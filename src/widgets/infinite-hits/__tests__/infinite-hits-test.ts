@@ -98,24 +98,23 @@ describe('infiniteHits()', () => {
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
-    const state = { page: 0 };
     const instantSearchInstance = createInstantSearch();
     widget.init({ helper, instantSearchInstance });
     widget.render({
       results: { ...results, page: 0, nbPages: 2 },
-      state,
+      state: { page: 0 },
     });
     widget.render({
       results: { ...results, page: 1, nbPages: 2 },
-      state,
+      state: { page: 1 },
     });
 
     const [firstRender, secondRender] = render.mock.calls;
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[0].props.isLastPage).toEqual(false);
     expect(firstRender[1]).toEqual(container);
-    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[0].props.isLastPage).toEqual(true);
     expect(secondRender[1]).toEqual(container);
   });
 
