@@ -29,7 +29,7 @@ storiesOf('Metadata/Breadcrumb', module)
           virtualHierarchicalMenu(),
 
           breadcrumb({
-            container: breadcrumb,
+            container: breadcrumbDiv,
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
@@ -62,7 +62,7 @@ storiesOf('Metadata/Breadcrumb', module)
           virtualHierarchicalMenu(),
 
           breadcrumb({
-            container: breadcrumb,
+            container: breadcrumbDiv,
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
@@ -98,7 +98,7 @@ storiesOf('Metadata/Breadcrumb', module)
           virtualHierarchicalMenu(),
 
           breadcrumb({
-            container: breadcrumb,
+            container: breadcrumbDiv,
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
@@ -135,7 +135,7 @@ storiesOf('Metadata/Breadcrumb', module)
 
         search.addWidgets([
           breadcrumb({
-            container: breadcrumb,
+            container: breadcrumbDiv,
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
@@ -179,7 +179,7 @@ storiesOf('Metadata/Breadcrumb', module)
 
         search.addWidgets([
           breadcrumb({
-            container: breadcrumb,
+            container: breadcrumbDiv,
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
@@ -221,7 +221,7 @@ storiesOf('Metadata/Breadcrumb', module)
           virtualHierarchicalMenu(),
 
           breadcrumb({
-            container: breadcrumb,
+            container: breadcrumbDiv,
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
