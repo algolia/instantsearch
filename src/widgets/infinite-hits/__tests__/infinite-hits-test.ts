@@ -1,9 +1,11 @@
 import { render as preactRender } from 'preact';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createRenderOptions } from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 
@@ -98,24 +100,23 @@ describe('infiniteHits()', () => {
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
-    const state = { page: 0 };
     const instantSearchInstance = createInstantSearch();
     widget.init({ helper, instantSearchInstance });
     widget.render({
       results: { ...results, page: 0, nbPages: 2 },
-      state,
+      state: { page: 0 },
     });
     widget.render({
       results: { ...results, page: 1, nbPages: 2 },
-      state,
+      state: { page: 1 },
     });
 
     const [firstRender, secondRender] = render.mock.calls;
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[0].props.isLastPage).toEqual(false);
     expect(firstRender[1]).toEqual(container);
-    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[0].props.isLastPage).toEqual(true);
     expect(secondRender[1]).toEqual(container);
   });
 
