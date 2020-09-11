@@ -1,11 +1,9 @@
 import { render as preactRender } from 'preact';
-import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper';
 import { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import { createRenderOptions } from '../../../../test/mock/createWidget';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 
