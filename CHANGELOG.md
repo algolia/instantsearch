@@ -1,3 +1,13 @@
+## [4.8.1](https://github.com/algolia/instantsearch.js/compare/v4.8.0...v4.8.1) (2020-09-15)
+
+
+### Bug Fixes
+
+* **hitsPerPage:** update link to hitsPerPage widget ([#4513](https://github.com/algolia/instantsearch.js/issues/4513)) ([daa4bb9](https://github.com/algolia/instantsearch.js/commit/daa4bb944065dede46d716308325039c3602d9dc))
+* **infiniteHits:** compute `isLastPage` based on cached pages ([#4509](https://github.com/algolia/instantsearch.js/issues/4509)) ([b6fb1ab](https://github.com/algolia/instantsearch.js/commit/b6fb1abcf5ac456dc39adaeb97945665cad8fa11))
+
+
+
 # [4.8.0](https://github.com/algolia/instantsearch.js/compare/v4.7.2...v4.8.0) (2020-09-08)
 
 
