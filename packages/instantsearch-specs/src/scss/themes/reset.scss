@@ -58,7 +58,10 @@
 // Prevent InfiniteHits buttons from moving scroll position
 // https://bugs.chromium.org/p/chromium/issues/detail?id=1110323
 .ais-InfiniteHits-loadPrevious,
-.ais-InfiniteHits-loadMore {
+.ais-InfiniteHits-loadMore,
+.ais-HierarchicalMenu-showMore,
+.ais-Menu-showMore,
+.ais-RefinementList-showMore {
   overflow-anchor: none;
 }
 
