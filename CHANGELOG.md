@@ -1,3 +1,48 @@
+## [4.8.1](https://github.com/algolia/instantsearch.js/compare/v4.8.0...v4.8.1) (2020-09-15)
+
+
+### Bug Fixes
+
+* **hitsPerPage:** update link to hitsPerPage widget ([#4513](https://github.com/algolia/instantsearch.js/issues/4513)) ([daa4bb9](https://github.com/algolia/instantsearch.js/commit/daa4bb944065dede46d716308325039c3602d9dc))
+* **infiniteHits:** compute `isLastPage` based on cached pages ([#4509](https://github.com/algolia/instantsearch.js/issues/4509)) ([b6fb1ab](https://github.com/algolia/instantsearch.js/commit/b6fb1abcf5ac456dc39adaeb97945665cad8fa11))
+
+
+
+# [4.8.0](https://github.com/algolia/instantsearch.js/compare/v4.7.2...v4.8.0) (2020-09-08)
+
+
+### Features
+
+* **insights:** introduce `insights` middleware ([#4446](https://github.com/algolia/instantsearch.js/issues/4446)) ([9bc6359](https://github.com/algolia/instantsearch.js/commit/9bc635986097736272aac8c5d3380a255488fdb7))
+
+
+
+## [4.7.2](https://github.com/algolia/instantsearch.js/compare/v4.7.1...v4.7.2) (2020-08-31)
+
+
+### Bug Fixes
+
+* **bundlesize:** remove prop-type imports ([#4491](https://github.com/algolia/instantsearch.js/issues/4491)) ([8361cd6](https://github.com/algolia/instantsearch.js/commit/8361cd63b3bac15eb6250e9f509fb15c1fc57f48))
+* **router:** skip router write on duplicate entries ([#4487](https://github.com/algolia/instantsearch.js/issues/4487)) ([9296022](https://github.com/algolia/instantsearch.js/commit/9296022fecadfbf82f15e837c215a1356eac4bc5))
+* **searchBox:** pass "spellcheck" property correctly to input ([#4483](https://github.com/algolia/instantsearch.js/issues/4483)) ([3cf43c7](https://github.com/algolia/instantsearch.js/commit/3cf43c7187841cf961a0280307af1a5f7a4e8da7))
+
+
+
+# [4.7.1](https://github.com/algolia/instantsearch.js/compare/v4.7.0...v4.7.1) (2020-08-19)
+
+
+### Bug Fixes
+
+* **configureRelatedItems:** support nested attributes ([#4480](https://github.com/algolia/instantsearch.js/issues/4480)) ([2266004](https://github.com/algolia/instantsearch.js/commit/2266004f274138b45640f000a5da8aa14e419e6c))
+* **connectToggleRefinement:** fix onFacetValue/offFacetValue on render when using arrays for on/off ([#4449](https://github.com/algolia/instantsearch.js/issues/4449)) ([fd3e83f](https://github.com/algolia/instantsearch.js/commit/fd3e83f2cf2e5b44b7d29eb4c67526e55c18d708))
+* **index:** don't show a development warning for inconsistent UI state in `connectRange` ([#4440](https://github.com/algolia/instantsearch.js/issues/4440)) ([eb8c8b3](https://github.com/algolia/instantsearch.js/commit/eb8c8b3494cb66dbef1d03e7d74374dc49059345)), closes [#4437](https://github.com/algolia/instantsearch.js/issues/4437)
+* **infiniteHits:** work with controlled mode ([#4435](https://github.com/algolia/instantsearch.js/issues/4435)) ([68b20f4](https://github.com/algolia/instantsearch.js/commit/68b20f487fcd54fd7dec11b4c494b6aa94a18516))
+* **typescript:** correct dummy v4 client ([#4459](https://github.com/algolia/instantsearch.js/issues/4459)) ([ca0c394](https://github.com/algolia/instantsearch.js/commit/ca0c3946608bb8ec5dcf5378d8d382d809a4d86f))
+* **typescript:** jsDoc comments which conform to Connector definition ([#4458](https://github.com/algolia/instantsearch.js/issues/4458)) ([5209bdb](https://github.com/algolia/instantsearch.js/commit/5209bdb9189e7cbbf9514b62fde55f923b2b3273))
+* **typescript:** export correct types ([#4476](https://github.com/algolia/instantsearch.js/issues/4476)) ([5fb4c5b](https://github.com/algolia/instantsearch.js/commit/5fb4c5b9d6ac75636e94514598ef5d5a86affafd))
+
+
+
 # [4.7.0](https://github.com/algolia/instantsearch.js/compare/v4.6.0...v4.7.0) (2020-06-15)
 
 

@@ -2,6 +2,8 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   isFiniteNumber,
+  SendEventForFacet,
+  convertNumericRefinementsToFilters,
   noop,
 } from '../../lib/utils';
 import { Connector, CreateURL, TransformItems } from '../../types';
@@ -86,12 +88,53 @@ export type NumericMenuRendererOptions = {
    * Sets the selected value and trigger a new search
    */
   refine: (facetValue: string) => void;
+
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEventForFacet;
 };
 
 export type NumericMenuConnector = Connector<
   NumericMenuRendererOptions,
   NumericMenuConnectorParams
 >;
+
+const $$type = 'ais.numericMenu';
+
+const createSendEvent = ({ instantSearchInstance, helper, attribute }) => (
+  ...args
+) => {
+  if (args.length === 1) {
+    instantSearchInstance.sendEventToInsights(args[0]);
+    return;
+  }
+
+  const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+  if (eventType !== 'click') {
+    return;
+  }
+  // facetValue === "%7B%22start%22:5,%22end%22:10%7D"
+  const filters = convertNumericRefinementsToFilters(
+    getRefinedState(helper.state, attribute, facetValue),
+    attribute
+  );
+  if (filters && filters.length > 0) {
+    /*
+        filters === ["price<=10", "price>=5"]
+      */
+    instantSearchInstance.sendEventToInsights({
+      insightsMethod: 'clickedFilters',
+      widgetType: $$type,
+      eventType,
+      payload: {
+        eventName,
+        index: helper.getIndex(),
+        filters,
+      },
+    });
+  }
+};
 
 const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
   renderFn,
@@ -116,6 +159,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     type ConnectorState = {
       refine?: (facetValue: string) => void;
       createURL?: (state: SearchParameters) => (facetValue: string) => string;
+      sendEvent?: SendEventForFacet;
     };
 
     const prepareItems = (state: SearchParameters) =>
@@ -128,16 +172,27 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     const connectorState: ConnectorState = {};
 
     return {
-      $$type: 'ais.numericMenu',
+      $$type,
 
       init({ helper, createURL, instantSearchInstance }) {
+        connectorState.sendEvent = createSendEvent({
+          instantSearchInstance,
+          helper,
+          attribute,
+        });
+
         connectorState.refine = facetValue => {
-          const refinedState = refine(helper.state, attribute, facetValue);
+          const refinedState = getRefinedState(
+            helper.state,
+            attribute,
+            facetValue
+          );
+          connectorState.sendEvent!('click', facetValue);
           helper.setState(refinedState).search();
         };
 
         connectorState.createURL = state => facetValue =>
-          createURL(refine(state, attribute, facetValue));
+          createURL(getRefinedState(state, attribute, facetValue));
 
         renderFn(
           {
@@ -145,6 +200,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
             items: transformItems(prepareItems(helper.state)),
             hasNoResults: true,
             refine: connectorState.refine,
+            sendEvent: connectorState.sendEvent!,
             instantSearchInstance,
             widgetParams,
           },
@@ -159,6 +215,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
             items: transformItems(prepareItems(state)),
             hasNoResults: results.nbHits === 0,
             refine: connectorState.refine!,
+            sendEvent: connectorState.sendEvent!,
             instantSearchInstance,
             widgetParams,
           },
@@ -275,7 +332,7 @@ function isRefined(
   return false;
 }
 
-function refine(
+function getRefinedState(
   state: SearchParameters,
   attribute: string,
   facetValue: string

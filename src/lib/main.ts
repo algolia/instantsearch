@@ -4,6 +4,7 @@ import version from './version';
 import * as connectors from '../connectors/index';
 import * as widgets from '../widgets/index';
 import * as helpers from '../helpers/index';
+import * as middlewares from '../middlewares/index';
 
 import * as routers from './routers/index';
 import * as stateMappings from './stateMappings/index';
@@ -39,5 +40,6 @@ instantsearch.createInfiniteHitsSessionStorageCache = createInfiniteHitsSessionS
 instantsearch.highlight = helpers.highlight;
 instantsearch.snippet = helpers.snippet;
 instantsearch.insights = helpers.insights;
+instantsearch.middlewares = middlewares;
 
 export default instantsearch;

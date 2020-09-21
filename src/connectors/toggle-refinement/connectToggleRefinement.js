@@ -13,6 +13,34 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const $$type = 'ais.toggleRefinement';
+
+const createSendEvent = ({ instantSearchInstance, attribute, on, helper }) => (
+  ...args
+) => {
+  if (args.length === 1) {
+    instantSearchInstance.sendEventToInsights(args[0]);
+    return;
+  }
+  const [eventType, isRefined, eventName = 'Filter Applied'] = args;
+  if (eventType !== 'click' || on === undefined) {
+    return;
+  }
+  // Checking
+  if (!isRefined) {
+    instantSearchInstance.sendEventToInsights({
+      insightsMethod: 'clickedFilters',
+      widgetType: $$type,
+      eventType,
+      payload: {
+        eventName,
+        index: helper.getIndex(),
+        filters: on.map(value => `${attribute}:${JSON.stringify(value)}`),
+      },
+    });
+  }
+};
+
 /**
  * @typedef {Object} ToggleValue
  * @property {boolean} isRefined `true` if the toggle is on.
@@ -105,12 +133,15 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       ? toArray(userOff).map(escapeRefinement)
       : undefined;
 
+    let sendEvent;
+
     return {
-      $$type: 'ais.toggleRefinement',
+      $$type,
 
       _toggleRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {
+          sendEvent('click', isRefined);
           if (hasAnOffValue) {
             off.forEach(v =>
               helper.removeDisjunctiveFacetRefinement(attribute, v)
@@ -135,6 +166,13 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       init({ state, helper, createURL, instantSearchInstance }) {
+        sendEvent = createSendEvent({
+          instantSearchInstance,
+          attribute,
+          on,
+          helper,
+        });
+
         this._createURL = isCurrentlyRefined => () => {
           const valuesToRemove = isCurrentlyRefined ? on : off;
           if (valuesToRemove) {
@@ -198,6 +236,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             value,
             createURL: this._createURL(value.isRefined),
             refine: this.toggleRefinement,
+            sendEvent,
             instantSearchInstance,
             widgetParams,
           },
@@ -209,30 +248,41 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
         const isRefined =
           on &&
           on.every(v => helper.state.isDisjunctiveFacetRefined(attribute, v));
-        const offValue = off === undefined ? false : off;
+        const offValue = toArray(off === undefined ? false : off);
         const allFacetValues = results.getFacetValues(attribute) || [];
 
-        const onData = find(
-          allFacetValues,
-          ({ name }) => name === unescapeRefinement(on)
-        );
+        const onData =
+          on &&
+          on
+            .map(v =>
+              find(allFacetValues, ({ name }) => name === unescapeRefinement(v))
+            )
+            .filter(v => v !== undefined);
         const onFacetValue = {
-          isRefined: onData !== undefined ? onData.isRefined : false,
-          count: onData === undefined ? null : onData.count,
+          isRefined: onData.length > 0 ? onData.every(v => v.isRefined) : false,
+          count:
+            onData.length === 0
+              ? null
+              : onData.reduce((acc, v) => acc + v.count, 0),
         };
 
         const offData = hasAnOffValue
-          ? find(
-              allFacetValues,
-              ({ name }) => name === unescapeRefinement(offValue)
-            )
-          : undefined;
+          ? offValue
+              .map(v =>
+                find(
+                  allFacetValues,
+                  ({ name }) => name === unescapeRefinement(v)
+                )
+              )
+              .filter(v => v !== undefined)
+          : [];
         const offFacetValue = {
-          isRefined: offData !== undefined ? offData.isRefined : false,
+          isRefined:
+            offData.length > 0 ? offData.every(v => v.isRefined) : false,
           count:
-            offData === undefined
+            offData.length === 0
               ? allFacetValues.reduce((total, { count }) => total + count, 0)
-              : offData.count,
+              : offData.reduce((acc, v) => acc + v.count, 0),
         };
 
         // what will we show by default,
@@ -254,6 +304,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             state,
             createURL: this._createURL(value.isRefined),
             refine: this.toggleRefinement,
+            sendEvent,
             helper,
             instantSearchInstance,
             widgetParams,

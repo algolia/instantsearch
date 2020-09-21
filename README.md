@@ -33,6 +33,7 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 - [Demos](#demos)
 - [Playground](#playground)
 - [Browser support](#browser-support)
+- [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -124,6 +125,10 @@ Start by [adding widgets](https://www.algolia.com/doc/guides/building-search-ui/
 We support the **last two versions of major browsers** (Chrome, Edge, Firefox, Safari).
 
 Please refer to the [browser support](https://www.algolia.com/doc/guides/building-search-ui/installation/js/#browser-support) section in the documentation to use InstantSearch.js on other browsers.
+
+## Troubleshooting
+
+Encountering an issue? Before reaching out to support, we recommend heading to our [FAQ](https://www.algolia.com/doc/guides/building-search-ui/troubleshooting/faq/js/) where you will find answers for the most common issues and gotchas with the library.
 
 ## Contributing
 

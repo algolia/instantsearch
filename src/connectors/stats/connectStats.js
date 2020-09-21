@@ -21,13 +21,17 @@ const withUsage = createDocumentationMessageGenerator({
  */
 
 /**
+ * @typedef {Object} CustomStatsWidgetOptions
+ */
+
+/**
  * **Stats** connector provides the logic to build a custom widget that will displays
  * search statistics (hits number and processing time).
  *
  * @type {Connector}
  * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function} Re-usable widget factory for a custom **Stats** widget.
+ * @return {function(CustomStatsWidgetOptions)} Re-usable widget factory for a custom **Stats** widget.
  * @example
  * // custom `renderFn` to render the custom Stats widget
  * function renderFn(StatsRenderingOptions, isFirstRendering) {

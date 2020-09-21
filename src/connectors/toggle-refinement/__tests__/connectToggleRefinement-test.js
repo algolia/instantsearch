@@ -3,6 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import connectToggleRefinement from '../connectToggleRefinement';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectToggleRefinement', () => {
   describe('Usage', () => {
@@ -152,6 +153,117 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     }
   });
 
+  it('Renders during init and render with array value', () => {
+    // test that the dummyRendering is called with the isFirstRendering
+    // flag set accordingly
+    const rendering = jest.fn();
+    const makeWidget = connectToggleRefinement(rendering);
+
+    const attribute = 'whatever';
+    const widget = makeWidget({
+      attribute,
+      on: ['a', 'b'],
+      off: ['c'],
+    });
+
+    const config = widget.getWidgetSearchParameters(new SearchParameters({}), {
+      uiState: {},
+    });
+    expect(config).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: [attribute],
+        disjunctiveFacetsRefinements: {
+          [attribute]: ['c'],
+        },
+      })
+    );
+
+    const helper = jsHelper({}, '', config);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    {
+      // should call the rendering once with isFirstRendering to true
+      expect(rendering).toHaveBeenCalledTimes(1);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
+      expect(isFirstRendering).toBe(true);
+
+      // should provide good values for the first rendering
+      const { value, widgetParams } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
+      expect(value).toEqual({
+        name: 'whatever',
+        count: null,
+        isRefined: false,
+        onFacetValue: {
+          isRefined: false,
+          count: 0,
+        },
+        offFacetValue: {
+          isRefined: true,
+          count: 0,
+        },
+      });
+
+      expect(widgetParams).toEqual({
+        attribute,
+        on: ['a', 'b'],
+        off: ['c'],
+      });
+    }
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            whatever: {
+              a: 45,
+              b: 20,
+              c: 20,
+            },
+          },
+          nbHits: 85,
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    {
+      // Should call the rendering a second time, with isFirstRendering to false
+      expect(rendering).toHaveBeenCalledTimes(2);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
+      expect(isFirstRendering).toBe(false);
+
+      // should provide good values after the first search
+      const { value } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
+      expect(value).toEqual({
+        name: 'whatever',
+        count: 65,
+        isRefined: false,
+        onFacetValue: {
+          isRefined: false,
+          count: 65,
+        },
+        offFacetValue: {
+          isRefined: true,
+          count: 20,
+        },
+      });
+    }
+  });
+
   it('does not throw without the unmount function', () => {
     const rendering = () => {};
     const makeWidget = connectToggleRefinement(rendering);
@@ -188,6 +300,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -334,6 +447,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -562,7 +676,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
     helper.search = jest.fn();
 
-    widget.init({ helper, state: helper.state });
+    widget.init({
+      helper,
+      state: helper.state,
+      instantSearchInstance: createInstantSearch(),
+    });
 
     expect(helper.state.disjunctiveFacetsRefinements).toEqual({
       whatever: [],
@@ -613,7 +731,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
     helper.search = jest.fn();
 
-    widget.init({ helper, state: helper.state });
+    widget.init({
+      helper,
+      state: helper.state,
+      instantSearchInstance: createInstantSearch(),
+    });
 
     expect(helper.state.disjunctiveFacetsRefinements).toEqual({
       whatever: [],
@@ -967,6 +1089,74 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       expect(actual.disjunctiveFacetsRefinements).toEqual({
         freeShipping: ['true'],
       });
+    });
+  });
+
+  describe('insights', () => {
+    const createInitializedWidget = () => {
+      const rendering = jest.fn();
+      const instantSearchInstance = createInstantSearch();
+      const makeWidget = connectToggleRefinement(rendering);
+
+      const attribute = 'isShippingFree';
+      const widget = makeWidget({
+        attribute,
+      });
+
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      return { rendering, helper, instantSearchInstance, widget };
+    };
+
+    it('sends event when a facet is added', () => {
+      const { rendering, instantSearchInstance } = createInitializedWidget();
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { refine } = renderOptions;
+      refine({ isRefined: false });
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['isShippingFree:true'],
+          index: '',
+        },
+        widgetType: 'ais.toggleRefinement',
+      });
+    });
+
+    it('does not send event when a facet is removed', () => {
+      const { rendering, instantSearchInstance } = createInitializedWidget();
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { refine } = renderOptions;
+      refine({ isRefined: false });
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+
+      refine({ isRefined: true });
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // still the same
     });
   });
 });

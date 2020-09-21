@@ -55,8 +55,8 @@ describe('Usage', () => {
 
   test('with `hidden` as boolean warns', () => {
     expect(() => {
-      // @ts-ignore wrong option type
       panel({
+        // @ts-ignore wrong option type
         hidden: true,
       });
     }).toWarnDev(
@@ -66,8 +66,8 @@ describe('Usage', () => {
 
   test('with `collapsed` as boolean warns', () => {
     expect(() => {
-      // @ts-ignore wrong option type
       panel({
+        // @ts-ignore wrong option type
         collapsed: true,
       });
     }).toWarnDev(

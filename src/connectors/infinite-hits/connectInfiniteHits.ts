@@ -11,6 +11,10 @@ import {
   addAbsolutePosition,
   addQueryID,
   noop,
+  createSendEventForHits,
+  SendEventForHits,
+  createBindEventForHits,
+  BindEventForHits,
 } from '../../lib/utils';
 
 export type InfiniteHitsCachedHits = {
@@ -85,6 +89,16 @@ export type InfiniteHitsRendererOptions = {
    * Indicates whether the last page of hits has been reached.
    */
   isLastPage: boolean;
+
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEventForHits;
+
+  /**
+   * Returns a string of data-insights-event attribute for insights middleware
+   */
+  bindEvent: BindEventForHits;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -143,6 +157,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     let prevState: Partial<SearchParameters>;
     let showPrevious: () => void;
     let showMore: () => void;
+    let sendEvent;
+    let bindEvent;
 
     const getFirstReceivedPage = () =>
       Math.min(...Object.keys(cachedHits || {}).map(Number));
@@ -181,6 +197,15 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
+        sendEvent = createSendEventForHits({
+          instantSearchInstance,
+          index: helper.getIndex(),
+          widgetType: this.$$type!,
+        });
+        bindEvent = createBindEventForHits({
+          index: helper.getIndex(),
+          widgetType: this.$$type!,
+        });
 
         renderFn(
           {
@@ -188,6 +213,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
               cache.read({ state: helper.state }) || {}
             ),
             results: undefined,
+            sendEvent,
+            bindEvent,
             showPrevious,
             showMore,
             isFirstPage:
@@ -264,12 +291,16 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         }
 
         const isFirstPage = getFirstReceivedPage() === 0;
-        const isLastPage = results.nbPages <= results.page + 1;
+        const isLastPage = results.nbPages <= getLastReceivedPage() + 1;
+
+        sendEvent('view', cachedHits[page]);
 
         renderFn(
           {
             hits: extractHitsFromCachedHits(cachedHits!),
             results,
+            sendEvent,
+            bindEvent,
             showPrevious,
             showMore,
             isFirstPage,

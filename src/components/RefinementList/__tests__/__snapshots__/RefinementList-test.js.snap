@@ -104,6 +104,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
             class="input"
             maxlength="512"
             placeholder="Search"
+            spellcheck="false"
             type="search"
           />
           <button
@@ -180,6 +181,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
             class="input"
             maxlength="512"
             placeholder="Search"
+            spellcheck="false"
             type="search"
           />
           <button

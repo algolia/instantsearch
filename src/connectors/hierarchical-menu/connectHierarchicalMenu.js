@@ -2,6 +2,7 @@ import {
   checkRendering,
   warning,
   createDocumentationMessageGenerator,
+  createSendEventForFacet,
   isEqual,
   noop,
 } from '../../lib/utils';
@@ -53,7 +54,7 @@ const withUsage = createDocumentationMessageGenerator({
  * levels deep.
  *
  * @type {Connector}
- * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
+ * @param {function(HierarchicalMenuRenderingOptions, boolean)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
@@ -89,6 +90,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     // so that we can always map $hierarchicalFacetName => real attributes
     // we use the first attribute name
     const [hierarchicalFacetName] = attributes;
+    let sendEvent;
 
     return {
       $$type: 'ais.hierarchicalMenu',
@@ -114,8 +116,16 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       init({ helper, createURL, instantSearchInstance }) {
+        sendEvent = createSendEventForFacet({
+          instantSearchInstance,
+          helper,
+          attribute: hierarchicalFacetName,
+          widgetType: this.$$type,
+        });
+
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
         this._refine = function(facetValue) {
+          sendEvent('click', facetValue);
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
         };
 
@@ -131,6 +141,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             items: [],
             createURL: _createURL,
             refine: this._refine,
+            sendEvent,
             instantSearchInstance,
             widgetParams,
             isShowingMore: false,
@@ -193,6 +204,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           {
             items,
             refine: this._refine,
+            sendEvent,
             createURL: _createURL,
             instantSearchInstance,
             widgetParams,
@@ -205,10 +217,10 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         );
       },
 
-      // eslint-disable-next-line valid-jsdoc
       /**
-       * @param {Object} param0
-       * @param {import('algoliasearch-helper').SearchParameters} param0.state
+       * @param {Object} param0 cleanup arguments
+       * @param {any} param0.state current search parameters
+       * @returns {any} next search parameters
        */
       dispose({ state }) {
         unmountFn();

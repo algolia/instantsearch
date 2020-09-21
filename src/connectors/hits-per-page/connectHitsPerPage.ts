@@ -58,7 +58,7 @@ export type HitsPerPageConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<HitsPerPageConnectorParamsItem>;
+  transformItems?: TransformItems<HitsPerPageRendererOptionsItem>;
 };
 
 export type HitsPerPageRendererOptions = {
@@ -160,7 +160,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
 \`hitsPerPage\` is not defined.
 The option \`hitsPerPage\` needs to be set using the \`configure\` widget.
 
-Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.html
+Learn more: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/
             `
           );
 

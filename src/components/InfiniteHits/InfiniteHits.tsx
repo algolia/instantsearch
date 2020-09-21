@@ -6,6 +6,7 @@ import Template from '../Template/Template';
 import { SearchResults } from 'algoliasearch-helper';
 import { Hits } from '../../types';
 import { InfiniteHitsTemplates } from '../../widgets/infinite-hits/infinite-hits';
+import { SendEventForHits, BindEventForHits } from '../../lib/utils';
 
 type InfiniteHitsCSSClasses = {
   root: string;
@@ -31,11 +32,14 @@ type InfiniteHitsProps = {
   };
   isFirstPage: boolean;
   isLastPage: boolean;
+  sendEvent: SendEventForHits;
+  bindEvent: BindEventForHits;
 };
 
 const InfiniteHits = ({
   results,
   hits,
+  bindEvent,
   hasShowPrevious,
   showPrevious,
   showMore,
@@ -86,6 +90,7 @@ const InfiniteHits = ({
               ...hit,
               __hitIndex: position,
             }}
+            bindEvent={bindEvent}
           />
         ))}
       </ol>
