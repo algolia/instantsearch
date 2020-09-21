@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import { connectHierarchicalMenu } from '../src/connectors';
 import { noop } from '../src/lib/utils';
-import { breadcrumb } from '../src/widgets';
+import { breadcrumb, panel } from '../src/widgets';
 
 const virtualHierarchicalMenu = (args = {}) =>
   connectHierarchicalMenu(
@@ -264,6 +264,48 @@ storiesOf('Metadata/Breadcrumb', module)
             ],
           })
         );
+      },
+      {
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
+          },
+        },
+      }
+    )
+  )
+  .add(
+    'with panel',
+    withHits(
+      ({ search, container }) => {
+        const breadcrumbDiv = document.createElement('div');
+        container.appendChild(breadcrumbDiv);
+        const panelDiv = document.createElement('div');
+        container.appendChild(panelDiv);
+
+        const breadcrumbWithPanel = panel({
+          collapsed(collapsedOptions) {
+            console.log({ collapsedOptions });
+            return false;
+          },
+        })(breadcrumb);
+
+        search.addWidgets([
+          virtualHierarchicalMenu(),
+
+          breadcrumbWithPanel({
+            container: panelDiv,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+          }),
+        ]);
       },
       {
         initialUiState: {

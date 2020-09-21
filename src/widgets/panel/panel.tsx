@@ -249,12 +249,23 @@ const panel: PanelWidget = widgetParams => {
       },
       render(...args) {
         const [options] = args;
+        let widgetRenderState;
+        if (widget._extractWidgetRenderState) {
+          widgetRenderState = widget._extractWidgetRenderState(
+            options.renderState[options.state.index]
+          );
+        }
+
+        const newOptions = {
+          ...options,
+          widgetRenderState,
+        };
 
         renderPanel({
-          options,
-          hidden: Boolean(hidden(options)),
+          options: newOptions,
+          hidden: Boolean(hidden(newOptions)),
           collapsible,
-          collapsed: Boolean(collapsedFn(options)),
+          collapsed: Boolean(collapsedFn(newOptions)),
         });
 
         if (typeof widget.render === 'function') {

@@ -143,62 +143,76 @@ export type RenderState = {
   [indexId: string]: IndexRenderState;
 };
 
+export type SearchBoxWidgetRenderState = WidgetRenderState<
+  {
+    query: string;
+    refine(query: string): void;
+    clear(): void;
+    isSearchStalled: boolean;
+  },
+  {
+    queryHook?(query: string, refine: (query: string) => void);
+  }
+>;
+
+export type AutocompleteWidgetRenderState = WidgetRenderState<
+  AutocompleteRendererOptions,
+  AutocompleteConnectorParams
+>;
+
+export type BreadcrumbWidgetRenderState = WidgetRenderState<
+  BreadcrumbRendererOptions,
+  BreadcrumbConnectorParams
+>;
+
+export type ClearRefinementsWidgetRenderState = WidgetRenderState<
+  ClearRefinementsRendererOptions,
+  ClearRefinementsConnectorParams
+>;
+
+export type ConfigureWidgetRenderState = WidgetRenderState<
+  ConfigureRendererOptions,
+  ConfigureConnectorParams
+>;
+
+export type CurrentRefinementsWidgetRenderState = WidgetRenderState<
+  CurrentRefinementsRendererOptions,
+  CurrentRefinementsConnectorParams
+>;
+
+export type HierarchicalMenuWidgetRenderState = WidgetRenderState<
+  {
+    items: any[];
+    refine(facetValue: any): void;
+    createURL(facetValue: any): string;
+    isShowingMore: boolean;
+    toggleShowMore(): void;
+    canToggleShowMore: boolean;
+  },
+  {
+    attributes: string[];
+    separator: string;
+    rootPath: string | null;
+    showParentLevel: boolean;
+    limit: number;
+    showMore: boolean;
+    showMoreLimit: number;
+    sortBy: any;
+    transformItems(items: any): any;
+  }
+>;
+
 export type IndexRenderState = Partial<{
-  searchBox: WidgetRenderState<
-    {
-      query: string;
-      refine(query: string): void;
-      clear(): void;
-      isSearchStalled: boolean;
-    },
-    {
-      queryHook?(query: string, refine: (query: string) => void);
-    }
-  >;
-  autocomplete: WidgetRenderState<
-    AutocompleteRendererOptions,
-    AutocompleteConnectorParams
-  >;
+  searchBox: SearchBoxWidgetRenderState;
+  autocomplete: AutocompleteWidgetRenderState;
   breadcrumb: {
-    [attribute: string]: WidgetRenderState<
-      BreadcrumbRendererOptions,
-      BreadcrumbConnectorParams
-    >;
+    [attribute: string]: BreadcrumbWidgetRenderState;
   };
-  clearRefinements: WidgetRenderState<
-    ClearRefinementsRendererOptions,
-    ClearRefinementsConnectorParams
-  >;
-  configure: WidgetRenderState<
-    ConfigureRendererOptions,
-    ConfigureConnectorParams
-  >;
-  currentRefinements: WidgetRenderState<
-    CurrentRefinementsRendererOptions,
-    CurrentRefinementsConnectorParams
-  >;
+  clearRefinements: ClearRefinementsWidgetRenderState;
+  configure: ConfigureWidgetRenderState;
+  currentRefinements: CurrentRefinementsWidgetRenderState;
   hierarchicalMenu: {
-    [attribute: string]: WidgetRenderState<
-      {
-        items: any[];
-        refine(facetValue: any): void;
-        createURL(facetValue: any): string;
-        isShowingMore: boolean;
-        toggleShowMore(): void;
-        canToggleShowMore: boolean;
-      },
-      {
-        attributes: string[];
-        separator: string;
-        rootPath: string | null;
-        showParentLevel: boolean;
-        limit: number;
-        showMore: boolean;
-        showMoreLimit: number;
-        sortBy: any;
-        transformItems(items: any): any;
-      }
-    >;
+    [attribute: string]: HierarchicalMenuWidgetRenderState;
   };
 }>;
 
@@ -266,6 +280,12 @@ export type Widget = {
     renderState: IndexRenderState,
     widgetRenderStateOptions: InitOptions | RenderOptions
   ): IndexRenderState;
+  /**
+   * Returns the current connector specific part of the renderState.
+   */
+  _extractWidgetRenderState?(
+    renderState: IndexRenderState
+  ): WidgetRenderState<unknown, unknown>; // @TODO fix unknown, but how? It depends on which connector returns what.
   /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and
