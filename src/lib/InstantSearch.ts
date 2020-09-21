@@ -279,6 +279,11 @@ See ${createDocumentationLink({
 
   // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
   public EXPERIMENTAL_use(...middleware: Middleware[]): this {
+    warning(
+      false,
+      'We recommend you to replace `EXPERIMENTAL_use` with `use`.'
+    );
+
     return this.use(...middleware);
   }
 
