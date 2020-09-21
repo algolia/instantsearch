@@ -58,7 +58,9 @@ const insightsListener = (BaseComponent: any) => {
           const payload = parseInsightsEvent(targetWithEvent);
           props.sendEvent(payload);
         }
-      } else {
+      }
+
+      {
         // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
         const insightsTarget = findInsightsTarget(
           event.target as HTMLElement | null,
