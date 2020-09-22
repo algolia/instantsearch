@@ -278,13 +278,13 @@ export type Widget = {
    */
   getRenderState?(
     renderState: IndexRenderState,
-    renderStateOptions: InitOptions | RenderOptions
+    renderOptions: InitOptions | RenderOptions
   ): IndexRenderState;
   /**
    * Returns the render params to pass to the render function.
    */
   getWidgetRenderState?(
-    renderStateOptions: InitOptions | RenderOptions
+    renderOptions: InitOptions | RenderOptions
   ):
     | SearchBoxWidgetRenderState
     | AutocompleteWidgetRenderState

@@ -135,14 +135,14 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         return getInitialSearchParameters(state, widgetParams);
       },
 
-      getRenderState(renderState, renderStateOptions) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          configure: this.getWidgetRenderState!(renderStateOptions),
+          configure: this.getWidgetRenderState!(renderOptions),
         };
       },
 
-      getWidgetRenderState(renderStateOptions) {
+      getWidgetRenderState(renderOptions) {
         return {
           refine: connectorState.refine!,
           widgetParams,

@@ -198,10 +198,10 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
         unmountFn();
       },
 
-      getRenderState(renderState, renderStateOptions) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          currentRefinements: this.getWidgetRenderState!(renderStateOptions),
+          currentRefinements: this.getWidgetRenderState!(renderOptions),
         };
       },
 

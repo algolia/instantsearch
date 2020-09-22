@@ -168,14 +168,12 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           .setQueryParameter('maxValuesPerFacet', undefined);
       },
 
-      getRenderState(renderState, renderStateOptions) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
           hierarchicalMenu: {
             ...renderState.hierarchicalMenu,
-            [hierarchicalFacetName]: this.getWidgetRenderState(
-              renderStateOptions
-            ),
+            [hierarchicalFacetName]: this.getWidgetRenderState(renderOptions),
           },
         };
       },

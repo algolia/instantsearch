@@ -133,10 +133,10 @@ search.addWidgets([
         );
       },
 
-      getRenderState(renderState, renderStateOptions) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          autocomplete: this.getWidgetRenderState!(renderStateOptions),
+          autocomplete: this.getWidgetRenderState!(renderOptions),
         };
       },
 

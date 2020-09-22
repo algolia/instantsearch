@@ -133,10 +133,10 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         return state.setQueryParameter('query', undefined);
       },
 
-      getRenderState(renderState, renderStateOptions) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          searchBox: this.getWidgetRenderState(renderStateOptions),
+          searchBox: this.getWidgetRenderState(renderOptions),
         };
       },
 

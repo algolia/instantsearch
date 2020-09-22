@@ -118,7 +118,7 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
       },
 
       render(renderOptions) {
-        const { createURL, renderState, instantSearchInstance } = renderOptions;
+        const { createURL, instantSearchInstance } = renderOptions;
 
         connectorState.refine = () => {
           connectorState.attributesToClear.forEach(
@@ -164,10 +164,10 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
         unmountFn();
       },
 
-      getRenderState(renderState, renderStateOptions) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          clearRefinements: this.getWidgetRenderState!(renderStateOptions),
+          clearRefinements: this.getWidgetRenderState!(renderOptions),
         };
       },
 

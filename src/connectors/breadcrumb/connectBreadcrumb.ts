@@ -180,14 +180,12 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         unmountFn();
       },
 
-      getRenderState(renderState, renderStateOptions) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
           breadcrumb: {
             ...renderState.breadcrumb,
-            [hierarchicalFacetName]: this.getWidgetRenderState!(
-              renderStateOptions
-            ),
+            [hierarchicalFacetName]: this.getWidgetRenderState!(renderOptions),
           },
         };
       },
