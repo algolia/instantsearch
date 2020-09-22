@@ -124,7 +124,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       ).not.toThrow();
     });
 
-    describe('getWidgetRenderState', () => {
+    describe('getRenderState', () => {
       test('returns the render state', () => {
         const renderFn = jest.fn();
         const unmountFn = jest.fn();
@@ -144,7 +144,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           ],
         });
 
-        const renderState1 = clearRefinements.getWidgetRenderState!(
+        const renderState1 = clearRefinements.getRenderState!(
           {},
           createInitOptions()
         );
@@ -160,7 +160,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
         helper.toggleRefinement('category', 'Decoration');
 
-        const renderState2 = clearRefinements.getWidgetRenderState!(
+        const renderState2 = clearRefinements.getRenderState!(
           {},
           createRenderOptions({
             helper,

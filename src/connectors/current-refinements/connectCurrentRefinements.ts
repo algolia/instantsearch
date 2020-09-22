@@ -15,7 +15,12 @@ import {
   FacetRefinement,
   NumericRefinement,
 } from '../../lib/utils/getRefinements';
-import { Connector, TransformItems, CreateURL } from '../../types';
+import {
+  Connector,
+  TransformItems,
+  CreateURL,
+  CurrentRefinementsWidgetRenderState,
+} from '../../types';
 
 export type CurrentRefinementsConnectorParamsRefinement = {
   /**
@@ -162,12 +167,13 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
       $$type: 'ais.currentRefinements',
 
       init(initOptions) {
-        const { renderState, instantSearchInstance } = initOptions;
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, initOptions)
-              .currentRefinements!,
+            ...(this.getWidgetRenderState!(
+              initOptions
+            ) as CurrentRefinementsWidgetRenderState),
             instantSearchInstance,
           },
           true
@@ -175,12 +181,13 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
       },
 
       render(renderOptions) {
-        const { renderState, instantSearchInstance } = renderOptions;
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, renderOptions)
-              .currentRefinements!,
+            ...(this.getWidgetRenderState!(
+              renderOptions
+            ) as CurrentRefinementsWidgetRenderState),
             instantSearchInstance,
           },
           false
@@ -191,10 +198,14 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
         unmountFn();
       },
 
-      getWidgetRenderState(
-        renderState,
-        { results, scopedResults, createURL, helper }
-      ) {
+      getRenderState(renderState, renderStateOptions) {
+        return {
+          ...renderState,
+          currentRefinements: this.getWidgetRenderState!(renderStateOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, scopedResults, createURL, helper }) {
         function getItems() {
           if (!results) {
             return transformItems(
@@ -225,14 +236,11 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
         }
 
         return {
-          ...renderState,
-          currentRefinements: {
-            items: getItems(),
-            refine: refinement => clearRefinement(helper, refinement),
-            createURL: refinement =>
-              createURL(clearRefinementFromState(helper.state, refinement)),
-            widgetParams,
-          },
+          items: getItems(),
+          refine: refinement => clearRefinement(helper, refinement),
+          createURL: refinement =>
+            createURL(clearRefinementFromState(helper.state, refinement)),
+          widgetParams,
         };
       },
     };

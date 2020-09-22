@@ -3,7 +3,7 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
-import { Connector } from '../../types';
+import { Connector, ConfigureWidgetRenderState } from '../../types';
 import {
   createDocumentationMessageGenerator,
   isPlainObject,
@@ -100,13 +100,15 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       $$type: 'ais.configure',
 
       init(initOptions) {
-        const { renderState, helper, instantSearchInstance } = initOptions;
+        const { helper, instantSearchInstance } = initOptions;
 
         connectorState.refine = refine(helper);
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, initOptions).configure!,
+            ...(this.getWidgetRenderState!(
+              initOptions
+            ) as ConfigureWidgetRenderState),
             instantSearchInstance,
           },
           true
@@ -114,12 +116,13 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       },
 
       render(renderOptions) {
-        const { renderState, instantSearchInstance } = renderOptions;
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, renderOptions)
-              .configure!,
+            ...(this.getWidgetRenderState!(
+              renderOptions
+            ) as ConfigureWidgetRenderState),
             instantSearchInstance,
           },
           false
@@ -132,13 +135,17 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         return getInitialSearchParameters(state, widgetParams);
       },
 
-      getWidgetRenderState(renderState) {
+      getRenderState(renderState, renderStateOptions) {
         return {
           ...renderState,
-          configure: {
-            refine: connectorState.refine!,
-            widgetParams,
-          },
+          configure: this.getWidgetRenderState!(renderStateOptions),
+        };
+      },
+
+      getWidgetRenderState(renderStateOptions) {
+        return {
+          refine: connectorState.refine!,
+          widgetParams,
         };
       },
 

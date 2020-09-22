@@ -67,7 +67,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     );
   });
 
-  describe('getWidgetRenderState', () => {
+  describe('getRenderState', () => {
     test('returns the render state', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
@@ -85,7 +85,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
       helper.toggleRefinement('category', 'Decoration');
 
-      const renderState1 = breadcrumb.getWidgetRenderState!(
+      const renderState1 = breadcrumb.getRenderState!(
         {
           breadcrumb: {
             anotherCategory: {
@@ -119,7 +119,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
       breadcrumb.init!(createInitOptions({ helper }));
 
-      const renderState2 = breadcrumb.getWidgetRenderState!(
+      const renderState2 = breadcrumb.getRenderState!(
         {
           breadcrumb: {
             anotherCategory: {

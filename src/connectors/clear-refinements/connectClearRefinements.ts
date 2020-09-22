@@ -8,7 +8,12 @@ import {
   uniq,
   mergeSearchParameters,
 } from '../../lib/utils';
-import { TransformItems, CreateURL, Connector } from '../../types';
+import {
+  TransformItems,
+  CreateURL,
+  Connector,
+  ClearRefinementsWidgetRenderState,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
@@ -99,12 +104,13 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
       $$type: 'ais.clearRefinements',
 
       init(initOptions) {
-        const { renderState, instantSearchInstance } = initOptions;
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, initOptions)
-              .clearRefinements!,
+            ...(this.getWidgetRenderState!(
+              initOptions
+            ) as ClearRefinementsWidgetRenderState),
             instantSearchInstance,
           },
           true
@@ -145,8 +151,9 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, renderOptions)
-              .clearRefinements!,
+            ...(this.getWidgetRenderState!(
+              renderOptions
+            ) as ClearRefinementsWidgetRenderState),
             instantSearchInstance,
           },
           false
@@ -157,7 +164,14 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
         unmountFn();
       },
 
-      getWidgetRenderState(renderState, { scopedResults }) {
+      getRenderState(renderState, renderStateOptions) {
+        return {
+          ...renderState,
+          clearRefinements: this.getWidgetRenderState!(renderStateOptions),
+        };
+      },
+
+      getWidgetRenderState({ scopedResults }) {
         connectorState.attributesToClear = scopedResults.reduce<
           Array<ReturnType<typeof getAttributesToClear>>
         >((results, scopedResult) => {
@@ -172,15 +186,12 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
         }, []);
 
         return {
-          ...renderState,
-          clearRefinements: {
-            hasRefinements: connectorState.attributesToClear.some(
-              attributeToClear => attributeToClear.items.length > 0
-            ),
-            refine: cachedRefine,
-            createURL: cachedCreateURL,
-            widgetParams,
-          },
+          hasRefinements: connectorState.attributesToClear.some(
+            attributeToClear => attributeToClear.items.length > 0
+          ),
+          refine: cachedRefine,
+          createURL: cachedCreateURL,
+          widgetParams,
         };
       },
     };

@@ -114,7 +114,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       init(initOptions) {
-        const { helper, renderState, instantSearchInstance } = initOptions;
+        const { helper, instantSearchInstance } = initOptions;
 
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
         this._refine = function(facetValue) {
@@ -123,8 +123,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
 
         renderFn(
           {
-            ...this.getWidgetRenderState(renderState, initOptions)
-              .hierarchicalMenu[hierarchicalFacetName],
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -143,14 +142,13 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       render(renderOptions) {
-        const { renderState, instantSearchInstance } = renderOptions;
+        const { instantSearchInstance } = renderOptions;
 
         this.toggleShowMore = this.createToggleShowMore(renderOptions);
 
         renderFn(
           {
-            ...this.getWidgetRenderState(renderState, renderOptions)
-              .hierarchicalMenu[hierarchicalFacetName],
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -170,7 +168,19 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           .setQueryParameter('maxValuesPerFacet', undefined);
       },
 
-      getWidgetRenderState(renderState, { results, state, createURL }) {
+      getRenderState(renderState, renderStateOptions) {
+        return {
+          ...renderState,
+          hierarchicalMenu: {
+            ...renderState.hierarchicalMenu,
+            [hierarchicalFacetName]: this.getWidgetRenderState(
+              renderStateOptions
+            ),
+          },
+        };
+      },
+
+      getWidgetRenderState({ results, state, createURL }) {
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
@@ -203,20 +213,14 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         };
 
         return {
-          ...renderState,
-          hierarchicalMenu: {
-            ...renderState.hierarchicalMenu,
-            [hierarchicalFacetName]: {
-              items,
-              refine: this._refine,
-              createURL: _createURL,
-              widgetParams,
-              isShowingMore: this.isShowingMore,
-              toggleShowMore: this.cachedToggleShowMore,
-              canToggleShowMore:
-                showMore && (this.isShowingMore || !getHasExhaustiveItems()),
-            },
-          },
+          items,
+          refine: this._refine,
+          createURL: _createURL,
+          widgetParams,
+          isShowingMore: this.isShowingMore,
+          toggleShowMore: this.cachedToggleShowMore,
+          canToggleShowMore:
+            showMore && (this.isShowingMore || !getHasExhaustiveItems()),
         };
       },
 

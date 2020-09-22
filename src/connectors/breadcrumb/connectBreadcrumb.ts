@@ -155,8 +155,9 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(initOptions.renderState, initOptions)
-              .breadcrumb![hierarchicalFacetName],
+            ...(this.getWidgetRenderState!(
+              initOptions
+            ) as BreadcrumbWidgetRenderState),
             instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
@@ -166,11 +167,8 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
       render(renderOptions) {
         renderFn(
           {
-            ...(this._extractWidgetRenderState!(
-              this.getWidgetRenderState!(
-                renderOptions.renderState,
-                renderOptions
-              )
+            ...(this.getWidgetRenderState!(
+              renderOptions
             ) as BreadcrumbWidgetRenderState),
             instantSearchInstance: renderOptions.instantSearchInstance,
           },
@@ -178,15 +176,23 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         );
       },
 
-      _extractWidgetRenderState(renderState) {
-        return renderState.breadcrumb![hierarchicalFacetName];
-      },
-
       dispose() {
         unmountFn();
       },
 
-      getWidgetRenderState(renderState, { results, state }) {
+      getRenderState(renderState, renderStateOptions) {
+        return {
+          ...renderState,
+          breadcrumb: {
+            ...renderState.breadcrumb,
+            [hierarchicalFacetName]: this.getWidgetRenderState!(
+              renderStateOptions
+            ),
+          },
+        };
+      },
+
+      getWidgetRenderState({ results, state }) {
         function getItems() {
           if (!results) {
             return [];
@@ -207,17 +213,11 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         const items = getItems();
 
         return {
-          ...renderState,
-          breadcrumb: {
-            ...renderState.breadcrumb,
-            [hierarchicalFacetName]: {
-              canRefine: items.length > 0,
-              createURL: connectorState.createURL,
-              items,
-              refine: connectorState.refine,
-              widgetParams,
-            },
-          },
+          canRefine: items.length > 0,
+          createURL: connectorState.createURL,
+          items,
+          refine: connectorState.refine,
+          widgetParams,
         };
       },
 

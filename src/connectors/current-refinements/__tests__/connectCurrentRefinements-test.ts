@@ -123,7 +123,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       ).not.toThrow();
     });
 
-    describe('getWidgetRenderState', () => {
+    describe('getRenderState', () => {
       test('returns the render state', () => {
         const renderFn = jest.fn();
         const unmountFn = jest.fn();
@@ -133,10 +133,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         );
         const configure = createCurrentRefinements({});
 
-        const renderState = configure.getWidgetRenderState!(
-          {},
-          createInitOptions()
-        );
+        const renderState = configure.getRenderState!({}, createInitOptions());
 
         expect(renderState.currentRefinements).toEqual({
           items: [],
@@ -169,7 +166,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
         helper.toggleRefinement('category', 'Decoration');
 
-        const renderState = configure.getWidgetRenderState!(
+        const renderState = configure.getRenderState!(
           {},
           createRenderOptions({
             helper,

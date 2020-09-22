@@ -276,16 +276,23 @@ export type Widget = {
   /**
    * Returns the render params to pass to the render function.
    */
-  getWidgetRenderState?(
+  getRenderState?(
     renderState: IndexRenderState,
-    widgetRenderStateOptions: InitOptions | RenderOptions
+    renderStateOptions: InitOptions | RenderOptions
   ): IndexRenderState;
   /**
-   * Returns the current connector specific part of the renderState.
+   * Returns the render params to pass to the render function.
    */
-  _extractWidgetRenderState?(
-    renderState: IndexRenderState
-  ): WidgetRenderState<unknown, unknown>; // @TODO fix unknown, but how? It depends on which connector returns what.
+  getWidgetRenderState?(
+    renderStateOptions: InitOptions | RenderOptions
+  ):
+    | SearchBoxWidgetRenderState
+    | AutocompleteWidgetRenderState
+    | BreadcrumbWidgetRenderState
+    | ClearRefinementsWidgetRenderState
+    | ConfigureWidgetRenderState
+    | CurrentRefinementsWidgetRenderState
+    | HierarchicalMenuWidgetRenderState;
   /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and
