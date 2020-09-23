@@ -73,6 +73,8 @@ function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
           fetch: undefined,
           _base: undefined,
           name: 'ais-ssr-root-component',
+          // copy over global Vue APIs
+          router: componentInstance.$router,
         };
 
         const extended = componentInstance.$vnode
