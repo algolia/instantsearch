@@ -134,7 +134,7 @@ function instantSearchPlayground({
       console.log('insights onEvent', props);
     },
   });
-  search.EXPERIMENTAL_use(insights);
+  search.use(insights);
 }
 
 export default instantSearchPlayground;
