@@ -281,7 +281,7 @@ See ${createDocumentationLink({
   public EXPERIMENTAL_use(...middleware: Middleware[]): this {
     warning(
       false,
-      'The middleware API is now considered stable so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
+      'The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
     );
 
     return this.use(...middleware);
