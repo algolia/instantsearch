@@ -58,17 +58,17 @@ const insightsListener = (BaseComponent: any) => {
           const payload = parseInsightsEvent(targetWithEvent);
           props.sendEvent(payload);
         }
-      } else {
-        // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
-        const insightsTarget = findInsightsTarget(
-          event.target as HTMLElement | null,
-          event.currentTarget as HTMLElement | null,
-          element => hasDataAttributes(element)
-        );
-        if (insightsTarget) {
-          const { method, payload } = readDataAttributes(insightsTarget);
-          props.insights(method, payload);
-        }
+      }
+
+      // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
+      const insightsTarget = findInsightsTarget(
+        event.target as HTMLElement | null,
+        event.currentTarget as HTMLElement | null,
+        element => hasDataAttributes(element)
+      );
+      if (insightsTarget) {
+        const { method, payload } = readDataAttributes(insightsTarget);
+        props.insights(method, payload);
       }
     };
 

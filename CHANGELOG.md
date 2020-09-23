@@ -1,3 +1,12 @@
+## [4.8.2](https://github.com/algolia/instantsearch.js/compare/v4.8.1...v4.8.2) (2020-09-22)
+
+
+### Bug Fixes
+
+* **insights:** fix the regression that it didn't send events with instantsearch.insights() ([#4519](https://github.com/algolia/instantsearch.js/issues/4519)) ([10e38df](https://github.com/algolia/instantsearch.js/commit/10e38df02608071cd7272e829b6748be41b9c2c0))
+
+
+
 ## [4.8.1](https://github.com/algolia/instantsearch.js/compare/v4.8.0...v4.8.1) (2020-09-15)
 
 
