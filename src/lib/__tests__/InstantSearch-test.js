@@ -272,7 +272,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
     expect(() => {
       search.EXPERIMENTAL_use(middleware);
-    }).toWarnDev();
+    }).toWarnDev(
+      '[InstantSearch.js]: The middleware API is now considered stable so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
+    );
   });
 
   it('does not warn dev with use', () => {
