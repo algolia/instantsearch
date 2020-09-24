@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { mount } from '@vue/test-utils';
 import _renderToString from 'vue-server-renderer/basic';
 import Router from 'vue-router';
+import Vuex from 'vuex';
 import { createServerRootMixin } from '../createServerRootMixin';
 import InstantSearchSsr from '../../components/InstantSearchSsr';
 import Configure from '../../components/Configure';
@@ -255,6 +256,54 @@ Array [
       const wrapper = new Vue({
         mixins: [forceIsServerMixin],
         router,
+        render(h) {
+          return h(App);
+        },
+      });
+
+      await renderToString(wrapper);
+    });
+
+    it('forwards vuex', async () => {
+      const searchClient = createFakeClient();
+
+      Vue.use(Vuex);
+
+      const store = new Vuex.Store();
+
+      // there are two renders of App, each with an assertion
+      expect.assertions(2);
+
+      const App = Vue.component('App', {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        data() {
+          expect(this.$store).toBe(store);
+          return {};
+        },
+        render(h) {
+          return h(InstantSearchSsr, {}, [
+            h(Configure, {
+              attrs: {
+                hitsPerPage: 100,
+              },
+            }),
+            h(SearchBox),
+          ]);
+        },
+        serverPrefetch() {
+          return this.instantsearch.findResultsState(this);
+        },
+      });
+
+      const wrapper = new Vue({
+        mixins: [forceIsServerMixin],
+        store,
         render(h) {
           return h(App);
         },

@@ -107,7 +107,8 @@
     "vue-server-renderer": "^2.6.11",
     "vue-slider-component": "3.0.15",
     "vue-template-compiler": "2.5.18",
-    "vuetify": "1.5.3"
+    "vuetify": "1.5.3",
+    "vuex": "3.5.1"
   },
   "bundlesize": [
     {
