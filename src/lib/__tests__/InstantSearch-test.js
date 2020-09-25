@@ -45,6 +45,10 @@ beforeEach(() => {
 });
 
 describe('Usage', () => {
+  beforeEach(() => {
+    warning.cache = {};
+  });
+
   it('throws without indexName', () => {
     expect(() => {
       // eslint-disable-next-line no-new
@@ -297,6 +301,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     expect(() => {
       search.use(middleware);
     }).not.toWarnDev();
+  });
+
+  it('warns dev when insightsClient is given', () => {
+    const searchClient = createSearchClient({
+      addAlgoliaAgent: jest.fn(),
+    });
+
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient,
+        insightsClient: () => {},
+      });
+    }).toWarnDev(
+      `[InstantSearch.js]: \`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by \`insights\` middleware.
+
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
+    );
   });
 });
 

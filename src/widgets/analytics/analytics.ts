@@ -1,5 +1,5 @@
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { createDocumentationMessageGenerator } from '../../lib/utils';
+import { createDocumentationMessageGenerator, warning } from '../../lib/utils';
 import { WidgetFactory } from '../../types';
 
 export type AnalyticsWidgetParamsPushFunction = (
@@ -63,6 +63,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'analytics' });
 
 export type AnalyticsWidget = WidgetFactory<{}, AnalyticsWidgetParams>;
 
+// @major this widget will be removed from the next major version.
 const analytics: AnalyticsWidget = function analytics(widgetParams) {
   const {
     pushFunction,
@@ -75,6 +76,13 @@ const analytics: AnalyticsWidget = function analytics(widgetParams) {
   if (!pushFunction) {
     throw new Error(withUsage('The `pushFunction` option is required.'));
   }
+
+  warning(
+    false,
+    `\`analytics\` widget has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by \`insights\` middleware.
+
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
+  );
 
   type AnalyticsState = {
     results: SearchResults;

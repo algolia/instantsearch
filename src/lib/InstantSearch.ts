@@ -119,6 +119,8 @@ export type InstantSearchOptions = {
   /**
    * the instance of search-insights to use for sending insights events inside
    * widgets like `hits`.
+   *
+   * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
 };
@@ -182,6 +184,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     if (typeof searchClient.addAlgoliaAgent === 'function') {
       searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
     }
+
+    warning(
+      insightsClient === null,
+      `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by \`insights\` middleware.
+
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
+    );
 
     warning(
       Boolean(insightsClient) || !hasDetectedInsightsClient(),
