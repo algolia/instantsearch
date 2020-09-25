@@ -249,7 +249,15 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         };
 
         helper
-          .searchForFacetValues(attribute, query, getLimit(isShowingMore), tags)
+          .searchForFacetValues(
+            attribute,
+            query,
+            // We cap the `maxFacetHits` value to 100 because the Algolia API
+            // doesn't support a greater number.
+            // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
+            Math.min(getLimit(isShowingMore), 100),
+            tags
+          )
           .then(results => {
             const facetValues = escapeFacetValues
               ? escapeFacets(results.facetHits)

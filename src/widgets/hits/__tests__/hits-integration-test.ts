@@ -6,10 +6,16 @@ import { createInsightsMiddleware } from '../../../middlewares';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 
-const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
+const createSearchClient = ({
+  hitsPerPage,
+  includeQueryID,
+}: {
+  hitsPerPage: number;
+  includeQueryID?: boolean;
+}) => {
   const page = 0;
 
-  const searchClient: any = {
+  return {
     search: jest.fn(requests =>
       Promise.resolve({
         results: requests.map(() =>
@@ -19,15 +25,23 @@ const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
               .map((_, index) => ({
                 title: `title ${page * hitsPerPage + index + 1}`,
                 objectID: `object-id${index}`,
+                ...(includeQueryID && { __queryID: 'test-query-id' }),
               })),
           })
         ),
       })
     ),
   };
+};
+
+const createInstantSearch = ({
+  hitsPerPage = 2,
+}: {
+  hitsPerPage?: number;
+} = {}) => {
   const search = instantsearch({
     indexName: 'instant_search',
-    searchClient,
+    searchClient: createSearchClient({ hitsPerPage }) as any,
   });
 
   search.addWidgets([
@@ -162,6 +176,58 @@ describe('hits', () => {
           objectIDs: ['object-id1'],
         },
         widgetType: 'ais.hits',
+      });
+    });
+  });
+
+  describe('old insights methods', () => {
+    it('sends event', async () => {
+      const aa = jest.fn();
+      const hitsPerPage = 2;
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchClient: createSearchClient({
+          hitsPerPage,
+          includeQueryID: true,
+        }) as any,
+        insightsClient: aa,
+      });
+
+      search.addWidgets([
+        configure({
+          hitsPerPage,
+        }),
+      ]);
+
+      search.addWidgets([
+        hits({
+          container,
+          templates: {
+            item: item => `
+              <button type='button' ${instantsearch.insights(
+                'clickedObjectIDsAfterSearch',
+                {
+                  objectIDs: [item.objectID],
+                  eventName: 'Add to cart',
+                }
+              )}>
+                ${item.title}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await runAllMicroTasks();
+
+      fireEvent.click(getByText(container, 'title 1'));
+      expect(aa).toHaveBeenCalledTimes(1);
+      expect(aa).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
+        eventName: 'Add to cart',
+        index: undefined,
+        objectIDs: ['object-id0'],
+        positions: [1],
+        queryID: 'test-query-id',
       });
     });
   });
