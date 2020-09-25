@@ -19,14 +19,15 @@
   "version": "3.2.0",
   "files": [
     "dist",
-    "src"
+    "src",
+    "es"
   ],
   "main": "dist/vue-instantsearch.common.js",
-  "module": "dist/vue-instantsearch.esm.js",
+  "module": "es/src/instantsearch.js",
   "sideEffects": false,
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rm -rf dist es && rollup -c",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook:build": "build-storybook -c .storybook -o website/stories",
     "examples:build": "yarn build && ./examples/build.sh",
@@ -87,7 +88,7 @@
     "jest-watch-typeahead": "0.2.1",
     "lodash": "4.17.19",
     "prettier": "1.14.3",
-    "rollup": "1.16.7",
+    "rollup": "1.32.1",
     "rollup-plugin-buble": "0.19.6",
     "rollup-plugin-commonjs": "10.0.1",
     "rollup-plugin-filesize": "9.0.0",
@@ -114,10 +115,6 @@
     {
       "path": "./dist/vue-instantsearch.js",
       "maxSize": "48.00 kB"
-    },
-    {
-      "path": "./dist/vue-instantsearch.esm.js",
-      "maxSize": "15.75 kB"
     },
     {
       "path": "./dist/vue-instantsearch.common.js",

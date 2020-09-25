@@ -12,6 +12,22 @@ const processEnv = conf => ({
   'process.env': `(${JSON.stringify(conf)})`,
 });
 
+const plugins = [
+  commonjs(),
+  vue({ compileTemplate: true, css: false }),
+  json(),
+  buble({
+    transforms: {
+      dangerousForOf: true,
+    },
+  }),
+  replace(processEnv({ NODE_ENV: 'production' })),
+  terser({
+    sourcemap: true,
+  }),
+  filesize(),
+];
+
 export default [
   {
     input: 'src/instantsearch.js',
@@ -28,26 +44,26 @@ export default [
         format: 'cjs',
         exports: 'named',
       },
+    ],
+    plugins: [...plugins],
+  },
+  {
+    input: 'src/instantsearch.js',
+    external: [
+      'algoliasearch-helper',
+      'instantsearch.js/es',
+      'instantsearch.js/es/connectors',
+      'vue',
+    ],
+    output: [
       {
         sourcemap: true,
-        file: `dist/vue-instantsearch.esm.js`,
+        dir: `es`,
         format: 'es',
       },
     ],
-    plugins: [
-      commonjs(),
-      vue({ compileTemplate: true, css: false }),
-      json(),
-      buble({
-        transforms: {
-          dangerousForOf: true,
-        },
-      }),
-      terser({
-        sourcemap: true,
-      }),
-      filesize(),
-    ],
+    preserveModules: true,
+    plugins: [...plugins],
   },
   {
     input: 'src/instantsearch.umd.js',
@@ -65,23 +81,11 @@ export default [
       },
     ],
     plugins: [
-      vue({ compileTemplate: true, css: false }),
-      json(),
+      ...plugins,
       resolve({
         browser: true,
         preferBuiltins: false,
       }),
-      buble({
-        transforms: {
-          dangerousForOf: true,
-        },
-      }),
-      replace(processEnv({ NODE_ENV: 'production' })),
-      commonjs(),
-      terser({
-        sourcemap: true,
-      }),
-      filesize(),
     ],
   },
 ];
