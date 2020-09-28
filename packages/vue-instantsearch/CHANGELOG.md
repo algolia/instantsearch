@@ -1,3 +1,18 @@
+# [3.3.0](https://github.com/algolia/vue-instantsearch/compare/v3.2.0...v3.3.0) (2020-09-28)
+
+
+### Bug Fixes
+
+* **RatingMenu:** use unique keys ([80ff944](https://github.com/algolia/vue-instantsearch/commit/80ff94480ff3e9759ccf4dad8b1da28821b9c254))
+* **Tree Shaking:** allow modern bundlers to remove parts of Vue InstantSearch which aren't used ([(#866)](https://github.com/algolia/vue-instantsearch/pulls/866))
+
+### Features
+
+* **ssr:** forward router instance to findResultsState clone ([#863](https://github.com/algolia/vue-instantsearch/issues/863)) ([84f79eb](https://github.com/algolia/vue-instantsearch/commit/84f79eb54a6f32ac3981d9fbf8504ddc4a319e03))
+* **ssr:** forward vuex instance to findResultsState clone ([#864](https://github.com/algolia/vue-instantsearch/issues/864)) ([986a992](https://github.com/algolia/vue-instantsearch/commit/986a992a564d409522252536fd653a3b86cda82b))
+
+
+
 # [3.2.0](https://github.com/algolia/vue-instantsearch/compare/v3.1.0...v3.2.0) (2020-08-12)
 
 
