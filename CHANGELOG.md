@@ -1,3 +1,13 @@
+## [4.8.3](https://github.com/algolia/instantsearch.js/compare/v4.8.2...v4.8.3) (2020-09-29)
+
+
+### Bug Fixes
+
+* **middleware:** rename EXPERIMENTAL_use to use ([#4450](https://github.com/algolia/instantsearch.js/issues/4450)) ([87ecb99](https://github.com/algolia/instantsearch.js/commit/87ecb99f33ab4930d8ec1996ddba9db0a9d07da4))
+* **refinementList:** cap `maxFacetHits` to 100 for SFFV ([#4523](https://github.com/algolia/instantsearch.js/issues/4523)) ([baf1f02](https://github.com/algolia/instantsearch.js/commit/baf1f027fc2436e86536fffbee11a595cfd7dac0))
+
+
+
 ## [4.8.2](https://github.com/algolia/instantsearch.js/compare/v4.8.1...v4.8.2) (2020-09-22)
 
 
