@@ -274,14 +274,15 @@ export type Widget = {
    */
   dispose?(options: DisposeOptions): SearchParameters | void;
   /**
-   * Returns the render params to pass to the render function.
+   * Returns IndexRenderState of the current index component tree
+   * to build the render state of the whole app.
    */
   getRenderState?(
     renderState: IndexRenderState,
     renderOptions: InitOptions | RenderOptions
   ): IndexRenderState;
   /**
-   * Returns the render params to pass to the render function.
+   * Returns the render state of the current widget to pass to the render function.
    */
   getWidgetRenderState?(
     renderOptions: InitOptions | RenderOptions
