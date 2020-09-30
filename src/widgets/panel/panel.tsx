@@ -248,17 +248,7 @@ const panel: PanelWidget = widgetParams => {
         return undefined;
       },
       render(...args) {
-        const [renderOptions] = args;
-
-        let widgetRenderState;
-        if (widget.getWidgetRenderState) {
-          widgetRenderState = widget.getWidgetRenderState(renderOptions);
-        }
-
-        const options = {
-          ...renderOptions,
-          widgetRenderState,
-        };
+        const [options] = args;
 
         renderPanel({
           options,
