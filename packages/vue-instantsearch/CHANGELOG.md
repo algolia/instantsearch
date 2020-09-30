@@ -1,3 +1,12 @@
+# [3.4.0](https://github.com/algolia/vue-instantsearch/compare/v3.3.0...v3.4.0) (2020-09-30)
+
+
+### Features
+
+* **ssr:** forward propsData to recreated component ([#865](https://github.com/algolia/vue-instantsearch/issues/865)) ([6c18a10](https://github.com/algolia/vue-instantsearch/commit/6c18a100558ae48e059c660262da32d420891d0d)), closes [/github.com/vuejs/vue/blob/7912f75c5eb09e0aef3e4bfd8a3bb78cad7540d7/src/core/util/options.js#L34-L44](https://github.com//github.com/vuejs/vue/blob/7912f75c5eb09e0aef3e4bfd8a3bb78cad7540d7/src/core/util/options.js/issues/L34-L44)
+
+
+
 # [3.3.0](https://github.com/algolia/vue-instantsearch/compare/v3.2.0...v3.3.0) (2020-09-28)
 
 
