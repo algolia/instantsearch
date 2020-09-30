@@ -15,12 +15,7 @@ import {
   FacetRefinement,
   NumericRefinement,
 } from '../../lib/utils/getRefinements';
-import {
-  Connector,
-  TransformItems,
-  CreateURL,
-  CurrentRefinementsWidgetRenderState,
-} from '../../types';
+import { Connector, TransformItems, CreateURL } from '../../types';
 
 export type CurrentRefinementsConnectorParamsRefinement = {
   /**
@@ -171,9 +166,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              initOptions
-            ) as CurrentRefinementsWidgetRenderState),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance,
           },
           true
@@ -185,9 +178,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              renderOptions
-            ) as CurrentRefinementsWidgetRenderState),
+            ...this.getWidgetRenderState!(renderOptions),
             instantSearchInstance,
           },
           false
