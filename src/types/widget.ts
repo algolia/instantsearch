@@ -229,37 +229,6 @@ type WidgetRenderState<
  * have at least a `render` or a `init` function.
  */
 export type Widget = {
-  $$type?:
-    | 'ais.autocomplete'
-    | 'ais.breadcrumb'
-    | 'ais.clearRefinements'
-    | 'ais.configure'
-    | 'ais.configureRelatedItems'
-    | 'ais.currentRefinements'
-    | 'ais.geoSearch'
-    | 'ais.hierarchicalMenu'
-    | 'ais.hits'
-    | 'ais.hitsPerPage'
-    | 'ais.index'
-    | 'ais.infiniteHits'
-    | 'ais.menu'
-    | 'ais.numericMenu'
-    | 'ais.pagination'
-    | 'ais.places'
-    | 'ais.poweredBy'
-    | 'ais.queryRules'
-    | 'ais.queryRuleCustomData'
-    | 'ais.queryRuleContext'
-    | 'ais.range'
-    | 'ais.rangeInput'
-    | 'ais.rangeSlider'
-    | 'ais.ratingMenu'
-    | 'ais.refinementList'
-    | 'ais.searchBox'
-    | 'ais.sortBy'
-    | 'ais.stats'
-    | 'ais.toggleRefinement'
-    | 'ais.voiceSearch';
   /**
    * Called once before the first search
    */
@@ -281,21 +250,6 @@ export type Widget = {
     renderState: IndexRenderState,
     renderOptions: InitOptions | RenderOptions
   ): IndexRenderState;
-  /**
-   * Returns the render state of the current widget to pass to the render function.
-   */
-  getWidgetRenderState?<
-    TWidgetRenderState =
-      | SearchBoxWidgetRenderState
-      | AutocompleteWidgetRenderState
-      | BreadcrumbWidgetRenderState
-      | ClearRefinementsWidgetRenderState
-      | ConfigureWidgetRenderState
-      | CurrentRefinementsWidgetRenderState
-      | HierarchicalMenuWidgetRenderState
-  >(
-    renderOptions: InitOptions | RenderOptions
-  ): TWidgetRenderState;
   /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and
@@ -330,7 +284,73 @@ export type Widget = {
     state: SearchParameters,
     widgetSearchParametersOptions: WidgetSearchParametersOptions
   ): SearchParameters;
-};
+} & (
+  | {
+      $$type: 'ais.searchBox';
+      getWidgetRenderState?: (
+        renderOptions: InitOptions | RenderOptions
+      ) => SearchBoxWidgetRenderState;
+    }
+  | {
+      $$type: 'ais.autocomplete';
+      getWidgetRenderState?: (
+        renderOptions: InitOptions | RenderOptions
+      ) => AutocompleteWidgetRenderState;
+    }
+  | {
+      $$type: 'ais.breadcrumb';
+      getWidgetRenderState?: (
+        renderOptions: InitOptions | RenderOptions
+      ) => BreadcrumbWidgetRenderState;
+    }
+  | {
+      $$type: 'ais.clearRefinements';
+      getWidgetRenderState?: (
+        renderOptions: InitOptions | RenderOptions
+      ) => ClearRefinementsWidgetRenderState;
+    }
+  | {
+      $$type: 'ais.configure';
+      getWidgetRenderState?: (
+        renderOptions: InitOptions | RenderOptions
+      ) => ConfigureWidgetRenderState;
+    }
+  | {
+      $$type: 'ais.currentRefinements';
+      getWidgetRenderState?: (
+        renderOptions: InitOptions | RenderOptions
+      ) => CurrentRefinementsWidgetRenderState;
+    }
+  | {
+      $$type: 'ais.hierarchicalMenu';
+      getWidgetRenderState?: (
+        renderOptions: InitOptions | RenderOptions
+      ) => HierarchicalMenuWidgetRenderState;
+    }
+  | { $$type: 'ais.configureRelatedItems' }
+  | { $$type: 'ais.geoSearch' }
+  | { $$type: 'ais.hits' }
+  | { $$type: 'ais.hitsPerPage' }
+  | { $$type: 'ais.index' }
+  | { $$type: 'ais.infiniteHits' }
+  | { $$type: 'ais.menu' }
+  | { $$type: 'ais.numericMenu' }
+  | { $$type: 'ais.pagination' }
+  | { $$type: 'ais.places' }
+  | { $$type: 'ais.poweredBy' }
+  | { $$type: 'ais.queryRules' }
+  | { $$type: 'ais.queryRuleCustomData' }
+  | { $$type: 'ais.queryRuleContext' }
+  | { $$type: 'ais.range' }
+  | { $$type: 'ais.rangeInput' }
+  | { $$type: 'ais.rangeSlider' }
+  | { $$type: 'ais.ratingMenu' }
+  | { $$type: 'ais.refinementList' }
+  | { $$type: 'ais.sortBy' }
+  | { $$type: 'ais.stats' }
+  | { $$type: 'ais.toggleRefinement' }
+  | { $$type: 'ais.voiceSearch' }
+);
 
 /**
  * The function that creates a new widget.

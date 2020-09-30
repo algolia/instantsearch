@@ -6,7 +6,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import { Hits, Connector, AutocompleteWidgetRenderState } from '../../types';
+import { Hits, Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
@@ -110,9 +110,7 @@ search.addWidgets([
 
         renderFn(
           {
-            ...this.getWidgetRenderState!<AutocompleteWidgetRenderState>(
-              initOptions
-            ),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance,
           },
           true
@@ -124,9 +122,7 @@ search.addWidgets([
 
         renderFn(
           {
-            ...this.getWidgetRenderState!<AutocompleteWidgetRenderState>(
-              renderOptions
-            ),
+            ...this.getWidgetRenderState!(renderOptions),
             instantSearchInstance,
           },
           false
@@ -136,9 +132,7 @@ search.addWidgets([
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          autocomplete: this.getWidgetRenderState!<
-            AutocompleteWidgetRenderState
-          >(renderOptions),
+          autocomplete: this.getWidgetRenderState!(renderOptions),
         };
       },
 
