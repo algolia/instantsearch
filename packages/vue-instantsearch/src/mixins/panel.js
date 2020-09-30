@@ -58,19 +58,22 @@ export const createPanelConsumerMixin = ({ mapStateToCanRefine }) => ({
     };
   },
   watch: {
-    state(nextState, previousState) {
-      if (!previousState || !nextState) {
-        return;
-      }
+    state: {
+      immediate: true,
+      handler(nextState, previousState) {
+        if (!nextState) {
+          return;
+        }
 
-      const previousCanRefine = mapStateToCanRefine(previousState);
-      const nextCanRefine = mapStateToCanRefine(nextState);
+        const previousCanRefine = mapStateToCanRefine(previousState || {});
+        const nextCanRefine = mapStateToCanRefine(nextState);
 
-      if (!this.hasAlreadyEmitted || previousCanRefine !== nextCanRefine) {
-        this.emitter.$emit(PANEL_CHANGE_EVENT, nextCanRefine);
+        if (!this.hasAlreadyEmitted || previousCanRefine !== nextCanRefine) {
+          this.emitter.$emit(PANEL_CHANGE_EVENT, nextCanRefine);
 
-        this.hasAlreadyEmitted = true;
-      }
+          this.hasAlreadyEmitted = true;
+        }
+      },
     },
   },
 });

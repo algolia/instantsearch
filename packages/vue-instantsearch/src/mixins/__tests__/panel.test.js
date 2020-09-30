@@ -108,16 +108,18 @@ describe('createPanelConsumerMixin', () => {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(0);
+    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
     wrapper.vm.state = {
       attributeName: true,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.$emit).toHaveBeenCalledTimes(2);
+    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
   });
 
-  it('emits at least once when both values are set', () => {
+  it('emits once when both values are set', () => {
     const localVue = createLocalVue();
     const emitter = createFakeEmitter();
     const Test = createFakeComponent(localVue);
@@ -137,7 +139,8 @@ describe('createPanelConsumerMixin', () => {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(0);
+    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
     wrapper.vm.state = {
       attributeName: false,
@@ -146,7 +149,7 @@ describe('createPanelConsumerMixin', () => {
     expect(emitter.$emit).toHaveBeenCalledTimes(1);
   });
 
-  it('do not emit when the previous value is not set', () => {
+  it('emits once on init of the component', () => {
     const localVue = createLocalVue();
     const emitter = createFakeEmitter();
     const Test = createFakeComponent(localVue);
@@ -166,7 +169,8 @@ describe('createPanelConsumerMixin', () => {
       attributeName: true,
     };
 
-    expect(emitter.$emit).not.toHaveBeenCalled();
+    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
   });
 
   it('do not emit when the next value is not set', () => {
@@ -189,11 +193,12 @@ describe('createPanelConsumerMixin', () => {
       attributeName: true,
     };
 
-    expect(emitter.$emit).not.toHaveBeenCalled();
+    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
     wrapper.vm.state = null;
 
-    expect(emitter.$emit).not.toHaveBeenCalled();
+    expect(emitter.$emit).toHaveBeenCalledTimes(1);
   });
 
   it('do not emit when the previous and next value are equal', () => {
@@ -216,18 +221,20 @@ describe('createPanelConsumerMixin', () => {
       attributeName: true,
     };
 
-    expect(emitter.$emit).not.toHaveBeenCalled();
+    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
     wrapper.vm.state = {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.$emit).toHaveBeenCalledTimes(2);
+    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
     wrapper.vm.state = {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.$emit).toHaveBeenCalledTimes(2);
   });
 });

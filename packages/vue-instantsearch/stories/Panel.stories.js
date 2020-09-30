@@ -6,6 +6,14 @@ storiesOf('ais-panel', module)
   .add('default', () => ({
     template: `
       <ais-panel>
+        <template slot="header">Brand</template>
+        <ais-refinement-list attribute="brand" />
+      </ais-panel>
+  `,
+  }))
+  .add('text content', () => ({
+    template: `
+      <ais-panel>
         This is the body of the Panel.
       </ais-panel>
     `,
