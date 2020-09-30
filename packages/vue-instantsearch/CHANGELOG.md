@@ -1,5 +1,9 @@
-# [3.4.0](https://github.com/algolia/vue-instantsearch/compare/v3.3.0...v3.4.0) (2020-09-30)
+## [3.4.1](https://github.com/algolia/vue-instantsearch/compare/v3.3.0...v3.4.1) (2020-09-30)
 
+
+### Bug Fixes
+
+* **panel:** react to changes on initial render ([#871](https://github.com/algolia/vue-instantsearch/issues/871)) ([56917a0](https://github.com/algolia/vue-instantsearch/commit/56917a079a1e48d4cce1a509d1caefec60f203fe))
 
 ### Features
 
