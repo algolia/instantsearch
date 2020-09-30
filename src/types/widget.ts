@@ -284,16 +284,18 @@ export type Widget = {
   /**
    * Returns the render state of the current widget to pass to the render function.
    */
-  getWidgetRenderState?(
+  getWidgetRenderState?<
+    TWidgetRenderState =
+      | SearchBoxWidgetRenderState
+      | AutocompleteWidgetRenderState
+      | BreadcrumbWidgetRenderState
+      | ClearRefinementsWidgetRenderState
+      | ConfigureWidgetRenderState
+      | CurrentRefinementsWidgetRenderState
+      | HierarchicalMenuWidgetRenderState
+  >(
     renderOptions: InitOptions | RenderOptions
-  ):
-    | SearchBoxWidgetRenderState
-    | AutocompleteWidgetRenderState
-    | BreadcrumbWidgetRenderState
-    | ClearRefinementsWidgetRenderState
-    | ConfigureWidgetRenderState
-    | CurrentRefinementsWidgetRenderState
-    | HierarchicalMenuWidgetRenderState;
+  ): TWidgetRenderState;
   /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and

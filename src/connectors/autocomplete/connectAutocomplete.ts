@@ -110,9 +110,9 @@ search.addWidgets([
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
+            ...this.getWidgetRenderState!<AutocompleteWidgetRenderState>(
               initOptions
-            ) as AutocompleteWidgetRenderState),
+            ),
             instantSearchInstance,
           },
           true
@@ -124,9 +124,9 @@ search.addWidgets([
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
+            ...this.getWidgetRenderState!<AutocompleteWidgetRenderState>(
               renderOptions
-            ) as AutocompleteWidgetRenderState),
+            ),
             instantSearchInstance,
           },
           false
@@ -136,7 +136,9 @@ search.addWidgets([
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          autocomplete: this.getWidgetRenderState!(renderOptions),
+          autocomplete: this.getWidgetRenderState!<
+            AutocompleteWidgetRenderState
+          >(renderOptions),
         };
       },
 
