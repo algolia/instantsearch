@@ -311,6 +311,57 @@ Array [
 
       await renderToString(wrapper);
     });
+
+    it('forwards props', async () => {
+      const searchClient = createFakeClient();
+
+      // there are two renders of App, each with an assertion
+      expect.assertions(2);
+
+      const someProp = { data: Math.random() };
+
+      const App = Vue.component('App', {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        props: {
+          someProp: {
+            required: true,
+            type: Object,
+            validator(value) {
+              expect(value).toBe(someProp);
+              return value === someProp;
+            },
+          },
+        },
+        render(h) {
+          return h(InstantSearchSsr, {}, [
+            h(Configure, {
+              attrs: {
+                hitsPerPage: 100,
+              },
+            }),
+            h(SearchBox),
+          ]);
+        },
+        serverPrefetch() {
+          return this.instantsearch.findResultsState(this);
+        },
+      });
+
+      const wrapper = new Vue({
+        mixins: [forceIsServerMixin],
+        render(h) {
+          return h(App, { props: { someProp } });
+        },
+      });
+
+      await renderToString(wrapper);
+    });
   });
 
   describe('hydrate', () => {
