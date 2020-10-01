@@ -6,7 +6,12 @@ import {
   noop,
 } from '../../lib/utils';
 import { SearchResults } from 'algoliasearch-helper';
-import { Connector, TransformItems, CreateURL } from '../../types';
+import {
+  Connector,
+  TransformItems,
+  CreateURL,
+  BreadcrumbWidgetRenderState,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'breadcrumb',
@@ -150,7 +155,9 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(initOptions),
+            ...(this.getWidgetRenderState!(
+              initOptions
+            ) as BreadcrumbWidgetRenderState),
             instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
@@ -160,7 +167,9 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
       render(renderOptions) {
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderOptions),
+            ...(this.getWidgetRenderState!(
+              renderOptions
+            ) as BreadcrumbWidgetRenderState),
             instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false
