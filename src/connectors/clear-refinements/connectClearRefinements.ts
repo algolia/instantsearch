@@ -56,7 +56,8 @@ export type ClearRefinementsRendererOptions = {
 
 export type ClearRefinementsConnector = Connector<
   ClearRefinementsRendererOptions,
-  ClearRefinementsConnectorParams
+  ClearRefinementsConnectorParams,
+  ClearRefinementsWidgetRenderState
 >;
 
 type AttributesToClear = {
@@ -108,9 +109,7 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              initOptions
-            ) as ClearRefinementsWidgetRenderState),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance,
           },
           true
@@ -151,9 +150,7 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              renderOptions
-            ) as ClearRefinementsWidgetRenderState),
+            ...this.getWidgetRenderState!(renderOptions),
             instantSearchInstance,
           },
           false

@@ -135,7 +135,8 @@ const withUsage = createDocumentationMessageGenerator({
 
 export type CurrentRefinementsConnector = Connector<
   CurrentRefinementsRendererOptions,
-  CurrentRefinementsConnectorParams
+  CurrentRefinementsConnectorParams,
+  CurrentRefinementsWidgetRenderState
 >;
 
 const connectCurrentRefinements: CurrentRefinementsConnector = function connectCurrentRefinements(
@@ -171,9 +172,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              initOptions
-            ) as CurrentRefinementsWidgetRenderState),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance,
           },
           true
@@ -185,9 +184,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              renderOptions
-            ) as CurrentRefinementsWidgetRenderState),
+            ...this.getWidgetRenderState!(renderOptions),
             instantSearchInstance,
           },
           false

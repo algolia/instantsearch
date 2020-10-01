@@ -78,7 +78,8 @@ export type BreadcrumbRendererOptions = {
 
 export type BreadcrumbConnector = Connector<
   BreadcrumbRendererOptions,
-  BreadcrumbConnectorParams
+  BreadcrumbConnectorParams,
+  BreadcrumbWidgetRenderState
 >;
 
 const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
@@ -155,9 +156,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              initOptions
-            ) as BreadcrumbWidgetRenderState),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
@@ -167,9 +166,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
       render(renderOptions) {
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              renderOptions
-            ) as BreadcrumbWidgetRenderState),
+            ...this.getWidgetRenderState!(renderOptions),
             instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false

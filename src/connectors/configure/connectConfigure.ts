@@ -56,7 +56,8 @@ function getInitialSearchParameters(
 
 export type ConfigureConnector = Connector<
   ConfigureRendererOptions,
-  ConfigureConnectorParams
+  ConfigureConnectorParams,
+  ConfigureWidgetRenderState
 >;
 
 const connectConfigure: ConfigureConnector = function connectConfigure(
@@ -106,9 +107,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              initOptions
-            ) as ConfigureWidgetRenderState),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance,
           },
           true
@@ -120,9 +119,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
 
         renderFn(
           {
-            ...(this.getWidgetRenderState!(
-              renderOptions
-            ) as ConfigureWidgetRenderState),
+            ...this.getWidgetRenderState!(renderOptions),
             instantSearchInstance,
           },
           false
@@ -142,7 +139,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         };
       },
 
-      getWidgetRenderState(renderOptions) {
+      getWidgetRenderState() {
         return {
           refine: connectorState.refine!,
           widgetParams,

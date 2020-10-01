@@ -228,7 +228,7 @@ type WidgetRenderState<
  * Widgets are the building blocks of InstantSearch.js. Any valid widget must
  * have at least a `render` or a `init` function.
  */
-export type Widget = {
+export type Widget<TWidgetRenderState> = {
   $$type?:
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
@@ -284,16 +284,7 @@ export type Widget = {
   /**
    * Returns the render state of the current widget to pass to the render function.
    */
-  getWidgetRenderState?<
-    TWidgetRenderState =
-      | SearchBoxWidgetRenderState
-      | AutocompleteWidgetRenderState
-      | BreadcrumbWidgetRenderState
-      | ClearRefinementsWidgetRenderState
-      | ConfigureWidgetRenderState
-      | CurrentRefinementsWidgetRenderState
-      | HierarchicalMenuWidgetRenderState
-  >(
+  getWidgetRenderState?(
     renderOptions: InitOptions | RenderOptions
   ): TWidgetRenderState;
   /**
@@ -335,12 +326,16 @@ export type Widget = {
 /**
  * The function that creates a new widget.
  */
-export type WidgetFactory<TConnectorParams, TWidgetParams> = (
+export type WidgetFactory<
+  TConnectorParams,
+  TWidgetParams,
+  TWidgetRenderState
+> = (
   /**
    * The params of the widget.
    */
   widgetParams: TConnectorParams & TWidgetParams
-) => Widget;
+) => Widget<TWidgetRenderState>;
 
 export type Template<TTemplateData = void> =
   | string

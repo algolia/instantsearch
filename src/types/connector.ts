@@ -60,7 +60,11 @@ export type Unmounter = () => void;
  * The connector handles the business logic and exposes
  * a simplified API to the rendering function.
  */
-export type Connector<TRendererOptions, TConnectorParams> = <TWidgetParams>(
+export type Connector<
+  TRendererOptions,
+  TConnectorParams,
+  TWidgetRenderState
+> = <TWidgetParams>(
   /**
    * The render function.
    */
@@ -70,7 +74,7 @@ export type Connector<TRendererOptions, TConnectorParams> = <TWidgetParams>(
    * The called function when unmounting a widget.
    */
   unmountFn?: Unmounter
-) => WidgetFactory<TConnectorParams, TWidgetParams>;
+) => WidgetFactory<TConnectorParams, TWidgetParams, TWidgetRenderState>;
 
 /**
  * Transforms the given items.

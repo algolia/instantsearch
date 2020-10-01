@@ -56,7 +56,8 @@ export type AutocompleteRendererOptions = {
 
 export type AutocompleteConnector = Connector<
   AutocompleteRendererOptions,
-  AutocompleteConnectorParams
+  AutocompleteConnectorParams,
+  AutocompleteWidgetRenderState
 >;
 
 const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
@@ -110,9 +111,7 @@ search.addWidgets([
 
         renderFn(
           {
-            ...this.getWidgetRenderState!<AutocompleteWidgetRenderState>(
-              initOptions
-            ),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance,
           },
           true
@@ -124,9 +123,7 @@ search.addWidgets([
 
         renderFn(
           {
-            ...this.getWidgetRenderState!<AutocompleteWidgetRenderState>(
-              renderOptions
-            ),
+            ...this.getWidgetRenderState!(renderOptions),
             instantSearchInstance,
           },
           false
@@ -136,9 +133,7 @@ search.addWidgets([
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          autocomplete: this.getWidgetRenderState!<
-            AutocompleteWidgetRenderState
-          >(renderOptions),
+          autocomplete: this.getWidgetRenderState!(renderOptions),
         };
       },
 
