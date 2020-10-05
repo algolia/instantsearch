@@ -1,3 +1,12 @@
+## [3.4.2](https://github.com/algolia/vue-instantsearch/compare/v3.4.1...v3.4.2) (2020-10-05)
+
+
+### Bug Fixes
+
+* **panel:** safely access state in mapStateToCanRefine ([#876](https://github.com/algolia/vue-instantsearch/issues/876)) ([435c7d3](https://github.com/algolia/vue-instantsearch/commit/435c7d3d890a0c78d5a37670a926abf29e0f8bff)), closes [#874](https://github.com/algolia/vue-instantsearch/issues/874)
+
+
+
 ## [3.4.1](https://github.com/algolia/vue-instantsearch/compare/v3.3.0...v3.4.1) (2020-09-30)
 
 
