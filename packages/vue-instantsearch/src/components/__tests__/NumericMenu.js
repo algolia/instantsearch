@@ -185,27 +185,29 @@ describe('default render', () => {
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('100'));
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('500'));
   });
+});
 
-  it('calls the Panel mixin with `hasNoResults`', () => {
-    __setState({ ...defaultState });
+it('calls the Panel mixin with `hasNoResults`', () => {
+  __setState({ ...defaultState });
 
-    const wrapper = mount(NumericMenu, {
-      propsData: defaultProps,
-    });
-
-    const mapStateToCanRefine = () =>
-      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-    expect(mapStateToCanRefine()).toBe(true);
-
-    wrapper.setData({
-      state: {
-        hasNoResults: true,
-      },
-    });
-
-    expect(mapStateToCanRefine()).toBe(false);
+  const wrapper = mount(NumericMenu, {
+    propsData: defaultProps,
   });
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      hasNoResults: true,
+    },
+  });
+
+  expect(mapStateToCanRefine()).toBe(false);
+
+  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
 describe('custom default render', () => {

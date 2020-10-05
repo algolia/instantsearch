@@ -45,6 +45,7 @@ const defaultState = {
     },
     { value: '?', label: '?', highlighted: '?', isRefined: false, count: 0 },
   ],
+  canRefine: true,
 };
 
 it('renders correctly', () => {
@@ -56,6 +57,7 @@ it('renders correctly', () => {
       attribute: 'something',
     },
   });
+
   expect(wrapper.html()).toMatchSnapshot();
 });
 
@@ -162,4 +164,27 @@ it('behaves correctly', () => {
   const button = wrapper.find('input[type="checkbox"]');
   button.trigger('click');
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('yo');
+});
+
+it('calls the Panel mixin with `canRefine`', () => {
+  __setState({ ...defaultState });
+
+  const wrapper = mount(RefinementList, {
+    propsData: { attribute: 'something' },
+  });
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      canRefine: false,
+    },
+  });
+
+  expect(mapStateToCanRefine()).toBe(false);
+
+  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });

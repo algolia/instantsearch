@@ -45,7 +45,8 @@ import { createPanelConsumerMixin } from '../mixins/panel';
 import HierarchicalMenuList from './HierarchicalMenuList.vue';
 import { createSuitMixin } from '../mixins/suit';
 
-const mapStateToCanRefine = state => state.items.length > 0;
+const mapStateToCanRefine = state =>
+  Boolean(state.items) && state.items.length > 0;
 
 export default {
   name: 'AisHierarchicalMenu',

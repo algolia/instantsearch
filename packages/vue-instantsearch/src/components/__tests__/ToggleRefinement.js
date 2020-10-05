@@ -160,37 +160,39 @@ describe('default render', () => {
     expect(refine).toHaveBeenCalled();
     expect(refine).toHaveBeenCalledWith(defaultValue);
   });
+});
 
-  it('calls the Panel mixin with `value.count`', () => {
-    __setState({
-      ...defaultState,
-      value: {
-        // Otherwise setData update the default value
-        // and impact the other tests. We should not
-        // rely on a global state for the tests.
-        ...defaultValue,
-      },
-    });
-
-    const wrapper = mount(Toggle, {
-      propsData: defaultProps,
-    });
-
-    const mapStateToCanRefine = () =>
-      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-    expect(mapStateToCanRefine()).toBe(true);
-
-    wrapper.setData({
-      state: {
-        value: {
-          count: 0,
-        },
-      },
-    });
-
-    expect(mapStateToCanRefine()).toBe(false);
+it('calls the Panel mixin with `value.count`', () => {
+  __setState({
+    ...defaultState,
+    value: {
+      // Otherwise setData update the default value
+      // and impact the other tests. We should not
+      // rely on a global state for the tests.
+      ...defaultValue,
+    },
   });
+
+  const wrapper = mount(Toggle, {
+    propsData: defaultProps,
+  });
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      value: {
+        count: 0,
+      },
+    },
+  });
+
+  expect(mapStateToCanRefine()).toBe(false);
+
+  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
 describe('custom default render', () => {

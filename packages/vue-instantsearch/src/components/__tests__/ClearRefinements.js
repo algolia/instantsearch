@@ -196,4 +196,6 @@ it('calls the Panel mixin with `hasRefinement`', () => {
   });
 
   expect(mapStateToCanRefine()).toBe(false);
+
+  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });

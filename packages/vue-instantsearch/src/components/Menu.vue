@@ -56,7 +56,7 @@ export default {
     createSuitMixin({ name: 'Menu' }),
     createWidgetMixin({ connector: connectMenu }),
     createPanelConsumerMixin({
-      mapStateToCanRefine: state => state.canRefine,
+      mapStateToCanRefine: state => Boolean(state.canRefine),
     }),
   ],
   props: {

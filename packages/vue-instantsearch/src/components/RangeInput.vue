@@ -60,7 +60,7 @@ import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 
 const mapStateToCanRefine = state =>
-  state && state.range && state.range.min !== state.range.max;
+  state && Boolean(state.range) && state.range.min !== state.range.max;
 
 export default {
   name: 'AisRangeInput',

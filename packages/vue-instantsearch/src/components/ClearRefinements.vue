@@ -31,7 +31,7 @@ export default {
   mixins: [
     createWidgetMixin({ connector: connectClearRefinements }),
     createPanelConsumerMixin({
-      mapStateToCanRefine: state => state.hasRefinements,
+      mapStateToCanRefine: state => Boolean(state.hasRefinements),
     }),
     createSuitMixin({ name: 'ClearRefinements' }),
   ],

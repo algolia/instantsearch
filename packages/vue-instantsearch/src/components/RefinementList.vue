@@ -111,7 +111,7 @@ export default {
     createSuitMixin({ name: 'RefinementList' }),
     createWidgetMixin({ connector: connectRefinementList }),
     createPanelConsumerMixin({
-      mapStateToCanRefine: state => state.canRefine,
+      mapStateToCanRefine: state => Boolean(state.canRefine),
     }),
   ],
   props: {

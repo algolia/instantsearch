@@ -99,4 +99,6 @@ it('calls the Panel mixin with `hasNoResults`', () => {
   });
 
   expect(mapStateToCanRefine()).toBe(false);
+
+  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });

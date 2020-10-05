@@ -245,38 +245,40 @@ describe('rendering', () => {
 
     expect(wrapper.find('.ais-RangeInput-input--max').element.value).toBe('');
   });
+});
 
-  it('calls the Panel mixin with `range`', () => {
-    __setState({
-      ...defaultState,
+it('calls the Panel mixin with `range`', () => {
+  __setState({
+    ...defaultState,
+    range: {
+      min: 0,
+      max: 10,
+    },
+  });
+
+  const wrapper = mount(RangeInput, {
+    propsData: {
+      attribute: 'price',
+    },
+  });
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
       range: {
         min: 0,
-        max: 10,
+        max: 0,
       },
-    });
-
-    const wrapper = mount(RangeInput, {
-      propsData: {
-        attribute: 'price',
-      },
-    });
-
-    const mapStateToCanRefine = () =>
-      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-    expect(mapStateToCanRefine()).toBe(true);
-
-    wrapper.setData({
-      state: {
-        range: {
-          min: 0,
-          max: 0,
-        },
-      },
-    });
-
-    expect(mapStateToCanRefine()).toBe(false);
+    },
   });
+
+  expect(mapStateToCanRefine()).toBe(false);
+
+  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
 describe('refinement', () => {

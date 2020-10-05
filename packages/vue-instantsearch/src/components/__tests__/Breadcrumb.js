@@ -186,7 +186,9 @@ describe('default render', () => {
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('TV & Home Theater');
   });
+});
 
+describe('panel', () => {
   it('calls the Panel mixin with `canRefine`', () => {
     __setState({ ...defaultState });
 
@@ -206,6 +208,8 @@ describe('default render', () => {
     });
 
     expect(mapStateToCanRefine()).toBe(false);
+
+    expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
   });
 });
 
@@ -301,7 +305,7 @@ describe('custom default render', () => {
 });
 
 describe('custom rootLabel render', () => {
-  const roolLabelSlot = `
+  const rootLabelSlot = `
     <template>Home page</template>
   `;
 
@@ -311,7 +315,7 @@ describe('custom rootLabel render', () => {
     const wrapper = mount(Breadcrumb, {
       propsData: defaultProps,
       scopedSlots: {
-        rootLabel: roolLabelSlot,
+        rootLabel: rootLabelSlot,
       },
     });
 
@@ -328,7 +332,7 @@ describe('custom rootLabel render', () => {
     const wrapper = mount(Breadcrumb, {
       propsData: defaultProps,
       scopedSlots: {
-        rootLabel: roolLabelSlot,
+        rootLabel: rootLabelSlot,
       },
     });
 

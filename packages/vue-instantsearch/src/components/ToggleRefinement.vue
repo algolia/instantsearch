@@ -34,7 +34,7 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 
-const mapStateToCanRefine = state => Boolean(state.value.count);
+const mapStateToCanRefine = state => Boolean(state.value && state.value.count);
 
 export default {
   name: 'AisToggleRefinement',

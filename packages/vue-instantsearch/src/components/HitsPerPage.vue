@@ -36,7 +36,7 @@ export default {
     createSuitMixin({ name: 'HitsPerPage' }),
     createWidgetMixin({ connector: connectHitsPerPage }),
     createPanelConsumerMixin({
-      mapStateToCanRefine: state => !state.hasNoResults,
+      mapStateToCanRefine: state => state.hasNoResults === false,
     }),
   ],
   props: {

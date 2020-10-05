@@ -2,7 +2,7 @@
 
 exports[`allows search bar classes override when it's searchable 1`] = `
 
-<div class="ais-RefinementList ais-RefinementList--noRefinement">
+<div class="ais-RefinementList">
   <div class="ais-RefinementList-searchBox">
     <form action
           role="search"
@@ -173,7 +173,7 @@ exports[`renders correctly (empty) 1`] = `
 
 exports[`renders correctly 1`] = `
 
-<div class="ais-RefinementList ais-RefinementList--noRefinement">
+<div class="ais-RefinementList">
   <ul class="ais-RefinementList-list">
     <li class="ais-RefinementList-item">
       <label class="ais-RefinementList-label">
@@ -266,7 +266,7 @@ exports[`renders correctly 1`] = `
 
 exports[`renders correctly when it's searchable 1`] = `
 
-<div class="ais-RefinementList ais-RefinementList--noRefinement">
+<div class="ais-RefinementList">
   <div class="ais-RefinementList-searchBox">
     <form action
           role="search"

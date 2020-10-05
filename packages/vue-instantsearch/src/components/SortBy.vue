@@ -38,7 +38,7 @@ export default {
     createWidgetMixin({ connector: connectSortBy }),
 
     createPanelConsumerMixin({
-      mapStateToCanRefine: state => !state.hasNoResults,
+      mapStateToCanRefine: state => state.hasNoResults === false,
     }),
   ],
   props: {

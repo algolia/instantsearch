@@ -88,7 +88,7 @@ export default {
     createSuitMixin({ name: 'RatingMenu' }),
     createWidgetMixin({ connector: connectRatingMenu }),
     createPanelConsumerMixin({
-      mapStateToCanRefine: state => !state.hasNoResults,
+      mapStateToCanRefine: state => state.hasNoResults === false,
     }),
   ],
   props: {

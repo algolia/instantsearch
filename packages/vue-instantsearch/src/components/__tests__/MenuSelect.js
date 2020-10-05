@@ -199,27 +199,29 @@ describe('default render', () => {
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('Apple');
   });
+});
 
-  it('calls the Panel mixin with `canRefine`', () => {
-    __setState({ ...defaultState });
+it('calls the Panel mixin with `canRefine`', () => {
+  __setState({ ...defaultState });
 
-    const wrapper = mount(MenuSelect, {
-      propsData: defaultProps,
-    });
-
-    const mapStateToCanRefine = () =>
-      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-    expect(mapStateToCanRefine()).toBe(true);
-
-    wrapper.setData({
-      state: {
-        canRefine: false,
-      },
-    });
-
-    expect(mapStateToCanRefine()).toBe(false);
+  const wrapper = mount(MenuSelect, {
+    propsData: defaultProps,
   });
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      canRefine: false,
+    },
+  });
+
+  expect(mapStateToCanRefine()).toBe(false);
+
+  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
 describe('custom item slot', () => {

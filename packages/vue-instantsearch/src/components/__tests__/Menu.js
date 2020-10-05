@@ -313,27 +313,28 @@ describe('default render', () => {
 
     expect(toggleShowMore).toHaveBeenCalledTimes(1);
   });
+});
 
-  it('calls the Panel mixin with `canRefine`', () => {
-    __setState({ ...defaultState });
+it('calls the Panel mixin with `canRefine`', () => {
+  __setState({ ...defaultState });
 
-    const wrapper = mount(Menu, {
-      propsData: defaultProps,
-    });
-
-    const mapStateToCanRefine = () =>
-      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-    expect(mapStateToCanRefine()).toBe(true);
-
-    wrapper.setData({
-      state: {
-        canRefine: false,
-      },
-    });
-
-    expect(mapStateToCanRefine()).toBe(false);
+  const wrapper = mount(Menu, {
+    propsData: defaultProps,
   });
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      canRefine: false,
+    },
+  });
+  expect(mapStateToCanRefine()).toBe(false);
+
+  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
 describe('custom default render', () => {

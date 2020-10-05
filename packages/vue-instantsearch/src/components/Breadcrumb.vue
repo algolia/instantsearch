@@ -58,7 +58,7 @@ export default {
   mixins: [
     createWidgetMixin({ connector: connectBreadcrumb }),
     createPanelConsumerMixin({
-      mapStateToCanRefine: state => state.canRefine,
+      mapStateToCanRefine: state => Boolean(state.canRefine),
     }),
     createSuitMixin({ name: 'Breadcrumb' }),
   ],
