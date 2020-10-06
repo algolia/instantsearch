@@ -284,14 +284,6 @@ export type Widget<
     renderOptions: InitOptions | RenderOptions
   ): IndexRenderState;
   /**
-   * Returns the render state of the current widget to pass to the render function.
-   */
-  getWidgetRenderState: TWidgetOptions['renderState'] extends object
-    ? (
-        renderOptions: InitOptions | RenderOptions
-      ) => TWidgetOptions['renderState']
-    : ((renderOptions: InitOptions | RenderOptions) => unknown) | undefined;
-  /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and
    * the search parameters applied.
@@ -325,7 +317,23 @@ export type Widget<
     state: SearchParameters,
     widgetSearchParametersOptions: WidgetSearchParametersOptions
   ): SearchParameters;
-};
+} & (TWidgetOptions['renderState'] extends object
+  ? {
+      /**
+       * Returns the render state of the current widget to pass to the render function.
+       */
+      getWidgetRenderState: (
+        renderOptions: InitOptions | RenderOptions
+      ) => TWidgetOptions['renderState'];
+    }
+  : {
+      /**
+       * Returns the render state of the current widget to pass to the render function.
+       */
+      getWidgetRenderState?: (
+        renderOptions: InitOptions | RenderOptions
+      ) => unknown;
+    });
 
 /**
  * The function that creates a new widget.
