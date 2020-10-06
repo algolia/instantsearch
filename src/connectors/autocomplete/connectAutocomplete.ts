@@ -6,7 +6,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import { Hits, Connector, AutocompleteWidgetRenderState } from '../../types';
+import { Hits, Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
@@ -56,9 +56,12 @@ export type AutocompleteRendererOptions = {
 
 export type AutocompleteConnector = Connector<
   AutocompleteRendererOptions,
-  AutocompleteConnectorParams,
-  AutocompleteWidgetRenderState
+  AutocompleteConnectorParams
 >;
+
+type WidgetParams = {
+  escapeHTML?: boolean;
+};
 
 const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
   renderFn,
@@ -66,8 +69,8 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
-    const { escapeHTML = true } = widgetParams || ({} as typeof widgetParams);
+  return (widgetParams: WidgetParams) => {
+    const { escapeHTML = true } = widgetParams || ({} as WidgetParams);
 
     warning(
       !(widgetParams as any).indices,
