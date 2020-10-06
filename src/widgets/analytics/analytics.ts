@@ -81,7 +81,7 @@ const analytics: AnalyticsWidget = function analytics(widgetParams) {
     false,
     `\`analytics\` widget has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
 
-For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
+For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#analytics-widget`
   );
 
   type AnalyticsState = {
