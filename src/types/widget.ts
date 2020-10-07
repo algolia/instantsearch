@@ -276,14 +276,6 @@ export type Widget<
    */
   dispose?(options: DisposeOptions): SearchParameters | void;
   /**
-   * Returns IndexRenderState of the current index component tree
-   * to build the render state of the whole app.
-   */
-  getRenderState?(
-    renderState: IndexRenderState,
-    renderOptions: InitOptions | RenderOptions
-  ): IndexRenderState;
-  /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and
    * the search parameters applied.
@@ -325,6 +317,14 @@ export type Widget<
       getWidgetRenderState: (
         renderOptions: InitOptions | RenderOptions
       ) => TWidgetOptions['renderState'];
+      /**
+       * Returns IndexRenderState of the current index component tree
+       * to build the render state of the whole app.
+       */
+      getRenderState(
+        renderState: IndexRenderState,
+        renderOptions: InitOptions | RenderOptions
+      ): IndexRenderState;
     }
   : {
       /**
@@ -333,6 +333,14 @@ export type Widget<
       getWidgetRenderState?: (
         renderOptions: InitOptions | RenderOptions
       ) => unknown;
+      /**
+       * Returns IndexRenderState of the current index component tree
+       * to build the render state of the whole app.
+       */
+      getRenderState?(
+        renderState: IndexRenderState,
+        renderOptions: InitOptions | RenderOptions
+      ): IndexRenderState;
     });
 
 /**
