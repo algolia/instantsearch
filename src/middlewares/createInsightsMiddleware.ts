@@ -1,5 +1,5 @@
 import { InsightsClient, InsightsClientMethod, Middleware } from '../types';
-import { getInsightsAnonymousUserToken } from '../helpers';
+import { getInsightsAnonymousUserTokenInternal } from '../helpers';
 import { warning, noop, getAppIdAndApiKey } from '../lib/utils';
 
 export type InsightsEvent = {
@@ -79,7 +79,7 @@ aa('setUserToken', 'your-user-token');
         if (hasInsightsClient) {
           // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
           // We can set it as userToken.
-          setUserTokenToSearch(getInsightsAnonymousUserToken());
+          setUserTokenToSearch(getInsightsAnonymousUserTokenInternal());
         }
 
         if (Array.isArray((insightsClient as any).queue)) {

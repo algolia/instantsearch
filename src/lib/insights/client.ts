@@ -1,5 +1,10 @@
 import { SearchResults } from 'algoliasearch-helper';
-import { uniq, find, createDocumentationMessageGenerator } from '../utils';
+import {
+  uniq,
+  find,
+  createDocumentationMessageGenerator,
+  warning,
+} from '../utils';
 import {
   Hits,
   InsightsClient,
@@ -79,6 +84,12 @@ const wrapInsightsClient = (
   method: InsightsClientMethod,
   payload: Partial<InsightsClientPayload>
 ) => {
+  warning(
+    false,
+    `\`insights\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
+
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
+  );
   if (!aa) {
     const withInstantSearchUsage = createDocumentationMessageGenerator({
       name: 'instantsearch',
@@ -101,6 +112,10 @@ const wrapInsightsClient = (
   aa(method, { ...inferredPayload, ...payload } as any);
 };
 
+/**
+ * @deprecated This function will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
+ * It passes `insights` to `HitsWithInsightsListener` and `InfiniteHitsWithInsightsListener`.
+ */
 export default function withInsights<TRendererOptions, TConnectorParams>(
   connector: Connector<TRendererOptions, TConnectorParams>
 ): Connector<TRendererOptions, TConnectorParams> {
