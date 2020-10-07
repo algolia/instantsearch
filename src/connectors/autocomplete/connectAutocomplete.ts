@@ -59,18 +59,14 @@ export type AutocompleteConnector = Connector<
   AutocompleteConnectorParams
 >;
 
-type WidgetParams = {
-  escapeHTML?: boolean;
-};
-
 const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
   renderFn,
   unmountFn = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams: WidgetParams) => {
-    const { escapeHTML = true } = widgetParams || ({} as WidgetParams);
+  return widgetParams => {
+    const { escapeHTML = true } = widgetParams || ({} as typeof widgetParams);
 
     warning(
       !(widgetParams as any).indices,
