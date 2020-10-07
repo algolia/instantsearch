@@ -144,7 +144,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           ],
         });
 
-        const renderState1 = clearRefinements.getRenderState!(
+        const renderState1 = clearRefinements.getRenderState(
           {},
           createInitOptions()
         );
@@ -160,7 +160,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
         helper.toggleRefinement('category', 'Decoration');
 
-        const renderState2 = clearRefinements.getRenderState!(
+        const renderState2 = clearRefinements.getRenderState(
           {},
           createRenderOptions({
             helper,

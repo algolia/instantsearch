@@ -436,10 +436,7 @@ search.addWidgets([
       const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
       const autocomplete = createAutocomplete({});
 
-      const renderState1 = autocomplete.getRenderState!(
-        {},
-        createInitOptions()
-      );
+      const renderState1 = autocomplete.getRenderState({}, createInitOptions());
 
       expect(renderState1.autocomplete).toEqual({
         currentRefinement: '',
@@ -450,7 +447,7 @@ search.addWidgets([
 
       autocomplete.init!(createInitOptions());
 
-      const renderState2 = autocomplete.getRenderState!(
+      const renderState2 = autocomplete.getRenderState(
         {},
         createRenderOptions()
       );
@@ -474,7 +471,7 @@ search.addWidgets([
 
       autocomplete.init!(createInitOptions());
 
-      const renderState = autocomplete.getRenderState!(
+      const renderState = autocomplete.getRenderState(
         {},
         createRenderOptions({ helper })
       );

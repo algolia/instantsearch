@@ -133,7 +133,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         );
         const configure = createCurrentRefinements({});
 
-        const renderState = configure.getRenderState!({}, createInitOptions());
+        const renderState = configure.getRenderState({}, createInitOptions());
 
         expect(renderState.currentRefinements).toEqual({
           items: [],
@@ -166,7 +166,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
         helper.toggleRefinement('category', 'Decoration');
 
-        const renderState = configure.getRenderState!(
+        const renderState = configure.getRenderState(
           {},
           createRenderOptions({
             helper,

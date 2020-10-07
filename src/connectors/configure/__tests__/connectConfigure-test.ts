@@ -250,7 +250,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         searchParameters: { facetFilters: ['brand:Samsung'] },
       });
 
-      const renderState1 = configure.getRenderState!({}, createInitOptions());
+      const renderState1 = configure.getRenderState({}, createInitOptions());
 
       expect(renderState1.configure).toEqual({
         refine: undefined,
@@ -261,7 +261,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
       configure.init!(createInitOptions());
 
-      const renderState2 = configure.getRenderState!({}, createRenderOptions());
+      const renderState2 = configure.getRenderState({}, createRenderOptions());
 
       expect(renderState2.configure).toEqual({
         refine: expect.any(Function),
