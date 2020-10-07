@@ -3,7 +3,7 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
-import { Connector, ConfigureWidgetRenderState } from '../../types';
+import { Connector } from '../../types';
 import {
   createDocumentationMessageGenerator,
   isPlainObject,
@@ -56,8 +56,7 @@ function getInitialSearchParameters(
 
 export type ConfigureConnector = Connector<
   ConfigureRendererOptions,
-  ConfigureConnectorParams,
-  ConfigureWidgetRenderState
+  ConfigureConnectorParams
 >;
 
 const connectConfigure: ConfigureConnector = function connectConfigure(
@@ -107,7 +106,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(initOptions),
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -119,7 +118,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderOptions),
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -135,7 +134,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          configure: this.getWidgetRenderState!(renderOptions),
+          configure: this.getWidgetRenderState(renderOptions),
         };
       },
 

@@ -8,12 +8,7 @@ import {
   uniq,
   mergeSearchParameters,
 } from '../../lib/utils';
-import {
-  TransformItems,
-  CreateURL,
-  Connector,
-  ClearRefinementsWidgetRenderState,
-} from '../../types';
+import { TransformItems, CreateURL, Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
@@ -56,8 +51,7 @@ export type ClearRefinementsRendererOptions = {
 
 export type ClearRefinementsConnector = Connector<
   ClearRefinementsRendererOptions,
-  ClearRefinementsConnectorParams,
-  ClearRefinementsWidgetRenderState
+  ClearRefinementsConnectorParams
 >;
 
 type AttributesToClear = {
@@ -109,7 +103,7 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(initOptions),
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -150,7 +144,7 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderOptions),
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -164,7 +158,7 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          clearRefinements: this.getWidgetRenderState!(renderOptions),
+          clearRefinements: this.getWidgetRenderState(renderOptions),
         };
       },
 

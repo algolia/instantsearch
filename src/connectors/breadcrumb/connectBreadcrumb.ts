@@ -6,12 +6,7 @@ import {
   noop,
 } from '../../lib/utils';
 import { SearchResults } from 'algoliasearch-helper';
-import {
-  Connector,
-  TransformItems,
-  CreateURL,
-  BreadcrumbWidgetRenderState,
-} from '../../types';
+import { Connector, TransformItems, CreateURL } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'breadcrumb',
@@ -78,8 +73,7 @@ export type BreadcrumbRendererOptions = {
 
 export type BreadcrumbConnector = Connector<
   BreadcrumbRendererOptions,
-  BreadcrumbConnectorParams,
-  BreadcrumbWidgetRenderState
+  BreadcrumbConnectorParams
 >;
 
 const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
@@ -156,7 +150,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(initOptions),
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
@@ -166,7 +160,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
       render(renderOptions) {
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderOptions),
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false
@@ -182,7 +176,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
           ...renderState,
           breadcrumb: {
             ...renderState.breadcrumb,
-            [hierarchicalFacetName]: this.getWidgetRenderState!(renderOptions),
+            [hierarchicalFacetName]: this.getWidgetRenderState(renderOptions),
           },
         };
       },
