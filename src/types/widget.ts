@@ -207,7 +207,7 @@ export type IndexRenderState = Partial<{
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
 }>;
 
-type WidgetRenderState<
+export type WidgetRenderState<
   TWidgetRenderState,
   // @ts-ignore
   TWidgetParams

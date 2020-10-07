@@ -3,7 +3,7 @@ import connectConfigure, {
   ConfigureRendererOptions,
   ConfigureConnectorParams,
 } from '../../connectors/configure/connectConfigure';
-import { WidgetFactory } from '../../types';
+import { Widget, WidgetRenderState } from '../../types';
 import { noop } from '../../lib/utils';
 
 /**
@@ -12,11 +12,14 @@ import { noop } from '../../lib/utils';
  */
 export type ConfigureWidgetParams = PlainSearchParameters;
 
-export type ConfigureWidget = WidgetFactory<
-  ConfigureRendererOptions,
-  ConfigureConnectorParams,
-  ConfigureWidgetParams
->;
+export type ConfigureWidget = (
+  widgetParams: ConfigureConnectorParams['searchParameters']
+) => Widget<{
+  renderState: WidgetRenderState<
+    ConfigureRendererOptions,
+    ConfigureWidgetParams
+  >;
+}>;
 
 const configure: ConfigureWidget = function configure(widgetParams) {
   // This is a renderless widget that falls back to the connector's
