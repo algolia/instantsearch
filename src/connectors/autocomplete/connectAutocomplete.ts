@@ -114,7 +114,7 @@ search.addWidgets([
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(initOptions),
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -126,7 +126,7 @@ search.addWidgets([
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderOptions),
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -136,7 +136,7 @@ search.addWidgets([
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          autocomplete: this.getWidgetRenderState!(renderOptions),
+          autocomplete: this.getWidgetRenderState(renderOptions),
         };
       },
 
