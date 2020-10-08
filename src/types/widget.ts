@@ -143,76 +143,62 @@ export type RenderState = {
   [indexId: string]: IndexRenderState;
 };
 
-export type SearchBoxWidgetRenderState = WidgetRenderState<
-  {
-    query: string;
-    refine(query: string): void;
-    clear(): void;
-    isSearchStalled: boolean;
-  },
-  {
-    queryHook?(query: string, refine: (query: string) => void);
-  }
->;
-
-export type AutocompleteWidgetRenderState = WidgetRenderState<
-  AutocompleteRendererOptions,
-  AutocompleteConnectorParams
->;
-
-export type BreadcrumbWidgetRenderState = WidgetRenderState<
-  BreadcrumbRendererOptions,
-  BreadcrumbConnectorParams
->;
-
-export type ClearRefinementsWidgetRenderState = WidgetRenderState<
-  ClearRefinementsRendererOptions,
-  ClearRefinementsConnectorParams
->;
-
-export type ConfigureWidgetRenderState = WidgetRenderState<
-  ConfigureRendererOptions,
-  ConfigureConnectorParams
->;
-
-export type CurrentRefinementsWidgetRenderState = WidgetRenderState<
-  CurrentRefinementsRendererOptions,
-  CurrentRefinementsConnectorParams
->;
-
-export type HierarchicalMenuWidgetRenderState = WidgetRenderState<
-  {
-    items: any[];
-    refine(facetValue: any): void;
-    createURL(facetValue: any): string;
-    isShowingMore: boolean;
-    toggleShowMore(): void;
-    canToggleShowMore: boolean;
-  },
-  {
-    attributes: string[];
-    separator: string;
-    rootPath: string | null;
-    showParentLevel: boolean;
-    limit: number;
-    showMore: boolean;
-    showMoreLimit: number;
-    sortBy: any;
-    transformItems(items: any): any;
-  }
->;
-
 export type IndexRenderState = Partial<{
-  searchBox: SearchBoxWidgetRenderState;
-  autocomplete: AutocompleteWidgetRenderState;
+  searchBox: WidgetRenderState<
+    {
+      query: string;
+      refine(query: string): void;
+      clear(): void;
+      isSearchStalled: boolean;
+    },
+    {
+      queryHook?(query: string, refine: (query: string) => void);
+    }
+  >;
+  autocomplete: WidgetRenderState<
+    AutocompleteRendererOptions,
+    AutocompleteConnectorParams
+  >;
   breadcrumb: {
-    [attribute: string]: BreadcrumbWidgetRenderState;
+    [attribute: string]: WidgetRenderState<
+      BreadcrumbRendererOptions,
+      BreadcrumbConnectorParams
+    >;
   };
-  clearRefinements: ClearRefinementsWidgetRenderState;
-  configure: ConfigureWidgetRenderState;
-  currentRefinements: CurrentRefinementsWidgetRenderState;
+  clearRefinements: WidgetRenderState<
+    ClearRefinementsRendererOptions,
+    ClearRefinementsConnectorParams
+  >;
+  configure: WidgetRenderState<
+    ConfigureRendererOptions,
+    ConfigureConnectorParams
+  >;
+  currentRefinements: WidgetRenderState<
+    CurrentRefinementsRendererOptions,
+    CurrentRefinementsConnectorParams
+  >;
   hierarchicalMenu: {
-    [attribute: string]: HierarchicalMenuWidgetRenderState;
+    [attribute: string]: WidgetRenderState<
+      {
+        items: any[];
+        refine(facetValue: any): void;
+        createURL(facetValue: any): string;
+        isShowingMore: boolean;
+        toggleShowMore(): void;
+        canToggleShowMore: boolean;
+      },
+      {
+        attributes: string[];
+        separator: string;
+        rootPath: string | null;
+        showParentLevel: boolean;
+        limit: number;
+        showMore: boolean;
+        showMoreLimit: number;
+        sortBy: any;
+        transformItems(items: any): any;
+      }
+    >;
   };
 }>;
 
