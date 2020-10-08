@@ -134,6 +134,10 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
+          // Even if there are multiple configure widgets,
+          // the last configure widget will override the ones before.
+          // If we want to merge widgetRenderState of multiple configure widgets,
+          // we should modify this part.
           configure: this.getWidgetRenderState(renderOptions),
         };
       },
