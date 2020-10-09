@@ -268,8 +268,8 @@ const index = (props: IndexProps): Index => {
         // to construct the whole render state object that is then passed to
         // `init`.
         widgets.forEach(widget => {
-          if (widget.getWidgetRenderState) {
-            const widgetRenderState = widget.getWidgetRenderState(
+          if (widget.getRenderState) {
+            const renderState = widget.getRenderState(
               localInstantSearchInstance!.renderState[this.getIndexId()] || {},
               {
                 uiState: localInstantSearchInstance!._initialUiState,
@@ -288,7 +288,7 @@ const index = (props: IndexProps): Index => {
             );
 
             storeRenderState({
-              widgetRenderState,
+              renderState,
               instantSearchInstance: localInstantSearchInstance!,
               parent: this,
             });
@@ -474,8 +474,8 @@ const index = (props: IndexProps): Index => {
       // to construct the whole render state object that is then passed to
       // `render`.
       localWidgets.forEach(widget => {
-        if (widget.getWidgetRenderState) {
-          const widgetRenderState = widget.getWidgetRenderState(
+        if (widget.getRenderState) {
+          const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
             {
               uiState,
@@ -494,7 +494,7 @@ const index = (props: IndexProps): Index => {
           );
 
           storeRenderState({
-            widgetRenderState,
+            renderState,
             instantSearchInstance,
             parent: this,
           });
@@ -560,8 +560,8 @@ const index = (props: IndexProps): Index => {
       }
 
       localWidgets.forEach(widget => {
-        if (widget.getWidgetRenderState) {
-          const widgetRenderState = widget.getWidgetRenderState(
+        if (widget.getRenderState) {
+          const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
             {
               helper: this.getHelper()!,
@@ -580,7 +580,7 @@ const index = (props: IndexProps): Index => {
           );
 
           storeRenderState({
-            widgetRenderState,
+            renderState,
             instantSearchInstance,
             parent: this,
           });
@@ -676,11 +676,7 @@ const index = (props: IndexProps): Index => {
 
 export default index;
 
-function storeRenderState({
-  widgetRenderState,
-  instantSearchInstance,
-  parent,
-}) {
+function storeRenderState({ renderState, instantSearchInstance, parent }) {
   const parentIndexName = parent
     ? parent.getIndexId()
     : instantSearchInstance.mainIndex.getIndexId();
@@ -689,7 +685,7 @@ function storeRenderState({
     ...instantSearchInstance.renderState,
     [parentIndexName]: {
       ...instantSearchInstance.renderState[parentIndexName],
-      ...widgetRenderState,
+      ...renderState,
     },
   };
 }

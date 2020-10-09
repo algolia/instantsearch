@@ -162,12 +162,11 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
       $$type: 'ais.currentRefinements',
 
       init(initOptions) {
-        const { renderState, instantSearchInstance } = initOptions;
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, initOptions)
-              .currentRefinements!,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -175,12 +174,11 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
       },
 
       render(renderOptions) {
-        const { renderState, instantSearchInstance } = renderOptions;
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, renderOptions)
-              .currentRefinements!,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -191,10 +189,14 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
         unmountFn();
       },
 
-      getWidgetRenderState(
-        renderState,
-        { results, scopedResults, createURL, helper }
-      ) {
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          currentRefinements: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, scopedResults, createURL, helper }) {
         function getItems() {
           if (!results) {
             return transformItems(
@@ -225,14 +227,11 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
         }
 
         return {
-          ...renderState,
-          currentRefinements: {
-            items: getItems(),
-            refine: refinement => clearRefinement(helper, refinement),
-            createURL: refinement =>
-              createURL(clearRefinementFromState(helper.state, refinement)),
-            widgetParams,
-          },
+          items: getItems(),
+          refine: refinement => clearRefinement(helper, refinement),
+          createURL: refinement =>
+            createURL(clearRefinementFromState(helper.state, refinement)),
+          widgetParams,
         };
       },
     };
