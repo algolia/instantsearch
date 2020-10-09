@@ -103,15 +103,14 @@ search.addWidgets([
       $$type: 'ais.autocomplete',
 
       init(initOptions) {
-        const { helper, renderState, instantSearchInstance } = initOptions;
+        const { helper, instantSearchInstance } = initOptions;
         connectorState.refine = (query: string) => {
           helper.setQuery(query).search();
         };
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, initOptions)
-              .autocomplete!,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -119,19 +118,25 @@ search.addWidgets([
       },
 
       render(renderOptions) {
-        const { renderState, instantSearchInstance } = renderOptions;
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, renderOptions)
-              .autocomplete!,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
         );
       },
 
-      getWidgetRenderState(renderState, { helper, scopedResults }) {
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          autocomplete: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ helper, scopedResults }) {
         const indices = scopedResults.map(scopedResult => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
@@ -148,13 +153,10 @@ search.addWidgets([
         });
 
         return {
-          ...renderState,
-          autocomplete: {
-            currentRefinement: helper.state.query || '',
-            indices,
-            refine: connectorState.refine!,
-            widgetParams,
-          },
+          currentRefinement: helper.state.query || '',
+          indices,
+          refine: connectorState.refine!,
+          widgetParams,
         };
       },
 

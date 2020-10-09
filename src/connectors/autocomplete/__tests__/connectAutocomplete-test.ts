@@ -429,17 +429,14 @@ search.addWidgets([
     });
   });
 
-  describe('getWidgetRenderState', () => {
+  describe('getRenderState', () => {
     test('returns the render state', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
       const autocomplete = createAutocomplete({});
 
-      const renderState1 = autocomplete.getWidgetRenderState!(
-        {},
-        createInitOptions()
-      );
+      const renderState1 = autocomplete.getRenderState({}, createInitOptions());
 
       expect(renderState1.autocomplete).toEqual({
         currentRefinement: '',
@@ -450,7 +447,7 @@ search.addWidgets([
 
       autocomplete.init!(createInitOptions());
 
-      const renderState2 = autocomplete.getWidgetRenderState!(
+      const renderState2 = autocomplete.getRenderState(
         {},
         createRenderOptions()
       );
@@ -474,7 +471,7 @@ search.addWidgets([
 
       autocomplete.init!(createInitOptions());
 
-      const renderState = autocomplete.getWidgetRenderState!(
+      const renderState = autocomplete.getRenderState(
         {},
         createRenderOptions({ helper })
       );

@@ -86,7 +86,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
 
       init(initOptions) {
-        const { helper, renderState, instantSearchInstance } = initOptions;
+        const { helper, instantSearchInstance } = initOptions;
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
 
@@ -107,7 +107,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
 
         renderFn(
           {
-            ...this.getWidgetRenderState(renderState, initOptions).searchBox,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -115,12 +115,12 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
 
       render(renderOptions) {
-        const { helper, renderState, instantSearchInstance } = renderOptions;
+        const { helper, instantSearchInstance } = renderOptions;
         this._clear = clear(helper);
 
         renderFn(
           {
-            ...this.getWidgetRenderState(renderState, renderOptions).searchBox,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -133,16 +133,20 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         return state.setQueryParameter('query', undefined);
       },
 
-      getWidgetRenderState(renderState, { helper, searchMetadata }) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          searchBox: {
-            query: helper.state.query || '',
-            refine: this._refine,
-            clear: this._cachedClear,
-            widgetParams,
-            isSearchStalled: searchMetadata.isSearchStalled,
-          },
+          searchBox: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ helper, searchMetadata }) {
+        return {
+          query: helper.state.query || '',
+          refine: this._refine,
+          clear: this._cachedClear,
+          widgetParams,
+          isSearchStalled: searchMetadata.isSearchStalled,
         };
       },
 

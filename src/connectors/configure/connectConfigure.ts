@@ -100,13 +100,13 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       $$type: 'ais.configure',
 
       init(initOptions) {
-        const { renderState, helper, instantSearchInstance } = initOptions;
+        const { helper, instantSearchInstance } = initOptions;
 
         connectorState.refine = refine(helper);
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, initOptions).configure!,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -114,12 +114,11 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       },
 
       render(renderOptions) {
-        const { renderState, instantSearchInstance } = renderOptions;
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, renderOptions)
-              .configure!,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -132,13 +131,21 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         return getInitialSearchParameters(state, widgetParams);
       },
 
-      getWidgetRenderState(renderState) {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          configure: {
-            refine: connectorState.refine!,
-            widgetParams,
-          },
+          // Even if there are multiple configure widgets,
+          // the last configure widget will override the ones before.
+          // If we want to merge widgetRenderState of multiple configure widgets,
+          // we should modify this part.
+          configure: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState() {
+        return {
+          refine: connectorState.refine!,
+          widgetParams,
         };
       },
 

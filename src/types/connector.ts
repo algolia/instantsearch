@@ -70,7 +70,7 @@ export type Connector<TRendererOptions, TConnectorParams> = <TWidgetParams>(
    * The called function when unmounting a widget.
    */
   unmountFn?: Unmounter
-) => WidgetFactory<TConnectorParams, TWidgetParams>;
+) => WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams>;
 
 /**
  * Transforms the given items.

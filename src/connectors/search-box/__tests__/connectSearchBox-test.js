@@ -58,6 +58,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
+          getRenderState: expect.any(Function),
           getWidgetRenderState: expect.any(Function),
           getWidgetUiState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
@@ -307,7 +308,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
-  describe('getWidgetRenderState', () => {
+  describe('getRenderState', () => {
     test('returns the render state with default render options', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
@@ -317,10 +318,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         queryHook,
       });
 
-      const renderState1 = searchBox.getWidgetRenderState(
-        {},
-        createInitOptions()
-      );
+      const renderState1 = searchBox.getRenderState({}, createInitOptions());
 
       expect(renderState1.searchBox).toEqual({
         clear: expect.any(Function),
@@ -332,10 +330,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       searchBox.init(createInitOptions());
 
-      const renderState2 = searchBox.getWidgetRenderState(
-        {},
-        createRenderOptions()
-      );
+      const renderState2 = searchBox.getRenderState({}, createRenderOptions());
 
       expect(renderState2.searchBox).toEqual({
         clear: renderState2.searchBox.clear,
@@ -359,7 +354,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       searchBox.init(createInitOptions());
 
-      const renderState = searchBox.getWidgetRenderState(
+      const renderState = searchBox.getRenderState(
         {},
         createRenderOptions({ helper })
       );
@@ -381,7 +376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       searchBox.init(createInitOptions());
 
-      const renderState = searchBox.getWidgetRenderState(
+      const renderState = searchBox.getRenderState(
         {},
         createRenderOptions({ searchMetadata: { isSearchStalled: true } })
       );

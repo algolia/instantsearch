@@ -1921,23 +1921,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchBoxClear = jest.fn();
       const paginationRefine = jest.fn();
       const searchBox = createSearchBox({
-        getWidgetRenderState: jest.fn(
-          (renderState, { helper, searchMetadata }) => {
-            return {
-              ...renderState,
-              searchBox: {
-                query: helper.state.query || '',
-                refine: searchBoxRefine,
-                clear: searchBoxClear,
-                isSearchStalled: searchMetadata.isSearchStalled,
-                widgetParams: {},
-              },
-            };
-          }
-        ),
+        getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
+          return {
+            ...renderState,
+            searchBox: {
+              query: helper.state.query || '',
+              refine: searchBoxRefine,
+              clear: searchBoxClear,
+              isSearchStalled: searchMetadata.isSearchStalled,
+              widgetParams: {},
+            },
+          };
+        }),
       });
       const pagination = createPagination({
-        getWidgetRenderState: jest.fn((renderState, { state }) => {
+        getRenderState: jest.fn((renderState, { state }) => {
           return {
             ...renderState,
             pagination: {
@@ -2012,29 +2010,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       search.start();
     });
 
-    test('calls `getWidgetRenderState` with the index render state', () => {
+    test('calls `getRenderState` with the index render state', () => {
       const searchIndex = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, 'indexName', {});
       const instantSearchInstance = createInstantSearch({ mainHelper });
       const searchBox = createSearchBox({
-        getWidgetRenderState: jest.fn(
-          (renderState, { helper, searchMetadata }) => {
-            return {
-              ...renderState,
-              searchBox: {
-                query: helper.state.query || '',
-                refine: () => {},
-                clear: () => {},
-                isSearchStalled: searchMetadata.isSearchStalled,
-                widgetParams: {},
-              },
-            };
-          }
-        ),
+        getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
+          return {
+            ...renderState,
+            searchBox: {
+              query: helper.state.query || '',
+              refine: () => {},
+              clear: () => {},
+              isSearchStalled: searchMetadata.isSearchStalled,
+              widgetParams: {},
+            },
+          };
+        }),
       });
       const pagination = createPagination({
-        getWidgetRenderState: jest.fn((renderState, { state }) => {
+        getRenderState: jest.fn((renderState, { state }) => {
           return {
             ...renderState,
             pagination: {
@@ -2055,8 +2051,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
 
-      expect(searchBox.getWidgetRenderState).toHaveBeenCalledTimes(1);
-      expect(searchBox.getWidgetRenderState).toHaveBeenCalledWith(
+      expect(searchBox.getRenderState).toHaveBeenCalledTimes(1);
+      expect(searchBox.getRenderState).toHaveBeenCalledWith(
         {},
         expect.objectContaining({
           uiState: {},
@@ -2074,8 +2070,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
 
-      expect(pagination.getWidgetRenderState).toHaveBeenCalledTimes(1);
-      expect(pagination.getWidgetRenderState).toHaveBeenCalledWith(
+      expect(pagination.getRenderState).toHaveBeenCalledTimes(1);
+      expect(pagination.getRenderState).toHaveBeenCalledWith(
         {
           searchBox: {
             clear: expect.any(Function),
