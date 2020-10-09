@@ -443,7 +443,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
   });
 
-  describe('getWidgetRenderState', () => {
+  describe('getRenderState', () => {
     test('returns the render state', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
@@ -463,7 +463,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       );
 
       expect(
-        hierarchicalMenu.getWidgetRenderState(
+        hierarchicalMenu.getRenderState(
           { hierarchicalMenu: { anotherCategory: {} } },
           createInitOptions({ helper })
         ).hierarchicalMenu
@@ -503,7 +503,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       hierarchicalMenu.init(createInitOptions({ helper }));
 
       expect(
-        hierarchicalMenu.getWidgetRenderState(
+        hierarchicalMenu.getRenderState(
           {},
           createRenderOptions({
             helper,

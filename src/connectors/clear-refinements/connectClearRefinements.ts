@@ -99,12 +99,11 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
       $$type: 'ais.clearRefinements',
 
       init(initOptions) {
-        const { renderState, instantSearchInstance } = initOptions;
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, initOptions)
-              .clearRefinements!,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
@@ -112,7 +111,7 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
       },
 
       render(renderOptions) {
-        const { createURL, renderState, instantSearchInstance } = renderOptions;
+        const { createURL, instantSearchInstance } = renderOptions;
 
         connectorState.refine = () => {
           connectorState.attributesToClear.forEach(
@@ -145,8 +144,7 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderState, renderOptions)
-              .clearRefinements!,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -157,7 +155,14 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
         unmountFn();
       },
 
-      getWidgetRenderState(renderState, { scopedResults }) {
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          clearRefinements: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ scopedResults }) {
         connectorState.attributesToClear = scopedResults.reduce<
           Array<ReturnType<typeof getAttributesToClear>>
         >((results, scopedResult) => {
@@ -172,15 +177,12 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
         }, []);
 
         return {
-          ...renderState,
-          clearRefinements: {
-            hasRefinements: connectorState.attributesToClear.some(
-              attributeToClear => attributeToClear.items.length > 0
-            ),
-            refine: cachedRefine,
-            createURL: cachedCreateURL,
-            widgetParams,
-          },
+          hasRefinements: connectorState.attributesToClear.some(
+            attributeToClear => attributeToClear.items.length > 0
+          ),
+          refine: cachedRefine,
+          createURL: cachedCreateURL,
+          widgetParams,
         };
       },
     };

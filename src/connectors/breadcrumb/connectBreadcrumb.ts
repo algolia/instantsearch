@@ -150,8 +150,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         renderFn(
           {
-            ...this.getWidgetRenderState!(initOptions.renderState, initOptions)
-              .breadcrumb![hierarchicalFacetName],
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
@@ -161,10 +160,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
       render(renderOptions) {
         renderFn(
           {
-            ...this.getWidgetRenderState!(
-              renderOptions.renderState,
-              renderOptions
-            ).breadcrumb![hierarchicalFacetName],
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false
@@ -175,7 +171,17 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         unmountFn();
       },
 
-      getWidgetRenderState(renderState, { results, state }) {
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          breadcrumb: {
+            ...renderState.breadcrumb,
+            [hierarchicalFacetName]: this.getWidgetRenderState(renderOptions),
+          },
+        };
+      },
+
+      getWidgetRenderState({ results, state }) {
         function getItems() {
           if (!results) {
             return [];
@@ -196,17 +202,11 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         const items = getItems();
 
         return {
-          ...renderState,
-          breadcrumb: {
-            ...renderState.breadcrumb,
-            [hierarchicalFacetName]: {
-              canRefine: items.length > 0,
-              createURL: connectorState.createURL,
-              items,
-              refine: connectorState.refine,
-              widgetParams,
-            },
-          },
+          canRefine: items.length > 0,
+          createURL: connectorState.createURL,
+          items,
+          refine: connectorState.refine,
+          widgetParams,
         };
       },
 
