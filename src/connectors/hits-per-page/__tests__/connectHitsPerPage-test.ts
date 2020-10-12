@@ -657,6 +657,285 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
   });
 
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHitsPerPage = connectHitsPerPage(renderFn, unmountFn);
+      const hitsPerPage = createHitsPerPage({
+        items: [
+          {
+            label: '4',
+            value: 4,
+            default: true,
+          },
+          {
+            label: '8',
+            value: 8,
+          },
+        ],
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState1 = hitsPerPage.getRenderState(
+        {
+          hitsPerPage: {
+            items: [
+              {
+                label: '4',
+                value: 4,
+                isRefined: false,
+              },
+              {
+                label: '8',
+                value: 8,
+                isRefined: false,
+              },
+            ],
+            createURL: () => '',
+            refine: () => {},
+            hasNoResults: false,
+            widgetParams: {
+              items: [
+                {
+                  label: '4',
+                  value: 4,
+                  default: true,
+                },
+                {
+                  label: '8',
+                  value: 8,
+                },
+              ],
+            },
+          },
+        },
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1.hitsPerPage).toEqual({
+        items: [
+          {
+            label: '4',
+            value: 4,
+            default: true,
+            isRefined: false,
+          },
+          {
+            label: '8',
+            value: 8,
+            isRefined: false,
+          },
+        ],
+        createURL: undefined,
+        hasNoResults: false,
+        refine: undefined,
+        widgetParams: {
+          items: [
+            {
+              label: '4',
+              value: 4,
+              default: true,
+            },
+            {
+              label: '8',
+              value: 8,
+            },
+          ],
+        },
+      });
+
+      hitsPerPage.init!(createInitOptions({ helper }));
+
+      const renderState2 = hitsPerPage.getRenderState(
+        {
+          hitsPerPage: {
+            items: [
+              {
+                label: '4',
+                value: 4,
+                isRefined: false,
+              },
+              {
+                label: '8',
+                value: 8,
+                isRefined: false,
+              },
+            ],
+            createURL: () => '',
+            refine: () => {},
+            hasNoResults: false,
+            widgetParams: {
+              items: [
+                {
+                  label: '4',
+                  value: 4,
+                  default: true,
+                },
+                {
+                  label: '8',
+                  value: 8,
+                },
+              ],
+            },
+          },
+        },
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hitsPerPage: 4,
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState2.hitsPerPage).toEqual({
+        items: [
+          {
+            label: '',
+            value: '',
+            isRefined: false,
+          },
+          {
+            label: '4',
+            value: 4,
+            default: true,
+            isRefined: false,
+          },
+          {
+            label: '8',
+            value: 8,
+            isRefined: false,
+          },
+        ],
+        createURL: expect.any(Function),
+        hasNoResults: true,
+        refine: expect.any(Function),
+        widgetParams: {
+          items: [
+            {
+              label: '4',
+              value: 4,
+              default: true,
+            },
+            {
+              label: '8',
+              value: 8,
+            },
+          ],
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHitsPerPage = connectHitsPerPage(renderFn, unmountFn);
+      const hitsPerPage = createHitsPerPage({
+        items: [
+          { label: '4', value: 4, default: true },
+          { label: '8', value: 8 },
+        ],
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState1 = hitsPerPage.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        items: [
+          {
+            label: '4',
+            value: 4,
+            default: true,
+            isRefined: false,
+          },
+          {
+            label: '8',
+            value: 8,
+            isRefined: false,
+          },
+        ],
+        refine: undefined,
+        createURL: undefined,
+        hasNoResults: false,
+        widgetParams: {
+          items: [
+            {
+              label: '4',
+              value: 4,
+              default: true,
+            },
+            {
+              label: '8',
+              value: 8,
+            },
+          ],
+        },
+      });
+
+      hitsPerPage.init!(createInitOptions({ helper }));
+
+      const renderState2 = hitsPerPage.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hitsPerPage: 4,
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState2).toEqual({
+        items: [
+          {
+            label: '',
+            value: '',
+            isRefined: false,
+          },
+          {
+            label: '4',
+            value: 4,
+            default: true,
+            isRefined: false,
+          },
+          {
+            label: '8',
+            value: 8,
+            isRefined: false,
+          },
+        ],
+        createURL: expect.any(Function),
+        hasNoResults: true,
+        refine: expect.any(Function),
+        widgetParams: {
+          items: [
+            {
+              label: '4',
+              value: 4,
+              default: true,
+            },
+            {
+              label: '8',
+              value: 8,
+            },
+          ],
+        },
+      });
+    });
+  });
+
   describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
       const render = jest.fn();
