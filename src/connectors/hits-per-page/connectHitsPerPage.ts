@@ -142,7 +142,9 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
     return {
       $$type: 'ais.hitsPerPage',
 
-      init({ helper, createURL, state, instantSearchInstance }) {
+      init(initOptions) {
+        const { helper, createURL, state, instantSearchInstance } = initOptions;
+
         const isCurrentInOptions = items.some(
           item => Number(state.hitsPerPage) === Number(item.value)
         );
@@ -190,6 +192,7 @@ You may want to add another entry to the \`items\` option with this value.`
 
         renderFn(
           {
+            ...this.getWidgetRenderState(initOptions),
             items: transformItems(normalizeItems(state)),
             refine: connectorState.setHitsPerPage,
             createURL: connectorState.createURLFactory(helper.state),
@@ -201,11 +204,13 @@ You may want to add another entry to the \`items\` option with this value.`
         );
       },
 
-      render({ state, results, instantSearchInstance }) {
+      render(initOptions) {
+        const { state, results, instantSearchInstance } = initOptions;
         const hasNoResults = results.nbHits === 0;
 
         renderFn(
           {
+            ...this.getWidgetRenderState(initOptions),
             items: transformItems(normalizeItems(state)),
             refine: connectorState.setHitsPerPage,
             createURL: connectorState.createURLFactory(state),
@@ -221,6 +226,23 @@ You may want to add another entry to the \`items\` option with this value.`
         unmountFn();
 
         return state.setQueryParameter('hitsPerPage', undefined);
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          hitsPerPage: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ state, results }) {
+        return {
+          items: transformItems(normalizeItems(state)),
+          refine: connectorState.setHitsPerPage,
+          createURL: connectorState.createURLFactory,
+          hasNoResults: results?.nbHits === 0,
+          widgetParams,
+        };
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

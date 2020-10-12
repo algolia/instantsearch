@@ -26,6 +26,10 @@ import {
   CurrentRefinementsRendererOptions,
   CurrentRefinementsConnectorParams,
 } from '../connectors/current-refinements/connectCurrentRefinements';
+import {
+  HitsPerPageConnectorParams,
+  HitsPerPageRendererOptions,
+} from '../connectors/hits-per-page/connectHitsPerPage';
 
 export type ScopedResult = {
   indexId: string;
@@ -200,6 +204,10 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  hitsPerPage: WidgetRenderState<
+    HitsPerPageRendererOptions,
+    HitsPerPageConnectorParams
+  >;
 }>;
 
 type WidgetRenderState<
