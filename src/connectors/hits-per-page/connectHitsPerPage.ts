@@ -143,7 +143,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
       $$type: 'ais.hitsPerPage',
 
       init(initOptions) {
-        const { helper, createURL, state, instantSearchInstance } = initOptions;
+        const { helper, state, instantSearchInstance } = initOptions;
 
         const isCurrentInOptions = items.some(
           item => Number(state.hitsPerPage) === Number(item.value)
@@ -181,21 +181,9 @@ You may want to add another entry to the \`items\` option with this value.`
           ];
         }
 
-        connectorState.createURLFactory = helperState => value => {
-          return createURL(
-            helperState.setQueryParameter(
-              'hitsPerPage',
-              !value && value !== 0 ? undefined : value
-            )
-          );
-        };
-
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
-            items: transformItems(normalizeItems(state)),
-            refine: connectorState.setHitsPerPage,
-            createURL: connectorState.createURLFactory(helper.state),
             hasNoResults: true,
             widgetParams,
             instantSearchInstance,
@@ -205,15 +193,12 @@ You may want to add another entry to the \`items\` option with this value.`
       },
 
       render(initOptions) {
-        const { state, results, instantSearchInstance } = initOptions;
+        const { results, instantSearchInstance } = initOptions;
         const hasNoResults = results.nbHits === 0;
 
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
-            items: transformItems(normalizeItems(state)),
-            refine: connectorState.setHitsPerPage,
-            createURL: connectorState.createURLFactory(state),
             hasNoResults,
             widgetParams,
             instantSearchInstance,
@@ -235,11 +220,20 @@ You may want to add another entry to the \`items\` option with this value.`
         };
       },
 
-      getWidgetRenderState({ state, results }) {
+      getWidgetRenderState({ state, results, createURL }) {
+        connectorState.createURLFactory = helperState => value => {
+          return createURL(
+            helperState.setQueryParameter(
+              'hitsPerPage',
+              !value && value !== 0 ? undefined : value
+            )
+          );
+        };
+
         return {
           items: transformItems(normalizeItems(state)),
           refine: connectorState.setHitsPerPage,
-          createURL: connectorState.createURLFactory,
+          createURL: connectorState.createURLFactory(state),
           hasNoResults: results?.nbHits === 0,
           widgetParams,
         };
