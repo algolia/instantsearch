@@ -882,6 +882,128 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
   });
 
+  describe('getRenderState', () => {
+    it('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState1 = infiniteHitsWidget.getRenderState!(
+        {},
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1.hits).toEqual({
+        hits: [],
+        isFirstPage: true,
+        isLastPage: true,
+        results: undefined,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+        widgetParams: {},
+      });
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderState2 = infiniteHitsWidget.getRenderState!(
+        {},
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      expect(renderState2.hits).toEqual(
+        expect.objectContaining({
+          hits: expectedHits,
+          isFirstPage: true,
+          isLastPage: true,
+          results,
+          showMore: expect.any(Function),
+          showPrevious: expect.any(Function),
+          widgetParams: {},
+        })
+      );
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState1 = infiniteHitsWidget.getWidgetRenderState!(
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1).toEqual({
+        hits: [],
+        isFirstPage: true,
+        isLastPage: true,
+        results: undefined,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+        widgetParams: {},
+      });
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderState2 = infiniteHitsWidget.getWidgetRenderState!(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      expect(renderState2).toEqual(
+        expect.objectContaining({
+          hits: expectedHits,
+          isFirstPage: true,
+          isLastPage: true,
+          results,
+          showMore: expect.any(Function),
+          showPrevious: expect.any(Function),
+          widgetParams: {},
+        })
+      );
+    });
+  });
+
   describe('getWidgetSearchParameters', () => {
     test('return default Search Parameters with highlighted tags by default', () => {
       const render = jest.fn();

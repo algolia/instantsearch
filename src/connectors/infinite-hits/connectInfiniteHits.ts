@@ -141,8 +141,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     } = widgetParams || ({} as typeof widgetParams);
     let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
     let prevState: Partial<SearchParameters>;
-    let showPrevious: () => void;
-    let showMore: () => void;
 
     const getFirstReceivedPage = () =>
       Math.min(...Object.keys(cachedHits || {}).map(Number));
@@ -178,107 +176,116 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     return {
       $$type: 'ais.infiniteHits',
 
-      init({ instantSearchInstance, helper }) {
-        showPrevious = getShowPrevious(helper);
-        showMore = getShowMore(helper);
-
+      init(initOptions) {
         renderFn(
           {
-            hits: extractHitsFromCachedHits(
-              cache.read({ state: helper.state }) || {}
-            ),
-            results: undefined,
-            showPrevious,
-            showMore,
-            isFirstPage:
-              getFirstReceivedPage() === 0 || helper.state.page === undefined,
-            isLastPage: true,
-            instantSearchInstance,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render({ results, state, instantSearchInstance }) {
-        // Reset cache and received pages if anything changes in the
-        // search state, except for the page.
-        //
-        // We're doing this to "reset" the widget if a refinement or the
-        // query changes between renders, but we want to keep it as is
-        // if we only change pages.
-        const {
-          page = 0,
-          facets,
-          hierarchicalFacets,
-          disjunctiveFacets,
-          maxValuesPerFacet,
-          ...currentState
-        } = state;
-
-        currentState.facetsRefinements = filterEmptyRefinements(
-          currentState.facetsRefinements
-        );
-        currentState.hierarchicalFacetsRefinements = filterEmptyRefinements(
-          currentState.hierarchicalFacetsRefinements
-        );
-        currentState.disjunctiveFacetsRefinements = filterEmptyRefinements(
-          currentState.disjunctiveFacetsRefinements
-        );
-        currentState.numericRefinements = filterEmptyRefinements(
-          currentState.numericRefinements
-        );
-
-        if (!isEqual(currentState, prevState)) {
-          cachedHits = cache.read({ state }) || {};
-          prevState = currentState;
-        }
-
-        if (escapeHTML && results.hits.length > 0) {
-          results.hits = escapeHits(results.hits);
-        }
-        const initialEscaped = (results.hits as any).__escaped;
-
-        results.hits = addAbsolutePosition(
-          results.hits,
-          results.page,
-          results.hitsPerPage
-        );
-
-        results.hits = addQueryID(results.hits, results.queryID);
-
-        results.hits = transformItems(results.hits);
-
-        // Make sure the escaped tag stays after mapping over the hits.
-        // This prevents the hits from being double-escaped if there are multiple
-        // hits widgets mounted on the page.
-        (results.hits as any).__escaped = initialEscaped;
-
-        if (cachedHits === undefined) {
-          cachedHits = cache.read({ state }) || {};
-        }
-
-        if (cachedHits![page] === undefined) {
-          cachedHits![page] = results.hits;
-          cache.write({ state, hits: cachedHits });
-        }
-
-        const isFirstPage = getFirstReceivedPage() === 0;
-        const isLastPage = results.nbPages <= results.page + 1;
-
+      render(renderOptions) {
         renderFn(
           {
-            hits: extractHitsFromCachedHits(cachedHits!),
-            results,
-            showPrevious,
-            showMore,
-            isFirstPage,
-            isLastPage,
-            instantSearchInstance,
-            widgetParams,
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false
         );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          hits: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, helper, state }) {
+        let hits;
+
+        if (!results) {
+          hits = extractHitsFromCachedHits(
+            cache.read({ state: helper.state }) || {}
+          );
+        } else {
+          // Reset cache and received pages if anything changes in the
+          // search state, except for the page.
+          //
+          // We're doing this to "reset" the widget if a refinement or the
+          // query changes between renders, but we want to keep it as is
+          // if we only change pages.
+          const {
+            page = 0,
+            facets,
+            hierarchicalFacets,
+            disjunctiveFacets,
+            maxValuesPerFacet,
+            ...currentState
+          } = state;
+
+          currentState.facetsRefinements = filterEmptyRefinements(
+            currentState.facetsRefinements
+          );
+          currentState.hierarchicalFacetsRefinements = filterEmptyRefinements(
+            currentState.hierarchicalFacetsRefinements
+          );
+          currentState.disjunctiveFacetsRefinements = filterEmptyRefinements(
+            currentState.disjunctiveFacetsRefinements
+          );
+          currentState.numericRefinements = filterEmptyRefinements(
+            currentState.numericRefinements
+          );
+
+          if (!isEqual(currentState, prevState)) {
+            cachedHits = cache.read({ state }) || {};
+            prevState = currentState;
+          }
+
+          if (escapeHTML && results.hits.length > 0) {
+            results.hits = escapeHits(results.hits);
+          }
+          const initialEscaped = (results.hits as any).__escaped;
+
+          results.hits = addAbsolutePosition(
+            results.hits,
+            results.page,
+            results.hitsPerPage
+          );
+
+          results.hits = addQueryID(results.hits, results.queryID);
+
+          results.hits = transformItems(results.hits);
+
+          // Make sure the escaped tag stays after mapping over the hits.
+          // This prevents the hits from being double-escaped if there are multiple
+          // hits widgets mounted on the page.
+          (results.hits as any).__escaped = initialEscaped;
+
+          if (cachedHits === undefined) {
+            cachedHits = cache.read({ state }) || {};
+          }
+
+          if (cachedHits![page] === undefined) {
+            cachedHits![page] = results.hits;
+            cache.write({ state, hits: cachedHits });
+          }
+
+          hits = extractHitsFromCachedHits(cachedHits!);
+        }
+
+        return {
+          hits,
+          results,
+          showPrevious: getShowPrevious(helper),
+          showMore: getShowMore(helper),
+          isFirstPage:
+            getFirstReceivedPage() === 0 || helper.state.page === undefined,
+          isLastPage: results ? results.nbPages <= results.page + 1 : true,
+          widgetParams,
+        };
       },
 
       dispose({ state }) {
