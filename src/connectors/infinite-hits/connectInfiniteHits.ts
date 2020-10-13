@@ -286,8 +286,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         (results.hits as any).__escaped = initialEscaped;
 
         const cachedHits = cache.read({ state }) || {};
-        if (cachedHits![page] === undefined) {
-          cachedHits![page] = results.hits;
+        if (cachedHits[page] === undefined) {
+          cachedHits[page] = results.hits;
           cache.write({ state, hits: cachedHits });
         }
 
@@ -298,7 +298,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 
         renderFn(
           {
-            hits: extractHitsFromCachedHits(cachedHits!),
+            hits: extractHitsFromCachedHits(cachedHits),
             results,
             sendEvent,
             bindEvent,
