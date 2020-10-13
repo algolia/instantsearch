@@ -1,9 +1,25 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
+import { connectHierarchicalMenu } from '../src/connectors';
 import panel from '../src/widgets/panel/panel';
 import refinementList from '../src/widgets/refinement-list/refinement-list';
 import rangeInput from '../src/widgets/range-input/range-input';
 import rangeSlider from '../src/widgets/range-slider/range-slider';
+import breadcrumb from '../src/widgets/breadcrumb/breadcrumb';
+import { noop } from '../src/lib/utils';
+
+const virtualHierarchicalMenu = (args = {}) =>
+  connectHierarchicalMenu(
+    noop,
+    noop
+  )({
+    attributes: [
+      'hierarchicalCategories.lvl0',
+      'hierarchicalCategories.lvl1',
+      'hierarchicalCategories.lvl2',
+    ],
+    ...args,
+  });
 
 storiesOf('Basics/Panel', module)
   .add(
@@ -129,4 +145,45 @@ storiesOf('Basics/Panel', module)
         }),
       ]);
     })
+  )
+  .add(
+    'collapsed unless canRefine',
+    withHits(
+      ({ search, container }) => {
+        const breadcrumbInPanel = panel({
+          collapsed: ({ widgetRenderState }) => {
+            // TODO: We need better typing here. Not sure how, yet.
+            return widgetRenderState && !(widgetRenderState as any).canRefine;
+          },
+          templates: {
+            header: 'Collapsible panel',
+            footer:
+              'The panel collapses if it cannot refine. Click "Home". This panel will collapse and you will not see this footer anymore.',
+          },
+        })(breadcrumb);
+
+        search.addWidgets([
+          virtualHierarchicalMenu(),
+          breadcrumbInPanel({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+          }),
+        ]);
+      },
+      {
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
+          },
+        },
+      }
+    )
   );
