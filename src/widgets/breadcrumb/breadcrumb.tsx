@@ -4,6 +4,7 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb, {
+  BreadcrumbRendererOptions,
   BreadcrumbConnectorParams,
 } from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates';
@@ -112,6 +113,7 @@ export type BreadcrumbWidgetOptions = {
 };
 
 export type BreadcrumbWidget = WidgetFactory<
+  BreadcrumbRendererOptions,
   BreadcrumbConnectorParams,
   BreadcrumbWidgetOptions
 >;
