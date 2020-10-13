@@ -731,7 +731,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
         createURL: expect.any(Function),
         hasNoResults: false,
-        refine: undefined,
+        refine: expect.any(Function),
         widgetParams: {
           items: [
             {
@@ -865,7 +865,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
             isRefined: false,
           },
         ],
-        refine: undefined,
+        refine: expect.any(Function),
         createURL: expect.any(Function),
         hasNoResults: false,
         widgetParams: {

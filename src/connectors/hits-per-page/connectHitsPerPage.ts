@@ -143,17 +143,11 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
       $$type: 'ais.hitsPerPage',
 
       init(initOptions) {
-        const { helper, state, instantSearchInstance } = initOptions;
+        const { state, instantSearchInstance } = initOptions;
 
         const isCurrentInOptions = items.some(
           item => Number(state.hitsPerPage) === Number(item.value)
         );
-
-        connectorState.setHitsPerPage = value => {
-          return !value && value !== 0
-            ? helper.setQueryParameter('hitsPerPage', undefined).search()
-            : helper.setQueryParameter('hitsPerPage', value).search();
-        };
 
         if (!isCurrentInOptions) {
           warning(
@@ -220,7 +214,13 @@ You may want to add another entry to the \`items\` option with this value.`
         };
       },
 
-      getWidgetRenderState({ state, results, createURL }) {
+      getWidgetRenderState({ helper, state, results, createURL }) {
+        connectorState.setHitsPerPage = value => {
+          return !value && value !== 0
+            ? helper.setQueryParameter('hitsPerPage', undefined).search()
+            : helper.setQueryParameter('hitsPerPage', value).search();
+        };
+
         connectorState.createURLFactory = helperState => value => {
           return createURL(
             helperState.setQueryParameter(
