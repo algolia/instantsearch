@@ -145,7 +145,7 @@
   "bundlesize": [
     {
       "path": "./dist/instantsearch.production.min.js",
-      "maxSize": "64.25 kB"
+      "maxSize": "64.30 kB"
     },
     {
       "path": "./dist/instantsearch.development.js",
