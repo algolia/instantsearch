@@ -153,17 +153,13 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       transformItems = (items: any[]) => items,
       cache = getInMemoryCache(),
     } = widgetParams || ({} as typeof widgetParams);
-    let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
     let prevState: Partial<SearchParameters>;
     let showPrevious: () => void;
     let showMore: () => void;
     let sendEvent;
     let bindEvent;
-
-    const getFirstReceivedPage = () =>
-      Math.min(...Object.keys(cachedHits || {}).map(Number));
-    const getLastReceivedPage = () =>
-      Math.max(...Object.keys(cachedHits || {}).map(Number));
+    let firstReceivedPage;
+    let lastReceivedPage;
 
     const getShowPrevious = (helper: Helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
@@ -171,12 +167,12 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       helper
         .overrideStateWithoutTriggeringChangeEvent({
           ...helper.state,
-          page: getFirstReceivedPage() - 1,
+          page: firstReceivedPage - 1,
         })
         .searchWithoutTriggeringOnStateChange();
     };
     const getShowMore = (helper: Helper): (() => void) => () => {
-      helper.setPage(getLastReceivedPage() + 1).search();
+      helper.setPage(lastReceivedPage + 1).search();
     };
     const filterEmptyRefinements = (refinements = {}) => {
       return Object.keys(refinements)
@@ -207,18 +203,20 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           widgetType: this.$$type!,
         });
 
+        const cachedHits = cache.read({ state: helper.state }) || {};
+        const pageNumbers = Object.keys(cachedHits).map(Number);
+        firstReceivedPage = Math.min(...pageNumbers);
+        lastReceivedPage = Math.max(...pageNumbers);
         renderFn(
           {
-            hits: extractHitsFromCachedHits(
-              cache.read({ state: helper.state }) || {}
-            ),
+            hits: extractHitsFromCachedHits(cachedHits),
             results: undefined,
             sendEvent,
             bindEvent,
             showPrevious,
             showMore,
             isFirstPage:
-              getFirstReceivedPage() === 0 || helper.state.page === undefined,
+              firstReceivedPage === 0 || helper.state.page === undefined,
             isLastPage: true,
             instantSearchInstance,
             widgetParams,
@@ -243,6 +241,13 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           ...currentState
         } = state;
 
+        if (!firstReceivedPage || page < firstReceivedPage) {
+          firstReceivedPage = page;
+        }
+        if (!lastReceivedPage || lastReceivedPage < page) {
+          lastReceivedPage = page;
+        }
+
         currentState.facetsRefinements = filterEmptyRefinements(
           currentState.facetsRefinements
         );
@@ -257,7 +262,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         );
 
         if (!isEqual(currentState, prevState)) {
-          cachedHits = cache.read({ state }) || {};
           prevState = currentState;
         }
 
@@ -281,17 +285,14 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         // hits widgets mounted on the page.
         (results.hits as any).__escaped = initialEscaped;
 
-        if (cachedHits === undefined) {
-          cachedHits = cache.read({ state }) || {};
-        }
-
+        const cachedHits = cache.read({ state }) || {};
         if (cachedHits![page] === undefined) {
           cachedHits![page] = results.hits;
           cache.write({ state, hits: cachedHits });
         }
 
-        const isFirstPage = getFirstReceivedPage() === 0;
-        const isLastPage = results.nbPages <= getLastReceivedPage() + 1;
+        const isFirstPage = firstReceivedPage === 0;
+        const isLastPage = results.nbPages <= lastReceivedPage + 1;
 
         sendEvent('view', cachedHits[page]);
 
