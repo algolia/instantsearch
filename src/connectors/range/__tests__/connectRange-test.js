@@ -3,6 +3,12 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import connectRange from '../connectRange';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectRange', () => {
   describe('Usage', () => {
@@ -1161,6 +1167,178 @@ describe('getWidgetUiState', () => {
       range: {
         age: '16:',
         price: '100:1000',
+      },
+    });
+  });
+});
+
+describe('getRenderState', () => {
+  it('returns the render state', () => {
+    const renderFn = jest.fn();
+    const unmountFn = jest.fn();
+    const createRange = connectRange(renderFn, unmountFn);
+    const rangeWidget = createRange({
+      attribute: 'price',
+    });
+    const helper = jsHelper(createSearchClient(), 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '<=': [1000],
+          '>=': [0],
+        },
+      },
+    });
+
+    const renderState1 = rangeWidget.getRenderState(
+      {},
+      createInitOptions({ state: helper.state, helper })
+    );
+
+    expect(renderState1.range).toEqual({
+      format: {
+        from: expect.any(Function),
+        to: expect.any(Function),
+      },
+      range: {
+        max: 0,
+        min: 0,
+      },
+      refine: expect.any(Function),
+      start: [0, 1000],
+      widgetParams: {
+        attribute: 'price',
+        precision: 0,
+      },
+    });
+
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({
+        hits: [{ test: 'oneTime' }],
+        facets: { price: { 10: 1, 20: 1, 30: 1 } },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        facets_stats: {
+          price: {
+            avg: 20,
+            max: 30,
+            min: 10,
+            sum: 60,
+          },
+        },
+        nbHits: 1,
+        nbPages: 1,
+        page: 0,
+      }),
+    ]);
+
+    const renderState2 = rangeWidget.getRenderState(
+      {},
+      createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      })
+    );
+
+    expect(renderState2.range).toEqual({
+      format: {
+        from: expect.any(Function),
+        to: expect.any(Function),
+      },
+      range: {
+        max: 30,
+        min: 10,
+      },
+      refine: expect.any(Function),
+      start: [0, 1000],
+      widgetParams: {
+        attribute: 'price',
+        precision: 0,
+      },
+    });
+  });
+});
+
+describe('getWidgetRenderState', () => {
+  it('returns the widget render state', () => {
+    const renderFn = jest.fn();
+    const unmountFn = jest.fn();
+    const createRange = connectRange(renderFn, unmountFn);
+    const rangeWidget = createRange({
+      attribute: 'price',
+    });
+    const helper = jsHelper(createSearchClient(), 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '<=': [1000],
+          '>=': [0],
+        },
+      },
+    });
+
+    const renderState1 = rangeWidget.getWidgetRenderState(
+      createInitOptions({ state: helper.state, helper })
+    );
+
+    expect(renderState1).toEqual({
+      format: {
+        from: expect.any(Function),
+        to: expect.any(Function),
+      },
+      range: {
+        max: 0,
+        min: 0,
+      },
+      refine: expect.any(Function),
+      start: [0, 1000],
+      widgetParams: {
+        attribute: 'price',
+        precision: 0,
+      },
+    });
+
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({
+        hits: [{ test: 'oneTime' }],
+        facets: { price: { 10: 1, 20: 1, 30: 1 } },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        facets_stats: {
+          price: {
+            avg: 20,
+            max: 30,
+            min: 10,
+            sum: 60,
+          },
+        },
+        nbHits: 1,
+        nbPages: 1,
+        page: 0,
+      }),
+    ]);
+
+    const renderState2 = rangeWidget.getWidgetRenderState(
+      createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      })
+    );
+
+    expect(renderState2).toEqual({
+      format: {
+        from: expect.any(Function),
+        to: expect.any(Function),
+      },
+      range: {
+        max: 30,
+        min: 10,
+      },
+      refine: expect.any(Function),
+      start: [0, 1000],
+      widgetParams: {
+        attribute: 'price',
+        precision: 0,
       },
     });
   });

@@ -205,6 +205,7 @@ export type IndexRenderState = Partial<{
     >;
   };
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
+  range: any; // @TODO type when connectRange is migrated to TypeScript
 }>;
 
 type WidgetRenderState<

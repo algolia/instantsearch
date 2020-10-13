@@ -191,32 +191,35 @@ export default function connectRange(renderFn, unmountFn = noop) {
         };
       },
 
-      init({ helper, instantSearchInstance }) {
-        const stats = {};
-        const currentRange = this._getCurrentRange(stats);
-        const start = this._getCurrentRefinement(helper);
-
+      init(initOptions) {
         renderFn(
           {
-            // On first render pass an empty range
-            // to be able to bypass the validation
-            // related to it
-            refine: this._refine(helper, {}),
-            format: rangeFormatter,
-            range: currentRange,
-            widgetParams: {
-              ...widgetParams,
-              precision,
-            },
-            start,
-            instantSearchInstance,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render({ results, helper, instantSearchInstance }) {
-        const facetsFromResults = results.disjunctiveFacets || [];
+      render(renderOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          range: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, helper }) {
+        const facetsFromResults = (results && results.disjunctiveFacets) || [];
         const facet = find(
           facetsFromResults,
           facetResult => facetResult.name === attribute
@@ -226,20 +229,27 @@ export default function connectRange(renderFn, unmountFn = noop) {
         const currentRange = this._getCurrentRange(stats);
         const start = this._getCurrentRefinement(helper);
 
-        renderFn(
-          {
-            refine: this._refine(helper, currentRange),
-            format: rangeFormatter,
-            range: currentRange,
-            widgetParams: {
-              ...widgetParams,
-              precision,
-            },
-            start,
-            instantSearchInstance,
+        let refine;
+
+        if (!results) {
+          // On first render pass an empty range
+          // to be able to bypass the validation
+          // related to it
+          refine = this._refine(helper, {});
+        } else {
+          refine = this._refine(helper, currentRange);
+        }
+
+        return {
+          refine,
+          format: rangeFormatter,
+          range: currentRange,
+          widgetParams: {
+            ...widgetParams,
+            precision,
           },
-          false
-        );
+          start,
+        };
       },
 
       dispose({ state }) {
