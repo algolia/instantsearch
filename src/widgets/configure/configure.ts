@@ -1,5 +1,8 @@
 import { PlainSearchParameters } from 'algoliasearch-helper';
-import connectConfigure from '../../connectors/configure/connectConfigure';
+import connectConfigure, {
+  ConfigureRendererOptions,
+  ConfigureConnectorParams,
+} from '../../connectors/configure/connectConfigure';
 import { WidgetFactory } from '../../types';
 import { noop } from '../../lib/utils';
 
@@ -7,9 +10,13 @@ import { noop } from '../../lib/utils';
  * A list of [search parameters](https://www.algolia.com/doc/api-reference/search-api-parameters/)
  * to enable when the widget mounts.
  */
-export type ConfigureWidgetOptions = PlainSearchParameters;
+export type ConfigureWidgetParams = PlainSearchParameters;
 
-export type ConfigureWidget = WidgetFactory<{}, ConfigureWidgetOptions>;
+export type ConfigureWidget = WidgetFactory<
+  ConfigureRendererOptions,
+  ConfigureConnectorParams,
+  ConfigureWidgetParams
+>;
 
 const configure: ConfigureWidget = function configure(widgetParams) {
   // This is a renderless widget that falls back to the connector's

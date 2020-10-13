@@ -58,7 +58,7 @@ export type HitsPerPageConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<HitsPerPageConnectorParamsItem>;
+  transformItems?: TransformItems<HitsPerPageRendererOptionsItem>;
 };
 
 export type HitsPerPageRendererOptions = {

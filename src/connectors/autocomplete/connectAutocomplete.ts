@@ -6,7 +6,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import { Hits, Connector } from '../../types';
+import { Hits, Connector, Widget } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
