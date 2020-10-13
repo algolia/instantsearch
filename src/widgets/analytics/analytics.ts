@@ -241,6 +241,16 @@ const analytics: AnalyticsWidget = function analytics(widgetParams) {
         window.removeEventListener('beforeunload', onUnload);
       }
     },
+
+    getRenderState(renderState) {
+      return renderState;
+    },
+
+    getWidgetRenderState() {
+      return {
+        widgetParams,
+      };
+    },
   };
 };
 
