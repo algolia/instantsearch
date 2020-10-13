@@ -55,19 +55,42 @@ const connectHits: HitsConnector = function connectHits(
     return {
       $$type: 'ais.hits',
 
-      init({ instantSearchInstance }) {
+      init(initOptions) {
         renderFn(
           {
-            hits: [],
-            results: undefined,
-            instantSearchInstance,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render({ results, instantSearchInstance }) {
+      render(renderOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          hits: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results }) {
+        if (!results) {
+          return {
+            hits: [],
+            results: undefined,
+            widgetParams,
+          };
+        }
+
         if (escapeHTML && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
@@ -92,15 +115,11 @@ const connectHits: HitsConnector = function connectHits(
           typeof escapeHits
         >).__escaped = initialEscaped;
 
-        renderFn(
-          {
-            hits: results.hits,
-            results,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        return {
+          hits: results.hits,
+          results,
+          widgetParams,
+        };
       },
 
       dispose({ state }) {
