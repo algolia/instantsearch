@@ -84,7 +84,7 @@ describe('infiniteHits', () => {
       expect(numberOfHits).toEqual(4);
     });
 
-    expect(customCache.read).toHaveBeenCalledTimes(2); // init & render
+    expect(customCache.read).toHaveBeenCalledTimes(3); // renderState computation in index widget & init & render
     expect(customCache.write).toHaveBeenCalledTimes(2); // page #0, page #1
   });
 

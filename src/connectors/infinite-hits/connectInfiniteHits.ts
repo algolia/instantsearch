@@ -280,14 +280,18 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           hits = extractHitsFromCachedHits(cachedHits!);
         }
 
+        const isFirstPage =
+          getFirstReceivedPage() === 0 ||
+          (helper ? helper.state.page === undefined : false);
+        const isLastPage = results ? results.nbPages <= results.page + 1 : true;
+
         return {
           hits,
           results,
           showPrevious,
           showMore,
-          isFirstPage:
-            getFirstReceivedPage() === 0 || helper.state.page === undefined,
-          isLastPage: results ? results.nbPages <= results.page + 1 : true,
+          isFirstPage,
+          isLastPage,
           widgetParams,
         };
       },
