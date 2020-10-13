@@ -153,7 +153,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       transformItems = (items: any[]) => items,
       cache = getInMemoryCache(),
     } = widgetParams || ({} as typeof widgetParams);
-    let prevState: Partial<SearchParameters>;
     let showPrevious: () => void;
     let showMore: () => void;
     let sendEvent;
@@ -232,37 +231,13 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         // We're doing this to "reset" the widget if a refinement or the
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
-        const {
-          page = 0,
-          facets,
-          hierarchicalFacets,
-          disjunctiveFacets,
-          maxValuesPerFacet,
-          ...currentState
-        } = state;
+        const { page = 0 } = state;
 
         if (!firstReceivedPage || page < firstReceivedPage) {
           firstReceivedPage = page;
         }
         if (!lastReceivedPage || lastReceivedPage < page) {
           lastReceivedPage = page;
-        }
-
-        currentState.facetsRefinements = filterEmptyRefinements(
-          currentState.facetsRefinements
-        );
-        currentState.hierarchicalFacetsRefinements = filterEmptyRefinements(
-          currentState.hierarchicalFacetsRefinements
-        );
-        currentState.disjunctiveFacetsRefinements = filterEmptyRefinements(
-          currentState.disjunctiveFacetsRefinements
-        );
-        currentState.numericRefinements = filterEmptyRefinements(
-          currentState.numericRefinements
-        );
-
-        if (!isEqual(currentState, prevState)) {
-          prevState = currentState;
         }
 
         if (escapeHTML && results.hits.length > 0) {
