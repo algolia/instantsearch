@@ -78,7 +78,7 @@ describe('infiniteHits', () => {
       };
     }
 
-    it('calls read & write methods of custom cache', async () => {
+    it('writes to a custom cache', async () => {
       const { search } = createInstantSearch();
       const { customCache } = createCustomCache();
 
@@ -96,6 +96,23 @@ describe('infiniteHits', () => {
         ).length;
         expect(numberOfHits).toEqual(2);
       });
+      expect(customCache.write).toHaveBeenCalledTimes(1);
+      expect(customCache.write.mock.calls[0][0].hits).toMatchInlineSnapshot(`
+        Object {
+          "0": Array [
+            Object {
+              "__position": 1,
+              "objectID": "object-id0",
+              "title": "title 1",
+            },
+            Object {
+              "__position": 2,
+              "objectID": "object-id1",
+              "title": "title 2",
+            },
+          ],
+        }
+      `);
 
       fireEvent.click(getByText(container, 'Show more results'));
       await waitFor(() => {
@@ -104,9 +121,35 @@ describe('infiniteHits', () => {
         ).length;
         expect(numberOfHits).toEqual(4);
       });
-
-      expect(customCache.read).toHaveBeenCalledTimes(3); // init & render #0, render #1
-      expect(customCache.write).toHaveBeenCalledTimes(2); // page #0, page #1
+      expect(customCache.write).toHaveBeenCalledTimes(2);
+      expect(customCache.write.mock.calls[1][0].hits).toMatchInlineSnapshot(`
+Object {
+  "0": Array [
+    Object {
+      "__position": 1,
+      "objectID": "object-id0",
+      "title": "title 1",
+    },
+    Object {
+      "__position": 2,
+      "objectID": "object-id1",
+      "title": "title 2",
+    },
+  ],
+  "1": Array [
+    Object {
+      "__position": 3,
+      "objectID": "object-id0",
+      "title": "title 3",
+    },
+    Object {
+      "__position": 4,
+      "objectID": "object-id1",
+      "title": "title 4",
+    },
+  ],
+}
+`);
     });
 
     it('displays all the hits from cache', async () => {

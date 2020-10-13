@@ -157,8 +157,24 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     let showMore: () => void;
     let sendEvent;
     let bindEvent;
-    let firstReceivedPage;
-    let lastReceivedPage;
+    const getFirstReceivedPage = (state: SearchParameters) => {
+      const { page = 0 } = state;
+      const pages = Object.keys(cache.read({ state }) || {}).map(Number);
+      if (pages.length === 0) {
+        return page;
+      } else {
+        return Math.min(page, ...pages);
+      }
+    };
+    const getLastReceivedPage = (state: SearchParameters) => {
+      const { page = 0 } = state;
+      const pages = Object.keys(cache.read({ state }) || {}).map(Number);
+      if (pages.length === 0) {
+        return page;
+      } else {
+        return Math.max(page, ...pages);
+      }
+    };
 
     const getShowPrevious = (helper: Helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
@@ -166,24 +182,12 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       helper
         .overrideStateWithoutTriggeringChangeEvent({
           ...helper.state,
-          page: firstReceivedPage - 1,
+          page: getFirstReceivedPage(helper.state) - 1,
         })
         .searchWithoutTriggeringOnStateChange();
     };
     const getShowMore = (helper: Helper): (() => void) => () => {
-      helper.setPage(lastReceivedPage + 1).search();
-    };
-    const filterEmptyRefinements = (refinements = {}) => {
-      return Object.keys(refinements)
-        .filter(key =>
-          Array.isArray(refinements[key])
-            ? refinements[key].length
-            : Object.keys(refinements[key]).length
-        )
-        .reduce((obj, key) => {
-          obj[key] = refinements[key];
-          return obj;
-        }, {});
+      helper.setPage(getLastReceivedPage(helper.state) + 1).search();
     };
 
     return {
@@ -203,9 +207,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         });
 
         const cachedHits = cache.read({ state: helper.state }) || {};
-        const pageNumbers = Object.keys(cachedHits).map(Number);
-        firstReceivedPage = Math.min(...pageNumbers);
-        lastReceivedPage = Math.max(...pageNumbers);
         renderFn(
           {
             hits: extractHitsFromCachedHits(cachedHits),
@@ -215,7 +216,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             showPrevious,
             showMore,
             isFirstPage:
-              firstReceivedPage === 0 || helper.state.page === undefined,
+              helper.state.page === undefined ||
+              getFirstReceivedPage(helper.state) === 0,
             isLastPage: true,
             instantSearchInstance,
             widgetParams,
@@ -232,13 +234,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
         const { page = 0 } = state;
-
-        if (!firstReceivedPage || page < firstReceivedPage) {
-          firstReceivedPage = page;
-        }
-        if (!lastReceivedPage || lastReceivedPage < page) {
-          lastReceivedPage = page;
-        }
+        const firstReceivedPage = getFirstReceivedPage(state);
+        const lastReceivedPage = getLastReceivedPage(state);
 
         if (escapeHTML && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
