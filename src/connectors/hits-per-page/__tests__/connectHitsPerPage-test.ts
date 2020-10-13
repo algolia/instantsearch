@@ -694,8 +694,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
                 isRefined: false,
               },
             ],
-            createURL: () => '',
-            refine: () => {},
+            createURL: expect.any(Function),
+            refine: expect.any(Function),
             hasNoResults: false,
             widgetParams: {
               items: [

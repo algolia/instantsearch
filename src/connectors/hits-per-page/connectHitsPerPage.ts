@@ -178,8 +178,6 @@ You may want to add another entry to the \`items\` option with this value.`
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
-            hasNoResults: true,
-            widgetParams,
             instantSearchInstance,
           },
           true
@@ -187,14 +185,11 @@ You may want to add another entry to the \`items\` option with this value.`
       },
 
       render(initOptions) {
-        const { results, instantSearchInstance } = initOptions;
-        const hasNoResults = results.nbHits === 0;
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
-            hasNoResults,
-            widgetParams,
             instantSearchInstance,
           },
           false
@@ -214,27 +209,30 @@ You may want to add another entry to the \`items\` option with this value.`
         };
       },
 
-      getWidgetRenderState({ helper, state, results, createURL }) {
-        connectorState.setHitsPerPage = value => {
-          return !value && value !== 0
-            ? helper.setQueryParameter('hitsPerPage', undefined).search()
-            : helper.setQueryParameter('hitsPerPage', value).search();
-        };
+      getWidgetRenderState({ state, results, createURL, helper }) {
+        if (!connectorState.createURLFactory) {
+          connectorState.createURLFactory = helperState => value =>
+            createURL(
+              helperState.setQueryParameter(
+                'hitsPerPage',
+                !value && value !== 0 ? undefined : value
+              )
+            );
+        }
 
-        connectorState.createURLFactory = helperState => value => {
-          return createURL(
-            helperState.setQueryParameter(
-              'hitsPerPage',
-              !value && value !== 0 ? undefined : value
-            )
-          );
-        };
+        if (!connectorState.setHitsPerPage) {
+          connectorState.setHitsPerPage = value => {
+            return !value && value !== 0
+              ? helper.setQueryParameter('hitsPerPage', undefined).search()
+              : helper.setQueryParameter('hitsPerPage', value).search();
+          };
+        }
 
         return {
           items: transformItems(normalizeItems(state)),
           refine: connectorState.setHitsPerPage,
           createURL: connectorState.createURLFactory(state),
-          hasNoResults: results?.nbHits === 0,
+          hasNoResults: results ? results.nbHits === 0 : true,
           widgetParams,
         };
       },
