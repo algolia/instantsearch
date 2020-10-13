@@ -143,7 +143,7 @@ search.addWidgets([
         };
       },
 
-      getWidgetRenderState({ helper, scopedResults }) {
+      getWidgetRenderState({ helper, scopedResults, instantSearchInstance }) {
         const indices = scopedResults.map(scopedResult => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
