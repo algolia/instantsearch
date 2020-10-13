@@ -27,6 +27,10 @@ import {
   CurrentRefinementsRendererOptions,
   CurrentRefinementsConnectorParams,
 } from '../connectors/current-refinements/connectCurrentRefinements';
+import {
+  HitsRendererOptions,
+  HitsConnectorParams,
+} from '../connectors/hits/connectHits';
 
 export type ScopedResult = {
   indexId: string;
@@ -201,6 +205,7 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
 }>;
 
 type WidgetRenderState<
