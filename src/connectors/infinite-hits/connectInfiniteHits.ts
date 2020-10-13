@@ -141,6 +141,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     } = widgetParams || ({} as typeof widgetParams);
     let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
     let prevState: Partial<SearchParameters>;
+    let showPrevious: () => void;
+    let showMore: () => void;
 
     const getFirstReceivedPage = () =>
       Math.min(...Object.keys(cachedHits || {}).map(Number));
@@ -199,7 +201,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          hits: this.getWidgetRenderState(renderOptions),
+          infiniteHits: this.getWidgetRenderState(renderOptions),
         };
       },
 
@@ -207,6 +209,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         let hits;
 
         if (!results) {
+          showPrevious = getShowPrevious(helper);
+          showMore = getShowMore(helper);
           hits = extractHitsFromCachedHits(
             cache.read({ state: helper.state }) || {}
           );
@@ -279,8 +283,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         return {
           hits,
           results,
-          showPrevious: getShowPrevious(helper),
-          showMore: getShowMore(helper),
+          showPrevious,
+          showMore,
           isFirstPage:
             getFirstReceivedPage() === 0 || helper.state.page === undefined,
           isLastPage: results ? results.nbPages <= results.page + 1 : true,

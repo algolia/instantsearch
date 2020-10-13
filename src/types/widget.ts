@@ -30,6 +30,10 @@ import {
   HitsRendererOptions,
   HitsConnectorParams,
 } from '../connectors/hits/connectHits';
+import {
+  InfiniteHitsRendererOptions,
+  InfiniteHitsConnectorParams,
+} from '../connectors/infinite-hits/connectInfiniteHits';
 
 export type ScopedResult = {
   indexId: string;
@@ -205,6 +209,10 @@ export type IndexRenderState = Partial<{
     >;
   };
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
+  infiniteHits: WidgetRenderState<
+    InfiniteHitsRendererOptions,
+    InfiniteHitsConnectorParams
+  >;
 }>;
 
 type WidgetRenderState<

@@ -897,7 +897,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         createInitOptions({ state: helper.state, helper })
       );
 
-      expect(renderState1.hits).toEqual({
+      expect(renderState1.infiniteHits).toEqual({
         hits: [],
         isFirstPage: true,
         isLastPage: true,
@@ -930,17 +930,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
       ];
 
-      expect(renderState2.hits).toEqual(
-        expect.objectContaining({
-          hits: expectedHits,
-          isFirstPage: true,
-          isLastPage: true,
-          results,
-          showMore: expect.any(Function),
-          showPrevious: expect.any(Function),
-          widgetParams: {},
-        })
-      );
+      expect(renderState2.infiniteHits).toEqual({
+        hits: expectedHits,
+        isFirstPage: true,
+        isLastPage: true,
+        results,
+        showMore: renderState1.infiniteHits!.showMore,
+        showPrevious: renderState1.infiniteHits!.showPrevious,
+        widgetParams: {},
+      });
     });
   });
 
@@ -996,8 +994,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           isFirstPage: true,
           isLastPage: true,
           results,
-          showMore: expect.any(Function),
-          showPrevious: expect.any(Function),
+          showMore: renderState1.showMore,
+          showPrevious: renderState1.showPrevious,
           widgetParams: {},
         })
       );
