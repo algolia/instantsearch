@@ -157,18 +157,24 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     let showMore: () => void;
     let sendEvent;
     let bindEvent;
-    const getFirstReceivedPage = (state: SearchParameters) => {
+    const getFirstReceivedPage = (
+      state: SearchParameters,
+      cachedHits: InfiniteHitsCachedHits
+    ) => {
       const { page = 0 } = state;
-      const pages = Object.keys(cache.read({ state }) || {}).map(Number);
+      const pages = Object.keys(cachedHits).map(Number);
       if (pages.length === 0) {
         return page;
       } else {
         return Math.min(page, ...pages);
       }
     };
-    const getLastReceivedPage = (state: SearchParameters) => {
+    const getLastReceivedPage = (
+      state: SearchParameters,
+      cachedHits: InfiniteHitsCachedHits
+    ) => {
       const { page = 0 } = state;
-      const pages = Object.keys(cache.read({ state }) || {}).map(Number);
+      const pages = Object.keys(cachedHits).map(Number);
       if (pages.length === 0) {
         return page;
       } else {
@@ -176,26 +182,35 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       }
     };
 
-    const getShowPrevious = (helper: Helper): (() => void) => () => {
+    const getShowPrevious = (
+      helper: Helper,
+      cachedHits: InfiniteHitsCachedHits
+    ): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
       // avoid updating the browser URL when the user displays the previous page.
       helper
         .overrideStateWithoutTriggeringChangeEvent({
           ...helper.state,
-          page: getFirstReceivedPage(helper.state) - 1,
+          page: getFirstReceivedPage(helper.state, cachedHits) - 1,
         })
         .searchWithoutTriggeringOnStateChange();
     };
-    const getShowMore = (helper: Helper): (() => void) => () => {
-      helper.setPage(getLastReceivedPage(helper.state) + 1).search();
+    const getShowMore = (
+      helper: Helper,
+      cachedHits: InfiniteHitsCachedHits
+    ): (() => void) => () => {
+      helper
+        .setPage(getLastReceivedPage(helper.state, cachedHits) + 1)
+        .search();
     };
 
     return {
       $$type: 'ais.infiniteHits',
 
       init({ instantSearchInstance, helper }) {
-        showPrevious = getShowPrevious(helper);
-        showMore = getShowMore(helper);
+        const cachedHits = cache.read({ state: helper.state }) || {};
+        showPrevious = getShowPrevious(helper, cachedHits);
+        showMore = getShowMore(helper, cachedHits);
         sendEvent = createSendEventForHits({
           instantSearchInstance,
           index: helper.getIndex(),
@@ -206,7 +221,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           widgetType: this.$$type!,
         });
 
-        const cachedHits = cache.read({ state: helper.state }) || {};
         renderFn(
           {
             hits: extractHitsFromCachedHits(cachedHits),
@@ -217,7 +231,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             showMore,
             isFirstPage:
               helper.state.page === undefined ||
-              getFirstReceivedPage(helper.state) === 0,
+              getFirstReceivedPage(helper.state, cachedHits) === 0,
             isLastPage: true,
             instantSearchInstance,
             widgetParams,
@@ -234,8 +248,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
         const { page = 0 } = state;
-        const firstReceivedPage = getFirstReceivedPage(state);
-        const lastReceivedPage = getLastReceivedPage(state);
 
         if (escapeHTML && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
@@ -263,6 +275,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           cache.write({ state, hits: cachedHits });
         }
 
+        const firstReceivedPage = getFirstReceivedPage(state, cachedHits);
+        const lastReceivedPage = getLastReceivedPage(state, cachedHits);
         const isFirstPage = firstReceivedPage === 0;
         const isLastPage = results.nbPages <= lastReceivedPage + 1;
 
