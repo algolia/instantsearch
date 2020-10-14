@@ -628,6 +628,7 @@ function hydrateMetadata(resultsState) {
         items:
           item.items &&
           item.items.map(nestedItem => ({
+            value() {},
             ...nestedItem,
           })),
       })),
