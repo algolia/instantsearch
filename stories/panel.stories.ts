@@ -5,7 +5,9 @@ import panel from '../src/widgets/panel/panel';
 import refinementList from '../src/widgets/refinement-list/refinement-list';
 import rangeInput from '../src/widgets/range-input/range-input';
 import rangeSlider from '../src/widgets/range-slider/range-slider';
-import breadcrumb from '../src/widgets/breadcrumb/breadcrumb';
+import breadcrumb, {
+  BreadcrumbWidget,
+} from '../src/widgets/breadcrumb/breadcrumb';
 import { noop } from '../src/lib/utils';
 
 const virtualHierarchicalMenu = (args = {}) =>
@@ -150,10 +152,9 @@ storiesOf('Basics/Panel', module)
     'collapsed unless canRefine',
     withHits(
       ({ search, container }) => {
-        const breadcrumbInPanel = panel({
+        const breadcrumbInPanel = panel<BreadcrumbWidget>({
           collapsed({ widgetRenderState }) {
-            // TODO: We need better typing here. Not sure how, yet.
-            return (widgetRenderState as any).canRefine;
+            return widgetRenderState.canRefine;
           },
           templates: {
             header: 'Collapsible panel',
