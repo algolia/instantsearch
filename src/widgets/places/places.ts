@@ -133,6 +133,16 @@ const placesWidget: WidgetFactory<{}, {}, PlacesWidgetOptions> = (
         .setQueryParameter('aroundLatLngViaIP', false)
         .setQueryParameter('aroundLatLng', position || undefined);
     },
+
+    getRenderState(renderState) {
+      return renderState;
+    },
+
+    getWidgetRenderState() {
+      return {
+        widgetParams: widgetOptions,
+      };
+    },
   };
 };
 
