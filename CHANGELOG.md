@@ -1,3 +1,12 @@
+## [6.8.1](https://github.com/algolia/react-instantsearch/compare/v6.8.0...v6.8.1) (2020-10-14)
+
+
+### Bug Fixes
+
+* **ssr:** hydrate metadata with a value ([9249c19](https://github.com/algolia/react-instantsearch/commit/9249c19))
+
+
+
 # [6.8.0](https://github.com/algolia/react-instantsearch/compare/v6.7.0...v6.8.0) (2020-10-14)
 
 
