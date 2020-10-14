@@ -616,9 +616,20 @@ function hydrateMetadata(resultsState) {
     return [];
   }
 
+  // add a value noop, which gets replaced once the widgets are mounted
   return resultsState.metadata.map(datum => ({
-    ...datum,
-    // add a value noop, which gets replaced once the widgets are mounted
     value() {},
+    ...datum,
+    items:
+      datum.items &&
+      datum.items.map(item => ({
+        value() {},
+        ...item,
+        items:
+          item.items &&
+          item.items.map(nestedItem => ({
+            ...nestedItem,
+          })),
+      })),
   }));
 }
