@@ -1,3 +1,15 @@
+# [6.8.0](https://github.com/algolia/react-instantsearch/compare/v6.7.0...v6.8.0) (2020-10-14)
+
+
+### Bug Fixes
+
+* **ssr:** make sure metadata is available on initial render ([#2973](https://github.com/algolia/react-instantsearch/issues/2973)) ([be43b65](https://github.com/algolia/react-instantsearch/commit/be43b65)), closes [#2972](https://github.com/algolia/react-instantsearch/issues/2972)
+* add missing dependencies ([#2975](https://github.com/algolia/react-instantsearch/issues/2975)) ([22ecb3c](https://github.com/algolia/react-instantsearch/commit/22ecb3c))
+* **ConfigureRelatedItems:** support nested attributes ([#2967](https://github.com/algolia/react-instantsearch/issues/2967)) ([86dfe86](https://github.com/algolia/react-instantsearch/commit/86dfe86))
+* **ssr:** allow "params" to be optional in custom clients ([#2961](https://github.com/algolia/react-instantsearch/issues/2961)) ([c3e3d2e](https://github.com/algolia/react-instantsearch/commit/c3e3d2e)), closes [#2958](https://github.com/algolia/react-instantsearch/issues/2958)
+
+
+
 # [6.7.0](https://github.com/algolia/react-instantsearch/compare/v6.5.0...v6.7.0) (2020-07-20)
 
 
