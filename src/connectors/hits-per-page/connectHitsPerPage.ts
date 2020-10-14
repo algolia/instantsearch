@@ -5,8 +5,14 @@ import {
   noop,
 } from '../../lib/utils';
 
-import { SearchParameters } from 'algoliasearch-helper';
-import { Connector, TransformItems, CreateURL } from '../../types';
+import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
+import {
+  Connector,
+  TransformItems,
+  CreateURL,
+  InitOptions,
+  RenderOptions,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
@@ -131,13 +137,29 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
     };
 
     type ConnectorState = {
-      setHitsPerPage: (value: HitsPerPageConnectorParamsItem['value']) => any;
-      createURLFactory: (
-        state: SearchParameters
-      ) => HitsPerPageRendererOptions['createURL'];
+      getRefine: (
+        helper: AlgoliaSearchHelper
+      ) => (value: HitsPerPageConnectorParamsItem['value']) => any;
+      createURLFactory: (props: {
+        state: SearchParameters;
+        createURL: (InitOptions | RenderOptions)['createURL'];
+      }) => HitsPerPageRendererOptions['createURL'];
     };
 
-    const connectorState = {} as ConnectorState;
+    const connectorState: ConnectorState = {
+      getRefine: helper => value => {
+        return !value && value !== 0
+          ? helper.setQueryParameter('hitsPerPage', undefined).search()
+          : helper.setQueryParameter('hitsPerPage', value).search();
+      },
+      createURLFactory: ({ state, createURL }) => value =>
+        createURL(
+          state.setQueryParameter(
+            'hitsPerPage',
+            !value && value !== 0 ? undefined : value
+          )
+        ),
+    };
 
     return {
       $$type: 'ais.hitsPerPage',
@@ -210,28 +232,10 @@ You may want to add another entry to the \`items\` option with this value.`
       },
 
       getWidgetRenderState({ state, results, createURL, helper }) {
-        if (!connectorState.createURLFactory) {
-          connectorState.createURLFactory = helperState => value =>
-            createURL(
-              helperState.setQueryParameter(
-                'hitsPerPage',
-                !value && value !== 0 ? undefined : value
-              )
-            );
-        }
-
-        if (!connectorState.setHitsPerPage) {
-          connectorState.setHitsPerPage = value => {
-            return !value && value !== 0
-              ? helper.setQueryParameter('hitsPerPage', undefined).search()
-              : helper.setQueryParameter('hitsPerPage', value).search();
-          };
-        }
-
         return {
           items: transformItems(normalizeItems(state)),
-          refine: connectorState.setHitsPerPage,
-          createURL: connectorState.createURLFactory(state),
+          refine: connectorState.getRefine(helper),
+          createURL: connectorState.createURLFactory({ state, createURL }),
           hasNoResults: results ? results.nbHits === 0 : true,
           widgetParams,
         };
