@@ -9,6 +9,7 @@ import {
   version,
 } from 'react-instantsearch-core';
 import { findResultsState } from '../createInstantSearchServer';
+import { SearchBox } from 'react-instantsearch-dom';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -47,7 +48,9 @@ describe('findResultsState', () => {
 
         return searchParameters.setQuery(searchState.query || fallback);
       },
-      getMetadata: () => null,
+      getMetadata(props, searchState) {
+        return { id: 'cool', props, searchState };
+      },
       getId: () => 'id',
     })(() => null);
 
@@ -93,7 +96,11 @@ describe('findResultsState', () => {
   });
 
   it('adds expected Algolia agents', () => {
-    const App = props => <InstantSearch {...props} />;
+    const App = props => (
+      <InstantSearch {...props}>
+        <SearchBox />
+      </InstantSearch>
+    );
 
     const searchClient = {
       ...createSearchClient(),
@@ -125,7 +132,11 @@ describe('findResultsState', () => {
   });
 
   it('does not throw if `searchClient` does not have a `addAlgoliaAgent()` method', () => {
-    const App = () => <div />;
+    const App = props => (
+      <InstantSearch {...props}>
+        <SearchBox />
+      </InstantSearch>
+    );
 
     const props = {
       ...requiredProps,
@@ -135,6 +146,21 @@ describe('findResultsState', () => {
     const trigger = () => findResultsState(App, props);
 
     expect(() => trigger()).not.toThrow();
+  });
+
+  it('throws if no widgets are added', () => {
+    const App = props => <InstantSearch {...props} />;
+
+    const props = {
+      ...requiredProps,
+      searchClient: createSearchClient(),
+    };
+
+    expect(() =>
+      findResultsState(App, props)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"[ssr]: no widgets were added, you likely did not pass the \`widgetsCollector\` down to the InstantSearch component."`
+    );
   });
 
   describe('single index', () => {
@@ -154,6 +180,7 @@ describe('findResultsState', () => {
       const results = await findResultsState(App, props);
 
       expect(results).toEqual({
+        metadata: [expect.objectContaining({ id: 'cool' })],
         state: expect.any(SearchParameters),
         rawResults: expect.arrayContaining([
           expect.objectContaining({ query: expect.any(String) }),
@@ -204,6 +231,7 @@ describe('findResultsState', () => {
       const data = await findResultsState(App, props);
 
       expect(data).toEqual({
+        metadata: [expect.objectContaining({ id: 'cool' })],
         rawResults: [
           expect.objectContaining({ index: 'indexName', query: 'Apple' }),
         ],
@@ -230,10 +258,44 @@ describe('findResultsState', () => {
       const data = await findResultsState(App, props);
 
       expect(data).toEqual({
+        metadata: [expect.objectContaining({ id: 'cool' })],
         rawResults: [
           expect.objectContaining({ index: 'indexName', query: 'iPhone' }),
         ],
         state: expect.objectContaining({ index: 'indexName', query: 'iPhone' }),
+      });
+    });
+
+    it('forwards metadata', async () => {
+      const Connected = createWidget();
+
+      const App = props => (
+        <InstantSearch {...props}>
+          <Connected prop="something" />
+        </InstantSearch>
+      );
+
+      const props = {
+        ...requiredProps,
+        searchState: {
+          query: 'godlike',
+        },
+      };
+
+      const results = await findResultsState(App, props);
+
+      expect(results).toEqual({
+        metadata: [
+          {
+            id: 'cool',
+            props: expect.objectContaining({ prop: 'something' }),
+            searchState: { query: 'godlike' },
+          },
+        ],
+        state: expect.any(SearchParameters),
+        rawResults: expect.arrayContaining([
+          expect.objectContaining({ query: expect.any(String) }),
+        ]),
       });
     });
 
@@ -459,7 +521,7 @@ describe('findResultsState', () => {
         ...requiredProps,
       };
 
-      const results = await findResultsState(App, props);
+      const { results } = await findResultsState(App, props);
 
       results.forEach(result => {
         expect(result.state).toBeInstanceOf(SearchParameters);
@@ -517,9 +579,15 @@ describe('findResultsState', () => {
 
       const data = await findResultsState(App, props);
 
-      expect(data).toHaveLength(2);
+      expect(data.results).toHaveLength(2);
 
-      const [first, second] = data;
+      const { metadata, results } = data;
+      const [first, second] = results;
+
+      expect(metadata).toEqual([
+        expect.objectContaining({ id: 'cool' }),
+        expect.objectContaining({ id: 'cool' }),
+      ]);
 
       expect(first).toEqual({
         _internalIndexId: 'index1',
@@ -555,11 +623,16 @@ describe('findResultsState', () => {
         indexName: 'index1',
       };
 
-      const data = await findResultsState(App, props);
+      const { results, metadata } = await findResultsState(App, props);
 
-      expect(data).toHaveLength(2);
+      expect(metadata).toEqual([
+        expect.objectContaining({ id: 'cool' }),
+        expect.objectContaining({ id: 'cool' }),
+      ]);
 
-      const [first, second] = data;
+      expect(results).toHaveLength(2);
+
+      const [first, second] = results;
 
       expect(first).toEqual({
         _internalIndexId: 'index1',
@@ -595,11 +668,16 @@ describe('findResultsState', () => {
         indexName: 'index1',
       };
 
-      const data = await findResultsState(App, props);
+      const { results, metadata } = await findResultsState(App, props);
 
-      expect(data).toHaveLength(2);
+      expect(metadata).toEqual([
+        expect.objectContaining({ id: 'cool' }),
+        expect.objectContaining({ id: 'cool' }),
+      ]);
 
-      const [first, second] = data;
+      expect(results).toHaveLength(2);
+
+      const [first, second] = results;
 
       expect(first).toEqual({
         _internalIndexId: 'index1',
@@ -647,11 +725,16 @@ describe('findResultsState', () => {
         },
       };
 
-      const data = await findResultsState(App, props);
+      const { results, metadata } = await findResultsState(App, props);
 
-      expect(data).toHaveLength(2);
+      expect(metadata).toEqual([
+        expect.objectContaining({ id: 'cool' }),
+        expect.objectContaining({ id: 'cool' }),
+      ]);
 
-      const [first, second] = data;
+      expect(results).toHaveLength(2);
+
+      const [first, second] = results;
 
       expect(first).toEqual({
         _internalIndexId: 'index1',
@@ -695,11 +778,16 @@ describe('findResultsState', () => {
         },
       };
 
-      const data = await findResultsState(App, props);
+      const { results, metadata } = await findResultsState(App, props);
 
-      expect(data).toHaveLength(2);
+      expect(metadata).toEqual([
+        expect.objectContaining({ id: 'cool' }),
+        expect.objectContaining({ id: 'cool' }),
+      ]);
 
-      const [first, second] = data;
+      expect(results).toHaveLength(2);
+
+      const [first, second] = results;
 
       expect(first).toEqual({
         _internalIndexId: 'index1',
@@ -743,11 +831,78 @@ describe('findResultsState', () => {
         },
       };
 
-      const data = await findResultsState(App, props);
+      const { results, metadata } = await findResultsState(App, props);
 
-      expect(data).toHaveLength(2);
+      expect(metadata).toEqual([
+        expect.objectContaining({ id: 'cool' }),
+        expect.objectContaining({ id: 'cool' }),
+      ]);
 
-      const [first, second] = data;
+      expect(results).toHaveLength(2);
+
+      const [first, second] = results;
+
+      expect(first).toEqual({
+        _internalIndexId: 'index1',
+        state: expect.objectContaining({ index: 'index1', query: 'iPhone' }),
+        rawResults: [
+          expect.objectContaining({ index: 'index1', query: 'iPhone' }),
+        ],
+      });
+      expect(second).toEqual({
+        _internalIndexId: 'index1WithRefinement',
+        state: expect.objectContaining({ index: 'index1', query: 'iPad' }),
+        rawResults: [
+          expect.objectContaining({ index: 'index1', query: 'iPad' }),
+        ],
+      });
+    });
+
+    it('forwards metadata', async () => {
+      const Connected = createWidget();
+      const App = props => (
+        <InstantSearch {...props}>
+          <Connected prop="value1" />
+
+          <Index indexId="index1WithRefinement" indexName="index1">
+            <Connected prop="value2" />
+          </Index>
+        </InstantSearch>
+      );
+
+      const searchState = {
+        query: 'iPhone',
+        indices: {
+          index1WithRefinement: {
+            query: 'iPad',
+          },
+        },
+      };
+
+      const props = {
+        ...requiredProps,
+        indexName: 'index1',
+        searchState,
+      };
+
+      const { results, metadata } = await findResultsState(App, props);
+
+      expect(metadata).toEqual([
+        {
+          id: 'cool',
+          searchState,
+          props: expect.objectContaining({ prop: 'value1' }),
+        },
+        {
+          id: 'cool',
+          searchState,
+          props: expect.objectContaining({ prop: 'value2' }),
+        },
+      ]);
+
+      expect(results).toHaveLength(2);
+
+      const [first, second] = results;
 
       expect(first).toEqual({
         _internalIndexId: 'index1',
@@ -791,11 +946,11 @@ describe('findResultsState', () => {
           },
         };
 
-        const data = await findResultsState(App, props);
+        const { results } = await findResultsState(App, props);
 
-        expect(data).toHaveLength(2);
+        expect(results).toHaveLength(2);
 
-        const [first, second] = data;
+        const [first, second] = results;
 
         expect(first.rawResults[0].params).toMatchInlineSnapshot(
           `"query=iPhone"`
@@ -834,11 +989,11 @@ describe('findResultsState', () => {
           },
         };
 
-        const data = await findResultsState(App, props);
+        const { results } = await findResultsState(App, props);
 
-        expect(data).toHaveLength(2);
+        expect(results).toHaveLength(2);
 
-        const [first, second] = data;
+        const [first, second] = results;
 
         expect(first.rawResults[0].params).toBeUndefined();
         expect(second.rawResults[0].params).toBeUndefined();
@@ -872,11 +1027,11 @@ describe('findResultsState', () => {
           },
         };
 
-        const data = await findResultsState(App, props);
+        const { results } = await findResultsState(App, props);
 
-        expect(data).toHaveLength(2);
+        expect(results).toHaveLength(2);
 
-        const [first, second] = data;
+        const [first, second] = results;
 
         expect(first.rawResults[0].params).toMatchInlineSnapshot(
           `"query=iPhone"`

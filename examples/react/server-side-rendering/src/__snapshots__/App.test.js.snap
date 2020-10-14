@@ -65,6 +65,13 @@ Array [
     </form>
   </div>,
   <div
+    className="ais-CurrentRefinements ais-CurrentRefinements--noRefinement"
+  >
+    <ul
+      className="ais-CurrentRefinements-list ais-CurrentRefinements-list--noRefinement"
+    />
+  </div>,
+  <div
     className="ais-RefinementList ais-RefinementList--noRefinement"
   />,
   <div

@@ -1,12 +1,13 @@
 import { createContext } from 'react';
 import { Store } from '../core/createStore';
+import InstantSearch from '../widgets/InstantSearch';
 
 export type InstantSearchContext = {
-  onInternalStateUpdate: (...args: any[]) => any;
-  createHrefForState: (...args: any[]) => string;
-  onSearchForFacetValues: (...args: any[]) => any;
-  onSearchStateChange: (...args: any[]) => any;
-  onSearchParameters: (...args: any[]) => any;
+  onInternalStateUpdate: InstantSearch['onWidgetsInternalStateUpdate'];
+  createHrefForState: InstantSearch['createHrefForState'];
+  onSearchForFacetValues: InstantSearch['onSearchForFacetValues'];
+  onSearchStateChange: InstantSearch['onSearchStateChange'];
+  onSearchParameters: InstantSearch['onSearchParameters'];
   store: Store;
   widgetsManager: any;
   mainTargetedIndex: string;

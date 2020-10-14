@@ -82,7 +82,8 @@ class Index extends Component<InnerProps, State> {
         ais: this.props.contextValue,
         multiIndexContext: this.state.indexContext,
       },
-      this.props
+      this.props,
+      undefined
     );
   }
 
