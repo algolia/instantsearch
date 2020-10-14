@@ -5,9 +5,7 @@ import panel from '../src/widgets/panel/panel';
 import refinementList from '../src/widgets/refinement-list/refinement-list';
 import rangeInput from '../src/widgets/range-input/range-input';
 import rangeSlider from '../src/widgets/range-slider/range-slider';
-import breadcrumb, {
-  BreadcrumbWidget,
-} from '../src/widgets/breadcrumb/breadcrumb';
+import breadcrumb from '../src/widgets/breadcrumb/breadcrumb';
 import { noop } from '../src/lib/utils';
 
 const virtualHierarchicalMenu = (args = {}) =>
@@ -152,7 +150,7 @@ storiesOf('Basics/Panel', module)
     'collapsed unless canRefine',
     withHits(
       ({ search, container }) => {
-        const breadcrumbInPanel = panel<BreadcrumbWidget>({
+        const breadcrumbInPanel = panel<typeof breadcrumb>({
           collapsed({ widgetRenderState }) {
             return widgetRenderState.canRefine;
           },
