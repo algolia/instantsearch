@@ -121,7 +121,7 @@ fi
 printf "\nRelease: Package was published to NPM\n\n"
 
 # Wait for the publish to be effective
-sleep 2.5
+sleep 10
 
 # Required until Lerna supports the top level package as a member
 # of the Workspaces. Another solution is to move out the stories
