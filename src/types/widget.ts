@@ -212,7 +212,7 @@ export type WidgetRenderState<
   // @ts-ignore
   TWidgetParams
 > = TWidgetRenderState & {
-  widgetParams: TWidgetParams;
+  widgetParams: any; // @TODO type as TWidgetParams
 };
 
 /**
