@@ -10,45 +10,56 @@ const getIndexId = context =>
     ? context.multiIndexContext.targetedIndex
     : context.ais.mainTargetedIndex;
 
-const createSearchParametersCollector = accumulator => {
-  return (getWidgetSearchParameters, context, props, searchState) => {
+function createWidgetsCollector(accumulator) {
+  return ({
+    getSearchParameters,
+    getMetadata: getMeta,
+    context,
+    props,
+    searchState,
+  }) => {
     accumulator.push({
-      getSearchParameters: getWidgetSearchParameters,
+      getSearchParameters,
+      getMetadata: getMeta,
       index: getIndexId(context),
       context,
       props,
       searchState,
     });
   };
-};
+}
 
-const getSearchParameters = (indexName, searchParameters) => {
-  const sharedParameters = searchParameters
-    .filter(searchParameter => !hasMultipleIndices(searchParameter.context))
+function getMetadata(widgets) {
+  return widgets
+    .filter(widget => widget.getMetadata)
+    .map(widget => {
+      return widget.getMetadata(widget.props, widget.searchState);
+    });
+}
+
+const getSearchParameters = (indexName, widgets) => {
+  const sharedParameters = widgets
+    .filter(widget => !hasMultipleIndices(widget.context))
     .reduce(
-      (acc, searchParameter) =>
-        searchParameter.getSearchParameters(
-          acc,
-          searchParameter.props,
-          searchParameter.searchState
-        ),
+      (acc, widget) =>
+        widget.getSearchParameters(acc, widget.props, widget.searchState),
       new algoliasearchHelper.SearchParameters({
         ...HIGHLIGHT_TAGS,
         index: indexName,
       })
     );
 
-  const derivedParameters = searchParameters
-    .filter(searchParameter => hasMultipleIndices(searchParameter.context))
-    .reduce((acc, searchParameter) => {
-      const indexId = getIndexId(searchParameter.context);
+  const derivedParameters = widgets
+    .filter(widget => hasMultipleIndices(widget.context))
+    .reduce((acc, widget) => {
+      const indexId = getIndexId(widget.context);
 
       return {
         ...acc,
-        [indexId]: searchParameter.getSearchParameters(
+        [indexId]: widget.getSearchParameters(
           acc[indexId] || sharedParameters,
-          searchParameter.props,
-          searchParameter.searchState
+          widget.props,
+          widget.searchState
         ),
       };
     }, {});
@@ -150,19 +161,24 @@ export const findResultsState = function(App, props) {
 
   const { indexName, searchClient } = props;
 
-  const searchParameters = [];
+  const widgets = [];
 
   renderToString(
-    <App
-      {...props}
-      onSearchParameters={createSearchParametersCollector(searchParameters)}
-    />
+    <App {...props} widgetsCollector={createWidgetsCollector(widgets)} />
   );
+
+  if (widgets.length === 0) {
+    throw new Error(
+      '[ssr]: no widgets were added, you likely did not pass the `widgetsCollector` down to the InstantSearch component.'
+    );
+  }
 
   const { sharedParameters, derivedParameters } = getSearchParameters(
     indexName,
-    searchParameters
+    widgets
   );
+
+  const metadata = getMetadata(widgets);
 
   const helper = algoliasearchHelper(searchClient, sharedParameters.index);
 
@@ -171,7 +187,12 @@ export const findResultsState = function(App, props) {
   }
 
   if (Object.keys(derivedParameters).length === 0) {
-    return singleIndexSearch(helper, sharedParameters);
+    return singleIndexSearch(helper, sharedParameters).then(res => {
+      return {
+        metadata,
+        ...res,
+      };
+    });
   }
 
   return multiIndexSearch(
@@ -180,5 +201,7 @@ export const findResultsState = function(App, props) {
     helper,
     sharedParameters,
     derivedParameters
-  );
+  ).then(results => {
+    return { metadata, results };
+  });
 };

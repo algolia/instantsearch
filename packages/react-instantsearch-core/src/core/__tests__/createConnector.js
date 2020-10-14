@@ -582,6 +582,7 @@ describe('createConnector', () => {
         displayName: 'CoolConnector',
         getProvidedProps: () => {},
         getSearchParameters: () => null,
+        getMetadata: () => null,
       })(() => null);
 
       const onSearchParameters = jest.fn();
@@ -600,7 +601,8 @@ describe('createConnector', () => {
       expect(onSearchParameters).toHaveBeenCalledWith(
         expect.any(Function),
         { ais: context },
-        { ...props, contextValue: context }
+        { ...props, contextValue: context },
+        expect.any(Function)
       );
     });
 

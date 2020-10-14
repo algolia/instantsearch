@@ -103,7 +103,7 @@ export default function createInstantSearchManager({
 
   const store = createStore({
     widgets: initialState,
-    metadata: [],
+    metadata: hydrateMetadata(resultsState),
     results: hydrateResultsState(resultsState),
     error: null,
     searching: false,
@@ -364,8 +364,8 @@ export default function createInstantSearchManager({
       };
     }
 
-    if (Array.isArray(results)) {
-      hydrateSearchClientWithMultiIndexRequest(client, results);
+    if (Array.isArray(results.results)) {
+      hydrateSearchClientWithMultiIndexRequest(client, results.results);
       return;
     }
 
@@ -478,8 +478,8 @@ export default function createInstantSearchManager({
       return null;
     }
 
-    if (Array.isArray(results)) {
-      return results.reduce(
+    if (Array.isArray(results.results)) {
+      return results.results.reduce(
         (acc, result) => ({
           ...acc,
           [result._internalIndexId]: new algoliasearchHelper.SearchResults(
@@ -609,4 +609,16 @@ export default function createInstantSearchManager({
     clearCache,
     skipSearch,
   };
+}
+
+function hydrateMetadata(resultsState) {
+  if (!resultsState) {
+    return [];
+  }
+
+  return resultsState.metadata.map(datum => ({
+    ...datum,
+    // add a value noop, which gets replaced once the widgets are mounted
+    value() {},
+  }));
 }

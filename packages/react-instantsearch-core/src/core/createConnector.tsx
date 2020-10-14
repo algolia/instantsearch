@@ -110,7 +110,8 @@ export function createConnectorWithoutContext(
               ais: this.props.contextValue,
               multiIndexContext: this.props.indexContextValue,
             },
-            this.props
+            this.props,
+            connectorDesc.getMetadata && connectorDesc.getMetadata.bind(this)
           );
         }
       }
