@@ -151,9 +151,9 @@ storiesOf('Basics/Panel', module)
     withHits(
       ({ search, container }) => {
         const breadcrumbInPanel = panel({
-          collapsed: ({ widgetRenderState }) => {
+          collapsed({ widgetRenderState }) {
             // TODO: We need better typing here. Not sure how, yet.
-            return widgetRenderState && !(widgetRenderState as any).canRefine;
+            return (widgetRenderState as any).canRefine;
           },
           templates: {
             header: 'Collapsible panel',

@@ -81,13 +81,13 @@ export type PanelWidgetOptions = {
    * A function that is called on each render to determine if the
    * panel should be hidden based on the render options.
    */
-  hidden?(options: RenderOptions & { widgetRenderState?: unknown }): boolean;
+  hidden?(options: RenderOptions & { widgetRenderState: unknown }): boolean;
 
   /**
    * A function that is called on each render to determine if the
    * panel should be collapsed based on the render options.
    */
-  collapsed?(options: RenderOptions & { widgetRenderState?: unknown }): boolean;
+  collapsed?(options: RenderOptions & { widgetRenderState: unknown }): boolean;
 
   /**
    * The templates to use for the widget.
@@ -257,7 +257,7 @@ const panel: PanelWidget = widgetParams => {
 
         const options = {
           ...renderOptions,
-          widgetRenderState,
+          widgetRenderState: widgetRenderState || {},
         };
 
         renderPanel({
