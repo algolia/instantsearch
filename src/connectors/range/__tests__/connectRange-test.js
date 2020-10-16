@@ -1196,19 +1196,21 @@ describe('getRenderState', () => {
     );
 
     expect(renderState1.range).toEqual({
-      format: {
-        from: expect.any(Function),
-        to: expect.any(Function),
-      },
-      range: {
-        max: 0,
-        min: 0,
-      },
-      refine: expect.any(Function),
-      start: [0, 1000],
-      widgetParams: {
-        attribute: 'price',
-        precision: 0,
+      price: {
+        format: {
+          from: expect.any(Function),
+          to: expect.any(Function),
+        },
+        range: {
+          max: 0,
+          min: 0,
+        },
+        refine: expect.any(Function),
+        start: [0, 1000],
+        widgetParams: {
+          attribute: 'price',
+          precision: 0,
+        },
       },
     });
 
@@ -1241,19 +1243,21 @@ describe('getRenderState', () => {
     );
 
     expect(renderState2.range).toEqual({
-      format: {
-        from: expect.any(Function),
-        to: expect.any(Function),
-      },
-      range: {
-        max: 30,
-        min: 10,
-      },
-      refine: expect.any(Function),
-      start: [0, 1000],
-      widgetParams: {
-        attribute: 'price',
-        precision: 0,
+      price: {
+        format: {
+          from: expect.any(Function),
+          to: expect.any(Function),
+        },
+        range: {
+          max: 30,
+          min: 10,
+        },
+        refine: expect.any(Function),
+        start: [0, 1000],
+        widgetParams: {
+          attribute: 'price',
+          precision: 0,
+        },
       },
     });
   });

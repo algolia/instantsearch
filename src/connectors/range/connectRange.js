@@ -214,7 +214,10 @@ export default function connectRange(renderFn, unmountFn = noop) {
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          range: this.getWidgetRenderState(renderOptions),
+          range: {
+            ...renderState.range,
+            [attribute]: this.getWidgetRenderState(renderOptions),
+          },
         };
       },
 
