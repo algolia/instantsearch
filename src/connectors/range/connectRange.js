@@ -265,33 +265,38 @@ export default function connectRange(renderFn, unmountFn = noop) {
         };
       },
 
-      init({ helper, instantSearchInstance }) {
-        const stats = {};
-        const currentRange = this._getCurrentRange(stats);
-        const start = this._getCurrentRefinement(helper);
-
+      init(initOptions) {
         renderFn(
           {
-            // On first render pass an empty range
-            // to be able to bypass the validation
-            // related to it
-            refine: this._refine(instantSearchInstance, helper, {}),
-            sendEvent: createSendEvent(instantSearchInstance, helper, {}),
-            format: rangeFormatter,
-            range: currentRange,
-            widgetParams: {
-              ...widgetParams,
-              precision,
-            },
-            start,
-            instantSearchInstance,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render({ results, helper, instantSearchInstance }) {
-        const facetsFromResults = results.disjunctiveFacets || [];
+      render(renderOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          range: {
+            ...renderState.range,
+            [attribute]: this.getWidgetRenderState(renderOptions),
+          },
+        };
+      },
+
+      getWidgetRenderState({ results, helper, instantSearchInstance }) {
+        const facetsFromResults = (results && results.disjunctiveFacets) || [];
         const facet = find(
           facetsFromResults,
           facetResult => facetResult.name === attribute
@@ -301,25 +306,32 @@ export default function connectRange(renderFn, unmountFn = noop) {
         const currentRange = this._getCurrentRange(stats);
         const start = this._getCurrentRefinement(helper);
 
-        renderFn(
-          {
-            refine: this._refine(instantSearchInstance, helper, currentRange),
-            sendEvent: createSendEvent(
-              instantSearchInstance,
-              helper,
-              currentRange
-            ),
-            format: rangeFormatter,
-            range: currentRange,
-            widgetParams: {
-              ...widgetParams,
-              precision,
-            },
-            start,
+        let refine;
+
+        if (!results) {
+          // On first render pass an empty range
+          // to be able to bypass the validation
+          // related to it
+          refine = this._refine(instantSearchInstance, helper, {});
+        } else {
+          refine = this._refine(instantSearchInstance, helper, currentRange);
+        }
+
+        return {
+          refine,
+          format: rangeFormatter,
+          range: currentRange,
+          sendEvent: createSendEvent(
             instantSearchInstance,
+            helper,
+            currentRange
+          ),
+          widgetParams: {
+            ...widgetParams,
+            precision,
           },
-          false
-        );
+          start,
+        };
       },
 
       dispose({ state }) {

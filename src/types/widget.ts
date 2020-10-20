@@ -31,6 +31,8 @@ import {
   HitsRendererOptions,
   HitsConnectorParams,
 } from '../connectors/hits/connectHits';
+import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
+import { PlacesWidgetParams } from '../widgets/places/places';
 
 export type ScopedResult = {
   indexId: string;
@@ -206,9 +208,33 @@ export type IndexRenderState = Partial<{
     >;
   };
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
+  analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
+  places: WidgetRenderState<{}, PlacesWidgetParams>;
+  range: {
+    [attribute: string]: WidgetRenderState<
+      {
+        refine(rangeValue: Array<number | undefined>): void;
+        range: {
+          min: number | undefined;
+          max: number | undefined;
+        };
+        start: number[];
+        format: {
+          from(fromValue: number): string;
+          to(toValue: number): string;
+        };
+      },
+      {
+        attribute: string;
+        min?: number;
+        max?: number;
+        precision?: number;
+      }
+    >;
+  };
 }>;
 
-type WidgetRenderState<
+export type WidgetRenderState<
   TWidgetRenderState,
   // @ts-ignore
   TWidgetParams
