@@ -137,8 +137,13 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      refine(helper) {
-        return facetValue => {
+      init(initOptions) {
+        const { helper, createURL, instantSearchInstance } = initOptions;
+
+        this._createURL = facetValue =>
+          createURL(helper.state.toggleRefinement(attribute, facetValue));
+
+        this._refine = function(facetValue) {
           const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
             attribute
           );
@@ -146,65 +151,25 @@ export default function connectMenu(renderFn, unmountFn = noop) {
             .toggleRefinement(attribute, facetValue ? facetValue : refinedItem)
             .search();
         };
-      },
-
-      init({ helper, createURL, instantSearchInstance }) {
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
-
-        this._createURL = facetValue =>
-          createURL(helper.state.toggleRefinement(attribute, facetValue));
-
-        this._refine = this.refine(helper);
 
         renderFn(
           {
-            items: [],
-            createURL: this._createURL,
-            refine: this._refine,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
-            canRefine: false,
-            widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore: false,
           },
           true
         );
       },
 
-      render({ results, instantSearchInstance }) {
-        const facetValues = results.getFacetValues(attribute, { sortBy });
-        const facetItems =
-          facetValues && facetValues.data ? facetValues.data : [];
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
 
-        const items = transformItems(
-          facetItems
-            .slice(0, this.getLimit())
-            .map(({ name: label, path: value, ...item }) => ({
-              ...item,
-              label,
-              value,
-            }))
-        );
-
-        this.toggleShowMore = this.createToggleShowMore({
-          results,
-          instantSearchInstance,
-        });
+        this.toggleShowMore = this.createToggleShowMore(renderOptions);
 
         renderFn(
           {
-            items,
-            createURL: this._createURL,
-            refine: this._refine,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
-            canRefine: items.length > 0,
-            widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore:
-              showMore &&
-              (this.isShowingMore || facetItems.length > this.getLimit()),
           },
           false
         );
@@ -216,6 +181,53 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         return state
           .removeHierarchicalFacet(attribute)
           .setQueryParameter('maxValuesPerFacet', undefined);
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          menu: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState(widgetOptions) {
+        let items = [];
+        let canToggleShowMore = false;
+
+        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
+
+        if (widgetOptions.results) {
+          const facetValues = widgetOptions.results.getFacetValues(attribute, {
+            sortBy,
+          });
+          const facetItems =
+            facetValues && facetValues.data ? facetValues.data : [];
+
+          canToggleShowMore =
+            showMore &&
+            (this.isShowingMore || facetItems.length > this.getLimit());
+
+          items = transformItems(
+            facetItems
+              .slice(0, this.getLimit())
+              .map(({ name: label, path: value, ...item }) => ({
+                ...item,
+                label,
+                value,
+              }))
+          );
+        }
+
+        return {
+          items,
+          createURL: this._createURL,
+          refine: this._refine,
+          canRefine: items.length > 0,
+          widgetParams,
+          isShowingMore: this.isShowingMore,
+          toggleShowMore: this.cachedToggleShowMore,
+          canToggleShowMore,
+        };
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

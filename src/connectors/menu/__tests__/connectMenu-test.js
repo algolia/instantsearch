@@ -2,7 +2,13 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper/dist/algoliasearch.helper';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 import connectMenu from '../connectMenu';
 
 describe('connectMenu', () => {
@@ -433,6 +439,116 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      );
+
+      const renderState1 = menu.getRenderState(
+        { menu: {} },
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1.menu).toEqual({
+        items: [],
+        createURL: undefined,
+        refine: undefined,
+        canRefine: false,
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+        widgetParams: { attribute: 'brand' },
+      });
+    });
+
+    test('returns the render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      menu.init(createInitOptions({ helper }));
+
+      expect(
+        menu.getRenderState(
+          {},
+          createRenderOptions({
+            helper,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                hits: [],
+                facets: {
+                  brand: 300,
+                },
+              }),
+            ]),
+          })
+        )
+      ).toEqual({
+        menu: {
+          items: [],
+          canRefine: false,
+          refine: expect.any(Function),
+          createURL: expect.any(Function),
+          widgetParams: { attribute: 'brand' },
+          isShowingMore: false,
+          toggleShowMore: expect.any(Function),
+          canToggleShowMore: false,
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      );
+
+      const renderState1 = menu.getWidgetRenderState(
+        {},
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        items: [],
+        createURL: undefined,
+        refine: undefined,
+        canRefine: false,
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+        widgetParams: { attribute: 'brand' },
+      });
+    });
   });
 
   describe('showMore', () => {
