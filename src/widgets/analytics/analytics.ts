@@ -61,7 +61,7 @@ export type AnalyticsWidgetParams = {
 
 const withUsage = createDocumentationMessageGenerator({ name: 'analytics' });
 
-export type AnalyticsWidget = WidgetFactory<{}, AnalyticsWidgetParams>;
+export type AnalyticsWidget = WidgetFactory<{}, {}, AnalyticsWidgetParams>;
 
 // @major this widget will be removed from the next major version.
 const analytics: AnalyticsWidget = function analytics(widgetParams) {
@@ -248,6 +248,19 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
         document.removeEventListener('click', onClick);
         window.removeEventListener('beforeunload', onUnload);
       }
+    },
+
+    getRenderState(renderState, renderOptions) {
+      return {
+        ...renderState,
+        analytics: this.getWidgetRenderState(renderOptions),
+      };
+    },
+
+    getWidgetRenderState() {
+      return {
+        widgetParams,
+      };
     },
   };
 };
