@@ -241,12 +241,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       },
 
       render({ results, state, instantSearchInstance }) {
-        // Reset cache and received pages if anything changes in the
-        // search state, except for the page.
-        //
-        // We're doing this to "reset" the widget if a refinement or the
-        // query changes between renders, but we want to keep it as is
-        // if we only change pages.
         const { page = 0 } = state;
 
         if (escapeHTML && results.hits.length > 0) {
