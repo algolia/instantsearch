@@ -47,19 +47,15 @@ describe('infiniteHits', () => {
   });
 
   describe('cache', () => {
-    let cachedState: any;
-    let cachedHits: any;
-    let customCache;
-
-    beforeEach(() => {
+    function createCustomCache() {
       const getStateWithoutPage = state => {
         const { page, ...rest } = state || {};
         return rest;
       };
       const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-      cachedState = undefined;
-      cachedHits = undefined;
-      customCache = {
+      let cachedState = undefined;
+      let cachedHits = undefined;
+      const customCache: any = {
         read: jest.fn(({ state }) => {
           return isEqual(cachedState, getStateWithoutPage(state))
             ? cachedHits
@@ -69,11 +65,22 @@ describe('infiniteHits', () => {
           cachedState = getStateWithoutPage(state);
           cachedHits = hits;
         }),
+        clear: jest.fn(() => {
+          cachedState = undefined;
+          cachedHits = undefined;
+        }),
       };
-    });
 
-    it('calls read & write methods of custom cache', async () => {
+      return {
+        cachedState,
+        cachedHits,
+        customCache,
+      };
+    }
+
+    it('writes to a custom cache', async () => {
       const { search } = createInstantSearch();
+      const { customCache } = createCustomCache();
 
       search.addWidgets([
         infiniteHits({
@@ -89,6 +96,23 @@ describe('infiniteHits', () => {
         ).length;
         expect(numberOfHits).toEqual(2);
       });
+      expect(customCache.write).toHaveBeenCalledTimes(1);
+      expect(customCache.write.mock.calls[0][0].hits).toMatchInlineSnapshot(`
+        Object {
+          "0": Array [
+            Object {
+              "__position": 1,
+              "objectID": "object-id0",
+              "title": "title 1",
+            },
+            Object {
+              "__position": 2,
+              "objectID": "object-id1",
+              "title": "title 2",
+            },
+          ],
+        }
+      `);
 
       fireEvent.click(getByText(container, 'Show more results'));
       await waitFor(() => {
@@ -97,13 +121,40 @@ describe('infiniteHits', () => {
         ).length;
         expect(numberOfHits).toEqual(4);
       });
-
-      expect(customCache.read).toHaveBeenCalledTimes(2); // init & render
-      expect(customCache.write).toHaveBeenCalledTimes(2); // page #0, page #1
+      expect(customCache.write).toHaveBeenCalledTimes(2);
+      expect(customCache.write.mock.calls[1][0].hits).toMatchInlineSnapshot(`
+Object {
+  "0": Array [
+    Object {
+      "__position": 1,
+      "objectID": "object-id0",
+      "title": "title 1",
+    },
+    Object {
+      "__position": 2,
+      "objectID": "object-id1",
+      "title": "title 2",
+    },
+  ],
+  "1": Array [
+    Object {
+      "__position": 3,
+      "objectID": "object-id0",
+      "title": "title 3",
+    },
+    Object {
+      "__position": 4,
+      "objectID": "object-id1",
+      "title": "title 4",
+    },
+  ],
+}
+`);
     });
 
     it('displays all the hits from cache', async () => {
       const { search, searchClient } = createInstantSearch();
+      const { customCache } = createCustomCache();
 
       // flow #1 - load page #0 & #1 to fill the cache
       search.addWidgets([
@@ -151,6 +202,96 @@ describe('infiniteHits', () => {
         ).length;
         expect(numberOfHits).toEqual(4); // it loads two pages initially
       });
+    });
+
+    it('works after the cache gets invalidated', async () => {
+      const { search } = createInstantSearch();
+      const { customCache } = createCustomCache();
+
+      customCache.write({
+        state: {
+          facets: [],
+          disjunctiveFacets: [],
+          hierarchicalFacets: [],
+          facetsRefinements: {},
+          facetsExcludes: {},
+          disjunctiveFacetsRefinements: {},
+          numericRefinements: {},
+          tagRefinements: [],
+          hierarchicalFacetsRefinements: {},
+          index: 'instant_search',
+          hitsPerPage: 2,
+          highlightPreTag: '__ais-highlight__',
+          highlightPostTag: '__/ais-highlight__',
+          page: 0,
+        },
+        hits: {
+          0: [
+            {
+              title: 'fake1',
+              objectID: 'test-object-id1',
+            },
+            {
+              title: 'fake2',
+              objectID: 'test-object-id2',
+            },
+            {
+              title: 'fake3',
+              objectID: 'test-object-id3',
+            },
+          ],
+        },
+      });
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          cache: customCache, // render with fake hits
+          templates: {
+            item: `<div>{{title}}</div>`,
+          },
+        }),
+      ]);
+      search.start();
+
+      // waits until it renders
+      await waitFor(() => {
+        const numberOfHits = container.querySelectorAll(
+          '.ais-InfiniteHits-item'
+        ).length;
+        expect(numberOfHits).toEqual(3);
+      });
+
+      // checks if the fake hits are rendered
+      getByText(container, 'fake1');
+      getByText(container, 'fake2');
+      getByText(container, 'fake3');
+
+      // clears the cache
+      customCache.clear();
+      search.refresh();
+
+      // waits until it renders the real hits
+      await waitFor(() => {
+        const numberOfHits = container.querySelectorAll(
+          '.ais-InfiniteHits-item'
+        ).length;
+        expect(numberOfHits).toEqual(2);
+      });
+
+      // checks if the correct hits are rendered
+      getByText(container, 'title 1');
+      getByText(container, 'title 2');
+
+      expect(() => {
+        getByText(container, 'fake1');
+      }).toThrowError(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            `Unable to find an element with the text: fake1.`
+          ),
+        })
+      );
     });
   });
 
