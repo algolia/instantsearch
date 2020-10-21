@@ -33,6 +33,14 @@ function telemetryClient() {
   const payload: { widgets: TelemetryWidget[] } = {
     widgets: [],
   };
+  let payloadContainer;
+
+  if (typeof document !== undefined) {
+    payloadContainer = document.createElement('script');
+    const refNode = document.querySelector('script');
+    payloadContainer.type = 'application/json';
+    refNode!.parentNode!.insertBefore(payloadContainer, refNode);
+  }
 
   return {
     updatePayload({ type, params, useConnector }: TelemetryWidget) {
@@ -48,44 +56,9 @@ function telemetryClient() {
       } else {
         payload.widgets.push({ type, params, useConnector });
       }
-    },
-    // updatePayload(widget: TelemetryWidget) {
-    //   if (!widget.params) {
-    //     console.log(`No params for ${widget.type}`, widget);
-    //   }
-    //   const type = WidgetType[widget.type]
-    //     ? WidgetType[widget.type].value
-    //     : WidgetType['ais.custom'].value;
-    //   const widgetParamsKeys = widget.params ? Object.keys(widget.params) : [];
-    //   const params = widgetParamsKeys
-    //     .filter(key => {
-    //       if (widget.params![key] === undefined) {
-    //         return false;
-    //       }
-    //       if (WidgetParams[key] === undefined) {
-    //         console.error(`${key} is missing in props list`);
-    //         return false;
-    //       }
-    //       return true;
-    //     })
-    //     .map(key => WidgetParams[key].value);
-    //   const useConnector = !widget.params;
-
-    //   const existingWidget = payload.widgets.find(
-    //     payloadWidget => payloadWidget.type === type
-    //   );
-    //   if (existingWidget) {
-    //     existingWidget.params = [
-    //       ...new Set([...(existingWidget.params || []), ...params]),
-    //     ];
-    //     existingWidget.useConnector =
-    //       existingWidget.useConnector || useConnector;
-    //   } else {
-    //     payload.widgets.push({ type, params, useConnector });
-    //   }
-    // },
-    getPayload() {
-      return payload;
+      if (typeof document !== undefined) {
+        payloadContainer.innerText = JSON.stringify(payload);
+      }
     },
   };
 }

@@ -26,82 +26,6 @@ import {
   warning,
 } from '../../lib/utils';
 
-import { WidgetType, WidgetParams, Schema } from '../../../schema';
-
-function Pbf() {
-  this.buf = new Uint8Array(0);
-  this.pos = 0;
-  this.type = 0;
-  this.length = 0;
-}
-
-Pbf.prototype = {
-  finish() {
-    this.length = this.pos;
-    this.pos = 0;
-    return this.buf.subarray(0, this.length);
-  },
-
-  writeVarint(val) {
-    val = +val || 0;
-
-    if (val > 0xfffffff || val < 0) throw new Error('Unsupported');
-
-    // realloc
-    let length = this.length || 16;
-    while (length < this.pos + 4) length *= 2;
-    if (length !== this.length) {
-      const buf = new Uint8Array(length);
-      buf.set(this.buf);
-      this.buf = buf;
-      this.length = length;
-    }
-
-    this.buf[this.pos++] = (val & 0x7f) | (val > 0x7f ? 0x80 : 0);
-    if (val <= 0x7f) return;
-    this.buf[this.pos++] = ((val >>>= 7) & 0x7f) | (val > 0x7f ? 0x80 : 0);
-    if (val <= 0x7f) return;
-    this.buf[this.pos++] = ((val >>>= 7) & 0x7f) | (val > 0x7f ? 0x80 : 0);
-    if (val <= 0x7f) return;
-    this.buf[this.pos++] = (val >>> 7) & 0x7f;
-  },
-
-  writeMessage(tag, fn, obj) {
-    this.writeVarint((tag << 3) | 2);
-
-    this.pos++; // reserve 1 byte for short message length
-
-    // write the message directly to the buffer and see how much was written
-    const startPos = this.pos;
-    fn(obj, this);
-    const len = this.pos - startPos;
-
-    if (len >= 0x80) throw new Error('Unsupported');
-
-    // finally, write the message length in the reserved place and restore the position
-    this.pos = startPos - 1;
-    this.writeVarint(len);
-    this.pos += len;
-  },
-
-  writePackedVarint(tag, arr) {
-    if (arr.length) this.writeMessage(tag, writePackedVarint, arr);
-  },
-
-  writeVarintField(tag, val) {
-    this.writeVarint((tag << 3) | 0);
-    this.writeVarint(val);
-  },
-
-  writeBooleanField(tag, val) {
-    this.writeVarintField(tag, Boolean(val));
-  },
-};
-
-function writePackedVarint(arr, pbf) {
-  for (let i = 0; i < arr.length; i++) pbf.writeVarint(arr[i]);
-}
-
 const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',
 });
@@ -374,14 +298,8 @@ const index = (props: IndexProps): Index => {
         widgets.forEach(widget => {
           if (widget.init) {
             localInstantSearchInstance!.telemetry.updatePayload({
-              type:
-                WidgetType[widget.$$type]?.value ||
-                WidgetType['ais.custom'].value,
-              params: widget.$$params
-                ? Object.keys(widget.$$params)
-                    .map(param => WidgetParams[param]?.value)
-                    .filter(Boolean)
-                : [],
+              type: widget.$$type || 'ais.custom',
+              params: widget.$$params ? Object.keys(widget.$$params) : [],
               useConnector: !widget.$$params,
             });
 
@@ -455,10 +373,8 @@ const index = (props: IndexProps): Index => {
 
     init({ instantSearchInstance, parent, uiState }: IndexInitOptions) {
       instantSearchInstance.telemetry.updatePayload({
-        type: WidgetType['ais.index'].value,
-        params: Object.keys(props)
-          .map(param => WidgetParams[param]?.value)
-          .filter(Boolean),
+        type: 'ais.index',
+        params: Object.keys(props),
         useConnector: false,
       });
 
@@ -476,7 +392,6 @@ const index = (props: IndexProps): Index => {
           index: indexName,
         }),
       });
-      let telemetryHeader = '';
 
       // This Helper is only used for state management we do not care about the
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
@@ -543,41 +458,6 @@ const index = (props: IndexProps): Index => {
       });
 
       derivedHelper.on('search', () => {
-        const pbf = new Pbf();
-        const payload = instantSearchInstance.telemetry.getPayload();
-        Schema.write(payload, pbf);
-        const arrayBuffer = pbf.finish();
-        const newTelemetryHeader = window.btoa(
-          String.fromCharCode.apply(null, arrayBuffer)
-        );
-
-        const mappedPayload = payload.widgets.map(widget => ({
-          type: Object.keys(WidgetType).find(
-            type => WidgetType[type].value === widget.type
-          ),
-          params: widget.params.map(paramId =>
-            Object.keys(WidgetParams).find(
-              type => WidgetParams[type].value === paramId
-            )
-          ),
-          useConnector: widget.useConnector,
-        }));
-
-        console.log('Telemetry payload', payload);
-        console.log('Telemetry mapped payload', mappedPayload);
-        console.log('Telemetry header', newTelemetryHeader);
-
-        if (telemetryHeader !== newTelemetryHeader) {
-          telemetryHeader = newTelemetryHeader;
-          instantSearchInstance.client.transporter.queryParameters[
-            'x-algolia-telemetry'
-          ] = telemetryHeader;
-        } else {
-          delete instantSearchInstance.client.transporter.queryParameters[
-            'x-algolia-telemetry'
-          ];
-        }
-
         // The index does not manage the "staleness" of the search. This is the
         // responsibility of the main instance. It does not make sense to manage
         // it at the index level because it's either: all of them or none of them
@@ -641,14 +521,8 @@ const index = (props: IndexProps): Index => {
 
         if (widget.init) {
           instantSearchInstance.telemetry.updatePayload({
-            type:
-              WidgetType[widget.$$type]?.value ||
-              WidgetType['ais.custom'].value,
-            params: widget.$$params
-              ? Object.keys(widget.$$params)
-                  .map(param => WidgetParams[param]?.value)
-                  .filter(Boolean)
-              : [],
+            type: widget.$$type || 'ais.custom',
+            params: widget.$$params ? Object.keys(widget.$$params) : [],
             useConnector: !widget.$$params,
           });
 
