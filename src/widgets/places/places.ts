@@ -6,7 +6,7 @@ import {
 } from 'places.js';
 import { Widget } from '../../types';
 
-type PlacesWidgetOptions = {
+type PlacesWidgetParams = {
   /**
    * The Algolia Places reference to use.
    *
@@ -31,14 +31,14 @@ type PlacesWidgetState = {
  * This widget sets the geolocation value for the search based on the selected
  * result in the Algolia Places autocomplete.
  */
-const placesWidget: (widgetOptions: PlacesWidgetOptions) => Widget = (
-  widgetOptions: PlacesWidgetOptions
+const placesWidget: (widgetParams: PlacesWidgetParams) => Widget = (
+  widgetParams: PlacesWidgetParams
 ) => {
   const {
     placesReference = undefined,
     defaultPosition = [],
     ...placesOptions
-  } = widgetOptions || {};
+  } = widgetParams || {};
 
   if (typeof placesReference !== 'function') {
     throw new Error(
