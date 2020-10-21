@@ -1,3 +1,12 @@
+## [6.8.2](https://github.com/algolia/react-instantsearch/compare/v6.8.1...v6.8.2) (2020-10-21)
+
+
+### Bug Fixes
+
+* **ssr:** provide metadata default value ([0a2f34c](https://github.com/algolia/react-instantsearch/commit/0a2f34c))
+
+
+
 ## [6.8.1](https://github.com/algolia/react-instantsearch/compare/v6.8.0...v6.8.1) (2020-10-14)
 
 
