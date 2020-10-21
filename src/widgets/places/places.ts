@@ -4,7 +4,7 @@ import {
   PlacesInstance,
   ReconfigurableOptions,
 } from 'places.js';
-import { Widget } from '../../types';
+import { WidgetFactory } from '../../types';
 
 type PlacesWidgetParams = {
   /**
@@ -31,7 +31,7 @@ type PlacesWidgetState = {
  * This widget sets the geolocation value for the search based on the selected
  * result in the Algolia Places autocomplete.
  */
-const placesWidget: (widgetParams: PlacesWidgetParams) => Widget = (
+const placesWidget: WidgetFactory<{}, {}, PlacesWidgetParams> = (
   widgetParams: PlacesWidgetParams
 ) => {
   const {

@@ -1,6 +1,6 @@
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createDocumentationMessageGenerator } from '../../lib/utils';
-import { Widget } from '../../types';
+import { WidgetFactory } from '../../types';
 
 export type AnalyticsWidgetParamsPushFunction = (
   /**
@@ -61,7 +61,7 @@ export type AnalyticsWidgetParams = {
 
 const withUsage = createDocumentationMessageGenerator({ name: 'analytics' });
 
-export type AnalyticsWidget = (widgetParams: AnalyticsWidgetParams) => Widget;
+export type AnalyticsWidget = WidgetFactory<{}, {}, AnalyticsWidgetParams>;
 
 const analytics: AnalyticsWidget = function analytics(widgetParams) {
   const {
@@ -240,6 +240,16 @@ const analytics: AnalyticsWidget = function analytics(widgetParams) {
         document.removeEventListener('click', onClick);
         window.removeEventListener('beforeunload', onUnload);
       }
+    },
+
+    getRenderState(renderState) {
+      return renderState;
+    },
+
+    getWidgetRenderState() {
+      return {
+        widgetParams,
+      };
     },
   };
 };
