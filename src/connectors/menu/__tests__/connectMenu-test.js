@@ -2,7 +2,6 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import algoliasearchHelper from 'algoliasearch-helper/dist/algoliasearch.helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import {
@@ -449,7 +448,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const menu = createMenu({
         attribute: 'brand',
       });
-      const helper = algoliasearchHelper(
+      const helper = jsHelper(
         createSearchClient(),
         'indexName',
         menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
@@ -479,7 +478,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const menu = createMenu({
         attribute: 'brand',
       });
-      const helper = algoliasearchHelper(
+      const helper = jsHelper(
         createSearchClient(),
         'indexName',
         menu.getWidgetSearchParameters(new SearchParameters(), {
@@ -527,7 +526,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const menu = createMenu({
         attribute: 'brand',
       });
-      const helper = algoliasearchHelper(
+      const helper = jsHelper(
         createSearchClient(),
         'indexName',
         menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })

@@ -152,6 +152,8 @@ export default function connectMenu(renderFn, unmountFn = noop) {
             .search();
         };
 
+        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
+
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -193,8 +195,6 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       getWidgetRenderState(widgetOptions) {
         let items = [];
         let canToggleShowMore = false;
-
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         if (widgetOptions.results) {
           const facetValues = widgetOptions.results.getFacetValues(attribute, {
