@@ -242,8 +242,11 @@ const analytics: AnalyticsWidget = function analytics(widgetParams) {
       }
     },
 
-    getRenderState(renderState) {
-      return renderState;
+    getRenderState(renderState, renderOptions) {
+      return {
+        ...renderState,
+        analytics: this.getWidgetRenderState(renderOptions),
+      };
     },
 
     getWidgetRenderState() {

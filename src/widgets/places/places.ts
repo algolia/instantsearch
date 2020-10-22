@@ -6,7 +6,7 @@ import {
 } from 'places.js';
 import { WidgetFactory } from '../../types';
 
-type PlacesWidgetParams = {
+export type PlacesWidgetParams = {
   /**
    * The Algolia Places reference to use.
    *
@@ -134,13 +134,16 @@ const placesWidget: WidgetFactory<{}, {}, PlacesWidgetParams> = (
         .setQueryParameter('aroundLatLng', position || undefined);
     },
 
-    getRenderState(renderState) {
-      return renderState;
+    getRenderState(renderState, renderOptions) {
+      return {
+        ...renderState,
+        places: this.getWidgetRenderState(renderOptions),
+      };
     },
 
     getWidgetRenderState() {
       return {
-        widgetParams: widgetOptions,
+        widgetParams,
       };
     },
   };
