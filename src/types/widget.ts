@@ -209,6 +209,28 @@ export type IndexRenderState = Partial<{
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
   analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
   places: WidgetRenderState<{}, PlacesWidgetParams>;
+  range: {
+    [attribute: string]: WidgetRenderState<
+      {
+        refine(rangeValue: Array<number | undefined>): void;
+        range: {
+          min: number | undefined;
+          max: number | undefined;
+        };
+        start: number[];
+        format: {
+          from(fromValue: number): string;
+          to(toValue: number): string;
+        };
+      },
+      {
+        attribute: string;
+        min?: number;
+        max?: number;
+        precision?: number;
+      }
+    >;
+  };
 }>;
 
 export type WidgetRenderState<
