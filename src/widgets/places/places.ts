@@ -6,7 +6,7 @@ import {
 } from 'places.js';
 import { WidgetFactory } from '../../types';
 
-type PlacesWidgetOptions = {
+export type PlacesWidgetParams = {
   /**
    * The Algolia Places reference to use.
    *
@@ -31,14 +31,14 @@ type PlacesWidgetState = {
  * This widget sets the geolocation value for the search based on the selected
  * result in the Algolia Places autocomplete.
  */
-const placesWidget: WidgetFactory<{}, PlacesWidgetOptions> = (
-  widgetOptions: PlacesWidgetOptions
+const placesWidget: WidgetFactory<{}, {}, PlacesWidgetParams> = (
+  widgetParams: PlacesWidgetParams
 ) => {
   const {
     placesReference = undefined,
     defaultPosition = [],
     ...placesOptions
-  } = widgetOptions || {};
+  } = widgetParams || {};
 
   if (typeof placesReference !== 'function') {
     throw new Error(
@@ -132,6 +132,19 @@ const placesWidget: WidgetFactory<{}, PlacesWidgetOptions> = (
         .setQueryParameter('insideBoundingBox', undefined)
         .setQueryParameter('aroundLatLngViaIP', false)
         .setQueryParameter('aroundLatLng', position || undefined);
+    },
+
+    getRenderState(renderState, renderOptions) {
+      return {
+        ...renderState,
+        places: this.getWidgetRenderState(renderOptions),
+      };
+    },
+
+    getWidgetRenderState() {
+      return {
+        widgetParams,
+      };
     },
   };
 };
