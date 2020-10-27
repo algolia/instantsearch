@@ -5,6 +5,11 @@ import jsHelper, {
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import connectRefinementList from '../connectRefinementList';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {
@@ -2165,6 +2170,194 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           brand: ['Apple', 'Microsoft'],
         },
       });
+    });
+  });
+
+  describe('getRenderState', () => {
+    it('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRefinementList = connectRefinementList(renderFn, unmountFn);
+      const refinementListWidget = createRefinementList({ attribute: 'brand' });
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      refinementListWidget.init(initOptions);
+
+      const renderState1 = refinementListWidget.getRenderState({}, initOptions);
+
+      expect(renderState1.refinementList).toEqual({
+        brand: {
+          createURL: expect.any(Function),
+          helperSpecializedSearchFacetValues: expect.any(Function),
+          isFirstSearch: true,
+          isFromSearch: false,
+          isShowingMore: false,
+          items: [],
+          refine: expect.any(Function),
+          state: helper.state,
+          toggleShowMore: expect.any(Function),
+        },
+      });
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          hits: [],
+          facets: {
+            brand: {
+              Apple: 88,
+              Microsoft: 66,
+              Samsung: 44,
+            },
+          },
+        }),
+      ]);
+
+      const renderState2 = refinementListWidget.getRenderState(
+        {},
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2.refinementList).toEqual({
+        brand: {
+          createURL: expect.any(Function),
+          helperSpecializedSearchFacetValues:
+            renderState1.refinementList.brand
+              .helperSpecializedSearchFacetValues,
+          isFirstSearch: false,
+          isFromSearch: false,
+          isShowingMore: false,
+          items: [
+            {
+              count: 88,
+              highlighted: 'Apple',
+              isRefined: true,
+              label: 'Apple',
+              value: 'Apple',
+            },
+            {
+              count: 66,
+              highlighted: 'Microsoft',
+              isRefined: true,
+              label: 'Microsoft',
+              value: 'Microsoft',
+            },
+            {
+              count: 44,
+              highlighted: 'Samsung',
+              isRefined: false,
+              label: 'Samsung',
+              value: 'Samsung',
+            },
+          ],
+          refine: renderState1.refinementList.brand.refine,
+          state: helper.state,
+          toggleShowMore: renderState1.refinementList.brand.toggleShowMore,
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRefinementList = connectRefinementList(renderFn, unmountFn);
+      const refinementListWidget = createRefinementList({ attribute: 'brand' });
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      refinementListWidget.init(initOptions);
+
+      const renderState1 = refinementListWidget.getWidgetRenderState(
+        initOptions
+      );
+
+      expect(renderState1).toEqual({
+        createURL: expect.any(Function),
+        helperSpecializedSearchFacetValues: expect.any(Function),
+        isFirstSearch: true,
+        isFromSearch: false,
+        isShowingMore: false,
+        items: [],
+        refine: expect.any(Function),
+        state: helper.state,
+        toggleShowMore: expect.any(Function),
+      });
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          hits: [],
+          facets: {
+            brand: {
+              Apple: 88,
+              Microsoft: 66,
+              Samsung: 44,
+            },
+          },
+        }),
+      ]);
+
+      const renderState2 = refinementListWidget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2).toEqual(
+        expect.objectContaining({
+          createURL: expect.any(Function),
+          helperSpecializedSearchFacetValues:
+            renderState1.helperSpecializedSearchFacetValues,
+          isFirstSearch: false,
+          isFromSearch: false,
+          isShowingMore: false,
+          items: [
+            {
+              count: 88,
+              highlighted: 'Apple',
+              isRefined: true,
+              label: 'Apple',
+              value: 'Apple',
+            },
+            {
+              count: 66,
+              highlighted: 'Microsoft',
+              isRefined: true,
+              label: 'Microsoft',
+              value: 'Microsoft',
+            },
+            {
+              count: 44,
+              highlighted: 'Samsung',
+              isRefined: false,
+              label: 'Samsung',
+              value: 'Samsung',
+            },
+          ],
+          refine: renderState1.refine,
+          state: helper.state,
+          toggleShowMore: renderState1.toggleShowMore,
+        })
+      );
     });
   });
 

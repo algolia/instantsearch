@@ -310,7 +310,8 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         return getLimit(this.isShowingMore);
       },
 
-      init({ helper, createURL, instantSearchInstance }) {
+      init(initOptions) {
+        const { instantSearchInstance, helper } = initOptions;
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         sendEvent = createSendEventForFacet({
@@ -326,68 +327,75 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         };
 
         searchForFacetValues = createSearchForFacetValues(
-          helper,
+          initOptions.helper,
           this.cachedToggleShowMore
         );
 
         render({
-          items: [],
-          state: helper.state,
-          createURL,
-          helperSpecializedSearchFacetValues: searchForFacetValues,
-          refine: triggerRefine,
-          isFromSearch: false,
-          isFirstSearch: true,
-          instantSearchInstance,
-          isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
-          sendEvent,
+          ...this.getWidgetRenderState(initOptions),
+          instantSearchInstance: initOptions.instantSearchInstance,
         });
       },
 
       render(renderOptions) {
-        const {
-          results,
-          state,
-          createURL,
-          instantSearchInstance,
-        } = renderOptions;
-
-        const facetValues = results.getFacetValues(attribute, { sortBy }) || [];
-        const items = transformItems(
-          facetValues.slice(0, this.getLimit()).map(formatItems)
-        );
-
-        const maxValuesPerFacetConfig = state.maxValuesPerFacet;
-        const currentLimit = this.getLimit();
-        // If the limit is the max number of facet retrieved it is impossible to know
-        // if the facets are exhaustive. The only moment we are sure it is exhaustive
-        // is when it is strictly under the number requested unless we know that another
-        // widget has requested more values (maxValuesPerFacet > getLimit()).
-        // Because this is used for making the search of facets unable or not, it is important
-        // to be conservative here.
-        hasExhaustiveItems =
-          maxValuesPerFacetConfig > currentLimit
-            ? facetValues.length <= currentLimit
-            : facetValues.length < currentLimit;
-
-        lastResultsFromMainSearch = items;
-
-        this.toggleShowMore = this.createToggleShowMore(renderOptions);
-
         render({
+          ...this.getWidgetRenderState(renderOptions),
+          instantSearchInstance: renderOptions.instantSearchInstance,
+        });
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          refinementList: {
+            ...renderState.refinementList,
+            [attribute]: this.getWidgetRenderState(renderOptions),
+          },
+        };
+      },
+
+      getWidgetRenderState(renderOptions) {
+        const { results, state, createURL } = renderOptions;
+        const isFirstSearch = !results;
+        let items = [];
+
+        if (results) {
+          const facetValues =
+            results.getFacetValues(attribute, { sortBy }) || [];
+          items = transformItems(
+            facetValues.slice(0, this.getLimit()).map(formatItems)
+          );
+
+          const maxValuesPerFacetConfig = state.maxValuesPerFacet;
+          const currentLimit = this.getLimit();
+          // If the limit is the max number of facet retrieved it is impossible to know
+          // if the facets are exhaustive. The only moment we are sure it is exhaustive
+          // is when it is strictly under the number requested unless we know that another
+          // widget has requested more values (maxValuesPerFacet > getLimit()).
+          // Because this is used for making the search of facets unable or not, it is important
+          // to be conservative here.
+          hasExhaustiveItems =
+            maxValuesPerFacetConfig > currentLimit
+              ? facetValues.length <= currentLimit
+              : facetValues.length < currentLimit;
+
+          lastResultsFromMainSearch = items;
+
+          this.toggleShowMore = this.createToggleShowMore(renderOptions);
+        }
+
+        return {
           items,
           state,
           createURL,
           helperSpecializedSearchFacetValues: searchForFacetValues,
           refine: triggerRefine,
           isFromSearch: false,
-          isFirstSearch: false,
-          instantSearchInstance,
+          isFirstSearch,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
           sendEvent,
-        });
+        };
       },
 
       dispose({ state }) {
