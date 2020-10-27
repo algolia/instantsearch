@@ -32,6 +32,10 @@ import {
 } from '../connectors/hits/connectHits';
 import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
 import { PlacesWidgetParams } from '../widgets/places/places';
+import {
+  NumericMenuConnectorParams,
+  NumericMenuRendererOptions,
+} from '../connectors/numeric-menu/connectNumericMenu';
 
 export type ScopedResult = {
   indexId: string;
@@ -229,6 +233,12 @@ export type IndexRenderState = Partial<{
         max?: number;
         precision?: number;
       }
+    >;
+  };
+  numericMenu: {
+    [attribute: string]: WidgetRenderState<
+      NumericMenuRendererOptions,
+      NumericMenuConnectorParams
     >;
   };
 }>;
