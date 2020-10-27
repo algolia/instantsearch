@@ -1,3 +1,13 @@
+## [4.8.4](https://github.com/algolia/instantsearch.js/compare/v4.8.3...v4.8.4) (2020-10-27)
+
+
+### Bug Fixes
+
+* **infiniteHits:** do not cache the cached hits inside the connector ([#4534](https://github.com/algolia/instantsearch.js/issues/4534)) ([c97395e](https://github.com/algolia/instantsearch.js/commit/c97395e2d3443651e628617f0974703a100a988e))
+* **insights:** show deprecation warnings for old insights related properties and functions ([#4524](https://github.com/algolia/instantsearch.js/issues/4524)) ([c93e1cf](https://github.com/algolia/instantsearch.js/commit/c93e1cfcad06b327066078088410eb7d51972790))
+
+
+
 ## [4.8.3](https://github.com/algolia/instantsearch.js/compare/v4.8.2...v4.8.3) (2020-09-29)
 
 
