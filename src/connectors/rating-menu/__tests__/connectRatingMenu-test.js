@@ -429,7 +429,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
-      const rangeWidget = createRatingMenu({
+      const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
       });
       const helper = jsHelper({}, 'indexName', {
@@ -439,7 +439,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         },
       });
 
-      const renderState1 = rangeWidget.getRenderState(
+      const renderState1 = ratingMenuWidget.getRenderState(
         {},
         createInitOptions({ state: helper.state, helper })
       );
@@ -464,7 +464,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         }),
       ]);
 
-      const renderState2 = rangeWidget.getRenderState(
+      const renderState2 = ratingMenuWidget.getRenderState(
         {},
         createRenderOptions({
           helper,
@@ -521,7 +521,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
-      const rangeWidget = createRatingMenu({
+      const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
       });
       const helper = jsHelper({}, 'indexName', {
@@ -531,7 +531,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         },
       });
 
-      const renderState1 = rangeWidget.getWidgetRenderState(
+      const renderState1 = ratingMenuWidget.getWidgetRenderState(
         createInitOptions({ state: helper.state, helper })
       );
 
@@ -553,7 +553,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         }),
       ]);
 
-      const renderState2 = rangeWidget.getWidgetRenderState(
+      const renderState2 = ratingMenuWidget.getWidgetRenderState(
         createRenderOptions({
           helper,
           state: helper.state,
