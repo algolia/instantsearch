@@ -11,6 +11,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectSortBy', () => {
   describe('Usage', () => {
@@ -255,6 +256,140 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect(helper.state.index).toBe('bop');
       expect(helper.search).toHaveBeenCalledTimes(2);
     }
+  });
+
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createSortBy = connectSortBy(renderFn, unmountFn);
+      const sortBy = createSortBy({
+        items: [
+          { label: 'asc', value: 'asc' },
+          { label: 'desc', value: 'desc' },
+        ],
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState1 = sortBy.getRenderState(
+        {
+          sortBy: {},
+        },
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1.sortBy).toEqual({
+        currentRefinement: 'indexName',
+        refine: undefined,
+        hasNoResults: true,
+        options: [
+          { label: 'asc', value: 'asc' },
+          { label: 'desc', value: 'desc' },
+        ],
+        widgetParams: {
+          items: [
+            { label: 'asc', value: 'asc' },
+            { label: 'desc', value: 'desc' },
+          ],
+        },
+      });
+
+      sortBy.init(createInitOptions({ helper }));
+
+      const renderState2 = sortBy.getRenderState(
+        { sortBy: {} },
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+        })
+      );
+
+      expect(renderState2.sortBy).toEqual({
+        currentRefinement: 'indexName',
+        refine: expect.any(Function),
+        hasNoResults: true,
+        options: [
+          { label: 'asc', value: 'asc' },
+          { label: 'desc', value: 'desc' },
+        ],
+        widgetParams: {
+          items: [
+            { label: 'asc', value: 'asc' },
+            { label: 'desc', value: 'desc' },
+          ],
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createSortBy = connectSortBy(renderFn, unmountFn);
+      const sortBy = createSortBy({
+        items: [
+          { label: 'asc', value: 'asc' },
+          { label: 'desc', value: 'desc' },
+        ],
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState1 = sortBy.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        currentRefinement: 'indexName',
+        refine: undefined,
+        hasNoResults: true,
+        options: [
+          { label: 'asc', value: 'asc' },
+          { label: 'desc', value: 'desc' },
+        ],
+        widgetParams: {
+          items: [
+            { label: 'asc', value: 'asc' },
+            { label: 'desc', value: 'desc' },
+          ],
+        },
+      });
+
+      sortBy.init(createInitOptions({ helper }));
+
+      const renderState2 = sortBy.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+        })
+      );
+
+      expect(renderState2).toEqual({
+        currentRefinement: 'indexName',
+        refine: expect.any(Function),
+        hasNoResults: true,
+        options: [
+          { label: 'asc', value: 'asc' },
+          { label: 'desc', value: 'desc' },
+        ],
+        widgetParams: {
+          items: [
+            { label: 'asc', value: 'asc' },
+            { label: 'desc', value: 'desc' },
+          ],
+        },
+      });
+    });
   });
 
   describe('options', () => {
