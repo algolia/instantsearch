@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
+import { Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'powered-by',
@@ -29,7 +30,23 @@ const withUsage = createDocumentationMessageGenerator({
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function} Re-usable widget factory for a custom **PoweredBy** widget.
  */
-export default function connectPoweredBy(renderFn, unmountFn = noop) {
+
+export type PoweredByRendererOptions = {
+  url: string;
+};
+export type PoweredByConnectorParams = {
+  url?: string;
+};
+
+export type PoweredByConnector = Connector<
+  PoweredByRendererOptions,
+  PoweredByConnectorParams
+>;
+
+const connectPoweredBy: PoweredByConnector = function connectPoweredBy(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
   const defaultUrl =
@@ -43,30 +60,47 @@ export default function connectPoweredBy(renderFn, unmountFn = noop) {
     }&` +
     'utm_campaign=poweredby';
 
-  return (widgetParams = {}) => {
-    const { url = defaultUrl } = widgetParams;
+  return widgetParams => {
+    const { url = defaultUrl } = widgetParams || {};
 
     return {
       $$type: 'ais.poweredBy',
 
-      init() {
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
         renderFn(
           {
-            url,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance,
           },
           true
         );
       },
 
-      render() {
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
+
         renderFn(
           {
-            url,
-            widgetParams,
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance,
           },
           false
         );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          poweredBy: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState() {
+        return {
+          url,
+          widgetParams,
+        };
       },
 
       dispose() {
@@ -74,4 +108,6 @@ export default function connectPoweredBy(renderFn, unmountFn = noop) {
       },
     };
   };
-}
+};
+
+export default connectPoweredBy;
