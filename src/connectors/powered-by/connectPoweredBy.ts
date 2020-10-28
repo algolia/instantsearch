@@ -9,6 +9,8 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+// something
+
 /**
  * @typedef {Object} PoweredByWidgetOptions
  * @property {string} [theme] The theme of the logo ("light" or "dark").
