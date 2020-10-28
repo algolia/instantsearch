@@ -53,33 +53,25 @@ export default function connectStats(renderFn, unmountFn = noop) {
   return (widgetParams = {}) => ({
     $$type: 'ais.stats',
 
-    init({ helper, instantSearchInstance }) {
+    init(initOptions) {
+      const { instantSearchInstance } = initOptions;
+
       renderFn(
         {
+          ...this.getWidgetRenderState(initOptions),
           instantSearchInstance,
-          hitsPerPage: helper.state.hitsPerPage,
-          nbHits: 0,
-          nbPages: 0,
-          page: helper.state.page || 0,
-          processingTimeMS: -1,
-          query: helper.state.query || '',
-          widgetParams,
         },
         true
       );
     },
 
-    render({ results, instantSearchInstance }) {
+    render(renderOptions) {
+      const { instantSearchInstance } = renderOptions;
+
       renderFn(
         {
+          ...this.getWidgetRenderState(renderOptions),
           instantSearchInstance,
-          hitsPerPage: results.hitsPerPage,
-          nbHits: results.nbHits,
-          nbPages: results.nbPages,
-          page: results.page,
-          processingTimeMS: results.processingTimeMS,
-          query: results.query,
-          widgetParams,
         },
         false
       );
@@ -87,6 +79,25 @@ export default function connectStats(renderFn, unmountFn = noop) {
 
     dispose() {
       unmountFn();
+    },
+
+    getRenderState(renderState, renderOptions) {
+      return {
+        ...renderState,
+        stats: this.getWidgetRenderState(renderOptions),
+      };
+    },
+
+    getWidgetRenderState({ results, helper }) {
+      return {
+        hitsPerPage: results ? results.hitsPerPage : helper.state.hitsPerPage,
+        nbHits: results ? results.nbHits : 0,
+        nbPages: results ? results.nbPages : 0,
+        page: results ? results.page : helper.state.page || 0,
+        processingTimeMS: results ? results.processingTimeMS : -1,
+        query: results ? results.query : helper.state.query || '',
+        widgetParams,
+      };
     },
   });
 }

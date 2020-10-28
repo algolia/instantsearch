@@ -1,5 +1,11 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 
 import connectStats from '../connectStats';
 
@@ -30,6 +36,110 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
           dispose: expect.any(Function),
         })
       );
+    });
+  });
+
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createStats = connectStats(renderFn, unmountFn);
+      const stats = createStats();
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+      helper.search = jest.fn();
+
+      const renderState1 = stats.getRenderState(
+        { stats: {} },
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1.stats).toEqual({
+        hitsPerPage: undefined,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: -1,
+        query: '',
+        widgetParams: {},
+      });
+
+      stats.init(createInitOptions({ helper, state: helper.state }));
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      const renderState2 = stats.getRenderState(
+        { stats: {} },
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2.stats).toEqual({
+        hitsPerPage: results.hitsPerPage,
+        nbHits: results.nbHits,
+        nbPages: results.nbPages,
+        page: results.page,
+        processingTimeMS: results.processingTimeMS,
+        query: results.query,
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createStats = connectStats(renderFn, unmountFn);
+      const stats = createStats();
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+      helper.search = jest.fn();
+
+      const renderState1 = stats.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        hitsPerPage: undefined,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: -1,
+        query: '',
+        widgetParams: {},
+      });
+
+      stats.init(createInitOptions({ helper, state: helper.state }));
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      const renderState2 = stats.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2).toEqual({
+        hitsPerPage: results.hitsPerPage,
+        nbHits: results.nbHits,
+        nbPages: results.nbPages,
+        page: results.page,
+        processingTimeMS: results.processingTimeMS,
+        query: results.query,
+        widgetParams: {},
+      });
     });
   });
 
