@@ -1086,7 +1086,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect(renderState2.numericMenu).toEqual({
         numerics: {
           createURL: expect.any(Function),
-          refine: expect.any(Function),
+          refine: renderState1.numericMenu.numerics.refine,
           hasNoResults: true,
           items: [
             {
@@ -1209,7 +1209,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
             value: '%7B%22start%22:20%7D',
           },
         ],
-        refine: expect.any(Function),
+        refine: renderState1.refine,
         widgetParams: {
           attribute: 'numerics',
           items: [
