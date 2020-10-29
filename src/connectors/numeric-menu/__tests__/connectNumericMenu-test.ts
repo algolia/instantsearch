@@ -812,7 +812,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       });
     });
 
-    test('returns the `uiState` with a refinement (numeric)', () => {
+    test('returns the `uiState` with a refinement (range)', () => {
       const [widget, helper] = getInitializedWidget();
 
       helper.addNumericRefinement('numerics', '>=', 10);
@@ -970,7 +970,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       );
     });
 
-    test('returns the `SearchParameters` with the value from `uiState` (numeric)', () => {
+    test('returns the `SearchParameters` with the value from `uiState` (range)', () => {
       const [widget, helper] = getInitializedWidget();
 
       const actual = widget.getWidgetSearchParameters(helper.state, {
