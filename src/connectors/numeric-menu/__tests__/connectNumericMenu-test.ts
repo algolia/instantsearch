@@ -1075,4 +1075,222 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       });
     });
   });
+
+  describe('getRenderState', () => {
+    it('returns the render state', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const renderState1 = widget.getRenderState(
+        {},
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1.numericMenu).toEqual({
+        numerics: {
+          createURL: expect.any(Function),
+          hasNoResults: true,
+          items: [
+            {
+              isRefined: false,
+              label: 'below 10',
+              value: '%7B%22end%22:10%7D',
+            },
+            {
+              isRefined: false,
+              label: '10 - 20',
+              value: '%7B%22start%22:10,%22end%22:20%7D',
+            },
+            {
+              isRefined: false,
+              label: 'more than 20',
+              value: '%7B%22start%22:20%7D',
+            },
+          ],
+          refine: expect.any(Function),
+          sendEvent: expect.any(Function),
+          widgetParams: {
+            attribute: 'numerics',
+            items: [
+              {
+                end: 10,
+                label: 'below 10',
+              },
+              {
+                end: 20,
+                label: '10 - 20',
+                start: 10,
+              },
+              {
+                label: 'more than 20',
+                start: 20,
+              },
+            ],
+          },
+        },
+      });
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      const renderState2 = widget.getRenderState(
+        {},
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2.numericMenu).toEqual({
+        numerics: {
+          createURL: expect.any(Function),
+          refine: renderState1.numericMenu.numerics.refine,
+          sendEvent: renderState1.numericMenu.numerics.sendEvent,
+          hasNoResults: true,
+          items: [
+            {
+              isRefined: false,
+              label: 'below 10',
+              value: '%7B%22end%22:10%7D',
+            },
+            {
+              isRefined: false,
+              label: '10 - 20',
+              value: '%7B%22start%22:10,%22end%22:20%7D',
+            },
+            {
+              isRefined: false,
+              label: 'more than 20',
+              value: '%7B%22start%22:20%7D',
+            },
+          ],
+          widgetParams: {
+            attribute: 'numerics',
+            items: [
+              {
+                end: 10,
+                label: 'below 10',
+              },
+              {
+                end: 20,
+                label: '10 - 20',
+                start: 10,
+              },
+              {
+                label: 'more than 20',
+                start: 20,
+              },
+            ],
+          },
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const renderState1 = widget.getWidgetRenderState(
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1).toEqual({
+        items: [
+          {
+            isRefined: false,
+            label: 'below 10',
+            value: '%7B%22end%22:10%7D',
+          },
+          {
+            isRefined: false,
+            label: '10 - 20',
+            value: '%7B%22start%22:10,%22end%22:20%7D',
+          },
+          {
+            isRefined: false,
+            label: 'more than 20',
+            value: '%7B%22start%22:20%7D',
+          },
+        ],
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        hasNoResults: true,
+        widgetParams: {
+          attribute: 'numerics',
+          items: [
+            {
+              end: 10,
+              label: 'below 10',
+            },
+            {
+              end: 20,
+              label: '10 - 20',
+              start: 10,
+            },
+            {
+              label: 'more than 20',
+              start: 20,
+            },
+          ],
+        },
+      });
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({}),
+      ]);
+
+      const renderState2 = widget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2).toEqual({
+        createURL: expect.any(Function),
+        hasNoResults: true,
+        items: [
+          {
+            isRefined: false,
+            label: 'below 10',
+            value: '%7B%22end%22:10%7D',
+          },
+          {
+            isRefined: false,
+            label: '10 - 20',
+            value: '%7B%22start%22:10,%22end%22:20%7D',
+          },
+          {
+            isRefined: false,
+            label: 'more than 20',
+            value: '%7B%22start%22:20%7D',
+          },
+        ],
+        refine: renderState1.refine,
+        sendEvent: renderState1.sendEvent,
+        widgetParams: {
+          attribute: 'numerics',
+          items: [
+            {
+              end: 10,
+              label: 'below 10',
+            },
+            {
+              end: 20,
+              label: '10 - 20',
+              start: 10,
+            },
+            {
+              label: 'more than 20',
+              start: 20,
+            },
+          ],
+        },
+      });
+    });
+  });
 });
