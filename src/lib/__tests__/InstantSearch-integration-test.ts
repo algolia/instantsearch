@@ -4,8 +4,8 @@ import { configure } from '../../widgets';
 import { connectConfigure } from '../../connectors';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 
-describe('InstantSearch integration', () => {
-  it('renders', () => {
+describe('configure', () => {
+  it('provides up-to-date uiState to onStateChange', () => {
     const container = document.createElement('div');
     const onStateChange = jest.fn();
     const search = instantsearch({
