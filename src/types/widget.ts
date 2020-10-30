@@ -33,6 +33,14 @@ import {
 import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
 import { PlacesWidgetParams } from '../widgets/places/places';
 import {
+  NumericMenuConnectorParams,
+  NumericMenuRendererOptions,
+} from '../connectors/numeric-menu/connectNumericMenu';
+import {
+  PoweredByConnectorParams,
+  PoweredByRendererOptions,
+} from '../connectors/powered-by/connectPoweredBy';
+import {
   VoiceSearchRendererOptions,
   VoiceSearchConnectorParams,
 } from '../connectors/voice-search/connectVoiceSearch';
@@ -213,6 +221,10 @@ export type IndexRenderState = Partial<{
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
   analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
   places: WidgetRenderState<{}, PlacesWidgetParams>;
+  poweredBy: WidgetRenderState<
+    PoweredByRendererOptions,
+    PoweredByConnectorParams
+  >;
   range: {
     [attribute: string]: WidgetRenderState<
       {
@@ -233,6 +245,12 @@ export type IndexRenderState = Partial<{
         max?: number;
         precision?: number;
       }
+    >;
+  };
+  numericMenu: {
+    [attribute: string]: WidgetRenderState<
+      NumericMenuRendererOptions,
+      NumericMenuConnectorParams
     >;
   };
   voiceSearch: WidgetRenderState<
