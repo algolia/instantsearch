@@ -36,6 +36,10 @@ import {
   NumericMenuConnectorParams,
   NumericMenuRendererOptions,
 } from '../connectors/numeric-menu/connectNumericMenu';
+import {
+  PoweredByConnectorParams,
+  PoweredByRendererOptions,
+} from '../connectors/powered-by/connectPoweredBy';
 
 export type ScopedResult = {
   indexId: string;
@@ -213,6 +217,10 @@ export type IndexRenderState = Partial<{
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
   analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
   places: WidgetRenderState<{}, PlacesWidgetParams>;
+  poweredBy: WidgetRenderState<
+    PoweredByRendererOptions,
+    PoweredByConnectorParams
+  >;
   range: {
     [attribute: string]: WidgetRenderState<
       {
