@@ -33,6 +33,10 @@ import {
 import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
 import { PlacesWidgetParams } from '../widgets/places/places';
 import {
+  NumericMenuConnectorParams,
+  NumericMenuRendererOptions,
+} from '../connectors/numeric-menu/connectNumericMenu';
+import {
   PoweredByConnectorParams,
   PoweredByRendererOptions,
 } from '../connectors/powered-by/connectPoweredBy';
@@ -237,6 +241,12 @@ export type IndexRenderState = Partial<{
         max?: number;
         precision?: number;
       }
+    >;
+  };
+  numericMenu: {
+    [attribute: string]: WidgetRenderState<
+      NumericMenuRendererOptions,
+      NumericMenuConnectorParams
     >;
   };
 }>;
