@@ -20,7 +20,8 @@
     "test:watch": "jest --watch",
     "release": "./scripts/release.js",
     "changelog:view-last": "conventional-changelog -u -n scripts/conventional-changelog/",
-    "changelog:update": "conventional-changelog -i CHANGELOG -s -u -n scripts/conventional-changelog/"
+    "changelog:update": "conventional-changelog -i CHANGELOG -s -u -n scripts/conventional-changelog/",
+    "postinstall": "patch-package"
   },
   "author": {
     "name": "Algolia Inc.",
@@ -70,7 +71,7 @@
     "metalsmith-changed": "2.0.0",
     "metalsmith-discover-partials": "0.1.0",
     "metalsmith-headings": "0.1.0",
-    "metalsmith-in-place": "superwolff/metalsmith-in-place#7cb06e54142b8843f35178ceb5560946ae356049",
+    "metalsmith-in-place": "1.4.4",
     "metalsmith-layouts": "1.8.1",
     "metalsmith-markdown": "0.2.1",
     "metalsmith-metallic": "1.0.0",
@@ -81,6 +82,7 @@
     "metalsmith-webpack": "1.0.3",
     "mversion": "1.13.0",
     "onchange": "3.2.1",
+    "patch-package": "6.2.2",
     "pretty-bytes-cli": "2.0.0",
     "prompt": "1.0.0",
     "pug": "2.0.3",

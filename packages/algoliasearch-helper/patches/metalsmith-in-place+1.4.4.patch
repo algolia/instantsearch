@@ -1,0 +1,26 @@
+diff --git a/node_modules/metalsmith-in-place/lib/index.js b/node_modules/metalsmith-in-place/lib/index.js
+index 4c0092a..9924129 100644
+--- a/node_modules/metalsmith-in-place/lib/index.js
++++ b/node_modules/metalsmith-in-place/lib/index.js
+@@ -24,7 +24,9 @@ module.exports = plugin;
+  *
+  * Options supported by metalsmith-in-place
+  */
+-var settings = ['engine', 'partials', 'pattern', 'rename'];
++// we need access to handlebars helpers (codepen etc.), so we use exposeConsolidate
++// to add plugins/handlebars-helpers.js
++var settings = ['engine', 'partials', 'pattern', 'rename', 'exposeConsolidate'];
+ 
+ /**
+  * Metalsmith plugin for in-place templating.
+@@ -57,6 +59,10 @@ function plugin(opts){
+     throw new Error('Unknown template engine: "' + opts.engine + '"');
+   }
+ 
++  if (typeof opts.exposeConsolidate === 'function') {
++    opts.exposeConsolidate(consolidate.requires);
++  }
++
+   // Map options to local variables
+   var engine = opts.engine;
+   var partials = opts.partials;
