@@ -111,14 +111,14 @@ export type PanelWidgetOptions<TWidget extends WidgetFactory<any, any, any>> = {
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
 
-const renderer = ({
+const renderer = <TWidget extends WidgetFactory<any, any, any>>({
   containerNode,
   bodyContainerNode,
   cssClasses,
   templates,
 }) => ({ options, hidden, collapsible, collapsed }) => {
   render(
-    <Panel
+    <Panel<TWidget>
       cssClasses={cssClasses}
       hidden={hidden}
       collapsible={collapsible}
@@ -222,7 +222,7 @@ const panel: PanelWidget = widgetParams => {
         </svg>`,
     };
 
-    const renderPanel = renderer({
+    const renderPanel = renderer<typeof widgetFactory>({
       containerNode: getContainerNode(container),
       bodyContainerNode,
       cssClasses,
