@@ -174,7 +174,8 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     return {
       $$type,
 
-      init({ helper, createURL, instantSearchInstance }) {
+      init(initOptions) {
+        const { helper, createURL, instantSearchInstance } = initOptions;
         connectorState.sendEvent = createSendEvent({
           instantSearchInstance,
           helper,
@@ -196,28 +197,19 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
 
         renderFn(
           {
-            createURL: connectorState.createURL(helper.state),
-            items: transformItems(prepareItems(helper.state)),
-            hasNoResults: true,
-            refine: connectorState.refine,
-            sendEvent: connectorState.sendEvent!,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
-            widgetParams,
           },
           true
         );
       },
 
-      render({ results, state, instantSearchInstance }) {
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
         renderFn(
           {
-            createURL: connectorState.createURL!(state),
-            items: transformItems(prepareItems(state)),
-            hasNoResults: results.nbHits === 0,
-            refine: connectorState.refine!,
-            sendEvent: connectorState.sendEvent!,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
-            widgetParams,
           },
           false
         );
@@ -294,6 +286,27 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
           : withMinRefinement;
 
         return withMaxRefinement;
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          numericMenu: {
+            ...renderState.numericMenu,
+            [attribute]: this.getWidgetRenderState(renderOptions),
+          },
+        };
+      },
+
+      getWidgetRenderState({ results, state }) {
+        return {
+          createURL: connectorState.createURL!(state),
+          items: transformItems(prepareItems(state)),
+          hasNoResults: results ? results.nbHits === 0 : true,
+          refine: connectorState.refine!,
+          sendEvent: connectorState.sendEvent!,
+          widgetParams,
+        };
       },
     };
   };
