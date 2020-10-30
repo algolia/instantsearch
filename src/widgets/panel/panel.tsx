@@ -76,30 +76,26 @@ export type PanelTemplates = {
   collapseButtonText?: Template<{ collapsed: boolean }>;
 };
 
+export type PanelRenderOptions<
+  TWidget extends WidgetFactory<any, any, any>
+> = RenderOptions & {
+  widgetRenderState: ReturnType<
+    Exclude<ReturnType<TWidget>['getWidgetRenderState'], undefined>
+  >;
+};
+
 export type PanelWidgetOptions<TWidget extends WidgetFactory<any, any, any>> = {
   /**
    * A function that is called on each render to determine if the
    * panel should be hidden based on the render options.
    */
-  hidden?(
-    options: RenderOptions & {
-      widgetRenderState: ReturnType<
-        Exclude<ReturnType<TWidget>['getWidgetRenderState'], undefined>
-      >;
-    }
-  ): boolean;
+  hidden?(options: PanelRenderOptions<TWidget>): boolean;
 
   /**
    * A function that is called on each render to determine if the
    * panel should be collapsed based on the render options.
    */
-  collapsed?(
-    options: RenderOptions & {
-      widgetRenderState: ReturnType<
-        Exclude<ReturnType<TWidget>['getWidgetRenderState'], undefined>
-      >;
-    }
-  ): boolean;
+  collapsed?(options: PanelRenderOptions<TWidget>): boolean;
 
   /**
    * The templates to use for the widget.
