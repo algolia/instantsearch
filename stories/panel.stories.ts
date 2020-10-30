@@ -155,8 +155,8 @@ storiesOf('Basics/Panel', module)
             return canRefine === false;
           },
           templates: {
-            header({ items }) {
-              return `Breadcrumb with ${items?.length} items`;
+            header({ canRefine }) {
+              return `Breadcrumb that can${canRefine ? '' : "'t "} refine`;
             },
             footer:
               'The panel collapses if it cannot refine. Click "Home". This panel will collapse and you will not see this footer anymore.',
