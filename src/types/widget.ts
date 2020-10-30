@@ -33,6 +33,14 @@ import {
 } from '../connectors/hits/connectHits';
 import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
 import { PlacesWidgetParams } from '../widgets/places/places';
+import {
+  NumericMenuConnectorParams,
+  NumericMenuRendererOptions,
+} from '../connectors/numeric-menu/connectNumericMenu';
+import {
+  PoweredByConnectorParams,
+  PoweredByRendererOptions,
+} from '../connectors/powered-by/connectPoweredBy';
 
 export type ScopedResult = {
   indexId: string;
@@ -210,6 +218,10 @@ export type IndexRenderState = Partial<{
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
   analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
   places: WidgetRenderState<{}, PlacesWidgetParams>;
+  poweredBy: WidgetRenderState<
+    PoweredByRendererOptions,
+    PoweredByConnectorParams
+  >;
   range: {
     [attribute: string]: WidgetRenderState<
       {
@@ -250,6 +262,12 @@ export type IndexRenderState = Partial<{
         attribute: string;
         max?: number;
       }
+    >;
+  };
+  numericMenu: {
+    [attribute: string]: WidgetRenderState<
+      NumericMenuRendererOptions,
+      NumericMenuConnectorParams
     >;
   };
 }>;
