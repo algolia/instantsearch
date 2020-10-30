@@ -79,9 +79,11 @@ export type PanelTemplates = {
 export type PanelRenderOptions<
   TWidget extends WidgetFactory<any, any, any>
 > = RenderOptions & {
-  widgetRenderState: ReturnType<
-    Exclude<ReturnType<TWidget>['getWidgetRenderState'], undefined>
-  >;
+  widgetRenderState: ReturnType<TWidget>['getWidgetRenderState'] extends (
+    renderOptions: any
+  ) => infer TRenderState
+    ? TRenderState
+    : unknown;
 };
 
 export type PanelWidgetOptions<TWidget extends WidgetFactory<any, any, any>> = {
@@ -132,12 +134,12 @@ const renderer = ({
 };
 
 export type PanelWidget = <TWidget extends WidgetFactory<any, any, any>>(
-  params?: PanelWidgetOptions<TWidget>
+  widgetParams?: PanelWidgetOptions<TWidget>
 ) => <
-  TWidgetOptions extends { container: HTMLElement | string; [key: string]: any }
+  TWidgetParams extends { container: HTMLElement | string; [key: string]: any }
 >(
-  widgetFactory: (widgetOptions: TWidgetOptions) => Widget
-) => (widgetOptions: TWidgetOptions) => Widget;
+  widgetFactory: TWidget
+) => (widgetOptions: TWidgetParams) => Widget;
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
@@ -260,8 +262,7 @@ const panel: PanelWidget = widgetParams => {
 
         const options = {
           ...renderOptions,
-          widgetRenderState: (widget.getWidgetRenderState?.(renderOptions) ||
-            {}) as any,
+          widgetRenderState: widget.getWidgetRenderState?.(renderOptions) || {},
         };
 
         renderPanel({
