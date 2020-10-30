@@ -44,39 +44,6 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const render = ({
-      isFirstRendering,
-      instantSearchInstance,
-      voiceSearchHelper: {
-        isBrowserSupported,
-        isListening,
-        startListening,
-        stopListening,
-        getState,
-      },
-    }): void => {
-      renderFn(
-        {
-          isBrowserSupported: isBrowserSupported(),
-          isListening: isListening(),
-          toggleListening() {
-            if (!isBrowserSupported()) {
-              return;
-            }
-            if (isListening()) {
-              stopListening();
-            } else {
-              startListening();
-            }
-          },
-          voiceListeningState: getState(),
-          widgetParams,
-          instantSearchInstance,
-        },
-        isFirstRendering
-      );
-    };
-
     const {
       searchAsYouSpeak = false,
       language,
@@ -87,7 +54,8 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
     return {
       $$type: 'ais.voiceSearch',
 
-      init({ helper, instantSearchInstance }) {
+      init(initOptions) {
+        const { helper, instantSearchInstance } = initOptions;
         (this as any)._refine = (query: string): void => {
           if (query !== helper.state.query) {
             const queryLanguages = language
@@ -116,27 +84,67 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
           language,
           onQueryChange: query => (this as any)._refine(query),
           onStateChange: () => {
-            render({
-              isFirstRendering: false,
-              instantSearchInstance,
-              voiceSearchHelper: (this as any)._voiceSearchHelper,
-            });
+            renderFn(
+              {
+                ...this.getWidgetRenderState(initOptions),
+                instantSearchInstance,
+              },
+              false
+            );
           },
         });
 
-        render({
-          isFirstRendering: true,
-          instantSearchInstance,
-          voiceSearchHelper: (this as any)._voiceSearchHelper,
-        });
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance,
+          },
+          true
+        );
       },
 
-      render({ instantSearchInstance }) {
-        render({
-          isFirstRendering: false,
-          instantSearchInstance,
-          voiceSearchHelper: (this as any)._voiceSearchHelper,
-        });
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          voiceSearch: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState() {
+        const {
+          isBrowserSupported,
+          isListening,
+          startListening,
+          stopListening,
+          getState,
+        } = (this as any)._voiceSearchHelper;
+        return {
+          isBrowserSupported: isBrowserSupported(),
+          isListening: isListening(),
+          toggleListening() {
+            if (!isBrowserSupported()) {
+              return;
+            }
+            if (isListening()) {
+              stopListening();
+            } else {
+              startListening();
+            }
+          },
+          voiceListeningState: getState(),
+          widgetParams,
+        };
       },
 
       dispose({ state }) {

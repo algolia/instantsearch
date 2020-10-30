@@ -32,6 +32,10 @@ import {
 } from '../connectors/hits/connectHits';
 import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
 import { PlacesWidgetParams } from '../widgets/places/places';
+import {
+  VoiceSearchRendererOptions,
+  VoiceSearchConnectorParams,
+} from '../connectors/voice-search/connectVoiceSearch';
 
 export type ScopedResult = {
   indexId: string;
@@ -231,6 +235,10 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  voiceSearch: WidgetRenderState<
+    VoiceSearchRendererOptions,
+    VoiceSearchConnectorParams
+  >;
 }>;
 
 export type WidgetRenderState<

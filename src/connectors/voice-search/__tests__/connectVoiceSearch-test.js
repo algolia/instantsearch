@@ -1,5 +1,6 @@
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import connectVoiceSearch from '../connectVoiceSearch';
+import { createInitOptions } from '../../../../test/mock/createWidget';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
   return ({ onStateChange, onQueryChange }) => {
@@ -253,6 +254,44 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       expect(actual).toEqual({
         query: 'Apple',
+      });
+    });
+  });
+
+  describe('getRenderState', () => {
+    it('returns the render state', () => {
+      const { widget, helper } = getInitializedWidget();
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState = widget.getRenderState({}, initOptions);
+
+      expect(renderState.voiceSearch).toEqual({
+        isBrowserSupported: true,
+        isListening: false,
+        toggleListening: expect.any(Function),
+        voiceListeningState: undefined,
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state', () => {
+      const { widget, helper } = getInitializedWidget();
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      widget.init(initOptions);
+
+      const renderState = widget.getWidgetRenderState(initOptions);
+
+      expect(renderState).toEqual({
+        isBrowserSupported: true,
+        isListening: false,
+        toggleListening: expect.any(Function),
+        voiceListeningState: undefined,
+        widgetParams: {},
       });
     });
   });
