@@ -105,60 +105,109 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       ? toArray(userOff).map(escapeRefinement)
       : undefined;
 
+    const toggleRefinement = (helper, { isRefined } = {}) => {
+      // Checking
+      if (!isRefined) {
+        if (hasAnOffValue) {
+          off.forEach(v =>
+            helper.removeDisjunctiveFacetRefinement(attribute, v)
+          );
+        }
+
+        on.forEach(v => helper.addDisjunctiveFacetRefinement(attribute, v));
+      } else {
+        // Unchecking
+        on.forEach(v => helper.removeDisjunctiveFacetRefinement(attribute, v));
+
+        if (hasAnOffValue) {
+          off.forEach(v => helper.addDisjunctiveFacetRefinement(attribute, v));
+        }
+      }
+
+      helper.search();
+    };
+
+    const connectorState = {
+      toggleRefinementFactory: helper => toggleRefinement.bind(this, helper),
+      createURLFactory: (isRefined, { state, createURL }) => () => {
+        const valuesToRemove = isRefined ? on : off;
+        if (valuesToRemove) {
+          valuesToRemove.forEach(v => {
+            state.removeDisjunctiveFacetRefinement(attribute, v);
+          });
+        }
+
+        const valuesToAdd = isRefined ? off : on;
+        if (valuesToAdd) {
+          valuesToAdd.forEach(v => {
+            state.addDisjunctiveFacetRefinement(attribute, v);
+          });
+        }
+
+        return createURL(state);
+      },
+    };
+
     return {
       $$type: 'ais.toggleRefinement',
 
-      _toggleRefinement(helper, { isRefined } = {}) {
-        // Checking
-        if (!isRefined) {
-          if (hasAnOffValue) {
-            off.forEach(v =>
-              helper.removeDisjunctiveFacetRefinement(attribute, v)
-            );
-          }
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
 
-          on.forEach(v => helper.addDisjunctiveFacetRefinement(attribute, v));
-        } else {
-          // Unchecking
-          on.forEach(v =>
-            helper.removeDisjunctiveFacetRefinement(attribute, v)
-          );
-
-          if (hasAnOffValue) {
-            off.forEach(v =>
-              helper.addDisjunctiveFacetRefinement(attribute, v)
-            );
-          }
-        }
-
-        helper.search();
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance,
+          },
+          true
+        );
       },
 
-      init({ state, helper, createURL, instantSearchInstance }) {
-        this._createURL = isCurrentlyRefined => () => {
-          const valuesToRemove = isCurrentlyRefined ? on : off;
-          if (valuesToRemove) {
-            valuesToRemove.forEach(v => {
-              state.removeDisjunctiveFacetRefinement(attribute, v);
-            });
-          }
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
 
-          const valuesToAdd = isCurrentlyRefined ? off : on;
-          if (valuesToAdd) {
-            valuesToAdd.forEach(v => {
-              state.addDisjunctiveFacetRefinement(attribute, v);
-            });
-          }
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance,
+          },
+          false
+        );
+      },
 
-          return createURL(state);
+      dispose({ state }) {
+        unmountFn();
+
+        return state.removeDisjunctiveFacet(attribute);
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          toggleRefinement: this.getWidgetRenderState(renderOptions),
         };
+      },
 
-        this.toggleRefinement = opts => {
-          this._toggleRefinement(helper, opts);
-        };
+      getWidgetRenderState({ state, helper, results, createURL }) {
+        let onData;
+        let offData;
+        let onFacetValue;
+        let offFacetValue;
+        let nextRefinement;
 
         const isRefined =
-          on && on.every(v => state.isDisjunctiveFacetRefined(attribute, v));
+          on &&
+          on.every(v =>
+            helper.state
+              ? helper.state.isDisjunctiveFacetRefined(attribute, v)
+              : state.isDisjunctiveFacetRefined(attribute, v)
+          );
+
+        const offValue = toArray(off === undefined ? false : off);
+
+        const allFacetValues = results
+          ? results.getFacetValues(attribute) || []
+          : null;
 
         // no need to refine anything at init if no custom off values
         if (hasAnOffValue) {
@@ -175,81 +224,59 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
           }
         }
 
-        const onFacetValue = {
-          isRefined,
-          count: 0,
-        };
-
-        const offFacetValue = {
-          isRefined: hasAnOffValue && !isRefined,
-          count: 0,
-        };
-
-        const value = {
-          name: attribute,
-          isRefined,
-          count: null,
-          onFacetValue,
-          offFacetValue,
-        };
-
-        renderFn(
-          {
-            value,
-            createURL: this._createURL(value.isRefined),
-            refine: this.toggleRefinement,
-            instantSearchInstance,
-            widgetParams,
-          },
-          true
-        );
-      },
-
-      render({ helper, results, state, instantSearchInstance }) {
-        const isRefined =
-          on &&
-          on.every(v => helper.state.isDisjunctiveFacetRefined(attribute, v));
-        const offValue = toArray(off === undefined ? false : off);
-        const allFacetValues = results.getFacetValues(attribute) || [];
-
-        const onData =
-          on &&
-          on
-            .map(v =>
-              find(allFacetValues, ({ name }) => name === unescapeRefinement(v))
-            )
-            .filter(v => v !== undefined);
-        const onFacetValue = {
-          isRefined: onData.length > 0 ? onData.every(v => v.isRefined) : false,
-          count:
-            onData.length === 0
-              ? null
-              : onData.reduce((acc, v) => acc + v.count, 0),
-        };
-
-        const offData = hasAnOffValue
-          ? offValue
+        if (allFacetValues) {
+          onData =
+            on &&
+            on
               .map(v =>
                 find(
                   allFacetValues,
                   ({ name }) => name === unescapeRefinement(v)
                 )
               )
-              .filter(v => v !== undefined)
-          : [];
-        const offFacetValue = {
-          isRefined:
-            offData.length > 0 ? offData.every(v => v.isRefined) : false,
-          count:
-            offData.length === 0
-              ? allFacetValues.reduce((total, { count }) => total + count, 0)
-              : offData.reduce((acc, v) => acc + v.count, 0),
-        };
+              .filter(v => v !== undefined);
 
-        // what will we show by default,
-        // if checkbox is not checked, show: [ ] free shipping (countWhenChecked)
-        // if checkbox is checked, show: [x] free shipping (countWhenNotChecked)
-        const nextRefinement = isRefined ? offFacetValue : onFacetValue;
+          offData = hasAnOffValue
+            ? offValue
+                .map(v =>
+                  find(
+                    allFacetValues,
+                    ({ name }) => name === unescapeRefinement(v)
+                  )
+                )
+                .filter(v => v !== undefined)
+            : [];
+
+          onFacetValue = {
+            isRefined:
+              onData.length > 0 ? onData.every(v => v.isRefined) : false,
+            count:
+              onData.length === 0
+                ? null
+                : onData.reduce((acc, v) => acc + v.count, 0),
+          };
+
+          offFacetValue = {
+            isRefined:
+              offData.length > 0 ? offData.every(v => v.isRefined) : false,
+            count:
+              offData.length === 0
+                ? allFacetValues.reduce((total, { count }) => total + count, 0)
+                : offData.reduce((acc, v) => acc + v.count, 0),
+          };
+
+          nextRefinement = isRefined ? offFacetValue : onFacetValue;
+        } else {
+          onFacetValue = {
+            isRefined,
+            count: 0,
+          };
+
+          offFacetValue = {
+            isRefined: hasAnOffValue && !isRefined,
+            count: 0,
+          };
+        }
 
         const value = {
           name: attribute,
@@ -259,24 +286,16 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
           offFacetValue,
         };
 
-        renderFn(
-          {
-            value,
+        return {
+          value,
+          state,
+          createURL: connectorState.createURLFactory(value.isRefined, {
             state,
-            createURL: this._createURL(value.isRefined),
-            refine: this.toggleRefinement,
-            helper,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
-      },
-
-      dispose({ state }) {
-        unmountFn();
-
-        return state.removeDisjunctiveFacet(attribute);
+            createURL,
+          }),
+          refine: connectorState.toggleRefinementFactory(helper),
+          widgetParams,
+        };
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

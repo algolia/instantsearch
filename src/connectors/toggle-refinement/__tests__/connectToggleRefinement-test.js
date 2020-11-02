@@ -3,6 +3,12 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import connectToggleRefinement from '../connectToggleRefinement';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectToggleRefinement', () => {
   describe('Usage', () => {
@@ -809,6 +815,49 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           index: indexName,
         })
       );
+    });
+  });
+
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createToggleRefinement = connectToggleRefinement(
+        renderFn,
+        unmountFn
+      );
+      const toggleRefinement = createToggleRefinement({
+        attribute: 'free_shipping',
+      });
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: [],
+        disjunctiveFacetsRefinements: {},
+      });
+
+      const renderState1 = toggleRefinement.getRenderState(
+        {},
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1.toggleRefinement).toEqual({
+        value: {
+          name: 'free_shipping',
+          isRefined: false,
+          count: null,
+          onFacetValue: {
+            isRefined: false,
+            count: 0,
+          },
+          offFacetValue: {
+            isRefined: false,
+            count: 0,
+          },
+        },
+        state: helper.state,
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        widgetParams: { attribute: 'free_shipping' },
+      });
     });
   });
 
