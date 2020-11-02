@@ -59,16 +59,16 @@ export type PanelCSSClasses = {
   footer?: string | string[];
 };
 
-export type PanelTemplates = {
+export type PanelTemplates<TWidget extends WidgetFactory<any, any, any>> = {
   /**
    * Template to use for the header.
    */
-  header?: Template<RenderOptions>;
+  header?: Template<PanelRenderOptions<TWidget>>;
 
   /**
    * Template to use for the footer.
    */
-  footer?: Template<RenderOptions>;
+  footer?: Template<PanelRenderOptions<TWidget>>;
 
   /**
    * Template to use for collapse button.
@@ -78,11 +78,11 @@ export type PanelTemplates = {
 
 export type PanelRenderOptions<
   TWidget extends WidgetFactory<any, any, any>
-> = RenderOptions & {
-  widgetRenderState: ReturnType<
-    Exclude<ReturnType<TWidget>['getWidgetRenderState'], undefined>
-  >;
-};
+> = RenderOptions & ReturnType<TWidget>['getWidgetRenderState'] extends (
+  renderOptions: any
+) => infer TRenderState
+  ? TRenderState
+  : Record<string, any>;
 
 export type PanelWidgetOptions<TWidget extends WidgetFactory<any, any, any>> = {
   /**
@@ -100,7 +100,7 @@ export type PanelWidgetOptions<TWidget extends WidgetFactory<any, any, any>> = {
   /**
    * The templates to use for the widget.
    */
-  templates?: PanelTemplates;
+  templates?: PanelTemplates<TWidget>;
 
   /**
    * The CSS classes to override.
@@ -111,14 +111,14 @@ export type PanelWidgetOptions<TWidget extends WidgetFactory<any, any, any>> = {
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
 
-const renderer = ({
+const renderer = <TWidget extends WidgetFactory<any, any, any>>({
   containerNode,
   bodyContainerNode,
   cssClasses,
   templates,
 }) => ({ options, hidden, collapsible, collapsed }) => {
   render(
-    <Panel
+    <Panel<TWidget>
       cssClasses={cssClasses}
       hidden={hidden}
       collapsible={collapsible}
@@ -132,12 +132,12 @@ const renderer = ({
 };
 
 export type PanelWidget = <TWidget extends WidgetFactory<any, any, any>>(
-  params?: PanelWidgetOptions<TWidget>
+  widgetParams?: PanelWidgetOptions<TWidget>
 ) => <
-  TWidgetOptions extends { container: HTMLElement | string; [key: string]: any }
+  TWidgetParams extends { container: HTMLElement | string; [key: string]: any }
 >(
-  widgetFactory: (widgetOptions: TWidgetOptions) => Widget
-) => (widgetOptions: TWidgetOptions) => Widget;
+  widgetFactory: TWidget
+) => (widgetOptions: TWidgetParams) => Widget;
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
@@ -222,7 +222,7 @@ const panel: PanelWidget = widgetParams => {
         </svg>`,
     };
 
-    const renderPanel = renderer({
+    const renderPanel = renderer<typeof widgetFactory>({
       containerNode: getContainerNode(container),
       bodyContainerNode,
       cssClasses,
@@ -259,9 +259,10 @@ const panel: PanelWidget = widgetParams => {
         const [renderOptions] = args;
 
         const options = {
+          ...(widget.getWidgetRenderState
+            ? widget.getWidgetRenderState(renderOptions)
+            : {}),
           ...renderOptions,
-          widgetRenderState: (widget.getWidgetRenderState?.(renderOptions) ||
-            {}) as any,
         };
 
         renderPanel({

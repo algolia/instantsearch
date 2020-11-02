@@ -151,11 +151,13 @@ storiesOf('Basics/Panel', module)
     withHits(
       ({ search, container }) => {
         const breadcrumbInPanel = panel<typeof breadcrumb>({
-          collapsed({ widgetRenderState }) {
-            return widgetRenderState.canRefine;
+          collapsed({ canRefine }) {
+            return canRefine === false;
           },
           templates: {
-            header: 'Collapsible panel',
+            header({ canRefine }) {
+              return `Breadcrumb that can${canRefine ? '' : "'t "} refine`;
+            },
             footer:
               'The panel collapses if it cannot refine. Click "Home". This panel will collapse and you will not see this footer anymore.',
           },
