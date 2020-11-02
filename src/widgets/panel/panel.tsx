@@ -59,7 +59,9 @@ export type PanelCSSClasses = {
   footer?: string | string[];
 };
 
-export type PanelTemplates<TWidget extends WidgetFactory<any, any, any>> = {
+export type PanelTemplates<
+  TWidget extends WidgetFactory<unknown, unknown, unknown>
+> = {
   /**
    * Template to use for the header.
    */
@@ -77,14 +79,16 @@ export type PanelTemplates<TWidget extends WidgetFactory<any, any, any>> = {
 };
 
 export type PanelRenderOptions<
-  TWidget extends WidgetFactory<any, any, any>
+  TWidget extends WidgetFactory<unknown, unknown, unknown>
 > = RenderOptions & ReturnType<TWidget>['getWidgetRenderState'] extends (
   renderOptions: any
 ) => infer TRenderState
   ? TRenderState
   : Record<string, any>;
 
-export type PanelWidgetOptions<TWidget extends WidgetFactory<any, any, any>> = {
+export type PanelWidgetOptions<
+  TWidget extends WidgetFactory<unknown, unknown, unknown>
+> = {
   /**
    * A function that is called on each render to determine if the
    * panel should be hidden based on the render options.
@@ -111,7 +115,7 @@ export type PanelWidgetOptions<TWidget extends WidgetFactory<any, any, any>> = {
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
 
-const renderer = <TWidget extends WidgetFactory<any, any, any>>({
+const renderer = <TWidget extends WidgetFactory<unknown, unknown, unknown>>({
   containerNode,
   bodyContainerNode,
   cssClasses,
@@ -131,7 +135,9 @@ const renderer = <TWidget extends WidgetFactory<any, any, any>>({
   );
 };
 
-export type PanelWidget = <TWidget extends WidgetFactory<any, any, any>>(
+export type PanelWidget = <
+  TWidget extends WidgetFactory<unknown, unknown, unknown>
+>(
   widgetParams?: PanelWidgetOptions<TWidget>
 ) => <
   TWidgetParams extends { container: HTMLElement | string; [key: string]: any }
