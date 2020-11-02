@@ -858,6 +858,47 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         refine: expect.any(Function),
         widgetParams: { attribute: 'free_shipping' },
       });
+
+      const results = new SearchResults(helper.state, [
+        {
+          facets: {
+            free_shipping: {
+              true: 45,
+              false: 40,
+            },
+          },
+          nbHits: 85,
+        },
+      ]);
+
+      const renderState2 = toggleRefinement.getRenderState(
+        {},
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2.toggleRefinement).toEqual({
+        value: {
+          name: 'free_shipping',
+          isRefined: false,
+          count: null,
+          onFacetValue: {
+            isRefined: false,
+            count: null,
+          },
+          offFacetValue: {
+            isRefined: false,
+            count: 0,
+          },
+        },
+        state: helper.state,
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        widgetParams: { attribute: 'free_shipping' },
+      });
     });
   });
 
