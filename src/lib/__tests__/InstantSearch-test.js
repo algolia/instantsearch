@@ -45,6 +45,10 @@ beforeEach(() => {
 });
 
 describe('Usage', () => {
+  beforeEach(() => {
+    warning.cache = {};
+  });
+
   it('throws without indexName', () => {
     expect(() => {
       // eslint-disable-next-line no-new
@@ -251,6 +255,71 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
 `);
+  });
+
+  it('warns dev with EXPERIMENTAL_use', () => {
+    const searchClient = createSearchClient({
+      addAlgoliaAgent: jest.fn(),
+    });
+
+    // eslint-disable-next-line no-new
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const middleware = () => ({
+      onStateChange: () => {},
+      subscribe: () => {},
+      unsubscribe: () => {},
+    });
+
+    expect(() => {
+      search.EXPERIMENTAL_use(middleware);
+    }).toWarnDev(
+      '[InstantSearch.js]: The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
+    );
+  });
+
+  it('does not warn dev with use', () => {
+    const searchClient = createSearchClient({
+      addAlgoliaAgent: jest.fn(),
+    });
+
+    // eslint-disable-next-line no-new
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const middleware = () => ({
+      onStateChange: () => {},
+      subscribe: () => {},
+      unsubscribe: () => {},
+    });
+
+    expect(() => {
+      search.use(middleware);
+    }).not.toWarnDev();
+  });
+
+  it('warns dev when insightsClient is given', () => {
+    const searchClient = createSearchClient({
+      addAlgoliaAgent: jest.fn(),
+    });
+
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient,
+        insightsClient: () => {},
+      });
+    }).toWarnDev(
+      `[InstantSearch.js]: \`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
+
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
+    );
   });
 });
 

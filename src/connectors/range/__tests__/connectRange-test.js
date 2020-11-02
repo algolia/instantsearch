@@ -9,6 +9,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectRange', () => {
   describe('Usage', () => {
@@ -217,6 +218,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       attribute,
     });
 
+    const instantSearchInstance = createInstantSearch();
     const helper = jsHelper(
       {},
       '',
@@ -228,6 +230,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance,
     });
 
     {
@@ -266,6 +269,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       state: helper.state,
       helper,
       createURL: () => '#',
+      instantSearchInstance,
     });
 
     {
@@ -300,6 +304,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -342,6 +347,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -382,6 +388,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -552,7 +559,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const createHelper = () => {
       const helper = jsHelper({});
       helper.search = jest.fn();
-      jest.spyOn(helper, 'removeNumericRefinement');
+      jest.spyOn(helper.state, 'removeNumericRefinement');
       return helper;
     };
 
@@ -564,11 +571,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute,
       });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalledWith(
+        attribute
+      );
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -578,11 +587,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalledWith(
+        attribute
+      );
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -592,11 +603,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -606,11 +617,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([11]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([491]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -623,11 +634,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         min: 10,
       });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -640,11 +651,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         max: 490,
       });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -657,11 +668,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalledWith(
+        attribute
+      );
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -674,11 +687,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalledWith(
+        attribute
+      );
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -691,11 +706,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalledWith(
+        attribute
+      );
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -708,11 +725,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalledWith(
+        attribute
+      );
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -724,11 +743,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       helper.addNumericRefinement(attribute, '>=', 10);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalledWith(
+        attribute
+      );
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -740,11 +761,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalledWith(
+        attribute
+      );
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -759,11 +782,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       helper.addNumericRefinement(attribute, '>=', 20);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -778,11 +801,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       helper.addNumericRefinement(attribute, '>=', 240);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([250]);
-      expect(helper.removeNumericRefinement).toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -792,11 +815,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
@@ -806,11 +829,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
@@ -820,11 +843,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
@@ -837,11 +860,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
@@ -851,11 +874,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
+      expect(helper.state.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
   });
@@ -916,6 +939,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         helper,
         state: helper.state,
         createURL: () => '#',
+        instantSearchInstance: createInstantSearch(),
       });
 
       const renderOptions = rendering.mock.calls[0][0];
@@ -1206,6 +1230,7 @@ describe('getRenderState', () => {
           min: 0,
         },
         refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         start: [0, 1000],
         widgetParams: {
           attribute: 'price',
@@ -1253,6 +1278,7 @@ describe('getRenderState', () => {
           min: 10,
         },
         refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         start: [0, 1000],
         widgetParams: {
           attribute: 'price',
@@ -1295,6 +1321,7 @@ describe('getWidgetRenderState', () => {
         min: 0,
       },
       refine: expect.any(Function),
+      sendEvent: expect.any(Function),
       start: [0, 1000],
       widgetParams: {
         attribute: 'price',
@@ -1339,6 +1366,7 @@ describe('getWidgetRenderState', () => {
         min: 10,
       },
       refine: expect.any(Function),
+      sendEvent: expect.any(Function),
       start: [0, 1000],
       widgetParams: {
         attribute: 'price',
@@ -1573,7 +1601,7 @@ describe('getWidgetSearchParameters', () => {
   });
 
   const attribute = 'price';
-  const rendering = () => {};
+  let rendering = () => {};
 
   it('expect to return default configuration', () => {
     const widget = connectRange(rendering)({
@@ -1689,5 +1717,100 @@ describe('getWidgetSearchParameters', () => {
     });
 
     expect(actual).toEqual(expectation);
+  });
+
+  describe('insights', () => {
+    it('sends event when a facet is added at each step', () => {
+      rendering = jest.fn();
+      const makeWidget = connectRange(rendering);
+      const widget = makeWidget({
+        attribute,
+      });
+
+      const instantSearchInstance = createInstantSearch();
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      {
+        // first rendering
+        const renderOptions =
+          rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        const { refine } = renderOptions;
+        refine([10, 30]);
+        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+          1
+        );
+        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+          eventType: 'click',
+          insightsMethod: 'clickedFilters',
+          payload: {
+            eventName: 'Filter Applied',
+            filters: ['price>=10', 'price<=30'],
+            index: '',
+          },
+          widgetType: 'ais.range',
+        });
+      }
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [{ test: 'oneTime' }],
+            facets: { price: { 10: 1, 20: 1, 30: 1 } },
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            facets_stats: {
+              price: {
+                avg: 20,
+                max: 30,
+                min: 10,
+                sum: 60,
+              },
+            },
+            nbHits: 1,
+            nbPages: 1,
+            page: 0,
+          },
+          {},
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      {
+        // Second rendering
+        const renderOptions =
+          rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        const { refine } = renderOptions;
+        refine([23, 27]);
+        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+          2
+        );
+        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+          eventType: 'click',
+          insightsMethod: 'clickedFilters',
+          payload: {
+            eventName: 'Filter Applied',
+            filters: ['price>=23', 'price<=27'],
+            index: '',
+          },
+          widgetType: 'ais.range',
+        });
+      }
+    });
   });
 });

@@ -3,6 +3,7 @@ import algoliasearchHelper, {
   SearchResults,
 } from 'algoliasearch-helper';
 import connectGeoSearch from '../connectGeoSearch';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectGeoSearch', () => {
   const createFakeHelper = client => {
@@ -71,9 +72,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch();
 
-    const client = {};
-    const helper = createFakeHelper(client);
-    const instantSearchInstance = { client, helper };
+    const instantSearchInstance = createInstantSearch();
+    const { mainHelper: helper } = instantSearchInstance;
 
     widget.init({
       state: helper.state,
@@ -87,6 +87,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         items: [],
         position: undefined,
         refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         clearMapRefinement: expect.any(Function),
         isRefinedWithMap: expect.any(Function),
         toggleRefineOnMapMove: expect.any(Function),
@@ -155,6 +156,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     widget.init({
       state: helper.state,
       helper,
+      instantSearchInstance: createInstantSearch(),
     });
 
     expect(render).toHaveBeenCalledTimes(1);
@@ -181,7 +183,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const widget = customGeoSearch();
 
     const helper = createFakeHelper({});
-
+    widget.init({
+      state: helper.state,
+      helper,
+      instantSearchInstance: createInstantSearch(),
+    });
     widget.render({
       results: new SearchResults(helper.state, [
         {
@@ -223,6 +229,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     const helper = createFakeHelper({});
+    widget.init({
+      state: helper.state,
+      helper,
+      instantSearchInstance: createInstantSearch(),
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -350,6 +361,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('aroundLatLng', '10,12');
 
+    widget.init({
+      state: helper.state,
+      helper,
+      instantSearchInstance: createInstantSearch(),
+    });
+
     widget.render({
       results,
       helper,
@@ -362,13 +379,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledTimes(3);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     lastRenderArgs(render).setMapMoveSinceLastRefine();
 
-    expect(render).toHaveBeenCalledTimes(3);
+    expect(render).toHaveBeenCalledTimes(4);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
@@ -379,7 +396,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(4);
+    expect(render).toHaveBeenCalledTimes(5);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
@@ -415,6 +432,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('aroundLatLng', '10,12');
 
+    widget.init({
+      state: helper.state,
+      helper,
+      instantSearchInstance: createInstantSearch(),
+    });
+
     widget.render({
       results,
       helper,
@@ -427,13 +450,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledTimes(3);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     lastRenderArgs(render).setMapMoveSinceLastRefine();
 
-    expect(render).toHaveBeenCalledTimes(3);
+    expect(render).toHaveBeenCalledTimes(4);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
@@ -444,7 +467,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(4);
+    expect(render).toHaveBeenCalledTimes(5);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
@@ -480,6 +503,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('insideBoundingBox', '10,12,14,16');
 
+    widget.init({
+      state: helper.state,
+      helper,
+      instantSearchInstance: createInstantSearch(),
+    });
+
     widget.render({
       results,
       helper,
@@ -492,13 +521,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledTimes(3);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     lastRenderArgs(render).setMapMoveSinceLastRefine();
 
-    expect(render).toHaveBeenCalledTimes(3);
+    expect(render).toHaveBeenCalledTimes(4);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
@@ -509,7 +538,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(4);
+    expect(render).toHaveBeenCalledTimes(5);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
   });
@@ -545,6 +574,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('insideBoundingBox', '10,12,14,16');
 
+    widget.init({
+      state: helper.state,
+      helper,
+      instantSearchInstance: createInstantSearch(),
+    });
+
     widget.render({
       results,
       helper,
@@ -557,13 +592,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledTimes(3);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     lastRenderArgs(render).setMapMoveSinceLastRefine();
 
-    expect(render).toHaveBeenCalledTimes(3);
+    expect(render).toHaveBeenCalledTimes(4);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
@@ -574,7 +609,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(4);
+    expect(render).toHaveBeenCalledTimes(5);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
@@ -743,6 +778,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       widget.init({
         state: helper.state,
         helper,
+        instantSearchInstance: createInstantSearch(),
       });
 
       expect(render).toHaveBeenCalledTimes(1);
@@ -790,12 +826,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       ]);
 
+      widget.init({
+        state: helper.state,
+        helper,
+        instantSearchInstance: createInstantSearch(),
+      });
+
       widget.render({
         results,
         helper,
       });
 
-      expect(render).toHaveBeenCalledTimes(1);
+      expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
@@ -808,7 +850,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         helper,
       });
 
-      expect(render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenCalledTimes(3);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
@@ -845,6 +887,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       widget.init({
         state: helper.state,
         helper,
+        instantSearchInstance: createInstantSearch(),
       });
 
       expect(render).toHaveBeenCalledTimes(1);
@@ -905,12 +948,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       ]);
 
+      widget.init({
+        state: helper.state,
+        helper,
+        instantSearchInstance: createInstantSearch(),
+      });
+
       widget.render({
         results,
         helper,
       });
 
-      expect(render).toHaveBeenCalledTimes(1);
+      expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
@@ -923,7 +972,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         helper,
       });
 
-      expect(render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenCalledTimes(3);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
@@ -936,7 +985,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         helper,
       });
 
-      expect(render).toHaveBeenCalledTimes(3);
+      expect(render).toHaveBeenCalledTimes(4);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
@@ -957,6 +1006,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       widget.init({
         state: helper.state,
         helper,
+        instantSearchInstance: createInstantSearch(),
       });
 
       expect(render).toHaveBeenCalledTimes(1);
@@ -992,6 +1042,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       const helper = createFakeHelper({});
 
+      widget.init({
+        state: helper.state,
+        helper,
+        instantSearchInstance: createInstantSearch(),
+      });
+
       widget.render({
         results: new SearchResults(helper.state, [
           {
@@ -1001,12 +1057,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         helper,
       });
 
-      expect(render).toHaveBeenCalledTimes(1);
+      expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(true);
 
       lastRenderArgs(render).toggleRefineOnMapMove();
 
-      expect(render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenCalledTimes(3);
       expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
       expect(firstRenderArgs(render).toggleRefineOnMapMove).toBe(
         lastRenderArgs(render).toggleRefineOnMapMove
@@ -1027,6 +1083,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       widget.init({
         state: helper.state,
         helper,
+        instantSearchInstance: createInstantSearch(),
       });
 
       expect(render).toHaveBeenCalledTimes(1);
@@ -1068,17 +1125,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       ]);
 
+      widget.init({
+        state: helper.state,
+        helper,
+        instantSearchInstance: createInstantSearch(),
+      });
+
       widget.render({
         results,
         helper,
       });
 
-      expect(render).toHaveBeenCalledTimes(1);
+      expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
 
       lastRenderArgs(render).setMapMoveSinceLastRefine();
 
-      expect(render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenCalledTimes(3);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
       expect(firstRenderArgs(render).setMapMoveSinceLastRefine).toBe(
         lastRenderArgs(render).setMapMoveSinceLastRefine
@@ -1100,22 +1163,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       ]);
 
+      widget.init({
+        state: helper.state,
+        helper,
+        instantSearchInstance: createInstantSearch(),
+      });
+
       widget.render({
         results,
         helper,
       });
 
-      expect(render).toHaveBeenCalledTimes(1);
+      expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
 
       lastRenderArgs(render).setMapMoveSinceLastRefine();
 
-      expect(render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenCalledTimes(3);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
 
       lastRenderArgs(render).setMapMoveSinceLastRefine();
 
-      expect(render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenCalledTimes(3);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
       expect(firstRenderArgs(render).setMapMoveSinceLastRefine).toBe(
         lastRenderArgs(render).setMapMoveSinceLastRefine
@@ -1276,6 +1345,127 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(searchParametersAfter.insideBoundingBox).toBeUndefined();
+    });
+  });
+
+  describe('insights', () => {
+    const createRenderedWidget = () => {
+      const hits = [
+        {
+          objectID: 123,
+          _geoloc: { lat: 10, lng: 12 },
+          __position: 0,
+          __queryID: 'test-query-id',
+        },
+        {
+          objectID: 456,
+          _geoloc: { lat: 12, lng: 14 },
+          __position: 1,
+          __queryID: 'test-query-id',
+        },
+        {
+          objectID: 789,
+          _geoloc: { lat: 14, lng: 16 },
+          __position: 2,
+          __queryID: 'test-query-id',
+        },
+      ];
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const instantSearchInstance = createInstantSearch();
+      const { mainHelper: helper } = instantSearchInstance;
+
+      widget.init({
+        state: helper.state,
+        instantSearchInstance,
+        helper,
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits,
+          },
+        ]),
+        helper,
+        instantSearchInstance,
+      });
+
+      return {
+        render,
+        instantSearchInstance,
+        hits,
+      };
+    };
+
+    it('sends view event when hits are rendered', () => {
+      const { instantSearchInstance } = createRenderedWidget();
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'view',
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          eventName: 'Hits Viewed',
+          index: 'indexName',
+          objectIDs: [123, 456, 789],
+        },
+        widgetType: 'ais.geoSearch',
+      });
+    });
+
+    it('sends click event', () => {
+      const { instantSearchInstance, render, hits } = createRenderedWidget();
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // view event by render
+
+      const { sendEvent } = render.mock.calls[render.mock.calls.length - 1][0];
+      sendEvent('click', hits[0], 'Location Added');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Location Added',
+          index: 'indexName',
+          objectIDs: [123],
+          positions: [0],
+          queryID: 'test-query-id',
+        },
+        widgetType: 'ais.geoSearch',
+      });
+    });
+
+    it('sends conversion event', () => {
+      const { instantSearchInstance, render, hits } = createRenderedWidget();
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // view event by render
+
+      const { sendEvent } = render.mock.calls[render.mock.calls.length - 1][0];
+      sendEvent('conversion', hits[0], 'Location Saved');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'conversion',
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Location Saved',
+          index: 'indexName',
+          objectIDs: [123],
+          queryID: 'test-query-id',
+        },
+        widgetType: 'ais.geoSearch',
+      });
     });
   });
 });
