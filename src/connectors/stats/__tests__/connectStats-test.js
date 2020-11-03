@@ -120,7 +120,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       stats.init(createInitOptions({ helper, state: helper.state }));
 
       const results = new SearchResults(helper.state, [
-        createSingleSearchResponse(),
+        createSingleSearchResponse({
+          hits: [
+            { brand: 'samsung', objectID: '1' },
+            { brand: 'apple', objectID: '2' },
+            { brand: 'sony', objectID: '3' },
+            { brand: 'benq', objectID: '4' },
+            { brand: 'dyson', objectID: '5' },
+          ],
+          hitsPerPage: 3,
+          query: 'apple',
+        }),
       ]);
 
       const renderState2 = stats.getWidgetRenderState(
