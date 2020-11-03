@@ -332,6 +332,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           addDisjunctiveFacetRefinement: jest.fn(),
           search: jest.fn(),
           setPage: jest.fn(),
+          getIndex: jest.fn(),
         };
       });
 

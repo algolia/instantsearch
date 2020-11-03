@@ -133,9 +133,12 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       ? toArray(userOff).map(escapeRefinement)
       : undefined;
 
+    let sendEvent;
+
     const toggleRefinement = (helper, { isRefined } = {}) => {
       // Checking
       if (!isRefined) {
+        sendEvent('click', isRefined);
         if (hasAnOffValue) {
           off.forEach(v =>
             helper.removeDisjunctiveFacetRefinement(attribute, v)
@@ -177,10 +180,16 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
     };
 
     return {
-      $$type: 'ais.toggleRefinement',
+      $$type,
 
       init(initOptions) {
-        const { instantSearchInstance } = initOptions;
+        const { instantSearchInstance, helper } = initOptions;
+        sendEvent = createSendEvent({
+          instantSearchInstance,
+          attribute,
+          on,
+          helper,
+        });
 
         renderFn(
           {
@@ -217,13 +226,23 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       getWidgetRenderState({ state, helper, results, createURL }) {
-        let value;
+        const isRefined = results
+          ? on &&
+            on.every(v => helper.state.isDisjunctiveFacetRefined(attribute, v))
+          : on && on.every(v => state.isDisjunctiveFacetRefined(attribute, v));
+
+        let onFacetValue = {
+          isRefined,
+          count: 0,
+        };
+
+        let offFacetValue = {
+          isRefined: hasAnOffValue && !isRefined,
+          count: 0,
+        };
 
         // results are null at init
         if (results) {
-          const isRefined =
-            on &&
-            on.every(v => helper.state.isDisjunctiveFacetRefined(attribute, v));
           const offValue = toArray(off === undefined ? false : off);
           const allFacetValues = results.getFacetValues(attribute) || [];
 
@@ -237,7 +256,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
                 )
               )
               .filter(v => v !== undefined);
-          const onFacetValue = {
+          onFacetValue = {
             isRefined:
               onData.length > 0 ? onData.every(v => v.isRefined) : false,
             count:
@@ -256,7 +275,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
                 )
                 .filter(v => v !== undefined)
             : [];
-          const offFacetValue = {
+          offFacetValue = {
             isRefined:
               offData.length > 0 ? offData.every(v => v.isRefined) : false,
             count:
@@ -264,56 +283,26 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
                 ? allFacetValues.reduce((total, { count }) => total + count, 0)
                 : offData.reduce((acc, v) => acc + v.count, 0),
           };
-
-          // what will we show by default,
-          // if checkbox is not checked, show: [ ] free shipping (countWhenChecked)
-          // if checkbox is checked, show: [x] free shipping (countWhenNotChecked)
-          const nextRefinement = isRefined ? offFacetValue : onFacetValue;
-
-          value = {
-            name: attribute,
-            isRefined,
-            count: nextRefinement === undefined ? null : nextRefinement.count,
-            onFacetValue,
-            offFacetValue,
-          };
-        } else {
-          const isRefined =
-            on && on.every(v => state.isDisjunctiveFacetRefined(attribute, v));
-
-          // no need to refine anything at init if no custom off values
-          if (hasAnOffValue) {
-            // Add filtering on the 'off' value if set
-            if (!isRefined) {
-              const currentPage = helper.state.page;
-              if (off) {
-                off.forEach(v =>
-                  helper.addDisjunctiveFacetRefinement(attribute, v)
-                );
-              }
-
-              helper.setPage(currentPage);
-            }
+        } else if (hasAnOffValue && !isRefined) {
+          const currentPage = helper.state.page;
+          if (off) {
+            off.forEach(v =>
+              helper.addDisjunctiveFacetRefinement(attribute, v)
+            );
           }
 
-          const onFacetValue = {
-            isRefined,
-            count: 0,
-          };
-
-          const offFacetValue = {
-            isRefined: hasAnOffValue && !isRefined,
-            count: 0,
-          };
-
-          value = {
-            name: attribute,
-            isRefined,
-            count: null,
-            onFacetValue,
-            offFacetValue,
-          };
+          helper.setPage(currentPage);
         }
+
+        const nextRefinement = isRefined ? offFacetValue : onFacetValue;
+
+        const value = {
+          name: attribute,
+          isRefined,
+          count: results && nextRefinement ? nextRefinement.count : null,
+          onFacetValue,
+          offFacetValue,
+        };
 
         return {
           value,
@@ -322,6 +311,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             state,
             createURL,
           }),
+          sendEvent,
           refine: connectorState.toggleRefinementFactory(helper),
           widgetParams,
         };
