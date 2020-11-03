@@ -265,13 +265,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       const createSortBy = connectSortBy(renderFn, unmountFn);
       const sortBy = createSortBy({
         items: [
-          { label: 'asc', value: 'asc' },
-          { label: 'desc', value: 'desc' },
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
         ],
       });
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
-        index: 'indexName',
-      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'index_default',
+        {
+          index: 'index_default',
+        }
+      );
 
       const renderState1 = sortBy.getRenderState(
         {
@@ -281,22 +286,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       );
 
       expect(renderState1.sortBy).toEqual({
-        currentRefinement: 'indexName',
+        currentRefinement: 'index_default',
         refine: undefined,
         hasNoResults: true,
         options: [
-          { label: 'asc', value: 'asc' },
-          { label: 'desc', value: 'desc' },
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
         ],
         widgetParams: {
           items: [
-            { label: 'asc', value: 'asc' },
-            { label: 'desc', value: 'desc' },
+            { label: 'default', value: 'index_default' },
+            { label: 'asc', value: 'index_asc' },
+            { label: 'desc', value: 'index_desc' },
           ],
         },
       });
 
       sortBy.init(createInitOptions({ helper }));
+      sortBy.getWidgetRenderState({ helper }).refine('index_desc');
 
       const renderState2 = sortBy.getRenderState(
         { sortBy: {} },
@@ -304,23 +312,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           helper,
           state: helper.state,
           results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+                { brand: 'sony', objectID: '3' },
+              ],
+              hitsPerPage: 1,
+            }),
           ]),
         })
       );
 
       expect(renderState2.sortBy).toEqual({
-        currentRefinement: 'indexName',
+        currentRefinement: 'index_desc',
         refine: expect.any(Function),
-        hasNoResults: true,
+        hasNoResults: false,
         options: [
-          { label: 'asc', value: 'asc' },
-          { label: 'desc', value: 'desc' },
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
         ],
         widgetParams: {
           items: [
-            { label: 'asc', value: 'asc' },
-            { label: 'desc', value: 'desc' },
+            { label: 'default', value: 'index_default' },
+            { label: 'asc', value: 'index_asc' },
+            { label: 'desc', value: 'index_desc' },
           ],
         },
       });
@@ -334,12 +351,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       const createSortBy = connectSortBy(renderFn, unmountFn);
       const sortBy = createSortBy({
         items: [
-          { label: 'asc', value: 'asc' },
-          { label: 'desc', value: 'desc' },
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
         ],
       });
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
-        index: 'indexName',
+      const helper = algoliasearchHelper(createSearchClient(), 'index_desc', {
+        index: 'index_desc',
       });
 
       const renderState1 = sortBy.getWidgetRenderState(
@@ -347,45 +365,56 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       );
 
       expect(renderState1).toEqual({
-        currentRefinement: 'indexName',
+        currentRefinement: 'index_desc',
         refine: undefined,
         hasNoResults: true,
         options: [
-          { label: 'asc', value: 'asc' },
-          { label: 'desc', value: 'desc' },
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
         ],
         widgetParams: {
           items: [
-            { label: 'asc', value: 'asc' },
-            { label: 'desc', value: 'desc' },
+            { label: 'default', value: 'index_default' },
+            { label: 'asc', value: 'index_asc' },
+            { label: 'desc', value: 'index_desc' },
           ],
         },
       });
 
       sortBy.init(createInitOptions({ helper }));
+      sortBy.getWidgetRenderState({ helper }).refine('index_default');
 
       const renderState2 = sortBy.getWidgetRenderState(
         createRenderOptions({
           helper,
           state: helper.state,
           results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+              ],
+              hitsPerPage: 20,
+            }),
           ]),
         })
       );
 
       expect(renderState2).toEqual({
-        currentRefinement: 'indexName',
+        currentRefinement: 'index_default',
         refine: expect.any(Function),
-        hasNoResults: true,
+        hasNoResults: false,
         options: [
-          { label: 'asc', value: 'asc' },
-          { label: 'desc', value: 'desc' },
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
         ],
         widgetParams: {
           items: [
-            { label: 'asc', value: 'asc' },
-            { label: 'desc', value: 'desc' },
+            { label: 'default', value: 'index_default' },
+            { label: 'asc', value: 'index_asc' },
+            { label: 'desc', value: 'index_desc' },
           ],
         },
       });
