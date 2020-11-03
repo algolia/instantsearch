@@ -829,10 +829,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const toggleRefinement = createToggleRefinement({
         attribute: 'free_shipping',
       });
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['free_shipping'],
         disjunctiveFacetsRefinements: {
-          free_shipping: ['true'],
+          free_shipping: ['false'],
         },
       });
 
@@ -847,7 +847,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         state: helper.state,
         value: {
           count: null,
-          isRefined: true,
+          isRefined: false,
           name: 'free_shipping',
           offFacetValue: {
             count: 0,
@@ -855,7 +855,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           },
           onFacetValue: {
             count: 0,
-            isRefined: true,
+            isRefined: false,
           },
         },
         widgetParams: {
@@ -863,20 +863,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         },
       });
 
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          facets: {
-            free_shipping: true,
-          },
-        }),
-      ]);
-
       const renderState2 = toggleRefinement.getRenderState(
         {},
         createRenderOptions({
           helper,
           state: helper.state,
-          results,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              facets: {
+                free_shipping: {
+                  true: 45,
+                  false: 40,
+                },
+              },
+              nbHits: 85,
+            }),
+          ]),
         })
       );
 
@@ -885,15 +887,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         refine: expect.any(Function),
         state: helper.state,
         value: {
-          count: 0,
-          isRefined: true,
+          count: 45,
+          isRefined: false,
           name: 'free_shipping',
           offFacetValue: {
-            count: 0,
+            count: 85,
             isRefined: false,
           },
           onFacetValue: {
-            count: null,
+            count: 45,
             isRefined: false,
           },
         },
@@ -915,10 +917,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const toggleRefinement = createToggleRefinement({
         attribute: 'free_shipping',
       });
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['free_shipping'],
         disjunctiveFacetsRefinements: {
-          free_shipping: ['false'],
+          free_shipping: ['true'],
         },
       });
 
@@ -932,7 +934,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         state: helper.state,
         value: {
           count: null,
-          isRefined: false,
+          isRefined: true,
           name: 'free_shipping',
           offFacetValue: {
             count: 0,
@@ -940,7 +942,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           },
           onFacetValue: {
             count: 0,
-            isRefined: false,
+            isRefined: true,
           },
         },
         widgetParams: {
@@ -948,19 +950,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         },
       });
 
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          facets: {
-            free_shipping: true,
-          },
-        }),
-      ]);
-
       const renderState2 = toggleRefinement.getWidgetRenderState(
         createRenderOptions({
           helper,
           state: helper.state,
-          results,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              facets: {
+                free_shipping: {
+                  true: 345,
+                  false: 940,
+                },
+              },
+              nbHits: 1285,
+            }),
+          ]),
         })
       );
 
@@ -969,16 +973,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         refine: expect.any(Function),
         state: helper.state,
         value: {
-          count: null,
-          isRefined: false,
+          count: 1285,
+          isRefined: true,
           name: 'free_shipping',
           offFacetValue: {
-            count: 0,
+            count: 1285,
             isRefined: false,
           },
           onFacetValue: {
-            count: null,
-            isRefined: false,
+            count: 345,
+            isRefined: true,
           },
         },
         widgetParams: {
