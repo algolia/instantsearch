@@ -10,7 +10,12 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
-import { Template, RenderOptions, WidgetFactory, Widget } from '../../types';
+import {
+  Template,
+  RenderOptions,
+  UnknownWidgetFactory,
+  Widget,
+} from '../../types';
 
 export type PanelCSSClasses = {
   /**
@@ -58,8 +63,6 @@ export type PanelCSSClasses = {
    */
   footer?: string | string[];
 };
-
-export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
 
 export type PanelTemplates<TWidget extends UnknownWidgetFactory> = {
   /**

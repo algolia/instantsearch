@@ -374,3 +374,5 @@ export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
 export type Template<TTemplateData = void> =
   | string
   | ((data: TTemplateData) => string);
+
+export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
