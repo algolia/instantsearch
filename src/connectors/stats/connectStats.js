@@ -89,15 +89,27 @@ export default function connectStats(renderFn, unmountFn = noop) {
     },
 
     getWidgetRenderState({ results, helper }) {
-      return {
-        hitsPerPage: results ? results.hitsPerPage : helper.state.hitsPerPage,
-        nbHits: results ? results.nbHits : 0,
-        nbPages: results ? results.nbPages : 0,
-        page: results ? results.page : helper.state.page || 0,
-        processingTimeMS: results ? results.processingTimeMS : -1,
-        query: results ? results.query : helper.state.query || '',
-        widgetParams,
-      };
+      if (results) {
+        return {
+          hitsPerPage: results.hitsPerPage,
+          nbHits: results.nbHits,
+          nbPages: results.nbPages,
+          page: results.page,
+          processingTimeMS: results.processingTimeMS,
+          query: results.query,
+          widgetParams,
+        };
+      } else {
+        return {
+          hitsPerPage: helper.state.hitsPerPage,
+          nbHits: 0,
+          nbPages: 0,
+          page: helper.state.page || 0,
+          processingTimeMS: -1,
+          query: helper.state.query || '',
+          widgetParams,
+        };
+      }
     },
   });
 }
