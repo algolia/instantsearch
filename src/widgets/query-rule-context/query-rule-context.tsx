@@ -3,6 +3,7 @@ import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 import connectQueryRules, {
   ParamTrackedFilters,
   ParamTransformRuleContexts,
+  QueryRulesRendererOptions,
   QueryRulesConnectorParams,
 } from '../../connectors/query-rules/connectQueryRules';
 
@@ -12,6 +13,7 @@ type QueryRuleContextWidgetParams = {
 };
 
 type QueryRuleContext = WidgetFactory<
+  QueryRulesRendererOptions,
   QueryRulesConnectorParams,
   QueryRuleContextWidgetParams
 >;

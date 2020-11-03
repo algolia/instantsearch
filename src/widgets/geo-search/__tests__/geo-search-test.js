@@ -3,6 +3,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import createHTMLMarker from '../createHTMLMarker';
 import renderer from '../GeoSearchRenderer';
 import geoSearch from '../geo-search';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -102,7 +103,8 @@ describe('GeoSearch', () => {
   });
 
   const createContainer = () => document.createElement('div');
-  const createFakeInstantSearch = () => ({ templatesConfig: undefined });
+  const createFakeInstantSearch = () =>
+    createInstantSearch({ templatesConfig: undefined });
   const createFakeHelper = () =>
     algoliasearchHelper(
       {

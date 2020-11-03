@@ -272,6 +272,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
   });
 
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createConfigure = connectConfigure(renderFn, unmountFn);
+      const configure = createConfigure({
+        searchParameters: { facetFilters: ['brand:Samsung'] },
+      });
+
+      const renderState1 = configure.getWidgetRenderState(createInitOptions());
+
+      expect(renderState1).toEqual({
+        refine: undefined,
+        widgetParams: {
+          searchParameters: { facetFilters: ['brand:Samsung'] },
+        },
+      });
+
+      configure.init!(createInitOptions());
+
+      const renderState2 = configure.getWidgetRenderState(
+        createRenderOptions()
+      );
+
+      expect(renderState2).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: { facetFilters: ['brand:Samsung'] },
+        },
+      });
+    });
+  });
+
   describe('getWidgetUiState', () => {
     it('adds default parameters', () => {
       const makeWidget = connectConfigure(noop);

@@ -25,7 +25,7 @@ Array [
         onFocus={[Function]}
         onInput={[Function]}
         placeholder=""
-        spellCheck={false}
+        spellCheck="false"
         type="search"
         value=""
       />
@@ -96,7 +96,7 @@ Array [
         onFocus={[Function]}
         onInput={[Function]}
         placeholder=""
-        spellCheck={false}
+        spellCheck="false"
         type="search"
         value=""
       />

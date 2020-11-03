@@ -178,6 +178,77 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     });
   });
 
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
+      const breadcrumb = createBreadcrumb({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        breadcrumb.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      helper.toggleRefinement('category', 'Decoration');
+
+      const renderState1 = breadcrumb.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        canRefine: false,
+        createURL: undefined,
+        items: [],
+        refine: undefined,
+        widgetParams: { attributes: ['category', 'subCategory'] },
+      });
+
+      breadcrumb.init!(createInitOptions({ helper }));
+
+      const renderState2 = breadcrumb.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  Decoration: 880,
+                },
+                subCategory: {
+                  'Decoration > Candle holders & candles': 193,
+                  'Decoration > Frames & pictures': 173,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  Decoration: 880,
+                  Outdoor: 47,
+                },
+              },
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState2).toEqual({
+        canRefine: true,
+        createURL: expect.any(Function),
+        items: [{ label: 'Decoration', value: null }],
+        refine: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+      });
+    });
+  });
+
   describe('getWidgetSearchParameters', () => {
     beforeEach(() => {
       warning.cache = {};
