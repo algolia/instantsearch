@@ -485,6 +485,62 @@ search.addWidgets([
     });
   });
 
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
+      const autocomplete = createAutocomplete({});
+
+      const renderState1 = autocomplete.getWidgetRenderState(
+        createInitOptions()
+      );
+
+      expect(renderState1).toEqual({
+        currentRefinement: '',
+        indices: [],
+        refine: undefined,
+        widgetParams: {},
+      });
+
+      autocomplete.init!(createInitOptions());
+
+      const renderState2 = autocomplete.getWidgetRenderState(
+        createRenderOptions()
+      );
+
+      expect(renderState2).toEqual({
+        currentRefinement: '',
+        indices: expect.any(Array),
+        refine: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with a query', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
+      const autocomplete = createAutocomplete({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        query: 'query',
+      });
+
+      autocomplete.init!(createInitOptions());
+
+      const renderState = autocomplete.getWidgetRenderState(
+        createRenderOptions({ helper })
+      );
+
+      expect(renderState).toEqual({
+        currentRefinement: 'query',
+        indices: expect.any(Array),
+        refine: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+  });
+
   describe('getWidgetUiState', () => {
     test('should give back the object unmodified if the default value is selected', () => {
       const [widget, helper] = getInitializedWidget();
