@@ -4,6 +4,7 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import connectGeoSearch from '../connectGeoSearch';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 describe('connectGeoSearch', () => {
   const createFakeHelper = client => {
@@ -20,7 +21,7 @@ describe('connectGeoSearch', () => {
 
     const widget = makeWidget();
 
-    const helper = createFakeHelper({});
+    const helper = createFakeHelper(createSearchClient());
 
     widget.init({
       helper,
@@ -31,6 +32,64 @@ describe('connectGeoSearch', () => {
     const { refine } = render.mock.calls[0][0];
 
     return [widget, helper, refine];
+  };
+
+  const getRenderedWidget = () => {
+    const hits = [
+      {
+        objectID: 123,
+        _geoloc: { lat: 10, lng: 12 },
+        __position: 0,
+        __queryID: 'test-query-id',
+      },
+      {
+        objectID: 456,
+        _geoloc: { lat: 12, lng: 14 },
+        __position: 1,
+        __queryID: 'test-query-id',
+      },
+      {
+        objectID: 789,
+        _geoloc: { lat: 14, lng: 16 },
+        __position: 2,
+        __queryID: 'test-query-id',
+      },
+    ];
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch(render, unmount);
+    const widget = customGeoSearch();
+
+    const instantSearchInstance = createInstantSearch();
+    const { mainHelper: helper } = instantSearchInstance;
+
+    widget.init({
+      state: helper.state,
+      instantSearchInstance,
+      helper,
+    });
+
+    const results = new SearchResults(helper.state, [
+      {
+        hits,
+      },
+    ]);
+
+    widget.render({
+      results,
+      helper,
+      instantSearchInstance,
+    });
+
+    return {
+      widget,
+      helper,
+      results,
+      hits,
+      render,
+      instantSearchInstance,
+    };
   };
 
   const firstRenderArgs = fn => fn.mock.calls[0][0];
@@ -62,6 +121,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       dispose: expect.any(Function),
       getWidgetUiState: expect.any(Function),
       getWidgetSearchParameters: expect.any(Function),
+      getWidgetRenderState: expect.any(Function),
+      getRenderState: expect.any(Function),
     });
   });
 
@@ -1348,62 +1409,137 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
   });
 
-  describe('insights', () => {
-    const createRenderedWidget = () => {
-      const hits = [
-        {
-          objectID: 123,
-          _geoloc: { lat: 10, lng: 12 },
-          __position: 0,
-          __queryID: 'test-query-id',
-        },
-        {
-          objectID: 456,
-          _geoloc: { lat: 12, lng: 14 },
-          __position: 1,
-          __queryID: 'test-query-id',
-        },
-        {
-          objectID: 789,
-          _geoloc: { lat: 14, lng: 16 },
-          __position: 2,
-          __queryID: 'test-query-id',
-        },
-      ];
-      const render = jest.fn();
-      const unmount = jest.fn();
+  describe('getWidgetRenderState', () => {
+    it('gives empty items without results', () => {
+      const [widget, helper] = getInitializedWidget();
 
-      const customGeoSearch = connectGeoSearch(render, unmount);
-      const widget = customGeoSearch();
+      expect(
+        widget.getWidgetRenderState({ helper, results: undefined }).items
+      ).toEqual([]);
+    });
 
-      const instantSearchInstance = createInstantSearch();
-      const { mainHelper: helper } = instantSearchInstance;
+    it('gives items from results', () => {
+      const { widget, helper, results } = getRenderedWidget();
 
-      widget.init({
-        state: helper.state,
-        instantSearchInstance,
-        helper,
-      });
-
-      widget.render({
-        results: new SearchResults(helper.state, [
-          {
-            hits,
+      expect(widget.getWidgetRenderState({ helper, results }).items)
+        .toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "__position": 0,
+            "__queryID": "test-query-id",
+            "_geoloc": Object {
+              "lat": 10,
+              "lng": 12,
+            },
+            "objectID": 123,
           },
-        ]),
-        helper,
-        instantSearchInstance,
+          Object {
+            "__position": 1,
+            "__queryID": "test-query-id",
+            "_geoloc": Object {
+              "lat": 12,
+              "lng": 14,
+            },
+            "objectID": 456,
+          },
+          Object {
+            "__position": 2,
+            "__queryID": "test-query-id",
+            "_geoloc": Object {
+              "lat": 14,
+              "lng": 16,
+            },
+            "objectID": 789,
+          },
+        ]
+      `);
+    });
+
+    it('gives all render functions without refinement', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      expect(widget.getWidgetRenderState({ helper })).toEqual({
+        position: undefined,
+        currentRefinement: undefined,
+        items: [],
+        clearMapRefinement: expect.any(Function),
+        hasMapMoveSinceLastRefine: expect.any(Function),
+        isRefineOnMapMove: expect.any(Function),
+        isRefinedWithMap: expect.any(Function),
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        setMapMoveSinceLastRefine: expect.any(Function),
+        toggleRefineOnMapMove: expect.any(Function),
+        widgetParams: {},
       });
+    });
 
-      return {
-        render,
-        instantSearchInstance,
-        hits,
+    it('gives all render functions with refinement', () => {
+      const [widget, helper] = getInitializedWidget();
+      helper.setQueryParameter('aroundLatLng', '10, 12');
+      helper.setQueryParameter('insideBoundingBox', '10,12,11,2');
+
+      expect(widget.getWidgetRenderState({ helper })).toEqual({
+        currentRefinement: {
+          northEast: {
+            lat: 10,
+            lng: 12,
+          },
+          southWest: {
+            lat: 11,
+            lng: 2,
+          },
+        },
+        position: {
+          lat: 10,
+          lng: 12,
+        },
+        items: [],
+        refine: expect.any(Function),
+        clearMapRefinement: expect.any(Function),
+        hasMapMoveSinceLastRefine: expect.any(Function),
+        isRefineOnMapMove: expect.any(Function),
+        isRefinedWithMap: expect.any(Function),
+        setMapMoveSinceLastRefine: expect.any(Function),
+        toggleRefineOnMapMove: expect.any(Function),
+        sendEvent: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getRenderState', () => {
+    it('merges with existing renderState', () => {
+      const renderState = {
+        something: {},
+        geoSearch: false,
       };
-    };
 
+      const [widget, helper] = getInitializedWidget();
+
+      expect(widget.getRenderState(renderState, { helper })).toEqual({
+        something: {},
+        geoSearch: {
+          position: undefined,
+          currentRefinement: undefined,
+          items: [],
+          clearMapRefinement: expect.any(Function),
+          hasMapMoveSinceLastRefine: expect.any(Function),
+          isRefineOnMapMove: expect.any(Function),
+          isRefinedWithMap: expect.any(Function),
+          refine: expect.any(Function),
+          sendEvent: expect.any(Function),
+          setMapMoveSinceLastRefine: expect.any(Function),
+          toggleRefineOnMapMove: expect.any(Function),
+          widgetParams: {},
+        },
+      });
+    });
+  });
+
+  describe('insights', () => {
     it('sends view event when hits are rendered', () => {
-      const { instantSearchInstance } = createRenderedWidget();
+      const { instantSearchInstance } = getRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
       );
@@ -1420,7 +1556,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('sends click event', () => {
-      const { instantSearchInstance, render, hits } = createRenderedWidget();
+      const { instantSearchInstance, render, hits } = getRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
       ); // view event by render
@@ -1445,7 +1581,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('sends conversion event', () => {
-      const { instantSearchInstance, render, hits } = createRenderedWidget();
+      const { instantSearchInstance, render, hits } = getRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
       ); // view event by render
