@@ -4,6 +4,7 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectNumericMenu, {
+  NumericMenuRendererOptions,
   NumericMenuConnectorParams,
 } from '../../connectors/numeric-menu/connectNumericMenu';
 import defaultTemplates from './defaultTemplates';
@@ -155,6 +156,7 @@ export type NumericMenuWidgetOptions = {
 };
 
 export type NumericMenuWidget = WidgetFactory<
+  NumericMenuRendererOptions,
   NumericMenuConnectorParams,
   NumericMenuWidgetOptions
 >;
