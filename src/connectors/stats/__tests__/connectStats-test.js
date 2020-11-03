@@ -120,6 +120,55 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       stats.init(createInitOptions({ helper, state: helper.state }));
 
       const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      const renderState2 = stats.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2).toEqual({
+        hitsPerPage: results.hitsPerPage,
+        nbHits: results.nbHits,
+        nbPages: results.nbPages,
+        page: results.page,
+        processingTimeMS: results.processingTimeMS,
+        query: results.query,
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createStats = connectStats(renderFn, unmountFn);
+      const stats = createStats();
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+      helper.search = jest.fn();
+
+      const renderState1 = stats.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        hitsPerPage: undefined,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: -1,
+        query: '',
+        widgetParams: {},
+      });
+
+      stats.init(createInitOptions({ helper, state: helper.state }));
+
+      const results = new SearchResults(helper.state, [
         createSingleSearchResponse({
           hits: [
             { brand: 'samsung', objectID: '1' },
