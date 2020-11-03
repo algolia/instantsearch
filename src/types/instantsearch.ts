@@ -36,6 +36,11 @@ export type HitSnippetResult = {
     | HitSnippetResult;
 };
 
+export type GeoLoc = {
+  lat: number;
+  lng: number;
+};
+
 export type AlgoliaHit = {
   [attribute: string]: any;
   objectID: string;
@@ -59,6 +64,7 @@ export type AlgoliaHit = {
     };
   };
   _distinctSeqID?: number;
+  _geoLoc?: GeoLoc;
 };
 
 export type Hit = {
