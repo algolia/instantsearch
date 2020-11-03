@@ -123,7 +123,11 @@ export type HitsWidgetOptions = {
   cssClasses?: HitsCSSClasses;
 };
 
-export type HitsWidget = WidgetFactory<HitsConnectorParams, HitsWidgetOptions>;
+export type HitsWidget = WidgetFactory<
+  HitsRendererOptions,
+  HitsConnectorParams,
+  HitsWidgetOptions
+>;
 
 const hits: HitsWidget = function hits(widgetOptions) {
   const {

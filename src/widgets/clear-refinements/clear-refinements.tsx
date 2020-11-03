@@ -5,6 +5,7 @@ import ClearRefinements from '../../components/ClearRefinements/ClearRefinements
 import cx from 'classnames';
 import connectClearRefinements, {
   ClearRefinementsConnectorParams,
+  ClearRefinementsRendererOptions,
 } from '../../connectors/clear-refinements/connectClearRefinements';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -86,6 +87,7 @@ export type ClearRefinementsWidgetOptions = {
 };
 
 export type ClearRefinementsWidget = WidgetFactory<
+  ClearRefinementsRendererOptions,
   ClearRefinementsConnectorParams,
   ClearRefinementsWidgetOptions
 >;
