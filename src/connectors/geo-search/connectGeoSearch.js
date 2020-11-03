@@ -176,14 +176,8 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
       $$type,
 
       init(initArgs) {
-        const { helper, instantSearchInstance } = initArgs;
+        const { instantSearchInstance } = initArgs;
         const isFirstRendering = true;
-
-        sendEvent = createSendEventForHits({
-          instantSearchInstance,
-          index: helper.getIndex(),
-          widgetType: $$type,
-        });
 
         widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
           noop,
@@ -255,12 +249,20 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
       },
 
       getWidgetRenderState(renderOptions) {
-        const { helper, results } = renderOptions;
+        const { helper, results, instantSearchInstance } = renderOptions;
         const state = helper.state;
 
         const items = results
           ? transformItems(results.hits.filter(hit => hit._geoloc))
           : [];
+
+        if (!sendEvent) {
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            index: helper.getIndex(),
+            widgetType: $$type,
+          });
+        }
 
         return {
           items,
