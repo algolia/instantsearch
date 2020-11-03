@@ -553,6 +553,112 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
   });
 
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHierarchicalMenu = connectHierarchicalMenu(
+        renderFn,
+        unmountFn
+      );
+      const hierarchicalMenu = createHierarchicalMenu({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      expect(
+        hierarchicalMenu.getWidgetRenderState(
+          { hierarchicalMenu: { anotherCategory: {} } },
+          createInitOptions({ helper })
+        )
+      ).toEqual({
+        items: [],
+        refine: undefined,
+        sendEvent: expect.any(Function),
+        createURL: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+      });
+    });
+
+    test('returns the widget render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHierarchicalMenu = connectHierarchicalMenu(
+        renderFn,
+        unmountFn
+      );
+      const hierarchicalMenu = createHierarchicalMenu({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      hierarchicalMenu.init(createInitOptions({ helper }));
+
+      expect(
+        hierarchicalMenu.getWidgetRenderState(
+          createRenderOptions({
+            helper,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                hits: [],
+                facets: {
+                  category: {
+                    Decoration: 880,
+                  },
+                  subCategory: {
+                    'Decoration > Candle holders & candles': 193,
+                    'Decoration > Frames & pictures': 173,
+                  },
+                },
+              }),
+              createSingleSearchResponse({
+                facets: {
+                  category: {
+                    Decoration: 880,
+                    Outdoor: 47,
+                  },
+                },
+              }),
+            ]),
+          })
+        )
+      ).toEqual({
+        items: [
+          {
+            count: 880,
+            data: null,
+            exhaustive: true,
+            isRefined: false,
+            label: 'Decoration',
+            value: 'Decoration',
+          },
+        ],
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        createURL: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+      });
+    });
+  });
+
   describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
       const render = () => {};
