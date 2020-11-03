@@ -5,7 +5,7 @@ import {
   SearchResults,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { InstantSearch } from './instantsearch';
+import { InstantSearch, Hit, GeoLoc } from './instantsearch';
 import { BindEventForHits } from '../lib/utils';
 import {
   AutocompleteRendererOptions,
@@ -249,6 +249,23 @@ export type IndexRenderState = Partial<{
       NumericMenuRendererOptions,
       NumericMenuConnectorParams
     >;
+  };
+  geoSearch: {
+    currentRefinement?: {
+      northEast: GeoLoc;
+      southWest: GeoLoc;
+    };
+    position?: GeoLoc;
+    items: Array<Hit & Required<Pick<Hit, '_geoLoc'>>>;
+    refine(position: { northEast: GeoLoc; southWest: GeoLoc }): void;
+    clearMapRefinement(): void;
+    hasMapMoveSinceLastRefine(): boolean;
+    isRefineOnMapMove(): boolean;
+    isRefinedWithMap(): boolean;
+    setMapMoveSinceLastRefine(): void;
+    toggleRefineOnMapMove(): void;
+    sendEvent: Function;
+    widgetParams: any;
   };
 }>;
 

@@ -172,86 +172,97 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
 
     let sendEvent;
 
-    const init = initArgs => {
-      const { state, helper, instantSearchInstance } = initArgs;
-      const isFirstRendering = true;
+    return {
+      $$type,
 
-      sendEvent = createSendEventForHits({
-        instantSearchInstance,
-        index: helper.getIndex(),
-        widgetType: $$type,
-      });
+      init(initArgs) {
+        const { helper, instantSearchInstance } = initArgs;
+        const isFirstRendering = true;
 
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
-        noop,
-        initArgs
-      );
-
-      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
-        noop,
-        initArgs
-      );
-
-      renderFn(
-        {
-          items: [],
-          position: getPositionFromState(state),
-          currentRefinement: getCurrentRefinementFromState(state),
-          refine: refine(helper),
-          sendEvent,
-          clearMapRefinement: clearMapRefinement(helper),
-          isRefinedWithMap: isRefinedWithMap(state),
-          toggleRefineOnMapMove,
-          isRefineOnMapMove,
-          setMapMoveSinceLastRefine,
-          hasMapMoveSinceLastRefine,
-          widgetParams,
+        sendEvent = createSendEventForHits({
           instantSearchInstance,
-        },
-        isFirstRendering
-      );
-    };
+          index: helper.getIndex(),
+          widgetType: $$type,
+        });
 
-    const render = renderArgs => {
-      const { results, helper, instantSearchInstance } = renderArgs;
-      const isFirstRendering = false;
-      // We don't use the state provided by the render function because we need
-      // to be sure that the state is the latest one for the following condition
-      const state = helper.state;
+        widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
+          noop,
+          initArgs
+        );
 
-      const positionChangedSinceLastRefine =
-        Boolean(state.aroundLatLng) &&
-        Boolean(widgetState.lastRefinePosition) &&
-        state.aroundLatLng !== widgetState.lastRefinePosition;
+        widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
+          noop,
+          initArgs
+        );
 
-      const boundingBoxChangedSinceLastRefine =
-        !state.insideBoundingBox &&
-        Boolean(widgetState.lastRefineBoundingBox) &&
-        state.insideBoundingBox !== widgetState.lastRefineBoundingBox;
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initArgs),
+            instantSearchInstance,
+          },
+          isFirstRendering
+        );
+      },
 
-      if (positionChangedSinceLastRefine || boundingBoxChangedSinceLastRefine) {
-        widgetState.hasMapMoveSinceLastRefine = false;
-      }
+      render(renderArgs) {
+        const { helper, instantSearchInstance } = renderArgs;
+        const isFirstRendering = false;
+        // We don't use the state provided by the render function because we need
+        // to be sure that the state is the latest one for the following condition
+        const state = helper.state;
 
-      widgetState.lastRefinePosition = state.aroundLatLng || '';
-      widgetState.lastRefineBoundingBox = state.insideBoundingBox || '';
+        const positionChangedSinceLastRefine =
+          Boolean(state.aroundLatLng) &&
+          Boolean(widgetState.lastRefinePosition) &&
+          state.aroundLatLng !== widgetState.lastRefinePosition;
 
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
-        render,
-        renderArgs
-      );
+        const boundingBoxChangedSinceLastRefine =
+          !state.insideBoundingBox &&
+          Boolean(widgetState.lastRefineBoundingBox) &&
+          state.insideBoundingBox !== widgetState.lastRefineBoundingBox;
 
-      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
-        render,
-        renderArgs
-      );
+        if (
+          positionChangedSinceLastRefine ||
+          boundingBoxChangedSinceLastRefine
+        ) {
+          widgetState.hasMapMoveSinceLastRefine = false;
+        }
 
-      const items = transformItems(results.hits.filter(hit => hit._geoloc));
+        widgetState.lastRefinePosition = state.aroundLatLng || '';
+        widgetState.lastRefineBoundingBox = state.insideBoundingBox || '';
 
-      sendEvent('view', items);
+        widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
+          this.render.bind(this),
+          renderArgs
+        );
 
-      renderFn(
-        {
+        widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
+          this.render.bind(this),
+          renderArgs
+        );
+
+        const widgetRenderState = this.getWidgetRenderState(renderArgs);
+
+        sendEvent('view', widgetRenderState.items);
+
+        renderFn(
+          {
+            ...widgetRenderState,
+            instantSearchInstance,
+          },
+          isFirstRendering
+        );
+      },
+
+      getWidgetRenderState(renderOptions) {
+        const { helper, results } = renderOptions;
+        const state = helper.state;
+
+        const items = results
+          ? transformItems(results.hits.filter(hit => hit._geoloc))
+          : [];
+
+        return {
           items,
           position: getPositionFromState(state),
           currentRefinement: getCurrentRefinementFromState(state),
@@ -264,18 +275,15 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
           setMapMoveSinceLastRefine,
           hasMapMoveSinceLastRefine,
           widgetParams,
-          instantSearchInstance,
-        },
-        isFirstRendering
-      );
-    };
+        };
+      },
 
-    return {
-      $$type,
-
-      init,
-
-      render,
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          geoSearch: this.getWidgetRenderState(renderOptions),
+        };
+      },
 
       dispose({ state }) {
         unmountFn();
