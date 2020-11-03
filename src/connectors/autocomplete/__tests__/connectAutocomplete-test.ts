@@ -532,9 +532,20 @@ search.addWidgets([
         createRenderOptions({ helper })
       );
 
+      const hits = [];
+      // @ts-ignore-next-line
+      hits.__escaped = true;
+
       expect(renderState).toEqual({
         currentRefinement: 'query',
-        indices: expect.any(Array),
+        indices: [
+          expect.objectContaining({
+            results: expect.objectContaining({
+              hits,
+            }),
+            sendEvent: expect.any(Function),
+          }),
+        ],
         refine: expect.any(Function),
         widgetParams: {},
       });
