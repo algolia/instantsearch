@@ -203,6 +203,84 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         });
       });
     });
+
+    describe('getWidgetRenderState', () => {
+      test('returns the widget render state', () => {
+        const renderFn = jest.fn();
+        const unmountFn = jest.fn();
+        const createClearRefinements = connectClearRefinements(
+          renderFn,
+          unmountFn
+        );
+        const clearRefinements = createClearRefinements({});
+        const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+          index: 'indexName',
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'subCategory'],
+              separator: ' > ',
+            },
+          ],
+        });
+
+        const renderState1 = clearRefinements.getWidgetRenderState(
+          createInitOptions()
+        );
+
+        expect(renderState1).toEqual({
+          hasRefinements: false,
+          createURL: expect.any(Function),
+          refine: expect.any(Function),
+          widgetParams: {},
+        });
+
+        clearRefinements.init!(createInitOptions());
+
+        helper.toggleRefinement('category', 'Decoration');
+
+        const renderState2 = clearRefinements.getWidgetRenderState(
+          createRenderOptions({
+            helper,
+            scopedResults: [
+              {
+                indexId: 'indexName',
+                helper,
+                results: new SearchResults(helper.state, [
+                  createSingleSearchResponse({
+                    hits: [],
+                    facets: {
+                      category: {
+                        Decoration: 880,
+                      },
+                      subCategory: {
+                        'Decoration > Candle holders & candles': 193,
+                        'Decoration > Frames & pictures': 173,
+                      },
+                    },
+                  }),
+                  createSingleSearchResponse({
+                    facets: {
+                      category: {
+                        Decoration: 880,
+                        Outdoor: 47,
+                      },
+                    },
+                  }),
+                ]),
+              },
+            ],
+          })
+        );
+
+        expect(renderState2).toEqual({
+          hasRefinements: true,
+          createURL: expect.any(Function),
+          refine: expect.any(Function),
+          widgetParams: {},
+        });
+      });
+    });
   });
 
   describe('Instance options', () => {
