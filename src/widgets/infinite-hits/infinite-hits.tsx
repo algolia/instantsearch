@@ -122,6 +122,7 @@ export type InfiniteHitsWidgetParams = {
 };
 
 export type InfiniteHitsWidget = WidgetFactory<
+  InfiniteHitsRendererOptions,
   InfiniteHitsConnectorParams,
   InfiniteHitsWidgetParams
 >;
