@@ -235,10 +235,9 @@ export type IndexRenderState = Partial<{
 
 export type WidgetRenderState<
   TWidgetRenderState,
-  // @ts-ignore
   TWidgetParams
 > = TWidgetRenderState & {
-  widgetParams: any; // @TODO type as TWidgetParams
+  widgetParams: TWidgetParams;
 };
 
 /**

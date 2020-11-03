@@ -59,7 +59,7 @@ export type PanelCSSClasses = {
   footer?: string | string[];
 };
 
-type UnknownWidgetFactory = WidgetFactory<unknown, unknown, unknown>;
+export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
 
 export type PanelTemplates<TWidget extends UnknownWidgetFactory> = {
   /**
@@ -80,11 +80,12 @@ export type PanelTemplates<TWidget extends UnknownWidgetFactory> = {
 
 export type PanelRenderOptions<
   TWidget extends UnknownWidgetFactory
-> = RenderOptions & ReturnType<TWidget>['getWidgetRenderState'] extends (
-  renderOptions: any
-) => infer TRenderState
-  ? TRenderState
-  : Record<string, any>;
+> = RenderOptions &
+  (ReturnType<TWidget>['getWidgetRenderState'] extends (
+    renderOptions: any
+  ) => infer TRenderState
+    ? TRenderState
+    : Record<string, any>);
 
 export type PanelWidgetOptions<TWidget extends UnknownWidgetFactory> = {
   /**
