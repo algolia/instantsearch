@@ -3,6 +3,7 @@ import {
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
   createDocumentationMessageGenerator,
+  createSendEventForHits,
   noop,
 } from '../../lib/utils';
 
@@ -10,6 +11,8 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'geo-search',
   connector: true,
 });
+
+const $$type = 'ais.geoSearch';
 
 /**
  * @typedef {Object} LatLng
@@ -167,9 +170,17 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
     const hasMapMoveSinceLastRefine = () =>
       widgetState.hasMapMoveSinceLastRefine;
 
+    let sendEvent;
+
     const init = initArgs => {
       const { state, helper, instantSearchInstance } = initArgs;
       const isFirstRendering = true;
+
+      sendEvent = createSendEventForHits({
+        instantSearchInstance,
+        index: helper.getIndex(),
+        widgetType: $$type,
+      });
 
       widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
         noop,
@@ -187,6 +198,7 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
           position: getPositionFromState(state),
           currentRefinement: getCurrentRefinementFromState(state),
           refine: refine(helper),
+          sendEvent,
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
           toggleRefineOnMapMove,
@@ -236,12 +248,15 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
 
       const items = transformItems(results.hits.filter(hit => hit._geoloc));
 
+      sendEvent('view', items);
+
       renderFn(
         {
           items,
           position: getPositionFromState(state),
           currentRefinement: getCurrentRefinementFromState(state),
           refine: refine(helper),
+          sendEvent,
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
           toggleRefineOnMapMove,
@@ -256,7 +271,7 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
     };
 
     return {
-      $$type: 'ais.geoSearch',
+      $$type,
 
       init,
 

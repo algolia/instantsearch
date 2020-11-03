@@ -6,6 +6,7 @@ import {
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
+import { BindEventForHits } from '../lib/utils';
 import {
   AutocompleteRendererOptions,
   AutocompleteConnectorParams,
@@ -26,6 +27,20 @@ import {
   CurrentRefinementsRendererOptions,
   CurrentRefinementsConnectorParams,
 } from '../connectors/current-refinements/connectCurrentRefinements';
+import {
+  HitsRendererOptions,
+  HitsConnectorParams,
+} from '../connectors/hits/connectHits';
+import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
+import { PlacesWidgetParams } from '../widgets/places/places';
+import {
+  NumericMenuConnectorParams,
+  NumericMenuRendererOptions,
+} from '../connectors/numeric-menu/connectNumericMenu';
+import {
+  PoweredByConnectorParams,
+  PoweredByRendererOptions,
+} from '../connectors/powered-by/connectPoweredBy';
 
 export type ScopedResult = {
   indexId: string;
@@ -200,9 +215,44 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
+  analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
+  places: WidgetRenderState<{}, PlacesWidgetParams>;
+  poweredBy: WidgetRenderState<
+    PoweredByRendererOptions,
+    PoweredByConnectorParams
+  >;
+  range: {
+    [attribute: string]: WidgetRenderState<
+      {
+        refine(rangeValue: Array<number | undefined>): void;
+        range: {
+          min: number | undefined;
+          max: number | undefined;
+        };
+        start: number[];
+        format: {
+          from(fromValue: number): string;
+          to(toValue: number): string;
+        };
+      },
+      {
+        attribute: string;
+        min?: number;
+        max?: number;
+        precision?: number;
+      }
+    >;
+  };
+  numericMenu: {
+    [attribute: string]: WidgetRenderState<
+      NumericMenuRendererOptions,
+      NumericMenuConnectorParams
+    >;
+  };
 }>;
 
-type WidgetRenderState<
+export type WidgetRenderState<
   TWidgetRenderState,
   // @ts-ignore
   TWidgetParams
@@ -344,3 +394,7 @@ export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
 export type Template<TTemplateData = void> =
   | string
   | ((data: TTemplateData) => string);
+
+export type TemplateWithBindEvent<TTemplateData = void> =
+  | string
+  | ((data: TTemplateData, bindEvent: BindEventForHits) => string);

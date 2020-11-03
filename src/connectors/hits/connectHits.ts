@@ -4,6 +4,10 @@ import {
   createDocumentationMessageGenerator,
   addAbsolutePosition,
   addQueryID,
+  createSendEventForHits,
+  SendEventForHits,
+  createBindEventForHits,
+  BindEventForHits,
   noop,
 } from '../../lib/utils';
 import { TransformItems, Connector, Hits, Hit, AlgoliaHit } from '../../types';
@@ -24,6 +28,16 @@ export type HitsRendererOptions = {
    * The response from the Algolia API.
    */
   results?: SearchResults<AlgoliaHit>;
+
+  /**
+   * Sends an event to the Insights middleware.
+   */
+  sendEvent: SendEventForHits;
+
+  /**
+   * Returns a string for the `data-insights-event` attribute for the Insights middleware
+   */
+  bindEvent: BindEventForHits;
 };
 
 export type HitsConnectorParams = {
@@ -51,23 +65,61 @@ const connectHits: HitsConnector = function connectHits(
   return widgetParams => {
     const { escapeHTML = true, transformItems = items => items } =
       widgetParams || ({} as typeof widgetParams);
+    let sendEvent: SendEventForHits;
+    let bindEvent: BindEventForHits;
 
     return {
       $$type: 'ais.hits',
 
-      init({ instantSearchInstance }) {
+      init(initOptions) {
         renderFn(
           {
-            hits: [],
-            results: undefined,
-            instantSearchInstance,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render({ results, instantSearchInstance }) {
+      render(renderOptions) {
+        sendEvent('view', renderOptions.results.hits);
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          hits: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, instantSearchInstance, helper }) {
+        if (!sendEvent || !bindEvent) {
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+          bindEvent = createBindEventForHits({
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+        }
+
+        if (!results) {
+          return {
+            hits: [],
+            results: undefined,
+            widgetParams,
+          };
+        }
+
         if (escapeHTML && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
@@ -92,15 +144,13 @@ const connectHits: HitsConnector = function connectHits(
           typeof escapeHits
         >).__escaped = initialEscaped;
 
-        renderFn(
-          {
-            hits: results.hits,
-            results,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        return {
+          hits: results.hits,
+          sendEvent,
+          bindEvent,
+          results,
+          widgetParams,
+        };
       },
 
       dispose({ state }) {

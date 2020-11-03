@@ -1,6 +1,7 @@
 import { render } from 'preact';
 import AlgoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import rangeSlider from '../range-slider';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -9,8 +10,6 @@ jest.mock('preact', () => {
 
   return module;
 });
-
-const instantSearchInstance = { templatesConfig: undefined };
 
 describe('rangeSlider', () => {
   describe('Usage', () => {
@@ -41,6 +40,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
     let container;
     let helper;
     let widget;
+    let instantSearchInstance;
 
     beforeEach(() => {
       render.mockClear();
@@ -55,6 +55,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         'indexName',
         { disjunctiveFacets: ['aNumAttr'] }
       );
+      instantSearchInstance = createInstantSearch({
+        templatesConfig: undefined,
+      });
     });
 
     it('should render without results', () => {
@@ -309,7 +312,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         const targetValue = stats.min + 1;
 
         const state0 = helper.state;
-        widget._refine(helper, stats)([targetValue, stats.max]);
+        widget._refine(
+          instantSearchInstance,
+          helper,
+          stats
+        )([targetValue, stats.max]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -321,7 +328,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         const targetValue = stats.max - 1;
 
         const state0 = helper.state;
-        widget._refine(helper, stats)([stats.min, targetValue]);
+        widget._refine(
+          instantSearchInstance,
+          helper,
+          stats
+        )([stats.min, targetValue]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -335,7 +346,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         const targetValue = [stats.min + 1, stats.max - 1];
 
         const state0 = helper.state;
-        widget._refine(helper, stats)(targetValue);
+        widget._refine(instantSearchInstance, helper, stats)(targetValue);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);

@@ -1,10 +1,11 @@
 import { render } from 'preact';
-import { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import hierarchicalMenu from '../hierarchical-menu';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -49,10 +50,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     beforeEach(() => {
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
       results = { getFacetValues: jest.fn(() => data) };
-      helper = {
-        toggleRefinement: jest.fn().mockReturnThis(),
-        search: jest.fn(),
-      };
+      helper = algoliasearchHelper({}, '');
+      helper.toggleRefinement = jest.fn().mockReturnThis();
+      helper.search = jest.fn();
       state = new SearchParameters();
       state.toggleRefinement = jest.fn();
       options = { container, attributes };
@@ -167,7 +167,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     it('has a toggleRefinement method', () => {
       widget = hierarchicalMenu(options);
 
-      widget.init(createInitOptions({ helper }));
+      widget.init(
+        createInitOptions({
+          helper,
+          instantSearchInstance: createInstantSearch(),
+        })
+      );
       widget.render(createRenderOptions({ results, state }));
 
       const [firstRender] = render.mock.calls;

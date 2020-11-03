@@ -2,7 +2,13 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import connectMenu from '../connectMenu';
 
 describe('connectMenu', () => {
@@ -220,6 +226,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -433,6 +440,119 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+      });
+      const helper = jsHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      );
+
+      const renderState1 = menu.getRenderState(
+        { menu: {} },
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1.menu).toEqual({
+        items: [],
+        createURL: undefined,
+        refine: undefined,
+        sendEvent: expect.any(Function),
+        canRefine: false,
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+        widgetParams: { attribute: 'brand' },
+      });
+    });
+
+    test('returns the render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+      });
+      const helper = jsHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      menu.init(createInitOptions({ helper }));
+
+      expect(
+        menu.getRenderState(
+          {},
+          createRenderOptions({
+            helper,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                hits: [],
+                facets: {
+                  brand: 300,
+                },
+              }),
+            ]),
+          })
+        )
+      ).toEqual({
+        menu: {
+          items: [],
+          canRefine: false,
+          refine: expect.any(Function),
+          sendEvent: expect.any(Function),
+          createURL: expect.any(Function),
+          widgetParams: { attribute: 'brand' },
+          isShowingMore: false,
+          toggleShowMore: expect.any(Function),
+          canToggleShowMore: false,
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+      });
+      const helper = jsHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      );
+
+      const renderState1 = menu.getWidgetRenderState(
+        {},
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        items: [],
+        createURL: undefined,
+        refine: undefined,
+        sendEvent: expect.any(Function),
+        canRefine: false,
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+        widgetParams: { attribute: 'brand' },
+      });
+    });
   });
 
   describe('showMore', () => {
@@ -975,6 +1095,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         helper,
         state: helper.state,
         createURL: () => '#',
+        instantSearchInstance: createInstantSearch(),
       });
 
       widget.render({
@@ -1082,6 +1203,68 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const newState = widget.dispose({ state });
 
       expect(newState).toEqual(new SearchParameters());
+    });
+  });
+
+  describe('insights', () => {
+    const createInitializedWidget = () => {
+      const widget = makeWidget({
+        attribute: 'category',
+      });
+      const instantSearchInstance = createInstantSearch();
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      return { instantSearchInstance, helper };
+    };
+
+    it('sends event when a facet is refined', () => {
+      const { instantSearchInstance } = createInitializedWidget();
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine } = firstRenderingOptions;
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['category:"value"'],
+          index: '',
+        },
+        widgetType: 'ais.menu',
+      });
+    });
+
+    it('does not send event when a facet is removed', () => {
+      const { instantSearchInstance, helper } = createInitializedWidget();
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine } = firstRenderingOptions;
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(helper.hasRefinements('category')).toBe(true);
+
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // still the same
     });
   });
 });
