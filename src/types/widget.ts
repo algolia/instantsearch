@@ -271,10 +271,9 @@ export type IndexRenderState = Partial<{
 
 export type WidgetRenderState<
   TWidgetRenderState,
-  // @ts-ignore
   TWidgetParams
 > = TWidgetRenderState & {
-  widgetParams: any; // @TODO type as TWidgetParams
+  widgetParams: TWidgetParams;
 };
 
 /**
@@ -411,6 +410,8 @@ export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
 export type Template<TTemplateData = void> =
   | string
   | ((data: TTemplateData) => string);
+
+export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
 
 export type TemplateWithBindEvent<TTemplateData = void> =
   | string
