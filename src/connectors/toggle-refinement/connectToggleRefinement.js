@@ -191,8 +191,8 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       getWidgetRenderState({ state, helper, results, createURL }) {
         let value;
 
+        // results are null at init
         if (results) {
-          // called at render
           const isRefined =
             on &&
             on.every(v => helper.state.isDisjunctiveFacetRefined(attribute, v));
@@ -250,7 +250,6 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             offFacetValue,
           };
         } else {
-          // called at init
           const isRefined =
             on && on.every(v => state.isDisjunctiveFacetRefined(attribute, v));
 

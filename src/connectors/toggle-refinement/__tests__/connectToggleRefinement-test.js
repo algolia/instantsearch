@@ -830,45 +830,45 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         attribute: 'free_shipping',
       });
       const helper = jsHelper({}, 'indexName', {
-        disjunctiveFacets: [],
-        disjunctiveFacetsRefinements: {},
+        disjunctiveFacets: ['free_shipping'],
+        disjunctiveFacetsRefinements: {
+          free_shipping: ['true'],
+        },
       });
 
       const renderState1 = toggleRefinement.getRenderState(
         {},
-        createInitOptions({ helper })
+        createInitOptions({ state: helper.state, helper })
       );
 
       expect(renderState1.toggleRefinement).toEqual({
-        value: {
-          name: 'free_shipping',
-          isRefined: false,
-          count: null,
-          onFacetValue: {
-            isRefined: false,
-            count: 0,
-          },
-          offFacetValue: {
-            isRefined: false,
-            count: 0,
-          },
-        },
-        state: helper.state,
         createURL: expect.any(Function),
         refine: expect.any(Function),
-        widgetParams: { attribute: 'free_shipping' },
+        state: helper.state,
+        value: {
+          count: null,
+          isRefined: true,
+          name: 'free_shipping',
+          offFacetValue: {
+            count: 0,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: 0,
+            isRefined: true,
+          },
+        },
+        widgetParams: {
+          attribute: 'free_shipping',
+        },
       });
 
       const results = new SearchResults(helper.state, [
-        {
+        createSingleSearchResponse({
           facets: {
-            free_shipping: {
-              true: 45,
-              false: 40,
-            },
+            free_shipping: true,
           },
-          nbHits: 85,
-        },
+        }),
       ]);
 
       const renderState2 = toggleRefinement.getRenderState(
@@ -881,23 +881,109 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       );
 
       expect(renderState2.toggleRefinement).toEqual({
-        value: {
-          name: 'free_shipping',
-          isRefined: false,
-          count: null,
-          onFacetValue: {
-            isRefined: false,
-            count: null,
-          },
-          offFacetValue: {
-            isRefined: false,
-            count: 0,
-          },
-        },
-        state: helper.state,
         createURL: expect.any(Function),
         refine: expect.any(Function),
-        widgetParams: { attribute: 'free_shipping' },
+        state: helper.state,
+        value: {
+          count: 0,
+          isRefined: true,
+          name: 'free_shipping',
+          offFacetValue: {
+            count: 0,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: null,
+            isRefined: false,
+          },
+        },
+        widgetParams: {
+          attribute: 'free_shipping',
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createToggleRefinement = connectToggleRefinement(
+        renderFn,
+        unmountFn
+      );
+      const toggleRefinement = createToggleRefinement({
+        attribute: 'free_shipping',
+      });
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['free_shipping'],
+        disjunctiveFacetsRefinements: {
+          free_shipping: ['false'],
+        },
+      });
+
+      const renderState1 = toggleRefinement.getWidgetRenderState(
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1).toEqual({
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        state: helper.state,
+        value: {
+          count: null,
+          isRefined: false,
+          name: 'free_shipping',
+          offFacetValue: {
+            count: 0,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: 0,
+            isRefined: false,
+          },
+        },
+        widgetParams: {
+          attribute: 'free_shipping',
+        },
+      });
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          facets: {
+            free_shipping: true,
+          },
+        }),
+      ]);
+
+      const renderState2 = toggleRefinement.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState2).toEqual({
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        state: helper.state,
+        value: {
+          count: null,
+          isRefined: false,
+          name: 'free_shipping',
+          offFacetValue: {
+            count: 0,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: null,
+            isRefined: false,
+          },
+        },
+        widgetParams: {
+          attribute: 'free_shipping',
+        },
       });
     });
   });
