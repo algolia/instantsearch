@@ -81,12 +81,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       );
 
       expect(renderState2.stats).toEqual({
-        hitsPerPage: results.hitsPerPage,
-        nbHits: results.nbHits,
-        nbPages: results.nbPages,
-        page: results.page,
-        processingTimeMS: results.processingTimeMS,
-        query: results.query,
+        hitsPerPage: 20,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: 0,
+        query: '',
         widgetParams: {},
       });
     });
@@ -132,12 +132,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       );
 
       expect(renderState2).toEqual({
-        hitsPerPage: results.hitsPerPage,
-        nbHits: results.nbHits,
-        nbPages: results.nbPages,
-        page: results.page,
-        processingTimeMS: results.processingTimeMS,
-        query: results.query,
+        hitsPerPage: 20,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: 0,
+        query: '',
         widgetParams: {},
       });
     });
@@ -177,12 +177,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       );
 
       expect(renderState).toEqual({
-        hitsPerPage: results.hitsPerPage,
-        nbHits: results.nbHits,
-        nbPages: results.nbPages,
-        page: results.page,
-        processingTimeMS: results.processingTimeMS,
-        query: results.query,
+        hitsPerPage: 3,
+        nbHits: 5,
+        nbPages: 2,
+        page: 0,
+        processingTimeMS: 0,
+        query: 'apple',
         widgetParams: {},
       });
     });
