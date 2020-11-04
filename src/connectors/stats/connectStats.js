@@ -89,17 +89,7 @@ export default function connectStats(renderFn, unmountFn = noop) {
     },
 
     getWidgetRenderState({ results, helper }) {
-      if (results) {
-        return {
-          hitsPerPage: results.hitsPerPage,
-          nbHits: results.nbHits,
-          nbPages: results.nbPages,
-          page: results.page,
-          processingTimeMS: results.processingTimeMS,
-          query: results.query,
-          widgetParams,
-        };
-      } else {
+      if (!results) {
         return {
           hitsPerPage: helper.state.hitsPerPage,
           nbHits: 0,
@@ -110,6 +100,16 @@ export default function connectStats(renderFn, unmountFn = noop) {
           widgetParams,
         };
       }
+
+      return {
+        hitsPerPage: results.hitsPerPage,
+        nbHits: results.nbHits,
+        nbPages: results.nbPages,
+        page: results.page,
+        processingTimeMS: results.processingTimeMS,
+        query: results.query,
+        widgetParams,
+      };
     },
   });
 }
