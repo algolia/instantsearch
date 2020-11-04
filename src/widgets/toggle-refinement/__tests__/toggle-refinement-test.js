@@ -308,11 +308,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     describe('refine', () => {
       let helper;
 
-      function toggleOn({ createURL, altHelper }) {
+      function toggleOn({ createURL, altHelper = helper }) {
         widget
           .getWidgetRenderState({
-            state: helper.state,
-            helper: altHelper ? altHelper : helper,
+            state: altHelper.state,
+            helper: altHelper,
             createURL,
           })
           .refine({ isRefined: false });
@@ -324,16 +324,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       }
 
       beforeEach(() => {
-        helper = {
-          state: {
-            isDisjunctiveFacetRefined: jest.fn().mockReturnValue(false),
-          },
-          removeDisjunctiveFacetRefinement: jest.fn(),
-          addDisjunctiveFacetRefinement: jest.fn(),
-          search: jest.fn(),
-          setPage: jest.fn(),
-          getIndex: jest.fn(),
-        };
+        helper = jsHelper({}, '');
+        helper.removeDisjunctiveFacetRefinement = jest.fn();
+        helper.addDisjunctiveFacetRefinement = jest.fn();
+        helper.search = jest.fn();
       });
 
       describe('default values', () => {
