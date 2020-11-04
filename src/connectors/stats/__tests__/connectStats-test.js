@@ -152,20 +152,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       });
       helper.search = jest.fn();
 
-      const renderState1 = stats.getWidgetRenderState(
-        createInitOptions({ helper })
-      );
-
-      expect(renderState1).toEqual({
-        hitsPerPage: undefined,
-        nbHits: 0,
-        nbPages: 0,
-        page: 0,
-        processingTimeMS: -1,
-        query: '',
-        widgetParams: {},
-      });
-
       stats.init(createInitOptions({ helper, state: helper.state }));
 
       const results = new SearchResults(helper.state, [
@@ -182,7 +168,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
         }),
       ]);
 
-      const renderState2 = stats.getWidgetRenderState(
+      const renderState = stats.getWidgetRenderState(
         createRenderOptions({
           helper,
           state: helper.state,
@@ -190,7 +176,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
         })
       );
 
-      expect(renderState2).toEqual({
+      expect(renderState).toEqual({
         hitsPerPage: results.hitsPerPage,
         nbHits: results.nbHits,
         nbPages: results.nbPages,
