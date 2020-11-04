@@ -461,6 +461,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(renderState1.hits).toEqual({
         hits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
         results: undefined,
         widgetParams: {},
       });
@@ -490,13 +492,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       ((expectedHits as unknown) as EscapedHits).__escaped = true;
 
-      expect(renderState2.hits).toEqual(
-        expect.objectContaining({
-          hits: expectedHits,
-          results,
-          widgetParams: {},
-        })
-      );
+      expect(renderState2.hits).toEqual({
+        hits: expectedHits,
+        sendEvent: renderState1.hits!.sendEvent,
+        bindEvent: renderState1.hits!.bindEvent,
+        results,
+        widgetParams: {},
+      });
     });
   });
 
@@ -516,6 +518,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(renderState1).toEqual({
         hits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
         results: undefined,
         widgetParams: {},
       });
@@ -544,13 +548,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       ((expectedHits as unknown) as EscapedHits).__escaped = true;
 
-      expect(renderState2).toEqual(
-        expect.objectContaining({
-          hits: expectedHits,
-          results,
-          widgetParams: {},
-        })
-      );
+      expect(renderState2).toEqual({
+        hits: expectedHits,
+        sendEvent: renderState1.sendEvent,
+        bindEvent: renderState2.bindEvent,
+        results,
+        widgetParams: {},
+      });
     });
   });
 
