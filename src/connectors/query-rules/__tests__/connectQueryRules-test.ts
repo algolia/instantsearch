@@ -10,16 +10,18 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { WidgetFactory } from '../../../types';
 import connectQueryRules, {
-  QueryRulesConnectorParams,
   QueryRulesRendererOptions,
 } from '../connectQueryRules';
 
 describe('connectQueryRules', () => {
-  let renderFn = jest.fn();
-  let unmountFn = jest.fn();
-  let makeWidget: WidgetFactory<QueryRulesConnectorParams, {}>;
+  function createWidget() {
+    const renderFn = jest.fn();
+    const unmountFn = jest.fn();
+    const makeWidget = connectQueryRules(renderFn, unmountFn);
+
+    return { makeWidget, renderFn, unmountFn };
+  }
 
   const createFakeHelper = (state = {}): Helper => {
     const client = createSearchClient();
@@ -30,12 +32,6 @@ describe('connectQueryRules', () => {
 
     return helper;
   };
-
-  beforeEach(() => {
-    renderFn = jest.fn();
-    unmountFn = jest.fn();
-    makeWidget = connectQueryRules(renderFn, unmountFn);
-  });
 
   describe('usage', () => {
     test('throws without render function', () => {
@@ -57,6 +53,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
     test('throws with a non-functon tracked filter', () => {
       expect(() => {
+        const { makeWidget } = createWidget();
         makeWidget({
           // @ts-ignore
           trackedFilters: { brand: ['Samsung'] },
@@ -89,6 +86,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
   describe('lifecycle', () => {
     test('calls the render function on init', () => {
       const helper = createFakeHelper();
+      const { makeWidget, renderFn } = createWidget();
       const widget = makeWidget({});
       const instantSearchInstance = createInstantSearch();
       const initOptions = createInitOptions({
@@ -116,6 +114,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
     test('calls the render function on render', () => {
       const helper = createFakeHelper();
+      const { makeWidget, renderFn } = createWidget();
       const widget = makeWidget({});
       const instantSearchInstance = createInstantSearch();
       const initOptions = createInitOptions({
@@ -183,6 +182,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
     test('calls the unmount function on dispose', () => {
       const helper = createFakeHelper();
+      const { makeWidget, unmountFn } = createWidget();
       const widget = makeWidget({});
 
       widget.init!(
@@ -200,10 +200,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     test('does not throw without the unmount function', () => {
       const helper = createFakeHelper();
       const rendering = () => {};
-      const createWidget = connectQueryRules<QueryRulesRendererOptions>(
+      const makeWidget = connectQueryRules<QueryRulesRendererOptions>(
         rendering
       );
-      const widget = createWidget({
+      const widget = makeWidget({
         items: [] as any[],
       });
 
@@ -220,10 +220,130 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     });
   });
 
+  describe('getWidgetRenderState', () => {
+    it('gives empty items without results', () => {
+      const { makeWidget } = createWidget();
+      const widget = makeWidget({});
+
+      expect(widget.getWidgetRenderState(createInitOptions())).toEqual({
+        items: [],
+        widgetParams: {},
+      });
+    });
+
+    it('gives empty items without userData', () => {
+      const { makeWidget } = createWidget();
+      const widget = makeWidget({});
+
+      expect(
+        widget.getWidgetRenderState(
+          createRenderOptions({
+            results: new SearchResults(new SearchParameters(), [
+              createSingleSearchResponse(),
+            ]),
+          })
+        )
+      ).toEqual({
+        items: [],
+        widgetParams: {},
+      });
+    });
+
+    it('gives items with userData', () => {
+      const { makeWidget } = createWidget();
+      const widget = makeWidget({});
+
+      expect(
+        widget.getWidgetRenderState(
+          createRenderOptions({
+            results: new SearchResults(new SearchParameters(), [
+              createSingleSearchResponse({ userData: ['dogs', 'cats'] }),
+            ]),
+          })
+        )
+      ).toEqual({
+        items: ['dogs', 'cats'],
+        widgetParams: {},
+      });
+    });
+
+    it('takes transformItems in account (empty)', () => {
+      const { makeWidget } = createWidget();
+      const transformItems = items => {
+        items.push('lions');
+        return items;
+      };
+      const widget = makeWidget({ transformItems });
+
+      expect(
+        widget.getWidgetRenderState(
+          createRenderOptions({
+            results: new SearchResults(new SearchParameters(), [
+              createSingleSearchResponse(),
+            ]),
+          })
+        )
+      ).toEqual({
+        items: ['lions'],
+        widgetParams: { transformItems },
+      });
+    });
+
+    it('takes transformItems in account', () => {
+      const { makeWidget } = createWidget();
+      const transformItems = items => {
+        items.push('lions');
+        return items;
+      };
+      const widget = makeWidget({ transformItems });
+
+      expect(
+        widget.getWidgetRenderState(
+          createRenderOptions({
+            results: new SearchResults(new SearchParameters(), [
+              createSingleSearchResponse({ userData: ['dogs', 'cats'] }),
+            ]),
+          })
+        )
+      ).toEqual({
+        items: ['dogs', 'cats', 'lions'],
+        widgetParams: { transformItems },
+      });
+    });
+  });
+
+  describe('getRenderState', () => {
+    it('passes info from getWidgetRenderState', () => {
+      const { makeWidget } = createWidget();
+      const widget = makeWidget({});
+
+      expect(
+        widget.getRenderState(
+          {
+            hierarchicalMenu: {},
+            queryRules: {
+              items: ['lions', 'eggs'],
+              widgetParams: { transformItems: () => {} },
+            },
+          },
+          createRenderOptions({
+            results: new SearchResults(new SearchParameters(), [
+              createSingleSearchResponse({ userData: ['dogs', 'cats'] }),
+            ]),
+          })
+        )
+      ).toEqual({
+        hierarchicalMenu: {},
+        queryRules: { items: ['dogs', 'cats'], widgetParams: {} },
+      });
+    });
+  });
+
   describe('options', () => {
     describe('transformItems', () => {
       test('is applied to items', () => {
         const helper = createFakeHelper();
+        const { makeWidget, renderFn } = createWidget();
         const widget = makeWidget({
           transformItems: customItems => customItems[0],
         });
@@ -271,6 +391,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
         const brandFilterSpy = jest.fn(values => values);
         const priceFilterSpy = jest.fn(values => values);
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: brandFilterSpy,
@@ -305,6 +426,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           disjunctiveFacets: ['brand'],
         });
         const brandFilterSpy = jest.fn(values => values);
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: brandFilterSpy,
@@ -332,6 +454,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
         const brandFilterSpy = jest.fn(values => values);
         const priceFilterSpy = jest.fn(values => values);
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: brandFilterSpy,
@@ -432,6 +555,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           disjunctiveFacets: ['brand'],
         });
         const brandFilterSpy = jest.fn(() => ['Samsung']);
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: brandFilterSpy,
@@ -507,6 +631,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       test('can filter tracked filters from numeric refinements', () => {
         const helper = createFakeHelper();
         const priceFilterSpy = jest.fn(() => [500]);
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             price: priceFilterSpy,
@@ -572,6 +697,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: values => values,
@@ -635,6 +761,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: values => values,
@@ -707,6 +834,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           disjunctiveFacets: ['brand'],
           ruleContexts: ['initial-rule'],
         });
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: values => values,
@@ -765,6 +893,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           },
         });
         const brandFilterSpy = jest.fn(values => values);
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: brandFilterSpy,
@@ -815,6 +944,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         const transformRuleContextsSpy = jest.fn((rules: string[]) =>
           rules.map(rule => rule.replace('ais-', 'transformed-'))
         );
+        const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
             brand: values => values,
