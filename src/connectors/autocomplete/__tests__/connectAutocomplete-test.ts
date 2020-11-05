@@ -485,6 +485,73 @@ search.addWidgets([
     });
   });
 
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
+      const autocomplete = createAutocomplete({});
+
+      const renderState1 = autocomplete.getWidgetRenderState(
+        createInitOptions()
+      );
+
+      expect(renderState1).toEqual({
+        currentRefinement: '',
+        indices: [],
+        refine: undefined,
+        widgetParams: {},
+      });
+
+      autocomplete.init!(createInitOptions());
+
+      const renderState2 = autocomplete.getWidgetRenderState(
+        createRenderOptions()
+      );
+
+      expect(renderState2).toEqual({
+        currentRefinement: '',
+        indices: expect.any(Array),
+        refine: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with a query', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
+      const autocomplete = createAutocomplete({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        query: 'query',
+      });
+
+      autocomplete.init!(createInitOptions());
+
+      const renderState = autocomplete.getWidgetRenderState(
+        createRenderOptions({ helper })
+      );
+
+      const hits = [];
+      // @ts-ignore-next-line
+      hits.__escaped = true;
+
+      expect(renderState).toEqual({
+        currentRefinement: 'query',
+        indices: [
+          expect.objectContaining({
+            results: expect.objectContaining({
+              hits,
+            }),
+            sendEvent: expect.any(Function),
+          }),
+        ],
+        refine: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+  });
+
   describe('getWidgetUiState', () => {
     test('should give back the object unmodified if the default value is selected', () => {
       const [widget, helper] = getInitializedWidget();
@@ -620,6 +687,156 @@ search.addWidgets([
           ...TAG_PLACEHOLDER,
         })
       );
+    });
+  });
+
+  describe('insights', () => {
+    const createRenderedWidget = () => {
+      const searchClient = createSearchClient();
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
+      const widget = makeWidget({ escapeHTML: false });
+
+      const helper = algoliasearchHelper(searchClient, '', {});
+      helper.search = jest.fn();
+
+      const initOptions = createInitOptions({ helper });
+      const instantSearchInstance = initOptions.instantSearchInstance;
+      widget.init!(initOptions);
+
+      const firstIndexHits = [
+        {
+          name: 'Hit 1-1',
+          objectID: '1-1',
+          __queryID: 'test-query-id',
+          __position: 0,
+        },
+      ];
+      const secondIndexHits = [
+        {
+          name: 'Hit 2-1',
+          objectID: '2-1',
+          __queryID: 'test-query-id',
+          __position: 0,
+        },
+        {
+          name: 'Hit 2-2',
+          objectID: '2-2',
+          __queryID: 'test-query-id',
+          __position: 1,
+        },
+      ];
+
+      const scopedResults = [
+        {
+          indexId: 'indexId0',
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              index: 'indexName0',
+              hits: firstIndexHits,
+            }),
+          ]),
+          helper,
+        },
+        {
+          indexId: 'indexId1',
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              index: 'indexName1',
+              hits: secondIndexHits,
+            }),
+          ]),
+          helper,
+        },
+      ];
+
+      widget.render!(
+        createRenderOptions({ instantSearchInstance, helper, scopedResults })
+      );
+
+      const sendEventToInsights = instantSearchInstance.sendEventToInsights as jest.Mock;
+
+      return {
+        instantSearchInstance,
+        sendEventToInsights,
+        render,
+        firstIndexHits,
+        secondIndexHits,
+      };
+    };
+
+    it('sends view event when hits are rendered', () => {
+      const { sendEventToInsights } = createRenderedWidget();
+      expect(sendEventToInsights).toHaveBeenCalledTimes(2);
+      expect(sendEventToInsights.mock.calls[0][0]).toEqual({
+        eventType: 'view',
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          eventName: 'Hits Viewed',
+          index: 'indexName0',
+          objectIDs: ['1-1'],
+        },
+        widgetType: 'ais.autocomplete',
+      });
+      expect(sendEventToInsights.mock.calls[1][0]).toEqual({
+        eventType: 'view',
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          eventName: 'Hits Viewed',
+          index: 'indexName1',
+          objectIDs: ['2-1', '2-2'],
+        },
+        widgetType: 'ais.autocomplete',
+      });
+    });
+
+    it('sends click event', () => {
+      const {
+        sendEventToInsights,
+        render,
+        secondIndexHits,
+      } = createRenderedWidget();
+      expect(sendEventToInsights).toHaveBeenCalledTimes(2); // two view events for each index by render
+
+      const { indices } = render.mock.calls[render.mock.calls.length - 1][0];
+      indices[1].sendEvent('click', secondIndexHits[0], 'Product Added');
+      expect(sendEventToInsights).toHaveBeenCalledTimes(3);
+      expect(sendEventToInsights.mock.calls[2][0]).toEqual({
+        eventType: 'click',
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Added',
+          index: 'indexName1',
+          objectIDs: ['2-1'],
+          positions: [0],
+          queryID: 'test-query-id',
+        },
+        widgetType: 'ais.autocomplete',
+      });
+    });
+
+    it('sends conversion event', () => {
+      const {
+        sendEventToInsights,
+        render,
+        firstIndexHits,
+      } = createRenderedWidget();
+      expect(sendEventToInsights).toHaveBeenCalledTimes(2); // two view events for each index by render
+
+      const { indices } = render.mock.calls[render.mock.calls.length - 1][0];
+      indices[0].sendEvent('conversion', firstIndexHits[0], 'Product Ordered');
+      expect(sendEventToInsights).toHaveBeenCalledTimes(3);
+      expect(sendEventToInsights.mock.calls[2][0]).toEqual({
+        eventType: 'conversion',
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Ordered',
+          index: 'indexName0',
+          objectIDs: ['1-1'],
+          queryID: 'test-query-id',
+        },
+        widgetType: 'ais.autocomplete',
+      });
     });
   });
 });

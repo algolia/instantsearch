@@ -4,6 +4,10 @@ import {
   createDocumentationMessageGenerator,
   addAbsolutePosition,
   addQueryID,
+  createSendEventForHits,
+  SendEventForHits,
+  createBindEventForHits,
+  BindEventForHits,
   noop,
 } from '../../lib/utils';
 import { TransformItems, Connector, Hits, Hit, AlgoliaHit } from '../../types';
@@ -24,6 +28,16 @@ export type HitsRendererOptions = {
    * The response from the Algolia API.
    */
   results?: SearchResults<AlgoliaHit>;
+
+  /**
+   * Sends an event to the Insights middleware.
+   */
+  sendEvent: SendEventForHits;
+
+  /**
+   * Returns a string for the `data-insights-event` attribute for the Insights middleware
+   */
+  bindEvent: BindEventForHits;
 };
 
 export type HitsConnectorParams = {
@@ -51,6 +65,8 @@ const connectHits: HitsConnector = function connectHits(
   return widgetParams => {
     const { escapeHTML = true, transformItems = items => items } =
       widgetParams || ({} as typeof widgetParams);
+    let sendEvent: SendEventForHits;
+    let bindEvent: BindEventForHits;
 
     return {
       $$type: 'ais.hits',
@@ -66,6 +82,7 @@ const connectHits: HitsConnector = function connectHits(
       },
 
       render(renderOptions) {
+        sendEvent('view', renderOptions.results.hits);
         renderFn(
           {
             ...this.getWidgetRenderState(renderOptions),
@@ -82,10 +99,24 @@ const connectHits: HitsConnector = function connectHits(
         };
       },
 
-      getWidgetRenderState({ results }) {
+      getWidgetRenderState({ results, instantSearchInstance, helper }) {
+        if (!sendEvent || !bindEvent) {
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+          bindEvent = createBindEventForHits({
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+        }
+
         if (!results) {
           return {
             hits: [],
+            sendEvent,
+            bindEvent,
             results: undefined,
             widgetParams,
           };
@@ -117,6 +148,8 @@ const connectHits: HitsConnector = function connectHits(
 
         return {
           hits: results.hits,
+          sendEvent,
+          bindEvent,
           results,
           widgetParams,
         };

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template/Template';
 
-const Hits = ({ results, hits, cssClasses, templateProps }) => {
+const Hits = ({ results, hits, bindEvent, cssClasses, templateProps }) => {
   if (results.hits.length === 0) {
     return (
       <Template
@@ -33,6 +33,7 @@ const Hits = ({ results, hits, cssClasses, templateProps }) => {
               ...hit,
               __hitIndex: position,
             }}
+            bindEvent={bindEvent}
           />
         ))}
       </ol>
@@ -49,6 +50,8 @@ Hits.propTypes = {
   }).isRequired,
   hits: PropTypes.array.isRequired,
   results: PropTypes.object.isRequired,
+  sendEvent: PropTypes.func.isRequired,
+  bindEvent: PropTypes.func.isRequired,
   templateProps: PropTypes.object.isRequired,
 };
 

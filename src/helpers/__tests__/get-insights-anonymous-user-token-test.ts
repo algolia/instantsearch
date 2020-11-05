@@ -1,6 +1,7 @@
 import getInsightsAnonymousUserToken, {
   ANONYMOUS_TOKEN_COOKIE_KEY,
 } from '../get-insights-anonymous-user-token';
+import { warning } from '../../lib/utils';
 
 const DAY = 86400000; /* 1 day in ms*/
 const DATE_TOMORROW = new Date(Date.now() + DAY).toUTCString();
@@ -33,5 +34,15 @@ describe('getInsightsAnonymousUserToken', () => {
     document.cookie = `${ANONYMOUS_TOKEN_COOKIE_KEY}=anonymous-uuid;expires=${DATE_TOMORROW};`;
     document.cookie = `BAD_COOKIE=val%ue;expires=${DATE_TOMORROW};path=/`;
     expect(getInsightsAnonymousUserToken()).toBe('anonymous-uuid');
+  });
+
+  it('should show deprecation warning', () => {
+    warning.cache = {};
+    expect(() => {
+      getInsightsAnonymousUserToken();
+    })
+      .toWarnDev(`[InstantSearch.js]: \`getInsightsAnonymousUserToken\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
+
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`);
   });
 });

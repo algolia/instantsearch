@@ -3,6 +3,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 const render = castToJestMock(preactRender);
 
@@ -57,6 +58,8 @@ describe('infiniteHits()', () => {
 
   it('calls twice render(<Hits props />, container)', () => {
     const state = { page: 0 };
+    const instantSearchInstance = createInstantSearch();
+    widget.init({ helper, instantSearchInstance });
 
     widget.render({ results, state });
     widget.render({ results, state });
@@ -81,7 +84,7 @@ describe('infiniteHits()', () => {
       showPrevious: false,
     });
 
-    widget.init({ helper, instantSearchInstance: {} });
+    widget.init({ helper, instantSearchInstance: createInstantSearch() });
 
     widget.render({
       results,
@@ -95,22 +98,23 @@ describe('infiniteHits()', () => {
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
-    const state = { page: 0 };
+    const instantSearchInstance = createInstantSearch();
+    widget.init({ helper, instantSearchInstance });
     widget.render({
       results: { ...results, page: 0, nbPages: 2 },
-      state,
+      state: { page: 0 },
     });
     widget.render({
       results: { ...results, page: 1, nbPages: 2 },
-      state,
+      state: { page: 1 },
     });
 
     const [firstRender, secondRender] = render.mock.calls;
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[0].props.isLastPage).toEqual(false);
     expect(firstRender[1]).toEqual(container);
-    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[0].props.isLastPage).toEqual(true);
     expect(secondRender[1]).toEqual(container);
   });
 
@@ -118,6 +122,8 @@ describe('infiniteHits()', () => {
     expect(helper.state.page).toBeUndefined();
 
     const state = { page: 0 };
+    const instantSearchInstance = createInstantSearch();
+    widget.init({ helper, instantSearchInstance });
 
     widget.render({ results, state });
 
@@ -134,7 +140,8 @@ describe('infiniteHits()', () => {
   it('should add __position key with absolute position', () => {
     results = { ...results, page: 4, hitsPerPage: 10 };
     const state = { page: results.page };
-
+    const instantSearchInstance = createInstantSearch();
+    widget.init({ helper, instantSearchInstance });
     widget.render({ results, state });
 
     expect(results.hits[0].__position).toEqual(41);
@@ -142,7 +149,8 @@ describe('infiniteHits()', () => {
 
   it('if it is the first page, then the props should contain isFirstPage true', () => {
     const state = { page: 0 };
-
+    const instantSearchInstance = createInstantSearch();
+    widget.init({ helper, instantSearchInstance });
     widget.render({
       results: { ...results, page: 0, nbPages: 2 },
       state,
@@ -165,7 +173,7 @@ describe('infiniteHits()', () => {
 
   it('if it is not the first page, then the props should contain isFirstPage false', () => {
     helper.setPage(1);
-    widget.init({ helper, instantSearchInstance: {} });
+    widget.init({ helper, instantSearchInstance: createInstantSearch() });
 
     const state = { page: 1 };
     widget.render({
@@ -215,7 +223,7 @@ describe('infiniteHits()', () => {
         showPrevious: false,
         cache: customCache,
       });
-      widget.init({ helper, instantSearchInstance: {} });
+      widget.init({ helper, instantSearchInstance: createInstantSearch() });
       expect(cachedState).toMatchInlineSnapshot(`undefined`);
       expect(cachedHits).toMatchInlineSnapshot(`undefined`);
       widget.render({
@@ -283,7 +291,7 @@ describe('infiniteHits()', () => {
         showPrevious: false,
         cache: customCache,
       });
-      widget.init({ helper, instantSearchInstance: {} });
+      widget.init({ helper, instantSearchInstance: createInstantSearch() });
       widget.render({
         results: {
           page: 0,

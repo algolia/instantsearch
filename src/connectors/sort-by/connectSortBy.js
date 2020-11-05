@@ -103,7 +103,8 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.sortBy',
 
-      init({ helper, instantSearchInstance, parent }) {
+      init(initOptions) {
+        const { helper, instantSearchInstance, parent } = initOptions;
         const currentIndex = helper.state.index;
         const isCurrentIndexInItems = find(
           items,
@@ -122,25 +123,18 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
 
         renderFn(
           {
-            currentRefinement: currentIndex,
-            options: transformItems(items),
-            refine: this.setIndex,
-            hasNoResults: true,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
         );
       },
 
-      render({ helper, results, instantSearchInstance }) {
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
         renderFn(
           {
-            currentRefinement: helper.state.index,
-            options: transformItems(items),
-            refine: this.setIndex,
-            hasNoResults: results.nbHits === 0,
-            widgetParams,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -151,6 +145,23 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
         unmountFn();
 
         return state.setIndex(this.initialIndex);
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          sortBy: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, helper }) {
+        return {
+          currentRefinement: helper.state.index,
+          options: transformItems(items),
+          refine: this.setIndex,
+          hasNoResults: results ? results.nbHits === 0 : true,
+          widgetParams,
+        };
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
