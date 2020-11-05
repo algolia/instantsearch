@@ -105,16 +105,18 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
 
       init(initOptions) {
         const { helper, instantSearchInstance, parent } = initOptions;
-        const currentIndex = helper.state.index;
-        const isCurrentIndexInItems = find(
-          items,
-          item => item.value === currentIndex
-        );
 
         this.initialIndex = parent.getIndexName();
         this.setIndex = indexName => {
           helper.setIndex(indexName).search();
         };
+
+        const widgetRenderState = this.getWidgetRenderState(initOptions);
+        const currentIndex = widgetRenderState.currentRefinement;
+        const isCurrentIndexInItems = find(
+          items,
+          item => item.value === currentIndex
+        );
 
         warning(
           isCurrentIndexInItems,
@@ -123,7 +125,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
 
         renderFn(
           {
-            ...this.getWidgetRenderState(initOptions),
+            ...widgetRenderState,
             instantSearchInstance,
           },
           true

@@ -28,6 +28,10 @@ import {
   CurrentRefinementsConnectorParams,
 } from '../connectors/current-refinements/connectCurrentRefinements';
 import {
+  HitsPerPageConnectorParams,
+  HitsPerPageRendererOptions,
+} from '../connectors/hits-per-page/connectHitsPerPage';
+import {
   HitsRendererOptions,
   HitsConnectorParams,
 } from '../connectors/hits/connectHits';
@@ -274,6 +278,10 @@ export type IndexRenderState = Partial<{
   queryRules: WidgetRenderState<
     QueryRulesRendererOptions,
     QueryRulesConnectorParams
+  >;
+  hitsPerPage: WidgetRenderState<
+    HitsPerPageRendererOptions,
+    HitsPerPageConnectorParams
   >;
 }>;
 
