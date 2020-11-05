@@ -23,17 +23,14 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 const queryRuleContext: QueryRuleContext = (
-  { trackedFilters, transformRuleContexts } = {} as QueryRuleContextWidgetParams
+  widgetParams = {} as QueryRuleContextWidgetParams
 ) => {
-  if (!trackedFilters) {
+  if (!widgetParams.trackedFilters) {
     throw new Error(withUsage('The `trackedFilters` option is required.'));
   }
 
   return {
-    ...connectQueryRules(noop)({
-      trackedFilters,
-      transformRuleContexts,
-    }),
+    ...connectQueryRules<QueryRuleContextWidgetParams>(noop)(widgetParams),
 
     $$type: 'ais.queryRuleContext',
   };

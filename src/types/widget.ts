@@ -41,6 +41,10 @@ import {
   PoweredByConnectorParams,
   PoweredByRendererOptions,
 } from '../connectors/powered-by/connectPoweredBy';
+import {
+  QueryRulesRendererOptions,
+  QueryRulesConnectorParams,
+} from '../connectors/query-rules/connectQueryRules';
 
 export type ScopedResult = {
   indexId: string;
@@ -267,6 +271,10 @@ export type IndexRenderState = Partial<{
     sendEvent: Function;
     widgetParams: any;
   };
+  queryRules: WidgetRenderState<
+    QueryRulesRendererOptions,
+    QueryRulesConnectorParams
+  >;
 }>;
 
 export type WidgetRenderState<
@@ -366,9 +374,9 @@ export type Widget<
       /**
        * Returns the render state of the current widget to pass to the render function.
        */
-      getWidgetRenderState: (
+      getWidgetRenderState(
         renderOptions: InitOptions | RenderOptions
-      ) => TWidgetOptions['renderState'];
+      ): TWidgetOptions['renderState'];
       /**
        * Returns IndexRenderState of the current index component tree
        * to build the render state of the whole app.
