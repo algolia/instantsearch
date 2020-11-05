@@ -115,6 +115,8 @@ const connectHits: HitsConnector = function connectHits(
         if (!results) {
           return {
             hits: [],
+            sendEvent,
+            bindEvent,
             results: undefined,
             widgetParams,
           };
