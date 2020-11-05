@@ -580,7 +580,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       ).toEqual({
         items: [],
         refine: undefined,
-        sendEvent: expect.any(Function),
+        sendEvent: undefined,
         createURL: expect.any(Function),
         widgetParams: { attributes: ['category', 'subCategory'] },
         isShowingMore: false,
