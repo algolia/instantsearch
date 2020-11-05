@@ -299,7 +299,10 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
         const value = {
           name: attribute,
           isRefined,
-          count: results && nextRefinement ? nextRefinement.count : null,
+          count:
+            results && nextRefinement !== undefined
+              ? nextRefinement.count
+              : null,
           onFacetValue,
           offFacetValue,
         };
