@@ -9,7 +9,7 @@ import connectPoweredBy from '../connectPoweredBy';
 describe('connectPoweredBy', () => {
   it('throws without rendering function', () => {
     expect(() => {
-      // @ts-expect-error
+      // @ts-ignore
       connectPoweredBy();
     }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
