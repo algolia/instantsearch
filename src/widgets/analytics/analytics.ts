@@ -213,7 +213,7 @@ const analytics: AnalyticsWidget = function analytics(widgetParams) {
 
   return {
     $$type: 'ais.analytics',
-    $$params: widgetParams,
+    $$officialWidget: true,
 
     init() {
       if (triggerOnUIInteraction === true) {

@@ -297,12 +297,6 @@ const index = (props: IndexProps): Index => {
 
         widgets.forEach(widget => {
           if (widget.init) {
-            localInstantSearchInstance!.telemetry.updatePayload({
-              type: widget.$$type || 'ais.custom',
-              params: widget.$$params ? Object.keys(widget.$$params) : [],
-              useConnector: !widget.$$params,
-            });
-
             widget.init({
               helper: helper!,
               parent: this,
@@ -372,12 +366,6 @@ const index = (props: IndexProps): Index => {
     },
 
     init({ instantSearchInstance, parent, uiState }: IndexInitOptions) {
-      instantSearchInstance.telemetry.updatePayload({
-        type: 'ais.index',
-        params: Object.keys(props),
-        useConnector: false,
-      });
-
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
       localUiState = uiState[indexId] || {};
@@ -520,12 +508,6 @@ const index = (props: IndexProps): Index => {
         );
 
         if (widget.init) {
-          instantSearchInstance.telemetry.updatePayload({
-            type: widget.$$type || 'ais.custom',
-            params: widget.$$params ? Object.keys(widget.$$params) : [],
-            useConnector: !widget.$$params,
-          });
-
           widget.init({
             uiState,
             helper: helper!,

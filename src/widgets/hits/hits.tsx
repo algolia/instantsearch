@@ -153,7 +153,7 @@ const hits: HitsWidget = function hits(widgetOptions) {
 
   return {
     ...makeHits({ escapeHTML, transformItems }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 };
 

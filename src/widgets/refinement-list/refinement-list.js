@@ -313,6 +313,6 @@ export default function refinementList(widgetOptions) {
       escapeFacetValues,
       transformItems,
     }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 }

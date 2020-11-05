@@ -223,6 +223,6 @@ export default function pagination(widgetOptions) {
 
   return {
     ...makeWidget({ totalPages, padding }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 }

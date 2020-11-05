@@ -166,6 +166,6 @@ export default function ratingMenu(widgetOptions) {
 
   return {
     ...makeWidget({ attribute, max }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 }

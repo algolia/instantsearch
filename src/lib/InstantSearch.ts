@@ -22,46 +22,7 @@ import {
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
 import { createRouter, RouterProps } from '../middleware/createRouter';
-
-type TelemetryWidget = {
-  type: number;
-  params: number[];
-  useConnector: boolean;
-};
-
-function telemetryClient() {
-  const payload: { widgets: TelemetryWidget[] } = {
-    widgets: [],
-  };
-  let payloadContainer;
-
-  if (typeof document !== undefined) {
-    payloadContainer = document.createElement('script');
-    const refNode = document.querySelector('script');
-    payloadContainer.type = 'application/json';
-    refNode!.parentNode!.insertBefore(payloadContainer, refNode);
-  }
-
-  return {
-    updatePayload({ type, params, useConnector }: TelemetryWidget) {
-      const existingWidget = payload.widgets.find(
-        payloadWidget => payloadWidget.type === type
-      );
-      if (existingWidget) {
-        existingWidget.params = [
-          ...new Set([...existingWidget.params, ...params]),
-        ];
-        existingWidget.useConnector =
-          existingWidget.useConnector || useConnector;
-      } else {
-        payload.widgets.push({ type, params, useConnector });
-      }
-      if (typeof document !== undefined) {
-        payloadContainer.innerText = JSON.stringify(payload);
-      }
-    },
-  };
-}
+import { createTelemetry } from '../middleware/createTelemetry';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -70,6 +31,12 @@ const withUsage = createDocumentationMessageGenerator({
 function defaultCreateURL() {
   return '#';
 }
+
+const ALGOLIA_CRAWLER_USER_AGENT = /Algolia Crawler\/[0-9]+.[0-9]+.[0-9]+/;
+
+const isTelemetryEnabled =
+  typeof window !== undefined &&
+  ALGOLIA_CRAWLER_USER_AGENT.test(window.navigator.userAgent);
 
 /**
  * Global options for an InstantSearch instance.
@@ -255,7 +222,6 @@ See ${createDocumentationLink({
 
     this.client = searchClient;
     this.insightsClient = insightsClient;
-    this.telemetry = telemetryClient();
     this.indexName = indexName;
     this.helper = null;
     this.mainHelper = null;
@@ -284,6 +250,10 @@ See ${createDocumentationLink({
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
       this.EXPERIMENTAL_use(createRouter(routerOptions));
+    }
+
+    if (isTelemetryEnabled) {
+      this.EXPERIMENTAL_use(createTelemetry());
     }
   }
 

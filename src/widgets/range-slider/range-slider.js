@@ -151,6 +151,6 @@ export default function rangeSlider(widgetOptions) {
     ...makeWidget({ attribute, min, max, precision }),
 
     $$type: 'ais.rangeSlider',
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 }

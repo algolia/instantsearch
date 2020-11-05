@@ -103,7 +103,7 @@ const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetOptions) {
 
   return {
     ...makeHitsPerPage({ items, transformItems }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 };
 

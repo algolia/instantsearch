@@ -11,3 +11,4 @@ export type Middleware = ({
 }) => MiddlewareDefinition;
 
 export { createRouter, RouterProps } from './createRouter';
+export { createTelemetry } from './createTelemetry';

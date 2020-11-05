@@ -213,7 +213,7 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetOptions) {
       items,
       transformItems,
     }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 };
 

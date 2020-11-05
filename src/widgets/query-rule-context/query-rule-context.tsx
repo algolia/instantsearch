@@ -35,7 +35,7 @@ const queryRuleContext: QueryRuleContext = widgetOptions => {
     }),
 
     $$type: 'ais.queryRuleContext',
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 };
 

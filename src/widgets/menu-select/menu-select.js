@@ -122,6 +122,6 @@ export default function menuSelect(widgetOptions) {
 
   return {
     ...makeWidget({ attribute, limit, sortBy, transformItems }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 }

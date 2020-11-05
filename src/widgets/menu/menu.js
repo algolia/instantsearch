@@ -182,6 +182,6 @@ export default function menu(widgetOptions) {
       sortBy,
       transformItems,
     }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 }

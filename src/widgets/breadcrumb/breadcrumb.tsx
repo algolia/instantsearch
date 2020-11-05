@@ -167,7 +167,7 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetOptions) {
 
   return {
     ...makeBreadcrumb({ attributes, separator, rootPath, transformItems }),
-    $$params: widgetOptions,
+    $$officialWidget: true,
   };
 };
 

@@ -228,7 +228,7 @@ const geoSearch = ({
       enableClearMapRefinement,
       enableRefineControl,
     }),
-    $$params: widgetParams,
+    $$officialWidget: true,
   };
 };
 
