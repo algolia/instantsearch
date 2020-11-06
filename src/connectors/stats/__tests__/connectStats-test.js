@@ -1,9 +1,36 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 
 import connectStats from '../connectStats';
 
 describe('connectStats', () => {
+  const getInitializedWidget = (config = {}) => {
+    const renderFn = jest.fn();
+    const makeWidget = connectStats(renderFn);
+    const widget = makeWidget({
+      ...config,
+    });
+
+    const helper = jsHelper(createSearchClient(), 'indexName', {
+      index: 'indexName',
+    });
+
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
+
+    return [widget, helper];
+  };
+
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
@@ -30,6 +57,177 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
           dispose: expect.any(Function),
         })
       );
+    });
+  });
+
+  describe('getRenderState', () => {
+    test('returns the widget render state without results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createStats = connectStats(renderFn, unmountFn);
+      const stats = createStats();
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState = stats.getRenderState(
+        { stats: {} },
+        createInitOptions({ helper })
+      );
+
+      expect(renderState.stats).toEqual({
+        hitsPerPage: undefined,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: -1,
+        query: '',
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with empty results', () => {
+      const [stats, helper] = getInitializedWidget();
+
+      const renderState = stats.getRenderState(
+        { stats: {} },
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+        })
+      );
+
+      expect(renderState.stats).toEqual({
+        hitsPerPage: 20,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: 0,
+        query: '',
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with results', () => {
+      const [stats, helper] = getInitializedWidget();
+
+      const renderState = stats.getRenderState(
+        { stats: {} },
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+                { brand: 'sony', objectID: '3' },
+                { brand: 'benq', objectID: '4' },
+                { brand: 'dyson', objectID: '5' },
+              ],
+              hitsPerPage: 3,
+              query: 'apple',
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState.stats).toEqual({
+        hitsPerPage: 3,
+        nbHits: 5,
+        nbPages: 2,
+        page: 0,
+        processingTimeMS: 0,
+        query: 'apple',
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state without results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createStats = connectStats(renderFn, unmountFn);
+      const stats = createStats();
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState = stats.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      expect(renderState).toEqual({
+        hitsPerPage: undefined,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: -1,
+        query: '',
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with empty results', () => {
+      const [stats, helper] = getInitializedWidget();
+
+      const renderState = stats.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+        })
+      );
+
+      expect(renderState).toEqual({
+        hitsPerPage: 20,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: 0,
+        query: '',
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with results', () => {
+      const [stats, helper] = getInitializedWidget();
+
+      const renderState = stats.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+                { brand: 'sony', objectID: '3' },
+                { brand: 'benq', objectID: '4' },
+                { brand: 'dyson', objectID: '5' },
+              ],
+              hitsPerPage: 3,
+              query: 'apple',
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState).toEqual({
+        hitsPerPage: 3,
+        nbHits: 5,
+        nbPages: 2,
+        page: 0,
+        processingTimeMS: 0,
+        query: 'apple',
+        widgetParams: {},
+      });
     });
   });
 
