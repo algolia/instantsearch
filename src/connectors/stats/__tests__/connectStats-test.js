@@ -10,6 +10,27 @@ import {
 import connectStats from '../connectStats';
 
 describe('connectStats', () => {
+  const getInitializedWidget = (config = {}) => {
+    const renderFn = jest.fn();
+    const makeWidget = connectStats(renderFn);
+    const widget = makeWidget({
+      ...config,
+    });
+
+    const helper = jsHelper(createSearchClient(), 'indexName', {
+      index: 'indexName',
+    });
+
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
+
+    return [widget, helper];
+  };
+
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
@@ -40,7 +61,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
   });
 
   describe('getRenderState', () => {
-    test('returns the render state', () => {
+    test('returns the widget render state without results', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createStats = connectStats(renderFn, unmountFn);
@@ -48,90 +69,38 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       const helper = jsHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
-      helper.search = jest.fn();
 
-      const renderState1 = stats.getRenderState(
+      const renderState = stats.getRenderState(
         { stats: {} },
         createInitOptions({ helper })
       );
 
-      expect(renderState1.stats).toEqual({
+      expect(renderState.stats).toEqual({
         hitsPerPage: undefined,
         nbHits: 0,
         nbPages: 0,
         page: 0,
         processingTimeMS: -1,
-        query: '',
-        widgetParams: {},
-      });
-
-      stats.init(createInitOptions({ helper, state: helper.state }));
-
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse(),
-      ]);
-
-      const renderState2 = stats.getRenderState(
-        { stats: {} },
-        createRenderOptions({
-          helper,
-          state: helper.state,
-          results,
-        })
-      );
-
-      expect(renderState2.stats).toEqual({
-        hitsPerPage: 20,
-        nbHits: 0,
-        nbPages: 0,
-        page: 0,
-        processingTimeMS: 0,
         query: '',
         widgetParams: {},
       });
     });
-  });
 
-  describe('getWidgetRenderState', () => {
-    test('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createStats = connectStats(renderFn, unmountFn);
-      const stats = createStats();
-      const helper = jsHelper(createSearchClient(), 'indexName', {
-        index: 'indexName',
-      });
-      helper.search = jest.fn();
+    test('returns the widget render state with empty results', () => {
+      const [stats, helper] = getInitializedWidget();
 
-      const renderState1 = stats.getWidgetRenderState(
-        createInitOptions({ helper })
-      );
-
-      expect(renderState1).toEqual({
-        hitsPerPage: undefined,
-        nbHits: 0,
-        nbPages: 0,
-        page: 0,
-        processingTimeMS: -1,
-        query: '',
-        widgetParams: {},
-      });
-
-      stats.init(createInitOptions({ helper, state: helper.state }));
-
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse(),
-      ]);
-
-      const renderState2 = stats.getWidgetRenderState(
+      const renderState = stats.getRenderState(
+        { stats: {} },
         createRenderOptions({
           helper,
           state: helper.state,
-          results,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
         })
       );
 
-      expect(renderState2).toEqual({
+      expect(renderState.stats).toEqual({
         hitsPerPage: 20,
         nbHits: 0,
         nbPages: 0,
@@ -143,6 +112,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
     });
 
     test('returns the widget render state with results', () => {
+      const [stats, helper] = getInitializedWidget();
+
+      const renderState = stats.getRenderState(
+        { stats: {} },
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+                { brand: 'sony', objectID: '3' },
+                { brand: 'benq', objectID: '4' },
+                { brand: 'dyson', objectID: '5' },
+              ],
+              hitsPerPage: 3,
+              query: 'apple',
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState.stats).toEqual({
+        hitsPerPage: 3,
+        nbHits: 5,
+        nbPages: 2,
+        page: 0,
+        processingTimeMS: 0,
+        query: 'apple',
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state without results', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createStats = connectStats(renderFn, unmountFn);
@@ -150,29 +156,66 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       const helper = jsHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
-      helper.search = jest.fn();
 
-      stats.init(createInitOptions({ helper, state: helper.state }));
+      const renderState = stats.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
 
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          hits: [
-            { brand: 'samsung', objectID: '1' },
-            { brand: 'apple', objectID: '2' },
-            { brand: 'sony', objectID: '3' },
-            { brand: 'benq', objectID: '4' },
-            { brand: 'dyson', objectID: '5' },
-          ],
-          hitsPerPage: 3,
-          query: 'apple',
-        }),
-      ]);
+      expect(renderState).toEqual({
+        hitsPerPage: undefined,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: -1,
+        query: '',
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with empty results', () => {
+      const [stats, helper] = getInitializedWidget();
 
       const renderState = stats.getWidgetRenderState(
         createRenderOptions({
           helper,
           state: helper.state,
-          results,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+        })
+      );
+
+      expect(renderState).toEqual({
+        hitsPerPage: 20,
+        nbHits: 0,
+        nbPages: 0,
+        page: 0,
+        processingTimeMS: 0,
+        query: '',
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with results', () => {
+      const [stats, helper] = getInitializedWidget();
+
+      const renderState = stats.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+                { brand: 'sony', objectID: '3' },
+                { brand: 'benq', objectID: '4' },
+                { brand: 'dyson', objectID: '5' },
+              ],
+              hitsPerPage: 3,
+              query: 'apple',
+            }),
+          ]),
         })
       );
 
