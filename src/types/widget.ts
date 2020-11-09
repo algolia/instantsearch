@@ -1,4 +1,5 @@
 import { Index } from '../widgets/index/index';
+import { CreateURL } from '.';
 import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
@@ -253,6 +254,26 @@ export type IndexRenderState = Partial<{
         min?: number;
         max?: number;
         precision?: number;
+      }
+    >;
+  };
+  ratingMenu: {
+    [attribute: string]: WidgetRenderState<
+      {
+        items: Array<{
+          stars: boolean[];
+          name: string;
+          value: string;
+          count: number;
+          isRefined: boolean;
+        }>;
+        hasNoResults: boolean;
+        refine(value: number): void;
+        createURL: CreateURL<string>;
+      },
+      {
+        attribute: string;
+        max?: number;
       }
     >;
   };
