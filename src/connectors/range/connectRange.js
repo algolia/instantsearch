@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  convertNumericRefinementsToFilters,
   isFiniteNumber,
   find,
   noop,
@@ -10,6 +11,8 @@ const withUsage = createDocumentationMessageGenerator(
   { name: 'range-input', connector: true },
   { name: 'range-slider', connector: true }
 );
+
+const $$type = 'ais.range';
 
 /**
  * @typedef {Object} CustomRangeWidgetOptions
@@ -71,8 +74,138 @@ export default function connectRange(renderFn, unmountFn = noop) {
       to: v => formatToNumber(v).toLocaleString(),
     };
 
+    // eslint-disable-next-line complexity
+    const getRefinedState = (helper, currentRange, nextMin, nextMax) => {
+      let resolvedState = helper.state;
+      const { min: currentRangeMin, max: currentRangeMax } = currentRange;
+
+      const [min] = resolvedState.getNumericRefinement(attribute, '>=') || [];
+      const [max] = resolvedState.getNumericRefinement(attribute, '<=') || [];
+
+      const isResetMin = nextMin === undefined || nextMin === '';
+      const isResetMax = nextMax === undefined || nextMax === '';
+
+      const nextMinAsNumber = !isResetMin ? parseFloat(nextMin) : undefined;
+      const nextMaxAsNumber = !isResetMax ? parseFloat(nextMax) : undefined;
+
+      let newNextMin;
+      if (!hasMinBound && currentRangeMin === nextMinAsNumber) {
+        newNextMin = undefined;
+      } else if (hasMinBound && isResetMin) {
+        newNextMin = minBound;
+      } else {
+        newNextMin = nextMinAsNumber;
+      }
+
+      let newNextMax;
+      if (!hasMaxBound && currentRangeMax === nextMaxAsNumber) {
+        newNextMax = undefined;
+      } else if (hasMaxBound && isResetMax) {
+        newNextMax = maxBound;
+      } else {
+        newNextMax = nextMaxAsNumber;
+      }
+
+      const isResetNewNextMin = newNextMin === undefined;
+      const isValidNewNextMin = isFiniteNumber(newNextMin);
+      const isValidMinCurrentRange = isFiniteNumber(currentRangeMin);
+      const isGreaterThanCurrentRange =
+        isValidMinCurrentRange && currentRangeMin <= newNextMin;
+      const isMinValid =
+        isResetNewNextMin ||
+        (isValidNewNextMin &&
+          (!isValidMinCurrentRange || isGreaterThanCurrentRange));
+
+      const isResetNewNextMax = newNextMax === undefined;
+      const isValidNewNextMax = isFiniteNumber(newNextMax);
+      const isValidMaxCurrentRange = isFiniteNumber(currentRangeMax);
+      const isLowerThanRange =
+        isValidMaxCurrentRange && currentRangeMax >= newNextMax;
+      const isMaxValid =
+        isResetNewNextMax ||
+        (isValidNewNextMax && (!isValidMaxCurrentRange || isLowerThanRange));
+
+      const hasMinChange = min !== newNextMin;
+      const hasMaxChange = max !== newNextMax;
+
+      if ((hasMinChange || hasMaxChange) && isMinValid && isMaxValid) {
+        resolvedState = resolvedState.removeNumericRefinement(attribute);
+
+        if (isValidNewNextMin) {
+          resolvedState = resolvedState.addNumericRefinement(
+            attribute,
+            '>=',
+            formatToNumber(newNextMin)
+          );
+        }
+
+        if (isValidNewNextMax) {
+          resolvedState = resolvedState.addNumericRefinement(
+            attribute,
+            '<=',
+            formatToNumber(newNextMax)
+          );
+        }
+
+        return resolvedState;
+      }
+
+      return null;
+    };
+
+    const sendEventWithRefinedState = (
+      refinedState,
+      instantSearchInstance,
+      helper,
+      eventName = 'Filter Applied'
+    ) => {
+      const filters = convertNumericRefinementsToFilters(
+        refinedState,
+        attribute
+      );
+      if (filters && filters.length > 0) {
+        instantSearchInstance.sendEventToInsights({
+          insightsMethod: 'clickedFilters',
+          widgetType: $$type,
+          eventType: 'click',
+          payload: {
+            eventName,
+            index: helper.getIndex(),
+            filters,
+          },
+        });
+      }
+    };
+
+    const createSendEvent = (instantSearchInstance, helper, currentRange) => (
+      ...args
+    ) => {
+      if (args.length === 1) {
+        instantSearchInstance.sendEventToInsights(args[0]);
+        return;
+      }
+
+      const [eventType, facetValue, eventName] = args;
+      if (eventType !== 'click') {
+        return;
+      }
+      const [nextMin, nextMax] = facetValue;
+      const refinedState = getRefinedState(
+        helper,
+        currentRange,
+        nextMin,
+        nextMax
+      );
+      sendEventWithRefinedState(
+        refinedState,
+        instantSearchInstance,
+        helper,
+        eventName
+      );
+    };
+
     return {
-      $$type: 'ais.range',
+      $$type,
 
       _getCurrentRange(stats) {
         const pow = Math.pow(10, precision);
@@ -112,81 +245,22 @@ export default function connectRange(renderFn, unmountFn = noop) {
         return [min, max];
       },
 
-      _refine(helper, currentRange) {
+      _refine(instantSearchInstance, helper, currentRange) {
         // eslint-disable-next-line complexity
         return ([nextMin, nextMax] = []) => {
-          const { min: currentRangeMin, max: currentRangeMax } = currentRange;
-
-          const [min] = helper.getNumericRefinement(attribute, '>=') || [];
-          const [max] = helper.getNumericRefinement(attribute, '<=') || [];
-
-          const isResetMin = nextMin === undefined || nextMin === '';
-          const isResetMax = nextMax === undefined || nextMax === '';
-
-          const nextMinAsNumber = !isResetMin ? parseFloat(nextMin) : undefined;
-          const nextMaxAsNumber = !isResetMax ? parseFloat(nextMax) : undefined;
-
-          let newNextMin;
-          if (!hasMinBound && currentRangeMin === nextMinAsNumber) {
-            newNextMin = undefined;
-          } else if (hasMinBound && isResetMin) {
-            newNextMin = minBound;
-          } else {
-            newNextMin = nextMinAsNumber;
-          }
-
-          let newNextMax;
-          if (!hasMaxBound && currentRangeMax === nextMaxAsNumber) {
-            newNextMax = undefined;
-          } else if (hasMaxBound && isResetMax) {
-            newNextMax = maxBound;
-          } else {
-            newNextMax = nextMaxAsNumber;
-          }
-
-          const isResetNewNextMin = newNextMin === undefined;
-          const isValidNewNextMin = isFiniteNumber(newNextMin);
-          const isValidMinCurrentRange = isFiniteNumber(currentRangeMin);
-          const isGreaterThanCurrentRange =
-            isValidMinCurrentRange && currentRangeMin <= newNextMin;
-          const isMinValid =
-            isResetNewNextMin ||
-            (isValidNewNextMin &&
-              (!isValidMinCurrentRange || isGreaterThanCurrentRange));
-
-          const isResetNewNextMax = newNextMax === undefined;
-          const isValidNewNextMax = isFiniteNumber(newNextMax);
-          const isValidMaxCurrentRange = isFiniteNumber(currentRangeMax);
-          const isLowerThanRange =
-            isValidMaxCurrentRange && currentRangeMax >= newNextMax;
-          const isMaxValid =
-            isResetNewNextMax ||
-            (isValidNewNextMax &&
-              (!isValidMaxCurrentRange || isLowerThanRange));
-
-          const hasMinChange = min !== newNextMin;
-          const hasMaxChange = max !== newNextMax;
-
-          if ((hasMinChange || hasMaxChange) && isMinValid && isMaxValid) {
-            helper.removeNumericRefinement(attribute);
-
-            if (isValidNewNextMin) {
-              helper.addNumericRefinement(
-                attribute,
-                '>=',
-                formatToNumber(newNextMin)
-              );
-            }
-
-            if (isValidNewNextMax) {
-              helper.addNumericRefinement(
-                attribute,
-                '<=',
-                formatToNumber(newNextMax)
-              );
-            }
-
-            helper.search();
+          const refinedState = getRefinedState(
+            helper,
+            currentRange,
+            nextMin,
+            nextMax
+          );
+          if (refinedState) {
+            sendEventWithRefinedState(
+              refinedState,
+              instantSearchInstance,
+              helper
+            );
+            helper.setState(refinedState).search();
           }
         };
       },
@@ -221,7 +295,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState({ results, helper }) {
+      getWidgetRenderState({ results, instantSearchInstance, helper }) {
         const facetsFromResults = (results && results.disjunctiveFacets) || [];
         const facet = find(
           facetsFromResults,
@@ -238,13 +312,18 @@ export default function connectRange(renderFn, unmountFn = noop) {
           // On first render pass an empty range
           // to be able to bypass the validation
           // related to it
-          refine = this._refine(helper, {});
+          refine = this._refine(instantSearchInstance, helper, {});
         } else {
-          refine = this._refine(helper, currentRange);
+          refine = this._refine(instantSearchInstance, helper, currentRange);
         }
 
         return {
           refine,
+          sendEvent: createSendEvent(
+            instantSearchInstance,
+            helper,
+            currentRange
+          ),
           format: rangeFormatter,
           range: currentRange,
           widgetParams: {

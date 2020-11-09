@@ -3,6 +3,7 @@ import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 import connectQueryRules, {
   ParamTrackedFilters,
   ParamTransformRuleContexts,
+  QueryRulesRendererOptions,
   QueryRulesConnectorParams,
 } from '../../connectors/query-rules/connectQueryRules';
 
@@ -12,6 +13,7 @@ type QueryRuleContextWidgetParams = {
 };
 
 type QueryRuleContext = WidgetFactory<
+  QueryRulesRendererOptions,
   QueryRulesConnectorParams,
   QueryRuleContextWidgetParams
 >;
@@ -21,17 +23,14 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 const queryRuleContext: QueryRuleContext = (
-  { trackedFilters, transformRuleContexts } = {} as QueryRuleContextWidgetParams
+  widgetParams = {} as QueryRuleContextWidgetParams
 ) => {
-  if (!trackedFilters) {
+  if (!widgetParams.trackedFilters) {
     throw new Error(withUsage('The `trackedFilters` option is required.'));
   }
 
   return {
-    ...connectQueryRules(noop)({
-      trackedFilters,
-      transformRuleContexts,
-    }),
+    ...connectQueryRules<QueryRuleContextWidgetParams>(noop)(widgetParams),
 
     $$type: 'ais.queryRuleContext',
   };

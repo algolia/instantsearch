@@ -10,6 +10,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectHierarchicalMenu', () => {
   describe('Usage', () => {
@@ -161,12 +162,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
     helper.toggleRefinement('category', 'value');
 
-    widget.init(
-      createInitOptions({
-        helper,
-        state: helper.state,
-      })
-    );
+    widget.init({
+      helper,
+      state: helper.state,
+      instantSearchInstance: createInstantSearch(),
+    });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
@@ -421,12 +421,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       );
       helper.search = jest.fn();
 
-      widget.init(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
+      widget.init({
+        helper,
+        state: helper.state,
+        instantSearchInstance: createInstantSearch(),
+      });
 
       const firstRenderingOptions = rendering.mock.calls[0][0];
       const { refine } = firstRenderingOptions;
@@ -471,6 +470,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         category: {
           items: [],
           refine: undefined,
+          sendEvent: expect.any(Function),
           createURL: expect.any(Function),
           widgetParams: { attributes: ['category', 'subCategory'] },
           isShowingMore: false,
@@ -541,6 +541,113 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           },
         ],
         refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        createURL: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHierarchicalMenu = connectHierarchicalMenu(
+        renderFn,
+        unmountFn
+      );
+      const hierarchicalMenu = createHierarchicalMenu({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      expect(
+        hierarchicalMenu.getWidgetRenderState(
+          { hierarchicalMenu: { anotherCategory: {} } },
+          createInitOptions({ helper })
+        )
+      ).toEqual({
+        items: [],
+        refine: undefined,
+        sendEvent: expect.any(Function),
+        createURL: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+      });
+    });
+
+    test('returns the widget render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHierarchicalMenu = connectHierarchicalMenu(
+        renderFn,
+        unmountFn
+      );
+      const hierarchicalMenu = createHierarchicalMenu({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      hierarchicalMenu.init(createInitOptions({ helper }));
+
+      expect(
+        hierarchicalMenu.getWidgetRenderState(
+          createRenderOptions({
+            helper,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                hits: [],
+                facets: {
+                  category: {
+                    Decoration: 880,
+                  },
+                  subCategory: {
+                    'Decoration > Candle holders & candles': 193,
+                    'Decoration > Frames & pictures': 173,
+                  },
+                },
+              }),
+              createSingleSearchResponse({
+                facets: {
+                  category: {
+                    Decoration: 880,
+                    Outdoor: 47,
+                  },
+                },
+              }),
+            ]),
+          })
+        )
+      ).toEqual({
+        items: [
+          {
+            count: 880,
+            data: null,
+            exhaustive: true,
+            isRefined: false,
+            label: 'Decoration',
+            value: 'Decoration',
+          },
+        ],
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         createURL: expect.any(Function),
         widgetParams: { attributes: ['category', 'subCategory'] },
         isShowingMore: false,
@@ -1252,6 +1359,50 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         }),
         expect.anything()
       );
+    });
+  });
+
+  describe('insights', () => {
+    it('sends event when a facet is added', () => {
+      const rendering = jest.fn();
+      const instantSearchInstance = createInstantSearch();
+      const makeWidget = connectHierarchicalMenu(rendering);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+      });
+
+      const helper = algoliasearchHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine } = firstRenderingOptions;
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['category:"value"'],
+          index: '',
+        },
+        widgetType: 'ais.hierarchicalMenu',
+      });
     });
   });
 });

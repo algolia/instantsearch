@@ -10,6 +10,37 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const $$type = 'ais.ratingMenu';
+
+const createSendEvent = ({
+  instantSearchInstance,
+  helper,
+  getRefinedStar,
+  attribute,
+}) => (...args) => {
+  if (args.length === 1) {
+    instantSearchInstance.sendEventToInsights(args[0]);
+    return;
+  }
+  const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+  if (eventType !== 'click') {
+    return;
+  }
+  const isRefined = getRefinedStar() === Number(facetValue);
+  if (!isRefined) {
+    instantSearchInstance.sendEventToInsights({
+      insightsMethod: 'clickedFilters',
+      widgetType: $$type,
+      eventType,
+      payload: {
+        eventName,
+        index: helper.getIndex(),
+        filters: [`${attribute}>=${facetValue}`],
+      },
+    });
+  }
+};
+
 /**
  * @typedef {Object} StarRatingItems
  * @property {string} name Name corresponding to the number of stars.
@@ -99,6 +130,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
 
   return (widgetParams = {}) => {
     const { attribute, max = 5 } = widgetParams;
+    let sendEvent;
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
@@ -115,6 +147,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
     };
 
     const toggleRefinement = (helper, facetValue) => {
+      sendEvent('click', facetValue);
       const isRefined = getRefinedStar(helper.state) === Number(facetValue);
       helper.removeDisjunctiveFacetRefinement(attribute);
       if (!isRefined) {
@@ -132,9 +165,17 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
     };
 
     return {
-      $$type: 'ais.ratingMenu',
+      $$type,
 
       init(initOptions) {
+        const { helper, instantSearchInstance } = initOptions;
+        sendEvent = createSendEvent({
+          instantSearchInstance,
+          helper,
+          getRefinedStar: () => getRefinedStar(helper.state),
+          attribute,
+        });
+
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -207,6 +248,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
           items: facetValues,
           hasNoResults: results ? results.nbHits === 0 : true,
           refine: connectorState.toggleRefinementFactory(helper),
+          sendEvent,
           createURL: connectorState.createURLFactory({ state, createURL }),
           widgetParams,
         };

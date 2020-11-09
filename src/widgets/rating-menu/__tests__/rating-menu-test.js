@@ -4,6 +4,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import ratingMenu from '../rating-menu';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -62,7 +63,9 @@ describe('ratingMenu()', () => {
     createURL = () => '#';
     widget.init({
       helper,
-      instantSearchInstance: { templatesConfig: undefined },
+      instantSearchInstance: createInstantSearch({
+        templatesConfig: undefined,
+      }),
     });
   });
 

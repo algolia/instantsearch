@@ -18,10 +18,15 @@ import {
   UiState,
   CreateURL,
   RenderState,
+  Middleware,
+  MiddlewareDefinition,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
-import { Middleware, MiddlewareDefinition } from '../middleware';
-import { createRouter, RouterProps } from '../middleware/createRouter';
+import {
+  createRouterMiddleware,
+  RouterProps,
+} from '../middlewares/createRouterMiddleware';
+import { InsightsEvent } from '../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -115,6 +120,8 @@ export type InstantSearchOptions = {
   /**
    * the instance of search-insights to use for sending insights events inside
    * widgets like `hits`.
+   *
+   * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
 };
@@ -143,6 +150,7 @@ class InstantSearch extends EventEmitter {
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: MiddlewareDefinition[] = [];
+  public sendEventToInsights: (event: InsightsEvent) => void;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -178,6 +186,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     if (typeof searchClient.addAlgoliaAgent === 'function') {
       searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
     }
+
+    warning(
+      insightsClient === null,
+      `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
+
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
+    );
 
     warning(
       Boolean(insightsClient) || !hasDetectedInsightsClient(),
@@ -241,9 +256,11 @@ See ${createDocumentationLink({
       this._searchFunction = searchFunction;
     }
 
+    this.sendEventToInsights = noop;
+
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
-      this.EXPERIMENTAL_use(createRouter(routerOptions));
+      this.use(createRouterMiddleware(routerOptions));
     }
   }
 
@@ -253,11 +270,10 @@ See ${createDocumentationLink({
    * This method is considered as experimental and is subject to change in
    * minor versions.
    */
-  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
+  public use(...middleware: Middleware[]): this {
     const newMiddlewareList = middleware.map(fn => {
       const newMiddleware = fn({ instantSearchInstance: this });
       this.middleware.push(newMiddleware);
-
       return newMiddleware;
     });
 
@@ -270,6 +286,16 @@ See ${createDocumentationLink({
     }
 
     return this;
+  }
+
+  // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
+  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
+    warning(
+      false,
+      'The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
+    );
+
+    return this.use(...middleware);
   }
 
   /**

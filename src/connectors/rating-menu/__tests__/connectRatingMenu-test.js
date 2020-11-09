@@ -8,11 +8,13 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectRatingMenu', () => {
   const getInitializedWidget = (config = {}, unmount) => {
     const rendering = jest.fn();
     const makeWidget = connectRatingMenu(rendering, unmount);
+    const instantSearchInstance = createInstantSearch();
 
     const attribute = 'grade';
     const widget = makeWidget({
@@ -31,11 +33,12 @@ describe('connectRatingMenu', () => {
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance,
     });
 
     const { refine } = rendering.mock.calls[0][0];
 
-    return { widget, helper, refine, rendering };
+    return { widget, helper, refine, rendering, instantSearchInstance };
   };
 
   describe('Usage', () => {
@@ -439,6 +442,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         },
       });
 
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      ratingMenuWidget.init(initOptions);
+
       const renderState1 = ratingMenuWidget.getRenderState(
         {},
         createInitOptions({ state: helper.state, helper })
@@ -449,6 +456,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           items: [],
           createURL: expect.any(Function),
           refine: expect.any(Function),
+          sendEvent: expect.any(Function),
           hasNoResults: true,
           widgetParams: {
             attribute: 'grade',
@@ -507,6 +515,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           ],
           createURL: expect.any(Function),
           refine: expect.any(Function),
+          sendEvent: renderState1.ratingMenu.grade.sendEvent,
           hasNoResults: true,
           widgetParams: {
             attribute: 'grade',
@@ -531,6 +540,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         },
       });
 
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      ratingMenuWidget.init(initOptions);
+
       const renderState1 = ratingMenuWidget.getWidgetRenderState(
         createInitOptions({ state: helper.state, helper })
       );
@@ -539,6 +552,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         items: [],
         createURL: expect.any(Function),
         refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         hasNoResults: true,
         widgetParams: {
           attribute: 'grade',
@@ -594,6 +608,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         ],
         createURL: expect.any(Function),
         refine: expect.any(Function),
+        sendEvent: renderState1.sendEvent,
         hasNoResults: true,
         widgetParams: {
           attribute: 'grade',
@@ -712,6 +727,62 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           },
         })
       );
+    });
+  });
+
+  describe('insights', () => {
+    it('sends event when a facet is added', () => {
+      const attribute = 'swag';
+      const { refine, instantSearchInstance } = getInitializedWidget({
+        attribute,
+      });
+
+      refine('3');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['swag>=3'],
+          index: '',
+        },
+        widgetType: 'ais.ratingMenu',
+      });
+    });
+
+    it('does not send event when a facet is removed', () => {
+      const attribute = 'swag';
+      const { refine, instantSearchInstance } = getInitializedWidget({
+        attribute,
+      });
+
+      refine('3');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+
+      refine('3');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // still the same
+
+      refine('4');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['swag>=4'],
+          index: '',
+        },
+        widgetType: 'ais.ratingMenu',
+      });
     });
   });
 });
