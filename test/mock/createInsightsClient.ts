@@ -26,13 +26,25 @@ export function createAlgoliaAnalytics() {
       callback(values._userToken);
     }
   };
+  const viewedObjectIDs = jest.fn(() => {
+    if (!values._apiKey) {
+      throw new Error(
+        'apiKey is missing, please provide it so we can authenticate the application'
+      );
+    }
+    if (!values._appId) {
+      throw new Error(
+        'appId is missing, please provide it, so we can properly attribute data to your application'
+      );
+    }
+  });
 
   return {
     setUserToken,
     init,
     _get,
     onUserTokenChange,
-    viewedObjectIDs: jest.fn(),
+    viewedObjectIDs,
   };
 }
 

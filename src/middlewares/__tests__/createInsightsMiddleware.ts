@@ -79,6 +79,22 @@ describe('insights', () => {
       });
     });
 
+    it('does not throw when an event is sent right after the creation', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+      createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+
+      expect(() => {
+        insightsClient('viewedObjectIDs', {
+          userToken: 'my-user-token',
+          index: instantSearchInstance.indexName,
+          eventName: 'Products Viewed',
+          objectIDs: ['obj-id0', 'obj-id1'],
+        });
+      }).not.toThrow();
+    });
+
     it('warns dev if userToken is set before creating the middleware', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
       insightsClient('setUserToken', 'abc');
