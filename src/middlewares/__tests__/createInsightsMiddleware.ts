@@ -116,9 +116,16 @@ describe('insights', () => {
       middleware.subscribe();
 
       setTimeout(() => {
-        libraryLoadedAndProcessQueue();
+        // When the library is loaded later, it consumes the queue and sends the event.
+        const { algoliaAnalytics } = libraryLoadedAndProcessQueue();
+        expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
+        expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledWith({
+          eventName: 'Hits Viewed',
+          index: '',
+          objectIDs: ['1', '2'],
+        });
         done();
-      }, 20);
+      }, 200);
 
       expect(() => {
         instantSearchInstance.sendEventToInsights({
@@ -132,6 +139,12 @@ describe('insights', () => {
           widgetType: 'ais.hits',
         });
       }).not.toThrow();
+
+      // The library is not loaded yet, so it stays in the queue.
+      expect(insightsClient.queue[insightsClient.queue.length - 1]).toEqual([
+        'viewedObjectIDs',
+        { eventName: 'Hits Viewed', index: '', objectIDs: ['1', '2'] },
+      ]);
     });
 
     it('applies clickAnalytics', () => {

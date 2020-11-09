@@ -74,6 +74,9 @@ export function createInsightsUmdVersion() {
       queue.push = ([methodName, ...args]) => {
         _aa(methodName, ...args);
       };
+      return {
+        algoliaAnalytics: instance,
+      };
     },
   };
 }
