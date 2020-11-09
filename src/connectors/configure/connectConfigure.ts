@@ -88,11 +88,11 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
           new algoliasearchHelper.SearchParameters(searchParameters)
         );
 
-        // Trigger a search with the resolved search parameters
-        helper.setState(nextSearchParameters).search();
-
         // Update original `widgetParams.searchParameters` to the new refined one
         widgetParams.searchParameters = searchParameters;
+
+        // Trigger a search with the resolved search parameters
+        helper.setState(nextSearchParameters).search();
       };
     }
 

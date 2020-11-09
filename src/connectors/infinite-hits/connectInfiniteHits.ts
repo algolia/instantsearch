@@ -11,6 +11,10 @@ import {
   addAbsolutePosition,
   addQueryID,
   noop,
+  createSendEventForHits,
+  SendEventForHits,
+  createBindEventForHits,
+  BindEventForHits,
 } from '../../lib/utils';
 
 export type InfiniteHitsCachedHits = {
@@ -85,6 +89,16 @@ export type InfiniteHitsRendererOptions = {
    * Indicates whether the last page of hits has been reached.
    */
   isLastPage: boolean;
+
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEventForHits;
+
+  /**
+   * Returns a string of data-insights-event attribute for insights middleware
+   */
+  bindEvent: BindEventForHits;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -139,40 +153,55 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       transformItems = (items: any[]) => items,
       cache = getInMemoryCache(),
     } = widgetParams || ({} as typeof widgetParams);
-    let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
-    let prevState: Partial<SearchParameters>;
     let showPrevious: () => void;
     let showMore: () => void;
+    let sendEvent;
+    let bindEvent;
+    const getFirstReceivedPage = (
+      state: SearchParameters,
+      cachedHits: InfiniteHitsCachedHits
+    ) => {
+      const { page = 0 } = state;
+      const pages = Object.keys(cachedHits).map(Number);
+      if (pages.length === 0) {
+        return page;
+      } else {
+        return Math.min(page, ...pages);
+      }
+    };
+    const getLastReceivedPage = (
+      state: SearchParameters,
+      cachedHits: InfiniteHitsCachedHits
+    ) => {
+      const { page = 0 } = state;
+      const pages = Object.keys(cachedHits).map(Number);
+      if (pages.length === 0) {
+        return page;
+      } else {
+        return Math.max(page, ...pages);
+      }
+    };
 
-    const getFirstReceivedPage = () =>
-      Math.min(...Object.keys(cachedHits || {}).map(Number));
-    const getLastReceivedPage = () =>
-      Math.max(...Object.keys(cachedHits || {}).map(Number));
-
-    const getShowPrevious = (helper: Helper): (() => void) => () => {
+    const getShowPrevious = (
+      helper: Helper,
+      cachedHits: InfiniteHitsCachedHits
+    ): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
       // avoid updating the browser URL when the user displays the previous page.
       helper
         .overrideStateWithoutTriggeringChangeEvent({
           ...helper.state,
-          page: getFirstReceivedPage() - 1,
+          page: getFirstReceivedPage(helper.state, cachedHits) - 1,
         })
         .searchWithoutTriggeringOnStateChange();
     };
-    const getShowMore = (helper: Helper): (() => void) => () => {
-      helper.setPage(getLastReceivedPage() + 1).search();
-    };
-    const filterEmptyRefinements = (refinements = {}) => {
-      return Object.keys(refinements)
-        .filter(key =>
-          Array.isArray(refinements[key])
-            ? refinements[key].length
-            : Object.keys(refinements[key]).length
-        )
-        .reduce((obj, key) => {
-          obj[key] = refinements[key];
-          return obj;
-        }, {});
+    const getShowMore = (
+      helper: Helper,
+      cachedHits: InfiniteHitsCachedHits
+    ): (() => void) => () => {
+      helper
+        .setPage(getLastReceivedPage(helper.state, cachedHits) + 1)
+        .search();
     };
 
     return {
@@ -189,10 +218,19 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       },
 
       render(renderOptions) {
+        const { state, instantSearchInstance } = renderOptions;
+
+        const widgetRenderState = this.getWidgetRenderState(renderOptions);
+
+        const cachedHits = cache.read({ state }) || {};
+        const { page = 0 } = state;
+
+        sendEvent('view', cachedHits[page]);
+
         renderFn(
           {
-            ...this.getWidgetRenderState(renderOptions),
-            instantSearchInstance: renderOptions.instantSearchInstance,
+            ...widgetRenderState,
+            instantSearchInstance,
           },
           false
         );
@@ -205,48 +243,27 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         };
       },
 
-      getWidgetRenderState({ results, helper, state }) {
-        let hits;
+      getWidgetRenderState({ results, helper, state, instantSearchInstance }) {
+        let isFirstPage;
+        const cachedHits = cache.read({ state }) || {};
 
         if (!results) {
-          showPrevious = getShowPrevious(helper);
-          showMore = getShowMore(helper);
-          hits = extractHitsFromCachedHits(
-            cache.read({ state: helper.state }) || {}
-          );
+          showPrevious = getShowPrevious(helper, cachedHits);
+          showMore = getShowMore(helper, cachedHits);
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+          bindEvent = createBindEventForHits({
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+          isFirstPage =
+            helper.state.page === undefined ||
+            getFirstReceivedPage(helper.state, cachedHits) === 0;
         } else {
-          // Reset cache and received pages if anything changes in the
-          // search state, except for the page.
-          //
-          // We're doing this to "reset" the widget if a refinement or the
-          // query changes between renders, but we want to keep it as is
-          // if we only change pages.
-          const {
-            page = 0,
-            facets,
-            hierarchicalFacets,
-            disjunctiveFacets,
-            maxValuesPerFacet,
-            ...currentState
-          } = state;
-
-          currentState.facetsRefinements = filterEmptyRefinements(
-            currentState.facetsRefinements
-          );
-          currentState.hierarchicalFacetsRefinements = filterEmptyRefinements(
-            currentState.hierarchicalFacetsRefinements
-          );
-          currentState.disjunctiveFacetsRefinements = filterEmptyRefinements(
-            currentState.disjunctiveFacetsRefinements
-          );
-          currentState.numericRefinements = filterEmptyRefinements(
-            currentState.numericRefinements
-          );
-
-          if (!isEqual(currentState, prevState)) {
-            cachedHits = cache.read({ state }) || {};
-            prevState = currentState;
-          }
+          const { page = 0 } = state;
 
           if (escapeHTML && results.hits.length > 0) {
             results.hits = escapeHits(results.hits);
@@ -268,25 +285,23 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           // hits widgets mounted on the page.
           (results.hits as any).__escaped = initialEscaped;
 
-          if (cachedHits === undefined) {
-            cachedHits = cache.read({ state }) || {};
-          }
-
-          if (cachedHits![page] === undefined) {
-            cachedHits![page] = results.hits;
+          if (cachedHits[page] === undefined) {
+            cachedHits[page] = results.hits;
             cache.write({ state, hits: cachedHits });
           }
 
-          hits = extractHitsFromCachedHits(cachedHits!);
+          isFirstPage = getFirstReceivedPage(state, cachedHits) === 0;
         }
 
-        const isFirstPage =
-          getFirstReceivedPage() === 0 ||
-          (helper ? helper.state.page === undefined : false);
-        const isLastPage = results ? results.nbPages <= results.page + 1 : true;
+        const hits = extractHitsFromCachedHits(cachedHits);
+        const isLastPage = results
+          ? results.nbPages <= getLastReceivedPage(state, cachedHits) + 1
+          : true;
 
         return {
           hits,
+          sendEvent,
+          bindEvent,
           results,
           showPrevious,
           showMore,

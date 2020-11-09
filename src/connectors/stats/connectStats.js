@@ -21,13 +21,17 @@ const withUsage = createDocumentationMessageGenerator({
  */
 
 /**
+ * @typedef {Object} CustomStatsWidgetOptions
+ */
+
+/**
  * **Stats** connector provides the logic to build a custom widget that will displays
  * search statistics (hits number and processing time).
  *
  * @type {Connector}
  * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function} Re-usable widget factory for a custom **Stats** widget.
+ * @return {function(CustomStatsWidgetOptions)} Re-usable widget factory for a custom **Stats** widget.
  * @example
  * // custom `renderFn` to render the custom Stats widget
  * function renderFn(StatsRenderingOptions, isFirstRendering) {
@@ -53,33 +57,25 @@ export default function connectStats(renderFn, unmountFn = noop) {
   return (widgetParams = {}) => ({
     $$type: 'ais.stats',
 
-    init({ helper, instantSearchInstance }) {
+    init(initOptions) {
+      const { instantSearchInstance } = initOptions;
+
       renderFn(
         {
+          ...this.getWidgetRenderState(initOptions),
           instantSearchInstance,
-          hitsPerPage: helper.state.hitsPerPage,
-          nbHits: 0,
-          nbPages: 0,
-          page: helper.state.page || 0,
-          processingTimeMS: -1,
-          query: helper.state.query || '',
-          widgetParams,
         },
         true
       );
     },
 
-    render({ results, instantSearchInstance }) {
+    render(renderOptions) {
+      const { instantSearchInstance } = renderOptions;
+
       renderFn(
         {
+          ...this.getWidgetRenderState(renderOptions),
           instantSearchInstance,
-          hitsPerPage: results.hitsPerPage,
-          nbHits: results.nbHits,
-          nbPages: results.nbPages,
-          page: results.page,
-          processingTimeMS: results.processingTimeMS,
-          query: results.query,
-          widgetParams,
         },
         false
       );
@@ -87,6 +83,37 @@ export default function connectStats(renderFn, unmountFn = noop) {
 
     dispose() {
       unmountFn();
+    },
+
+    getRenderState(renderState, renderOptions) {
+      return {
+        ...renderState,
+        stats: this.getWidgetRenderState(renderOptions),
+      };
+    },
+
+    getWidgetRenderState({ results, helper }) {
+      if (!results) {
+        return {
+          hitsPerPage: helper.state.hitsPerPage,
+          nbHits: 0,
+          nbPages: 0,
+          page: helper.state.page || 0,
+          processingTimeMS: -1,
+          query: helper.state.query || '',
+          widgetParams,
+        };
+      }
+
+      return {
+        hitsPerPage: results.hitsPerPage,
+        nbHits: results.nbHits,
+        nbPages: results.nbPages,
+        page: results.page,
+        processingTimeMS: results.processingTimeMS,
+        query: results.query,
+        widgetParams,
+      };
     },
   });
 }

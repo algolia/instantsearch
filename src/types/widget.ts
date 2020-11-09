@@ -5,7 +5,8 @@ import {
   SearchResults,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { InstantSearch } from './instantsearch';
+import { InstantSearch, Hit, GeoLoc } from './instantsearch';
+import { BindEventForHits } from '../lib/utils';
 import {
   AutocompleteRendererOptions,
   AutocompleteConnectorParams,
@@ -27,6 +28,10 @@ import {
   CurrentRefinementsConnectorParams,
 } from '../connectors/current-refinements/connectCurrentRefinements';
 import {
+  HitsPerPageConnectorParams,
+  HitsPerPageRendererOptions,
+} from '../connectors/hits-per-page/connectHitsPerPage';
+import {
   HitsRendererOptions,
   HitsConnectorParams,
 } from '../connectors/hits/connectHits';
@@ -36,6 +41,18 @@ import {
 } from '../connectors/infinite-hits/connectInfiniteHits';
 import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
 import { PlacesWidgetParams } from '../widgets/places/places';
+import {
+  NumericMenuConnectorParams,
+  NumericMenuRendererOptions,
+} from '../connectors/numeric-menu/connectNumericMenu';
+import {
+  PoweredByConnectorParams,
+  PoweredByRendererOptions,
+} from '../connectors/powered-by/connectPoweredBy';
+import {
+  QueryRulesRendererOptions,
+  QueryRulesConnectorParams,
+} from '../connectors/query-rules/connectQueryRules';
 
 export type ScopedResult = {
   indexId: string;
@@ -217,6 +234,10 @@ export type IndexRenderState = Partial<{
   >;
   analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
   places: WidgetRenderState<{}, PlacesWidgetParams>;
+  poweredBy: WidgetRenderState<
+    PoweredByRendererOptions,
+    PoweredByConnectorParams
+  >;
   range: {
     [attribute: string]: WidgetRenderState<
       {
@@ -239,14 +260,44 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  numericMenu: {
+    [attribute: string]: WidgetRenderState<
+      NumericMenuRendererOptions,
+      NumericMenuConnectorParams
+    >;
+  };
+  geoSearch: {
+    currentRefinement?: {
+      northEast: GeoLoc;
+      southWest: GeoLoc;
+    };
+    position?: GeoLoc;
+    items: Array<Hit & Required<Pick<Hit, '_geoLoc'>>>;
+    refine(position: { northEast: GeoLoc; southWest: GeoLoc }): void;
+    clearMapRefinement(): void;
+    hasMapMoveSinceLastRefine(): boolean;
+    isRefineOnMapMove(): boolean;
+    isRefinedWithMap(): boolean;
+    setMapMoveSinceLastRefine(): void;
+    toggleRefineOnMapMove(): void;
+    sendEvent: Function;
+    widgetParams: any;
+  };
+  queryRules: WidgetRenderState<
+    QueryRulesRendererOptions,
+    QueryRulesConnectorParams
+  >;
+  hitsPerPage: WidgetRenderState<
+    HitsPerPageRendererOptions,
+    HitsPerPageConnectorParams
+  >;
 }>;
 
 export type WidgetRenderState<
   TWidgetRenderState,
-  // @ts-ignore
   TWidgetParams
 > = TWidgetRenderState & {
-  widgetParams: any; // @TODO type as TWidgetParams
+  widgetParams: TWidgetParams;
 };
 
 /**
@@ -339,9 +390,9 @@ export type Widget<
       /**
        * Returns the render state of the current widget to pass to the render function.
        */
-      getWidgetRenderState: (
+      getWidgetRenderState(
         renderOptions: InitOptions | RenderOptions
-      ) => TWidgetOptions['renderState'];
+      ): TWidgetOptions['renderState'];
       /**
        * Returns IndexRenderState of the current index component tree
        * to build the render state of the whole app.
@@ -383,3 +434,9 @@ export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
 export type Template<TTemplateData = void> =
   | string
   | ((data: TTemplateData) => string);
+
+export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
+
+export type TemplateWithBindEvent<TTemplateData = void> =
+  | string
+  | ((data: TTemplateData, bindEvent: BindEventForHits) => string);

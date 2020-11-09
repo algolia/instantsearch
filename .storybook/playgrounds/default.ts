@@ -1,5 +1,6 @@
 import instantsearch from '../../src/index';
 import { panel, numericMenu, hits } from '../../src/widgets';
+import { createInsightsMiddleware } from '../../src/middlewares';
 
 export const hitsItemTemplate = `
 <div
@@ -126,6 +127,14 @@ function instantSearchPlayground({
       container: pagination,
     }),
   ]);
+
+  const insights = createInsightsMiddleware({
+    insightsClient: null,
+    onEvent: props => {
+      console.log('insights onEvent', props);
+    },
+  });
+  search.use(insights);
 }
 
 export default instantSearchPlayground;
