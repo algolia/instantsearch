@@ -186,7 +186,9 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
     return {
       $$type: 'ais.queryRules',
 
-      init({ helper, state, instantSearchInstance }) {
+      init(initOptions) {
+        const { helper, state, instantSearchInstance } = initOptions;
+
         initialRuleContexts = state.ruleContexts || [];
         onHelperChange = applyRuleContexts.bind({
           helper,
@@ -214,26 +216,40 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
 
         render(
           {
-            items: [],
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
-            widgetParams,
           },
           true
         );
       },
 
-      render({ results, instantSearchInstance }) {
-        const { userData = [] } = results;
-        const items = transformItems(userData);
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
 
         render(
           {
-            items,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
-            widgetParams,
           },
           false
         );
+      },
+
+      getWidgetRenderState({ results }) {
+        const { userData = [] } = results || {};
+        const items = transformItems(userData);
+
+        return {
+          items,
+          widgetParams,
+        };
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          queryRules: this.getWidgetRenderState(renderOptions),
+        };
       },
 
       dispose({ helper, state }) {

@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  createSendEventForFacet,
   noop,
 } from '../../lib/utils';
 
@@ -114,6 +115,8 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       );
     }
 
+    let sendEvent;
+
     return {
       $$type: 'ais.menu',
 
@@ -147,6 +150,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
             attribute
           );
+          sendEvent('click', facetValue ? facetValue : refinedItem);
           helper
             .toggleRefinement(attribute, facetValue ? facetValue : refinedItem)
             .search();
@@ -192,12 +196,21 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState(widgetOptions) {
+      getWidgetRenderState({ instantSearchInstance, helper, results }) {
         let items = [];
         let canToggleShowMore = false;
 
-        if (widgetOptions.results) {
-          const facetValues = widgetOptions.results.getFacetValues(attribute, {
+        if (!sendEvent) {
+          sendEvent = createSendEventForFacet({
+            instantSearchInstance,
+            helper,
+            attribute,
+            widgetType: this.$$type,
+          });
+        }
+
+        if (results) {
+          const facetValues = results.getFacetValues(attribute, {
             sortBy,
           });
           const facetItems =
@@ -222,6 +235,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           items,
           createURL: this._createURL,
           refine: this._refine,
+          sendEvent,
           canRefine: items.length > 0,
           widgetParams,
           isShowingMore: this.isShowingMore,

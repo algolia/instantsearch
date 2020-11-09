@@ -313,12 +313,9 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      expect(router.write).toHaveBeenCalledTimes(2);
-      expect(router.write).toHaveBeenLastCalledWith({
-        indexName: {
-          query: 'Apple',
-        },
-      });
+      // The UI state hasn't changed so `router.write` wasn't called a second
+      // time
+      expect(router.write).toHaveBeenCalledTimes(1);
     });
 
     test('should keep the UI state up to date on first render', async () => {
@@ -363,12 +360,9 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      expect(router.write).toHaveBeenCalledTimes(2);
-      expect(router.write).toHaveBeenLastCalledWith({
-        indexName: {
-          query: 'Apple iPhone',
-        },
-      });
+      // The UI state hasn't changed so `router.write` wasn't called a second
+      // time
+      expect(router.write).toHaveBeenCalledTimes(1);
     });
 
     test('should keep the UI state up to date on router.update', async () => {
@@ -440,6 +434,85 @@ describe('RoutingManager', () => {
       expect(router.write).toHaveBeenLastCalledWith({
         indexName: {
           query: 'Apple',
+        },
+      });
+    });
+
+    test('skips duplicate route state entries', async () => {
+      let triggerChange = false;
+      const searchClient = createSearchClient();
+      const stateMapping = createFakeStateMapping({
+        stateToRoute(uiState) {
+          if (triggerChange) {
+            return {
+              ...uiState,
+              indexName: {
+                ...uiState.indexName,
+                triggerChange,
+              },
+            };
+          }
+
+          return uiState;
+        },
+      });
+      const history = createFakeHistory();
+      const router = createFakeRouter({
+        onUpdate(fn) {
+          history.subscribe(state => {
+            fn(state);
+          });
+        },
+        write: jest.fn(state => {
+          history.push(state);
+        }),
+      });
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        routing: {
+          router,
+          stateMapping,
+        },
+      });
+
+      const fakeSearchBox: any = createFakeSearchBox();
+      const fakeHitsPerPage1 = createFakeHitsPerPage();
+      const fakeHitsPerPage2 = createFakeHitsPerPage();
+
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage1, fakeHitsPerPage2]);
+
+      search.start();
+
+      await runAllMicroTasks();
+
+      // Trigger an update - push a change
+      fakeSearchBox.refine('Apple');
+
+      expect(router.write).toHaveBeenCalledTimes(1);
+      expect(router.write).toHaveBeenLastCalledWith({
+        indexName: {
+          query: 'Apple',
+        },
+      });
+
+      // Trigger change without UI state change
+      search.removeWidgets([fakeHitsPerPage1]);
+
+      expect(router.write).toHaveBeenCalledTimes(1);
+
+      await runAllMicroTasks();
+
+      triggerChange = true;
+      // Trigger change without UI state change but with a route change
+      search.removeWidgets([fakeHitsPerPage2]);
+
+      expect(router.write).toHaveBeenCalledTimes(2);
+      expect(router.write).toHaveBeenLastCalledWith({
+        indexName: {
+          query: 'Apple',
+          triggerChange: true,
         },
       });
     });

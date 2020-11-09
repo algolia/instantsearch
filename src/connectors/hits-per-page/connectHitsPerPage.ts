@@ -5,8 +5,14 @@ import {
   noop,
 } from '../../lib/utils';
 
-import { SearchParameters } from 'algoliasearch-helper';
-import { Connector, TransformItems, CreateURL } from '../../types';
+import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
+import {
+  Connector,
+  TransformItems,
+  CreateURL,
+  InitOptions,
+  RenderOptions,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
@@ -131,27 +137,39 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
     };
 
     type ConnectorState = {
-      setHitsPerPage: (value: HitsPerPageConnectorParamsItem['value']) => any;
-      createURLFactory: (
-        state: SearchParameters
-      ) => HitsPerPageRendererOptions['createURL'];
+      getRefine: (
+        helper: AlgoliaSearchHelper
+      ) => (value: HitsPerPageConnectorParamsItem['value']) => any;
+      createURLFactory: (props: {
+        state: SearchParameters;
+        createURL: (InitOptions | RenderOptions)['createURL'];
+      }) => HitsPerPageRendererOptions['createURL'];
     };
 
-    const connectorState = {} as ConnectorState;
+    const connectorState: ConnectorState = {
+      getRefine: helper => value => {
+        return !value && value !== 0
+          ? helper.setQueryParameter('hitsPerPage', undefined).search()
+          : helper.setQueryParameter('hitsPerPage', value).search();
+      },
+      createURLFactory: ({ state, createURL }) => value =>
+        createURL(
+          state.setQueryParameter(
+            'hitsPerPage',
+            !value && value !== 0 ? undefined : value
+          )
+        ),
+    };
 
     return {
       $$type: 'ais.hitsPerPage',
 
-      init({ helper, createURL, state, instantSearchInstance }) {
+      init(initOptions) {
+        const { state, instantSearchInstance } = initOptions;
+
         const isCurrentInOptions = items.some(
           item => Number(state.hitsPerPage) === Number(item.value)
         );
-
-        connectorState.setHitsPerPage = value => {
-          return !value && value !== 0
-            ? helper.setQueryParameter('hitsPerPage', undefined).search()
-            : helper.setQueryParameter('hitsPerPage', value).search();
-        };
 
         if (!isCurrentInOptions) {
           warning(
@@ -160,7 +178,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
 \`hitsPerPage\` is not defined.
 The option \`hitsPerPage\` needs to be set using the \`configure\` widget.
 
-Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.html
+Learn more: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/
             `
           );
 
@@ -179,38 +197,21 @@ You may want to add another entry to the \`items\` option with this value.`
           ];
         }
 
-        connectorState.createURLFactory = helperState => value => {
-          return createURL(
-            helperState.setQueryParameter(
-              'hitsPerPage',
-              !value && value !== 0 ? undefined : value
-            )
-          );
-        };
-
         renderFn(
           {
-            items: transformItems(normalizeItems(state)),
-            refine: connectorState.setHitsPerPage,
-            createURL: connectorState.createURLFactory(helper.state),
-            hasNoResults: true,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
         );
       },
 
-      render({ state, results, instantSearchInstance }) {
-        const hasNoResults = results.nbHits === 0;
+      render(initOptions) {
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            items: transformItems(normalizeItems(state)),
-            refine: connectorState.setHitsPerPage,
-            createURL: connectorState.createURLFactory(state),
-            hasNoResults,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           false
@@ -221,6 +222,23 @@ You may want to add another entry to the \`items\` option with this value.`
         unmountFn();
 
         return state.setQueryParameter('hitsPerPage', undefined);
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          hitsPerPage: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ state, results, createURL, helper }) {
+        return {
+          items: transformItems(normalizeItems(state)),
+          refine: connectorState.getRefine(helper),
+          createURL: connectorState.createURLFactory({ state, createURL }),
+          hasNoResults: results ? results.nbHits === 0 : true,
+          widgetParams,
+        };
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

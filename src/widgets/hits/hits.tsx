@@ -17,11 +17,13 @@ import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
 import {
   Template,
+  TemplateWithBindEvent,
   Hit,
   WidgetFactory,
   Renderer,
   InsightsClientWrapper,
 } from '../../types';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
@@ -33,7 +35,7 @@ const renderer = ({
   containerNode,
   templates,
 }): Renderer<HitsRendererOptions, Partial<HitsWidgetOptions>> => (
-  { hits: receivedHits, results, instantSearchInstance, insights },
+  { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -52,6 +54,10 @@ const renderer = ({
       results={results}
       templateProps={renderState.templateProps}
       insights={insights as InsightsClientWrapper}
+      sendEvent={(event: InsightsEvent) => {
+        instantSearchInstance.sendEventToInsights(event);
+      }}
+      bindEvent={bindEvent}
     />,
     containerNode
   );
@@ -93,7 +99,7 @@ export type HitsTemplates = {
    *
    * @default ''
    */
-  item?: Template<
+  item?: TemplateWithBindEvent<
     Hit & {
       __hitIndex: number;
     }
@@ -117,7 +123,11 @@ export type HitsWidgetOptions = {
   cssClasses?: HitsCSSClasses;
 };
 
-export type HitsWidget = WidgetFactory<HitsConnectorParams, HitsWidgetOptions>;
+export type HitsWidget = WidgetFactory<
+  HitsRendererOptions,
+  HitsConnectorParams,
+  HitsWidgetOptions
+>;
 
 const hits: HitsWidget = function hits(widgetOptions) {
   const {

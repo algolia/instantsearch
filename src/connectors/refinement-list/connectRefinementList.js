@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  createSendEventForFacet,
   noop,
 } from '../../lib/utils';
 import {
@@ -158,6 +159,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     let hasExhaustiveItems = true;
     let searchForFacetValues;
     let triggerRefine;
+    let sendEvent;
 
     const render = ({
       items,
@@ -247,7 +249,15 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         };
 
         helper
-          .searchForFacetValues(attribute, query, getLimit(isShowingMore), tags)
+          .searchForFacetValues(
+            attribute,
+            query,
+            // We cap the `maxFacetHits` value to 100 because the Algolia API
+            // doesn't support a greater number.
+            // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
+            Math.min(getLimit(isShowingMore), 100),
+            tags
+          )
           .then(results => {
             const facetValues = escapeFacetValues
               ? escapeFacets(results.facetHits)
@@ -303,8 +313,17 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
-        triggerRefine = facetValue =>
+        sendEvent = createSendEventForFacet({
+          instantSearchInstance,
+          helper,
+          attribute,
+          widgetType: this.$$type,
+        });
+
+        triggerRefine = facetValue => {
+          sendEvent('click', facetValue);
           helper.toggleRefinement(attribute, facetValue).search();
+        };
 
         searchForFacetValues = createSearchForFacetValues(
           helper,
@@ -322,6 +341,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
+          sendEvent,
         });
       },
 
@@ -366,6 +386,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
+          sendEvent,
         });
       },
 

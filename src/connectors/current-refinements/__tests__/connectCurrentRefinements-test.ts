@@ -228,6 +228,109 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
   });
 
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createCurrentRefinements = connectCurrentRefinements(
+        renderFn,
+        unmountFn
+      );
+      const configure = createCurrentRefinements({});
+
+      const renderState = configure.getWidgetRenderState(createInitOptions());
+
+      expect(renderState).toEqual({
+        items: [],
+        refine: expect.any(Function),
+        createURL: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    test('returns the widget render state with scoped results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createCurrentRefinements = connectCurrentRefinements(
+        renderFn,
+        unmountFn
+      );
+      const configure = createCurrentRefinements({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'subCategory'],
+            separator: ' > ',
+          },
+        ],
+      });
+
+      configure.init!(createInitOptions());
+
+      helper.toggleRefinement('category', 'Decoration');
+
+      const renderState = configure.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          scopedResults: [
+            {
+              indexId: 'indexName',
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  hits: [],
+                  facets: {
+                    category: {
+                      Decoration: 880,
+                    },
+                    subCategory: {
+                      'Decoration > Candle holders & candles': 193,
+                      'Decoration > Frames & pictures': 173,
+                    },
+                  },
+                }),
+                createSingleSearchResponse({
+                  facets: {
+                    category: {
+                      Decoration: 880,
+                      Outdoor: 47,
+                    },
+                  },
+                }),
+              ]),
+            },
+          ],
+        })
+      );
+
+      expect(renderState).toEqual({
+        items: [
+          {
+            attribute: 'category',
+            indexName: 'indexName',
+            label: 'category',
+            refine: expect.any(Function),
+            refinements: [
+              {
+                attribute: 'category',
+                count: 880,
+                exhaustive: true,
+                label: 'Decoration',
+                type: 'hierarchical',
+                value: 'Decoration',
+              },
+            ],
+          },
+        ],
+        refine: expect.any(Function),
+        createURL: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+  });
+
   describe('Widget options', () => {
     let helper: AlgoliaSearchHelper;
 

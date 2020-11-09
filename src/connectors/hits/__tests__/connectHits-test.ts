@@ -461,6 +461,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(renderState1.hits).toEqual({
         hits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
         results: undefined,
         widgetParams: {},
       });
@@ -490,13 +492,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       ((expectedHits as unknown) as EscapedHits).__escaped = true;
 
-      expect(renderState2.hits).toEqual(
-        expect.objectContaining({
-          hits: expectedHits,
-          results,
-          widgetParams: {},
-        })
-      );
+      expect(renderState2.hits).toEqual({
+        hits: expectedHits,
+        sendEvent: renderState1.hits!.sendEvent,
+        bindEvent: renderState1.hits!.bindEvent,
+        results,
+        widgetParams: {},
+      });
     });
   });
 
@@ -516,6 +518,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(renderState1).toEqual({
         hits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
         results: undefined,
         widgetParams: {},
       });
@@ -544,13 +548,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       ((expectedHits as unknown) as EscapedHits).__escaped = true;
 
-      expect(renderState2).toEqual(
-        expect.objectContaining({
-          hits: expectedHits,
-          results,
-          widgetParams: {},
-        })
-      );
+      expect(renderState2).toEqual({
+        hits: expectedHits,
+        sendEvent: renderState1.sendEvent,
+        bindEvent: renderState2.bindEvent,
+        results,
+        widgetParams: {},
+      });
     });
   });
 
@@ -658,6 +662,187 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(nextState.highlightPreTag).toBe('<mark>');
       expect(nextState.highlightPostTag).toBe('</mark>');
+    });
+  });
+
+  describe('insights', () => {
+    const createRenderedWidget = () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectHits(renderFn);
+      const widget = makeWidget({});
+
+      const helper = algoliasearchHelper(createSearchClient(), '', {});
+      helper.search = jest.fn();
+
+      const initOptions = createInitOptions({
+        helper,
+        state: helper.state,
+      });
+      const instantSearchInstance = initOptions.instantSearchInstance;
+      widget.init!(initOptions);
+
+      const hits = [
+        {
+          objectID: '1',
+          fake: 'data',
+          __queryID: 'test-query-id',
+          __position: 0,
+        },
+        {
+          objectID: '2',
+          sample: 'infos',
+          __queryID: 'test-query-id',
+          __position: 1,
+        },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits }),
+      ]);
+      widget.render!(
+        createRenderOptions({
+          results,
+          state: helper.state,
+          helper,
+        })
+      );
+
+      return { instantSearchInstance, renderFn, hits };
+    };
+
+    describe('insights', () => {
+      describe('sendEvent', () => {
+        it('sends view event when hits are rendered', () => {
+          const { instantSearchInstance } = createRenderedWidget();
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1);
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledWith({
+            eventType: 'view',
+            insightsMethod: 'viewedObjectIDs',
+            payload: {
+              eventName: 'Hits Viewed',
+              index: '',
+              objectIDs: ['1', '2'],
+            },
+            widgetType: 'ais.hits',
+          });
+        });
+
+        it('sends click event', () => {
+          const {
+            instantSearchInstance,
+            renderFn,
+            hits,
+          } = createRenderedWidget();
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1); // view event by render
+
+          const { sendEvent } = renderFn.mock.calls[
+            renderFn.mock.calls.length - 1
+          ][0];
+          sendEvent('click', hits[0], 'Product Added');
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(2);
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledWith({
+            eventType: 'click',
+            insightsMethod: 'clickedObjectIDsAfterSearch',
+            payload: {
+              eventName: 'Product Added',
+              index: '',
+              objectIDs: ['1'],
+              positions: [0],
+              queryID: 'test-query-id',
+            },
+            widgetType: 'ais.hits',
+          });
+        });
+
+        it('sends conversion event', () => {
+          const {
+            instantSearchInstance,
+            renderFn,
+            hits,
+          } = createRenderedWidget();
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1); // view event by render
+
+          const { sendEvent } = renderFn.mock.calls[
+            renderFn.mock.calls.length - 1
+          ][0];
+          sendEvent('conversion', hits[1], 'Product Ordered');
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(2);
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledWith({
+            eventType: 'conversion',
+            insightsMethod: 'convertedObjectIDsAfterSearch',
+            payload: {
+              eventName: 'Product Ordered',
+              index: '',
+              objectIDs: ['2'],
+              queryID: 'test-query-id',
+            },
+            widgetType: 'ais.hits',
+          });
+        });
+      });
+
+      describe('bindEvent', () => {
+        it('returns a payload for click event', () => {
+          const { renderFn, hits } = createRenderedWidget();
+          const { bindEvent } = renderFn.mock.calls[
+            renderFn.mock.calls.length - 1
+          ][0];
+          const payload = bindEvent('click', hits[0], 'Product Added');
+          expect(payload.startsWith('data-insights-event=')).toBe(true);
+          expect(
+            JSON.parse(atob(payload.substr('data-insights-event='.length)))
+          ).toEqual({
+            eventType: 'click',
+            insightsMethod: 'clickedObjectIDsAfterSearch',
+            payload: {
+              eventName: 'Product Added',
+              index: '',
+              objectIDs: ['1'],
+              positions: [0],
+              queryID: 'test-query-id',
+            },
+            widgetType: 'ais.hits',
+          });
+        });
+
+        it('returns a payload for conversion event', () => {
+          const { renderFn, hits } = createRenderedWidget();
+          const { bindEvent } = renderFn.mock.calls[
+            renderFn.mock.calls.length - 1
+          ][0];
+          const payload = bindEvent('conversion', hits[1], 'Product Ordered');
+          expect(payload.startsWith('data-insights-event=')).toBe(true);
+          expect(
+            JSON.parse(atob(payload.substr('data-insights-event='.length)))
+          ).toEqual({
+            eventType: 'conversion',
+            insightsMethod: 'convertedObjectIDsAfterSearch',
+            payload: {
+              eventName: 'Product Ordered',
+              index: '',
+              objectIDs: ['2'],
+              queryID: 'test-query-id',
+            },
+            widgetType: 'ais.hits',
+          });
+        });
+      });
     });
   });
 });

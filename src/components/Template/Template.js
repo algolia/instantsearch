@@ -28,6 +28,7 @@ class Template extends Component {
       compileOptions,
       helpers: this.props.templatesConfig.helpers,
       data: this.props.data,
+      bindEvent: this.props.bindEvent,
     });
 
     if (content === null) {
@@ -69,6 +70,7 @@ Template.propTypes = {
     }),
   }),
   useCustomCompileOptions: PropTypes.objectOf(PropTypes.bool),
+  bindEvent: PropTypes.func,
 };
 
 Template.defaultProps = {

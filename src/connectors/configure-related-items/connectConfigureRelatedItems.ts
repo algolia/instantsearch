@@ -7,6 +7,7 @@ import {
   createDocumentationMessageGenerator,
   getObjectType,
   warning,
+  getPropertyByPath,
 } from '../../lib/utils';
 import connectConfigure, {
   ConfigureRendererOptions,
@@ -79,7 +80,7 @@ const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = function co
       Array<string | string[]>
     >((acc, attributeName) => {
       const attribute = matchingPatterns[attributeName];
-      const attributeValue = hit[attributeName];
+      const attributeValue = getPropertyByPath(hit, attributeName);
       const attributeScore = attribute.score;
 
       if (Array.isArray(attributeValue)) {
