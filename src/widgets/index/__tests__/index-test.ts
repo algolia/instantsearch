@@ -1920,6 +1920,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchBoxRefine = jest.fn();
       const searchBoxClear = jest.fn();
       const paginationRefine = jest.fn();
+      const paginationCreateURL = jest.fn();
+
       const searchBox = createSearchBox({
         getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
           return {
@@ -1935,12 +1937,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         }),
       });
       const pagination = createPagination({
-        getRenderState: jest.fn((renderState, { state }) => {
+        getRenderState: jest.fn(renderState => {
           return {
             ...renderState,
             pagination: {
               refine: paginationRefine,
-              page: state.page,
+              createURL: paginationCreateURL,
+              isFirstPage: true,
+              isLastPage: true,
+              currentRefinement: 0,
+              nbHits: 0,
+              nbPages: 0,
+              pages: [],
               widgetParams: {},
             },
           };
@@ -1968,7 +1976,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
               },
               pagination: {
                 refine: paginationRefine,
-                page: 0,
+                createURL: paginationCreateURL,
+                isFirstPage: true,
+                isLastPage: true,
+                currentRefinement: 0,
+                nbHits: 0,
+                nbPages: 0,
+                pages: [],
                 widgetParams: {},
               },
             },
@@ -1995,7 +2009,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
               },
               pagination: {
                 refine: paginationRefine,
-                page: 0,
+                createURL: paginationCreateURL,
+                isFirstPage: true,
+                isLastPage: true,
+                currentRefinement: 0,
+                nbHits: 0,
+                nbPages: 0,
+                pages: [],
                 widgetParams: {},
               },
             },
@@ -2030,12 +2050,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         }),
       });
       const pagination = createPagination({
-        getRenderState: jest.fn((renderState, { state }) => {
+        getRenderState: jest.fn(renderState => {
           return {
             ...renderState,
             pagination: {
               refine: () => {},
-              page: state.page,
+              createURL: () => '',
+              isFirstPage: true,
+              isLastPage: true,
+              currentRefinement: 0,
+              nbHits: 0,
+              nbPages: 0,
+              pages: [],
               widgetParams: {},
             },
           };

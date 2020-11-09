@@ -49,6 +49,10 @@ import {
   QueryRulesRendererOptions,
   QueryRulesConnectorParams,
 } from '../connectors/query-rules/connectQueryRules';
+import {
+  PaginationRendererOptions,
+  PaginationConnectorParams,
+} from '../connectors/pagination/connectPagination';
 
 export type ScopedResult = {
   indexId: string;
@@ -282,6 +286,10 @@ export type IndexRenderState = Partial<{
   hitsPerPage: WidgetRenderState<
     HitsPerPageRendererOptions,
     HitsPerPageConnectorParams
+  >;
+  pagination: WidgetRenderState<
+    PaginationRendererOptions,
+    PaginationConnectorParams
   >;
 }>;
 
