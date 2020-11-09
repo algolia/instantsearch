@@ -36,6 +36,30 @@ describe('insights', () => {
     };
   };
 
+  const createUmdTestEnvironment = () => {
+    const {
+      insightsClient,
+      libraryLoadedAndProcessQueue,
+    } = createInsightsUmdVersion();
+    const instantSearchInstance = createInstantSearch({
+      client: algoliasearch('myAppId', 'myApiKey'),
+    });
+    const helper = algoliasearchHelper({} as SearchClient, '');
+    const getUserToken = () => {
+      return (helper.state as any).userToken;
+    };
+    instantSearchInstance.mainIndex = {
+      getHelper: () => helper,
+    } as Index;
+    return {
+      insightsClient,
+      libraryLoadedAndProcessQueue,
+      instantSearchInstance,
+      helper,
+      getUserToken,
+    };
+  };
+
   beforeEach(() => {
     warning.cache = {};
   });
@@ -79,38 +103,35 @@ describe('insights', () => {
       });
     });
 
-    it('does not throw when an event is sent right after the creation', () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment();
-      createInsightsMiddleware({
+    it('does not throw when an event is sent right after the creation in UMD', done => {
+      const {
+        insightsClient,
+        libraryLoadedAndProcessQueue,
+        instantSearchInstance,
+      } = createUmdTestEnvironment();
+
+      const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
+      middleware.subscribe();
+
+      setTimeout(() => {
+        libraryLoadedAndProcessQueue();
+        done();
+      }, 20);
 
       expect(() => {
-        insightsClient('viewedObjectIDs', {
-          userToken: 'my-user-token',
-          index: instantSearchInstance.indexName,
-          eventName: 'Products Viewed',
-          objectIDs: ['obj-id0', 'obj-id1'],
+        instantSearchInstance.sendEventToInsights({
+          eventType: 'view',
+          insightsMethod: 'viewedObjectIDs',
+          payload: {
+            eventName: 'Hits Viewed',
+            index: '',
+            objectIDs: ['1', '2'],
+          },
+          widgetType: 'ais.hits',
         });
       }).not.toThrow();
-    });
-
-    it('warns dev if userToken is set before creating the middleware', () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment();
-      insightsClient('setUserToken', 'abc');
-      expect(() => {
-        createInsightsMiddleware({
-          insightsClient,
-        })({ instantSearchInstance });
-      })
-        .toWarnDev(`[InstantSearch.js]: You set userToken before \`createInsightsMiddleware()\` and it is ignored.
-Please set the token after the \`createInsightsMiddleware()\` call.
-
-createInsightsMiddleware({ /* ... */ });
-
-insightsClient('setUserToken', 'your-user-token');
-// or
-aa('setUserToken', 'your-user-token');`);
     });
 
     it('applies clickAnalytics', () => {
@@ -169,7 +190,7 @@ aa('setUserToken', 'your-user-token');`);
       expect(getUserToken()).toEqual(ANONYMOUS_TOKEN);
     });
 
-    it('ignores userToken set before init', () => {
+    it('applies userToken which was set before init', () => {
       const {
         insightsClient,
         instantSearchInstance,
@@ -182,33 +203,10 @@ aa('setUserToken', 'your-user-token');`);
         insightsClient,
       })({ instantSearchInstance });
       middleware.subscribe();
-      expect(getUserToken()).toEqual(ANONYMOUS_TOKEN);
+      expect(getUserToken()).toEqual('token-from-queue-before-init');
     });
 
     describe('umd', () => {
-      const createUmdTestEnvironment = () => {
-        const {
-          insightsClient,
-          libraryLoadedAndProcessQueue,
-        } = createInsightsUmdVersion();
-        const instantSearchInstance = createInstantSearch({
-          client: algoliasearch('myAppId', 'myApiKey'),
-        });
-        const helper = algoliasearchHelper({} as SearchClient, '');
-        const getUserToken = () => {
-          return (helper.state as any).userToken;
-        };
-        instantSearchInstance.mainIndex = {
-          getHelper: () => helper,
-        } as Index;
-        return {
-          insightsClient,
-          libraryLoadedAndProcessQueue,
-          instantSearchInstance,
-          helper,
-          getUserToken,
-        };
-      };
       it('applies userToken from queue if exists', () => {
         const {
           insightsClient,
@@ -238,6 +236,7 @@ aa('setUserToken', 'your-user-token');`);
           insightsClient,
           instantSearchInstance,
           getUserToken,
+          libraryLoadedAndProcessQueue,
         } = createUmdTestEnvironment();
 
         // call init and setUserToken even before the library is loaded.
@@ -252,6 +251,7 @@ aa('setUserToken', 'your-user-token');`);
           insightsClient,
         })({ instantSearchInstance });
         middleware.subscribe();
+        libraryLoadedAndProcessQueue();
         expect(getUserToken()).toEqual('token-from-queue');
       });
 
