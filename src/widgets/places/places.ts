@@ -30,18 +30,19 @@ type PlacesWidgetState = {
   isInitialLatLngViaIPSet: boolean;
 };
 
+export type PlacesWidget = WidgetFactory<
+  {},
+  PlacesWidgetParams,
+  PlacesWidgetParams
+>;
+
 /**
  * This widget sets the geolocation value for the search based on the selected
  * result in the Algolia Places autocomplete.
  */
-const placesWidget: WidgetFactory<{}, {}, PlacesWidgetParams> = (
-  widgetParams: PlacesWidgetParams
-) => {
-  const {
-    placesReference = undefined,
-    defaultPosition = [],
-    ...placesOptions
-  } = widgetParams || {};
+const placesWidget: PlacesWidget = (widgetParams: PlacesWidgetParams) => {
+  const { placesReference, defaultPosition = [], ...placesOptions } =
+    widgetParams || ({} as PlacesWidgetParams);
 
   if (typeof placesReference !== 'function') {
     throw new Error(
