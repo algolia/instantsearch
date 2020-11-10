@@ -64,13 +64,19 @@ export type Connector<TRendererOptions, TConnectorParams> = <TWidgetParams>(
   /**
    * The render function.
    */
-  renderFn: Renderer<TRendererOptions, TWidgetParams>,
+  renderFn: Renderer<TRendererOptions, TConnectorParams & TWidgetParams>,
 
   /**
    * The called function when unmounting a widget.
    */
   unmountFn?: Unmounter
-) => WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams>;
+) => WidgetFactory<
+  TRendererOptions,
+  // a connector doesn't know the difference between TWidgetParams and the
+  // TConnectorParams for the context of rendering.
+  TConnectorParams & TWidgetParams,
+  TConnectorParams & TWidgetParams
+>;
 
 /**
  * Transforms the given items.

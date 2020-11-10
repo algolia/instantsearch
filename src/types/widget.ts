@@ -427,9 +427,9 @@ export type Widget<
       /**
        * Returns the render state of the current widget to pass to the render function.
        */
-      getWidgetRenderState?: (
+      getWidgetRenderState?(
         renderOptions: InitOptions | RenderOptions
-      ) => unknown;
+      ): unknown;
       /**
        * Returns IndexRenderState of the current index component tree
        * to build the render state of the whole app.
@@ -449,7 +449,12 @@ export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
    */
   widgetParams: TConnectorParams & TWidgetParams
 ) => Widget<{
-  renderState: WidgetRenderState<TRendererOptions, TWidgetParams>;
+  renderState: WidgetRenderState<
+    TRendererOptions,
+    // widgetParams sent to the connector of builtin widgets are actually
+    // the connector params, therefore renderState uses TConnectorParams only
+    TConnectorParams
+  >;
 }>;
 
 export type Template<TTemplateData = void> =
