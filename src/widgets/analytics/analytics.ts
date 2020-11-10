@@ -61,7 +61,11 @@ export type AnalyticsWidgetParams = {
 
 const withUsage = createDocumentationMessageGenerator({ name: 'analytics' });
 
-export type AnalyticsWidget = WidgetFactory<{}, {}, AnalyticsWidgetParams>;
+export type AnalyticsWidget = WidgetFactory<
+  {},
+  AnalyticsWidgetParams,
+  AnalyticsWidgetParams
+>;
 
 // @major this widget will be removed from the next major version.
 const analytics: AnalyticsWidget = function analytics(widgetParams) {
