@@ -99,6 +99,11 @@ export type InfiniteHitsRendererOptions = {
    * Returns a string of data-insights-event attribute for insights middleware
    */
   bindEvent: BindEventForHits;
+
+  /**
+   * Hits for the current page
+   */
+  currentPageHits: Hits;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -218,14 +223,11 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       },
 
       render(renderOptions) {
-        const { state, instantSearchInstance } = renderOptions;
+        const { instantSearchInstance } = renderOptions;
 
         const widgetRenderState = this.getWidgetRenderState(renderOptions);
 
-        const cachedHits = cache.read({ state }) || {};
-        const { page = 0 } = state;
-
-        sendEvent('view', cachedHits[page]);
+        sendEvent('view', widgetRenderState.currentPageHits);
 
         renderFn(
           {
@@ -245,6 +247,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 
       getWidgetRenderState({ results, helper, state, instantSearchInstance }) {
         let isFirstPage;
+        let currentPageHits;
         const cachedHits = cache.read({ state }) || {};
 
         if (!results) {
@@ -289,6 +292,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             cachedHits[page] = results.hits;
             cache.write({ state, hits: cachedHits });
           }
+          currentPageHits = results.hits;
 
           isFirstPage = getFirstReceivedPage(state, cachedHits) === 0;
         }
@@ -300,6 +304,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 
         return {
           hits,
+          currentPageHits,
           sendEvent,
           bindEvent,
           results,

@@ -1018,8 +1018,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
       ];
 
+      const expectedCurrentPageHits = [
+        {
+          __queryID: 'theQueryID',
+          name: 'name 1',
+          objectID: '1',
+        },
+        {
+          __queryID: 'theQueryID',
+          name: 'name 2',
+          objectID: '2',
+        },
+      ];
+      (expectedCurrentPageHits as any).__escaped = true;
+
       expect(renderState2.infiniteHits).toEqual({
         hits: expectedHits,
+        currentPageHits: expectedCurrentPageHits,
         sendEvent: renderState1.infiniteHits!.sendEvent,
         bindEvent: renderState1.infiniteHits!.bindEvent,
         isFirstPage: true,
@@ -1080,19 +1095,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
       ];
 
-      expect(renderState2).toEqual(
-        expect.objectContaining({
-          hits: expectedHits,
-          sendEvent: renderState1.sendEvent,
-          bindEvent: renderState1.bindEvent,
-          isFirstPage: true,
-          isLastPage: true,
-          results,
-          showMore: renderState1.showMore,
-          showPrevious: renderState1.showPrevious,
-          widgetParams: {},
-        })
-      );
+      const expectedCurrentPageHits = [
+        {
+          __queryID: 'theQueryID',
+          name: 'name 1',
+          objectID: '1',
+        },
+        {
+          __queryID: 'theQueryID',
+          name: 'name 2',
+          objectID: '2',
+        },
+      ];
+      (expectedCurrentPageHits as any).__escaped = true;
+
+      expect(renderState2).toEqual({
+        hits: expectedHits,
+        currentPageHits: expectedCurrentPageHits,
+        sendEvent: renderState1.sendEvent,
+        bindEvent: renderState1.bindEvent,
+        isFirstPage: true,
+        isLastPage: true,
+        results,
+        showMore: renderState1.showMore,
+        showPrevious: renderState1.showPrevious,
+        widgetParams: {},
+      });
     });
   });
 
