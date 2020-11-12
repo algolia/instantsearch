@@ -46,7 +46,9 @@ export type InsightsClient = InsightsSendEvent &
   InsightsOnUserTokenChange &
   InsightsGet &
   InsightsInit &
-  InsightsSetUserToken;
+  InsightsSetUserToken & {
+    queue?: Array<[string, any]>;
+  };
 
 export type InsightsClientWrapper = (
   method: InsightsClientMethod,

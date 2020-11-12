@@ -41,7 +41,8 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
     const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
     let queuedUserToken: string | undefined = undefined;
     let userTokenBeforeInit: string | undefined = undefined;
-    if (Array.isArray((insightsClient as any).queue)) {
+
+    if (Array.isArray(insightsClient.queue)) {
       // Context: The umd build of search-insights is asynchronously loaded by the snippet.
       //
       // When user calls `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
@@ -53,7 +54,7 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
       // we still want to read the token from the queue.
       // Otherwise, the first search call will be fired without the token.
       [, queuedUserToken] =
-        (insightsClient as any).queue
+        insightsClient.queue
           .slice()
           .reverse()
           .find(([method]) => method === 'setUserToken') || [];
