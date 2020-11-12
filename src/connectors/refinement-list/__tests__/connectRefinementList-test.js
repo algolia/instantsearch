@@ -2178,7 +2178,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   describe('getRenderState', () => {
-    it('returns the render state', () => {
+    it('returns the render state without results', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createRefinementList = connectRefinementList(renderFn, unmountFn);
@@ -2213,6 +2213,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           },
         },
       });
+    });
+
+    it('returns the render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRefinementList = connectRefinementList(renderFn, unmountFn);
+      const refinementListWidget = createRefinementList({ attribute: 'brand' });
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      refinementListWidget.init(initOptions);
+
+      const renderState1 = refinementListWidget.getRenderState({}, initOptions);
 
       const results = new SearchResults(helper.state, [
         createSingleSearchResponse({
@@ -2227,13 +2246,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         }),
       ]);
 
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
       const renderState2 = refinementListWidget.getRenderState(
         {},
-        createRenderOptions({
-          helper,
-          state: helper.state,
-          results,
-        })
+        renderOptions
       );
 
       expect(renderState2.refinementList).toEqual({
@@ -2279,7 +2300,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   describe('getWidgetRenderState', () => {
-    it('returns the widget render state', () => {
+    it('returns the widget render state without results', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createRefinementList = connectRefinementList(renderFn, unmountFn);
@@ -2314,6 +2335,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           attribute: 'brand',
         },
       });
+    });
+
+    it('returns the widget render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRefinementList = connectRefinementList(renderFn, unmountFn);
+      const refinementListWidget = createRefinementList({ attribute: 'brand' });
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      refinementListWidget.init(initOptions);
+
+      const renderState1 = refinementListWidget.getWidgetRenderState(
+        initOptions
+      );
 
       const results = new SearchResults(helper.state, [
         createSingleSearchResponse({
@@ -2328,12 +2370,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         }),
       ]);
 
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
       const renderState2 = refinementListWidget.getWidgetRenderState(
-        createRenderOptions({
-          helper,
-          state: helper.state,
-          results,
-        })
+        renderOptions
       );
 
       expect(renderState2).toEqual(
