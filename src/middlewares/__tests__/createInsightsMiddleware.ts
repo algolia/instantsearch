@@ -6,6 +6,7 @@ import {
   createAlgoliaAnalytics,
   createInsightsClient,
   createInsightsUmdVersion,
+  AlgoliaAnalytics,
   ANONYMOUS_TOKEN,
 } from '../../../test/mock/createInsightsClient';
 import { warning } from '../../lib/utils';
@@ -36,11 +37,11 @@ describe('insights', () => {
     };
   };
 
-  const createUmdTestEnvironment = () => {
+  const createUmdTestEnvironment = (algoliaAnalytics?: AlgoliaAnalytics) => {
     const {
       insightsClient,
       libraryLoadedAndProcessQueue,
-    } = createInsightsUmdVersion();
+    } = createInsightsUmdVersion(algoliaAnalytics);
     const instantSearchInstance = createInstantSearch({
       client: algoliasearch('myAppId', 'myApiKey'),
     });
@@ -103,48 +104,46 @@ describe('insights', () => {
       });
     });
 
-    it('does not throw when an event is sent right after the creation in UMD', done => {
+    it('does not throw when an event is sent right after the creation in UMD', () => {
+      const algoliaAnalytics = createAlgoliaAnalytics();
       const {
         insightsClient,
         libraryLoadedAndProcessQueue,
         instantSearchInstance,
-      } = createUmdTestEnvironment();
+      } = createUmdTestEnvironment(algoliaAnalytics);
 
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
       middleware.subscribe();
 
-      setTimeout(() => {
-        // When the library is loaded later, it consumes the queue and sends the event.
-        const { algoliaAnalytics } = libraryLoadedAndProcessQueue();
-        expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
-        expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledWith({
+      // It tries to send an event.
+      instantSearchInstance.sendEventToInsights({
+        eventType: 'view',
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
           eventName: 'Hits Viewed',
           index: '',
           objectIDs: ['1', '2'],
-        });
-        done();
-      }, 200);
+        },
+        widgetType: 'ais.hits',
+      });
+      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
 
-      expect(() => {
-        instantSearchInstance.sendEventToInsights({
-          eventType: 'view',
-          insightsMethod: 'viewedObjectIDs',
-          payload: {
-            eventName: 'Hits Viewed',
-            index: '',
-            objectIDs: ['1', '2'],
-          },
-          widgetType: 'ais.hits',
-        });
-      }).not.toThrow();
-
-      // The library is not loaded yet, so it stays in the queue.
+      // But, the library hasn't been loaded yet, so the event stays in the queue.
       expect(insightsClient.queue[insightsClient.queue.length - 1]).toEqual([
         'viewedObjectIDs',
         { eventName: 'Hits Viewed', index: '', objectIDs: ['1', '2'] },
       ]);
+
+      // When the library is loaded later, it consumes the queue and sends the event.
+      libraryLoadedAndProcessQueue();
+      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
+      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledWith({
+        eventName: 'Hits Viewed',
+        index: '',
+        objectIDs: ['1', '2'],
+      });
     });
 
     it('applies clickAnalytics', () => {

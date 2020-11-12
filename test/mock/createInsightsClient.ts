@@ -1,5 +1,16 @@
 export const ANONYMOUS_TOKEN = 'anonymous-user-id-1';
 
+export type AlgoliaAnalytics = {
+  setUserToken: (userToken: string) => void;
+  init: ({ appId, apiKey }) => void;
+  _get: (key: string, callback: Function) => void;
+  onUserTokenChange: (
+    callback: Function,
+    options?: { immediate?: boolean }
+  ) => void;
+  viewedObjectIDs: Function;
+};
+
 export function createAlgoliaAnalytics() {
   let values: any = {};
   const setValues = obj => {
@@ -26,16 +37,7 @@ export function createAlgoliaAnalytics() {
       callback(values._userToken);
     }
   };
-  const sendEvent = () => {
-    if (!values._hasCredentials) {
-      throw new Error(
-        "Before calling any methods on the analytics, you first need to call the 'init' function with appId and apiKey parameters"
-      );
-    }
-  };
-  const viewedObjectIDs = jest.fn(() => {
-    sendEvent();
-  });
+  const viewedObjectIDs = jest.fn();
 
   return {
     setUserToken,
@@ -43,7 +45,7 @@ export function createAlgoliaAnalytics() {
     _get,
     onUserTokenChange,
     viewedObjectIDs,
-  };
+  } as AlgoliaAnalytics;
 }
 
 export function createInsightsClient(instance = createAlgoliaAnalytics()) {
@@ -55,7 +57,9 @@ export function createInsightsClient(instance = createAlgoliaAnalytics()) {
   };
 }
 
-export function createInsightsUmdVersion() {
+export function createInsightsUmdVersion(
+  algoliaAnalytics = createAlgoliaAnalytics()
+) {
   const globalObject: any = {};
   globalObject.aa = (...args) => {
     globalObject.aa.queue = globalObject.aa.queue || [];
@@ -65,8 +69,7 @@ export function createInsightsUmdVersion() {
   return {
     insightsClient: globalObject.aa,
     libraryLoadedAndProcessQueue: () => {
-      const instance = createAlgoliaAnalytics();
-      const _aa = createInsightsClient(instance);
+      const _aa = createInsightsClient(algoliaAnalytics);
       const queue = globalObject.aa.queue;
       queue.forEach(([methodName, ...args]) => {
         _aa(methodName, ...args);
@@ -75,7 +78,7 @@ export function createInsightsUmdVersion() {
         _aa(methodName, ...args);
       };
       return {
-        algoliaAnalytics: instance,
+        algoliaAnalytics,
       };
     },
   };
