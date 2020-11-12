@@ -52,11 +52,11 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
       // At this point, even though `search-insights` is not loaded yet,
       // we still want to read the token from the queue.
       // Otherwise, the first search call will be fired without the token.
-      (insightsClient as any).queue.forEach(([method, firstArgument]) => {
-        if (method === 'setUserToken') {
-          queuedUserToken = firstArgument;
-        }
-      });
+      [, queuedUserToken] =
+        (insightsClient as any).queue
+          .slice()
+          .reverse()
+          .find(([method]) => method === 'setUserToken') || [];
     }
     insightsClient('_get', '_userToken', (userToken: string) => {
       // If user has called `aa('setUserToken', 'my-user-token')` before creating
