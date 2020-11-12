@@ -274,6 +274,44 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         widgetParams: {},
       });
     });
+
+    it('returns the render state with a custom voice helper', () => {
+      const voiceHelper = {
+        isBrowserSupported: () => true,
+        dispose: () => {},
+        getState: () => ({
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        }),
+        isListening: () => true,
+        toggleListening: () => {},
+      };
+
+      const { widget, helper } = getInitializedWidget({
+        widgetParams: {
+          createVoiceSearchHelper: () => voiceHelper,
+        },
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState = widget.getRenderState({}, initOptions);
+
+      expect(renderState.voiceSearch).toEqual({
+        isBrowserSupported: true,
+        isListening: true,
+        toggleListening: expect.any(Function),
+        voiceListeningState: {
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        },
+        widgetParams: {
+          createVoiceSearchHelper: expect.any(Function),
+        },
+      });
+    });
   });
 
   describe('getWidgetRenderState', () => {
@@ -292,6 +330,46 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         toggleListening: expect.any(Function),
         voiceListeningState: undefined,
         widgetParams: {},
+      });
+    });
+
+    it('returns the render state with a custom voice helper', () => {
+      const voiceHelper = {
+        isBrowserSupported: () => true,
+        dispose: () => {},
+        getState: () => ({
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        }),
+        isListening: () => true,
+        toggleListening: () => {},
+      };
+
+      const { widget, helper } = getInitializedWidget({
+        widgetParams: {
+          createVoiceSearchHelper: () => voiceHelper,
+        },
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      widget.init(initOptions);
+
+      const renderState = widget.getWidgetRenderState(initOptions);
+
+      expect(renderState).toEqual({
+        isBrowserSupported: true,
+        isListening: true,
+        toggleListening: expect.any(Function),
+        voiceListeningState: {
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        },
+        widgetParams: {
+          createVoiceSearchHelper: expect.any(Function),
+        },
       });
     });
   });
