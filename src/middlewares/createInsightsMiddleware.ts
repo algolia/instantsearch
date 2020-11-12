@@ -93,12 +93,12 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
           setUserTokenToSearch(anonymousUserToken);
         }
 
-        if (queuedUserToken) {
-          insightsClient('setUserToken', queuedUserToken);
-        }
-
+        // We consider the `userToken` coming from a `init` call to have a higher
+        // importance than the one coming from the queue.
         if (userTokenBeforeInit) {
           insightsClient('setUserToken', userTokenBeforeInit);
+        } else if (queuedUserToken) {
+          insightsClient('setUserToken', queuedUserToken);
         }
 
         // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
