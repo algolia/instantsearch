@@ -12,6 +12,11 @@ export type InsightsClientPayload = {
   positions?: number[];
 };
 
+export type InsightsSetUserToken = (
+  method: 'setUserToken',
+  userToken: string
+) => void;
+
 export type InsightsSendEvent = (
   method: InsightsClientMethod,
   payload: InsightsClientPayload
@@ -40,7 +45,10 @@ export type InsightsInit = (
 export type InsightsClient = InsightsSendEvent &
   InsightsOnUserTokenChange &
   InsightsGet &
-  InsightsInit;
+  InsightsInit &
+  InsightsSetUserToken & {
+    queue?: Array<[string, any]>;
+  };
 
 export type InsightsClientWrapper = (
   method: InsightsClientMethod,
