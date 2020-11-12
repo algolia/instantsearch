@@ -969,7 +969,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   describe('getRenderState', () => {
-    it('returns the render state', () => {
+    it('returns the render state without results', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
@@ -978,10 +978,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         index: 'indexName',
       });
 
-      const renderState1 = infiniteHitsWidget.getRenderState!(
-        {},
-        createInitOptions({ state: helper.state, helper })
-      );
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getRenderState({}, initOptions);
 
       expect(renderState1.infiniteHits).toEqual({
         hits: [],
@@ -994,6 +993,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: expect.any(Function),
         widgetParams: {},
       });
+    });
+
+    it('returns the render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getRenderState({}, initOptions);
 
       const hits = [
         { objectID: '1', name: 'name 1' },
@@ -1004,14 +1017,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
       ]);
 
-      const renderState2 = infiniteHitsWidget.getRenderState!(
-        {},
-        createRenderOptions({
-          helper,
-          state: helper.state,
-          results,
-        })
-      );
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState2 = infiniteHitsWidget.getRenderState({}, renderOptions);
 
       const expectedHits = [
         { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
@@ -1048,7 +1060,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   describe('getWidgetRenderState', () => {
-    it('returns the widget render state', () => {
+    it('returns the widget render state without results', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
@@ -1057,9 +1069,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         index: 'indexName',
       });
 
-      const renderState1 = infiniteHitsWidget.getWidgetRenderState!(
-        createInitOptions({ state: helper.state, helper })
-      );
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getWidgetRenderState(initOptions);
+
+      expect(renderState1).toEqual({
+        hits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        isFirstPage: true,
+        isLastPage: true,
+        results: undefined,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    it('returns the widget render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getWidgetRenderState(initOptions);
 
       expect(renderState1).toEqual({
         hits: [],
@@ -1082,12 +1120,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
       ]);
 
-      const renderState2 = infiniteHitsWidget.getWidgetRenderState!(
-        createRenderOptions({
-          helper,
-          state: helper.state,
-          results,
-        })
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState2 = infiniteHitsWidget.getWidgetRenderState(
+        renderOptions
       );
 
       const expectedHits = [
