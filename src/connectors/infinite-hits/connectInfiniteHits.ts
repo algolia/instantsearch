@@ -99,6 +99,11 @@ export type InfiniteHitsRendererOptions = {
    * Returns a string of data-insights-event attribute for insights middleware
    */
   bindEvent: BindEventForHits;
+
+  /**
+   * Hits for the current page
+   */
+  currentPageHits: Hits;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -207,90 +212,108 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     return {
       $$type: 'ais.infiniteHits',
 
-      init({ instantSearchInstance, helper }) {
-        const cachedHits = cache.read({ state: helper.state }) || {};
-        showPrevious = getShowPrevious(helper, cachedHits);
-        showMore = getShowMore(helper, cachedHits);
-        sendEvent = createSendEventForHits({
-          instantSearchInstance,
-          index: helper.getIndex(),
-          widgetType: this.$$type!,
-        });
-        bindEvent = createBindEventForHits({
-          index: helper.getIndex(),
-          widgetType: this.$$type!,
-        });
-
+      init(initOptions) {
         renderFn(
           {
-            hits: extractHitsFromCachedHits(cachedHits),
-            results: undefined,
-            sendEvent,
-            bindEvent,
-            showPrevious,
-            showMore,
-            isFirstPage:
-              helper.state.page === undefined ||
-              getFirstReceivedPage(helper.state, cachedHits) === 0,
-            isLastPage: true,
-            instantSearchInstance,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render({ results, state, instantSearchInstance }) {
-        const { page = 0 } = state;
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
 
-        if (escapeHTML && results.hits.length > 0) {
-          results.hits = escapeHits(results.hits);
-        }
-        const initialEscaped = (results.hits as any).__escaped;
+        const widgetRenderState = this.getWidgetRenderState(renderOptions);
 
-        results.hits = addAbsolutePosition(
-          results.hits,
-          results.page,
-          results.hitsPerPage
-        );
-
-        results.hits = addQueryID(results.hits, results.queryID);
-
-        results.hits = transformItems(results.hits);
-
-        // Make sure the escaped tag stays after mapping over the hits.
-        // This prevents the hits from being double-escaped if there are multiple
-        // hits widgets mounted on the page.
-        (results.hits as any).__escaped = initialEscaped;
-
-        const cachedHits = cache.read({ state }) || {};
-        if (cachedHits[page] === undefined) {
-          cachedHits[page] = results.hits;
-          cache.write({ state, hits: cachedHits });
-        }
-
-        const firstReceivedPage = getFirstReceivedPage(state, cachedHits);
-        const lastReceivedPage = getLastReceivedPage(state, cachedHits);
-        const isFirstPage = firstReceivedPage === 0;
-        const isLastPage = results.nbPages <= lastReceivedPage + 1;
-
-        sendEvent('view', cachedHits[page]);
+        sendEvent('view', widgetRenderState.currentPageHits);
 
         renderFn(
           {
-            hits: extractHitsFromCachedHits(cachedHits),
-            results,
-            sendEvent,
-            bindEvent,
-            showPrevious,
-            showMore,
-            isFirstPage,
-            isLastPage,
+            ...widgetRenderState,
             instantSearchInstance,
-            widgetParams,
           },
           false
         );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          infiniteHits: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, helper, state, instantSearchInstance }) {
+        let isFirstPage: boolean;
+        let currentPageHits: Hits = [];
+        const cachedHits = cache.read({ state }) || {};
+
+        if (!results) {
+          showPrevious = getShowPrevious(helper, cachedHits);
+          showMore = getShowMore(helper, cachedHits);
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+          bindEvent = createBindEventForHits({
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+          isFirstPage =
+            helper.state.page === undefined ||
+            getFirstReceivedPage(helper.state, cachedHits) === 0;
+        } else {
+          const { page = 0 } = state;
+
+          if (escapeHTML && results.hits.length > 0) {
+            results.hits = escapeHits(results.hits);
+          }
+          const initialEscaped = (results.hits as any).__escaped;
+
+          results.hits = addAbsolutePosition(
+            results.hits,
+            results.page,
+            results.hitsPerPage
+          );
+
+          results.hits = addQueryID(results.hits, results.queryID);
+
+          results.hits = transformItems(results.hits);
+
+          // Make sure the escaped tag stays after mapping over the hits.
+          // This prevents the hits from being double-escaped if there are multiple
+          // hits widgets mounted on the page.
+          (results.hits as any).__escaped = initialEscaped;
+
+          if (cachedHits[page] === undefined) {
+            cachedHits[page] = results.hits;
+            cache.write({ state, hits: cachedHits });
+          }
+          currentPageHits = results.hits;
+
+          isFirstPage = getFirstReceivedPage(state, cachedHits) === 0;
+        }
+
+        const hits = extractHitsFromCachedHits(cachedHits);
+        const isLastPage = results
+          ? results.nbPages <= getLastReceivedPage(state, cachedHits) + 1
+          : true;
+
+        return {
+          hits,
+          currentPageHits,
+          sendEvent,
+          bindEvent,
+          results,
+          showPrevious,
+          showMore,
+          isFirstPage,
+          isLastPage,
+          widgetParams,
+        };
       },
 
       dispose({ state }) {
