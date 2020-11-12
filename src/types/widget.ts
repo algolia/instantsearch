@@ -36,6 +36,10 @@ import {
   HitsRendererOptions,
   HitsConnectorParams,
 } from '../connectors/hits/connectHits';
+import {
+  InfiniteHitsRendererOptions,
+  InfiniteHitsConnectorParams,
+} from '../connectors/infinite-hits/connectInfiniteHits';
 import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
 import { PlacesWidgetParams } from '../widgets/places/places';
 import {
@@ -229,6 +233,10 @@ export type IndexRenderState = Partial<{
     >;
   };
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
+  infiniteHits: WidgetRenderState<
+    InfiniteHitsRendererOptions,
+    InfiniteHitsConnectorParams
+  >;
   analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
   places: WidgetRenderState<{}, PlacesWidgetParams>;
   poweredBy: WidgetRenderState<
