@@ -246,8 +246,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       },
 
       getWidgetRenderState({ results, helper, state, instantSearchInstance }) {
-        let isFirstPage;
-        let currentPageHits;
+        let isFirstPage: boolean;
+        let currentPageHits: Hits = [];
         const cachedHits = cache.read({ state }) || {};
 
         if (!results) {

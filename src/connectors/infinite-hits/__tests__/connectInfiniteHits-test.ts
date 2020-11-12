@@ -984,6 +984,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(renderState1.infiniteHits).toEqual({
         hits: [],
+        currentPageHits: [],
         sendEvent: expect.any(Function),
         bindEvent: expect.any(Function),
         isFirstPage: true,
@@ -1075,6 +1076,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(renderState1).toEqual({
         hits: [],
+        currentPageHits: [],
         sendEvent: expect.any(Function),
         bindEvent: expect.any(Function),
         isFirstPage: true,
@@ -1098,18 +1100,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const initOptions = createInitOptions({ state: helper.state, helper });
 
       const renderState1 = infiniteHitsWidget.getWidgetRenderState(initOptions);
-
-      expect(renderState1).toEqual({
-        hits: [],
-        sendEvent: expect.any(Function),
-        bindEvent: expect.any(Function),
-        isFirstPage: true,
-        isLastPage: true,
-        results: undefined,
-        showMore: expect.any(Function),
-        showPrevious: expect.any(Function),
-        widgetParams: {},
-      });
 
       const hits = [
         { objectID: '1', name: 'name 1' },
