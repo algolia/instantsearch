@@ -159,7 +159,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
     };
 
     const connectorState = {
-      toggleRefinementFactory: helper => toggleRefinement.bind(this, helper),
+      toggleRefinementFactory: helper => toggleRefinement.bind(null, helper),
       createURLFactory: (isRefined, { state, createURL }) => () => {
         const valuesToRemove = isRefined ? on : off;
         if (valuesToRemove) {
