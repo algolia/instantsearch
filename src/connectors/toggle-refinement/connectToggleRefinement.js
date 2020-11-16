@@ -135,7 +135,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
 
     let sendEvent;
 
-    const toggleRefinement = (helper, { isRefined } = {}) => {
+    const toggleRefinementFactory = helper => ({ isRefined } = {}) => {
       // Checking
       if (!isRefined) {
         sendEvent('click', isRefined);
@@ -159,7 +159,6 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
     };
 
     const connectorState = {
-      toggleRefinementFactory: helper => toggleRefinement.bind(null, helper),
       createURLFactory: (isRefined, { state, createURL }) => () => {
         const valuesToRemove = isRefined ? on : off;
         if (valuesToRemove) {
@@ -298,7 +297,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             createURL,
           }),
           sendEvent,
-          refine: connectorState.toggleRefinementFactory(helper),
+          refine: toggleRefinementFactory(helper),
           widgetParams,
         };
       },
