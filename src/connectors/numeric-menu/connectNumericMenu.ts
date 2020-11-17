@@ -175,20 +175,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
       $$type,
 
       init(initOptions) {
-        const { helper, createURL, instantSearchInstance } = initOptions;
-
-        connectorState.refine = facetValue => {
-          const refinedState = getRefinedState(
-            helper.state,
-            attribute,
-            facetValue
-          );
-          connectorState.sendEvent!('click', facetValue);
-          helper.setState(refinedState).search();
-        };
-
-        connectorState.createURL = state => facetValue =>
-          createURL(getRefinedState(state, attribute, facetValue));
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
@@ -293,7 +280,30 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         };
       },
 
-      getWidgetRenderState({ results, state, instantSearchInstance, helper }) {
+      getWidgetRenderState({
+        results,
+        state,
+        instantSearchInstance,
+        helper,
+        createURL,
+      }) {
+        if (!connectorState.refine) {
+          connectorState.refine = facetValue => {
+            const refinedState = getRefinedState(
+              helper.state,
+              attribute,
+              facetValue
+            );
+            connectorState.sendEvent!('click', facetValue);
+            helper.setState(refinedState).search();
+          };
+        }
+
+        if (!connectorState.createURL) {
+          connectorState.createURL = newState => facetValue =>
+            createURL(getRefinedState(newState, attribute, facetValue));
+        }
+
         if (!connectorState.sendEvent) {
           connectorState.sendEvent = createSendEvent({
             instantSearchInstance,
