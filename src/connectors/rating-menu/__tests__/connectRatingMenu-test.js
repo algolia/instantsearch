@@ -428,7 +428,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
   });
 
   describe('getRenderState', () => {
-    it('returns the render state', () => {
+    it('returns the render state without results', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
@@ -444,12 +444,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      ratingMenuWidget.init(initOptions);
-
-      const renderState1 = ratingMenuWidget.getRenderState(
-        {},
-        createInitOptions({ state: helper.state, helper })
-      );
+      const renderState1 = ratingMenuWidget.getRenderState({}, initOptions);
 
       expect(renderState1.ratingMenu).toEqual({
         grade: {
@@ -463,6 +458,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           },
         },
       });
+    });
+
+    it('returns the render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
+      const ratingMenuWidget = createRatingMenu({
+        attribute: 'grade',
+      });
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['grade'],
+        disjunctiveFacetsRefinements: {
+          grade: ['2', '3', '4'],
+        },
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = ratingMenuWidget.getRenderState({}, initOptions);
 
       const results = new SearchResults(helper.state, [
         createSingleSearchResponse({
@@ -472,14 +486,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         }),
       ]);
 
-      const renderState2 = ratingMenuWidget.getRenderState(
-        {},
-        createRenderOptions({
-          helper,
-          state: helper.state,
-          results,
-        })
-      );
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState2 = ratingMenuWidget.getRenderState({}, renderOptions);
 
       expect(renderState2.ratingMenu).toEqual({
         grade: {
@@ -526,7 +539,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
   });
 
   describe('getWidgetRenderState', () => {
-    it('returns the widget render state', () => {
+    it('returns the widget render state without results', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
@@ -542,11 +555,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      ratingMenuWidget.init(initOptions);
-
-      const renderState1 = ratingMenuWidget.getWidgetRenderState(
-        createInitOptions({ state: helper.state, helper })
-      );
+      const renderState1 = ratingMenuWidget.getWidgetRenderState(initOptions);
 
       expect(renderState1).toEqual({
         items: [],
@@ -558,6 +567,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           attribute: 'grade',
         },
       });
+    });
+
+    it('returns the widget render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
+      const ratingMenuWidget = createRatingMenu({
+        attribute: 'grade',
+      });
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['grade'],
+        disjunctiveFacetsRefinements: {
+          grade: ['2', '3', '4'],
+        },
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = ratingMenuWidget.getWidgetRenderState(initOptions);
 
       const results = new SearchResults(helper.state, [
         createSingleSearchResponse({
@@ -567,13 +595,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         }),
       ]);
 
-      const renderState2 = ratingMenuWidget.getWidgetRenderState(
-        createRenderOptions({
-          helper,
-          state: helper.state,
-          results,
-        })
-      );
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState2 = ratingMenuWidget.getWidgetRenderState(renderOptions);
 
       expect(renderState2).toEqual({
         items: [
