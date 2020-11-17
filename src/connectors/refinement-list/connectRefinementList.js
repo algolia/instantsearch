@@ -161,6 +161,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     let searchForFacetValues;
     let triggerRefine;
     let sendEvent;
+    let toggleShowMore;
 
     /* eslint-disable max-params */
     const createSearchForFacetValues = function(helper) {
@@ -224,7 +225,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       // has to only bind it once when `isFirstRendering` for instance
       toggleShowMore() {},
       cachedToggleShowMore() {
-        this.toggleShowMore();
+        toggleShowMore();
       },
 
       createToggleShowMore(renderOptions) {
@@ -239,26 +240,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       },
 
       init(initOptions) {
-        const { instantSearchInstance, helper } = initOptions;
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
-
-        sendEvent = createSendEventForFacet({
-          instantSearchInstance,
-          helper,
-          attribute,
-          widgetType: this.$$type,
-        });
-
-        triggerRefine = facetValue => {
-          sendEvent('click', facetValue);
-          helper.toggleRefinement(attribute, facetValue).search();
-        };
-
-        searchForFacetValues = createSearchForFacetValues.call(
-          this,
-          initOptions.helper
-        );
-
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -295,9 +276,26 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           createURL,
           instantSearchInstance,
           isFromSearch = false,
+          helper,
         } = renderOptions;
         let items = [];
         let facetValues;
+
+        if (!sendEvent || !triggerRefine || !searchForFacetValues) {
+          sendEvent = createSendEventForFacet({
+            instantSearchInstance,
+            helper,
+            attribute,
+            widgetType: this.$$type,
+          });
+
+          triggerRefine = facetValue => {
+            sendEvent('click', facetValue);
+            helper.toggleRefinement(attribute, facetValue).search();
+          };
+
+          searchForFacetValues = createSearchForFacetValues.call(this, helper);
+        }
 
         if (results) {
           if (!isFromSearch) {
@@ -335,7 +333,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           lastResultsFromMainSearch = results;
           lastItemsFromMainSearch = items;
 
-          this.toggleShowMore = this.createToggleShowMore(renderOptions);
+          toggleShowMore = this.createToggleShowMore(renderOptions);
         }
 
         // Compute a specific createURL method able to link to any facet value state change

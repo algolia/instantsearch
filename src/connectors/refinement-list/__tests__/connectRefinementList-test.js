@@ -2192,8 +2192,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      refinementListWidget.init(initOptions);
-
       const renderState1 = refinementListWidget.getRenderState({}, initOptions);
 
       expect(renderState1.refinementList).toEqual({
@@ -2228,8 +2226,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       const initOptions = createInitOptions({ state: helper.state, helper });
-
-      refinementListWidget.init(initOptions);
 
       const renderState1 = refinementListWidget.getRenderState({}, initOptions);
 
@@ -2314,8 +2310,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      refinementListWidget.init(initOptions);
-
       const renderState1 = refinementListWidget.getWidgetRenderState(
         initOptions
       );
@@ -2350,8 +2344,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       const initOptions = createInitOptions({ state: helper.state, helper });
-
-      refinementListWidget.init(initOptions);
 
       const renderState1 = refinementListWidget.getWidgetRenderState(
         initOptions
