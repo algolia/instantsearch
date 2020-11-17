@@ -1,3 +1,12 @@
+## [4.8.6](https://github.com/algolia/instantsearch.js/compare/v4.8.5...v4.8.6) (2020-11-17)
+
+
+### Bug Fixes
+
+* **insights:** do not throw when sending event right after creating insights middleware ([#4575](https://github.com/algolia/instantsearch.js/issues/4575)) ([d963f8d](https://github.com/algolia/instantsearch.js/commit/d963f8d6155e6bb56f852e00528ed10dc9bcc461))
+
+
+
 ## [4.8.5](https://github.com/algolia/instantsearch.js/compare/v4.8.4...v4.8.5) (2020-11-10)
 
 
