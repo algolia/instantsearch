@@ -260,11 +260,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
   describe('getRenderState', () => {
     it('returns the render state', () => {
-      const { widget, helper } = getInitializedWidget();
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
+      const voiceSearchWidget = createVoiceSearch({});
+      const helper = algoliasearchHelper({}, '');
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      const renderState = widget.getRenderState({}, initOptions);
+      const renderState = voiceSearchWidget.getRenderState({}, initOptions);
 
       expect(renderState.voiceSearch).toEqual({
         isBrowserSupported: true,
@@ -288,15 +292,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         toggleListening: () => {},
       };
 
-      const { widget, helper } = getInitializedWidget({
-        widgetParams: {
-          createVoiceSearchHelper: () => voiceHelper,
-        },
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
+      const voiceSearchWidget = createVoiceSearch({
+        createVoiceSearchHelper: () => voiceHelper,
       });
+      const helper = algoliasearchHelper({}, '');
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      const renderState = widget.getRenderState({}, initOptions);
+      const renderState = voiceSearchWidget.getRenderState({}, initOptions);
 
       expect(renderState.voiceSearch).toEqual({
         isBrowserSupported: true,
@@ -316,13 +322,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state', () => {
-      const { widget, helper } = getInitializedWidget();
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
+      const voiceSearchWidget = createVoiceSearch({});
+      const helper = algoliasearchHelper({}, '');
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      widget.init(initOptions);
-
-      const renderState = widget.getWidgetRenderState(initOptions);
+      const renderState = voiceSearchWidget.getWidgetRenderState(initOptions);
 
       expect(renderState).toEqual({
         isBrowserSupported: true,
@@ -346,17 +354,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         toggleListening: () => {},
       };
 
-      const { widget, helper } = getInitializedWidget({
-        widgetParams: {
-          createVoiceSearchHelper: () => voiceHelper,
-        },
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
+      const voiceSearchWidget = createVoiceSearch({
+        createVoiceSearchHelper: () => voiceHelper,
       });
+      const helper = algoliasearchHelper({}, '');
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      widget.init(initOptions);
-
-      const renderState = widget.getWidgetRenderState(initOptions);
+      const renderState = voiceSearchWidget.getWidgetRenderState(initOptions);
 
       expect(renderState).toEqual({
         isBrowserSupported: true,

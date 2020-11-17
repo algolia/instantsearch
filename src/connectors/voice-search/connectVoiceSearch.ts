@@ -55,45 +55,7 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
       $$type: 'ais.voiceSearch',
 
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-        (this as any)._refine = (query: string): void => {
-          if (query !== helper.state.query) {
-            const queryLanguages = language
-              ? [language.split('-')[0]]
-              : undefined;
-            helper.setQueryParameter('queryLanguages', queryLanguages);
-
-            if (typeof additionalQueryParameters === 'function') {
-              helper.setState(
-                helper.state.setQueryParameters({
-                  ignorePlurals: true,
-                  removeStopWords: true,
-                  // @ts-ignore (optionalWords only allows array, while string is also valid)
-                  optionalWords: query,
-                  ...additionalQueryParameters({ query }),
-                })
-              );
-            }
-
-            helper.setQuery(query).search();
-          }
-        };
-
-        (this as any)._voiceSearchHelper = createVoiceSearchHelper({
-          searchAsYouSpeak,
-          language,
-          onQueryChange: query => (this as any)._refine(query),
-          onStateChange: () => {
-            renderFn(
-              {
-                ...this.getWidgetRenderState(initOptions),
-                instantSearchInstance,
-              },
-              false
-            );
-          },
-        });
-
+        const { instantSearchInstance } = initOptions;
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -121,7 +83,50 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
         };
       },
 
-      getWidgetRenderState() {
+      getWidgetRenderState(renderOptions) {
+        const { helper, instantSearchInstance } = renderOptions;
+        if (!(this as any)._refine) {
+          (this as any)._refine = (query: string): void => {
+            if (query !== helper.state.query) {
+              const queryLanguages = language
+                ? [language.split('-')[0]]
+                : undefined;
+              helper.setQueryParameter('queryLanguages', queryLanguages);
+
+              if (typeof additionalQueryParameters === 'function') {
+                helper.setState(
+                  helper.state.setQueryParameters({
+                    ignorePlurals: true,
+                    removeStopWords: true,
+                    // @ts-ignore (optionalWords only allows array, while string is also valid)
+                    optionalWords: query,
+                    ...additionalQueryParameters({ query }),
+                  })
+                );
+              }
+
+              helper.setQuery(query).search();
+            }
+          };
+        }
+
+        if (!(this as any)._voiceSearchHelper) {
+          (this as any)._voiceSearchHelper = createVoiceSearchHelper({
+            searchAsYouSpeak,
+            language,
+            onQueryChange: query => (this as any)._refine(query),
+            onStateChange: () => {
+              renderFn(
+                {
+                  ...this.getWidgetRenderState(renderOptions),
+                  instantSearchInstance,
+                },
+                false
+              );
+            },
+          });
+        }
+
         const {
           isBrowserSupported,
           isListening,
@@ -129,6 +134,7 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
           stopListening,
           getState,
         } = (this as any)._voiceSearchHelper;
+
         return {
           isBrowserSupported: isBrowserSupported(),
           isListening: isListening(),
