@@ -1144,7 +1144,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       });
 
       const helper = jsHelper(createSearchClient(), '');
-      helper.search = () => helper;
 
       const renderState = widget.getWidgetRenderState(
         createInitOptions({ state: helper.state, helper })
