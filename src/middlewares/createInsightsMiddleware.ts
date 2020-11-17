@@ -1,6 +1,6 @@
 import { InsightsClient, InsightsClientMethod, Middleware } from '../types';
 import { getInsightsAnonymousUserTokenInternal } from '../helpers';
-import { warning, noop, getAppIdAndApiKey } from '../lib/utils';
+import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils';
 
 export type InsightsEvent = {
   insightsMethod?: InsightsClientMethod;
@@ -54,10 +54,10 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
       // we still want to read the token from the queue.
       // Otherwise, the first search call will be fired without the token.
       [, queuedUserToken] =
-        insightsClient.queue
-          .slice()
-          .reverse()
-          .find(([method]) => method === 'setUserToken') || [];
+        find(
+          insightsClient.queue.slice().reverse(),
+          ([method]) => method === 'setUserToken'
+        ) || [];
     }
     insightsClient('_get', '_userToken', (userToken: string) => {
       // If user has called `aa('setUserToken', 'my-user-token')` before creating
