@@ -165,20 +165,14 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
 
     /* eslint-disable max-params */
     const createSearchForFacetValues = function(helper) {
-      return (
-        state,
-        createURL,
-        instantSearchInstance,
-        isShowingMore
-      ) => query => {
-        if (query === '' && lastResultsFromMainSearch) {
+      return renderOptions => query => {
+        const { instantSearchInstance } = renderOptions;
+        if (query === '' && lastItemsFromMainSearch) {
           // render with previous data from the helper.
           renderFn({
             ...this.getWidgetRenderState({
+              ...renderOptions,
               results: lastResultsFromMainSearch,
-              state,
-              createURL,
-              instantSearchInstance,
             }),
             instantSearchInstance,
           });
@@ -196,19 +190,38 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
             .searchForFacetValues(
               attribute,
               query,
-              getLimit(isShowingMore),
+              // We cap the `maxFacetHits` value to 100 because the Algolia API
+              // doesn't support a greater number.
+              // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
+              Math.min(getLimit(this.isShowingMore), 100),
               tags
             )
             .then(results => {
+              const facetValues = escapeFacetValues
+                ? escapeFacets(results.facetHits)
+                : results.facetHits;
+
+              const normalizedFacetValues = transformItems(
+                facetValues.map(({ value, ...item }) => ({
+                  ...item,
+                  value,
+                  label: value,
+                }))
+              );
+
+              const canToggleShowMore =
+                this.isShowingMore && lastItemsFromMainSearch.length > limit;
+
               renderFn({
                 ...this.getWidgetRenderState({
-                  results,
-                  state,
-                  createURL,
-                  instantSearchInstance,
-                  isFromSearch: true,
+                  ...renderOptions,
+                  results: lastResultsFromMainSearch,
                 }),
+                items: normalizedFacetValues,
+                canToggleShowMore,
+                canRefine: true,
                 instantSearchInstance,
+                isFromSearch: true,
               });
             });
         }
@@ -343,13 +356,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
         // function
         const searchFacetValues =
-          searchForFacetValues &&
-          searchForFacetValues(
-            state,
-            createURL,
-            instantSearchInstance,
-            this.isShowingMore
-          );
+          searchForFacetValues && searchForFacetValues(renderOptions);
 
         const canShowLess =
           this.isShowingMore && lastItemsFromMainSearch.length > limit;
