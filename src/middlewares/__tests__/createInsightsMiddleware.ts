@@ -6,6 +6,7 @@ import {
   createAlgoliaAnalytics,
   createInsightsClient,
   createInsightsUmdVersion,
+  AlgoliaAnalytics,
   ANONYMOUS_TOKEN,
 } from '../../../test/mock/createInsightsClient';
 import { warning } from '../../lib/utils';
@@ -30,6 +31,30 @@ describe('insights', () => {
     return {
       analytics,
       insightsClient,
+      instantSearchInstance,
+      helper,
+      getUserToken,
+    };
+  };
+
+  const createUmdTestEnvironment = (algoliaAnalytics?: AlgoliaAnalytics) => {
+    const {
+      insightsClient,
+      libraryLoadedAndProcessQueue,
+    } = createInsightsUmdVersion(algoliaAnalytics);
+    const instantSearchInstance = createInstantSearch({
+      client: algoliasearch('myAppId', 'myApiKey'),
+    });
+    const helper = algoliasearchHelper({} as SearchClient, '');
+    const getUserToken = () => {
+      return (helper.state as any).userToken;
+    };
+    instantSearchInstance.mainIndex = {
+      getHelper: () => helper,
+    } as Index;
+    return {
+      insightsClient,
+      libraryLoadedAndProcessQueue,
       instantSearchInstance,
       helper,
       getUserToken,
@@ -79,22 +104,46 @@ describe('insights', () => {
       });
     });
 
-    it('warns dev if userToken is set before creating the middleware', () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment();
-      insightsClient('setUserToken', 'abc');
-      expect(() => {
-        createInsightsMiddleware({
-          insightsClient,
-        })({ instantSearchInstance });
-      })
-        .toWarnDev(`[InstantSearch.js]: You set userToken before \`createInsightsMiddleware()\` and it is ignored.
-Please set the token after the \`createInsightsMiddleware()\` call.
+    it('does not throw when an event is sent right after the creation in UMD', () => {
+      const algoliaAnalytics = createAlgoliaAnalytics();
+      const {
+        insightsClient,
+        libraryLoadedAndProcessQueue,
+        instantSearchInstance,
+      } = createUmdTestEnvironment(algoliaAnalytics);
 
-createInsightsMiddleware({ /* ... */ });
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      middleware.subscribe();
 
-insightsClient('setUserToken', 'your-user-token');
-// or
-aa('setUserToken', 'your-user-token');`);
+      // It tries to send an event.
+      instantSearchInstance.sendEventToInsights({
+        eventType: 'view',
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          eventName: 'Hits Viewed',
+          index: '',
+          objectIDs: ['1', '2'],
+        },
+        widgetType: 'ais.hits',
+      });
+      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
+
+      // But, the library hasn't been loaded yet, so the event stays in the queue.
+      expect(insightsClient.queue[insightsClient.queue.length - 1]).toEqual([
+        'viewedObjectIDs',
+        { eventName: 'Hits Viewed', index: '', objectIDs: ['1', '2'] },
+      ]);
+
+      // When the library is loaded later, it consumes the queue and sends the event.
+      libraryLoadedAndProcessQueue();
+      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
+      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledWith({
+        eventName: 'Hits Viewed',
+        index: '',
+        objectIDs: ['1', '2'],
+      });
     });
 
     it('applies clickAnalytics', () => {
@@ -153,7 +202,7 @@ aa('setUserToken', 'your-user-token');`);
       expect(getUserToken()).toEqual(ANONYMOUS_TOKEN);
     });
 
-    it('ignores userToken set before init', () => {
+    it('applies userToken which was set before init', () => {
       const {
         insightsClient,
         instantSearchInstance,
@@ -166,33 +215,10 @@ aa('setUserToken', 'your-user-token');`);
         insightsClient,
       })({ instantSearchInstance });
       middleware.subscribe();
-      expect(getUserToken()).toEqual(ANONYMOUS_TOKEN);
+      expect(getUserToken()).toEqual('token-from-queue-before-init');
     });
 
     describe('umd', () => {
-      const createUmdTestEnvironment = () => {
-        const {
-          insightsClient,
-          libraryLoadedAndProcessQueue,
-        } = createInsightsUmdVersion();
-        const instantSearchInstance = createInstantSearch({
-          client: algoliasearch('myAppId', 'myApiKey'),
-        });
-        const helper = algoliasearchHelper({} as SearchClient, '');
-        const getUserToken = () => {
-          return (helper.state as any).userToken;
-        };
-        instantSearchInstance.mainIndex = {
-          getHelper: () => helper,
-        } as Index;
-        return {
-          insightsClient,
-          libraryLoadedAndProcessQueue,
-          instantSearchInstance,
-          helper,
-          getUserToken,
-        };
-      };
       it('applies userToken from queue if exists', () => {
         const {
           insightsClient,
@@ -222,6 +248,7 @@ aa('setUserToken', 'your-user-token');`);
           insightsClient,
           instantSearchInstance,
           getUserToken,
+          libraryLoadedAndProcessQueue,
         } = createUmdTestEnvironment();
 
         // call init and setUserToken even before the library is loaded.
@@ -236,6 +263,7 @@ aa('setUserToken', 'your-user-token');`);
           insightsClient,
         })({ instantSearchInstance });
         middleware.subscribe();
+        libraryLoadedAndProcessQueue();
         expect(getUserToken()).toEqual('token-from-queue');
       });
 
