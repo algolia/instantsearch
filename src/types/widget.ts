@@ -51,6 +51,10 @@ import {
   PoweredByRendererOptions,
 } from '../connectors/powered-by/connectPoweredBy';
 import {
+  VoiceSearchRendererOptions,
+  VoiceSearchConnectorParams,
+} from '../connectors/voice-search/connectVoiceSearch';
+import {
   QueryRulesRendererOptions,
   QueryRulesConnectorParams,
 } from '../connectors/query-rules/connectQueryRules';
@@ -291,6 +295,10 @@ export type IndexRenderState = Partial<{
       NumericMenuConnectorParams
     >;
   };
+  voiceSearch: WidgetRenderState<
+    VoiceSearchRendererOptions,
+    VoiceSearchConnectorParams
+  >;
   geoSearch: {
     currentRefinement?: {
       northEast: GeoLoc;
