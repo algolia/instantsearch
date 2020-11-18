@@ -2,7 +2,6 @@
 
 import { h } from 'preact';
 import cx from 'classnames';
-import { find } from '../../lib/utils';
 import Template from '../Template/Template';
 
 type MenuSelectTemplates = {
