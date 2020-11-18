@@ -68,7 +68,7 @@ module.exports = api => {
             // this is actually only called on arrays
             'String.prototype.includes',
           ];
-          if (defaultShouldInject && exclude.indexOf(name) === -1) {
+          if (defaultShouldInject && !exclude.includes(name)) {
             throw new Error(
               `Usage of a builtin which isn't allowed to be polyfilled: ${name}`
             );
