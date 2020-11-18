@@ -29,6 +29,8 @@ export type ConfigureRendererOptions = {
    * Refine the given search parameters.
    */
   refine: Refine;
+
+  _identifier: number;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -58,6 +60,8 @@ export type ConfigureConnector = Connector<
   ConfigureRendererOptions,
   ConfigureConnectorParams
 >;
+
+let uniqueIdentifier = 0;
 
 const connectConfigure: ConfigureConnector = function connectConfigure(
   renderFn = noop,
@@ -96,6 +100,8 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       };
     }
 
+    const _identifier = uniqueIdentifier++;
+
     return {
       $$type: 'ais.configure',
 
@@ -132,18 +138,19 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       },
 
       getRenderState(renderState, renderOptions) {
+        const widgetRenderState = this.getWidgetRenderState(renderOptions);
         return {
           ...renderState,
-          // Even if there are multiple configure widgets,
-          // the last configure widget will override the ones before.
-          // If we want to merge widgetRenderState of multiple configure widgets,
-          // we should modify this part.
-          configure: this.getWidgetRenderState(renderOptions),
+          configure: {
+            ...renderState.configure,
+            [widgetRenderState._identifier]: widgetRenderState,
+          },
         };
       },
 
       getWidgetRenderState() {
         return {
+          _identifier,
           refine: connectorState.refine!,
           widgetParams,
         };

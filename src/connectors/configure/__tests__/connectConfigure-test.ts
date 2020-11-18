@@ -252,7 +252,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
       const renderState1 = configure.getRenderState({}, createInitOptions());
 
+      console.log(renderState1);
+
       expect(renderState1.configure).toEqual({
+        _identifier: expect.any(Number),
         refine: undefined,
         widgetParams: {
           searchParameters: { facetFilters: ['brand:Samsung'] },
@@ -284,6 +287,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       const renderState1 = configure.getWidgetRenderState(createInitOptions());
 
       expect(renderState1).toEqual({
+        _identifier: expect.any(Number),
         refine: undefined,
         widgetParams: {
           searchParameters: { facetFilters: ['brand:Samsung'] },
@@ -297,6 +301,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       );
 
       expect(renderState2).toEqual({
+        _identifier: expect.any(Number),
         refine: expect.any(Function),
         widgetParams: {
           searchParameters: { facetFilters: ['brand:Samsung'] },
