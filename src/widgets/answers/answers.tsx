@@ -8,6 +8,7 @@ import {
   createDocumentationMessageGenerator,
   getContainerNode,
   prepareTemplateProps,
+  warning,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import TemplateRenderer from '../../components/Template/Template';
@@ -95,6 +96,8 @@ const answersWidget: AnswersWidget = widgetParams => {
   const findAnswers = ({ query, index }) => {
     const answersIndex = searchClient.initIndex(index);
     if (!answersIndex.findAnswers) {
+      // FIXME: put the correct version which supports findAnswers both in lite and full version
+      warning(false, '`algoliasearch` >= x.y.z required.');
       return Promise.resolve([]);
     }
     return answersIndex.findAnswers(query, queryLanguages, {
