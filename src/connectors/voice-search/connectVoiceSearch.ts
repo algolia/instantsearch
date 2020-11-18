@@ -44,19 +44,98 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const render = ({
-      isFirstRendering,
-      instantSearchInstance,
-      voiceSearchHelper: {
-        isBrowserSupported,
-        isListening,
-        startListening,
-        stopListening,
-        getState,
+    const {
+      searchAsYouSpeak = false,
+      language,
+      additionalQueryParameters,
+      createVoiceSearchHelper = builtInCreateVoiceSearchHelper,
+    } = widgetParams;
+
+    return {
+      $$type: 'ais.voiceSearch',
+
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance,
+          },
+          true
+        );
       },
-    }): void => {
-      renderFn(
-        {
+
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          voiceSearch: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState(renderOptions) {
+        const { helper, instantSearchInstance } = renderOptions;
+        if (!(this as any)._refine) {
+          (this as any)._refine = (query: string): void => {
+            if (query !== helper.state.query) {
+              const queryLanguages = language
+                ? [language.split('-')[0]]
+                : undefined;
+              helper.setQueryParameter('queryLanguages', queryLanguages);
+
+              if (typeof additionalQueryParameters === 'function') {
+                helper.setState(
+                  helper.state.setQueryParameters({
+                    ignorePlurals: true,
+                    removeStopWords: true,
+                    // @ts-ignore (optionalWords only allows array, while string is also valid)
+                    optionalWords: query,
+                    ...additionalQueryParameters({ query }),
+                  })
+                );
+              }
+
+              helper.setQuery(query).search();
+            }
+          };
+        }
+
+        if (!(this as any)._voiceSearchHelper) {
+          (this as any)._voiceSearchHelper = createVoiceSearchHelper({
+            searchAsYouSpeak,
+            language,
+            onQueryChange: query => (this as any)._refine(query),
+            onStateChange: () => {
+              renderFn(
+                {
+                  ...this.getWidgetRenderState(renderOptions),
+                  instantSearchInstance,
+                },
+                false
+              );
+            },
+          });
+        }
+
+        const {
+          isBrowserSupported,
+          isListening,
+          startListening,
+          stopListening,
+          getState,
+        } = (this as any)._voiceSearchHelper;
+
+        return {
           isBrowserSupported: isBrowserSupported(),
           isListening: isListening(),
           toggleListening() {
@@ -71,72 +150,7 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
           },
           voiceListeningState: getState(),
           widgetParams,
-          instantSearchInstance,
-        },
-        isFirstRendering
-      );
-    };
-
-    const {
-      searchAsYouSpeak = false,
-      language,
-      additionalQueryParameters,
-      createVoiceSearchHelper = builtInCreateVoiceSearchHelper,
-    } = widgetParams;
-
-    return {
-      $$type: 'ais.voiceSearch',
-
-      init({ helper, instantSearchInstance }) {
-        (this as any)._refine = (query: string): void => {
-          if (query !== helper.state.query) {
-            const queryLanguages = language
-              ? [language.split('-')[0]]
-              : undefined;
-            helper.setQueryParameter('queryLanguages', queryLanguages);
-
-            if (typeof additionalQueryParameters === 'function') {
-              helper.setState(
-                helper.state.setQueryParameters({
-                  ignorePlurals: true,
-                  removeStopWords: true,
-                  // @ts-ignore (optionalWords only allows array, while string is also valid)
-                  optionalWords: query,
-                  ...additionalQueryParameters({ query }),
-                })
-              );
-            }
-
-            helper.setQuery(query).search();
-          }
         };
-
-        (this as any)._voiceSearchHelper = createVoiceSearchHelper({
-          searchAsYouSpeak,
-          language,
-          onQueryChange: query => (this as any)._refine(query),
-          onStateChange: () => {
-            render({
-              isFirstRendering: false,
-              instantSearchInstance,
-              voiceSearchHelper: (this as any)._voiceSearchHelper,
-            });
-          },
-        });
-
-        render({
-          isFirstRendering: true,
-          instantSearchInstance,
-          voiceSearchHelper: (this as any)._voiceSearchHelper,
-        });
-      },
-
-      render({ instantSearchInstance }) {
-        render({
-          isFirstRendering: false,
-          instantSearchInstance,
-          voiceSearchHelper: (this as any)._voiceSearchHelper,
-        });
       },
 
       dispose({ state }) {
