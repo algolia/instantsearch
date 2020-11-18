@@ -44,7 +44,7 @@ type Props = {
 };
 
 function MenuSelect({ cssClasses, templateProps, items, refine }: Props) {
-  const { value: selectedValue } = find(items, item => item.isRefined) || {
+  const { value: selectedValue } = items.find(item => item.isRefined) || {
     value: '',
   };
 
