@@ -257,12 +257,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         widget.getWidgetRenderState(
           createRenderOptions({
             results: new SearchResults(new SearchParameters(), [
-              createSingleSearchResponse({ userData: ['dogs', 'cats'] }),
+              createSingleSearchResponse({
+                userData: [{ dogs: false }, { cats: true }],
+              }),
             ]),
           })
         )
       ).toEqual({
-        items: ['dogs', 'cats'],
+        items: [{ dogs: false }, { cats: true }],
         widgetParams: {},
       });
     });
@@ -270,7 +272,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     it('takes transformItems in account (empty)', () => {
       const { makeWidget } = createWidget();
       const transformItems = items => {
-        items.push('lions');
+        items.push({ lions: true });
         return items;
       };
       const widget = makeWidget({ transformItems });
@@ -284,7 +286,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         )
       ).toEqual({
-        items: ['lions'],
+        items: [{ lions: true }],
         widgetParams: { transformItems },
       });
     });
@@ -292,7 +294,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     it('takes transformItems in account', () => {
       const { makeWidget } = createWidget();
       const transformItems = items => {
-        items.push('lions');
+        items.push({ lions: true });
         return items;
       };
       const widget = makeWidget({ transformItems });
@@ -301,12 +303,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         widget.getWidgetRenderState(
           createRenderOptions({
             results: new SearchResults(new SearchParameters(), [
-              createSingleSearchResponse({ userData: ['dogs', 'cats'] }),
+              createSingleSearchResponse({
+                userData: [{ dogs: false }, { cats: true }],
+              }),
             ]),
           })
         )
       ).toEqual({
-        items: ['dogs', 'cats', 'lions'],
+        items: [{ dogs: false }, { cats: true }, { lions: true }],
         widgetParams: { transformItems },
       });
     });
@@ -328,13 +332,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
           createRenderOptions({
             results: new SearchResults(new SearchParameters(), [
-              createSingleSearchResponse({ userData: ['dogs', 'cats'] }),
+              createSingleSearchResponse({
+                userData: [{ dogs: false }, { cats: true }],
+              }),
             ]),
           })
         )
       ).toEqual({
         hierarchicalMenu: {},
-        queryRules: { items: ['dogs', 'cats'], widgetParams: {} },
+        queryRules: {
+          items: [{ dogs: false }, { cats: true }],
+          widgetParams: {},
+        },
       });
     });
   });
