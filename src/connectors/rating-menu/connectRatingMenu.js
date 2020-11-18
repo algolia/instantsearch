@@ -168,28 +168,24 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       $$type,
 
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-        sendEvent = createSendEvent({
-          instantSearchInstance,
-          helper,
-          getRefinedStar: () => getRefinedStar(helper.state),
-          attribute,
-        });
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
-            instantSearchInstance: initOptions.instantSearchInstance,
+            instantSearchInstance,
           },
           true
         );
       },
 
       render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
+
         renderFn(
           {
             ...this.getWidgetRenderState(renderOptions),
-            instantSearchInstance: renderOptions.instantSearchInstance,
+            instantSearchInstance,
           },
           false
         );
@@ -205,8 +201,23 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState({ helper, results, state, createURL }) {
+      getWidgetRenderState({
+        helper,
+        results,
+        state,
+        instantSearchInstance,
+        createURL,
+      }) {
         const facetValues = [];
+
+        if (!sendEvent) {
+          sendEvent = createSendEvent({
+            instantSearchInstance,
+            helper,
+            getRefinedStar: () => getRefinedStar(helper.state),
+            attribute,
+          });
+        }
 
         if (results) {
           const allValues = {};
