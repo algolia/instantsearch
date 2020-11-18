@@ -150,11 +150,11 @@ const answersWidget: AnswersWidget = widgetParams => {
         </div>,
         containerNode
       );
-      debouncedFindAnswers({ query, index }).then(({ hits }) => {
+      debouncedFindAnswers({ query, index }).then(({ hits = [] }) => {
         render(
           <div
             className={`${cssClasses.root} ${
-              hits && hits.length > 0 ? '' : cssClasses.emptyRoot
+              hits.length > 0 ? '' : cssClasses.emptyRoot
             }`}
           >
             {templates.header && (
@@ -167,7 +167,7 @@ const answersWidget: AnswersWidget = widgetParams => {
               </div>
             )}
             <ul className={cssClasses.list}>
-              {(hits || []).map((hit, key) => (
+              {hits.map((hit, key) => (
                 <li key={key} className={cssClasses.item}>
                   <TemplateRenderer
                     {...templateProps}
