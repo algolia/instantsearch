@@ -1,3 +1,9 @@
+3.3.2 - 2020-11-19
+ * fix(ts): add queryLanguages to parameters https://github.com/algolia/algoliasearch-helper-js/commit/51f544855a38031e36c70e3c9b2212446cc4a1fa
+ * fix(ts): add searchWithoutTriggeringOnStateChange https://github.com/algolia/algoliasearch-helper-js/commit/fb91e277325fa7c6c534370323dc2bdaee590b6d
+ * fix(ts): correct type for clearCache https://github.com/algolia/algoliasearch-helper-js/commit/684d5c02f54de51512c282117c70d86cf09ba098
+ * fix(ts): detailed type for facet.stats https://github.com/algolia/algoliasearch-helper-js/commit/234cb19d0f8bf98a490b8e3d9042c9e0317b69e7
+
 3.3.1 - 2020-11-19
  * fix(setup): run postinstall only locally https://github.com/algolia/algoliasearch-helper-js/commit/9df09e465a3fff44bc3737b6660a076df0aebeec
 
