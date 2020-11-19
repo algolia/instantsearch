@@ -1,3 +1,12 @@
+## [4.8.7](https://github.com/algolia/instantsearch.js/compare/v4.8.6...v4.8.7) (2020-11-19)
+
+
+### Bug Fixes
+
+* **insights:** use internal `find` util method ([#4580](https://github.com/algolia/instantsearch.js/issues/4580)) ([61b855b](https://github.com/algolia/instantsearch.js/commit/61b855b28282992a55795db88f8bfef2e5825cb3))
+
+
+
 ## [4.8.6](https://github.com/algolia/instantsearch.js/compare/v4.8.5...v4.8.6) (2020-11-17)
 
 
