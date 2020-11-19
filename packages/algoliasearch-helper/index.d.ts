@@ -113,6 +113,11 @@ declare namespace algoliasearchHelper {
     searchOnlyWithDerivedHelpers(): this;
 
     /**
+     * Private method for search, without triggering events
+     */
+    searchWithoutTriggeringOnStateChange(): this;
+
+    /**
      * Gets the search query parameters that would be sent to the Algolia Client
      * for the hits
      */
