@@ -1295,7 +1295,12 @@ declare namespace algoliasearchHelper {
     interface Facet {
       name: string;
       data: object;
-      stats: object;
+      stats?: {
+        min: number;
+        max: number;
+        sum: number;
+        avg: number;
+      };
     }
 
     interface HierarchicalFacet {
