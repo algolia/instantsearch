@@ -634,7 +634,7 @@ SearchParameters.prototype = {
   /**
    * Get the list of numeric refinements for a single facet
    * @param {string} facetName name of the attribute used for faceting
-   * @return {SearchParameters.OperatorList[]} list of refinements
+   * @return {SearchParameters.OperatorList} list of refinements
    */
   getNumericRefinements: function(facetName) {
     return this.numericRefinements[facetName] || {};

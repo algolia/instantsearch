@@ -544,7 +544,7 @@ declare namespace algoliasearchHelper {
     getHierarchicalFacetBreadcrumb(facetName: string): string[];
     getHierarchicalFacetByName(hierarchicalFacetName: string): any;
     getHierarchicalRefinement(facetName: string): string[];
-    getNumericRefinements(facetName: string): SearchParameters.OperatorList[];
+    getNumericRefinements(facetName: string): SearchParameters.OperatorList;
     getNumericRefinement(
       attribute: string,
       operator: SearchParameters.Operator
