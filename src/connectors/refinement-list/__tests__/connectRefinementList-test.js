@@ -975,7 +975,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const renderingOptions2 = rendering.mock.calls[1][0];
-    expect(renderingOptions2.items).toHaveLength(1);
+    expect(renderingOptions2).toEqual({
+      createURL: expect.any(Function),
+      items: [
+        {
+          count: 880,
+          highlighted: 'c1',
+          isRefined: false,
+          label: 'c1',
+          value: 'c1',
+        },
+      ],
+      refine: expect.any(Function),
+      searchForItems: expect.any(Function),
+      isFromSearch: false,
+      canRefine: true,
+      widgetParams: {
+        attribute: 'category',
+        limit: 1,
+        showMore: true,
+        showMoreLimit: 2,
+      },
+      isShowingMore: false,
+      canToggleShowMore: true,
+      toggleShowMore: expect.any(Function),
+      hasExhaustiveItems: false,
+      sendEvent: expect.any(Function),
+    });
 
     // `searchForItems` triggers a new render
     renderingOptions2.searchForItems('query triggering no results');
@@ -988,23 +1014,101 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       expect.anything()
     );
 
-    expect(rendering).toHaveBeenCalledTimes(2);
-    const renderingOptions3 = rendering.mock.calls[1][0];
+    expect(rendering).toHaveBeenCalledTimes(3);
+    const renderingOptions3 = rendering.mock.calls[2][0];
+    expect(renderingOptions3).toEqual({
+      createURL: expect.any(Function),
+      items: [],
+      refine: expect.any(Function),
+      searchForItems: expect.any(Function),
+      isFromSearch: true,
+      canRefine: true,
+      widgetParams: {
+        attribute: 'category',
+        limit: 1,
+        showMore: true,
+        showMoreLimit: 2,
+      },
+      isShowingMore: false,
+      canToggleShowMore: false,
+      toggleShowMore: expect.any(Function),
+      hasExhaustiveItems: false,
+      sendEvent: expect.any(Function),
+    });
 
     // `searchForItems` triggers a new render
     renderingOptions3.searchForItems('');
     await Promise.resolve();
 
-    expect(rendering).toHaveBeenCalledTimes(3);
-    const renderingOptions4 = rendering.mock.calls[2][0];
-    expect(renderingOptions4.toggleShowMore).toBeDefined();
+    expect(rendering).toHaveBeenCalledTimes(4);
+    const renderingOptions4 = rendering.mock.calls[3][0];
+    expect(renderingOptions4).toEqual({
+      createURL: expect.any(Function),
+      items: [
+        {
+          count: 880,
+          highlighted: 'c1',
+          isRefined: false,
+          label: 'c1',
+          value: 'c1',
+        },
+      ],
+      refine: expect.any(Function),
+      searchForItems: expect.any(Function),
+      isFromSearch: false,
+      canRefine: true,
+      widgetParams: {
+        attribute: 'category',
+        limit: 1,
+        showMore: true,
+        showMoreLimit: 2,
+      },
+      isShowingMore: false,
+      canToggleShowMore: true,
+      toggleShowMore: expect.any(Function),
+      hasExhaustiveItems: false,
+      sendEvent: expect.any(Function),
+    });
 
     // `toggleShowMore` triggers a new render
     renderingOptions4.toggleShowMore();
 
-    expect(rendering).toHaveBeenCalledTimes(4);
-    const renderingOptions5 = rendering.mock.calls[3][0];
-    expect(renderingOptions5.items).toHaveLength(2);
+    expect(rendering).toHaveBeenCalledTimes(5);
+    const renderingOptions5 = rendering.mock.calls[4][0];
+    expect(renderingOptions5).toEqual({
+      createURL: expect.any(Function),
+      items: [
+        {
+          count: 880,
+          highlighted: 'c1',
+          isRefined: false,
+          label: 'c1',
+          value: 'c1',
+        },
+        {
+          count: 880,
+          highlighted: 'c3',
+          isRefined: false,
+          label: 'c3',
+          value: 'c3',
+        },
+      ],
+      refine: expect.any(Function),
+      searchForItems: expect.any(Function),
+      isFromSearch: false,
+      canRefine: true,
+      widgetParams: {
+        attribute: 'category',
+        limit: 1,
+        showMore: true,
+        showMoreLimit: 2,
+      },
+      isShowingMore: true,
+      canToggleShowMore: true,
+      toggleShowMore: expect.any(Function),
+      hasExhaustiveItems: false,
+      sendEvent: expect.any(Function),
+    });
 
     renderingOptions5.searchForItems('new search');
     expect(helper.searchForFacetValues).toHaveBeenCalledWith(
@@ -2206,6 +2310,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           refine: expect.any(Function),
           searchForItems: expect.any(Function),
           toggleShowMore: expect.any(Function),
+          sendEvent: expect.any(Function),
           widgetParams: {
             attribute: 'brand',
           },
@@ -2286,6 +2391,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           ],
           refine: renderState1.refinementList.brand.refine,
           searchForItems: expect.any(Function),
+          sendEvent: expect.any(Function),
           toggleShowMore: renderState1.refinementList.brand.toggleShowMore,
           widgetParams: {
             attribute: 'brand',
@@ -2325,6 +2431,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         refine: expect.any(Function),
         searchForItems: expect.any(Function),
         toggleShowMore: expect.any(Function),
+        sendEvent: expect.any(Function),
         widgetParams: {
           attribute: 'brand',
         },
