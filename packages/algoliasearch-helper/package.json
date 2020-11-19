@@ -21,7 +21,7 @@
     "release": "./scripts/release.js",
     "changelog:view-last": "conventional-changelog -u -n scripts/conventional-changelog/",
     "changelog:update": "conventional-changelog -i CHANGELOG -s -u -n scripts/conventional-changelog/",
-    "postinstall": "patch-package"
+    "prepare": "patch-package"
   },
   "author": {
     "name": "Algolia Inc.",
