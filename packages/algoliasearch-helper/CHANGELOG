@@ -1,3 +1,8 @@
+3.3.0 - 2020-11-19
+ * chore(dev): replace github dependency metalsmith-in-place (#796) https://github.com/algolia/algoliasearch-helper-js/commit/3eb8d39c4598bbf0a19ab85a9d07e2cc1e474be8
+ * feat(ts): fill in more of the types https://github.com/algolia/algoliasearch-helper-js/commit/34ae5cd58977fa3c935ae74aa43b5049c9e6a6f9
+ * fix(ts): correct type for getNumericRefinements (#800) https://github.com/algolia/algoliasearch-helper-js/commit/0920d945b09134b0b2ef7e5ccf7a71947504f9f0
+
 3.2.2 - 2020-07-30
  * chore(deps): update dependency lodash to v4.17.19 [security] (#785) https://github.com/algolia/algoliasearch-helper-js/commit/c6e03cb6f66d21192a00c04e2c4dcbda71c6dde5, closes https://github.com/algolia/algoliasearch-helper-js/issues/785
  * docs: fix "bellow" typo in d.ts file comment (#788) https://github.com/algolia/algoliasearch-helper-js/commit/1a8f54adde525c852d37fc87feb0deb3d9939d53, closes https://github.com/algolia/algoliasearch-helper-js/issues/788
