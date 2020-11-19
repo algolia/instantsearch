@@ -490,6 +490,7 @@ declare namespace algoliasearchHelper {
     // types missing in @types/algoliasearch, so duplicated from v4
     ruleContexts?: string[];
     optionalFilters?: Array<string | string[]>;
+    queryLanguages?: string[];
   }
 
   export class SearchParameters implements PlainSearchParameters {
