@@ -1,3 +1,6 @@
+3.3.1 - 2020-11-19
+ * fix(setup): run postinstall only locally https://github.com/algolia/algoliasearch-helper-js/commit/9df09e465a3fff44bc3737b6660a076df0aebeec
+
 3.3.0 - 2020-11-19
  * chore(dev): replace github dependency metalsmith-in-place (#796) https://github.com/algolia/algoliasearch-helper-js/commit/3eb8d39c4598bbf0a19ab85a9d07e2cc1e474be8
  * feat(ts): fill in more of the types https://github.com/algolia/algoliasearch-helper-js/commit/34ae5cd58977fa3c935ae74aa43b5049c9e6a6f9
