@@ -344,7 +344,7 @@ declare namespace algoliasearchHelper {
      * @deprecated
      */
     containsRefinement(...any: any[]): any;
-    clearCache(): void;
+    clearCache(): this;
     setClient(client: SearchClient): this;
     getClient(): SearchClient;
     derive(
