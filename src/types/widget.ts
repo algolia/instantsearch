@@ -205,12 +205,10 @@ export type IndexRenderState = Partial<{
     ClearRefinementsRendererOptions,
     ClearRefinementsConnectorParams
   >;
-  configure: {
-    [identifier: number]: WidgetRenderState<
-      ConfigureRendererOptions,
-      ConfigureConnectorParams
-    >;
-  };
+  configure: WidgetRenderState<
+    ConfigureRendererOptions,
+    ConfigureConnectorParams
+  >;
   currentRefinements: WidgetRenderState<
     CurrentRefinementsRendererOptions,
     CurrentRefinementsConnectorParams

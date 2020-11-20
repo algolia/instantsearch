@@ -29,8 +29,6 @@ export type ConfigureRendererOptions = {
    * Refine the given search parameters.
    */
   refine: Refine;
-
-  _identifier: number;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -60,8 +58,6 @@ export type ConfigureConnector = Connector<
   ConfigureRendererOptions,
   ConfigureConnectorParams
 >;
-
-let uniqueIdentifier = 0;
 
 const connectConfigure: ConfigureConnector = function connectConfigure(
   renderFn = noop,
@@ -99,8 +95,6 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         helper.setState(nextSearchParameters).search();
       };
     }
-
-    const _identifier = uniqueIdentifier++;
 
     return {
       $$type: 'ais.configure',
@@ -142,15 +136,24 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         return {
           ...renderState,
           configure: {
-            ...renderState.configure,
-            [widgetRenderState._identifier]: widgetRenderState,
+            ...widgetRenderState,
+            widgetParams: {
+              ...widgetRenderState.widgetParams,
+              searchParameters: mergeSearchParameters(
+                new algoliasearchHelper.SearchParameters(
+                  renderState.configure?.widgetParams.searchParameters
+                ),
+                new algoliasearchHelper.SearchParameters(
+                  widgetRenderState.widgetParams.searchParameters
+                )
+              ).getQueryParams(),
+            },
           },
         };
       },
 
       getWidgetRenderState() {
         return {
-          _identifier,
           refine: connectorState.refine!,
           widgetParams,
         };
