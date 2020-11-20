@@ -1,11 +1,19 @@
 import {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import {
   checkRendering,
   createDocumentationMessageGenerator,
   convertNumericRefinementsToFilters,
   isFiniteNumber,
   find,
   noop,
+  SendEventForFacet,
 } from '../../lib/utils';
+import { InsightsEvent } from '../../middlewares';
+import { Connector, InstantSearch } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator(
   { name: 'range-input', connector: true },
@@ -14,25 +22,83 @@ const withUsage = createDocumentationMessageGenerator(
 
 const $$type = 'ais.range';
 
-/**
- * @typedef {Object} CustomRangeWidgetOptions
- * @property {string} attribute Name of the attribute for faceting.
- * @property {number} [min = undefined] Minimal range value, default to automatically computed from the result set.
- * @property {number} [max = undefined] Maximal range value, default to automatically computed from the result set.
- * @property {number} [precision = 2] Number of digits after decimal point to use.
- */
+export type Min = number | undefined;
+export type Max = number | undefined;
+export type Start = [Min, Max];
+export type Range = {
+  min: Min;
+  max: Max;
+};
 
-/**
- * @typedef {Object} RangeRenderingOptions
- * @property {function(Array<number, number>)} refine Sets a range to filter the results on. Both values
- * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a
- * previously set bound or to set an infinite bound.
- * @property {{min: number, max: number}} range Results bounds without the current range filter.
- * @property {Array<number, number>} start Current numeric bounds of the search.
- * @property {{from: function, to: function}} formatter Transform for the rendering `from` and/or `to` values.
- * Both functions take a `number` as input and should output a `string`.
- * @property {Object} widgetParams All original `CustomRangeWidgetOptions` forwarded to the `renderFn`.
- */
+export type RangeRendererOptions = {
+  /**
+   * Sets a range to filter the results on. Both values
+   * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a
+   * previously set bound or to set an infinite bound.
+   * @param rangeValue tuple of [min, max] bounds
+   */
+  refine(rangeValue: Start): void;
+
+  /**
+   * Send an event to the insights middleware
+   */
+  sendEvent: SendEventForFacet;
+
+  /**
+   * Maximum range possible for this search
+   */
+  range: Range;
+
+  /**
+   * Current refinement of the search
+   */
+  start: Start;
+
+  /**
+   * Transform for the rendering `from` and/or `to` values.
+   * Both functions take a `number` as input and should output a `string`.
+   */
+  format: {
+    from(fromValue: number): string;
+    to(toValue: number): string;
+  };
+};
+
+export type RangeConnectorParams = {
+  /**
+   * Name of the attribute for faceting.
+   */
+  attribute: string;
+
+  /**
+   * Minimal range value, default to automatically computed from the result set.
+   */
+  min?: number;
+
+  /**
+   * Maximal range value, default to automatically computed from the result set.
+   */
+  max?: number;
+
+  /**
+   * Number of digits after decimal point to use.
+   */
+  precision?: number;
+};
+
+export type ConnectRange = Connector<
+  RangeRendererOptions,
+  RangeConnectorParams
+>;
+
+function toPrecision({ min, max, precision }) {
+  const pow = Math.pow(10, precision);
+
+  return {
+    min: min ? Math.floor(min * pow) / pow : min,
+    max: max ? Math.ceil(max * pow) / pow : max,
+  };
+}
 
 /**
  * **Range** connector provides the logic to create custom widget that will let
@@ -40,42 +106,44 @@ const $$type = 'ais.range';
  *
  * This connectors provides a `refine()` function that accepts bounds. It will also provide
  * information about the min and max bounds for the current result set.
- * @type {Connector}
- * @param {function(RangeRenderingOptions, boolean)} renderFn Rendering function for the custom **Range** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomRangeWidgetOptions)} Re-usable widget factory for a custom **Range** widget.
  */
-export default function connectRange(renderFn, unmountFn = noop) {
+const connectRange: ConnectRange = function connectRange(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
-    const {
-      attribute,
-      min: minBound,
-      max: maxBound,
-      precision = 0,
-    } = widgetParams;
-
-    const hasMinBound = isFiniteNumber(minBound);
-    const hasMaxBound = isFiniteNumber(maxBound);
+  return widgetParams => {
+    const { attribute, min: minBound, max: maxBound, precision = 0 } =
+      widgetParams || ({} as RangeConnectorParams);
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
-    if (hasMinBound && hasMaxBound && minBound > maxBound) {
+    if (
+      isFiniteNumber(minBound) &&
+      isFiniteNumber(maxBound) &&
+      minBound > maxBound
+    ) {
       throw new Error(withUsage("The `max` option can't be lower than `min`."));
     }
 
-    const formatToNumber = v => Number(Number(v).toFixed(precision));
+    const formatToNumber = (v: string | number) =>
+      Number(Number(v).toFixed(precision));
 
     const rangeFormatter = {
-      from: v => v,
-      to: v => formatToNumber(v).toLocaleString(),
+      from: (v: number) => v.toLocaleString(),
+      to: (v: number) => formatToNumber(v).toLocaleString(),
     };
 
     // eslint-disable-next-line complexity
-    const getRefinedState = (helper, currentRange, nextMin, nextMax) => {
+    const getRefinedState = (
+      helper: AlgoliaSearchHelper,
+      currentRange: Range,
+      nextMin: Min | string,
+      nextMax: Max | string
+    ) => {
       let resolvedState = helper.state;
       const { min: currentRangeMin, max: currentRangeMax } = currentRange;
 
@@ -85,22 +153,25 @@ export default function connectRange(renderFn, unmountFn = noop) {
       const isResetMin = nextMin === undefined || nextMin === '';
       const isResetMax = nextMax === undefined || nextMax === '';
 
-      const nextMinAsNumber = !isResetMin ? parseFloat(nextMin) : undefined;
-      const nextMaxAsNumber = !isResetMax ? parseFloat(nextMax) : undefined;
+      const { min: nextMinAsNumber, max: nextMaxAsNumber } = toPrecision({
+        min: !isResetMin ? parseFloat(nextMin as string) : undefined,
+        max: !isResetMax ? parseFloat(nextMax as string) : undefined,
+        precision,
+      });
 
-      let newNextMin;
-      if (!hasMinBound && currentRangeMin === nextMinAsNumber) {
+      let newNextMin: Min;
+      if (!isFiniteNumber(minBound) && currentRangeMin === nextMinAsNumber) {
         newNextMin = undefined;
-      } else if (hasMinBound && isResetMin) {
+      } else if (isFiniteNumber(minBound) && isResetMin) {
         newNextMin = minBound;
       } else {
         newNextMin = nextMinAsNumber;
       }
 
-      let newNextMax;
-      if (!hasMaxBound && currentRangeMax === nextMaxAsNumber) {
+      let newNextMax: Max;
+      if (!isFiniteNumber(maxBound) && currentRangeMax === nextMaxAsNumber) {
         newNextMax = undefined;
-      } else if (hasMaxBound && isResetMax) {
+      } else if (isFiniteNumber(maxBound) && isResetMax) {
         newNextMax = maxBound;
       } else {
         newNextMax = nextMaxAsNumber;
@@ -110,20 +181,19 @@ export default function connectRange(renderFn, unmountFn = noop) {
       const isValidNewNextMin = isFiniteNumber(newNextMin);
       const isValidMinCurrentRange = isFiniteNumber(currentRangeMin);
       const isGreaterThanCurrentRange =
-        isValidMinCurrentRange && currentRangeMin <= newNextMin;
+        isValidMinCurrentRange && currentRangeMin! <= newNextMin!;
       const isMinValid =
         isResetNewNextMin ||
         (isValidNewNextMin &&
           (!isValidMinCurrentRange || isGreaterThanCurrentRange));
 
       const isResetNewNextMax = newNextMax === undefined;
-      const isValidNewNextMax = isFiniteNumber(newNextMax);
-      const isValidMaxCurrentRange = isFiniteNumber(currentRangeMax);
       const isLowerThanRange =
-        isValidMaxCurrentRange && currentRangeMax >= newNextMax;
+        isFiniteNumber(newNextMax) && currentRangeMax! >= newNextMax;
       const isMaxValid =
         isResetNewNextMax ||
-        (isValidNewNextMax && (!isValidMaxCurrentRange || isLowerThanRange));
+        (isFiniteNumber(newNextMax) &&
+          (!isFiniteNumber(currentRangeMax) || isLowerThanRange));
 
       const hasMinChange = min !== newNextMin;
       const hasMaxChange = max !== newNextMax;
@@ -131,19 +201,19 @@ export default function connectRange(renderFn, unmountFn = noop) {
       if ((hasMinChange || hasMaxChange) && isMinValid && isMaxValid) {
         resolvedState = resolvedState.removeNumericRefinement(attribute);
 
-        if (isValidNewNextMin) {
+        if (isFiniteNumber(newNextMin)) {
           resolvedState = resolvedState.addNumericRefinement(
             attribute,
             '>=',
-            formatToNumber(newNextMin)
+            newNextMin
           );
         }
 
-        if (isValidNewNextMax) {
+        if (isFiniteNumber(newNextMax)) {
           resolvedState = resolvedState.addNumericRefinement(
             attribute,
             '<=',
-            formatToNumber(newNextMax)
+            newNextMax
           );
         }
 
@@ -154,9 +224,9 @@ export default function connectRange(renderFn, unmountFn = noop) {
     };
 
     const sendEventWithRefinedState = (
-      refinedState,
-      instantSearchInstance,
-      helper,
+      refinedState: SearchParameters | null,
+      instantSearchInstance: InstantSearch,
+      helper: AlgoliaSearchHelper,
       eventName = 'Filter Applied'
     ) => {
       const filters = convertNumericRefinementsToFilters(
@@ -177,9 +247,11 @@ export default function connectRange(renderFn, unmountFn = noop) {
       }
     };
 
-    const createSendEvent = (instantSearchInstance, helper, currentRange) => (
-      ...args
-    ) => {
+    const createSendEvent = (
+      instantSearchInstance: InstantSearch,
+      helper: AlgoliaSearchHelper,
+      currentRange: Range
+    ) => (...args: [InsightsEvent] | [string, string, string?]) => {
       if (args.length === 1) {
         instantSearchInstance.sendEventToInsights(args[0]);
         return;
@@ -204,66 +276,66 @@ export default function connectRange(renderFn, unmountFn = noop) {
       );
     };
 
+    function _getCurrentRange(
+      stats: Partial<NonNullable<SearchResults.Facet['stats']>>
+    ) {
+      let min: number;
+      if (isFiniteNumber(minBound)) {
+        min = minBound;
+      } else if (isFiniteNumber(stats.min)) {
+        min = stats.min;
+      } else {
+        min = 0;
+      }
+
+      let max: number;
+      if (isFiniteNumber(maxBound)) {
+        max = maxBound;
+      } else if (isFiniteNumber(stats.max)) {
+        max = stats.max;
+      } else {
+        max = 0;
+      }
+
+      return toPrecision({ min, max, precision });
+    }
+
+    function _getCurrentRefinement(helper: AlgoliaSearchHelper): Start {
+      const [minValue] = helper.getNumericRefinement(attribute, '>=') || [];
+
+      const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
+
+      const min = isFiniteNumber(minValue) ? minValue : -Infinity;
+      const max = isFiniteNumber(maxValue) ? maxValue : Infinity;
+
+      return [min, max];
+    }
+
+    function _refine(
+      instantSearchInstance: InstantSearch,
+      helper: AlgoliaSearchHelper,
+      currentRange: Range
+    ) {
+      return ([nextMin, nextMax]: Start = [undefined, undefined]) => {
+        const refinedState = getRefinedState(
+          helper,
+          currentRange,
+          nextMin,
+          nextMax
+        );
+        if (refinedState) {
+          sendEventWithRefinedState(
+            refinedState,
+            instantSearchInstance,
+            helper
+          );
+          helper.setState(refinedState).search();
+        }
+      };
+    }
+
     return {
       $$type,
-
-      _getCurrentRange(stats) {
-        const pow = Math.pow(10, precision);
-
-        let min;
-        if (hasMinBound) {
-          min = minBound;
-        } else if (isFiniteNumber(stats.min)) {
-          min = stats.min;
-        } else {
-          min = 0;
-        }
-
-        let max;
-        if (hasMaxBound) {
-          max = maxBound;
-        } else if (isFiniteNumber(stats.max)) {
-          max = stats.max;
-        } else {
-          max = 0;
-        }
-
-        return {
-          min: Math.floor(min * pow) / pow,
-          max: Math.ceil(max * pow) / pow,
-        };
-      },
-
-      _getCurrentRefinement(helper) {
-        const [minValue] = helper.getNumericRefinement(attribute, '>=') || [];
-
-        const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
-
-        const min = isFiniteNumber(minValue) ? minValue : -Infinity;
-        const max = isFiniteNumber(maxValue) ? maxValue : Infinity;
-
-        return [min, max];
-      },
-
-      _refine(instantSearchInstance, helper, currentRange) {
-        // eslint-disable-next-line complexity
-        return ([nextMin, nextMax] = []) => {
-          const refinedState = getRefinedState(
-            helper,
-            currentRange,
-            nextMin,
-            nextMax
-          );
-          if (refinedState) {
-            sendEventWithRefinedState(
-              refinedState,
-              instantSearchInstance,
-              helper
-            );
-            helper.setState(refinedState).search();
-          }
-        };
-      },
 
       init(initOptions) {
         renderFn(
@@ -301,20 +373,26 @@ export default function connectRange(renderFn, unmountFn = noop) {
           facetsFromResults,
           facetResult => facetResult.name === attribute
         );
-        const stats = (facet && facet.stats) || {};
+        const stats = (facet && facet.stats) || {
+          min: undefined,
+          max: undefined,
+        };
 
-        const currentRange = this._getCurrentRange(stats);
-        const start = this._getCurrentRefinement(helper);
+        const currentRange = _getCurrentRange(stats);
+        const start = _getCurrentRefinement(helper);
 
-        let refine;
+        let refine: ReturnType<typeof _refine>;
 
         if (!results) {
           // On first render pass an empty range
           // to be able to bypass the validation
           // related to it
-          refine = this._refine(instantSearchInstance, helper, {});
+          refine = _refine(instantSearchInstance, helper, {
+            min: undefined,
+            max: undefined,
+          });
         } else {
-          refine = this._refine(instantSearchInstance, helper, currentRange);
+          refine = _refine(instantSearchInstance, helper, currentRange);
         }
 
         return {
@@ -342,10 +420,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
         // can not use setQueryParameters || removeNumericRefinement, because
         // they both keep the old value. This isn't immutable, but it is fine
         // since it's already a copy.
-        stateWithoutDisjunctive.numericRefinements = {
-          ...state.numericRefinements,
-          [attribute]: undefined,
-        };
+        delete stateWithoutDisjunctive.numericRefinements[attribute];
 
         return stateWithoutDisjunctive;
       },
@@ -379,7 +454,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
             },
           });
 
-        if (hasMinBound) {
+        if (isFiniteNumber(minBound)) {
           widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '>=',
@@ -387,7 +462,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
           );
         }
 
-        if (hasMaxBound) {
+        if (isFiniteNumber(maxBound)) {
           widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '<=',
@@ -423,4 +498,6 @@ export default function connectRange(renderFn, unmountFn = noop) {
       },
     };
   };
-}
+};
+
+export default connectRange;

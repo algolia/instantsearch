@@ -352,6 +352,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         name: 'hello',
         _highlightResult: {
           name: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
           },
         },
@@ -361,6 +363,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         name: 'halloween',
         _highlightResult: {
           name: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
           },
         },
@@ -385,6 +389,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         name: 'hello',
         _highlightResult: {
           name: {
+            matchLevel: 'full',
+            matchedWords: [],
             value: 'HE<MARK>LLO</MARK>',
           },
         },
@@ -394,6 +400,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         name: 'halloween',
         _highlightResult: {
           name: {
+            matchLevel: 'full',
+            matchedWords: [],
             value: 'HA<MARK>LLO</MARK>WEEN',
           },
         },

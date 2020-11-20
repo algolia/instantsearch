@@ -62,6 +62,10 @@ import {
   PaginationRendererOptions,
   PaginationConnectorParams,
 } from '../connectors/pagination/connectPagination';
+import {
+  RangeConnectorParams,
+  RangeRendererOptions,
+} from '../connectors/range/connectRange';
 
 export type ScopedResult = {
   indexId: string;
@@ -249,24 +253,8 @@ export type IndexRenderState = Partial<{
   >;
   range: {
     [attribute: string]: WidgetRenderState<
-      {
-        refine(rangeValue: Array<number | undefined>): void;
-        range: {
-          min: number | undefined;
-          max: number | undefined;
-        };
-        start: number[];
-        format: {
-          from(fromValue: number): string;
-          to(toValue: number): string;
-        };
-      },
-      {
-        attribute: string;
-        min?: number;
-        max?: number;
-        precision?: number;
-      }
+      RangeRendererOptions,
+      RangeConnectorParams
     >;
   };
   ratingMenu: {
