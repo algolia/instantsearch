@@ -100,10 +100,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       $$type: 'ais.configure',
 
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-
-        connectorState.refine = refine(helper);
-
+        const { instantSearchInstance } = initOptions;
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -152,9 +149,13 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         };
       },
 
-      getWidgetRenderState() {
+      getWidgetRenderState({ helper }) {
+        if (!connectorState.refine) {
+          connectorState.refine = refine(helper);
+        }
+
         return {
-          refine: connectorState.refine!,
+          refine: connectorState.refine,
           widgetParams,
         };
       },

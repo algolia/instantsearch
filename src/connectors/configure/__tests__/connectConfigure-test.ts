@@ -255,7 +255,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       const renderState1 = configure.getRenderState({}, createInitOptions());
 
       expect(renderState1.configure).toEqual({
-        refine: undefined,
+        refine: expect.any(Function),
         widgetParams: {
           searchParameters: {
             facetFilters: ['brand:Samsung'],
@@ -274,6 +274,63 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         },
       });
     });
+
+    test('merges the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createConfigure = connectConfigure(renderFn, unmountFn);
+      const configure = createConfigure({
+        searchParameters: {
+          facetFilters: ['brand:Samsung'],
+        },
+      });
+
+      const renderState1 = configure.getRenderState(
+        {
+          configure: {
+            refine() {},
+            widgetParams: {
+              searchParameters: { queryLanguages: ['gr'] },
+            },
+          },
+        },
+        createInitOptions()
+      );
+
+      expect(renderState1.configure).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: {
+            queryLanguages: ['gr'],
+            facetFilters: ['brand:Samsung'],
+          },
+        },
+      });
+
+      configure.init!(createInitOptions());
+
+      const renderState2 = configure.getRenderState(
+        {
+          configure: {
+            refine() {},
+            widgetParams: {
+              searchParameters: { queryType: 'prefixAll' },
+            },
+          },
+        },
+        createRenderOptions()
+      );
+
+      expect(renderState2.configure).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: {
+            queryType: 'prefixAll',
+            facetFilters: ['brand:Samsung'],
+          },
+        },
+      });
+    });
   });
 
   describe('getWidgetRenderState', () => {
@@ -288,7 +345,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       const renderState1 = configure.getWidgetRenderState(createInitOptions());
 
       expect(renderState1).toEqual({
-        refine: undefined,
+        refine: expect.any(Function),
         widgetParams: {
           searchParameters: { facetFilters: ['brand:Samsung'] },
         },
