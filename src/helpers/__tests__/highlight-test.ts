@@ -138,4 +138,13 @@ describe('highlight', () => {
       `"Nested <mark class=\\"ais-Highlight-highlighted\\">Amazon</mark> name"`
     );
   });
+
+  test('with array attribute as array', () => {
+    expect(
+      highlight({
+        attribute: ['categories', 1],
+        hit,
+      })
+    ).toMatchInlineSnapshot(`"Streaming Media Players"`);
+  });
 });

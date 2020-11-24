@@ -19,6 +19,15 @@ describe('getPropertyByPath', () => {
       ).toBe(true);
     });
 
+    it('gets an existing, very deep array property', () => {
+      expect(
+        getPropertyByPath(
+          { dog: { cat: ['test', { algolia: { cool: true } }] } },
+          'dog.cat.1.algolia.cool'
+        )
+      ).toBe(true);
+    });
+
     it('gets undefined for a non-existing, very deep property', () => {
       expect(
         getPropertyByPath(
@@ -62,6 +71,15 @@ describe('getPropertyByPath', () => {
           'algolia',
           'cool',
         ])
+      ).toBe(true);
+    });
+
+    it('gets an existing, very deep array property', () => {
+      expect(
+        getPropertyByPath(
+          { dog: { cat: ['test', { algolia: { cool: true } }] } },
+          ['dog', 'cat', 1, 'algolia', 'cool']
+        )
       ).toBe(true);
     });
 

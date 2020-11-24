@@ -134,4 +134,22 @@ describe('snippet', () => {
       `"Nested <mark class=\\"ais-Snippet-highlighted\\">Amazon</mark> name"`
     );
   });
+
+  test('with array attribute', () => {
+    expect(
+      snippet({
+        attribute: 'categories.1',
+        hit,
+      })
+    ).toMatchInlineSnapshot(`"Streaming Media Players"`);
+  });
+
+  test('with array attribute as array', () => {
+    expect(
+      snippet({
+        attribute: ['categories', 1],
+        hit,
+      })
+    ).toMatchInlineSnapshot(`"Streaming Media Players"`);
+  });
 });
