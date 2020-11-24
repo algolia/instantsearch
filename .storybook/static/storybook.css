@@ -258,3 +258,9 @@ body {
   background: #f7f7f7;
   color: black;
 }
+
+/* tmp class during dev phase for ReverseHighlight component */
+.ais-ReverseHighlight-highlighted {
+  background: transparent;
+  font-weight: bold;
+}
