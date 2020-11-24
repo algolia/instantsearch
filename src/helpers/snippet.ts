@@ -5,7 +5,7 @@ import { component } from '../lib/suit';
 
 export type SnippetOptions = {
   // @MAJOR only accept string[] here
-  attribute: string | Array<string | number>;
+  attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
   cssClasses?: {

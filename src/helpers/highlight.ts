@@ -5,7 +5,7 @@ import { component } from '../lib/suit';
 
 export type HighlightOptions = {
   // @MAJOR only accept array of paths here
-  attribute: string | Array<string | number>;
+  attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
   cssClasses?: {
