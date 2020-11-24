@@ -59,6 +59,24 @@ storiesOf('Results/Hits', module)
     })
   )
   .add(
+    'with reverseHighlight function',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        hits({
+          container,
+          templates: {
+            item(hit) {
+              return instantsearch.reverseHighlight({
+                attribute: 'name',
+                hit,
+              });
+            },
+          },
+        }),
+      ]);
+    })
+  )
+  .add(
     'with snippet function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
