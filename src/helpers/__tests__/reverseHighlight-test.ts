@@ -1,5 +1,8 @@
 import reverseHighlight from '../reverseHighlight';
 
+const NONE = 'none' as const;
+const FULL = 'full' as const;
+
 /* eslint-disable @typescript-eslint/camelcase */
 const hit = {
   name: 'Amazon - Fire TV Stick with Alexa Voice Remote - Black',
@@ -24,49 +27,45 @@ const hit = {
     name: {
       value:
         '<mark>Amazon</mark> - Fire TV Stick with Alexa Voice Remote - Black',
-      matchLevel: 'full',
+      matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['amazon'],
     },
     description: {
       value:
         'Enjoy smart access to videos, games and apps with this <mark>Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark>Amazon</mark> Fire TV stick works fast for buffer-free streaming.',
-      matchLevel: 'full',
+      matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['amazon'],
     },
     brand: {
       value: '<mark>Amazon</mark>',
-      matchLevel: 'full',
+      matchLevel: FULL,
       fullyHighlighted: true,
       matchedWords: ['amazon'],
     },
     categories: [
       {
         value: 'TV & Home Theater',
-        matchLevel: 'none',
+        matchLevel: NONE,
         matchedWords: [],
       },
       {
         value: 'Streaming Media Players',
-        matchLevel: 'none',
+        matchLevel: NONE,
         matchedWords: [],
       },
     ],
     type: {
-      value: '<mark>Streaming media plyr</mark>',
-      matchLevel: 'none',
+      value: 'Streaming media plyr',
+      matchLevel: NONE,
       matchedWords: [],
     },
     meta: {
       name: {
         value: 'Nested <mark>Amazon</mark> name',
-      },
-      empty: {
-        value: ' ',
-      },
-      emptyHighlight: {
-        value: '<mark> </mark>',
+        matchLevel: NONE,
+        matchedWords: ['Amazon'],
       },
     },
   },
@@ -138,12 +137,23 @@ describe('reverseHighlight', () => {
     );
   });
 
-  test('with space only query', () => {
+  test('with nested attribute as array', () => {
     expect(
       reverseHighlight({
-        attribute: 'meta.empty',
+        attribute: ['meta', 'name'],
         hit,
       })
-    ).toMatchInlineSnapshot(`" "`);
+    ).toMatchInlineSnapshot(
+      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Nested</mark> Amazon <mark class=\\"ais-ReverseHighlight-highlighted\\">name</mark>"`
+    );
+  });
+
+  test('with array attribute as array', () => {
+    expect(
+      reverseHighlight({
+        attribute: ['categories', 1],
+        hit,
+      })
+    ).toMatchInlineSnapshot(`"Streaming Media Players"`);
   });
 });

@@ -13,7 +13,7 @@ const htmlEscapes = {
 };
 
 // Used to match HTML entities and HTML characters.
-const regexEscapedHtml = /&(nbsp|amp|quot|lt|gt);/g;
+const regexEscapedHtml = /&(amp|quot|lt|gt|#39);/g;
 const regexHasEscapedHtml = RegExp(regexEscapedHtml.source);
 
 /**

@@ -77,6 +77,20 @@ storiesOf('Results/Hits', module)
     })
   )
   .add(
+    'with reverseHighlight helper',
+    withHits(({ search, container }) => {
+      search.addWidgets([
+        hits({
+          container,
+          templates: {
+            item:
+              '{{#helpers.reverseHighlight}}{ "attribute": "name" }{{/helpers.reverseHighlight}}',
+          },
+        }),
+      ]);
+    })
+  )
+  .add(
     'with snippet function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
@@ -122,6 +136,57 @@ storiesOf('Results/Hits', module)
             item: `
               <h4>{{#helpers.snippet}}{ "attribute": "name", "highlightedTagName": "mark" }{{/helpers.snippet}}</h4>
               <p>{{#helpers.snippet}}{ "attribute": "description", "highlightedTagName": "mark" }{{/helpers.snippet}}</p>`,
+          },
+        }),
+      ]);
+    })
+  )
+  .add(
+    'with reverseSnippet function',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        configure({
+          attributesToSnippet: ['name', 'description'],
+        }),
+      ]);
+
+      search.addWidgets([
+        hits({
+          container,
+          templates: {
+            item(hit) {
+              return `
+                <h4>${instantsearch.reverseSnippet({
+                  attribute: 'name',
+                  hit,
+                })}</h4>
+                <p>${instantsearch.reverseSnippet({
+                  attribute: 'description',
+                  hit,
+                })}</p>
+              `;
+            },
+          },
+        }),
+      ]);
+    })
+  )
+  .add(
+    'with reverseSnippet helper',
+    withHits(({ search, container }) => {
+      search.addWidgets([
+        configure({
+          attributesToSnippet: ['name', 'description'],
+        }),
+      ]);
+
+      search.addWidgets([
+        hits({
+          container,
+          templates: {
+            item: `
+              <h4>{{#helpers.reverseSnippet}}{ "attribute": "name", "highlightedTagName": "mark" }{{/helpers.reverseSnippet}}</h4>
+              <p>{{#helpers.reverseSnippet}}{ "attribute": "description", "highlightedTagName": "mark" }{{/helpers.reverseSnippet}}</p>`,
           },
         }),
       ]);

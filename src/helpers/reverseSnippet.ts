@@ -3,7 +3,7 @@ import { getPropertyByPath, unescape } from '../lib/utils';
 import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
-export type ReverseHighlightOptions = {
+export type ReverseSnippetOptions = {
   attribute: string | Array<string | number>;
   highlightedTagName?: string;
   hit: Partial<Hit>;
@@ -12,7 +12,7 @@ export type ReverseHighlightOptions = {
   };
 };
 
-const suit = component('ReverseHighlight');
+const suit = component('ReverseSnippet');
 
 const getReversedHighlight = (attribute: string) => {
   const regexHasMark = /(<mark>.*?<\/mark>)/gi;
@@ -44,14 +44,14 @@ const getReversedHighlight = (attribute: string) => {
     .join('');
 };
 
-export default function reverseHighlight({
+export default function reverseSnippet({
   attribute,
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
-}: ReverseHighlightOptions): string {
+}: ReverseSnippetOptions): string {
   const { value: attributeValue = '' } =
-    getPropertyByPath(hit._highlightResult, attribute) || {};
+    getPropertyByPath(hit._snippetResult, attribute) || {};
 
   // cx is not used, since it would be bundled as a dependency for Vue & Angular
   const className =
