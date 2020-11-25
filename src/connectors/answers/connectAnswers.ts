@@ -2,6 +2,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   createConcurrentSafePromise,
+  debounce,
   noop,
 } from '../../lib/utils';
 import { Connector, Hits, FindAnswersResponse } from '../../types';
@@ -53,6 +54,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
     let lastAnswersResult: Partial<FindAnswersResponse<{}>>;
     let isLoading = false;
+    const debouncedRenderFn = debounce(renderFn, 200);
 
     return {
       $$type: 'ais.answers',
@@ -80,7 +82,21 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         if (!answersIndex.findAnswers) {
           throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
         }
+        if (!query) {
+          // renders nothing with empty query
+          lastAnswersResult = {};
+          isLoading = false;
+          renderFn(
+            {
+              ...this.getWidgetRenderState(renderOptions),
+              instantSearchInstance: renderOptions.instantSearchInstance,
+            },
+            false
+          );
+          return;
+        }
 
+        // render the loader
         isLoading = true;
         renderFn(
           {
@@ -90,17 +106,16 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           false
         );
 
+        // call /answers API
         runConcurrentSafePromise(
-          !query
-            ? ({} as FindAnswersResponse<{}>) // FIXME: Hit instead of {}
-            : answersIndex.findAnswers(query, queryLanguages, {
-                nbHits,
-                attributesForPrediction,
-              })
+          answersIndex.findAnswers(query, queryLanguages, {
+            nbHits,
+            attributesForPrediction,
+          })
         ).then(result => {
           lastAnswersResult = result;
           isLoading = false;
-          renderFn(
+          debouncedRenderFn(
             {
               ...this.getWidgetRenderState(renderOptions),
               instantSearchInstance: renderOptions.instantSearchInstance,
