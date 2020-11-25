@@ -1,9 +1,10 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  createConcurrentSafePromise,
   noop,
 } from '../../lib/utils';
-import { Connector, Hits } from '../../types';
+import { Connector, Hits, FindAnswersResponse } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'answers',
@@ -22,7 +23,13 @@ export type AnswersRendererOptions = {
   isLoading: boolean;
 };
 
-export type AnswersConnectorParams = {};
+export type AnswersConnectorParams = {
+  attributesForPrediction: string[];
+
+  queryLanguages?: string[];
+
+  nbHits?: number;
+};
 
 export type AnswersConnector = Connector<
   AnswersRendererOptions,
@@ -36,12 +43,27 @@ const connectAnswers: AnswersConnector = function connectAnswers(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    // const {} = widgetParams || ({} as typeof widgetParams);
+    const { attributesForPrediction, queryLanguages = ['en'], nbHits } =
+      widgetParams || ({} as typeof widgetParams);
+    // FIXME: replace `FindAnswersResponse<{}>` with `FindAnswersResponse<Hit>`
+    // once the change in algoliasearch is released.
+    const runConcurrentSafePromise = createConcurrentSafePromise<
+      FindAnswersResponse<{}>
+    >();
+
+    let lastAnswersResult: Partial<FindAnswersResponse<{}>>;
+    let isLoading = false;
 
     return {
       $$type: 'ais.answers',
 
       init(initOptions) {
+        const { instantSearchInstance } = initOptions;
+        // FIXME: remove this customization once the engine accepts url encoded query params
+        if (instantSearchInstance.client.transporter) {
+          instantSearchInstance.client.transporter.userAgent.value =
+            'answers-test';
+        }
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -52,6 +74,14 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       },
 
       render(renderOptions) {
+        const { state, instantSearchInstance } = renderOptions;
+        const { query, index } = state;
+        const answersIndex = instantSearchInstance.client!.initIndex!(index);
+        if (!answersIndex.findAnswers) {
+          throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
+        }
+
+        isLoading = true;
         renderFn(
           {
             ...this.getWidgetRenderState(renderOptions),
@@ -59,6 +89,25 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           },
           false
         );
+
+        runConcurrentSafePromise(
+          !query
+            ? ({} as FindAnswersResponse<{}>) // FIXME: Hit instead of {}
+            : answersIndex.findAnswers(query, queryLanguages, {
+                nbHits,
+                attributesForPrediction,
+              })
+        ).then(result => {
+          lastAnswersResult = result;
+          isLoading = false;
+          renderFn(
+            {
+              ...this.getWidgetRenderState(renderOptions),
+              instantSearchInstance: renderOptions.instantSearchInstance,
+            },
+            false
+          );
+        });
       },
 
       getRenderState(renderState, renderOptions) {
@@ -70,8 +119,8 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
       getWidgetRenderState() {
         return {
-          hits: [],
-          isLoading: false,
+          hits: (lastAnswersResult && lastAnswersResult.hits) || [],
+          isLoading,
           widgetParams,
         };
       },
@@ -89,104 +138,3 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 };
 
 export default connectAnswers;
-
-/*
-  let lastQuery;
-
-  const findAnswers = ({ query, index }) => {
-    const answersIndex = searchClient.initIndex(index);
-    if (!answersIndex.findAnswers) {
-      // FIXME: put the correct version which supports findAnswers both in lite and full version
-      warning(false, '`algoliasearch` >= x.y.z required.');
-      return Promise.resolve([]);
-    }
-    return answersIndex.findAnswers(query, queryLanguages, {
-      nbHits,
-      attributesForPrediction,
-    });
-  };
-
-  const debouncedFindAnswers = async ({ query, index }) => {
-    if (query === '') {
-      return [];
-    }
-    // TODO: debounce + concurrent-safe
-    const answers = await findAnswers({ query, index });
-    return answers;
-  };
-
-
-
-
-
-
-
-  return {
-    init() {
-      // TODO: remove this customization once the engine accepts url encoded query params
-      if (searchClient.transporter) {
-        searchClient.transporter.userAgent.value = 'answers-test';
-      }
-    },
-    render({ state: { query, index }, instantSearchInstance }) {
-      const templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates,
-      });
-      if (lastQuery === query) {
-        return;
-      }
-
-      lastQuery = query;
-      render(
-        <div className={cssClasses.root}>
-          {templates.header && (
-            <div className={cssClasses.header}>
-              <TemplateRenderer
-                {...templateProps}
-                templateKey="header"
-                data={{ hits: [], isLoading: true }}
-              />
-            </div>
-          )}
-          {templates.loader && (
-            <TemplateRenderer {...templateProps} templateKey="loader" />
-          )}
-        </div>,
-        containerNode
-      );
-      debouncedFindAnswers({ query, index }).then(({ hits = [] }) => {
-        render(
-          <div
-            className={`${cssClasses.root} ${
-              hits.length > 0 ? '' : cssClasses.emptyRoot
-            }`}
-          >
-            {templates.header && (
-              <div className={cssClasses.header}>
-                <TemplateRenderer
-                  {...templateProps}
-                  templateKey="header"
-                  data={{ hits, isLoading: false }}
-                />
-              </div>
-            )}
-            <ul className={cssClasses.list}>
-              {hits.map((hit, key) => (
-                <li key={key} className={cssClasses.item}>
-                  <TemplateRenderer
-                    {...templateProps}
-                    templateKey="item"
-                    data={hit}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>,
-          containerNode
-        );
-      });
-    },
-  };
-*/

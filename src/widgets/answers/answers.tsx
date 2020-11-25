@@ -79,12 +79,6 @@ export type AnswersWidgetParams = {
    */
   container: string | HTMLElement;
 
-  attributesForPrediction: string[];
-
-  queryLanguages?: string[];
-
-  nbHits?: number;
-
   templates?: AnswersTemplates;
 
   cssClasses?: AnswersCSSClasses;

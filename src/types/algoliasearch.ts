@@ -24,6 +24,7 @@ import {
   // @ts-ignore
   // eslint-disable-next-line import/no-unresolved
 } from '@algolia/client-search';
+export { FindAnswersResponse } from '@algolia/client-search';
 
 type DummySearchClientV4 = {
   readonly transporter: any;
@@ -40,6 +41,7 @@ export type SearchClient = {
   searchForFacetValues: DefaultSearchClient['searchForFacetValues'];
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
   initIndex?: DefaultSearchClient['initIndex'];
+  transporter?: SearchClientV4['transporter'];
 };
 
 export type MultiResponse<THit = any> = {
