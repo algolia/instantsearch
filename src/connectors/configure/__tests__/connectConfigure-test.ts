@@ -290,7 +290,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
           configure: {
             refine() {},
             widgetParams: {
-              searchParameters: { queryLanguages: ['gr'] },
+              searchParameters: { removeStopWords: ['group'] },
             },
           },
         },
@@ -301,7 +301,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         refine: expect.any(Function),
         widgetParams: {
           searchParameters: {
-            queryLanguages: ['gr'],
+            removeStopWords: ['group'],
             facetFilters: ['brand:Samsung'],
           },
         },
