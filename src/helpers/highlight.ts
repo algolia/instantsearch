@@ -4,7 +4,7 @@ import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
 export type HighlightOptions = {
-  // @MAJOR only accept array of paths here
+  // @MAJOR string should no longer be allowed to be a path, only array can be a path
   attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
