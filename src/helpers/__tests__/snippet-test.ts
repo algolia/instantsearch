@@ -1,4 +1,7 @@
-import highlight from '../highlight';
+import snippet from '../snippet';
+
+const NONE = 'none' as const;
+const FULL = 'full' as const;
 
 /* eslint-disable @typescript-eslint/camelcase */
 const hit = {
@@ -20,92 +23,90 @@ const hit = {
   rating: 4,
   popularity: 21469,
   objectID: '5477500',
-  _highlightResult: {
+  _snippetResult: {
     name: {
       value:
         '<mark>Amazon</mark> - Fire TV Stick with Alexa Voice Remote - Black',
-      matchLevel: 'full',
+      matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['amazon'],
     },
     description: {
       value:
         'Enjoy smart access to videos, games and apps with this <mark>Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark>Amazon</mark> Fire TV stick works fast for buffer-free streaming.',
-      matchLevel: 'full',
+      matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['amazon'],
     },
     brand: {
       value: '<mark>Amazon</mark>',
-      matchLevel: 'full',
+      matchLevel: FULL,
       fullyHighlighted: true,
       matchedWords: ['amazon'],
     },
     categories: [
       {
         value: 'TV & Home Theater',
-        matchLevel: 'none',
-        matchedWords: [],
+        matchLevel: NONE,
       },
       {
         value: 'Streaming Media Players',
-        matchLevel: 'none',
-        matchedWords: [],
+        matchLevel: NONE,
       },
     ],
     type: {
       value: 'Streaming media plyr',
-      matchLevel: 'none',
-      matchedWords: [],
+      matchLevel: NONE,
     },
     meta: {
       name: {
         value: 'Nested <mark>Amazon</mark> name',
+        matchLevel: FULL,
       },
     },
   },
 };
 /* eslint-enable @typescript-eslint/camelcase */
 
-describe('highlight', () => {
+describe('snippet', () => {
   test('with default tag name', () => {
     expect(
-      highlight({
+      snippet({
         attribute: 'name',
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-Highlight-highlighted\\">Amazon</mark> - Fire TV Stick with Alexa Voice Remote - Black"`
+      `"<mark class=\\"ais-Snippet-highlighted\\">Amazon</mark> - Fire TV Stick with Alexa Voice Remote - Black"`
     );
   });
 
   test('with custom tag name', () => {
     expect(
-      highlight({
+      snippet({
         attribute: 'description',
         highlightedTagName: 'em',
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Enjoy smart access to videos, games and apps with this <em class=\\"ais-Highlight-highlighted\\">Amazon</em> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <em class=\\"ais-Highlight-highlighted\\">Amazon</em> Fire TV stick works fast for buffer-free streaming."`
+      `"Enjoy smart access to videos, games and apps with this <em class=\\"ais-Snippet-highlighted\\">Amazon</em> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <em class=\\"ais-Snippet-highlighted\\">Amazon</em> Fire TV stick works fast for buffer-free streaming."`
     );
   });
 
   test('with custom highlighted class name', () => {
     expect(
-      highlight({
+      snippet({
         attribute: 'description',
-        cssClasses: { highlighted: '__highlighted class' },
+        cssClasses: { highlighted: '__highlighted' },
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Enjoy smart access to videos, games and apps with this <mark class=\\"ais-Highlight-highlighted __highlighted class\\">Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark class=\\"ais-Highlight-highlighted __highlighted class\\">Amazon</mark> Fire TV stick works fast for buffer-free streaming."`
+      `"Enjoy smart access to videos, games and apps with this <mark class=\\"ais-Snippet-highlighted __highlighted\\">Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark class=\\"ais-Snippet-highlighted __highlighted\\">Amazon</mark> Fire TV stick works fast for buffer-free streaming."`
     );
   });
 
   test('with unknown attribute returns an empty string', () => {
     expect(
-      highlight({
+      snippet({
         attribute: 'wrong-attribute',
         hit,
       })
@@ -114,12 +115,41 @@ describe('highlight', () => {
 
   test('with nested attribute', () => {
     expect(
-      highlight({
+      snippet({
         attribute: 'meta.name',
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Nested <mark class=\\"ais-Highlight-highlighted\\">Amazon</mark> name"`
+      `"Nested <mark class=\\"ais-Snippet-highlighted\\">Amazon</mark> name"`
     );
+  });
+
+  test('with nested attribute as array', () => {
+    expect(
+      snippet({
+        attribute: ['meta', 'name'],
+        hit,
+      })
+    ).toMatchInlineSnapshot(
+      `"Nested <mark class=\\"ais-Snippet-highlighted\\">Amazon</mark> name"`
+    );
+  });
+
+  test('with array attribute', () => {
+    expect(
+      snippet({
+        attribute: 'categories.1',
+        hit,
+      })
+    ).toMatchInlineSnapshot(`"Streaming Media Players"`);
+  });
+
+  test('with array attribute as array', () => {
+    expect(
+      snippet({
+        attribute: ['categories', '1'],
+        hit,
+      })
+    ).toMatchInlineSnapshot(`"Streaming Media Players"`);
   });
 });
