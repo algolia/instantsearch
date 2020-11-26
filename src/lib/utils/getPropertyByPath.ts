@@ -1,6 +1,6 @@
 function getPropertyByPath(
   object: object | undefined,
-  path: string | Array<number | string>
+  path: string | string[]
 ): any {
   const parts = Array.isArray(path) ? path : path.split('.');
 

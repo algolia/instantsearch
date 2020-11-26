@@ -78,7 +78,7 @@ describe('getPropertyByPath', () => {
       expect(
         getPropertyByPath(
           { dog: { cat: ['test', { algolia: { cool: true } }] } },
-          ['dog', 'cat', 1, 'algolia', 'cool']
+          ['dog', 'cat', '1', 'algolia', 'cool']
         )
       ).toBe(true);
     });

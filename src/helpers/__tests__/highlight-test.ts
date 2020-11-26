@@ -142,7 +142,7 @@ describe('highlight', () => {
   test('with array attribute as array', () => {
     expect(
       highlight({
-        attribute: ['categories', 1],
+        attribute: ['categories', '1'],
         hit,
       })
     ).toMatchInlineSnapshot(`"Streaming Media Players"`);

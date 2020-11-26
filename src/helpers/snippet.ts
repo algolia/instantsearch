@@ -4,8 +4,8 @@ import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
 export type SnippetOptions = {
-  // @MAJOR only accept string[] here
-  attribute: string | Array<string | number>;
+  // @MAJOR string should no longer be allowed to be a path, only array can be a path
+  attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
   cssClasses?: {
