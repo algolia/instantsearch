@@ -155,135 +155,77 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     });
     const getLimit = isShowingMore => (isShowingMore ? showMoreLimit : limit);
 
-    let lastResultsFromMainSearch = [];
+    let lastResultsFromMainSearch;
+    let lastItemsFromMainSearch = [];
     let hasExhaustiveItems = true;
     let searchForFacetValues;
     let triggerRefine;
     let sendEvent;
-
-    const render = ({
-      items,
-      state,
-      createURL,
-      helperSpecializedSearchFacetValues,
-      refine,
-      isFromSearch,
-      isFirstSearch,
-      isShowingMore,
-      toggleShowMore,
-      instantSearchInstance,
-    }) => {
-      // Compute a specific createURL method able to link to any facet value state change
-      const _createURL = facetValue =>
-        createURL(state.toggleRefinement(attribute, facetValue));
-
-      // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
-      // function
-      const searchFacetValues =
-        helperSpecializedSearchFacetValues &&
-        helperSpecializedSearchFacetValues(
-          state,
-          createURL,
-          helperSpecializedSearchFacetValues,
-          refine,
-          instantSearchInstance,
-          isShowingMore
-        );
-
-      const canShowLess =
-        isShowingMore && lastResultsFromMainSearch.length > limit;
-      const canShowMore = showMore && !isFromSearch && !hasExhaustiveItems;
-
-      const canToggleShowMore = canShowLess || canShowMore;
-
-      renderFn(
-        {
-          createURL: _createURL,
-          items,
-          refine,
-          searchForItems: searchFacetValues,
-          instantSearchInstance,
-          isFromSearch,
-          canRefine: isFromSearch || items.length > 0,
-          widgetParams,
-          isShowingMore,
-          canToggleShowMore,
-          toggleShowMore,
-          hasExhaustiveItems,
-        },
-        isFirstSearch
-      );
-    };
+    let toggleShowMore;
 
     /* eslint-disable max-params */
-    const createSearchForFacetValues = (helper, toggleShowMore) => (
-      state,
-      createURL,
-      helperSpecializedSearchFacetValues,
-      toggleRefinement,
-      instantSearchInstance,
-      isShowingMore
-    ) => query => {
-      if (query === '' && lastResultsFromMainSearch) {
-        // render with previous data from the helper.
-        render({
-          items: lastResultsFromMainSearch,
-          state,
-          createURL,
-          helperSpecializedSearchFacetValues,
-          refine: toggleRefinement,
-          isFromSearch: false,
-          isFirstSearch: false,
-          instantSearchInstance,
-          toggleShowMore, // and yet it will be
-          isShowingMore, // so we need to restore in the state of show more as well
-        });
-      } else {
-        const tags = {
-          highlightPreTag: escapeFacetValues
-            ? TAG_PLACEHOLDER.highlightPreTag
-            : TAG_REPLACEMENT.highlightPreTag,
-          highlightPostTag: escapeFacetValues
-            ? TAG_PLACEHOLDER.highlightPostTag
-            : TAG_REPLACEMENT.highlightPostTag,
-        };
-
-        helper
-          .searchForFacetValues(
-            attribute,
-            query,
-            // We cap the `maxFacetHits` value to 100 because the Algolia API
-            // doesn't support a greater number.
-            // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
-            Math.min(getLimit(isShowingMore), 100),
-            tags
-          )
-          .then(results => {
-            const facetValues = escapeFacetValues
-              ? escapeFacets(results.facetHits)
-              : results.facetHits;
-
-            const normalizedFacetValues = transformItems(
-              facetValues.map(({ value, ...item }) => ({
-                ...item,
-                value,
-                label: value,
-              }))
-            );
-
-            render({
-              items: normalizedFacetValues,
-              state,
-              createURL,
-              helperSpecializedSearchFacetValues,
-              refine: toggleRefinement,
-              isFromSearch: true,
-              isFirstSearch: false,
-              instantSearchInstance,
-              isShowingMore,
-            });
+    const createSearchForFacetValues = function(helper) {
+      return renderOptions => query => {
+        const { instantSearchInstance } = renderOptions;
+        if (query === '' && lastItemsFromMainSearch) {
+          // render with previous data from the helper.
+          renderFn({
+            ...this.getWidgetRenderState({
+              ...renderOptions,
+              results: lastResultsFromMainSearch,
+            }),
+            instantSearchInstance,
           });
-      }
+        } else {
+          const tags = {
+            highlightPreTag: escapeFacetValues
+              ? TAG_PLACEHOLDER.highlightPreTag
+              : TAG_REPLACEMENT.highlightPreTag,
+            highlightPostTag: escapeFacetValues
+              ? TAG_PLACEHOLDER.highlightPostTag
+              : TAG_REPLACEMENT.highlightPostTag,
+          };
+
+          helper
+            .searchForFacetValues(
+              attribute,
+              query,
+              // We cap the `maxFacetHits` value to 100 because the Algolia API
+              // doesn't support a greater number.
+              // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
+              Math.min(getLimit(this.isShowingMore), 100),
+              tags
+            )
+            .then(results => {
+              const facetValues = escapeFacetValues
+                ? escapeFacets(results.facetHits)
+                : results.facetHits;
+
+              const normalizedFacetValues = transformItems(
+                facetValues.map(({ value, ...item }) => ({
+                  ...item,
+                  value,
+                  label: value,
+                }))
+              );
+
+              const canToggleShowMore =
+                this.isShowingMore && lastItemsFromMainSearch.length > limit;
+
+              renderFn({
+                ...this.getWidgetRenderState({
+                  ...renderOptions,
+                  results: lastResultsFromMainSearch,
+                }),
+                items: normalizedFacetValues,
+                canToggleShowMore,
+                canRefine: true,
+                instantSearchInstance,
+                isFromSearch: true,
+              });
+            });
+        }
+      };
     };
     /* eslint-enable max-params */
 
@@ -296,7 +238,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       // has to only bind it once when `isFirstRendering` for instance
       toggleShowMore() {},
       cachedToggleShowMore() {
-        this.toggleShowMore();
+        toggleShowMore();
       },
 
       createToggleShowMore(renderOptions) {
@@ -310,84 +252,132 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         return getLimit(this.isShowingMore);
       },
 
-      init({ helper, createURL, instantSearchInstance }) {
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
-
-        sendEvent = createSendEventForFacet({
-          instantSearchInstance,
-          helper,
-          attribute,
-          widgetType: this.$$type,
-        });
-
-        triggerRefine = facetValue => {
-          sendEvent('click', facetValue);
-          helper.toggleRefinement(attribute, facetValue).search();
-        };
-
-        searchForFacetValues = createSearchForFacetValues(
-          helper,
-          this.cachedToggleShowMore
+      init(initOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
+          },
+          true
         );
-
-        render({
-          items: [],
-          state: helper.state,
-          createURL,
-          helperSpecializedSearchFacetValues: searchForFacetValues,
-          refine: triggerRefine,
-          isFromSearch: false,
-          isFirstSearch: true,
-          instantSearchInstance,
-          isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
-          sendEvent,
-        });
       },
 
       render(renderOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          refinementList: {
+            ...renderState.refinementList,
+            [attribute]: this.getWidgetRenderState(renderOptions),
+          },
+        };
+      },
+
+      getWidgetRenderState(renderOptions) {
         const {
           results,
           state,
           createURL,
           instantSearchInstance,
+          isFromSearch = false,
+          helper,
         } = renderOptions;
+        let items = [];
+        let facetValues;
 
-        const facetValues = results.getFacetValues(attribute, { sortBy }) || [];
-        const items = transformItems(
-          facetValues.slice(0, this.getLimit()).map(formatItems)
-        );
+        if (!sendEvent || !triggerRefine || !searchForFacetValues) {
+          sendEvent = createSendEventForFacet({
+            instantSearchInstance,
+            helper,
+            attribute,
+            widgetType: this.$$type,
+          });
 
-        const maxValuesPerFacetConfig = state.maxValuesPerFacet;
-        const currentLimit = this.getLimit();
-        // If the limit is the max number of facet retrieved it is impossible to know
-        // if the facets are exhaustive. The only moment we are sure it is exhaustive
-        // is when it is strictly under the number requested unless we know that another
-        // widget has requested more values (maxValuesPerFacet > getLimit()).
-        // Because this is used for making the search of facets unable or not, it is important
-        // to be conservative here.
-        hasExhaustiveItems =
-          maxValuesPerFacetConfig > currentLimit
-            ? facetValues.length <= currentLimit
-            : facetValues.length < currentLimit;
+          triggerRefine = facetValue => {
+            sendEvent('click', facetValue);
+            helper.toggleRefinement(attribute, facetValue).search();
+          };
 
-        lastResultsFromMainSearch = items;
+          searchForFacetValues = createSearchForFacetValues.call(this, helper);
+        }
 
-        this.toggleShowMore = this.createToggleShowMore(renderOptions);
+        if (results) {
+          if (!isFromSearch) {
+            facetValues = results.getFacetValues(attribute, { sortBy }) || [];
+            items = transformItems(
+              facetValues.slice(0, this.getLimit()).map(formatItems)
+            );
+          } else {
+            facetValues = escapeFacetValues
+              ? escapeFacets(results.facetHits)
+              : results.facetHits;
 
-        render({
+            items = transformItems(
+              facetValues.map(({ value, ...item }) => ({
+                ...item,
+                value,
+                label: value,
+              }))
+            );
+          }
+
+          const maxValuesPerFacetConfig = state.maxValuesPerFacet;
+          const currentLimit = this.getLimit();
+          // If the limit is the max number of facet retrieved it is impossible to know
+          // if the facets are exhaustive. The only moment we are sure it is exhaustive
+          // is when it is strictly under the number requested unless we know that another
+          // widget has requested more values (maxValuesPerFacet > getLimit()).
+          // Because this is used for making the search of facets unable or not, it is important
+          // to be conservative here.
+          hasExhaustiveItems =
+            maxValuesPerFacetConfig > currentLimit
+              ? facetValues.length <= currentLimit
+              : facetValues.length < currentLimit;
+
+          lastResultsFromMainSearch = results;
+          lastItemsFromMainSearch = items;
+
+          toggleShowMore = this.createToggleShowMore(renderOptions);
+        }
+
+        // Compute a specific createURL method able to link to any facet value state change
+        const _createURL = facetValue =>
+          createURL(state.toggleRefinement(attribute, facetValue));
+
+        // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
+        // function
+        const searchFacetValues =
+          searchForFacetValues && searchForFacetValues(renderOptions);
+
+        const canShowLess =
+          this.isShowingMore && lastItemsFromMainSearch.length > limit;
+        const canShowMore = showMore && !isFromSearch && !hasExhaustiveItems;
+
+        const canToggleShowMore = canShowLess || canShowMore;
+
+        return {
+          createURL: _createURL,
           items,
-          state,
-          createURL,
-          helperSpecializedSearchFacetValues: searchForFacetValues,
           refine: triggerRefine,
-          isFromSearch: false,
-          isFirstSearch: false,
-          instantSearchInstance,
+          searchForItems: searchFacetValues,
+          isFromSearch,
+          canRefine: isFromSearch || items.length > 0,
+          widgetParams,
           isShowingMore: this.isShowingMore,
+          canToggleShowMore,
           toggleShowMore: this.cachedToggleShowMore,
           sendEvent,
-        });
+          hasExhaustiveItems,
+        };
       },
 
       dispose({ state }) {
