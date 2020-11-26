@@ -192,17 +192,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
     );
 
-    warning(
-      Boolean(insightsClient) || !hasDetectedInsightsClient(),
-      withUsage(`InstantSearch detected the Insights client in the global scope.
-To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
-
-const search = instantsearch({
-  /* ... */
-  insightsClient: window.aa,
-});`)
-    );
-
     if (insightsClient && typeof insightsClient !== 'function') {
       throw new Error(
         withUsage('The `insightsClient` option should be a function.')
