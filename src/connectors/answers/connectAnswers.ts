@@ -5,7 +5,7 @@ import {
   debounce,
   noop,
 } from '../../lib/utils';
-import { Connector, Hits, FindAnswersResponse } from '../../types';
+import { Connector, Hits, Hit, FindAnswersResponse } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'answers',
@@ -46,13 +46,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
   return widgetParams => {
     const { attributesForPrediction, queryLanguages = ['en'], nbHits } =
       widgetParams || ({} as typeof widgetParams);
-    // FIXME: replace `FindAnswersResponse<{}>` with `FindAnswersResponse<Hit>`
-    // once the change in algoliasearch is released.
     const runConcurrentSafePromise = createConcurrentSafePromise<
-      FindAnswersResponse<{}>
+      FindAnswersResponse<Hit>
     >();
 
-    let lastAnswersResult: Partial<FindAnswersResponse<{}>>;
+    let lastAnswersResult: Partial<FindAnswersResponse<Hit>>;
     let isLoading = false;
     const debouncedRenderFn = debounce(renderFn, 200);
 
