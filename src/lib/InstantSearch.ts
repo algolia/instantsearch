@@ -20,7 +20,6 @@ import {
   Middleware,
   MiddlewareDefinition,
 } from '../types';
-import hasDetectedInsightsClient from './utils/detect-insights-client';
 import {
   createRouterMiddleware,
   RouterProps,
