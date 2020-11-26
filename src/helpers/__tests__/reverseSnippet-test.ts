@@ -156,7 +156,7 @@ describe('reverseSnippet', () => {
   test('with array attribute as array', () => {
     expect(
       reverseSnippet({
-        attribute: ['categories', 1],
+        attribute: ['categories', '1'],
         hit,
       })
     ).toMatchInlineSnapshot(`"Streaming Media Players"`);

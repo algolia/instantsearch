@@ -151,7 +151,7 @@ describe('reverseHighlight', () => {
   test('with array attribute as array', () => {
     expect(
       reverseHighlight({
-        attribute: ['categories', 1],
+        attribute: ['categories', '1'],
         hit,
       })
     ).toMatchInlineSnapshot(`"Streaming Media Players"`);
