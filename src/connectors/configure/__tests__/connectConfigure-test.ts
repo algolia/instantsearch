@@ -100,6 +100,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
   });
 
+  it('should not apply `null` as userToken', () => {
+    const makeWidget = connectConfigure(noop);
+    const widget = makeWidget({
+      searchParameters: {
+        // @ts-ignore-next-line
+        userToken: null,
+      },
+    });
+    expect(
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        uiState: {},
+      })
+    ).toEqual(new SearchParameters({}));
+  });
+
+  it('should not apply an empty string as userToken', () => {
+    const makeWidget = connectConfigure(noop);
+    const widget = makeWidget({
+      searchParameters: {
+        userToken: '',
+      },
+    });
+    expect(
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        uiState: {},
+      })
+    ).toEqual(new SearchParameters({}));
+  });
+
   it('should apply searchParameters with a higher priority', () => {
     const makeWidget = connectConfigure(noop);
     const widget = makeWidget({
@@ -194,6 +223,52 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         facets: ['brand', 'rating'],
       })
     );
+  });
+
+  it('should not apply invalid userToken on refine()', () => {
+    const renderFn = jest.fn();
+    const createConfigure = connectConfigure(renderFn, jest.fn());
+    const configure = createConfigure({
+      searchParameters: {},
+    });
+    configure.init!(createInitOptions({ helper }));
+    const getUserToken = () =>
+      configure.getWidgetRenderState(createRenderOptions({})).widgetParams
+        .searchParameters.userToken;
+
+    const { refine } = configure.getWidgetRenderState(createRenderOptions({}));
+
+    // @ts-ignore-next-line
+    refine({ userToken: null });
+    expect(getUserToken()).toBeUndefined();
+
+    refine({ userToken: '' });
+    expect(getUserToken()).toBeUndefined();
+  });
+
+  it('should not override userToken with an invalid value on refine()', () => {
+    const renderFn = jest.fn();
+    const createConfigure = connectConfigure(renderFn, jest.fn());
+    const configure = createConfigure({
+      searchParameters: {},
+    });
+    configure.init!(createInitOptions({ helper }));
+    const getUserToken = () =>
+      configure.getWidgetRenderState(createRenderOptions({})).widgetParams
+        .searchParameters.userToken;
+
+    const { refine } = configure.getWidgetRenderState(createRenderOptions({}));
+
+    // set a valid userToken
+    refine({ userToken: 'abc' });
+    expect(getUserToken()).toEqual('abc');
+
+    // @ts-ignore-next-line
+    refine({ userToken: null });
+    expect(getUserToken()).toEqual('abc');
+
+    refine({ userToken: '' });
+    expect(getUserToken()).toEqual('abc');
   });
 
   it('should dispose only the state set by configure', () => {

@@ -59,6 +59,18 @@ export type ConfigureConnector = Connector<
   ConfigureConnectorParams
 >;
 
+function excludeInvalidUserToken(searchParameters: PlainSearchParameters) {
+  if (
+    searchParameters.userToken === '' ||
+    searchParameters.userToken === null
+  ) {
+    const { userToken, ...newSearchParameters } = searchParameters;
+    return newSearchParameters;
+  } else {
+    return searchParameters;
+  }
+}
+
 const connectConfigure: ConfigureConnector = function connectConfigure(
   renderFn = noop,
   unmountFn = noop
@@ -69,6 +81,10 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         withUsage('The `searchParameters` option expects an object.')
       );
     }
+    // Update original `widgetParams.searchParameters` to the new one without invalid userToken
+    widgetParams.searchParameters = excludeInvalidUserToken(
+      widgetParams.searchParameters
+    );
 
     type ConnectorState = {
       refine?: Refine;
@@ -78,6 +94,8 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
 
     function refine(helper: AlgoliaSearchHelper): Refine {
       return (searchParameters: PlainSearchParameters) => {
+        const newSearchParameters = excludeInvalidUserToken(searchParameters);
+
         // Merge new `searchParameters` with the ones set from other widgets
         const actualState = getInitialSearchParameters(
           helper.state,
@@ -85,11 +103,14 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         );
         const nextSearchParameters = mergeSearchParameters(
           actualState,
-          new algoliasearchHelper.SearchParameters(searchParameters)
+          new algoliasearchHelper.SearchParameters(newSearchParameters)
         );
 
         // Update original `widgetParams.searchParameters` to the new refined one
-        widgetParams.searchParameters = searchParameters;
+        widgetParams.searchParameters = {
+          userToken: widgetParams.searchParameters.userToken,
+          ...newSearchParameters,
+        };
 
         // Trigger a search with the resolved search parameters
         helper.setState(nextSearchParameters).search();
