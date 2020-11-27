@@ -93,7 +93,7 @@
     "@wdio/spec-reporter": "5.16.5",
     "@wdio/static-server-service": "5.16.5",
     "algoliasearch": "4.3.1",
-    "algoliasearch-v3": "npm:algoliasearch@3",
+    "algoliasearch-v3": "npm:algoliasearch@3.35.1",
     "babel-eslint": "10.0.3",
     "babel-jest": "24.9.0",
     "babel-loader": "8.0.6",
