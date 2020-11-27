@@ -137,6 +137,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           answersIndex.findAnswers(query, queryLanguages, {
             nbHits,
             attributesForPrediction,
+            params: state,
           })
         ).then(result => {
           lastAnswersResult = result;

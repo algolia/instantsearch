@@ -32,17 +32,6 @@ describe('connectAnswers', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
 `);
     });
-
-    it('throws without attributesForPrediction', () => {
-      expect(() => {
-        // @ts-ignore: test connectAnswers with invalid parameters
-        connectAnswers(() => {})({});
-      }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attributesForPrediction\` option expects an array of strings.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
-`);
-    });
   });
 
   const setupTestEnvironment = ({
@@ -51,11 +40,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
   }) => {
     const renderFn = jest.fn();
     const unmountFn = jest.fn();
+    const findAnswers = jest.fn(() => Promise.resolve({ hits }));
     const client = createSearchClient({
       // @ts-ignore-next-line
       initIndex() {
         return {
-          findAnswers: () => Promise.resolve({ hits }),
+          findAnswers,
         };
       },
     });
@@ -71,6 +61,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       instantSearchInstance,
       widget,
       helper,
+      findAnswers,
     };
   };
 
@@ -316,6 +307,55 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     await wait(300);
     // but no more rendering
     expect(renderFn).toHaveBeenCalledTimes(4);
+  });
+
+  it('forwards search parameters to findAnswers', () => {
+    const hits = [{ title: '' }];
+    const {
+      instantSearchInstance,
+      widget,
+      helper,
+      findAnswers,
+    } = setupTestEnvironment({ hits });
+
+    widget.init!(
+      createInitOptions({
+        instantSearchInstance,
+        state: helper.state,
+        helper,
+      })
+    );
+
+    const nextState = helper.state
+      .setQuery('a')
+      .addDisjunctiveFacet('brand')
+      .addDisjunctiveFacetRefinement('brand', 'Apple');
+    widget.render!(
+      createRenderOptions({
+        state: nextState,
+        instantSearchInstance,
+        helper,
+      })
+    );
+
+    expect(findAnswers).toHaveBeenCalledTimes(1);
+    expect(findAnswers).toHaveBeenCalledWith('a', ['en'], {
+      attributesForPrediction: ['description'],
+      nbHits: 1,
+      params: {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: { brand: ['Apple'] },
+        facets: [],
+        facetsExcludes: {},
+        facetsRefinements: {},
+        hierarchicalFacets: [],
+        hierarchicalFacetsRefinements: {},
+        index: '',
+        numericRefinements: {},
+        query: 'a',
+        tagRefinements: [],
+      },
+    });
   });
 
   describe('getRenderState', () => {
