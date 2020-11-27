@@ -44,8 +44,21 @@ const connectAnswers: AnswersConnector = function connectAnswers(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { attributesForPrediction, queryLanguages = ['en'], nbHits } =
+    const { attributesForPrediction, queryLanguages = ['en'], nbHits = 1 } =
       widgetParams || ({} as typeof widgetParams);
+
+    if (
+      !attributesForPrediction ||
+      !Array.isArray(attributesForPrediction) ||
+      attributesForPrediction.length === 0
+    ) {
+      throw new Error(
+        withUsage(
+          'The `attributesForPrediction` option expects an array of strings.'
+        )
+      );
+    }
+
     const runConcurrentSafePromise = createConcurrentSafePromise<
       FindAnswersResponse<Hit>
     >();

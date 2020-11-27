@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Answers Rendering renders the loader 1`] = `
+<div>
+  <div
+    class="root empty"
+  >
+    <div
+      class="header"
+    >
+      header
+    </div>
+    <div
+      class="loader"
+    >
+      loader
+    </div>
+    <ul
+      class="list"
+    />
+  </div>
+</div>
+`;
+
+exports[`Answers Rendering renders without anything 1`] = `
+<div>
+  <div
+    class="root empty"
+  >
+    <div
+      class="header"
+    >
+      header
+    </div>
+    <ul
+      class="list"
+    />
+  </div>
+</div>
+`;
