@@ -46,7 +46,7 @@ storiesOf('Results/Answers', module)
           container: answersContainer,
           attributesForPrediction: ['description'],
           templates: {
-            header: ({ hits, isLoading }) => {
+            header: ({ hits }) => {
               return hits.length === 0 ? '' : `<p>Answers</p>`;
             },
             item: hit => {

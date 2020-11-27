@@ -37,6 +37,10 @@
   line-height: 1.4rem;
 }
 
+.my-Answers .description em {
+  background-color: #ffc168;
+}
+
 .one-line {
   display: -webkit-box;
   -webkit-line-clamp: 1;
