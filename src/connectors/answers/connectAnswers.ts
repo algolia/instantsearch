@@ -25,10 +25,22 @@ export type AnswersRendererOptions = {
 };
 
 export type AnswersConnectorParams = {
-  attributesForPrediction: string[];
+  /**
+   * Attributes to use for predictions.
+   * If empty, we use all `searchableAttributes` to find answers.
+   * All your `attributesForPrediction` must be part of your `searchableAttributes`.
+   */
+  attributesForPrediction?: string[];
 
+  /**
+   * The languages in the query. Currently only supports `en`.
+   */
   queryLanguages?: string[];
 
+  /**
+   * Maximum number of answers to retrieve from the Answers Engine.
+   * Cannot be greater than 1000.
+   */
   nbHits?: number;
 };
 
@@ -44,8 +56,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { attributesForPrediction, queryLanguages = ['en'], nbHits = 1 } =
-      widgetParams || ({} as typeof widgetParams);
+    const {
+      attributesForPrediction = ['*'],
+      queryLanguages = ['en'],
+      nbHits = 1,
+    } = widgetParams || ({} as typeof widgetParams);
 
     if (
       !attributesForPrediction ||
