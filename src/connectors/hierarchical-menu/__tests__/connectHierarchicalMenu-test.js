@@ -471,9 +471,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         anotherCategory: {},
         category: {
           items: [],
-          refine: undefined,
+          refine: expect.any(Function),
           createURL: expect.any(Function),
-          sendEvent: undefined,
+          sendEvent: expect.any(Function),
           widgetParams: { attributes: ['category', 'subCategory'] },
           isShowingMore: false,
           toggleShowMore: expect.any(Function),
@@ -579,8 +579,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         )
       ).toEqual({
         items: [],
-        refine: undefined,
-        sendEvent: undefined,
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         createURL: expect.any(Function),
         widgetParams: { attributes: ['category', 'subCategory'] },
         isShowingMore: false,

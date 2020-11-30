@@ -92,17 +92,17 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     const [hierarchicalFacetName] = attributes;
     let sendEvent;
 
+    // Provide the same function to the `renderFn` so that way the user
+    // has to only bind it once when `isFirstRendering` for instance
+    let toggleShowMore = () => {};
+    function cachedToggleShowMore() {
+      toggleShowMore();
+    }
+
     return {
       $$type: 'ais.hierarchicalMenu',
 
       isShowingMore: false,
-
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
-        this.toggleShowMore();
-      },
 
       createToggleShowMore(renderOptions) {
         return () => {
@@ -116,20 +116,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-
-        sendEvent = createSendEventForFacet({
-          instantSearchInstance,
-          helper,
-          attribute: hierarchicalFacetName,
-          widgetType: this.$$type,
-        });
-
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
-        this._refine = function(facetValue) {
-          sendEvent('click', facetValue);
-          helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
-        };
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
@@ -154,7 +141,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       render(renderOptions) {
         const { instantSearchInstance } = renderOptions;
 
-        this.toggleShowMore = this.createToggleShowMore(renderOptions);
+        toggleShowMore = this.createToggleShowMore(renderOptions);
 
         renderFn(
           {
@@ -188,12 +175,34 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState({ results, state, createURL }) {
+      getWidgetRenderState({
+        results,
+        state,
+        createURL,
+        instantSearchInstance,
+        helper,
+      }) {
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
             state.toggleRefinement(hierarchicalFacetName, facetValue)
           );
+        }
+
+        if (!sendEvent) {
+          sendEvent = createSendEventForFacet({
+            instantSearchInstance,
+            helper,
+            attribute: hierarchicalFacetName,
+            widgetType: this.$$type,
+          });
+        }
+
+        if (!this._refine) {
+          this._refine = function(facetValue) {
+            sendEvent('click', facetValue);
+            helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+          };
         }
 
         const facetValues = results
@@ -227,7 +236,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           sendEvent,
           widgetParams,
           isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
+          toggleShowMore: cachedToggleShowMore,
           canToggleShowMore:
             showMore && (this.isShowingMore || !getHasExhaustiveItems()),
         };

@@ -117,17 +117,17 @@ export default function connectMenu(renderFn, unmountFn = noop) {
 
     let sendEvent;
 
+    // Provide the same function to the `renderFn` so that way the user
+    // has to only bind it once when `isFirstRendering` for instance
+    let toggleShowMore = () => {};
+    function cachedToggleShowMore() {
+      toggleShowMore();
+    }
+
     return {
       $$type: 'ais.menu',
 
       isShowingMore: false,
-
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
-        this.toggleShowMore();
-      },
 
       createToggleShowMore({ results, instantSearchInstance }) {
         return () => {
@@ -141,29 +141,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       init(initOptions) {
-        const { helper, createURL, instantSearchInstance } = initOptions;
-
-        sendEvent = createSendEventForFacet({
-          instantSearchInstance,
-          helper,
-          attribute,
-          widgetType: this.$$type,
-        });
-
-        this._createURL = facetValue =>
-          createURL(helper.state.toggleRefinement(attribute, facetValue));
-
-        this._refine = function(facetValue) {
-          const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
-            attribute
-          );
-          sendEvent('click', facetValue ? facetValue : refinedItem);
-          helper
-            .toggleRefinement(attribute, facetValue ? facetValue : refinedItem)
-            .search();
-        };
-
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
@@ -176,8 +154,6 @@ export default function connectMenu(renderFn, unmountFn = noop) {
 
       render(renderOptions) {
         const { instantSearchInstance } = renderOptions;
-
-        this.toggleShowMore = this.createToggleShowMore(renderOptions);
 
         renderFn(
           {
@@ -203,12 +179,51 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState(widgetOptions) {
+      getWidgetRenderState({
+        results,
+        createURL,
+        instantSearchInstance,
+        helper,
+      }) {
         let items = [];
         let canToggleShowMore = false;
 
-        if (widgetOptions.results) {
-          const facetValues = widgetOptions.results.getFacetValues(attribute, {
+        if (!sendEvent) {
+          sendEvent = createSendEventForFacet({
+            instantSearchInstance,
+            helper,
+            attribute,
+            widgetType: this.$$type,
+          });
+        }
+
+        if (!this._createURL) {
+          this._createURL = facetValue =>
+            createURL(helper.state.toggleRefinement(attribute, facetValue));
+        }
+
+        if (!this._refine) {
+          this._refine = function(facetValue) {
+            const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
+              attribute
+            );
+            sendEvent('click', facetValue ? facetValue : refinedItem);
+            helper
+              .toggleRefinement(
+                attribute,
+                facetValue ? facetValue : refinedItem
+              )
+              .search();
+          };
+        }
+
+        toggleShowMore = this.createToggleShowMore({
+          results,
+          instantSearchInstance,
+        });
+
+        if (results) {
+          const facetValues = results.getFacetValues(attribute, {
             sortBy,
           });
           const facetItems =
@@ -237,7 +252,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           canRefine: items.length > 0,
           widgetParams,
           isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
+          toggleShowMore: cachedToggleShowMore,
           canToggleShowMore,
         };
       },

@@ -110,9 +110,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         },
         category: {
           canRefine: false,
-          createURL: undefined,
+          createURL: expect.any(Function),
           items: [],
-          refine: undefined,
+          refine: expect.any(Function),
           widgetParams: { attributes: ['category', 'subCategory'] },
         },
       });
@@ -202,9 +202,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
       expect(renderState1).toEqual({
         canRefine: false,
-        createURL: undefined,
+        createURL: expect.any(Function),
         items: [],
-        refine: undefined,
+        refine: expect.any(Function),
         widgetParams: { attributes: ['category', 'subCategory'] },
       });
 

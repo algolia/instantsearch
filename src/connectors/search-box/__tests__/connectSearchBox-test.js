@@ -324,7 +324,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         clear: expect.any(Function),
         isSearchStalled: false,
         query: '',
-        refine: undefined,
+        refine: expect.any(Function),
         widgetParams: { queryHook },
       });
 
@@ -407,7 +407,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         clear: expect.any(Function),
         isSearchStalled: false,
         query: '',
-        refine: undefined,
+        refine: expect.any(Function),
         widgetParams: { queryHook },
       });
 

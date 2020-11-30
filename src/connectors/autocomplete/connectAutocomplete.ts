@@ -110,10 +110,7 @@ search.addWidgets([
       $$type: 'ais.autocomplete',
 
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-        connectorState.refine = (query: string) => {
-          helper.setQuery(query).search();
-        };
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
@@ -127,9 +124,15 @@ search.addWidgets([
       render(renderOptions) {
         const { instantSearchInstance } = renderOptions;
 
+        const renderState = this.getWidgetRenderState(renderOptions);
+
+        renderState.indices.forEach(({ sendEvent, hits }) => {
+          sendEvent('view', hits);
+        });
+
         renderFn(
           {
-            ...this.getWidgetRenderState(renderOptions),
+            ...renderState,
             instantSearchInstance,
           },
           false
@@ -144,6 +147,12 @@ search.addWidgets([
       },
 
       getWidgetRenderState({ helper, scopedResults, instantSearchInstance }) {
+        if (!connectorState.refine) {
+          connectorState.refine = (query: string) => {
+            helper.setQuery(query).search();
+          };
+        }
+
         const indices = scopedResults.map(scopedResult => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
@@ -156,8 +165,6 @@ search.addWidgets([
             index: scopedResult.results.index,
             widgetType: this.$$type!,
           });
-
-          sendEvent('view', scopedResult.results.hits);
 
           return {
             indexId: scopedResult.indexId,

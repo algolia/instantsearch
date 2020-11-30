@@ -287,7 +287,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       expect(renderState1.sortBy).toEqual({
         currentRefinement: 'index_default',
-        refine: undefined,
+        refine: expect.any(Function),
         hasNoResults: true,
         options: [
           { label: 'default', value: 'index_default' },
@@ -366,7 +366,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       expect(renderState1).toEqual({
         currentRefinement: 'index_desc',
-        refine: undefined,
+        refine: expect.any(Function),
         hasNoResults: true,
         options: [
           { label: 'default', value: 'index_default' },
