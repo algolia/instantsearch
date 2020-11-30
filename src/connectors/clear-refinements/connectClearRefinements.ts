@@ -111,7 +111,41 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
       },
 
       render(renderOptions) {
-        const { createURL, instantSearchInstance } = renderOptions;
+        const { instantSearchInstance } = renderOptions;
+
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      dispose() {
+        unmountFn();
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          clearRefinements: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ createURL, scopedResults }) {
+        connectorState.attributesToClear = scopedResults.reduce<
+          Array<ReturnType<typeof getAttributesToClear>>
+        >((results, scopedResult) => {
+          return results.concat(
+            getAttributesToClear({
+              scopedResult,
+              includedAttributes,
+              excludedAttributes,
+              transformItems,
+            })
+          );
+        }, []);
 
         connectorState.refine = () => {
           connectorState.attributesToClear.forEach(
@@ -141,40 +175,6 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
               )
             )
           );
-
-        renderFn(
-          {
-            ...this.getWidgetRenderState(renderOptions),
-            instantSearchInstance,
-          },
-          false
-        );
-      },
-
-      dispose() {
-        unmountFn();
-      },
-
-      getRenderState(renderState, renderOptions) {
-        return {
-          ...renderState,
-          clearRefinements: this.getWidgetRenderState(renderOptions),
-        };
-      },
-
-      getWidgetRenderState({ scopedResults }) {
-        connectorState.attributesToClear = scopedResults.reduce<
-          Array<ReturnType<typeof getAttributesToClear>>
-        >((results, scopedResult) => {
-          return results.concat(
-            getAttributesToClear({
-              scopedResult,
-              includedAttributes,
-              excludedAttributes,
-              transformItems,
-            })
-          );
-        }, []);
 
         return {
           hasRefinements: connectorState.attributesToClear.some(

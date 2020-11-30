@@ -182,13 +182,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       $$type,
 
       init(initOptions) {
-        const { instantSearchInstance, helper } = initOptions;
-        sendEvent = createSendEvent({
-          instantSearchInstance,
-          attribute,
-          on,
-          helper,
-        });
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
@@ -224,7 +218,13 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState({ state, helper, results, createURL }) {
+      getWidgetRenderState({
+        state,
+        helper,
+        results,
+        createURL,
+        instantSearchInstance,
+      }) {
         const isRefined = results
           ? on?.every(v => helper.state.isDisjunctiveFacetRefined(attribute, v))
           : on?.every(v => state.isDisjunctiveFacetRefined(attribute, v));
@@ -281,6 +281,14 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
           helper.setPage(helper.state.page);
         }
 
+        if (!sendEvent) {
+          sendEvent = createSendEvent({
+            instantSearchInstance,
+            attribute,
+            on,
+            helper,
+          });
+        }
         const nextRefinement = isRefined ? offFacetValue : onFacetValue;
 
         return {

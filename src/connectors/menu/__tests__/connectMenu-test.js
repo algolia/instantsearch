@@ -463,8 +463,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
       expect(renderState1.menu).toEqual({
         items: [],
-        createURL: undefined,
-        refine: undefined,
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         canRefine: false,
         isShowingMore: false,
         toggleShowMore: expect.any(Function),
@@ -542,8 +543,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
       expect(renderState1).toEqual({
         items: [],
-        createURL: undefined,
-        refine: undefined,
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         canRefine: false,
         isShowingMore: false,
         toggleShowMore: expect.any(Function),

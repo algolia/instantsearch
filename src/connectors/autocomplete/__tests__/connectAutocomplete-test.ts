@@ -441,7 +441,7 @@ search.addWidgets([
       expect(renderState1.autocomplete).toEqual({
         currentRefinement: '',
         indices: [],
-        refine: undefined,
+        refine: expect.any(Function),
         widgetParams: {},
       });
 
@@ -499,7 +499,7 @@ search.addWidgets([
       expect(renderState1).toEqual({
         currentRefinement: '',
         indices: [],
-        refine: undefined,
+        refine: expect.any(Function),
         widgetParams: {},
       });
 

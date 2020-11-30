@@ -104,12 +104,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
       $$type: 'ais.sortBy',
 
       init(initOptions) {
-        const { helper, instantSearchInstance, parent } = initOptions;
-
-        this.initialIndex = parent.getIndexName();
-        this.setIndex = indexName => {
-          helper.setIndex(indexName).search();
-        };
+        const { instantSearchInstance } = initOptions;
 
         const widgetRenderState = this.getWidgetRenderState(initOptions);
         const currentIndex = widgetRenderState.currentRefinement;
@@ -156,7 +151,16 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState({ results, helper }) {
+      getWidgetRenderState({ results, helper, parent }) {
+        if (!this.initialIndex) {
+          this.initialIndex = parent.getIndexName();
+        }
+        if (!this.setIndex) {
+          this.setIndex = indexName => {
+            helper.setIndex(indexName).search();
+          };
+        }
+
         return {
           currentRefinement: helper.state.index,
           options: transformItems(items),
