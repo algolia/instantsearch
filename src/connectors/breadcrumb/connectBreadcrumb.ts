@@ -162,8 +162,6 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         const items = getItems();
 
-
-
         if (!connectorState.createURL) {
           connectorState.createURL = facetValue => {
             if (!facetValue) {
