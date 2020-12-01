@@ -21,7 +21,6 @@ import {
   MiddlewareDefinition,
   RenderState,
 } from '../types';
-import hasDetectedInsightsClient from './utils/detect-insights-client';
 import {
   createRouterMiddleware,
   RouterProps,
@@ -192,17 +191,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
 
 For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
-    );
-
-    warning(
-      Boolean(insightsClient) || !hasDetectedInsightsClient(),
-      withUsage(`InstantSearch detected the Insights client in the global scope.
-To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
-
-const search = instantsearch({
-  /* ... */
-  insightsClient: window.aa,
-});`)
     );
 
     if (insightsClient && typeof insightsClient !== 'function') {
