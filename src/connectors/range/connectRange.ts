@@ -22,12 +22,14 @@ const withUsage = createDocumentationMessageGenerator(
 
 const $$type = 'ais.range';
 
-export type Min = number | undefined;
-export type Max = number | undefined;
-export type Start = [Min, Max];
+export type RangeMin = number | undefined;
+export type RangeMax = number | undefined;
+
+// @MAJOR: potentially we should consolidate these types
+export type RangeBoundaries = [RangeMin, RangeMax];
 export type Range = {
-  min: Min;
-  max: Max;
+  min: RangeMin;
+  max: RangeMax;
 };
 
 export type RangeRendererOptions = {
@@ -37,7 +39,7 @@ export type RangeRendererOptions = {
    * previously set bound or to set an infinite bound.
    * @param rangeValue tuple of [min, max] bounds
    */
-  refine(rangeValue: Start): void;
+  refine(rangeValue: RangeBoundaries): void;
 
   /**
    * Send an event to the insights middleware
@@ -52,7 +54,7 @@ export type RangeRendererOptions = {
   /**
    * Current refinement of the search
    */
-  start: Start;
+  start: RangeBoundaries;
 
   /**
    * Transform for the rendering `from` and/or `to` values.
@@ -141,8 +143,8 @@ const connectRange: ConnectRange = function connectRange(
     const getRefinedState = (
       helper: AlgoliaSearchHelper,
       currentRange: Range,
-      nextMin: Min | string,
-      nextMax: Max | string
+      nextMin: RangeMin | string,
+      nextMax: RangeMax | string
     ) => {
       let resolvedState = helper.state;
       const { min: currentRangeMin, max: currentRangeMax } = currentRange;
@@ -159,7 +161,7 @@ const connectRange: ConnectRange = function connectRange(
         precision,
       });
 
-      let newNextMin: Min;
+      let newNextMin: RangeMin;
       if (!isFiniteNumber(minBound) && currentRangeMin === nextMinAsNumber) {
         newNextMin = undefined;
       } else if (isFiniteNumber(minBound) && isResetMin) {
@@ -168,7 +170,7 @@ const connectRange: ConnectRange = function connectRange(
         newNextMin = nextMinAsNumber;
       }
 
-      let newNextMax: Max;
+      let newNextMax: RangeMax;
       if (!isFiniteNumber(maxBound) && currentRangeMax === nextMaxAsNumber) {
         newNextMax = undefined;
       } else if (isFiniteNumber(maxBound) && isResetMax) {
@@ -178,14 +180,13 @@ const connectRange: ConnectRange = function connectRange(
       }
 
       const isResetNewNextMin = newNextMin === undefined;
-      const isValidNewNextMin = isFiniteNumber(newNextMin);
-      const isValidMinCurrentRange = isFiniteNumber(currentRangeMin);
+
       const isGreaterThanCurrentRange =
-        isValidMinCurrentRange && currentRangeMin! <= newNextMin!;
+        isFiniteNumber(currentRangeMin) && currentRangeMin <= newNextMin!;
       const isMinValid =
         isResetNewNextMin ||
-        (isValidNewNextMin &&
-          (!isValidMinCurrentRange || isGreaterThanCurrentRange));
+        (isFiniteNumber(newNextMin) &&
+          (!isFiniteNumber(currentRangeMin) || isGreaterThanCurrentRange));
 
       const isResetNewNextMax = newNextMax === undefined;
       const isLowerThanRange =
@@ -300,7 +301,9 @@ const connectRange: ConnectRange = function connectRange(
       return toPrecision({ min, max, precision });
     }
 
-    function _getCurrentRefinement(helper: AlgoliaSearchHelper): Start {
+    function _getCurrentRefinement(
+      helper: AlgoliaSearchHelper
+    ): RangeBoundaries {
       const [minValue] = helper.getNumericRefinement(attribute, '>=') || [];
 
       const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
@@ -316,7 +319,7 @@ const connectRange: ConnectRange = function connectRange(
       helper: AlgoliaSearchHelper,
       currentRange: Range
     ) {
-      return ([nextMin, nextMax]: Start = [undefined, undefined]) => {
+      return ([nextMin, nextMax]: RangeBoundaries = [undefined, undefined]) => {
         const refinedState = getRefinedState(
           helper,
           currentRange,
