@@ -21,6 +21,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 `);
     });
 
+    it('throws without `attributesForPrediction`', () => {
+      expect(() => {
+        // @ts-ignore
+        answers({ container: document.createElement('div') });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attributesForPrediction\` option expects an array of strings.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
+`);
+    });
+
     it('throws when searchClient does not support findAnswers', () => {
       const container = document.createElement('div');
       const searchClient = createSearchClient({
