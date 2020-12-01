@@ -62,6 +62,10 @@ import {
   PaginationRendererOptions,
   PaginationConnectorParams,
 } from '../connectors/pagination/connectPagination';
+import {
+  AnswersRendererOptions,
+  AnswersConnectorParams,
+} from '../connectors/answers/connectAnswers';
 
 export type ScopedResult = {
   indexId: string;
@@ -359,6 +363,7 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  answers: WidgetRenderState<AnswersRendererOptions, AnswersConnectorParams>;
 }>;
 
 export type WidgetRenderState<
@@ -405,7 +410,8 @@ export type Widget<
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
-    | 'ais.voiceSearch';
+    | 'ais.voiceSearch'
+    | 'ais.answers';
   /**
    * Called once before the first search
    */

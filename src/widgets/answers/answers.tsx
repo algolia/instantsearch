@@ -2,19 +2,51 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import { WidgetFactory, SearchClient, Template, Hit } from '../../types';
+import { WidgetFactory, Template, Hit, Renderer } from '../../types';
 import defaultTemplates from './defaultTemplates';
 import {
   createDocumentationMessageGenerator,
   getContainerNode,
   prepareTemplateProps,
-  warning,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import TemplateRenderer from '../../components/Template/Template';
+import Answers from '../../components/Answers/Answers';
+import connectAnswers, {
+  AnswersRendererOptions,
+  AnswersConnectorParams,
+} from '../../connectors/answers/connectAnswers';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'answers' });
 const suit = component('Answers');
+
+const renderer = ({
+  renderState,
+  cssClasses,
+  containerNode,
+  templates,
+}): Renderer<AnswersRendererOptions, Partial<AnswersWidgetParams>> => (
+  { hits, isLoading, instantSearchInstance },
+  isFirstRendering
+) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  render(
+    <Answers
+      cssClasses={cssClasses}
+      hits={hits}
+      isLoading={isLoading}
+      templateProps={renderState.templateProps}
+    />,
+    containerNode
+  );
+};
 
 export type AnswersTemplates = {
   header?: Template<{
@@ -49,8 +81,6 @@ export type AnswersWidgetParams = {
 
   attributesForPrediction: string[];
 
-  searchClient: SearchClient;
-
   queryLanguages?: string[];
 
   nbHits?: number;
@@ -61,8 +91,8 @@ export type AnswersWidgetParams = {
 };
 
 export type AnswersWidget = WidgetFactory<
-  {},
-  AnswersWidgetParams,
+  AnswersRendererOptions,
+  AnswersConnectorParams,
   AnswersWidgetParams
 >;
 
@@ -70,7 +100,6 @@ const answersWidget: AnswersWidget = widgetParams => {
   const {
     container,
     attributesForPrediction,
-    searchClient,
     queryLanguages = ['en'],
     nbHits = 1,
     templates = defaultTemplates,
@@ -91,98 +120,22 @@ const answersWidget: AnswersWidget = widgetParams => {
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
   };
 
-  let lastQuery;
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    templates,
+    renderState: {},
+  });
 
-  const findAnswers = ({ query, index }) => {
-    const answersIndex = searchClient.initIndex(index);
-    if (!answersIndex.findAnswers) {
-      // FIXME: put the correct version which supports findAnswers both in lite and full version
-      warning(false, '`algoliasearch` >= x.y.z required.');
-      return Promise.resolve([]);
-    }
-    return answersIndex.findAnswers(query, queryLanguages, {
-      nbHits,
-      attributesForPrediction,
-    });
-  };
+  const makeWidget = connectAnswers(specializedRenderer, () =>
+    render(null, containerNode)
+  );
 
-  const debouncedFindAnswers = async ({ query, index }) => {
-    if (query === '') {
-      return [];
-    }
-    // TODO: debounce + concurrent-safe
-    const answers = await findAnswers({ query, index });
-    return answers;
-  };
-
-  return {
-    init() {
-      // TODO: remove this customization once the engine accepts url encoded query params
-      if (searchClient.transporter) {
-        searchClient.transporter.userAgent.value = 'answers-test';
-      }
-    },
-    render({ state: { query, index }, instantSearchInstance }) {
-      const templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates,
-      });
-      if (lastQuery === query) {
-        return;
-      }
-
-      lastQuery = query;
-      render(
-        <div className={cssClasses.root}>
-          {templates.header && (
-            <div className={cssClasses.header}>
-              <TemplateRenderer
-                {...templateProps}
-                templateKey="header"
-                data={{ hits: [], isLoading: true }}
-              />
-            </div>
-          )}
-          {templates.loader && (
-            <TemplateRenderer {...templateProps} templateKey="loader" />
-          )}
-        </div>,
-        containerNode
-      );
-      debouncedFindAnswers({ query, index }).then(({ hits = [] }) => {
-        render(
-          <div
-            className={`${cssClasses.root} ${
-              hits.length > 0 ? '' : cssClasses.emptyRoot
-            }`}
-          >
-            {templates.header && (
-              <div className={cssClasses.header}>
-                <TemplateRenderer
-                  {...templateProps}
-                  templateKey="header"
-                  data={{ hits, isLoading: false }}
-                />
-              </div>
-            )}
-            <ul className={cssClasses.list}>
-              {hits.map((hit, key) => (
-                <li key={key} className={cssClasses.item}>
-                  <TemplateRenderer
-                    {...templateProps}
-                    templateKey="item"
-                    data={hit}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>,
-          containerNode
-        );
-      });
-    },
-  };
+  return makeWidget({
+    attributesForPrediction,
+    queryLanguages,
+    nbHits,
+  });
 };
 
 export default answersWidget;
