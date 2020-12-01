@@ -19,6 +19,7 @@ import {
   CreateURL,
   Middleware,
   MiddlewareDefinition,
+  RenderState,
 } from '../types';
 import {
   createRouterMiddleware,
@@ -139,6 +140,7 @@ class InstantSearch extends EventEmitter {
   public mainIndex: Index;
   public started: boolean;
   public templatesConfig: object;
+  public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
@@ -543,7 +545,7 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
     this.mainIndex.refreshUiState();
     const nextUiState =
       typeof uiState === 'function'
-        ? uiState(this.mainIndex.getWidgetState({}))
+        ? uiState(this.mainIndex.getWidgetUiState({}))
         : uiState;
 
     const setIndexHelperState = (indexWidget: Index) => {
@@ -573,7 +575,7 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
   };
 
   public onInternalStateChange = () => {
-    const nextUiState = this.mainIndex.getWidgetState({});
+    const nextUiState = this.mainIndex.getWidgetUiState({});
 
     this.middleware.forEach(m => {
       m.onStateChange({

@@ -444,6 +444,120 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     expect(((results.hits as unknown) as EscapedHits).__escaped).toBe(true);
   });
 
+  describe('getRenderState', () => {
+    it('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHits = connectHits(renderFn, unmountFn);
+      const hitsWidget = createHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState1 = hitsWidget.getRenderState(
+        {},
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1.hits).toEqual({
+        hits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        results: undefined,
+        widgetParams: {},
+      });
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderState2 = hitsWidget.getRenderState(
+        {},
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      ((expectedHits as unknown) as EscapedHits).__escaped = true;
+
+      expect(renderState2.hits).toEqual({
+        hits: expectedHits,
+        sendEvent: renderState1.hits!.sendEvent,
+        bindEvent: renderState1.hits!.bindEvent,
+        results,
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHits = connectHits(renderFn, unmountFn);
+      const hitsWidget = createHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const renderState1 = hitsWidget.getWidgetRenderState(
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1).toEqual({
+        hits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        results: undefined,
+        widgetParams: {},
+      });
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderState2 = hitsWidget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      ((expectedHits as unknown) as EscapedHits).__escaped = true;
+
+      expect(renderState2).toEqual({
+        hits: expectedHits,
+        sendEvent: renderState1.sendEvent,
+        bindEvent: renderState2.bindEvent,
+        results,
+        widgetParams: {},
+      });
+    });
+  });
+
   describe('getWidgetSearchParameters', () => {
     it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
       const render = () => {};

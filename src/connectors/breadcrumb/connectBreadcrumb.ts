@@ -108,75 +108,21 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
     return {
       $$type: 'ais.breadcrumb',
 
-      init({ createURL, helper, instantSearchInstance }) {
-        connectorState.createURL = facetValue => {
-          if (!facetValue) {
-            const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
-              hierarchicalFacetName
-            );
-            if (breadcrumb.length > 0) {
-              return createURL(
-                helper.state.toggleFacetRefinement(
-                  hierarchicalFacetName,
-                  breadcrumb[0]
-                )
-              );
-            }
-          }
-          return createURL(
-            helper.state.toggleFacetRefinement(
-              hierarchicalFacetName,
-              facetValue
-            )
-          );
-        };
-
-        connectorState.refine = facetValue => {
-          if (!facetValue) {
-            const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
-              hierarchicalFacetName
-            );
-            if (breadcrumb.length > 0) {
-              helper
-                .toggleRefinement(hierarchicalFacetName, breadcrumb[0])
-                .search();
-            }
-          } else {
-            helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
-          }
-        };
-
+      init(initOptions) {
         renderFn(
           {
-            createURL: connectorState.createURL,
-            canRefine: false,
-            instantSearchInstance,
-            items: [],
-            refine: connectorState.refine,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render({ instantSearchInstance, results, state }) {
-        const [{ name: facetName }] = state.hierarchicalFacets;
-
-        const facetValues = results.getFacetValues(
-          facetName,
-          {}
-        ) as SearchResults.HierarchicalFacet;
-        const data = Array.isArray(facetValues.data) ? facetValues.data : [];
-        const items = transformItems(shiftItemsValues(prepareItems(data)));
-
+      render(renderOptions) {
         renderFn(
           {
-            canRefine: items.length > 0,
-            createURL: connectorState.createURL,
-            instantSearchInstance,
-            items,
-            refine: connectorState.refine,
-            widgetParams,
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false
         );
@@ -184,6 +130,88 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
       dispose() {
         unmountFn();
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          breadcrumb: {
+            ...renderState.breadcrumb,
+            [hierarchicalFacetName]: this.getWidgetRenderState(renderOptions),
+          },
+        };
+      },
+
+      getWidgetRenderState({ helper, createURL, results, state }) {
+        function getItems() {
+          if (!results) {
+            return [];
+          }
+
+          const [{ name: facetName }] = state.hierarchicalFacets;
+
+          const facetValues = results.getFacetValues(
+            facetName,
+            {}
+          ) as SearchResults.HierarchicalFacet;
+          const data = Array.isArray(facetValues.data) ? facetValues.data : [];
+          const items = transformItems(shiftItemsValues(prepareItems(data)));
+
+          return items;
+        }
+
+        const items = getItems();
+
+        if (!connectorState.createURL) {
+          connectorState.createURL = facetValue => {
+            if (!facetValue) {
+              const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
+                hierarchicalFacetName
+              );
+              if (breadcrumb.length > 0) {
+                return createURL(
+                  helper.state.toggleFacetRefinement(
+                    hierarchicalFacetName,
+                    breadcrumb[0]
+                  )
+                );
+              }
+            }
+            return createURL(
+              helper.state.toggleFacetRefinement(
+                hierarchicalFacetName,
+                facetValue
+              )
+            );
+          };
+        }
+
+        if (!connectorState.refine) {
+          connectorState.refine = facetValue => {
+            if (!facetValue) {
+              const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
+                hierarchicalFacetName
+              );
+              if (breadcrumb.length > 0) {
+                helper
+                  .toggleRefinement(hierarchicalFacetName, breadcrumb[0])
+                  .search();
+              }
+            } else {
+              helper
+                .toggleRefinement(hierarchicalFacetName, facetValue)
+                .search();
+            }
+          };
+        }
+
+        return {
+          canRefine: items.length > 0,
+          createURL: connectorState.createURL,
+          items,
+          refine: connectorState.refine,
+          widgetParams,
+        };
       },
 
       getWidgetSearchParameters(searchParameters) {

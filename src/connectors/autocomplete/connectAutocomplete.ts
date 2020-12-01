@@ -109,24 +109,50 @@ search.addWidgets([
     return {
       $$type: 'ais.autocomplete',
 
-      init({ instantSearchInstance, helper }) {
-        connectorState.refine = (query: string) => {
-          helper.setQuery(query).search();
-        };
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            widgetParams,
-            currentRefinement: helper.state.query || '',
-            indices: [],
-            refine: connectorState.refine,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
         );
       },
 
-      render({ helper, scopedResults, instantSearchInstance }) {
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
+
+        const renderState = this.getWidgetRenderState(renderOptions);
+
+        renderState.indices.forEach(({ sendEvent, hits }) => {
+          sendEvent('view', hits);
+        });
+
+        renderFn(
+          {
+            ...renderState,
+            instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          autocomplete: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ helper, scopedResults, instantSearchInstance }) {
+        if (!connectorState.refine) {
+          connectorState.refine = (query: string) => {
+            helper.setQuery(query).search();
+          };
+        }
+
         const indices = scopedResults.map(scopedResult => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
@@ -140,8 +166,6 @@ search.addWidgets([
             widgetType: this.$$type!,
           });
 
-          sendEvent('view', scopedResult.results.hits);
-
           return {
             indexId: scopedResult.indexId,
             indexName: scopedResult.results.index,
@@ -151,19 +175,15 @@ search.addWidgets([
           };
         });
 
-        renderFn(
-          {
-            widgetParams,
-            currentRefinement: helper.state.query || '',
-            indices,
-            refine: connectorState.refine!,
-            instantSearchInstance,
-          },
-          false
-        );
+        return {
+          currentRefinement: helper.state.query || '',
+          indices,
+          refine: connectorState.refine!,
+          widgetParams,
+        };
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const query = searchParameters.query || '';
 
         if (query === '' || (uiState && uiState.query === query)) {

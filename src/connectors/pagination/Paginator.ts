@@ -1,13 +1,21 @@
 import { range } from '../../lib/utils';
 
 class Paginator {
-  constructor(params) {
+  public currentPage: number;
+  public total: number;
+  public padding: number;
+
+  public constructor(params: {
+    currentPage: number;
+    total: number;
+    padding: number;
+  }) {
     this.currentPage = params.currentPage;
     this.total = params.total;
     this.padding = params.padding;
   }
 
-  pages() {
+  public pages() {
     const { total, currentPage, padding } = this;
 
     if (total === 0) return [0];
@@ -31,11 +39,16 @@ class Paginator {
     return range({ start: first, end: last });
   }
 
-  nbPagesDisplayed(padding, total) {
+  public nbPagesDisplayed(padding: number, total: number) {
     return Math.min(2 * padding + 1, total);
   }
 
-  calculatePaddingLeft(current, padding, total, totalDisplayedPages) {
+  public calculatePaddingLeft(
+    current: number,
+    padding: number,
+    total: number,
+    totalDisplayedPages: number
+  ) {
     if (current <= padding) {
       return current;
     }
@@ -47,11 +60,11 @@ class Paginator {
     return padding;
   }
 
-  isLastPage() {
+  public isLastPage() {
     return this.currentPage === this.total - 1 || this.total === 0;
   }
 
-  isFirstPage() {
+  public isFirstPage() {
     return this.currentPage === 0;
   }
 }
