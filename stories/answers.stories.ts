@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { answers } from '../src/widgets';
+import { EXPERIMENTAL_answers as answers } from '../src/widgets';
 import '../.storybook/static/answers.css';
 
 const searchOptions = {
