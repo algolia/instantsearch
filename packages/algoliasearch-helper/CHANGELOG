@@ -1,3 +1,6 @@
+3.3.3 - 2020-12-02
+ * fix(removeNumericRefinement): clear empty refinements (#801) https://github.com/algolia/algoliasearch-helper-js/commit/844f7d787de4897f17ebd5982f20316d7cb75a7d
+
 3.3.2 - 2020-11-19
  * fix(ts): add queryLanguages to parameters https://github.com/algolia/algoliasearch-helper-js/commit/51f544855a38031e36c70e3c9b2212446cc4a1fa
  * fix(ts): add searchWithoutTriggeringOnStateChange https://github.com/algolia/algoliasearch-helper-js/commit/fb91e277325fa7c6c534370323dc2bdaee590b6d
