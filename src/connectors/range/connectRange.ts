@@ -418,14 +418,9 @@ const connectRange: ConnectRange = function connectRange(
       dispose({ state }) {
         unmountFn();
 
-        const stateWithoutDisjunctive = state.removeDisjunctiveFacet(attribute);
-
-        // can not use setQueryParameters || removeNumericRefinement, because
-        // they both keep the old value. This isn't immutable, but it is fine
-        // since it's already a copy.
-        delete stateWithoutDisjunctive.numericRefinements[attribute];
-
-        return stateWithoutDisjunctive;
+        return state
+          .removeDisjunctiveFacet(attribute)
+          .removeNumericRefinement(attribute);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
