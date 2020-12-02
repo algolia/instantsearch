@@ -665,9 +665,6 @@ SearchParameters.prototype = {
       }
       return {};
     } else if (typeof attribute === 'string') {
-      if (!objectHasKeys(this.numericRefinements[attribute])) {
-        return this.numericRefinements;
-      }
       return omit(this.numericRefinements, [attribute]);
     } else if (typeof attribute === 'function') {
       var hasChanged = false;

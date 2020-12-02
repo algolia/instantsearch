@@ -7,6 +7,16 @@ test('When removing all numeric refinements of a state without any', function() 
   expect(state._clearNumericRefinements()).toBe(state.numericRefinements);
 });
 
+test('When removing numericRefinements of a specific attribute, which has no refinements', function() {
+  var state = SearchParameters.make({
+    numericRefinements: {
+      size: {}
+    }
+  });
+
+  expect(state._clearNumericRefinements('size')).toEqual({});
+});
+
 test('When removing numericRefinements of a specific attribute, and there are no refinements for this attribute', function() {
   var state = SearchParameters.make({
     numericRefinements: {
@@ -14,7 +24,7 @@ test('When removing numericRefinements of a specific attribute, and there are no
     }
   });
 
-  expect(state._clearNumericRefinements('size')).toBe(state.numericRefinements);
+  expect(state._clearNumericRefinements('size')).toEqual(state.numericRefinements);
 });
 
 test('When removing refinements of a specific attribute, and another refinement is a substring of this attribute', function() {
