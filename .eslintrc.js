@@ -31,6 +31,7 @@ module.exports = {
           'instant_search',
           'instant_search_movies',
           'free_shipping',
+          'facets_stats',
           '^EXPERIMENTAL_',
         ],
       },

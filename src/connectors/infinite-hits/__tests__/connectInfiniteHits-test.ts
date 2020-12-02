@@ -425,8 +425,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const hits = [
       {
+        foobar: '<script>foobar</script>',
         _highlightResult: {
           foobar: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
@@ -448,8 +451,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const escapedHits = [
       {
+        foobar: '<script>foobar</script>',
         _highlightResult: {
           foobar: {
+            matchLevel: 'full',
+            matchedWords: [],
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
@@ -555,6 +561,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'hello',
         _highlightResult: {
           name: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
           },
         },
@@ -564,6 +572,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'halloween',
         _highlightResult: {
           name: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
           },
         },
@@ -591,6 +601,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             name: 'hello',
             _highlightResult: {
               name: {
+                matchLevel: 'full',
+                matchedWords: [],
                 value: 'HE<MARK>LLO</MARK>',
               },
             },
@@ -600,6 +612,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             name: 'halloween',
             _highlightResult: {
               name: {
+                matchLevel: 'full',
+                matchedWords: [],
                 value: 'HA<MARK>LLO</MARK>WEEN',
               },
             },
