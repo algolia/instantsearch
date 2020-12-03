@@ -60,10 +60,7 @@ export const createRouterMiddleware: RoutingManager = (props = {}) => {
 
       subscribe() {
         router.onUpdate(route => {
-          instantSearchInstance.setUiState(
-            stateMapping.routeToState(route),
-            true
-          );
+          instantSearchInstance.setUiState(stateMapping.routeToState(route));
         });
       },
 
