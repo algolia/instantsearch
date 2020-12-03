@@ -130,90 +130,139 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
 
   return (widgetParams = {}) => {
     const { attribute, max = 5 } = widgetParams;
+    let sendEvent;
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
-    let sendEvent;
+    const getRefinedStar = state => {
+      const refinements = state.getDisjunctiveRefinements(attribute);
+
+      if (!refinements.length) {
+        return undefined;
+      }
+
+      return Math.min(...refinements.map(Number));
+    };
+
+    const toggleRefinement = (helper, facetValue) => {
+      sendEvent('click', facetValue);
+      const isRefined = getRefinedStar(helper.state) === Number(facetValue);
+      helper.removeDisjunctiveFacetRefinement(attribute);
+      if (!isRefined) {
+        for (let val = Number(facetValue); val <= max; ++val) {
+          helper.addDisjunctiveFacetRefinement(attribute, val);
+        }
+      }
+      helper.search();
+    };
+
+    const connectorState = {
+      toggleRefinementFactory: helper => toggleRefinement.bind(this, helper),
+      createURLFactory: ({ state, createURL }) => value =>
+        createURL(state.toggleRefinement(attribute, value)),
+    };
 
     return {
       $$type,
 
-      init({ helper, createURL, instantSearchInstance }) {
-        this._toggleRefinement = this._toggleRefinement.bind(this, helper);
-        this._createURL = state => facetValue =>
-          createURL(state.toggleRefinement(attribute, facetValue));
-
-        sendEvent = createSendEvent({
-          instantSearchInstance,
-          helper,
-          getRefinedStar: () => this._getRefinedStar(helper.state),
-          attribute,
-        });
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
-            items: [],
-            hasNoResults: true,
-            refine: this._toggleRefinement,
-            sendEvent,
-            createURL: this._createURL(helper.state),
-            widgetParams,
           },
           true
         );
       },
 
-      render({ helper, results, state, instantSearchInstance }) {
-        const facetValues = [];
-        const allValues = {};
-        for (let v = max; v >= 0; --v) {
-          allValues[v] = 0;
-        }
-        (results.getFacetValues(attribute) || []).forEach(facet => {
-          const val = Math.round(facet.name);
-          if (!val || val > max) {
-            return;
-          }
-          for (let v = val; v >= 1; --v) {
-            allValues[v] += facet.count;
-          }
-        });
-        const refinedStar = this._getRefinedStar(helper.state);
-        for (let star = max - 1; star >= 1; --star) {
-          const count = allValues[star];
-          if (refinedStar && star !== refinedStar && count === 0) {
-            // skip count==0 when at least 1 refinement is enabled
-            // eslint-disable-next-line no-continue
-            continue;
-          }
-          const stars = [];
-          for (let i = 1; i <= max; ++i) {
-            stars.push(i <= star);
-          }
-          facetValues.push({
-            stars,
-            name: String(star),
-            value: String(star),
-            count,
-            isRefined: refinedStar === star,
-          });
-        }
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
-            items: facetValues,
-            hasNoResults: results.nbHits === 0,
-            refine: this._toggleRefinement,
-            sendEvent,
-            createURL: this._createURL(state),
-            widgetParams,
           },
           false
         );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          ratingMenu: {
+            ...renderState.ratingMenu,
+            [attribute]: this.getWidgetRenderState(renderOptions),
+          },
+        };
+      },
+
+      getWidgetRenderState({
+        helper,
+        results,
+        state,
+        instantSearchInstance,
+        createURL,
+      }) {
+        const facetValues = [];
+
+        if (!sendEvent) {
+          sendEvent = createSendEvent({
+            instantSearchInstance,
+            helper,
+            getRefinedStar: () => getRefinedStar(helper.state),
+            attribute,
+          });
+        }
+
+        if (results) {
+          const allValues = {};
+          for (let v = max; v >= 0; --v) {
+            allValues[v] = 0;
+          }
+          (results.getFacetValues(attribute) || []).forEach(facet => {
+            const val = Math.round(facet.name);
+            if (!val || val > max) {
+              return;
+            }
+            for (let v = val; v >= 1; --v) {
+              allValues[v] += facet.count;
+            }
+          });
+          const refinedStar = getRefinedStar(state);
+          for (let star = max - 1; star >= 1; --star) {
+            const count = allValues[star];
+            if (refinedStar && star !== refinedStar && count === 0) {
+              // skip count==0 when at least 1 refinement is enabled
+              // eslint-disable-next-line no-continue
+              continue;
+            }
+            const stars = [];
+            for (let i = 1; i <= max; ++i) {
+              stars.push(i <= star);
+            }
+            facetValues.push({
+              stars,
+              name: String(star),
+              value: String(star),
+              count,
+              isRefined: refinedStar === star,
+            });
+          }
+        }
+
+        return {
+          items: facetValues,
+          hasNoResults: results ? results.nbHits === 0 : true,
+          refine: connectorState.toggleRefinementFactory(helper),
+          sendEvent,
+          createURL: connectorState.createURLFactory({ state, createURL }),
+          widgetParams,
+        };
       },
 
       dispose({ state }) {
@@ -222,8 +271,8 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         return state.removeDisjunctiveFacet(attribute);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
-        const value = this._getRefinedStar(searchParameters);
+      getWidgetUiState(uiState, { searchParameters }) {
+        const value = getRefinedStar(searchParameters);
 
         if (typeof value !== 'number') {
           return uiState;
@@ -260,29 +309,6 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
             parameters.addDisjunctiveFacetRefinement(attribute, number),
           withDisjunctiveFacet
         );
-      },
-
-      _toggleRefinement(helper, facetValue) {
-        sendEvent('click', facetValue);
-        const isRefined =
-          this._getRefinedStar(helper.state) === Number(facetValue);
-        helper.removeDisjunctiveFacetRefinement(attribute);
-        if (!isRefined) {
-          for (let val = Number(facetValue); val <= max; ++val) {
-            helper.addDisjunctiveFacetRefinement(attribute, val);
-          }
-        }
-        helper.search();
-      },
-
-      _getRefinedStar(state) {
-        const refinements = state.getDisjunctiveRefinements(attribute);
-
-        if (!refinements.length) {
-          return undefined;
-        }
-
-        return Math.min(...refinements.map(Number));
       },
     };
   };

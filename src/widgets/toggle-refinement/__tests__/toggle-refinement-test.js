@@ -195,7 +195,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         expect(firstRender[0].props).toMatchSnapshot();
         expect(secondRender[0].props).toMatchSnapshot();
 
-        widget.toggleRefinement({ isRefined: true });
+        widget
+          .getWidgetRenderState({
+            state: helper.state,
+            helper,
+            createURL,
+            results,
+          })
+          .refine({ isRefined: true });
 
         expect(altHelper.state.isDisjunctiveFacetRefined(attribute, 5)).toBe(
           false
@@ -301,11 +308,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     describe('refine', () => {
       let helper;
 
-      function toggleOn() {
-        widget.toggleRefinement({ isRefined: false });
+      function toggleOn({ createURL, altHelper = helper }) {
+        widget
+          .getWidgetRenderState({
+            state: altHelper.state,
+            helper: altHelper,
+            createURL,
+          })
+          .refine({ isRefined: false });
       }
-      function toggleOff() {
-        widget.toggleRefinement({ isRefined: true });
+      function toggleOff({ createURL }) {
+        widget
+          .getWidgetRenderState({ state: helper.state, helper, createURL })
+          .refine({ isRefined: true });
       }
 
       beforeEach(() => {
@@ -333,7 +348,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
-          toggleOn();
+          toggleOn({ createURL });
 
           // Then
           expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledWith(
@@ -361,7 +376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
-          toggleOff();
+          toggleOff({ createURL });
 
           // Then
           expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledWith(
@@ -398,7 +413,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           });
 
           // When
-          toggleOn();
+          toggleOn({ createURL, altHelper });
 
           // Then
           expect(
@@ -427,7 +442,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
-          toggleOff();
+          toggleOff({ createURL });
 
           // Then
           expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledWith(

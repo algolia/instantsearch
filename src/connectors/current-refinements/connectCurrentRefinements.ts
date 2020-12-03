@@ -161,53 +161,25 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
     return {
       $$type: 'ais.currentRefinements',
 
-      init({ helper, createURL, instantSearchInstance }) {
-        const items = transformItems(
-          getItems({
-            results: {} as SearchResults,
-            helper,
-            includedAttributes,
-            excludedAttributes,
-          })
-        );
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            items,
-            refine: refinement => clearRefinement(helper, refinement),
-            createURL: refinement =>
-              createURL(clearRefinementFromState(helper.state, refinement)),
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
-            widgetParams,
           },
           true
         );
       },
 
-      render({ scopedResults, helper, createURL, instantSearchInstance }) {
-        const items = scopedResults.reduce<
-          CurrentRefinementsConnectorParamsItem[]
-        >((results, scopedResult) => {
-          return results.concat(
-            transformItems(
-              getItems({
-                results: scopedResult.results,
-                helper: scopedResult.helper,
-                includedAttributes,
-                excludedAttributes,
-              })
-            )
-          );
-        }, []);
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
-            items,
-            refine: refinement => clearRefinement(helper, refinement),
-            createURL: refinement =>
-              createURL(clearRefinementFromState(helper.state, refinement)),
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
-            widgetParams,
           },
           false
         );
@@ -216,11 +188,57 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
       dispose() {
         unmountFn();
       },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          currentRefinements: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, scopedResults, createURL, helper }) {
+        function getItems() {
+          if (!results) {
+            return transformItems(
+              getRefinementsItems({
+                results: {} as SearchResults,
+                helper,
+                includedAttributes,
+                excludedAttributes,
+              })
+            );
+          }
+
+          return scopedResults.reduce<CurrentRefinementsConnectorParamsItem[]>(
+            (accResults, scopedResult) => {
+              return accResults.concat(
+                transformItems(
+                  getRefinementsItems({
+                    results: scopedResult.results,
+                    helper: scopedResult.helper,
+                    includedAttributes,
+                    excludedAttributes,
+                  })
+                )
+              );
+            },
+            []
+          );
+        }
+
+        return {
+          items: getItems(),
+          refine: refinement => clearRefinement(helper, refinement),
+          createURL: refinement =>
+            createURL(clearRefinementFromState(helper.state, refinement)),
+          widgetParams,
+        };
+      },
     };
   };
 };
 
-function getItems({
+function getRefinementsItems({
   results,
   helper,
   includedAttributes,

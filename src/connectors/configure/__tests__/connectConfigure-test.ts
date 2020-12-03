@@ -7,6 +7,7 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import connectConfigure from '../connectConfigure';
 import {
   createInitOptions,
+  createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
 import { noop } from '../../../lib/utils';
@@ -240,7 +241,132 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
   });
 
-  describe('getWidgetState', () => {
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createConfigure = connectConfigure(renderFn, unmountFn);
+      const configure = createConfigure({
+        searchParameters: {
+          facetFilters: ['brand:Samsung'],
+        },
+      });
+
+      const renderState1 = configure.getRenderState({}, createInitOptions());
+
+      expect(renderState1.configure).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: {
+            facetFilters: ['brand:Samsung'],
+          },
+        },
+      });
+
+      configure.init!(createInitOptions());
+
+      const renderState2 = configure.getRenderState({}, createRenderOptions());
+
+      expect(renderState2.configure).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: { facetFilters: ['brand:Samsung'] },
+        },
+      });
+    });
+
+    test('merges the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createConfigure = connectConfigure(renderFn, unmountFn);
+      const configure = createConfigure({
+        searchParameters: {
+          facetFilters: ['brand:Samsung'],
+        },
+      });
+
+      const renderState1 = configure.getRenderState(
+        {
+          configure: {
+            refine() {},
+            widgetParams: {
+              searchParameters: { removeStopWords: ['group'] },
+            },
+          },
+        },
+        createInitOptions()
+      );
+
+      expect(renderState1.configure).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: {
+            removeStopWords: ['group'],
+            facetFilters: ['brand:Samsung'],
+          },
+        },
+      });
+
+      configure.init!(createInitOptions());
+
+      const renderState2 = configure.getRenderState(
+        {
+          configure: {
+            refine() {},
+            widgetParams: {
+              searchParameters: { queryType: 'prefixAll' },
+            },
+          },
+        },
+        createRenderOptions()
+      );
+
+      expect(renderState2.configure).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: {
+            queryType: 'prefixAll',
+            facetFilters: ['brand:Samsung'],
+          },
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createConfigure = connectConfigure(renderFn, unmountFn);
+      const configure = createConfigure({
+        searchParameters: { facetFilters: ['brand:Samsung'] },
+      });
+
+      const renderState1 = configure.getWidgetRenderState(createInitOptions());
+
+      expect(renderState1).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: { facetFilters: ['brand:Samsung'] },
+        },
+      });
+
+      configure.init!(createInitOptions());
+
+      const renderState2 = configure.getWidgetRenderState(
+        createRenderOptions()
+      );
+
+      expect(renderState2).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: { facetFilters: ['brand:Samsung'] },
+        },
+      });
+    });
+  });
+
+  describe('getWidgetUiState', () => {
     it('adds default parameters', () => {
       const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
@@ -250,7 +376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { analytics: true },
       });
@@ -271,7 +397,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       refine({ analytics: false });
 
       expect(
-        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { analytics: false },
       });
@@ -292,7 +418,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       refine({ query: 'unsafe toys' });
 
       expect(
-        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { query: 'unsafe toys' },
       });
@@ -307,7 +433,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetState!(
+        widget.getWidgetUiState!(
           { configure: { queryType: 'prefixAll' } },
           { helper, searchParameters: helper.state }
         )
@@ -325,7 +451,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetState!(
+        widget.getWidgetUiState!(
           { configure: { analytics: false } },
           { helper, searchParameters: helper.state }
         )

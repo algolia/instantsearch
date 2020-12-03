@@ -28,7 +28,10 @@ storiesOf('Basics/ConfigureRelatedItems', module).add(
     );
     container.appendChild(relatedContainer);
 
-    const pagination = connectPagination(
+    const pagination = connectPagination<{
+      previousPageContainer: HTMLElement;
+      nextPageContainer: HTMLElement;
+    }>(
       ({
         currentRefinement,
         refine,

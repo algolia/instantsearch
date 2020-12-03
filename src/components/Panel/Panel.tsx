@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import cx from 'classnames';
 import Template from '../Template/Template';
 import { PanelCSSClasses, PanelTemplates } from '../../widgets/panel/panel';
-import { RenderOptions } from '../../types';
+import { RenderOptions, UnknownWidgetFactory } from '../../types';
 
 type PanelComponentCSSClasses = Required<
   Omit<
@@ -17,17 +17,19 @@ type PanelComponentCSSClasses = Required<
   >
 >;
 
-type PanelProps = {
+type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;
   collapsible: boolean;
   isCollapsed: boolean;
   data: RenderOptions;
   cssClasses: PanelComponentCSSClasses;
-  templates: Required<PanelTemplates>;
+  templates: Required<PanelTemplates<TWidget>>;
   bodyElement: HTMLElement;
 };
 
-function Panel(props: PanelProps) {
+function Panel<TWidget extends UnknownWidgetFactory>(
+  props: PanelProps<TWidget>
+) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(props.isCollapsed);
   const [isControlled, setIsControlled] = useState<boolean>(false);
   const bodyRef = useRef<HTMLElement | null>(null);

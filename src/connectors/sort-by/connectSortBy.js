@@ -103,17 +103,15 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.sortBy',
 
-      init({ helper, instantSearchInstance, parent }) {
-        const currentIndex = helper.state.index;
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
+
+        const widgetRenderState = this.getWidgetRenderState(initOptions);
+        const currentIndex = widgetRenderState.currentRefinement;
         const isCurrentIndexInItems = find(
           items,
           item => item.value === currentIndex
         );
-
-        this.initialIndex = parent.getIndexName();
-        this.setIndex = indexName => {
-          helper.setIndex(indexName).search();
-        };
 
         warning(
           isCurrentIndexInItems,
@@ -122,25 +120,18 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
 
         renderFn(
           {
-            currentRefinement: currentIndex,
-            options: transformItems(items),
-            refine: this.setIndex,
-            hasNoResults: true,
-            widgetParams,
+            ...widgetRenderState,
             instantSearchInstance,
           },
           true
         );
       },
 
-      render({ helper, results, instantSearchInstance }) {
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
         renderFn(
           {
-            currentRefinement: helper.state.index,
-            options: transformItems(items),
-            refine: this.setIndex,
-            hasNoResults: results.nbHits === 0,
-            widgetParams,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -153,7 +144,33 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
         return state.setIndex(this.initialIndex);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          sortBy: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, helper, parent }) {
+        if (!this.initialIndex) {
+          this.initialIndex = parent.getIndexName();
+        }
+        if (!this.setIndex) {
+          this.setIndex = indexName => {
+            helper.setIndex(indexName).search();
+          };
+        }
+
+        return {
+          currentRefinement: helper.state.index,
+          options: transformItems(items),
+          refine: this.setIndex,
+          hasNoResults: results ? results.nbHits === 0 : true,
+          widgetParams,
+        };
+      },
+
+      getWidgetUiState(uiState, { searchParameters }) {
         const currentIndex = searchParameters.index;
         const isInitialIndex = currentIndex === this.initialIndex;
 

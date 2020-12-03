@@ -1,15 +1,50 @@
-import { render } from 'preact';
-import AlgoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import { render as _originalRender, VNode } from 'preact';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import rangeSlider from '../range-slider';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createRenderOptions } from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { InstantSearch } from '../../../types';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
   return module;
 });
+const render = _originalRender as jest.MockedFunction<typeof _originalRender>;
+
+function createFacetStatsResults({
+  helper,
+  attribute,
+  min,
+  max,
+}: {
+  helper: AlgoliaSearchHelper;
+  attribute: string;
+  min: number;
+  max: number;
+}): SearchResults {
+  return new SearchResults(helper.state, [
+    createSingleSearchResponse({
+      facets: { [attribute]: { [min]: 10000, [max]: 1 } },
+      facets_stats: {
+        [attribute]: {
+          min,
+          max,
+          avg: min,
+          sum: max,
+        },
+      },
+    }),
+  ]);
+}
 
 describe('rangeSlider', () => {
   describe('Usage', () => {
@@ -37,24 +72,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
   describe('Lifecycle', () => {
     const attribute = 'aNumAttr';
 
-    let container;
-    let helper;
+    let container: HTMLDivElement;
+    let helper: AlgoliaSearchHelper;
     let widget;
-    let instantSearchInstance;
+    let instantSearchInstance: InstantSearch;
 
     beforeEach(() => {
-      render.mockClear();
+      (render as jest.Mock).mockClear();
 
       container = document.createElement('div');
-      helper = new AlgoliasearchHelper(
-        {
-          search() {
-            return Promise.resolve({ results: [{}] });
-          },
-        },
-        'indexName',
-        { disjunctiveFacets: ['aNumAttr'] }
-      );
+      helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        disjunctiveFacets: [attribute],
+      });
       instantSearchInstance = createInstantSearch({
         templatesConfig: undefined,
       });
@@ -71,10 +100,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       widget.init({ helper, instantSearchInstance });
       widget.render({ results: [], helper });
 
-      const [firstRender] = render.mock.calls;
+      const firstRender = render.mock.calls[0][0] as VNode;
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(firstRender[0].props).toMatchSnapshot();
+      expect(firstRender.props).toMatchSnapshot();
     });
 
     describe('min option', () => {
@@ -144,10 +173,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         widget.init({ helper, instantSearchInstance });
         widget.render({ results: {}, helper });
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
 
         expect(render).toHaveBeenCalledTimes(1);
-        expect(firstRender[0].props).toMatchSnapshot();
+        expect(firstRender.props).toMatchSnapshot();
       });
 
       it('will use the results max when only min passed', () => {
@@ -178,11 +207,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
 
         expect(render).toHaveBeenCalledTimes(1);
-        expect(firstRender[0].props.max).toEqual(5000);
-        expect(firstRender[0].props).toMatchSnapshot();
+        // @ts-ignore preact types are are quite broad
+        expect(firstRender.props.max).toEqual(5000);
+        expect(firstRender.props).toMatchSnapshot();
       });
     });
 
@@ -236,16 +266,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
 
         expect(render).toHaveBeenCalledTimes(1);
-        expect(firstRender[0].props.min).toEqual(1);
-        expect(firstRender[0].props).toMatchSnapshot();
+        // @ts-ignore preact types are are quite broad
+        expect(firstRender.props.min).toEqual(1);
+        expect(firstRender.props).toMatchSnapshot();
       });
     });
 
     describe('with results', () => {
-      let results;
+      let results: SearchResults;
 
       beforeEach(() => {
         widget = rangeSlider({
@@ -256,17 +287,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         });
         widget.init({ helper, instantSearchInstance });
 
-        results = {
-          disjunctiveFacets: [
-            {
-              name: attribute,
-              stats: {
-                min: 1.99,
-                max: 4999.98,
-              },
-            },
-          ],
-        };
+        results = createFacetStatsResults({
+          helper,
+          attribute,
+          min: 1.99,
+          max: 4999.98,
+        });
 
         helper.search = jest.fn();
       });
@@ -291,11 +317,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         widget.render({ results, helper });
         widget.render({ results, helper });
 
-        const [firstRender, secondRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
+        const secondRender = render.mock.calls[1][0] as VNode;
 
         expect(render).toHaveBeenCalledTimes(2);
-        expect(firstRender[0].props).toMatchSnapshot();
-        expect(secondRender[0].props).toMatchSnapshot();
+        expect(firstRender.props).toMatchSnapshot();
+        expect(secondRender.props).toMatchSnapshot();
       });
 
       it('does not call the refinement functions if not refined', () => {
@@ -309,30 +336,41 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
       it('calls the refinement function if refined with min+1', () => {
         const [{ stats }] = results.disjunctiveFacets;
-        const targetValue = stats.min + 1;
 
-        const state0 = helper.state;
-        widget._refine(
-          instantSearchInstance,
-          helper,
-          stats
-        )([targetValue, stats.max]);
+        const { refine } = widget.getWidgetRenderState(
+          createRenderOptions({
+            helper,
+            results,
+          })
+        );
+
+        const state0 = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+        helper.setState(state0);
+        refine([stats!.min + 1, stats!.max]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
-        expect(state1).toEqual(state0.addNumericRefinement(attribute, '>=', 3));
+        expect(state1).toEqual(state0.addNumericRefinement(attribute, '>=', 2));
       });
 
       it('calls the refinement function if refined with max-1', () => {
         const [{ stats }] = results.disjunctiveFacets;
-        const targetValue = stats.max - 1;
 
-        const state0 = helper.state;
-        widget._refine(
-          instantSearchInstance,
-          helper,
-          stats
-        )([stats.min, targetValue]);
+        const { refine } = widget.getWidgetRenderState(
+          createRenderOptions({
+            helper,
+            results,
+            instantSearchInstance,
+          })
+        );
+
+        const state0 = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+        helper.setState(state0);
+        refine([stats!.min, stats!.max - 1]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -343,16 +381,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
       it('calls the refinement function if refined with min+1 and max-1', () => {
         const [{ stats }] = results.disjunctiveFacets;
-        const targetValue = [stats.min + 1, stats.max - 1];
+
+        const { refine } = widget.getWidgetRenderState(
+          createRenderOptions({
+            helper,
+            results,
+          })
+        );
 
         const state0 = helper.state;
-        widget._refine(instantSearchInstance, helper, stats)(targetValue);
+        refine([stats!.min + 1, stats!.max - 1]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
           state0
-            .addNumericRefinement(attribute, '>=', 3)
+            .addNumericRefinement(attribute, '>=', 2)
             .addNumericRefinement(attribute, '<=', 4999)
         );
       });
@@ -372,9 +416,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
         widget.render({ results, helper });
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
 
-        expect(firstRender[0].props.values[0]).toBe(5000);
+        // @ts-ignore preact types are are quite broad
+        expect(firstRender.props.values[0]).toBe(5000);
       });
 
       it("expect to clamp the max value to the min range when it's lower than range", () => {
@@ -392,9 +437,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
         widget.render({ results, helper });
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
 
-        expect(firstRender[0].props.values[1]).toBe(1);
+        // @ts-ignore preact types are are quite broad
+        expect(firstRender.props.values[1]).toBe(1);
       });
     });
   });

@@ -71,31 +71,62 @@ const connectHits: HitsConnector = function connectHits(
     return {
       $$type: 'ais.hits',
 
-      init({ instantSearchInstance, helper }) {
-        sendEvent = createSendEventForHits({
-          instantSearchInstance,
-          index: helper.getIndex(),
-          widgetType: this.$$type!,
-        });
-        bindEvent = createBindEventForHits({
-          index: helper.getIndex(),
-          widgetType: this.$$type!,
-        });
-
+      init(initOptions) {
         renderFn(
           {
-            hits: [],
-            results: undefined,
-            sendEvent,
-            bindEvent,
-            instantSearchInstance,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render({ results, instantSearchInstance }) {
+      render(renderOptions) {
+        const renderState = this.getWidgetRenderState(renderOptions);
+        renderState.sendEvent('view', renderState.hits);
+
+        renderFn(
+          {
+            ...renderState,
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          hits: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ results, helper, instantSearchInstance }) {
+        if (!sendEvent) {
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+        }
+
+        if (!bindEvent) {
+          bindEvent = createBindEventForHits({
+            index: helper.getIndex(),
+            widgetType: this.$$type!,
+          });
+        }
+
+        if (!results) {
+          return {
+            hits: [],
+            results: undefined,
+            sendEvent,
+            bindEvent,
+            widgetParams,
+          };
+        }
+
         if (escapeHTML && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
@@ -120,19 +151,13 @@ const connectHits: HitsConnector = function connectHits(
           typeof escapeHits
         >).__escaped = initialEscaped;
 
-        sendEvent('view', results.hits);
-
-        renderFn(
-          {
-            hits: results.hits,
-            results,
-            sendEvent,
-            bindEvent,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        return {
+          hits: results.hits,
+          results,
+          sendEvent,
+          bindEvent,
+          widgetParams,
+        };
       },
 
       dispose({ state }) {

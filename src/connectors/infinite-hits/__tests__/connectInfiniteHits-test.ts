@@ -46,7 +46,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         render: expect.any(Function),
         dispose: expect.any(Function),
 
-        getWidgetState: expect.any(Function),
+        getWidgetUiState: expect.any(Function),
         getWidgetSearchParameters: expect.any(Function),
       })
     );
@@ -425,8 +425,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const hits = [
       {
+        foobar: '<script>foobar</script>',
         _highlightResult: {
           foobar: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
@@ -448,8 +451,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const escapedHits = [
       {
+        foobar: '<script>foobar</script>',
         _highlightResult: {
           foobar: {
+            matchLevel: 'full',
+            matchedWords: [],
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
@@ -555,6 +561,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'hello',
         _highlightResult: {
           name: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
           },
         },
@@ -564,6 +572,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'halloween',
         _highlightResult: {
           name: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
           },
         },
@@ -591,6 +601,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             name: 'hello',
             _highlightResult: {
               name: {
+                matchLevel: 'full',
+                matchedWords: [],
                 value: 'HE<MARK>LLO</MARK>',
               },
             },
@@ -600,6 +612,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             name: 'halloween',
             _highlightResult: {
               name: {
+                matchLevel: 'full',
+                matchedWords: [],
                 value: 'HA<MARK>LLO</MARK>WEEN',
               },
             },
@@ -878,7 +892,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     test('returns the `uiState` with `page` when `showPrevious` not given', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
@@ -887,7 +901,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       });
       const widget = makeWidget({});
 
-      const actual = widget.getWidgetState!(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -910,7 +924,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetState!(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -931,7 +945,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetState!(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -954,7 +968,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetState!(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -964,6 +978,192 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(actual).toEqual({
         page: 4,
+      });
+    });
+  });
+
+  describe('getRenderState', () => {
+    it('returns the render state without results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getRenderState({}, initOptions);
+
+      expect(renderState1.infiniteHits).toEqual({
+        hits: [],
+        currentPageHits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        isFirstPage: true,
+        isLastPage: true,
+        results: undefined,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    it('returns the render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getRenderState({}, initOptions);
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState2 = infiniteHitsWidget.getRenderState({}, renderOptions);
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      const expectedCurrentPageHits = [
+        {
+          __queryID: 'theQueryID',
+          name: 'name 1',
+          objectID: '1',
+        },
+        {
+          __queryID: 'theQueryID',
+          name: 'name 2',
+          objectID: '2',
+        },
+      ];
+      (expectedCurrentPageHits as any).__escaped = true;
+
+      expect(renderState2.infiniteHits).toEqual({
+        hits: expectedHits,
+        currentPageHits: expectedCurrentPageHits,
+        sendEvent: renderState1.infiniteHits!.sendEvent,
+        bindEvent: renderState1.infiniteHits!.bindEvent,
+        isFirstPage: true,
+        isLastPage: true,
+        results,
+        showMore: renderState1.infiniteHits!.showMore,
+        showPrevious: renderState1.infiniteHits!.showPrevious,
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state without results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getWidgetRenderState(initOptions);
+
+      expect(renderState1).toEqual({
+        hits: [],
+        currentPageHits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        isFirstPage: true,
+        isLastPage: true,
+        results: undefined,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    it('returns the widget render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getWidgetRenderState(initOptions);
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState2 = infiniteHitsWidget.getWidgetRenderState(
+        renderOptions
+      );
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      const expectedCurrentPageHits = [
+        {
+          __queryID: 'theQueryID',
+          name: 'name 1',
+          objectID: '1',
+        },
+        {
+          __queryID: 'theQueryID',
+          name: 'name 2',
+          objectID: '2',
+        },
+      ];
+      (expectedCurrentPageHits as any).__escaped = true;
+
+      expect(renderState2).toEqual({
+        hits: expectedHits,
+        currentPageHits: expectedCurrentPageHits,
+        sendEvent: renderState1.sendEvent,
+        bindEvent: renderState1.bindEvent,
+        isFirstPage: true,
+        isLastPage: true,
+        results,
+        showMore: renderState1.showMore,
+        showPrevious: renderState1.showPrevious,
+        widgetParams: {},
       });
     });
   });
