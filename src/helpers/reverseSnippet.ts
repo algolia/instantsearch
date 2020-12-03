@@ -1,5 +1,10 @@
 import { Hit } from '../types';
-import { getPropertyByPath, getReversedHighlight } from '../lib/utils';
+import {
+  getPropertyByPath,
+  getHighlightedParts,
+  reverseHighlightedParts,
+  concatHighlightedParts,
+} from '../lib/utils';
 import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
@@ -8,9 +13,9 @@ export type ReverseSnippetOptions = {
   attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
-  cssClasses?: {
-    highlighted?: string;
-  };
+  cssClasses?: Partial<{
+    highlighted: string;
+  }>;
 };
 
 const suit = component('ReverseSnippet');
@@ -30,7 +35,11 @@ export default function reverseSnippet({
       descendantName: 'highlighted',
     }) + (cssClasses.highlighted ? ` ${cssClasses.highlighted}` : '');
 
-  return getReversedHighlight(attributeValue)
+  const reverseHighlightedValue = concatHighlightedParts(
+    reverseHighlightedParts(getHighlightedParts(attributeValue))
+  );
+
+  return reverseHighlightedValue
     .replace(
       new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
       `<${highlightedTagName} class="${className}">`

@@ -262,6 +262,6 @@ body {
 /* tmp class during dev phase for ReverseHighlight and reverseSnippet component */
 .ais-ReverseHighlight-highlighted,
 .ais-ReverseSnippet-highlighted {
-  background: transparent;
+  background: none;
   font-weight: bold;
 }

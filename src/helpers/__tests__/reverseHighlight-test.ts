@@ -33,10 +33,10 @@ const hit = {
     },
     description: {
       value:
-        'Enjoy smart access to videos, games and apps with this <mark>Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark>Amazon</mark> Fire TV stick works fast for buffer-free streaming.',
+        'Enjoy smart access to videos, games and apps with this <mark>Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core <mark>processor</mark>, <mark>1GB</mark> internal memory and 8GB of storage, this portable <mark>Amazon</mark> Fire TV stick works fast for buffer-free streaming.',
       matchLevel: FULL,
       fullyHighlighted: false,
-      matchedWords: ['amazon'],
+      matchedWords: ['amazon', 'processor', '1GB'],
     },
     brand: {
       value: '<mark>Amazon</mark>',
@@ -80,7 +80,7 @@ describe('reverseHighlight', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Amazon - <mark class=\\"ais-ReverseHighlight-highlighted\\">Fire</mark> <mark class=\\"ais-ReverseHighlight-highlighted\\">TV</mark> <mark class=\\"ais-ReverseHighlight-highlighted\\">Stick</mark> <mark class=\\"ais-ReverseHighlight-highlighted\\">with</mark> <mark class=\\"ais-ReverseHighlight-highlighted\\">Alexa</mark> <mark class=\\"ais-ReverseHighlight-highlighted\\">Voice</mark> <mark class=\\"ais-ReverseHighlight-highlighted\\">Remote</mark> - <mark class=\\"ais-ReverseHighlight-highlighted\\">Black</mark>"`
+      `"Amazon<mark class=\\"ais-ReverseHighlight-highlighted\\"> - Fire TV Stick with Alexa Voice Remote - Black</mark>"`
     );
   });
 
@@ -101,7 +101,7 @@ describe('reverseHighlight', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"<em class=\\"ais-ReverseHighlight-highlighted\\">Enjoy</em> <em class=\\"ais-ReverseHighlight-highlighted\\">smart</em> <em class=\\"ais-ReverseHighlight-highlighted\\">access</em> <em class=\\"ais-ReverseHighlight-highlighted\\">to</em> <em class=\\"ais-ReverseHighlight-highlighted\\">videos</em>, <em class=\\"ais-ReverseHighlight-highlighted\\">games</em> <em class=\\"ais-ReverseHighlight-highlighted\\">and</em> <em class=\\"ais-ReverseHighlight-highlighted\\">apps</em> <em class=\\"ais-ReverseHighlight-highlighted\\">with</em> <em class=\\"ais-ReverseHighlight-highlighted\\">this</em> Amazon <em class=\\"ais-ReverseHighlight-highlighted\\">Fire</em> <em class=\\"ais-ReverseHighlight-highlighted\\">TV</em> <em class=\\"ais-ReverseHighlight-highlighted\\">stick</em>. <em class=\\"ais-ReverseHighlight-highlighted\\">Its</em> <em class=\\"ais-ReverseHighlight-highlighted\\">Alexa</em> <em class=\\"ais-ReverseHighlight-highlighted\\">voice</em> <em class=\\"ais-ReverseHighlight-highlighted\\">remote</em> <em class=\\"ais-ReverseHighlight-highlighted\\">lets</em> <em class=\\"ais-ReverseHighlight-highlighted\\">you</em> <em class=\\"ais-ReverseHighlight-highlighted\\">deliver</em> <em class=\\"ais-ReverseHighlight-highlighted\\">hands</em>-<em class=\\"ais-ReverseHighlight-highlighted\\">free</em> <em class=\\"ais-ReverseHighlight-highlighted\\">commands</em> <em class=\\"ais-ReverseHighlight-highlighted\\">when</em> <em class=\\"ais-ReverseHighlight-highlighted\\">you</em> <em class=\\"ais-ReverseHighlight-highlighted\\">want</em> <em class=\\"ais-ReverseHighlight-highlighted\\">to</em> <em class=\\"ais-ReverseHighlight-highlighted\\">watch</em> <em class=\\"ais-ReverseHighlight-highlighted\\">television</em> <em class=\\"ais-ReverseHighlight-highlighted\\">or</em> <em class=\\"ais-ReverseHighlight-highlighted\\">engage</em> <em class=\\"ais-ReverseHighlight-highlighted\\">with</em> <em class=\\"ais-ReverseHighlight-highlighted\\">other</em> <em class=\\"ais-ReverseHighlight-highlighted\\">applications</em>. <em class=\\"ais-ReverseHighlight-highlighted\\">With</em> <em class=\\"ais-ReverseHighlight-highlighted\\">a</em> <em class=\\"ais-ReverseHighlight-highlighted\\">quad</em>-<em class=\\"ais-ReverseHighlight-highlighted\\">core</em> <em class=\\"ais-ReverseHighlight-highlighted\\">processor</em>, <em class=\\"ais-ReverseHighlight-highlighted\\">1GB</em> <em class=\\"ais-ReverseHighlight-highlighted\\">internal</em> <em class=\\"ais-ReverseHighlight-highlighted\\">memory</em> <em class=\\"ais-ReverseHighlight-highlighted\\">and</em> <em class=\\"ais-ReverseHighlight-highlighted\\">8GB</em> <em class=\\"ais-ReverseHighlight-highlighted\\">of</em> <em class=\\"ais-ReverseHighlight-highlighted\\">storage</em>, <em class=\\"ais-ReverseHighlight-highlighted\\">this</em> <em class=\\"ais-ReverseHighlight-highlighted\\">portable</em> Amazon <em class=\\"ais-ReverseHighlight-highlighted\\">Fire</em> <em class=\\"ais-ReverseHighlight-highlighted\\">TV</em> <em class=\\"ais-ReverseHighlight-highlighted\\">stick</em> <em class=\\"ais-ReverseHighlight-highlighted\\">works</em> <em class=\\"ais-ReverseHighlight-highlighted\\">fast</em> <em class=\\"ais-ReverseHighlight-highlighted\\">for</em> <em class=\\"ais-ReverseHighlight-highlighted\\">buffer</em>-<em class=\\"ais-ReverseHighlight-highlighted\\">free</em> <em class=\\"ais-ReverseHighlight-highlighted\\">streaming</em>."`
+      `"<em class=\\"ais-ReverseHighlight-highlighted\\">Enjoy smart access to videos, games and apps with this </em>Amazon<em class=\\"ais-ReverseHighlight-highlighted\\"> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core </em>processor, 1GB<em class=\\"ais-ReverseHighlight-highlighted\\"> internal memory and 8GB of storage, this portable </em>Amazon<em class=\\"ais-ReverseHighlight-highlighted\\"> Fire TV stick works fast for buffer-free streaming.</em>"`
     );
   });
 
@@ -113,7 +113,7 @@ describe('reverseHighlight', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">Enjoy</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">smart</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">access</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">to</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">videos</mark>, <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">games</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">and</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">apps</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">with</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">this</mark> Amazon <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">Fire</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">TV</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">stick</mark>. <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">Its</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">Alexa</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">voice</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">remote</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">lets</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">you</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">deliver</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">hands</mark>-<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">free</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">commands</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">when</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">you</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">want</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">to</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">watch</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">television</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">or</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">engage</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">with</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">other</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">applications</mark>. <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">With</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">a</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">quad</mark>-<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">core</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">processor</mark>, <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">1GB</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">internal</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">memory</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">and</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">8GB</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">of</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">storage</mark>, <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">this</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">portable</mark> Amazon <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">Fire</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">TV</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">stick</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">works</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">fast</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">for</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">buffer</mark>-<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">free</mark> <mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">streaming</mark>."`
+      `"<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">Enjoy smart access to videos, games and apps with this </mark>Amazon<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\"> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core </mark>processor, 1GB<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\"> internal memory and 8GB of storage, this portable </mark>Amazon<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\"> Fire TV stick works fast for buffer-free streaming.</mark>"`
     );
   });
 
@@ -133,7 +133,7 @@ describe('reverseHighlight', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Nested</mark> Amazon <mark class=\\"ais-ReverseHighlight-highlighted\\">name</mark>"`
+      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Nested </mark>Amazon<mark class=\\"ais-ReverseHighlight-highlighted\\"> name</mark>"`
     );
   });
 
@@ -144,8 +144,17 @@ describe('reverseHighlight', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Nested</mark> Amazon <mark class=\\"ais-ReverseHighlight-highlighted\\">name</mark>"`
+      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Nested </mark>Amazon<mark class=\\"ais-ReverseHighlight-highlighted\\"> name</mark>"`
     );
+  });
+
+  test('with array attribute', () => {
+    expect(
+      reverseHighlight({
+        attribute: 'categories.1',
+        hit,
+      })
+    ).toMatchInlineSnapshot(`"Streaming Media Players"`);
   });
 
   test('with array attribute as array', () => {

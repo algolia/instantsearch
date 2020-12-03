@@ -8,9 +8,9 @@ export type HighlightOptions = {
   attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
-  cssClasses?: {
-    highlighted?: string;
-  };
+  cssClasses?: Partial<{
+    highlighted: string;
+  }>;
 };
 
 const suit = component('Highlight');
