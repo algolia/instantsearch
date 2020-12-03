@@ -8,6 +8,7 @@ import {
 } from '../../lib/utils';
 import { Connector, CreateURL, TransformItems } from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
+import { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'numeric-menu',
@@ -103,7 +104,7 @@ export type NumericMenuConnector = Connector<
 const $$type = 'ais.numericMenu';
 
 const createSendEvent = ({ instantSearchInstance, helper, attribute }) => (
-  ...args
+  ...args: [InsightsEvent] | [string, string, string?]
 ) => {
   if (args.length === 1) {
     instantSearchInstance.sendEventToInsights(args[0]);
@@ -174,50 +175,24 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     return {
       $$type,
 
-      init({ helper, createURL, instantSearchInstance }) {
-        connectorState.sendEvent = createSendEvent({
-          instantSearchInstance,
-          helper,
-          attribute,
-        });
-
-        connectorState.refine = facetValue => {
-          const refinedState = getRefinedState(
-            helper.state,
-            attribute,
-            facetValue
-          );
-          connectorState.sendEvent!('click', facetValue);
-          helper.setState(refinedState).search();
-        };
-
-        connectorState.createURL = state => facetValue =>
-          createURL(getRefinedState(state, attribute, facetValue));
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            createURL: connectorState.createURL(helper.state),
-            items: transformItems(prepareItems(helper.state)),
-            hasNoResults: true,
-            refine: connectorState.refine,
-            sendEvent: connectorState.sendEvent!,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
-            widgetParams,
           },
           true
         );
       },
 
-      render({ results, state, instantSearchInstance }) {
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
         renderFn(
           {
-            createURL: connectorState.createURL!(state),
-            items: transformItems(prepareItems(state)),
-            hasNoResults: results.nbHits === 0,
-            refine: connectorState.refine!,
-            sendEvent: connectorState.sendEvent!,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
-            widgetParams,
           },
           false
         );
@@ -228,7 +203,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         return state.clearRefinements(attribute);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const values = searchParameters.getNumericRefinements(attribute);
 
         const equal = values['='] && values['='][0];
@@ -294,6 +269,58 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
           : withMinRefinement;
 
         return withMaxRefinement;
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          numericMenu: {
+            ...renderState.numericMenu,
+            [attribute]: this.getWidgetRenderState(renderOptions),
+          },
+        };
+      },
+
+      getWidgetRenderState({
+        results,
+        state,
+        instantSearchInstance,
+        helper,
+        createURL,
+      }) {
+        if (!connectorState.refine) {
+          connectorState.refine = facetValue => {
+            const refinedState = getRefinedState(
+              helper.state,
+              attribute,
+              facetValue
+            );
+            connectorState.sendEvent!('click', facetValue);
+            helper.setState(refinedState).search();
+          };
+        }
+
+        if (!connectorState.createURL) {
+          connectorState.createURL = newState => facetValue =>
+            createURL(getRefinedState(newState, attribute, facetValue));
+        }
+
+        if (!connectorState.sendEvent) {
+          connectorState.sendEvent = createSendEvent({
+            instantSearchInstance,
+            helper,
+            attribute,
+          });
+        }
+
+        return {
+          createURL: connectorState.createURL!(state),
+          items: transformItems(prepareItems(state)),
+          hasNoResults: results ? results.nbHits === 0 : true,
+          refine: connectorState.refine!,
+          sendEvent: connectorState.sendEvent!,
+          widgetParams,
+        };
       },
     };
   };

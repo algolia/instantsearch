@@ -11,6 +11,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectSortBy', () => {
   describe('Usage', () => {
@@ -57,7 +58,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getWidgetState: expect.any(Function),
+          getWidgetUiState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
       );
@@ -257,6 +258,169 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     }
   });
 
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createSortBy = connectSortBy(renderFn, unmountFn);
+      const sortBy = createSortBy({
+        items: [
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
+        ],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'index_default',
+        {
+          index: 'index_default',
+        }
+      );
+
+      const renderState1 = sortBy.getRenderState(
+        {
+          sortBy: {},
+        },
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1.sortBy).toEqual({
+        currentRefinement: 'index_default',
+        refine: expect.any(Function),
+        hasNoResults: true,
+        options: [
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
+        ],
+        widgetParams: {
+          items: [
+            { label: 'default', value: 'index_default' },
+            { label: 'asc', value: 'index_asc' },
+            { label: 'desc', value: 'index_desc' },
+          ],
+        },
+      });
+
+      sortBy.init(createInitOptions({ helper }));
+      sortBy.getWidgetRenderState({ helper }).refine('index_desc');
+
+      const renderState2 = sortBy.getRenderState(
+        { sortBy: {} },
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+                { brand: 'sony', objectID: '3' },
+              ],
+              hitsPerPage: 1,
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState2.sortBy).toEqual({
+        currentRefinement: 'index_desc',
+        refine: expect.any(Function),
+        hasNoResults: false,
+        options: [
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
+        ],
+        widgetParams: {
+          items: [
+            { label: 'default', value: 'index_default' },
+            { label: 'asc', value: 'index_asc' },
+            { label: 'desc', value: 'index_desc' },
+          ],
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createSortBy = connectSortBy(renderFn, unmountFn);
+      const sortBy = createSortBy({
+        items: [
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
+        ],
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'index_desc', {
+        index: 'index_desc',
+      });
+
+      const renderState1 = sortBy.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        currentRefinement: 'index_desc',
+        refine: expect.any(Function),
+        hasNoResults: true,
+        options: [
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
+        ],
+        widgetParams: {
+          items: [
+            { label: 'default', value: 'index_default' },
+            { label: 'asc', value: 'index_asc' },
+            { label: 'desc', value: 'index_desc' },
+          ],
+        },
+      });
+
+      sortBy.init(createInitOptions({ helper }));
+      sortBy.getWidgetRenderState({ helper }).refine('index_default');
+
+      const renderState2 = sortBy.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+              ],
+              hitsPerPage: 20,
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState2).toEqual({
+        currentRefinement: 'index_default',
+        refine: expect.any(Function),
+        hasNoResults: false,
+        options: [
+          { label: 'default', value: 'index_default' },
+          { label: 'asc', value: 'index_asc' },
+          { label: 'desc', value: 'index_desc' },
+        ],
+        widgetParams: {
+          items: [
+            { label: 'default', value: 'index_default' },
+            { label: 'asc', value: 'index_asc' },
+            { label: 'desc', value: 'index_desc' },
+          ],
+        },
+      });
+    });
+  });
+
   describe('options', () => {
     describe('items', () => {
       test('uses the helper index by default', () => {
@@ -358,12 +522,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       return [widget, helper, refine];
     };
 
-    describe('getWidgetState', () => {
+    describe('getWidgetUiState', () => {
       test('should return the same `uiState` when the default value is selected', () => {
         const [widget, helper] = getInitializedWidget();
 
         const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -377,7 +541,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         refine('priceASC');
 
         const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -392,14 +556,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         refine('priceASC');
 
-        const uiStateBefore = widget.getWidgetState(
+        const uiStateBefore = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,
             helper,
           }
         );
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -438,7 +602,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
 
-        const actual = widget.getWidgetState(
+        const actual = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,
@@ -484,7 +648,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
 
-        const actual = widget.getWidgetState(
+        const actual = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,

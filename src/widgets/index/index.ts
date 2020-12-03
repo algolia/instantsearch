@@ -13,7 +13,7 @@ import {
   Widget,
   InitOptions,
   RenderOptions,
-  WidgetStateOptions,
+  WidgetUiStateOptions,
   WidgetSearchParametersOptions,
   ScopedResult,
   SearchClient,
@@ -23,6 +23,7 @@ import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   mergeSearchParameters,
+  warning,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -57,7 +58,11 @@ export type Index = Widget & {
   init(options: IndexInitOptions): void;
   render(options: IndexRenderOptions): void;
   dispose(): void;
+  /**
+   * @deprecated
+   */
   getWidgetState(uiState: UiState): UiState;
+  getWidgetUiState(uiState: UiState): UiState;
   getWidgetSearchParameters(
     searchParameters: SearchParameters,
     searchParametersOptions: { uiState: IndexUiState }
@@ -100,17 +105,21 @@ function privateHelperSetState(
 
 function getLocalWidgetsState(
   widgets: Widget[],
-  widgetStateOptions: WidgetStateOptions,
+  widgetStateOptions: WidgetUiStateOptions,
   initialUiState: IndexUiState = {}
 ): IndexUiState {
   return widgets
     .filter(widget => !isIndexWidget(widget))
     .reduce<IndexUiState>((uiState, widget) => {
-      if (!widget.getWidgetState) {
+      if (!widget.getWidgetUiState && !widget.getWidgetState) {
         return uiState;
       }
 
-      return widget.getWidgetState(uiState, widgetStateOptions);
+      if (widget.getWidgetUiState) {
+        return widget.getWidgetUiState(uiState, widgetStateOptions);
+      }
+
+      return widget.getWidgetState!(uiState, widgetStateOptions);
     }, initialUiState);
 }
 
@@ -255,16 +264,52 @@ const index = (props: IndexProps): Index => {
           _uiState: localUiState,
         });
 
+        // We compute the render state before calling `init` in a separate loop
+        // to construct the whole render state object that is then passed to
+        // `init`.
         widgets.forEach(widget => {
-          if (localInstantSearchInstance && widget.init) {
+          if (widget.getRenderState) {
+            const renderState = widget.getRenderState(
+              localInstantSearchInstance!.renderState[this.getIndexId()] || {},
+              {
+                uiState: localInstantSearchInstance!._initialUiState,
+                helper: this.getHelper()!,
+                parent: this,
+                instantSearchInstance: localInstantSearchInstance!,
+                state: helper!.state,
+                renderState: localInstantSearchInstance!.renderState,
+                templatesConfig: localInstantSearchInstance!.templatesConfig,
+                createURL,
+                scopedResults: [],
+                searchMetadata: {
+                  isSearchStalled: localInstantSearchInstance!._isSearchStalled,
+                },
+              }
+            );
+
+            storeRenderState({
+              renderState,
+              instantSearchInstance: localInstantSearchInstance!,
+              parent: this,
+            });
+          }
+        });
+
+        widgets.forEach(widget => {
+          if (widget.init) {
             widget.init({
               helper: helper!,
               parent: this,
-              uiState: localInstantSearchInstance._initialUiState,
-              instantSearchInstance: localInstantSearchInstance,
+              uiState: localInstantSearchInstance!._initialUiState,
+              instantSearchInstance: localInstantSearchInstance!,
               state: helper!.state,
-              templatesConfig: localInstantSearchInstance.templatesConfig,
+              renderState: localInstantSearchInstance!.renderState,
+              templatesConfig: localInstantSearchInstance!.templatesConfig,
               createURL,
+              scopedResults: [],
+              searchMetadata: {
+                isSearchStalled: localInstantSearchInstance!._isSearchStalled,
+              },
             });
           }
         });
@@ -351,7 +396,7 @@ const index = (props: IndexProps): Index => {
       helper.search = () => {
         if (instantSearchInstance.onStateChange) {
           instantSearchInstance.onStateChange!({
-            uiState: instantSearchInstance.mainIndex.getWidgetState({}),
+            uiState: instantSearchInstance.mainIndex.getWidgetUiState({}),
             setUiState: instantSearchInstance.setUiState.bind(
               instantSearchInstance
             ),
@@ -425,7 +470,43 @@ const index = (props: IndexProps): Index => {
         helper!.lastResults = results;
       });
 
+      // We compute the render state before calling `render` in a separate loop
+      // to construct the whole render state object that is then passed to
+      // `render`.
       localWidgets.forEach(widget => {
+        if (widget.getRenderState) {
+          const renderState = widget.getRenderState(
+            instantSearchInstance.renderState[this.getIndexId()] || {},
+            {
+              uiState,
+              helper: helper!,
+              parent: this,
+              instantSearchInstance,
+              state: helper!.state,
+              renderState: instantSearchInstance.renderState,
+              templatesConfig: instantSearchInstance.templatesConfig,
+              createURL,
+              scopedResults: [],
+              searchMetadata: {
+                isSearchStalled: instantSearchInstance._isSearchStalled,
+              },
+            }
+          );
+
+          storeRenderState({
+            renderState,
+            instantSearchInstance,
+            parent: this,
+          });
+        }
+      });
+
+      localWidgets.forEach(widget => {
+        warning(
+          !widget.getWidgetState,
+          'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+        );
+
         if (widget.init) {
           widget.init({
             uiState,
@@ -433,8 +514,13 @@ const index = (props: IndexProps): Index => {
             parent: this,
             instantSearchInstance,
             state: helper!.state,
+            renderState: instantSearchInstance.renderState,
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL,
+            scopedResults: [],
+            searchMetadata: {
+              isSearchStalled: instantSearchInstance._isSearchStalled,
+            },
           });
         }
       });
@@ -469,6 +555,38 @@ const index = (props: IndexProps): Index => {
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
+      if (!this.getResults()) {
+        return;
+      }
+
+      localWidgets.forEach(widget => {
+        if (widget.getRenderState) {
+          const renderState = widget.getRenderState(
+            instantSearchInstance.renderState[this.getIndexId()] || {},
+            {
+              helper: this.getHelper()!,
+              parent: this,
+              instantSearchInstance,
+              results: this.getResults()!,
+              scopedResults: resolveScopedResultsFromIndex(this),
+              state: this.getResults()!._state,
+              renderState: instantSearchInstance.renderState,
+              templatesConfig: instantSearchInstance.templatesConfig,
+              createURL,
+              searchMetadata: {
+                isSearchStalled: instantSearchInstance._isSearchStalled,
+              },
+            }
+          );
+
+          storeRenderState({
+            renderState,
+            instantSearchInstance,
+            parent: this,
+          });
+        }
+      });
+
       localWidgets.forEach(widget => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
@@ -477,13 +595,15 @@ const index = (props: IndexProps): Index => {
         // be delayed. The render is triggered for the complete tree but some parts do
         // not have results yet.
 
-        if (widget.render && derivedHelper!.lastResults) {
+        if (widget.render) {
           widget.render({
             helper: helper!,
+            parent: this,
             instantSearchInstance,
-            results: derivedHelper!.lastResults,
+            results: this.getResults()!,
             scopedResults: resolveScopedResultsFromIndex(this),
-            state: derivedHelper!.lastResults._state,
+            state: this.getResults()!._state,
+            renderState: instantSearchInstance.renderState,
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL,
             searchMetadata: {
@@ -516,17 +636,26 @@ const index = (props: IndexProps): Index => {
       derivedHelper = null;
     },
 
-    getWidgetState(uiState: UiState) {
+    getWidgetUiState(uiState: UiState) {
       return localWidgets
         .filter(isIndexWidget)
         .reduce<UiState>(
           (previousUiState, innerIndex) =>
-            innerIndex.getWidgetState(previousUiState),
+            innerIndex.getWidgetUiState(previousUiState),
           {
             ...uiState,
             [this.getIndexId()]: localUiState,
           }
         );
+    },
+
+    getWidgetState(uiState: UiState) {
+      warning(
+        false,
+        'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+      );
+
+      return this.getWidgetUiState(uiState);
     },
 
     getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -546,3 +675,17 @@ const index = (props: IndexProps): Index => {
 };
 
 export default index;
+
+function storeRenderState({ renderState, instantSearchInstance, parent }) {
+  const parentIndexName = parent
+    ? parent.getIndexId()
+    : instantSearchInstance.mainIndex.getIndexId();
+
+  instantSearchInstance.renderState = {
+    ...instantSearchInstance.renderState,
+    [parentIndexName]: {
+      ...instantSearchInstance.renderState[parentIndexName],
+      ...renderState,
+    },
+  };
+}

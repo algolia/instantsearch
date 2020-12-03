@@ -1,5 +1,6 @@
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import connectVoiceSearch from '../connectVoiceSearch';
+import { createInitOptions } from '../../../../test/mock/createWidget';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
   return ({ onStateChange, onQueryChange }) => {
@@ -63,7 +64,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
           render: expect.any(Function),
           dispose: expect.any(Function),
 
-          getWidgetState: expect.any(Function),
+          getWidgetUiState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
       );
@@ -225,11 +226,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
       const { widget, helper } = getInitializedWidget();
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -244,7 +245,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       helper.setQueryParameter('query', 'Apple');
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -253,6 +254,130 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       expect(actual).toEqual({
         query: 'Apple',
+      });
+    });
+  });
+
+  describe('getRenderState', () => {
+    it('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
+      const voiceSearchWidget = createVoiceSearch({});
+      const helper = algoliasearchHelper({}, '');
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState = voiceSearchWidget.getRenderState({}, initOptions);
+
+      expect(renderState.voiceSearch).toEqual({
+        isBrowserSupported: true,
+        isListening: false,
+        toggleListening: expect.any(Function),
+        voiceListeningState: undefined,
+        widgetParams: {},
+      });
+    });
+
+    it('returns the render state with a custom voice helper', () => {
+      const voiceHelper = {
+        isBrowserSupported: () => true,
+        dispose: () => {},
+        getState: () => ({
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        }),
+        isListening: () => true,
+        toggleListening: () => {},
+      };
+
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
+      const voiceSearchWidget = createVoiceSearch({
+        createVoiceSearchHelper: () => voiceHelper,
+      });
+      const helper = algoliasearchHelper({}, '');
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState = voiceSearchWidget.getRenderState({}, initOptions);
+
+      expect(renderState.voiceSearch).toEqual({
+        isBrowserSupported: true,
+        isListening: true,
+        toggleListening: expect.any(Function),
+        voiceListeningState: {
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        },
+        widgetParams: {
+          createVoiceSearchHelper: expect.any(Function),
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
+      const voiceSearchWidget = createVoiceSearch({});
+      const helper = algoliasearchHelper({}, '');
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState = voiceSearchWidget.getWidgetRenderState(initOptions);
+
+      expect(renderState).toEqual({
+        isBrowserSupported: true,
+        isListening: false,
+        toggleListening: expect.any(Function),
+        voiceListeningState: undefined,
+        widgetParams: {},
+      });
+    });
+
+    it('returns the render state with a custom voice helper', () => {
+      const voiceHelper = {
+        isBrowserSupported: () => true,
+        dispose: () => {},
+        getState: () => ({
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        }),
+        isListening: () => true,
+        toggleListening: () => {},
+      };
+
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
+      const voiceSearchWidget = createVoiceSearch({
+        createVoiceSearchHelper: () => voiceHelper,
+      });
+      const helper = algoliasearchHelper({}, '');
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState = voiceSearchWidget.getWidgetRenderState(initOptions);
+
+      expect(renderState).toEqual({
+        isBrowserSupported: true,
+        isListening: true,
+        toggleListening: expect.any(Function),
+        voiceListeningState: {
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        },
+        widgetParams: {
+          createVoiceSearchHelper: expect.any(Function),
+        },
       });
     });
   });

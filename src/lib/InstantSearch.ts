@@ -19,8 +19,8 @@ import {
   CreateURL,
   Middleware,
   MiddlewareDefinition,
+  RenderState,
 } from '../types';
-import hasDetectedInsightsClient from './utils/detect-insights-client';
 import {
   createRouterMiddleware,
   RouterProps,
@@ -140,6 +140,7 @@ class InstantSearch extends EventEmitter {
   public mainIndex: Index;
   public started: boolean;
   public templatesConfig: object;
+  public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
@@ -190,17 +191,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
 
 For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
-    );
-
-    warning(
-      Boolean(insightsClient) || !hasDetectedInsightsClient(),
-      withUsage(`InstantSearch detected the Insights client in the global scope.
-To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
-
-const search = instantsearch({
-  /* ... */
-  insightsClient: window.aa,
-});`)
     );
 
     if (insightsClient && typeof insightsClient !== 'function') {
@@ -532,30 +522,19 @@ See ${createDocumentationLink({
     }
   }
 
-  public setUiState: (
-    uiState: UiState | ((uiState: UiState) => UiState)
-  ) => void = uiState => {
+  public setUiState(uiState: UiState | ((uiState: UiState) => UiState)): void {
     if (!this.mainHelper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `setUiState`.')
       );
     }
 
-    warning(
-      false,
-      `
-\`setUiState\` provides a powerful way to manage the UI state. This is considered experimental as the API might change in a next minor version.
-
-Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearch.js/issues/new
-    `
-    );
-
     // We refresh the index UI state to update the local UI state that the
     // main index passes to the function form of `setUiState`.
     this.mainIndex.refreshUiState();
     const nextUiState =
       typeof uiState === 'function'
-        ? uiState(this.mainIndex.getWidgetState({}))
+        ? uiState(this.mainIndex.getWidgetUiState({}))
         : uiState;
 
     const setIndexHelperState = (indexWidget: Index) => {
@@ -582,10 +561,10 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
 
     this.scheduleSearch();
     this.onInternalStateChange();
-  };
+  }
 
   public onInternalStateChange = () => {
-    const nextUiState = this.mainIndex.getWidgetState({});
+    const nextUiState = this.mainIndex.getWidgetUiState({});
 
     this.middleware.forEach(m => {
       m.onStateChange({

@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "4.8.7",
+  "version": "4.9.0",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/",
   "types": "es/index.d.ts",
@@ -53,7 +53,7 @@
   ],
   "dependencies": {
     "@types/googlemaps": "^3.39.6",
-    "algoliasearch-helper": "^3.2.2",
+    "algoliasearch-helper": "^3.3.3",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
@@ -62,7 +62,7 @@
     "qs": "^6.5.1"
   },
   "devDependencies": {
-    "@algolia/client-search": "4.3.1",
+    "@algolia/client-search": "4.8.2",
     "@babel/cli": "7.8.3",
     "@babel/core": "7.8.3",
     "@babel/plugin-proposal-class-properties": "7.8.3",
@@ -92,8 +92,8 @@
     "@wdio/selenium-standalone-service": "5.16.5",
     "@wdio/spec-reporter": "5.16.5",
     "@wdio/static-server-service": "5.16.5",
-    "algoliasearch": "4.3.1",
-    "algoliasearch-v3": "npm:algoliasearch@3.35.1",
+    "algoliasearch": "4.8.2",
+    "algoliasearch-v3": "npm:algoliasearch@3",
     "babel-eslint": "10.0.3",
     "babel-jest": "24.9.0",
     "babel-loader": "8.0.6",
@@ -143,7 +143,7 @@
   "bundlesize": [
     {
       "path": "./dist/instantsearch.production.min.js",
-      "maxSize": "64.50 kB"
+      "maxSize": "65.25 kB"
     },
     {
       "path": "./dist/instantsearch.development.js",

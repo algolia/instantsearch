@@ -99,25 +99,24 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
     return {
       $$type: 'ais.configure',
 
-      init({ instantSearchInstance, helper }) {
-        connectorState.refine = refine(helper);
-
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
         renderFn(
           {
-            refine: connectorState.refine,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
-            widgetParams,
           },
           true
         );
       },
 
-      render({ instantSearchInstance }) {
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
+
         renderFn(
           {
-            refine: connectorState.refine!,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
-            widgetParams,
           },
           false
         );
@@ -127,6 +126,38 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         unmountFn();
 
         return getInitialSearchParameters(state, widgetParams);
+      },
+
+      getRenderState(renderState, renderOptions) {
+        const widgetRenderState = this.getWidgetRenderState(renderOptions);
+        return {
+          ...renderState,
+          configure: {
+            ...widgetRenderState,
+            widgetParams: {
+              ...widgetRenderState.widgetParams,
+              searchParameters: mergeSearchParameters(
+                new algoliasearchHelper.SearchParameters(
+                  renderState.configure?.widgetParams.searchParameters
+                ),
+                new algoliasearchHelper.SearchParameters(
+                  widgetRenderState.widgetParams.searchParameters
+                )
+              ).getQueryParams(),
+            },
+          },
+        };
+      },
+
+      getWidgetRenderState({ helper }) {
+        if (!connectorState.refine) {
+          connectorState.refine = refine(helper);
+        }
+
+        return {
+          refine: connectorState.refine,
+          widgetParams,
+        };
       },
 
       getWidgetSearchParameters(state, { uiState }) {
@@ -139,7 +170,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         );
       },
 
-      getWidgetState(uiState) {
+      getWidgetUiState(uiState) {
         return {
           ...uiState,
           configure: {

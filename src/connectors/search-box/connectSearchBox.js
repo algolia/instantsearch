@@ -72,62 +72,37 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
 
     function clear(helper) {
       return function() {
-        helper.setQuery('');
-        helper.search();
+        helper.setQuery('').search();
       };
+    }
+
+    let _clear = () => {};
+    function _cachedClear() {
+      _clear();
     }
 
     return {
       $$type: 'ais.searchBox',
 
-      _clear() {},
-
-      _cachedClear() {
-        this._clear();
-      },
-
-      init({ helper, instantSearchInstance }) {
-        this._cachedClear = this._cachedClear.bind(this);
-        this._clear = clear(helper);
-
-        const setQueryAndSearch = query => {
-          if (query !== helper.state.query) {
-            helper.setQuery(query).search();
-          }
-        };
-
-        this._refine = query => {
-          if (queryHook) {
-            queryHook(query, setQueryAndSearch);
-            return;
-          }
-
-          setQueryAndSearch(query);
-        };
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
-            query: helper.state.query || '',
-            refine: this._refine,
-            clear: this._cachedClear,
-            widgetParams,
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
           },
           true
         );
       },
 
-      render({ helper, instantSearchInstance, searchMetadata }) {
-        this._clear = clear(helper);
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
-            query: helper.state.query || '',
-            refine: this._refine,
-            clear: this._cachedClear,
-            widgetParams,
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance,
-            isSearchStalled: searchMetadata.isSearchStalled,
           },
           false
         );
@@ -139,7 +114,43 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         return state.setQueryParameter('query', undefined);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          searchBox: this.getWidgetRenderState(renderOptions),
+        };
+      },
+
+      getWidgetRenderState({ helper, searchMetadata }) {
+        if (!this._refine) {
+          const setQueryAndSearch = query => {
+            if (query !== helper.state.query) {
+              helper.setQuery(query).search();
+            }
+          };
+
+          this._refine = query => {
+            if (queryHook) {
+              queryHook(query, setQueryAndSearch);
+              return;
+            }
+
+            setQueryAndSearch(query);
+          };
+        }
+
+        _clear = clear(helper);
+
+        return {
+          query: helper.state.query || '',
+          refine: this._refine,
+          clear: _cachedClear,
+          widgetParams,
+          isSearchStalled: searchMetadata.isSearchStalled,
+        };
+      },
+
+      getWidgetUiState(uiState, { searchParameters }) {
         const query = searchParameters.query || '';
 
         if (query === '' || (uiState && uiState.query === query)) {

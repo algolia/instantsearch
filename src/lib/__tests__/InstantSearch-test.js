@@ -96,56 +96,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
 `);
   });
-  describe('when insights client is detected', () => {
-    const warningMessage = `[InstantSearch.js]: InstantSearch detected the Insights client in the global scope.
-To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
-
-const search = instantsearch({
-  /* ... */
-  insightsClient: window.aa,
-});
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/`;
-
-    it('throws a warning if insightsClient was not passed', () => {
-      warning.cache = {};
-
-      const AlgoliaAnalyticsObject = 'aa';
-      global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
-      global[AlgoliaAnalyticsObject] = jest.fn();
-
-      expect(() => {
-        // eslint-disable-next-line no-new
-        new InstantSearch({
-          indexName: 'indexName',
-          searchClient: createSearchClient(),
-        });
-      }).toWarnDev(warningMessage);
-
-      delete global.AlgoliaAnalyticsObject;
-      delete global[AlgoliaAnalyticsObject];
-    });
-
-    it('does not throw a warning if insightsClient was passed', () => {
-      warning.cache = {};
-
-      const AlgoliaAnalyticsObject = 'aa';
-      global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
-      global[AlgoliaAnalyticsObject] = jest.fn();
-
-      expect(() => {
-        // eslint-disable-next-line no-new
-        new InstantSearch({
-          indexName: 'indexName',
-          searchClient: createSearchClient(),
-          insightsClient: jest.fn(),
-        });
-      }).not.toWarnDev(warningMessage);
-
-      delete global.AlgoliaAnalyticsObject;
-      delete global[AlgoliaAnalyticsObject];
-    });
-  });
 
   it('throws if addWidgets is called with a single widget', () => {
     expect(() => {
@@ -648,7 +598,7 @@ describe('start', () => {
 
     search.start();
 
-    expect(search.mainIndex.getWidgetState()).toEqual({
+    expect(search.mainIndex.getWidgetUiState()).toEqual({
       indexName: {
         refinementList: {
           brand: ['Apple'],
@@ -681,7 +631,7 @@ describe('start', () => {
 
     search.start();
 
-    expect(search.mainIndex.getWidgetState()).toEqual({
+    expect(search.mainIndex.getWidgetUiState()).toEqual({
       indexName: {
         hierarchicalMenu: {
           'hierarchicalCategories.lvl0': ['Cell Phones'],
@@ -1877,29 +1827,6 @@ search.addWidgets([
 If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
 
 See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
-  });
-
-  it('warns about experimental API', () => {
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    search.addWidgets([connectSearchBox(() => {})({})]);
-
-    search.start();
-
-    expect(() => {
-      search.setUiState({
-        indexName: {
-          query: 'Query',
-        },
-      });
-    })
-      .toWarnDev(`[InstantSearch.js]: \`setUiState\` provides a powerful way to manage the UI state. This is considered experimental as the API might change in a next minor version.
-
-Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearch.js/issues/new`);
   });
 });
 

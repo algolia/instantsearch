@@ -1,4 +1,4 @@
-import jsHelper, {
+import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -67,6 +67,188 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     );
   });
 
+  describe('getRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
+      const breadcrumb = createBreadcrumb({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        breadcrumb.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      helper.toggleRefinement('category', 'Decoration');
+
+      const renderState1 = breadcrumb.getRenderState(
+        {
+          breadcrumb: {
+            anotherCategory: {
+              canRefine: false,
+              createURL: () => '',
+              items: [],
+              refine: () => {},
+              widgetParams: { attributes: ['anotherCategory'] },
+            },
+          },
+        },
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1.breadcrumb).toEqual({
+        anotherCategory: {
+          canRefine: false,
+          createURL: expect.any(Function),
+          items: [],
+          refine: expect.any(Function),
+          widgetParams: { attributes: ['anotherCategory'] },
+        },
+        category: {
+          canRefine: false,
+          createURL: expect.any(Function),
+          items: [],
+          refine: expect.any(Function),
+          widgetParams: { attributes: ['category', 'subCategory'] },
+        },
+      });
+
+      breadcrumb.init!(createInitOptions({ helper }));
+
+      const renderState2 = breadcrumb.getRenderState(
+        {
+          breadcrumb: {
+            anotherCategory: {
+              canRefine: false,
+              createURL: () => '',
+              items: [],
+              refine: () => {},
+              widgetParams: { attributes: ['anotherCategory'] },
+            },
+          },
+        },
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  Decoration: 880,
+                },
+                subCategory: {
+                  'Decoration > Candle holders & candles': 193,
+                  'Decoration > Frames & pictures': 173,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  Decoration: 880,
+                  Outdoor: 47,
+                },
+              },
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState2.breadcrumb).toEqual({
+        anotherCategory: {
+          canRefine: false,
+          createURL: expect.any(Function),
+          items: [],
+          refine: expect.any(Function),
+          widgetParams: { attributes: ['anotherCategory'] },
+        },
+        category: {
+          canRefine: true,
+          createURL: expect.any(Function),
+          items: [{ label: 'Decoration', value: null }],
+          refine: expect.any(Function),
+          widgetParams: { attributes: ['category', 'subCategory'] },
+        },
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
+      const breadcrumb = createBreadcrumb({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        breadcrumb.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      helper.toggleRefinement('category', 'Decoration');
+
+      const renderState1 = breadcrumb.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      expect(renderState1).toEqual({
+        canRefine: false,
+        createURL: expect.any(Function),
+        items: [],
+        refine: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+      });
+
+      breadcrumb.init!(createInitOptions({ helper }));
+
+      const renderState2 = breadcrumb.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  Decoration: 880,
+                },
+                subCategory: {
+                  'Decoration > Candle holders & candles': 193,
+                  'Decoration > Frames & pictures': 173,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  Decoration: 880,
+                  Outdoor: 47,
+                },
+              },
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState2).toEqual({
+        canRefine: true,
+        createURL: expect.any(Function),
+        items: [{ label: 'Decoration', value: null }],
+        refine: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+      });
+    });
+  });
+
   describe('getWidgetSearchParameters', () => {
     beforeEach(() => {
       warning.cache = {};
@@ -75,7 +257,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('returns the `SearchParameters` with default value', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
-      const helper = jsHelper(createSearchClient(), '');
+      const helper = algoliasearchHelper(createSearchClient(), '');
       const widget = makeWidget({
         attributes: ['category', 'sub_category'],
       });
@@ -97,7 +279,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('returns the `SearchParameters` with default a custom `separator`', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
-      const helper = jsHelper(createSearchClient(), '');
+      const helper = algoliasearchHelper(createSearchClient(), '');
       const widget = makeWidget({
         attributes: ['category', 'sub_category'],
         separator: ' / ',
@@ -120,7 +302,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('returns the `SearchParameters` with default a custom `rootPath`', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
-      const helper = jsHelper(createSearchClient(), '');
+      const helper = algoliasearchHelper(createSearchClient(), '');
       const widget = makeWidget({
         attributes: ['category', 'sub_category'],
         rootPath: 'TopLevel > SubLevel',
@@ -143,7 +325,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('returns the `SearchParameters` with another `hierarchicalFacets` already defined', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         hierarchicalFacets: [
           {
             name: 'country',
@@ -179,7 +361,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('returns the `SearchParameters` with the same `hierarchicalFacets` already defined', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         hierarchicalFacets: [
           {
             name: 'category',
@@ -213,7 +395,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('warns with the same `hierarchicalFacets` already defined with different `attributes`', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         hierarchicalFacets: [
           {
             name: 'category',
@@ -239,7 +421,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('warns with the same `hierarchicalFacets` already defined with different `separator`', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         hierarchicalFacets: [
           {
             name: 'category',
@@ -266,7 +448,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('warns with the same `hierarchicalFacets` already defined with different `rootPath`', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         hierarchicalFacets: [
           {
             name: 'category',
@@ -316,7 +498,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     // Verify that the widget has not been rendered yet at this point
     expect(rendering.mock.calls).toHaveLength(0);
 
-    const helper = jsHelper(createSearchClient(), '', config);
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
     widget.init!(
@@ -379,7 +561,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},
     });
-    const helper = jsHelper(createSearchClient(), '', config);
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -439,7 +621,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const config = widget.getWidgetSearchParameters!(new SearchParameters({}), {
       uiState: {},
     });
-    const helper = jsHelper(createSearchClient(), '', config);
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
 
     helper.search = jest.fn();
 
@@ -488,7 +670,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},
     });
-    const helper = jsHelper(createSearchClient(), '', config);
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -546,7 +728,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},
     });
-    const helper = jsHelper(createSearchClient(), '', config);
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
     widget.init!(
@@ -613,7 +795,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},
     });
-    const helper = jsHelper(createSearchClient(), '', config);
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
     widget.init!(
@@ -779,7 +961,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},
     });
-    const helper = jsHelper(createSearchClient(), '', config);
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
     widget.init!(
@@ -832,7 +1014,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
   describe('dispose', () => {
     it('does not throw without the unmount function', () => {
-      const helper = jsHelper(createSearchClient(), '');
+      const helper = algoliasearchHelper(createSearchClient(), '');
 
       const renderFn = () => {};
       const makeWidget = connectBreadcrumb(renderFn);
@@ -848,7 +1030,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       const makeWidget = connectBreadcrumb(renderFn);
       const widget = makeWidget({ attributes: ['category'] });
 
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         hierarchicalFacetsRefinements: {
           category: ['boxes'],
         },
