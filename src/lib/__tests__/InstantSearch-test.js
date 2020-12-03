@@ -1828,29 +1828,6 @@ If you're using custom widgets that do set these query parameters, we recommend 
 
 See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
   });
-
-  it('warns about experimental API', () => {
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    search.addWidgets([connectSearchBox(() => {})({})]);
-
-    search.start();
-
-    expect(() => {
-      search.setUiState({
-        indexName: {
-          query: 'Query',
-        },
-      });
-    })
-      .toWarnDev(`[InstantSearch.js]: \`setUiState\` provides a powerful way to manage the UI state. This is considered experimental as the API might change in a next minor version.
-
-Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearch.js/issues/new`);
-  });
 });
 
 describe('onStateChange', () => {
