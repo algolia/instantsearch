@@ -522,9 +522,10 @@ See ${createDocumentationLink({
     }
   }
 
-  public setUiState: (
-    uiState: UiState | ((uiState: UiState) => UiState)
-  ) => void = uiState => {
+  public setUiState(
+    uiState: UiState | ((uiState: UiState) => UiState),
+    suppressWarning = false
+  ): void {
     if (!this.mainHelper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `setUiState`.')
@@ -532,7 +533,7 @@ See ${createDocumentationLink({
     }
 
     warning(
-      false,
+      suppressWarning,
       `
 \`setUiState\` provides a powerful way to manage the UI state. This is considered experimental as the API might change in a next minor version.
 
@@ -572,7 +573,7 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
 
     this.scheduleSearch();
     this.onInternalStateChange();
-  };
+  }
 
   public onInternalStateChange = () => {
     const nextUiState = this.mainIndex.getWidgetUiState({});
