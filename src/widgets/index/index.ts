@@ -151,7 +151,6 @@ function resetPageFromWidgets(widgets: Widget[]): void {
     const widgetHelper = widget.getHelper()!;
 
     privateHelperSetState(widgetHelper, {
-      // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
       state: widgetHelper.state.resetPage(),
       isPageReset: true,
     });
