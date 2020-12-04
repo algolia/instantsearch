@@ -62,18 +62,6 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       nbHits = 1,
     } = widgetParams || ({} as typeof widgetParams);
 
-    if (
-      !attributesForPrediction ||
-      !Array.isArray(attributesForPrediction) ||
-      attributesForPrediction.length === 0
-    ) {
-      throw new Error(
-        withUsage(
-          'The `attributesForPrediction` option expects an array of strings.'
-        )
-      );
-    }
-
     const runConcurrentSafePromise = createConcurrentSafePromise<
       FindAnswersResponse<Hit>
     >();
