@@ -7,6 +7,7 @@ var find = require('../functions/find');
 var valToNumber = require('../functions/valToNumber');
 var omit = require('../functions/omit');
 var objectHasKeys = require('../functions/objectHasKeys');
+var isValidUserToken = require('../utils/isValidUserToken');
 
 var RefinementList = require('./RefinementList');
 
@@ -93,6 +94,9 @@ function findArray(array, searchedValue) {
 function SearchParameters(newParameters) {
   var params = newParameters ? SearchParameters._parseNumbers(newParameters) : {};
 
+  if (params.userToken !== undefined && !isValidUserToken(params.userToken)) {
+    console.warn('[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}');
+  }
   /**
    * This attribute contains the list of all the conjunctive facets
    * used. This list will be added to requested facets in the

@@ -35,3 +35,21 @@ test('setChange should not change the current state: no real modification', func
   expect(changed).toBe(false);
   expect(helper.state).toBe(initialState);
 });
+
+test('setQueryParameter should warn about invalid userToken', function() {
+  const message = '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
+  console.warn = jest.fn();
+
+  var helper = algoliasearchHelper(fakeClient, null, {});
+  helper.setQueryParameter('userToken', null);
+  expect(console.warn).toHaveBeenCalledTimes(1);
+  expect(console.warn).toHaveBeenLastCalledWith(message);
+
+  helper.setQueryParameter('userToken', '');
+  expect(console.warn).toHaveBeenCalledTimes(2);
+  expect(console.warn).toHaveBeenLastCalledWith(message);
+
+  helper.setQueryParameter('userToken', 'my invalid token!');
+  expect(console.warn).toHaveBeenCalledTimes(3);
+  expect(console.warn).toHaveBeenLastCalledWith(message);
+});

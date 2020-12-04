@@ -89,3 +89,21 @@ test('setQueryParameters should omit defined parameters with next values of unde
   expect(state1).not.toHaveProperty('query');
   expect(state1).not.toHaveProperty('page');
 });
+
+test('setQueryParameters should warn about invalid userToken', function() {
+  const message = '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
+  console.warn = jest.fn();
+
+  var state = new SearchParameters();
+  state.setQueryParameters({userToken: null});
+  expect(console.warn).toHaveBeenCalledTimes(1);
+  expect(console.warn).toHaveBeenLastCalledWith(message);
+
+  state.setQueryParameters({userToken: ''});
+  expect(console.warn).toHaveBeenCalledTimes(2);
+  expect(console.warn).toHaveBeenLastCalledWith(message);
+
+  state.setQueryParameters({userToken: 'my invalid token!'});
+  expect(console.warn).toHaveBeenCalledTimes(3);
+  expect(console.warn).toHaveBeenLastCalledWith(message);
+});
