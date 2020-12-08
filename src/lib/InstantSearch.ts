@@ -522,23 +522,12 @@ See ${createDocumentationLink({
     }
   }
 
-  public setUiState: (
-    uiState: UiState | ((uiState: UiState) => UiState)
-  ) => void = uiState => {
+  public setUiState(uiState: UiState | ((uiState: UiState) => UiState)): void {
     if (!this.mainHelper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `setUiState`.')
       );
     }
-
-    warning(
-      false,
-      `
-\`setUiState\` provides a powerful way to manage the UI state. This is considered experimental as the API might change in a next minor version.
-
-Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearch.js/issues/new
-    `
-    );
 
     // We refresh the index UI state to update the local UI state that the
     // main index passes to the function form of `setUiState`.
@@ -572,7 +561,7 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
 
     this.scheduleSearch();
     this.onInternalStateChange();
-  };
+  }
 
   public onInternalStateChange = () => {
     const nextUiState = this.mainIndex.getWidgetUiState({});
