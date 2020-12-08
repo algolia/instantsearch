@@ -591,6 +591,17 @@ $break-medium: 767px;
 }
 
 /**
+ * ReverseHighlighting and ReverseSnippeting
+ */
+
+.ais-ReverseHighlight-highlighted,
+.ais-ReverseSnippet-highlighted {
+  font-weight: bold;
+  font-style: normal;
+  background: none;
+}
+
+/**
  * Hits
  */
 
