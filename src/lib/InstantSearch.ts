@@ -32,12 +32,6 @@ function defaultCreateURL() {
   return '#';
 }
 
-const ALGOLIA_CRAWLER_USER_AGENT = /Algolia Crawler\/[0-9]+.[0-9]+.[0-9]+/;
-
-const isTelemetryEnabled =
-  typeof window !== undefined &&
-  ALGOLIA_CRAWLER_USER_AGENT.test(window.navigator.userAgent);
-
 /**
  * Global options for an InstantSearch instance.
  */
@@ -252,9 +246,7 @@ See ${createDocumentationLink({
       this.EXPERIMENTAL_use(createRouter(routerOptions));
     }
 
-    if (isTelemetryEnabled) {
-      this.EXPERIMENTAL_use(createTelemetry());
-    }
+    this.EXPERIMENTAL_use(createTelemetry());
   }
 
   /**

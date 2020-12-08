@@ -1,71 +1,76 @@
 import { Middleware } from '.';
+import { Widget } from '../types';
+import { resolveScopedResultsFromIndex } from '../widgets/index/index';
 
 type TelemetryWidget = {
   type: string;
   params: string[];
-  useConnector: boolean;
+  officialWidget: boolean;
 };
 
+const ALGOLIA_CRAWLER_USER_AGENT = /Algolia Crawler\/[0-9]+.[0-9]+.[0-9]+/;
+
 export const createTelemetry = (): Middleware => {
-  let localInstantSearchInstance;
+  const isTelemetryEnabled =
+    typeof window !== undefined &&
+    ALGOLIA_CRAWLER_USER_AGENT.test(window.navigator.userAgent);
+
+  if (!isTelemetryEnabled) {
+    return () => ({
+      onStateChange() {},
+      subscribe() {},
+      unsubscribe() {},
+    });
+  }
 
   const payload: { widgets: TelemetryWidget[] } = {
     widgets: [],
   };
 
   const payloadContainer = document.createElement('meta');
-  const refNode = document.querySelector('script');
+  const refNode = document.querySelector('head');
   payloadContainer.name = 'instantsearch:widgets';
-  refNode!.parentNode!.insertBefore(payloadContainer, refNode);
+  refNode!.appendChild(payloadContainer);
 
   return ({ instantSearchInstance }) => {
-    localInstantSearchInstance = instantSearchInstance;
-
     return {
       onStateChange() {},
       subscribe() {
         setTimeout(() => {
-          const widgets = localInstantSearchInstance.mainIndex.getWidgets();
+          const widgets: Array<Widget<{
+            renderState: any;
+          }>> = instantSearchInstance.mainIndex.getWidgets();
+
+          const parent = instantSearchInstance.mainIndex;
 
           const initOptions = {
-            helper: localInstantSearchInstance.helper,
-            uiState: localInstantSearchInstance._initialUiState,
-            localInstantSearchInstance: localInstantSearchInstance!,
-            state: localInstantSearchInstance.helper.state,
-            renderState: localInstantSearchInstance.renderState,
-            templatesConfig: localInstantSearchInstance.templatesConfig,
-            createURL: localInstantSearchInstance._createURL,
-            scopedResults: [],
+            instantSearchInstance,
+            parent,
+            results: parent.getResults()!,
+            scopedResults: resolveScopedResultsFromIndex(parent),
+            state: parent.getResults()!._state,
+            helper: parent.getHelper()!,
+            createURL: parent.getCreateURL(),
+            uiState: instantSearchInstance._initialUiState,
+            renderState: instantSearchInstance.renderState,
+            templatesConfig: instantSearchInstance.templatesConfig,
             searchMetadata: {
-              isSearchStalled: localInstantSearchInstance._isSearchStalled,
+              isSearchStalled: instantSearchInstance._isSearchStalled,
             },
           };
 
           widgets.forEach(widget => {
-            // Compute widget data
-            const type: TelemetryWidget['type'] =
-              widget.$$type || 'custom widget';
-            const params: TelemetryWidget['params'] = widget.getWidgetRenderState
-              ? Object.keys(
-                  widget.getWidgetRenderState(initOptions).widgetParams as any
-                )
-              : [];
-            const useConnector: TelemetryWidget['useConnector'] = !widget.$$officialWidget;
-            // Finds out if the widget is already in the payload and merge them if that's the case
-            const existingWidget = payload.widgets.find(
-              payloadWidget => payloadWidget.type === type
-            );
-            if (existingWidget) {
-              existingWidget.params = [
-                ...new Set([...existingWidget.params, ...params]),
-              ];
-              existingWidget.useConnector =
-                existingWidget.useConnector || useConnector;
-            } else {
-              payload.widgets.push({ type, params, useConnector });
-            }
+            payload.widgets.push({
+              type: widget.$$type || 'custom.widget',
+              params: widget.getWidgetRenderState
+                ? Object.keys(
+                    widget.getWidgetRenderState(initOptions).widgetParams
+                  )
+                : [],
+              officialWidget: Boolean(widget.$$officialWidget),
+            });
           });
-          // Update the DOM element
+
           payloadContainer.content = JSON.stringify(payload);
         }, 0);
       },
