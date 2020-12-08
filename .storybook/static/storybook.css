@@ -258,10 +258,3 @@ body {
   background: #f7f7f7;
   color: black;
 }
-
-/* tmp class during dev phase for ReverseHighlight and reverseSnippet component */
-.ais-ReverseHighlight-highlighted,
-.ais-ReverseSnippet-highlighted {
-  background: none;
-  font-weight: bold;
-}
