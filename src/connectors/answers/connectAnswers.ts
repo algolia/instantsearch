@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   createConcurrentSafePromise,
   debounce,
+  addAbsolutePosition,
   noop,
 } from '../../lib/utils';
 import { Connector, Hits, Hit, FindAnswersResponse } from '../../types';
@@ -129,6 +130,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           })
         ).then(result => {
           lastAnswersResult = result;
+          lastAnswersResult.hits = addAbsolutePosition<typeof result.hits[0]>(
+            result.hits,
+            0,
+            nbHits
+          );
           isLoading = false;
           debouncedRenderFn(
             {

@@ -54,7 +54,11 @@ describe('Answers', () => {
         },
       };
       const { container } = render(
-        <Answers {...props} isLoading={false} hits={[{ objectID: '1' }]} />
+        <Answers
+          {...props}
+          isLoading={false}
+          hits={[{ objectID: '1', __position: 1 }]}
+        />
       );
       expect(container.querySelector('.header')!.textContent).toEqual(
         '1 answer(s) loaded'
@@ -77,7 +81,7 @@ describe('Answers', () => {
         <Answers
           {...props}
           isLoading={false}
-          hits={[{ objectID: '1', title: 'hello!' }]}
+          hits={[{ objectID: '1', title: 'hello!', __position: 1 }]}
         />
       );
       expect(container.querySelector('.list')!.textContent).toEqual(

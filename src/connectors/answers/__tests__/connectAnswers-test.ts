@@ -186,6 +186,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 
   it('renders loader and results when query is given', async () => {
     const hits = [{ title: '' }];
+    const hitsWithPosition = [{ title: '', __position: 1 }];
     const {
       renderFn,
       instantSearchInstance,
@@ -228,7 +229,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     expect(renderFn).toHaveBeenNthCalledWith(
       3,
       expect.objectContaining({
-        hits,
+        hits: hitsWithPosition,
         isLoading: false,
       }),
       false
@@ -240,6 +241,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       jest.requireActual('../../../lib/utils/debounce').debounce
     );
     const hits = [{ title: '' }];
+    const hitsWithPosition = [{ title: '', __position: 1 }];
     const {
       renderFn,
       instantSearchInstance,
@@ -295,7 +297,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     expect(renderFn).toHaveBeenNthCalledWith(
       4,
       expect.objectContaining({
-        hits,
+        hits: hitsWithPosition,
         isLoading: false,
       }),
       false
@@ -408,7 +410,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           })
         )
       ).toEqual({
-        hits: [{ title: '' }],
+        hits: [{ title: '', __position: 1 }],
         isLoading: false,
         widgetParams: {
           attributesForPrediction: ['description'],
