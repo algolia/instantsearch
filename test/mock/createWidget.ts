@@ -1,4 +1,4 @@
-import algolisearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper';
 import {
   InitOptions,
   RenderOptions,
@@ -36,7 +36,7 @@ export const createRenderOptions = (
   const { instantSearchInstance = createInstantSearch(), ...rest } = args;
   const response = createMultiSearchResponse();
   const helper = args.helper || instantSearchInstance.helper!;
-  const results = new algolisearchHelper.SearchResults(
+  const results = new algoliasearchHelper.SearchResults(
     instantSearchInstance.helper!.state,
     response.results
   );

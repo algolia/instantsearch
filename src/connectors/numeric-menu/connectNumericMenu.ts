@@ -8,6 +8,7 @@ import {
 } from '../../lib/utils';
 import { Connector, CreateURL, TransformItems } from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
+import { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'numeric-menu',
@@ -103,7 +104,7 @@ export type NumericMenuConnector = Connector<
 const $$type = 'ais.numericMenu';
 
 const createSendEvent = ({ instantSearchInstance, helper, attribute }) => (
-  ...args
+  ...args: [InsightsEvent] | [string, string, string?]
 ) => {
   if (args.length === 1) {
     instantSearchInstance.sendEventToInsights(args[0]);

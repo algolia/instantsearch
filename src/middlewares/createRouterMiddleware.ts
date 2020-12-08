@@ -1,6 +1,5 @@
 import simpleStateMapping from '../lib/stateMappings/simple';
 import historyRouter from '../lib/routers/history';
-import { Index } from '../widgets/index/index';
 import {
   Router,
   StateMapping,
@@ -9,18 +8,6 @@ import {
   RouteState,
 } from '../types';
 import { isEqual } from '../lib/utils';
-
-const walk = (current: Index, callback: (index: Index) => void) => {
-  callback(current);
-  current
-    .getWidgets()
-    .filter(function(widget): widget is Index {
-      return widget.$$type === 'ais.index';
-    })
-    .forEach(innerIndex => {
-      walk(innerIndex, callback);
-    });
-};
 
 export type RouterProps = {
   router?: Router;
@@ -73,28 +60,7 @@ export const createRouterMiddleware: RoutingManager = (props = {}) => {
 
       subscribe() {
         router.onUpdate(route => {
-          const uiState = stateMapping.routeToState(route);
-
-          walk(instantSearchInstance.mainIndex, current => {
-            const widgets = current.getWidgets();
-            const indexUiState = uiState[current.getIndexId()] || {};
-
-            const searchParameters = widgets.reduce((parameters, widget) => {
-              if (!widget.getWidgetSearchParameters) {
-                return parameters;
-              }
-
-              return widget.getWidgetSearchParameters(parameters, {
-                uiState: indexUiState,
-              });
-            }, current.getHelper()!.state);
-
-            current
-              .getHelper()!
-              .overrideStateWithoutTriggeringChangeEvent(searchParameters);
-
-            instantSearchInstance.scheduleSearch();
-          });
+          instantSearchInstance.setUiState(stateMapping.routeToState(route));
         });
       },
 
