@@ -1,4 +1,4 @@
-import { UiState } from '../types';
+import { InstantSearch, UiState } from '../types';
 
 export type MiddlewareDefinition = {
   onStateChange(options: { uiState: UiState }): void;
@@ -6,8 +6,8 @@ export type MiddlewareDefinition = {
   unsubscribe(): void;
 };
 
-export type Middleware = ({
-  instantSearchInstance: InstantSearch,
+export type Middleware = (args: {
+  instantSearchInstance: InstantSearch;
 }) => MiddlewareDefinition;
 
 export { createRouter, RouterProps } from './createRouter';
