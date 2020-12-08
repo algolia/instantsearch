@@ -1,3 +1,12 @@
+## [4.9.1](https://github.com/algolia/instantsearch.js/compare/v4.9.0...v4.9.1) (2020-12-08)
+
+
+### Bug Fixes
+
+* **range:** consistently convert min & max to numbers ([#4587](https://github.com/algolia/instantsearch.js/issues/4587)) ([ccf159e](https://github.com/algolia/instantsearch.js/commit/ccf159efcb94e9c8c04c558fcb69e2e3d8d79729))
+
+
+
 # [4.9.0](https://github.com/algolia/instantsearch.js/compare/v4.8.7...v4.9.0) (2020-12-01)
 
 
