@@ -53,8 +53,11 @@ export type Index = Widget & {
   getResults(): SearchResults | null;
   getParent(): Index | null;
   getWidgets(): Widget[];
+  createURL(state: SearchParameters): string;
+
   addWidgets(widgets: Widget[]): Index;
   removeWidgets(widgets: Widget[]): Index;
+
   init(options: IndexInitOptions): void;
   render(options: IndexRenderOptions): void;
   dispose(): void;
@@ -196,14 +199,6 @@ const index = (props: IndexProps): Index => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
 
-  const createURL = (nextState: SearchParameters) =>
-    localInstantSearchInstance!._createURL!({
-      [indexId]: getLocalWidgetsState(localWidgets, {
-        searchParameters: nextState,
-        helper: helper!,
-      }),
-    });
-
   return {
     $$type: 'ais.index',
 
@@ -225,6 +220,15 @@ const index = (props: IndexProps): Index => {
 
     getParent() {
       return localParent;
+    },
+
+    createURL(nextState: SearchParameters) {
+      return localInstantSearchInstance!._createURL!({
+        [indexId]: getLocalWidgetsState(localWidgets, {
+          searchParameters: nextState,
+          helper: helper!,
+        }),
+      });
     },
 
     getWidgets() {
@@ -278,7 +282,7 @@ const index = (props: IndexProps): Index => {
                 state: helper!.state,
                 renderState: localInstantSearchInstance!.renderState,
                 templatesConfig: localInstantSearchInstance!.templatesConfig,
-                createURL,
+                createURL: this.createURL,
                 scopedResults: [],
                 searchMetadata: {
                   isSearchStalled: localInstantSearchInstance!._isSearchStalled,
@@ -304,7 +308,7 @@ const index = (props: IndexProps): Index => {
               state: helper!.state,
               renderState: localInstantSearchInstance!.renderState,
               templatesConfig: localInstantSearchInstance!.templatesConfig,
-              createURL,
+              createURL: this.createURL,
               scopedResults: [],
               searchMetadata: {
                 isSearchStalled: localInstantSearchInstance!._isSearchStalled,
@@ -484,7 +488,7 @@ const index = (props: IndexProps): Index => {
               state: helper!.state,
               renderState: instantSearchInstance.renderState,
               templatesConfig: instantSearchInstance.templatesConfig,
-              createURL,
+              createURL: this.createURL,
               scopedResults: [],
               searchMetadata: {
                 isSearchStalled: instantSearchInstance._isSearchStalled,
@@ -515,7 +519,7 @@ const index = (props: IndexProps): Index => {
             state: helper!.state,
             renderState: instantSearchInstance.renderState,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL,
+            createURL: this.createURL,
             scopedResults: [],
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
@@ -571,7 +575,7 @@ const index = (props: IndexProps): Index => {
               state: this.getResults()!._state,
               renderState: instantSearchInstance.renderState,
               templatesConfig: instantSearchInstance.templatesConfig,
-              createURL,
+              createURL: this.createURL,
               searchMetadata: {
                 isSearchStalled: instantSearchInstance._isSearchStalled,
               },
@@ -604,7 +608,7 @@ const index = (props: IndexProps): Index => {
             state: this.getResults()!._state,
             renderState: instantSearchInstance.renderState,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL,
+            createURL: this.createURL,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },
