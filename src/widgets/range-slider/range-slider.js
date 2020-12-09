@@ -94,7 +94,7 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  * @type {WidgetFactory}
  * @devNovel RangeSlider
  * @category filter
- * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
+ * @param {RangeSliderWidgetOptions} widgetOptions RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.
  * @example
  * search.addWidgets([
@@ -109,17 +109,18 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  *   })
  * ]);
  */
-export default function rangeSlider({
-  container,
-  attribute,
-  min,
-  max,
-  cssClasses: userCssClasses = {},
-  step,
-  pips = true,
-  precision = 0,
-  tooltips = true,
-} = {}) {
+export default function rangeSlider(widgetOptions) {
+  const {
+    container,
+    attribute,
+    min,
+    max,
+    cssClasses: userCssClasses = {},
+    step,
+    pips = true,
+    precision = 0,
+    tooltips = true,
+  } = widgetOptions || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -150,5 +151,6 @@ export default function rangeSlider({
     ...makeWidget({ attribute, min, max, precision }),
 
     $$type: 'ais.rangeSlider',
+    $$officialWidget: true,
   };
 }

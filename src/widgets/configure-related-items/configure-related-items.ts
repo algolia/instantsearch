@@ -19,7 +19,10 @@ const configureRelatedItems: ConfigureRelatedItemsWidget = function configureRel
 ) {
   const makeWidget = connectConfigureRelatedItems(noop);
 
-  return makeWidget(widgetParams);
+  return {
+    ...makeWidget(widgetParams),
+    $$officialWidget: true,
+  };
 };
 
 export default configureRelatedItems;

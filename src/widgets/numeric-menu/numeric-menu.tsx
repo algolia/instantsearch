@@ -205,15 +205,18 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetOptions) {
     templates,
   });
 
-  const makeNumericMenu = connectNumericMenu(specializedRenderer, () =>
+  const makeWidget = connectNumericMenu(specializedRenderer, () =>
     render(null, containerNode)
   );
 
-  return makeNumericMenu({
-    attribute,
-    items,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      attribute,
+      items,
+      transformItems,
+    }),
+    $$officialWidget: true,
+  };
 };
 
 export default numericMenu;

@@ -33,6 +33,7 @@ const queryRuleContext: QueryRuleContext = (
     ...connectQueryRules<QueryRuleContextWidgetParams>(noop)(widgetParams),
 
     $$type: 'ais.queryRuleContext',
+    $$officialWidget: true,
   };
 };
 

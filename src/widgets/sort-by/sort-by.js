@@ -63,7 +63,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @type {WidgetFactory}
  * @devNovel SortBy
  * @category sort
- * @param {SortByWidgetOptions} $0 Options for the SortBy widget
+ * @param {SortByWidgetOptions} widgetOptions Options for the SortBy widget
  * @return {Widget} Creates a new instance of the SortBy widget.
  * @example
  * search.addWidgets([
@@ -77,12 +77,9 @@ const renderer = ({ containerNode, cssClasses }) => (
  *   })
  * ]);
  */
-export default function sortBy({
-  container,
-  items,
-  cssClasses: userCssClasses = {},
-  transformItems,
-} = {}) {
+export default function sortBy(widgetOptions) {
+  const { container, items, cssClasses: userCssClasses = {}, transformItems } =
+    widgetOptions || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -104,5 +101,8 @@ export default function sortBy({
     render(null, containerNode)
   );
 
-  return makeWidget({ items, transformItems });
+  return {
+    ...makeWidget({ items, transformItems }),
+    $$officialWidget: true,
+  };
 }

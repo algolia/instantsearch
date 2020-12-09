@@ -83,15 +83,17 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function menuSelect({
-  container,
-  attribute,
-  sortBy = ['name:asc'],
-  limit = 10,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  transformItems,
-}) {
+export default function menuSelect(widgetOptions) {
+  const {
+    container,
+    attribute,
+    sortBy = ['name:asc'],
+    limit = 10,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    transformItems,
+  } = widgetOptions || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -118,5 +120,8 @@ export default function menuSelect({
     render(null, containerNode)
   );
 
-  return makeWidget({ attribute, limit, sortBy, transformItems });
+  return {
+    ...makeWidget({ attribute, limit, sortBy, transformItems }),
+    $$officialWidget: true,
+  };
 }

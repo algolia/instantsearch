@@ -224,6 +224,9 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
   };
 
   return {
+    $$type: 'ais.analytics',
+    $$officialWidget: true,
+
     init() {
       if (triggerOnUIInteraction === true) {
         document.addEventListener('click', onClick);

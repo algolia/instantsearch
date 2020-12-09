@@ -177,7 +177,7 @@ function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
   }, []);
 }
 
-function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
+export function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
   const widgetParent = widget.getParent();
   // If the widget is the root, we consider itself as the only sibling.
   const widgetSiblings = widgetParent ? widgetParent.getWidgets() : [widget];

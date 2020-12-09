@@ -91,8 +91,8 @@ const renderer: Renderer<
   );
 };
 
-const voiceSearch: VoiceSearch = (
-  {
+const voiceSearch: VoiceSearch = widgetOptions => {
+  const {
     container,
     cssClasses: userCssClasses = {} as VoiceSearchCSSClasses,
     templates,
@@ -100,8 +100,7 @@ const voiceSearch: VoiceSearch = (
     language,
     additionalQueryParameters,
     createVoiceSearchHelper,
-  } = {} as VoiceSearchWidgetParams
-) => {
+  } = widgetOptions || ({} as VoiceSearchWidgetParams);
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -118,15 +117,18 @@ const voiceSearch: VoiceSearch = (
     render(null, containerNode)
   );
 
-  return makeWidget({
-    container: containerNode,
-    cssClasses,
-    templates: { ...defaultTemplates, ...templates },
-    searchAsYouSpeak,
-    language,
-    additionalQueryParameters,
-    createVoiceSearchHelper,
-  });
+  return {
+    ...makeWidget({
+      container: containerNode,
+      cssClasses,
+      templates: { ...defaultTemplates, ...templates },
+      searchAsYouSpeak,
+      language,
+      additionalQueryParameters,
+      createVoiceSearchHelper,
+    }),
+    $$officialWidget: true,
+  };
 };
 
 export default voiceSearch;

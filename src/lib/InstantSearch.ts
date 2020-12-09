@@ -26,6 +26,7 @@ import {
   RouterProps,
 } from '../middlewares/createRouterMiddleware';
 import { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import { createTelemetryMiddleware } from '../middlewares/createTelemetryMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -218,7 +219,6 @@ See ${createDocumentationLink({
 
     this.client = searchClient;
     this.insightsClient = insightsClient;
-
     this.indexName = indexName;
     this.helper = null;
     this.mainHelper = null;
@@ -250,6 +250,8 @@ See ${createDocumentationLink({
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
       this.use(createRouterMiddleware(routerOptions));
     }
+
+    this.use(createTelemetryMiddleware());
   }
 
   /**

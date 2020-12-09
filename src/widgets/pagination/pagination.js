@@ -127,7 +127,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel Pagination
  * @category navigation
- * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
+ * @param {PaginationWidgetOptions} widgetOptions Options for the Pagination widget.
  * @return {Widget} A new instance of Pagination widget.
  * @example
  * search.addWidgets([
@@ -141,18 +141,20 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function pagination({
-  container,
-  templates: userTemplates = {},
-  cssClasses: userCssClasses = {},
-  totalPages,
-  padding,
-  showFirst = true,
-  showLast = true,
-  showPrevious = true,
-  showNext = true,
-  scrollTo: userScrollTo = 'body',
-} = {}) {
+export default function pagination(widgetOptions) {
+  const {
+    container,
+    templates: userTemplates = {},
+    cssClasses: userCssClasses = {},
+    totalPages,
+    padding,
+    showFirst = true,
+    showLast = true,
+    showPrevious = true,
+    showNext = true,
+    scrollTo: userScrollTo = 'body',
+  } = widgetOptions || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -219,5 +221,8 @@ export default function pagination({
     render(null, containerNode)
   );
 
-  return makeWidget({ totalPages, padding });
+  return {
+    ...makeWidget({ totalPages, padding }),
+    $$officialWidget: true,
+  };
 }

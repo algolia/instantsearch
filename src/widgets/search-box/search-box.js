@@ -91,7 +91,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel SearchBox
  * @category basic
- * @param {SearchBoxWidgetOptions} $0 Options used to configure a SearchBox widget.
+ * @param {SearchBoxWidgetOptions} widgetOptions Options used to configure a SearchBox widget.
  * @return {Widget} Creates a new instance of the SearchBox widget.
  * @example
  * search.addWidgets([
@@ -101,18 +101,19 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function searchBox({
-  container,
-  placeholder = '',
-  cssClasses: userCssClasses = {},
-  autofocus = false,
-  searchAsYouType = true,
-  showReset = true,
-  showSubmit = true,
-  showLoadingIndicator = true,
-  queryHook,
-  templates,
-} = {}) {
+export default function searchBox(widgetOptions) {
+  const {
+    container,
+    placeholder = '',
+    cssClasses: userCssClasses = {},
+    autofocus = false,
+    searchAsYouType = true,
+    showReset = true,
+    showSubmit = true,
+    showLoadingIndicator = true,
+    queryHook,
+    templates,
+  } = widgetOptions || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -159,5 +160,8 @@ export default function searchBox({
     render(null, containerNode)
   );
 
-  return makeWidget({ queryHook });
+  return {
+    ...makeWidget({ queryHook }),
+    $$officialWidget: true,
+  };
 }

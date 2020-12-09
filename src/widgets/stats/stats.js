@@ -92,7 +92,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @type {WidgetFactory}
  * @devNovel Stats
  * @category metadata
- * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatory: `container`,
+ * @param {StatsWidgetOptions} widgetOptions Stats widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new stats widget instance
  * @example
  * search.addWidgets([
@@ -101,11 +101,12 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function stats({
-  container,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-} = {}) {
+export default function stats(widgetOptions) {
+  const {
+    container,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+  } = widgetOptions || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -128,5 +129,8 @@ export default function stats({
     render(null, containerNode)
   );
 
-  return makeWidget();
+  return {
+    ...makeWidget(),
+    $$officialWidget: true,
+  };
 }

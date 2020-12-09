@@ -121,13 +121,16 @@ const currentRefinements: CurrentRefinementsWidget = function currentRefinements
     () => render(null, containerNode)
   );
 
-  return makeWidget({
-    container: containerNode,
-    cssClasses,
-    includedAttributes,
-    excludedAttributes,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      container: containerNode,
+      cssClasses,
+      includedAttributes,
+      excludedAttributes,
+      transformItems,
+    }),
+    $$officialWidget: true,
+  };
 };
 
 export default currentRefinements;

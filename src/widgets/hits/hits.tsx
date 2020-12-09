@@ -157,11 +157,14 @@ const hits: HitsWidget = function hits(widgetOptions) {
     templates,
   });
 
-  const makeHits = withInsights(connectHits)(specializedRenderer, () =>
+  const makeWidget = withInsights(connectHits)(specializedRenderer, () =>
     render(null, containerNode)
   );
 
-  return makeHits({ escapeHTML, transformItems });
+  return {
+    ...makeWidget({ escapeHTML, transformItems }),
+    $$officialWidget: true,
+  };
 };
 
 export default hits;

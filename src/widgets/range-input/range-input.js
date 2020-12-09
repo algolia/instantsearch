@@ -106,15 +106,17 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function rangeInput({
-  container,
-  attribute,
-  min,
-  max,
-  precision = 0,
-  cssClasses: userCssClasses = {},
-  templates: userTemplates = {},
-} = {}) {
+export default function rangeInput(widgetOptions) {
+  const {
+    container,
+    attribute,
+    min,
+    max,
+    precision = 0,
+    cssClasses: userCssClasses = {},
+    templates: userTemplates = {},
+  } = widgetOptions || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -168,5 +170,6 @@ export default function rangeInput({
     }),
 
     $$type: 'ais.rangeInput',
+    $$officialWidget: true,
   };
 }

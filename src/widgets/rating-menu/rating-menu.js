@@ -98,7 +98,7 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
  * @type {WidgetFactory}
  * @devNovel RatingMenu
  * @category filter
- * @param {RatingMenuWidgetOptions} $0 RatingMenu widget options.
+ * @param {RatingMenuWidgetOptions} widgetOptions RatingMenu widget options.
  * @return {Widget} A new RatingMenu widget instance.
  * @example
  * search.addWidgets([
@@ -109,13 +109,14 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
  *   })
  * ]);
  */
-export default function ratingMenu({
-  container,
-  attribute,
-  max = 5,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-} = {}) {
+export default function ratingMenu(widgetOptions) {
+  const {
+    container,
+    attribute,
+    max = 5,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+  } = widgetOptions || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -163,5 +164,8 @@ export default function ratingMenu({
     render(null, containerNode)
   );
 
-  return makeWidget({ attribute, max });
+  return {
+    ...makeWidget({ attribute, max }),
+    $$officialWidget: true,
+  };
 }

@@ -208,25 +208,28 @@ const geoSearch = ({
     ? builtInMarker
     : customHTMLMarker;
 
-  const makeGeoSearch = connectGeoSearch(renderer, () =>
+  const makeWidget = connectGeoSearch(renderer, () =>
     render(null, containerNode)
   );
 
-  return makeGeoSearch({
-    ...widgetParams,
-    renderState: {},
-    container: containerNode,
-    googleReference,
-    initialZoom,
-    initialPosition,
-    templates,
-    cssClasses,
-    createMarker,
-    markerOptions,
-    enableRefine,
-    enableClearMapRefinement,
-    enableRefineControl,
-  });
+  return {
+    ...makeWidget({
+      ...widgetParams,
+      renderState: {},
+      container: containerNode,
+      googleReference,
+      initialZoom,
+      initialPosition,
+      templates,
+      cssClasses,
+      createMarker,
+      markerOptions,
+      enableRefine,
+      enableClearMapRefinement,
+      enableRefineControl,
+    }),
+    $$officialWidget: true,
+  };
 };
 
 export default geoSearch;

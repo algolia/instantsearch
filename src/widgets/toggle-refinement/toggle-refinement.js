@@ -88,7 +88,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @type {WidgetFactory}
  * @devNovel ToggleRefinement
  * @category filter
- * @param {ToggleWidgetOptions} $0 Options for the ToggleRefinement widget.
+ * @param {ToggleWidgetOptions} widgetOptions Options for the ToggleRefinement widget.
  * @return {Widget} A new instance of the ToggleRefinement widget
  * @example
  * search.addWidgets([
@@ -102,14 +102,15 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function toggleRefinement({
-  container,
-  attribute,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  on = true,
-  off,
-} = {}) {
+export default function toggleRefinement(widgetOptions) {
+  const {
+    container,
+    attribute,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    on = true,
+    off,
+  } = widgetOptions || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -137,5 +138,8 @@ export default function toggleRefinement({
     render(null, containerNode)
   );
 
-  return makeWidget({ attribute, on, off });
+  return {
+    ...makeWidget({ attribute, on, off }),
+    $$officialWidget: true,
+  };
 }
