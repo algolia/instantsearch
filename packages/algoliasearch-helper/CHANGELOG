@@ -1,3 +1,6 @@
+3.3.4 - 2020-12-09
+ * fix: ignore invalid userToken (#802) https://github.com/algolia/algoliasearch-helper-js/commit/a2876c59fb7bdf7bd564c727bc70e7514362e189
+
 3.3.3 - 2020-12-02
  * fix(removeNumericRefinement): clear empty refinements (#801) https://github.com/algolia/algoliasearch-helper-js/commit/844f7d787de4897f17ebd5982f20316d7cb75a7d
 
