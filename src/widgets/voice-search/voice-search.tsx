@@ -61,6 +61,7 @@ type VoiceSearchRendererWidgetParams = {
 } & VoiceSearchWidgetParams;
 
 type VoiceSearch = WidgetFactory<
+  VoiceSearchRendererOptions,
   VoiceSearchConnectorParams,
   VoiceSearchWidgetParams
 >;

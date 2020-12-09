@@ -2,6 +2,7 @@ import {
   checkRendering,
   warning,
   createDocumentationMessageGenerator,
+  createSendEventForFacet,
   isEqual,
   noop,
 } from '../../lib/utils';
@@ -53,7 +54,7 @@ const withUsage = createDocumentationMessageGenerator({
  * levels deep.
  *
  * @type {Connector}
- * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
+ * @param {function(HierarchicalMenuRenderingOptions, boolean)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
@@ -89,18 +90,19 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     // so that we can always map $hierarchicalFacetName => real attributes
     // we use the first attribute name
     const [hierarchicalFacetName] = attributes;
+    let sendEvent;
+
+    // Provide the same function to the `renderFn` so that way the user
+    // has to only bind it once when `isFirstRendering` for instance
+    let toggleShowMore = () => {};
+    function cachedToggleShowMore() {
+      toggleShowMore();
+    }
 
     return {
       $$type: 'ais.hierarchicalMenu',
 
       isShowingMore: false,
-
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
-        this.toggleShowMore();
-      },
 
       createToggleShowMore(renderOptions) {
         return () => {
@@ -114,12 +116,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
-        this._refine = function(facetValue) {
-          helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
-        };
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
@@ -144,7 +141,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       render(renderOptions) {
         const { instantSearchInstance } = renderOptions;
 
-        this.toggleShowMore = this.createToggleShowMore(renderOptions);
+        toggleShowMore = this.createToggleShowMore(renderOptions);
 
         renderFn(
           {
@@ -155,10 +152,10 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         );
       },
 
-      // eslint-disable-next-line valid-jsdoc
       /**
-       * @param {Object} param0
-       * @param {import('algoliasearch-helper').SearchParameters} param0.state
+       * @param {Object} param0 cleanup arguments
+       * @param {any} param0.state current search parameters
+       * @returns {any} next search parameters
        */
       dispose({ state }) {
         unmountFn();
@@ -178,12 +175,34 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState({ results, state, createURL }) {
+      getWidgetRenderState({
+        results,
+        state,
+        createURL,
+        instantSearchInstance,
+        helper,
+      }) {
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
             state.toggleRefinement(hierarchicalFacetName, facetValue)
           );
+        }
+
+        if (!sendEvent) {
+          sendEvent = createSendEventForFacet({
+            instantSearchInstance,
+            helper,
+            attribute: hierarchicalFacetName,
+            widgetType: this.$$type,
+          });
+        }
+
+        if (!this._refine) {
+          this._refine = function(facetValue) {
+            sendEvent('click', facetValue);
+            helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+          };
         }
 
         const facetValues = results
@@ -214,9 +233,10 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           items,
           refine: this._refine,
           createURL: _createURL,
+          sendEvent,
           widgetParams,
           isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
+          toggleShowMore: cachedToggleShowMore,
           canToggleShowMore:
             showMore && (this.isShowingMore || !getHasExhaustiveItems()),
         };

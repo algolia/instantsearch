@@ -36,6 +36,7 @@ type QueryRuleCustomDataRendererWidgetParams = {
 } & QueryRuleCustomDataWidgetParams;
 
 type QueryRuleCustomDataWidget = WidgetFactory<
+  QueryRulesRendererOptions,
   QueryRulesConnectorParams,
   QueryRuleCustomDataWidgetParams
 >;

@@ -76,34 +76,16 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       };
     }
 
+    let _clear = () => {};
+    function _cachedClear() {
+      _clear();
+    }
+
     return {
       $$type: 'ais.searchBox',
 
-      _clear() {},
-
-      _cachedClear() {
-        this._clear();
-      },
-
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-        this._cachedClear = this._cachedClear.bind(this);
-        this._clear = clear(helper);
-
-        const setQueryAndSearch = query => {
-          if (query !== helper.state.query) {
-            helper.setQuery(query).search();
-          }
-        };
-
-        this._refine = query => {
-          if (queryHook) {
-            queryHook(query, setQueryAndSearch);
-            return;
-          }
-
-          setQueryAndSearch(query);
-        };
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
@@ -115,8 +97,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
 
       render(renderOptions) {
-        const { helper, instantSearchInstance } = renderOptions;
-        this._clear = clear(helper);
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
@@ -141,10 +122,29 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
 
       getWidgetRenderState({ helper, searchMetadata }) {
+        if (!this._refine) {
+          const setQueryAndSearch = query => {
+            if (query !== helper.state.query) {
+              helper.setQuery(query).search();
+            }
+          };
+
+          this._refine = query => {
+            if (queryHook) {
+              queryHook(query, setQueryAndSearch);
+              return;
+            }
+
+            setQueryAndSearch(query);
+          };
+        }
+
+        _clear = clear(helper);
+
         return {
           query: helper.state.query || '',
           refine: this._refine,
-          clear: this._cachedClear,
+          clear: _cachedClear,
           widgetParams,
           isSearchStalled: searchMetadata.isSearchStalled,
         };

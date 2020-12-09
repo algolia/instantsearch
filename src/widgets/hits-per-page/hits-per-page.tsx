@@ -72,6 +72,7 @@ export type HitsPerPageWidgetOptions = {
 };
 
 export type HitsPerPageWidget = WidgetFactory<
+  HitsPerPageRendererOptions,
   HitsPerPageConnectorParams,
   HitsPerPageWidgetOptions
 >;

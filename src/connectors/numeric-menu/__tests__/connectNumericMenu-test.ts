@@ -1018,6 +1018,64 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
   });
 
+  describe('insights', () => {
+    it('sends event when a facet is added', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectNumericMenu(rendering);
+      const widget = makeWidget({
+        attribute: 'numerics',
+        items: [
+          { label: 'below 10', end: 10 },
+          { label: '10 - 20', start: 10, end: 20 },
+          { label: 'more than 20', start: 20 },
+          { label: '42', start: 42, end: 42 },
+          { label: 'void' },
+        ],
+      });
+
+      const helper = jsHelper(createSearchClient(), '');
+      helper.search = jest.fn();
+      const initOptions = createInitOptions({
+        helper,
+        state: helper.state,
+      });
+      const { instantSearchInstance } = initOptions;
+      widget.init!(initOptions);
+
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine, items } = firstRenderingOptions;
+      refine(items[0].value);
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['numerics<=10'],
+          index: '',
+        },
+        widgetType: 'ais.numericMenu',
+      });
+
+      refine(items[1].value);
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['numerics<=20', 'numerics>=10'],
+          index: '',
+        },
+        widgetType: 'ais.numericMenu',
+      });
+    });
+  });
+
   describe('getRenderState', () => {
     it('returns the render state', () => {
       const [widget, helper] = getInitializedWidget();
@@ -1049,6 +1107,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
             },
           ],
           refine: expect.any(Function),
+          sendEvent: expect.any(Function),
           widgetParams: {
             attribute: 'numerics',
             items: [
@@ -1087,6 +1146,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         numerics: {
           createURL: expect.any(Function),
           refine: renderState1.numericMenu.numerics.refine,
+          sendEvent: renderState1.numericMenu.numerics.sendEvent,
           hasNoResults: true,
           items: [
             {
@@ -1129,6 +1189,67 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   describe('getWidgetRenderState', () => {
+    it('returns the widget render state before init', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectNumericMenu(rendering);
+      const widget = makeWidget({
+        attribute: 'numerics',
+        items: [
+          { label: 'below 10', end: 10 },
+          { label: '10 - 20', start: 10, end: 20 },
+          { label: 'more than 20', start: 20 },
+        ],
+      });
+
+      const helper = jsHelper(createSearchClient(), '');
+
+      const renderState = widget.getWidgetRenderState(
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState).toEqual({
+        items: [
+          {
+            isRefined: false,
+            label: 'below 10',
+            value: '%7B%22end%22:10%7D',
+          },
+          {
+            isRefined: false,
+            label: '10 - 20',
+            value: '%7B%22start%22:10,%22end%22:20%7D',
+          },
+          {
+            isRefined: false,
+            label: 'more than 20',
+            value: '%7B%22start%22:20%7D',
+          },
+        ],
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        hasNoResults: true,
+        widgetParams: {
+          attribute: 'numerics',
+          items: [
+            {
+              end: 10,
+              label: 'below 10',
+            },
+            {
+              end: 20,
+              label: '10 - 20',
+              start: 10,
+            },
+            {
+              label: 'more than 20',
+              start: 20,
+            },
+          ],
+        },
+      });
+    });
+
     it('returns the widget render state', () => {
       const [widget, helper] = getInitializedWidget();
 
@@ -1156,6 +1277,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         ],
         createURL: expect.any(Function),
         refine: expect.any(Function),
+        sendEvent: expect.any(Function),
         hasNoResults: true,
         widgetParams: {
           attribute: 'numerics',
@@ -1210,6 +1332,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           },
         ],
         refine: renderState1.refine,
+        sendEvent: renderState1.sendEvent,
         widgetParams: {
           attribute: 'numerics',
           items: [

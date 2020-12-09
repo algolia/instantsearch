@@ -3,6 +3,8 @@ import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  createSendEventForHits,
+  SendEventForHits,
   noop,
   warning,
 } from '../../lib/utils';
@@ -46,6 +48,11 @@ export type AutocompleteRendererOptions = {
      * The full results object from the Algolia API.
      */
     results: SearchResults;
+
+    /**
+     * Send event to insights middleware
+     */
+    sendEvent: SendEventForHits;
   }>;
 
   /**
@@ -103,10 +110,7 @@ search.addWidgets([
       $$type: 'ais.autocomplete',
 
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-        connectorState.refine = (query: string) => {
-          helper.setQuery(query).search();
-        };
+        const { instantSearchInstance } = initOptions;
 
         renderFn(
           {
@@ -120,9 +124,15 @@ search.addWidgets([
       render(renderOptions) {
         const { instantSearchInstance } = renderOptions;
 
+        const renderState = this.getWidgetRenderState(renderOptions);
+
+        renderState.indices.forEach(({ sendEvent, hits }) => {
+          sendEvent('view', hits);
+        });
+
         renderFn(
           {
-            ...this.getWidgetRenderState(renderOptions),
+            ...renderState,
             instantSearchInstance,
           },
           false
@@ -136,7 +146,13 @@ search.addWidgets([
         };
       },
 
-      getWidgetRenderState({ helper, scopedResults }) {
+      getWidgetRenderState({ helper, scopedResults, instantSearchInstance }) {
+        if (!connectorState.refine) {
+          connectorState.refine = (query: string) => {
+            helper.setQuery(query).search();
+          };
+        }
+
         const indices = scopedResults.map(scopedResult => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
@@ -144,11 +160,18 @@ search.addWidgets([
             ? escapeHits(scopedResult.results.hits)
             : scopedResult.results.hits;
 
+          const sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            index: scopedResult.results.index,
+            widgetType: this.$$type!,
+          });
+
           return {
             indexId: scopedResult.indexId,
             indexName: scopedResult.results.index,
             hits: scopedResult.results.hits,
             results: scopedResult.results,
+            sendEvent,
           };
         });
 

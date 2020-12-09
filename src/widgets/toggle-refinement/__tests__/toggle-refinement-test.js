@@ -2,6 +2,7 @@ import { render } from 'preact';
 import jsHelper, { SearchParameters } from 'algoliasearch-helper';
 import toggleRefinement from '../toggle-refinement';
 import RefinementList from '../../../components/RefinementList/RefinementList';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -39,7 +40,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         container: containerNode,
         attribute,
       });
-      instantSearchInstance = { templatesConfig: undefined };
+      instantSearchInstance = createInstantSearch({
+        templatesConfig: undefined,
+      });
     });
 
     describe('render', () => {
@@ -49,14 +52,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       let createURL;
 
       beforeEach(() => {
-        helper = {
-          state: {
-            isDisjunctiveFacetRefined: jest.fn().mockReturnValue(false),
-          },
-          removeDisjunctiveFacetRefinement: jest.fn(),
-          addDisjunctiveFacetRefinement: jest.fn(),
-          search: jest.fn(),
-        };
+        helper = jsHelper({}, '');
+        helper.state.isDisjunctiveFacetRefined = jest
+          .fn()
+          .mockReturnValue(false);
+        helper.removeDisjunctiveFacetRefinement = jest.fn();
+        helper.addDisjunctiveFacetRefinement = jest.fn();
+        helper.search = jest.fn();
         state = {
           removeDisjunctiveFacetRefinement: jest.fn(),
           addDisjunctiveFacetRefinement: jest.fn(),
@@ -193,7 +195,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         expect(firstRender[0].props).toMatchSnapshot();
         expect(secondRender[0].props).toMatchSnapshot();
 
-        widget.toggleRefinement({ isRefined: true });
+        widget
+          .getWidgetRenderState({
+            state: helper.state,
+            helper,
+            createURL,
+            results,
+          })
+          .refine({ isRefined: true });
 
         expect(altHelper.state.isDisjunctiveFacetRefined(attribute, 5)).toBe(
           false
@@ -299,19 +308,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     describe('refine', () => {
       let helper;
 
-      function toggleOn() {
-        widget.toggleRefinement({ isRefined: false });
+      function toggleOn({ createURL, altHelper = helper }) {
+        widget
+          .getWidgetRenderState({
+            state: altHelper.state,
+            helper: altHelper,
+            createURL,
+          })
+          .refine({ isRefined: false });
       }
-      function toggleOff() {
-        widget.toggleRefinement({ isRefined: true });
+      function toggleOff({ createURL }) {
+        widget
+          .getWidgetRenderState({ state: helper.state, helper, createURL })
+          .refine({ isRefined: true });
       }
 
       beforeEach(() => {
-        helper = {
-          removeDisjunctiveFacetRefinement: jest.fn(),
-          addDisjunctiveFacetRefinement: jest.fn(),
-          search: jest.fn(),
-        };
+        helper = jsHelper({}, '');
+        helper.removeDisjunctiveFacetRefinement = jest.fn();
+        helper.addDisjunctiveFacetRefinement = jest.fn();
+        helper.search = jest.fn();
       });
 
       describe('default values', () => {
@@ -332,7 +348,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
-          toggleOn();
+          toggleOn({ createURL });
 
           // Then
           expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledWith(
@@ -360,7 +376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
-          toggleOff();
+          toggleOff({ createURL });
 
           // Then
           expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledWith(
@@ -397,7 +413,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           });
 
           // When
-          toggleOn();
+          toggleOn({ createURL, altHelper });
 
           // Then
           expect(
@@ -426,7 +442,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
-          toggleOff();
+          toggleOff({ createURL });
 
           // Then
           expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledWith(

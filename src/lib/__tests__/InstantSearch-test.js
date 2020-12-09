@@ -45,6 +45,10 @@ beforeEach(() => {
 });
 
 describe('Usage', () => {
+  beforeEach(() => {
+    warning.cache = {};
+  });
+
   it('throws without indexName', () => {
     expect(() => {
       // eslint-disable-next-line no-new
@@ -91,56 +95,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
 `);
-  });
-  describe('when insights client is detected', () => {
-    const warningMessage = `[InstantSearch.js]: InstantSearch detected the Insights client in the global scope.
-To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
-
-const search = instantsearch({
-  /* ... */
-  insightsClient: window.aa,
-});
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/`;
-
-    it('throws a warning if insightsClient was not passed', () => {
-      warning.cache = {};
-
-      const AlgoliaAnalyticsObject = 'aa';
-      global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
-      global[AlgoliaAnalyticsObject] = jest.fn();
-
-      expect(() => {
-        // eslint-disable-next-line no-new
-        new InstantSearch({
-          indexName: 'indexName',
-          searchClient: createSearchClient(),
-        });
-      }).toWarnDev(warningMessage);
-
-      delete global.AlgoliaAnalyticsObject;
-      delete global[AlgoliaAnalyticsObject];
-    });
-
-    it('does not throw a warning if insightsClient was passed', () => {
-      warning.cache = {};
-
-      const AlgoliaAnalyticsObject = 'aa';
-      global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
-      global[AlgoliaAnalyticsObject] = jest.fn();
-
-      expect(() => {
-        // eslint-disable-next-line no-new
-        new InstantSearch({
-          indexName: 'indexName',
-          searchClient: createSearchClient(),
-          insightsClient: jest.fn(),
-        });
-      }).not.toWarnDev(warningMessage);
-
-      delete global.AlgoliaAnalyticsObject;
-      delete global[AlgoliaAnalyticsObject];
-    });
   });
 
   it('throws if addWidgets is called with a single widget', () => {
@@ -251,6 +205,71 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
 `);
+  });
+
+  it('warns dev with EXPERIMENTAL_use', () => {
+    const searchClient = createSearchClient({
+      addAlgoliaAgent: jest.fn(),
+    });
+
+    // eslint-disable-next-line no-new
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const middleware = () => ({
+      onStateChange: () => {},
+      subscribe: () => {},
+      unsubscribe: () => {},
+    });
+
+    expect(() => {
+      search.EXPERIMENTAL_use(middleware);
+    }).toWarnDev(
+      '[InstantSearch.js]: The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
+    );
+  });
+
+  it('does not warn dev with use', () => {
+    const searchClient = createSearchClient({
+      addAlgoliaAgent: jest.fn(),
+    });
+
+    // eslint-disable-next-line no-new
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const middleware = () => ({
+      onStateChange: () => {},
+      subscribe: () => {},
+      unsubscribe: () => {},
+    });
+
+    expect(() => {
+      search.use(middleware);
+    }).not.toWarnDev();
+  });
+
+  it('warns dev when insightsClient is given', () => {
+    const searchClient = createSearchClient({
+      addAlgoliaAgent: jest.fn(),
+    });
+
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient,
+        insightsClient: () => {},
+      });
+    }).toWarnDev(
+      `[InstantSearch.js]: \`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
+
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
+    );
   });
 });
 
@@ -1808,29 +1827,6 @@ search.addWidgets([
 If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
 
 See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
-  });
-
-  it('warns about experimental API', () => {
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    search.addWidgets([connectSearchBox(() => {})({})]);
-
-    search.start();
-
-    expect(() => {
-      search.setUiState({
-        indexName: {
-          query: 'Query',
-        },
-      });
-    })
-      .toWarnDev(`[InstantSearch.js]: \`setUiState\` provides a powerful way to manage the UI state. This is considered experimental as the API might change in a next minor version.
-
-Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearch.js/issues/new`);
   });
 });
 

@@ -1,3 +1,153 @@
+## [4.9.1](https://github.com/algolia/instantsearch.js/compare/v4.9.0...v4.9.1) (2020-12-08)
+
+
+### Bug Fixes
+
+* **range:** consistently convert min & max to numbers ([#4587](https://github.com/algolia/instantsearch.js/issues/4587)) ([ccf159e](https://github.com/algolia/instantsearch.js/commit/ccf159efcb94e9c8c04c558fcb69e2e3d8d79729))
+
+
+
+# [4.9.0](https://github.com/algolia/instantsearch.js/compare/v4.8.7...v4.9.0) (2020-12-01)
+
+
+### Bug Fixes
+
+* remove a warning about insights that is not relevant anymore ([#4593](https://github.com/algolia/instantsearch.js/issues/4593)) ([b5f6a47](https://github.com/algolia/instantsearch.js/commit/b5f6a479ff1b9b692c733f51e39eade724ff3413))
+
+
+### Features
+
+* **autocomplete:** implement `getWidgetRenderState` ([#4466](https://github.com/algolia/instantsearch.js/issues/4466)) ([c215836](https://github.com/algolia/instantsearch.js/commit/c2158364a63d0f05bb820f802871a2f093e041ec))
+* **breadcrumb:** implement `getWidgetRenderState` ([#4467](https://github.com/algolia/instantsearch.js/issues/4467)) ([80b348e](https://github.com/algolia/instantsearch.js/commit/80b348ef1a6a29b1897f5ee1d680dcbaba5fa4fe))
+* **clearRefinements:** implement `getWidgetRenderState` ([#4468](https://github.com/algolia/instantsearch.js/issues/4468)) ([2b3117c](https://github.com/algolia/instantsearch.js/commit/2b3117c34207514967ff453b6f5d8275a6b0b0ec))
+* **configure:** getRenderState for multiple configure widgets ([#4582](https://github.com/algolia/instantsearch.js/issues/4582)) ([5432af1](https://github.com/algolia/instantsearch.js/commit/5432af1df3c1ee4e62b87ede76acda7b749f38dd))
+* **configure:** implement `getWidgetRenderState` ([#4469](https://github.com/algolia/instantsearch.js/issues/4469)) ([3a1b325](https://github.com/algolia/instantsearch.js/commit/3a1b32556f3d5a6a3330b404688e06d5815a2390))
+* **connectPagination:** add getWidgetRenderState & refactor to TS ([#4574](https://github.com/algolia/instantsearch.js/issues/4574)) ([1553aa3](https://github.com/algolia/instantsearch.js/commit/1553aa36c8bb8664b5e74fd2378ea2ef45a52acf))
+* **core:** introduce `getWidgetRenderState` (2/n) ([#4457](https://github.com/algolia/instantsearch.js/issues/4457)) ([4839bb6](https://github.com/algolia/instantsearch.js/commit/4839bb61e4c8ee6083710195d5db5684c7b0889f))
+* **core:** introduce `getWidgetUiState` lifecycle hook (1/n) ([#4454](https://github.com/algolia/instantsearch.js/issues/4454)) ([cf21ea4](https://github.com/algolia/instantsearch.js/commit/cf21ea4cb580ed523828c926b7ba724c46eed8a4))
+* **currentRefinements:** implement `getWidgetRenderState` ([#4470](https://github.com/algolia/instantsearch.js/issues/4470)) ([b8df824](https://github.com/algolia/instantsearch.js/commit/b8df824e26a164280d9da9b3c3ce41ad56962439))
+* **connectQueryRules:** getWidgetRenderState ([#4572](https://github.com/algolia/instantsearch.js/issues/4572)) ([edcc4a4](https://github.com/algolia/instantsearch.js/commit/edcc4a463d32af21bb73acbca879d4982ae9006f))
+* **connectGeoSearch:** support getWidgetRenderState ([#4564](https://github.com/algolia/instantsearch.js/issues/4564)) ([8d06fba](https://github.com/algolia/instantsearch.js/commit/8d06fba40be0392daa1b48f235d93d92bb6b5e93))
+* **hierarchicalMenu:** implement `getWidgetRenderState` ([#4471](https://github.com/algolia/instantsearch.js/issues/4471)) ([9fd3cd0](https://github.com/algolia/instantsearch.js/commit/9fd3cd06dfc3b5302c00ee1820ff58be2a37c3b7))
+* **highlight:** accept array for attribute ([#4588](https://github.com/algolia/instantsearch.js/issues/4588)) ([b0c3a3a](https://github.com/algolia/instantsearch.js/commit/b0c3a3a960646bff22b2d28e21aa2675484a354b))
+* **hits:** implement `getWidgetRenderState` ([#4525](https://github.com/algolia/instantsearch.js/issues/4525)) ([3391ff7](https://github.com/algolia/instantsearch.js/commit/3391ff7bac8b406ab474e712408bda2be69934c9))
+* **hitsPerPage:** implement `getRenderState` and `getWidgetRenderState` ([#4532](https://github.com/algolia/instantsearch.js/issues/4532)) ([7ad10ea](https://github.com/algolia/instantsearch.js/commit/7ad10ea648f48766061153994da90920a5194103))
+* **infinite-hits:** implement `getRenderState` and `getWidgetRenderState` ([#4535](https://github.com/algolia/instantsearch.js/issues/4535)) ([98c70d9](https://github.com/algolia/instantsearch.js/commit/98c70d980bc1036057a2dd99dc6aeee8343e4472))
+* **menu:** implement `getRenderState` and `getWidgetRenderState` ([#4540](https://github.com/algolia/instantsearch.js/issues/4540)) ([239906c](https://github.com/algolia/instantsearch.js/commit/239906c7fdb36c691b9a9aca343802a8ccc616c8))
+* **panel:** spread widgetRenderState in the options in panel ([#4527](https://github.com/algolia/instantsearch.js/issues/4527)) ([8f82eaa](https://github.com/algolia/instantsearch.js/commit/8f82eaa34e7abe9070e404a5a45d352af61d940a)), closes [#4558](https://github.com/algolia/instantsearch.js/issues/4558)
+* **poweredBy:** getWidgetRenderState ([#4551](https://github.com/algolia/instantsearch.js/issues/4551)) ([cd816a4](https://github.com/algolia/instantsearch.js/commit/cd816a41afe0704eab3cbd1f019fc660ca5d255e))
+* **range:** implement `getRenderState` and `getWidgetRenderState` ([#4536](https://github.com/algolia/instantsearch.js/issues/4536)) ([d67bfcd](https://github.com/algolia/instantsearch.js/commit/d67bfcdb828cc8b35a5c959e54823b6d3c37b087))
+* **rating-menu:** implement `getRenderState` and `getWidgetRenderState` ([#4548](https://github.com/algolia/instantsearch.js/issues/4548)) ([166a96c](https://github.com/algolia/instantsearch.js/commit/166a96c170c137e78b3fe3b9f69f73744f4fcb8b))
+* **refinement-list:** implement `getRenderState` and `getWidgetRenderState` ([#4549](https://github.com/algolia/instantsearch.js/issues/4549)) ([c824bd0](https://github.com/algolia/instantsearch.js/commit/c824bd074d388e44e99b53592167cffcacae3377))
+* **numeric-menu:** add `getRenderState` ([#4550](https://github.com/algolia/instantsearch.js/issues/4550)) ([5385edf](https://github.com/algolia/instantsearch.js/commit/5385edf39d3ac1515845b5e20ce179a2869ab86d))
+* **sortBy:** implement `getRenderState` and `getWidgetRenderState` ([#4568](https://github.com/algolia/instantsearch.js/issues/4568)) ([fd249f7](https://github.com/algolia/instantsearch.js/commit/fd249f700854d1f11e97cb5dac2c1b3964c59e29))
+* **stats:** implement `getRenderState` and `getWidgetRenderState` ([#4565](https://github.com/algolia/instantsearch.js/issues/4565)) ([b8dfd6d](https://github.com/algolia/instantsearch.js/commit/b8dfd6dbb8c462b0d0571e9f0499df6e4dda7745))
+* **toggleRefinement:** implement `getRenderState` and `getWidgetRenderState` ([#4569](https://github.com/algolia/instantsearch.js/issues/4569)) ([f2c9a10](https://github.com/algolia/instantsearch.js/commit/f2c9a102cba9abe21ed08b18e979713156e10901))
+* **voice-search:** implement `getRenderState` and `getWidgetRenderState` ([#4557](https://github.com/algolia/instantsearch.js/issues/4557)) ([d308da1](https://github.com/algolia/instantsearch.js/commit/d308da1ab892cc5185616cd5b8a4a3f488e708c4))
+
+
+
+## [4.8.7](https://github.com/algolia/instantsearch.js/compare/v4.8.6...v4.8.7) (2020-11-19)
+
+
+### Bug Fixes
+
+* **insights:** use internal `find` util method ([#4580](https://github.com/algolia/instantsearch.js/issues/4580)) ([61b855b](https://github.com/algolia/instantsearch.js/commit/61b855b28282992a55795db88f8bfef2e5825cb3))
+
+
+
+## [4.8.6](https://github.com/algolia/instantsearch.js/compare/v4.8.5...v4.8.6) (2020-11-17)
+
+
+### Bug Fixes
+
+* **insights:** do not throw when sending event right after creating insights middleware ([#4575](https://github.com/algolia/instantsearch.js/issues/4575)) ([d963f8d](https://github.com/algolia/instantsearch.js/commit/d963f8d6155e6bb56f852e00528ed10dc9bcc461))
+
+
+
+## [4.8.5](https://github.com/algolia/instantsearch.js/compare/v4.8.4...v4.8.5) (2020-11-10)
+
+
+### Bug Fixes
+
+* **configure:** pass the latest state to onStateChange ([#4555](https://github.com/algolia/instantsearch.js/issues/4555)) ([6ab76e8](https://github.com/algolia/instantsearch.js/commit/6ab76e82f93e8c7bb2bfdde267b6d7f4f9b333ff))
+
+
+
+## [4.8.4](https://github.com/algolia/instantsearch.js/compare/v4.8.3...v4.8.4) (2020-10-27)
+
+
+### Bug Fixes
+
+* **infiniteHits:** do not cache the cached hits inside the connector ([#4534](https://github.com/algolia/instantsearch.js/issues/4534)) ([c97395e](https://github.com/algolia/instantsearch.js/commit/c97395e2d3443651e628617f0974703a100a988e))
+* **insights:** show deprecation warnings for old insights related properties and functions ([#4524](https://github.com/algolia/instantsearch.js/issues/4524)) ([c93e1cf](https://github.com/algolia/instantsearch.js/commit/c93e1cfcad06b327066078088410eb7d51972790))
+
+
+
+## [4.8.3](https://github.com/algolia/instantsearch.js/compare/v4.8.2...v4.8.3) (2020-09-29)
+
+
+### Bug Fixes
+
+* **middleware:** rename EXPERIMENTAL_use to use ([#4450](https://github.com/algolia/instantsearch.js/issues/4450)) ([87ecb99](https://github.com/algolia/instantsearch.js/commit/87ecb99f33ab4930d8ec1996ddba9db0a9d07da4))
+* **refinementList:** cap `maxFacetHits` to 100 for SFFV ([#4523](https://github.com/algolia/instantsearch.js/issues/4523)) ([baf1f02](https://github.com/algolia/instantsearch.js/commit/baf1f027fc2436e86536fffbee11a595cfd7dac0))
+
+
+
+## [4.8.2](https://github.com/algolia/instantsearch.js/compare/v4.8.1...v4.8.2) (2020-09-22)
+
+
+### Bug Fixes
+
+* **insights:** fix the regression that it didn't send events with instantsearch.insights() ([#4519](https://github.com/algolia/instantsearch.js/issues/4519)) ([10e38df](https://github.com/algolia/instantsearch.js/commit/10e38df02608071cd7272e829b6748be41b9c2c0))
+
+
+
+## [4.8.1](https://github.com/algolia/instantsearch.js/compare/v4.8.0...v4.8.1) (2020-09-15)
+
+
+### Bug Fixes
+
+* **hitsPerPage:** update link to hitsPerPage widget ([#4513](https://github.com/algolia/instantsearch.js/issues/4513)) ([daa4bb9](https://github.com/algolia/instantsearch.js/commit/daa4bb944065dede46d716308325039c3602d9dc))
+* **infiniteHits:** compute `isLastPage` based on cached pages ([#4509](https://github.com/algolia/instantsearch.js/issues/4509)) ([b6fb1ab](https://github.com/algolia/instantsearch.js/commit/b6fb1abcf5ac456dc39adaeb97945665cad8fa11))
+
+
+
+# [4.8.0](https://github.com/algolia/instantsearch.js/compare/v4.7.2...v4.8.0) (2020-09-08)
+
+
+### Features
+
+* **insights:** introduce `insights` middleware ([#4446](https://github.com/algolia/instantsearch.js/issues/4446)) ([9bc6359](https://github.com/algolia/instantsearch.js/commit/9bc635986097736272aac8c5d3380a255488fdb7))
+
+
+
+## [4.7.2](https://github.com/algolia/instantsearch.js/compare/v4.7.1...v4.7.2) (2020-08-31)
+
+
+### Bug Fixes
+
+* **bundlesize:** remove prop-type imports ([#4491](https://github.com/algolia/instantsearch.js/issues/4491)) ([8361cd6](https://github.com/algolia/instantsearch.js/commit/8361cd63b3bac15eb6250e9f509fb15c1fc57f48))
+* **router:** skip router write on duplicate entries ([#4487](https://github.com/algolia/instantsearch.js/issues/4487)) ([9296022](https://github.com/algolia/instantsearch.js/commit/9296022fecadfbf82f15e837c215a1356eac4bc5))
+* **searchBox:** pass "spellcheck" property correctly to input ([#4483](https://github.com/algolia/instantsearch.js/issues/4483)) ([3cf43c7](https://github.com/algolia/instantsearch.js/commit/3cf43c7187841cf961a0280307af1a5f7a4e8da7))
+
+
+
+# [4.7.1](https://github.com/algolia/instantsearch.js/compare/v4.7.0...v4.7.1) (2020-08-19)
+
+
+### Bug Fixes
+
+* **configureRelatedItems:** support nested attributes ([#4480](https://github.com/algolia/instantsearch.js/issues/4480)) ([2266004](https://github.com/algolia/instantsearch.js/commit/2266004f274138b45640f000a5da8aa14e419e6c))
+* **connectToggleRefinement:** fix onFacetValue/offFacetValue on render when using arrays for on/off ([#4449](https://github.com/algolia/instantsearch.js/issues/4449)) ([fd3e83f](https://github.com/algolia/instantsearch.js/commit/fd3e83f2cf2e5b44b7d29eb4c67526e55c18d708))
+* **index:** don't show a development warning for inconsistent UI state in `connectRange` ([#4440](https://github.com/algolia/instantsearch.js/issues/4440)) ([eb8c8b3](https://github.com/algolia/instantsearch.js/commit/eb8c8b3494cb66dbef1d03e7d74374dc49059345)), closes [#4437](https://github.com/algolia/instantsearch.js/issues/4437)
+* **infiniteHits:** work with controlled mode ([#4435](https://github.com/algolia/instantsearch.js/issues/4435)) ([68b20f4](https://github.com/algolia/instantsearch.js/commit/68b20f487fcd54fd7dec11b4c494b6aa94a18516))
+* **typescript:** correct dummy v4 client ([#4459](https://github.com/algolia/instantsearch.js/issues/4459)) ([ca0c394](https://github.com/algolia/instantsearch.js/commit/ca0c3946608bb8ec5dcf5378d8d382d809a4d86f))
+* **typescript:** jsDoc comments which conform to Connector definition ([#4458](https://github.com/algolia/instantsearch.js/issues/4458)) ([5209bdb](https://github.com/algolia/instantsearch.js/commit/5209bdb9189e7cbbf9514b62fde55f923b2b3273))
+* **typescript:** export correct types ([#4476](https://github.com/algolia/instantsearch.js/issues/4476)) ([5fb4c5b](https://github.com/algolia/instantsearch.js/commit/5fb4c5b9d6ac75636e94514598ef5d5a86affafd))
+
+
+
 # [4.7.0](https://github.com/algolia/instantsearch.js/compare/v4.6.0...v4.7.0) (2020-06-15)
 
 

@@ -1,6 +1,9 @@
 import { render } from 'preact';
 import getContainerNode from '../../../lib/utils/getContainerNode';
 import pagination from '../pagination';
+import { createRenderOptions } from '../../../../test/mock/createWidget';
+import { SearchResults, SearchParameters } from 'algoliasearch-helper';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -73,7 +76,7 @@ describe('pagination()', () => {
   });
 
   it('sets the page', () => {
-    widget.refine(helper, 42);
+    widget.getWidgetRenderState({ helper }).refine(42);
     expect(helper.setPage).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
@@ -101,7 +104,7 @@ describe('pagination()', () => {
     it('should not scroll', () => {
       widget = pagination({ container, scrollTo: false });
       widget.init({ helper });
-      widget.refine(helper, 2);
+      widget.getWidgetRenderState({ helper }).refine(2);
       expect(scrollIntoView).toHaveBeenCalledTimes(0);
     });
 
@@ -147,32 +150,52 @@ describe('pagination MaxPage', () => {
       disabledItem: 'disabledItem',
       link: 'link',
     };
-    results = {
-      hits: [{ first: 'hit', second: 'hit' }],
-      nbHits: 300,
-      hitsPerPage: 10,
-      nbPages: 30,
-    };
+    results = new SearchResults(new SearchParameters(), [
+      createSingleSearchResponse({
+        hits: [{ objectID: 'lol' }],
+        nbHits: 300,
+        hitsPerPage: 10,
+        nbPages: 30,
+      }),
+    ]);
     paginationOptions = { container, scrollTo: false, cssClasses };
   });
 
   it('does to have any default', () => {
     widget = pagination(paginationOptions);
 
-    expect(widget.getMaxPage(results)).toEqual(30);
+    expect(
+      widget.getWidgetRenderState(
+        createRenderOptions({
+          results,
+        })
+      ).nbPages
+    ).toEqual(30);
   });
 
   it('does reduce the number of pages if lower than nbPages', () => {
     paginationOptions.totalPages = 20;
     widget = pagination(paginationOptions);
 
-    expect(widget.getMaxPage(results)).toEqual(20);
+    expect(
+      widget.getWidgetRenderState(
+        createRenderOptions({
+          results,
+        })
+      ).nbPages
+    ).toEqual(20);
   });
 
   it('does not reduce the number of pages if greater than nbPages', () => {
     paginationOptions.totalPages = 40;
     widget = pagination(paginationOptions);
 
-    expect(widget.getMaxPage(results)).toEqual(30);
+    expect(
+      widget.getWidgetRenderState(
+        createRenderOptions({
+          results,
+        })
+      ).nbPages
+    ).toEqual(30);
   });
 });

@@ -1,11 +1,13 @@
 import { Index } from '../widgets/index/index';
+import { CreateURL } from '.';
 import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { InstantSearch } from './instantsearch';
+import { InstantSearch, Hit, GeoLoc } from './instantsearch';
+import { BindEventForHits } from '../lib/utils';
 import {
   AutocompleteRendererOptions,
   AutocompleteConnectorParams,
@@ -27,9 +29,17 @@ import {
   CurrentRefinementsConnectorParams,
 } from '../connectors/current-refinements/connectCurrentRefinements';
 import {
+  HitsPerPageConnectorParams,
+  HitsPerPageRendererOptions,
+} from '../connectors/hits-per-page/connectHitsPerPage';
+import {
   HitsRendererOptions,
   HitsConnectorParams,
 } from '../connectors/hits/connectHits';
+import {
+  InfiniteHitsRendererOptions,
+  InfiniteHitsConnectorParams,
+} from '../connectors/infinite-hits/connectInfiniteHits';
 import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
 import { PlacesWidgetParams } from '../widgets/places/places';
 import {
@@ -40,6 +50,22 @@ import {
   PoweredByConnectorParams,
   PoweredByRendererOptions,
 } from '../connectors/powered-by/connectPoweredBy';
+import {
+  VoiceSearchRendererOptions,
+  VoiceSearchConnectorParams,
+} from '../connectors/voice-search/connectVoiceSearch';
+import {
+  QueryRulesRendererOptions,
+  QueryRulesConnectorParams,
+} from '../connectors/query-rules/connectQueryRules';
+import {
+  PaginationRendererOptions,
+  PaginationConnectorParams,
+} from '../connectors/pagination/connectPagination';
+import {
+  RangeConnectorParams,
+  RangeRendererOptions,
+} from '../connectors/range/connectRange';
 
 export type ScopedResult = {
   indexId: string;
@@ -215,6 +241,10 @@ export type IndexRenderState = Partial<{
     >;
   };
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
+  infiniteHits: WidgetRenderState<
+    InfiniteHitsRendererOptions,
+    InfiniteHitsConnectorParams
+  >;
   analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
   places: WidgetRenderState<{}, PlacesWidgetParams>;
   poweredBy: WidgetRenderState<
@@ -223,23 +253,27 @@ export type IndexRenderState = Partial<{
   >;
   range: {
     [attribute: string]: WidgetRenderState<
+      RangeRendererOptions,
+      RangeConnectorParams
+    >;
+  };
+  ratingMenu: {
+    [attribute: string]: WidgetRenderState<
       {
-        refine(rangeValue: Array<number | undefined>): void;
-        range: {
-          min: number | undefined;
-          max: number | undefined;
-        };
-        start: number[];
-        format: {
-          from(fromValue: number): string;
-          to(toValue: number): string;
-        };
+        items: Array<{
+          stars: boolean[];
+          name: string;
+          value: string;
+          count: number;
+          isRefined: boolean;
+        }>;
+        hasNoResults: boolean;
+        refine(value: number): void;
+        createURL: CreateURL<string>;
       },
       {
         attribute: string;
-        min?: number;
         max?: number;
-        precision?: number;
       }
     >;
   };
@@ -249,14 +283,77 @@ export type IndexRenderState = Partial<{
       NumericMenuConnectorParams
     >;
   };
+  voiceSearch: WidgetRenderState<
+    VoiceSearchRendererOptions,
+    VoiceSearchConnectorParams
+  >;
+  geoSearch: {
+    currentRefinement?: {
+      northEast: GeoLoc;
+      southWest: GeoLoc;
+    };
+    position?: GeoLoc;
+    items: Array<Hit & Required<Pick<Hit, '_geoLoc'>>>;
+    refine(position: { northEast: GeoLoc; southWest: GeoLoc }): void;
+    clearMapRefinement(): void;
+    hasMapMoveSinceLastRefine(): boolean;
+    isRefineOnMapMove(): boolean;
+    isRefinedWithMap(): boolean;
+    setMapMoveSinceLastRefine(): void;
+    toggleRefineOnMapMove(): void;
+    sendEvent: Function;
+    widgetParams: any;
+  };
+  queryRules: WidgetRenderState<
+    QueryRulesRendererOptions,
+    QueryRulesConnectorParams
+  >;
+  hitsPerPage: WidgetRenderState<
+    HitsPerPageRendererOptions,
+    HitsPerPageConnectorParams
+  >;
+  pagination: WidgetRenderState<
+    PaginationRendererOptions,
+    PaginationConnectorParams
+  >;
+  refinementList: {
+    [attribute: string]: WidgetRenderState<
+      {
+        createURL: CreateURL<string>;
+        helperSpecializedSearchFacetValues: any;
+        isFirstSearch: boolean;
+        isFromSearch: boolean;
+        isShowingMore: boolean;
+        items: Array<{
+          count: number;
+          highlighted: string;
+          isRefined: boolean;
+          label: string;
+          value: string;
+        }>;
+        refine(value: string): void;
+        state: SearchParameters;
+        toggleShowMore(): void;
+      },
+      {
+        attribute: string;
+        operator: string;
+        limit: number;
+        showMore: boolean;
+        showMoreLimit: number;
+        sortBy: ((firstItem: any, secondItem: any) => number) | string[];
+        escapeFacetValues: boolean;
+        transformItems(items: any): any;
+      }
+    >;
+  };
 }>;
 
 export type WidgetRenderState<
   TWidgetRenderState,
-  // @ts-ignore
   TWidgetParams
 > = TWidgetRenderState & {
-  widgetParams: any; // @TODO type as TWidgetParams
+  widgetParams: TWidgetParams;
 };
 
 /**
@@ -266,8 +363,11 @@ export type WidgetRenderState<
 export type Widget<
   TWidgetOptions extends { renderState: unknown } = { renderState: unknown }
 > = {
-  /** identifier for official widgets */
+  /**
+   * identifier for official widgets
+   */
   $$type?:
+    | 'ais.analytics'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -356,9 +456,9 @@ export type Widget<
       /**
        * Returns the render state of the current widget to pass to the render function.
        */
-      getWidgetRenderState: (
+      getWidgetRenderState(
         renderOptions: InitOptions | RenderOptions
-      ) => TWidgetOptions['renderState'];
+      ): TWidgetOptions['renderState'];
       /**
        * Returns IndexRenderState of the current index component tree
        * to build the render state of the whole app.
@@ -372,9 +472,9 @@ export type Widget<
       /**
        * Returns the render state of the current widget to pass to the render function.
        */
-      getWidgetRenderState?: (
+      getWidgetRenderState?(
         renderOptions: InitOptions | RenderOptions
-      ) => unknown;
+      ): unknown;
       /**
        * Returns IndexRenderState of the current index component tree
        * to build the render state of the whole app.
@@ -394,9 +494,20 @@ export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
    */
   widgetParams: TConnectorParams & TWidgetParams
 ) => Widget<{
-  renderState: WidgetRenderState<TRendererOptions, TWidgetParams>;
+  renderState: WidgetRenderState<
+    TRendererOptions,
+    // widgetParams sent to the connector of builtin widgets are actually
+    // the connector params, therefore renderState uses TConnectorParams only
+    TConnectorParams
+  >;
 }>;
 
 export type Template<TTemplateData = void> =
   | string
   | ((data: TTemplateData) => string);
+
+export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
+
+export type TemplateWithBindEvent<TTemplateData = void> =
+  | string
+  | ((data: TTemplateData, bindEvent: BindEventForHits) => string);

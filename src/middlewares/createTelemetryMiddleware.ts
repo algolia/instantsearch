@@ -1,5 +1,4 @@
-import { Middleware } from '.';
-import { Widget } from '../types';
+import { Widget, Middleware } from '../types';
 import { resolveScopedResultsFromIndex } from '../widgets/index/index';
 
 type TelemetryWidget = {
@@ -10,7 +9,7 @@ type TelemetryWidget = {
 
 const ALGOLIA_CRAWLER_USER_AGENT = /Algolia Crawler\/[0-9]+.[0-9]+.[0-9]+/;
 
-export const createTelemetry = (): Middleware => {
+export const createTelemetryMiddleware = (): Middleware => {
   const isTelemetryEnabled =
     typeof window !== undefined &&
     ALGOLIA_CRAWLER_USER_AGENT.test(window.navigator.userAgent);
@@ -50,7 +49,8 @@ export const createTelemetry = (): Middleware => {
             scopedResults: resolveScopedResultsFromIndex(parent),
             state: parent.getResults()!._state,
             helper: parent.getHelper()!,
-            createURL: parent.getCreateURL(),
+            // @TODO: https://github.com/algolia/instantsearch.js/pull/4603
+            // createURL: parent.createURL,
             uiState: instantSearchInstance._initialUiState,
             renderState: instantSearchInstance.renderState,
             templatesConfig: instantSearchInstance.templatesConfig,

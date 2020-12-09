@@ -4,6 +4,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import ratingMenu from '../rating-menu';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -30,7 +31,6 @@ describe('ratingMenu()', () => {
   let container;
   let widget;
   let helper;
-  let state;
   let createURL;
   let results;
 
@@ -56,9 +56,6 @@ describe('ratingMenu()', () => {
     jest.spyOn(helper, 'removeDisjunctiveFacetRefinement');
     helper.search = jest.fn();
 
-    state = {
-      toggleRefinement: jest.fn(),
-    };
     results = {
       getFacetValues: jest.fn().mockReturnValue([]),
       hits: [],
@@ -66,7 +63,9 @@ describe('ratingMenu()', () => {
     createURL = () => '#';
     widget.init({
       helper,
-      instantSearchInstance: { templatesConfig: undefined },
+      instantSearchInstance: createInstantSearch({
+        templatesConfig: undefined,
+      }),
     });
   });
 
@@ -84,8 +83,8 @@ describe('ratingMenu()', () => {
   });
 
   it('calls twice render(<RefinementList props />, container)', () => {
-    widget.render({ state, helper, results, createURL });
-    widget.render({ state, helper, results, createURL });
+    widget.render({ state: helper.state, helper, results, createURL });
+    widget.render({ state: helper.state, helper, results, createURL });
 
     const [firstRender, secondRender] = render.mock.calls;
 
@@ -108,7 +107,12 @@ describe('ratingMenu()', () => {
       {},
     ]);
 
-    widget.render({ state, helper, results: _results, createURL });
+    widget.render({
+      state: helper.state,
+      helper,
+      results: _results,
+      createURL,
+    });
 
     const [firstRender] = render.mock.calls;
 
@@ -126,7 +130,7 @@ describe('ratingMenu()', () => {
 
   it("doesn't call the refinement functions if not refined", () => {
     helper.getRefinements = jest.fn().mockReturnValue([]);
-    widget.render({ state, helper, results, createURL });
+    widget.render({ state: helper.state, helper, results, createURL });
 
     expect(helper.clearRefinements).toHaveBeenCalledTimes(0);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(0);
@@ -135,7 +139,9 @@ describe('ratingMenu()', () => {
 
   it('refines the search', () => {
     helper.getRefinements = jest.fn().mockReturnValue([]);
-    widget._toggleRefinement('3');
+    widget
+      .getWidgetRenderState({ state: helper.state, helper, results, createURL })
+      .refine('3');
 
     expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(3);
@@ -145,7 +151,9 @@ describe('ratingMenu()', () => {
   it('toggles the refinements', () => {
     helper.addDisjunctiveFacetRefinement(attribute, 2);
     helper.addDisjunctiveFacetRefinement.mockReset();
-    widget._toggleRefinement('2');
+    widget
+      .getWidgetRenderState({ state: helper.state, helper, results, createURL })
+      .refine('2');
 
     expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(0);
@@ -154,7 +162,9 @@ describe('ratingMenu()', () => {
 
   it('toggles the refinements with another facet', () => {
     helper.getRefinements = jest.fn().mockReturnValue([{ value: '2' }]);
-    widget._toggleRefinement('4');
+    widget
+      .getWidgetRenderState({ state: helper.state, helper, results, createURL })
+      .refine('4');
 
     expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(2);

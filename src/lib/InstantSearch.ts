@@ -17,12 +17,16 @@ import {
   Widget,
   UiState,
   CreateURL,
+  Middleware,
+  MiddlewareDefinition,
   RenderState,
 } from '../types';
-import hasDetectedInsightsClient from './utils/detect-insights-client';
-import { Middleware, MiddlewareDefinition } from '../middleware';
-import { createRouter, RouterProps } from '../middleware/createRouter';
-import { createTelemetry } from '../middleware/createTelemetry';
+import {
+  createRouterMiddleware,
+  RouterProps,
+} from '../middlewares/createRouterMiddleware';
+import { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import { createTelemetryMiddleware } from '../middlewares/createTelemetryMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -116,6 +120,8 @@ export type InstantSearchOptions = {
   /**
    * the instance of search-insights to use for sending insights events inside
    * widgets like `hits`.
+   *
+   * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
 };
@@ -144,6 +150,7 @@ class InstantSearch extends EventEmitter {
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: MiddlewareDefinition[] = [];
+  public sendEventToInsights: (event: InsightsEvent) => void;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -181,14 +188,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     warning(
-      Boolean(insightsClient) || !hasDetectedInsightsClient(),
-      withUsage(`InstantSearch detected the Insights client in the global scope.
-To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
+      insightsClient === null,
+      `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
 
-const search = instantsearch({
-  /* ... */
-  insightsClient: window.aa,
-});`)
+For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
     );
 
     if (insightsClient && typeof insightsClient !== 'function') {
@@ -241,12 +244,14 @@ See ${createDocumentationLink({
       this._searchFunction = searchFunction;
     }
 
+    this.sendEventToInsights = noop;
+
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
-      this.EXPERIMENTAL_use(createRouter(routerOptions));
+      this.use(createRouterMiddleware(routerOptions));
     }
 
-    this.EXPERIMENTAL_use(createTelemetry());
+    this.use(createTelemetryMiddleware());
   }
 
   /**
@@ -255,11 +260,10 @@ See ${createDocumentationLink({
    * This method is considered as experimental and is subject to change in
    * minor versions.
    */
-  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
+  public use(...middleware: Middleware[]): this {
     const newMiddlewareList = middleware.map(fn => {
       const newMiddleware = fn({ instantSearchInstance: this });
       this.middleware.push(newMiddleware);
-
       return newMiddleware;
     });
 
@@ -272,6 +276,16 @@ See ${createDocumentationLink({
     }
 
     return this;
+  }
+
+  // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
+  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
+    warning(
+      false,
+      'The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
+    );
+
+    return this.use(...middleware);
   }
 
   /**
@@ -510,23 +524,12 @@ See ${createDocumentationLink({
     }
   }
 
-  public setUiState: (
-    uiState: UiState | ((uiState: UiState) => UiState)
-  ) => void = uiState => {
+  public setUiState(uiState: UiState | ((uiState: UiState) => UiState)): void {
     if (!this.mainHelper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `setUiState`.')
       );
     }
-
-    warning(
-      false,
-      `
-\`setUiState\` provides a powerful way to manage the UI state. This is considered experimental as the API might change in a next minor version.
-
-Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearch.js/issues/new
-    `
-    );
 
     // We refresh the index UI state to update the local UI state that the
     // main index passes to the function form of `setUiState`.
@@ -560,7 +563,7 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
 
     this.scheduleSearch();
     this.onInternalStateChange();
-  };
+  }
 
   public onInternalStateChange = () => {
     const nextUiState = this.mainIndex.getWidgetUiState({});

@@ -4,7 +4,8 @@ import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
 export type HighlightOptions = {
-  attribute: string;
+  // @MAJOR string should no longer be allowed to be a path, only array can be a path
+  attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
   cssClasses?: {
@@ -20,9 +21,8 @@ export default function highlight({
   hit,
   cssClasses = {},
 }: HighlightOptions): string {
-  const attributeValue =
-    (getPropertyByPath(hit, `_highlightResult.${attribute}.value`) as string) ||
-    '';
+  const { value: attributeValue = '' } =
+    getPropertyByPath(hit._highlightResult, attribute) || {};
 
   // cx is not used, since it would be bundled as a dependency for Vue & Angular
   const className =

@@ -318,6 +318,92 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(thirdRenderOptions.results).toEqual(otherResults);
   });
 
+  it('sets isLastPage to true when all pages are cached', () => {
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
+    const widget = makeWidget({});
+    const helper = algoliasearchHelper({} as SearchClient, '', {
+      hitsPerPage: 1,
+    });
+    helper.search = jest.fn();
+
+    widget.init!(
+      createInitOptions({
+        state: helper.state,
+        helper,
+      })
+    );
+
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }],
+            page: 0,
+            nbPages: 3,
+          }),
+        ]),
+        helper,
+      })
+    );
+
+    renderFn.mock.calls[1][0].showMore();
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }, { objectID: '2' }],
+            page: 1,
+            nbPages: 3,
+          }),
+        ]),
+        helper,
+      })
+    );
+    expect(helper.state.page).toEqual(1);
+
+    renderFn.mock.calls[2][0].showMore();
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            page: 2,
+            nbPages: 3,
+          }),
+        ]),
+        helper,
+      })
+    );
+    expect(helper.state.page).toEqual(2);
+
+    helper.setPage(0);
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }],
+            page: 0,
+            nbPages: 3,
+          }),
+        ]),
+        helper,
+      })
+    );
+    expect(helper.state.page).toEqual(0);
+
+    expect(renderFn).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        isLastPage: true,
+      }),
+      false
+    );
+  });
+
   it('escape highlight properties if requested', () => {
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
@@ -339,8 +425,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const hits = [
       {
+        foobar: '<script>foobar</script>',
         _highlightResult: {
           foobar: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
@@ -362,8 +451,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const escapedHits = [
       {
+        foobar: '<script>foobar</script>',
         _highlightResult: {
           foobar: {
+            matchLevel: 'full',
+            matchedWords: [],
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
@@ -469,6 +561,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'hello',
         _highlightResult: {
           name: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
           },
         },
@@ -478,6 +572,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'halloween',
         _highlightResult: {
           name: {
+            matchLevel: 'full' as const,
+            matchedWords: [],
             value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
           },
         },
@@ -505,6 +601,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             name: 'hello',
             _highlightResult: {
               name: {
+                matchLevel: 'full',
+                matchedWords: [],
                 value: 'HE<MARK>LLO</MARK>',
               },
             },
@@ -514,6 +612,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             name: 'halloween',
             _highlightResult: {
               name: {
+                matchLevel: 'full',
+                matchedWords: [],
                 value: 'HA<MARK>LLO</MARK>WEEN',
               },
             },
@@ -882,6 +982,192 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
   });
 
+  describe('getRenderState', () => {
+    it('returns the render state without results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getRenderState({}, initOptions);
+
+      expect(renderState1.infiniteHits).toEqual({
+        hits: [],
+        currentPageHits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        isFirstPage: true,
+        isLastPage: true,
+        results: undefined,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    it('returns the render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getRenderState({}, initOptions);
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState2 = infiniteHitsWidget.getRenderState({}, renderOptions);
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      const expectedCurrentPageHits = [
+        {
+          __queryID: 'theQueryID',
+          name: 'name 1',
+          objectID: '1',
+        },
+        {
+          __queryID: 'theQueryID',
+          name: 'name 2',
+          objectID: '2',
+        },
+      ];
+      (expectedCurrentPageHits as any).__escaped = true;
+
+      expect(renderState2.infiniteHits).toEqual({
+        hits: expectedHits,
+        currentPageHits: expectedCurrentPageHits,
+        sendEvent: renderState1.infiniteHits!.sendEvent,
+        bindEvent: renderState1.infiniteHits!.bindEvent,
+        isFirstPage: true,
+        isLastPage: true,
+        results,
+        showMore: renderState1.infiniteHits!.showMore,
+        showPrevious: renderState1.infiniteHits!.showPrevious,
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state without results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getWidgetRenderState(initOptions);
+
+      expect(renderState1).toEqual({
+        hits: [],
+        currentPageHits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        isFirstPage: true,
+        isLastPage: true,
+        results: undefined,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    it('returns the widget render state with results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+
+      const renderState1 = infiniteHitsWidget.getWidgetRenderState(initOptions);
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState2 = infiniteHitsWidget.getWidgetRenderState(
+        renderOptions
+      );
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      const expectedCurrentPageHits = [
+        {
+          __queryID: 'theQueryID',
+          name: 'name 1',
+          objectID: '1',
+        },
+        {
+          __queryID: 'theQueryID',
+          name: 'name 2',
+          objectID: '2',
+        },
+      ];
+      (expectedCurrentPageHits as any).__escaped = true;
+
+      expect(renderState2).toEqual({
+        hits: expectedHits,
+        currentPageHits: expectedCurrentPageHits,
+        sendEvent: renderState1.sendEvent,
+        bindEvent: renderState1.bindEvent,
+        isFirstPage: true,
+        isLastPage: true,
+        results,
+        showMore: renderState1.showMore,
+        showPrevious: renderState1.showPrevious,
+        widgetParams: {},
+      });
+    });
+  });
+
   describe('getWidgetSearchParameters', () => {
     test('return default Search Parameters with highlighted tags by default', () => {
       const render = jest.fn();
@@ -976,6 +1262,187 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       });
 
       expect(actual.page).toEqual(2);
+    });
+  });
+
+  describe('insights', () => {
+    const createRenderedWidget = () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectInfiniteHits(renderFn);
+      const widget = makeWidget({});
+
+      const helper = algoliasearchHelper(createSearchClient(), '', {});
+      helper.search = jest.fn();
+
+      const initOptions = createInitOptions({
+        helper,
+        state: helper.state,
+      });
+      const instantSearchInstance = initOptions.instantSearchInstance;
+      widget.init!(initOptions);
+
+      const hits = [
+        {
+          objectID: '1',
+          fake: 'data',
+          __queryID: 'test-query-id',
+          __position: 0,
+        },
+        {
+          objectID: '2',
+          sample: 'infos',
+          __queryID: 'test-query-id',
+          __position: 1,
+        },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits }),
+      ]);
+      widget.render!(
+        createRenderOptions({
+          results,
+          state: helper.state,
+          helper,
+        })
+      );
+
+      return { instantSearchInstance, renderFn, hits };
+    };
+
+    describe('insights', () => {
+      describe('sendEvent', () => {
+        it('sends view event when hits are rendered', () => {
+          const { instantSearchInstance } = createRenderedWidget();
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1);
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledWith({
+            eventType: 'view',
+            insightsMethod: 'viewedObjectIDs',
+            payload: {
+              eventName: 'Hits Viewed',
+              index: '',
+              objectIDs: ['1', '2'],
+            },
+            widgetType: 'ais.infiniteHits',
+          });
+        });
+
+        it('sends click event', () => {
+          const {
+            instantSearchInstance,
+            renderFn,
+            hits,
+          } = createRenderedWidget();
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1); // view event by render
+
+          const { sendEvent } = renderFn.mock.calls[
+            renderFn.mock.calls.length - 1
+          ][0];
+          sendEvent('click', hits[0], 'Product Added');
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(2);
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledWith({
+            eventType: 'click',
+            insightsMethod: 'clickedObjectIDsAfterSearch',
+            payload: {
+              eventName: 'Product Added',
+              index: '',
+              objectIDs: ['1'],
+              positions: [0],
+              queryID: 'test-query-id',
+            },
+            widgetType: 'ais.infiniteHits',
+          });
+        });
+
+        it('sends conversion event', () => {
+          const {
+            instantSearchInstance,
+            renderFn,
+            hits,
+          } = createRenderedWidget();
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1); // view event by render
+
+          const { sendEvent } = renderFn.mock.calls[
+            renderFn.mock.calls.length - 1
+          ][0];
+          sendEvent('conversion', hits[1], 'Product Ordered');
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(2);
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledWith({
+            eventType: 'conversion',
+            insightsMethod: 'convertedObjectIDsAfterSearch',
+            payload: {
+              eventName: 'Product Ordered',
+              index: '',
+              objectIDs: ['2'],
+              queryID: 'test-query-id',
+            },
+            widgetType: 'ais.infiniteHits',
+          });
+        });
+      });
+
+      describe('bindEvent', () => {
+        it('returns a payload for click event', () => {
+          const { renderFn, hits } = createRenderedWidget();
+          const { bindEvent } = renderFn.mock.calls[
+            renderFn.mock.calls.length - 1
+          ][0];
+          const payload = bindEvent('click', hits[0], 'Product Added');
+          expect(payload.startsWith('data-insights-event=')).toBe(true);
+          expect(
+            JSON.parse(atob(payload.substr('data-insights-event='.length)))
+          ).toEqual({
+            eventType: 'click',
+            insightsMethod: 'clickedObjectIDsAfterSearch',
+            payload: {
+              eventName: 'Product Added',
+              index: '',
+              objectIDs: ['1'],
+              positions: [0],
+              queryID: 'test-query-id',
+            },
+            widgetType: 'ais.infiniteHits',
+          });
+        });
+
+        it('returns a payload for conversion event', () => {
+          const { renderFn, hits } = createRenderedWidget();
+          const { bindEvent } = renderFn.mock.calls[
+            renderFn.mock.calls.length - 1
+          ][0];
+          const payload = bindEvent('conversion', hits[1], 'Product Ordered');
+          expect(payload.startsWith('data-insights-event=')).toBe(true);
+          expect(
+            JSON.parse(atob(payload.substr('data-insights-event='.length)))
+          ).toEqual({
+            eventType: 'conversion',
+            insightsMethod: 'convertedObjectIDsAfterSearch',
+            payload: {
+              eventName: 'Product Ordered',
+              index: '',
+              objectIDs: ['2'],
+              queryID: 'test-query-id',
+            },
+            widgetType: 'ais.infiniteHits',
+          });
+        });
+      });
     });
   });
 });

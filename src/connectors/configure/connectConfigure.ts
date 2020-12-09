@@ -88,11 +88,11 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
           new algoliasearchHelper.SearchParameters(searchParameters)
         );
 
-        // Trigger a search with the resolved search parameters
-        helper.setState(nextSearchParameters).search();
-
         // Update original `widgetParams.searchParameters` to the new refined one
         widgetParams.searchParameters = searchParameters;
+
+        // Trigger a search with the resolved search parameters
+        helper.setState(nextSearchParameters).search();
       };
     }
 
@@ -100,10 +100,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       $$type: 'ais.configure',
 
       init(initOptions) {
-        const { helper, instantSearchInstance } = initOptions;
-
-        connectorState.refine = refine(helper);
-
+        const { instantSearchInstance } = initOptions;
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -132,19 +129,33 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       },
 
       getRenderState(renderState, renderOptions) {
+        const widgetRenderState = this.getWidgetRenderState(renderOptions);
         return {
           ...renderState,
-          // Even if there are multiple configure widgets,
-          // the last configure widget will override the ones before.
-          // If we want to merge widgetRenderState of multiple configure widgets,
-          // we should modify this part.
-          configure: this.getWidgetRenderState(renderOptions),
+          configure: {
+            ...widgetRenderState,
+            widgetParams: {
+              ...widgetRenderState.widgetParams,
+              searchParameters: mergeSearchParameters(
+                new algoliasearchHelper.SearchParameters(
+                  renderState.configure?.widgetParams.searchParameters
+                ),
+                new algoliasearchHelper.SearchParameters(
+                  widgetRenderState.widgetParams.searchParameters
+                )
+              ).getQueryParams(),
+            },
+          },
         };
       },
 
-      getWidgetRenderState() {
+      getWidgetRenderState({ helper }) {
+        if (!connectorState.refine) {
+          connectorState.refine = refine(helper);
+        }
+
         return {
-          refine: connectorState.refine!,
+          refine: connectorState.refine,
           widgetParams,
         };
       },
