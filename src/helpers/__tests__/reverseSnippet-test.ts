@@ -55,8 +55,22 @@ const hit = {
       },
     ],
     type: {
-      value: 'Streaming media plyr',
-      matchLevel: NONE,
+      value: '<mark>Streaming</mark> - (<mark>media</mark> plyr)',
+      matchLevel: FULL,
+      fullyHighlighted: false,
+      matchedWords: ['streaming', 'media'],
+    },
+    typeMissingSibling: {
+      value: 'Streaming - (<mark>media</mark> plyr)',
+      matchLevel: FULL,
+      fullyHighlighted: false,
+      matchedWords: ['media'],
+    },
+    typeFullMatch: {
+      value: '<mark>Streaming</mark> - (<mark>media</mark> <mark>plyr</mark>)',
+      matchLevel: FULL,
+      fullyHighlighted: false,
+      matchedWords: ['streaming', 'media', 'plyr'],
     },
     meta: {
       name: {
@@ -80,13 +94,13 @@ describe('reverseSnippet', () => {
     );
   });
 
-  test('with default tag name and full match', () => {
+  test('with full match', () => {
     expect(
       reverseSnippet({
-        attribute: 'type',
+        attribute: 'typeFullMatch',
         hit,
       })
-    ).toMatchInlineSnapshot(`"Streaming media plyr"`);
+    ).toMatchInlineSnapshot(`"Streaming - (media plyr)"`);
   });
 
   test('with custom tag name', () => {
@@ -160,5 +174,27 @@ describe('reverseSnippet', () => {
         hit,
       })
     ).toMatchInlineSnapshot(`"Streaming Media Players"`);
+  });
+
+  test('with non-alphanumeric character with alphanumeric siblings matching highlight', () => {
+    expect(
+      reverseSnippet({
+        attribute: 'type',
+        hit,
+      })
+    ).toMatchInlineSnapshot(
+      `"Streaming - (media<mark class=\\"ais-ReverseSnippet-highlighted\\"> plyr)</mark>"`
+    );
+  });
+
+  test('with non-alphanumeric character with different alphanumeric siblings highlight', () => {
+    expect(
+      reverseSnippet({
+        attribute: 'typeMissingSibling',
+        hit,
+      })
+    ).toMatchInlineSnapshot(
+      `"<mark class=\\"ais-ReverseSnippet-highlighted\\">Streaming - (</mark>media<mark class=\\"ais-ReverseSnippet-highlighted\\"> plyr)</mark>"`
+    );
   });
 });

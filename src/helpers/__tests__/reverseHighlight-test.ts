@@ -14,7 +14,7 @@ const hit = {
     lvl0: 'TV & Home Theater',
     lvl1: 'TV & Home Theater > Streaming Media Players',
   },
-  type: 'Streaming media plyr',
+  type: 'Streaming - (media plyr)',
   price: 39.99,
   price_range: '1 - 50',
   image: 'https://cdn-demo.algolia.com/bestbuy-0118/5477500_sb.jpg',
@@ -57,9 +57,22 @@ const hit = {
       },
     ],
     type: {
-      value: 'Streaming media plyr',
-      matchLevel: NONE,
-      matchedWords: [],
+      value: '<mark>Streaming</mark> - (<mark>media</mark> plyr)',
+      matchLevel: FULL,
+      fullyHighlighted: false,
+      matchedWords: ['streaming', 'media'],
+    },
+    typeMissingSibling: {
+      value: 'Streaming - (<mark>media</mark> plyr)',
+      matchLevel: FULL,
+      fullyHighlighted: false,
+      matchedWords: ['media'],
+    },
+    typeFullMatch: {
+      value: '<mark>Streaming</mark> - (<mark>media</mark> <mark>plyr</mark>)',
+      matchLevel: FULL,
+      fullyHighlighted: false,
+      matchedWords: ['streaming', 'media', 'plyr'],
     },
     meta: {
       name: {
@@ -84,13 +97,13 @@ describe('reverseHighlight', () => {
     );
   });
 
-  test('with default tag name and full match', () => {
+  test('with full match', () => {
     expect(
       reverseHighlight({
-        attribute: 'type',
+        attribute: 'typeFullMatch',
         hit,
       })
-    ).toMatchInlineSnapshot(`"Streaming media plyr"`);
+    ).toMatchInlineSnapshot(`"Streaming - (media plyr)"`);
   });
 
   test('with custom tag name', () => {
@@ -164,5 +177,27 @@ describe('reverseHighlight', () => {
         hit,
       })
     ).toMatchInlineSnapshot(`"Streaming Media Players"`);
+  });
+
+  test('with non-alphanumeric character with alphanumeric siblings matching highlight', () => {
+    expect(
+      reverseHighlight({
+        attribute: 'type',
+        hit,
+      })
+    ).toMatchInlineSnapshot(
+      `"Streaming - (media<mark class=\\"ais-ReverseHighlight-highlighted\\"> plyr)</mark>"`
+    );
+  });
+
+  test('with non-alphanumeric character with different alphanumeric siblings highlight', () => {
+    expect(
+      reverseHighlight({
+        attribute: 'typeMissingSibling',
+        hit,
+      })
+    ).toMatchInlineSnapshot(
+      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Streaming - (</mark>media<mark class=\\"ais-ReverseHighlight-highlighted\\"> plyr)</mark>"`
+    );
   });
 });
