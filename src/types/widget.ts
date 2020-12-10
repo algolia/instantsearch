@@ -192,7 +192,7 @@ export type IndexRenderState = Partial<{
       isSearchStalled: boolean;
     },
     {
-      queryHook?(query: string, refine: (query: string) => void);
+      queryHook?(query: string, refine: (query: string) => void): void;
     }
   >;
   autocomplete: WidgetRenderState<
