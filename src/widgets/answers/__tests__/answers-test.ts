@@ -21,6 +21,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 `);
     });
 
+    it('throws without `queryLanguages`', () => {
+      const container = document.createElement('div');
+      expect(() => {
+        // @ts-ignore
+        answers({ container });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`queryLanguages\` expects an array of strings.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
+`);
+    });
+
     it('throws when searchClient does not support findAnswers', () => {
       const container = document.createElement('div');
       const searchClient = createSearchClient({
@@ -36,6 +48,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       });
       const widget = answers({
         container,
+        queryLanguages: ['en'],
         attributesForPrediction: ['description'],
       });
       // @ts-ignore-next-line
@@ -71,6 +84,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       search.addWidgets([
         answers({
           container,
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
         }),
       ]);
@@ -99,6 +113,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       search.addWidgets([
         answers({
           container: answersContainer,
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
           cssClasses: {
             root: 'root',

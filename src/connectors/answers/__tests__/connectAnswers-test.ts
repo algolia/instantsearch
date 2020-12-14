@@ -50,7 +50,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     });
     const instantSearchInstance = createInstantSearch({ client });
     const makeWidget = connectAnswers(renderFn, unmountFn);
-    const widget = makeWidget({ attributesForPrediction });
+    const widget = makeWidget({
+      queryLanguages: ['en'],
+      attributesForPrediction,
+    });
 
     const helper = algoliasearchHelper(client, '', {});
 
@@ -69,6 +72,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 
     const makeWidget = connectAnswers(render, unmount);
     const widget = makeWidget({
+      queryLanguages: ['en'],
       attributesForPrediction: ['description'],
     });
 
@@ -110,6 +114,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         hits: [],
         isLoading: false,
         widgetParams: {
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
         },
       }),
@@ -134,6 +139,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         hits: [],
         isLoading: false,
         widgetParams: {
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
         },
       }),
@@ -177,6 +183,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         hits: [],
         isLoading: false,
         widgetParams: {
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
         },
       }),
@@ -328,7 +335,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         answers: {
           hits: [],
           isLoading: false,
-          widgetParams: { attributesForPrediction: ['description'] },
+          widgetParams: {
+            queryLanguages: ['en'],
+            attributesForPrediction: ['description'],
+          },
         },
       });
 
@@ -353,7 +363,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         answers: {
           hits: [],
           isLoading: false,
-          widgetParams: { attributesForPrediction: ['description'] },
+          widgetParams: {
+            queryLanguages: ['en'],
+            attributesForPrediction: ['description'],
+          },
         },
       });
     });
@@ -395,6 +408,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         hits: [],
         isLoading: true,
         widgetParams: {
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
         },
       });
@@ -413,6 +427,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         hits: [{ title: '', __position: 1 }],
         isLoading: false,
         widgetParams: {
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
         },
       });

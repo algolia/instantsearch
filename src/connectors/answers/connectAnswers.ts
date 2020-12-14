@@ -36,7 +36,7 @@ export type AnswersConnectorParams = {
   /**
    * The languages in the query. Currently only supports `en`.
    */
-  queryLanguages?: string[];
+  queryLanguages: string[];
 
   /**
    * Maximum number of answers to retrieve from the Answers Engine.
@@ -57,11 +57,14 @@ const connectAnswers: AnswersConnector = function connectAnswers(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const {
-      attributesForPrediction = ['*'],
-      queryLanguages = ['en'],
-      nbHits = 1,
-    } = widgetParams || ({} as typeof widgetParams);
+    const { queryLanguages, attributesForPrediction = ['*'], nbHits = 1 } =
+      widgetParams || ({} as typeof widgetParams);
+
+    if (!queryLanguages || queryLanguages.length === 0) {
+      throw new Error(
+        withUsage('The `queryLanguages` expects an array of strings.')
+      );
+    }
 
     const runConcurrentSafePromise = createConcurrentSafePromise<
       FindAnswersResponse<Hit>

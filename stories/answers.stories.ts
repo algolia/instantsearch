@@ -22,6 +22,7 @@ storiesOf('Results/Answers', module)
       search.addWidgets([
         answers({
           container: answersContainer,
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
           templates: {
             item: hit => {
@@ -44,6 +45,7 @@ storiesOf('Results/Answers', module)
       search.addWidgets([
         answers({
           container: answersContainer,
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
           templates: {
             header: ({ hits }) => {
@@ -69,6 +71,7 @@ storiesOf('Results/Answers', module)
       search.addWidgets([
         answers({
           container: answersContainer,
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
           templates: {
             header: ({ hits }) => {
@@ -95,6 +98,7 @@ storiesOf('Results/Answers', module)
       search.addWidgets([
         answers({
           container: answersContainer,
+          queryLanguages: ['en'],
           attributesForPrediction: ['description'],
           cssClasses: {
             root: 'my-Answers',
