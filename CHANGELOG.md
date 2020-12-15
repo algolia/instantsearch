@@ -1,3 +1,13 @@
+## [4.9.2](https://github.com/algolia/instantsearch.js/compare/v4.9.1...v4.9.2) (2020-12-15)
+
+
+### Bug Fixes
+
+* warn about invalid userToken ([#4605](https://github.com/algolia/instantsearch.js/issues/4605)) ([5fce769](https://github.com/algolia/instantsearch.js/commit/5fce769f42fe5b44f73eb68f3858a6ea1ec2d854))
+* **types:** correct type for queryHook return ([#4602](https://github.com/algolia/instantsearch.js/issues/4602)) ([acff8db](https://github.com/algolia/instantsearch.js/commit/acff8db3a2238edf40da1ee6b44e93a94e090698))
+
+
+
 ## [4.9.1](https://github.com/algolia/instantsearch.js/compare/v4.9.0...v4.9.1) (2020-12-08)
 
 
