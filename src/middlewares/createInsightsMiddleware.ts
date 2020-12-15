@@ -11,6 +11,12 @@ export type InsightsEvent = {
 
 export type InsightsProps = {
   insightsClient: null | InsightsClient;
+  insightsInitParams?: {
+    userHasOptedOut?: boolean;
+    useCookie?: boolean;
+    cookieDuration?: number;
+    region?: 'de' | 'us';
+  };
   onEvent?: (
     event: InsightsEvent,
     insightsClient: null | InsightsClient
@@ -20,7 +26,8 @@ export type InsightsProps = {
 export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
-  const { insightsClient: _insightsClient, onEvent } = props || {};
+  const { insightsClient: _insightsClient, insightsInitParams, onEvent } =
+    props || {};
   if (_insightsClient !== null && !_insightsClient) {
     if (__DEV__) {
       throw new Error(
@@ -67,7 +74,7 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
       // Otherwise, the `init` call might override it with anonymous user token.
       userTokenBeforeInit = userToken;
     });
-    insightsClient('init', { appId, apiKey });
+    insightsClient('init', { appId, apiKey, ...insightsInitParams });
 
     return {
       onStateChange() {},
