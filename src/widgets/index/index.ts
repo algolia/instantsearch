@@ -106,7 +106,7 @@ function privateHelperSetState(
   }
 }
 
-function getLocalWidgetsState(
+function getLocalWidgetsUiState(
   widgets: Widget[],
   widgetStateOptions: WidgetUiStateOptions,
   initialUiState: IndexUiState = {}
@@ -224,7 +224,7 @@ const index = (props: IndexProps): Index => {
 
     createURL(nextState: SearchParameters) {
       return localInstantSearchInstance!._createURL!({
-        [indexId]: getLocalWidgetsState(localWidgets, {
+        [indexId]: getLocalWidgetsUiState(localWidgets, {
           searchParameters: nextState,
           helper: helper!,
         }),
@@ -348,7 +348,7 @@ const index = (props: IndexProps): Index => {
           return next || state;
         }, helper!.state);
 
-        localUiState = getLocalWidgetsState(localWidgets, {
+        localUiState = getLocalWidgetsUiState(localWidgets, {
           searchParameters: nextState,
           helper: helper!,
         });
@@ -540,7 +540,7 @@ const index = (props: IndexProps): Index => {
         // @ts-ignore _uiState comes from privateHelperSetState and thus isn't typed on the helper event
         const _uiState = event._uiState;
 
-        localUiState = getLocalWidgetsState(
+        localUiState = getLocalWidgetsUiState(
           localWidgets,
           {
             searchParameters: state,
@@ -669,7 +669,7 @@ const index = (props: IndexProps): Index => {
     },
 
     refreshUiState() {
-      localUiState = getLocalWidgetsState(localWidgets, {
+      localUiState = getLocalWidgetsUiState(localWidgets, {
         searchParameters: this.getHelper()!.state,
         helper: this.getHelper()!,
       });
