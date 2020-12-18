@@ -362,6 +362,163 @@ Array [
 
       await renderToString(wrapper);
     });
+
+    it('forwards slots', async done => {
+      const searchClient = createFakeClient();
+
+      expect.assertions(2);
+
+      const App = Vue.component('App', {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        render(h) {
+          return h(InstantSearchSsr, {}, this.$slots.default);
+        },
+        serverPrefetch() {
+          return (
+            this.instantsearch
+              .findResultsState(this)
+              .then(res => {
+                expect(
+                  this.instantsearch.mainIndex.getWidgets().map(w => w.$$type)
+                ).toEqual(['ais.configure']);
+
+                expect(res.hello._state.hitsPerPage).toBe(100);
+              })
+              // jest throws an error we need to catch, since stuck in the flow
+              .catch(e => {
+                done.fail(e);
+              })
+          );
+        },
+      });
+
+      const wrapper = new Vue({
+        mixins: [forceIsServerMixin],
+        render(h) {
+          return h(App, [
+            h('template', { slot: 'default' }, [
+              h(Configure, {
+                attrs: {
+                  hitsPerPage: 100,
+                },
+              }),
+            ]),
+          ]);
+        },
+      });
+
+      await renderToString(wrapper);
+      done();
+    });
+
+    // TODO: forwarding of scoped slots doesn't yet work.
+    it.skip('forwards scoped slots', async done => {
+      const searchClient = createFakeClient();
+
+      expect.assertions(2);
+
+      const App = Vue.component('App', {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        render(h) {
+          return h(InstantSearchSsr, {}, [
+            this.$scopedSlots.default({ test: true }),
+          ]);
+        },
+        serverPrefetch() {
+          return (
+            this.instantsearch
+              .findResultsState(this)
+              .then(res => {
+                expect(
+                  this.instantsearch.mainIndex.getWidgets().map(w => w.$$type)
+                ).toEqual(['ais.configure']);
+
+                expect(res.hello._state.hitsPerPage).toBe(100);
+              })
+              // jest throws an error we need to catch, since stuck in the flow
+              .catch(e => {
+                done.fail(e);
+              })
+          );
+        },
+      });
+
+      const wrapper = new Vue({
+        mixins: [forceIsServerMixin],
+        render(h) {
+          return h(App, {
+            scopedSlots: {
+              default({ test }) {
+                if (test) {
+                  return h(Configure, {
+                    attrs: {
+                      hitsPerPage: 100,
+                    },
+                  });
+                }
+                return null;
+              },
+            },
+          });
+        },
+      });
+
+      await renderToString(wrapper);
+      done();
+    });
+
+    it('forwards root', async () => {
+      const searchClient = createFakeClient();
+
+      // there are two renders of App, each with an assertion
+      expect.assertions(2);
+
+      const App = Vue.component('App', {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        render(h) {
+          expect(this.$root).toBe(wrapper);
+
+          return h(InstantSearchSsr, {}, [
+            h(Configure, {
+              attrs: {
+                hitsPerPage: 100,
+              },
+            }),
+            h(SearchBox),
+          ]);
+        },
+        serverPrefetch() {
+          return this.instantsearch.findResultsState(this);
+        },
+      });
+
+      const wrapper = new Vue({
+        mixins: [forceIsServerMixin],
+        render(h) {
+          return h(App);
+        },
+      });
+
+      await renderToString(wrapper);
+    });
   });
 
   describe('hydrate', () => {
