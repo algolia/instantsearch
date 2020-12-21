@@ -1,6 +1,6 @@
 import { TAG_REPLACEMENT } from '../../lib/escape-highlight';
 
-const getHighlightedParts = (highlightedValue: string) => {
+export default function getHighlightedParts(highlightedValue: string) {
   const { highlightPostTag, highlightPreTag } = TAG_REPLACEMENT;
 
   const splitByPreTag = highlightedValue.split(highlightPreTag);
@@ -26,6 +26,4 @@ const getHighlightedParts = (highlightedValue: string) => {
   });
 
   return elements;
-};
-
-export default getHighlightedParts;
+}

@@ -20,10 +20,8 @@ const regexHasEscapedHtml = RegExp(regexEscapedHtml.source);
  * Converts the HTML entities "&", "<", ">", '"', and "'" in `string` to their
  * characters.
  */
-function unescape(value: string): string {
+export default function unescape(value: string): string {
   return value && regexHasEscapedHtml.test(value)
     ? value.replace(regexEscapedHtml, character => htmlEscapes[character])
     : value;
 }
-
-export default unescape;

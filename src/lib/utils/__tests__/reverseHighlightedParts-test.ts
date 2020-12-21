@@ -1,25 +1,16 @@
-import { HighlightedParts } from '../../../types';
 import reverseHighlightedParts from '../reverseHighlightedParts';
-
-const oneMatch: HighlightedParts[] = [
-  { isHighlighted: false, value: 'Amazon' },
-  {
-    isHighlighted: true,
-    value: ' - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-Fi - Black',
-  },
-];
-
-const multipleMatches: HighlightedParts[] = [
-  { isHighlighted: false, value: 'Amazon' },
-  { isHighlighted: true, value: ' - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-' },
-  { isHighlighted: false, value: 'Fi' },
-  { isHighlighted: false, value: ' - ' },
-  { isHighlighted: false, value: 'Black' },
-];
 
 describe('reverseHighlightedParts', () => {
   test('returns reversed HighlightedParts with a single match', () => {
-    expect(reverseHighlightedParts(oneMatch)).toEqual([
+    expect(
+      reverseHighlightedParts([
+        { isHighlighted: false, value: 'Amazon' },
+        {
+          isHighlighted: true,
+          value: ' - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-Fi - Black',
+        },
+      ])
+    ).toEqual([
       { isHighlighted: true, value: 'Amazon' },
       {
         isHighlighted: false,
@@ -29,7 +20,18 @@ describe('reverseHighlightedParts', () => {
   });
 
   test('with reversed HighlightedParts with multiple matches', () => {
-    expect(reverseHighlightedParts(multipleMatches)).toEqual([
+    expect(
+      reverseHighlightedParts([
+        { isHighlighted: false, value: 'Amazon' },
+        {
+          isHighlighted: true,
+          value: ' - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-',
+        },
+        { isHighlighted: false, value: 'Fi' },
+        { isHighlighted: false, value: ' - ' },
+        { isHighlighted: false, value: 'Black' },
+      ])
+    ).toEqual([
       { isHighlighted: true, value: 'Amazon' },
       {
         isHighlighted: false,

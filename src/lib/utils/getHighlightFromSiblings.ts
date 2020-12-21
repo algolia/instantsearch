@@ -1,9 +1,13 @@
 import unescape from './unescape';
 import { HighlightedParts } from '../../types';
 
-const getHighlightFromSiblings = (parts: HighlightedParts[], i: number) => {
+const isAlphanumeric = new RegExp(/\w/i);
+
+export default function getHighlightFromSiblings(
+  parts: HighlightedParts[],
+  i: number
+) {
   const current = parts[i];
-  const isAlphanumeric = new RegExp(/\w/gi);
   const isNextHighlighted = parts[i + 1]?.isHighlighted || true;
   const isPreviousHighlighted = parts[i - 1]?.isHighlighted || true;
 
@@ -15,6 +19,4 @@ const getHighlightFromSiblings = (parts: HighlightedParts[], i: number) => {
   }
 
   return current.isHighlighted;
-};
-
-export default getHighlightFromSiblings;
+}
