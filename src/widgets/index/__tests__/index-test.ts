@@ -14,6 +14,7 @@ import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 import { Widget, InstantSearch } from '../../../types';
 import index from '../index';
 import { warning } from '../../../lib/utils';
+import { refinementList } from '../..';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
@@ -647,6 +648,103 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.removeWidgets([searchBox]);
 
         expect(instantSearchInstance.scheduleSearch).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('createURL', () => {
+    it('default url returns #', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      instance.addWidgets([searchBox, pagination]);
+
+      instance.init(createInitOptions());
+
+      expect(instance.createURL(new SearchParameters())).toEqual('#');
+    });
+
+    it('calls the createURL of routing', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      instance.addWidgets([searchBox, pagination]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance: createInstantSearch({
+            // @ts-ignore
+            _createURL(routeState) {
+              return routeState;
+            },
+          }),
+        })
+      );
+
+      expect(instance.createURL(new SearchParameters())).toEqual({
+        indexName: {},
+      });
+    });
+
+    it('create URLs with custom helper state', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      instance.addWidgets([searchBox, pagination]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance: createInstantSearch({
+            // @ts-ignore
+            _createURL(routeState) {
+              return routeState;
+            },
+          }),
+        })
+      );
+
+      expect(instance.createURL(new SearchParameters({ page: 100 }))).toEqual({
+        indexName: { page: 100 },
+      });
+    });
+
+    it('create URLs with non-namesake helper state', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      const container = document.createElement('div');
+      document.body.append(container);
+
+      instance.addWidgets([
+        searchBox,
+        pagination,
+        refinementList({ container, attribute: 'doggies' }),
+      ]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance: createInstantSearch({
+            // @ts-ignore
+            _createURL(routeState) {
+              return routeState;
+            },
+          }),
+        })
+      );
+
+      expect(
+        instance.createURL(
+          new SearchParameters({
+            disjunctiveFacets: ['doggies'],
+            disjunctiveFacetsRefinements: { doggies: ['zap'] },
+          })
+        )
+      ).toEqual({
+        indexName: { refinementList: { doggies: ['zap'] } },
       });
     });
   });
