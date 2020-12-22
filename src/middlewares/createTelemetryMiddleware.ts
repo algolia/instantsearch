@@ -6,12 +6,10 @@ type TelemetryWidget = {
   officialWidget: boolean;
 };
 
-const ALGOLIA_CRAWLER_USER_AGENT = /Algolia Crawler\/[0-9]+.[0-9]+.[0-9]+/;
-
 export function createTelemetryMiddleware(): Middleware {
   const isTelemetryEnabled =
-    typeof window !== undefined &&
-    ALGOLIA_CRAWLER_USER_AGENT.test(window.navigator.userAgent);
+    typeof window !== 'undefined' &&
+    window.navigator.userAgent.indexOf('Algolia Crawler') > -1;
 
   if (!isTelemetryEnabled) {
     return () => ({
