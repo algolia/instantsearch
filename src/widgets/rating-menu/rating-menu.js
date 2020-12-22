@@ -113,6 +113,7 @@ export default function ratingMenu({
   container,
   attribute,
   max = 5,
+  step = 1,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
 } = {}) {
@@ -163,5 +164,5 @@ export default function ratingMenu({
     render(null, containerNode)
   );
 
-  return makeWidget({ attribute, max });
+  return makeWidget({ attribute, max, step });
 }

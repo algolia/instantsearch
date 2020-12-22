@@ -51,9 +51,9 @@ describe('ratingMenu()', () => {
       })
     );
     jest.spyOn(helper, 'clearRefinements');
-    jest.spyOn(helper, 'addDisjunctiveFacetRefinement');
+    jest.spyOn(helper, 'addNumericRefinement');
     jest.spyOn(helper, 'getRefinements');
-    jest.spyOn(helper, 'removeDisjunctiveFacetRefinement');
+    jest.spyOn(helper, 'removeNumericRefinement');
     helper.search = jest.fn();
 
     results = {
@@ -63,6 +63,7 @@ describe('ratingMenu()', () => {
     createURL = () => '#';
     widget.init({
       helper,
+      state: helper.state,
       instantSearchInstance: createInstantSearch({
         templatesConfig: undefined,
       }),
@@ -75,7 +76,7 @@ describe('ratingMenu()', () => {
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['anAttrName'],
-        disjunctiveFacetsRefinements: {
+        numericRefinements: {
           anAttrName: [],
         },
       })
@@ -97,7 +98,7 @@ describe('ratingMenu()', () => {
   });
 
   it('hide the count==0 when there is a refinement', () => {
-    helper.addDisjunctiveFacetRefinement(attribute, 1);
+    helper.addNumericRefinement(attribute, '>=', 1);
     const _results = new SearchResults(helper.state, [
       {
         facets: {
@@ -133,7 +134,7 @@ describe('ratingMenu()', () => {
     widget.render({ state: helper.state, helper, results, createURL });
 
     expect(helper.clearRefinements).toHaveBeenCalledTimes(0);
-    expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(0);
+    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(0);
     expect(helper.search).toHaveBeenCalledTimes(0);
   });
 
@@ -143,20 +144,20 @@ describe('ratingMenu()', () => {
       .getWidgetRenderState({ state: helper.state, helper, results, createURL })
       .refine('3');
 
-    expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(3);
+    expect(helper.removeNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
   it('toggles the refinements', () => {
-    helper.addDisjunctiveFacetRefinement(attribute, 2);
-    helper.addDisjunctiveFacetRefinement.mockReset();
+    helper.addNumericRefinement(attribute, '>=', 2);
+    helper.addNumericRefinement.mockReset();
     widget
       .getWidgetRenderState({ state: helper.state, helper, results, createURL })
       .refine('2');
 
-    expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(0);
+    expect(helper.removeNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(0);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
@@ -166,8 +167,8 @@ describe('ratingMenu()', () => {
       .getWidgetRenderState({ state: helper.state, helper, results, createURL })
       .refine('4');
 
-    expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(2);
+    expect(helper.removeNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 

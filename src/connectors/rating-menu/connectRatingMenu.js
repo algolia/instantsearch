@@ -1,8 +1,9 @@
 import {
   checkRendering,
+  createDocumentationLink,
   createDocumentationMessageGenerator,
-  range,
   noop,
+  warning,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -11,6 +12,8 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 const $$type = 'ais.ratingMenu';
+
+const MAX_VALUES_PER_FACET_API_LIMIT = 1000;
 
 const createSendEvent = ({
   instantSearchInstance,
@@ -129,7 +132,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
-    const { attribute, max = 5 } = widgetParams;
+    const { attribute, max = 5, step = 1 } = widgetParams;
     let sendEvent;
 
     if (!attribute) {
@@ -137,23 +140,69 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
     }
 
     const getRefinedStar = state => {
-      const refinements = state.getDisjunctiveRefinements(attribute);
+      const values = state.getNumericRefinements(attribute);
 
-      if (!refinements.length) {
+      if (!values['>=']?.length) {
         return undefined;
       }
 
-      return Math.min(...refinements.map(Number));
+      return values['>='][0];
+    };
+
+    const getFacetsMaxDecimalPlaces = facetResults => {
+      let maxDecimalPlaces = 0;
+      facetResults.forEach(facetResult => {
+        const [, decimal = ''] = facetResult.name.split('.');
+        maxDecimalPlaces = Math.max(maxDecimalPlaces, decimal.length);
+      });
+      return maxDecimalPlaces;
+    };
+
+    const getFacetValuesWarningMessage = ({
+      maxDecimalPlaces,
+      maxFacets,
+      maxValuesPerFacet,
+    }) => {
+      const maxDecimalPlacesInRange = Math.max(
+        0,
+        Math.floor(Math.log10(MAX_VALUES_PER_FACET_API_LIMIT / max))
+      );
+      const maxFacetsInRange = Math.min(
+        MAX_VALUES_PER_FACET_API_LIMIT,
+        Math.pow(10, maxDecimalPlacesInRange) * max
+      );
+
+      const solutions = [];
+
+      if (maxFacets > MAX_VALUES_PER_FACET_API_LIMIT) {
+        solutions.push(
+          `- Update your records to lower the precision of the values in the "${attribute}" attribute (for example: ${(5.123456789).toPrecision(
+            maxDecimalPlaces + 1
+          )} to ${(5.123456789).toPrecision(maxDecimalPlacesInRange + 1)})`
+        );
+      }
+      if (maxValuesPerFacet < maxFacetsInRange) {
+        solutions.push(
+          `- Increase the maximum number of facet values to ${maxFacetsInRange} using the "configure" widget ${createDocumentationLink(
+            { name: 'configure' }
+          )} and the "maxValuesPerFacet" parameter https://www.algolia.com/doc/api-reference/api-parameters/maxValuesPerFacet/`
+        );
+      }
+
+      return `The ${attribute} attribute can have ${maxFacets} different values (0 to ${max} with a maximum of ${maxDecimalPlaces} decimals = ${maxFacets}) but you retrieved only ${maxValuesPerFacet} facet values. Therefore the number of results that match the refinements can be incorrect.
+${
+  solutions.length
+    ? `To resolve this problem you can:\n${solutions.join('\n')}`
+    : ``
+}`;
     };
 
     const toggleRefinement = (helper, facetValue) => {
       sendEvent('click', facetValue);
       const isRefined = getRefinedStar(helper.state) === Number(facetValue);
-      helper.removeDisjunctiveFacetRefinement(attribute);
+      helper.removeNumericRefinement(attribute);
       if (!isRefined) {
-        for (let val = Number(facetValue); val <= max; ++val) {
-          helper.addDisjunctiveFacetRefinement(attribute, val);
-        }
+        helper.addNumericRefinement(attribute, '>=', facetValue);
       }
       helper.search();
     };
@@ -208,7 +257,8 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         instantSearchInstance,
         createURL,
       }) {
-        const facetValues = [];
+        const { maxValuesPerFacet } = state;
+        let facetValues = [];
 
         if (!sendEvent) {
           sendEvent = createSendEvent({
@@ -220,40 +270,50 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         }
 
         if (results) {
-          const allValues = {};
-          for (let v = max; v >= 0; --v) {
-            allValues[v] = 0;
-          }
-          (results.getFacetValues(attribute) || []).forEach(facet => {
-            const val = Math.round(facet.name);
-            if (!val || val > max) {
-              return;
-            }
-            for (let v = val; v >= 1; --v) {
-              allValues[v] += facet.count;
-            }
-          });
+          const facetResults = results.getFacetValues(attribute);
+
+          const maxDecimalPlaces = getFacetsMaxDecimalPlaces(facetResults);
+          const maxFacets = Math.pow(10, maxDecimalPlaces) * max;
+
+          warning(
+            maxFacets <= maxValuesPerFacet,
+            getFacetValuesWarningMessage({
+              maxDecimalPlaces,
+              maxFacets,
+              maxValuesPerFacet,
+            })
+          );
+
           const refinedStar = getRefinedStar(state);
-          for (let star = max - 1; star >= 1; --star) {
-            const count = allValues[star];
-            if (refinedStar && star !== refinedStar && count === 0) {
+
+          for (let star = step; star < max; star += step) {
+            const isRefined = refinedStar === star;
+
+            const count = facetResults
+              .filter(f => Number(f.name) >= star)
+              .map(f => f.count)
+              .reduce((sum, current) => sum + current, 0);
+
+            if (refinedStar && !isRefined && count === 0) {
               // skip count==0 when at least 1 refinement is enabled
               // eslint-disable-next-line no-continue
               continue;
             }
-            const stars = [];
-            for (let i = 1; i <= max; ++i) {
-              stars.push(i <= star);
-            }
+
+            const stars = [...new Array(Math.floor(max / step))].map(
+              (v, i) => i * step < star
+            );
+
             facetValues.push({
               stars,
               name: String(star),
               value: String(star),
               count,
-              isRefined: refinedStar === star,
+              isRefined,
             });
           }
         }
+        facetValues = facetValues.reverse();
 
         return {
           items: facetValues,
@@ -268,7 +328,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        return state.removeDisjunctiveFacet(attribute);
+        return state.removeNumericRefinement(attribute);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
@@ -297,17 +357,17 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
 
         if (!value) {
           return withDisjunctiveFacet.setQueryParameters({
-            disjunctiveFacetsRefinements: {
-              ...withDisjunctiveFacet.disjunctiveFacetsRefinements,
+            numericRefinements: {
+              ...withDisjunctiveFacet.numericRefinements,
               [attribute]: [],
             },
           });
         }
 
-        return range({ start: Number(value), end: max + 1 }).reduce(
-          (parameters, number) =>
-            parameters.addDisjunctiveFacetRefinement(attribute, number),
-          withDisjunctiveFacet
+        return withDisjunctiveFacet.addNumericRefinement(
+          attribute,
+          '>=',
+          value
         );
       },
     };
