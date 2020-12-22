@@ -2871,10 +2871,10 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.5.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-algoliasearch-helper@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.3.3.tgz#8f1338790c3b478a8223f14ee447b9bdab4ab68b"
-  integrity sha512-1MKryf/yLQK9qgCaHtM+OBmG+R3qD6wxN8NnZstlCB8LijCZjoX1mgdema3+cBaa/zfmsD2q6/aP9kUKQmH4DQ==
+algoliasearch-helper@^3.3.4:
+  version "3.3.4"
+  resolved "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-3.3.4.tgz#4a3c56d42a2a81589d5722b73653b2deaf3e7064"
+  integrity sha512-1Ts2XcgGdjGlDrp3v6zbY8VW+X9+jJ5rBmtPBmXOQLd4b5t/LpJlaBdxoAnlMfVFjywP7KSAdmyFUNNYVHDyRQ==
   dependencies:
     events "^1.1.1"
 
