@@ -749,6 +749,139 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     });
   });
 
+  describe('getScopedResults', () => {
+    it('gets deep results', async () => {
+      const level0 = index({ indexName: 'level0IndexName' });
+      const level1 = index({ indexName: 'level1IndexName' });
+      const level2 = index({ indexName: 'level2IndexName' });
+      const level21 = index({ indexName: 'level21IndexName' });
+      const level22 = index({ indexName: 'level22IndexName' });
+      const level221 = index({ indexName: 'level221IndexName' });
+      const level3 = index({ indexName: 'level3IndexName' });
+      const searchBoxLevel0 = createSearchBox();
+      const searchBoxLevel1 = createSearchBox();
+      const searchBoxLevel21 = createSearchBox();
+
+      level0.addWidgets([
+        searchBoxLevel0,
+        level1.addWidgets([searchBoxLevel1]),
+        level2.addWidgets([
+          createSearchBox(),
+          level21.addWidgets([searchBoxLevel21]),
+          level22.addWidgets([
+            createSearchBox(),
+            level221.addWidgets([createSearchBox()]),
+          ]),
+        ]),
+        level3.addWidgets([createSearchBox()]),
+      ]);
+
+      level0.init(createInitOptions({ parent: null }));
+
+      // Simulate a call to search from a widget - this step is required otherwise
+      // the DerivedHelper does not contain the results. The `lastResults` attribute
+      // is set once the `result` event is emitted.
+      level0.getHelper()!.search();
+
+      await runAllMicroTasks();
+
+      expect(level1.getScopedResults()).toEqual([
+        // Root index
+        {
+          indexId: 'level1IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level1.getHelper(),
+        },
+        // Siblings and children
+        {
+          indexId: 'level2IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level2.getHelper(),
+        },
+        {
+          indexId: 'level21IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level21.getHelper(),
+        },
+        {
+          indexId: 'level22IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level22.getHelper(),
+        },
+        {
+          indexId: 'level221IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level221.getHelper(),
+        },
+        {
+          indexId: 'level3IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level3.getHelper(),
+        },
+      ]);
+
+      expect(level21.getScopedResults()).toEqual([
+        // Root index
+        {
+          indexId: 'level21IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level21.getHelper(),
+        },
+        // Siblings and children
+        {
+          indexId: 'level22IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level22.getHelper(),
+        },
+        {
+          indexId: 'level221IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level221.getHelper(),
+        },
+      ]);
+
+      expect(level0.getScopedResults()).toEqual([
+        // Root index
+        {
+          indexId: 'level0IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level0.getHelper(),
+        },
+        // Siblings and children
+        {
+          indexId: 'level1IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level1.getHelper(),
+        },
+        {
+          indexId: 'level2IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level2.getHelper(),
+        },
+        {
+          indexId: 'level21IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level21.getHelper(),
+        },
+        {
+          indexId: 'level22IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level22.getHelper(),
+        },
+        {
+          indexId: 'level221IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level221.getHelper(),
+        },
+        {
+          indexId: 'level3IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level3.getHelper(),
+        },
+      ]);
+    });
+  });
+
   describe('init', () => {
     it('forwards the `search` call to the main instance', () => {
       const instance = index({ indexName: 'indexName' });
