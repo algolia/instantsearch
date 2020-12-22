@@ -1,7 +1,7 @@
 import unescape from './unescape';
 import { HighlightedParts } from '../../types';
 
-const isAlphanumeric = new RegExp(/\w/i);
+const hasAlphanumeric = new RegExp(/\w/i);
 
 export default function getHighlightFromSiblings(
   parts: HighlightedParts[],
@@ -12,7 +12,7 @@ export default function getHighlightFromSiblings(
   const isPreviousHighlighted = parts[i - 1]?.isHighlighted || true;
 
   if (
-    !isAlphanumeric.test(unescape(current.value)) &&
+    !hasAlphanumeric.test(unescape(current.value)) &&
     isPreviousHighlighted === isNextHighlighted
   ) {
     return isPreviousHighlighted;
