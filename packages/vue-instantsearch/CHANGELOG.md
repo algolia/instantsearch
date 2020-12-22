@@ -1,3 +1,12 @@
+## [3.4.3](https://github.com/algolia/vue-instantsearch/compare/v3.4.2...v3.4.3) (2020-12-22)
+
+
+### Bug Fixes
+
+* **ssr:** forward slots of the AisInstantSearchSsr component ([#898](https://github.com/algolia/vue-instantsearch/issues/898)) ([60b595e](https://github.com/algolia/vue-instantsearch/commit/60b595e4b806dd52c66e9f3c82772deb9c67b770))
+
+
+
 ## [3.4.2](https://github.com/algolia/vue-instantsearch/compare/v3.4.1...v3.4.2) (2020-10-05)
 
 
