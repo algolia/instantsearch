@@ -42,8 +42,7 @@ export function createTelemetryMiddleware(): Middleware {
           const initOptions = {
             instantSearchInstance,
             parent,
-            // @TODO: https://github.com/algolia/instantsearch.js/pull/4609
-            // scopedResults: parent.getScopedResults(),
+            scopedResults: parent.getScopedResults(),
             state: parent.getHelper()!.state,
             helper: parent.getHelper()!,
             createURL: parent.createURL,
