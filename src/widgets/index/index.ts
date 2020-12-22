@@ -51,6 +51,7 @@ export type Index = Widget & {
   getIndexId(): string;
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
+  getScopedResults(): ScopedResult[];
   getParent(): Index | null;
   getWidgets(): Widget[];
   createURL(state: SearchParameters): string;
@@ -177,14 +178,6 @@ function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
   }, []);
 }
 
-function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
-  const widgetParent = widget.getParent();
-  // If the widget is the root, we consider itself as the only sibling.
-  const widgetSiblings = widgetParent ? widgetParent.getWidgets() : [widget];
-
-  return resolveScopedResultsFromWidgets(widgetSiblings);
-}
-
 const index = (props: IndexProps): Index => {
   if (props === undefined || props.indexName === undefined) {
     throw new Error(withUsage('The `indexName` option is required.'));
@@ -216,6 +209,15 @@ const index = (props: IndexProps): Index => {
 
     getResults() {
       return derivedHelper && derivedHelper.lastResults;
+    },
+
+    getScopedResults() {
+      const widgetParent = this.getParent();
+
+      // If the widget is the root, we consider itself as the only sibling.
+      const widgetSiblings = widgetParent ? widgetParent.getWidgets() : [this];
+
+      return resolveScopedResultsFromWidgets(widgetSiblings);
     },
 
     getParent() {
@@ -571,7 +573,7 @@ const index = (props: IndexProps): Index => {
               parent: this,
               instantSearchInstance,
               results: this.getResults()!,
-              scopedResults: resolveScopedResultsFromIndex(this),
+              scopedResults: this.getScopedResults(),
               state: this.getResults()!._state,
               renderState: instantSearchInstance.renderState,
               templatesConfig: instantSearchInstance.templatesConfig,
@@ -604,7 +606,7 @@ const index = (props: IndexProps): Index => {
             parent: this,
             instantSearchInstance,
             results: this.getResults()!,
-            scopedResults: resolveScopedResultsFromIndex(this),
+            scopedResults: this.getScopedResults(),
             state: this.getResults()!._state,
             renderState: instantSearchInstance.renderState,
             templatesConfig: instantSearchInstance.templatesConfig,
