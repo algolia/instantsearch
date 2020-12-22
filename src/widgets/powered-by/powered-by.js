@@ -48,7 +48,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @type {WidgetFactory}
  * @devNovel PoweredBy
  * @category metadata
- * @param {PoweredByWidgetOptions} $0 PoweredBy widget options. Some keys are mandatory: `container`,
+ * @param {PoweredByWidgetOptions} widgetOptions PoweredBy widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new poweredBy widget instance
  * @example
  * search.addWidgets([

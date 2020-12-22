@@ -92,7 +92,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @type {WidgetFactory}
  * @devNovel RangeInput
  * @category filter
- * @param {RangeInputWidgetOptions} $0 The RangeInput widget options.
+ * @param {RangeInputWidgetOptions} widgetOptions The RangeInput widget options.
  * @return {Widget} A new instance of RangeInput widget.
  * @example
  * search.addWidgets([

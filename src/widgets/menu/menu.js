@@ -109,7 +109,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel Menu
  * @category filter
- * @param {MenuWidgetOptions} $0 The Menu widget options.
+ * @param {MenuWidgetOptions} widgetOptions The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.
  * @example
  * search.addWidgets([
