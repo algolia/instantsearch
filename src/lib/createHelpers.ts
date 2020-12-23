@@ -1,8 +1,12 @@
 import {
   highlight,
+  reverseHighlight,
   snippet,
+  reverseSnippet,
   HighlightOptions,
+  ReverseHighlightOptions,
   SnippetOptions,
+  ReverseSnippetOptions,
   insights,
 } from '../helpers';
 import { Hit, InsightsClientMethod, InsightsClientPayload } from '../types';
@@ -12,7 +16,9 @@ type HoganRenderer = (value: any) => string;
 type HoganHelpers = {
   formatNumber: (value: number, render: HoganRenderer) => string;
   highlight: (options: string, render: HoganRenderer) => string;
+  reverseHighlight: (options: string, render: HoganRenderer) => string;
   snippet: (options: string, render: HoganRenderer) => string;
+  reverseSnippet: (options: string, render: HoganRenderer) => string;
   insights: (options: string, render: HoganRenderer) => string;
 };
 
@@ -43,6 +49,25 @@ The highlight helper expects a JSON object of the format:
 { "attribute": "name", "highlightedTagName": "mark" }`);
       }
     },
+    reverseHighlight(options, render) {
+      try {
+        const reverseHighlightOptions: Omit<
+          ReverseHighlightOptions,
+          'hit'
+        > = JSON.parse(options);
+
+        return render(
+          reverseHighlight({
+            ...reverseHighlightOptions,
+            hit: this,
+          })
+        );
+      } catch (error) {
+        throw new Error(`
+  The reverseHighlight helper expects a JSON object of the format:
+  { "attribute": "name", "highlightedTagName": "mark" }`);
+      }
+    },
     snippet(options, render) {
       try {
         const snippetOptions: Omit<SnippetOptions, 'hit'> = JSON.parse(options);
@@ -57,6 +82,25 @@ The highlight helper expects a JSON object of the format:
         throw new Error(`
 The snippet helper expects a JSON object of the format:
 { "attribute": "name", "highlightedTagName": "mark" }`);
+      }
+    },
+    reverseSnippet(options, render) {
+      try {
+        const reverseSnippetOptions: Omit<
+          ReverseSnippetOptions,
+          'hit'
+        > = JSON.parse(options);
+
+        return render(
+          reverseSnippet({
+            ...reverseSnippetOptions,
+            hit: this,
+          })
+        );
+      } catch (error) {
+        throw new Error(`
+  The reverseSnippet helper expects a JSON object of the format:
+  { "attribute": "name", "highlightedTagName": "mark" }`);
       }
     },
     insights(this: Hit, options, render) {
