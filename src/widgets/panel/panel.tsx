@@ -252,7 +252,6 @@ const panel: PanelWidget = widgetParams => {
 
     return {
       ...widget,
-      $$props: widgetOptions,
       dispose(...args) {
         render(null, getContainerNode(container));
 
