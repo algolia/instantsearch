@@ -56,7 +56,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  */
 
 /**
- * @typedef {Object} MenuSelectWidgetOptions
+ * @typedef {Object} MenuSelectWidgetParams
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attribute Name of the attribute for faceting
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
@@ -72,7 +72,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * Create a menu select out of a facet
  * @type {WidgetFactory}
  * @category filter
- * @param {MenuSelectWidgetOptions} widgetOptions The Menu select widget options.
+ * @param {MenuSelectWidgetParams} widgetParams The Menu select widget options.
  * @return {Widget} Creates a new instance of the Menu select widget.
  * @example
  * search.addWidgets([
@@ -83,7 +83,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function menuSelect(widgetOptions) {
+export default function menuSelect(widgetParams) {
   const {
     container,
     attribute,
@@ -92,7 +92,7 @@ export default function menuSelect(widgetOptions) {
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformItems,
-  } = widgetOptions || {};
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

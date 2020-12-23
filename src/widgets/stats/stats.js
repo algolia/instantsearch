@@ -78,7 +78,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  */
 
 /**
- * @typedef {Object} StatsWidgetOptions
+ * @typedef {Object} StatsWidgetParams
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {StatsWidgetTemplates} [templates] Templates to use for the widget.
  * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add.
@@ -92,7 +92,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @type {WidgetFactory}
  * @devNovel Stats
  * @category metadata
- * @param {StatsWidgetOptions} widgetOptions Stats widget options. Some keys are mandatory: `container`,
+ * @param {StatsWidgetParams} widgetParams Stats widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new stats widget instance
  * @example
  * search.addWidgets([
@@ -101,12 +101,12 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function stats(widgetOptions) {
+export default function stats(widgetParams) {
   const {
     container,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
-  } = widgetOptions || {};
+  } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

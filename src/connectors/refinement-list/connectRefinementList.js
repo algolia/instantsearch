@@ -22,7 +22,7 @@ const withUsage = createDocumentationMessageGenerator({
  */
 
 /**
- * @typedef {Object} CustomRefinementListWidgetOptions
+ * @typedef {Object} CustomRefinementListWidgetParams
  * @property {string} attribute The name of the attribute in the records.
  * @property {"and"|"or"} [operator = 'or'] How the filters are combined together.
  * @property {number} [limit = 10] The max number of items to display when
@@ -45,7 +45,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @property {boolean} canRefine `true` if a refinement can be applied.
  * @property {boolean} canToggleShowMore `true` if the toggleShowMore button can be activated (enough items to display more or
  * already displaying more than `limit` items)
- * @property {Object} widgetParams All original `CustomRefinementListWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomRefinementListWidgetParams` forwarded to the `renderFn`.
  * @property {boolean} isShowingMore True if the menu is displaying all the menu items.
  * @property {function} toggleShowMore Toggles the number of values displayed between `limit` and `showMoreLimit`.
  */
@@ -59,7 +59,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @type {Connector}
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.
+ * @return {function(CustomRefinementListWidgetParams)} Re-usable widget factory for a custom **RefinementList** widget.
  * @example
  * // custom `renderFn` to render the custom RefinementList widget
  * function renderFn(RefinementListRenderingOptions, isFirstRendering) {

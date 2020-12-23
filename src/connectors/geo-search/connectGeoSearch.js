@@ -27,7 +27,7 @@ const $$type = 'ais.geoSearch';
  */
 
 /**
- * @typedef {Object} CustomGeoSearchWidgetOptions
+ * @typedef {Object} CustomGeoSearchWidgetParams
  * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -44,7 +44,7 @@ const $$type = 'ais.geoSearch';
  * @property {function(): boolean} isRefineOnMapMove Return true if the user is able to refine on map move.
  * @property {function()} setMapMoveSinceLastRefine Set the fact that the map has moved since the last refinement, should be call on each map move. The call to the function triggers a new rendering only when the value change.
  * @property {function(): boolean} hasMapMoveSinceLastRefine Return true if the map has move since the last refinement.
- * @property {Object} widgetParams All original `CustomGeoSearchWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomGeoSearchWidgetParams` forwarded to the `renderFn`.
  * @property {LatLng} [position] The current position of the search.
  */
 
@@ -59,7 +59,7 @@ const $$type = 'ais.geoSearch';
  *
  * @param {function(GeoSearchRenderingOptions, boolean)} renderFn Rendering function for the custom **GeoSearch** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomGeoSearchWidgetOptions)} Re-usable widget factory for a custom **GeoSearch** widget.
+ * @return {function(CustomGeoSearchWidgetParams)} Re-usable widget factory for a custom **GeoSearch** widget.
  * @staticExample
  * // This example use Leaflet for the rendering, be sure to have the library correctly setup
  * // before trying the demo. You can find more details in their documentation (link below).

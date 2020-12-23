@@ -180,7 +180,7 @@ const renderer = ({
   );
 };
 
-const infiniteHits: InfiniteHitsWidget = widgetOptions => {
+const infiniteHits: InfiniteHitsWidget = widgetParams => {
   const {
     container,
     escapeHTML,
@@ -189,7 +189,7 @@ const infiniteHits: InfiniteHitsWidget = widgetOptions => {
     cssClasses: userCssClasses = {},
     showPrevious,
     cache,
-  } = widgetOptions || ({} as InfiniteHitsWidgetParams);
+  } = widgetParams || ({} as InfiniteHitsWidgetParams);
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

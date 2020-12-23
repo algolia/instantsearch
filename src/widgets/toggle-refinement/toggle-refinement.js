@@ -61,7 +61,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  */
 
 /**
- * @typedef {Object} ToggleWidgetOptions
+ * @typedef {Object} ToggleWidgetParams
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {string|number|boolean|array} on Value to filter on when checked.
@@ -88,7 +88,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @type {WidgetFactory}
  * @devNovel ToggleRefinement
  * @category filter
- * @param {ToggleWidgetOptions} widgetOptions Options for the ToggleRefinement widget.
+ * @param {ToggleWidgetParams} widgetParams Options for the ToggleRefinement widget.
  * @return {Widget} A new instance of the ToggleRefinement widget
  * @example
  * search.addWidgets([
@@ -102,7 +102,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function toggleRefinement(widgetOptions) {
+export default function toggleRefinement(widgetParams) {
   const {
     container,
     attribute,
@@ -110,7 +110,7 @@ export default function toggleRefinement(widgetOptions) {
     templates = defaultTemplates,
     on = true,
     off,
-  } = widgetOptions || {};
+  } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

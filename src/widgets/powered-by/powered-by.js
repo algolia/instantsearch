@@ -37,7 +37,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  */
 
 /**
- * @typedef {Object} PoweredByWidgetOptions
+ * @typedef {Object} PoweredByWidgetParams
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} [theme] The theme of the logo ("light" or "dark").
  * @property {PoweredByWidgetCssClasses} [cssClasses] CSS classes to add.
@@ -48,7 +48,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @type {WidgetFactory}
  * @devNovel PoweredBy
  * @category metadata
- * @param {PoweredByWidgetOptions} widgetOptions PoweredBy widget options. Some keys are mandatory: `container`,
+ * @param {PoweredByWidgetParams} widgetParams PoweredBy widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new poweredBy widget instance
  * @example
  * search.addWidgets([
@@ -58,9 +58,9 @@ const renderer = ({ containerNode, cssClasses }) => (
  *   })
  * ]);
  */
-export default function poweredBy(widgetOptions) {
+export default function poweredBy(widgetParams) {
   const { container, cssClasses: userCssClasses = {}, theme = 'light' } =
-    widgetOptions || {};
+    widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

@@ -22,7 +22,7 @@ const withUsage = createDocumentationMessageGenerator({
  */
 
 /**
- * @typedef {Object} CustomHierarchicalMenuWidgetOptions
+ * @typedef {Object} CustomHierarchicalMenuWidgetParams
  * @property {string[]} attributes Attributes to use to generate the hierarchy of the menu.
  * @property {string} [separator = '>'] Separator used in the attributes to separate level values.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
@@ -42,7 +42,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @property {function(item.value): string} createURL Creates an url for the next state for a clicked item.
  * @property {HierarchicalMenuItem[]} items Values to be rendered.
  * @property {function(item.value)} refine Sets the path of the hierarchical filter and triggers a new search.
- * @property {Object} widgetParams All original `CustomHierarchicalMenuWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomHierarchicalMenuWidgetParams` forwarded to the `renderFn`.
  */
 
 /**
@@ -56,7 +56,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @type {Connector}
  * @param {function(HierarchicalMenuRenderingOptions, boolean)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
+ * @return {function(CustomHierarchicalMenuWidgetParams)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
 export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

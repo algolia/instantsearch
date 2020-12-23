@@ -61,7 +61,7 @@ const suit = component('GeoSearch');
  */
 
 /**
- * @typedef {object} GeoSearchWidgetOptions
+ * @typedef {object} GeoSearchWidgetParams
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {object} googleReference Reference to the global `window.google` object. <br />
  * See [the documentation](https://developers.google.com/maps/documentation/javascript/tutorial) for more information.
@@ -94,7 +94,7 @@ const suit = component('GeoSearch');
  * Don't forget to explicitly set the `height` of the map container (default class `.ais-geo-search--map`), otherwise it won't be shown (it's a requirement of Google Maps).
  *
  * @devNovel GeoSearch
- * @param {GeoSearchWidgetOptions} widgetOptions Options of the GeoSearch widget.
+ * @param {GeoSearchWidgetParams} widgetParams Options of the GeoSearch widget.
  * @return {Widget} A new instance of GeoSearch widget.
  * @staticExample
  * search.addWidgets([
@@ -104,7 +104,7 @@ const suit = component('GeoSearch');
  *   })
  * ]);
  */
-const geoSearch = widgetOptions => {
+const geoSearch = widgetParams => {
   const {
     initialZoom = 1,
     initialPosition = { lat: 0, lng: 0 },
@@ -117,8 +117,8 @@ const geoSearch = widgetOptions => {
     enableRefineControl = true,
     container,
     googleReference,
-    ...widgetParams
-  } = widgetOptions || {};
+    ...otherWidgetParams
+  } = widgetParams || {};
 
   const defaultBuiltInMarker = {
     createOptions: noop,
@@ -216,7 +216,7 @@ const geoSearch = widgetOptions => {
 
   return {
     ...makeWidget({
-      ...widgetParams,
+      ...otherWidgetParams,
       renderState: {},
       container: containerNode,
       googleReference,

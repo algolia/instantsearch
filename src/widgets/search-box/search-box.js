@@ -64,7 +64,7 @@ const renderer = ({
  */
 
 /**
- * @typedef {Object} SearchBoxWidgetOptions
+ * @typedef {Object} SearchBoxWidgetParams
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
  * @property {string} [placeholder] The placeholder of the input
  * @property {boolean} [autofocus=false] Whether the input should be autofocused
@@ -91,7 +91,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel SearchBox
  * @category basic
- * @param {SearchBoxWidgetOptions} widgetOptions Options used to configure a SearchBox widget.
+ * @param {SearchBoxWidgetParams} widgetParams Options used to configure a SearchBox widget.
  * @return {Widget} Creates a new instance of the SearchBox widget.
  * @example
  * search.addWidgets([
@@ -101,7 +101,7 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function searchBox(widgetOptions) {
+export default function searchBox(widgetParams) {
   const {
     container,
     placeholder = '',
@@ -113,7 +113,7 @@ export default function searchBox(widgetOptions) {
     showLoadingIndicator = true,
     queryHook,
     templates,
-  } = widgetOptions || {};
+  } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
