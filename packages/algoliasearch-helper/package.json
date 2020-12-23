@@ -39,9 +39,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@types/algoliasearch": "3.30.12",
+    "@types/algoliasearch": "3.34.11",
     "algolia-frontend-components": "0.0.35",
-    "algoliasearch": "4.0.0-beta.14",
+    "algoliasearch": "4.8.3",
     "babel-core": "6.26.3",
     "babel-loader": "6.4.1",
     "babel-preset-es2015": "6.24.1",

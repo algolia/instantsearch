@@ -8,6 +8,8 @@ var requestBuilder = require('./requestBuilder');
 var events = require('events');
 var inherits = require('./functions/inherits');
 var objectHasKeys = require('./functions/objectHasKeys');
+var omit = require('./functions/omit');
+var merge = require('./functions/merge');
 
 var version = require('./version');
 
@@ -246,6 +248,49 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
     if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
     throw e;
   });
+};
+
+ /**
+ * Start the search for answers with the parameters set in the state.
+ * This method returns a promise.
+ * @param {Object} options - the options for answers API call
+ * @param {string[]} options.attributesForPrediction - Attributes to use for predictions. If empty, `searchableAttributes` is used instead.
+ * @param {string[]} options.queryLanguages - The languages in the query. Currently only supports ['en'].
+ * @param {number} options.nbHits - Maximum number of answers to retrieve from the Answers Engine. Cannot be greater than 1000.
+ *
+ * @return {promise} the answer results
+ */
+AlgoliaSearchHelper.prototype.findAnswers = function(options) {
+  var state = this.state;
+  var derivedHelper = this.derivedHelpers[0];
+  if (!derivedHelper) {
+    return Promise.resolve([]);
+  }
+  var derivedState = derivedHelper.getModifiedState(state);
+  var data = merge(
+    {
+      attributesForPrediction: options.attributesForPrediction,
+      nbHits: options.nbHits
+    },
+    {
+      params: omit(requestBuilder._getHitsSearchParams(derivedState), [
+        'attributesToSnippet',
+        'hitsPerPage',
+        'restrictSearchableAttributes',
+        'snippetEllipsisText' // FIXME remove this line once the engine is fixed.
+      ])
+    }
+  );
+
+  var errorMessage = 'search for answers was called, but this client does not have a function client.initIndex(index).findAnswers';
+  if (typeof this.client.initIndex !== 'function') {
+    throw new Error(errorMessage);
+  }
+  var index = this.client.initIndex(derivedState.index);
+  if (typeof index.findAnswers !== 'function') {
+    throw new Error(errorMessage);
+  }
+  return index.findAnswers(derivedState.query, options.queryLanguages, data);
 };
 
 /**

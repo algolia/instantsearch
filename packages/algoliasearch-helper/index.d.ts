@@ -16,6 +16,7 @@ import algoliasearch, {
 import {
   SearchOptions as SearchOptionsV4,
   SearchResponse as SearchResponseV4,
+  FindAnswersResponse
   // @ts-ignore
 } from '@algolia/client-search';
 import { EventEmitter } from 'events';
@@ -170,6 +171,20 @@ declare namespace algoliasearchHelper {
         state: SearchParameters
       ) => void
     ): void;
+
+    /**
+     * Start the search for answers with the parameters set in the state.
+     * This method returns a promise.
+     * @param {Object} options - the options for answers API call
+     * @param {string[]} options.attributesForPrediction - Attributes to use for predictions. If empty, `searchableAttributes` is used instead.
+     * @param {string[]} options.queryLanguages - The languages in the query. Currently only supports ['en'].
+     * @param {number} options.nbHits - Maximum number of answers to retrieve from the Answers Engine. Cannot be greater than 1000.
+     */
+    findAnswers<TObject>(options: {
+      attributesForPrediction: string[];
+      queryLanguages: string[];
+      nbHits: number;
+    }): Promise<FindAnswersResponse<TObject>>;
 
     /**
      * Search for facet values based on an query and the name of a faceted attribute. This
