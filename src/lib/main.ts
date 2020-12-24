@@ -38,7 +38,9 @@ instantsearch.widgets = widgets;
 instantsearch.version = version;
 instantsearch.createInfiniteHitsSessionStorageCache = createInfiniteHitsSessionStorageCache;
 instantsearch.highlight = helpers.highlight;
+instantsearch.reverseHighlight = helpers.reverseHighlight;
 instantsearch.snippet = helpers.snippet;
+instantsearch.reverseSnippet = helpers.reverseSnippet;
 instantsearch.insights = helpers.insights;
 instantsearch.middlewares = middlewares;
 
