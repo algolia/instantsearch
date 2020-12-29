@@ -1,3 +1,14 @@
+# [4.10.0](https://github.com/algolia/instantsearch.js/compare/v4.9.2...v4.10.0) (2020-12-29)
+
+
+### Features
+
+* **index:** expose createURL ([#4603](https://github.com/algolia/instantsearch.js/issues/4603)) ([f57e9c5](https://github.com/algolia/instantsearch.js/commit/f57e9c5a46e927b8dd38f167ee5c467151334a08))
+* **index:** expose scoped results getter ([#4609](https://github.com/algolia/instantsearch.js/issues/4609)) ([a41b1e4](https://github.com/algolia/instantsearch.js/commit/a41b1e46bb195e6ef1f9bdbdde64d9300246c22f))
+* **reverseHighlight/reverseSnippet:** Implements reverseHighlight and reverseSnippet ([#4592](https://github.com/algolia/instantsearch.js/issues/4592)) ([718bf45](https://github.com/algolia/instantsearch.js/commit/718bf458152bb55bab1efb542adb8e31298c0c3c))
+
+
+
 ## [4.9.2](https://github.com/algolia/instantsearch.js/compare/v4.9.1...v4.9.2) (2020-12-15)
 
 
