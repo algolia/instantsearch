@@ -290,7 +290,7 @@ ${
             const isRefined = refinedStar === star;
 
             const count = facetResults
-              .filter(f => Number(f.name) >= star)
+              .filter(f => Number(f.name) >= star && Number(f.name) < max)
               .map(f => f.count)
               .reduce((sum, current) => sum + current, 0);
 
