@@ -257,7 +257,6 @@ ${
         instantSearchInstance,
         createURL,
       }) {
-        const { maxValuesPerFacet } = state;
         let facetValues = [];
 
         if (!sendEvent) {
@@ -271,6 +270,7 @@ ${
 
         if (results) {
           const facetResults = results.getFacetValues(attribute);
+          const maxValuesPerFacet = facetResults.length;
 
           const maxDecimalPlaces = getFacetsMaxDecimalPlaces(facetResults);
           const maxFacets = Math.pow(10, maxDecimalPlaces) * max;
