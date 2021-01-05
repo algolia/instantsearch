@@ -9,7 +9,7 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { TAG_PLACEHOLDER } from '../../../lib/utils/escape-highlight';
+import { TAG_PLACEHOLDER } from '../../../lib/utils/';
 import connectInfiniteHits from '../connectInfiniteHits';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
