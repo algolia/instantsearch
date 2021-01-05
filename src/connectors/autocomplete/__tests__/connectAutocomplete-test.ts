@@ -10,7 +10,7 @@ import {
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectAutocomplete from '../connectAutocomplete';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
+import { TAG_PLACEHOLDER } from '../../../lib/utils/escape-highlight';
 import { SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {

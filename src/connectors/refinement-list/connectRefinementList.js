@@ -1,14 +1,12 @@
 import {
+  escapeFacets,
+  TAG_PLACEHOLDER,
+  TAG_REPLACEMENT,
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
 } from '../../lib/utils';
-import {
-  escapeFacets,
-  TAG_PLACEHOLDER,
-  TAG_REPLACEMENT,
-} from '../../lib/escape-highlight';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',

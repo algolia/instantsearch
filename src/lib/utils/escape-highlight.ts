@@ -1,6 +1,6 @@
-import escape from '../lib/utils/escape';
-import isPlainObject from '../lib/utils/isPlainObject';
-import { Hit, FacetHit, EscapedHits } from '../types';
+import escape from './escape';
+import isPlainObject from './isPlainObject';
+import { Hit, FacetHit, EscapedHits } from '../../types';
 
 export const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',

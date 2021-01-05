@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
+import { TAG_PLACEHOLDER } from '../../../lib/utils/escape-highlight';
 import connectHits from '../connectHits';
 import {
   createInitOptions,
