@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/utils/';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectHits from '../connectHits';
 import {
   createInitOptions,
