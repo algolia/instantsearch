@@ -28,7 +28,7 @@ const configure: ConfigureWidget = function configure(widgetParams) {
 
   return {
     ...makeWidget({ searchParameters: widgetParams }),
-    $$officialWidget: true,
+    $$official: true,
   };
 };
 

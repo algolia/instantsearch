@@ -140,6 +140,6 @@ export default function toggleRefinement(widgetOptions) {
 
   return {
     ...makeWidget({ attribute, on, off }),
-    $$officialWidget: true,
+    $$official: true,
   };
 }

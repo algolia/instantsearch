@@ -97,7 +97,7 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetOptions => {
     }),
 
     $$type: 'ais.queryRuleCustomData',
-    $$officialWidget: true,
+    $$official: true,
   };
 };
 

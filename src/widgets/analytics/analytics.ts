@@ -225,7 +225,7 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
 
   return {
     $$type: 'ais.analytics',
-    $$officialWidget: true,
+    $$official: true,
 
     init() {
       if (triggerOnUIInteraction === true) {

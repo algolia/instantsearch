@@ -402,7 +402,7 @@ export type Widget<
   /**
    * private marker on widgets to differentiate a widget from a connector
    */
-  $$officialWidget?: boolean;
+  $$official?: boolean;
 
   /**
    * Called once before the first search

@@ -105,7 +105,7 @@ describe('telemetry', () => {
       expect(document.head).toMatchInlineSnapshot(`
 <head>
   <meta
-    content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"params\\":[],\\"officialWidget\\":true},{\\"type\\":\\"ais.searchBox\\",\\"params\\":[],\\"officialWidget\\":true},{\\"type\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"],\\"officialWidget\\":true},{\\"type\\":\\"ais.index\\",\\"params\\":[],\\"officialWidget\\":true},{\\"type\\":\\"ais.pagination\\",\\"params\\":[],\\"officialWidget\\":true},{\\"type\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"],\\"officialWidget\\":true}]}"
+    content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"params\\":[],\\"official\\":true},{\\"type\\":\\"ais.searchBox\\",\\"params\\":[],\\"official\\":true},{\\"type\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"],\\"official\\":true},{\\"type\\":\\"ais.index\\",\\"params\\":[],\\"official\\":true},{\\"type\\":\\"ais.pagination\\",\\"params\\":[],\\"official\\":true},{\\"type\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"],\\"official\\":true}]}"
     name="instantsearch:widgets"
   />
 </head>
@@ -116,34 +116,34 @@ describe('telemetry', () => {
 Object {
   "widgets": Array [
     Object {
-      "officialWidget": true,
+      "official": true,
       "params": Array [],
       "type": "ais.searchBox",
     },
     Object {
-      "officialWidget": true,
+      "official": true,
       "params": Array [],
       "type": "ais.searchBox",
     },
     Object {
-      "officialWidget": true,
+      "official": true,
       "params": Array [
         "escapeHTML",
       ],
       "type": "ais.hits",
     },
     Object {
-      "officialWidget": true,
+      "official": true,
       "params": Array [],
       "type": "ais.index",
     },
     Object {
-      "officialWidget": true,
+      "official": true,
       "params": Array [],
       "type": "ais.pagination",
     },
     Object {
-      "officialWidget": true,
+      "official": true,
       "params": Array [
         "searchParameters",
       ],

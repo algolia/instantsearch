@@ -162,6 +162,6 @@ export default function searchBox(widgetOptions) {
 
   return {
     ...makeWidget({ queryHook }),
-    $$officialWidget: true,
+    $$official: true,
   };
 }

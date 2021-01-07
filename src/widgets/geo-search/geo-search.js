@@ -230,7 +230,7 @@ const geoSearch = widgetOptions => {
       enableClearMapRefinement,
       enableRefineControl,
     }),
-    $$officialWidget: true,
+    $$official: true,
   };
 };
 

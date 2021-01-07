@@ -4,7 +4,7 @@ import { Index } from '../widgets/index/index';
 type TelemetryWidget = {
   type: string;
   params: string[];
-  officialWidget: boolean;
+  official: boolean;
 };
 
 type TelemetryPayload = {
@@ -52,7 +52,7 @@ function extractPayload(
     payload.widgets.push({
       type: widget.$$type || 'custom.widget',
       params,
-      officialWidget: Boolean(widget.$$officialWidget),
+      official: Boolean(widget.$$official),
     });
 
     if (widget.$$type === 'ais.index') {

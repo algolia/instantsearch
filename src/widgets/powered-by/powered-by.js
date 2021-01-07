@@ -89,6 +89,6 @@ export default function poweredBy(widgetOptions) {
 
   return {
     ...makeWidget({ theme }),
-    $$officialWidget: true,
+    $$official: true,
   };
 }

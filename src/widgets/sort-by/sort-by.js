@@ -103,6 +103,6 @@ export default function sortBy(widgetOptions) {
 
   return {
     ...makeWidget({ items, transformItems }),
-    $$officialWidget: true,
+    $$official: true,
   };
 }

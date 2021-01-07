@@ -129,7 +129,7 @@ const currentRefinements: CurrentRefinementsWidget = function currentRefinements
       excludedAttributes,
       transformItems,
     }),
-    $$officialWidget: true,
+    $$official: true,
   };
 };
 
