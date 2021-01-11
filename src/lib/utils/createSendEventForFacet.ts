@@ -40,7 +40,7 @@ export function createSendEventForFacet({
           payload: {
             eventName,
             index: helper.getIndex(),
-            filters: [`${attribute}:${JSON.stringify(facetValue)}`],
+            filters: [`${attribute}:${facetValue}`],
           },
         });
       }

@@ -51,10 +51,14 @@ export type Index = Widget & {
   getIndexId(): string;
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
+  getScopedResults(): ScopedResult[];
   getParent(): Index | null;
   getWidgets(): Widget[];
+  createURL(state: SearchParameters): string;
+
   addWidgets(widgets: Widget[]): Index;
   removeWidgets(widgets: Widget[]): Index;
+
   init(options: IndexInitOptions): void;
   render(options: IndexRenderOptions): void;
   dispose(): void;
@@ -103,7 +107,7 @@ function privateHelperSetState(
   }
 }
 
-function getLocalWidgetsState(
+function getLocalWidgetsUiState(
   widgets: Widget[],
   widgetStateOptions: WidgetUiStateOptions,
   initialUiState: IndexUiState = {}
@@ -174,14 +178,6 @@ function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
   }, []);
 }
 
-function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
-  const widgetParent = widget.getParent();
-  // If the widget is the root, we consider itself as the only sibling.
-  const widgetSiblings = widgetParent ? widgetParent.getWidgets() : [widget];
-
-  return resolveScopedResultsFromWidgets(widgetSiblings);
-}
-
 const index = (props: IndexProps): Index => {
   if (props === undefined || props.indexName === undefined) {
     throw new Error(withUsage('The `indexName` option is required.'));
@@ -195,14 +191,6 @@ const index = (props: IndexProps): Index => {
   let localParent: Index | null = null;
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
-
-  const createURL = (nextState: SearchParameters) =>
-    localInstantSearchInstance!._createURL!({
-      [indexId]: getLocalWidgetsState(localWidgets, {
-        searchParameters: nextState,
-        helper: helper!,
-      }),
-    });
 
   return {
     $$type: 'ais.index',
@@ -223,8 +211,26 @@ const index = (props: IndexProps): Index => {
       return derivedHelper && derivedHelper.lastResults;
     },
 
+    getScopedResults() {
+      const widgetParent = this.getParent();
+
+      // If the widget is the root, we consider itself as the only sibling.
+      const widgetSiblings = widgetParent ? widgetParent.getWidgets() : [this];
+
+      return resolveScopedResultsFromWidgets(widgetSiblings);
+    },
+
     getParent() {
       return localParent;
+    },
+
+    createURL(nextState: SearchParameters) {
+      return localInstantSearchInstance!._createURL!({
+        [indexId]: getLocalWidgetsUiState(localWidgets, {
+          searchParameters: nextState,
+          helper: helper!,
+        }),
+      });
     },
 
     getWidgets() {
@@ -278,7 +284,7 @@ const index = (props: IndexProps): Index => {
                 state: helper!.state,
                 renderState: localInstantSearchInstance!.renderState,
                 templatesConfig: localInstantSearchInstance!.templatesConfig,
-                createURL,
+                createURL: this.createURL,
                 scopedResults: [],
                 searchMetadata: {
                   isSearchStalled: localInstantSearchInstance!._isSearchStalled,
@@ -304,7 +310,7 @@ const index = (props: IndexProps): Index => {
               state: helper!.state,
               renderState: localInstantSearchInstance!.renderState,
               templatesConfig: localInstantSearchInstance!.templatesConfig,
-              createURL,
+              createURL: this.createURL,
               scopedResults: [],
               searchMetadata: {
                 isSearchStalled: localInstantSearchInstance!._isSearchStalled,
@@ -344,7 +350,7 @@ const index = (props: IndexProps): Index => {
           return next || state;
         }, helper!.state);
 
-        localUiState = getLocalWidgetsState(localWidgets, {
+        localUiState = getLocalWidgetsUiState(localWidgets, {
           searchParameters: nextState,
           helper: helper!,
         });
@@ -484,7 +490,7 @@ const index = (props: IndexProps): Index => {
               state: helper!.state,
               renderState: instantSearchInstance.renderState,
               templatesConfig: instantSearchInstance.templatesConfig,
-              createURL,
+              createURL: this.createURL,
               scopedResults: [],
               searchMetadata: {
                 isSearchStalled: instantSearchInstance._isSearchStalled,
@@ -502,7 +508,9 @@ const index = (props: IndexProps): Index => {
 
       localWidgets.forEach(widget => {
         warning(
-          !widget.getWidgetState,
+          // if it has NO getWidgetState or if it has getWidgetUiState, we don't warn
+          // aka we warn if there's _only_ getWidgetState
+          !widget.getWidgetState || Boolean(widget.getWidgetUiState),
           'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
         );
 
@@ -515,7 +523,7 @@ const index = (props: IndexProps): Index => {
             state: helper!.state,
             renderState: instantSearchInstance.renderState,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL,
+            createURL: this.createURL,
             scopedResults: [],
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
@@ -536,7 +544,7 @@ const index = (props: IndexProps): Index => {
         // @ts-ignore _uiState comes from privateHelperSetState and thus isn't typed on the helper event
         const _uiState = event._uiState;
 
-        localUiState = getLocalWidgetsState(
+        localUiState = getLocalWidgetsUiState(
           localWidgets,
           {
             searchParameters: state,
@@ -567,11 +575,11 @@ const index = (props: IndexProps): Index => {
               parent: this,
               instantSearchInstance,
               results: this.getResults()!,
-              scopedResults: resolveScopedResultsFromIndex(this),
+              scopedResults: this.getScopedResults(),
               state: this.getResults()!._state,
               renderState: instantSearchInstance.renderState,
               templatesConfig: instantSearchInstance.templatesConfig,
-              createURL,
+              createURL: this.createURL,
               searchMetadata: {
                 isSearchStalled: instantSearchInstance._isSearchStalled,
               },
@@ -600,11 +608,11 @@ const index = (props: IndexProps): Index => {
             parent: this,
             instantSearchInstance,
             results: this.getResults()!,
-            scopedResults: resolveScopedResultsFromIndex(this),
+            scopedResults: this.getScopedResults(),
             state: this.getResults()!._state,
             renderState: instantSearchInstance.renderState,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL,
+            createURL: this.createURL,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },
@@ -665,7 +673,7 @@ const index = (props: IndexProps): Index => {
     },
 
     refreshUiState() {
-      localUiState = getLocalWidgetsState(localWidgets, {
+      localUiState = getLocalWidgetsUiState(localWidgets, {
         searchParameters: this.getHelper()!.state,
         helper: this.getHelper()!,
       });
