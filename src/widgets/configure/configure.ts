@@ -1,4 +1,3 @@
-import { PlainSearchParameters } from 'algoliasearch-helper';
 import connectConfigure, {
   ConfigureRendererOptions,
   ConfigureConnectorParams,
@@ -10,14 +9,14 @@ import { noop } from '../../lib/utils';
  * A list of [search parameters](https://www.algolia.com/doc/api-reference/search-api-parameters/)
  * to enable when the widget mounts.
  */
-export type ConfigureWidgetParams = PlainSearchParameters;
+export type ConfigureWidgetParams = ConfigureConnectorParams['searchParameters'];
 
 export type ConfigureWidget = (
-  widgetParams: ConfigureConnectorParams['searchParameters']
+  widgetParams: ConfigureWidgetParams
 ) => Widget<{
   renderState: WidgetRenderState<
     ConfigureRendererOptions,
-    ConfigureWidgetParams
+    ConfigureConnectorParams
   >;
 }>;
 

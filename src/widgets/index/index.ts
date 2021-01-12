@@ -509,7 +509,9 @@ const index = (props: IndexProps): Index => {
 
       localWidgets.forEach(widget => {
         warning(
-          !widget.getWidgetState,
+          // if it has NO getWidgetState or if it has getWidgetUiState, we don't warn
+          // aka we warn if there's _only_ getWidgetState
+          !widget.getWidgetState || Boolean(widget.getWidgetUiState),
           'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
         );
 
