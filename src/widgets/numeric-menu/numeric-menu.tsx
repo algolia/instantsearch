@@ -215,7 +215,6 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetOptions) {
       items,
       transformItems,
     }),
-    $$official: true,
   };
 };
 

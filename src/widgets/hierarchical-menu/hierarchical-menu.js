@@ -248,6 +248,5 @@ export default function hierarchicalMenu(widgetOptions) {
       sortBy,
       transformItems,
     }),
-    $$official: true,
   };
 }

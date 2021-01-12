@@ -60,7 +60,6 @@ const placesWidget: PlacesWidget = (widgetParams: PlacesWidgetParams) => {
 
   return {
     $$type: 'ais.places',
-    $$official: true,
 
     init({ helper }) {
       placesAutocomplete.on('change', (eventOptions: ChangeEvent) => {

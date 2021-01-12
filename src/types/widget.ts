@@ -400,11 +400,6 @@ export type Widget<
     | 'ais.voiceSearch';
 
   /**
-   * private marker on widgets to differentiate a widget from a connector
-   */
-  $$official?: boolean;
-
-  /**
    * Called once before the first search
    */
   init?(options: InitOptions): void;

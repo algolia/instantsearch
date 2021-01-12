@@ -236,7 +236,6 @@ const infiniteHits: InfiniteHitsWidget = widgetOptions => {
       showPrevious,
       cache,
     }),
-    $params: widgetOptions,
   };
 };
 

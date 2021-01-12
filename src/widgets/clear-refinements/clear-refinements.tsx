@@ -134,7 +134,6 @@ const clearRefinements: ClearRefinementsWidget = widgetOptions => {
       excludedAttributes,
       transformItems,
     }),
-    $$official: true,
   };
 };
 

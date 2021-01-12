@@ -127,7 +127,6 @@ const voiceSearch: VoiceSearch = widgetOptions => {
       additionalQueryParameters,
       createVoiceSearchHelper,
     }),
-    $$official: true,
   };
 };
 

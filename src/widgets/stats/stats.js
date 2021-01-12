@@ -131,6 +131,5 @@ export default function stats(widgetOptions) {
 
   return {
     ...makeWidget(),
-    $$official: true,
   };
 }
