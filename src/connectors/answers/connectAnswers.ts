@@ -36,7 +36,7 @@ export type AnswersConnectorParams = {
   /**
    * The languages in the query. Currently only supports `en`.
    */
-  queryLanguages: string[];
+  queryLanguages: Array<'en'>;
 
   /**
    * Maximum number of answers to retrieve from the Answers Engine.
