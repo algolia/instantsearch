@@ -170,5 +170,6 @@ export default function rangeInput(widgetOptions) {
     }),
 
     $$type: 'ais.rangeInput',
+    $$widgetType: 'ais.rangeInput',
   };
 }

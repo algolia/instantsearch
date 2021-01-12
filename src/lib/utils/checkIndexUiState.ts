@@ -20,7 +20,7 @@ function getWidgetNames(connectorName: string): string[] {
 
 type StateDescription = {
   connectors: string[];
-  widgets: Array<Widget['$$type']>;
+  widgets: Array<Widget['$$widgetType']>;
 };
 
 type StateToWidgets = {

@@ -104,6 +104,7 @@ const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetOptions) {
 
   return {
     ...makeWidget({ items, transformItems }),
+    $$widgetType: 'ais.hitsPerPage',
   };
 };
 

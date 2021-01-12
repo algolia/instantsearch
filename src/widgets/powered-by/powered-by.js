@@ -89,5 +89,6 @@ export default function poweredBy(widgetOptions) {
 
   return {
     ...makeWidget({ theme }),
+    $$widgetType: 'ais.poweredBy',
   };
 }

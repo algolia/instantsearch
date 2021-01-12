@@ -236,6 +236,7 @@ const infiniteHits: InfiniteHitsWidget = widgetOptions => {
       showPrevious,
       cache,
     }),
+    $$widgetType: 'ais.infiniteHits',
   };
 };
 

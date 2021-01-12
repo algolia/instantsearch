@@ -223,5 +223,6 @@ export default function pagination(widgetOptions) {
 
   return {
     ...makeWidget({ totalPages, padding }),
+    $$widgetType: 'ais.pagination',
   };
 }

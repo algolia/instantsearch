@@ -162,5 +162,6 @@ export default function searchBox(widgetOptions) {
 
   return {
     ...makeWidget({ queryHook }),
+    $$widgetType: 'ais.searchBox',
   };
 }

@@ -129,6 +129,7 @@ const currentRefinements: CurrentRefinementsWidget = function currentRefinements
       excludedAttributes,
       transformItems,
     }),
+    $$widgetType: 'ais.currentRefinements',
   };
 };
 

@@ -122,5 +122,6 @@ export default function menuSelect(widgetOptions) {
 
   return {
     ...makeWidget({ attribute, limit, sortBy, transformItems }),
+    $$widgetType: 'ais.menuSelect',
   };
 }

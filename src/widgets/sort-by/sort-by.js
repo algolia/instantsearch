@@ -103,5 +103,6 @@ export default function sortBy(widgetOptions) {
 
   return {
     ...makeWidget({ items, transformItems }),
+    $$widgetType: 'ais.sortBy',
   };
 }

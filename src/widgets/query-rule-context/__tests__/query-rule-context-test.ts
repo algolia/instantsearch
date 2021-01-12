@@ -29,7 +29,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
       expect(widget).toEqual(
         expect.objectContaining({
-          $$type: 'ais.queryRuleContext',
+          $$type: 'ais.queryRules',
+          $$widgetType: 'ais.queryRuleContext',
         })
       );
     });

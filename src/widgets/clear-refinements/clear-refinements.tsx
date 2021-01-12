@@ -134,6 +134,7 @@ const clearRefinements: ClearRefinementsWidget = widgetOptions => {
       excludedAttributes,
       transformItems,
     }),
+    $$widgetType: 'ais.clearRefinements',
   };
 };
 

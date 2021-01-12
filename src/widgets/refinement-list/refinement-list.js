@@ -313,5 +313,6 @@ export default function refinementList(widgetOptions) {
       escapeFacetValues,
       transformItems,
     }),
+    $$widgetType: 'ais.refinementList',
   };
 }

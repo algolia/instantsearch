@@ -248,5 +248,6 @@ export default function hierarchicalMenu(widgetOptions) {
       sortBy,
       transformItems,
     }),
+    $$widgetType: 'ais.hierarchicalMenu',
   };
 }
