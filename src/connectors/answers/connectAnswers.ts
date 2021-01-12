@@ -88,15 +88,6 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       $$type: 'ais.answers',
 
       init(initOptions) {
-        const { instantSearchInstance } = initOptions;
-        // eslint-disable-next-line no-warning-comments
-        // FIXME: remove this customization once the engine accepts url encoded query params
-        // @ts-ignore
-        if (instantSearchInstance.client.transporter) {
-          // @ts-ignore
-          instantSearchInstance.client.transporter.userAgent.value =
-            'answers-test';
-        }
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -142,6 +133,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           answersIndex.findAnswers(query, queryLanguages, {
             nbHits,
             attributesForPrediction,
+            // eslint-disable-next-line no-warning-comments
+            // FIXME: remove this x-algolia-agent once the engine accepts url encoded query params
+            queryParameters: {
+              'x-algolia-agent': 'answers-test',
+            },
           })
         ).then(result => {
           lastAnswersResult = result;
