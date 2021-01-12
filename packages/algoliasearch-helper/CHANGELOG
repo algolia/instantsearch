@@ -1,3 +1,6 @@
+3.4.0 - 2021-01-12
+ * feat(answers): add `findAnswers` (#804) https://github.com/algolia/algoliasearch-helper-js/commit/4635dd5b911713be7d2a868a79f9150b7bd175bd
+
 3.3.4 - 2020-12-09
  * fix: ignore invalid userToken (#802) https://github.com/algolia/algoliasearch-helper-js/commit/a2876c59fb7bdf7bd564c727bc70e7514362e189
 
