@@ -2,6 +2,7 @@ import { createTelemetryMiddleware } from '../';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import instantsearch from '../../lib/main';
 import { configure, hits, index, pagination, searchBox } from '../../widgets';
+import { isTelemetryEnabled } from '../createTelemetryMiddleware';
 
 declare global {
   // using namespace so it's only in this file
@@ -42,34 +43,21 @@ describe('telemetry', () => {
   });
 
   describe('telemetry disabled', () => {
-    it('does not add a meta tag on normal user agent', () => {
+    it('does not enable on normal user agent', () => {
       global.navigator.userAgent = defaultUserAgent;
 
-      createTelemetryMiddleware();
-
-      expect(document.head).toMatchInlineSnapshot(`
-        <head>
-          <meta
-            name="instantsearch:widgets"
-          />
-        </head>
-      `);
+      expect(isTelemetryEnabled()).toBe(false);
     });
 
-    it("does not add meta tag when there's no window", () => {
+    it("does not enable when there's no window", () => {
       global.navigator.userAgent = algoliaUserAgent;
 
+      // @ts-ignore
       delete global.window;
 
       createTelemetryMiddleware();
 
-      expect(document.head).toMatchInlineSnapshot(`
-        <head>
-          <meta
-            name="instantsearch:widgets"
-          />
-        </head>
-      `);
+      expect(isTelemetryEnabled()).toBe(false);
 
       global.window = window;
     });
@@ -80,16 +68,14 @@ describe('telemetry', () => {
       global.navigator.userAgent = algoliaUserAgent;
     });
 
-    it('adds a meta tag', () => {
+    it('telemetry enabled returns true', () => {
+      expect(isTelemetryEnabled()).toBe(true);
+    });
+
+    it('does not add meta before subscribe', () => {
       createTelemetryMiddleware();
 
-      expect(document.head).toMatchInlineSnapshot(`
-        <head>
-          <meta
-            name="instantsearch:widgets"
-          />
-        </head>
-      `);
+      expect(document.head).toMatchInlineSnapshot(`<head />`);
     });
 
     it('fills it with widgets after start', async () => {

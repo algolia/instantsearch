@@ -63,19 +63,14 @@ function extractPayload(
   });
 }
 
-export function createTelemetryMiddleware(): Middleware {
-  const isTelemetryEnabled =
+export function isTelemetryEnabled() {
+  return (
     typeof window !== 'undefined' &&
-    window.navigator.userAgent.indexOf('Algolia Crawler') > -1;
+    window.navigator.userAgent.indexOf('Algolia Crawler') > -1
+  );
+}
 
-  if (!isTelemetryEnabled) {
-    return () => ({
-      onStateChange() {},
-      subscribe() {},
-      unsubscribe() {},
-    });
-  }
-
+export function createTelemetryMiddleware(): Middleware {
   const payload: TelemetryPayload = {
     widgets: [],
   };
@@ -83,7 +78,6 @@ export function createTelemetryMiddleware(): Middleware {
   const payloadContainer = document.createElement('meta');
   const refNode = document.querySelector('head')!;
   payloadContainer.name = 'instantsearch:widgets';
-  refNode.appendChild(payloadContainer);
 
   return ({ instantSearchInstance }) => {
     return {
@@ -98,6 +92,7 @@ export function createTelemetryMiddleware(): Middleware {
           );
 
           payloadContainer.content = JSON.stringify(payload);
+          refNode.appendChild(payloadContainer);
         }, 0);
       },
 

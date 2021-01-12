@@ -26,7 +26,10 @@ import {
   RouterProps,
 } from '../middlewares/createRouterMiddleware';
 import { InsightsEvent } from '../middlewares/createInsightsMiddleware';
-import { createTelemetryMiddleware } from '../middlewares/createTelemetryMiddleware';
+import {
+  createTelemetryMiddleware,
+  isTelemetryEnabled,
+} from '../middlewares/createTelemetryMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -251,7 +254,9 @@ See ${createDocumentationLink({
       this.use(createRouterMiddleware(routerOptions));
     }
 
-    this.use(createTelemetryMiddleware());
+    if (isTelemetryEnabled()) {
+      this.use(createTelemetryMiddleware());
+    }
   }
 
   /**
