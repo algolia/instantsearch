@@ -86,7 +86,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',
-          filters: ['category:"value"'],
+          filters: ['category:value'],
           index: '',
         },
         widgetType: 'ais.customWidget',
@@ -104,7 +104,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Category Clicked',
-          filters: ['category:"value"'],
+          filters: ['category:value'],
           index: '',
         },
         widgetType: 'ais.customWidget',

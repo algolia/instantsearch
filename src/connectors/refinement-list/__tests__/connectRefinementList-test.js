@@ -2864,7 +2864,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',
-          filters: ['category:"value"'],
+          filters: ['category:value'],
           index: '',
         },
         widgetType: 'ais.refinementList',

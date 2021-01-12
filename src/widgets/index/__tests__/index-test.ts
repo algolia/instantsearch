@@ -2810,5 +2810,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
       );
     });
+
+    test('does not warn for index itself', () => {
+      warning.cache = {};
+
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.addWidgets([index({ indexName: 'other' })]);
+
+      expect(() => {
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+      }).not.toWarnDev(
+        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+      );
+    });
   });
 });
