@@ -43,6 +43,12 @@ export type AnswersConnectorParams = {
    * Cannot be greater than 1000.
    */
   nbHits?: number;
+
+  /**
+   * Debounce time in milliseconds to debounce answers API
+   * default: 200
+   */
+  debounceTime?: number;
 };
 
 export type AnswersConnector = Connector<
@@ -57,8 +63,12 @@ const connectAnswers: AnswersConnector = function connectAnswers(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { queryLanguages, attributesForPrediction = ['*'], nbHits = 1 } =
-      widgetParams || ({} as typeof widgetParams);
+    const {
+      queryLanguages,
+      attributesForPrediction = ['*'],
+      nbHits = 1,
+      debounceTime = 200,
+    } = widgetParams || ({} as typeof widgetParams);
 
     if (!queryLanguages || queryLanguages.length === 0) {
       throw new Error(
@@ -72,7 +82,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
     let lastAnswersResult: Partial<FindAnswersResponse<Hit>>;
     let isLoading = false;
-    const debouncedRenderFn = debounce(renderFn, 200);
+    const debouncedRenderFn = debounce(renderFn, debounceTime);
 
     return {
       $$type: 'ais.answers',
