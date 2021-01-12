@@ -364,7 +364,7 @@ export type Widget<
   TWidgetOptions extends { renderState: unknown } = { renderState: unknown }
 > = {
   /**
-   * identifier for official widgets
+   * Identifier for official widgets
    */
   $$type?:
     | 'ais.analytics'
