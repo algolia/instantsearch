@@ -20,7 +20,7 @@ import {
   SearchResponse as SearchResponseV4,
   // no comma, TS is particular about which nodes expose comments
   // eslint-disable-next-line prettier/prettier
-  SearchForFacetValuesResponse as SearchForFacetValuesResponseV4
+  SearchForFacetValuesResponse as SearchForFacetValuesResponseV4,
   /** @ts-ignore */
   // @ts-ignore
   // eslint-disable-next-line import/no-unresolved
@@ -43,7 +43,6 @@ export type SearchClient = {
   searchForFacetValues: DefaultSearchClient['searchForFacetValues'];
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
   initIndex?: DefaultSearchClient['initIndex'];
-  transporter?: SearchClientV4['transporter'];
 };
 
 export type MultiResponse<THit = any> = {

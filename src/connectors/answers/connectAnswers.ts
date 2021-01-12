@@ -81,7 +81,9 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         const { instantSearchInstance } = initOptions;
         // eslint-disable-next-line no-warning-comments
         // FIXME: remove this customization once the engine accepts url encoded query params
+        // @ts-ignore
         if (instantSearchInstance.client.transporter) {
+          // @ts-ignore
           instantSearchInstance.client.transporter.userAgent.value =
             'answers-test';
         }
