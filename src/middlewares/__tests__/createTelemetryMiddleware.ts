@@ -47,7 +47,13 @@ describe('telemetry', () => {
 
       createTelemetryMiddleware();
 
-      expect(document.head).toMatchInlineSnapshot(`<head />`);
+      expect(document.head).toMatchInlineSnapshot(`
+        <head>
+          <meta
+            name="instantsearch:widgets"
+          />
+        </head>
+      `);
     });
 
     it("does not add meta tag when there's no window", () => {
@@ -57,7 +63,13 @@ describe('telemetry', () => {
 
       createTelemetryMiddleware();
 
-      expect(document.head).toMatchInlineSnapshot(`<head />`);
+      expect(document.head).toMatchInlineSnapshot(`
+        <head>
+          <meta
+            name="instantsearch:widgets"
+          />
+        </head>
+      `);
 
       global.window = window;
     });
@@ -105,7 +117,7 @@ describe('telemetry', () => {
       expect(document.head).toMatchInlineSnapshot(`
 <head>
   <meta
-    content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"params\\":[],\\"official\\":true},{\\"type\\":\\"ais.searchBox\\",\\"params\\":[],\\"official\\":true},{\\"type\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"],\\"official\\":true},{\\"type\\":\\"ais.index\\",\\"params\\":[],\\"official\\":true},{\\"type\\":\\"ais.pagination\\",\\"params\\":[],\\"official\\":true},{\\"type\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"],\\"official\\":true}]}"
+    content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"]},{\\"type\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]}]}"
     name="instantsearch:widgets"
   />
 </head>
@@ -116,34 +128,28 @@ describe('telemetry', () => {
 Object {
   "widgets": Array [
     Object {
-      "official": true,
       "params": Array [],
       "type": "ais.searchBox",
     },
     Object {
-      "official": true,
       "params": Array [],
       "type": "ais.searchBox",
     },
     Object {
-      "official": true,
       "params": Array [
         "escapeHTML",
       ],
       "type": "ais.hits",
     },
     Object {
-      "official": true,
       "params": Array [],
       "type": "ais.index",
     },
     Object {
-      "official": true,
       "params": Array [],
       "type": "ais.pagination",
     },
     Object {
-      "official": true,
       "params": Array [
         "searchParameters",
       ],

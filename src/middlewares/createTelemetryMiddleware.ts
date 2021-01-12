@@ -89,6 +89,7 @@ export function createTelemetryMiddleware(): Middleware {
     return {
       onStateChange() {},
       subscribe() {
+        // using setTimeout here to delay extraction until widgets have been added in a tick (e.g. Vue)
         setTimeout(() => {
           extractPayload(
             instantSearchInstance.mainIndex.getWidgets(),
@@ -101,7 +102,7 @@ export function createTelemetryMiddleware(): Middleware {
       },
 
       unsubscribe() {
-        payloadContainer.parentNode!.removeChild(payloadContainer);
+        payloadContainer.parentNode?.removeChild(payloadContainer);
       },
     };
   };
