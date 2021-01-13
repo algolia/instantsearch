@@ -1,9 +1,14 @@
 import { Hit } from '../types';
-import { getPropertyByPath } from '../lib/utils';
+import {
+  getPropertyByPath,
+  getHighlightedParts,
+  reverseHighlightedParts,
+  concatHighlightedParts,
+} from '../lib/utils';
 import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
-export type HighlightOptions = {
+export type ReverseSnippetOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path
   attribute: string | string[];
   highlightedTagName?: string;
@@ -13,16 +18,16 @@ export type HighlightOptions = {
   }>;
 };
 
-const suit = component('Highlight');
+const suit = component('ReverseSnippet');
 
-export default function highlight({
+export default function reverseSnippet({
   attribute,
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
-}: HighlightOptions): string {
+}: ReverseSnippetOptions): string {
   const { value: attributeValue = '' } =
-    getPropertyByPath(hit._highlightResult, attribute) || {};
+    getPropertyByPath(hit._snippetResult, attribute) || {};
 
   // cx is not used, since it would be bundled as a dependency for Vue & Angular
   const className =
@@ -30,7 +35,11 @@ export default function highlight({
       descendantName: 'highlighted',
     }) + (cssClasses.highlighted ? ` ${cssClasses.highlighted}` : '');
 
-  return attributeValue
+  const reverseHighlightedValue = concatHighlightedParts(
+    reverseHighlightedParts(getHighlightedParts(attributeValue))
+  );
+
+  return reverseHighlightedValue
     .replace(
       new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
       `<${highlightedTagName} class="${className}">`

@@ -35,7 +35,7 @@ const createSendEvent = ({ instantSearchInstance, attribute, on, helper }) => (
       payload: {
         eventName,
         index: helper.getIndex(),
-        filters: on.map(value => `${attribute}:${JSON.stringify(value)}`),
+        filters: on.map(value => `${attribute}:${value}`),
       },
     });
   }

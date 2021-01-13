@@ -14,6 +14,7 @@ import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 import { Widget, InstantSearch } from '../../../types';
 import index from '../index';
 import { warning } from '../../../lib/utils';
+import { refinementList } from '../..';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
@@ -648,6 +649,236 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         expect(instantSearchInstance.scheduleSearch).toHaveBeenCalledTimes(0);
       });
+    });
+  });
+
+  describe('createURL', () => {
+    it('default url returns #', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      instance.addWidgets([searchBox, pagination]);
+
+      instance.init(createInitOptions());
+
+      expect(instance.createURL(new SearchParameters())).toEqual('#');
+    });
+
+    it('calls the createURL of routing', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      instance.addWidgets([searchBox, pagination]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance: createInstantSearch({
+            // @ts-ignore
+            _createURL(routeState) {
+              return routeState;
+            },
+          }),
+        })
+      );
+
+      expect(instance.createURL(new SearchParameters())).toEqual({
+        indexName: {},
+      });
+    });
+
+    it('create URLs with custom helper state', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      instance.addWidgets([searchBox, pagination]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance: createInstantSearch({
+            // @ts-ignore
+            _createURL(routeState) {
+              return routeState;
+            },
+          }),
+        })
+      );
+
+      expect(instance.createURL(new SearchParameters({ page: 100 }))).toEqual({
+        indexName: { page: 100 },
+      });
+    });
+
+    it('create URLs with non-namesake helper state', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      const container = document.createElement('div');
+      document.body.append(container);
+
+      instance.addWidgets([
+        searchBox,
+        pagination,
+        refinementList({ container, attribute: 'doggies' }),
+      ]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance: createInstantSearch({
+            // @ts-ignore
+            _createURL(routeState) {
+              return routeState;
+            },
+          }),
+        })
+      );
+
+      expect(
+        instance.createURL(
+          new SearchParameters({
+            disjunctiveFacets: ['doggies'],
+            disjunctiveFacetsRefinements: { doggies: ['zap'] },
+          })
+        )
+      ).toEqual({
+        indexName: { refinementList: { doggies: ['zap'] } },
+      });
+    });
+  });
+
+  describe('getScopedResults', () => {
+    it('gets deep results', async () => {
+      const level0 = index({ indexName: 'level0IndexName' });
+      const level1 = index({ indexName: 'level1IndexName' });
+      const level2 = index({ indexName: 'level2IndexName' });
+      const level21 = index({ indexName: 'level21IndexName' });
+      const level22 = index({ indexName: 'level22IndexName' });
+      const level221 = index({ indexName: 'level221IndexName' });
+      const level3 = index({ indexName: 'level3IndexName' });
+      const searchBoxLevel0 = createSearchBox();
+      const searchBoxLevel1 = createSearchBox();
+      const searchBoxLevel21 = createSearchBox();
+
+      level0.addWidgets([
+        searchBoxLevel0,
+        level1.addWidgets([searchBoxLevel1]),
+        level2.addWidgets([
+          createSearchBox(),
+          level21.addWidgets([searchBoxLevel21]),
+          level22.addWidgets([
+            createSearchBox(),
+            level221.addWidgets([createSearchBox()]),
+          ]),
+        ]),
+        level3.addWidgets([createSearchBox()]),
+      ]);
+
+      level0.init(createInitOptions({ parent: null }));
+
+      // Simulate a call to search from a widget - this step is required otherwise
+      // the DerivedHelper does not contain the results. The `lastResults` attribute
+      // is set once the `result` event is emitted.
+      level0.getHelper()!.search();
+
+      await runAllMicroTasks();
+
+      expect(level1.getScopedResults()).toEqual([
+        // Root index
+        {
+          indexId: 'level1IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level1.getHelper(),
+        },
+        // Siblings and children
+        {
+          indexId: 'level2IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level2.getHelper(),
+        },
+        {
+          indexId: 'level21IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level21.getHelper(),
+        },
+        {
+          indexId: 'level22IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level22.getHelper(),
+        },
+        {
+          indexId: 'level221IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level221.getHelper(),
+        },
+        {
+          indexId: 'level3IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level3.getHelper(),
+        },
+      ]);
+
+      expect(level21.getScopedResults()).toEqual([
+        // Root index
+        {
+          indexId: 'level21IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level21.getHelper(),
+        },
+        // Siblings and children
+        {
+          indexId: 'level22IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level22.getHelper(),
+        },
+        {
+          indexId: 'level221IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level221.getHelper(),
+        },
+      ]);
+
+      expect(level0.getScopedResults()).toEqual([
+        // Root index
+        {
+          indexId: 'level0IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level0.getHelper(),
+        },
+        // Siblings and children
+        {
+          indexId: 'level1IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level1.getHelper(),
+        },
+        {
+          indexId: 'level2IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level2.getHelper(),
+        },
+        {
+          indexId: 'level21IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level21.getHelper(),
+        },
+        {
+          indexId: 'level22IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level22.getHelper(),
+        },
+        {
+          indexId: 'level221IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level221.getHelper(),
+        },
+        {
+          indexId: 'level3IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level3.getHelper(),
+        },
+      ]);
     });
   });
 
@@ -2576,6 +2807,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
       }).toWarnDev(
+        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+      );
+    });
+
+    test('does not warn for index itself', () => {
+      warning.cache = {};
+
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.addWidgets([index({ indexName: 'other' })]);
+
+      expect(() => {
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+      }).not.toWarnDev(
         '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
       );
     });

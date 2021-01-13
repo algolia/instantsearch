@@ -3,7 +3,9 @@ import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 import {
   snippet,
+  reverseSnippet,
   highlight,
+  reverseHighlight,
   insights,
   getInsightsAnonymousUserToken,
 } from './helpers';
@@ -14,7 +16,9 @@ const instantsearch = (options: InstantSearchOptions): InstantSearch =>
 
 instantsearch.version = version;
 instantsearch.snippet = snippet;
+instantsearch.reverseSnippet = reverseSnippet;
 instantsearch.highlight = highlight;
+instantsearch.reverseHighlight = reverseHighlight;
 instantsearch.insights = insights;
 instantsearch.getInsightsAnonymousUserToken = getInsightsAnonymousUserToken;
 instantsearch.createInfiniteHitsSessionStorageCache = createInfiniteHitsSessionStorageCache;
