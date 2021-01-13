@@ -1,8 +1,8 @@
-import { createTelemetryMiddleware } from '../';
+import { createMetadataMiddleware } from '..';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import instantsearch from '../../lib/main';
 import { configure, hits, index, pagination, searchBox } from '../../widgets';
-import { isTelemetryEnabled } from '../createTelemetryMiddleware';
+import { isMetadataEnabled } from '../createMetadataMiddleware';
 
 declare global {
   // using namespace so it's only in this file
@@ -37,16 +37,16 @@ const defaultUserAgent =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15';
 const algoliaUserAgent = 'Algolia Crawler 5.3.2';
 
-describe('telemetry', () => {
+describe('createMetadataMiddleware', () => {
   beforeEach(() => {
     document.head.innerHTML = '';
   });
 
-  describe('telemetry disabled', () => {
+  describe('metadata disabled', () => {
     it('does not enable on normal user agent', () => {
       global.navigator.userAgent = defaultUserAgent;
 
-      expect(isTelemetryEnabled()).toBe(false);
+      expect(isMetadataEnabled()).toBe(false);
     });
 
     it("does not enable when there's no window", () => {
@@ -55,32 +55,32 @@ describe('telemetry', () => {
       // @ts-ignore
       delete global.window;
 
-      createTelemetryMiddleware();
+      createMetadataMiddleware();
 
-      expect(isTelemetryEnabled()).toBe(false);
+      expect(isMetadataEnabled()).toBe(false);
 
       global.window = window;
     });
   });
 
-  describe('telemetry enabled', () => {
+  describe('metadata enabled', () => {
     beforeEach(() => {
       global.navigator.userAgent = algoliaUserAgent;
     });
 
-    it('telemetry enabled returns true', () => {
-      expect(isTelemetryEnabled()).toBe(true);
+    it('metadata enabled returns true', () => {
+      expect(isMetadataEnabled()).toBe(true);
     });
 
     it('does not add meta before subscribe', () => {
-      createTelemetryMiddleware();
+      createMetadataMiddleware();
 
       expect(document.head).toMatchInlineSnapshot(`<head />`);
     });
 
     it('fills it with widgets after start', async () => {
-      // not using createTelemetryMiddleware() here,
-      // since telemetry is built into instantsearch
+      // not using createMetadataMiddleware() here,
+      // since metadata is built into instantsearch
       const search = instantsearch({
         searchClient: createSearchClient(),
         indexName: 'test',

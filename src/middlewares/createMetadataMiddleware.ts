@@ -1,19 +1,19 @@
 import { InstantSearch, Middleware, Widget } from '../types';
 import { Index } from '../widgets/index/index';
 
-type TelemetryWidget = {
+type WidgetMetaData = {
   type?: string;
   params: string[];
 };
 
-type TelemetryPayload = {
-  widgets: TelemetryWidget[];
+type Payload = {
+  widgets: WidgetMetaData[];
 };
 
 function extractPayload(
   widgets: Array<Widget<{ renderState: any }>>,
   instantSearchInstance: InstantSearch,
-  payload: TelemetryPayload
+  payload: Payload
 ) {
   const parent = instantSearchInstance.mainIndex;
 
@@ -63,15 +63,15 @@ function extractPayload(
   });
 }
 
-export function isTelemetryEnabled() {
+export function isMetadataEnabled() {
   return (
     typeof window !== 'undefined' &&
     window.navigator.userAgent.indexOf('Algolia Crawler') > -1
   );
 }
 
-export function createTelemetryMiddleware(): Middleware {
-  const payload: TelemetryPayload = {
+export function createMetadataMiddleware(): Middleware {
+  const payload: Payload = {
     widgets: [],
   };
 
