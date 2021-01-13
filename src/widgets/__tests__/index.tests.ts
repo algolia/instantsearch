@@ -1,10 +1,18 @@
 import { PlacesInstance } from 'places.js';
 import * as widgets from '../';
-import { entries } from '../../lib/utils/typedObject';
 import { Widget } from '../../types';
+
+// @TODO: move to typedObject once this no longer needs to be polyfilled
+type Entries<TObject> = {
+  [TKey in keyof TObject]: [TKey, TObject[TKey]];
+}[keyof TObject];
+const entries = Object.entries as <TObject extends {}>(
+  yourObject: TObject
+) => Array<Entries<TObject>>;
 
 type Widgets = typeof widgets;
 type WidgetNames = keyof typeof widgets;
+
 function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
   return entries(widgets).map(([name, widget]) => {
     return [name, initiateWidget(name, widget)];
