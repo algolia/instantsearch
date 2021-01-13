@@ -2,6 +2,7 @@ import capitalize from './capitalize';
 import { warning } from './logger';
 import { Index } from '../../widgets/index/index';
 import { Widget, IndexUiState } from '../../types';
+import { keys } from './typedObject';
 
 // Some connectors are responsible for multiple widgets so we need
 // to map them.
@@ -18,16 +19,24 @@ function getWidgetNames(connectorName: string): string[] {
   }
 }
 
+type WidgetType = Required<Widget>['$$type'];
+
 type StateDescription = {
   connectors: string[];
-  widgets: Array<Widget['$$widgetType']>;
+  widgets: WidgetType[];
 };
 
 type StateToWidgets = {
   [TParameter in keyof IndexUiState]: StateDescription;
 };
 
-type MissingWidgets = Array<[string, StateDescription]>;
+type WidgetDescription = {
+  connectors: string[];
+  // no longer widget type, "ais." is stripped
+  widgets: string[];
+};
+
+type MissingWidgets = Array<[string, WidgetDescription]>;
 
 const stateToWidgetsMap: StateToWidgets = {
   query: {
@@ -102,10 +111,15 @@ export function checkIndexUiState({
     .map(widget => widget.$$type)
     .filter(Boolean);
 
-  const missingWidgets = Object.keys(indexUiState).reduce<MissingWidgets>(
+  const missingWidgets = keys(indexUiState).reduce<MissingWidgets>(
     (acc, parameter) => {
-      const requiredWidgets: Array<Widget['$$type']> | undefined =
-        stateToWidgetsMap[parameter] && stateToWidgetsMap[parameter].widgets;
+      const widgetUiState = stateToWidgetsMap[parameter];
+
+      if (!widgetUiState) {
+        return acc;
+      }
+
+      const requiredWidgets = widgetUiState.widgets;
 
       if (
         requiredWidgets &&
@@ -116,9 +130,9 @@ export function checkIndexUiState({
         acc.push([
           parameter,
           {
-            connectors: stateToWidgetsMap[parameter].connectors,
-            widgets: stateToWidgetsMap[parameter].widgets.map(
-              (widgetIdentifier: string) => widgetIdentifier.split('ais.')[1]
+            connectors: widgetUiState.connectors,
+            widgets: widgetUiState.widgets.map(
+              widgetIdentifier => widgetIdentifier.split('ais.')[1]
             ),
           },
         ]);
