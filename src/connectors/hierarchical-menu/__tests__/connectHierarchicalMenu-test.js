@@ -1401,7 +1401,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',
-          filters: ['category:"value"'],
+          filters: ['category:value'],
           index: '',
         },
         widgetType: 'ais.hierarchicalMenu',

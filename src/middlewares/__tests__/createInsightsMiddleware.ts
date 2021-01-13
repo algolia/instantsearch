@@ -104,6 +104,24 @@ describe('insights', () => {
       });
     });
 
+    it('passes initParams to insightsClient', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+      createInsightsMiddleware({
+        insightsClient,
+        insightsInitParams: {
+          useCookie: false,
+          region: 'de',
+        },
+      })({ instantSearchInstance });
+
+      expect(insightsClient).toHaveBeenLastCalledWith('init', {
+        apiKey: 'myApiKey',
+        appId: 'myAppId',
+        region: 'de',
+        useCookie: false,
+      });
+    });
+
     it('does not throw when an event is sent right after the creation in UMD', () => {
       const algoliaAnalytics = createAlgoliaAnalytics();
       const {
