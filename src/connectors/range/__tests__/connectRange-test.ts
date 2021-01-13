@@ -1280,14 +1280,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       const newState = widget.dispose!({ helper, state: helper.state });
 
-      expect(newState).toEqual(
-        new SearchParameters({
-          index: indexName,
-          numericRefinements: {
-            price: {},
-          },
-        })
-      );
+      expect(newState).toEqual(new SearchParameters({ index: indexName }));
     });
 
     it('removes active refinement', () => {
