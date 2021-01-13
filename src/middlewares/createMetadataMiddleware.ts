@@ -3,6 +3,7 @@ import { Index } from '../widgets/index/index';
 
 type WidgetMetaData = {
   type: string | undefined;
+  widgetType: string | undefined;
   params: string[];
 };
 
@@ -50,6 +51,7 @@ function extractPayload(
 
     payload.widgets.push({
       type: widget.$$type,
+      widgetType: widget.$$widgetType,
       params,
     });
 
