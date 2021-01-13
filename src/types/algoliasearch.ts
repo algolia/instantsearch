@@ -16,7 +16,7 @@ import algoliasearch, {
   SearchForFacetValues as SearchForFacetValuesV3,
 } from 'algoliasearch';
 import {
-  FindAnswersResponse,
+  FindAnswersResponse as FindAnswersResponseV4,
   SearchResponse as SearchResponseV4,
   // no comma, TS is particular about which nodes expose comments
   // eslint-disable-next-line prettier/prettier
@@ -26,7 +26,9 @@ import {
   // eslint-disable-next-line import/no-unresolved
 } from '@algolia/client-search';
 
-export { FindAnswersResponse };
+export type FindAnswersResponse = DefaultSearchClient extends DummySearchClientV4
+  ? FindAnswersResponseV4
+  : never;
 
 type DummySearchClientV4 = {
   readonly transporter: any;
