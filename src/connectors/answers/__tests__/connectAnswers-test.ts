@@ -32,6 +32,17 @@ describe('connectAnswers', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
 `);
     });
+
+    it('throws without `queryLanguages`', () => {
+      expect(() => {
+        // @ts-ignore: test connectAnswers with invalid parameters
+        connectAnswers(() => {})({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`queryLanguages\` expects an array of strings.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
+`);
+    });
   });
 
   const setupTestEnvironment = ({
