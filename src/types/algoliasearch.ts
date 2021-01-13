@@ -26,8 +26,10 @@ import {
   // eslint-disable-next-line import/no-unresolved
 } from '@algolia/client-search';
 
-export type FindAnswersResponse = DefaultSearchClient extends DummySearchClientV4
-  ? FindAnswersResponseV4
+export type FindAnswersResponse<
+  TObject
+> = DefaultSearchClient extends DummySearchClientV4
+  ? FindAnswersResponseV4<TObject>
   : never;
 
 type DummySearchClientV4 = {
