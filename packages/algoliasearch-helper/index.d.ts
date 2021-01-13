@@ -1213,7 +1213,7 @@ declare namespace algoliasearchHelper {
      * queryID is the unique identifier of the query used to generate the current search results.
      * This value is only available if the `clickAnalytics` search parameter is set to `true`.
      */
-    queryID: string;
+    queryID?: string;
     /**
      * disjunctive facets results
      */
