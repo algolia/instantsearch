@@ -2,7 +2,7 @@ import { InstantSearch, Middleware, Widget } from '../types';
 import { Index } from '../widgets/index/index';
 
 type TelemetryWidget = {
-  type: string;
+  type?: string;
   params: string[];
 };
 
@@ -49,7 +49,7 @@ function extractPayload(
     );
 
     payload.widgets.push({
-      type: widget.$$type || 'custom.widget',
+      type: widget.$$type,
       params,
     });
 
