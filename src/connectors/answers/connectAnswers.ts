@@ -1,7 +1,9 @@
+import escapeHits from '../../lib/escape-highlight';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   createConcurrentSafePromise,
+  addQueryID,
   debounce,
   addAbsolutePosition,
   noop,
@@ -49,6 +51,13 @@ export type AnswersConnectorParams = {
    * default: 200
    */
   debounceTime?: number;
+
+  /**
+   * Whether to escape HTML tags from hits string values.
+   *
+   * @default true
+   */
+  escapeHTML?: boolean;
 };
 
 export type AnswersConnector = Connector<
@@ -68,6 +77,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       attributesForPrediction = ['*'],
       nbHits = 1,
       debounceTime = 200,
+      escapeHTML = true,
     } = widgetParams || ({} as typeof widgetParams);
 
     if (!queryLanguages || queryLanguages.length === 0) {
@@ -139,13 +149,32 @@ const connectAnswers: AnswersConnector = function connectAnswers(
               'x-algolia-agent': 'answers-test',
             },
           })
-        ).then(result => {
-          lastAnswersResult = result;
-          lastAnswersResult.hits = addAbsolutePosition<typeof result.hits[0]>(
-            result.hits,
+        ).then(results => {
+          if (escapeHTML && results.hits.length > 0) {
+            results.hits = escapeHits(results.hits);
+          }
+          const initialEscaped = (results.hits as ReturnType<typeof escapeHits>)
+            .__escaped;
+
+          results.hits = addAbsolutePosition<typeof results.hits[0]>(
+            results.hits,
             0,
             nbHits
           );
+
+          results.hits = addQueryID<typeof results.hits[0]>(
+            results.hits,
+            results.queryID
+          );
+
+          // Make sure the escaped tag stays, even after mapping over the hits.
+          // This prevents the hits from being double-escaped if there are multiple
+          // hits widgets mounted on the page.
+          (results.hits as ReturnType<
+            typeof escapeHits
+          >).__escaped = initialEscaped;
+
+          lastAnswersResult = results;
           isLoading = false;
           debouncedRenderFn(
             {
