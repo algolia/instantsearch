@@ -3,7 +3,7 @@
 import { h } from 'preact';
 import { shallow, mount } from 'enzyme';
 import { highlight } from '../../../helpers';
-import { TAG_REPLACEMENT } from '../../../lib/escape-highlight';
+import { TAG_REPLACEMENT } from '../../../lib/utils';
 import Template from '../../Template/Template';
 import Hits from '../Hits';
 

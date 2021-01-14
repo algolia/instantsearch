@@ -2,7 +2,7 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectRefinementList from '../connectRefinementList';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {

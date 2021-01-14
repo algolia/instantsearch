@@ -1,4 +1,4 @@
-import escapeHits from '../escape-highlight';
+import { escapeHits } from '../escape-highlight';
 
 describe('escapeHits()', () => {
   it('should escape highlightProperty simple text value', () => {
