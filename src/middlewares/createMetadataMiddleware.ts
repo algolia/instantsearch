@@ -70,6 +70,13 @@ export function isMetadataEnabled() {
   );
 }
 
+/**
+ * Exposes the metadata of mounted widgets in a custom
+ * `<meta name="instantsearch:widgets" />` tag. The metadata per widget is:
+ * - applied parameters
+ * - widget name
+ * - connector name
+ */
 export function createMetadataMiddleware(): Middleware {
   return ({ instantSearchInstance }) => {
     const payload: Payload = {
