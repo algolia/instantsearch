@@ -2,7 +2,7 @@ import { InstantSearch, Middleware, Widget } from '../types';
 import { Index } from '../widgets/index/index';
 
 type WidgetMetaData = {
-  type?: string;
+  type: string | undefined;
   params: string[];
 };
 
@@ -71,15 +71,14 @@ export function isMetadataEnabled() {
 }
 
 export function createMetadataMiddleware(): Middleware {
-  const payload: Payload = {
-    widgets: [],
-  };
-
-  const payloadContainer = document.createElement('meta');
-  const refNode = document.querySelector('head')!;
-  payloadContainer.name = 'instantsearch:widgets';
-
   return ({ instantSearchInstance }) => {
+    const payload: Payload = {
+      widgets: [],
+    };
+    const payloadContainer = document.createElement('meta');
+    const refNode = document.querySelector('head')!;
+    payloadContainer.name = 'instantsearch:widgets';
+
     return {
       onStateChange() {},
       subscribe() {
