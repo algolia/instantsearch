@@ -1,11 +1,11 @@
 import { Hit } from '../types';
 import {
+  TAG_REPLACEMENT,
   getPropertyByPath,
   getHighlightedParts,
   reverseHighlightedParts,
   concatHighlightedParts,
 } from '../lib/utils';
-import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
 export type ReverseSnippetOptions = {
