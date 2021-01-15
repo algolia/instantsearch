@@ -74,7 +74,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
   return widgetParams => {
     const {
       queryLanguages,
-      attributesForPrediction = ['*'],
+      attributesForPrediction,
       nbHits = 1,
       debounceTime = 200,
       escapeHTML = true,
@@ -90,7 +90,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       FindAnswersResponse<Hit>
     >();
 
-    let lastAnswersResult: Partial<FindAnswersResponse<Hit>>;
+    let lastResult: Partial<FindAnswersResponse<Hit>>;
     let isLoading = false;
     const debouncedRenderFn = debounce(renderFn, debounceTime);
 
@@ -116,7 +116,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         }
         if (!query) {
           // renders nothing with empty query
-          lastAnswersResult = {};
+          lastResult = {};
           isLoading = false;
           renderFn(
             {
@@ -129,6 +129,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         }
 
         // render the loader
+        lastResult = {};
         isLoading = true;
         renderFn(
           {
@@ -174,7 +175,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
             typeof escapeHits
           >).__escaped = initialEscaped;
 
-          lastAnswersResult = results;
+          lastResult = results;
           isLoading = false;
           debouncedRenderFn(
             {
@@ -195,7 +196,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
       getWidgetRenderState() {
         return {
-          hits: (lastAnswersResult && lastAnswersResult.hits) || [],
+          hits: (lastResult && lastResult.hits) || [],
           isLoading,
           widgetParams,
         };
