@@ -1,6 +1,7 @@
 import { SearchResults } from 'algoliasearch-helper';
-import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
+  escapeHits,
+  TAG_PLACEHOLDER,
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForHits,

@@ -1,7 +1,6 @@
 import { Hit } from '../types';
-import { getPropertyByPath } from '../lib/utils';
-import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
+import { getPropertyByPath, TAG_REPLACEMENT } from '../lib/utils';
 
 export type HighlightOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path

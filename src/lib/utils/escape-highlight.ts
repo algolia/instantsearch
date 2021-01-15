@@ -1,5 +1,6 @@
-import { Hit, FacetHit, EscapedHits } from '../types';
-import { isPlainObject, escape } from '../lib/utils';
+import escape from './escape';
+import isPlainObject from './isPlainObject';
+import { Hit, FacetHit, EscapedHits } from '../../types';
 
 export const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',
@@ -44,9 +45,7 @@ function recursiveEscape(input: any): any {
   };
 }
 
-export default function escapeHits<THit extends Hit>(
-  hits: THit[]
-): EscapedHits<THit> {
+export function escapeHits<THit extends Hit>(hits: THit[]): EscapedHits<THit> {
   if ((hits as any).__escaped === undefined) {
     // We don't override the value on hit because it will mutate the raw results
     // instead we make a shallow copy and we assign the escaped values on it.

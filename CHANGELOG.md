@@ -1,3 +1,18 @@
+# [4.11.0](https://github.com/algolia/instantsearch.js/compare/v4.10.0...v4.11.0) (2021-01-14)
+
+
+### Bug Fixes
+
+* **index:** do not warn for nested index widget ([#4620](https://github.com/algolia/instantsearch.js/issues/4620)) ([7502744](https://github.com/algolia/instantsearch.js/commit/7502744cd546181ec4429cd6b8144200ba2a8f82))
+* **insights:** don't quote values ([#4619](https://github.com/algolia/instantsearch.js/issues/4619)) ([ac2444c](https://github.com/algolia/instantsearch.js/commit/ac2444c36c6f41e35ed6d1a6d045479b35416576))
+
+
+### Features
+
+* **insights:** accept initParams for insightsClient ([#4608](https://github.com/algolia/instantsearch.js/issues/4608)) ([0a0ae2b](https://github.com/algolia/instantsearch.js/commit/0a0ae2bf10a4e210373b8fde635949a56c86e52e))
+
+
+
 # [4.10.0](https://github.com/algolia/instantsearch.js/compare/v4.9.2...v4.10.0) (2021-01-05)
 
 
