@@ -177,49 +177,13 @@ function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
     // parameters, because those are from the lastResults
     localHelper.state = state;
 
-    // TODO: copied from index widget, since it's only accessible once sent to render()
-    // a possible solution is making createURL accessible from the index widget.
-    const createURL = nextState =>
-      search._createURL({
-        [parent.getIndexId()]: parent
-          .getWidgets()
-          .filter(w => w.$$type !== 'ais.index')
-          .reduce((uiState, w) => {
-            if (!w.getWidgetState) {
-              return uiState;
-            }
-
-            return w.getWidgetState(uiState, {
-              searchParameters: nextState,
-              helper: localHelper,
-            });
-          }, {}),
-      });
-
-    function resolveScopedResultsFromWidgets(widgets) {
-      const indexWidgets = widgets.filter(w => w.$$type === 'ais.index');
-
-      return indexWidgets.reduce(
-        (scopedResults, current) =>
-          scopedResults.concat(
-            {
-              indexId: current.getIndexId(),
-              results: search.__initialSearchResults[current.getIndexId()],
-              helper: current.getHelper(),
-            },
-            ...resolveScopedResultsFromWidgets(current.getWidgets())
-          ),
-        []
-      );
-    }
-
     widget.render({
       helper: localHelper,
       results,
-      scopedResults: resolveScopedResultsFromWidgets([parent]),
+      scopedResults: parent.getScopedResults(),
       state,
       templatesConfig: {},
-      createURL,
+      createURL: parent.createURL,
       instantSearchInstance: search,
       searchMetadata: {
         isSearchStalled: false,
