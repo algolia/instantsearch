@@ -145,7 +145,7 @@ describe('ratingMenu()', () => {
       .refine('3');
 
     expect(helper.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(2);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
@@ -168,7 +168,7 @@ describe('ratingMenu()', () => {
       .refine('4');
 
     expect(helper.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(2);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 

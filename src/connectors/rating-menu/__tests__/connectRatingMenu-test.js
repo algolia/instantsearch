@@ -169,6 +169,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     expect(helper.getRefinements(attribute)).toEqual([]);
     refine('3');
     expect(helper.getRefinements(attribute)).toEqual([
+      { operator: '<=', type: 'numeric', value: [5] },
       { operator: '>=', type: 'numeric', value: [3] },
     ]);
     expect(helper.search).toHaveBeenCalledTimes(1);
@@ -227,10 +228,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         },
       ]);
       expect(helper.getRefinements(attribute)).toEqual([
+        { operator: '<=', type: 'numeric', value: [5] },
         { operator: '>=', type: 'numeric', value: [3] },
       ]);
       refine('4');
       expect(helper.getRefinements(attribute)).toEqual([
+        { operator: '<=', type: 'numeric', value: [5] },
         { operator: '>=', type: 'numeric', value: [4] },
       ]);
       expect(helper.search).toHaveBeenCalledTimes(2);
@@ -247,6 +250,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     expect(helper.getRefinements(attribute)).toEqual([]);
     refine('3');
     expect(helper.getRefinements(attribute)).toEqual([
+      { operator: '<=', type: 'numeric', value: [5] },
       { operator: '>=', type: 'numeric', value: [3] },
     ]);
     expect(helper.search).toHaveBeenCalledTimes(1);
@@ -271,13 +275,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
     // Second rendering
     expect(helper.getRefinements(attribute)).toEqual([
+      { operator: '<=', type: 'numeric', value: [5] },
       { operator: '>=', type: 'numeric', value: [3] },
     ]);
     refine('3');
     expect(helper.getRefinements(attribute)).toEqual([
+      { operator: '<=', type: 'numeric', value: [] },
       { operator: '>=', type: 'numeric', value: [] },
     ]);
-    expect(helper.state.numericRefinements).toEqual({ swag: { '>=': [] } });
+    expect(helper.state.numericRefinements).toEqual({
+      swag: { '<=': [], '>=': [] },
+    });
     expect(helper.search).toHaveBeenCalledTimes(2);
   });
 
@@ -736,6 +744,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           disjunctiveFacets: ['grade'],
           numericRefinements: {
             grade: {
+              '<=': [5],
               '>=': [3],
             },
           },
@@ -773,6 +782,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           disjunctiveFacets: ['grade'],
           numericRefinements: {
             grade: {
+              '<=': [5],
               '>=': [3],
             },
           },

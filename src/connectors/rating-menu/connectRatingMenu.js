@@ -202,7 +202,9 @@ ${
       const isRefined = getRefinedStar(helper.state) === Number(facetValue);
       helper.removeNumericRefinement(attribute);
       if (!isRefined) {
-        helper.addNumericRefinement(attribute, '>=', facetValue);
+        helper
+          .addNumericRefinement(attribute, '<=', max)
+          .addNumericRefinement(attribute, '>=', facetValue);
       }
       helper.search();
     };
@@ -210,7 +212,12 @@ ${
     const connectorState = {
       toggleRefinementFactory: helper => toggleRefinement.bind(this, helper),
       createURLFactory: ({ state, createURL }) => value =>
-        createURL(state.toggleRefinement(attribute, value)),
+        createURL(
+          state
+            .removeNumericRefinement(attribute)
+            .addNumericRefinement(attribute, '<=', max)
+            .addNumericRefinement(attribute, '>=', value)
+        ),
     };
 
     return {
@@ -364,11 +371,9 @@ ${
           });
         }
 
-        return withDisjunctiveFacet.addNumericRefinement(
-          attribute,
-          '>=',
-          value
-        );
+        return withDisjunctiveFacet
+          .addNumericRefinement(attribute, '<=', max)
+          .addNumericRefinement(attribute, '>=', value);
       },
     };
   };
