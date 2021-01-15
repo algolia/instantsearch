@@ -477,6 +477,10 @@ const connectRange: ConnectRange = function connectRange(
         const [lowerBound, upperBound] = value.split(':').map(parseFloat);
 
         if (isFiniteNumber(lowerBound)) {
+          widgetSearchParameters = widgetSearchParameters.removeNumericRefinement(
+            attribute,
+            '>='
+          );
           widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '>=',
@@ -485,6 +489,10 @@ const connectRange: ConnectRange = function connectRange(
         }
 
         if (isFiniteNumber(upperBound)) {
+          widgetSearchParameters = widgetSearchParameters.removeNumericRefinement(
+            attribute,
+            '<='
+          );
           widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '<=',
