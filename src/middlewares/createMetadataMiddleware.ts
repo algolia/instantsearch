@@ -20,7 +20,7 @@ function extractPayload(
   const initOptions = {
     instantSearchInstance,
     parent,
-    scopedResults: parent.getScopedResults(),
+    scopedResults: [],
     state: parent.getHelper()!.state,
     helper: parent.getHelper()!,
     createURL: parent.createURL,
