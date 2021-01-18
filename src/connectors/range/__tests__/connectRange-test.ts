@@ -1987,7 +1987,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(actual.numericRefinements.price['>=']).toEqual([0]);
       expect(actual.numericRefinements.price['<=']).toEqual([500]);
-    })
+    });
 
     const attribute = 'price';
 
