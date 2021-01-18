@@ -14,9 +14,7 @@ import connectAnswers from '../connectAnswers';
 
 const wait = (time = 10) => {
   return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, time);
+    setTimeout(resolve, time);
   });
 };
 
