@@ -2,7 +2,9 @@ import { PlacesInstance } from 'places.js';
 import * as widgets from '../';
 import { Widget } from '../../types';
 
-// @TODO: move to typedObject once this no longer needs to be polyfilled
+// This is written in the test, since Object.entries is not allowed in the
+// source code. Once we use Object.entries without polyfill, we can move this
+// helper to the `typedObject` file.
 type Entries<TObject> = {
   [TKey in keyof TObject]: [TKey, TObject[TKey]];
 }[keyof TObject];
