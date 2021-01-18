@@ -201,8 +201,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
   });
 
   it('renders loader and results when query is given', async () => {
-    const hits = [{ title: '' }];
-    const hitsWithPosition = [{ title: '', __position: 1 }];
+    const hits = [{ title: '', objectID: 'a' }];
     const {
       renderFn,
       instantSearchInstance,
@@ -241,11 +240,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     await wait();
 
     // render with hits
+    const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
+    (expectedHits as any).__escaped = true;
     expect(renderFn).toHaveBeenCalledTimes(3);
     expect(renderFn).toHaveBeenNthCalledWith(
       3,
       expect.objectContaining({
-        hits: hitsWithPosition,
+        hits: expectedHits,
         isLoading: false,
       }),
       false
@@ -256,8 +257,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     (debounce as jest.Mock).mockImplementation(
       jest.requireActual('../../../lib/utils/debounce').debounce
     );
-    const hits = [{ title: '' }];
-    const hitsWithPosition = [{ title: '', __position: 1 }];
+    const hits = [{ title: '', objectID: 'a' }];
     const {
       renderFn,
       instantSearchInstance,
@@ -308,12 +308,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 
     // wait for debounce
     await wait(300);
-
+    const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
+    (expectedHits as any).__escaped = true;
     expect(renderFn).toHaveBeenCalledTimes(4);
     expect(renderFn).toHaveBeenNthCalledWith(
       4,
       expect.objectContaining({
-        hits: hitsWithPosition,
+        hits: expectedHits,
         isLoading: false,
       }),
       false
@@ -384,7 +385,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
   describe('getWidgetRenderState', () => {
     it('returns the widget render state', async () => {
       const { instantSearchInstance, widget, helper } = setupTestEnvironment({
-        hits: [{ title: '' }],
+        hits: [{ title: '', objectID: 'a' }],
       });
 
       widget.init!(
@@ -423,7 +424,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       });
 
       await wait();
-
+      const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
+      (expectedHits as any).__escaped = true;
       expect(
         widget.getWidgetRenderState(
           createRenderOptions({
@@ -433,7 +435,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           })
         )
       ).toEqual({
-        hits: [{ title: '', __position: 1 }],
+        hits: expectedHits,
         isLoading: false,
         widgetParams: {
           queryLanguages: ['en'],
