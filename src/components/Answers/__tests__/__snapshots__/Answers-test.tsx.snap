@@ -15,9 +15,6 @@ exports[`Answers Rendering renders the loader 1`] = `
     >
       loader
     </div>
-    <ul
-      class="list"
-    />
   </div>
 </div>
 `;

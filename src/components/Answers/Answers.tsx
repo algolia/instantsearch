@@ -52,21 +52,23 @@ const Answers = ({
         rootProps={{ className: cssClasses.loader }}
       />
     )}
-    <ul className={cssClasses.list}>
-      {hits.map((hit, position) => (
-        <Template
-          {...templateProps}
-          templateKey="item"
-          rootTagName="li"
-          rootProps={{ className: cssClasses.item }}
-          key={hit.objectID}
-          data={{
-            ...hit,
-            __hitIndex: position,
-          }}
-        />
-      ))}
-    </ul>
+    {!isLoading && (
+      <ul className={cssClasses.list}>
+        {hits.map((hit, position) => (
+          <Template
+            {...templateProps}
+            templateKey="item"
+            rootTagName="li"
+            rootProps={{ className: cssClasses.item }}
+            key={hit.objectID}
+            data={{
+              ...hit,
+              __hitIndex: position,
+            }}
+          />
+        ))}
+      </ul>
+    )}
   </div>
 );
 
