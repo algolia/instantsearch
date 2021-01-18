@@ -423,7 +423,6 @@ export type Widget<
     | 'ais.poweredBy'
     | 'ais.queryRuleCustomData'
     | 'ais.queryRuleContext'
-    | 'ais.range'
     | 'ais.rangeInput'
     | 'ais.rangeSlider'
     | 'ais.ratingMenu'
