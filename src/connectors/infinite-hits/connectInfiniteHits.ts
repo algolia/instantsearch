@@ -1,10 +1,11 @@
-import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
 import { Hits, Connector, TransformItems, Hit } from '../../types';
 import {
+  escapeHits,
+  TAG_PLACEHOLDER,
   checkRendering,
   createDocumentationMessageGenerator,
   isEqual,

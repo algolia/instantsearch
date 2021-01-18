@@ -32,6 +32,12 @@ export { default as resolveSearchParameters } from './resolveSearchParameters';
 export { default as toArray } from './toArray';
 export { warning, deprecate } from './logger';
 export {
+  escapeHits,
+  TAG_PLACEHOLDER,
+  TAG_REPLACEMENT,
+  escapeFacets,
+} from './escape-highlight';
+export {
   createDocumentationLink,
   createDocumentationMessageGenerator,
 } from './documentation';

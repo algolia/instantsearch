@@ -2,7 +2,7 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectRefinementList from '../connectRefinementList';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -2864,7 +2864,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',
-          filters: ['category:"value"'],
+          filters: ['category:value'],
           index: '',
         },
         widgetType: 'ais.refinementList',
