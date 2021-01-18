@@ -1,4 +1,3 @@
-import escapeHits from '../../lib/escape-highlight';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -7,6 +6,7 @@ import {
   debounce,
   addAbsolutePosition,
   noop,
+  escapeHits,
 } from '../../lib/utils';
 import { Connector, Hits, Hit, FindAnswersResponse } from '../../types';
 
