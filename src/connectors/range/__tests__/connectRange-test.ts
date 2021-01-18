@@ -1946,12 +1946,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
-        numericRefinements: {
-          price: {
-            '<=': [500],
-            '>=': [0],
-          },
-        },
       });
       const widget = makeWidget({
         attribute: 'price',
@@ -1970,6 +1964,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(actual.numericRefinements.price['>=']).toEqual([0]);
       expect(actual.numericRefinements.price['<=']).toEqual([400]);
     });
+
+    test('ignores min or max from uiState if they are out of bound', () => {
+      const render = jest.fn();
+      const makeWidget = connectRange(render);
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        disjunctiveFacets: ['price'],
+      });
+      const widget = makeWidget({
+        attribute: 'price',
+        min: 0,
+        max: 500,
+      });
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {
+          range: {
+            price: '-20:600',
+          },
+        },
+      });
+
+      expect(actual.numericRefinements.price['>=']).toEqual([0]);
+      expect(actual.numericRefinements.price['<=']).toEqual([500]);
+    })
 
     const attribute = 'price';
 

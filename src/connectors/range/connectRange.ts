@@ -476,7 +476,10 @@ const connectRange: ConnectRange = function connectRange(
 
         const [lowerBound, upperBound] = value.split(':').map(parseFloat);
 
-        if (isFiniteNumber(lowerBound)) {
+        if (
+          isFiniteNumber(lowerBound) &&
+          (!isFiniteNumber(minBound) || minBound < lowerBound)
+        ) {
           widgetSearchParameters = widgetSearchParameters.removeNumericRefinement(
             attribute,
             '>='
@@ -488,7 +491,10 @@ const connectRange: ConnectRange = function connectRange(
           );
         }
 
-        if (isFiniteNumber(upperBound)) {
+        if (
+          isFiniteNumber(upperBound) &&
+          (!isFiniteNumber(maxBound) || upperBound < maxBound)
+        ) {
           widgetSearchParameters = widgetSearchParameters.removeNumericRefinement(
             attribute,
             '<='
