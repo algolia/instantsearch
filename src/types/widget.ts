@@ -386,7 +386,7 @@ export type Widget<
     | 'ais.places'
     | 'ais.poweredBy'
     | 'ais.queryRules'
-    // @MAJOR: remove individual types for rangeSlider & rangeInput
+    // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
     | 'ais.range'
     | 'ais.rangeSlider'
     | 'ais.rangeInput'
