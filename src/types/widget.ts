@@ -368,7 +368,11 @@ export type WidgetRenderState<
 export type Widget<
   TWidgetOptions extends { renderState: unknown } = { renderState: unknown }
 > = {
+  /**
+   * Identifier for official connectors and widgets
+   */
   $$type?:
+    | 'ais.analytics'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -387,9 +391,43 @@ export type Widget<
     | 'ais.places'
     | 'ais.poweredBy'
     | 'ais.queryRules'
+    // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
+    | 'ais.range'
+    | 'ais.rangeSlider'
+    | 'ais.rangeInput'
+    | 'ais.ratingMenu'
+    | 'ais.refinementList'
+    | 'ais.searchBox'
+    | 'ais.sortBy'
+    | 'ais.stats'
+    | 'ais.toggleRefinement'
+    | 'ais.voiceSearch';
+
+  /**
+   * Identifier for official widgets
+   */
+  $$widgetType?:
+    | 'ais.analytics'
+    | 'ais.autocomplete'
+    | 'ais.breadcrumb'
+    | 'ais.clearRefinements'
+    | 'ais.configure'
+    | 'ais.configureRelatedItems'
+    | 'ais.currentRefinements'
+    | 'ais.geoSearch'
+    | 'ais.hierarchicalMenu'
+    | 'ais.hits'
+    | 'ais.hitsPerPage'
+    | 'ais.index'
+    | 'ais.infiniteHits'
+    | 'ais.menu'
+    | 'ais.menuSelect'
+    | 'ais.numericMenu'
+    | 'ais.pagination'
+    | 'ais.places'
+    | 'ais.poweredBy'
     | 'ais.queryRuleCustomData'
     | 'ais.queryRuleContext'
-    | 'ais.range'
     | 'ais.rangeInput'
     | 'ais.rangeSlider'
     | 'ais.ratingMenu'

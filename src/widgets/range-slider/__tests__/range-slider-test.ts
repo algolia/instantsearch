@@ -64,6 +64,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       expect(widget).toEqual(
         expect.objectContaining({
           $$type: 'ais.rangeSlider',
+          $$widgetType: 'ais.rangeSlider',
         })
       );
     });

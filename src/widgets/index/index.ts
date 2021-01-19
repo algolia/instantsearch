@@ -194,6 +194,7 @@ const index = (props: IndexProps): Index => {
 
   return {
     $$type: 'ais.index',
+    $$widgetType: 'ais.index',
 
     getIndexName() {
       return indexName;

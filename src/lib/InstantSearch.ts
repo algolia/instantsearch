@@ -26,6 +26,10 @@ import {
   RouterProps,
 } from '../middlewares/createRouterMiddleware';
 import { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import {
+  createMetadataMiddleware,
+  isMetadataEnabled,
+} from '../middlewares/createMetadataMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -218,7 +222,6 @@ See ${createDocumentationLink({
 
     this.client = searchClient;
     this.insightsClient = insightsClient;
-
     this.indexName = indexName;
     this.helper = null;
     this.mainHelper = null;
@@ -249,6 +252,10 @@ See ${createDocumentationLink({
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
       this.use(createRouterMiddleware(routerOptions));
+    }
+
+    if (isMetadataEnabled()) {
+      this.use(createMetadataMiddleware());
     }
   }
 
