@@ -2,6 +2,14 @@ import { PlacesInstance } from 'places.js';
 import * as widgets from '../';
 import { Widget } from '../../types';
 
+/**
+ * Checklist when adding a new widget
+ *
+ * 1. Include $$type in the returned object from connector
+ * 2. Include $$widgetType in widget
+ * 3. Update $$type and $$widgetType in src/types/widget.ts
+ */
+
 // This is written in the test, since Object.entries is not allowed in the
 // source code. Once we use Object.entries without polyfill, we can move this
 // helper to the `typedObject` file.
