@@ -61,7 +61,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
       expect(widget).toEqual(
         expect.objectContaining({
-          $$type: 'ais.queryRuleCustomData',
+          $$type: 'ais.queryRules',
+          $$widgetType: 'ais.queryRuleCustomData',
         })
       );
     });

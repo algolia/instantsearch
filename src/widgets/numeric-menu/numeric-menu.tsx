@@ -133,7 +133,7 @@ export type NumericMenuTemplates = {
   }>;
 };
 
-export type NumericMenuWidgetOptions = {
+export type NumericMenuWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -158,10 +158,10 @@ export type NumericMenuWidgetOptions = {
 export type NumericMenuWidget = WidgetFactory<
   NumericMenuRendererOptions,
   NumericMenuConnectorParams,
-  NumericMenuWidgetOptions
+  NumericMenuWidgetParams
 >;
 
-const numericMenu: NumericMenuWidget = function numericMenu(widgetOptions) {
+const numericMenu: NumericMenuWidget = function numericMenu(widgetParams) {
   const {
     container,
     attribute,
@@ -169,7 +169,7 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetOptions) {
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformItems,
-  } = widgetOptions || ({} as typeof widgetOptions);
+  } = widgetParams || ({} as typeof widgetParams);
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -205,15 +205,18 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetOptions) {
     templates,
   });
 
-  const makeNumericMenu = connectNumericMenu(specializedRenderer, () =>
+  const makeWidget = connectNumericMenu(specializedRenderer, () =>
     render(null, containerNode)
   );
 
-  return makeNumericMenu({
-    attribute,
-    items,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      attribute,
+      items,
+      transformItems,
+    }),
+    $$widgetType: 'ais.numericMenu',
+  };
 };
 
 export default numericMenu;

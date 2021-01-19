@@ -90,7 +90,7 @@ export type PanelRenderOptions<
     ? TRenderState
     : Record<string, any>);
 
-export type PanelWidgetOptions<TWidget extends UnknownWidgetFactory> = {
+export type PanelWidgetParams<TWidget extends UnknownWidgetFactory> = {
   /**
    * A function that is called on each render to determine if the
    * panel should be hidden based on the render options.
@@ -138,24 +138,24 @@ const renderer = <TWidget extends UnknownWidgetFactory>({
 };
 
 export type PanelWidget = <TWidget extends UnknownWidgetFactory>(
-  widgetParams?: PanelWidgetOptions<TWidget>
+  widgetParams?: PanelWidgetParams<TWidget>
 ) => <
   TWidgetParams extends { container: HTMLElement | string; [key: string]: any }
 >(
   widgetFactory: TWidget
-) => (widgetOptions: TWidgetParams) => Widget;
+) => (widgetParams: TWidgetParams) => Widget;
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
  * It also reacts, indicates and sets CSS classes when widgets are no longer relevant for refining.
  */
-const panel: PanelWidget = widgetParams => {
+const panel: PanelWidget = panelWidgetParams => {
   const {
     templates = {},
     hidden = () => false,
     collapsed,
     cssClasses: userCssClasses = {},
-  } = widgetParams || {};
+  } = panelWidgetParams || {};
 
   warning(
     typeof hidden === 'function',
@@ -201,8 +201,8 @@ const panel: PanelWidget = widgetParams => {
     footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
   };
 
-  return widgetFactory => widgetOptions => {
-    const { container } = widgetOptions || ({} as typeof widgetOptions);
+  return widgetFactory => widgetParams => {
+    const { container } = widgetParams || ({} as typeof widgetParams);
 
     if (!container) {
       throw new Error(
@@ -246,7 +246,7 @@ const panel: PanelWidget = widgetParams => {
     });
 
     const widget = widgetFactory({
-      ...widgetOptions,
+      ...widgetParams,
       container: bodyContainerNode,
     });
 

@@ -54,7 +54,7 @@ const createSendEvent = ({
  */
 
 /**
- * @typedef {Object} CustomStarRatingWidgetOptions
+ * @typedef {Object} CustomStarRatingWidgetParams
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {number} [max = 5] The maximum rating value.
  */
@@ -67,7 +67,7 @@ const createSendEvent = ({
  * @property {function(string)} refine Selects a rating to filter the results
  * (takes the filter value as parameter). Takes the value of an item as parameter.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
- * @property {Object} widgetParams All original `CustomStarRatingWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomStarRatingWidgetParams` forwarded to the `renderFn`.
  */
 
 /**
@@ -80,7 +80,7 @@ const createSendEvent = ({
  * @type {Connector}
  * @param {function(StarRatingRenderingOptions, boolean)} renderFn Rendering function for the custom **StarRating** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomStarRatingWidgetOptions)} Re-usable widget factory for a custom **StarRating** widget.
+ * @return {function(CustomStarRatingWidgetParams)} Re-usable widget factory for a custom **StarRating** widget.
  * @example
  * // custom `renderFn` to render the custom StarRating widget
  * function renderFn(StarRatingRenderingOptions, isFirstRendering) {

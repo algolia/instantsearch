@@ -19,7 +19,10 @@ const configureRelatedItems: ConfigureRelatedItemsWidget = function configureRel
 ) {
   const makeWidget = connectConfigureRelatedItems(noop);
 
-  return makeWidget(widgetParams);
+  return {
+    ...makeWidget(widgetParams),
+    $$widgetType: 'ais.configureRelatedItems',
+  };
 };
 
 export default configureRelatedItems;

@@ -25,7 +25,10 @@ const configure: ConfigureWidget = function configure(widgetParams) {
   // noop render and unmount functions.
   const makeWidget = connectConfigure(noop);
 
-  return makeWidget({ searchParameters: widgetParams });
+  return {
+    ...makeWidget({ searchParameters: widgetParams }),
+    $$widgetType: 'ais.configure',
+  };
 };
 
 export default configure;

@@ -44,6 +44,24 @@ beforeEach(() => {
   algoliasearchHelper.mockClear();
 });
 
+const defaultUserAgent =
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15';
+const algoliaUserAgent = 'Algolia Crawler 5.3.2';
+
+const { window } = global;
+Object.defineProperty(
+  window.navigator,
+  'userAgent',
+  (value => ({
+    get() {
+      return value;
+    },
+    set(v) {
+      value = v;
+    },
+  }))(window.navigator.userAgent)
+);
+
 describe('Usage', () => {
   beforeEach(() => {
     warning.cache = {};
@@ -366,6 +384,36 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     // could be null if we don't pretend the main helper is the one who searched
     expect(search.helper.lastResults).not.toBe(null);
+  });
+
+  it("doesn't add metadata middleware by default", () => {
+    global.navigator.userAgent = defaultUserAgent;
+
+    const useSpy = jest.spyOn(InstantSearch.prototype, 'use');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const search = new InstantSearch({
+      searchClient: createSearchClient(),
+      indexName: 'test',
+    });
+
+    expect(useSpy).toHaveBeenCalledTimes(0);
+    global.navigator.userAgent = defaultUserAgent;
+  });
+
+  it('adds metadata middleware on the Crawler user agent', () => {
+    global.navigator.userAgent = algoliaUserAgent;
+
+    const useSpy = jest.spyOn(InstantSearch.prototype, 'use');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const search = new InstantSearch({
+      searchClient: createSearchClient(),
+      indexName: 'test',
+    });
+
+    expect(useSpy).toHaveBeenCalledTimes(1);
+    global.navigator.userAgent = defaultUserAgent;
   });
 });
 

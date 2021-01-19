@@ -34,7 +34,7 @@ const renderer = ({
   cssClasses,
   containerNode,
   templates,
-}): Renderer<HitsRendererOptions, Partial<HitsWidgetOptions>> => (
+}): Renderer<HitsRendererOptions, Partial<HitsWidgetParams>> => (
   { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
   isFirstRendering
 ) => {
@@ -106,7 +106,7 @@ export type HitsTemplates = {
   >;
 };
 
-export type HitsWidgetOptions = {
+export type HitsWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -126,17 +126,17 @@ export type HitsWidgetOptions = {
 export type HitsWidget = WidgetFactory<
   HitsRendererOptions,
   HitsConnectorParams,
-  HitsWidgetOptions
+  HitsWidgetParams
 >;
 
-const hits: HitsWidget = function hits(widgetOptions) {
+const hits: HitsWidget = function hits(widgetParams) {
   const {
     container,
     escapeHTML,
     transformItems,
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
-  } = widgetOptions || ({} as typeof widgetOptions);
+  } = widgetParams || ({} as typeof widgetParams);
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -157,11 +157,14 @@ const hits: HitsWidget = function hits(widgetOptions) {
     templates,
   });
 
-  const makeHits = withInsights(connectHits)(specializedRenderer, () =>
+  const makeWidget = withInsights(connectHits)(specializedRenderer, () =>
     render(null, containerNode)
   );
 
-  return makeHits({ escapeHTML, transformItems });
+  return {
+    ...makeWidget({ escapeHTML, transformItems }),
+    $$widgetType: 'ais.hits',
+  };
 };
 
 export default hits;

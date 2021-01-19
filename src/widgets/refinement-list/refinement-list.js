@@ -132,7 +132,7 @@ const renderer = ({
  */
 
 /**
- * @typedef {Object} RefinementListWidgetOptions
+ * @typedef {Object} RefinementListWidgetParams
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attribute Name of the attribute for faceting.
  * @property {"and"|"or"} [operator="or"] How to apply refinements. Possible values: `or`, `and`
@@ -175,7 +175,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel RefinementList
  * @category filter
- * @param {RefinementListWidgetOptions} $0 The RefinementList widget options that you use to customize the widget.
+ * @param {RefinementListWidgetParams} widgetParams The RefinementList widget options that you use to customize the widget.
  * @return {Widget} Creates a new instance of the RefinementList widget.
  * @example
  * search.addWidgets([
@@ -187,22 +187,24 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function refinementList({
-  container,
-  attribute,
-  operator,
-  sortBy,
-  limit,
-  showMore,
-  showMoreLimit,
-  searchable = false,
-  searchablePlaceholder = 'Search...',
-  searchableEscapeFacetValues = true,
-  searchableIsAlwaysActive = true,
-  cssClasses: userCssClasses = {},
-  templates: userTemplates = defaultTemplates,
-  transformItems,
-} = {}) {
+export default function refinementList(widgetParams) {
+  const {
+    container,
+    attribute,
+    operator,
+    sortBy,
+    limit,
+    showMore,
+    showMoreLimit,
+    searchable = false,
+    searchablePlaceholder = 'Search...',
+    searchableEscapeFacetValues = true,
+    searchableIsAlwaysActive = true,
+    cssClasses: userCssClasses = {},
+    templates: userTemplates = defaultTemplates,
+    transformItems,
+  } = widgetParams || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -300,14 +302,17 @@ export default function refinementList({
     render(null, containerNode)
   );
 
-  return makeWidget({
-    attribute,
-    operator,
-    limit,
-    showMore,
-    showMoreLimit,
-    sortBy,
-    escapeFacetValues,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      attribute,
+      operator,
+      limit,
+      showMore,
+      showMoreLimit,
+      sortBy,
+      escapeFacetValues,
+      transformItems,
+    }),
+    $$widgetType: 'ais.refinementList',
+  };
 }
