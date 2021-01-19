@@ -49,7 +49,7 @@ export type AnswersConnectorParams = {
 
   /**
    * Debounce time in milliseconds to debounce render
-   * default: 200
+   * default: 100
    */
   renderDebounceTime?: number;
 
@@ -83,7 +83,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       queryLanguages,
       attributesForPrediction,
       nbHits = 1,
-      renderDebounceTime = 200,
+      renderDebounceTime = 100,
       searchDebounceTime = 100,
       escapeHTML = true,
     } = widgetParams || ({} as typeof widgetParams);
