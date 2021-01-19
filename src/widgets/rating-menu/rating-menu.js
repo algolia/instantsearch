@@ -114,7 +114,6 @@ export default function ratingMenu(widgetParams) {
     container,
     attribute,
     max = 5,
-    step = 1,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
   } = widgetParams || {};
@@ -166,7 +165,7 @@ export default function ratingMenu(widgetParams) {
   );
 
   return {
-    ...makeWidget({ attribute, max, step }),
+    ...makeWidget({ attribute, max }),
     $$widgetType: 'ais.ratingMenu',
   };
 }

@@ -14,6 +14,7 @@ const withUsage = createDocumentationMessageGenerator({
 const $$type = 'ais.ratingMenu';
 
 const MAX_VALUES_PER_FACET_API_LIMIT = 1000;
+const STEP = 1;
 
 const createSendEvent = ({
   instantSearchInstance,
@@ -132,7 +133,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
-    const { attribute, max = 5, step = 1 } = widgetParams;
+    const { attribute, max = 5 } = widgetParams;
     let sendEvent;
 
     if (!attribute) {
@@ -293,7 +294,7 @@ ${
 
           const refinedStar = getRefinedStar(state);
 
-          for (let star = step; star < max; star += step) {
+          for (let star = STEP; star < max; star += STEP) {
             const isRefined = refinedStar === star;
 
             const count = facetResults
@@ -307,8 +308,8 @@ ${
               continue;
             }
 
-            const stars = [...new Array(Math.floor(max / step))].map(
-              (v, i) => i * step < star
+            const stars = [...new Array(Math.floor(max / STEP))].map(
+              (v, i) => i * STEP < star
             );
 
             facetValues.push({
