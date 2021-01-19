@@ -11,6 +11,7 @@ import {
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import instantsearch from '../../../lib/main';
 
 function createFacetStatsResults({
   helper,
@@ -2110,6 +2111,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       });
 
       expect(actual).toEqual(expectation);
+    });
+
+    it('passes the correct range set by initialUiState', () => {
+      const searchClient = createSearchClient();
+      const search = instantsearch({
+        indexName: 'test-index',
+        searchClient,
+        initialUiState: {
+          'test-index': {
+            range: {
+              price: '100:200',
+            },
+          },
+        },
+      });
+      const renderer = jest.fn();
+      const customRangeInput = connectRange(renderer);
+
+      search.addWidgets([
+        customRangeInput({
+          attribute: 'price',
+          min: 0,
+          max: 500,
+        }),
+      ]);
+      search.start();
+
+      expect(renderer).toHaveBeenCalledWith(
+        expect.objectContaining({
+          start: [100, 200],
+        }),
+        true
+      );
     });
   });
 
