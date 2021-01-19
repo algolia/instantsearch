@@ -162,7 +162,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel HierarchicalMenu
  * @category filter
- * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
+ * @param {HierarchicalMenuWidgetOptions} widgetOptions The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.
  * @example
  * search.addWidgets([
@@ -172,20 +172,22 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function hierarchicalMenu({
-  container,
-  attributes,
-  separator,
-  rootPath,
-  showParentLevel,
-  limit,
-  showMore = false,
-  showMoreLimit,
-  sortBy,
-  transformItems,
-  templates = defaultTemplates,
-  cssClasses: userCssClasses = {},
-} = {}) {
+export default function hierarchicalMenu(widgetOptions) {
+  const {
+    container,
+    attributes,
+    separator,
+    rootPath,
+    showParentLevel,
+    limit,
+    showMore = false,
+    showMoreLimit,
+    sortBy,
+    transformItems,
+    templates = defaultTemplates,
+    cssClasses: userCssClasses = {},
+  } = widgetOptions || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -230,20 +232,21 @@ export default function hierarchicalMenu({
     renderState: {},
   });
 
-  const makeHierarchicalMenu = connectHierarchicalMenu(
-    specializedRenderer,
-    () => render(null, containerNode)
+  const makeWidget = connectHierarchicalMenu(specializedRenderer, () =>
+    render(null, containerNode)
   );
 
-  return makeHierarchicalMenu({
-    attributes,
-    separator,
-    rootPath,
-    showParentLevel,
-    limit,
-    showMore,
-    showMoreLimit,
-    sortBy,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      attributes,
+      separator,
+      rootPath,
+      showParentLevel,
+      limit,
+      showMore,
+      showMoreLimit,
+      sortBy,
+      transformItems,
+    }),
+  };
 }

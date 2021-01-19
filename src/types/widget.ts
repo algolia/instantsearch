@@ -363,7 +363,11 @@ export type WidgetRenderState<
 export type Widget<
   TWidgetOptions extends { renderState: unknown } = { renderState: unknown }
 > = {
+  /**
+   * Identifier for official widgets
+   */
   $$type?:
+    | 'ais.analytics'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -394,6 +398,7 @@ export type Widget<
     | 'ais.stats'
     | 'ais.toggleRefinement'
     | 'ais.voiceSearch';
+
   /**
    * Called once before the first search
    */

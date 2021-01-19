@@ -98,11 +98,13 @@ const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetOptions) {
     cssClasses,
   });
 
-  const makeHitsPerPage = connectHitsPerPage(specializedRenderer, () =>
+  const makeWidget = connectHitsPerPage(specializedRenderer, () =>
     render(null, containerNode)
   );
 
-  return makeHitsPerPage({ items, transformItems });
+  return {
+    ...makeWidget({ items, transformItems }),
+  };
 };
 
 export default hitsPerPage;

@@ -48,7 +48,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @type {WidgetFactory}
  * @devNovel PoweredBy
  * @category metadata
- * @param {PoweredByWidgetOptions} $0 PoweredBy widget options. Some keys are mandatory: `container`,
+ * @param {PoweredByWidgetOptions} widgetOptions PoweredBy widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new poweredBy widget instance
  * @example
  * search.addWidgets([
@@ -58,11 +58,10 @@ const renderer = ({ containerNode, cssClasses }) => (
  *   })
  * ]);
  */
-export default function poweredBy({
-  container,
-  cssClasses: userCssClasses = {},
-  theme = 'light',
-} = {}) {
+export default function poweredBy(widgetOptions) {
+  const { container, cssClasses: userCssClasses = {}, theme = 'light' } =
+    widgetOptions || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -88,5 +87,7 @@ export default function poweredBy({
     render(null, containerNode)
   );
 
-  return makeWidget({ theme });
+  return {
+    ...makeWidget({ theme }),
+  };
 }

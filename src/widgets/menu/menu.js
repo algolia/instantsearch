@@ -109,7 +109,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel Menu
  * @category filter
- * @param {MenuWidgetOptions} $0 The Menu widget options.
+ * @param {MenuWidgetOptions} widgetOptions The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.
  * @example
  * search.addWidgets([
@@ -120,17 +120,19 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function menu({
-  container,
-  attribute,
-  sortBy,
-  limit,
-  showMore,
-  showMoreLimit,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  transformItems,
-}) {
+export default function menu(widgetOptions) {
+  const {
+    container,
+    attribute,
+    sortBy,
+    limit,
+    showMore,
+    showMoreLimit,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    transformItems,
+  } = widgetOptions || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -171,12 +173,14 @@ export default function menu({
     render(null, containerNode)
   );
 
-  return makeWidget({
-    attribute,
-    limit,
-    showMore,
-    showMoreLimit,
-    sortBy,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      attribute,
+      limit,
+      showMore,
+      showMoreLimit,
+      sortBy,
+      transformItems,
+    }),
+  };
 }

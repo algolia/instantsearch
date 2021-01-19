@@ -94,7 +94,7 @@ const suit = component('GeoSearch');
  * Don't forget to explicitly set the `height` of the map container (default class `.ais-geo-search--map`), otherwise it won't be shown (it's a requirement of Google Maps).
  *
  * @devNovel GeoSearch
- * @param {GeoSearchWidgetOptions} $0 Options of the GeoSearch widget.
+ * @param {GeoSearchWidgetOptions} widgetOptions Options of the GeoSearch widget.
  * @return {Widget} A new instance of GeoSearch widget.
  * @staticExample
  * search.addWidgets([
@@ -104,20 +104,22 @@ const suit = component('GeoSearch');
  *   })
  * ]);
  */
-const geoSearch = ({
-  initialZoom = 1,
-  initialPosition = { lat: 0, lng: 0 },
-  templates: userTemplates = {},
-  cssClasses: userCssClasses = {},
-  builtInMarker: userBuiltInMarker = {},
-  customHTMLMarker: userCustomHTMLMarker,
-  enableRefine = true,
-  enableClearMapRefinement = true,
-  enableRefineControl = true,
-  container,
-  googleReference,
-  ...widgetParams
-} = {}) => {
+const geoSearch = widgetOptions => {
+  const {
+    initialZoom = 1,
+    initialPosition = { lat: 0, lng: 0 },
+    templates: userTemplates = {},
+    cssClasses: userCssClasses = {},
+    builtInMarker: userBuiltInMarker = {},
+    customHTMLMarker: userCustomHTMLMarker,
+    enableRefine = true,
+    enableClearMapRefinement = true,
+    enableRefineControl = true,
+    container,
+    googleReference,
+    ...widgetParams
+  } = widgetOptions || {};
+
   const defaultBuiltInMarker = {
     createOptions: noop,
     events: {},
@@ -208,25 +210,27 @@ const geoSearch = ({
     ? builtInMarker
     : customHTMLMarker;
 
-  const makeGeoSearch = connectGeoSearch(renderer, () =>
+  const makeWidget = connectGeoSearch(renderer, () =>
     render(null, containerNode)
   );
 
-  return makeGeoSearch({
-    ...widgetParams,
-    renderState: {},
-    container: containerNode,
-    googleReference,
-    initialZoom,
-    initialPosition,
-    templates,
-    cssClasses,
-    createMarker,
-    markerOptions,
-    enableRefine,
-    enableClearMapRefinement,
-    enableRefineControl,
-  });
+  return {
+    ...makeWidget({
+      ...widgetParams,
+      renderState: {},
+      container: containerNode,
+      googleReference,
+      initialZoom,
+      initialPosition,
+      templates,
+      cssClasses,
+      createMarker,
+      markerOptions,
+      enableRefine,
+      enableClearMapRefinement,
+      enableRefineControl,
+    }),
+  };
 };
 
 export default geoSearch;

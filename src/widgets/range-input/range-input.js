@@ -92,7 +92,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @type {WidgetFactory}
  * @devNovel RangeInput
  * @category filter
- * @param {RangeInputWidgetOptions} $0 The RangeInput widget options.
+ * @param {RangeInputWidgetOptions} widgetOptions The RangeInput widget options.
  * @return {Widget} A new instance of RangeInput widget.
  * @example
  * search.addWidgets([
@@ -106,15 +106,17 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function rangeInput({
-  container,
-  attribute,
-  min,
-  max,
-  precision = 0,
-  cssClasses: userCssClasses = {},
-  templates: userTemplates = {},
-} = {}) {
+export default function rangeInput(widgetOptions) {
+  const {
+    container,
+    attribute,
+    min,
+    max,
+    precision = 0,
+    cssClasses: userCssClasses = {},
+    templates: userTemplates = {},
+  } = widgetOptions || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
