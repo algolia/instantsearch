@@ -111,6 +111,10 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
           attributes: ['attr1', 'attr2'],
         });
       }
+      case 'EXPERIMENTAL_answers': {
+        const EXPERIMENTAL_answers = widget as Widgets['EXPERIMENTAL_answers'];
+        return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
+      }
       default: {
         return widget({ container, attribute: 'attr' });
       }

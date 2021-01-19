@@ -401,7 +401,8 @@ export type Widget<
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
-    | 'ais.voiceSearch';
+    | 'ais.voiceSearch'
+    | 'ais.answers';
 
   /**
    * Identifier for official widgets

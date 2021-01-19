@@ -160,13 +160,16 @@ const answersWidget: AnswersWidget = widgetParams => {
     render(null, containerNode)
   );
 
-  return makeWidget({
-    attributesForPrediction,
-    queryLanguages,
-    nbHits,
-    searchDebounceTime,
-    renderDebounceTime,
-  });
+  return {
+    ...makeWidget({
+      attributesForPrediction,
+      queryLanguages,
+      nbHits,
+      searchDebounceTime,
+      renderDebounceTime,
+    }),
+    $$widgetType: 'ais.answers',
+  };
 };
 
 export default answersWidget;

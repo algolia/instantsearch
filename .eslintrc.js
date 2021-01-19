@@ -11,6 +11,7 @@ module.exports = {
           'EXPERIMENTAL_use',
           'EXPERIMENTAL_connectConfigureRelatedItems',
           'EXPERIMENTAL_configureRelatedItems',
+          'EXPERIMENTAL_answers',
         ],
       },
     ],
