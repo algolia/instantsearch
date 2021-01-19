@@ -133,12 +133,12 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
       ),
     };
 
-    const makeConfigure = connectConfigure(renderFn, unmountFn);
+    const makeWidget = connectConfigure(renderFn, unmountFn);
 
     return {
       // required, since widget parameters differ between these connectors
       // and we don't want to have the parameters of configure here
-      ...makeConfigure({ searchParameters } as any),
+      ...makeWidget({ searchParameters } as any),
       $$type: 'ais.configureRelatedItems',
     };
   };

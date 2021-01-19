@@ -121,13 +121,16 @@ const currentRefinements: CurrentRefinementsWidget = function currentRefinements
     () => render(null, containerNode)
   );
 
-  return makeWidget({
-    container: containerNode,
-    cssClasses,
-    includedAttributes,
-    excludedAttributes,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      container: containerNode,
+      cssClasses,
+      includedAttributes,
+      excludedAttributes,
+      transformItems,
+    }),
+    $$widgetType: 'ais.currentRefinements',
+  };
 };
 
 export default currentRefinements;

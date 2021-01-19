@@ -69,7 +69,7 @@ export type ClearRefinementsTemplates = {
   resetLabel?: Template;
 };
 
-export type ClearRefinementsWidgetOptions = {
+export type ClearRefinementsWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -89,10 +89,10 @@ export type ClearRefinementsWidgetOptions = {
 export type ClearRefinementsWidget = WidgetFactory<
   ClearRefinementsRendererOptions,
   ClearRefinementsConnectorParams,
-  ClearRefinementsWidgetOptions
+  ClearRefinementsWidgetParams
 >;
 
-const clearRefinements: ClearRefinementsWidget = widgetOptions => {
+const clearRefinements: ClearRefinementsWidget = widgetParams => {
   const {
     container,
     templates = defaultTemplates,
@@ -100,7 +100,7 @@ const clearRefinements: ClearRefinementsWidget = widgetOptions => {
     excludedAttributes,
     transformItems,
     cssClasses: userCssClasses = {},
-  } = widgetOptions || ({} as typeof widgetOptions);
+  } = widgetParams || ({} as typeof widgetParams);
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -128,11 +128,14 @@ const clearRefinements: ClearRefinementsWidget = widgetOptions => {
     render(null, containerNode)
   );
 
-  return makeWidget({
-    includedAttributes,
-    excludedAttributes,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      includedAttributes,
+      excludedAttributes,
+      transformItems,
+    }),
+    $$widgetType: 'ais.clearRefinements',
+  };
 };
 
 export default clearRefinements;

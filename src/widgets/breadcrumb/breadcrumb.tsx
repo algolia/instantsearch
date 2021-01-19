@@ -95,7 +95,7 @@ export type BreadcrumbTemplates = {
   separator?: Template;
 };
 
-export type BreadcrumbWidgetOptions = {
+export type BreadcrumbWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -115,10 +115,10 @@ export type BreadcrumbWidgetOptions = {
 export type BreadcrumbWidget = WidgetFactory<
   BreadcrumbRendererOptions,
   BreadcrumbConnectorParams,
-  BreadcrumbWidgetOptions
+  BreadcrumbWidgetParams
 >;
 
-const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetOptions) {
+const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetParams) {
   const {
     container,
     attributes,
@@ -127,7 +127,7 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetOptions) {
     transformItems,
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
-  } = widgetOptions || ({} as typeof widgetOptions);
+  } = widgetParams || ({} as typeof widgetParams);
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -161,11 +161,14 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetOptions) {
     templates,
   });
 
-  const makeBreadcrumb = connectBreadcrumb(specializedRenderer, () =>
+  const makeWidget = connectBreadcrumb(specializedRenderer, () =>
     render(null, containerNode)
   );
 
-  return makeBreadcrumb({ attributes, separator, rootPath, transformItems });
+  return {
+    ...makeWidget({ attributes, separator, rootPath, transformItems }),
+    $$widgetType: 'ais.breadcrumb',
+  };
 };
 
 export default breadcrumb;

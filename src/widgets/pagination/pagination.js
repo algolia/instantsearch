@@ -100,7 +100,7 @@ const renderer = ({
  */
 
 /**
- * @typedef {Object} PaginationWidgetOptions
+ * @typedef {Object} PaginationWidgetParams
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {number} [totalPages] The max number of pages to browse.
  * @property  {number} [padding=3] The number of pages to display on each side of the current page.
@@ -127,7 +127,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel Pagination
  * @category navigation
- * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
+ * @param {PaginationWidgetParams} widgetParams Options for the Pagination widget.
  * @return {Widget} A new instance of Pagination widget.
  * @example
  * search.addWidgets([
@@ -141,18 +141,20 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function pagination({
-  container,
-  templates: userTemplates = {},
-  cssClasses: userCssClasses = {},
-  totalPages,
-  padding,
-  showFirst = true,
-  showLast = true,
-  showPrevious = true,
-  showNext = true,
-  scrollTo: userScrollTo = 'body',
-} = {}) {
+export default function pagination(widgetParams) {
+  const {
+    container,
+    templates: userTemplates = {},
+    cssClasses: userCssClasses = {},
+    totalPages,
+    padding,
+    showFirst = true,
+    showLast = true,
+    showPrevious = true,
+    showNext = true,
+    scrollTo: userScrollTo = 'body',
+  } = widgetParams || {};
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -219,5 +221,8 @@ export default function pagination({
     render(null, containerNode)
   );
 
-  return makeWidget({ totalPages, padding });
+  return {
+    ...makeWidget({ totalPages, padding }),
+    $$widgetType: 'ais.pagination',
+  };
 }

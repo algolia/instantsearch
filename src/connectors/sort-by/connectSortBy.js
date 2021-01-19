@@ -18,7 +18,7 @@ const withUsage = createDocumentationMessageGenerator({
  */
 
 /**
- * @typedef {Object} CustomSortByWidgetOptions
+ * @typedef {Object} CustomSortByWidgetParams
  * @property {SortByItem[]} items Array of objects defining the different indices to choose from.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -29,7 +29,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @property {SortByItem[]} options All the available indices
  * @property {function(string)} refine Switches indices and triggers a new search.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
- * @property {Object} widgetParams All original `CustomSortByWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomSortByWidgetParams` forwarded to the `renderFn`.
  */
 
 /**
@@ -44,7 +44,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @type {Connector}
  * @param {function(SortByRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBy** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomSortByWidgetOptions)} Re-usable widget factory for a custom **SortBy** widget.
+ * @return {function(CustomSortByWidgetParams)} Re-usable widget factory for a custom **SortBy** widget.
  * @example
  * // custom `renderFn` to render the custom SortBy widget
  * function renderFn(SortByRenderingOptions, isFirstRendering) {
