@@ -166,5 +166,6 @@ export default function ratingMenu(widgetOptions) {
 
   return {
     ...makeWidget({ attribute, max }),
+    $$widgetType: 'ais.ratingMenu',
   };
 }

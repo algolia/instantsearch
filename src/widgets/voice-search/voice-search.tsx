@@ -127,6 +127,7 @@ const voiceSearch: VoiceSearch = widgetOptions => {
       additionalQueryParameters,
       createVoiceSearchHelper,
     }),
+    $$widgetType: 'ais.voiceSearch',
   };
 };
 

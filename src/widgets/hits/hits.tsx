@@ -163,6 +163,7 @@ const hits: HitsWidget = function hits(widgetOptions) {
 
   return {
     ...makeWidget({ escapeHTML, transformItems }),
+    $$widgetType: 'ais.hits',
   };
 };
 

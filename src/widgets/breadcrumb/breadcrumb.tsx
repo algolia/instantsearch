@@ -167,6 +167,7 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetOptions) {
 
   return {
     ...makeWidget({ attributes, separator, rootPath, transformItems }),
+    $$widgetType: 'ais.breadcrumb',
   };
 };
 

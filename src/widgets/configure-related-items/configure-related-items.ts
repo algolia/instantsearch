@@ -21,6 +21,7 @@ const configureRelatedItems: ConfigureRelatedItemsWidget = function configureRel
 
   return {
     ...makeWidget(widgetParams),
+    $$widgetType: 'ais.configureRelatedItems',
   };
 };
 

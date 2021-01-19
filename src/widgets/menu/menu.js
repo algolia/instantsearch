@@ -182,5 +182,6 @@ export default function menu(widgetOptions) {
       sortBy,
       transformItems,
     }),
+    $$widgetType: 'ais.menu',
   };
 }

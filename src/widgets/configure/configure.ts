@@ -27,6 +27,7 @@ const configure: ConfigureWidget = function configure(widgetParams) {
 
   return {
     ...makeWidget({ searchParameters: widgetParams }),
+    $$widgetType: 'ais.configure',
   };
 };
 

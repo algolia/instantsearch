@@ -230,6 +230,7 @@ const geoSearch = widgetOptions => {
       enableClearMapRefinement,
       enableRefineControl,
     }),
+    $$widgetType: 'ais.geoSearch',
   };
 };
 

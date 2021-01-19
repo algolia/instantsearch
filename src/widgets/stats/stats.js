@@ -131,5 +131,6 @@ export default function stats(widgetOptions) {
 
   return {
     ...makeWidget(),
+    $$widgetType: 'ais.stats',
   };
 }

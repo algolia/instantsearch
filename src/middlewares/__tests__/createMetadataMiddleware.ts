@@ -101,13 +101,13 @@ describe('createMetadataMiddleware', () => {
       await wait(100);
 
       expect(document.head).toMatchInlineSnapshot(`
-<head>
-  <meta
-    content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"]},{\\"type\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]}]}"
-    name="instantsearch:widgets"
-  />
-</head>
-`);
+        <head>
+          <meta
+            content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"widgetType\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"]},{\\"type\\":\\"ais.index\\",\\"widgetType\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"widgetType\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"widgetType\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]}]}"
+            name="instantsearch:widgets"
+          />
+        </head>
+      `);
 
       expect(JSON.parse(document.head.querySelector('meta')!.content))
         .toMatchInlineSnapshot(`
@@ -116,30 +116,36 @@ Object {
     Object {
       "params": Array [],
       "type": "ais.searchBox",
+      "widgetType": "ais.searchBox",
     },
     Object {
       "params": Array [],
       "type": "ais.searchBox",
+      "widgetType": "ais.searchBox",
     },
     Object {
       "params": Array [
         "escapeHTML",
       ],
       "type": "ais.hits",
+      "widgetType": "ais.hits",
     },
     Object {
       "params": Array [],
       "type": "ais.index",
+      "widgetType": "ais.index",
     },
     Object {
       "params": Array [],
       "type": "ais.pagination",
+      "widgetType": "ais.pagination",
     },
     Object {
       "params": Array [
         "searchParameters",
       ],
       "type": "ais.configure",
+      "widgetType": "ais.configure",
     },
   ],
 }

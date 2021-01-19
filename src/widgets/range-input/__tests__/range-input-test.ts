@@ -44,6 +44,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(widget).toEqual(
         expect.objectContaining({
           $$type: 'ais.rangeInput',
+          $$widgetType: 'ais.rangeInput',
         })
       );
     });
