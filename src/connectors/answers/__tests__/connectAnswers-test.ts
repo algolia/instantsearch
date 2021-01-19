@@ -6,13 +6,13 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-jest.mock('../../../lib/utils/debounce', () => ({
-  debounce: jest.fn(callback => (...args) => setTimeout(callback(...args), 0)),
-}));
-import { debounce } from '../../../lib/utils/debounce';
 import connectAnswers from '../connectAnswers';
 
-const wait = (time = 10) => {
+const defaultRenderDebounceTime = 10;
+const defaultSearchDebounceTime = 10;
+
+// 10(render debounce) + 10(search debounce) + 10(just to make sure)
+const wait = (time = 30) => {
   return new Promise(resolve => {
     setTimeout(resolve, time);
   });
@@ -46,6 +46,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
   const setupTestEnvironment = ({
     hits,
     attributesForPrediction = ['description'],
+    renderDebounceTime = defaultRenderDebounceTime,
+    searchDebounceTime = defaultSearchDebounceTime,
+  }: {
+    hits: any[];
+    attributesForPrediction?: string[];
+    renderDebounceTime?: number;
+    searchDebounceTime?: number;
   }) => {
     const renderFn = jest.fn();
     const unmountFn = jest.fn();
@@ -62,6 +69,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     const widget = makeWidget({
       queryLanguages: ['en'],
       attributesForPrediction,
+      renderDebounceTime,
+      searchDebounceTime,
     });
 
     const helper = algoliasearchHelper(client, '', {});
@@ -125,6 +134,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         widgetParams: {
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
+          renderDebounceTime: 10,
+          searchDebounceTime: 10,
         },
       }),
       true
@@ -150,6 +161,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         widgetParams: {
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
+          renderDebounceTime: 10,
+          searchDebounceTime: 10,
         },
       }),
       false
@@ -194,6 +207,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         widgetParams: {
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
+          renderDebounceTime: 10,
+          searchDebounceTime: 10,
         },
       }),
       false
@@ -207,7 +222,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       instantSearchInstance,
       widget,
       helper,
-    } = setupTestEnvironment({ hits });
+    } = setupTestEnvironment({
+      hits,
+    });
 
     widget.init!(
       createInitOptions({
@@ -254,16 +271,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
   });
 
   it('debounces renders', async () => {
-    (debounce as jest.Mock).mockImplementation(
-      jest.requireActual('../../../lib/utils/debounce').debounce
-    );
     const hits = [{ title: '', objectID: 'a' }];
     const {
       renderFn,
       instantSearchInstance,
       widget,
       helper,
-    } = setupTestEnvironment({ hits });
+    } = setupTestEnvironment({
+      hits,
+    });
 
     widget.init!(
       createInitOptions({
@@ -307,7 +323,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     expect(renderFn).toHaveBeenCalledTimes(3);
 
     // wait for debounce
-    await wait(300);
+    await wait();
     const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
     (expectedHits as any).__escaped = true;
     expect(renderFn).toHaveBeenCalledTimes(4);
@@ -321,7 +337,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     );
 
     // wait
-    await wait(300);
+    await wait();
     // but no more rendering
     expect(renderFn).toHaveBeenCalledTimes(4);
   });
@@ -348,6 +364,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           widgetParams: {
             queryLanguages: ['en'],
             attributesForPrediction: ['description'],
+            renderDebounceTime: 10,
+            searchDebounceTime: 10,
           },
         },
       });
@@ -376,6 +394,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           widgetParams: {
             queryLanguages: ['en'],
             attributesForPrediction: ['description'],
+            renderDebounceTime: 10,
+            searchDebounceTime: 10,
           },
         },
       });
@@ -420,6 +440,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         widgetParams: {
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
+          renderDebounceTime: 10,
+          searchDebounceTime: 10,
         },
       });
 
@@ -440,6 +462,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         widgetParams: {
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
+          renderDebounceTime: 10,
+          searchDebounceTime: 10,
         },
       });
     });

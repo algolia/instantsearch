@@ -51,14 +51,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         queryLanguages: ['en'],
         attributesForPrediction: ['description'],
       });
-      // @ts-ignore-next-line
-      widget.init({
-        helper,
-        instantSearchInstance: search,
-      });
       expect(() => {
         // @ts-ignore-next-line
-        widget.render({ state: {}, instantSearchInstance: search });
+        widget.init({
+          state: helper.state,
+          helper,
+          instantSearchInstance: search,
+        });
       }).toThrowErrorMatchingInlineSnapshot(`
 "\`algoliasearch\` >= 4.8.0 required.
 
@@ -104,8 +103,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           // @ts-ignore-next-line
           initIndex() {
             return {
-              findAnswers: () =>
-                Promise.resolve({ hits: [{ title: 'Hello' }] }),
+              findAnswers: () => {
+                return Promise.resolve({ hits: [{ title: 'Hello' }] });
+              },
             };
           },
         }),
@@ -115,6 +115,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           container: answersContainer,
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
+          renderDebounceTime: 10,
+          searchDebounceTime: 10,
           cssClasses: {
             root: 'root',
             loader: 'loader',
@@ -155,7 +157,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           'title: Hello'
         );
         done();
-      }, 200);
+      }, 30);
     });
   });
 });

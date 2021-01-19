@@ -129,6 +129,8 @@ const answersWidget: AnswersWidget = widgetParams => {
     attributesForPrediction,
     queryLanguages,
     nbHits,
+    searchDebounceTime,
+    renderDebounceTime,
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
   } = widgetParams || ({} as typeof widgetParams);
@@ -162,6 +164,8 @@ const answersWidget: AnswersWidget = widgetParams => {
     attributesForPrediction,
     queryLanguages,
     nbHits,
+    searchDebounceTime,
+    renderDebounceTime,
   });
 };
 

@@ -4,6 +4,7 @@ import {
   createConcurrentSafePromise,
   addQueryID,
   debounce,
+  debounceAsync,
   addAbsolutePosition,
   noop,
   escapeHits,
@@ -47,10 +48,16 @@ export type AnswersConnectorParams = {
   nbHits?: number;
 
   /**
-   * Debounce time in milliseconds to debounce answers API
+   * Debounce time in milliseconds to debounce render
    * default: 200
    */
-  debounceTime?: number;
+  renderDebounceTime?: number;
+
+  /**
+   * Debounce time in milliseconds to debounce search
+   * default: 100
+   */
+  searchDebounceTime?: number;
 
   /**
    * Whether to escape HTML tags from hits string values.
@@ -76,7 +83,8 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       queryLanguages,
       attributesForPrediction,
       nbHits = 1,
-      debounceTime = 200,
+      renderDebounceTime = 200,
+      searchDebounceTime = 100,
       escapeHTML = true,
     } = widgetParams || ({} as typeof widgetParams);
 
@@ -92,12 +100,25 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
     let lastResult: Partial<FindAnswersResponse<Hit>>;
     let isLoading = false;
-    const debouncedRenderFn = debounce(renderFn, debounceTime);
+    const debouncedRender = debounce(renderFn, renderDebounceTime);
+    let debouncedRefine;
 
     return {
       $$type: 'ais.answers',
 
       init(initOptions) {
+        const { state, instantSearchInstance } = initOptions;
+        const answersIndex = instantSearchInstance.client!.initIndex!(
+          state.index
+        );
+        if (!answersIndex.findAnswers) {
+          throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
+        }
+        debouncedRefine = debounceAsync(
+          answersIndex.findAnswers,
+          searchDebounceTime
+        );
+
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -108,12 +129,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       },
 
       render(renderOptions) {
-        const { state, instantSearchInstance } = renderOptions;
-        const { query, index } = state;
-        const answersIndex = instantSearchInstance.client!.initIndex!(index);
-        if (!answersIndex.findAnswers) {
-          throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
-        }
+        const query = renderOptions.state.query;
         if (!query) {
           // renders nothing with empty query
           lastResult = {};
@@ -141,7 +157,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
         // call /answers API
         runConcurrentSafePromise(
-          answersIndex.findAnswers(query, queryLanguages, {
+          debouncedRefine(query, queryLanguages, {
             nbHits,
             attributesForPrediction,
             // eslint-disable-next-line no-warning-comments
@@ -151,6 +167,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
             },
           })
         ).then(results => {
+          if (!results) {
+            // It's undefined when it's debounced.
+            return;
+          }
+
           if (escapeHTML && results.hits.length > 0) {
             results.hits = escapeHits(results.hits);
           }
@@ -177,7 +198,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
           lastResult = results;
           isLoading = false;
-          debouncedRenderFn(
+          debouncedRender(
             {
               ...this.getWidgetRenderState(renderOptions),
               instantSearchInstance: renderOptions.instantSearchInstance,
