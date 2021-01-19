@@ -19,7 +19,7 @@ const withUsage = createDocumentationMessageGenerator({
  */
 
 /**
- * @typedef {Object} CustomMenuWidgetOptions
+ * @typedef {Object} CustomMenuWidgetParams
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {number} [limit = 10] How many facets values to retrieve.
  * @property {boolean} [showMore = false] Whether to display a button that expands the number of items.
@@ -36,7 +36,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @property {function(item.value): string} createURL Creates the URL for a single item name in the list.
  * @property {function(item.value)} refine Filter the search to item value.
  * @property {boolean} canRefine True if refinement can be applied.
- * @property {Object} widgetParams All original `CustomMenuWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomMenuWidgetParams` forwarded to the `renderFn`.
  * @property {boolean} isShowingMore True if the menu is displaying all the menu items.
  * @property {function} toggleShowMore Toggles the number of values displayed between `limit` and `showMore.limit`.
  * @property {boolean} canToggleShowMore `true` if the toggleShowMore button can be activated (enough items to display more or
@@ -54,7 +54,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @type {Connector}
  * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomMenuWidgetOptions)} Re-usable widget factory for a custom **Menu** widget.
+ * @return {function(CustomMenuWidgetParams)} Re-usable widget factory for a custom **Menu** widget.
  * @example
  * // custom `renderFn` to render the custom Menu widget
  * function renderFn(MenuRenderingOptions, isFirstRendering) {

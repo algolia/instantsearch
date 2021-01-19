@@ -50,7 +50,7 @@ const createSendEvent = ({ instantSearchInstance, attribute, on, helper }) => (
  */
 
 /**
- * @typedef {Object} CustomToggleWidgetOptions
+ * @typedef {Object} CustomToggleWidgetParams
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {Object} [on = true] Value to filter on when toggled.
  * @property {Object} [off] Value to filter on when not toggled.
@@ -61,7 +61,7 @@ const createSendEvent = ({ instantSearchInstance, attribute, on, helper }) => (
  * @property {ToggleValue} value The current toggle value.
  * @property {function():string} createURL Creates an URL for the next state.
  * @property {function(value)} refine Updates to the next state by applying the toggle refinement.
- * @property {Object} widgetParams All original `CustomToggleWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomToggleWidgetParams` forwarded to the `renderFn`.
  */
 
 /**
@@ -75,7 +75,7 @@ const createSendEvent = ({ instantSearchInstance, attribute, on, helper }) => (
  * @type {Connector}
  * @param {function(ToggleRenderingOptions, boolean)} renderFn Rendering function for the custom **Toggle** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomToggleWidgetOptions)} Re-usable widget factory for a custom **Toggle** widget.
+ * @return {function(CustomToggleWidgetParams)} Re-usable widget factory for a custom **Toggle** widget.
  * @example
  * // custom `renderFn` to render the custom ClearAll widget
  * function renderFn(ToggleRenderingOptions, isFirstRendering) {

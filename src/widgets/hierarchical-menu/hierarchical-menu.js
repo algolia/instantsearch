@@ -83,7 +83,7 @@ const renderer = ({
  */
 
 /**
- * @typedef {Object} HierarchicalMenuWidgetOptions
+ * @typedef {Object} HierarchicalMenuWidgetParams
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
  * @property {string} [separator = " > "] Separator used in the attributes to separate level values.
@@ -162,7 +162,7 @@ const renderer = ({
  * @type {WidgetFactory}
  * @devNovel HierarchicalMenu
  * @category filter
- * @param {HierarchicalMenuWidgetOptions} widgetOptions The HierarchicalMenu widget options.
+ * @param {HierarchicalMenuWidgetParams} widgetParams The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.
  * @example
  * search.addWidgets([
@@ -172,7 +172,7 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function hierarchicalMenu(widgetOptions) {
+export default function hierarchicalMenu(widgetParams) {
   const {
     container,
     attributes,
@@ -186,7 +186,7 @@ export default function hierarchicalMenu(widgetOptions) {
     transformItems,
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
-  } = widgetOptions || {};
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

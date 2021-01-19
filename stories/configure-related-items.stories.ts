@@ -7,7 +7,7 @@ import {
   index,
 } from '../src/widgets';
 import { connectHits, connectPagination } from '../src/connectors';
-import { HitsWidgetOptions } from '../src/widgets/hits/hits';
+import { HitsWidgetParams } from '../src/widgets/hits/hits';
 import { AlgoliaHit } from '../src/types';
 
 storiesOf('Basics/ConfigureRelatedItems', module).add(
@@ -72,7 +72,7 @@ storiesOf('Basics/ConfigureRelatedItems', module).add(
       referenceHit: null,
     };
 
-    const relatedHits = connectHits<HitsWidgetOptions>(
+    const relatedHits = connectHits<HitsWidgetParams>(
       ({ hits: items, widgetParams, instantSearchInstance }) => {
         const [hit] = items;
 

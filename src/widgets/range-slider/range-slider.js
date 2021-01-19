@@ -65,7 +65,7 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  */
 
 /**
- * @typedef {Object} RangeSliderWidgetOptions
+ * @typedef {Object} RangeSliderWidgetParams
  * @property  {string|HTMLElement} container CSS Selector or DOMElement to insert the widget.
  * @property  {string} attribute Name of the attribute for faceting.
  * @property  {boolean|RangeSliderTooltipOptions} [tooltips=true] Should we show tooltips or not.
@@ -94,7 +94,7 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  * @type {WidgetFactory}
  * @devNovel RangeSlider
  * @category filter
- * @param {RangeSliderWidgetOptions} widgetOptions RangeSlider widget options.
+ * @param {RangeSliderWidgetParams} widgetParams RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.
  * @example
  * search.addWidgets([
@@ -109,7 +109,7 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  *   })
  * ]);
  */
-export default function rangeSlider(widgetOptions) {
+export default function rangeSlider(widgetParams) {
   const {
     container,
     attribute,
@@ -120,7 +120,7 @@ export default function rangeSlider(widgetOptions) {
     pips = true,
     precision = 0,
     tooltips = true,
-  } = widgetOptions || {};
+  } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

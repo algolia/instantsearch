@@ -70,7 +70,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  */
 
 /**
- * @typedef {Object} RangeInputWidgetOptions
+ * @typedef {Object} RangeInputWidgetParams
  * @property {string|HTMLElement} container Valid CSS Selector as a string or DOMElement.
  * @property {string} attribute Name of the attribute for faceting.
  * @property {number} [min] Minimal slider value, default to automatically computed from the result set.
@@ -92,7 +92,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @type {WidgetFactory}
  * @devNovel RangeInput
  * @category filter
- * @param {RangeInputWidgetOptions} widgetOptions The RangeInput widget options.
+ * @param {RangeInputWidgetParams} widgetParams The RangeInput widget options.
  * @return {Widget} A new instance of RangeInput widget.
  * @example
  * search.addWidgets([
@@ -106,7 +106,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *   })
  * ]);
  */
-export default function rangeInput(widgetOptions) {
+export default function rangeInput(widgetParams) {
   const {
     container,
     attribute,
@@ -115,7 +115,7 @@ export default function rangeInput(widgetOptions) {
     precision = 0,
     cssClasses: userCssClasses = {},
     templates: userTemplates = {},
-  } = widgetOptions || {};
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

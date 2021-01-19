@@ -59,7 +59,7 @@ export type HitsPerPageCSSClasses = {
   option?: string | string[];
 };
 
-export type HitsPerPageWidgetOptions = {
+export type HitsPerPageWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -74,12 +74,12 @@ export type HitsPerPageWidgetOptions = {
 export type HitsPerPageWidget = WidgetFactory<
   HitsPerPageRendererOptions,
   HitsPerPageConnectorParams,
-  HitsPerPageWidgetOptions
+  HitsPerPageWidgetParams
 >;
 
-const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetOptions) {
+const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetParams) {
   const { container, items, cssClasses: userCssClasses = {}, transformItems } =
-    widgetOptions || ({} as typeof widgetOptions);
+    widgetParams || ({} as typeof widgetParams);
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

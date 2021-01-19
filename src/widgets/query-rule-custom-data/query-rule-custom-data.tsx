@@ -59,13 +59,13 @@ const renderer: Renderer<
   );
 };
 
-const queryRuleCustomData: QueryRuleCustomDataWidget = widgetOptions => {
+const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
   const {
     container,
     cssClasses: userCssClasses = {} as QueryRuleCustomDataCSSClasses,
     templates: userTemplates = {},
     transformItems = items => items,
-  } = widgetOptions || ({} as QueryRuleCustomDataWidgetParams);
+  } = widgetParams || ({} as QueryRuleCustomDataWidgetParams);
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

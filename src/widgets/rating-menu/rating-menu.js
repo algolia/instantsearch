@@ -75,7 +75,7 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
  */
 
 /**
- * @typedef {Object} RatingMenuWidgetOptions
+ * @typedef {Object} RatingMenuWidgetParams
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute in your records that contains the ratings.
  * @property {number} [max = 5] The maximum rating value.
@@ -98,7 +98,7 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
  * @type {WidgetFactory}
  * @devNovel RatingMenu
  * @category filter
- * @param {RatingMenuWidgetOptions} widgetOptions RatingMenu widget options.
+ * @param {RatingMenuWidgetParams} widgetParams RatingMenu widget options.
  * @return {Widget} A new RatingMenu widget instance.
  * @example
  * search.addWidgets([
@@ -109,14 +109,14 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
  *   })
  * ]);
  */
-export default function ratingMenu(widgetOptions) {
+export default function ratingMenu(widgetParams) {
   const {
     container,
     attribute,
     max = 5,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
-  } = widgetOptions || {};
+  } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

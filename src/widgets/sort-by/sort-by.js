@@ -48,7 +48,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  */
 
 /**
- * @typedef {Object} SortByWidgetOptions
+ * @typedef {Object} SortByWidgetParams
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {SortByIndexDefinition[]} items Array of objects defining the different indices to choose from.
  * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
@@ -63,7 +63,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @type {WidgetFactory}
  * @devNovel SortBy
  * @category sort
- * @param {SortByWidgetOptions} widgetOptions Options for the SortBy widget
+ * @param {SortByWidgetParams} widgetParams Options for the SortBy widget
  * @return {Widget} Creates a new instance of the SortBy widget.
  * @example
  * search.addWidgets([
@@ -77,9 +77,9 @@ const renderer = ({ containerNode, cssClasses }) => (
  *   })
  * ]);
  */
-export default function sortBy(widgetOptions) {
+export default function sortBy(widgetParams) {
   const { container, items, cssClasses: userCssClasses = {}, transformItems } =
-    widgetOptions || {};
+    widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

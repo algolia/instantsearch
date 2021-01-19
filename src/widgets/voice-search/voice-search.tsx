@@ -91,7 +91,7 @@ const renderer: Renderer<
   );
 };
 
-const voiceSearch: VoiceSearch = widgetOptions => {
+const voiceSearch: VoiceSearch = widgetParams => {
   const {
     container,
     cssClasses: userCssClasses = {} as VoiceSearchCSSClasses,
@@ -100,7 +100,7 @@ const voiceSearch: VoiceSearch = widgetOptions => {
     language,
     additionalQueryParameters,
     createVoiceSearchHelper,
-  } = widgetOptions || ({} as VoiceSearchWidgetParams);
+  } = widgetParams || ({} as VoiceSearchWidgetParams);
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

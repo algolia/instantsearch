@@ -17,11 +17,11 @@ const withUsage = createDocumentationMessageGenerator({
  * @property {number} page The current page.
  * @property {number} processingTimeMS The time taken to compute the results inside the Algolia engine.
  * @property {string} query The query used for the current search.
- * @property {object} widgetParams All original `CustomStatsWidgetOptions` forwarded to the `renderFn`.
+ * @property {object} widgetParams All original `CustomStatsWidgetParams` forwarded to the `renderFn`.
  */
 
 /**
- * @typedef {Object} CustomStatsWidgetOptions
+ * @typedef {Object} CustomStatsWidgetParams
  */
 
 /**
@@ -31,7 +31,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @type {Connector}
  * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomStatsWidgetOptions)} Re-usable widget factory for a custom **Stats** widget.
+ * @return {function(CustomStatsWidgetParams)} Re-usable widget factory for a custom **Stats** widget.
  * @example
  * // custom `renderFn` to render the custom Stats widget
  * function renderFn(StatsRenderingOptions, isFirstRendering) {

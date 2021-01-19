@@ -10,7 +10,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 /**
- * @typedef {Object} CustomSearchBoxWidgetOptions
+ * @typedef {Object} CustomSearchBoxWidgetParams
  * @property {function(string, function(string))} [queryHook = undefined] A function that will be called every time
  * a new value for the query is set. The first parameter is the query and the second is a
  * function to actually trigger the search. The function takes the query as the parameter.
@@ -23,7 +23,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @property {string} query The query from the last search.
  * @property {function(string)} refine Sets a new query and searches.
  * @property {function()} clear Remove the query and perform search.
- * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomSearchBoxWidgetParams` forwarded to the `renderFn`.
  * @property {boolean} isSearchStalled `true` if the search results takes more than a certain time to come back
  * from Algolia servers. This can be configured on the InstantSearch constructor with the attribute
  * `stalledSearchDelay` which is 200ms, by default.
@@ -37,7 +37,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @type {Connector}
  * @param {function(SearchBoxRenderingOptions, boolean)} renderFn Rendering function for the custom **SearchBox** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomSearchBoxWidgetOptions)} Re-usable widget factory for a custom **SearchBox** widget.
+ * @return {function(CustomSearchBoxWidgetParams)} Re-usable widget factory for a custom **SearchBox** widget.
  * @example
  * // custom `renderFn` to render the custom SearchBox widget
  * function renderFn(SearchBoxRenderingOptions, isFirstRendering) {
