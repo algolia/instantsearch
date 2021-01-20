@@ -68,8 +68,6 @@ const Answers = ({
         ))}
       </ul>
     )}
-      </ul>
-    )}
   </div>
 );
 
