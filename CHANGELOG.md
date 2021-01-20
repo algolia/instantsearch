@@ -1,3 +1,23 @@
+# [4.12.0](https://github.com/algolia/instantsearch.js/compare/v4.11.0...v4.12.0) (2021-01-20)
+
+
+### Code Refactoring
+
+* rename all references to widgetOptions as widgetParams ([#4612](https://github.com/algolia/instantsearch.js/issues/4612)) ([ff9a18d](https://github.com/algolia/instantsearch.js/commit/ff9a18d31635013ee4bc242291f121c8e5827f38))
+
+
+### Features
+
+* **core:** expose metadata of widgets ([#4604](https://github.com/algolia/instantsearch.js/issues/4604)) ([1fcf716](https://github.com/algolia/instantsearch.js/commit/1fcf71657b176b14067df36765a38e32d2a6dd9b))
+* **widgets:** annotate widget instances with $$widgetType ([#4624](https://github.com/algolia/instantsearch.js/issues/4624)) ([df3f478](https://github.com/algolia/instantsearch.js/commit/df3f47867e65a2e56c6da968d7a154471172adce))
+
+
+### BREAKING CHANGES
+
+* if you're using experimental-typescript and importing a type of the form `...WidgetOptions` (eg. replace `HitsWidgetOptions` with `HitsWidgetParams`)
+
+
+
 # [4.11.0](https://github.com/algolia/instantsearch.js/compare/v4.10.0...v4.11.0) (2021-01-14)
 
 
