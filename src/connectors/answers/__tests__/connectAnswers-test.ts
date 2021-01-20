@@ -6,17 +6,11 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { wait } from '../../../../test/utils/wait';
 import connectAnswers from '../connectAnswers';
 
 const defaultRenderDebounceTime = 10;
 const defaultSearchDebounceTime = 10;
-
-// 10(render debounce) + 10(search debounce) + 10(just to make sure)
-const wait = (time = 30) => {
-  return new Promise(resolve => {
-    setTimeout(resolve, time);
-  });
-};
 
 describe('connectAnswers', () => {
   describe('Usage', () => {
@@ -254,7 +248,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       false
     );
 
-    await wait();
+    await wait(30); // 10(render debounce) + 10(search debounce) + 10(just to make sure)
 
     // render with hits
     const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
@@ -323,7 +317,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     expect(renderFn).toHaveBeenCalledTimes(3);
 
     // wait for debounce
-    await wait();
+    await wait(30);
     const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
     (expectedHits as any).__escaped = true;
     expect(renderFn).toHaveBeenCalledTimes(4);
@@ -337,7 +331,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     );
 
     // wait
-    await wait();
+    await wait(30);
     // but no more rendering
     expect(renderFn).toHaveBeenCalledTimes(4);
   });
@@ -445,7 +439,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         },
       });
 
-      await wait();
+      await wait(30);
       const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
       (expectedHits as any).__escaped = true;
       expect(

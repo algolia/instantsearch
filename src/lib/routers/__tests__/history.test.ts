@@ -1,6 +1,5 @@
 import historyRouter from '../history';
-
-const wait = (ms = 0) => new Promise(res => setTimeout(res, ms));
+import { wait } from '../../../../test/utils/wait';
 
 describe('life cycle', () => {
   beforeEach(() => {

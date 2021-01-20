@@ -1,5 +1,6 @@
 import { createMetadataMiddleware } from '..';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
+import { wait } from '../../../test/utils/wait';
 import instantsearch from '../../lib/main';
 import { configure, hits, index, pagination, searchBox } from '../../widgets';
 import { isMetadataEnabled } from '../createMetadataMiddleware';
@@ -30,8 +31,6 @@ Object.defineProperty(
     },
   }))(window.navigator.userAgent)
 );
-
-const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const defaultUserAgent =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15';
