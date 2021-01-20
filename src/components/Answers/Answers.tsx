@@ -45,14 +45,13 @@ const Answers = ({
         isLoading,
       }}
     />
-    {isLoading && (
+    {isLoading ? (
       <Template
         {...templateProps}
         templateKey="loader"
         rootProps={{ className: cssClasses.loader }}
       />
-    )}
-    {!isLoading && (
+    ) : (
       <ul className={cssClasses.list}>
         {hits.map((hit, position) => (
           <Template
@@ -67,6 +66,8 @@ const Answers = ({
             }}
           />
         ))}
+      </ul>
+    )}
       </ul>
     )}
   </div>
