@@ -166,46 +166,49 @@ const connectAnswers: AnswersConnector = function connectAnswers(
               'x-algolia-agent': 'answers-test',
             },
           })
-        ).then(results => {
-          if (!results) {
-            // It's undefined when it's debounced.
-            return;
-          }
+        )
+          .then(results => {
+            if (!results) {
+              // It's undefined when it's debounced.
+              return;
+            }
 
-          if (escapeHTML && results.hits.length > 0) {
-            results.hits = escapeHits(results.hits);
-          }
-          const initialEscaped = (results.hits as ReturnType<typeof escapeHits>)
-            .__escaped;
+            if (escapeHTML && results.hits.length > 0) {
+              results.hits = escapeHits(results.hits);
+            }
+            const initialEscaped = (results.hits as ReturnType<
+              typeof escapeHits
+            >).__escaped;
 
-          results.hits = addAbsolutePosition<typeof results.hits[0]>(
-            results.hits,
-            0,
-            nbHits
-          );
+            results.hits = addAbsolutePosition<typeof results.hits[0]>(
+              results.hits,
+              0,
+              nbHits
+            );
 
-          results.hits = addQueryID<typeof results.hits[0]>(
-            results.hits,
-            results.queryID
-          );
+            results.hits = addQueryID<typeof results.hits[0]>(
+              results.hits,
+              results.queryID
+            );
 
-          // Make sure the escaped tag stays, even after mapping over the hits.
-          // This prevents the hits from being double-escaped if there are multiple
-          // hits widgets mounted on the page.
-          (results.hits as ReturnType<
-            typeof escapeHits
-          >).__escaped = initialEscaped;
+            // Make sure the escaped tag stays, even after mapping over the hits.
+            // This prevents the hits from being double-escaped if there are multiple
+            // hits widgets mounted on the page.
+            (results.hits as ReturnType<
+              typeof escapeHits
+            >).__escaped = initialEscaped;
 
-          lastResult = results;
-          isLoading = false;
-          debouncedRender(
-            {
-              ...this.getWidgetRenderState(renderOptions),
-              instantSearchInstance: renderOptions.instantSearchInstance,
-            },
-            false
-          );
-        });
+            lastResult = results;
+            isLoading = false;
+            debouncedRender(
+              {
+                ...this.getWidgetRenderState(renderOptions),
+                instantSearchInstance: renderOptions.instantSearchInstance,
+              },
+              false
+            );
+          })
+          .catch(_error => {});
       },
 
       getRenderState(renderState, renderOptions) {

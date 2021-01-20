@@ -20,30 +20,28 @@ export function createConcurrentSafePromise<TValue>() {
     basePromiseId++;
     const currentPromiseId = basePromiseId;
 
-    return Promise.resolve(promise)
-      .then(x => {
-        // The promise might take too long to resolve and get outdated. This would
-        // result in resolving stale values.
-        // When this happens, we ignore the promise value and return the one
-        // coming from the latest resolved value.
-        //
-        // +----------------------------------+
-        // |        100ms                     |
-        // | run(1) +--->  R1                 |
-        // |        300ms                     |
-        // | run(2) +-------------> R2 (SKIP) |
-        // |        200ms                     |
-        // | run(3) +--------> R3             |
-        // +----------------------------------+
-        if (latestResolvedValue && currentPromiseId < latestResolvedId) {
-          return latestResolvedValue;
-        }
+    return Promise.resolve(promise).then(x => {
+      // The promise might take too long to resolve and get outdated. This would
+      // result in resolving stale values.
+      // When this happens, we ignore the promise value and return the one
+      // coming from the latest resolved value.
+      //
+      // +----------------------------------+
+      // |        100ms                     |
+      // | run(1) +--->  R1                 |
+      // |        300ms                     |
+      // | run(2) +-------------> R2 (SKIP) |
+      // |        200ms                     |
+      // | run(3) +--------> R3             |
+      // +----------------------------------+
+      if (latestResolvedValue && currentPromiseId < latestResolvedId) {
+        return latestResolvedValue;
+      }
 
-        latestResolvedId = currentPromiseId;
-        latestResolvedValue = x;
+      latestResolvedId = currentPromiseId;
+      latestResolvedValue = x;
 
-        return x;
-      })
-      .catch(_error => {});
+      return x;
+    });
   };
 }
