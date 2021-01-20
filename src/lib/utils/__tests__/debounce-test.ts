@@ -47,9 +47,13 @@ describe('debounceAsync', () => {
   });
 
   it('returns a promise with a resolved data', async () => {
-    const originalFunction = () => Promise.resolve('abc');
+    type OriginalFunction = () => Promise<'abc'>;
+    const originalFunction: OriginalFunction = () => Promise.resolve('abc');
 
-    const debouncedFunction = debounceAsync(originalFunction, 100);
+    const debouncedFunction = debounceAsync<OriginalFunction>(
+      originalFunction,
+      100
+    );
     const promise = debouncedFunction();
     const ret = await promise;
     expect(ret).toEqual('abc');
