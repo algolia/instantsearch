@@ -14,7 +14,7 @@
 
 ### BREAKING CHANGES
 
-* if you're using experimental-typescript and importing a type of the form `...WidgetOptions` (eg. replace `HitsWidgetOptions` with `HitsWidgetParams`)
+* if you're using experimental-typescript and importing a type of the form `...WidgetOptions`, this now becomes `...WidgetParams` (eg. replace `HitsWidgetOptions` with `HitsWidgetParams`)
 
 
 
