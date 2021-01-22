@@ -10,6 +10,7 @@ const examplesPath = path.join(__dirname, '..', 'examples');
   const examples = glob.sync(path.join(examplesPath, '!(react-native*)'));
 
   examples.forEach(example => {
+    console.log('updating in', example);
     execSync(
       `cd ${example} && yarn upgrade react-instantsearch-dom@${version}`,
       {
@@ -24,6 +25,7 @@ const examplesPath = path.join(__dirname, '..', 'examples');
   const examples = glob.sync(path.join(examplesPath, '+(react-native*)'));
 
   examples.forEach(example => {
+    console.log('updating in', example);
     // @TODO: update to react-instantsearch-native
     execSync(`cd ${example} && yarn upgrade react-instantsearch@${version}`, {
       stdio: 'inherit',
@@ -36,6 +38,7 @@ const examplesPath = path.join(__dirname, '..', 'examples');
   const examples = glob.sync(path.join(examplesPath, 'geo-search'));
 
   examples.forEach(example => {
+    console.log('updating in', example);
     execSync(
       `cd ${example} && yarn upgrade react-instantsearch-dom-maps@${version}`,
       {
