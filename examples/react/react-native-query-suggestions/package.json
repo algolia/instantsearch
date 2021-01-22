@@ -15,7 +15,7 @@
     "algoliasearch": "4.2.0",
     "expo": "37.0.3",
     "lodash": "4.17.15",
-    "prop-types": "15.7.2",
+    "prop-types": "15.6.2",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-instantsearch": "6.7.0",
