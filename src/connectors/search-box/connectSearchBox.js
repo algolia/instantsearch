@@ -122,7 +122,8 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
 
       getWidgetRenderState({ helper, searchMetadata }) {
-        if (!this._refine) {
+        if (!this._refine || helper !== this.__oldHelper) {
+          this.__oldHelper = helper;
           const setQueryAndSearch = query => {
             if (query !== helper.state.query) {
               helper.setQuery(query).search();
