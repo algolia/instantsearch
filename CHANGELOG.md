@@ -1,3 +1,12 @@
+## [6.8.3](https://github.com/algolia/react-instantsearch/compare/v6.8.2...v6.8.3) (2021-01-22)
+
+
+### Bug Fixes
+
+* upgrade prop-types dependency to 15.6+ ([#3003](https://github.com/algolia/react-instantsearch/issues/3003)) ([fc03496](https://github.com/algolia/react-instantsearch/commit/fc03496))
+
+
+
 ## [6.8.2](https://github.com/algolia/react-instantsearch/compare/v6.8.1...v6.8.2) (2020-10-21)
 
 
