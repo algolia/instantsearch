@@ -131,6 +131,8 @@ const answersWidget: AnswersWidget = widgetParams => {
     nbHits,
     searchDebounceTime,
     renderDebounceTime,
+    escapeHTML,
+    extraParameters,
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
   } = widgetParams || ({} as typeof widgetParams);
@@ -167,6 +169,8 @@ const answersWidget: AnswersWidget = widgetParams => {
       nbHits,
       searchDebounceTime,
       renderDebounceTime,
+      escapeHTML,
+      extraParameters,
     }),
     $$widgetType: 'ais.answers',
   };

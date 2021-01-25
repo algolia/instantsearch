@@ -18,6 +18,7 @@ import algoliasearch, {
 import {
   FindAnswersResponse as FindAnswersResponseV4,
   SearchResponse as SearchResponseV4,
+  FindAnswersOptions as FindAnswersOptionsV4,
   // no comma, TS is particular about which nodes expose comments
   // eslint-disable-next-line prettier/prettier
   SearchForFacetValuesResponse as SearchForFacetValuesResponseV4,
@@ -25,6 +26,10 @@ import {
   // @ts-ignore
   // eslint-disable-next-line import/no-unresolved
 } from '@algolia/client-search';
+
+export type FindAnswersOptions = DefaultSearchClient extends DummySearchClientV4
+  ? FindAnswersOptionsV4
+  : never;
 
 export type FindAnswersResponse<
   TObject

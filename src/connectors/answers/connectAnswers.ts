@@ -9,7 +9,13 @@ import {
   noop,
   escapeHits,
 } from '../../lib/utils';
-import { Connector, Hits, Hit, FindAnswersResponse } from '../../types';
+import {
+  Connector,
+  Hits,
+  Hit,
+  FindAnswersOptions,
+  FindAnswersResponse,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'answers',
@@ -49,13 +55,13 @@ export type AnswersConnectorParams = {
 
   /**
    * Debounce time in milliseconds to debounce render
-   * default: 100
+   * @default 100
    */
   renderDebounceTime?: number;
 
   /**
    * Debounce time in milliseconds to debounce search
-   * default: 100
+   * @default 100
    */
   searchDebounceTime?: number;
 
@@ -65,6 +71,12 @@ export type AnswersConnectorParams = {
    * @default true
    */
   escapeHTML?: boolean;
+
+  /**
+   * Extra parameters to pass to findAnswers method.
+   * @default {}
+   */
+  extraParameters?: FindAnswersOptions;
 };
 
 export type AnswersConnector = Connector<
@@ -86,6 +98,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       renderDebounceTime = 100,
       searchDebounceTime = 100,
       escapeHTML = true,
+      extraParameters = {},
     } = widgetParams || ({} as typeof widgetParams);
 
     if (!queryLanguages || queryLanguages.length === 0) {
@@ -158,6 +171,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         // call /answers API
         runConcurrentSafePromise(
           debouncedRefine(query, queryLanguages, {
+            ...extraParameters,
             nbHits,
             attributesForPrediction,
             // eslint-disable-next-line no-warning-comments
