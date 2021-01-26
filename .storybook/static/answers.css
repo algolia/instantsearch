@@ -2,10 +2,6 @@
   display: none;
 }
 
-.my-Answers.ais-Answers--empty .ais-Answers-loader {
-  display: block;
-}
-
 .my-Answers .ais-Answers-list {
   list-style: none;
   margin: 0;
