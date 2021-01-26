@@ -1,5 +1,5 @@
 import { PlacesInstance } from 'places.js';
-import * as widgets from '../';
+import * as widgets from '..';
 import { Widget } from '../../types';
 
 /**
