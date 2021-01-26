@@ -53,4 +53,4 @@ export * from './createSendEventForHits';
 export { getAppIdAndApiKey } from './getAppIdAndApiKey';
 export { convertNumericRefinementsToFilters } from './convertNumericRefinementsToFilters';
 export { createConcurrentSafePromise } from './createConcurrentSafePromise';
-export { debounce, debounceAsync } from './debounce';
+export { debounce } from './debounce';

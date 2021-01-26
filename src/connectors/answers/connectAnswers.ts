@@ -4,7 +4,6 @@ import {
   createConcurrentSafePromise,
   addQueryID,
   debounce,
-  debounceAsync,
   addAbsolutePosition,
   noop,
   escapeHits,
@@ -127,7 +126,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         if (!answersIndex.findAnswers) {
           throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
         }
-        debouncedRefine = debounceAsync(
+        debouncedRefine = debounce(
           answersIndex.findAnswers,
           searchDebounceTime
         );

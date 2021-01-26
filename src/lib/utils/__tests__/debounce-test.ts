@@ -1,4 +1,4 @@
-import { debounce, debounceAsync } from '../debounce';
+import { debounce } from '../debounce';
 
 describe('debounce', () => {
   it('debounces the function', done => {
@@ -30,17 +30,15 @@ describe('debounce', () => {
       done();
     }, 250);
   });
-});
 
-describe('debounceAsync', () => {
   it('returns a promise', async () => {
     const originalFunction = jest.fn(x => Promise.resolve(x));
-    const debouncedFunction = debounceAsync(originalFunction, 100);
-    const promise1 = debouncedFunction('a');
-    const promise2 = debouncedFunction('b');
+    const debouncedFunction = debounce(originalFunction, 100);
 
-    await expect(promise1).rejects.toEqual(undefined);
-    await expect(promise2).resolves.toEqual('b');
+    debouncedFunction('a');
+
+    const promise = debouncedFunction('b');
+    await expect(promise).resolves.toEqual('b');
 
     expect(originalFunction).toHaveBeenCalledTimes(1);
     expect(originalFunction).toHaveBeenLastCalledWith('b');
@@ -50,10 +48,7 @@ describe('debounceAsync', () => {
     type OriginalFunction = () => Promise<'abc'>;
     const originalFunction: OriginalFunction = () => Promise.resolve('abc');
 
-    const debouncedFunction = debounceAsync<OriginalFunction>(
-      originalFunction,
-      100
-    );
+    const debouncedFunction = debounce<OriginalFunction>(originalFunction, 100);
     const promise = debouncedFunction();
     const ret = await promise;
     expect(ret).toEqual('abc');
@@ -61,7 +56,7 @@ describe('debounceAsync', () => {
 
   it('accepts synchronous function as well', async () => {
     const originalFunction = jest.fn(x => x);
-    const debouncedFunction = debounceAsync(originalFunction, 100);
+    const debouncedFunction = debounce(originalFunction, 100);
     const promise = debouncedFunction('a');
 
     await expect(promise).resolves.toEqual('a');
