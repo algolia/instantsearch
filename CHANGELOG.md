@@ -1,3 +1,12 @@
+# [4.13.0](https://github.com/algolia/instantsearch.js/compare/v4.12.0...v4.13.0) (2021-01-26)
+
+
+### Features
+
+* **ratingMenu:** Add support for floats in values ([#4611](https://github.com/algolia/instantsearch.js/issues/4611)) ([3f52784](https://github.com/algolia/instantsearch.js/commit/3f52784862b72ef59acfc0735fe482cbfa6ad1f5))
+
+
+
 # [4.12.0](https://github.com/algolia/instantsearch.js/compare/v4.11.0...v4.12.0) (2021-01-20)
 
 
