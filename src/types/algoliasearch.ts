@@ -21,7 +21,7 @@ import {
   FindAnswersOptions as FindAnswersOptionsV4,
   // no comma, TS is particular about which nodes expose comments
   // eslint-disable-next-line prettier/prettier
-  SearchForFacetValuesResponse as SearchForFacetValuesResponseV4,
+  SearchForFacetValuesResponse as SearchForFacetValuesResponseV4
   /** @ts-ignore */
   // @ts-ignore
   // eslint-disable-next-line import/no-unresolved
