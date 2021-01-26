@@ -373,6 +373,7 @@ export type Widget<
    */
   $$type?:
     | 'ais.analytics'
+    | 'ais.answers'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -401,14 +402,14 @@ export type Widget<
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
-    | 'ais.voiceSearch'
-    | 'ais.answers';
+    | 'ais.voiceSearch';
 
   /**
    * Identifier for official widgets
    */
   $$widgetType?:
     | 'ais.analytics'
+    | 'ais.answers'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -437,8 +438,7 @@ export type Widget<
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
-    | 'ais.voiceSearch'
-    | 'ais.answers';
+    | 'ais.voiceSearch';
   /**
    * Called once before the first search
    */
