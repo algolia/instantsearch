@@ -111,6 +111,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       extraParameters = {},
     } = widgetParams || ({} as typeof widgetParams);
 
+    // @ts-ignore checking the wrong parameter
     if (!queryLanguages || queryLanguages.length === 0) {
       throw new Error(
         withUsage('The `queryLanguages` expects an array of strings.')
