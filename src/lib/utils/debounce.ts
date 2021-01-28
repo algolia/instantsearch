@@ -14,14 +14,13 @@ export function debounce<TFunction extends Func>(
   let lastTimeout: ReturnType<typeof setTimeout> | null = null;
   return function(...args) {
     // @ts-ignore-next-line
-    const that = this;
     return new Promise((resolve, reject) => {
       if (lastTimeout) {
         clearTimeout(lastTimeout);
       }
       lastTimeout = setTimeout(() => {
         lastTimeout = null;
-        Promise.resolve(func.apply(that, args))
+        Promise.resolve(func(...args))
           .then(resolve)
           .catch(reject);
       }, wait);
