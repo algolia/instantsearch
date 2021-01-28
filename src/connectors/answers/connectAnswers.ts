@@ -16,6 +16,16 @@ import {
   FindAnswersResponse,
 } from '../../types';
 
+type IndexWithAnswers = {
+  readonly findAnswers: any;
+};
+
+function hasFindAnswersMethod(
+  answersIndex: IndexWithAnswers | any
+): answersIndex is IndexWithAnswers {
+  return typeof (answersIndex as IndexWithAnswers).findAnswers === 'function';
+}
+
 const withUsage = createDocumentationMessageGenerator({
   name: 'answers',
   connector: true,
@@ -124,7 +134,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         const answersIndex = instantSearchInstance.client!.initIndex!(
           state.index
         );
-        if (!answersIndex.findAnswers) {
+        if (!hasFindAnswersMethod(answersIndex)) {
           throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
         }
         debouncedRefine = debounce(

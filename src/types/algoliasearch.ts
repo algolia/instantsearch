@@ -21,7 +21,7 @@ import {
   FindAnswersOptions as FindAnswersOptionsV4,
   // no comma, TS is particular about which nodes expose comments
   // eslint-disable-next-line prettier/prettier
-  SearchForFacetValuesResponse as SearchForFacetValuesResponseV4
+  SearchForFacetValuesResponse as SearchForFacetValuesResponseV4,
   /** @ts-ignore */
   // @ts-ignore
   // eslint-disable-next-line import/no-unresolved
@@ -29,13 +29,13 @@ import {
 
 export type FindAnswersOptions = DefaultSearchClient extends DummySearchClientV4
   ? FindAnswersOptionsV4
-  : never;
+  : any;
 
 export type FindAnswersResponse<
   TObject
 > = DefaultSearchClient extends DummySearchClientV4
   ? FindAnswersResponseV4<TObject>
-  : never;
+  : any;
 
 type DummySearchClientV4 = {
   readonly transporter: any;
