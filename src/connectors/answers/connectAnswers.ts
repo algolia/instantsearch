@@ -28,7 +28,7 @@ export type AnswersRendererOptions = {
   hits: Hits;
 
   /**
-   * whether it's still loading the results from the /answers API
+   * Whether it's still loading the results from the Answers API.
    */
   isLoading: boolean;
 };
@@ -44,11 +44,12 @@ export type AnswersConnectorParams = {
   /**
    * The languages in the query. Currently only supports `en`.
    */
-  queryLanguages: Array<'en'>;
+  queryLanguages: ['en'];
 
   /**
    * Maximum number of answers to retrieve from the Answers Engine.
    * Cannot be greater than 1000.
+   * @default 1
    */
   nbHits?: number;
 
@@ -230,7 +231,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
       getWidgetRenderState() {
         return {
-          hits: (lastResult && lastResult.hits) || [],
+          hits: lastResult?.hits || [],
           isLoading,
           widgetParams,
         };
