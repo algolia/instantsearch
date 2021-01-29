@@ -185,11 +185,6 @@ const connectAnswers: AnswersConnector = function connectAnswers(
             ...extraParameters,
             nbHits,
             attributesForPrediction,
-            // eslint-disable-next-line no-warning-comments
-            // FIXME: remove this x-algolia-agent once the engine accepts url encoded query params
-            queryParameters: {
-              'x-algolia-agent': 'answers-test',
-            },
           })
         ).then(results => {
           if (!results) {
