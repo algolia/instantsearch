@@ -1,3 +1,41 @@
+## [4.13.1](https://github.com/algolia/instantsearch.js/compare/v4.13.0...v4.13.1) (2021-01-26)
+
+
+### Bug Fixes
+
+* **index:** only set listeners on init once ([#4634](https://github.com/algolia/instantsearch.js/issues/4634)) ([730b49d](https://github.com/algolia/instantsearch.js/commit/730b49d43782b98c5119a5d3dbfec09073bde1d0))
+
+
+
+# [4.13.0](https://github.com/algolia/instantsearch.js/compare/v4.12.0...v4.13.0) (2021-01-26)
+
+
+### Features
+
+* **ratingMenu:** Add support for floats in values ([#4611](https://github.com/algolia/instantsearch.js/issues/4611)) ([3f52784](https://github.com/algolia/instantsearch.js/commit/3f52784862b72ef59acfc0735fe482cbfa6ad1f5))
+
+
+
+# [4.12.0](https://github.com/algolia/instantsearch.js/compare/v4.11.0...v4.12.0) (2021-01-20)
+
+
+### Code Refactoring
+
+* rename all references to widgetOptions as widgetParams ([#4612](https://github.com/algolia/instantsearch.js/issues/4612)) ([ff9a18d](https://github.com/algolia/instantsearch.js/commit/ff9a18d31635013ee4bc242291f121c8e5827f38))
+
+
+### Features
+
+* **core:** expose metadata of widgets ([#4604](https://github.com/algolia/instantsearch.js/issues/4604)) ([1fcf716](https://github.com/algolia/instantsearch.js/commit/1fcf71657b176b14067df36765a38e32d2a6dd9b))
+* **widgets:** annotate widget instances with $$widgetType ([#4624](https://github.com/algolia/instantsearch.js/issues/4624)) ([df3f478](https://github.com/algolia/instantsearch.js/commit/df3f47867e65a2e56c6da968d7a154471172adce))
+
+
+### BREAKING CHANGES
+
+* if you're using experimental-typescript and importing a type of the form `...WidgetOptions`, this now becomes `...WidgetParams` (eg. replace `HitsWidgetOptions` with `HitsWidgetParams`)
+
+
+
 # [4.11.0](https://github.com/algolia/instantsearch.js/compare/v4.10.0...v4.11.0) (2021-01-14)
 
 

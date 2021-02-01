@@ -2341,6 +2341,58 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect.anything()
       );
     });
+
+    describe('multiple init calls', () => {
+      it('does not recreate helper', () => {
+        const instance = index({ indexName: 'test' });
+
+        expect(instance.getHelper()).toBe(null);
+
+        instance.init(createInitOptions());
+
+        const helper1 = instance.getHelper()!;
+
+        instance.init(createInitOptions());
+
+        const helper2 = instance.getHelper()!;
+
+        expect(helper1).toBe(helper2);
+      });
+
+      it('does not listen on change again multiple times', () => {
+        const instance = index({ indexName: 'test' });
+
+        expect(instance.getHelper()).toBe(null);
+
+        instance.init(createInitOptions());
+
+        const helper = instance.getHelper()!;
+
+        expect(helper.listenerCount('change')).toBe(2);
+
+        instance.init(createInitOptions());
+
+        expect(helper.listenerCount('change')).toBe(2);
+      });
+
+      it('derives only once', () => {
+        const instance = index({ indexName: 'test' });
+
+        const mainHelper = algoliasearchHelper(createSearchClient(), '');
+
+        const instantSearchInstance = createInstantSearch({ mainHelper });
+
+        expect(instance.getHelper()).toBe(null);
+
+        instance.init(createInitOptions({ instantSearchInstance }));
+
+        expect(mainHelper.derivedHelpers.length).toBe(1);
+
+        instance.init(createInitOptions({ instantSearchInstance }));
+
+        expect(mainHelper.derivedHelpers.length).toBe(1);
+      });
+    });
   });
 
   describe('render', () => {

@@ -169,9 +169,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     expect(helper.getRefinements(attribute)).toEqual([]);
     refine('3');
     expect(helper.getRefinements(attribute)).toEqual([
-      { type: 'disjunctive', value: '3' },
-      { type: 'disjunctive', value: '4' },
-      { type: 'disjunctive', value: '5' },
+      { operator: '<=', type: 'numeric', value: [5] },
+      { operator: '>=', type: 'numeric', value: [3] },
     ]);
     expect(helper.search).toHaveBeenCalledTimes(1);
 
@@ -229,14 +228,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         },
       ]);
       expect(helper.getRefinements(attribute)).toEqual([
-        { type: 'disjunctive', value: '3' },
-        { type: 'disjunctive', value: '4' },
-        { type: 'disjunctive', value: '5' },
+        { operator: '<=', type: 'numeric', value: [5] },
+        { operator: '>=', type: 'numeric', value: [3] },
       ]);
       refine('4');
       expect(helper.getRefinements(attribute)).toEqual([
-        { type: 'disjunctive', value: '4' },
-        { type: 'disjunctive', value: '5' },
+        { operator: '<=', type: 'numeric', value: [5] },
+        { operator: '>=', type: 'numeric', value: [4] },
       ]);
       expect(helper.search).toHaveBeenCalledTimes(2);
     }
@@ -252,9 +250,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     expect(helper.getRefinements(attribute)).toEqual([]);
     refine('3');
     expect(helper.getRefinements(attribute)).toEqual([
-      { type: 'disjunctive', value: '3' },
-      { type: 'disjunctive', value: '4' },
-      { type: 'disjunctive', value: '5' },
+      { operator: '<=', type: 'numeric', value: [5] },
+      { operator: '>=', type: 'numeric', value: [3] },
     ]);
     expect(helper.search).toHaveBeenCalledTimes(1);
 
@@ -278,13 +275,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
     // Second rendering
     expect(helper.getRefinements(attribute)).toEqual([
-      { type: 'disjunctive', value: '3' },
-      { type: 'disjunctive', value: '4' },
-      { type: 'disjunctive', value: '5' },
+      { operator: '<=', type: 'numeric', value: [5] },
+      { operator: '>=', type: 'numeric', value: [3] },
     ]);
     refine('3');
-    expect(helper.getRefinements(attribute)).toEqual([]);
-    expect(helper.state.disjunctiveFacetsRefinements).toEqual({ swag: [] });
+    expect(helper.getRefinements(attribute)).toEqual([
+      { operator: '<=', type: 'numeric', value: [] },
+      { operator: '>=', type: 'numeric', value: [] },
+    ]);
+    expect(helper.state.numericRefinements).toEqual({
+      swag: { '<=': [], '>=': [] },
+    });
     expect(helper.search).toHaveBeenCalledTimes(2);
   });
 
@@ -313,8 +314,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const attribute = 'grade';
       const helper = jsHelper({}, indexName, {
         disjunctiveFacets: [attribute],
-        disjunctiveFacetsRefinements: {
-          [attribute]: [4, 5],
+        numericRefinements: {
+          [attribute]: {
+            '>=': [4],
+          },
         },
       });
       helper.search = jest.fn();
@@ -327,8 +330,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         new SearchParameters({
           index: indexName,
           disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            grade: [4, 5],
+          numericRefinements: {
+            grade: {
+              '>=': [4],
+            },
           },
         })
       );
@@ -338,6 +343,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(nextState).toEqual(
         new SearchParameters({
           index: indexName,
+          disjunctiveFacets: [attribute],
+          numericRefinements: {
+            grade: {
+              '>=': [],
+            },
+          },
         })
       );
     });
@@ -368,8 +379,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '', {
         disjunctiveFacets: ['grade'],
-        disjunctiveFacetsRefinements: {
-          grade: ['2', '3', '4', '5'],
+        numericRefinements: {
+          grade: {
+            '>=': [2],
+          },
         },
       });
 
@@ -397,8 +410,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '', {
         disjunctiveFacets: ['grade'],
-        disjunctiveFacetsRefinements: {
-          grade: ['2', '3', '4', '5'],
+        numericRefinements: {
+          grade: {
+            '>=': [2],
+          },
         },
       });
 
@@ -437,8 +452,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       });
       const helper = jsHelper({}, 'indexName', {
         disjunctiveFacets: ['grade'],
-        disjunctiveFacetsRefinements: {
-          grade: ['2', '3', '4'],
+        numericRefinements: {
+          grade: {
+            '>=': [2],
+          },
         },
       });
 
@@ -469,8 +486,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       });
       const helper = jsHelper({}, 'indexName', {
         disjunctiveFacets: ['grade'],
-        disjunctiveFacetsRefinements: {
-          grade: ['2', '3', '4'],
+        numericRefinements: {
+          grade: {
+            '>=': [2],
+          },
         },
       });
 
@@ -548,8 +567,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       });
       const helper = jsHelper({}, 'indexName', {
         disjunctiveFacets: ['grade'],
-        disjunctiveFacetsRefinements: {
-          grade: ['2', '3', '4'],
+        numericRefinements: {
+          grade: {
+            '>=': [2],
+          },
         },
       });
 
@@ -578,8 +599,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       });
       const helper = jsHelper({}, 'indexName', {
         disjunctiveFacets: ['grade'],
-        disjunctiveFacetsRefinements: {
-          grade: ['2', '3', '4'],
+        numericRefinements: {
+          grade: {
+            '>=': [2],
+          },
         },
       });
 
@@ -662,7 +685,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         new SearchParameters({
           index: '',
           disjunctiveFacets: ['grade'],
-          disjunctiveFacetsRefinements: {
+          numericRefinements: {
             grade: [],
           },
         })
@@ -673,8 +696,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '', {
-        disjunctiveFacetsRefinements: {
-          grade: ['2', '3', '4', '5'],
+        numericRefinements: {
+          grade: {
+            '>=': [2],
+          },
         },
       });
 
@@ -690,7 +715,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         new SearchParameters({
           index: '',
           disjunctiveFacets: ['grade'],
-          disjunctiveFacetsRefinements: {
+          numericRefinements: {
             grade: [],
           },
         })
@@ -717,8 +742,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         new SearchParameters({
           index: '',
           disjunctiveFacets: ['grade'],
-          disjunctiveFacetsRefinements: {
-            grade: ['3', '4', '5'],
+          numericRefinements: {
+            grade: {
+              '<=': [5],
+              '>=': [3],
+            },
           },
         })
       );
@@ -729,8 +757,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '', {
         disjunctiveFacets: ['grade'],
-        disjunctiveFacetsRefinements: {
-          grade: ['1', '2', '3', '4', '5'],
+        numericRefinements: {
+          grade: {
+            '>=': [1],
+          },
         },
       });
 
@@ -750,8 +780,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         new SearchParameters({
           index: '',
           disjunctiveFacets: ['grade'],
-          disjunctiveFacetsRefinements: {
-            grade: ['3', '4', '5'],
+          numericRefinements: {
+            grade: {
+              '<=': [5],
+              '>=': [3],
+            },
           },
         })
       );
