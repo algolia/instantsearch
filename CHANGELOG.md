@@ -1,3 +1,12 @@
+## [4.13.1](https://github.com/algolia/instantsearch.js/compare/v4.13.0...v4.13.1) (2021-01-26)
+
+
+### Bug Fixes
+
+* **index:** only set listeners on init once ([#4634](https://github.com/algolia/instantsearch.js/issues/4634)) ([730b49d](https://github.com/algolia/instantsearch.js/commit/730b49d43782b98c5119a5d3dbfec09073bde1d0))
+
+
+
 # [4.13.0](https://github.com/algolia/instantsearch.js/compare/v4.12.0...v4.13.0) (2021-01-26)
 
 

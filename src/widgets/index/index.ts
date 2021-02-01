@@ -372,6 +372,12 @@ const index = (props: IndexProps): Index => {
     },
 
     init({ instantSearchInstance, parent, uiState }: IndexInitOptions) {
+      if (helper !== null) {
+        // helper is already initialized, therefore we do not need to set up
+        // any listeners
+        return;
+      }
+
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
       localUiState = uiState[indexId] || {};
@@ -416,7 +422,7 @@ const index = (props: IndexProps): Index => {
         return mainHelper.search();
       };
 
-      (helper as any).searchWithoutTriggeringOnStateChange = () => {
+      helper.searchWithoutTriggeringOnStateChange = () => {
         return mainHelper.search();
       };
 
