@@ -1942,7 +1942,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       });
     });
 
-    test('returns the `SearchParamters` with only one min and one max', () => {
+    test('returns the `SearchParameters` with only one min and one max', () => {
       const render = jest.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
