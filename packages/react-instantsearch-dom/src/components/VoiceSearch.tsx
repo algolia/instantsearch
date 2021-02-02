@@ -5,6 +5,7 @@ import createVoiceSearchHelper, {
   VoiceSearchHelper,
   VoiceListeningState,
   Status,
+  SpeechRecognitionErrorCode,
 } from '../lib/voiceSearchHelper';
 const cx = createClassNames('VoiceSearch');
 

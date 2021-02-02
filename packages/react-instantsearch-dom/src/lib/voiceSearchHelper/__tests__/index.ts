@@ -30,6 +30,7 @@ const createFakeSpeechRecognition = (): jest.Mock => {
 describe('VoiceSearchHelper', () => {
   afterEach(() => {
     delete window.webkitSpeechRecognition;
+    // @ts-ignore: not sure why TS says that `window.SpeechRecognition` isn't optional.
     delete window.SpeechRecognition;
   });
 
