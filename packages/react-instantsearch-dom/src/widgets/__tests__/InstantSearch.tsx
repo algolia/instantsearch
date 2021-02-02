@@ -3,6 +3,7 @@ import React from 'react';
 import algoliasearch from 'algoliasearch';
 import { InstantSearch, SearchBox, Index } from 'react-instantsearch-dom';
 import { render, cleanup } from '@testing-library/react';
+import { runAllMicroTasks } from '../../../../../test/utils';
 
 // @ts-ignore: `version` is not present on Algoliasearch v3 type declaration
 const CLIENT_VERSION_LOWER_THAN_V4 = /^[0-3]\./.test(algoliasearch.version);
@@ -27,8 +28,6 @@ const EMPTY_RESPONSE = {
 };
 
 nock.disableNetConnect();
-
-const runAllMicroTasks = () => new Promise(setImmediate);
 
 describe('InstantSearch', () => {
   describe('client hydratation', () => {

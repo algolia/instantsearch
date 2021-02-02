@@ -1,5 +1,24 @@
 // copied from https://github.com/algolia/instantsearch.js/blob/688e36a67bb4c63d008d8abc02257a7b7c04e513/src/lib/voiceSearchHelper/index.ts
 
+// #region wrong SpeechRecognition-related types
+// This is not released in typescript yet, so we're copy&pasting the type definition from
+// https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/924
+export type SpeechRecognitionErrorCode =
+  | 'aborted'
+  | 'audio-capture'
+  | 'bad-grammar'
+  | 'language-not-supported'
+  | 'network'
+  | 'no-speech'
+  | 'not-allowed'
+  | 'service-not-allowed';
+
+interface SpeechRecognitionErrorEvent extends Event {
+  readonly error: SpeechRecognitionErrorCode;
+  readonly message: string;
+}
+// #endregion wrong SpeechRecognition-related types
+
 export type VoiceSearchHelperParams = {
   searchAsYouSpeak: boolean;
   language?: string;
@@ -74,7 +93,7 @@ export default function createVoiceSearchHelper({
     });
   };
 
-  const onError = (event: SpeechRecognitionError): void => {
+  const onError = (event: SpeechRecognitionErrorEvent): void => {
     setState({ status: 'error', errorCode: event.error });
   };
 
@@ -113,6 +132,7 @@ export default function createVoiceSearchHelper({
       recognition.lang = language;
     }
     recognition.addEventListener('start', onStart);
+    // @ts-ignore: refer to the top `wrong SpeechRecognition-related types` comments
     recognition.addEventListener('error', onError);
     recognition.addEventListener('result', onResult);
     recognition.addEventListener('end', onEnd);
@@ -125,6 +145,7 @@ export default function createVoiceSearchHelper({
     }
     recognition.stop();
     recognition.removeEventListener('start', onStart);
+    // @ts-ignore: refer to the top `wrong SpeechRecognition-related types` comments
     recognition.removeEventListener('error', onError);
     recognition.removeEventListener('result', onResult);
     recognition.removeEventListener('end', onEnd);

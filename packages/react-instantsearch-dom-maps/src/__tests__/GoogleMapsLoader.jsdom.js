@@ -3,6 +3,7 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import injectScript from 'scriptjs';
 import GoogleMapsLoader from '../GoogleMapsLoader';
+import { runAllMicroTasks } from '../../../../test/utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -12,8 +13,6 @@ describe('GoogleMapsLoader', () => {
   const defaultProps = {
     apiKey: 'API_KEY',
   };
-
-  const runAllMicroTasks = () => new Promise(resolve => setImmediate(resolve));
 
   it('expect to call Google Maps API', () => {
     const children = jest.fn(x => x);

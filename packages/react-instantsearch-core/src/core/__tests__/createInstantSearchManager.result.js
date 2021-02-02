@@ -1,6 +1,5 @@
 import createInstantSearchManager from '../createInstantSearchManager';
-
-const runAllMicroTasks = () => new Promise(setImmediate);
+import { runAllMicroTasks } from '../../../../../test/utils';
 
 const createSearchClient = () => ({
   search: jest.fn(() =>

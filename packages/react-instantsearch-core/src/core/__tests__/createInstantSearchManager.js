@@ -4,6 +4,7 @@ import Enzyme, { mount } from 'enzyme';
 import algoliasearch from 'algoliasearch/lite';
 import { SearchResults } from 'algoliasearch-helper';
 import createInstantSearchManager from '../createInstantSearchManager';
+import { runAllMicroTasks } from '../../../../../test/utils';
 import {
   InstantSearch,
   Index,
@@ -15,7 +16,6 @@ Enzyme.configure({ adapter: new Adapter() });
 
 jest.useFakeTimers();
 
-const runAllMicroTasks = () => new Promise(setImmediate);
 const runOnlyNextMicroTask = () => Promise.resolve();
 
 const createSearchClient = () => ({
