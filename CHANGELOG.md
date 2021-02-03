@@ -1,3 +1,12 @@
+# [6.9.0](https://github.com/algolia/react-instantsearch/compare/v6.8.3...v6.9.0) (2021-02-03)
+
+
+### Features
+
+* **answers:** add `EXPERIMENTAL_Answers` widget ([#2996](https://github.com/algolia/react-instantsearch/issues/2996)) ([55e4191](https://github.com/algolia/react-instantsearch/commit/55e4191)), closes [#3005](https://github.com/algolia/react-instantsearch/issues/3005)
+
+
+
 ## [6.8.3](https://github.com/algolia/react-instantsearch/compare/v6.8.2...v6.8.3) (2021-01-22)
 
 
