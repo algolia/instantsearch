@@ -17,8 +17,7 @@ export function createConcurrentSafePromise<TValue>() {
   let latestResolvedValue: TValue | undefined = undefined;
 
   return function runConcurrentSafePromise(promise: MaybePromise<TValue>) {
-    basePromiseId++;
-    const currentPromiseId = basePromiseId;
+    const currentPromiseId = ++basePromiseId;
 
     return Promise.resolve(promise).then(x => {
       // The promise might take too long to resolve and get outdated. This would
