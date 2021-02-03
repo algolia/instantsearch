@@ -160,6 +160,9 @@ export type IndexUiState = {
      */
     boundingBox: string;
   };
+  smartSort?: {
+    relevancyStrictness?: number;
+  };
   sortBy?: string;
   page?: number;
   hitsPerPage?: number;
@@ -393,6 +396,7 @@ export type Widget<
     | 'ais.ratingMenu'
     | 'ais.refinementList'
     | 'ais.searchBox'
+    | 'ais.smartSort'
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
@@ -428,6 +432,7 @@ export type Widget<
     | 'ais.ratingMenu'
     | 'ais.refinementList'
     | 'ais.searchBox'
+    | 'ais.smartSort'
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
