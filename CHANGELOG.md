@@ -1,3 +1,12 @@
+## [4.13.2](https://github.com/algolia/instantsearch.js/compare/v4.13.1...v4.13.2) (2021-02-03)
+
+
+### Bug Fixes
+
+* **range:** don't go out of bounds with min or max given ([#4627](https://github.com/algolia/instantsearch.js/issues/4627)) ([8327ec0](https://github.com/algolia/instantsearch.js/commit/8327ec01c3940dfc20f5f1c8e3e0fc85f29af690))
+
+
+
 ## [4.13.1](https://github.com/algolia/instantsearch.js/compare/v4.13.0...v4.13.1) (2021-01-26)
 
 
