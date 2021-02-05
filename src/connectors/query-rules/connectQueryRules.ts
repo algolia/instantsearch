@@ -74,7 +74,8 @@ function getRuleContextsFromTrackedFilters({
         // An empty object is technically not a `SearchResults` but `getRefinements`
         // only accesses properties, meaning it will not throw with an empty object.
         helper.lastResults || ({} as SearchResults),
-        sharedHelperState
+        sharedHelperState,
+        true
       )
         .filter(
           (refinement: InternalRefinement) => refinement.attribute === facetName

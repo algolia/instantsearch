@@ -249,7 +249,7 @@ function getRefinementsItems({
   includedAttributes: CurrentRefinementsConnectorParams['includedAttributes'];
   excludedAttributes: CurrentRefinementsConnectorParams['excludedAttributes'];
 }): CurrentRefinementsConnectorParamsItem[] {
-  const clearsQuery =
+  const includesQuery =
     (includedAttributes || []).indexOf('query') !== -1 ||
     (excludedAttributes || []).indexOf('query') === -1;
 
@@ -259,7 +259,7 @@ function getRefinementsItems({
     : (item: CurrentRefinementsConnectorParamsRefinement) =>
         excludedAttributes!.indexOf(item.attribute) === -1;
 
-  const items = getRefinements(results, helper.state, clearsQuery)
+  const items = getRefinements(results, helper.state, includesQuery)
     .map(normalizeRefinement)
     .filter(filterFunction);
 

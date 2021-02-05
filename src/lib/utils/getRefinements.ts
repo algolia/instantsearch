@@ -93,7 +93,7 @@ function getRefinement(
 function getRefinements(
   results: SearchResults,
   state: SearchParameters,
-  clearsQuery: boolean = false
+  includesQuery: boolean = false
 ): Refinement[] {
   const refinements: Refinement[] = [];
   const {
@@ -188,7 +188,7 @@ function getRefinements(
     refinements.push({ type: 'tag', attribute: '_tags', name: refinementName });
   });
 
-  if (clearsQuery && state.query && state.query.trim()) {
+  if (includesQuery && state.query && state.query.trim()) {
     refinements.push({
       attribute: 'query',
       type: 'query',
