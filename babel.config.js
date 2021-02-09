@@ -90,7 +90,7 @@ module.exports = api => {
         {
           modules,
           targets,
-          loose: true,
+          loose: !isTest,
           exclude: [
             // not needed, we don't have Symbols
             '@babel/plugin-transform-typeof-symbol',
