@@ -25,7 +25,9 @@ module.exports = api => {
   ];
 
   const buildPlugins = clean([
+    ['@babel/proposal-object-rest-spread', { loose: true }],
     '@babel/plugin-proposal-class-properties',
+    ['@babel/plugin-transform-classes', { loose: true }],
     '@babel/plugin-transform-react-constant-elements',
     [
       'babel-plugin-transform-react-remove-prop-types',
@@ -88,6 +90,14 @@ module.exports = api => {
         {
           modules,
           targets,
+          loose: true,
+          exclude: [
+            // not needed, we don't have Symbols
+            '@babel/plugin-transform-typeof-symbol',
+            // we are passing an option
+            '@babel/plugin-transform-classes',
+            '@babel/proposal-object-rest-spread',
+          ],
         },
       ],
     ],
