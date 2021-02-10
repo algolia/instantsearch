@@ -33,10 +33,6 @@ storiesOf('Sorting/SmartSort', module)
           cssClasses: {
             root: 'my-SmartSort',
           },
-          templates: {
-            default: ({ isSmartSorted }) =>
-              isSmartSorted ? 'See all results' : 'See relevant results',
-          },
         }),
       ]);
     }, searchOptions)
@@ -49,7 +45,7 @@ storiesOf('Sorting/SmartSort', module)
           container,
           relevancyStrictness: 50,
           templates: {
-            default: ({ isSmartSorted }) =>
+            text: ({ isSmartSorted }) =>
               isSmartSorted ? 'See all results' : 'See relevant results',
           },
         }),

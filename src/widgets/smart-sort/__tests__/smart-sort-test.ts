@@ -38,19 +38,6 @@ describe('smartSort', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/smart-sort/js/"
 `);
     });
-
-    it('throws without templates.text', () => {
-      expect(() => {
-        // @ts-ignore wrong options
-        smartSort({
-          container: document.createElement('div'),
-        });
-      }).toThrowErrorMatchingInlineSnapshot(`
-"The \`templates.text\` option is required.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/smart-sort/js/"
-`);
-    });
   });
 
   it('render', () => {

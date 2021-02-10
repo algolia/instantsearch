@@ -13,20 +13,21 @@ import connectSmartSort, {
   SmartSortRendererOptions,
 } from '../../connectors/smart-sort/connectSmartSort';
 import SmartSort from '../../components/SmartSort/SmartSort';
+import defaultTemplates from './defaultTemplates';
 
-export type SmartSortCSSClasses = {
+export type SmartSortCSSClasses = Partial<{
   root: string;
-};
+}>;
 
-export type SmartSortTemplates = {
+export type SmartSortTemplates = Partial<{
   text: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
-};
+}>;
 
 type SmartSortWidgetParams = {
   container: string | HTMLElement;
   relevancyStrictness?: number;
   cssClasses?: SmartSortCSSClasses;
-  templates: SmartSortTemplates;
+  templates?: SmartSortTemplates;
 };
 
 type SmartSortRendererWidgetParams = {
@@ -73,8 +74,8 @@ const renderer: Renderer<
 const smartSort: SmartSortWidget = widgetParams => {
   const {
     container,
-    templates,
     relevancyStrictness,
+    templates: userTemplates = {} as SmartSortTemplates,
     cssClasses: userCssClasses = {} as SmartSortCSSClasses,
   } = widgetParams;
 
@@ -82,12 +83,13 @@ const smartSort: SmartSortWidget = widgetParams => {
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  if (!templates || !templates.text) {
-    throw new Error(withUsage('The `templates.text` option is required.'));
-  }
-
-  const cssClasses = {
+  const cssClasses: SmartSortCSSClasses = {
     root: cx(suit(), userCssClasses.root),
+  };
+
+  const templates: SmartSortTemplates = {
+    ...defaultTemplates,
+    ...userTemplates,
   };
 
   const containerNode = getContainerNode(container);
