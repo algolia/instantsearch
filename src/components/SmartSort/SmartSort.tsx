@@ -35,7 +35,7 @@ const SmartSort = ({
   >
     <Template
       rootTagName="span"
-      templateKey="default"
+      templateKey="text"
       templates={templates}
       data={{ isSmartSorted }}
     />

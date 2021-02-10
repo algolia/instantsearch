@@ -19,7 +19,7 @@ export type SmartSortCSSClasses = {
 };
 
 export type SmartSortTemplates = {
-  default: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
+  text: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
 };
 
 type SmartSortWidgetParams = {
@@ -82,8 +82,8 @@ const smartSort: SmartSortWidget = widgetParams => {
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  if (!templates || !templates.default) {
-    throw new Error(withUsage('The `templates.default` option is required.'));
+  if (!templates || !templates.text) {
+    throw new Error(withUsage('The `templates.text` option is required.'));
   }
 
   const cssClasses = {
