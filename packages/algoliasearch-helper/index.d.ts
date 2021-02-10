@@ -511,6 +511,13 @@ declare namespace algoliasearchHelper {
     ruleContexts?: string[];
     optionalFilters?: Array<string | string[]>;
     queryLanguages?: string[];
+
+    /**
+     * The relevancy threshold to apply to search in a virtual index [0-100]. A Bigger
+     * value means fewer, but more relevant results, smaller value means more, but
+     * less relevant results.
+     */
+    relevancyStrictness?: number;
   }
 
   export class SearchParameters implements PlainSearchParameters {
@@ -1156,6 +1163,14 @@ declare namespace algoliasearchHelper {
      * total number of hits of this query on the index
      */
     nbHits: number;
+    /**
+     * subset of hits selected when relevancyStrictness is applied
+     */
+    nbSortedHits?: number;
+    /**
+     * the relevancy threshold applied to search in a virtual index
+     */
+    appliedRelevancyStrictness?: number;
     /**
      * total number of pages with respect to the number of hits per page and the total number of hits
      */
