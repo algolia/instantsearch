@@ -6,6 +6,8 @@ import Template from '../Template/Template';
 
 const Stats = ({
   nbHits,
+  nbSortedHits,
+  isSmartSorted,
   hitsPerPage,
   nbPages,
   page,
@@ -21,11 +23,14 @@ const Stats = ({
       rootTagName="span"
       rootProps={{ className: cssClasses.text }}
       data={{
+        hasManySortedHits: nbSortedHits > 1,
         hasManyResults: nbHits > 1,
         hasNoResults: nbHits === 0,
         hasOneResult: nbHits === 1,
+        isSmartSorted,
         hitsPerPage,
         nbHits,
+        nbSortedHits,
         nbPages,
         page,
         processingTimeMS,
@@ -43,6 +48,8 @@ Stats.propTypes = {
   }).isRequired,
   hitsPerPage: PropTypes.number,
   nbHits: PropTypes.number,
+  nbSortedHits: PropTypes.number,
+  isSmartSorted: PropTypes.bool,
   nbPages: PropTypes.number,
   page: PropTypes.number,
   processingTimeMS: PropTypes.number,

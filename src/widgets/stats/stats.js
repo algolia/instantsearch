@@ -19,6 +19,8 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   {
     hitsPerPage,
     nbHits,
+    nbSortedHits,
+    appliedRelevancyStrictness,
     nbPages,
     page,
     processingTimeMS,
@@ -42,6 +44,11 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
       cssClasses={cssClasses}
       hitsPerPage={hitsPerPage}
       nbHits={nbHits}
+      nbSortedHits={nbSortedHits}
+      isSmartSorted={
+        typeof appliedRelevancyStrictness !== 'undefined' &&
+        appliedRelevancyStrictness > 0
+      }
       nbPages={nbPages}
       page={page}
       processingTimeMS={processingTimeMS}
@@ -55,7 +62,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
 /**
  * @typedef {Object} StatsWidgetTemplates
  * @property {string|function} [text] Text template, provided with `hasManyResults`,
- * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`.
+ * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbSortedHits`, `nbPages`, `page`, `processingTimeMS`, `query`.
  */
 
 /**
@@ -71,6 +78,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @property {boolean} hasOneResult True if the result set has exactly one result.
  * @property {number} hitsPerPage Number of hits per page.
  * @property {number} nbHits Number of hit in the result set.
+ * @property {number} nbSortedHits Subset of hits selected when relevancyStrictness is applied
  * @property {number} nbPages Number of pages in the result set with regard to the hitsPerPage and number of hits.
  * @property {number} page Number of the current page. First page is 0.
  * @property {number} processingTimeMS Time taken to compute the results inside the engine.

@@ -7,16 +7,28 @@ Object {
     "text": "ais-Stats-text text cx",
   },
   "hitsPerPage": 2,
+  "isSmartSorted": false,
   "nbHits": 20,
   "nbPages": 10,
+  "nbSortedHits": undefined,
   "page": 0,
   "processingTimeMS": 42,
   "query": "a query",
   "templateProps": Object {
     "templates": Object {
-      "text": "{{#hasNoResults}}No results{{/hasNoResults}}
-    {{#hasOneResult}}1 result{{/hasOneResult}}
-    {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}} found in {{processingTimeMS}}ms",
+      "text": "
+    {{#isSmartSorted}}
+      {{#helpers.formatNumber}}{{nbSortedHits}}{{/helpers.formatNumber}}
+      relevant
+      {{#hasManySortedHits}}results{{/hasManySortedHits}}{{^hasManySortedHits}}result{{/hasManySortedHits}}
+      sorted out of {{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}}
+    {{/isSmartSorted}}
+    {{^isSmartSorted}}
+      {{#hasNoResults}}No results{{/hasNoResults}}
+      {{#hasOneResult}}1 result{{/hasOneResult}}
+      {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
+    {{/isSmartSorted}}
+    found in {{processingTimeMS}}ms",
     },
     "templatesConfig": undefined,
     "useCustomCompileOptions": Object {
@@ -33,16 +45,28 @@ Object {
     "text": "ais-Stats-text text cx",
   },
   "hitsPerPage": 2,
+  "isSmartSorted": false,
   "nbHits": 20,
   "nbPages": 10,
+  "nbSortedHits": undefined,
   "page": 0,
   "processingTimeMS": 42,
   "query": "a query",
   "templateProps": Object {
     "templates": Object {
-      "text": "{{#hasNoResults}}No results{{/hasNoResults}}
-    {{#hasOneResult}}1 result{{/hasOneResult}}
-    {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}} found in {{processingTimeMS}}ms",
+      "text": "
+    {{#isSmartSorted}}
+      {{#helpers.formatNumber}}{{nbSortedHits}}{{/helpers.formatNumber}}
+      relevant
+      {{#hasManySortedHits}}results{{/hasManySortedHits}}{{^hasManySortedHits}}result{{/hasManySortedHits}}
+      sorted out of {{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}}
+    {{/isSmartSorted}}
+    {{^isSmartSorted}}
+      {{#hasNoResults}}No results{{/hasNoResults}}
+      {{#hasOneResult}}1 result{{/hasOneResult}}
+      {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
+    {{/isSmartSorted}}
+    found in {{processingTimeMS}}ms",
     },
     "templatesConfig": undefined,
     "useCustomCompileOptions": Object {
