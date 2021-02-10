@@ -66,6 +66,10 @@ import {
   RangeConnectorParams,
   RangeRendererOptions,
 } from '../connectors/range/connectRange';
+import {
+  SmartSortConnectorParams,
+  SmartSortRendererOptions,
+} from '../connectors/smart-sort/connectSmartSort';
 
 export type ScopedResult = {
   indexId: string;
@@ -350,6 +354,10 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  smartSort: WidgetRenderState<
+    SmartSortRendererOptions,
+    SmartSortConnectorParams
+  >;
 }>;
 
 export type WidgetRenderState<

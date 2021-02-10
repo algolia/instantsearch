@@ -72,8 +72,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
       })
     ).toEqual(
       new SearchParameters({
-        // @TODO: remove @ts-ignore once we update the helper to include relevancyStrictness.
-        // @ts-ignore
         relevancyStrictness: 10,
       })
     );
@@ -101,8 +99,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
       })
     ).toEqual(
       new SearchParameters({
-        // @TODO: remove @ts-ignore once we update the helper to include relevancyStrictness.
-        // @ts-ignore
         relevancyStrictness: 10,
       })
     );

@@ -69,8 +69,6 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
       dispose({ state }) {
         unmountFn();
 
-        // @TODO: remove @ts-ignore once we update the helper to include relevancyStrictness.
-        // @ts-ignore
         return state.setQueryParameter('relevancyStrictness', undefined);
       },
 
@@ -82,8 +80,6 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
       },
 
       getWidgetRenderState({ results, helper }) {
-        // @TODO: remove @ts-ignore once we update the helper to include appliedRelevancyStrictness.
-        // @ts-ignore
         const { appliedRelevancyStrictness } = results || {};
 
         return {
@@ -103,14 +99,10 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
       getWidgetSearchParameters(state, { uiState }) {
         return mergeSearchParameters(
           new algoliasearchHelper.SearchParameters({
-            // @TODO: remove @ts-ignore once we update the helper to include relevancyStrictness.
-            // @ts-ignore
             relevancyStrictness: widgetParams.relevancyStrictness,
           }),
           state,
           new algoliasearchHelper.SearchParameters({
-            // @TODO: remove @ts-ignore once we update the helper to include relevancyStrictness.
-            // @ts-ignore
             relevancyStrictness: uiState.smartSort?.relevancyStrictness,
           })
         );
