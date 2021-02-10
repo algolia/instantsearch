@@ -2912,10 +2912,10 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.5.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-algoliasearch-helper@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.4.1.tgz#ccb40439e5d28ad4b16ed3c31b6f087fedc559b3"
-  integrity sha512-12bU7+/MgGPcOLv7HFkvBuWvKuDT7yYkAHA1VUSORnxRsywPIP4xgYHLMGDFJsKRUHesfjBZap9P1p7ptidXtQ==
+algoliasearch-helper@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.4.2.tgz#8b45380a0e777034eb0e61d9a7af6d399c1d107e"
+  integrity sha512-xuNY+xfyMmrTyD6c8vdYdsBkWqsFGmBM/uxZs4lWgjWxeNb2Jsi2ZaMR51aBn4DeCK4NRdp4LOLvdFEOCoeBkQ==
   dependencies:
     events "^1.1.1"
 
