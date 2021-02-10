@@ -1,3 +1,8 @@
+3.4.1 - 2021-02-10
+ * chore: update yarn.lock https://github.com/algolia/algoliasearch-helper-js/commit/4f9360cf069d2fb4bffc16661b6f8eed46ec19c4
+ * fix(ts): add types for smart sort (#809) https://github.com/algolia/algoliasearch-helper-js/commit/236822e0f041ecb2e926740cff7e6ecdadccc604
+ * fix(ts): make queryID optional (#806) https://github.com/algolia/algoliasearch-helper-js/commit/67ad89bace2b3795a4d4281f97b4edf557b6903d
+
 3.4.0 - 2021-01-12
  * feat(answers): add `findAnswers` (#804) https://github.com/algolia/algoliasearch-helper-js/commit/4635dd5b911713be7d2a868a79f9150b7bd175bd
 
