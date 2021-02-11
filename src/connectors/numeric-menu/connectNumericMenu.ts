@@ -42,7 +42,7 @@ export type NumericMenuRendererOptionsItem = {
    * URL encoded of the bounds object with the form `{start, end}`.
    * This value can be used verbatim in the webpage and can be read by `refine`
    * directly. If you want to inspect the value, you can do:
-   * `JSON.parse(window.decodeURI(value))` to get the object.
+   * `JSON.parse(decodeURI(value))` to get the object.
    */
   value: string;
 
@@ -166,7 +166,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     const prepareItems = (state: SearchParameters) =>
       items.map(({ start, end, label }) => ({
         label,
-        value: (window as any).encodeURI(JSON.stringify({ start, end })),
+        value: encodeURI(JSON.stringify({ start, end })),
         isRefined: isRefined(state, attribute, { start, end, label }),
       }));
 
@@ -366,7 +366,7 @@ function getRefinedState(
 ) {
   let resolvedState = state;
 
-  const refinedOption = JSON.parse((window as any).decodeURI(facetValue));
+  const refinedOption = JSON.parse(decodeURI(facetValue));
 
   // @TODO: why is array / element mixed here & hasRefinements; seems wrong?
   const currentRefinements = resolvedState.getNumericRefinements(
