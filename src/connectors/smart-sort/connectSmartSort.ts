@@ -1,10 +1,5 @@
 import { Connector } from '../../types';
-import {
-  createDocumentationMessageGenerator,
-  mergeSearchParameters,
-  noop,
-} from '../../lib/utils';
-import algoliasearchHelper from 'algoliasearch-helper';
+import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 
 export type SmartSortConnectorParams = {
   relevancyStrictness?: number;
@@ -109,14 +104,11 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
       },
 
       getWidgetSearchParameters(state, { uiState }) {
-        return mergeSearchParameters(
-          new algoliasearchHelper.SearchParameters({
-            relevancyStrictness: widgetParams.relevancyStrictness,
-          }),
-          state,
-          new algoliasearchHelper.SearchParameters({
-            relevancyStrictness: uiState.smartSort?.relevancyStrictness,
-          })
+        return state.setQueryParameter(
+          'relevancyStrictness',
+          uiState.smartSort?.relevancyStrictness ??
+            state.relevancyStrictness ??
+            widgetParams.relevancyStrictness
         );
       },
 
