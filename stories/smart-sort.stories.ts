@@ -14,9 +14,9 @@ const searchOptions = {
     {
       hosts: [
         {
-          protocol: 'https', // or 'http'
+          protocol: 'https',
           url: 'c7rirjryr9-3.algolianet.com',
-          accept: CallEnum.Read, // CallEnum.Any or CallEnum.Write
+          accept: CallEnum.Read,
         },
       ],
     }
