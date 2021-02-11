@@ -1,6 +1,6 @@
 import { Hits } from '../../types';
 
-export const addQueryID = (hits: Hits, queryID: string): Hits => {
+export const addQueryID = (hits: Hits, queryID?: string): Hits => {
   if (!queryID) {
     return hits;
   }
