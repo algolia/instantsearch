@@ -77,8 +77,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState.stats).toEqual({
         hitsPerPage: undefined,
+        isSmartSorted: false,
         nbHits: 0,
         nbPages: 0,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: -1,
         query: '',
@@ -102,8 +104,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState.stats).toEqual({
         hitsPerPage: 20,
+        isSmartSorted: false,
         nbHits: 0,
         nbPages: 0,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: 0,
         query: '',
@@ -137,8 +141,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState.stats).toEqual({
         hitsPerPage: 3,
+        isSmartSorted: false,
         nbHits: 5,
         nbPages: 2,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: 0,
         query: 'apple',
@@ -163,8 +169,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState).toEqual({
         hitsPerPage: undefined,
+        isSmartSorted: false,
         nbHits: 0,
         nbPages: 0,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: -1,
         query: '',
@@ -187,8 +195,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState).toEqual({
         hitsPerPage: 20,
+        isSmartSorted: false,
         nbHits: 0,
         nbPages: 0,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: 0,
         query: '',
@@ -221,8 +231,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState).toEqual({
         hitsPerPage: 3,
+        isSmartSorted: false,
         nbHits: 5,
         nbPages: 2,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: 0,
         query: 'apple',

@@ -98,7 +98,7 @@ export default function connectStats(renderFn, unmountFn = noop) {
           hitsPerPage: helper.state.hitsPerPage,
           nbHits: 0,
           nbSortedHits: undefined,
-          appliedRelevancyStrictness: undefined,
+          isSmartSorted: false,
           nbPages: 0,
           page: helper.state.page || 0,
           processingTimeMS: -1,
@@ -111,7 +111,9 @@ export default function connectStats(renderFn, unmountFn = noop) {
         hitsPerPage: results.hitsPerPage,
         nbHits: results.nbHits,
         nbSortedHits: results.nbSortedHits,
-        appliedRelevancyStrictness: results.appliedRelevancyStrictness,
+        isSmartSorted:
+          typeof results.appliedRelevancyStrictness !== 'undefined' &&
+          results.appliedRelevancyStrictness > 0,
         nbPages: results.nbPages,
         page: results.page,
         processingTimeMS: results.processingTimeMS,
