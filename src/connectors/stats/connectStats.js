@@ -111,9 +111,7 @@ export default function connectStats(renderFn, unmountFn = noop) {
         hitsPerPage: results.hitsPerPage,
         nbHits: results.nbHits,
         nbSortedHits: results.nbSortedHits,
-        isSmartSorted:
-          typeof results.appliedRelevancyStrictness !== 'undefined' &&
-          results.appliedRelevancyStrictness > 0,
+        isSmartSorted: results.appliedRelevancyStrictness > 0,
         nbPages: results.nbPages,
         page: results.page,
         processingTimeMS: results.processingTimeMS,
