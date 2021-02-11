@@ -1,4 +1,4 @@
 export default {
-  text: ({ isSmartSorted }) =>
+  button: ({ isSmartSorted }) =>
     isSmartSorted ? 'See all results' : 'See relevant results',
 };

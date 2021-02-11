@@ -17,7 +17,7 @@ jest.mock('preact', () => {
 });
 
 const templates = {
-  text: ({ isSmartSorted }) => {
+  button: ({ isSmartSorted }) => {
     return isSmartSorted ? 'See all results' : 'See relevant results';
   },
 };

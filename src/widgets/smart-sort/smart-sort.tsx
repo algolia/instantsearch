@@ -20,7 +20,7 @@ export type SmartSortCSSClasses = Partial<{
 }>;
 
 export type SmartSortTemplates = Partial<{
-  text: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
+  button: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
 }>;
 
 type SmartSortWidgetParams = {
