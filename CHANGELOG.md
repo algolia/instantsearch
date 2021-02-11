@@ -1,3 +1,12 @@
+# [4.14.0](https://github.com/algolia/instantsearch.js/compare/v4.13.2...v4.14.0) (2021-02-09)
+
+
+### Features
+
+* **queryRuleContext:** allow to make refinements based on query ([#4638](https://github.com/algolia/instantsearch.js/issues/4638)) ([dd033fc](https://github.com/algolia/instantsearch.js/commit/dd033fc58ff11027e4f4b6157aedf0aea0326af3))
+
+
+
 ## [4.13.2](https://github.com/algolia/instantsearch.js/compare/v4.13.1...v4.13.2) (2021-02-03)
 
 

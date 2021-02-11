@@ -559,7 +559,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(priceFilterSpy).toHaveBeenCalledWith([500, 400, 100]);
       });
 
-      test('can filter trackedFilters with facets refinements', () => {
+      test('can track filters from facets refinements', () => {
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
@@ -637,7 +637,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung', 'Apple']);
       });
 
-      test('can filter tracked filters from numeric refinements', () => {
+      test('can track filters from numeric refinements', () => {
         const helper = createFakeHelper();
         const priceFilterSpy = jest.fn(() => [500]);
         const { makeWidget } = createWidget();
@@ -700,6 +700,88 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         ]);
         expect(priceFilterSpy).toHaveBeenCalledTimes(1);
         expect(priceFilterSpy).toHaveBeenCalledWith([500, 400, 100]);
+      });
+
+      test('can track filters from query', () => {
+        const helper = createFakeHelper();
+        const querySpy = jest.fn(filters => {
+          const [query] = filters as string[];
+          return query.includes('cat') ? [query] : [];
+        });
+        const { makeWidget } = createWidget();
+        const widget = makeWidget({
+          trackedFilters: {
+            query: querySpy,
+          },
+        });
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
+
+        expect((helper.state as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
+        expect(querySpy).toHaveBeenCalledTimes(0);
+
+        widget.render!(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+              createSingleSearchResponse(),
+            ]),
+          })
+        );
+
+        expect((helper.state as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
+        expect(querySpy).toHaveBeenCalledTimes(0);
+
+        helper.setState({
+          query: 'cats are cool',
+        });
+
+        widget.render!(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+              createSingleSearchResponse(),
+            ]),
+          })
+        );
+
+        expect((helper.state as SearchParameters).ruleContexts).toEqual([
+          'ais-query-cats_are_cool',
+        ]);
+        expect(querySpy).toHaveBeenCalledTimes(1);
+        expect(querySpy).toHaveBeenCalledWith(['cats are cool']);
+
+        helper.setState({
+          query: 'dogs are cool',
+        });
+
+        widget.render!(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+              createSingleSearchResponse(),
+            ]),
+          })
+        );
+
+        expect((helper.state as SearchParameters).ruleContexts).toBeUndefined();
+        expect(querySpy).toHaveBeenCalledTimes(2);
+        expect(querySpy).toHaveBeenCalledWith(['dogs are cool']);
       });
 
       test('escapes all ruleContexts before passing them to search parameters', () => {
