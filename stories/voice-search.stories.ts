@@ -58,8 +58,8 @@ storiesOf('Basics/VoiceSearch', module)
   .add(
     'with a custom button text',
     withHits(({ search, container }) => {
-      const style = window.document.createElement('style');
-      window.document.head.appendChild(style);
+      const style = document.createElement('style');
+      document.head.appendChild(style);
       [
         `.ais-VoiceSearch-button.custom-button:hover {
         background: inherit;
@@ -130,8 +130,8 @@ storiesOf('Basics/VoiceSearch', module)
       container.appendChild(subContainer1);
       container.appendChild(subContainer2);
 
-      const style = window.document.createElement('style');
-      window.document.head.appendChild(style);
+      const style = document.createElement('style');
+      document.head.appendChild(style);
       [
         `.voice-search-button {
           position: absolute;
