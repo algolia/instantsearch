@@ -63,13 +63,13 @@
   },
   "devDependencies": {
     "@algolia/client-search": "4.8.2",
-    "@babel/cli": "7.8.3",
-    "@babel/core": "7.8.3",
+    "@babel/cli": "7.8.4",
+    "@babel/core": "7.9.6",
     "@babel/plugin-proposal-class-properties": "7.8.3",
-    "@babel/plugin-transform-react-constant-elements": "7.8.3",
-    "@babel/preset-env": "7.8.3",
-    "@babel/preset-react": "7.8.3",
-    "@babel/preset-typescript": "7.8.3",
+    "@babel/plugin-transform-react-constant-elements": "7.9.0",
+    "@babel/preset-env": "7.9.6",
+    "@babel/preset-react": "7.9.4",
+    "@babel/preset-typescript": "7.9.0",
     "@microsoft/api-extractor": "7.9.2",
     "@storybook/addon-actions": "5.3.9",
     "@storybook/html": "5.3.9",
@@ -143,7 +143,7 @@
   "bundlesize": [
     {
       "path": "./dist/instantsearch.production.min.js",
-      "maxSize": "66 kB"
+      "maxSize": "66.15 kB"
     },
     {
       "path": "./dist/instantsearch.development.js",
