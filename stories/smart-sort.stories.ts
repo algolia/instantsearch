@@ -32,7 +32,7 @@ storiesOf('Sorting/SmartSort', module)
           container,
           relevancyStrictness: 50,
           templates: {
-            text: ({ isSmartSorted }) =>
+            button: ({ isSmartSorted }) =>
               isSmartSorted ? 'See all results' : 'See relevant results',
           },
         }),
