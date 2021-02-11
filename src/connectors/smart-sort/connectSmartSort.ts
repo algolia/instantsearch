@@ -10,9 +10,11 @@ export type SmartSortConnectorParams = {
   relevancyStrictness?: number;
 };
 
+type Refine = (relevancyStrictness: number) => void;
+
 export type SmartSortRendererOptions = {
   isSmartSorted: boolean;
-  refine: (relevancyStrictness: number) => void;
+  refine: Refine;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -39,6 +41,12 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
         withUsage('The `relevancyStrictness` option must be between 0 and 100.')
       );
     }
+
+    type ConnectorState = {
+      refine?: Refine;
+    };
+
+    const connectorState: ConnectorState = {};
 
     return {
       $$type: 'ais.smartSort',
@@ -80,6 +88,14 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
       },
 
       getWidgetRenderState({ results, helper }) {
+        if (!connectorState.refine) {
+          connectorState.refine = (relevancyStrictness: number | undefined) => {
+            helper
+              .setQueryParameter('relevancyStrictness', relevancyStrictness)
+              .search();
+          };
+        }
+
         const { appliedRelevancyStrictness } = results || {};
 
         return {
@@ -87,11 +103,7 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
             typeof appliedRelevancyStrictness !== 'undefined' &&
             appliedRelevancyStrictness > 0 &&
             appliedRelevancyStrictness <= 100,
-          refine: relevancyStrictness => {
-            helper
-              .setQueryParameter('relevancyStrictness', relevancyStrictness)
-              .search();
-          },
+          refine: connectorState.refine,
           widgetParams,
         };
       },
