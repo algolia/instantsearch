@@ -17,9 +17,12 @@ import defaultTemplates from './defaultTemplates';
 
 export type SmartSortCSSClasses = Partial<{
   root: string;
+  text: string;
+  button: string;
 }>;
 
 export type SmartSortTemplates = Partial<{
+  text: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
   button: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
 }>;
 
@@ -85,6 +88,8 @@ const smartSort: SmartSortWidget = widgetParams => {
 
   const cssClasses: SmartSortCSSClasses = {
     root: cx(suit(), userCssClasses.root),
+    text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
+    button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
   };
 
   const templates: SmartSortTemplates = {

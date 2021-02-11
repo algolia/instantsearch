@@ -22,24 +22,34 @@ const SmartSort = ({
   relevancyStrictness,
   refine,
 }: SmartSortProps) => (
-  <button
-    className={cssClasses.root}
-    type="button"
-    onClick={() => {
-      if (isSmartSorted) {
-        refine(0);
-      } else {
-        refine(relevancyStrictness);
-      }
-    }}
-  >
+  <div className={cssClasses.root}>
     <Template
-      rootTagName="span"
-      templateKey="button"
+      templateKey="text"
       templates={templates}
+      rootProps={{
+        className: cssClasses.text,
+      }}
       data={{ isSmartSorted }}
     />
-  </button>
+    <button
+      type="button"
+      className={cssClasses.button}
+      onClick={() => {
+        if (isSmartSorted) {
+          refine(0);
+        } else {
+          refine(relevancyStrictness);
+        }
+      }}
+    >
+      <Template
+        rootTagName="span"
+        templateKey="button"
+        templates={templates}
+        data={{ isSmartSorted }}
+      />
+    </button>
+  </div>
 );
 
 export default SmartSort;

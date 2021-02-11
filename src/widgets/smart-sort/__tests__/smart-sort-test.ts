@@ -17,6 +17,7 @@ jest.mock('preact', () => {
 });
 
 const templates = {
+  text: '',
   button: ({ isSmartSorted }) => {
     return isSmartSorted ? 'See all results' : 'See relevant results';
   },
@@ -69,7 +70,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smart-sort/
     expect(render).toHaveBeenCalledTimes(2);
     expect(secondRender[0].props).toEqual(
       expect.objectContaining({
-        cssClasses: { root: 'ais-SmartSort my-SmartSort' },
+        cssClasses: {
+          root: 'ais-SmartSort my-SmartSort',
+          text: 'ais-SmartSort-text',
+          button: 'ais-SmartSort-button',
+        },
         isSmartSorted: true,
         refine: expect.any(Function),
         relevancyStrictness: undefined,

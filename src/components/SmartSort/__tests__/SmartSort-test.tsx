@@ -7,9 +7,12 @@ import SmartSort from '../SmartSort';
 
 const cssClasses = {
   root: 'root',
+  text: 'text',
+  button: 'button',
 };
 
 const templates = {
+  text: '',
   button: ({ isSmartSorted }) => {
     return isSmartSorted ? 'See all results' : 'See relevant results';
   },
@@ -27,14 +30,21 @@ describe('SmartSort', () => {
     );
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <button
+        <div
           class="root"
-          type="button"
         >
-          <span>
-            See relevant results
-          </span>
-        </button>
+          <div
+            class="text"
+          />
+          <button
+            class="button"
+            type="button"
+          >
+            <span>
+              See relevant results
+            </span>
+          </button>
+        </div>
       </div>
     `);
   });
@@ -79,17 +89,24 @@ describe('SmartSort', () => {
       />
     );
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <button
-    class="root"
-    type="button"
-  >
-    <span>
-      See all results
-    </span>
-  </button>
-</div>
-`);
+      <div>
+        <div
+          class="root"
+        >
+          <div
+            class="text"
+          />
+          <button
+            class="button"
+            type="button"
+          >
+            <span>
+              See all results
+            </span>
+          </button>
+        </div>
+      </div>
+    `);
   });
 
   it('refine with zero when seeing all results', () => {
