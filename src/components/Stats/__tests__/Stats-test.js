@@ -66,6 +66,54 @@ describe('Stats', () => {
     `);
   });
 
+  it('should render 1 sorted hit', () => {
+    const wrapper = mount(
+      <Stats
+        {...getProps({ nbSortedHits: 1, isSmartSorted: true })}
+        templateProps={{
+          templates: defaultTemplates,
+          templatesConfig: {
+            helpers: createHelpers({}),
+          },
+        }}
+      />
+    );
+    expect(wrapper.find('.text')).toMatchInlineSnapshot(`
+      <span
+        className="text"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "1 relevant result sorted out of 1,234 found in 42ms",
+          }
+        }
+      />
+    `);
+  });
+
+  it('should render 0 sorted hit', () => {
+    const wrapper = mount(
+      <Stats
+        {...getProps({ nbSortedHits: 0, isSmartSorted: true })}
+        templateProps={{
+          templates: defaultTemplates,
+          templatesConfig: {
+            helpers: createHelpers({}),
+          },
+        }}
+      />
+    );
+    expect(wrapper.find('.text')).toMatchInlineSnapshot(`
+      <span
+        className="text"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "No relevant results sorted out of 1,234 found in 42ms",
+          }
+        }
+      />
+    `);
+  });
+
   function getProps(extraProps = {}) {
     return {
       cssClasses,

@@ -1,9 +1,9 @@
 export default {
   text: `
     {{#isSmartSorted}}
-      {{#helpers.formatNumber}}{{nbSortedHits}}{{/helpers.formatNumber}}
-      relevant
-      {{#hasManySortedHits}}results{{/hasManySortedHits}}{{^hasManySortedHits}}result{{/hasManySortedHits}}
+      {{#hasNoSortedResults}}No relevant results{{/hasNoSortedResults}}
+      {{#hasOneSortedResults}}1 relevant result{{/hasOneSortedResults}}
+      {{#hasManySortedResults}}{{#helpers.formatNumber}}{{nbSortedHits}}{{/helpers.formatNumber}} relevant results{{/hasManySortedResults}}
       sorted out of {{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}}
     {{/isSmartSorted}}
     {{^isSmartSorted}}

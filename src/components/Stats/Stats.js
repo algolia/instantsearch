@@ -23,7 +23,9 @@ const Stats = ({
       rootTagName="span"
       rootProps={{ className: cssClasses.text }}
       data={{
-        hasManySortedHits: nbSortedHits > 1,
+        hasManySortedResults: nbSortedHits > 1,
+        hasNoSortedResults: nbSortedHits === 0,
+        hasOneSortedResults: nbSortedHits === 1,
         hasManyResults: nbHits > 1,
         hasNoResults: nbHits === 0,
         hasOneResult: nbHits === 1,
