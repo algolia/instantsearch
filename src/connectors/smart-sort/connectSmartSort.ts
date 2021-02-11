@@ -95,7 +95,9 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
 
         return {
           isSmartSorted:
-            appliedRelevancyStrictness > 0 && appliedRelevancyStrictness <= 100,
+            typeof appliedRelevancyStrictness !== 'undefined' &&
+            appliedRelevancyStrictness > 0 &&
+            appliedRelevancyStrictness <= 100,
           refine: connectorState.refine,
           widgetParams,
         };
