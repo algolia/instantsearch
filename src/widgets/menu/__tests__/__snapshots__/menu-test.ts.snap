@@ -17,20 +17,7 @@ Object {
     "showMore": "ais-Menu-showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
-      "label": "foo",
-      "transformed": true,
-      "url": "#",
-      "value": undefined,
-    },
-    Object {
-      "label": "bar",
-      "transformed": true,
-      "url": "#",
-      "value": undefined,
-    },
-  ],
+  "facetValues": Array [],
   "isShowingMore": false,
   "showMore": undefined,
   "templateProps": Object {
@@ -45,7 +32,7 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "item": false,
       "showMoreText": false,
@@ -73,18 +60,7 @@ Object {
     "showMore": "ais-Menu-showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
-      "label": "foo",
-      "url": "#",
-      "value": undefined,
-    },
-    Object {
-      "label": "bar",
-      "url": "#",
-      "value": undefined,
-    },
-  ],
+  "facetValues": Array [],
   "isShowingMore": false,
   "showMore": undefined,
   "templateProps": Object {
@@ -99,7 +75,7 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "item": false,
       "showMoreText": false,
