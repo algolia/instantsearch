@@ -143,15 +143,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       expect(answersContainer.querySelector('.loader')!.innerHTML).toEqual(
         'loading...'
       );
-      expect(answersContainer.querySelector('.root')!.classList).toContain(
-        'empty'
-      );
+      expect(answersContainer.querySelector('.root')).toHaveClass('empty');
 
       setTimeout(() => {
         // debounced render
-        expect(
-          answersContainer.querySelector('.root')!.classList
-        ).not.toContain('empty');
+        expect(answersContainer.querySelector('.root')).not.toHaveClass(
+          'empty'
+        );
         expect(answersContainer.querySelectorAll('.item').length).toEqual(1);
         expect(answersContainer.querySelector('.item')!.innerHTML).toEqual(
           'title: Hello'

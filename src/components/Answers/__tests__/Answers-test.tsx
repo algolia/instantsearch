@@ -28,15 +28,47 @@ describe('Answers', () => {
   describe('Rendering', () => {
     it('renders without anything', () => {
       const { container } = render(<Answers {...defaultProps} />);
-      expect(container.querySelector('.root')!.classList).toContain('empty');
-      expect(container).toMatchSnapshot();
+      expect(container.querySelector('.root')).toHaveClass('empty');
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="root empty"
+          >
+            <div
+              class="header"
+            >
+              header
+            </div>
+            <ul
+              class="list"
+            />
+          </div>
+        </div>
+      `);
     });
 
     it('renders the loader', () => {
       const { container } = render(
         <Answers {...defaultProps} isLoading={true} />
       );
-      expect(container).toMatchSnapshot();
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root empty"
+  >
+    <div
+      class="header"
+    >
+      header
+    </div>
+    <div
+      class="loader"
+    >
+      loader
+    </div>
+  </div>
+</div>
+`);
     });
 
     it('renders the header with data', () => {
@@ -60,7 +92,7 @@ describe('Answers', () => {
           hits={[{ objectID: '1', __position: 1 }]}
         />
       );
-      expect(container.querySelector('.header')!.textContent).toEqual(
+      expect(container.querySelector('.header')).toHaveTextContent(
         '1 answer(s) loaded'
       );
     });
@@ -84,7 +116,7 @@ describe('Answers', () => {
           hits={[{ objectID: '1', title: 'hello!', __position: 1 }]}
         />
       );
-      expect(container.querySelector('.list')!.textContent).toEqual(
+      expect(container.querySelector('.list')).toHaveTextContent(
         'answer: hello!'
       );
     });
