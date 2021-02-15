@@ -1,3 +1,7 @@
+3.4.3 - 2021-02-15
+ * docs(examples): remove frameworks https://github.com/algolia/algoliasearch-helper-js/commit/c71f9c5210dcd140a9ac9b350047da75bcda7c77
+ * fix(ts): correct type for HierarchicalFacet parameter (#811) https://github.com/algolia/algoliasearch-helper-js/commit/3b705dd4b22aa57c0ecd6533ea515fdafa7fd5f9
+
 3.4.2 - 2021-02-10
  * fix(types): add relevancyStrictness to SearchParameters (#810) https://github.com/algolia/algoliasearch-helper-js/commit/3860179c63c31bce0df82337d4000c7449ef516a
 
