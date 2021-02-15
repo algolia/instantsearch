@@ -1,5 +1,4 @@
 import jsHelper, {
-  AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
@@ -34,14 +33,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/"
   });
 
   describe('render', () => {
-    let results: SearchResults;
-    let state: SearchParameters;
-    let helper: AlgoliaSearchHelper;
-
     beforeEach(() => {
-      helper = jsHelper(createSearchClient(), '');
-      state = helper.state;
-      results = new SearchResults(helper.state, [
+      render.mockClear();
+    });
+
+    it('snapshot', () => {
+      const widget = menu({
+        container: document.createElement('div'),
+        attribute: 'test',
+      });
+
+      const helper = jsHelper(createSearchClient(), '');
+
+      helper.setState(
+        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+
+      const results = new SearchResults(helper.state, [
         createSingleSearchResponse({
           facets: {
             test: {
@@ -52,22 +62,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/"
         }),
       ]);
 
-      render.mockClear();
-    });
-
-    it('snapshot', () => {
-      const widget = menu({
-        container: document.createElement('div'),
-        attribute: 'test',
-      });
-
       widget.init!(
         createInitOptions({
           helper,
+          state: helper.state,
           createURL: () => '#',
         })
       );
-      widget.render!(createRenderOptions({ results, state }));
+      widget.render!(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
 
       const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -82,13 +90,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/"
           items.map(item => ({ ...item, transformed: true })),
       });
 
+      const helper = jsHelper(createSearchClient(), '');
+
+      helper.setState(
+        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          facets: {
+            test: {
+              foo: 123,
+              bar: 456,
+            },
+          },
+        }),
+      ]);
+
       widget.init!(
         createInitOptions({
           helper,
           createURL: () => '#',
         })
       );
-      widget.render!(createRenderOptions({ results, state }));
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results,
+        })
+      );
 
       const firstRender = render.mock.calls[0][0] as VNode;
 
