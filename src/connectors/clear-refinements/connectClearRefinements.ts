@@ -195,7 +195,7 @@ function getAttributesToClear({
   excludedAttributes,
   transformItems,
 }): AttributesToClear {
-  const clearsQuery =
+  const includesQuery =
     includedAttributes.indexOf('query') !== -1 ||
     excludedAttributes.indexOf('query') === -1;
 
@@ -206,7 +206,7 @@ function getAttributesToClear({
         getRefinements(
           scopedResult.results,
           scopedResult.helper.state,
-          clearsQuery
+          includesQuery
         )
           .map(refinement => refinement.attribute)
           .filter(
@@ -219,7 +219,7 @@ function getAttributesToClear({
           .filter(
             attribute =>
               // If the query is included, we ignore the default `excludedAttributes = ['query']`
-              (attribute === 'query' && clearsQuery) ||
+              (attribute === 'query' && includesQuery) ||
               // Otherwise, ignore the excluded attributes
               excludedAttributes.indexOf(attribute) === -1
           )
