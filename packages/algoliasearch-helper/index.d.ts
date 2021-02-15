@@ -549,7 +549,9 @@ declare namespace algoliasearchHelper {
     addFacet(facet: string): SearchParameters;
     /* Add a refinement on a "normal" facet */
     addFacetRefinement(facet: string, value: string): SearchParameters;
-    addHierarchicalFacet(facet: any): SearchParameters;
+    addHierarchicalFacet(
+      facet: SearchParameters.HierarchicalFacet
+    ): SearchParameters;
     addHierarchicalFacetRefinement(
       facet: string,
       path: string
@@ -1128,7 +1130,7 @@ declare namespace algoliasearchHelper {
     type HierarchicalFacet = {
       name: string;
       attributes: string[];
-      separator: string;
+      separator?: string;
     };
 
     type OperatorList = {
