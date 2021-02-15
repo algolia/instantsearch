@@ -3404,7 +3404,7 @@ algoliasearch-helper@^3.3.4:
     semver "^5.1.0"
     tunnel-agent "^0.6.0"
 
- algoliasearch@^3.35.1:
+algoliasearch@^3.35.1:
    version "3.35.1"
    resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.35.1.tgz#297d15f534a3507cab2f5dfb996019cac7568f0c"
    integrity sha512-K4yKVhaHkXfJ/xcUnil04xiSrB8B8yHZoFEhWNpXg23eiCnqvTZw1tn/SqvdsANlYHLJlKl0qi3I/Q2Sqo7LwQ==
