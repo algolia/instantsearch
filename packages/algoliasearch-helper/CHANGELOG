@@ -1,3 +1,6 @@
+3.4.4 - 2021-02-16
+ * fix(ts): add rootPath to HierarchicalFacet https://github.com/algolia/algoliasearch-helper-js/commit/06fb959f119cc0e7b91268154c01e0f6f4aa3ba1
+
 3.4.3 - 2021-02-15
  * docs(examples): remove frameworks https://github.com/algolia/algoliasearch-helper-js/commit/c71f9c5210dcd140a9ac9b350047da75bcda7c77
  * fix(ts): correct type for HierarchicalFacet parameter (#811) https://github.com/algolia/algoliasearch-helper-js/commit/3b705dd4b22aa57c0ecd6533ea515fdafa7fd5f9
