@@ -103,8 +103,12 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { items: userItems, transformItems = items => items } =
-      widgetParams || ({} as typeof widgetParams);
+    const {
+      items: userItems,
+      transformItems = (items => items) as TransformItems<
+        HitsPerPageRendererOptionsItem
+      >,
+    } = widgetParams || {};
     let items = userItems;
 
     if (!Array.isArray(items)) {

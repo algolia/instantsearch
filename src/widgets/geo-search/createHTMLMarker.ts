@@ -1,4 +1,5 @@
-// eslint-disable-next-line no-undef
+/* global google EventListener */
+
 const createHTMLMarker = (googleReference: typeof google) => {
   class HTMLMarker extends googleReference.maps.OverlayView {
     public __id: string;

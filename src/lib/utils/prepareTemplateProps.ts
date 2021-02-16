@@ -1,7 +1,7 @@
 import uniq from './uniq';
 import { Template } from '../../types';
 
-type TemplatesConfig = object;
+type TemplatesConfig = Record<string, unknown>;
 
 type Templates = {
   [key: string]: Template;
@@ -28,7 +28,10 @@ function prepareTemplates(
     ...Object.keys(templates),
   ]);
 
-  return allKeys.reduce(
+  return allKeys.reduce<{
+    templates: Templates;
+    useCustomCompileOptions: { [key: string]: boolean };
+  }>(
     (config, key) => {
       const defaultTemplate = defaultTemplates[key];
       const customTemplate = templates[key];
@@ -43,8 +46,8 @@ function prepareTemplates(
       return config;
     },
     {
-      templates: {} as Templates,
-      useCustomCompileOptions: {} as { [key: string]: boolean },
+      templates: {},
+      useCustomCompileOptions: {},
     }
   );
 }

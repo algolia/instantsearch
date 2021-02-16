@@ -65,8 +65,12 @@ const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = function co
   unmountFn
 ) {
   return widgetParams => {
-    const { hit, matchingPatterns, transformSearchParameters = x => x } =
-      widgetParams || ({} as typeof widgetParams);
+    const {
+      hit,
+      matchingPatterns,
+      transformSearchParameters = (x =>
+        x) as ConfigureRelatedItemsConnectorParams['transformSearchParameters'],
+    } = widgetParams || {};
 
     if (!hit) {
       throw new Error(withUsage('The `hit` option is required.'));

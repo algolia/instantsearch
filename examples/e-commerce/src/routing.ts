@@ -1,4 +1,4 @@
-/* eslint @typescript-eslint/camelcase: ["error", { allow: ["free_shipping"] }], complexity: off */
+/* eslint complexity: off */
 
 import {
   history as historyRouter,
@@ -17,7 +17,7 @@ type RouteState = {
   category?: string;
   rating?: string;
   price?: string;
-  free_shipping?: string;
+  freeShipping?: string;
   sortBy?: string;
   hitsPerPage?: string;
 };
@@ -29,7 +29,7 @@ const routeStateDefaultValues: RouteState = {
   category: '',
   rating: '',
   price: '',
-  free_shipping: 'false',
+  freeShipping: 'false',
   sortBy: 'instant_search',
   hitsPerPage: '20',
 };
@@ -128,10 +128,10 @@ const router = historyRouter({
       queryParameters.price = routeState.price;
     }
     if (
-      routeState.free_shipping &&
-      routeState.free_shipping !== routeStateDefaultValues.free_shipping
+      routeState.freeShipping &&
+      routeState.freeShipping !== routeStateDefaultValues.freeShipping
     ) {
-      queryParameters.free_shipping = routeState.free_shipping;
+      queryParameters.freeShipping = routeState.freeShipping;
     }
     if (
       routeState.sortBy &&
@@ -165,7 +165,7 @@ const router = historyRouter({
       page = 1,
       brands = [],
       price,
-      free_shipping,
+      freeShipping,
     } = queryParameters;
     // `qs` does not return an array when there's a single value.
     const allBrands = Array.isArray(brands) ? brands : [brands].filter(Boolean);
@@ -182,7 +182,7 @@ const router = historyRouter({
       category,
       rating,
       price,
-      free_shipping,
+      freeShipping,
       sortBy,
       hitsPerPage,
     };
@@ -194,7 +194,7 @@ const getStateMapping = ({ indexName }) => ({
     const indexUiState = uiState[indexName];
     return {
       query: indexUiState.query,
-      page: indexUiState.page,
+      page: String(indexUiState.page),
       brands: indexUiState.refinementList && indexUiState.refinementList.brand,
       category:
         indexUiState.hierarchicalMenu &&
@@ -202,7 +202,7 @@ const getStateMapping = ({ indexName }) => ({
         indexUiState.hierarchicalMenu['hierarchicalCategories.lvl0'].join('/'),
       rating: indexUiState.ratingMenu && String(indexUiState.ratingMenu.rating),
       price: indexUiState.range && indexUiState.range.price,
-      free_shipping:
+      freeShipping:
         (indexUiState.toggle && String(indexUiState.toggle.free_shipping)) ||
         undefined,
       sortBy: indexUiState.sortBy,
@@ -241,7 +241,7 @@ const getStateMapping = ({ indexName }) => ({
         },
         range,
         toggle: {
-          free_shipping: Boolean(routeState.free_shipping),
+          free_shipping: Boolean(routeState.freeShipping),
         },
         sortBy: routeState.sortBy,
         hitsPerPage: Number(routeState.hitsPerPage),

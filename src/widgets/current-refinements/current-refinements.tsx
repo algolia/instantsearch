@@ -96,7 +96,7 @@ const currentRefinements: CurrentRefinementsWidget = function currentRefinements
     excludedAttributes,
     cssClasses: userCssClasses = {},
     transformItems,
-  } = widgetParams || ({} as typeof widgetParams);
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

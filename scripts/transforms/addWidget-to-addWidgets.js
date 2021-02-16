@@ -1,4 +1,4 @@
-/* eslint-disable no-console,no-shadow */
+/* eslint-disable no-shadow */
 
 export default function transform(file, api, options) {
   const j = api.jscodeshift;

@@ -11,7 +11,6 @@ import {
 } from '../../../test/mock/createInsightsClient';
 import { warning } from '../../lib/utils';
 import { SearchClient } from '../../types';
-import { Index } from '../../widgets/index/index';
 
 describe('insights', () => {
   const createTestEnvironment = () => {
@@ -24,9 +23,10 @@ describe('insights', () => {
     const getUserToken = () => {
       return (helper.state as any).userToken;
     };
+    // @ts-expect-error
     instantSearchInstance.mainIndex = {
       getHelper: () => helper,
-    } as Index;
+    };
 
     return {
       analytics,
@@ -49,9 +49,10 @@ describe('insights', () => {
     const getUserToken = () => {
       return (helper.state as any).userToken;
     };
+    // @ts-expect-error
     instantSearchInstance.mainIndex = {
       getHelper: () => helper,
-    } as Index;
+    };
     return {
       insightsClient,
       libraryLoadedAndProcessQueue,

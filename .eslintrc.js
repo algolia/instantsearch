@@ -20,20 +20,39 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'jest/no-test-callback': 'off',
+    'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
     '@typescript-eslint/no-unused-vars': [
       'error',
       { argsIgnorePattern: '^_', ignoreRestSiblings: true },
     ],
-    '@typescript-eslint/camelcase': [
+    '@typescript-eslint/naming-convention': [
       'error',
       {
-        allow: [
-          'instant_search',
-          'instant_search_movies',
-          'free_shipping',
-          'facets_stats',
-          '^EXPERIMENTAL_',
-        ],
+        "selector": "variable",
+        "modifiers": ["destructured"],
+        "format": null
+      },
+      {
+        selector: 'variable',
+        format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
+        leadingUnderscore: 'allow',
+        filter: {
+          regex: '^EXPERIMENTAL_|__DEV__',
+          match: false,
+        },
+      },
+      {
+        selector: 'typeParameter',
+        format: ['PascalCase'],
+        prefix: ['T', 'K'],
+      },
+      {
+        selector: 'interface',
+        format: ['PascalCase'],
+        custom: {
+          regex: '^I[A-Z]',
+          match: false,
+        },
       },
     ],
   },
@@ -42,6 +61,12 @@ module.exports = {
       files: ['*.ts', '*.tsx'],
       rules: {
         'valid-jsdoc': 'off',
+      },
+    },
+    {
+      files: ['*.js'],
+      rules: {
+        '@typescript-eslint/explicit-member-accessibility': 'off',
       },
     },
   ],

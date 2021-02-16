@@ -161,7 +161,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     let sendEvent;
     let toggleShowMore;
 
-    /* eslint-disable max-params */
     const createSearchForFacetValues = function(helper) {
       return renderOptions => query => {
         const { instantSearchInstance } = renderOptions;
@@ -225,7 +224,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         }
       };
     };
-    /* eslint-enable max-params */
 
     return {
       $$type: 'ais.refinementList',

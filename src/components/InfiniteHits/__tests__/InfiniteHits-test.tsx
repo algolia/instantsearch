@@ -2,9 +2,17 @@
 
 import { h } from 'preact';
 import { render } from '@testing-library/preact';
-import { SearchResults } from 'algoliasearch-helper';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../InfiniteHits';
 import { Hits } from '../../../types';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { SearchResponse } from '@algolia/client-search';
+
+function createResults(partialResults: Partial<SearchResponse<any>>) {
+  return new SearchResults(new SearchParameters(), [
+    createSingleSearchResponse(partialResults),
+  ]);
+}
 
 describe('InfiniteHits', () => {
   const cssClasses = {
@@ -40,7 +48,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: false,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits } as SearchResults,
+        results: createResults({ hits }),
         hits,
         isFirstPage: true,
         isLastPage: false,
@@ -80,7 +88,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: false,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits } as SearchResults,
+        results: createResults({ hits }),
         hits,
         isFirstPage: false,
         isLastPage: true,
@@ -109,7 +117,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: false,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits } as SearchResults,
+        results: createResults({ hits }),
         hits,
         isFirstPage: true,
         isLastPage: false,
@@ -138,7 +146,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: false,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits } as SearchResults,
+        results: createResults({ hits }),
         hits,
         isFirstPage: false,
         isLastPage: true,
@@ -178,7 +186,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: true,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits } as SearchResults,
+        results: createResults({ hits }),
         hits,
         isFirstPage: true,
         isLastPage: false,
@@ -223,7 +231,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: true,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits } as SearchResults,
+        results: createResults({ hits }),
         hits,
         isFirstPage: false,
         isLastPage: true,

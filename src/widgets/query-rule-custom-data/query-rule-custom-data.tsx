@@ -65,7 +65,7 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
     cssClasses: userCssClasses = {} as QueryRuleCustomDataCSSClasses,
     templates: userTemplates = {},
     transformItems = items => items,
-  } = widgetParams || ({} as QueryRuleCustomDataWidgetParams);
+  }: QueryRuleCustomDataWidgetParams = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

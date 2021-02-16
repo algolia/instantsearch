@@ -189,7 +189,7 @@ const infiniteHits: InfiniteHitsWidget = widgetParams => {
     cssClasses: userCssClasses = {},
     showPrevious,
     cache,
-  } = widgetParams || ({} as InfiniteHitsWidgetParams);
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

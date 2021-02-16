@@ -1,17 +1,17 @@
 export const ANONYMOUS_TOKEN = 'anonymous-user-id-1';
 
 export type AlgoliaAnalytics = {
-  setUserToken: (userToken: string) => void;
-  init: ({ appId, apiKey }) => void;
-  _get: (key: string, callback: Function) => void;
-  onUserTokenChange: (
-    callback: Function,
+  setUserToken(userToken: string): void;
+  init({ appId, apiKey }): void;
+  _get(key: string, callback: (value: any) => void): void;
+  onUserTokenChange(
+    callback: (value: string) => void,
     options?: { immediate?: boolean }
-  ) => void;
-  viewedObjectIDs: Function;
+  ): void;
+  viewedObjectIDs(...args: any[]): void;
 };
 
-export function createAlgoliaAnalytics() {
+export function createAlgoliaAnalytics(): AlgoliaAnalytics {
   let values: any = {};
   const setValues = obj => {
     values = {
@@ -45,7 +45,7 @@ export function createAlgoliaAnalytics() {
     _get,
     onUserTokenChange,
     viewedObjectIDs,
-  } as AlgoliaAnalytics;
+  };
 }
 
 export function createInsightsClient(instance = createAlgoliaAnalytics()) {

@@ -1,4 +1,5 @@
 function getPropertyByPath(
+  // eslint-disable-next-line @typescript-eslint/ban-types
   object: object | undefined,
   path: string | string[]
 ): any {
