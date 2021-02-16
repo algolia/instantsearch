@@ -10,7 +10,6 @@ import {
 } from '../../../../test/mock/createWidget';
 import { noop } from '../../../lib/utils';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const createHelper = () => {
@@ -18,30 +17,6 @@ const createHelper = () => {
 };
 
 describe('connectSmartSort', () => {
-  describe('Usage', () => {
-    it('throws with relevancyStrictness out of bound', () => {
-      // @ts-ignore wrong options
-      expect(() => connectSmartSort()({ relevancyStrictness: -1 }))
-        .toThrowErrorMatchingInlineSnapshot(`
-"The \`relevancyStrictness\` option must be between 0 and 100.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/js/#connector"
-`);
-
-      // @ts-ignore wrong options
-      expect(() => connectSmartSort()({ relevancyStrictness: 101 }))
-        .toThrowErrorMatchingInlineSnapshot(`
-"The \`relevancyStrictness\` option must be between 0 and 100.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/js/#connector"
-`);
-    });
-
-    it('does not throw when relevancyStrictness is not given', () => {
-      expect(() => connectSmartSort(() => null)({})).not.toThrow();
-    });
-  });
-
   it('is a widget', () => {
     const render = jest.fn();
     const unmount = jest.fn();
@@ -59,54 +34,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
     );
   });
 
-  it('apply relevancyStrictness to searchParameter', () => {
+  it('dispose relevancyStrictness set by the widget', () => {
     const helper = createHelper();
     const makeWidget = connectSmartSort(noop);
-    const widget = makeWidget({
-      relevancyStrictness: 10,
-    });
+    const widget = makeWidget({});
     widget.init!(createInitOptions({ helper }));
+    const { refine } = widget.getWidgetRenderState(
+      createRenderOptions({
+        helper,
+      })
+    );
+    refine(10);
     expect(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
-      })
-    ).toEqual(
-      new SearchParameters({
-        relevancyStrictness: 10,
-      })
-    );
-  });
-
-  it('dispose only the state set by smartSort', () => {
-    const helper = createHelper();
-    const makeWidget = connectSmartSort(noop);
-    const widget = makeWidget({
-      relevancyStrictness: 10,
-    });
-    helper.setState(
-      widget.getWidgetSearchParameters!(
-        new SearchParameters({
-          relevancyStrictness: 10,
-        }),
-        { uiState: { smartSort: { relevancyStrictness: 10 } } }
-      )
-    );
-    widget.init!(createInitOptions({ helper }));
-
-    expect(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
-        uiState: {},
-      })
-    ).toEqual(
-      new SearchParameters({
-        relevancyStrictness: 10,
-      })
-    );
+      }).relevancyStrictness
+    ).toEqual(10);
 
     const nextState = widget.dispose!(
       createDisposeOptions({ state: helper.state })
-    );
-    expect(nextState).toEqual(new SearchParameters({}));
+    ) as SearchParameters;
+    expect(nextState.relevancyStrictness).toBeUndefined();
   });
 
   it('apply relevancyStrictness to helper on refine()', () => {
@@ -114,34 +62,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
     const makeWidget = connectSmartSort(noop);
     const widget = makeWidget({});
 
-    helper.setState(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
-        uiState: { smartSort: { relevancyStrictness: 10 } },
-      })
-    );
-
     widget.init!(createInitOptions({ helper }));
-    expect(helper.state.relevancyStrictness).toEqual(10);
-    const renderState = widget.getWidgetRenderState(
+    const { refine } = widget.getWidgetRenderState(
       createRenderOptions({ helper })
     );
 
-    renderState.refine(0);
+    expect(helper.state.relevancyStrictness).toBeUndefined();
+
+    refine(0);
     expect(helper.state.relevancyStrictness).toEqual(0);
 
-    renderState.refine(11);
+    refine(11);
     expect(helper.state.relevancyStrictness).toEqual(11);
   });
 
-  it('decide isSmartSorted based on appliedRelevancyStrictness', async () => {
+  it('decide isSmartSorted based on appliedRelevancyStrictness', () => {
     const helper = createHelper();
     const makeWidget = connectSmartSort(noop);
     const widget = makeWidget({});
 
     widget.init!(createInitOptions({ helper }));
-    helper.search();
-
-    await runAllMicroTasks();
 
     let renderState = widget.getWidgetRenderState(
       createRenderOptions({
@@ -156,7 +96,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
     );
     expect(renderState.isSmartSorted).toBe(true);
 
-    renderState.refine(0);
     renderState = widget.getWidgetRenderState(
       createRenderOptions({
         helper,
@@ -171,89 +110,148 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
     expect(renderState.isSmartSorted).toBe(false);
   });
 
+  it('decide isVirtualReplica based on appliedRelevancyStrictness', () => {
+    const helper = createHelper();
+    const makeWidget = connectSmartSort(noop);
+    const widget = makeWidget({});
+
+    widget.init!(createInitOptions({ helper }));
+
+    let renderState = widget.getWidgetRenderState(
+      createRenderOptions({
+        helper,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            appliedRelevancyStrictness: 60,
+          }),
+        ]),
+      })
+    );
+    expect(renderState.isVirtualReplica).toBe(true);
+
+    renderState = widget.getWidgetRenderState(
+      createRenderOptions({
+        helper,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            appliedRelevancyStrictness: 0,
+          }),
+        ]),
+      })
+    );
+    expect(renderState.isVirtualReplica).toBe(true);
+
+    renderState = widget.getWidgetRenderState(
+      createRenderOptions({
+        helper,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            appliedRelevancyStrictness: undefined,
+          }),
+        ]),
+      })
+    );
+    expect(renderState.isVirtualReplica).toBe(false);
+  });
+
   describe('getRenderState', () => {
     it('return the render state', () => {
+      const helper = createHelper();
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const makeWidget = connectSmartSort(renderFn, unmountFn);
-      const widget = makeWidget({
-        relevancyStrictness: 15,
-      });
+      const widget = makeWidget({});
 
-      const renderState1 = widget.getRenderState({}, createInitOptions());
+      const renderState1 = widget.getRenderState(
+        {},
+        createInitOptions({ helper })
+      );
       expect(renderState1.smartSort).toEqual({
         isSmartSorted: false,
+        isVirtualReplica: false,
         refine: expect.any(Function),
-        widgetParams: {
-          relevancyStrictness: 15,
-        },
+        widgetParams: {},
       });
 
       widget.init!(createInitOptions());
-      const renderState2 = widget.getRenderState({}, createRenderOptions());
+      const renderState2 = widget.getRenderState(
+        {},
+        createRenderOptions({
+          helper,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              appliedRelevancyStrictness: 15,
+            }),
+          ]),
+        })
+      );
       expect(renderState2.smartSort).toEqual({
-        isSmartSorted: false,
+        isSmartSorted: true,
+        isVirtualReplica: true,
         refine: expect.any(Function),
-        widgetParams: {
-          relevancyStrictness: 15,
-        },
+        widgetParams: {},
       });
     });
   });
 
   describe('getWidgetRenderState', () => {
-    it('return the render state', () => {
+    it('return the widget render state', () => {
+      const helper = createHelper();
       const makeWidget = connectSmartSort(noop);
-      const widget = makeWidget({
-        relevancyStrictness: 15,
-      });
+      const widget = makeWidget({});
 
       const widgetRenderState1 = widget.getWidgetRenderState(
-        createInitOptions()
+        createInitOptions({ helper })
       );
       expect(widgetRenderState1).toEqual({
         isSmartSorted: false,
+        isVirtualReplica: false,
         refine: expect.any(Function),
-        widgetParams: {
-          relevancyStrictness: 15,
-        },
+        widgetParams: {},
       });
 
       widget.init!(createInitOptions());
       const widgetRenderState2 = widget.getWidgetRenderState(
-        createRenderOptions()
+        createRenderOptions({
+          helper,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              appliedRelevancyStrictness: 20,
+            }),
+          ]),
+        })
       );
       expect(widgetRenderState2).toEqual({
-        isSmartSorted: false,
+        isSmartSorted: true,
+        isVirtualReplica: true,
         refine: expect.any(Function),
-        widgetParams: {
-          relevancyStrictness: 15,
-        },
+        widgetParams: {},
       });
     });
   });
 
   describe('getWidgetUiState', () => {
-    it('add default parameters', () => {
+    it('does not have relevancyStrictness by default', () => {
       const helper = createHelper();
       const makeWidget = connectSmartSort(noop);
-      const widget = makeWidget({
-        relevancyStrictness: 20,
-      });
+      const widget = makeWidget({});
 
-      expect(
-        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
-      ).toEqual({
-        smartSort: { relevancyStrictness: 20 },
-      });
+      const widgetUiState = widget.getWidgetUiState!(
+        {},
+        { helper, searchParameters: helper.state }
+      );
+      expect(widgetUiState.smartSort?.relevancyStrictness).toBeUndefined();
     });
 
     it('add refined parameters', () => {
       const helper = createHelper();
       const makeWidget = connectSmartSort(noop);
-      const widget = makeWidget({
-        relevancyStrictness: 20,
-      });
+      const widget = makeWidget({});
 
       widget.init!(createInitOptions({ helper }));
       const { refine } = widget.getWidgetRenderState(
@@ -271,18 +269,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
     it('overwrite existing uiState with searchParameters', () => {
       const helper = createHelper();
       const makeWidget = connectSmartSort(noop);
-      const widget = makeWidget({
-        relevancyStrictness: 20,
-      });
+      const widget = makeWidget({});
 
-      // applies 20 from widgetParams
       expect(
         widget.getWidgetUiState!(
           { smartSort: { relevancyStrictness: 25 } },
           { helper, searchParameters: helper.state }
         )
       ).toEqual({
-        smartSort: { relevancyStrictness: 20 },
+        smartSort: { relevancyStrictness: undefined },
       });
 
       const { refine } = widget.getWidgetRenderState(
@@ -303,11 +298,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
   });
 
   describe('getWidgetSearchParameters', () => {
-    it('return parameters set by default', () => {
+    it('does not include relevancyStrictness by default', () => {
       const makeWidget = connectSmartSort(noop);
-      const widget = makeWidget({
-        relevancyStrictness: 20,
-      });
+      const widget = makeWidget({});
 
       const searchParameters = widget.getWidgetSearchParameters!(
         new SearchParameters(),
@@ -315,9 +308,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
           uiState: {},
         }
       );
-      expect(searchParameters).toEqual(
-        new SearchParameters({ relevancyStrictness: 20 })
-      );
+      expect(searchParameters.relevancyStrictness).toBeUndefined();
     });
 
     it('return parameters set by uiState', () => {
@@ -339,11 +330,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
       );
     });
 
-    it('override parameters with the value from uiState', () => {
+    it('store refined state', () => {
+      const helper = createHelper();
       const makeWidget = connectSmartSort(noop);
-      const widget = makeWidget({
-        relevancyStrictness: 20,
+      const widget = makeWidget({});
+
+      const { refine } = widget.getWidgetRenderState(
+        createRenderOptions({ helper })
+      );
+      refine(25);
+
+      const searchParameters = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {},
       });
+      expect(searchParameters.relevancyStrictness).toEqual(25);
+    });
+
+    it('override parameters with the value from uiState', () => {
+      const helper = createHelper();
+      const makeWidget = connectSmartSort(noop);
+      const widget = makeWidget({});
+
+      const { refine } = widget.getWidgetRenderState(
+        createRenderOptions({ helper })
+      );
+      refine(25);
 
       const searchParameters = widget.getWidgetSearchParameters!(
         new SearchParameters(),
@@ -355,30 +366,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smartSort/j
           },
         }
       );
-
-      expect(searchParameters).toEqual(
-        new SearchParameters({ relevancyStrictness: 15 })
-      );
-    });
-
-    it('store refined state', () => {
-      const helper = createHelper();
-      const makeWidget = connectSmartSort(noop);
-      const widget = makeWidget({
-        relevancyStrictness: 20,
-      });
-
-      widget.init!(createInitOptions({ helper }));
-      const { refine } = widget.getWidgetRenderState(
-        createRenderOptions({ helper })
-      );
-      refine(25);
-
-      const searchParameters = widget.getWidgetSearchParameters!(helper.state, {
-        uiState: {},
-      });
-
-      expect(searchParameters.relevancyStrictness).toEqual(25);
+      expect(searchParameters.relevancyStrictness).toEqual(15);
     });
   });
 });

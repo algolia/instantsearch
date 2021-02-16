@@ -28,7 +28,6 @@ export type SmartSortTemplates = Partial<{
 
 type SmartSortWidgetParams = {
   container: string | HTMLElement;
-  relevancyStrictness?: number;
   cssClasses?: SmartSortCSSClasses;
   templates?: SmartSortTemplates;
 };
@@ -54,20 +53,15 @@ const suit = component('SmartSort');
 const renderer: Renderer<
   SmartSortRendererOptions,
   SmartSortRendererWidgetParams
-> = ({ isSmartSorted, refine, widgetParams }) => {
-  const {
-    container,
-    cssClasses,
-    templates,
-    relevancyStrictness,
-  } = widgetParams;
+> = ({ isSmartSorted, isVirtualReplica, refine, widgetParams }) => {
+  const { container, cssClasses, templates } = widgetParams;
 
   render(
     <SmartSort
       cssClasses={cssClasses}
       templates={templates}
       isSmartSorted={isSmartSorted}
-      relevancyStrictness={relevancyStrictness}
+      isVirtualReplica={isVirtualReplica}
       refine={refine}
     />,
     container
@@ -77,7 +71,6 @@ const renderer: Renderer<
 const smartSort: SmartSortWidget = widgetParams => {
   const {
     container,
-    relevancyStrictness,
     templates: userTemplates = {} as SmartSortTemplates,
     cssClasses: userCssClasses = {} as SmartSortCSSClasses,
   } = widgetParams;
@@ -107,7 +100,6 @@ const smartSort: SmartSortWidget = widgetParams => {
       container: containerNode,
       cssClasses,
       templates,
-      relevancyStrictness,
     }),
     $$widgetType: 'ais.smartSort',
   };

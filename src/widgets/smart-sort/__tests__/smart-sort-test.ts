@@ -76,27 +76,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smart-sort/
           button: 'ais-SmartSort-button',
         },
         isSmartSorted: true,
+        isVirtualReplica: true,
         refine: expect.any(Function),
-        relevancyStrictness: undefined,
         templates,
-      })
-    );
-  });
-
-  it('pass relevancyStrictness', () => {
-    const helper = algoliasearchHelper(createSearchClient(), '', {});
-    const widget = smartSort({
-      container: document.createElement('div'),
-      relevancyStrictness: 20,
-      templates,
-    });
-    widget.init!(createInitOptions({ helper, state: helper.state }));
-
-    const [firstRender] = (render as jest.Mock).mock.calls;
-    expect(render).toHaveBeenCalledTimes(1);
-    expect(firstRender[0].props).toEqual(
-      expect.objectContaining({
-        relevancyStrictness: 20,
       })
     );
   });

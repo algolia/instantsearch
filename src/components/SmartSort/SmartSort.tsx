@@ -11,7 +11,7 @@ type SmartSortProps = {
   cssClasses: SmartSortCSSClasses;
   templates: SmartSortTemplates;
   isSmartSorted: boolean;
-  relevancyStrictness?: number;
+  isVirtualReplica: boolean;
   refine(relevancyStrictness: number | undefined): void;
 };
 
@@ -19,37 +19,38 @@ const SmartSort = ({
   cssClasses,
   templates,
   isSmartSorted,
-  relevancyStrictness,
+  isVirtualReplica,
   refine,
-}: SmartSortProps) => (
-  <div className={cssClasses.root}>
-    <Template
-      templateKey="text"
-      templates={templates}
-      rootProps={{
-        className: cssClasses.text,
-      }}
-      data={{ isSmartSorted }}
-    />
-    <button
-      type="button"
-      className={cssClasses.button}
-      onClick={() => {
-        if (isSmartSorted) {
-          refine(0);
-        } else {
-          refine(relevancyStrictness);
-        }
-      }}
-    >
+}: SmartSortProps) =>
+  isVirtualReplica ? (
+    <div className={cssClasses.root}>
       <Template
-        rootTagName="span"
-        templateKey="button"
+        templateKey="text"
         templates={templates}
+        rootProps={{
+          className: cssClasses.text,
+        }}
         data={{ isSmartSorted }}
       />
-    </button>
-  </div>
-);
+      <button
+        type="button"
+        className={cssClasses.button}
+        onClick={() => {
+          if (isSmartSorted) {
+            refine(0);
+          } else {
+            refine(undefined);
+          }
+        }}
+      >
+        <Template
+          rootTagName="span"
+          templateKey="button"
+          templates={templates}
+          data={{ isSmartSorted }}
+        />
+      </button>
+    </div>
+  ) : null;
 
 export default SmartSort;

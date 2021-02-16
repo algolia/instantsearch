@@ -19,12 +19,26 @@ const templates = {
 };
 
 describe('SmartSort', () => {
+  it('render nothing if not virtual replica', () => {
+    const { container } = render(
+      <SmartSort
+        cssClasses={cssClasses}
+        templates={templates}
+        isSmartSorted={false}
+        isVirtualReplica={false}
+        refine={() => {}}
+      />
+    );
+    expect(container).toMatchInlineSnapshot(`<div />`);
+  });
+
   it('render the default status', () => {
     const { container } = render(
       <SmartSort
         cssClasses={cssClasses}
         templates={templates}
         isSmartSorted={false}
+        isVirtualReplica={true}
         refine={() => {}}
       />
     );
@@ -56,27 +70,12 @@ describe('SmartSort', () => {
         cssClasses={cssClasses}
         templates={templates}
         isSmartSorted={false}
+        isVirtualReplica={true}
         refine={refine}
       />
     );
     fireEvent.click(getByText('See relevant results'));
     expect(refine).toHaveBeenCalledTimes(1);
-  });
-
-  it('refine with given value', () => {
-    const refine = jest.fn();
-    const { getByText } = render(
-      <SmartSort
-        cssClasses={cssClasses}
-        templates={templates}
-        isSmartSorted={false}
-        relevancyStrictness={30}
-        refine={refine}
-      />
-    );
-    fireEvent.click(getByText('See relevant results'));
-    expect(refine).toHaveBeenCalledTimes(1);
-    expect(refine).toHaveBeenCalledWith(30);
   });
 
   it('render sorted status', () => {
@@ -85,6 +84,7 @@ describe('SmartSort', () => {
         cssClasses={cssClasses}
         templates={templates}
         isSmartSorted={true}
+        isVirtualReplica={true}
         refine={() => {}}
       />
     );
@@ -109,13 +109,30 @@ describe('SmartSort', () => {
     `);
   });
 
-  it('refine with zero when seeing all results', () => {
+  it('refine with `undefined` on "See relevant results"', () => {
+    const refine = jest.fn();
+    const { getByText } = render(
+      <SmartSort
+        cssClasses={cssClasses}
+        templates={templates}
+        isSmartSorted={false}
+        isVirtualReplica={true}
+        refine={refine}
+      />
+    );
+    fireEvent.click(getByText('See relevant results'));
+    expect(refine).toHaveBeenCalledTimes(1);
+    expect(refine).toHaveBeenCalledWith(undefined);
+  });
+
+  it('refine with `0` on "Seeing all results"', () => {
     const refine = jest.fn();
     const { getByText } = render(
       <SmartSort
         cssClasses={cssClasses}
         templates={templates}
         isSmartSorted={true}
+        isVirtualReplica={true}
         refine={refine}
       />
     );

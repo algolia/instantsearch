@@ -1,21 +1,15 @@
 import { Connector } from '../../types';
-import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
+import { noop } from '../../lib/utils';
 
-export type SmartSortConnectorParams = {
-  relevancyStrictness?: number;
-};
+export type SmartSortConnectorParams = {};
 
 type Refine = (relevancyStrictness: number) => void;
 
 export type SmartSortRendererOptions = {
   isSmartSorted: boolean;
+  isVirtualReplica: boolean;
   refine: Refine;
 };
-
-const withUsage = createDocumentationMessageGenerator({
-  name: 'smartSort',
-  connector: true,
-});
 
 export type SmartSortConnector = Connector<
   SmartSortRendererOptions,
@@ -27,16 +21,6 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
   unmountFn = noop
 ) {
   return widgetParams => {
-    if (
-      typeof widgetParams.relevancyStrictness !== 'undefined' &&
-      (widgetParams.relevancyStrictness < 0 ||
-        widgetParams.relevancyStrictness > 100)
-    ) {
-      throw new Error(
-        withUsage('The `relevancyStrictness` option must be between 0 and 100.')
-      );
-    }
-
     type ConnectorState = {
       refine?: Refine;
     };
@@ -98,6 +82,7 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
             typeof appliedRelevancyStrictness !== 'undefined' &&
             appliedRelevancyStrictness > 0 &&
             appliedRelevancyStrictness <= 100,
+          isVirtualReplica: typeof appliedRelevancyStrictness !== 'undefined',
           refine: connectorState.refine,
           widgetParams,
         };
@@ -106,9 +91,7 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
       getWidgetSearchParameters(state, { uiState }) {
         return state.setQueryParameter(
           'relevancyStrictness',
-          uiState.smartSort?.relevancyStrictness ??
-            state.relevancyStrictness ??
-            widgetParams.relevancyStrictness
+          uiState.smartSort?.relevancyStrictness ?? state.relevancyStrictness
         );
       },
 
@@ -117,9 +100,7 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
           ...uiState,
           smartSort: {
             ...uiState.smartSort,
-            relevancyStrictness:
-              searchParameters.relevancyStrictness ??
-              widgetParams.relevancyStrictness,
+            relevancyStrictness: searchParameters.relevancyStrictness,
           },
         };
       },

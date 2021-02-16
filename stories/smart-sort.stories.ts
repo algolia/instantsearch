@@ -30,7 +30,6 @@ storiesOf('Sorting/SmartSort', module)
       search.addWidgets([
         smartSort({
           container,
-          relevancyStrictness: 50,
           templates: {
             button: ({ isSmartSorted }) =>
               isSmartSorted ? 'See all results' : 'See relevant results',
