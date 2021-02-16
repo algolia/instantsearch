@@ -3,10 +3,6 @@
 
 import algoliasearch, {
   /** @ts-ignore */
-  SearchClient as SearchClientV4,
-  /** @ts-ignore */
-  Client as SearchClientV3,
-  /** @ts-ignore */
   Response as SearchResponseV3,
   /** @ts-ignore */
   SearchForFacetValues as SearchForFacetValuesV3,
@@ -22,11 +18,7 @@ type DummySearchClientV4 = {
   readonly transporter: any;
 };
 
-type DefaultSearchClient = ReturnType<
-  typeof algoliasearch
-> extends DummySearchClientV4
-  ? SearchClientV4
-  : SearchClientV3;
+type DefaultSearchClient = ReturnType<typeof algoliasearch>;
 
 export type SearchClient = {
   search: DefaultSearchClient['search'];
