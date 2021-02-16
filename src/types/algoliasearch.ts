@@ -12,7 +12,7 @@ import {
   SearchResponse as SearchResponseV4,
   /** @ts-ignore */
   SearchForFacetValuesResponse as SearchForFacetValuesResponseV4,
-} from '@algolia/client-search';
+} from '@algolia/client-search'; /** @ts-ignore */
 
 type DummySearchClientV4 = {
   readonly transporter: any;

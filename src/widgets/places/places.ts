@@ -7,7 +7,7 @@ import {
   PlacesInstance,
   /** @ts-ignore */
   ReconfigurableOptions,
-} from 'places.js';
+} from 'places.js'; /** @ts-ignore */
 import { WidgetFactory } from '../../types';
 
 export type PlacesWidgetParams = {
