@@ -82,7 +82,7 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
             typeof appliedRelevancyStrictness !== 'undefined' &&
             appliedRelevancyStrictness > 0 &&
             appliedRelevancyStrictness <= 100,
-          isVirtualReplica: typeof appliedRelevancyStrictness !== 'undefined',
+          isVirtualReplica: appliedRelevancyStrictness !== undefined,
           refine: connectorState.refine,
           widgetParams,
         };
