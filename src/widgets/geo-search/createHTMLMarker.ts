@@ -88,7 +88,10 @@ const createHTMLMarker = (googleReference: typeof google) => {
           );
         });
 
+        // after onRemove the class is no longer used, thus it can be deleted
+        // @ts-expect-error
         delete this.element;
+        // @ts-expect-error
         delete this.listeners;
       }
     }

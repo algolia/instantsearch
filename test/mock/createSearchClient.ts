@@ -41,7 +41,7 @@ export const createControlledSearchClient = (
 
       searches.push({
         promise,
-        // @ts-ignore
+        // @ts-expect-error
         resolver,
       });
 

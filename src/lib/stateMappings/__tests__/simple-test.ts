@@ -55,7 +55,7 @@ describe('simpleStateMapping', () => {
           refinementList: {
             color: ['red'],
           },
-          // @ts-ignore
+          // @ts-expect-error
           spy: ['stealing', 'all', 'your', 'searches'],
         },
       });
@@ -126,7 +126,6 @@ describe('simpleStateMapping', () => {
           refinementList: {
             color: ['red'],
           },
-          // @ts-ignore
           spy: ['stealing', 'all', 'your', 'searches'],
         },
       });

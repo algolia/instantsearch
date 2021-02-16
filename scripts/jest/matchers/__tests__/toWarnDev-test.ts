@@ -4,7 +4,7 @@ describe('toWarnDev', () => {
   describe('usage', () => {
     test('fails with incorrect type of message', () => {
       expect(() => {
-        // @ts-ignore:next-line
+        // @ts-expect-error
         expect(() => {}).toWarnDev(false);
       }).toThrowErrorMatchingInlineSnapshot(
         `"toWarnDev() requires a parameter of type string but was given boolean."`

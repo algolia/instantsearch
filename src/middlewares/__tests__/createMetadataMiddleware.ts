@@ -52,7 +52,7 @@ describe('createMetadataMiddleware', () => {
     it("does not enable when there's no window", () => {
       global.navigator.userAgent = algoliaUserAgent;
 
-      // @ts-ignore
+      // @ts-expect-error
       delete global.window;
 
       createMetadataMiddleware();

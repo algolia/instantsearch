@@ -86,7 +86,7 @@ describe('voiceSearch()', () => {
     it('throws without container', () => {
       expect(() => {
         voiceSearch({
-          // @ts-ignore
+          // @ts-expect-error
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`

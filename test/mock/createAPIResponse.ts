@@ -52,9 +52,10 @@ export const createMultiSearchResponse = <THit = any>(
 
 export const createSFFVResponse = (
   args: Partial<SearchForFacetValuesResponse> = {}
-): SearchForFacetValuesResponse => ({
-  facetHits: [],
-  exhaustiveFacetsCount: true,
-  processingTimeMS: 1,
-  ...args,
-});
+): SearchForFacetValuesResponse =>
+  (({
+    facetHits: [],
+    exhaustiveFacetsCount: true,
+    processingTimeMS: 1,
+    ...args,
+  } as unknown) as SearchForFacetValuesResponse); // @TODO: this casting should not be needed

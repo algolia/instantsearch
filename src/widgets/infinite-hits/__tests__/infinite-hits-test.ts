@@ -18,7 +18,7 @@ jest.mock('preact', () => {
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
-      // @ts-ignore: test infiniteHits with invalid parameters
+      // @ts-expect-error
       infiniteHits({ container: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.

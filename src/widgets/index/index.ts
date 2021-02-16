@@ -548,8 +548,7 @@ const index = (props: IndexProps): Index => {
       helper.on('change', event => {
         const { state } = event;
 
-        // @ts-ignore _uiState comes from privateHelperSetState and thus isn't typed on the helper event
-        const _uiState = event._uiState;
+        const _uiState = (event as any)._uiState;
 
         localUiState = getLocalWidgetsUiState(
           localWidgets,

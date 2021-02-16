@@ -1,11 +1,12 @@
 import {
+  /** @ts-ignore */
   StaticOptions,
+  /** @ts-ignore */
   ChangeEvent,
+  /** @ts-ignore */
   PlacesInstance,
-  // no comma, TS is particular about which nodes expose comments
-  // eslint-disable-next-line prettier/prettier
-  ReconfigurableOptions
-  /** @ts-ignore places is only a peer dependency */
+  /** @ts-ignore */
+  ReconfigurableOptions,
 } from 'places.js';
 import { WidgetFactory } from '../../types';
 

@@ -31,7 +31,7 @@ describe('breadcrumb()', () => {
     it('throws without `container`', () => {
       expect(() => {
         breadcrumb({
-          // @ts-ignore
+          // @ts-expect-error
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`

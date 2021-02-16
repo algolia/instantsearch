@@ -68,7 +68,7 @@ describe('insights', () => {
   describe('usage', () => {
     it('throws when insightsClient is not given', () => {
       expect(() =>
-        // @ts-ignore:next-line
+        // @ts-expect-error
         createInsightsMiddleware()
       ).toThrowErrorMatchingInlineSnapshot(
         `"The \`insightsClient\` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to \`null\`."`

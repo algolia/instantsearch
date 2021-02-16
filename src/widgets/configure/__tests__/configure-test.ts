@@ -3,7 +3,7 @@ import configure from '../configure';
 describe('configure', () => {
   test('throws without options', () => {
     const trigger = () => {
-      // @ts-ignore wrong options
+      // @ts-expect-error
       configure();
     };
 
