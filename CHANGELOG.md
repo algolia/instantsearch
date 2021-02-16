@@ -1,3 +1,12 @@
+## [4.14.1](https://github.com/algolia/instantsearch.js/compare/v4.14.0...v4.14.1) (2021-02-16)
+
+
+### Bug Fixes
+
+* **compat:** remove references to window ([#4651](https://github.com/algolia/instantsearch.js/issues/4651)) ([1ede1ae](https://github.com/algolia/instantsearch.js/commit/1ede1ae392d3a12f5b0fe29075ffeb05e572a874)), closes [#4650](https://github.com/algolia/instantsearch.js/issues/4650)
+
+
+
 # [4.14.0](https://github.com/algolia/instantsearch.js/compare/v4.13.2...v4.14.0) (2021-02-09)
 
 
