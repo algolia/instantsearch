@@ -48,7 +48,7 @@ const renderer = ({
   );
 };
 
-export type AnswersTemplates = Partial<{
+export type AnswersTemplates = {
   /**
    * Template to use for the header. This template will receive an object containing `hits` and `isLoading`.
    */
@@ -66,9 +66,9 @@ export type AnswersTemplates = Partial<{
    * Template to use for each result. This template will receive an object containing a single record.
    */
   item: Template<Hit>;
-}>;
+};
 
-export type AnswersCSSClasses = Partial<{
+export type AnswersCSSClasses = {
   /**
    * CSS class to add to the root element of the widget.
    */
@@ -98,7 +98,7 @@ export type AnswersCSSClasses = Partial<{
    * CSS class to add to each result.
    */
   item: string | string[];
-}>;
+};
 
 export type AnswersWidgetParams = {
   /**
@@ -109,12 +109,12 @@ export type AnswersWidgetParams = {
   /**
    * The templates to use for the widget.
    */
-  templates?: AnswersTemplates;
+  templates?: Partial<AnswersTemplates>;
 
   /**
    * The CSS classes to override.
    */
-  cssClasses?: AnswersCSSClasses;
+  cssClasses?: Partial<AnswersCSSClasses>;
 };
 
 export type AnswersWidget = WidgetFactory<
