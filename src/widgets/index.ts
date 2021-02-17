@@ -30,3 +30,4 @@ export { default as index } from './index/index';
 export { default as places } from './places/places';
 export { default as EXPERIMENTAL_answers } from './answers/answers';
 export { default as relevantSort } from './relevant-sort/relevant-sort';
+export { default as EXPERIMENTAL_dynamicWidgets } from './dynamic-widgets/dynamic-widgets';

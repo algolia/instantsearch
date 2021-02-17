@@ -26,3 +26,4 @@ export { default as connectQueryRules } from './query-rules/connectQueryRules';
 export { default as connectVoiceSearch } from './voice-search/connectVoiceSearch';
 export { default as EXPERIMENTAL_connectAnswers } from './answers/connectAnswers';
 export { default as connectRelevantSort } from './relevant-sort/connectRelevantSort';
+export { default as EXPERIMENTAL_connectDynamicWidgets } from './dynamic-widgets/connectDynamicWidgets';
