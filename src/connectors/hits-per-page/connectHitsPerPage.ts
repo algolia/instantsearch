@@ -109,13 +109,14 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
         HitsPerPageRendererOptionsItem
       >,
     } = widgetParams || {};
-    let items = userItems;
 
-    if (!Array.isArray(items)) {
+    if (!Array.isArray(userItems)) {
       throw new Error(
         withUsage('The `items` option expects an array of objects.')
       );
     }
+
+    let items = userItems;
 
     const defaultItems = items.filter(item => item.default === true);
 
