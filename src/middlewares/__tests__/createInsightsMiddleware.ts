@@ -176,6 +176,20 @@ describe('insights', () => {
       middleware.subscribe();
       expect(helper.state.clickAnalytics).toBe(true);
     });
+
+    it("doesn't reset page", () => {
+      const {
+        insightsClient,
+        instantSearchInstance,
+        helper,
+      } = createTestEnvironment();
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      helper.setPage(100);
+      middleware.subscribe();
+      expect(helper.state.page).toBe(100);
+    });
   });
 
   describe('userToken', () => {
@@ -190,6 +204,23 @@ describe('insights', () => {
       })({ instantSearchInstance });
       insightsClient('setUserToken', 'abc');
       middleware.subscribe();
+      expect(getUserToken()).toEqual('abc');
+    });
+
+    it('applies userToken without resetting the page', () => {
+      const {
+        insightsClient,
+        instantSearchInstance,
+        getUserToken,
+        helper,
+      } = createTestEnvironment();
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      insightsClient('setUserToken', 'abc');
+      helper.setPage(100);
+      middleware.subscribe();
+      expect(helper.state.page).toBe(100);
       expect(getUserToken()).toEqual('abc');
     });
 
