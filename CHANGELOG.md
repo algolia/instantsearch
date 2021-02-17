@@ -1,3 +1,12 @@
+## [4.14.2](https://github.com/algolia/instantsearch.js/compare/v4.14.1...v4.14.2) (2021-02-17)
+
+
+### Bug Fixes
+
+* **insights:** don't reset page ([#4655](https://github.com/algolia/instantsearch.js/issues/4655)) ([2b31250](https://github.com/algolia/instantsearch.js/commit/2b312508e8be59284180e7f490ce0aac80f9c2b6))
+
+
+
 ## [4.14.1](https://github.com/algolia/instantsearch.js/compare/v4.14.0...v4.14.1) (2021-02-16)
 
 
