@@ -13,7 +13,7 @@ type SearchResponseV3<TObject> = AlgoliaSearch.Response<TObject>;
 type SearchResponseV4<TObject> = ClientSearch.SearchResponse<TObject>;
 
 /** @ts-ignore */
-type SearchForFacetValuesV3 = AlgoliaSearch.SearchForFacetValues.Response;
+type SearchForFacetValuesResponseV3 = AlgoliaSearch.SearchForFacetValues.Response;
 /** @ts-ignore */
 type SearchForFacetValuesResponseV4 = ClientSearch.SearchForFacetValuesResponse;
 
@@ -41,4 +41,4 @@ export type SearchResponse<
 
 export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
-  : SearchForFacetValuesV3;
+  : SearchForFacetValuesResponseV3;
