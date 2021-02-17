@@ -17,7 +17,7 @@ type RouteState = {
   category?: string;
   rating?: string;
   price?: string;
-  freeShipping?: string;
+  free_shipping?: string;
   sortBy?: string;
   hitsPerPage?: string;
 };
@@ -29,7 +29,7 @@ const routeStateDefaultValues: RouteState = {
   category: '',
   rating: '',
   price: '',
-  freeShipping: 'false',
+  free_shipping: 'false',
   sortBy: 'instant_search',
   hitsPerPage: '20',
 };
@@ -128,10 +128,10 @@ const router = historyRouter({
       queryParameters.price = routeState.price;
     }
     if (
-      routeState.freeShipping &&
-      routeState.freeShipping !== routeStateDefaultValues.freeShipping
+      routeState.free_shipping &&
+      routeState.free_shipping !== routeStateDefaultValues.free_shipping
     ) {
-      queryParameters.freeShipping = routeState.freeShipping;
+      queryParameters.free_shipping = routeState.free_shipping;
     }
     if (
       routeState.sortBy &&
@@ -165,7 +165,8 @@ const router = historyRouter({
       page = 1,
       brands = [],
       price,
-      freeShipping,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      free_shipping,
     } = queryParameters;
     // `qs` does not return an array when there's a single value.
     const allBrands = Array.isArray(brands) ? brands : [brands].filter(Boolean);
@@ -182,7 +183,7 @@ const router = historyRouter({
       category,
       rating,
       price,
-      freeShipping,
+      free_shipping,
       sortBy,
       hitsPerPage,
     };
@@ -202,7 +203,7 @@ const getStateMapping = ({ indexName }) => ({
         indexUiState.hierarchicalMenu['hierarchicalCategories.lvl0'].join('/'),
       rating: indexUiState.ratingMenu && String(indexUiState.ratingMenu.rating),
       price: indexUiState.range && indexUiState.range.price,
-      freeShipping:
+      free_shipping:
         (indexUiState.toggle && String(indexUiState.toggle.free_shipping)) ||
         undefined,
       sortBy: indexUiState.sortBy,
@@ -241,7 +242,7 @@ const getStateMapping = ({ indexName }) => ({
         },
         range,
         toggle: {
-          free_shipping: Boolean(routeState.freeShipping),
+          free_shipping: Boolean(routeState.free_shipping),
         },
         sortBy: routeState.sortBy,
         hitsPerPage: Number(routeState.hitsPerPage),
