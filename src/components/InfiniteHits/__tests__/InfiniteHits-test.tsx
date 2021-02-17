@@ -4,9 +4,8 @@ import { h } from 'preact';
 import { render } from '@testing-library/preact';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../InfiniteHits';
-import { Hits } from '../../../types';
+import { Hits, SearchResponse } from '../../../types';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { SearchResponse } from '@algolia/client-search';
 
 function createResults(partialResults: Partial<SearchResponse<any>>) {
   return new SearchResults(new SearchParameters(), [

@@ -1,18 +1,21 @@
+/* eslint-disable import/no-duplicates */
 // Custom types to support both algoliasearch
 // `v3` and algoliasearch `v4` clients.
 
-import algoliasearch, {
-  /** @ts-ignore */
-  Response as SearchResponseV3,
-  /** @ts-ignore */
-  SearchForFacetValues as SearchForFacetValuesV3,
-} from 'algoliasearch';
-import {
-  /** @ts-ignore */
-  SearchResponse as SearchResponseV4,
-  /** @ts-ignore */
-  SearchForFacetValuesResponse as SearchForFacetValuesResponseV4,
-} from '@algolia/client-search'; /** @ts-ignore */
+import algoliasearch from 'algoliasearch';
+import * as AlgoliaSearch from 'algoliasearch';
+/** @ts-ignore */
+import * as ClientSearch from '@algolia/client-search';
+
+/** @ts-ignore */
+type SearchResponseV3<TObject> = AlgoliaSearch.Response<TObject>;
+/** @ts-ignore */
+type SearchResponseV4<TObject> = ClientSearch.SearchResponse<TObject>;
+
+/** @ts-ignore */
+type SearchForFacetValuesV3 = AlgoliaSearch.SearchForFacetValues.Response;
+/** @ts-ignore */
+type SearchForFacetValuesResponseV4 = ClientSearch.SearchForFacetValuesResponse;
 
 type DummySearchClientV4 = {
   readonly transporter: any;
@@ -38,4 +41,4 @@ export type SearchResponse<
 
 export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
-  : SearchForFacetValuesV3.Response;
+  : SearchForFacetValuesV3;

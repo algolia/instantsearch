@@ -1,14 +1,12 @@
-import {
-  /** @ts-ignore */
-  StaticOptions,
-  /** @ts-ignore */
-  ChangeEvent,
-  /** @ts-ignore */
-  PlacesInstance,
-  /** @ts-ignore */
-  ReconfigurableOptions,
-} from 'places.js'; /** @ts-ignore */
+/** @ts-ignore */
+import * as Places from 'places.js';
 import { WidgetFactory } from '../../types';
+
+// using the type like this requires only one ts-ignore
+type StaticOptions = Places.StaticOptions;
+type ChangeEvent = Places.ChangeEvent;
+type PlacesInstance = Places.PlacesInstance;
+type ReconfigurableOptions = Places.ReconfigurableOptions;
 
 export type PlacesWidgetParams = {
   /**
