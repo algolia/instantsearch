@@ -207,7 +207,7 @@ describe('insights', () => {
       expect(getUserToken()).toEqual('abc');
     });
 
-    it('applies userToken without resetting the page', () => {
+    it('applies userToken before subscribe() without resetting the page', () => {
       const {
         insightsClient,
         instantSearchInstance,
@@ -235,6 +235,23 @@ describe('insights', () => {
       })({ instantSearchInstance });
       middleware.subscribe();
       insightsClient('setUserToken', 'def');
+      expect(getUserToken()).toEqual('def');
+    });
+
+    it('applies userToken which was set after subscribe() without resetting the page', () => {
+      const {
+        insightsClient,
+        instantSearchInstance,
+        helper,
+        getUserToken
+      } = createTestEnvironment();
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      helper.setPage(100);
+      middleware.subscribe();
+      insightsClient('setUserToken', 'def');
+      expect(helper.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
     });
 
