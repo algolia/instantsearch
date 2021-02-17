@@ -243,7 +243,7 @@ describe('insights', () => {
         insightsClient,
         instantSearchInstance,
         helper,
-        getUserToken
+        getUserToken,
       } = createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
