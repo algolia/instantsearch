@@ -66,6 +66,7 @@ import {
   RangeConnectorParams,
   RangeRendererOptions,
 } from '../connectors/range/connectRange';
+import { TransformItems } from './connector';
 
 export type ScopedResult = {
   indexId: string;
@@ -236,7 +237,7 @@ export type IndexRenderState = Partial<{
         showMore: boolean;
         showMoreLimit: number;
         sortBy: any;
-        transformItems(items: any): any;
+        transformItems: TransformItems<any>;
       }
     >;
   };
@@ -343,7 +344,7 @@ export type IndexRenderState = Partial<{
         showMoreLimit: number;
         sortBy: ((firstItem: any, secondItem: any) => number) | string[];
         escapeFacetValues: boolean;
-        transformItems(items: any): any;
+        transformItems: TransformItems<any>;
       }
     >;
   };

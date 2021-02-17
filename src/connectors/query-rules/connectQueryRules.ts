@@ -2,7 +2,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { HelperChangeEvent, Connector } from '../../types';
+import { HelperChangeEvent, Connector, TransformItems } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -24,7 +24,7 @@ export type ParamTrackedFilters = {
   ) => TrackedFilterRefinement[];
 };
 export type ParamTransformRuleContexts = (ruleContexts: string[]) => string[];
-type ParamTransformItems = (items: any[]) => any;
+type ParamTransformItems = TransformItems<any>;
 
 export type QueryRulesConnectorParams = {
   trackedFilters?: ParamTrackedFilters;
