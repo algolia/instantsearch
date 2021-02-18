@@ -8,15 +8,14 @@ import {
 } from '../../../../test/mock/createWidget';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
   return module;
 });
-
-const render = castToJestMock(preactRender);
 
 beforeEach(() => {
   render.mockClear();

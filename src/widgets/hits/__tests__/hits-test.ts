@@ -6,9 +6,8 @@ import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

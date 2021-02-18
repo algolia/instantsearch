@@ -10,9 +10,8 @@ import { createSingleSearchResponse } from '../../../../test/mock/createAPIRespo
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

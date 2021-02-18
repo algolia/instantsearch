@@ -2,7 +2,7 @@ import { render } from 'preact';
 import poweredBy from '../powered-by';
 
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

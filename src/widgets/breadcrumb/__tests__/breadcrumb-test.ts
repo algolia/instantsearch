@@ -7,9 +7,8 @@ import {
 } from '../../../../test/mock/createWidget';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

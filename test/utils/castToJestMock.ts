@@ -1,1 +1,2 @@
-export const castToJestMock = (obj: any): jest.Mock => obj;
+export const castToJestMock = <T extends (...args: any[]) => any>(obj: T) =>
+  obj as jest.MockedFunction<typeof obj>;

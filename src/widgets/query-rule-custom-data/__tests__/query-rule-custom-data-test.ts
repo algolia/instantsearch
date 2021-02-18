@@ -8,9 +8,8 @@ import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import queryRuleCustomData from '../query-rule-custom-data';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

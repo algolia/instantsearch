@@ -4,9 +4,8 @@ import hitsPerPage from '../hits-per-page';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

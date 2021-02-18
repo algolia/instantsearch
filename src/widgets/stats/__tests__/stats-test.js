@@ -2,7 +2,7 @@ import { render } from 'preact';
 import stats from '../stats';
 
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
