@@ -19,16 +19,24 @@ Object {
   "depth": 0,
   "facetValues": Array [
     Object {
-      "label": "foo",
-      "transformed": true,
-      "url": "#",
-      "value": undefined,
-    },
-    Object {
+      "count": 456,
+      "data": null,
+      "exhaustive": true,
+      "isRefined": false,
       "label": "bar",
       "transformed": true,
       "url": "#",
-      "value": undefined,
+      "value": "bar",
+    },
+    Object {
+      "count": 123,
+      "data": null,
+      "exhaustive": true,
+      "isRefined": false,
+      "label": "foo",
+      "transformed": true,
+      "url": "#",
+      "value": "foo",
     },
   ],
   "isShowingMore": false,
@@ -45,7 +53,7 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "item": false,
       "showMoreText": false,
@@ -75,14 +83,22 @@ Object {
   "depth": 0,
   "facetValues": Array [
     Object {
-      "label": "foo",
-      "url": "#",
-      "value": undefined,
-    },
-    Object {
+      "count": 456,
+      "data": null,
+      "exhaustive": true,
+      "isRefined": false,
       "label": "bar",
       "url": "#",
-      "value": undefined,
+      "value": "bar",
+    },
+    Object {
+      "count": 123,
+      "data": null,
+      "exhaustive": true,
+      "isRefined": false,
+      "label": "foo",
+      "url": "#",
+      "value": "foo",
     },
   ],
   "isShowingMore": false,
@@ -99,7 +115,7 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "item": false,
       "showMoreText": false,
