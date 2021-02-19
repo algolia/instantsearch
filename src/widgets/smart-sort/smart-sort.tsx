@@ -7,7 +7,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Renderer } from '../../types';
+import { WidgetFactory, Renderer, Template } from '../../types';
 import connectSmartSort, {
   SmartSortConnectorParams,
   SmartSortRendererOptions,
@@ -22,8 +22,8 @@ export type SmartSortCSSClasses = Partial<{
 }>;
 
 export type SmartSortTemplates = Partial<{
-  text: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
-  button: string | (({ isSmartSorted }: { isSmartSorted: boolean }) => string);
+  text: Template<{ isSmartSorted: boolean }>;
+  button: Template<{ isSmartSorted: boolean }>;
 }>;
 
 type SmartSortWidgetParams = {
