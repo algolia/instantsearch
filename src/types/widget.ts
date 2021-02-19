@@ -79,6 +79,10 @@ import {
   MenuConnectorParams,
   MenuRendererOptions,
 } from '../connectors/menu/connectMenu';
+import {
+  RefinementListRendererOptions,
+  RefinementListConnectorParams,
+} from '../connectors/refinement-list/connectRefinementList';
 
 export type ScopedResult = {
   indexId: string;
@@ -340,33 +344,8 @@ export type IndexRenderState = Partial<{
   >;
   refinementList: {
     [attribute: string]: WidgetRenderState<
-      {
-        createURL: CreateURL<string>;
-        helperSpecializedSearchFacetValues: any;
-        isFirstSearch: boolean;
-        isFromSearch: boolean;
-        isShowingMore: boolean;
-        items: Array<{
-          count: number;
-          highlighted: string;
-          isRefined: boolean;
-          label: string;
-          value: string;
-        }>;
-        refine(value: string): void;
-        state: SearchParameters;
-        toggleShowMore(): void;
-      },
-      {
-        attribute: string;
-        operator: string;
-        limit: number;
-        showMore: boolean;
-        showMoreLimit: number;
-        sortBy: ((firstItem: any, secondItem: any) => number) | string[];
-        escapeFacetValues: boolean;
-        transformItems: TransformItems<any>;
-      }
+      RefinementListRendererOptions,
+      RefinementListConnectorParams
     >;
   };
   answers: WidgetRenderState<AnswersRendererOptions, AnswersConnectorParams>;
