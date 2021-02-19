@@ -80,14 +80,12 @@ export default createConnector({
 
     this._prevState = this._prevState || {};
 
-    const cache = props.cache || getInMemoryCache();
-    if (this._cachedHits === undefined) {
-      this._cachedHits = cache.read({ state: searchState }) || {};
-    }
+    this._cache = props.cache ? props.cache : this._cache || getInMemoryCache();
+    let cachedHits = this._cache.read({ state: searchState }) || {};
 
     if (!results) {
       return {
-        hits: extractHitsFromCachedHits(this._cachedHits),
+        hits: extractHitsFromCachedHits(cachedHits),
         hasPrevious: false,
         hasMore: false,
         refine: () => {},
@@ -111,24 +109,20 @@ export default createConnector({
     );
 
     if (!isEqual(currentState, this._prevState)) {
-      this._cachedHits = cache.read({ state: searchState }) || {};
+      cachedHits = this._cache.read({ state: searchState }) || {};
     }
-    if (this._cachedHits[page] === undefined) {
-      this._cachedHits[page] = hitsWithPositionsAndQueryID;
-      cache.write({ state: searchState, hits: this._cachedHits });
+    if (cachedHits[page] === undefined) {
+      cachedHits[page] = hitsWithPositionsAndQueryID;
+      this._cache.write({ state: searchState, hits: cachedHits });
     }
 
     this._prevState = currentState;
     /*
       Math.min() and Math.max() returns Infinity or -Infinity when no argument is given.
-      But there is always something in this point because of `this._cachedHits[page]`.
+      But there is always something in this point because of `cachedHits[page]`.
     */
-    const firstReceivedPage = Math.min(
-      ...Object.keys(this._cachedHits).map(Number)
-    );
-    const lastReceivedPage = Math.max(
-      ...Object.keys(this._cachedHits).map(Number)
-    );
+    const firstReceivedPage = Math.min(...Object.keys(cachedHits).map(Number));
+    const lastReceivedPage = Math.max(...Object.keys(cachedHits).map(Number));
 
     const hasPrevious = firstReceivedPage > 0;
     const lastPageIndex = nbPages - 1;
@@ -137,7 +131,7 @@ export default createConnector({
     const refineNext = event => this.refine(event, lastReceivedPage + 1);
 
     return {
-      hits: extractHitsFromCachedHits(this._cachedHits),
+      hits: extractHitsFromCachedHits(cachedHits),
       hasPrevious,
       hasMore,
       refinePrevious,
@@ -156,7 +150,9 @@ export default createConnector({
   },
 
   refine(props, searchState, event, index) {
-    const pages = Object.keys(this._cachedHits || {}).map(Number);
+    this._cache = props.cache ? props.cache : this._cache || getInMemoryCache();
+    const cachedHits = this._cache.read({ state: searchState }) || {};
+    const pages = Object.keys(cachedHits).map(Number);
     const lastReceivedPage =
       pages.length === 0 ? undefined : Math.max(...pages);
     // If there is no key in `this._cachedHits`,

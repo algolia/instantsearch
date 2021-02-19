@@ -1,3 +1,4 @@
+import isEqual from 'react-fast-compare';
 import connect from '../connectInfiniteHits';
 
 jest.mock('../../core/createConnector', () => x => x);
@@ -558,6 +559,201 @@ describe('connectInfiniteHits', () => {
       );
 
       expect(actual).toEqual(expectation);
+    });
+
+    it('read from given cache', () => {
+      const cache = {
+        read: jest.fn(),
+        write: jest.fn(),
+      };
+      const props = { cache, contextValue };
+      const searchState = {};
+      const searchResults = {};
+      connect.getProvidedProps.call({}, props, searchState, searchResults);
+      expect(cache.read).toHaveBeenCalledTimes(1);
+    });
+
+    it('read from new cache prop', () => {
+      const cache = {
+        read: jest.fn(),
+        write: jest.fn(),
+      };
+      const searchState = {};
+      const searchResults = {};
+      const instance = {};
+      connect.getProvidedProps.call(
+        instance,
+        { cache, contextValue },
+        searchState,
+        searchResults
+      );
+      expect(cache.read).toHaveBeenCalledTimes(1);
+
+      const cache2 = {
+        read: jest.fn(),
+        write: jest.fn(),
+      };
+      connect.getProvidedProps.call(
+        instance,
+        { cache: cache2, contextValue },
+        searchState,
+        searchResults
+      );
+      expect(cache.read).toHaveBeenCalledTimes(1);
+      expect(cache2.read).toHaveBeenCalledTimes(1);
+    });
+
+    it('keep the same in-memory cache', () => {
+      const searchState = {};
+      const searchResults = {};
+      const instance = {};
+      connect.getProvidedProps.call(
+        instance,
+        { contextValue },
+        searchState,
+        searchResults
+      );
+      const memoryCache = instance._cache;
+
+      connect.getProvidedProps.call(
+        instance,
+        { contextValue },
+        searchState,
+        searchResults
+      );
+      expect(instance._cache).toBe(memoryCache);
+    });
+
+    it('render hits correctly after invalidating cache', () => {
+      const getStateWithoutPage = state => {
+        const { page, ...rest } = state || {};
+        return rest;
+      };
+
+      const getInMemoryCache = () => {
+        let cachedHits = undefined;
+        let cachedState = undefined;
+        return {
+          read({ state }) {
+            return isEqual(cachedState, getStateWithoutPage(state))
+              ? cachedHits
+              : null;
+          },
+          write({ state, hits }) {
+            cachedState = getStateWithoutPage(state);
+            cachedHits = hits;
+          },
+          clear() {
+            cachedHits = undefined;
+            cachedState = undefined;
+          },
+        };
+      };
+
+      const instance = {};
+      const cache = getInMemoryCache();
+      const props = { cache, contextValue };
+      const searchState = {};
+      const searchResults1 = {
+        results: {
+          hits: [{ objectID: 'a' }, { objectID: 'b' }, { objectID: 'c' }],
+          hitsPerPage: 3,
+          page: 0,
+          nbPages: 3,
+        },
+      };
+      expect(
+        connect.getProvidedProps.call(
+          instance,
+          props,
+          searchState,
+          searchResults1
+        ).hits
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "__position": 1,
+            "objectID": "a",
+          },
+          Object {
+            "__position": 2,
+            "objectID": "b",
+          },
+          Object {
+            "__position": 3,
+            "objectID": "c",
+          },
+        ]
+      `);
+
+      const searchResults2 = {
+        results: {
+          hits: [{ objectID: 'd' }, { objectID: 'e' }, { objectID: 'f' }],
+          hitsPerPage: 3,
+          page: 1,
+          nbPages: 3,
+        },
+      };
+      expect(
+        connect.getProvidedProps.call(
+          instance,
+          props,
+          searchState,
+          searchResults2
+        ).hits
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "__position": 1,
+            "objectID": "a",
+          },
+          Object {
+            "__position": 2,
+            "objectID": "b",
+          },
+          Object {
+            "__position": 3,
+            "objectID": "c",
+          },
+          Object {
+            "__position": 4,
+            "objectID": "d",
+          },
+          Object {
+            "__position": 5,
+            "objectID": "e",
+          },
+          Object {
+            "__position": 6,
+            "objectID": "f",
+          },
+        ]
+      `);
+
+      cache.clear();
+      expect(
+        connect.getProvidedProps.call(
+          instance,
+          props,
+          searchState,
+          searchResults2
+        ).hits
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "__position": 4,
+            "objectID": "d",
+          },
+          Object {
+            "__position": 5,
+            "objectID": "e",
+          },
+          Object {
+            "__position": 6,
+            "objectID": "f",
+          },
+        ]
+      `);
     });
   });
 
