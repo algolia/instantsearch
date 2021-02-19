@@ -79,19 +79,19 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
     return {
       onStateChange() {},
       subscribe() {
+        // At the time this middleware is subscribed, `mainIndex.init()` is already called.
+        // It means `mainIndex.getHelper()` exists.
+        const helper = instantSearchInstance.mainIndex.getHelper()!;
+
         const setUserTokenToSearch = (userToken?: string) => {
-          // At the time this middleware is subscribed, `mainIndex.init()` is already called.
-          // It means `mainIndex.getHelper()` exists.
           if (userToken) {
-            instantSearchInstance.mainIndex
-              .getHelper()!
-              .setQueryParameter('userToken', userToken);
+            helper.setState(
+              helper.state.setQueryParameter('userToken', userToken)
+            );
           }
         };
 
-        instantSearchInstance.mainIndex
-          .getHelper()!
-          .setQueryParameter('clickAnalytics', true);
+        helper.setState(helper.state.setQueryParameter('clickAnalytics', true));
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
         if (hasInsightsClient && anonymousUserToken) {
