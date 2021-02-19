@@ -213,7 +213,7 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
       highlighted: label,
     });
 
-    let lastResultsFromMainSearch;
+    let lastResultsFromMainSearch: SearchResults;
     let lastItemsFromMainSearch: RefinementListItem[] = [];
     let hasExhaustiveItems = true;
     let triggerRefine: RefinementListRendererOptions['refine'] | undefined;
@@ -225,6 +225,20 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
     let toggleShowMore = () => {};
     function cachedToggleShowMore() {
       toggleShowMore();
+    }
+
+    function createToggleShowMore(
+      renderOptions: RenderOptions,
+      widget: Widget
+    ) {
+      return () => {
+        isShowingMore = !isShowingMore;
+        widget.render!(renderOptions);
+      };
+    }
+
+    function getLimit() {
+      return isShowingMore ? showMoreLimit : limit;
     }
 
     let searchForFacetValues: (
@@ -304,20 +318,6 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
         }
       };
     };
-
-    function createToggleShowMore(
-      renderOptions: RenderOptions,
-      widget: Widget
-    ) {
-      return () => {
-        isShowingMore = !isShowingMore;
-        widget.render!(renderOptions);
-      };
-    }
-
-    function getLimit() {
-      return isShowingMore ? showMoreLimit : limit;
-    }
 
     return {
       $$type: 'ais.refinementList' as const,

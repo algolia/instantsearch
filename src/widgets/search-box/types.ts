@@ -1,5 +1,5 @@
 // @TODO: move this to ../search-box.tsx once that exists
-import { Template } from "../../types";
+import { Template } from '../../types';
 
 export type SearchBoxCSSClasses = {
   root: string;
