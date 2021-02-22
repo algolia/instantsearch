@@ -2,7 +2,6 @@
 
 exports[`menuSelect Lifecycle render renders correctly 1`] = `
 Object {
-  "canRefine": true,
   "cssClasses": Object {
     "noRefinementRoot": "ais-MenuSelect--noRefinement",
     "option": "ais-MenuSelect-option",
@@ -25,7 +24,7 @@ Object {
       "defaultOption": "See all",
       "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "defaultOption": false,
       "item": false,
@@ -36,7 +35,6 @@ Object {
 
 exports[`menuSelect Lifecycle render renders transformed items correctly 1`] = `
 Object {
-  "canRefine": true,
   "cssClasses": Object {
     "noRefinementRoot": "ais-MenuSelect--noRefinement",
     "option": "ais-MenuSelect-option",
@@ -61,7 +59,7 @@ Object {
       "defaultOption": "See all",
       "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "defaultOption": false,
       "item": false,

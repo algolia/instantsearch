@@ -1,3 +1,21 @@
+## [4.14.2](https://github.com/algolia/instantsearch.js/compare/v4.14.1...v4.14.2) (2021-02-17)
+
+
+### Bug Fixes
+
+* **insights:** don't reset page ([#4655](https://github.com/algolia/instantsearch.js/issues/4655)) ([2b31250](https://github.com/algolia/instantsearch.js/commit/2b312508e8be59284180e7f490ce0aac80f9c2b6))
+
+
+
+## [4.14.1](https://github.com/algolia/instantsearch.js/compare/v4.14.0...v4.14.1) (2021-02-16)
+
+
+### Bug Fixes
+
+* **compat:** remove references to window ([#4651](https://github.com/algolia/instantsearch.js/issues/4651)) ([1ede1ae](https://github.com/algolia/instantsearch.js/commit/1ede1ae392d3a12f5b0fe29075ffeb05e572a874)), closes [#4650](https://github.com/algolia/instantsearch.js/issues/4650)
+
+
+
 # [4.14.0](https://github.com/algolia/instantsearch.js/compare/v4.13.2...v4.14.0) (2021-02-09)
 
 

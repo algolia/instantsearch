@@ -66,6 +66,14 @@ import {
   RangeConnectorParams,
   RangeRendererOptions,
 } from '../connectors/range/connectRange';
+import {
+  SmartSortConnectorParams,
+  SmartSortRendererOptions,
+} from '../connectors/smart-sort/connectSmartSort';
+import {
+  MenuConnectorParams,
+  MenuRendererOptions,
+} from '../connectors/menu/connectMenu';
 
 export type ScopedResult = {
   indexId: string;
@@ -160,6 +168,9 @@ export type IndexUiState = {
      */
     boundingBox: string;
   };
+  smartSort?: {
+    relevancyStrictness?: number;
+  };
   sortBy?: string;
   page?: number;
   hitsPerPage?: number;
@@ -217,6 +228,12 @@ export type IndexRenderState = Partial<{
     CurrentRefinementsRendererOptions,
     CurrentRefinementsConnectorParams
   >;
+  menu: {
+    [attribute: string]: WidgetRenderState<
+      MenuRendererOptions,
+      MenuConnectorParams
+    >;
+  };
   hierarchicalMenu: {
     [attribute: string]: WidgetRenderState<
       {
@@ -347,6 +364,10 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  smartSort: WidgetRenderState<
+    SmartSortRendererOptions,
+    SmartSortConnectorParams
+  >;
 }>;
 
 export type WidgetRenderState<
@@ -393,6 +414,7 @@ export type Widget<
     | 'ais.ratingMenu'
     | 'ais.refinementList'
     | 'ais.searchBox'
+    | 'ais.smartSort'
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
@@ -428,6 +450,7 @@ export type Widget<
     | 'ais.ratingMenu'
     | 'ais.refinementList'
     | 'ais.searchBox'
+    | 'ais.smartSort'
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
