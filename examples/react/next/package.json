@@ -18,7 +18,7 @@
     "style-loader": "1.0.0"
   },
   "dependencies": {
-    "algoliasearch": "4.8.2",
+    "algoliasearch": "4.8.5",
     "next": "9.1.1",
     "prop-types": "15.6.2",
     "qs": "6.8.0",

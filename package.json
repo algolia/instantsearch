@@ -32,7 +32,7 @@
     "website:build": "yarn build && yarn webpack --config website/webpack.config.js"
   },
   "devDependencies": {
-    "@algolia/client-search": "4.8.2",
+    "@algolia/client-search": "4.8.5",
     "@babel/cli": "7.4.4",
     "@babel/core": "7.4.5",
     "@babel/plugin-proposal-class-properties": "7.4.4",
@@ -72,7 +72,7 @@
     "@wdio/selenium-standalone-service": "5.16.10",
     "@wdio/spec-reporter": "5.16.11",
     "@wdio/static-server-service": "5.16.10",
-    "algoliasearch": "4.8.2",
+    "algoliasearch": "4.8.5",
     "argos-cli": "0.1.3",
     "babel-eslint": "10.0.2",
     "babel-jest": "24.9.0",
@@ -138,19 +138,19 @@
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Connectors.min.js",
-      "maxSize": "21.75 kB"
+      "maxSize": "22.1 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "34.45 kB"
+      "maxSize": "34.90 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
-      "maxSize": "25.50 kB"
+      "maxSize": "25.80 kB"
     },
     {
       "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
-      "maxSize": "38.00 kB"
+      "maxSize": "38.40 kB"
     },
     {
       "path": "packages/react-instantsearch-dom-maps/dist/umd/ReactInstantSearchDOMMaps.min.js",
