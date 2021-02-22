@@ -26,20 +26,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/"
 describe('stats()', () => {
   let container;
   let widget;
-  let results;
 
   beforeEach(() => {
     container = document.createElement('div');
     widget = stats({ container, cssClasses: { text: ['text', 'cx'] } });
-    results = {
-      hits: [{}, {}],
-      nbHits: 20,
-      page: 0,
-      nbPages: 10,
-      hitsPerPage: 2,
-      processingTimeMS: 42,
-      query: 'a query',
-    };
 
     widget.init({
       helper: { state: {} },
@@ -50,6 +40,15 @@ describe('stats()', () => {
   });
 
   it('calls twice render(<Stats props />, container)', () => {
+    const results = {
+      hits: [{}, {}],
+      nbHits: 20,
+      page: 0,
+      nbPages: 10,
+      hitsPerPage: 2,
+      processingTimeMS: 42,
+      query: 'a query',
+    };
     widget.render({ results, instantSearchInstance });
     widget.render({ results, instantSearchInstance });
 
@@ -60,5 +59,28 @@ describe('stats()', () => {
     expect(firstRender[1]).toEqual(container);
     expect(secondRender[0].props).toMatchSnapshot();
     expect(secondRender[1]).toEqual(container);
+  });
+
+  it('renders sorted hits', () => {
+    const results = {
+      hits: [{}, {}],
+      nbHits: 20,
+      nbSortedHits: 16,
+      appliedRelevancyStrictness: 20,
+      page: 0,
+      nbPages: 10,
+      hitsPerPage: 2,
+      processingTimeMS: 42,
+      query: 'second query',
+    };
+    widget.render({ results, instantSearchInstance });
+
+    const [firstRender] = render.mock.calls;
+    expect(firstRender[0].props).toEqual(
+      expect.objectContaining({
+        areHitsSorted: true,
+        nbSortedHits: 16,
+      })
+    );
   });
 });

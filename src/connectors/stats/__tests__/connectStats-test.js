@@ -77,8 +77,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState.stats).toEqual({
         hitsPerPage: undefined,
+        areHitsSorted: false,
         nbHits: 0,
         nbPages: 0,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: -1,
         query: '',
@@ -102,8 +104,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState.stats).toEqual({
         hitsPerPage: 20,
+        areHitsSorted: false,
         nbHits: 0,
         nbPages: 0,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: 0,
         query: '',
@@ -137,8 +141,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState.stats).toEqual({
         hitsPerPage: 3,
+        areHitsSorted: false,
         nbHits: 5,
         nbPages: 2,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: 0,
         query: 'apple',
@@ -163,8 +169,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState).toEqual({
         hitsPerPage: undefined,
+        areHitsSorted: false,
         nbHits: 0,
         nbPages: 0,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: -1,
         query: '',
@@ -187,8 +195,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState).toEqual({
         hitsPerPage: 20,
+        areHitsSorted: false,
         nbHits: 0,
         nbPages: 0,
+        nbSortedHits: undefined,
         page: 0,
         processingTimeMS: 0,
         query: '',
@@ -221,8 +231,89 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
       expect(renderState).toEqual({
         hitsPerPage: 3,
+        areHitsSorted: false,
         nbHits: 5,
         nbPages: 2,
+        nbSortedHits: undefined,
+        page: 0,
+        processingTimeMS: 0,
+        query: 'apple',
+        widgetParams: {},
+      });
+    });
+
+    test('returns areHitsSorted as true', () => {
+      const [stats, helper] = getInitializedWidget();
+
+      const renderState = stats.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+                { brand: 'sony', objectID: '3' },
+                { brand: 'benq', objectID: '4' },
+                { brand: 'dyson', objectID: '5' },
+              ],
+              hitsPerPage: 3,
+              query: 'apple',
+              appliedRelevancyStrictness: 20,
+              nbHits: 20,
+              nbPages: 2,
+              nbSortedHits: 5,
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState).toEqual({
+        hitsPerPage: 3,
+        areHitsSorted: true,
+        nbHits: 20,
+        nbPages: 2,
+        nbSortedHits: 5,
+        page: 0,
+        processingTimeMS: 0,
+        query: 'apple',
+        widgetParams: {},
+      });
+    });
+
+    test('returns areHitsSorted as false when nbSortedHits === nbHits', () => {
+      const [stats, helper] = getInitializedWidget();
+
+      const renderState = stats.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+                { brand: 'sony', objectID: '3' },
+                { brand: 'benq', objectID: '4' },
+                { brand: 'dyson', objectID: '5' },
+              ],
+              hitsPerPage: 3,
+              query: 'apple',
+              appliedRelevancyStrictness: 20,
+              nbHits: 5,
+              nbSortedHits: 5,
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState).toEqual({
+        hitsPerPage: 3,
+        areHitsSorted: false,
+        nbHits: 5,
+        nbPages: 2,
+        nbSortedHits: 5,
         page: 0,
         processingTimeMS: 0,
         query: 'apple',

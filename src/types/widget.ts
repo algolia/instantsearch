@@ -71,6 +71,10 @@ import {
   RangeRendererOptions,
 } from '../connectors/range/connectRange';
 import {
+  SmartSortConnectorParams,
+  SmartSortRendererOptions,
+} from '../connectors/smart-sort/connectSmartSort';
+import {
   MenuConnectorParams,
   MenuRendererOptions,
 } from '../connectors/menu/connectMenu';
@@ -167,6 +171,9 @@ export type IndexUiState = {
      * @example '47.3165,4.9665,47.3424,5.0201'
      */
     boundingBox: string;
+  };
+  smartSort?: {
+    relevancyStrictness?: number;
   };
   sortBy?: string;
   page?: number;
@@ -362,6 +369,10 @@ export type IndexRenderState = Partial<{
     >;
   };
   answers: WidgetRenderState<AnswersRendererOptions, AnswersConnectorParams>;
+  smartSort: WidgetRenderState<
+    SmartSortRendererOptions,
+    SmartSortConnectorParams
+  >;
 }>;
 
 export type WidgetRenderState<
@@ -409,6 +420,7 @@ export type Widget<
     | 'ais.ratingMenu'
     | 'ais.refinementList'
     | 'ais.searchBox'
+    | 'ais.smartSort'
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
@@ -445,6 +457,7 @@ export type Widget<
     | 'ais.ratingMenu'
     | 'ais.refinementList'
     | 'ais.searchBox'
+    | 'ais.smartSort'
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
