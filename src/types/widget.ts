@@ -70,6 +70,10 @@ import {
   SmartSortConnectorParams,
   SmartSortRendererOptions,
 } from '../connectors/smart-sort/connectSmartSort';
+import {
+  MenuConnectorParams,
+  MenuRendererOptions,
+} from '../connectors/menu/connectMenu';
 
 export type ScopedResult = {
   indexId: string;
@@ -224,6 +228,12 @@ export type IndexRenderState = Partial<{
     CurrentRefinementsRendererOptions,
     CurrentRefinementsConnectorParams
   >;
+  menu: {
+    [attribute: string]: WidgetRenderState<
+      MenuRendererOptions,
+      MenuConnectorParams
+    >;
+  };
   hierarchicalMenu: {
     [attribute: string]: WidgetRenderState<
       {

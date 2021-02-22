@@ -4,11 +4,11 @@ import { h } from 'preact';
 import cx from 'classnames';
 import { find } from '../../lib/utils';
 import Template from '../Template/Template';
-
-type MenuSelectTemplates = {
-  defaultOption: string;
-  item: string;
-};
+import {
+  MenuSelectCSSClasses,
+  MenuSelectTemplates,
+} from '../../widgets/menu-select/menu-select';
+import { MenuRendererOptions } from '../../connectors/menu/connectMenu';
 
 type MenuItem = {
   /**
@@ -30,14 +30,9 @@ type MenuItem = {
 };
 
 type Props = {
-  cssClasses: {
-    root: string;
-    noRefinementRoot: string;
-    select: string;
-    option: string;
-  };
+  cssClasses: MenuSelectCSSClasses;
   items: MenuItem[];
-  refine: (value: MenuItem['value']) => void;
+  refine: MenuRendererOptions['refine'];
   templateProps: {
     templates: MenuSelectTemplates;
   };
