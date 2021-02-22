@@ -45,7 +45,7 @@ describe('Stats', () => {
   it('should render sorted hits', () => {
     const wrapper = mount(
       <Stats
-        {...getProps({ nbSortedHits: 150, isSmartSorted: true })}
+        {...getProps({ nbSortedHits: 150, areHitsSorted: true })}
         templateProps={{
           templates: defaultTemplates,
           templatesConfig: {
@@ -69,7 +69,7 @@ describe('Stats', () => {
   it('should render 1 sorted hit', () => {
     const wrapper = mount(
       <Stats
-        {...getProps({ nbSortedHits: 1, isSmartSorted: true })}
+        {...getProps({ nbSortedHits: 1, areHitsSorted: true })}
         templateProps={{
           templates: defaultTemplates,
           templatesConfig: {
@@ -93,7 +93,7 @@ describe('Stats', () => {
   it('should render 0 sorted hit', () => {
     const wrapper = mount(
       <Stats
-        {...getProps({ nbSortedHits: 0, isSmartSorted: true })}
+        {...getProps({ nbSortedHits: 0, areHitsSorted: true })}
         templateProps={{
           templates: defaultTemplates,
           templatesConfig: {

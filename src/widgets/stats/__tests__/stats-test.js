@@ -78,7 +78,7 @@ describe('stats()', () => {
     const [firstRender] = render.mock.calls;
     expect(firstRender[0].props).toEqual(
       expect.objectContaining({
-        isSmartSorted: true,
+        areHitsSorted: true,
         nbSortedHits: 16,
       })
     );

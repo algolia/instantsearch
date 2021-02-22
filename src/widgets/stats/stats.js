@@ -20,7 +20,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
     hitsPerPage,
     nbHits,
     nbSortedHits,
-    isSmartSorted,
+    areHitsSorted,
     nbPages,
     page,
     processingTimeMS,
@@ -45,7 +45,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
       hitsPerPage={hitsPerPage}
       nbHits={nbHits}
       nbSortedHits={nbSortedHits}
-      isSmartSorted={isSmartSorted}
+      areHitsSorted={areHitsSorted}
       nbPages={nbPages}
       page={page}
       processingTimeMS={processingTimeMS}
