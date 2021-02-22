@@ -1,9 +1,6 @@
 import { Hit } from '../../types';
 
-export function addQueryID<THit = Hit>(
-  hits: THit[],
-  queryID?: string
-): THit[] {
+export function addQueryID<THit = Hit>(hits: THit[], queryID?: string): THit[] {
   if (!queryID) {
     return hits;
   }
@@ -11,4 +8,4 @@ export function addQueryID<THit = Hit>(
     ...hit,
     __queryID: queryID,
   }));
-};
+}
