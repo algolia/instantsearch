@@ -12,7 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "algoliasearch": "4.2.0",
+    "algoliasearch": "4.8.5",
     "expo": "37.0.3",
     "lodash": "4.17.15",
     "prop-types": "15.6.2",

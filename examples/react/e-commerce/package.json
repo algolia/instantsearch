@@ -3,7 +3,7 @@
   "version": "6.8.3",
   "private": true,
   "dependencies": {
-    "algoliasearch": "4.8.2",
+    "algoliasearch": "4.8.5",
     "classnames": "2.2.6",
     "qs": "6.8.0",
     "react": "16.8.6",

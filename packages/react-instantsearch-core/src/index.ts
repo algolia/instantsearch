@@ -53,6 +53,7 @@ export {
 } from './connectors/connectRefinementList';
 export { default as connectScrollTo } from './connectors/connectScrollTo';
 export { default as connectSearchBox } from './connectors/connectSearchBox';
+export { default as connectSmartSort } from './connectors/connectSmartSort';
 export { default as connectSortBy } from './connectors/connectSortBy';
 export {
   default as connectStateResults,

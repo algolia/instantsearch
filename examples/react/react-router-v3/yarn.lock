@@ -2043,10 +2043,10 @@ ajv@^6.10.0, ajv@^6.10.2:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-algoliasearch-helper@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.1.0.tgz#f8725bd6f0d1f515955d720ccd617a3af4ac695f"
-  integrity sha512-d48U2GIsGJr/fVV+W7Z1Ud6GWLSblKQgA71M254YNtxvniKFsbI0Z6hQZ/8yodfGWHjJ4dETeb7ihGKQaXihUw==
+algoliasearch-helper@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.4.3.tgz#69c5f32e053e38fd34a14847ae53703c1873efa8"
+  integrity sha512-ocnorp1rhNLeZgTadgkJF6UNQGEZZAh7xcanZxldqKI8hx8xtk5MuILitZwViedmBKrTwGXRrY9Dz8Mqdk4hlQ==
   dependencies:
     events "^1.1.1"
 
@@ -9069,7 +9069,7 @@ react-instantsearch-core@^6.9.0:
   integrity sha512-xLNyF0mUBq7MaLQgmosBnxac7YnLTuanu5TKZkH7RFEVC2T5mi4fINtG6vAkOkVjiH90abv2wdPY6UjE/Vt6kQ==
   dependencies:
     "@babel/runtime" "^7.1.2"
-    algoliasearch-helper "^3.1.0"
+    algoliasearch-helper "^3.4.3"
     prop-types "^15.6.2"
     react-fast-compare "^3.0.0"
 
@@ -9079,7 +9079,7 @@ react-instantsearch-dom@6.9.0:
   integrity sha512-G8jSIC5QutdiK6QhZwyLcIONg2C6/6wRMkAM6uZ5ObSDvY+h/PkSohc8//A7LNOyedOCACd/UfdWlmexSYjl6Q==
   dependencies:
     "@babel/runtime" "^7.1.2"
-    algoliasearch-helper "^3.1.0"
+    algoliasearch-helper "^3.4.3"
     classnames "^2.2.5"
     prop-types "^15.6.2"
     react-fast-compare "^3.0.0"
