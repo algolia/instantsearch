@@ -8,31 +8,16 @@ const searchOptions = {
   indexName: 'test_Bestbuy_vr_price_asc',
 };
 
-storiesOf('Sorting/SmartSort', module)
-  .add(
-    'default',
-    withHits(({ search, container }) => {
-      search.addWidgets([
-        smartSort({
-          container,
-          cssClasses: {
-            root: 'my-SmartSort',
-          },
-        }),
-      ]);
-    }, searchOptions)
-  )
-  .add(
-    'explicit value',
-    withHits(({ search, container }) => {
-      search.addWidgets([
-        smartSort({
-          container,
-          templates: {
-            button: ({ isSmartSorted }) =>
-              isSmartSorted ? 'See all results' : 'See relevant results',
-          },
-        }),
-      ]);
-    }, searchOptions)
-  );
+storiesOf('Sorting/SmartSort', module).add(
+  'default',
+  withHits(({ search, container }) => {
+    search.addWidgets([
+      smartSort({
+        container,
+        cssClasses: {
+          root: 'my-SmartSort',
+        },
+      }),
+    ]);
+  }, searchOptions)
+);
