@@ -1,3 +1,17 @@
+# [6.10.0](https://github.com/algolia/react-instantsearch/compare/v6.9.0...v6.10.0) (2021-02-23)
+
+
+### Bug Fixes
+
+* **infiniteHits:** do not cache the cached hits ([#3011](https://github.com/algolia/react-instantsearch/issues/3011)) ([b56f5f7](https://github.com/algolia/react-instantsearch/commit/b56f5f7))
+
+
+### Features
+
+* **smartSort:** add widget ([#3009](https://github.com/algolia/react-instantsearch/issues/3009)) ([4cc8412](https://github.com/algolia/react-instantsearch/commit/4cc8412)), closes [#3010](https://github.com/algolia/react-instantsearch/issues/3010)
+
+
+
 # [6.9.0](https://github.com/algolia/react-instantsearch/compare/v6.8.3...v6.9.0) (2021-02-03)
 
 
