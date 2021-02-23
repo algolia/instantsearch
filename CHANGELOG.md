@@ -1,3 +1,14 @@
+# [4.15.0](https://github.com/algolia/instantsearch.js/compare/v4.14.2...v4.15.0) (2021-02-23)
+
+
+### Features
+
+* **smartSort:** add widget ([#4648](https://github.com/algolia/instantsearch.js/issues/4648)) ([89c6e86](https://github.com/algolia/instantsearch.js/commit/89c6e868f490e9b6e507dd70c215e962f4c69ccb))
+* **stats:** apply nbSortedHits ([#4649](https://github.com/algolia/instantsearch.js/issues/4649)) ([34478c1](https://github.com/algolia/instantsearch.js/commit/34478c198dcafbd45fd101db0cd2fbe6328272b8))
+* **ts:** convert menu ([#4652](https://github.com/algolia/instantsearch.js/issues/4652)) ([2271b43](https://github.com/algolia/instantsearch.js/commit/2271b4379918e865a1b0cea09c139e517df97bc5))
+
+
+
 ## [4.14.2](https://github.com/algolia/instantsearch.js/compare/v4.14.1...v4.14.2) (2021-02-17)
 
 
