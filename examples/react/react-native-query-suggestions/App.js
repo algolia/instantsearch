@@ -12,12 +12,14 @@ import {
 } from 'react-native';
 import algoliasearch from 'algoliasearch/lite';
 import {
+  InstantSearch,
+  Configure,
+  Index,
   connectSearchBox,
   connectInfiniteHits,
   connectHits,
   connectRefinementList,
-} from 'react-instantsearch/connectors';
-import { InstantSearch, Configure, Index } from 'react-instantsearch/native';
+} from 'react-instantsearch-native';
 import Highlight from './Highlight';
 import { omit } from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
