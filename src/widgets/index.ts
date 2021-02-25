@@ -28,3 +28,4 @@ export { default as queryRuleCustomData } from './query-rule-custom-data/query-r
 export { default as queryRuleContext } from './query-rule-context/query-rule-context';
 export { default as index } from './index/index';
 export { default as places } from './places/places';
+export { default as smartSort } from './smart-sort/smart-sort';
