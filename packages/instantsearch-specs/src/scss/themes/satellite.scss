@@ -115,7 +115,8 @@ $break-medium: 767px;
 .ais-Pagination-link,
 .ais-GeoSearch-redo,
 .ais-GeoSearch-reset,
-.ais-VoiceSearch-button {
+.ais-VoiceSearch-button,
+.ais-SmartSort-button {
   appearance: none;
   background-color: $white;
   background-image: linear-gradient(-180deg, $white, $grey50);

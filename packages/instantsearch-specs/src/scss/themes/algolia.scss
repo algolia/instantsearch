@@ -42,6 +42,7 @@ a[class^='ais-'] {
 .ais-RatingMenu,
 .ais-RefinementList,
 .ais-SearchBox,
+.ais-SmartSort,
 .ais-SortBy,
 .ais-Stats,
 .ais-ToggleRefinement {
@@ -84,7 +85,8 @@ a[class^='ais-'] {
 .ais-InfiniteHits-loadMore,
 .ais-InfiniteResults-loadMore,
 .ais-Menu-showMore,
-.ais-RefinementList-showMore {
+.ais-RefinementList-showMore,
+.ais-SmartSort-button {
   padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
   color: #fff;
@@ -454,7 +456,8 @@ a[class^='ais-'] {
 .ais-PoweredBy-text,
 .rheostat-tooltip,
 .rheostat-value,
-.ais-Stats-text {
+.ais-Stats-text,
+.ais-SmartSort-text {
   font-size: 0.8rem;
 }
 
