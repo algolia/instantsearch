@@ -61,6 +61,6 @@ export default translatable({
     areHitsSorted?: boolean
   ): string =>
     areHitsSorted && n !== nSorted
-      ? `${nSorted!.toLocaleString()} relevant results sorted out of ${n.toLocaleString()} in ${ms.toLocaleString()}ms`
+      ? `${nSorted!.toLocaleString()} relevant results sorted out of ${n.toLocaleString()} found in ${ms.toLocaleString()}ms`
       : `${n.toLocaleString()} results found in ${ms.toLocaleString()}ms`,
 })(Stats);
