@@ -25,3 +25,4 @@ export { default as connectAutocomplete } from './autocomplete/connectAutocomple
 export { default as connectQueryRules } from './query-rules/connectQueryRules';
 export { default as connectVoiceSearch } from './voice-search/connectVoiceSearch';
 export { default as EXPERIMENTAL_connectAnswers } from './answers/connectAnswers';
+export { default as connectSmartSort } from './smart-sort/connectSmartSort';
