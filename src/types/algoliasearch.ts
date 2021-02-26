@@ -16,7 +16,9 @@ import algoliasearch, {
   SearchForFacetValues as SearchForFacetValuesV3,
 } from 'algoliasearch';
 import {
+  FindAnswersResponse as FindAnswersResponseV4,
   SearchResponse as SearchResponseV4,
+  FindAnswersOptions as FindAnswersOptionsV4,
   // no comma, TS is particular about which nodes expose comments
   // eslint-disable-next-line prettier/prettier
   SearchForFacetValuesResponse as SearchForFacetValuesResponseV4
@@ -24,6 +26,16 @@ import {
   // @ts-ignore
   // eslint-disable-next-line import/no-unresolved
 } from '@algolia/client-search';
+
+export type FindAnswersOptions = DefaultSearchClient extends DummySearchClientV4
+  ? FindAnswersOptionsV4
+  : any;
+
+export type FindAnswersResponse<
+  TObject
+> = DefaultSearchClient extends DummySearchClientV4
+  ? FindAnswersResponseV4<TObject>
+  : any;
 
 type DummySearchClientV4 = {
   readonly transporter: any;
@@ -39,6 +51,7 @@ export type SearchClient = {
   search: DefaultSearchClient['search'];
   searchForFacetValues: DefaultSearchClient['searchForFacetValues'];
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
+  initIndex?: DefaultSearchClient['initIndex'];
 };
 
 export type MultiResponse<THit = any> = {

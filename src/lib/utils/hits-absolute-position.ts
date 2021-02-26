@@ -1,10 +1,10 @@
-import { Hits } from '../../types';
+import { Hit } from '../../types';
 
-export const addAbsolutePosition = (
-  hits: Hits,
+export const addAbsolutePosition = <THit = Hit>(
+  hits: THit[],
   page: number,
   hitsPerPage: number
-): Hits => {
+): THit[] => {
   return hits.map((hit, idx) => ({
     ...hit,
     __position: hitsPerPage * page + idx + 1,

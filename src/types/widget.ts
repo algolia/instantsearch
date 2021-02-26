@@ -63,6 +63,10 @@ import {
   PaginationConnectorParams,
 } from '../connectors/pagination/connectPagination';
 import {
+  AnswersRendererOptions,
+  AnswersConnectorParams,
+} from '../connectors/answers/connectAnswers';
+import {
   RangeConnectorParams,
   RangeRendererOptions,
 } from '../connectors/range/connectRange';
@@ -364,6 +368,7 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  answers: WidgetRenderState<AnswersRendererOptions, AnswersConnectorParams>;
   smartSort: WidgetRenderState<
     SmartSortRendererOptions,
     SmartSortConnectorParams
@@ -389,6 +394,7 @@ export type Widget<
    */
   $$type?:
     | 'ais.analytics'
+    | 'ais.answers'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -425,6 +431,7 @@ export type Widget<
    */
   $$widgetType?:
     | 'ais.analytics'
+    | 'ais.answers'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -455,7 +462,6 @@ export type Widget<
     | 'ais.stats'
     | 'ais.toggleRefinement'
     | 'ais.voiceSearch';
-
   /**
    * Called once before the first search
    */
