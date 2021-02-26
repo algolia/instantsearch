@@ -61,7 +61,7 @@ describe('Stats', () => {
         <span
           className="ais-Stats-text"
         >
-          21 relevant results sorted out of 42 in 0ms
+          21 relevant results sorted out of 42 found in 0ms
         </span>
       </div>
     `);
