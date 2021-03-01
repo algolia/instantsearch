@@ -58,17 +58,21 @@ Files are automatically formatted with Prettier.
 
 ## Release
 
+You need to have `GITHUB_TOKEN` added to your `.env` file. You can create a [personal access token](https://github.com/settings/tokens).
+
 ```sh
 yarn release
 ```
 
+It will create a pull request for the next release. When it's reviewed, approved and merged, then CircleCI will automatically publish it to npm.
+
 ### Beta release
 
 ```sh
-yarn release --beta
+yarn release
 ```
 
-Append `-beta.x` where x is a number to the version for beta, so 4.0.0-beta.2 for example.
+The script will ask you a question about the next version. If it's wrong, you can say "No" and specify the version (e.g. "7.0.0-beta.0"). Then, it will open a pull request for that release. When the pull request is merged, CircleCI will publish it to npm with a `--tag beta` argument.
 
 ## Update docs
 

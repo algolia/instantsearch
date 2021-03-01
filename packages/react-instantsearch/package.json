@@ -31,9 +31,8 @@
     "build:cjs": "babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist --quiet",
     "build:es": "BABEL_ENV=es babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
-    "preparePackageFolder": "mkdir -p dist && cp {package.json,README.md} dist",
-    "release": "yarn clean && yarn preparePackageFolder && yarn build && cd dist && yarn publish --non-interactive",
-    "release:beta": "yarn clean && yarn preparePackageFolder && yarn build && cd dist && yarn publish --tag beta --non-interactive"
+    "preparePackageFolder": "cp package.json dist && cp ../../README.md dist",
+    "prepublishOnly": "yarn run preparePackageFolder"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",

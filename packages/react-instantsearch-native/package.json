@@ -33,9 +33,7 @@
     "watch": "yarn build:cjs --watch",
     "build": "yarn build:cjs && yarn build:es",
     "build:cjs": "babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
-    "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
-    "release": "yarn clean && yarn build && yarn publish --non-interactive",
-    "release:beta": "yarn clean && yarn build && yarn publish --tag beta --non-interactive"
+    "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",

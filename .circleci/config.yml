@@ -118,6 +118,33 @@ jobs:
           name: Build & Test examples
           command: yarn test:examples
 
+  release_if_needed:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Trigger a release if the latest commit is a release commit
+          command: yarn shipjs trigger
+
+  prepare_release:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Prepare a pull request for next release
+          command: |
+            git config --global user.email "instantsearch-bot@algolia.com"
+            git config --global user.name "InstantSearch"
+            yarn run release --yes --no-browse
+
 workflows:
   version: 2
   ci:
@@ -128,3 +155,19 @@ workflows:
       - test_integration
       - test_e2e
       - test_examples
+      - release_if_needed:
+          filters:
+            branches:
+              only:
+                - master
+                - next
+  scheduled_release:
+    triggers:
+      - schedule:
+          cron: '0 9 * * 2'
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - prepare_release
