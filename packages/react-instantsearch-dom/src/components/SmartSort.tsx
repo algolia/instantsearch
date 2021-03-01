@@ -13,23 +13,29 @@ export type SmartSortProps = {
   className?: string;
   isVirtualReplica: boolean;
   isSmartSorted: boolean;
-  buttonTextComponent: React.FunctionComponent<SmartSortComponentProps>;
-  textComponent: React.FunctionComponent<SmartSortComponentProps>;
+  buttonTextComponent?: React.FunctionComponent<SmartSortComponentProps>;
+  textComponent?: React.FunctionComponent<SmartSortComponentProps>;
   refine(relevancyStrictness: number | undefined): void;
 };
+
+const DefaultButtonTextComponent = ({
+  isSmartSorted,
+}: SmartSortComponentProps) => (
+  <span>{isSmartSorted ? 'See all results' : 'See relevant results'}</span>
+);
 
 const SmartSort: React.FC<SmartSortProps> = ({
   className = '',
   isVirtualReplica,
   isSmartSorted,
-  buttonTextComponent: ButtonTextComponent,
+  buttonTextComponent: ButtonTextComponent = DefaultButtonTextComponent,
   textComponent: TextComponent,
   refine,
 }) =>
   !isVirtualReplica ? null : (
     <div className={classNames(cx(''), className)}>
       <div className={cx('text')}>
-        <TextComponent isSmartSorted={isSmartSorted} />
+        {TextComponent && <TextComponent isSmartSorted={isSmartSorted} />}
       </div>
       <button
         className={cx('button')}
@@ -41,12 +47,12 @@ const SmartSort: React.FC<SmartSortProps> = ({
   );
 
 SmartSort.propTypes = {
-  buttonTextComponent: PropTypes.func.isRequired,
+  buttonTextComponent: PropTypes.func,
   className: PropTypes.string,
   isVirtualReplica: PropTypes.bool.isRequired,
   isSmartSorted: PropTypes.bool.isRequired,
   refine: PropTypes.func.isRequired,
-  textComponent: PropTypes.func.isRequired,
+  textComponent: PropTypes.func,
 };
 
 export default SmartSort;
