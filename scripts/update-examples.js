@@ -3,6 +3,10 @@ const glob = require('glob');
 const execSync = require('child_process').execSync;
 const [version] = process.argv.slice(2);
 
+execSync('yarn');
+execSync(`yarn upgrade react-instantsearch-dom@${version} -D`);
+execSync(`yarn upgrade react-instantsearch-dom-maps@${version} -D`);
+
 const examplesPath = path.join(__dirname, '..', 'examples');
 
 {
@@ -47,3 +51,7 @@ const examplesPath = path.join(__dirname, '..', 'examples');
     );
   });
 }
+
+const commitMessage = `chore(deps): update examples to react-instantsearch v${version}`;
+execSync('git add examples package.json yarn.lock');
+execSync(`printf "${commitMessage}" | git commit --file -`);
