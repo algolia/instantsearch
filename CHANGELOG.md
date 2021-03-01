@@ -1,3 +1,17 @@
+# [4.16.0](https://github.com/algolia/instantsearch.js/compare/v4.15.0...v4.16.0) (2021-03-01)
+
+
+### Bug Fixes
+
+* **smartSort:** export the widget and the connector ([#4663](https://github.com/algolia/instantsearch.js/issues/4663)) ([e7aaa8c](https://github.com/algolia/instantsearch.js/commit/e7aaa8ceb47b8cafc3a3a323ebe47f45f3841ba4))
+
+
+### Features
+
+* **answers:** add `EXPERIMENTAL_answers` widget ([#4581](https://github.com/algolia/instantsearch.js/issues/4581)) ([e4c9070](https://github.com/algolia/instantsearch.js/commit/e4c9070250779d7d3afabe7f9a19644717bc12c8)), closes [#4635](https://github.com/algolia/instantsearch.js/issues/4635)
+
+
+
 # [4.15.0](https://github.com/algolia/instantsearch.js/compare/v4.14.2...v4.15.0) (2021-02-23)
 
 
