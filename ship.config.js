@@ -46,16 +46,16 @@ module.exports = {
   pullRequestTeamReviewers: ['instantsearch-for-websites'],
   buildCommand: ({ version }) =>
     `NODE_ENV=production VERSION=${version} yarn build`,
-  afterPublish: async ({ exec, version }) => {
-    await waitUntil(() => {
-      return (
-        exec(`npm view react-instantsearch@${version}`)
-          .toString()
-          .trim() !== ''
-      );
-    });
-    exec('node scripts/update-examples.js');
-  },
+  // afterPublish: async ({ exec, version }) => {
+  //   await waitUntil(() => {
+  //     return (
+  //       exec(`npm view react-instantsearch@${version}`)
+  //         .toString()
+  //         .trim() !== ''
+  //     );
+  //   });
+  //   exec('node scripts/update-examples.js');
+  // },
   slack: {
     // disable slack notification for `prepared` lifecycle.
     // Ship.js will send slack message only for `releaseSuccess`.
@@ -96,13 +96,13 @@ module.exports = {
   },
 };
 
-function waitUntil(checkFn) {
-  return new Promise(resolve => {
-    const intervalId = setInterval(async () => {
-      if (await checkFn()) {
-        clearInterval(intervalId);
-        resolve();
-      }
-    }, 3000);
-  });
-}
+// function waitUntil(checkFn) {
+//   return new Promise(resolve => {
+//     const intervalId = setInterval(async () => {
+//       if (await checkFn()) {
+//         clearInterval(intervalId);
+//         resolve();
+//       }
+//     }, 3000);
+//   });
+// }
