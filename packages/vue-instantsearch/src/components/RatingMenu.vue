@@ -33,7 +33,7 @@
           :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
         >
           <a
-            :href="state.createURL(item)"
+            :href="state.createURL(item.value)"
             :aria-label="`${item.value} & Up`"
             :class="suit('link')"
             @click.prevent="state.refine(item.value)"
