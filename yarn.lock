@@ -16782,6 +16782,27 @@ react-inspector@^2.3.0, react-inspector@^2.3.1:
     is-dom "^1.0.9"
     prop-types "^15.6.1"
 
+react-instantsearch-dom-maps@6.10.0:
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-dom-maps/-/react-instantsearch-dom-maps-6.10.0.tgz#8e236539838c2a91b46a8fedf2af959438b63f03"
+  integrity sha512-gzZvJVVTmGKwFhVU86Mc7oUKKAK8IwjNmveGv1Qv7bcslZ0YiE3x/pyWn4y8b/379Wev++d5dZSumMx086YxCQ==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    prop-types "^15.6.2"
+    scriptjs "^2.5.8"
+
+react-instantsearch-dom@6.10.0:
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-6.10.0.tgz#25286e6958461b96e8ff9ed58653dd7c943cea67"
+  integrity sha512-t1IGn1i4btp9a8wNNV/OCYwfJwCx5CuCP6WNwBxYY1QeL27RKGaWPxvz6FjfRFCfrOvD2556STyvVriyGhDoeg==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    algoliasearch-helper "^3.4.3"
+    classnames "^2.2.5"
+    prop-types "^15.6.2"
+    react-fast-compare "^3.0.0"
+    react-instantsearch-core "^6.10.0"
+
 react-is@^16.3.0, react-is@^16.8.1:
   version "16.8.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.2.tgz#09891d324cad1cb0c1f2d91f70a71a4bee34df0f"
