@@ -1,3 +1,12 @@
+## [6.10.1](https://github.com/algolia/react-instantsearch/compare/v6.10.0...v6.10.1) (2021-03-02)
+
+
+### Bug Fixes
+
+* **SmartSort:** make `textComponent` and `buttonTextComponent` optional ([#3014](https://github.com/algolia/react-instantsearch/issues/3014)) ([682ee6d](https://github.com/algolia/react-instantsearch/commit/682ee6d))
+
+
+
 # [6.10.0](https://github.com/algolia/react-instantsearch/compare/v6.9.0...v6.10.0) (2021-02-23)
 
 
