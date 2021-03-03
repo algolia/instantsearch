@@ -12,7 +12,7 @@ export type CurrentRefinementsComponentCSSClasses = {
   [TClassName in keyof CurrentRefinementsCSSClasses]: string;
 };
 
-type CurrentRefinementsProps = {
+export type CurrentRefinementsProps = {
   items: CurrentRefinementsConnectorParamsItem[];
   cssClasses: CurrentRefinementsComponentCSSClasses;
 };

@@ -1,6 +1,7 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import panel from '../panel';
+import { PanelProps } from '../../../components/Panel/Panel';
 import {
   createInitOptions,
   createRenderOptions,
@@ -108,7 +109,10 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      PanelProps<typeof widgetFactory>
+    >;
+    const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates).toEqual({
       header: '',
@@ -128,7 +132,10 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      PanelProps<typeof widgetFactory>
+    >;
+    const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates.header).toBe('Custom header');
   });
@@ -144,7 +151,10 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      PanelProps<typeof widgetFactory>
+    >;
+    const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates.footer).toBe('Custom footer');
   });
@@ -160,7 +170,10 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      PanelProps<typeof widgetFactory>
+    >;
+    const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates.collapseButtonText).toBe('Custom collapseButtonText');
   });

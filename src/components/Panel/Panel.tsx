@@ -17,7 +17,7 @@ type PanelComponentCSSClasses = Required<
   >
 >;
 
-type PanelProps<TWidget extends UnknownWidgetFactory> = {
+export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;
   collapsible: boolean;
   isCollapsed: boolean;

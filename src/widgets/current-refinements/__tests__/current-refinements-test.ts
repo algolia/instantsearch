@@ -1,6 +1,7 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import currentRefinements from '../current-refinements';
+import { CurrentRefinementsProps } from '../../../components/CurrentRefinements/CurrentRefinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createInitOptions,
@@ -142,13 +143,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       widget.render!(createRenderOptions(renderParameters));
       widget.render!(createRenderOptions(renderParameters));
 
-      const [firstRender, secondRender] = render.mock.calls;
+      const firstRender = render.mock.calls[0][0] as VNode<
+        CurrentRefinementsProps
+      >;
+      const secondRender = render.mock.calls[1][0] as VNode<
+        CurrentRefinementsProps
+      >;
+      const firstContainer = render.mock.calls[0][1];
+      const secondContainer = render.mock.calls[1][1];
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(firstRender[0].props).toMatchSnapshot();
-      expect(firstRender[1]).toBe(container);
-      expect(secondRender[0].props).toMatchSnapshot();
-      expect(secondRender[1]).toBe(container);
+      expect(firstRender.props).toMatchSnapshot();
+      expect(firstContainer).toBe(container);
+      expect(secondRender.props).toMatchSnapshot();
+      expect(secondContainer).toBe(container);
     });
 
     describe('options.container', () => {
@@ -171,11 +179,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          CurrentRefinementsProps
+        >;
 
         expect(render).toHaveBeenCalledTimes(1);
-        expect(firstRender[0].props).toMatchSnapshot();
-        expect(firstRender[1]).toBe(container);
+        expect(firstRender.props).toMatchSnapshot();
+        expect(render.mock.calls[0][1]).toBe(container);
       });
     });
 
@@ -236,9 +246,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          CurrentRefinementsProps
+        >;
+        const {
+          items: renderedItems,
+        } = firstRender.props as CurrentRefinementsProps;
 
-        const renderedItems = firstRender[0].props.items;
         expect(renderedItems).toHaveLength(1);
 
         const [item] = renderedItems;
@@ -298,9 +312,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          CurrentRefinementsProps
+        >;
+        const {
+          items: renderedItems,
+        } = firstRender.props as CurrentRefinementsProps;
 
-        const renderedItems = firstRender[0].props.items;
         expect(renderedItems).toHaveLength(0);
       });
     });
@@ -371,14 +389,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const [firstRender] = render.mock.calls;
-
-        const renderedItems = firstRender[0].props.items;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          CurrentRefinementsProps
+        >;
+        // @TODO: expose a way to transform the item type using transformItems
+        const renderedItems = (firstRender.props as CurrentRefinementsProps)
+          .items as Array<
+          CurrentRefinementsProps['items'][number] & {
+            refinements: Array<
+              CurrentRefinementsProps['items'][number]['refinements'][number] & {
+                transformed: boolean;
+              }
+            >;
+          }
+        >;
 
         expect(renderedItems[0].refinements[0].transformed).toBe(true);
         expect(renderedItems[0].refinements[1].transformed).toBe(true);
+
         expect(renderedItems[1].refinements[0].transformed).toBe(true);
         expect(renderedItems[1].refinements[1].transformed).toBe(true);
+
         expect(renderedItems[2].refinements[0].transformed).toBe(true);
         expect(renderedItems[2].refinements[1].transformed).toBe(true);
       });
@@ -406,9 +437,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          CurrentRefinementsProps
+        >;
+        const props = firstRender.props as CurrentRefinementsProps;
 
-        expect(firstRender[0].props.cssClasses.root).toContain('customRoot');
+        expect(props.cssClasses.root).toContain('customRoot');
       });
 
       it('should work with an array', () => {
@@ -432,11 +466,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          CurrentRefinementsProps
+        >;
+        const props = firstRender.props as CurrentRefinementsProps;
 
-        expect(firstRender[0].props.cssClasses.root).toContain('customRoot1');
+        expect(props.cssClasses.root).toContain('customRoot1');
 
-        expect(firstRender[0].props.cssClasses.root).toContain('customRoot2');
+        expect(props.cssClasses.root).toContain('customRoot2');
       });
     });
 
@@ -539,9 +576,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
 
-        expect(firstRender[0].props).toMatchSnapshot();
+        expect(firstRender.props).toMatchSnapshot();
       });
     });
   });
