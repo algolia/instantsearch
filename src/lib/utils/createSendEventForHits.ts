@@ -60,8 +60,11 @@ const buildPayload: BuildPayload = ({
       return null;
     }
   }
-  // `[...hits]` is to remove `hits.__escaped`
-  const hitsArray = Array.isArray(hits) ? [...hits] : [hits];
+  const hitsArray: Hit[] & { __escaped?: boolean } = Array.isArray(hits)
+    ? hits
+    : [hits];
+  delete hitsArray.__escaped;
+
   if (hitsArray.length === 0) {
     return null;
   }
