@@ -3,7 +3,7 @@
 
 ### Bug Fixes
 
-* **smartSort:** export the widget and the connector ([#4663](https://github.com/algolia/instantsearch.js/issues/4663)) ([e7aaa8c](https://github.com/algolia/instantsearch.js/commit/e7aaa8ceb47b8cafc3a3a323ebe47f45f3841ba4))
+* **relevantSort:** export the widget and the connector ([#4663](https://github.com/algolia/instantsearch.js/issues/4663)) ([e7aaa8c](https://github.com/algolia/instantsearch.js/commit/e7aaa8ceb47b8cafc3a3a323ebe47f45f3841ba4))
 
 
 ### Features
@@ -17,7 +17,7 @@
 
 ### Features
 
-* **smartSort:** add widget ([#4648](https://github.com/algolia/instantsearch.js/issues/4648)) ([89c6e86](https://github.com/algolia/instantsearch.js/commit/89c6e868f490e9b6e507dd70c215e962f4c69ccb))
+* **relevantSort:** add widget ([#4648](https://github.com/algolia/instantsearch.js/issues/4648)) ([89c6e86](https://github.com/algolia/instantsearch.js/commit/89c6e868f490e9b6e507dd70c215e962f4c69ccb))
 * **stats:** apply nbSortedHits ([#4649](https://github.com/algolia/instantsearch.js/issues/4649)) ([34478c1](https://github.com/algolia/instantsearch.js/commit/34478c198dcafbd45fd101db0cd2fbe6328272b8))
 * **ts:** convert menu ([#4652](https://github.com/algolia/instantsearch.js/issues/4652)) ([2271b43](https://github.com/algolia/instantsearch.js/commit/2271b4379918e865a1b0cea09c139e517df97bc5))
 

@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import connectSmartSort from '../connectSmartSort';
+import connectRelevantSort from '../connectRelevantSort';
 import {
   createInitOptions,
   createRenderOptions,
@@ -16,17 +16,17 @@ const createHelper = () => {
   return algoliasearchHelper(createSearchClient(), '', {});
 };
 
-describe('connectSmartSort', () => {
+describe('connectRelevantSort', () => {
   it('is a widget', () => {
     const render = jest.fn();
     const unmount = jest.fn();
 
-    const customSmartSort = connectSmartSort(render, unmount);
-    const widget = customSmartSort({});
+    const customRelevantSort = connectRelevantSort(render, unmount);
+    const widget = customRelevantSort({});
 
     expect(widget).toEqual(
       expect.objectContaining({
-        $$type: 'ais.smartSort',
+        $$type: 'ais.relevantSort',
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
@@ -36,7 +36,7 @@ describe('connectSmartSort', () => {
 
   it('dispose relevancyStrictness set by the widget', () => {
     const helper = createHelper();
-    const makeWidget = connectSmartSort(noop);
+    const makeWidget = connectRelevantSort(noop);
     const widget = makeWidget({});
     widget.init!(createInitOptions({ helper }));
     const { refine } = widget.getWidgetRenderState(
@@ -59,7 +59,7 @@ describe('connectSmartSort', () => {
 
   it('apply relevancyStrictness to helper on refine()', () => {
     const helper = createHelper();
-    const makeWidget = connectSmartSort(noop);
+    const makeWidget = connectRelevantSort(noop);
     const widget = makeWidget({});
 
     widget.init!(createInitOptions({ helper }));
@@ -76,9 +76,9 @@ describe('connectSmartSort', () => {
     expect(helper.state.relevancyStrictness).toEqual(11);
   });
 
-  it('decide isSmartSorted based on appliedRelevancyStrictness', () => {
+  it('decide isRelevantSorted based on appliedRelevancyStrictness', () => {
     const helper = createHelper();
-    const makeWidget = connectSmartSort(noop);
+    const makeWidget = connectRelevantSort(noop);
     const widget = makeWidget({});
 
     widget.init!(createInitOptions({ helper }));
@@ -94,7 +94,7 @@ describe('connectSmartSort', () => {
         ]),
       })
     );
-    expect(renderState.isSmartSorted).toBe(true);
+    expect(renderState.isRelevantSorted).toBe(true);
 
     renderState = widget.getWidgetRenderState(
       createRenderOptions({
@@ -107,12 +107,12 @@ describe('connectSmartSort', () => {
         ]),
       })
     );
-    expect(renderState.isSmartSorted).toBe(false);
+    expect(renderState.isRelevantSorted).toBe(false);
   });
 
   it('decide isVirtualReplica based on appliedRelevancyStrictness', () => {
     const helper = createHelper();
-    const makeWidget = connectSmartSort(noop);
+    const makeWidget = connectRelevantSort(noop);
     const widget = makeWidget({});
 
     widget.init!(createInitOptions({ helper }));
@@ -162,15 +162,15 @@ describe('connectSmartSort', () => {
       const helper = createHelper();
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
-      const makeWidget = connectSmartSort(renderFn, unmountFn);
+      const makeWidget = connectRelevantSort(renderFn, unmountFn);
       const widget = makeWidget({});
 
       const renderState1 = widget.getRenderState(
         {},
         createInitOptions({ helper })
       );
-      expect(renderState1.smartSort).toEqual({
-        isSmartSorted: false,
+      expect(renderState1.relevantSort).toEqual({
+        isRelevantSorted: false,
         isVirtualReplica: false,
         refine: expect.any(Function),
         widgetParams: {},
@@ -189,8 +189,8 @@ describe('connectSmartSort', () => {
           ]),
         })
       );
-      expect(renderState2.smartSort).toEqual({
-        isSmartSorted: true,
+      expect(renderState2.relevantSort).toEqual({
+        isRelevantSorted: true,
         isVirtualReplica: true,
         refine: expect.any(Function),
         widgetParams: {},
@@ -201,14 +201,14 @@ describe('connectSmartSort', () => {
   describe('getWidgetRenderState', () => {
     it('return the widget render state', () => {
       const helper = createHelper();
-      const makeWidget = connectSmartSort(noop);
+      const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
       const widgetRenderState1 = widget.getWidgetRenderState(
         createInitOptions({ helper })
       );
       expect(widgetRenderState1).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: false,
         refine: expect.any(Function),
         widgetParams: {},
@@ -227,7 +227,7 @@ describe('connectSmartSort', () => {
         })
       );
       expect(widgetRenderState2).toEqual({
-        isSmartSorted: true,
+        isRelevantSorted: true,
         isVirtualReplica: true,
         refine: expect.any(Function),
         widgetParams: {},
@@ -238,19 +238,19 @@ describe('connectSmartSort', () => {
   describe('getWidgetUiState', () => {
     it('does not have relevancyStrictness by default', () => {
       const helper = createHelper();
-      const makeWidget = connectSmartSort(noop);
+      const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
       const widgetUiState = widget.getWidgetUiState!(
         {},
         { helper, searchParameters: helper.state }
       );
-      expect(widgetUiState.smartSort?.relevancyStrictness).toBeUndefined();
+      expect(widgetUiState.relevantSort?.relevancyStrictness).toBeUndefined();
     });
 
     it('add refined parameters', () => {
       const helper = createHelper();
-      const makeWidget = connectSmartSort(noop);
+      const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
       widget.init!(createInitOptions({ helper }));
@@ -262,22 +262,22 @@ describe('connectSmartSort', () => {
       expect(
         widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
       ).toEqual({
-        smartSort: { relevancyStrictness: 25 },
+        relevantSort: { relevancyStrictness: 25 },
       });
     });
 
     it('overwrite existing uiState with searchParameters', () => {
       const helper = createHelper();
-      const makeWidget = connectSmartSort(noop);
+      const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
       expect(
         widget.getWidgetUiState!(
-          { smartSort: { relevancyStrictness: 25 } },
+          { relevantSort: { relevancyStrictness: 25 } },
           { helper, searchParameters: helper.state }
         )
       ).toEqual({
-        smartSort: { relevancyStrictness: undefined },
+        relevantSort: { relevancyStrictness: undefined },
       });
 
       const { refine } = widget.getWidgetRenderState(
@@ -288,18 +288,18 @@ describe('connectSmartSort', () => {
       // applies 30 from searchParameters
       expect(
         widget.getWidgetUiState!(
-          { smartSort: { relevancyStrictness: 25 } },
+          { relevantSort: { relevancyStrictness: 25 } },
           { helper, searchParameters: helper.state }
         )
       ).toEqual({
-        smartSort: { relevancyStrictness: 30 },
+        relevantSort: { relevancyStrictness: 30 },
       });
     });
   });
 
   describe('getWidgetSearchParameters', () => {
     it('does not include relevancyStrictness by default', () => {
-      const makeWidget = connectSmartSort(noop);
+      const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
       const searchParameters = widget.getWidgetSearchParameters!(
@@ -312,14 +312,14 @@ describe('connectSmartSort', () => {
     });
 
     it('return parameters set by uiState', () => {
-      const makeWidget = connectSmartSort(noop);
+      const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
       const searchParameters = widget.getWidgetSearchParameters!(
         new SearchParameters(),
         {
           uiState: {
-            smartSort: {
+            relevantSort: {
               relevancyStrictness: 15,
             },
           },
@@ -332,7 +332,7 @@ describe('connectSmartSort', () => {
 
     it('store refined state', () => {
       const helper = createHelper();
-      const makeWidget = connectSmartSort(noop);
+      const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
       const { refine } = widget.getWidgetRenderState(
@@ -348,7 +348,7 @@ describe('connectSmartSort', () => {
 
     it('override parameters with the value from uiState', () => {
       const helper = createHelper();
-      const makeWidget = connectSmartSort(noop);
+      const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
       const { refine } = widget.getWidgetRenderState(
@@ -360,7 +360,7 @@ describe('connectSmartSort', () => {
         new SearchParameters(),
         {
           uiState: {
-            smartSort: {
+            relevantSort: {
               relevancyStrictness: 15,
             },
           },
