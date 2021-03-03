@@ -9,6 +9,6 @@
     "react": "16.8.6",
     "react-compound-slider": "2.2.0",
     "react-dom": "16.8.6",
-    "react-instantsearch-dom": "6.10.0"
+    "react-instantsearch-dom": "6.10.2"
   }
 }
