@@ -60,7 +60,8 @@ const buildPayload: BuildPayload = ({
       return null;
     }
   }
-  const hitsArray = Array.isArray(hits) ? hits : [hits];
+  // `Array.from(hits)` is to remove `hits.__escaped`
+  const hitsArray = Array.isArray(hits) ? Array.from(hits) : [hits];
   if (hitsArray.length === 0) {
     return null;
   }
@@ -78,6 +79,7 @@ const buildPayload: BuildPayload = ({
         index,
         objectIDs,
       },
+      hits: hitsArray,
     };
   } else if (eventType === 'click') {
     return {
@@ -91,6 +93,7 @@ const buildPayload: BuildPayload = ({
         objectIDs,
         positions,
       },
+      hits: hitsArray,
     };
   } else if (eventType === 'conversion') {
     return {
@@ -103,6 +106,7 @@ const buildPayload: BuildPayload = ({
         queryID,
         objectIDs,
       },
+      hits: hitsArray,
     };
   } else if (__DEV__) {
     throw new Error(`eventType("${eventType}") is not supported.

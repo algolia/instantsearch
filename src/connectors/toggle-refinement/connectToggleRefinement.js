@@ -37,6 +37,7 @@ const createSendEvent = ({ instantSearchInstance, attribute, on, helper }) => (
         index: helper.getIndex(),
         filters: on.map(value => `${attribute}:${value}`),
       },
+      attribute,
     });
   }
 };

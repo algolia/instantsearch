@@ -1545,6 +1545,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         eventType: 'view',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            _geoloc: {
+              lat: 10,
+              lng: 12,
+            },
+            objectID: 123,
+          },
+          {
+            __position: 1,
+            __queryID: 'test-query-id',
+            _geoloc: {
+              lat: 12,
+              lng: 14,
+            },
+            objectID: 456,
+          },
+          {
+            __position: 2,
+            __queryID: 'test-query-id',
+            _geoloc: {
+              lat: 14,
+              lng: 16,
+            },
+            objectID: 789,
+          },
+        ],
         insightsMethod: 'viewedObjectIDs',
         payload: {
           eventName: 'Hits Viewed',
@@ -1568,6 +1597,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         eventType: 'click',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            _geoloc: {
+              lat: 10,
+              lng: 12,
+            },
+            objectID: 123,
+          },
+        ],
         insightsMethod: 'clickedObjectIDsAfterSearch',
         payload: {
           eventName: 'Location Added',
@@ -1591,8 +1631,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         2
       );
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      expect(
+        instantSearchInstance.sendEventToInsights
+      ).toHaveBeenLastCalledWith({
         eventType: 'conversion',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            _geoloc: {
+              lat: 10,
+              lng: 12,
+            },
+            objectID: 123,
+          },
+        ],
         insightsMethod: 'convertedObjectIDsAfterSearch',
         payload: {
           eventName: 'Location Saved',

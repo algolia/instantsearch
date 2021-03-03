@@ -1,8 +1,8 @@
-import {
-  createSendEventForHits,
-  createBindEventForHits,
-} from '../createSendEventForHits';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import {
+  createBindEventForHits,
+  createSendEventForHits,
+} from '../createSendEventForHits';
 
 const createTestEnvironment = () => {
   const instantSearchInstance = createInstantSearch();
@@ -93,6 +93,13 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'view',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
       insightsMethod: 'viewedObjectIDs',
       payload: {
         eventName: 'Hits Viewed',
@@ -109,6 +116,13 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'view',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
       insightsMethod: 'viewedObjectIDs',
       payload: {
         eventName: 'Products Displayed',
@@ -125,6 +139,18 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'view',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+        {
+          __position: 1,
+          __queryID: 'test-query-id',
+          objectID: 'obj1',
+        },
+      ],
       insightsMethod: 'viewedObjectIDs',
       payload: {
         eventName: 'Hits Viewed',
@@ -141,6 +167,13 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'click',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
       insightsMethod: 'clickedObjectIDsAfterSearch',
       payload: {
         eventName: 'Product Clicked',
@@ -159,6 +192,13 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'conversion',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
       insightsMethod: 'convertedObjectIDsAfterSearch',
       payload: {
         eventName: 'Product Ordered',
@@ -197,6 +237,13 @@ describe('createBindEventForHits', () => {
     );
     expect(parsedPayload).toEqual({
       eventType: 'click',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
       insightsMethod: 'clickedObjectIDsAfterSearch',
       payload: {
         eventName: 'Product Clicked',
@@ -216,6 +263,13 @@ describe('createBindEventForHits', () => {
     );
     expect(parsedPayload).toEqual({
       eventType: 'conversion',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
       insightsMethod: 'convertedObjectIDsAfterSearch',
       payload: {
         eventName: 'Product Ordered',
