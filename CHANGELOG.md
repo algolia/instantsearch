@@ -1,3 +1,12 @@
+## [6.10.2](https://github.com/algolia/react-instantsearch/compare/v6.10.1...v6.10.2) (2021-03-03)
+
+
+### Bug Fixes
+
+* **infiniteHits:** fix stale hits issue ([#3021](https://github.com/algolia/react-instantsearch/issues/3021)) ([a9a29c7](https://github.com/algolia/react-instantsearch/commit/a9a29c7))
+
+
+
 ## [6.10.1](https://github.com/algolia/react-instantsearch/compare/v6.10.0...v6.10.1) (2021-03-02)
 
 
