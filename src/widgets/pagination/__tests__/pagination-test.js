@@ -6,7 +6,7 @@ import { SearchResults, SearchParameters } from 'algoliasearch-helper';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -14,7 +14,7 @@ jest.mock('preact', () => {
 });
 
 jest.mock('../../../lib/utils/getContainerNode', () => {
-  const module = require.requireActual('../../../lib/utils/getContainerNode');
+  const module = jest.requireActual('../../../lib/utils/getContainerNode');
 
   const _getContainerNode = module.default;
   module.default = jest.fn((...args) => _getContainerNode(...args));

@@ -18,7 +18,7 @@ import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 jest.useFakeTimers();
 
 jest.mock('algoliasearch-helper', () => {
-  const module = require.requireActual('algoliasearch-helper');
+  const module = jest.requireActual('algoliasearch-helper');
   const mock = jest.fn((...args) => {
     const helper = module(...args);
 

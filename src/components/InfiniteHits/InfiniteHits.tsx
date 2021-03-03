@@ -19,7 +19,7 @@ type InfiniteHitsCSSClasses = {
   disabledLoadMore: string;
 };
 
-type InfiniteHitsProps = {
+export type InfiniteHitsProps = {
   cssClasses: InfiniteHitsCSSClasses;
   hits: Hits;
   results: SearchResults;
