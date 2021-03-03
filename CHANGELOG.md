@@ -1,3 +1,12 @@
+## [4.16.1](https://github.com/algolia/instantsearch.js/compare/v4.16.0...v4.16.1) (2021-03-03)
+
+
+### Bug Fixes
+
+* **relevantSort:** rename smartSort to relevantSort ([#4668](https://github.com/algolia/instantsearch.js/issues/4668)) ([579eee8](https://github.com/algolia/instantsearch.js/commit/579eee8d38effe067407a269e493400c460eb842))
+
+
+
 # [4.16.0](https://github.com/algolia/instantsearch.js/compare/v4.15.0...v4.16.0) (2021-03-01)
 
 
