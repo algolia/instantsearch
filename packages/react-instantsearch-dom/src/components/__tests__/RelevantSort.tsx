@@ -1,13 +1,13 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import SmartSort, { SmartSortComponentProps } from '../SmartSort';
+import RelevantSort, { RelevantSortComponentProps } from '../RelevantSort';
 
-describe('SmartSort', () => {
+describe('RelevantSort', () => {
   it("returns null if it's not a virtual replica", () => {
     const tree = renderer.create(
-      <SmartSort
+      <RelevantSort
         isVirtualReplica={false}
-        isSmartSorted={false}
+        isRelevantSorted={false}
         refine={() => {}}
       />
     );
@@ -17,27 +17,29 @@ describe('SmartSort', () => {
 
   it('accepts a custom className', () => {
     const tree = renderer.create(
-      <SmartSort
-        className="MyCustomSmartSort"
+      <RelevantSort
+        className="MyCustomRelevantSort"
         isVirtualReplica={true}
-        isSmartSorted={false}
+        isRelevantSorted={false}
         refine={() => {}}
       />
     );
 
-    expect(tree.root.props.className.includes('MyCustomSmartSort')).toBe(true);
+    expect(tree.root.props.className.includes('MyCustomRelevantSort')).toBe(
+      true
+    );
   });
 
-  it('forward isSmartSorted to props components', () => {
+  it('forward isRelevantSorted to props components', () => {
     const mockTextComponent = jest.fn(() => null);
 
     const mockButtonTextComponent = jest.fn(() => null);
 
     renderer.create(
-      <SmartSort
+      <RelevantSort
         buttonTextComponent={mockTextComponent}
         isVirtualReplica={true}
-        isSmartSorted={true}
+        isRelevantSorted={true}
         refine={() => {}}
         textComponent={mockButtonTextComponent}
       />
@@ -45,13 +47,13 @@ describe('SmartSort', () => {
 
     expect(mockTextComponent).toHaveBeenCalledWith(
       {
-        isSmartSorted: true,
+        isRelevantSorted: true,
       },
       {}
     );
     expect(mockButtonTextComponent).toHaveBeenCalledWith(
       {
-        isSmartSorted: true,
+        isRelevantSorted: true,
       },
       {}
     );
@@ -59,22 +61,22 @@ describe('SmartSort', () => {
 
   it('renders with the default ButtonTextComponent', () => {
     const tree = renderer.create(
-      <SmartSort
+      <RelevantSort
         isVirtualReplica={true}
-        isSmartSorted={true}
+        isRelevantSorted={true}
         refine={() => {}}
       />
     );
 
     expect(tree.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="ais-SmartSort"
+        className="ais-RelevantSort"
       >
         <div
-          className="ais-SmartSort-text"
+          className="ais-RelevantSort-text"
         />
         <button
-          className="ais-SmartSort-button"
+          className="ais-RelevantSort-button"
           onClick={[Function]}
         >
           <span>
@@ -87,27 +89,29 @@ describe('SmartSort', () => {
 
   it('renders with a custom ButtonTextComponent', () => {
     const tree = renderer.create(
-      <SmartSort
-        buttonTextComponent={({ isSmartSorted }: SmartSortComponentProps) => (
+      <RelevantSort
+        buttonTextComponent={({
+          isRelevantSorted,
+        }: RelevantSortComponentProps) => (
           <span>
-            {isSmartSorted ? 'See all results' : 'See relevant results'}
+            {isRelevantSorted ? 'See all results' : 'See relevant results'}
           </span>
         )}
         isVirtualReplica={true}
-        isSmartSorted={true}
+        isRelevantSorted={true}
         refine={() => {}}
       />
     );
 
     expect(tree.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="ais-SmartSort"
+        className="ais-RelevantSort"
       >
         <div
-          className="ais-SmartSort-text"
+          className="ais-RelevantSort-text"
         />
         <button
-          className="ais-SmartSort-button"
+          className="ais-RelevantSort-button"
           onClick={[Function]}
         >
           <span>
@@ -120,22 +124,22 @@ describe('SmartSort', () => {
 
   it('renders without a textComponent', () => {
     const tree = renderer.create(
-      <SmartSort
+      <RelevantSort
         isVirtualReplica={true}
-        isSmartSorted={false}
+        isRelevantSorted={false}
         refine={() => {}}
       />
     );
 
     expect(tree.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="ais-SmartSort"
+        className="ais-RelevantSort"
       >
         <div
-          className="ais-SmartSort-text"
+          className="ais-RelevantSort-text"
         />
         <button
-          className="ais-SmartSort-button"
+          className="ais-RelevantSort-button"
           onClick={[Function]}
         >
           <span>
@@ -148,13 +152,13 @@ describe('SmartSort', () => {
 
   it('renders with a custom textComponent', () => {
     const tree = renderer.create(
-      <SmartSort
+      <RelevantSort
         isVirtualReplica={true}
-        isSmartSorted={false}
+        isRelevantSorted={false}
         refine={() => {}}
-        textComponent={({ isSmartSorted }: SmartSortComponentProps) => (
+        textComponent={({ isRelevantSorted }: RelevantSortComponentProps) => (
           <p>
-            {isSmartSorted
+            {isRelevantSorted
               ? 'We removed some search results to show you the most relevant ones'
               : 'Currently showing all results'}
           </p>
@@ -164,17 +168,17 @@ describe('SmartSort', () => {
 
     expect(tree.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="ais-SmartSort"
+        className="ais-RelevantSort"
       >
         <div
-          className="ais-SmartSort-text"
+          className="ais-RelevantSort-text"
         >
           <p>
             Currently showing all results
           </p>
         </div>
         <button
-          className="ais-SmartSort-button"
+          className="ais-RelevantSort-button"
           onClick={[Function]}
         >
           <span>

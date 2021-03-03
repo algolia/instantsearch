@@ -3,31 +3,31 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { createClassNames } from '../core/utils';
 
-const cx = createClassNames('SmartSort');
+const cx = createClassNames('RelevantSort');
 
-export type SmartSortComponentProps = {
-  isSmartSorted: boolean;
+export type RelevantSortComponentProps = {
+  isRelevantSorted: boolean;
 };
 
-export type SmartSortProps = {
+export type RelevantSortProps = {
   className?: string;
   isVirtualReplica: boolean;
-  isSmartSorted: boolean;
-  buttonTextComponent?: React.FunctionComponent<SmartSortComponentProps>;
-  textComponent?: React.FunctionComponent<SmartSortComponentProps>;
+  isRelevantSorted: boolean;
+  buttonTextComponent?: React.FunctionComponent<RelevantSortComponentProps>;
+  textComponent?: React.FunctionComponent<RelevantSortComponentProps>;
   refine(relevancyStrictness: number | undefined): void;
 };
 
 const DefaultButtonTextComponent = ({
-  isSmartSorted,
-}: SmartSortComponentProps) => (
-  <span>{isSmartSorted ? 'See all results' : 'See relevant results'}</span>
+  isRelevantSorted,
+}: RelevantSortComponentProps) => (
+  <span>{isRelevantSorted ? 'See all results' : 'See relevant results'}</span>
 );
 
-const SmartSort: React.FC<SmartSortProps> = ({
+const RelevantSort: React.FC<RelevantSortProps> = ({
   className = '',
   isVirtualReplica,
-  isSmartSorted,
+  isRelevantSorted,
   buttonTextComponent: ButtonTextComponent = DefaultButtonTextComponent,
   textComponent: TextComponent,
   refine,
@@ -35,24 +35,24 @@ const SmartSort: React.FC<SmartSortProps> = ({
   !isVirtualReplica ? null : (
     <div className={classNames(cx(''), className)}>
       <div className={cx('text')}>
-        {TextComponent && <TextComponent isSmartSorted={isSmartSorted} />}
+        {TextComponent && <TextComponent isRelevantSorted={isRelevantSorted} />}
       </div>
       <button
         className={cx('button')}
-        onClick={() => refine(isSmartSorted ? 0 : undefined)}
+        onClick={() => refine(isRelevantSorted ? 0 : undefined)}
       >
-        <ButtonTextComponent isSmartSorted={isSmartSorted} />
+        <ButtonTextComponent isRelevantSorted={isRelevantSorted} />
       </button>
     </div>
   );
 
-SmartSort.propTypes = {
+RelevantSort.propTypes = {
   buttonTextComponent: PropTypes.func,
   className: PropTypes.string,
   isVirtualReplica: PropTypes.bool.isRequired,
-  isSmartSorted: PropTypes.bool.isRequired,
+  isRelevantSorted: PropTypes.bool.isRequired,
   refine: PropTypes.func.isRequired,
   textComponent: PropTypes.func,
 };
 
-export default SmartSort;
+export default RelevantSort;
