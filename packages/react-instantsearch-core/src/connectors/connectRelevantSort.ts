@@ -26,7 +26,7 @@ function getCurrentRefinement(
 }
 
 export default createConnector({
-  displayName: 'AlgoliaSmartSort',
+  displayName: 'AlgoliaRelevantSort',
 
   getProvidedProps(props, _searchState, searchResults) {
     const results = getResults(searchResults, {
@@ -37,13 +37,13 @@ export default createConnector({
     if (!results) {
       return {
         isVirtualReplica: false,
-        isSmartSorted: false,
+        isRelevantSorted: false,
       };
     }
 
     return {
       isVirtualReplica: results.appliedRelevancyStrictness !== undefined,
-      isSmartSorted:
+      isRelevantSorted:
         results.appliedRelevancyStrictness !== undefined &&
         results.appliedRelevancyStrictness > 0,
     };

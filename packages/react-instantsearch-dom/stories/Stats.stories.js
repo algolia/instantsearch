@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { Panel, Stats, SmartSort } from 'react-instantsearch-dom';
+import { Panel, Stats, RelevantSort } from 'react-instantsearch-dom';
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Stats', module);
@@ -29,17 +29,17 @@ stories
     >
       <div>
         <Stats />
-        <SmartSort
-          textComponent={({ isSmartSorted }) => (
+        <RelevantSort
+          textComponent={({ isRelevantSorted }) => (
             <div>
-              {isSmartSorted
+              {isRelevantSorted
                 ? 'We removed some search results to show you the most relevant ones'
                 : 'Currently showing all results'}
             </div>
           )}
-          buttonTextComponent={({ isSmartSorted }) => (
+          buttonTextComponent={({ isRelevantSorted }) => (
             <div>
-              {isSmartSorted ? 'See all results' : 'See relevant results'}
+              {isRelevantSorted ? 'See all results' : 'See relevant results'}
             </div>
           )}
         />

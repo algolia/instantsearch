@@ -12,7 +12,7 @@ export { default as RefinementList } from './RefinementList';
 export { default as ClearRefinements } from './ClearRefinements';
 export { default as ScrollTo } from './ScrollTo';
 export { default as SearchBox } from './SearchBox';
-export { default as SmartSort } from './SmartSort';
+export { default as RelevantSort } from './RelevantSort';
 export { default as SortBy } from './SortBy';
 export { default as Stats } from './Stats';
 export { default as ToggleRefinement } from './ToggleRefinement';

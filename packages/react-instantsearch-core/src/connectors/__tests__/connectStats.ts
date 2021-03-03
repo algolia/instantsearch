@@ -24,7 +24,7 @@ describe('connectStats', () => {
           processingTimeMS: 1,
           hits: [],
           nbSortedHits: undefined,
-          isSmartSorted: false,
+          isRelevantSorted: false,
         },
       });
       expect(props).toEqual({
@@ -57,7 +57,7 @@ describe('connectStats', () => {
               nbHits: 666,
               processingTimeMS: 1,
               nbSortedHits: undefined,
-              isSmartSorted: false,
+              isRelevantSorted: false,
             },
           },
         }

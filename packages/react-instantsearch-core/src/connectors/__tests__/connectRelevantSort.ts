@@ -1,5 +1,5 @@
 import { ConnectorDescription } from '../../core/createConnector';
-import connectReal from '../connectSmartSort';
+import connectReal from '../connectRelevantSort';
 
 jest.mock(
   '../../core/createConnector',
@@ -10,7 +10,7 @@ jest.mock(
 // @TODO: refactor these tests to work better with TS
 const connect: any = connectReal;
 
-describe('connectSmartSort', () => {
+describe('connectRelevantSort', () => {
   describe('single index', () => {
     const contextValue = { mainTargetedIndex: 'index' };
 
@@ -20,7 +20,7 @@ describe('connectSmartSort', () => {
       });
 
       expect(props).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: false,
       });
     });
@@ -36,7 +36,7 @@ describe('connectSmartSort', () => {
       });
 
       expect(props).toEqual({
-        isSmartSorted: true,
+        isRelevantSorted: true,
         isVirtualReplica: true,
       });
     });
@@ -47,12 +47,12 @@ describe('connectSmartSort', () => {
       });
 
       expect(props).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: false,
       });
     });
 
-    it('decide isSmartSorted based on appliedRelevancyStrictness', () => {
+    it('decide isRelevantSorted based on appliedRelevancyStrictness', () => {
       const props = connect.getProvidedProps({ contextValue }, null, {
         results: {
           hits: [],
@@ -61,7 +61,7 @@ describe('connectSmartSort', () => {
       });
 
       expect(props).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: true,
       });
     });
@@ -77,7 +77,7 @@ describe('connectSmartSort', () => {
       });
 
       expect(props).toEqual({
-        isSmartSorted: true,
+        isRelevantSorted: true,
         isVirtualReplica: true,
       });
 
@@ -96,7 +96,7 @@ describe('connectSmartSort', () => {
       });
 
       expect(props).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: true,
       });
     });
@@ -116,7 +116,7 @@ describe('connectSmartSort', () => {
       );
 
       expect(props).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: false,
       });
     });
@@ -138,7 +138,7 @@ describe('connectSmartSort', () => {
       );
 
       expect(props).toEqual({
-        isSmartSorted: true,
+        isRelevantSorted: true,
         isVirtualReplica: true,
       });
     });
@@ -153,12 +153,12 @@ describe('connectSmartSort', () => {
       );
 
       expect(props).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: false,
       });
     });
 
-    it('decide isSmartSorted based on appliedRelevancyStrictness', () => {
+    it('decide isRelevantSorted based on appliedRelevancyStrictness', () => {
       const props = connect.getProvidedProps(
         { contextValue, indexContextValue },
         null,
@@ -173,7 +173,7 @@ describe('connectSmartSort', () => {
       );
 
       expect(props).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: true,
       });
     });
@@ -195,7 +195,7 @@ describe('connectSmartSort', () => {
       );
 
       expect(props).toEqual({
-        isSmartSorted: true,
+        isRelevantSorted: true,
         isVirtualReplica: true,
       });
 
@@ -220,7 +220,7 @@ describe('connectSmartSort', () => {
       );
 
       expect(props).toEqual({
-        isSmartSorted: false,
+        isRelevantSorted: false,
         isVirtualReplica: true,
       });
     });
