@@ -3,25 +3,25 @@
 import { h } from 'preact';
 import Template from '../Template/Template';
 import {
-  SmartSortCSSClasses,
-  SmartSortTemplates,
-} from '../../widgets/smart-sort/smart-sort';
+  RelevantSortCSSClasses,
+  RelevantSortTemplates,
+} from '../../widgets/relevant-sort/relevant-sort';
 
-type SmartSortProps = {
-  cssClasses: SmartSortCSSClasses;
-  templates: SmartSortTemplates;
-  isSmartSorted: boolean;
+type RelevantSortProps = {
+  cssClasses: RelevantSortCSSClasses;
+  templates: RelevantSortTemplates;
+  isRelevantSorted: boolean;
   isVirtualReplica: boolean;
   refine(relevancyStrictness: number | undefined): void;
 };
 
-const SmartSort = ({
+const RelevantSort = ({
   cssClasses,
   templates,
-  isSmartSorted,
+  isRelevantSorted,
   isVirtualReplica,
   refine,
-}: SmartSortProps) =>
+}: RelevantSortProps) =>
   isVirtualReplica ? (
     <div className={cssClasses.root}>
       <Template
@@ -30,13 +30,13 @@ const SmartSort = ({
         rootProps={{
           className: cssClasses.text,
         }}
-        data={{ isSmartSorted }}
+        data={{ isRelevantSorted }}
       />
       <button
         type="button"
         className={cssClasses.button}
         onClick={() => {
-          if (isSmartSorted) {
+          if (isRelevantSorted) {
             refine(0);
           } else {
             refine(undefined);
@@ -47,10 +47,10 @@ const SmartSort = ({
           rootTagName="span"
           templateKey="button"
           templates={templates}
-          data={{ isSmartSorted }}
+          data={{ isRelevantSorted }}
         />
       </button>
     </div>
   ) : null;
 
-export default SmartSort;
+export default RelevantSort;

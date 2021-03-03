@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import smartSort from '../src/widgets/smart-sort/smart-sort';
+import relevantSort from '../src/widgets/relevant-sort/relevant-sort';
 
 const searchOptions = {
   appId: 'C7RIRJRYR9',
@@ -8,14 +8,14 @@ const searchOptions = {
   indexName: 'test_Bestbuy_vr_price_asc',
 };
 
-storiesOf('Sorting/SmartSort', module).add(
+storiesOf('Sorting/RelevantSort', module).add(
   'default',
   withHits(({ search, container }) => {
     search.addWidgets([
-      smartSort({
+      relevantSort({
         container,
         cssClasses: {
-          root: 'my-SmartSort',
+          root: 'my-RelevantSort',
         },
       }),
     ]);

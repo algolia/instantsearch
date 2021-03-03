@@ -1,22 +1,22 @@
 import { Connector } from '../../types';
 import { noop } from '../../lib/utils';
 
-export type SmartSortConnectorParams = {};
+export type RelevantSortConnectorParams = {};
 
 type Refine = (relevancyStrictness: number) => void;
 
-export type SmartSortRendererOptions = {
-  isSmartSorted: boolean;
+export type RelevantSortRendererOptions = {
+  isRelevantSorted: boolean;
   isVirtualReplica: boolean;
   refine: Refine;
 };
 
-export type SmartSortConnector = Connector<
-  SmartSortRendererOptions,
-  SmartSortConnectorParams
+export type RelevantSortConnector = Connector<
+  RelevantSortRendererOptions,
+  RelevantSortConnectorParams
 >;
 
-const connectSmartSort: SmartSortConnector = function connectSmartSort(
+const connectRelevantSort: RelevantSortConnector = function connectRelevantSort(
   renderFn = noop,
   unmountFn = noop
 ) {
@@ -28,7 +28,7 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
     const connectorState: ConnectorState = {};
 
     return {
-      $$type: 'ais.smartSort',
+      $$type: 'ais.relevantSort',
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
@@ -62,7 +62,7 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          smartSort: this.getWidgetRenderState(renderOptions),
+          relevantSort: this.getWidgetRenderState(renderOptions),
         };
       },
 
@@ -78,7 +78,7 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
         const { appliedRelevancyStrictness } = results || {};
 
         return {
-          isSmartSorted:
+          isRelevantSorted:
             typeof appliedRelevancyStrictness !== 'undefined' &&
             appliedRelevancyStrictness > 0,
           isVirtualReplica: appliedRelevancyStrictness !== undefined,
@@ -90,15 +90,15 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
       getWidgetSearchParameters(state, { uiState }) {
         return state.setQueryParameter(
           'relevancyStrictness',
-          uiState.smartSort?.relevancyStrictness ?? state.relevancyStrictness
+          uiState.relevantSort?.relevancyStrictness ?? state.relevancyStrictness
         );
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
         return {
           ...uiState,
-          smartSort: {
-            ...uiState.smartSort,
+          relevantSort: {
+            ...uiState.relevantSort,
             relevancyStrictness: searchParameters.relevancyStrictness,
           },
         };
@@ -107,4 +107,4 @@ const connectSmartSort: SmartSortConnector = function connectSmartSort(
   };
 };
 
-export default connectSmartSort;
+export default connectRelevantSort;
