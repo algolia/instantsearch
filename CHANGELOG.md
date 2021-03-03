@@ -1,3 +1,12 @@
+## [6.10.3](https://github.com/algolia/react-instantsearch/compare/v6.10.2...v6.10.3) (2021-03-03)
+
+
+### Bug Fixes
+
+* **RelevantSort:** Rename `SmartSort` widget to `RelevantSort` ([#3026](https://github.com/algolia/react-instantsearch/issues/3026)) ([47d11bf](https://github.com/algolia/react-instantsearch/commit/47d11bf))
+
+
+
 ## [6.10.2](https://github.com/algolia/react-instantsearch/compare/v6.10.1...v6.10.2) (2021-03-03)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-e-commerce",
-  "version": "6.10.2",
+  "version": "6.10.3",
   "private": true,
   "dependencies": {
     "algoliasearch": "4.8.5",
