@@ -19,9 +19,20 @@ storiesOf('ais-relevant-sort', module)
     template: `
       <ais-relevant-sort>
         <template slot="text" slot-scope="{ isRelevantSorted }">
-          {{ isRelevantSorted
-               ? 'We removed some search results to show you the most relevant ones'
-               : 'Currently showing all results' }}
+          <template v-if="isRelevantSorted">
+            We removed some search results to show you the most relevant ones
+          </template>
+          <template>
+            Currently showing all results
+          </template>
+        </template>
+        <template slot="button" slot-scope="{ isRelevantSorted }">
+          <template v-if="isRelevantSorted">
+            See all results
+          </template>
+          <template>
+            See relevant results
+          </template>
         </template>
       </ais-relevant-sort>
     `,
