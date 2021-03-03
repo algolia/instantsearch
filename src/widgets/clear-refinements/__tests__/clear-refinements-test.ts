@@ -1,4 +1,4 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import {
   createInitOptions,
@@ -7,11 +7,11 @@ import {
 import clearRefinements from '../clear-refinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { ClearRefinementsProps } from '../../../components/ClearRefinements/types';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -52,13 +52,20 @@ describe('clearRefinements()', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
 
-      const [firstRender, secondRender] = render.mock.calls;
+      const firstRender = render.mock.calls[0][0] as VNode<
+        ClearRefinementsProps
+      >;
+      const secondRender = render.mock.calls[1][0] as VNode<
+        ClearRefinementsProps
+      >;
+      const firstContainer = render.mock.calls[0][1];
+      const secondContainer = render.mock.calls[1][1];
 
-      expect(firstRender[0].props).toMatchSnapshot();
-      expect(firstRender[1]).toEqual(container);
+      expect(firstRender.props).toMatchSnapshot();
+      expect(firstContainer).toEqual(container);
 
-      expect(secondRender[0].props).toMatchSnapshot();
-      expect(secondRender[1]).toEqual(container);
+      expect(secondRender.props).toMatchSnapshot();
+      expect(secondContainer).toEqual(container);
     });
   });
 
@@ -80,13 +87,20 @@ describe('clearRefinements()', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
 
-      const [firstRender, secondRender] = render.mock.calls;
+      const firstRender = render.mock.calls[0][0] as VNode<
+        ClearRefinementsProps
+      >;
+      const secondRender = render.mock.calls[1][0] as VNode<
+        ClearRefinementsProps
+      >;
+      const firstContainer = render.mock.calls[0][1];
+      const secondContainer = render.mock.calls[1][1];
 
-      expect(firstRender[0].props).toMatchSnapshot();
-      expect(firstRender[1]).toEqual(container);
+      expect(firstRender.props).toMatchSnapshot();
+      expect(firstContainer).toEqual(container);
 
-      expect(secondRender[0].props).toMatchSnapshot();
-      expect(secondRender[1]).toEqual(container);
+      expect(secondRender.props).toMatchSnapshot();
+      expect(secondContainer).toEqual(container);
     });
   });
 
@@ -101,7 +115,12 @@ describe('clearRefinements()', () => {
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, state: helper.state }));
 
-      expect(render.mock.calls[0][0].props.cssClasses).toMatchInlineSnapshot(`
+      const firstRender = render.mock.calls[0][0] as VNode<
+        ClearRefinementsProps
+      >;
+      const { cssClasses } = firstRender.props as ClearRefinementsProps;
+
+      expect(cssClasses).toMatchInlineSnapshot(`
         Object {
           "button": "ais-ClearRefinements-button",
           "disabledButton": "ais-ClearRefinements-button--disabled",
@@ -125,7 +144,12 @@ describe('clearRefinements()', () => {
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, state: helper.state }));
 
-      expect(render.mock.calls[0][0].props.cssClasses).toMatchInlineSnapshot(`
+      const firstRender = render.mock.calls[0][0] as VNode<
+        ClearRefinementsProps
+      >;
+      const { cssClasses } = firstRender.props as ClearRefinementsProps;
+
+      expect(cssClasses).toMatchInlineSnapshot(`
         Object {
           "button": "ais-ClearRefinements-button myButton myPrimaryButton",
           "disabledButton": "ais-ClearRefinements-button--disabled disabled",

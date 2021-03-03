@@ -6,7 +6,7 @@ import geoSearch from '../geo-search';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -14,7 +14,7 @@ jest.mock('preact', () => {
 });
 
 jest.mock('../GeoSearchRenderer', () => {
-  const module = require.requireActual('../GeoSearchRenderer');
+  const module = jest.requireActual('../GeoSearchRenderer');
 
   return jest.fn((...args) => module.default(...args));
 });

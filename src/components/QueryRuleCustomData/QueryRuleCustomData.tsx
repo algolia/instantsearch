@@ -7,7 +7,7 @@ import {
 } from '../../widgets/query-rule-custom-data/query-rule-custom-data';
 import Template from '../Template/Template';
 
-type QueryRuleCustomDataProps = {
+export type QueryRuleCustomDataProps = {
   cssClasses: QueryRuleCustomDataCSSClasses;
   templates: QueryRuleCustomDataTemplates;
   items: any[];

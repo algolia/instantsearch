@@ -24,3 +24,5 @@ export { default as EXPERIMENTAL_connectConfigureRelatedItems } from './configur
 export { default as connectAutocomplete } from './autocomplete/connectAutocomplete';
 export { default as connectQueryRules } from './query-rules/connectQueryRules';
 export { default as connectVoiceSearch } from './voice-search/connectVoiceSearch';
+export { default as EXPERIMENTAL_connectAnswers } from './answers/connectAnswers';
+export { default as connectRelevantSort } from './relevant-sort/connectRelevantSort';

@@ -4,50 +4,51 @@ import { Template } from '../../types';
 type TemplatesConfig = Record<string, unknown>;
 
 type Templates = {
-  [key: string]: Template;
+  [key: string]: Template<any>;
 };
 
-type TemplateProps = {
-  defaultTemplates: Templates;
-  templates: Templates;
+export type PreparedTemplateProps<TTemplates extends Templates> = {
   templatesConfig: TemplatesConfig;
+  templates: TTemplates;
+  useCustomCompileOptions: {
+    [TKey in keyof Partial<TTemplates>]: boolean;
+  };
 };
 
-type PreparedTemplateProps = {
-  templatesConfig: TemplatesConfig;
-  templates: Templates;
-  useCustomCompileOptions: { [key: string]: boolean };
-};
-
-function prepareTemplates(
-  defaultTemplates: Templates = {},
-  templates: Templates = {}
+function prepareTemplates<TTemplates extends Templates>(
+  // can not use = {} here, since the template could have different constraints
+  defaultTemplates?: TTemplates,
+  templates: Partial<TTemplates> = {}
 ) {
   const allKeys = uniq([
-    ...Object.keys(defaultTemplates),
+    ...Object.keys(defaultTemplates || {}),
     ...Object.keys(templates),
   ]);
 
-  return allKeys.reduce<{
-    templates: Templates;
-    useCustomCompileOptions: { [key: string]: boolean };
-  }>(
-    (config, key) => {
-      const defaultTemplate = defaultTemplates[key];
+  return allKeys.reduce(
+    (config, key: keyof TTemplates) => {
+      const defaultTemplate = defaultTemplates
+        ? defaultTemplates[key]
+        : undefined;
       const customTemplate = templates[key];
       const isCustomTemplate =
         customTemplate !== undefined && customTemplate !== defaultTemplate;
 
       config.templates[key] = isCustomTemplate
-        ? customTemplate
-        : defaultTemplate;
+        ? customTemplate! // typescript doesn't recognize that this condition asserts customTemplate is defined
+        : defaultTemplate!;
+
       config.useCustomCompileOptions[key] = isCustomTemplate;
 
       return config;
     },
     {
-      templates: {},
-      useCustomCompileOptions: {},
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      templates: {} as TTemplates,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      useCustomCompileOptions: {} as {
+        [TKey in keyof TTemplates]: boolean;
+      },
     }
   );
 }
@@ -55,11 +56,15 @@ function prepareTemplates(
 /**
  * Prepares an object to be passed to the Template widget
  */
-function prepareTemplateProps({
+function prepareTemplateProps<TTemplates extends Templates>({
   defaultTemplates,
   templates,
   templatesConfig,
-}: TemplateProps): PreparedTemplateProps {
+}: {
+  defaultTemplates: TTemplates;
+  templates: Partial<TTemplates>;
+  templatesConfig: TemplatesConfig;
+}): PreparedTemplateProps<TTemplates> {
   const preparedTemplates = prepareTemplates(defaultTemplates, templates);
 
   return {

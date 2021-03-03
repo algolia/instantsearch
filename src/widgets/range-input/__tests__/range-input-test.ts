@@ -1,10 +1,12 @@
 /** @jsx h */
 
-import { render as _originalRender, VNode } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import rangeInput from '../range-input';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -12,7 +14,6 @@ jest.mock('preact', () => {
 
   return module;
 });
-const render = _originalRender as jest.MockedFunction<typeof _originalRender>;
 
 describe('rangeInput', () => {
   const attribute = 'aNumAttr';

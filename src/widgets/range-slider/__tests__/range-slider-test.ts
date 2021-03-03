@@ -1,4 +1,4 @@
-import { render as _originalRender, VNode } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearchHelper, {
   AlgoliaSearchHelper,
   SearchParameters,
@@ -10,7 +10,9 @@ import { createRenderOptions } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { InstantSearch } from '../../../types';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -18,7 +20,7 @@ jest.mock('preact', () => {
 
   return module;
 });
-const render = _originalRender as jest.MockedFunction<typeof _originalRender>;
+
 type SliderProps = {
   max: number;
   min: number;

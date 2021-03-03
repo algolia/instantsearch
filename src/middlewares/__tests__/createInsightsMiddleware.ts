@@ -177,6 +177,20 @@ describe('insights', () => {
       middleware.subscribe();
       expect(helper.state.clickAnalytics).toBe(true);
     });
+
+    it("doesn't reset page", () => {
+      const {
+        insightsClient,
+        instantSearchInstance,
+        helper,
+      } = createTestEnvironment();
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      helper.setPage(100);
+      middleware.subscribe();
+      expect(helper.state.page).toBe(100);
+    });
   });
 
   describe('userToken', () => {
@@ -194,6 +208,23 @@ describe('insights', () => {
       expect(getUserToken()).toEqual('abc');
     });
 
+    it('applies userToken before subscribe() without resetting the page', () => {
+      const {
+        insightsClient,
+        instantSearchInstance,
+        getUserToken,
+        helper,
+      } = createTestEnvironment();
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      insightsClient('setUserToken', 'abc');
+      helper.setPage(100);
+      middleware.subscribe();
+      expect(helper.state.page).toBe(100);
+      expect(getUserToken()).toEqual('abc');
+    });
+
     it('applies userToken which was set after subscribe()', () => {
       const {
         insightsClient,
@@ -205,6 +236,23 @@ describe('insights', () => {
       })({ instantSearchInstance });
       middleware.subscribe();
       insightsClient('setUserToken', 'def');
+      expect(getUserToken()).toEqual('def');
+    });
+
+    it('applies userToken which was set after subscribe() without resetting the page', () => {
+      const {
+        insightsClient,
+        instantSearchInstance,
+        helper,
+        getUserToken,
+      } = createTestEnvironment();
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      helper.setPage(100);
+      middleware.subscribe();
+      insightsClient('setUserToken', 'def');
+      expect(helper.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
     });
 

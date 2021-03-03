@@ -7,11 +7,7 @@ module.exports = {
     'new-cap': [
       'error',
       {
-        capIsNewExceptions: [
-          'EXPERIMENTAL_use',
-          'EXPERIMENTAL_connectConfigureRelatedItems',
-          'EXPERIMENTAL_configureRelatedItems',
-        ],
+        capIsNewExceptionPattern: '(\\.|^)EXPERIMENTAL_.+',
       },
     ],
     'react/no-string-refs': 'error',

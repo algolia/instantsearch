@@ -1,3 +1,55 @@
+## [4.16.1](https://github.com/algolia/instantsearch.js/compare/v4.16.0...v4.16.1) (2021-03-03)
+
+
+### Bug Fixes
+
+* **relevantSort:** rename smartSort to relevantSort ([#4668](https://github.com/algolia/instantsearch.js/issues/4668)) ([579eee8](https://github.com/algolia/instantsearch.js/commit/579eee8d38effe067407a269e493400c460eb842))
+
+
+
+# [4.16.0](https://github.com/algolia/instantsearch.js/compare/v4.15.0...v4.16.0) (2021-03-01)
+
+
+### Bug Fixes
+
+* **relevantSort:** export the widget and the connector ([#4663](https://github.com/algolia/instantsearch.js/issues/4663)) ([e7aaa8c](https://github.com/algolia/instantsearch.js/commit/e7aaa8ceb47b8cafc3a3a323ebe47f45f3841ba4))
+
+
+### Features
+
+* **answers:** add `EXPERIMENTAL_answers` widget ([#4581](https://github.com/algolia/instantsearch.js/issues/4581)) ([e4c9070](https://github.com/algolia/instantsearch.js/commit/e4c9070250779d7d3afabe7f9a19644717bc12c8)), closes [#4635](https://github.com/algolia/instantsearch.js/issues/4635)
+
+
+
+# [4.15.0](https://github.com/algolia/instantsearch.js/compare/v4.14.2...v4.15.0) (2021-02-23)
+
+
+### Features
+
+* **relevantSort:** add widget ([#4648](https://github.com/algolia/instantsearch.js/issues/4648)) ([89c6e86](https://github.com/algolia/instantsearch.js/commit/89c6e868f490e9b6e507dd70c215e962f4c69ccb))
+* **stats:** apply nbSortedHits ([#4649](https://github.com/algolia/instantsearch.js/issues/4649)) ([34478c1](https://github.com/algolia/instantsearch.js/commit/34478c198dcafbd45fd101db0cd2fbe6328272b8))
+* **ts:** convert menu ([#4652](https://github.com/algolia/instantsearch.js/issues/4652)) ([2271b43](https://github.com/algolia/instantsearch.js/commit/2271b4379918e865a1b0cea09c139e517df97bc5))
+
+
+
+## [4.14.2](https://github.com/algolia/instantsearch.js/compare/v4.14.1...v4.14.2) (2021-02-17)
+
+
+### Bug Fixes
+
+* **insights:** don't reset page ([#4655](https://github.com/algolia/instantsearch.js/issues/4655)) ([2b31250](https://github.com/algolia/instantsearch.js/commit/2b312508e8be59284180e7f490ce0aac80f9c2b6))
+
+
+
+## [4.14.1](https://github.com/algolia/instantsearch.js/compare/v4.14.0...v4.14.1) (2021-02-16)
+
+
+### Bug Fixes
+
+* **compat:** remove references to window ([#4651](https://github.com/algolia/instantsearch.js/issues/4651)) ([1ede1ae](https://github.com/algolia/instantsearch.js/commit/1ede1ae392d3a12f5b0fe29075ffeb05e572a874)), closes [#4650](https://github.com/algolia/instantsearch.js/issues/4650)
+
+
+
 # [4.14.0](https://github.com/algolia/instantsearch.js/compare/v4.13.2...v4.14.0) (2021-02-09)
 
 

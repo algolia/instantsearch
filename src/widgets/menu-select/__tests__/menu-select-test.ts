@@ -1,9 +1,16 @@
-import { render } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -14,6 +21,7 @@ describe('menuSelect', () => {
   describe('Usage', () => {
     it('throws without container ', () => {
       expect(() => {
+        // @ts-ignore
         menuSelect({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -32,7 +40,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
     beforeEach(() => {
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
       results = { getFacetValues: jest.fn(() => data) };
-      helper = algoliasearchHelper({}, 'index_name');
+      helper = algoliasearchHelper(createSearchClient(), 'index_name');
       helper.search = jest.fn();
       state = helper.state;
 
@@ -46,16 +54,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
           attribute: 'test',
         });
 
-        widget.init({
-          helper,
-          createURL: () => '#',
-          instantSearchInstance: {},
-        });
-        widget.render({ results, createURL: () => '#', state });
+        widget.init!(
+          createInitOptions({
+            helper,
+            createURL: () => '#',
+          })
+        );
+        widget.render!(
+          createRenderOptions({ results, createURL: () => '#', state })
+        );
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
 
-        expect(firstRender[0].props).toMatchSnapshot();
+        expect(firstRender.props).toMatchSnapshot();
       });
 
       it('renders transformed items correctly', () => {
@@ -66,16 +77,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
             items.map(item => ({ ...item, transformed: true })),
         });
 
-        widget.init({
-          helper,
-          createURL: () => '#',
-          instantSearchInstance: {},
-        });
-        widget.render({ results, createURL: () => '#', state });
+        widget.init!(
+          createInitOptions({
+            helper,
+            createURL: () => '#',
+          })
+        );
+        widget.render!(
+          createRenderOptions({ results, createURL: () => '#', state })
+        );
 
-        const [firstRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0][0] as VNode;
 
-        expect(firstRender[0].props).toMatchSnapshot();
+        expect(firstRender.props).toMatchSnapshot();
       });
     });
 
@@ -88,7 +102,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
         });
 
         helper.setState(
-          widget.getWidgetSearchParameters(new SearchParameters({}), {
+          widget.getWidgetSearchParameters!(new SearchParameters({}), {
             uiState: {
               menu: {
                 amazingBrand: 'algolia',
@@ -107,7 +121,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
 
         expect(render).toHaveBeenCalledTimes(0);
 
-        const newState = widget.dispose({
+        const newState = widget.dispose!({
           state: helper.state,
           helper,
         });

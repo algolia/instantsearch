@@ -1,6 +1,6 @@
-import { Hits } from '../../types';
+import { Hit } from '../../types';
 
-export const addQueryID = (hits: Hits, queryID: string): Hits => {
+export function addQueryID<THit = Hit>(hits: THit[], queryID?: string): THit[] {
   if (!queryID) {
     return hits;
   }
@@ -8,4 +8,4 @@ export const addQueryID = (hits: Hits, queryID: string): Hits => {
     ...hit,
     __queryID: queryID,
   }));
-};
+}

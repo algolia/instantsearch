@@ -1,4 +1,4 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
 } from 'algoliasearch-helper';
@@ -6,12 +6,11 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInitOptions } from '../../../../test/mock/createWidget';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import queryRuleCustomData from '../query-rule-custom-data';
+import { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
-
+  const module = jest.requireActual('preact');
   module.render = jest.fn();
 
   return module;
@@ -83,7 +82,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        const { cssClasses } = render.mock.calls[0][0].props;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          QueryRuleCustomDataProps
+        >;
+        const { cssClasses } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(cssClasses).toEqual({
           root: 'ais-QueryRuleCustomData',
@@ -106,7 +108,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        const { cssClasses } = render.mock.calls[0][0].props;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          QueryRuleCustomDataProps
+        >;
+        const { cssClasses } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(cssClasses).toEqual({
           root: 'ais-QueryRuleCustomData CustomRoot',
@@ -128,12 +133,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        const { templates } = render.mock.calls[0][0].props;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          QueryRuleCustomDataProps
+        >;
+        const { templates } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(templates).toEqual({
           default: expect.any(Function),
         });
         expect(
+          // @ts-expect-error (TS did not understand the jest expectation narrowed the type)
           templates.default({
             items: [{ banner: '1.jpg' }, { banner: '2.jpg' }],
           })
@@ -165,7 +174,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        const { templates } = render.mock.calls[0][0].props;
+        const firstRender = render.mock.calls[0][0] as VNode<
+          QueryRuleCustomDataProps
+        >;
+        const { templates } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(templates).toEqual({
           default: 'default',

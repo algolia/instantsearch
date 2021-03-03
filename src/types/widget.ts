@@ -7,6 +7,7 @@ import {
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch, Hit, GeoLoc } from './instantsearch';
+import { TransformItems } from './connector';
 import { BindEventForHits, SendEventForHits } from '../lib/utils';
 import {
   AutocompleteRendererOptions,
@@ -63,10 +64,21 @@ import {
   PaginationConnectorParams,
 } from '../connectors/pagination/connectPagination';
 import {
+  AnswersRendererOptions,
+  AnswersConnectorParams,
+} from '../connectors/answers/connectAnswers';
+import {
   RangeConnectorParams,
   RangeRendererOptions,
 } from '../connectors/range/connectRange';
-import { TransformItems } from './connector';
+import {
+  RelevantSortConnectorParams,
+  RelevantSortRendererOptions,
+} from '../connectors/relevant-sort/connectRelevantSort';
+import {
+  MenuConnectorParams,
+  MenuRendererOptions,
+} from '../connectors/menu/connectMenu';
 
 export type ScopedResult = {
   indexId: string;
@@ -161,6 +173,9 @@ export type IndexUiState = {
      */
     boundingBox: string;
   };
+  relevantSort?: {
+    relevancyStrictness?: number;
+  };
   sortBy?: string;
   page?: number;
   hitsPerPage?: number;
@@ -218,6 +233,12 @@ export type IndexRenderState = Partial<{
     CurrentRefinementsRendererOptions,
     CurrentRefinementsConnectorParams
   >;
+  menu: {
+    [attribute: string]: WidgetRenderState<
+      MenuRendererOptions,
+      MenuConnectorParams
+    >;
+  };
   hierarchicalMenu: {
     [attribute: string]: WidgetRenderState<
       {
@@ -348,6 +369,11 @@ export type IndexRenderState = Partial<{
       }
     >;
   };
+  answers: WidgetRenderState<AnswersRendererOptions, AnswersConnectorParams>;
+  relevantSort: WidgetRenderState<
+    RelevantSortRendererOptions,
+    RelevantSortConnectorParams
+  >;
 }>;
 
 export type WidgetRenderState<
@@ -369,6 +395,7 @@ export type Widget<
    */
   $$type?:
     | 'ais.analytics'
+    | 'ais.answers'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -394,6 +421,7 @@ export type Widget<
     | 'ais.ratingMenu'
     | 'ais.refinementList'
     | 'ais.searchBox'
+    | 'ais.relevantSort'
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
@@ -404,6 +432,7 @@ export type Widget<
    */
   $$widgetType?:
     | 'ais.analytics'
+    | 'ais.answers'
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
@@ -429,11 +458,11 @@ export type Widget<
     | 'ais.ratingMenu'
     | 'ais.refinementList'
     | 'ais.searchBox'
+    | 'ais.relevantSort'
     | 'ais.sortBy'
     | 'ais.stats'
     | 'ais.toggleRefinement'
     | 'ais.voiceSearch';
-
   /**
    * Called once before the first search
    */

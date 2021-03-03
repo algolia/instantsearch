@@ -27,6 +27,7 @@ export type SearchClient = {
   search: DefaultSearchClient['search'];
   searchForFacetValues: DefaultSearchClient['searchForFacetValues'];
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
+  initIndex?: DefaultSearchClient['initIndex'];
 };
 
 export type MultiResponse<THit = any> = {
@@ -37,8 +38,18 @@ export type SearchResponse<
   THit
 > = DefaultSearchClient extends DummySearchClientV4
   ? SearchResponseV4<THit>
-  : SearchResponseV3<THit>;
+  : SearchResponseV3<THit> & { appliedRelevancyStrictness?: number };
 
 export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
   : SearchForFacetValuesResponseV3;
+
+export type FindAnswersOptions = DefaultSearchClient extends DummySearchClientV4
+  ? ClientSearch.FindAnswersOptions
+  : any;
+
+export type FindAnswersResponse<
+  TObject
+> = DefaultSearchClient extends DummySearchClientV4
+  ? ClientSearch.FindAnswersResponse<TObject>
+  : any;

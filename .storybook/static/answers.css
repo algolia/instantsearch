@@ -1,0 +1,132 @@
+.my-Answers .ais-Answers-loader {
+  display: none;
+}
+
+.my-Answers .ais-Answers-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.my-Answers .ais-Answers-item {
+  height: 10rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
+
+.my-Answers .title {
+  padding: 0;
+  margin: 1rem;
+  font-size: 1.2rem;
+  color: #333;
+  line-height: 1.4rem;
+}
+
+.my-Answers .separator {
+  border-top: 1px solid #ddd;
+}
+
+.my-Answers .description {
+  margin: 1rem;
+  padding: 0;
+  color: #333;
+  line-height: 1.4rem;
+}
+
+.my-Answers .description em {
+  background-color: #ffc168;
+}
+
+.one-line {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.three-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* skeleton loader from https://codepen.io/jordanmsykes/pen/RgPqgV - begin */
+@keyframes placeHolderShimmer {
+  0% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    background-position: -468px 0;
+  }
+  to {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    background-position: 468px 0;
+  }
+}
+
+.card-skeleton {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width: calc(100% - 2rem);
+  height: 10rem;
+  transition: all 0.3s ease-in-out;
+  -webkit-backface-visibility: hidden;
+  background: #fff;
+  z-index: 10;
+  opacity: 1;
+}
+
+.card-skeleton.hidden {
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  height: 0;
+  padding: 0;
+}
+
+.card-skeleton-img {
+  width: 100%;
+  height: 120px;
+  background: #e6e6e6;
+  display: block;
+}
+
+.animated-background {
+  will-change: transform;
+  animation: placeHolderShimmer 1s linear infinite forwards;
+  -webkit-backface-visibility: hidden;
+  background: #e6e6e6;
+  background: linear-gradient(90deg, #eee 8%, #ddd 18%, #eee 33%);
+  background-size: 800px 104px;
+  height: 100%;
+  position: relative;
+}
+
+.skel-mask-container {
+  position: relative;
+}
+
+.skel-mask {
+  background: #fff;
+  position: absolute;
+  z-index: 200;
+}
+
+.skel-mask-1 {
+  width: 100%;
+  height: 15px;
+  top: 0;
+}
+
+.skel-mask-2 {
+  width: 100%;
+  height: 25px;
+  top: 45px;
+}
+
+.skel-mask-3 {
+  width: 100%;
+  height: 15px;
+  top: 145px;
+}
+/* skeleton loader - end */
