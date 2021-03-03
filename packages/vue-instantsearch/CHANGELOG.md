@@ -1,3 +1,17 @@
+# [3.5.0](https://github.com/algolia/vue-instantsearch/compare/v3.4.3...v3.5.0) (2021-03-03)
+
+
+### Bug Fixes
+
+* **ratingMenu:** correct URL ([3c3f7e2](https://github.com/algolia/vue-instantsearch/commit/3c3f7e21a0c19852eefc0e37f38cdad2683c900d))
+
+
+### Features
+
+* **ais-relevant-sort:** add widget ([#918](https://github.com/algolia/vue-instantsearch/issues/918)) ([4fe5745](https://github.com/algolia/vue-instantsearch/commit/4fe5745c3dc8b95a8952b272f3e139295fb42820))
+
+
+
 ## [3.4.3](https://github.com/algolia/vue-instantsearch/compare/v3.4.2...v3.4.3) (2020-12-22)
 
 
