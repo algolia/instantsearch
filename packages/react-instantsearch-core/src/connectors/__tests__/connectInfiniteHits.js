@@ -318,14 +318,14 @@ describe('connectInfiniteHits', () => {
         'theQueryID_1',
         'theQueryID_1',
         // page 2
-        'theQueryID_2',
-        'theQueryID_2',
-        'theQueryID_2',
-        'theQueryID_2',
-        'theQueryID_2',
-        'theQueryID_2',
-        'theQueryID_2',
-        'theQueryID_2',
+        'theQueryID_2_',
+        'theQueryID_2_',
+        'theQueryID_2_',
+        'theQueryID_2_',
+        'theQueryID_2_',
+        'theQueryID_2_',
+        'theQueryID_2_',
+        'theQueryID_2_',
       ]);
       expect(res3.hasMore).toBe(true);
     });
@@ -498,17 +498,6 @@ describe('connectInfiniteHits', () => {
       expect(instance.refine).toHaveBeenLastCalledWith(event, 1);
     });
 
-    it('adds 1 to page when calling refine', () => {
-      const props = { contextValue };
-      const state0 = {};
-
-      const state1 = connect.refine.call({}, props, state0);
-      expect(state1).toEqual({ page: 2 });
-
-      const state2 = connect.refine.call({}, props, state1);
-      expect(state2).toEqual({ page: 3 });
-    });
-
     it('set page to the corresponding index', () => {
       const props = { contextValue };
       const state0 = {};
@@ -518,14 +507,6 @@ describe('connectInfiniteHits', () => {
       const state1 = connect.refine.call({}, props, state0, event, index);
       // `index` is indexed from 0 but page number is indexed from 1
       expect(state1).toEqual({ page: 6 });
-    });
-
-    it('automatically converts String state to Number', () => {
-      const props = { contextValue };
-      const state0 = { page: '0' };
-
-      const state1 = connect.refine.call({}, props, state0);
-      expect(state1).toEqual({ page: 1 });
     });
 
     it('expect to always return an array of hits', () => {
@@ -561,7 +542,7 @@ describe('connectInfiniteHits', () => {
       expect(actual).toEqual(expectation);
     });
 
-    it('read from given cache', () => {
+    it('does not read from given cache when results is empty', () => {
       const cache = {
         read: jest.fn(),
         write: jest.fn(),
@@ -569,6 +550,25 @@ describe('connectInfiniteHits', () => {
       const props = { cache, contextValue };
       const searchState = {};
       const searchResults = {};
+      connect.getProvidedProps.call({}, props, searchState, searchResults);
+      expect(cache.read).toHaveBeenCalledTimes(0);
+    });
+
+    it('read from given cache', () => {
+      const cache = {
+        read: jest.fn(),
+        write: jest.fn(),
+      };
+      const props = { cache, contextValue };
+      const searchState = {};
+      const searchResults = {
+        results: {
+          hits: [{}, {}, {}],
+          hitsPerPage: 3,
+          page: 1,
+          nbPages: 3,
+        },
+      };
       connect.getProvidedProps.call({}, props, searchState, searchResults);
       expect(cache.read).toHaveBeenCalledTimes(1);
     });
@@ -579,7 +579,14 @@ describe('connectInfiniteHits', () => {
         write: jest.fn(),
       };
       const searchState = {};
-      const searchResults = {};
+      const searchResults = {
+        results: {
+          hits: [{}, {}, {}],
+          hitsPerPage: 3,
+          page: 1,
+          nbPages: 3,
+        },
+      };
       const instance = {};
       connect.getProvidedProps.call(
         instance,
