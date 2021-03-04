@@ -142,6 +142,7 @@ const dynamicWidgets: DynamicWidgets = function dynamicWidgets(widgetParams) {
     ...widget,
     addWidget(attribute: string, cb: (container: HTMLElement) => Widget) {
       const container = document.createElement('div');
+      container.className = 'ais-DynamicWidgets-widget';
       rootContainer.appendChild(container);
       containers.set(attribute, container);
       addWidget(attribute, cb(container));

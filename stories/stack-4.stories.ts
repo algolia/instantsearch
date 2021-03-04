@@ -9,7 +9,7 @@ import {
   WidgetRenderState,
   InitOptions,
 } from '../src/types';
-import { refinementList, menu } from '../src/widgets';
+import { refinementList, menu, panel, hierarchicalMenu } from '../src/widgets';
 
 type DynamicWidgetsRendererOptions = {
   attributesToRender: string[];
@@ -187,6 +187,7 @@ const dynamicWidgets: DynamicWidgets = function dynamicWidgets(widgetParams) {
     init(initOptions) {
       widgets.forEach(cb => {
         const container = document.createElement('div');
+        container.className = 'ais-DynamicWidgets-widget';
         rootContainer.appendChild(container);
 
         const widget = cb(container);
@@ -214,12 +215,25 @@ storiesOf('Basics/DynamicWidgets', module).add(
           if (results._state.query === 'lego') {
             return ['categories', 'brand'];
           }
-          return ['brand', 'categories'];
+          return ['brand', 'hierarchicalCategories.lvl0', 'categories'];
         },
         container: rootContainer,
         widgets: [
           container => menu({ container, attribute: 'categories' }),
-          container => refinementList({ container, attribute: 'brand' }),
+          container =>
+            panel({ templates: { header: 'brand' } })(refinementList)({
+              container,
+              attribute: 'brand',
+            }),
+          container =>
+            panel({ templates: { header: 'hierarchy' } })(hierarchicalMenu)({
+              container,
+              attributes: [
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
+              ],
+            }),
         ],
       }),
     ]);

@@ -10,9 +10,6 @@ type DynamicWidgetsParams = {
 };
 
 type DynamicWidgets = Widget & {
-  // addWidgets(widget: Widget[]): DynamicWidgets;
-  // removeWidgets(widget: Widget[]): DynamicWidgets;
-
   createContainer(
     attribute: string
   ): { container: HTMLElement; apply(widget: Widget): void };
@@ -76,7 +73,7 @@ function dynamicWidgets({
     },
     createContainer(attribute) {
       const container = document.createElement('div');
-      container.className = 'ais-DynamicWidget';
+      container.className = 'ais-DynamicWidgets-widget';
 
       rootContainer.appendChild(container);
 
