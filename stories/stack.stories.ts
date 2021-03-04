@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { SearchResults } from 'algoliasearch-helper';
 import { withHits } from '../.storybook/decorators';
 import { noop } from '../src/lib/utils';
-import { Widget, Connector } from '../src/types';
+import { Widget, Connector, WidgetFactory } from '../src/types';
 import { refinementList, menu } from '../src/widgets';
 
 type DynamicWidgetsParams = {
@@ -48,7 +48,6 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
 
     return {
       $$type: 'ais.dynamicWidgets',
-      $$widgetType: 'ais.dynamicWidgets',
       init() {},
       render(renderOptions) {
         const { parent } = renderOptions;
@@ -202,6 +201,53 @@ function transformItems(_attributes, results) {
   return ['brand', 'categories'];
 }
 
+type DynamicWidgetsWidgetParams = {
+  container: HTMLElement;
+};
+
+type DynamicWidgets2 = WidgetFactory<
+  DynamicWidgetsRendererOptions,
+  DynamicWidgetsConnectorParams,
+  DynamicWidgetsWidgetParams
+>;
+
+const dynamicWidgets2: DynamicWidgets2 = function dynamicWidgets2(
+  widgetParams
+) {
+  const { container: rootContainer, transformItems } = widgetParams || {};
+
+  const containers = new Map<string, HTMLElement>();
+
+  const makeWidget = connectDynamicWidgets(
+    ({ attributesToRender }) => {
+      attributesToRender.forEach(attribute => {
+        if (!containers.has(attribute)) {
+          return;
+        }
+        const container = containers.get(attribute)!;
+        rootContainer.appendChild(container);
+      });
+    },
+    () => {
+      rootContainer.innerText = '';
+    }
+  );
+
+  const { addWidget, ...widget } = makeWidget({ transformItems });
+
+  return {
+    ...widget,
+    addWidget(attribute: string, cb: (container: HTMLElement) => Widget) {
+      const container = document.createElement('div');
+      rootContainer.appendChild(container);
+      containers.set(attribute, container);
+      addWidget(attribute, cb(container));
+      return this;
+    },
+    $$widgetType: 'ais.dynamicWidgets',
+  };
+};
+
 storiesOf('Basics/DynamicWidgets', module)
   .add(
     'default',
@@ -266,7 +312,7 @@ storiesOf('Basics/DynamicWidgets', module)
             ['categories', categoriesContainer],
           ]),
         })
-          // @ts-expect-error haven't yet found a
+          // @ts-expect-error haven't yet found a way to add functions to connector/widget type
           .addWidget(
             'brand',
             refinementList({
@@ -278,6 +324,30 @@ storiesOf('Basics/DynamicWidgets', module)
             'categories',
             menu({
               container: categoriesContainer,
+              attribute: 'categories',
+            })
+          ),
+      ]);
+    })
+  )
+  .add(
+    'connector-widget',
+    withHits(({ search, container }) => {
+      search.addWidgets([
+        dynamicWidgets2({
+          transformItems,
+          container,
+        })
+          // @ts-expect-error haven't yet found a way to add functions to connector/widget type
+          .addWidget('brand', container =>
+            refinementList({
+              container,
+              attribute: 'brand',
+            })
+          )
+          .addWidget('categories', container =>
+            menu({
+              container,
               attribute: 'categories',
             })
           ),
