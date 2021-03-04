@@ -34,33 +34,40 @@ function dynamicWidgets({
     $$widgetType: 'ais.dynamicWidgets',
     init() {},
     render({ results, parent }) {
+      // retrieve the facet order out of the results:
       // results.facetOrder.map(facet => facet.attribute)
       const attributesToRender = transformItems([], results);
 
-      localWidgets.forEach(
-        ({ widget, isMounted, container }, attribute, localWidgets) => {
-          const shouldMount = attributesToRender.indexOf(attribute) > -1;
+      localWidgets.forEach(({ widget, isMounted, container }, attribute) => {
+        const shouldMount = attributesToRender.indexOf(attribute) > -1;
 
-          if (!isMounted && shouldMount) {
-            parent!.addWidgets([widget]);
-            localWidgets.set(attribute, {
-              widget,
-              container,
-              isMounted: true,
-            });
-          } else if (isMounted && !shouldMount) {
-            // make sure this only happens after the regular render, otherwise it happens too quick
-            // render is "deferred" for the next microtask
-            // so this needs to be a whole task later
-            setTimeout(() => parent!.removeWidgets([widget]), 0);
-            localWidgets.set(attribute, {
-              widget,
-              container,
-              isMounted: false,
-            });
-          }
+        if (!isMounted && shouldMount) {
+          parent!.addWidgets([widget]);
+          localWidgets.set(attribute, {
+            widget,
+            container,
+            isMounted: true,
+          });
+        } else if (isMounted && !shouldMount) {
+          // make sure this only happens after the regular render, otherwise it happens too quick
+          // render is "deferred" for the next microtask
+          // so this needs to be a whole task later
+          setTimeout(() => parent!.removeWidgets([widget]), 0);
+          localWidgets.set(attribute, {
+            widget,
+            container,
+            isMounted: false,
+          });
         }
-      );
+      });
+
+      attributesToRender.forEach(attribute => {
+        if (!localWidgets.has(attribute)) {
+          return;
+        }
+        const { container } = localWidgets.get(attribute)!;
+        rootContainer.appendChild(container);
+      });
     },
     createContainer(attribute) {
       const container = document.createElement('div');
@@ -85,6 +92,9 @@ storiesOf('Basics/DynamicWidgets', module).add(
       transformItems(_attributes, results) {
         if (results._state.query === 'dog') {
           return ['categories'];
+        }
+        if (results._state.query === 'lego') {
+          return ['categories', 'brand'];
         }
         return ['brand', 'categories'];
       },
