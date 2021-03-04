@@ -1,4 +1,4 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import numericMenu from '../numeric-menu';
 import algoliasearchHelper, {
   SearchParameters,
@@ -13,11 +13,11 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { RefinementListProps } from '../../../components/RefinementList/types';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -85,13 +85,16 @@ describe('numericMenu()', () => {
     widget.render!(createRenderOptions({ state, results }));
     widget.render!(createRenderOptions({ state, results }));
 
-    const [firstRender, secondRender] = render.mock.calls;
+    const firstRender = render.mock.calls[0][0] as VNode<RefinementListProps>;
+    const secondRender = render.mock.calls[1][0] as VNode<RefinementListProps>;
+    const firstContainer = render.mock.calls[0][1];
+    const secondContainer = render.mock.calls[1][1];
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(firstRender[0].props).toMatchSnapshot();
-    expect(firstRender[1]).toEqual(container);
-    expect(secondRender[0].props).toMatchSnapshot();
-    expect(secondRender[1]).toEqual(container);
+    expect(firstRender.props).toMatchSnapshot();
+    expect(firstContainer).toEqual(container);
+    expect(secondRender.props).toMatchSnapshot();
+    expect(secondContainer).toEqual(container);
   });
 
   it('renders with transformed items', () => {
@@ -106,9 +109,10 @@ describe('numericMenu()', () => {
     widget.init!(createInitOptions({ helper }));
     widget.render!(createRenderOptions({ state, results }));
 
-    const [firstRender] = render.mock.calls;
+    const firstRender = render.mock.calls[0][0] as VNode<RefinementListProps>;
+    const { facetValues } = firstRender.props as RefinementListProps;
 
-    expect(firstRender[0].props.facetValues).toEqual([
+    expect(facetValues).toEqual([
       {
         isRefined: true,
         label: 'All',

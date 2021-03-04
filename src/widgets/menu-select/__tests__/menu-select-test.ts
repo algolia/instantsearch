@@ -1,4 +1,4 @@
-import { render as _originalRender, VNode } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
@@ -6,7 +6,9 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -14,7 +16,6 @@ jest.mock('preact', () => {
 
   return module;
 });
-const render = _originalRender as jest.MockedFunction<typeof _originalRender>;
 
 describe('menuSelect', () => {
   describe('Usage', () => {

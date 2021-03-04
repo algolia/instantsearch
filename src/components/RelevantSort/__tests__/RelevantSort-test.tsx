@@ -3,7 +3,7 @@
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 
-import SmartSort from '../SmartSort';
+import RelevantSort from '../RelevantSort';
 
 const cssClasses = {
   root: 'root',
@@ -13,18 +13,18 @@ const cssClasses = {
 
 const templates = {
   text: '',
-  button: ({ isSmartSorted }) => {
-    return isSmartSorted ? 'See all results' : 'See relevant results';
+  button: ({ isRelevantSorted }) => {
+    return isRelevantSorted ? 'See all results' : 'See relevant results';
   },
 };
 
-describe('SmartSort', () => {
+describe('RelevantSort', () => {
   it('render nothing if not virtual replica', () => {
     const { container } = render(
-      <SmartSort
+      <RelevantSort
         cssClasses={cssClasses}
         templates={templates}
-        isSmartSorted={false}
+        isRelevantSorted={false}
         isVirtualReplica={false}
         refine={() => {}}
       />
@@ -34,10 +34,10 @@ describe('SmartSort', () => {
 
   it('render the default status', () => {
     const { container } = render(
-      <SmartSort
+      <RelevantSort
         cssClasses={cssClasses}
         templates={templates}
-        isSmartSorted={false}
+        isRelevantSorted={false}
         isVirtualReplica={true}
         refine={() => {}}
       />
@@ -66,10 +66,10 @@ describe('SmartSort', () => {
   it('refine on button click', () => {
     const refine = jest.fn();
     const { getByText } = render(
-      <SmartSort
+      <RelevantSort
         cssClasses={cssClasses}
         templates={templates}
-        isSmartSorted={false}
+        isRelevantSorted={false}
         isVirtualReplica={true}
         refine={refine}
       />
@@ -80,10 +80,10 @@ describe('SmartSort', () => {
 
   it('render sorted status', () => {
     const { container } = render(
-      <SmartSort
+      <RelevantSort
         cssClasses={cssClasses}
         templates={templates}
-        isSmartSorted={true}
+        isRelevantSorted={true}
         isVirtualReplica={true}
         refine={() => {}}
       />
@@ -112,10 +112,10 @@ describe('SmartSort', () => {
   it('refine with `undefined` on "See relevant results"', () => {
     const refine = jest.fn();
     const { getByText } = render(
-      <SmartSort
+      <RelevantSort
         cssClasses={cssClasses}
         templates={templates}
-        isSmartSorted={false}
+        isRelevantSorted={false}
         isVirtualReplica={true}
         refine={refine}
       />
@@ -128,10 +128,10 @@ describe('SmartSort', () => {
   it('refine with `0` on "Seeing all results"', () => {
     const refine = jest.fn();
     const { getByText } = render(
-      <SmartSort
+      <RelevantSort
         cssClasses={cssClasses}
         templates={templates}
-        isSmartSorted={true}
+        isRelevantSorted={true}
         isVirtualReplica={true}
         refine={refine}
       />

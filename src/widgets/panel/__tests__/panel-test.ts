@@ -1,6 +1,7 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import panel from '../panel';
+import { PanelProps } from '../../../components/Panel/Panel';
 import {
   createInitOptions,
   createRenderOptions,
@@ -8,15 +9,14 @@ import {
 } from '../../../../test/mock/createWidget';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
   return module;
 });
-
-const render = castToJestMock(preactRender);
 
 beforeEach(() => {
   render.mockClear();
@@ -109,7 +109,10 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      PanelProps<typeof widgetFactory>
+    >;
+    const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates).toEqual({
       header: '',
@@ -129,7 +132,10 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      PanelProps<typeof widgetFactory>
+    >;
+    const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates.header).toBe('Custom header');
   });
@@ -145,7 +151,10 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      PanelProps<typeof widgetFactory>
+    >;
+    const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates.footer).toBe('Custom footer');
   });
@@ -161,7 +170,10 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      PanelProps<typeof widgetFactory>
+    >;
+    const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates.collapseButtonText).toBe('Custom collapseButtonText');
   });

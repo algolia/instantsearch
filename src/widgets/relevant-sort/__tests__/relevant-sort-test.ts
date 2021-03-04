@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import smartSort from '../smart-sort';
+import relevantSort from '../relevant-sort';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
@@ -18,12 +18,12 @@ jest.mock('preact', () => {
 
 const templates = {
   text: '',
-  button: ({ isSmartSorted }) => {
-    return isSmartSorted ? 'See all results' : 'See relevant results';
+  button: ({ isRelevantSorted }) => {
+    return isRelevantSorted ? 'See all results' : 'See relevant results';
   },
 };
 
-describe('smartSort', () => {
+describe('relevantSort', () => {
   beforeEach(() => {
     (render as jest.Mock).mockReset();
   });
@@ -32,21 +32,21 @@ describe('smartSort', () => {
     it('throws without container', () => {
       expect(() => {
         // @ts-ignore wrong options
-        smartSort({ container: undefined });
+        relevantSort({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/smart-sort/js/"
+See documentation: https://www.algolia.com/doc/api-reference/widgets/relevant-sort/js/"
 `);
     });
   });
 
   it('render', () => {
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    const widget = smartSort({
+    const widget = relevantSort({
       container: document.createElement('div'),
       cssClasses: {
-        root: 'my-SmartSort',
+        root: 'my-RelevantSort',
       },
       templates,
     });
@@ -71,11 +71,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/smart-sort/
     expect(secondRender[0].props).toEqual(
       expect.objectContaining({
         cssClasses: {
-          root: 'ais-SmartSort my-SmartSort',
-          text: 'ais-SmartSort-text',
-          button: 'ais-SmartSort-button',
+          root: 'ais-RelevantSort my-RelevantSort',
+          text: 'ais-RelevantSort-text',
+          button: 'ais-RelevantSort-button',
         },
-        isSmartSorted: true,
+        isRelevantSorted: true,
         isVirtualReplica: true,
         refine: expect.any(Function),
         templates,

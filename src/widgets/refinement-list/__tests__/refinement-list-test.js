@@ -3,7 +3,7 @@ import { SearchParameters } from 'algoliasearch-helper';
 import refinementList from '../refinement-list';
 
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

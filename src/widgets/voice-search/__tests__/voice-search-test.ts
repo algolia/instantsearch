@@ -1,4 +1,4 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
@@ -14,11 +14,11 @@ import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { Widget } from '../../../types';
 import voiceSearch, { VoiceSearchWidgetParams } from '../voice-search';
 import { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types';
+import { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -125,10 +125,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       const { widgetInit } = defaultSetup();
       widgetInit(helper);
 
-      const [firstRender] = render.mock.calls;
+      const firstRender = render.mock.calls[0][0] as VNode<VoiceSearchProps>;
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(firstRender[0].props).toMatchSnapshot();
+      expect(firstRender.props).toMatchSnapshot();
     });
 
     test('renders during render()', () => {
@@ -136,13 +136,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       widgetInit(helper);
       widgetRender(helper);
 
-      const [firstRender, secondRender] = render.mock.calls;
+      const firstRender = render.mock.calls[0][0] as VNode<VoiceSearchProps>;
+      const secondRender = render.mock.calls[1][0] as VNode<VoiceSearchProps>;
+      const firstContainer = render.mock.calls[0][1];
+      const secondContainer = render.mock.calls[1][1];
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(firstRender[0].props).toMatchSnapshot();
-      expect(firstRender[1]).toEqual(container);
-      expect(secondRender[0].props).toMatchSnapshot();
-      expect(secondRender[1]).toEqual(container);
+      expect(firstRender.props).toMatchSnapshot();
+      expect(firstContainer).toEqual(container);
+      expect(secondRender.props).toMatchSnapshot();
+      expect(secondContainer).toEqual(container);
     });
 
     test('sets the correct CSS classes', () => {
@@ -150,9 +153,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       widgetInit(helper);
 
-      const [firstRender] = render.mock.calls;
+      const firstRender = render.mock.calls[0][0] as VNode<VoiceSearchProps>;
 
-      expect(firstRender[0].props.cssClasses).toMatchSnapshot();
+      expect(
+        (firstRender.props as VoiceSearchProps).cssClasses
+      ).toMatchSnapshot();
     });
   });
 });

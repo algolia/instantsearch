@@ -7,7 +7,7 @@ import ratingMenu from '../rating-menu';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

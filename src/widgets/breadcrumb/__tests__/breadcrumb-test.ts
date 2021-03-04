@@ -1,4 +1,4 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import breadcrumb from '../breadcrumb';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import {
@@ -7,9 +7,8 @@ import {
 } from '../../../../test/mock/createWidget';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -119,9 +118,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         })
       );
 
-      const [firstRender] = render.mock.calls;
+      const firstRender = render.mock.calls[0][0] as VNode;
 
-      expect(firstRender[0].props).toMatchSnapshot();
+      expect(firstRender.props).toMatchSnapshot();
     });
   });
 });

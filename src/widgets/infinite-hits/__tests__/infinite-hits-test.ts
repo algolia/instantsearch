@@ -1,14 +1,14 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
+import { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -64,13 +64,16 @@ describe('infiniteHits()', () => {
     widget.render({ results, state });
     widget.render({ results, state });
 
-    const [firstRender, secondRender] = render.mock.calls;
+    const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
+    const secondRender = render.mock.calls[1][0] as VNode<InfiniteHitsProps>;
+    const firstContainer = render.mock.calls[0][1];
+    const secondContainer = render.mock.calls[1][1];
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(firstRender[0].props).toMatchSnapshot();
-    expect(firstRender[1]).toEqual(container);
-    expect(secondRender[0].props).toMatchSnapshot();
-    expect(secondRender[1]).toEqual(container);
+    expect(firstRender.props).toMatchSnapshot();
+    expect(firstContainer).toEqual(container);
+    expect(secondRender.props).toMatchSnapshot();
+    expect(secondContainer).toEqual(container);
   });
 
   it('renders transformed items', () => {
@@ -92,9 +95,9 @@ describe('infiniteHits()', () => {
       instantSearchInstance: {},
     });
 
-    const [firstRender] = render.mock.calls;
+    const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
 
-    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender.props).toMatchSnapshot();
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
@@ -109,13 +112,18 @@ describe('infiniteHits()', () => {
       state: { page: 1 },
     });
 
-    const [firstRender, secondRender] = render.mock.calls;
+    const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
+    const firstProps = firstRender.props as InfiniteHitsProps;
+    const secondRender = render.mock.calls[1][0] as VNode<InfiniteHitsProps>;
+    const secondProps = secondRender.props as InfiniteHitsProps;
+    const firstContainer = render.mock.calls[0][1];
+    const secondContainer = render.mock.calls[1][1];
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(firstRender[0].props.isLastPage).toEqual(false);
-    expect(firstRender[1]).toEqual(container);
-    expect(secondRender[0].props.isLastPage).toEqual(true);
-    expect(secondRender[1]).toEqual(container);
+    expect(firstProps.isLastPage).toEqual(false);
+    expect(firstContainer).toEqual(container);
+    expect(secondProps.isLastPage).toEqual(true);
+    expect(secondContainer).toEqual(container);
   });
 
   it('updates the search state properly when showMore is called', () => {
@@ -127,9 +135,8 @@ describe('infiniteHits()', () => {
 
     widget.render({ results, state });
 
-    const [firstRender] = render.mock.calls;
-
-    const { showMore } = firstRender[0].props;
+    const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
+    const { showMore } = firstRender.props as InfiniteHitsProps;
 
     showMore();
 
@@ -162,13 +169,18 @@ describe('infiniteHits()', () => {
 
     expect(render).toHaveBeenCalledTimes(2);
 
-    const [firstRender, secondRender] = render.mock.calls;
+    const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
+    const firstProps = firstRender.props as InfiniteHitsProps;
+    const secondRender = render.mock.calls[1][0] as VNode<InfiniteHitsProps>;
+    const secondProps = secondRender.props as InfiniteHitsProps;
+    const firstContainer = render.mock.calls[0][1];
+    const secondContainer = render.mock.calls[1][1];
 
-    expect(firstRender[0].props.isFirstPage).toEqual(true);
-    expect(firstRender[1]).toEqual(container);
+    expect(firstProps.isFirstPage).toEqual(true);
+    expect(firstContainer).toEqual(container);
 
-    expect(secondRender[0].props.isFirstPage).toEqual(true);
-    expect(secondRender[1]).toEqual(container);
+    expect(secondProps.isFirstPage).toEqual(true);
+    expect(secondContainer).toEqual(container);
   });
 
   it('if it is not the first page, then the props should contain isFirstPage false', () => {
@@ -181,11 +193,13 @@ describe('infiniteHits()', () => {
       state,
     });
 
-    const [firstRender] = render.mock.calls;
+    const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
+    const { isFirstPage } = firstRender.props as InfiniteHitsProps;
+    const firstContainer = render.mock.calls[0][1];
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect(firstRender[0].props.isFirstPage).toEqual(false);
-    expect(firstRender[1]).toEqual(container);
+    expect(isFirstPage).toEqual(false);
+    expect(firstContainer).toEqual(container);
   });
 
   describe('cache', () => {
@@ -253,8 +267,9 @@ describe('infiniteHits()', () => {
     ],
   }
   `);
-      const firstCall = render.mock.calls[0];
-      expect(firstCall[0].props.hits).toMatchInlineSnapshot(`
+      const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
+      const { hits } = firstRender.props as InfiniteHitsProps;
+      expect(hits).toMatchInlineSnapshot(`
   Array [
     Object {
       "__position": 1,
@@ -300,8 +315,10 @@ describe('infiniteHits()', () => {
         },
         state,
       });
-      const firstCall = render.mock.calls[0];
-      expect(firstCall[0].props.hits).toMatchInlineSnapshot(`
+      const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
+      const { hits } = firstRender.props as InfiniteHitsProps;
+
+      expect(hits).toMatchInlineSnapshot(`
 Array [
   Object {
     "__position": 1,

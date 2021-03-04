@@ -1,12 +1,12 @@
-import { render as preactRender } from 'preact';
+import { render as preactRender, VNode, ComponentChildren } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
 import hitsPerPage from '../hits-per-page';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { SelectorProps } from '../../../components/Selector/types';
 
 const render = castToJestMock(preactRender);
-
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -89,12 +89,12 @@ describe('hitsPerPage()', () => {
     widget.render({ results, state });
     widget.render({ results, state });
 
-    const [firstRender] = render.mock.calls;
-    const { children, ...rootProps } = firstRender[0].props;
+    const firstRender = render.mock.calls[0][0] as VNode;
+    const { children, ...rootProps } = firstRender.props as any;
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(rootProps).toMatchSnapshot();
-    expect(firstRender[0].props.children.props).toMatchSnapshot();
+    expect(children.props).toMatchSnapshot();
   });
 
   it('renders transformed items', () => {
@@ -111,9 +111,12 @@ describe('hitsPerPage()', () => {
     widget.init({ helper, state: helper.state });
     widget.render({ results, state });
 
-    const [firstRender] = render.mock.calls;
+    const selectorRender = ((render.mock.calls[0][0] as VNode).props as {
+      children: ComponentChildren;
+    }).children as VNode<SelectorProps>;
+    const props = selectorRender.props as SelectorProps;
 
-    expect(firstRender[0].props.children.props.options).toEqual([
+    expect(props.options).toEqual([
       {
         isRefined: true,
         label: '10 results',
