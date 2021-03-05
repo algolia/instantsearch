@@ -1,6 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { SearchResults } from 'algoliasearch-helper';
 import { withHits } from '../.storybook/decorators';
+import { hashRouter } from '../.storybook/HashRouter';
 import { noop } from '../src/lib/utils';
 import {
   Widget,
@@ -76,8 +77,9 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
       init(initOptions) {
         widgets.forEach(widget => {
           const attribute = getAttribute(widget, initOptions);
-          localWidgets.set(attribute, { widget, isMounted: false });
+          localWidgets.set(attribute, { widget, isMounted: true });
         });
+        initOptions.parent!.addWidgets(widgets);
       },
       render(renderOptions) {
         const { parent } = renderOptions;
@@ -98,7 +100,6 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
             });
           } else if (isMounted && !shouldMount) {
             widgetsToUnmount.push(widget);
-
             localWidgets.set(attribute, {
               widget,
               isMounted: false,
@@ -205,37 +206,40 @@ const dynamicWidgets: DynamicWidgets = function dynamicWidgets(widgetParams) {
 
 storiesOf('Basics/DynamicWidgets', module).add(
   'widgets: cb[]',
-  withHits(({ search, container: rootContainer }) => {
-    search.addWidgets([
-      dynamicWidgets({
-        transformItems(_attributes, results) {
-          if (results._state.query === 'dog') {
-            return ['categories'];
-          }
-          if (results._state.query === 'lego') {
-            return ['categories', 'brand'];
-          }
-          return ['brand', 'hierarchicalCategories.lvl0', 'categories'];
-        },
-        container: rootContainer,
-        widgets: [
-          container => menu({ container, attribute: 'categories' }),
-          container =>
-            panel({ templates: { header: 'brand' } })(refinementList)({
-              container,
-              attribute: 'brand',
-            }),
-          container =>
-            panel({ templates: { header: 'hierarchy' } })(hierarchicalMenu)({
-              container,
-              attributes: [
-                'hierarchicalCategories.lvl0',
-                'hierarchicalCategories.lvl1',
-                'hierarchicalCategories.lvl2',
-              ],
-            }),
-        ],
-      }),
-    ]);
-  })
+  withHits(
+    ({ search, container: rootContainer }) => {
+      search.addWidgets([
+        dynamicWidgets({
+          transformItems(_attributes, results) {
+            if (results._state.query === 'dog') {
+              return ['categories'];
+            }
+            if (results._state.query === 'lego') {
+              return ['categories', 'brand'];
+            }
+            return ['brand', 'hierarchicalCategories.lvl0', 'categories'];
+          },
+          container: rootContainer,
+          widgets: [
+            container => menu({ container, attribute: 'categories' }),
+            container =>
+              panel({ templates: { header: 'brand' } })(refinementList)({
+                container,
+                attribute: 'brand',
+              }),
+            container =>
+              panel({ templates: { header: 'hierarchy' } })(hierarchicalMenu)({
+                container,
+                attributes: [
+                  'hierarchicalCategories.lvl0',
+                  'hierarchicalCategories.lvl1',
+                  'hierarchicalCategories.lvl2',
+                ],
+              }),
+          ],
+        }),
+      ]);
+    },
+    { routing: { router: hashRouter() } }
+  )
 );
