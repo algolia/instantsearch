@@ -3,12 +3,14 @@
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import withInsightsListener from '../insights/listener';
+import { serializePayload } from '../../lib/utils';
 
 describe('withInsightsListener', () => {
   it('should capture clicks performed on inner elements with data-insights-method defined', () => {
-    const payload = btoa(
-      JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
-    );
+    const payload = serializePayload({
+      objectIDs: ['1'],
+      eventName: 'Add to Cart',
+    });
 
     const Hits = () => (
       <div>
@@ -62,9 +64,10 @@ describe('withInsightsListener', () => {
   });
 
   it('should capture clicks performed on inner elements whose parents have data-insights-method defined', () => {
-    const payload = btoa(
-      JSON.stringify({ objectIDs: ['1'], eventName: 'Product Clicked' })
-    );
+    const payload = serializePayload({
+      objectIDs: ['1'],
+      eventName: 'Product Clicked',
+    });
 
     const Hits = () => (
       <div>
@@ -118,9 +121,10 @@ describe('withInsightsListener', () => {
   });
 
   it('should not capture clicks performed on inner elements with no data-insights-method defined', () => {
-    const payload = btoa(
-      JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
-    );
+    const payload = serializePayload({
+      objectIDs: ['1'],
+      eventName: 'Add to Cart',
+    });
 
     const Hits = () => (
       <div>

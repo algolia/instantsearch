@@ -54,3 +54,4 @@ export { getAppIdAndApiKey } from './getAppIdAndApiKey';
 export { convertNumericRefinementsToFilters } from './convertNumericRefinementsToFilters';
 export { createConcurrentSafePromise } from './createConcurrentSafePromise';
 export { debounce } from './debounce';
+export { serializePayload, deserializePayload } from './serializer';

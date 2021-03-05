@@ -3,7 +3,7 @@ import insights, {
   readDataAttributes,
   hasDataAttributes,
 } from '../insights';
-import { warning } from '../../lib/utils';
+import { warning, serializePayload } from '../../lib/utils';
 
 const makeDomElement = (html: string): HTMLElement => {
   const div = document.createElement('div');
@@ -115,9 +115,10 @@ describe('readDataAttributes', () => {
     let domElement: HTMLElement;
 
     beforeEach(() => {
-      const payload = btoa(
-        JSON.stringify({ objectIDs: ['3'], eventName: 'Add to Cart' })
-      );
+      const payload = serializePayload({
+        objectIDs: ['3'],
+        eventName: 'Add to Cart',
+      });
       domElement = makeDomElement(
         `<button
         data-insights-method="clickedObjectIDsAfterSearch"

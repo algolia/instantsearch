@@ -1,5 +1,5 @@
 import { InsightsClientMethod, InsightsClientPayload } from '../types';
-import { warning } from '../lib/utils';
+import { warning, serializePayload, deserializePayload } from '../lib/utils';
 
 export function readDataAttributes(
   domElement: HTMLElement
@@ -20,8 +20,8 @@ export function readDataAttributes(
   }
 
   try {
-    const payload: Partial<InsightsClientPayload> = JSON.parse(
-      atob(serializedPayload)
+    const payload: Partial<InsightsClientPayload> = deserializePayload(
+      serializedPayload
     );
     return { method, payload };
   } catch (error) {
@@ -49,7 +49,7 @@ export function writeDataAttributes({
   let serializedPayload: string;
 
   try {
-    serializedPayload = btoa(JSON.stringify(payload));
+    serializedPayload = serializePayload(payload);
   } catch (error) {
     throw new Error(`Could not JSON serialize the payload object.`);
   }
