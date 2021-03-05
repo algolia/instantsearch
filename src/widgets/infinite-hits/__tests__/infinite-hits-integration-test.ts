@@ -325,6 +325,18 @@ Object {
       expect(onEvent).toHaveBeenCalledWith(
         {
           eventType: 'view',
+          hits: [
+            {
+              __position: 1,
+              objectID: 'object-id0',
+              title: 'title 1',
+            },
+            {
+              __position: 2,
+              objectID: 'object-id1',
+              title: 'title 2',
+            },
+          ],
           insightsMethod: 'viewedObjectIDs',
           payload: {
             eventName: 'Hits Viewed',
@@ -362,6 +374,14 @@ Object {
       expect(onEvent).toHaveBeenCalledTimes(2);
       expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
         eventType: 'click',
+        hits: [
+          {
+            __hitIndex: 0,
+            __position: 1,
+            objectID: 'object-id0',
+            title: 'title 1',
+          },
+        ],
         insightsMethod: 'clickedObjectIDsAfterSearch',
         payload: {
           eventName: 'Item Clicked',
@@ -402,6 +422,14 @@ Object {
       expect(onEvent).toHaveBeenCalledTimes(2);
       expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
         eventType: 'conversion',
+        hits: [
+          {
+            __hitIndex: 1,
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
         insightsMethod: 'convertedObjectIDsAfterSearch',
         payload: {
           eventName: 'Product Ordered',

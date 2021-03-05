@@ -803,6 +803,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         1
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'swag',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {
@@ -835,6 +836,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         2
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'swag',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {

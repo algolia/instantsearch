@@ -41,6 +41,7 @@ const createSendEvent = ({
         index: helper.getIndex(),
         filters: [`${attribute}>=${facetValue}`],
       },
+      attribute,
     });
   }
 };

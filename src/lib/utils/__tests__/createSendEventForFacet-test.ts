@@ -82,6 +82,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
         1
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'category',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {
@@ -100,6 +101,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
         1
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'category',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {

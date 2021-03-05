@@ -729,6 +729,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'view',
+            hits: [
+              {
+                __position: 0,
+                __queryID: 'test-query-id',
+                fake: 'data',
+                objectID: '1',
+              },
+              {
+                __position: 1,
+                __queryID: 'test-query-id',
+                objectID: '2',
+                sample: 'infos',
+              },
+            ],
             insightsMethod: 'viewedObjectIDs',
             payload: {
               eventName: 'Hits Viewed',
@@ -760,6 +774,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'click',
+            hits: [
+              {
+                __position: 0,
+                __queryID: 'test-query-id',
+                fake: 'data',
+                objectID: '1',
+              },
+            ],
             insightsMethod: 'clickedObjectIDsAfterSearch',
             payload: {
               eventName: 'Product Added',
@@ -793,6 +815,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'conversion',
+            hits: [
+              {
+                __position: 1,
+                __queryID: 'test-query-id',
+                objectID: '2',
+                sample: 'infos',
+              },
+            ],
             insightsMethod: 'convertedObjectIDsAfterSearch',
             payload: {
               eventName: 'Product Ordered',
@@ -817,6 +847,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             JSON.parse(atob(payload.substr('data-insights-event='.length)))
           ).toEqual({
             eventType: 'click',
+            hits: [
+              {
+                __position: 0,
+                __queryID: 'test-query-id',
+                fake: 'data',
+                objectID: '1',
+              },
+            ],
             insightsMethod: 'clickedObjectIDsAfterSearch',
             payload: {
               eventName: 'Product Added',
@@ -840,6 +878,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             JSON.parse(atob(payload.substr('data-insights-event='.length)))
           ).toEqual({
             eventType: 'conversion',
+            hits: [
+              {
+                __position: 1,
+                __queryID: 'test-query-id',
+                objectID: '2',
+                sample: 'infos',
+              },
+            ],
             insightsMethod: 'convertedObjectIDsAfterSearch',
             payload: {
               eventName: 'Product Ordered',

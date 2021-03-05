@@ -133,6 +133,7 @@ const createSendEvent = ({ instantSearchInstance, helper, attribute }) => (
         index: helper.getIndex(),
         filters,
       },
+      attribute,
     });
   }
 };

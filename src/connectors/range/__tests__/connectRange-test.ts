@@ -2184,6 +2184,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           1
         );
         expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+          attribute: 'price',
           eventType: 'click',
           insightsMethod: 'clickedFilters',
           payload: {
@@ -2219,6 +2220,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           2
         );
         expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+          attribute: 'price',
           eventType: 'click',
           insightsMethod: 'clickedFilters',
           payload: {

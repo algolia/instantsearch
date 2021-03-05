@@ -42,6 +42,7 @@ export function createSendEventForFacet({
             index: helper.getIndex(),
             filters: [`${attribute}:${facetValue}`],
           },
+          attribute,
         });
       }
     } else if (__DEV__) {
