@@ -1,8 +1,9 @@
-import { action } from '@storybook/addon-actions';
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../src/index';
 import defaultPlayground from '../playgrounds/default';
 import { configure } from '../../src/widgets';
+import { InstantSearch, InstantSearchOptions } from '../../src/types';
+import { memoryRouter } from '../MemoryRouter';
 
 export const withHits = (
   storyFn: ({
@@ -12,9 +13,15 @@ export const withHits = (
   }: {
     container: HTMLElement;
     instantsearch: any;
-    search: any;
+    search: InstantSearch;
   }) => void,
-  searchOptions?: any
+  searchOptions?: Partial<
+    InstantSearchOptions & {
+      appId: string;
+      apiKey: string;
+      playground: any;
+    }
+  >
 ) => () => {
   const {
     appId = 'latency',
@@ -24,20 +31,10 @@ export const withHits = (
     ...instantsearchOptions
   } = searchOptions || {};
 
-  const urlLogger = action('Routing state');
   const search = instantsearch({
     indexName,
     searchClient: algoliasearch(appId, apiKey),
-    routing: {
-      router: {
-        write: (routeState: object) => {
-          urlLogger(JSON.stringify(routeState, null, 2));
-        },
-        read: () => ({}),
-        createURL: () => '',
-        onUpdate: () => {},
-      },
-    },
+    routing: { router: memoryRouter({}) },
     ...instantsearchOptions,
   });
 
