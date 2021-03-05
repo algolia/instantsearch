@@ -163,7 +163,7 @@ export function createBindEventForHits({
       args,
     });
     return payload
-      ? `data-insights-event=${btoa(JSON.stringify(payload))}`
+      ? `data-insights-event="${btoa(JSON.stringify(payload))}"`
       : '';
   };
   return bindEventForHits;
