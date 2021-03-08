@@ -1434,7 +1434,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             renderFn.mock.calls.length - 1
           ][0];
           const payload = bindEvent('click', hits[0], 'Product Added');
-          console.log({ payload });
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(
             deserializePayload(payload.substr('data-insights-event='.length))
