@@ -27,7 +27,9 @@ const findInsightsTarget = (
   return element;
 };
 
-const parseInsightsEvent = element => {
+type ParseInsightsEvent = (element: HTMLElement) => InsightsEvent;
+
+const parseInsightsEvent: ParseInsightsEvent = element => {
   const serializedPayload = element.getAttribute('data-insights-event');
 
   if (typeof serializedPayload !== 'string') {
@@ -37,7 +39,7 @@ const parseInsightsEvent = element => {
   }
 
   try {
-    return deserializePayload(serializedPayload);
+    return deserializePayload(serializedPayload) as InsightsEvent;
   } catch (error) {
     throw new Error(
       'The insights middleware was unable to parse `data-insights-event`.'
