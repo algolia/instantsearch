@@ -19,7 +19,7 @@ describe('insights', () => {
         eventName: 'Add to Cart',
       })
     ).toMatchInlineSnapshot(
-      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"eyJvYmplY3RJRHMiOlsiMyJdLCJldmVudE5hbWUiOiJBZGQgdG8gQ2FydCJ9\\""`
+      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"JTdCJTIyb2JqZWN0SURzJTIyJTNBJTVCJTIyMyUyMiU1RCUyQyUyMmV2ZW50TmFtZSUyMiUzQSUyMkFkZCUyMHRvJTIwQ2FydCUyMiU3RA==\\""`
     );
   });
 
@@ -50,7 +50,7 @@ describe('writeDataAttributes', () => {
         },
       })
     ).toMatchInlineSnapshot(
-      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"eyJvYmplY3RJRHMiOlsiMyJdLCJldmVudE5hbWUiOiJBZGQgdG8gQ2FydCJ9\\""`
+      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"JTdCJTIyb2JqZWN0SURzJTIyJTNBJTVCJTIyMyUyMiU1RCUyQyUyMmV2ZW50TmFtZSUyMiUzQSUyMkFkZCUyMHRvJTIwQ2FydCUyMiU3RA==\\""`
     );
   });
   it('should reject undefined payloads', () => {
