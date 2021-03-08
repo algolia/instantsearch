@@ -62,7 +62,7 @@
     "qs": "^6.5.1"
   },
   "devDependencies": {
-    "@algolia/client-search": "4.8.5",
+    "@algolia/client-search": "4.8.6",
     "@babel/cli": "7.8.4",
     "@babel/core": "7.9.6",
     "@babel/plugin-proposal-class-properties": "7.8.3",
@@ -92,7 +92,7 @@
     "@wdio/selenium-standalone-service": "5.16.5",
     "@wdio/spec-reporter": "5.16.5",
     "@wdio/static-server-service": "5.16.5",
-    "algoliasearch": "4.8.5",
+    "algoliasearch": "4.8.6",
     "algoliasearch-v3": "npm:algoliasearch@3.35.1",
     "babel-eslint": "10.0.3",
     "babel-jest": "24.9.0",
