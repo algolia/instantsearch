@@ -1,4 +1,9 @@
-import { InsightsClient, InsightsClientMethod, Middleware } from '../types';
+import {
+  InsightsClient,
+  InsightsClientMethod,
+  Middleware,
+  Hit,
+} from '../types';
 import { getInsightsAnonymousUserTokenInternal } from '../helpers';
 import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils';
 
@@ -7,6 +12,8 @@ export type InsightsEvent = {
   payload: any;
   widgetType: string;
   eventType: string; // 'view' | 'click' | 'conversion', but we're not restricting.
+  hits?: Hit[];
+  attribute?: string;
 };
 
 export type InsightsProps = {

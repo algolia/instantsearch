@@ -1246,6 +1246,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         1
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'category',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {

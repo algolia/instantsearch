@@ -1,9 +1,9 @@
-import { InstantSearch, Hit } from '../../types';
+import { InstantSearch, Hit, Hits, EscapedHits } from '../../types';
 import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type BuiltInSendEventForHits = (
   eventType: string,
-  hits: Hit | Hit[],
+  hits: Hit | Hits,
   eventName?: string
 ) => void;
 type CustomSendEventForHits = (customPayload: any) => void;
@@ -11,7 +11,7 @@ export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
 
 type BuiltInBindEventForHits = (
   eventType: string,
-  hits: Hit | Hit[],
+  hits: Hit | Hits,
   eventName?: string
 ) => string;
 type CustomBindEventForHits = (customPayload: any) => string;
@@ -34,7 +34,7 @@ const buildPayload: BuildPayload = ({
     return args[0];
   }
   const eventType: string = args[0];
-  const hits: Hit | Hit[] = args[1];
+  const hits: Hit | Hits | EscapedHits = args[1];
   const eventName: string | undefined = args[2];
   if (!hits) {
     if (__DEV__) {
@@ -60,7 +60,10 @@ const buildPayload: BuildPayload = ({
       return null;
     }
   }
-  const hitsArray = Array.isArray(hits) ? hits : [hits];
+  const hitsArray: Hits = Array.isArray(hits)
+    ? removeEscapedFromHits(hits)
+    : [hits];
+
   if (hitsArray.length === 0) {
     return null;
   }
@@ -78,6 +81,7 @@ const buildPayload: BuildPayload = ({
         index,
         objectIDs,
       },
+      hits: hitsArray,
     };
   } else if (eventType === 'click') {
     return {
@@ -91,6 +95,7 @@ const buildPayload: BuildPayload = ({
         objectIDs,
         positions,
       },
+      hits: hitsArray,
     };
   } else if (eventType === 'conversion') {
     return {
@@ -103,6 +108,7 @@ const buildPayload: BuildPayload = ({
         queryID,
         objectIDs,
       },
+      hits: hitsArray,
     };
   } else if (__DEV__) {
     throw new Error(`eventType("${eventType}") is not supported.
@@ -112,6 +118,12 @@ const buildPayload: BuildPayload = ({
     return null;
   }
 };
+
+function removeEscapedFromHits(hits: Hits | EscapedHits): Hits {
+  // this returns without `hits.__escaped`
+  // and this way it doesn't mutate the original `hits`
+  return hits.map(hit => hit);
+}
 
 export function createSendEventForHits({
   instantSearchInstance,

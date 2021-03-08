@@ -770,6 +770,14 @@ search.addWidgets([
       expect(sendEventToInsights).toHaveBeenCalledTimes(2);
       expect(sendEventToInsights.mock.calls[0][0]).toEqual({
         eventType: 'view',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            name: 'Hit 1-1',
+            objectID: '1-1',
+          },
+        ],
         insightsMethod: 'viewedObjectIDs',
         payload: {
           eventName: 'Hits Viewed',
@@ -780,6 +788,20 @@ search.addWidgets([
       });
       expect(sendEventToInsights.mock.calls[1][0]).toEqual({
         eventType: 'view',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            name: 'Hit 2-1',
+            objectID: '2-1',
+          },
+          {
+            __position: 1,
+            __queryID: 'test-query-id',
+            name: 'Hit 2-2',
+            objectID: '2-2',
+          },
+        ],
         insightsMethod: 'viewedObjectIDs',
         payload: {
           eventName: 'Hits Viewed',
@@ -803,6 +825,14 @@ search.addWidgets([
       expect(sendEventToInsights).toHaveBeenCalledTimes(3);
       expect(sendEventToInsights.mock.calls[2][0]).toEqual({
         eventType: 'click',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            name: 'Hit 2-1',
+            objectID: '2-1',
+          },
+        ],
         insightsMethod: 'clickedObjectIDsAfterSearch',
         payload: {
           eventName: 'Product Added',
@@ -828,6 +858,14 @@ search.addWidgets([
       expect(sendEventToInsights).toHaveBeenCalledTimes(3);
       expect(sendEventToInsights.mock.calls[2][0]).toEqual({
         eventType: 'conversion',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            name: 'Hit 1-1',
+            objectID: '1-1',
+          },
+        ],
         insightsMethod: 'convertedObjectIDsAfterSearch',
         payload: {
           eventName: 'Product Ordered',

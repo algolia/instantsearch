@@ -244,6 +244,7 @@ const connectRange: ConnectRange = function connectRange(
             index: helper.getIndex(),
             filters,
           },
+          attribute,
         });
       }
     };

@@ -1397,6 +1397,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         1
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'category',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {

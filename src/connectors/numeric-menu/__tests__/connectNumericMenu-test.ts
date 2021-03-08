@@ -1049,6 +1049,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         1
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'numerics',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {
@@ -1064,6 +1065,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         2
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'numerics',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {
