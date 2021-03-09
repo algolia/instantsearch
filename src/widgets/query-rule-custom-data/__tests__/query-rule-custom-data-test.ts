@@ -142,8 +142,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           default: expect.any(Function),
         });
         expect(
-          // @ts-expect-error (TS did not understand the jest expectation narrowed the type)
-          templates.default({
+          (templates.default as (data: { items: any[] }) => string)({
             items: [{ banner: '1.jpg' }, { banner: '2.jpg' }],
           })
         ).toMatchInlineSnapshot(`
