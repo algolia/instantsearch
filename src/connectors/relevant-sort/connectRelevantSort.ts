@@ -1,9 +1,7 @@
 import { Connector } from '../../types';
 import { noop } from '../../lib/utils';
 
-// Record<string, never> doesn't work for empty connectors, since that infects widgetParameters
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type RelevantSortConnectorParams = {};
+export type RelevantSortConnectorParams = Record<string, unknown>;
 
 type Refine = (relevancyStrictness: number) => void;
 
