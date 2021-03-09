@@ -276,7 +276,7 @@ See ${createDocumentationLink({
     // middleware so they're notified of changes.
     if (this.started) {
       newMiddlewareList.forEach(m => {
-        m.subscribe();
+        m.subscribe?.();
       });
     }
 
@@ -455,7 +455,7 @@ See ${createDocumentationLink({
     });
 
     this.middleware.forEach(m => {
-      m.subscribe();
+      m.subscribe?.();
     });
 
     mainHelper.search();
@@ -496,7 +496,7 @@ See ${createDocumentationLink({
     this.helper = null;
 
     this.middleware.forEach(m => {
-      m.unsubscribe();
+      m.unsubscribe?.();
     });
   }
 
@@ -574,7 +574,7 @@ See ${createDocumentationLink({
     const nextUiState = this.mainIndex.getWidgetUiState({});
 
     this.middleware.forEach(m => {
-      m.onStateChange({
+      m.onStateChange?.({
         uiState: nextUiState,
       });
     });

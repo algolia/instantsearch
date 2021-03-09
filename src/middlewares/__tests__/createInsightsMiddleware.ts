@@ -133,7 +133,7 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      middleware.subscribe();
+      middleware.subscribe!();
 
       // It tries to send an event.
       instantSearchInstance.sendEventToInsights({
@@ -173,7 +173,7 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      middleware.subscribe();
+      middleware.subscribe!();
       expect(helper.state.clickAnalytics).toBe(true);
     });
 
@@ -187,7 +187,7 @@ describe('insights', () => {
         insightsClient,
       })({ instantSearchInstance });
       helper.setPage(100);
-      middleware.subscribe();
+      middleware.subscribe!();
       expect(helper.state.page).toBe(100);
     });
   });
@@ -203,7 +203,7 @@ describe('insights', () => {
         insightsClient,
       })({ instantSearchInstance });
       insightsClient('setUserToken', 'abc');
-      middleware.subscribe();
+      middleware.subscribe!();
       expect(getUserToken()).toEqual('abc');
     });
 
@@ -219,7 +219,7 @@ describe('insights', () => {
       })({ instantSearchInstance });
       insightsClient('setUserToken', 'abc');
       helper.setPage(100);
-      middleware.subscribe();
+      middleware.subscribe!();
       expect(helper.state.page).toBe(100);
       expect(getUserToken()).toEqual('abc');
     });
@@ -233,7 +233,7 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      middleware.subscribe();
+      middleware.subscribe!();
       insightsClient('setUserToken', 'def');
       expect(getUserToken()).toEqual('def');
     });
@@ -249,7 +249,7 @@ describe('insights', () => {
         insightsClient,
       })({ instantSearchInstance });
       helper.setPage(100);
-      middleware.subscribe();
+      middleware.subscribe!();
       insightsClient('setUserToken', 'def');
       expect(helper.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
@@ -264,7 +264,7 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      middleware.subscribe();
+      middleware.subscribe!();
       expect(getUserToken()).toEqual(ANONYMOUS_TOKEN);
     });
 
@@ -280,7 +280,7 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      middleware.subscribe();
+      middleware.subscribe!();
       expect(getUserToken()).toEqual('token-from-queue-before-init');
     });
 
@@ -305,7 +305,7 @@ describe('insights', () => {
         const middleware = createInsightsMiddleware({
           insightsClient,
         })({ instantSearchInstance });
-        middleware.subscribe();
+        middleware.subscribe!();
         expect(getUserToken()).toEqual('token-from-queue');
       });
 
@@ -328,7 +328,7 @@ describe('insights', () => {
         const middleware = createInsightsMiddleware({
           insightsClient,
         })({ instantSearchInstance });
-        middleware.subscribe();
+        middleware.subscribe!();
         libraryLoadedAndProcessQueue();
         expect(getUserToken()).toEqual('token-from-queue');
       });
@@ -348,7 +348,7 @@ describe('insights', () => {
         const middleware = createInsightsMiddleware({
           insightsClient,
         })({ instantSearchInstance });
-        middleware.subscribe();
+        middleware.subscribe!();
         expect(getUserToken()).toEqual(ANONYMOUS_TOKEN);
       });
     });
@@ -365,7 +365,7 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      middleware.subscribe();
+      middleware.subscribe!();
 
       instantSearchInstance.sendEventToInsights({
         insightsMethod: 'viewedObjectIDs',
@@ -393,7 +393,7 @@ describe('insights', () => {
         insightsClient,
         onEvent,
       })({ instantSearchInstance });
-      middleware.subscribe();
+      middleware.subscribe!();
 
       instantSearchInstance.sendEventToInsights({
         insightsMethod: 'viewedObjectIDs',
@@ -424,7 +424,7 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      middleware.subscribe();
+      middleware.subscribe!();
 
       const numberOfCalls = insightsClient.mock.calls.length;
       expect(() => {
