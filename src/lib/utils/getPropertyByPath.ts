@@ -1,6 +1,5 @@
 function getPropertyByPath(
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  object: object | undefined,
+  object: Record<string, any> | undefined,
   path: string | string[]
 ): any {
   const parts = Array.isArray(path) ? path : path.split('.');

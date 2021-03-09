@@ -35,13 +35,13 @@ const createFakeStateMapping = (
   ...args,
 });
 
-/* eslint-disable @typescript-eslint/ban-types */
+type Entry = Record<string, unknown>;
+
 type HistoryState = {
   index: number;
-  entries: object[];
-  listeners: Array<(value: object) => void>;
+  entries: Entry[];
+  listeners: Array<(value: Entry) => void>;
 };
-/* eslint-enable @typescript-eslint/ban-types */
 
 const createFakeHistory = (
   {
@@ -60,8 +60,7 @@ const createFakeHistory = (
     subscribe(listener: () => void) {
       state.listeners.push(listener);
     },
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    push(value: object) {
+    push(value: Entry) {
       state.entries.push(value);
       state.index++;
     },
