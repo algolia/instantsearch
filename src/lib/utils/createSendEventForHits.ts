@@ -1,4 +1,5 @@
 import { InstantSearch, Hit, Hits, EscapedHits } from '../../types';
+import { serializePayload } from '../../lib/utils';
 import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type BuiltInSendEventForHits = (
@@ -162,9 +163,7 @@ export function createBindEventForHits({
       methodName: 'bindEvent',
       args,
     });
-    return payload
-      ? `data-insights-event=${btoa(JSON.stringify(payload))}`
-      : '';
+    return payload ? `data-insights-event=${serializePayload(payload)}` : '';
   };
   return bindEventForHits;
 }

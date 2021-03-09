@@ -1,6 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
+import { deserializePayload } from '../utils';
 import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
 import { InsightsClientWrapper } from '../../types';
 import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
@@ -26,7 +27,9 @@ const findInsightsTarget = (
   return element;
 };
 
-const parseInsightsEvent = element => {
+type ParseInsightsEvent = (element: HTMLElement) => InsightsEvent;
+
+const parseInsightsEvent: ParseInsightsEvent = element => {
   const serializedPayload = element.getAttribute('data-insights-event');
 
   if (typeof serializedPayload !== 'string') {
@@ -36,7 +39,7 @@ const parseInsightsEvent = element => {
   }
 
   try {
-    return JSON.parse(atob(serializedPayload));
+    return deserializePayload(serializedPayload) as InsightsEvent;
   } catch (error) {
     throw new Error(
       'The insights middleware was unable to parse `data-insights-event`.'

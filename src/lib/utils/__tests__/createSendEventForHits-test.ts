@@ -3,6 +3,7 @@ import {
   createBindEventForHits,
   createSendEventForHits,
 } from '../createSendEventForHits';
+import { deserializePayload } from '../../utils';
 
 const createTestEnvironment = () => {
   const instantSearchInstance = createInstantSearch();
@@ -227,7 +228,7 @@ describe('createSendEventForHits', () => {
 describe('createBindEventForHits', () => {
   function parsePayload(payload) {
     expect(payload.startsWith('data-insights-event=')).toBe(true);
-    return JSON.parse(atob(payload.substr('data-insights-event='.length)));
+    return deserializePayload(payload.substr('data-insights-event='.length));
   }
 
   it('returns a payload for click event', () => {

@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/utils';
+import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
 import connectHits from '../connectHits';
 import {
   createInitOptions,
@@ -844,7 +844,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           const payload = bindEvent('click', hits[0], 'Product Added');
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(
-            JSON.parse(atob(payload.substr('data-insights-event='.length)))
+            deserializePayload(payload.substr('data-insights-event='.length))
           ).toEqual({
             eventType: 'click',
             hits: [
@@ -875,7 +875,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           const payload = bindEvent('conversion', hits[1], 'Product Ordered');
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(
-            JSON.parse(atob(payload.substr('data-insights-event='.length)))
+            deserializePayload(payload.substr('data-insights-event='.length))
           ).toEqual({
             eventType: 'conversion',
             hits: [

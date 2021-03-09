@@ -3,7 +3,7 @@ import insights, {
   readDataAttributes,
   hasDataAttributes,
 } from '../insights';
-import { warning } from '../../lib/utils';
+import { warning, serializePayload } from '../../lib/utils';
 
 const makeDomElement = (html: string): HTMLElement => {
   const div = document.createElement('div');
@@ -19,7 +19,7 @@ describe('insights', () => {
         eventName: 'Add to Cart',
       })
     ).toMatchInlineSnapshot(
-      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"eyJvYmplY3RJRHMiOlsiMyJdLCJldmVudE5hbWUiOiJBZGQgdG8gQ2FydCJ9\\""`
+      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"JTdCJTIyb2JqZWN0SURzJTIyJTNBJTVCJTIyMyUyMiU1RCUyQyUyMmV2ZW50TmFtZSUyMiUzQSUyMkFkZCUyMHRvJTIwQ2FydCUyMiU3RA==\\""`
     );
   });
 
@@ -50,7 +50,7 @@ describe('writeDataAttributes', () => {
         },
       })
     ).toMatchInlineSnapshot(
-      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"eyJvYmplY3RJRHMiOlsiMyJdLCJldmVudE5hbWUiOiJBZGQgdG8gQ2FydCJ9\\""`
+      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"JTdCJTIyb2JqZWN0SURzJTIyJTNBJTVCJTIyMyUyMiU1RCUyQyUyMmV2ZW50TmFtZSUyMiUzQSUyMkFkZCUyMHRvJTIwQ2FydCUyMiU3RA==\\""`
     );
   });
   it('should reject undefined payloads', () => {
@@ -115,9 +115,10 @@ describe('readDataAttributes', () => {
     let domElement: HTMLElement;
 
     beforeEach(() => {
-      const payload = btoa(
-        JSON.stringify({ objectIDs: ['3'], eventName: 'Add to Cart' })
-      );
+      const payload = serializePayload({
+        objectIDs: ['3'],
+        eventName: 'Add to Cart',
+      });
       domElement = makeDomElement(
         `<button
         data-insights-method="clickedObjectIDsAfterSearch"
