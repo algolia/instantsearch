@@ -1,3 +1,17 @@
+# [4.17.0](https://github.com/algolia/instantsearch.js/compare/v4.16.1...v4.17.0) (2021-03-09)
+
+
+### Bug Fixes
+
+* **bindEvent:** escape payload correctly ([#4670](https://github.com/algolia/instantsearch.js/issues/4670)) ([c1cbaf4](https://github.com/algolia/instantsearch.js/commit/c1cbaf49f6af9784535df80d024cdad56f3ddb84))
+
+
+### Features
+
+* **insights:** add hits and attributes to InsightsEvent ([#4667](https://github.com/algolia/instantsearch.js/issues/4667)) ([17ef71c](https://github.com/algolia/instantsearch.js/commit/17ef71c32586d0a93bb3905696b6ff7c7be1f3f9))
+
+
+
 ## [4.16.1](https://github.com/algolia/instantsearch.js/compare/v4.16.0...v4.16.1) (2021-03-03)
 
 
