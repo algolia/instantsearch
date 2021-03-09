@@ -1,5 +1,4 @@
 /** @jsx h */
-/* global React */
 
 import { h } from 'preact';
 import Template from '../Template/Template';
@@ -30,8 +29,10 @@ const VoiceSearch = ({
   voiceListeningState,
   templates,
 }: VoiceSearchProps) => {
-  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
-    event.currentTarget.blur();
+  const handleClick = (event: MouseEvent): void => {
+    if (event.currentTarget instanceof HTMLElement) {
+      event.currentTarget.blur();
+    }
     toggleListening();
   };
 
