@@ -17,7 +17,7 @@ import {
   Widget,
   UiState,
   CreateURL,
-  Middleware,
+  PartialMiddleware,
   MiddlewareDefinition,
   RenderState,
 } from '../types';
@@ -265,9 +265,14 @@ See ${createDocumentationLink({
    * This method is considered as experimental and is subject to change in
    * minor versions.
    */
-  public use(...middleware: Middleware[]): this {
+  public use(...middleware: PartialMiddleware[]): this {
     const newMiddlewareList = middleware.map(fn => {
-      const newMiddleware = fn({ instantSearchInstance: this });
+      const newMiddleware = {
+        subscribe: noop,
+        unsubscribe: noop,
+        onStateChange: noop,
+        ...fn({ instantSearchInstance: this }),
+      };
       this.middleware.push(newMiddleware);
       return newMiddleware;
     });
@@ -276,7 +281,7 @@ See ${createDocumentationLink({
     // middleware so they're notified of changes.
     if (this.started) {
       newMiddlewareList.forEach(m => {
-        m.subscribe?.();
+        m.subscribe();
       });
     }
 
@@ -284,7 +289,7 @@ See ${createDocumentationLink({
   }
 
   // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
-  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
+  public EXPERIMENTAL_use(...middleware: PartialMiddleware[]): this {
     warning(
       false,
       'The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
@@ -455,7 +460,7 @@ See ${createDocumentationLink({
     });
 
     this.middleware.forEach(m => {
-      m.subscribe?.();
+      m.subscribe();
     });
 
     mainHelper.search();
@@ -496,7 +501,7 @@ See ${createDocumentationLink({
     this.helper = null;
 
     this.middleware.forEach(m => {
-      m.unsubscribe?.();
+      m.unsubscribe();
     });
   }
 
@@ -574,7 +579,7 @@ See ${createDocumentationLink({
     const nextUiState = this.mainIndex.getWidgetUiState({});
 
     this.middleware.forEach(m => {
-      m.onStateChange?.({
+      m.onStateChange({
         uiState: nextUiState,
       });
     });
