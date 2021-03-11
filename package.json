@@ -101,6 +101,7 @@
     "jest": "24.9.0",
     "jest-watch-typeahead": "0.4.0",
     "json": "9.0.6",
+    "latest-version": "5.1.0",
     "lerna": "3.16.4",
     "lodash.orderby": "4.6.0",
     "mversion": "1.13.0",
