@@ -62,7 +62,7 @@ function prepareTemplateProps<TTemplates extends Templates>({
   templatesConfig,
 }: {
   defaultTemplates: TTemplates;
-  templates: Partial<TTemplates>;
+  templates?: Partial<TTemplates>;
   templatesConfig: TemplatesConfig;
 }): PreparedTemplateProps<TTemplates> {
   const preparedTemplates = prepareTemplates(defaultTemplates, templates);
