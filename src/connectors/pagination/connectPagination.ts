@@ -70,8 +70,7 @@ const connectPagination: ConnectPagination = function connectPagination(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { totalPages, padding = 3 } =
-      widgetParams || ({} as typeof widgetParams);
+    const { totalPages, padding = 3 } = widgetParams || {};
 
     const pager = new Paginator({
       currentPage: 0,
@@ -80,11 +79,11 @@ const connectPagination: ConnectPagination = function connectPagination(
     });
 
     type ConnectorState = {
-      refine(page: number): void;
-      createURL(state: SearchParameters): (page: number) => string;
+      refine?(page: number): void;
+      createURL?(state: SearchParameters): (page: number) => string;
     };
 
-    const connectorState = {} as ConnectorState;
+    const connectorState: ConnectorState = {};
 
     function getMaxPage({ nbPages }) {
       return totalPages !== undefined ? Math.min(totalPages, nbPages) : nbPages;

@@ -141,8 +141,8 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
 
   return widgetParams => {
     if (
-      (widgetParams || ({} as typeof widgetParams)).includedAttributes &&
-      (widgetParams || ({} as typeof widgetParams)).excludedAttributes
+      (widgetParams || {}).includedAttributes &&
+      (widgetParams || {}).excludedAttributes
     ) {
       throw new Error(
         withUsage(
@@ -156,7 +156,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
       excludedAttributes = ['query'],
       transformItems = (items: CurrentRefinementsConnectorParamsItem[]) =>
         items,
-    } = widgetParams || ({} as typeof widgetParams);
+    } = widgetParams || {};
 
     return {
       $$type: 'ais.currentRefinements',
@@ -201,7 +201,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
           if (!results) {
             return transformItems(
               getRefinementsItems({
-                results: {} as SearchResults,
+                results: {},
                 helper,
                 includedAttributes,
                 excludedAttributes,
@@ -244,7 +244,7 @@ function getRefinementsItems({
   includedAttributes,
   excludedAttributes,
 }: {
-  results: SearchResults;
+  results: SearchResults | Record<string, never>;
   helper: AlgoliaSearchHelper;
   includedAttributes: CurrentRefinementsConnectorParams['includedAttributes'];
   excludedAttributes: CurrentRefinementsConnectorParams['excludedAttributes'];

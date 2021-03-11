@@ -169,7 +169,7 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetParams) {
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformItems,
-  } = widgetParams || ({} as typeof widgetParams);
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

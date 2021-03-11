@@ -83,19 +83,21 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
   checkRendering(renderFn, withUsage());
 
   type ConnectorState = {
-    refine: BreadcrumbRendererOptions['refine'];
-    createURL: BreadcrumbRendererOptions['createURL'];
+    refine?: BreadcrumbRendererOptions['refine'];
+    createURL?: BreadcrumbRendererOptions['createURL'];
   };
 
-  const connectorState = {} as ConnectorState;
+  const connectorState: ConnectorState = {};
 
   return widgetParams => {
     const {
       attributes,
       separator = ' > ',
       rootPath = null,
-      transformItems = items => items,
-    } = widgetParams || ({} as typeof widgetParams);
+      transformItems = (items => items) as TransformItems<
+        BreadcrumbConnectorParamsItem
+      >,
+    } = widgetParams || {};
 
     if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
       throw new Error(

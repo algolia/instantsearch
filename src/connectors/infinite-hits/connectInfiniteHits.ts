@@ -156,13 +156,13 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
   return widgetParams => {
     const {
       escapeHTML = true,
-      transformItems = (items: any[]) => items,
+      transformItems = (items => items) as TransformItems<Hit>,
       cache = getInMemoryCache(),
-    } = widgetParams || ({} as typeof widgetParams);
+    } = widgetParams || {};
     let showPrevious: () => void;
     let showMore: () => void;
-    let sendEvent;
-    let bindEvent;
+    let sendEvent: SendEventForHits;
+    let bindEvent: BindEventForHits;
     const getFirstReceivedPage = (
       state: SearchParameters,
       cachedHits: InfiniteHitsCachedHits

@@ -24,6 +24,10 @@ export type MatchingPatterns = {
   };
 };
 
+export type TransformSearchParameters = (
+  searchParameters: SearchParameters
+) => PlainSearchParameters;
+
 export type ConfigureRelatedItemsConnectorParams = {
   /**
    * The reference hit to extract the filters from.
@@ -37,9 +41,7 @@ export type ConfigureRelatedItemsConnectorParams = {
   /**
    * Function to transform the generated search parameters.
    */
-  transformSearchParameters?(
-    searchParameters: SearchParameters
-  ): PlainSearchParameters;
+  transformSearchParameters?: TransformSearchParameters;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -65,8 +67,11 @@ const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = function co
   unmountFn
 ) {
   return widgetParams => {
-    const { hit, matchingPatterns, transformSearchParameters = x => x } =
-      widgetParams || ({} as typeof widgetParams);
+    const {
+      hit,
+      matchingPatterns,
+      transformSearchParameters = (x => x) as TransformSearchParameters,
+    } = widgetParams || {};
 
     if (!hit) {
       throw new Error(withUsage('The `hit` option is required.'));

@@ -28,7 +28,7 @@ describe('currentRefinements()', () => {
     it('throws without container', () => {
       expect(() => {
         currentRefinements({
-          // @ts-ignore wrong options
+          // @ts-expect-error
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`

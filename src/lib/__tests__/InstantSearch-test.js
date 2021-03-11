@@ -230,7 +230,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       addAlgoliaAgent: jest.fn(),
     });
 
-    // eslint-disable-next-line no-new
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient,
@@ -254,7 +253,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       addAlgoliaAgent: jest.fn(),
     });
 
-    // eslint-disable-next-line no-new
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient,

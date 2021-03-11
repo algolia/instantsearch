@@ -21,6 +21,12 @@ jest.mock('preact', () => {
   return module;
 });
 
+type SliderProps = {
+  max: number;
+  min: number;
+  values: [number, number];
+};
+
 function createFacetStatsResults({
   helper,
   attribute,
@@ -209,11 +215,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
-        const firstRender = render.mock.calls[0][0] as VNode;
-
         expect(render).toHaveBeenCalledTimes(1);
-        // @ts-ignore preact types are are quite broad
-        expect(firstRender.props.max).toEqual(5000);
+
+        const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
+
+        expect((firstRender.props as SliderProps).max).toEqual(5000);
         expect(firstRender.props).toMatchSnapshot();
       });
     });
@@ -268,11 +274,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
-        const firstRender = render.mock.calls[0][0] as VNode;
-
         expect(render).toHaveBeenCalledTimes(1);
-        // @ts-ignore preact types are are quite broad
-        expect(firstRender.props.min).toEqual(1);
+
+        const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
+        expect((firstRender.props as SliderProps).min).toEqual(1);
         expect(firstRender.props).toMatchSnapshot();
       });
     });
@@ -418,10 +423,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
         widget.render({ results, helper });
 
-        const firstRender = render.mock.calls[0][0] as VNode;
+        const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
 
-        // @ts-ignore preact types are are quite broad
-        expect(firstRender.props.values[0]).toBe(5000);
+        expect((firstRender.props as SliderProps).values[0]).toBe(5000);
       });
 
       it("expect to clamp the max value to the min range when it's lower than range", () => {
@@ -439,10 +443,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
         widget.render({ results, helper });
 
-        const firstRender = render.mock.calls[0][0] as VNode;
+        const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
 
-        // @ts-ignore preact types are are quite broad
-        expect(firstRender.props.values[1]).toBe(1);
+        expect((firstRender.props as SliderProps).values[1]).toBe(1);
       });
     });
   });

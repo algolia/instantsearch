@@ -29,8 +29,10 @@ const VoiceSearch = ({
   voiceListeningState,
   templates,
 }: VoiceSearchProps) => {
-  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
-    event.currentTarget.blur();
+  const handleClick = (event: MouseEvent): void => {
+    if (event.currentTarget instanceof HTMLElement) {
+      event.currentTarget.blur();
+    }
     toggleListening();
   };
 

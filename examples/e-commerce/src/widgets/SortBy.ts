@@ -17,7 +17,6 @@ const items = [
 
 export const sortBy = sortByWidget({
   container: '[data-widget="sort-by"]',
-  attribute: 'price',
   items,
 });
 

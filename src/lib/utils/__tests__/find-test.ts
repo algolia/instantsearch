@@ -35,6 +35,7 @@ describe('find', () => {
     const originalArrayFind = Array.prototype.find;
 
     beforeAll(() => {
+      // @ts-expect-error
       delete Array.prototype.find;
     });
 

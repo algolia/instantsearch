@@ -16,7 +16,7 @@ import { Widget } from '../../types';
 type Entries<TObject> = {
   [TKey in keyof TObject]: [TKey, TObject[TKey]];
 }[keyof TObject];
-const entries = Object.entries as <TObject extends {}>(
+const entries = Object.entries as <TObject extends Record<string, unknown>>(
   yourObject: TObject
 ) => Array<Entries<TObject>>;
 
@@ -107,9 +107,11 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
       }
       case 'places': {
         const places = widget as Widgets['places'];
+        // @ts-expect-error
+        const placesInstance: PlacesInstance = {};
         return places({
           container: document.createElement('input'),
-          placesReference: () => ({} as PlacesInstance),
+          placesReference: () => placesInstance,
         });
       }
       case 'panel': {

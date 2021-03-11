@@ -64,10 +64,12 @@ const connectHits: HitsConnector = function connectHits(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { escapeHTML = true, transformItems = items => items } =
-      widgetParams || ({} as typeof widgetParams);
-    let sendEvent;
-    let bindEvent;
+    const {
+      escapeHTML = true,
+      transformItems = (items => items) as TransformItems<Hit>,
+    } = widgetParams || {};
+    let sendEvent: SendEventForHits;
+    let bindEvent: BindEventForHits;
 
     return {
       $$type: 'ais.hits',

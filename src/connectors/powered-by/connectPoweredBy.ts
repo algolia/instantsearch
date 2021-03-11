@@ -47,7 +47,7 @@ const connectPoweredBy: PoweredByConnector = function connectPoweredBy(
     'utm_campaign=poweredby';
 
   return widgetParams => {
-    const { url = defaultUrl } = widgetParams || ({} as typeof widgetParams);
+    const { url = defaultUrl } = widgetParams || {};
 
     return {
       $$type: 'ais.poweredBy',

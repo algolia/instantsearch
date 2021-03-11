@@ -116,8 +116,8 @@ const connectRange: ConnectRange = function connectRange(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { attribute, min: minBound, max: maxBound, precision = 0 } =
-      widgetParams || ({} as RangeConnectorParams);
+    const { attribute = '', min: minBound, max: maxBound, precision = 0 } =
+      widgetParams || {};
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));

@@ -23,7 +23,7 @@ export default function createInfiniteHitsSessionStorageCache(): InfiniteHitsCac
       }
       try {
         const cache = JSON.parse(
-          // @ts-ignore JSON.parse() requires a string, but it actually accepts null, too.
+          // @ts-expect-error JSON.parse() requires a string, but it actually accepts null, too.
           window.sessionStorage.getItem(KEY)
         );
 

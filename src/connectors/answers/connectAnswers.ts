@@ -109,7 +109,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       searchDebounceTime = 100,
       escapeHTML = true,
       extraParameters = {},
-    } = widgetParams || ({} as typeof widgetParams);
+    } = widgetParams || {};
 
     // @ts-ignore checking for the wrong value
     if (!queryLanguages || queryLanguages.length === 0) {

@@ -13,8 +13,8 @@ shell.exec(`tsc -p tsconfig.declaration.json --outDir es/`);
 // replace block ts-ignore comments with line ones to support TS < 3.9
 shell.sed(
   '-i',
-  /\*\* @ts-ignore/g,
-  '/ @ts-ignore',
+  /\/\*\* @ts-ignore \*\//g,
+  '// @ts-ignore',
   path.join(__dirname, '../../es/**/*.d.ts')
 );
 

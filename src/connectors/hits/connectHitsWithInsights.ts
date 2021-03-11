@@ -10,6 +10,7 @@ import { Connector } from '../../types';
  * Connector<...> imported in this file, even though it is only used implicitly.
  * This _uses_ Connector<...> so it is not accidentally removed by someone.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare type ImportWorkaround = Connector<
   HitsRendererOptions,
   HitsConnectorParams

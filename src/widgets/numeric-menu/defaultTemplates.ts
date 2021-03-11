@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export default {
   item: `<label class="{{cssClasses.label}}">
   <input type="radio" class="{{cssClasses.radio}}" name="{{attribute}}"{{#isRefined}} checked{{/isRefined}} />

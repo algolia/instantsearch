@@ -1,4 +1,5 @@
-/* eslint-disable no-console, no-redeclare */
+/* eslint-disable no-console */
+/* global CustomMatcherResult */
 /*
  * The `no-redeclare` rule sends a false positive with
  * an incompatibility with TypeScript namespaces.
@@ -10,7 +11,7 @@ import jestDiff from 'jest-diff';
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
-    // eslint-disable-next-line @typescript-eslint/generic-type-naming
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
     interface Matchers<R> {
       toWarnDev(expectedMessage?: string): CustomMatcherResult;
     }

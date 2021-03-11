@@ -3,7 +3,6 @@ import highlight from '../highlight';
 const NONE = 'none' as const;
 const FULL = 'full' as const;
 
-/* eslint-disable @typescript-eslint/camelcase */
 const hit = {
   name: 'Amazon - Fire TV Stick with Alexa Voice Remote - Black',
   description:
@@ -70,7 +69,6 @@ const hit = {
     },
   },
 };
-/* eslint-enable @typescript-eslint/camelcase */
 
 describe('highlight', () => {
   test('with default tag name', () => {
