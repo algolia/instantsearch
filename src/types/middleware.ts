@@ -11,8 +11,10 @@ export type MiddlewareOptions = {
   instantSearchInstance: InstantSearch;
 };
 
-export type Middleware = (options: MiddlewareOptions) => MiddlewareDefinition;
+export type InternalMiddleware = (
+  options: MiddlewareOptions
+) => MiddlewareDefinition;
 
-export type PartialMiddleware = (
+export type Middleware = (
   options: MiddlewareOptions
 ) => Partial<MiddlewareDefinition>;

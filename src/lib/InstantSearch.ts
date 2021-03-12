@@ -17,7 +17,7 @@ import {
   Widget,
   UiState,
   CreateURL,
-  PartialMiddleware,
+  Middleware,
   MiddlewareDefinition,
   RenderState,
 } from '../types';
@@ -265,7 +265,7 @@ See ${createDocumentationLink({
    * This method is considered as experimental and is subject to change in
    * minor versions.
    */
-  public use(...middleware: PartialMiddleware[]): this {
+  public use(...middleware: Middleware[]): this {
     const newMiddlewareList = middleware.map(fn => {
       const newMiddleware = {
         subscribe: noop,
@@ -289,7 +289,7 @@ See ${createDocumentationLink({
   }
 
   // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
-  public EXPERIMENTAL_use(...middleware: PartialMiddleware[]): this {
+  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
     warning(
       false,
       'The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
