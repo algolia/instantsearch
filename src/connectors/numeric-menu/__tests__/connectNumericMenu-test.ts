@@ -4,6 +4,7 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import connectNumericMenu, {
   NumericMenuConnectorParamsItem,
+  NumericMenuRendererOptions,
   NumericMenuRendererOptionsItem,
 } from '../connectNumericMenu';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
@@ -27,7 +28,7 @@ const mapOptionsToItems: (
 
 describe('connectNumericMenu', () => {
   const getInitializedWidget = () => {
-    const rendering = jest.fn();
+    const rendering = jest.fn<any, [NumericMenuRendererOptions, boolean]>();
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
@@ -50,7 +51,7 @@ describe('connectNumericMenu', () => {
 
     const { refine } = rendering.mock.calls[0][0];
 
-    return [widget, helper, refine];
+    return [widget, helper, refine] as const;
   };
 
   describe('Usage', () => {
@@ -741,7 +742,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     test('returns the `uiState` empty', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -757,7 +758,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
       helper.addNumericRefinement('numerics', '=', 20);
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -777,7 +778,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
       helper.addNumericRefinement('numerics', '>=', 10);
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -797,7 +798,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
       helper.addNumericRefinement('numerics', '<=', 20);
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -818,7 +819,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper.addNumericRefinement('numerics', '>=', 10);
       helper.addNumericRefinement('numerics', '<=', 20);
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -839,7 +840,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper.addNumericRefinement('numerics', '>=', 10);
       helper.addNumericRefinement('numerics', '<=', 20);
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {
           numericMenu: {
             numerics2: '27:36',
@@ -864,7 +865,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     test('returns the `SearchParameters` with the default value', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
@@ -883,7 +884,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
       helper.addNumericRefinement('numerics', '=', [5, 10]);
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
@@ -904,7 +905,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         .addNumericRefinement('numerics', '>=', [10])
         .addNumericRefinement('numerics', '<=', [20]);
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           numericMenu: {
             numerics: '10',
@@ -927,7 +928,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     test('returns the `SearchParameters` with the value from `uiState` (only min)', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           numericMenu: {
             numerics: '10:',
@@ -950,7 +951,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     test('returns the `SearchParameters` with the value from `uiState` (only max)', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           numericMenu: {
             numerics: ':20',
@@ -973,7 +974,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     test('returns the `SearchParameters` with the value from `uiState` (range)', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           numericMenu: {
             numerics: '10:20',
@@ -997,7 +998,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     test('returns the `SearchParameters` with the value from `uiState` (exact)', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           numericMenu: {
             numerics: '10',
@@ -1147,8 +1148,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect(renderState2.numericMenu).toEqual({
         numerics: {
           createURL: expect.any(Function),
-          refine: renderState1.numericMenu.numerics.refine,
-          sendEvent: renderState1.numericMenu.numerics.sendEvent,
+          refine: renderState1.numericMenu!.numerics.refine,
+          sendEvent: renderState1.numericMenu!.numerics.sendEvent,
           hasNoResults: true,
           items: [
             {
