@@ -5,6 +5,8 @@ import { mount } from 'enzyme';
 import Stats from '../Stats';
 import defaultTemplates from '../../../widgets/stats/defaultTemplates';
 import createHelpers from '../../../lib/createHelpers';
+import { render } from '@testing-library/preact';
+import { ReactElementLike } from 'prop-types';
 
 describe('Stats', () => {
   const cssClasses = {
@@ -14,7 +16,12 @@ describe('Stats', () => {
 
   it('should render <Template data= />', () => {
     const wrapper = mount(
-      <Stats {...getProps()} templateProps={{ templates: defaultTemplates }} />
+      (
+        <Stats
+          {...getProps()}
+          templateProps={{ templates: defaultTemplates }}
+        />
+      ) as ReactElementLike
     );
 
     const defaultProps = {
@@ -25,25 +32,46 @@ describe('Stats', () => {
     };
 
     expect(wrapper.find('Template').props().data).toMatchObject(defaultProps);
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper).toMatchInlineSnapshot(`
+      Array [
+        <div
+          className="root"
+        >
+          Array [
+            <span
+              className="text"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "results found in 42ms",
+                }
+              }
+            />,
+          ]
+        </div>,
+      ]
+    `);
   });
 
   it('should render <Stats /> with custom CSS classes', () => {
-    const wrapper = mount(
+    const { container } = render(
       <Stats
+        {...getProps()}
         templateProps={{
           templates: defaultTemplates,
         }}
-        nbHits={1}
-        cssClasses={cssClasses}
+        cssClasses={{
+          root: 'customRoot',
+          text: 'customText',
+        }}
       />
     );
 
-    expect(wrapper).toMatchSnapshot();
+    expect(container.querySelector('.customRoot')).toBeInTheDocument();
+    expect(container.querySelector('.customText')).toBeInTheDocument();
   });
 
   it('should render sorted hits', () => {
-    const wrapper = mount(
+    const { container } = render(
       <Stats
         {...getProps({ nbSortedHits: 150, areHitsSorted: true })}
         templateProps={{
@@ -54,20 +82,17 @@ describe('Stats', () => {
         }}
       />
     );
-    expect(wrapper.find('.text')).toMatchInlineSnapshot(`
+    expect(container.querySelector('.text')).toMatchInlineSnapshot(`
       <span
-        className="text"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "150 relevant results sorted out of 1,234 found in 42ms",
-          }
-        }
-      />
+        class="text"
+      >
+        150 relevant results sorted out of 1,234 found in 42ms
+      </span>
     `);
   });
 
   it('should render 1 sorted hit', () => {
-    const wrapper = mount(
+    const { container } = render(
       <Stats
         {...getProps({ nbSortedHits: 1, areHitsSorted: true })}
         templateProps={{
@@ -78,22 +103,19 @@ describe('Stats', () => {
         }}
       />
     );
-    expect(wrapper.find('.text')).toMatchInlineSnapshot(`
+    expect(container.querySelector('.text')).toMatchInlineSnapshot(`
       <span
-        className="text"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "1 relevant result sorted out of 1,234 found in 42ms",
-          }
-        }
-      />
+        class="text"
+      >
+        1 relevant result sorted out of 1,234 found in 42ms
+      </span>
     `);
   });
 
   it('should render 0 sorted hit', () => {
-    const wrapper = mount(
+    const { container } = render(
       <Stats
-        {...getProps({ nbSortedHits: 0, areHitsSorted: true })}
+        {...getProps({ areHitsSorted: true })}
         templateProps={{
           templates: defaultTemplates,
           templatesConfig: {
@@ -102,21 +124,20 @@ describe('Stats', () => {
         }}
       />
     );
-    expect(wrapper.find('.text')).toMatchInlineSnapshot(`
+    expect(container.querySelector('.text')).toMatchInlineSnapshot(`
       <span
-        className="text"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "No relevant results sorted out of 1,234 found in 42ms",
-          }
-        }
-      />
+        class="text"
+      >
+        No relevant results sorted out of 1,234 found in 42ms
+      </span>
     `);
   });
 
   function getProps(extraProps = {}) {
     return {
       cssClasses,
+      areHitsSorted: false,
+      nbSortedHits: 0,
       hitsPerPage: 10,
       nbHits: 1234,
       nbPages: 124,

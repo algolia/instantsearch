@@ -83,6 +83,10 @@ import {
   RefinementListRendererOptions,
   RefinementListConnectorParams,
 } from '../connectors/refinement-list/connectRefinementList';
+import {
+  StatsConnectorParams,
+  StatsRendererOptions,
+} from '../connectors/stats/connectStats';
 
 export type ScopedResult = {
   indexId: string;
@@ -353,6 +357,7 @@ export type IndexRenderState = Partial<{
     RelevantSortRendererOptions,
     RelevantSortConnectorParams
   >;
+  stats: WidgetRenderState<StatsRendererOptions, StatsConnectorParams>;
 }>;
 
 export type WidgetRenderState<
