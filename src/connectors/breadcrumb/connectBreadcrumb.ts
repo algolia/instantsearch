@@ -167,23 +167,21 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         if (!connectorState.createURL) {
           connectorState.createURL = facetValue => {
             if (!facetValue) {
-              const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
+              const breadcrumb = state.getHierarchicalFacetBreadcrumb(
                 hierarchicalFacetName
               );
               if (breadcrumb.length > 0) {
                 return createURL(
-                  helper.state.toggleFacetRefinement(
-                    hierarchicalFacetName,
-                    breadcrumb[0]
-                  )
+                  state
+                    .resetPage()
+                    .toggleFacetRefinement(hierarchicalFacetName, breadcrumb[0])
                 );
               }
             }
             return createURL(
-              helper.state.toggleFacetRefinement(
-                hierarchicalFacetName,
-                facetValue
-              )
+              state
+                .resetPage()
+                .toggleFacetRefinement(hierarchicalFacetName, facetValue)
             );
           };
         }
@@ -196,12 +194,12 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
               );
               if (breadcrumb.length > 0) {
                 helper
-                  .toggleRefinement(hierarchicalFacetName, breadcrumb[0])
+                  .toggleFacetRefinement(hierarchicalFacetName, breadcrumb[0])
                   .search();
               }
             } else {
               helper
-                .toggleRefinement(hierarchicalFacetName, facetValue)
+                .toggleFacetRefinement(hierarchicalFacetName, facetValue)
                 .search();
             }
           };

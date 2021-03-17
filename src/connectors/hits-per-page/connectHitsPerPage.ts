@@ -159,10 +159,12 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
       },
       createURLFactory: ({ state, createURL }) => value =>
         createURL(
-          state.setQueryParameter(
-            'hitsPerPage',
-            !value && value !== 0 ? undefined : value
-          )
+          state
+            .resetPage()
+            .setQueryParameter(
+              'hitsPerPage',
+              !value && value !== 0 ? undefined : value
+            )
         ),
     };
 
