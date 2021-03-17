@@ -43,6 +43,10 @@ module.exports = api => {
           type: 'node',
           replacement: "process.env.NODE_ENV === 'development'",
         },
+        __KEEP_DEPRECATION__: {
+          type: 'node',
+          replacement: JSON.stringify(process.env.KEEP_DEPRECATION !== 'false'),
+        },
       },
     ],
     // this plugin is used to test if we need polyfills, not to actually insert them
@@ -77,6 +81,7 @@ module.exports = api => {
         },
       },
     ],
+    'minify-dead-code-elimination',
   ]);
 
   return {

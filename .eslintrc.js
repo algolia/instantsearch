@@ -24,16 +24,16 @@ module.exports = {
     '@typescript-eslint/naming-convention': [
       'error',
       {
-        "selector": "variable",
-        "modifiers": ["destructured"],
-        "format": null
+        selector: 'variable',
+        modifiers: ['destructured'],
+        format: null,
       },
       {
         selector: 'variable',
         format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
         leadingUnderscore: 'allow',
         filter: {
-          regex: '^EXPERIMENTAL_|__DEV__',
+          regex: '^EXPERIMENTAL_|__DEV__|__KEEP_DEPRECATION__',
           match: false,
         },
       },
@@ -82,5 +82,6 @@ module.exports = {
   },
   globals: {
     __DEV__: false,
+    __KEEP_DEPRECATION__: true,
   },
 };

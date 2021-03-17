@@ -63,15 +63,17 @@ const insightsListener = (BaseComponent: any) => {
         }
       }
 
-      // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
-      const insightsTarget = findInsightsTarget(
-        event.target as HTMLElement | null,
-        event.currentTarget as HTMLElement | null,
-        element => hasDataAttributes(element)
-      );
-      if (insightsTarget) {
-        const { method, payload } = readDataAttributes(insightsTarget);
-        props.insights(method, payload);
+      if (__KEEP_DEPRECATION__) {
+        // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
+        const insightsTarget = findInsightsTarget(
+          event.target as HTMLElement | null,
+          event.currentTarget as HTMLElement | null,
+          element => hasDataAttributes(element)
+        );
+        if (insightsTarget) {
+          const { method, payload } = readDataAttributes(insightsTarget);
+          props.insights(method, payload);
+        }
       }
     };
 

@@ -23,5 +23,6 @@ module.exports = {
   ],
   globals: {
     __DEV__: true,
+    __KEEP_DEPRECATION__: true,
   },
 };

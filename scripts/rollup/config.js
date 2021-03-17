@@ -40,29 +40,37 @@ const plugins = [
   }),
 ];
 
-const createConfiguration = ({ mode, filename }) => ({
-  input: 'src/index.ts',
-  output: {
-    file: `dist/${filename}`,
-    name: 'instantsearch',
-    format: 'umd',
-    banner: license,
-    sourcemap: true,
-  },
-  plugins: [
-    ...plugins,
-    replace({
-      __DEV__: mode === 'development',
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
-    mode === 'production' &&
-      uglify({
-        output: {
-          preamble: license,
-        },
+const createConfiguration = ({ mode, filename }) => {
+  console.log('rollup/config.js', {
+    __DEV__: mode === 'development',
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    __KEEP_DEPRECATION__: process.env.KEEP_DEPRECATION !== 'false',
+  });
+  return {
+    input: 'src/index.ts',
+    output: {
+      file: `dist/${filename}`,
+      name: 'instantsearch',
+      format: 'umd',
+      banner: license,
+      sourcemap: true,
+    },
+    plugins: [
+      ...plugins,
+      replace({
+        __DEV__: mode === 'development',
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        __KEEP_DEPRECATION__: process.env.KEEP_DEPRECATION !== 'false',
       }),
-  ].filter(Boolean),
-});
+      mode === 'production' &&
+        uglify({
+          output: {
+            preamble: license,
+          },
+        }),
+    ].filter(Boolean),
+  };
+};
 
 export default [
   createConfiguration({
