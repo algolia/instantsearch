@@ -1,14 +1,12 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import stats from '../stats';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
-
-  return {
-    ...module,
-    render: jest.fn(),
-  };
+  module.render = jest.fn();
+  return module;
 });
 
 const instantSearchInstance = { templatesConfig: undefined };
@@ -39,7 +37,7 @@ describe('stats()', () => {
       instantSearchInstance,
     });
 
-    castToJestMock(render).mockClear();
+    render.mockClear();
   });
 
   it('calls twice render(<Stats props />, container)', () => {
@@ -55,7 +53,7 @@ describe('stats()', () => {
     widget.render({ results, instantSearchInstance });
     widget.render({ results, instantSearchInstance });
 
-    const [firstRender, secondRender] = castToJestMock(render).mock.calls;
+    const [firstRender, secondRender] = render.mock.calls;
 
     expect(render).toHaveBeenCalledTimes(2);
     // @ts-expect-error
@@ -152,7 +150,7 @@ describe('stats()', () => {
     };
     widget.render({ results, instantSearchInstance });
 
-    const [firstRender] = castToJestMock(render).mock.calls;
+    const [firstRender] = render.mock.calls;
     // @ts-expect-error
     expect(firstRender[0].props).toEqual(
       expect.objectContaining({
