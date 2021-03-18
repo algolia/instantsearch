@@ -2173,6 +2173,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             ...renderState,
             pagination: {
               refine: paginationRefine,
+              canRefine: false,
               createURL: paginationCreateURL,
               isFirstPage: true,
               isLastPage: true,
@@ -2286,6 +2287,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             ...renderState,
             pagination: {
               refine: () => {},
+              canRefine: false,
               createURL: () => '',
               isFirstPage: true,
               isLastPage: true,
