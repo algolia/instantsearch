@@ -38,7 +38,10 @@ export type SearchResponse<
   THit
 > = DefaultSearchClient extends DummySearchClientV4
   ? SearchResponseV4<THit>
-  : SearchResponseV3<THit> & { appliedRelevancyStrictness?: number };
+  : SearchResponseV3<THit> & {
+      appliedRelevancyStrictness?: number;
+      nbSortedHits?: number;
+    };
 
 export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
