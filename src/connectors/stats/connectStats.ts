@@ -19,7 +19,7 @@ export type StatsRendererOptions = {
   /**
    * The maximum number of hits per page returned by Algolia.
    */
-  hitsPerPage: number | undefined;
+  hitsPerPage?: number;
   /**
    * The number of hits in the result set.
    */
@@ -27,7 +27,7 @@ export type StatsRendererOptions = {
   /**
    * The number of sorted hits in the result set (when using Relevant sort).
    */
-  nbSortedHits: number | undefined;
+  nbSortedHits?: number;
   /**
    * Indicates whether the index is currently using Relevant sort and is displaying only sorted hits.
    */
