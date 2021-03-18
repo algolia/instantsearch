@@ -32,9 +32,15 @@ export type StatsCSSClasses = {
 
 export type StatsTemplates = {
   /**
-   * Text template, provided with `hasManyResults`, `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbSortedHits`, `nbPages`, `page`, `processingTimeMS`, `query`.
+   * Text template, provided with `hasManyResults`, `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbSortedHits`, `nbPages`, `areHitsSorted`, `page`, `processingTimeMS`, `query`.
    */
-  text: Template;
+  text: Template<
+    {
+      hasManyResults: boolean;
+      hasNoResults: boolean;
+      hasOneResult: boolean;
+    } & StatsRendererOptions
+  >;
 };
 
 export type StatsWidgetParams = {
