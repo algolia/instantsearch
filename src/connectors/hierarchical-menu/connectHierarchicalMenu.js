@@ -232,6 +232,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         return {
           items,
           refine: this._refine,
+          canRefine: items.length > 0,
           createURL: _createURL,
           sendEvent,
           widgetParams,
