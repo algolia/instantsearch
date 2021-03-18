@@ -144,8 +144,18 @@ describe('ratingMenu()', () => {
       .getWidgetRenderState({ state: helper.state, helper, results, createURL })
       .refine('3');
 
-    expect(helper.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(2);
+    expect(helper.state).toEqual(
+      new SearchParameters({
+        index: '',
+        disjunctiveFacets: ['anAttrName'],
+        numericRefinements: {
+          anAttrName: {
+            '<=': [5],
+            '>=': [3],
+          },
+        },
+      })
+    );
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
@@ -156,8 +166,17 @@ describe('ratingMenu()', () => {
       .getWidgetRenderState({ state: helper.state, helper, results, createURL })
       .refine('2');
 
-    expect(helper.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(0);
+    expect(helper.state).toEqual(
+      new SearchParameters({
+        index: '',
+        disjunctiveFacets: ['anAttrName'],
+        numericRefinements: {
+          anAttrName: {
+            '>=': [],
+          },
+        },
+      })
+    );
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
@@ -167,8 +186,18 @@ describe('ratingMenu()', () => {
       .getWidgetRenderState({ state: helper.state, helper, results, createURL })
       .refine('4');
 
-    expect(helper.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.addNumericRefinement).toHaveBeenCalledTimes(2);
+    expect(helper.state).toEqual(
+      new SearchParameters({
+        index: '',
+        disjunctiveFacets: ['anAttrName'],
+        numericRefinements: {
+          anAttrName: {
+            '<=': [5],
+            '>=': [4],
+          },
+        },
+      })
+    );
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
