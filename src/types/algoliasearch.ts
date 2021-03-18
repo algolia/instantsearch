@@ -17,6 +17,11 @@ type SearchForFacetValuesResponseV3 = AlgoliaSearch.SearchForFacetValues.Respons
 /** @ts-ignore */
 type SearchForFacetValuesResponseV4 = ClientSearch.SearchForFacetValuesResponse;
 
+type RelevantSortResponse = {
+  appliedRelevancyStrictness?: number;
+  nbSortedHits?: number;
+};
+
 type DummySearchClientV4 = {
   readonly transporter: any;
 };
@@ -38,10 +43,7 @@ export type SearchResponse<
   THit
 > = DefaultSearchClient extends DummySearchClientV4
   ? SearchResponseV4<THit>
-  : SearchResponseV3<THit> & {
-      appliedRelevancyStrictness?: number;
-      nbSortedHits?: number;
-    };
+  : SearchResponseV3<THit> & RelevantSortResponse;
 
 export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
