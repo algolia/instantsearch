@@ -48,10 +48,6 @@ export type StatsRendererOptions = {
    * The query used for the current search.
    */
   query: string;
-  /**
-   * All original `StatsConnectorParams` forwarded to the `renderFn`.
-   */
-  widgetParams: StatsConnectorParams;
 };
 
 export type StatsConnectorParams = Record<string, unknown>;
