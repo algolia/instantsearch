@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
+import { Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'stats',
@@ -10,51 +11,59 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 /**
- * @typedef {Object} StatsRenderingOptions
- * @property {number} hitsPerPage The maximum number of hits per page returned by Algolia.
- * @property {number} nbHits The number of hits in the result set.
- * @property {number} nbPages The number of pages computed for the result set.
- * @property {number} page The current page.
- * @property {number} processingTimeMS The time taken to compute the results inside the Algolia engine.
- * @property {string} query The query used for the current search.
- * @property {object} widgetParams All original `CustomStatsWidgetParams` forwarded to the `renderFn`.
- */
-
-/**
- * @typedef {Object} CustomStatsWidgetParams
- */
-
-/**
  * **Stats** connector provides the logic to build a custom widget that will displays
  * search statistics (hits number and processing time).
- *
- * @type {Connector}
- * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomStatsWidgetParams)} Re-usable widget factory for a custom **Stats** widget.
- * @example
- * // custom `renderFn` to render the custom Stats widget
- * function renderFn(StatsRenderingOptions, isFirstRendering) {
- *   if (isFirstRendering) return;
- *
- *   StatsRenderingOptions.widgetParams.containerNode
- *     .html(StatsRenderingOptions.nbHits + ' results found in ' + StatsRenderingOptions.processingTimeMS);
- * }
- *
- * // connect `renderFn` to Stats logic
- * var customStatsWidget = instantsearch.connectors.connectStats(renderFn);
- *
- * // mount widget on the page
- * search.addWidgets([
- *   customStatsWidget({
- *     containerNode: $('#custom-stats-container'),
- *   })
- * ]);
  */
-export default function connectStats(renderFn, unmountFn = noop) {
+
+export type StatsRendererOptions = {
+  /**
+   * The maximum number of hits per page returned by Algolia.
+   */
+  hitsPerPage?: number;
+  /**
+   * The number of hits in the result set.
+   */
+  nbHits: number;
+  /**
+   * The number of sorted hits in the result set (when using Relevant sort).
+   */
+  nbSortedHits?: number;
+  /**
+   * Indicates whether the index is currently using Relevant sort and is displaying only sorted hits.
+   */
+  areHitsSorted: boolean;
+  /**
+   * The number of pages computed for the result set.
+   */
+  nbPages: number;
+  /**
+   * The current page.
+   */
+  page: number;
+  /**
+   * The time taken to compute the results inside the Algolia engine.
+   */
+  processingTimeMS: number;
+  /**
+   * The query used for the current search.
+   */
+  query: string;
+};
+
+export type StatsConnectorParams = Record<string, unknown>;
+
+export type StatsConnector = Connector<
+  StatsRendererOptions,
+  StatsConnectorParams
+>;
+
+const connectStats: StatsConnector = function connectStats(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => ({
+  return widgetParams => ({
     $$type: 'ais.stats',
 
     init(initOptions) {
@@ -123,4 +132,6 @@ export default function connectStats(renderFn, unmountFn = noop) {
       };
     },
   });
-}
+};
+
+export default connectStats;
