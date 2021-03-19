@@ -43,6 +43,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 `);
     });
 
+    it('accepts not being passed widgetParams', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customStats = connectStats(render, unmount);
+      // @ts-expect-error
+      expect(() => customStats()).not.toThrow();
+    });
+
     it('is a widget', () => {
       const render = jest.fn();
       const unmount = jest.fn();
