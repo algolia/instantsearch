@@ -113,6 +113,11 @@ export type CurrentRefinementsRendererOptions = {
   items: CurrentRefinementsConnectorParamsItem[];
 
   /**
+   * Indicates if search state can be refined.
+   */
+  canRefine: boolean;
+
+  /**
    * Removes the given refinement and triggers a new search.
    */
   refine(refinement: CurrentRefinementsConnectorParamsRefinement): void;
@@ -226,8 +231,11 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
           );
         }
 
+        const items = getItems();
+
         return {
-          items: getItems(),
+          items,
+          canRefine: items.length > 0,
           refine: refinement => clearRefinement(helper, refinement),
           createURL: refinement =>
             createURL(clearRefinementFromState(helper.state, refinement)),
