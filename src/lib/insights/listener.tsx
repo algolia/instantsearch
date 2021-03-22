@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { deserializePayload } from '../utils';
+import { deserializePayload, deprecated } from '../utils';
 import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
 import { InsightsClientWrapper } from '../../types';
 import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
@@ -63,7 +63,7 @@ const insightsListener = (BaseComponent: any) => {
         }
       }
 
-      if (__KEEP_DEPRECATION__) {
+      deprecated(() => {
         // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
         const insightsTarget = findInsightsTarget(
           event.target as HTMLElement | null,
@@ -74,7 +74,7 @@ const insightsListener = (BaseComponent: any) => {
           const { method, payload } = readDataAttributes(insightsTarget);
           props.insights(method, payload);
         }
-      }
+      });
     };
 
     return (

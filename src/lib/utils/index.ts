@@ -31,6 +31,7 @@ export { default as mergeSearchParameters } from './mergeSearchParameters';
 export { default as resolveSearchParameters } from './resolveSearchParameters';
 export { default as toArray } from './toArray';
 export { warning } from './logger';
+export { deprecated } from './deprecated';
 export {
   escapeHits,
   TAG_PLACEHOLDER,
