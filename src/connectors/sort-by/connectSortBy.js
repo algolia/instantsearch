@@ -27,6 +27,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @typedef {Object} SortByRenderingOptions
  * @property {string} currentRefinement The currently selected index.
  * @property {SortByItem[]} options All the available indices
+ * @property {boolean} canRefine Indicates if search state can be refined.
  * @property {function(string)} refine Switches indices and triggers a new search.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams All original `CustomSortByWidgetParams` forwarded to the `renderFn`.
@@ -164,6 +165,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
         return {
           currentRefinement: helper.state.index,
           options: transformItems(items),
+          canRefine: Boolean(results && results.nbHits > 0),
           refine: this.setIndex,
           hasNoResults: results ? results.nbHits === 0 : true,
           widgetParams,

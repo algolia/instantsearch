@@ -287,6 +287,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       expect(renderState1.sortBy).toEqual({
         currentRefinement: 'index_default',
+        canRefine: false,
         refine: expect.any(Function),
         hasNoResults: true,
         options: [
@@ -326,6 +327,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       expect(renderState2.sortBy).toEqual({
         currentRefinement: 'index_desc',
+        canRefine: true,
         refine: expect.any(Function),
         hasNoResults: false,
         options: [
@@ -366,6 +368,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       expect(renderState1).toEqual({
         currentRefinement: 'index_desc',
+        canRefine: false,
         refine: expect.any(Function),
         hasNoResults: true,
         options: [
@@ -403,6 +406,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       expect(renderState2).toEqual({
         currentRefinement: 'index_default',
+        canRefine: true,
         refine: expect.any(Function),
         hasNoResults: false,
         options: [
