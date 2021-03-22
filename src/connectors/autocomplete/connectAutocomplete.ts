@@ -74,7 +74,7 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { escapeHTML = true } = widgetParams || ({} as typeof widgetParams);
+    const { escapeHTML = true } = widgetParams || {};
 
     warning(
       !(widgetParams as any).indices,
@@ -102,7 +102,7 @@ search.addWidgets([
     );
 
     type ConnectorState = {
-      refine?: (query: string) => void;
+      refine?(query: string): void;
     };
 
     const connectorState: ConnectorState = {};

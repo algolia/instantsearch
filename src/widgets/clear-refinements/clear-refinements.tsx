@@ -100,7 +100,7 @@ const clearRefinements: ClearRefinementsWidget = widgetParams => {
     excludedAttributes,
     transformItems,
     cssClasses: userCssClasses = {},
-  } = widgetParams || ({} as typeof widgetParams);
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

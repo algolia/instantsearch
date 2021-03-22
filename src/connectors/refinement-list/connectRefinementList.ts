@@ -1,4 +1,9 @@
 import {
+  AlgoliaSearchHelper,
+  SearchForFacetValues,
+  SearchResults,
+} from 'algoliasearch-helper';
+import {
   escapeFacets,
   TAG_PLACEHOLDER,
   TAG_REPLACEMENT,
@@ -6,116 +11,162 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
+  SendEventForFacet,
 } from '../../lib/utils';
+import {
+  Connector,
+  TransformItems,
+  SortBy,
+  RenderOptions,
+  Widget,
+  InitOptions,
+  WidgetRenderState,
+  FacetHit,
+  CreateURL,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
   connector: true,
 });
 
-/**
- * @typedef {Object} RefinementListItem
- * @property {string} value The value of the refinement list item.
- * @property {string} label Human-readable value of the refinement list item.
- * @property {number} count Number of matched results after refinement is applied.
- * @property {boolean} isRefined Indicates if the list item is refined.
- */
+export type RefinementListItem = {
+  /**
+   * The value of the refinement list item.
+   */
+  value: string;
+  /**
+   * Human-readable value of the refinement list item.
+   */
+  label: string;
+  /**
+   * Human-readable value of the searched refinement list item.
+   */
+  highlighted?: string;
+  /**
+   * Number of matched results after refinement is applied.
+   */
+  count: number;
+  /**
+   * Indicates if the list item is refined.
+   */
+  isRefined: boolean;
+};
+
+export type RefinementListConnectorParams = {
+  /**
+   * The name of the attribute in the records.
+   */
+  attribute: string;
+  /**
+   * How the filters are combined together.
+   */
+  operator?: 'and' | 'or';
+  /**
+   * The max number of items to display when
+   * `showMoreLimit` is not set or if the widget is showing less value.
+   */
+  limit?: number;
+  /**
+   * Whether to display a button that expands the number of items.
+   */
+  showMore?: boolean;
+  /**
+   * The max number of items to display if the widget
+   * is showing more items.
+   */
+  showMoreLimit?: number;
+  /**
+   * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+   */
+  sortBy?: SortBy<RefinementListItem>;
+  /**
+   * Escapes the content of the facet values.
+   */
+  escapeFacetValues?: boolean;
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: TransformItems<RefinementListItem>;
+};
+
+export type RefinementListRendererOptions = {
+  /**
+   * The list of filtering values returned from Algolia API.
+   */
+  items: RefinementListItem[];
+  /**
+   * indicates whether the results are exhaustive (complete)
+   */
+  hasExhaustiveItems: boolean;
+  /**
+   * Creates the next state url for a selected refinement.
+   */
+  createURL: CreateURL<string>;
+  /**
+   * Action to apply selected refinements.
+   */
+  refine(value: string): void;
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEventForFacet;
+  /**
+   * Searches for values inside the list.
+   */
+  searchForItems(query: string): void;
+  /**
+   * `true` if the values are from an index search.
+   */
+  isFromSearch: boolean;
+  /**
+   * `true` if a refinement can be applied.
+   */
+  canRefine: boolean;
+  /**
+   * `true` if the toggleShowMore button can be activated (enough items to display more or
+   * already displaying more than `limit` items)
+   */
+  canToggleShowMore: boolean;
+  /**
+   * True if the menu is displaying all the menu items.
+   */
+  isShowingMore: boolean;
+  /**
+   * Toggles the number of values displayed between `limit` and `showMoreLimit`.
+   */
+  toggleShowMore(): void;
+};
+
+export type RefinementListConnector = Connector<
+  RefinementListRendererOptions,
+  RefinementListConnectorParams
+>;
+
+type RefinementListRenderOptions = (InitOptions | RenderOptions) & {
+  isFromSearch: true;
+  results: SearchForFacetValues.Result;
+};
 
 /**
- * @typedef {Object} CustomRefinementListWidgetParams
- * @property {string} attribute The name of the attribute in the records.
- * @property {"and"|"or"} [operator = 'or'] How the filters are combined together.
- * @property {number} [limit = 10] The max number of items to display when
- * `showMoreLimit` is not set or if the widget is showing less value.
- * @property {boolean} [showMore = false] Whether to display a button that expands the number of items.
- * @property {number} [showMoreLimit = 20] The max number of items to display if the widget
- * is showing more items.
- * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- * @property {boolean} [escapeFacetValues = true] Escapes the content of the facet values.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
+ * **RefinementList** connector provides the logic to build a custom widget that
+ * will let the user filter the results based on the values of a specific facet.
+ *
+ * **Requirement:** the attribute passed as `attribute` must be present in
+ * attributesForFaceting of the searched index.
+ *
+ * This connector provides:
+ * - a `refine()` function to select an item.
+ * - a `toggleShowMore()` function to display more or less items
+ * - a `searchForItems()` function to search within the items.
  */
-
-/**
- * @typedef {Object} RefinementListRenderingOptions
- * @property {RefinementListItem[]} items The list of filtering values returned from Algolia API.
- * @property {function(item.value): string} createURL Creates the next state url for a selected refinement.
- * @property {function(item.value)} refine Action to apply selected refinements.
- * @property {function} searchForItems Searches for values inside the list.
- * @property {boolean} isFromSearch `true` if the values are from an index search.
- * @property {boolean} canRefine `true` if a refinement can be applied.
- * @property {boolean} canToggleShowMore `true` if the toggleShowMore button can be activated (enough items to display more or
- * already displaying more than `limit` items)
- * @property {Object} widgetParams All original `CustomRefinementListWidgetParams` forwarded to the `renderFn`.
- * @property {boolean} isShowingMore True if the menu is displaying all the menu items.
- * @property {function} toggleShowMore Toggles the number of values displayed between `limit` and `showMoreLimit`.
- */
-
-/**
- * **RefinementList** connector provides the logic to build a custom widget that will let the
- * user filter the results based on the values of a specific facet.
- *
- * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
- * function to select an item.
- * @type {Connector}
- * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomRefinementListWidgetParams)} Re-usable widget factory for a custom **RefinementList** widget.
- * @example
- * // custom `renderFn` to render the custom RefinementList widget
- * function renderFn(RefinementListRenderingOptions, isFirstRendering) {
- *   if (isFirstRendering) {
- *     RefinementListRenderingOptions.widgetParams.containerNode
- *       .html('<ul></ul>')
- *   }
- *
- *     RefinementListRenderingOptions.widgetParams.containerNode
- *       .find('li[data-refine-value]')
- *       .each(function() { $(this).off('click'); });
- *
- *   if (RefinementListRenderingOptions.canRefine) {
- *     var list = RefinementListRenderingOptions.items.map(function(item) {
- *       return `
- *         <li data-refine-value="${item.value}">
- *           <input type="checkbox" value="${item.value}" ${item.isRefined ? 'checked' : ''} />
- *           <a href="${RefinementListRenderingOptions.createURL(item.value)}">
- *             ${item.label} (${item.count})
- *           </a>
- *         </li>
- *       `;
- *     });
- *
- *     RefinementListRenderingOptions.widgetParams.containerNode.find('ul').html(list);
- *     RefinementListRenderingOptions.widgetParams.containerNode
- *       .find('li[data-refine-value]')
- *       .each(function() {
- *         $(this).on('click', function(event) {
- *           event.stopPropagation();
- *           event.preventDefault();
- *
- *           RefinementListRenderingOptions.refine($(this).data('refine-value'));
- *         });
- *       });
- *   } else {
- *     RefinementListRenderingOptions.widgetParams.containerNode.find('ul').html('');
- *   }
- * }
- *
- * // connect `renderFn` to RefinementList logic
- * var customRefinementList = instantsearch.connectors.connectRefinementList(renderFn);
- *
- * // mount widget on the page
- * search.addWidgets([
- *   customRefinementList({
- *     containerNode: $('#custom-refinement-list-container'),
- *     attribute: 'categories',
- *     limit: 10,
- *   })
- * ]);
- */
-export default function connectRefinementList(renderFn, unmountFn = noop) {
+const connectRefinementList: RefinementListConnector = function connectRefinementList(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
+  return widgetParams => {
     const {
       attribute,
       operator = 'or',
@@ -124,8 +175,15 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       showMoreLimit = 20,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
       escapeFacetValues = true,
-      transformItems = items => items,
-    } = widgetParams;
+      transformItems = (items => items) as TransformItems<RefinementListItem>,
+    } = widgetParams || {};
+
+    type ThisWidget = Widget<{
+      renderState: WidgetRenderState<
+        RefinementListRendererOptions,
+        typeof widgetParams & RefinementListConnectorParams
+      >;
+    }>;
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
@@ -145,35 +203,67 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       );
     }
 
-    const formatItems = ({ name: label, ...item }) => ({
+    const formatItems = ({
+      name: label,
+      ...item
+    }: SearchResults.FacetValue): RefinementListItem => ({
       ...item,
       label,
       value: label,
       highlighted: label,
     });
-    const getLimit = isShowingMore => (isShowingMore ? showMoreLimit : limit);
 
-    let lastResultsFromMainSearch;
-    let lastItemsFromMainSearch = [];
+    let lastResultsFromMainSearch: SearchResults;
+    let lastItemsFromMainSearch: RefinementListItem[] = [];
     let hasExhaustiveItems = true;
-    let searchForFacetValues;
-    let triggerRefine;
-    let sendEvent;
-    let toggleShowMore;
+    let triggerRefine: RefinementListRendererOptions['refine'] | undefined;
+    let sendEvent: RefinementListRendererOptions['sendEvent'] | undefined;
 
-    /* eslint-disable max-params */
-    const createSearchForFacetValues = function(helper) {
-      return renderOptions => query => {
+    let isShowingMore = false;
+    // Provide the same function to the `renderFn` so that way the user
+    // has to only bind it once when `isFirstRendering` for instance
+    let toggleShowMore = () => {};
+    function cachedToggleShowMore() {
+      toggleShowMore();
+    }
+
+    function createToggleShowMore(
+      renderOptions: RenderOptions,
+      widget: Widget
+    ) {
+      return () => {
+        isShowingMore = !isShowingMore;
+        widget.render!(renderOptions);
+      };
+    }
+
+    function getLimit() {
+      return isShowingMore ? showMoreLimit : limit;
+    }
+
+    let searchForFacetValues: (
+      renderOptions: RefinementListRenderOptions
+    ) => RefinementListRendererOptions['searchForItems'] = () => () => {};
+    const createSearchForFacetValues = function(
+      helper: AlgoliaSearchHelper,
+      widget: ThisWidget
+    ) {
+      return (renderOptions: RefinementListRenderOptions) => (
+        query: string
+      ) => {
         const { instantSearchInstance } = renderOptions;
         if (query === '' && lastItemsFromMainSearch) {
           // render with previous data from the helper.
-          renderFn({
-            ...this.getWidgetRenderState({
-              ...renderOptions,
-              results: lastResultsFromMainSearch,
-            }),
-            instantSearchInstance,
-          });
+          renderFn(
+            {
+              ...widget.getWidgetRenderState({
+                ...renderOptions,
+                results: lastResultsFromMainSearch,
+              }),
+              instantSearchInstance,
+            },
+            false
+          );
         } else {
           const tags = {
             highlightPreTag: escapeFacetValues
@@ -191,7 +281,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
               // We cap the `maxFacetHits` value to 100 because the Algolia API
               // doesn't support a greater number.
               // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
-              Math.min(getLimit(this.isShowingMore), 100),
+              Math.min(getLimit(), 100),
               tags
             )
             .then(results => {
@@ -208,47 +298,29 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
               );
 
               const canToggleShowMore =
-                this.isShowingMore && lastItemsFromMainSearch.length > limit;
+                isShowingMore && lastItemsFromMainSearch.length > limit;
 
-              renderFn({
-                ...this.getWidgetRenderState({
-                  ...renderOptions,
-                  results: lastResultsFromMainSearch,
-                }),
-                items: normalizedFacetValues,
-                canToggleShowMore,
-                canRefine: true,
-                instantSearchInstance,
-                isFromSearch: true,
-              });
+              renderFn(
+                {
+                  ...widget.getWidgetRenderState({
+                    ...renderOptions,
+                    results: lastResultsFromMainSearch,
+                  }),
+                  items: normalizedFacetValues,
+                  canToggleShowMore,
+                  canRefine: true,
+                  instantSearchInstance,
+                  isFromSearch: true,
+                },
+                false
+              );
             });
         }
       };
     };
-    /* eslint-enable max-params */
 
     return {
-      $$type: 'ais.refinementList',
-
-      isShowingMore: false,
-
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
-        toggleShowMore();
-      },
-
-      createToggleShowMore(renderOptions) {
-        return () => {
-          this.isShowingMore = !this.isShowingMore;
-          this.render(renderOptions);
-        };
-      },
-
-      getLimit() {
-        return getLimit(this.isShowingMore);
-      },
+      $$type: 'ais.refinementList' as const,
 
       init(initOptions) {
         renderFn(
@@ -280,7 +352,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetRenderState(renderOptions) {
+      getWidgetRenderState(renderOptions: RefinementListRenderOptions) {
         const {
           results,
           state,
@@ -289,30 +361,31 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           isFromSearch = false,
           helper,
         } = renderOptions;
-        let items = [];
-        let facetValues;
+        let items: RefinementListItem[] = [];
+        let facetValues: SearchResults.FacetValue[] | FacetHit[] = [];
 
         if (!sendEvent || !triggerRefine || !searchForFacetValues) {
           sendEvent = createSendEventForFacet({
             instantSearchInstance,
             helper,
             attribute,
-            widgetType: this.$$type,
+            widgetType: this.$$type!,
           });
 
           triggerRefine = facetValue => {
-            sendEvent('click', facetValue);
-            helper.toggleRefinement(attribute, facetValue).search();
+            sendEvent!('click', facetValue);
+            helper.toggleFacetRefinement(attribute, facetValue).search();
           };
 
-          searchForFacetValues = createSearchForFacetValues.call(this, helper);
+          searchForFacetValues = createSearchForFacetValues(helper, this);
         }
 
         if (results) {
           if (!isFromSearch) {
-            facetValues = results.getFacetValues(attribute, { sortBy }) || [];
+            const values = results.getFacetValues(attribute, { sortBy });
+            facetValues = values && Array.isArray(values) ? values : [];
             items = transformItems(
-              facetValues.slice(0, this.getLimit()).map(formatItems)
+              facetValues.slice(0, getLimit()).map(formatItems)
             );
           } else {
             facetValues = escapeFacetValues
@@ -329,7 +402,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           }
 
           const maxValuesPerFacetConfig = state.maxValuesPerFacet;
-          const currentLimit = this.getLimit();
+          const currentLimit = getLimit();
           // If the limit is the max number of facet retrieved it is impossible to know
           // if the facets are exhaustive. The only moment we are sure it is exhaustive
           // is when it is strictly under the number requested unless we know that another
@@ -337,19 +410,17 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           // Because this is used for making the search of facets unable or not, it is important
           // to be conservative here.
           hasExhaustiveItems =
-            maxValuesPerFacetConfig > currentLimit
+            maxValuesPerFacetConfig! > currentLimit
               ? facetValues.length <= currentLimit
               : facetValues.length < currentLimit;
 
           lastResultsFromMainSearch = results;
           lastItemsFromMainSearch = items;
 
-          toggleShowMore = this.createToggleShowMore(renderOptions);
+          if (renderOptions.results) {
+            toggleShowMore = createToggleShowMore(renderOptions, this);
+          }
         }
-
-        // Compute a specific createURL method able to link to any facet value state change
-        const _createURL = facetValue =>
-          createURL(state.toggleRefinement(attribute, facetValue));
 
         // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
         // function
@@ -357,22 +428,23 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           searchForFacetValues && searchForFacetValues(renderOptions);
 
         const canShowLess =
-          this.isShowingMore && lastItemsFromMainSearch.length > limit;
+          isShowingMore && lastItemsFromMainSearch.length > limit;
         const canShowMore = showMore && !isFromSearch && !hasExhaustiveItems;
 
         const canToggleShowMore = canShowLess || canShowMore;
 
         return {
-          createURL: _createURL,
+          createURL: facetValue =>
+            createURL(state.toggleFacetRefinement(attribute, facetValue)),
           items,
           refine: triggerRefine,
           searchForItems: searchFacetValues,
           isFromSearch,
           canRefine: isFromSearch || items.length > 0,
           widgetParams,
-          isShowingMore: this.isShowingMore,
+          isShowingMore,
           canToggleShowMore,
-          toggleShowMore: this.cachedToggleShowMore,
+          toggleShowMore: cachedToggleShowMore,
           sendEvent,
           hasExhaustiveItems,
         };
@@ -456,4 +528,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       },
     };
   };
-}
+};
+
+export default connectRefinementList;

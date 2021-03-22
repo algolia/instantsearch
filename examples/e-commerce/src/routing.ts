@@ -1,4 +1,4 @@
-/* eslint @typescript-eslint/camelcase: ["error", { allow: ["free_shipping"] }], complexity: off */
+/* eslint complexity: off */
 
 import {
   history as historyRouter,
@@ -165,6 +165,7 @@ const router = historyRouter({
       page = 1,
       brands = [],
       price,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       free_shipping,
     } = queryParameters;
     // `qs` does not return an array when there's a single value.
@@ -194,7 +195,7 @@ const getStateMapping = ({ indexName }) => ({
     const indexUiState = uiState[indexName];
     return {
       query: indexUiState.query,
-      page: indexUiState.page,
+      page: indexUiState.page && String(indexUiState.page),
       brands: indexUiState.refinementList && indexUiState.refinementList.brand,
       category:
         indexUiState.hierarchicalMenu &&

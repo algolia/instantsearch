@@ -34,7 +34,7 @@ describe('queryRuleCustomData', () => {
   describe('Usage', () => {
     test('throws container error without options', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         queryRuleCustomData();
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -45,7 +45,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
     test('throws container error with empty options', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         queryRuleCustomData({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -142,7 +142,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           default: expect.any(Function),
         });
         expect(
-          (templates.default as Function)({
+          (templates.default as (data: { items: any[] }) => string)({
             items: [{ banner: '1.jpg' }, { banner: '2.jpg' }],
           })
         ).toMatchInlineSnapshot(`

@@ -51,7 +51,7 @@ describe('singleIndexStateMapping', () => {
           refinementList: {
             color: ['red'],
           },
-          // @ts-ignore
+          // @ts-expect-error
           spy: ['stealing', 'all', 'your', 'searches'],
         },
       });
@@ -75,7 +75,7 @@ describe('singleIndexStateMapping', () => {
           },
         },
         anotherIndex: {
-          // @ts-ignore
+          // @ts-expect-error
           totally: 'ignored',
           refinementList: {
             color: ['blue'],
@@ -101,7 +101,7 @@ describe('singleIndexStateMapping', () => {
           },
         },
         anotherIndex: {
-          // @ts-ignore
+          // @ts-expect-error
           totally: 'ignored',
           refinementList: {
             color: ['blue'],
@@ -162,7 +162,6 @@ describe('singleIndexStateMapping', () => {
         refinementList: {
           color: ['red'],
         },
-        // @ts-ignore
         spy: ['stealing', 'all', 'your', 'searches'],
       });
 
@@ -180,7 +179,6 @@ describe('singleIndexStateMapping', () => {
     it('returns wrong data if used with nested state', () => {
       const stateMapping = singleIndexStateMapping('indexName');
       const actual = stateMapping.routeToState({
-        // @ts-ignore (we are passing wrong data)
         indexName: {
           query: 'zamboni',
           refinementList: {

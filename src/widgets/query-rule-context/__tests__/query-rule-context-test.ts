@@ -4,7 +4,7 @@ describe('queryRuleContext', () => {
   describe('Usage', () => {
     test('throws trackedFilters error without options', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         queryRuleContext();
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`trackedFilters\` option is required.
@@ -15,7 +15,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
     test('throws trackedFilters error with empty options', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         queryRuleContext({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`trackedFilters\` option is required.

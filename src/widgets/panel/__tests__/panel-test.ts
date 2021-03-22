@@ -56,7 +56,7 @@ describe('Usage', () => {
   test('with `hidden` as boolean warns', () => {
     expect(() => {
       panel({
-        // @ts-ignore wrong option type
+        // @ts-expect-error
         hidden: true,
       });
     }).toWarnDev(
@@ -67,7 +67,7 @@ describe('Usage', () => {
   test('with `collapsed` as boolean warns', () => {
     expect(() => {
       panel({
-        // @ts-ignore wrong option type
+        // @ts-expect-error
         collapsed: true,
       });
     }).toWarnDev(
@@ -80,7 +80,7 @@ describe('Usage', () => {
     const fakeWithPanel = panel()(fakeWidget);
 
     expect(() => {
-      // @ts-ignore missing option
+      // @ts-expect-error
       fakeWithPanel();
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required in the widget within the panel.

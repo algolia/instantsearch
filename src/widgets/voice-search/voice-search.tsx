@@ -12,7 +12,7 @@ import connectVoiceSearch, {
   VoiceSearchConnectorParams,
   VoiceSearchRendererOptions,
 } from '../../connectors/voice-search/connectVoiceSearch';
-import VoiceSearch, {
+import VoiceSearchComponent, {
   VoiceSearchComponentCSSClasses,
 } from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
@@ -79,7 +79,7 @@ const renderer: Renderer<
   const { container, cssClasses, templates } = widgetParams;
 
   render(
-    <VoiceSearch
+    <VoiceSearchComponent
       cssClasses={cssClasses}
       templates={templates}
       isBrowserSupported={isBrowserSupported}
@@ -100,7 +100,7 @@ const voiceSearch: VoiceSearch = widgetParams => {
     language,
     additionalQueryParameters,
     createVoiceSearchHelper,
-  } = widgetParams || ({} as VoiceSearchWidgetParams);
+  }: VoiceSearchWidgetParams = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

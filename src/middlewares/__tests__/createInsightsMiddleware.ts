@@ -11,7 +11,6 @@ import {
 } from '../../../test/mock/createInsightsClient';
 import { warning } from '../../lib/utils';
 import { SearchClient } from '../../types';
-import { Index } from '../../widgets/index/index';
 
 describe('insights', () => {
   const createTestEnvironment = () => {
@@ -24,9 +23,10 @@ describe('insights', () => {
     const getUserToken = () => {
       return (helper.state as any).userToken;
     };
+    // @ts-expect-error
     instantSearchInstance.mainIndex = {
       getHelper: () => helper,
-    } as Index;
+    };
 
     return {
       analytics,
@@ -49,9 +49,10 @@ describe('insights', () => {
     const getUserToken = () => {
       return (helper.state as any).userToken;
     };
+    // @ts-expect-error
     instantSearchInstance.mainIndex = {
       getHelper: () => helper,
-    } as Index;
+    };
     return {
       insightsClient,
       libraryLoadedAndProcessQueue,
@@ -68,7 +69,7 @@ describe('insights', () => {
   describe('usage', () => {
     it('throws when insightsClient is not given', () => {
       expect(() =>
-        // @ts-ignore:next-line
+        // @ts-expect-error
         createInsightsMiddleware()
       ).toThrowErrorMatchingInlineSnapshot(
         `"The \`insightsClient\` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to \`null\`."`

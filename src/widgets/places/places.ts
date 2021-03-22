@@ -1,13 +1,12 @@
-import {
-  StaticOptions,
-  ChangeEvent,
-  PlacesInstance,
-  // no comma, TS is particular about which nodes expose comments
-  // eslint-disable-next-line prettier/prettier
-  ReconfigurableOptions
-  /** @ts-ignore places is only a peer dependency */
-} from 'places.js';
+/** @ts-ignore */
+import * as Places from 'places.js';
 import { WidgetFactory } from '../../types';
+
+// using the type like this requires only one ts-ignore
+type StaticOptions = Places.StaticOptions;
+type ChangeEvent = Places.ChangeEvent;
+type PlacesInstance = Places.PlacesInstance;
+type ReconfigurableOptions = Places.ReconfigurableOptions;
 
 export type PlacesWidgetParams = {
   /**
@@ -31,7 +30,7 @@ type PlacesWidgetState = {
 };
 
 export type PlacesWidget = WidgetFactory<
-  {},
+  unknown,
   PlacesWidgetParams,
   PlacesWidgetParams
 >;
@@ -40,9 +39,9 @@ export type PlacesWidget = WidgetFactory<
  * This widget sets the geolocation value for the search based on the selected
  * result in the Algolia Places autocomplete.
  */
-const placesWidget: PlacesWidget = (widgetParams: PlacesWidgetParams) => {
+const placesWidget: PlacesWidget = widgetParams => {
   const { placesReference, defaultPosition = [], ...placesOptions } =
-    widgetParams || ({} as PlacesWidgetParams);
+    widgetParams || {};
 
   if (typeof placesReference !== 'function') {
     throw new Error(

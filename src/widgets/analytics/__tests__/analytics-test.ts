@@ -4,7 +4,7 @@ describe('Usage', () => {
   it('throws without `pushFunction`', () => {
     expect(() => {
       analytics({
-        // @ts-ignore
+        // @ts-expect-error
         pushFunction: undefined,
       });
     }).toThrowErrorMatchingInlineSnapshot(`

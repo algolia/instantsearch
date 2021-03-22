@@ -4,7 +4,7 @@ const KEY = 'ais.infiniteHits';
 
 describe('createInfiniteHitsSessionStorageCache', () => {
   const originalSessionStorage = window.sessionStorage;
-  // @ts-ignore:next-line
+  // @ts-expect-error
   delete window.sessionStorage;
 
   let store = {};
@@ -40,7 +40,7 @@ describe('createInfiniteHitsSessionStorageCache', () => {
   });
 
   afterAll(() => {
-    // @ts-ignore:next-line
+    // @ts-expect-error
     window.sessionStorage = originalSessionStorage;
   });
 

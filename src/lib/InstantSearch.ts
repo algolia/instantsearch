@@ -98,7 +98,9 @@ export type InstantSearchOptions = {
    */
   onStateChange?: (params: {
     uiState: UiState;
-    setUiState(uiState: UiState | ((uiState: UiState) => UiState)): void;
+    setUiState(
+      uiState: UiState | ((previousUiState: UiState) => UiState)
+    ): void;
   }) => void;
 
   /**
@@ -143,7 +145,7 @@ class InstantSearch extends EventEmitter {
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: Index;
   public started: boolean;
-  public templatesConfig: object;
+  public templatesConfig: Record<string, unknown>;
   public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
@@ -534,7 +536,9 @@ See ${createDocumentationLink({
     }
   }
 
-  public setUiState(uiState: UiState | ((uiState: UiState) => UiState)): void {
+  public setUiState(
+    uiState: UiState | ((previousUiState: UiState) => UiState)
+  ): void {
     if (!this.mainHelper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `setUiState`.')

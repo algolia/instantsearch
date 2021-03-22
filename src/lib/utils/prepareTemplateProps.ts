@@ -1,7 +1,7 @@
 import uniq from './uniq';
 import { Template } from '../../types';
 
-type TemplatesConfig = object;
+type TemplatesConfig = Record<string, unknown>;
 
 type Templates = {
   [key: string]: Template<any>;
@@ -43,7 +43,9 @@ function prepareTemplates<TTemplates extends Templates>(
       return config;
     },
     {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       templates: {} as TTemplates,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       useCustomCompileOptions: {} as {
         [TKey in keyof TTemplates]: boolean;
       },
@@ -60,7 +62,7 @@ function prepareTemplateProps<TTemplates extends Templates>({
   templatesConfig,
 }: {
   defaultTemplates: TTemplates;
-  templates: Partial<TTemplates>;
+  templates?: Partial<TTemplates>;
   templatesConfig: TemplatesConfig;
 }): PreparedTemplateProps<TTemplates> {
   const preparedTemplates = prepareTemplates(defaultTemplates, templates);

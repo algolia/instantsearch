@@ -95,7 +95,7 @@ describe('index', () => {
 
   it('throws without argument', () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-expect-error
       index();
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`indexName\` option is required.
@@ -163,7 +163,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instance = index({ indexName: 'indexName' });
 
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         instance.addWidgets();
       }).toThrow();
 
@@ -430,7 +430,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instance = index({ indexName: 'indexName' });
 
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         instance.removeWidgets();
       }).toThrow();
 
@@ -675,7 +675,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.init(
         createInitOptions({
           instantSearchInstance: createInstantSearch({
-            // @ts-ignore
+            // @ts-expect-error
             _createURL(routeState) {
               return routeState;
             },
@@ -698,7 +698,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.init(
         createInitOptions({
           instantSearchInstance: createInstantSearch({
-            // @ts-ignore
+            // @ts-expect-error
             _createURL(routeState) {
               return routeState;
             },
@@ -728,7 +728,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.init(
         createInitOptions({
           instantSearchInstance: createInstantSearch({
-            // @ts-ignore
+            // @ts-expect-error
             _createURL(routeState) {
               return routeState;
             },

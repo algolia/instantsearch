@@ -189,6 +189,10 @@ class RefinementList extends Component {
       this.props.searchIsAlwaysActive !== true &&
       !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
 
+    const templates = this.props.searchBoxTemplateProps
+      ? this.props.searchBoxTemplateProps.templates
+      : {};
+
     const searchBox = this.props.searchFacetValues && (
       <div className={this.props.cssClasses.searchBox}>
         <SearchBox
@@ -196,7 +200,7 @@ class RefinementList extends Component {
           placeholder={this.props.searchPlaceholder}
           disabled={shouldDisableSearchBox}
           cssClasses={this.props.cssClasses.searchable}
-          templates={this.props.templateProps.templates}
+          templates={templates}
           onChange={event => this.props.searchFacetValues(event.target.value)}
           onReset={() => this.props.searchFacetValues('')}
           onSubmit={() => this.refineFirstValue()}
@@ -282,6 +286,7 @@ RefinementList.propTypes = {
   facetValues: PropTypes.array,
   attribute: PropTypes.string,
   templateProps: PropTypes.object.isRequired,
+  searchBoxTemplateProps: PropTypes.object,
   toggleRefinement: PropTypes.func.isRequired,
   searchFacetValues: PropTypes.func,
   searchPlaceholder: PropTypes.string,

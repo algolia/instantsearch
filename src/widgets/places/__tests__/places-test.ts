@@ -58,7 +58,7 @@ describe('places', () => {
     });
 
     test('throws without parameters', () => {
-      // @ts-ignore
+      // @ts-expect-error
       expect(() => places()).toThrowErrorMatchingInlineSnapshot(
         `"The \`placesReference\` option requires a valid Places.js reference."`
       );

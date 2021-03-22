@@ -55,7 +55,7 @@ describe('writeDataAttributes', () => {
   });
   it('should reject undefined payloads', () => {
     expect(() =>
-      // @ts-ignore
+      // @ts-expect-error
       writeDataAttributes({
         method: 'clickedObjectIDsAfterSearch',
       })
@@ -67,7 +67,7 @@ describe('writeDataAttributes', () => {
     expect(() =>
       writeDataAttributes({
         method: 'clickedObjectIDsAfterSearch',
-        // @ts-ignore
+        // @ts-expect-error
         payload: 2,
       })
     ).toThrowErrorMatchingInlineSnapshot(

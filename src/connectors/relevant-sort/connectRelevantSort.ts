@@ -1,7 +1,7 @@
 import { Connector } from '../../types';
 import { noop } from '../../lib/utils';
 
-export type RelevantSortConnectorParams = {};
+export type RelevantSortConnectorParams = Record<string, unknown>;
 
 type Refine = (relevancyStrictness: number) => void;
 

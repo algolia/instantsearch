@@ -35,10 +35,12 @@ const createFakeStateMapping = (
   ...args,
 });
 
+type Entry = Record<string, unknown>;
+
 type HistoryState = {
   index: number;
-  entries: object[];
-  listeners: Array<(value: object) => void>;
+  entries: Entry[];
+  listeners: Array<(value: Entry) => void>;
 };
 
 const createFakeHistory = (
@@ -58,7 +60,7 @@ const createFakeHistory = (
     subscribe(listener: () => void) {
       state.listeners.push(listener);
     },
-    push(value: object) {
+    push(value: Entry) {
       state.entries.push(value);
       state.index++;
     },
@@ -576,7 +578,7 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter();
-      // @ts-ignore: This method is considered private but we still use it
+      // @ts-expect-error: This method is considered private but we still use it
       // in the test after the TypeScript migration.
       // In a next refactor, we can consider changing this test implementation.
       const parsedUrl = router.parseURL({
@@ -623,7 +625,7 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter();
-      // @ts-ignore: This method is considered private but we still use it
+      // @ts-expect-error: This method is considered private but we still use it
       // in the test after the TypeScript migration.
       // In a next refactor, we can consider changing this test implementation.
       const parsedUrl = router.parseURL({

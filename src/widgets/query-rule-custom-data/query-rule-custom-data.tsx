@@ -7,7 +7,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Renderer } from '../../types';
+import { WidgetFactory, Renderer, Template } from '../../types';
 import connectQueryRules, {
   QueryRulesConnectorParams,
   QueryRulesRendererOptions,
@@ -19,14 +19,13 @@ export type QueryRuleCustomDataCSSClasses = {
 };
 
 export type QueryRuleCustomDataTemplates = {
-  default?: string | (({ items }: { items: any }) => string);
+  default: Template<{ items: any[] }>;
 };
 
 type QueryRuleCustomDataWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: QueryRuleCustomDataCSSClasses;
-  templates?: QueryRuleCustomDataTemplates;
-  transformItems?: (items: any[]) => any;
+  templates?: Partial<QueryRuleCustomDataTemplates>;
 };
 
 type QueryRuleCustomDataRendererWidgetParams = {
@@ -64,8 +63,9 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
     container,
     cssClasses: userCssClasses = {} as QueryRuleCustomDataCSSClasses,
     templates: userTemplates = {},
-    transformItems = items => items,
-  } = widgetParams || ({} as QueryRuleCustomDataWidgetParams);
+    transformItems = (items =>
+      items) as QueryRulesConnectorParams['transformItems'],
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

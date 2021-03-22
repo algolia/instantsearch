@@ -34,7 +34,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       const render = jest.fn();
       const unmount = jest.fn();
 
-      const customCurrentRefinements = connectCurrentRefinements<{}>(
+      const customCurrentRefinements = connectCurrentRefinements(
         render,
         unmount
       );

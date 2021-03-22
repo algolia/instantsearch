@@ -62,7 +62,7 @@ export type AnalyticsWidgetParams = {
 const withUsage = createDocumentationMessageGenerator({ name: 'analytics' });
 
 export type AnalyticsWidget = WidgetFactory<
-  {},
+  unknown,
   AnalyticsWidgetParams,
   AnalyticsWidgetParams
 >;
@@ -75,7 +75,7 @@ const analytics: AnalyticsWidget = function analytics(widgetParams) {
     triggerOnUIInteraction = false,
     pushInitialSearch = true,
     pushPagination = false,
-  } = widgetParams || ({} as typeof widgetParams);
+  } = widgetParams || {};
 
   if (!pushFunction) {
     throw new Error(withUsage('The `pushFunction` option is required.'));

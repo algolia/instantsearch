@@ -126,8 +126,8 @@ const connectMenu: MenuConnector = function connectMenu(
       showMore = false,
       showMoreLimit = 20,
       sortBy = ['isRefined', 'name:asc'],
-      transformItems = items => items,
-    } = widgetParams || ({} as typeof widgetParams);
+      transformItems = (items => items) as TransformItems<MenuItem>,
+    } = widgetParams || {};
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));

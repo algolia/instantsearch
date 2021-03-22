@@ -407,6 +407,10 @@ describe('RefinementList', () => {
           templates: {
             item: item => item.value,
             searchableNoResults: x => JSON.stringify(x),
+          },
+        },
+        searchBoxTemplateProps: {
+          templates: {
             reset: 'reset',
             submit: 'submit',
             loadingIndicator: 'loadingIndicator',
@@ -544,6 +548,10 @@ describe('RefinementList', () => {
         templateProps: {
           templates: {
             item: item => item.value,
+          },
+        },
+        searchBoxTemplateProps: {
+          templates: {
             reset: 'reset',
             submit: 'submit',
             loadingIndicator: 'loadingIndicator',

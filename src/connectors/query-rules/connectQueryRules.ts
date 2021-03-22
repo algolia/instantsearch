@@ -1,9 +1,8 @@
 import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
-  SearchResults,
 } from 'algoliasearch-helper';
-import { HelperChangeEvent, Connector } from '../../types';
+import { HelperChangeEvent, Connector, TransformItems } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -25,7 +24,7 @@ export type ParamTrackedFilters = {
   ) => TrackedFilterRefinement[];
 };
 export type ParamTransformRuleContexts = (ruleContexts: string[]) => string[];
-type ParamTransformItems = (items: any[]) => any;
+type ParamTransformItems = TransformItems<any>;
 
 export type QueryRulesConnectorParams = {
   trackedFilters?: ParamTrackedFilters;
@@ -71,9 +70,7 @@ function getRuleContextsFromTrackedFilters({
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
       const facetRefinements: TrackedFilterRefinement[] = getRefinements(
-        // An empty object is technically not a `SearchResults` but `getRefinements`
-        // only accesses properties, meaning it will not throw with an empty object.
-        helper.lastResults || ({} as SearchResults),
+        helper.lastResults || {},
         sharedHelperState,
         true
       )
@@ -165,7 +162,7 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
       trackedFilters = {} as ParamTrackedFilters,
       transformRuleContexts = (rules => rules) as ParamTransformRuleContexts,
       transformItems = (items => items) as ParamTransformItems,
-    } = widgetParams || ({} as typeof widgetParams);
+    } = widgetParams || {};
 
     Object.keys(trackedFilters).forEach(facetName => {
       if (typeof trackedFilters[facetName] !== 'function') {

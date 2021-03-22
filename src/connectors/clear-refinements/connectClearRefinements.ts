@@ -69,8 +69,8 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
     const {
       includedAttributes = [],
       excludedAttributes = ['query'],
-      transformItems = items => items,
-    } = widgetParams || ({} as typeof widgetParams);
+      transformItems = (items => items) as TransformItems<string>,
+    } = widgetParams || {};
 
     if (widgetParams.includedAttributes && widgetParams.excludedAttributes) {
       throw new Error(

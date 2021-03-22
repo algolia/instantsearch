@@ -138,7 +138,7 @@ const renderer = <TWidget extends UnknownWidgetFactory>({
 };
 
 export type PanelWidget = <TWidget extends UnknownWidgetFactory>(
-  widgetParams?: PanelWidgetParams<TWidget>
+  panelWidgetParams?: PanelWidgetParams<TWidget>
 ) => <
   TWidgetParams extends { container: HTMLElement | string; [key: string]: any }
 >(
@@ -202,7 +202,7 @@ const panel: PanelWidget = panelWidgetParams => {
   };
 
   return widgetFactory => widgetParams => {
-    const { container } = widgetParams || ({} as typeof widgetParams);
+    const { container } = widgetParams || {};
 
     if (!container) {
       throw new Error(

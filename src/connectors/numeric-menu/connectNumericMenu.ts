@@ -145,8 +145,13 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { attribute = '', items = [], transformItems = x => x } =
-      widgetParams || ({} as typeof widgetParams);
+    const {
+      attribute = '',
+      items = [],
+      transformItems = (x => x) as TransformItems<
+        NumericMenuRendererOptionsItem
+      >,
+    } = widgetParams || {};
 
     if (attribute === '') {
       throw new Error(withUsage('The `attribute` option is required.'));
@@ -159,8 +164,8 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     }
 
     type ConnectorState = {
-      refine?: (facetValue: string) => void;
-      createURL?: (state: SearchParameters) => (facetValue: string) => string;
+      refine?(facetValue: string): void;
+      createURL?(state: SearchParameters): (facetValue: string) => string;
       sendEvent?: SendEventForFacet;
     };
 

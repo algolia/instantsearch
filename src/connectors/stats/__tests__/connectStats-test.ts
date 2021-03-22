@@ -21,25 +21,35 @@ describe('connectStats', () => {
       index: 'indexName',
     });
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         state: helper.state,
       })
     );
 
-    return [widget, helper];
+    return [widget, helper] as const;
   };
 
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
+        // @ts-expect-error
         connectStats()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#connector"
 `);
+    });
+
+    it('accepts not being passed widgetParams', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customStats = connectStats(render, unmount);
+      // @ts-expect-error
+      expect(() => customStats()).not.toThrow();
     });
 
     it('is a widget', () => {
@@ -65,13 +75,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createStats = connectStats(renderFn, unmountFn);
-      const stats = createStats();
+      const stats = createStats({});
       const helper = jsHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
 
       const renderState = stats.getRenderState(
-        { stats: {} },
+        {},
         createInitOptions({ helper })
       );
 
@@ -92,7 +102,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       const [stats, helper] = getInitializedWidget();
 
       const renderState = stats.getRenderState(
-        { stats: {} },
+        {},
         createRenderOptions({
           helper,
           state: helper.state,
@@ -119,7 +129,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       const [stats, helper] = getInitializedWidget();
 
       const renderState = stats.getRenderState(
-        { stats: {} },
+        {},
         createRenderOptions({
           helper,
           state: helper.state,
@@ -158,7 +168,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createStats = connectStats(renderFn, unmountFn);
-      const stats = createStats();
+      const stats = createStats({});
       const helper = jsHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
@@ -332,14 +342,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       foo: 'bar', // dummy param to test `widgetParams`
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(createInitOptions());
 
     {
       // should call the rendering once with isFirstRendering to true
@@ -367,22 +373,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       expect(widgetParams).toEqual({ foo: 'bar' });
     }
 
-    widget.render({
-      results: new SearchResults(helper.state, [
-        {
-          hits: [{ One: 'record' }],
-          nbPages: 1,
-          nbHits: 1,
-          hitsPerPage: helper.state.hitsPerPage,
-          page: helper.state.page,
-          query: '',
-          processingTimeMS: 12,
-        },
-      ]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        createURL: () => '#',
+        state: helper.state,
+        helper,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [
+              {
+                objectID: 'string',
+              },
+            ],
+            nbPages: 1,
+            nbHits: 1,
+            hitsPerPage: helper.state.hitsPerPage,
+            page: helper.state.page,
+            query: '',
+            processingTimeMS: 12,
+          }),
+        ]),
+      })
+    );
 
     {
       // Should call the rendering a second time, with isFirstRendering to false
@@ -400,10 +412,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
         processingTimeMS,
         query,
       } = rendering.mock.calls[rendering.mock.calls.length - 1][0];
-      expect(hitsPerPage).toBe(helper.state.hitsPerPage);
+      expect(hitsPerPage).toBe(20);
       expect(nbHits).toBe(1);
       expect(nbPages).toBe(1);
-      expect(page).toBe(helper.state.page);
+      expect(page).toBe(0);
       expect(processingTimeMS).toBe(12);
       expect(query).toBe('');
     }
@@ -413,7 +425,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
     const rendering = () => {};
     const makeWidget = connectStats(rendering);
     const widget = makeWidget({});
-    const helper = jsHelper({});
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+    const helper = jsHelper(createSearchClient(), '');
+    expect(() =>
+      widget.dispose!({ helper, state: helper.state })
+    ).not.toThrow();
   });
 });

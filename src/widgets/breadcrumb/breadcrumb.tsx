@@ -127,7 +127,7 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetParams) {
     transformItems,
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
-  } = widgetParams || ({} as typeof widgetParams);
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

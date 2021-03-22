@@ -91,7 +91,7 @@ function getRefinement(
 }
 
 function getRefinements(
-  results: SearchResults,
+  results: SearchResults | Record<string, never>,
   state: SearchParameters,
   includesQuery: boolean = false
 ): Refinement[] {

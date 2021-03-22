@@ -7,7 +7,8 @@ import {
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch, Hit, GeoLoc } from './instantsearch';
-import { BindEventForHits } from '../lib/utils';
+import { TransformItems } from './connector';
+import { BindEventForHits, SendEventForHits } from '../lib/utils';
 import {
   AutocompleteRendererOptions,
   AutocompleteConnectorParams,
@@ -78,6 +79,14 @@ import {
   MenuConnectorParams,
   MenuRendererOptions,
 } from '../connectors/menu/connectMenu';
+import {
+  RefinementListRendererOptions,
+  RefinementListConnectorParams,
+} from '../connectors/refinement-list/connectRefinementList';
+import {
+  StatsConnectorParams,
+  StatsRendererOptions,
+} from '../connectors/stats/connectStats';
 
 export type ScopedResult = {
   indexId: string;
@@ -88,7 +97,7 @@ export type ScopedResult = {
 type SharedRenderOptions = {
   instantSearchInstance: InstantSearch;
   parent: Index | null;
-  templatesConfig: object;
+  templatesConfig: Record<string, unknown>;
   scopedResults: ScopedResult[];
   state: SearchParameters;
   renderState: IndexRenderState;
@@ -207,7 +216,7 @@ export type IndexRenderState = Partial<{
       isSearchStalled: boolean;
     },
     {
-      queryHook?(query: string, refine: (query: string) => void): void;
+      queryHook?(query: string, refine: (value: string) => void): void;
     }
   >;
   autocomplete: WidgetRenderState<
@@ -257,7 +266,7 @@ export type IndexRenderState = Partial<{
         showMore: boolean;
         showMoreLimit: number;
         sortBy: any;
-        transformItems(items: any): any;
+        transformItems: TransformItems<any>;
       }
     >;
   };
@@ -266,8 +275,8 @@ export type IndexRenderState = Partial<{
     InfiniteHitsRendererOptions,
     InfiniteHitsConnectorParams
   >;
-  analytics: WidgetRenderState<{}, AnalyticsWidgetParams>;
-  places: WidgetRenderState<{}, PlacesWidgetParams>;
+  analytics: WidgetRenderState<unknown, AnalyticsWidgetParams>;
+  places: WidgetRenderState<unknown, PlacesWidgetParams>;
   poweredBy: WidgetRenderState<
     PoweredByRendererOptions,
     PoweredByConnectorParams
@@ -322,7 +331,7 @@ export type IndexRenderState = Partial<{
     isRefinedWithMap(): boolean;
     setMapMoveSinceLastRefine(): void;
     toggleRefineOnMapMove(): void;
-    sendEvent: Function;
+    sendEvent: SendEventForHits;
     widgetParams: any;
   };
   queryRules: WidgetRenderState<
@@ -339,33 +348,8 @@ export type IndexRenderState = Partial<{
   >;
   refinementList: {
     [attribute: string]: WidgetRenderState<
-      {
-        createURL: CreateURL<string>;
-        helperSpecializedSearchFacetValues: any;
-        isFirstSearch: boolean;
-        isFromSearch: boolean;
-        isShowingMore: boolean;
-        items: Array<{
-          count: number;
-          highlighted: string;
-          isRefined: boolean;
-          label: string;
-          value: string;
-        }>;
-        refine(value: string): void;
-        state: SearchParameters;
-        toggleShowMore(): void;
-      },
-      {
-        attribute: string;
-        operator: string;
-        limit: number;
-        showMore: boolean;
-        showMoreLimit: number;
-        sortBy: ((firstItem: any, secondItem: any) => number) | string[];
-        escapeFacetValues: boolean;
-        transformItems(items: any): any;
-      }
+      RefinementListRendererOptions,
+      RefinementListConnectorParams
     >;
   };
   answers: WidgetRenderState<AnswersRendererOptions, AnswersConnectorParams>;
@@ -373,6 +357,7 @@ export type IndexRenderState = Partial<{
     RelevantSortRendererOptions,
     RelevantSortConnectorParams
   >;
+  stats: WidgetRenderState<StatsRendererOptions, StatsConnectorParams>;
 }>;
 
 export type WidgetRenderState<
@@ -509,7 +494,7 @@ export type Widget<
     state: SearchParameters,
     widgetSearchParametersOptions: WidgetSearchParametersOptions
   ): SearchParameters;
-} & (TWidgetOptions['renderState'] extends object
+} & (TWidgetOptions['renderState'] extends Record<string, unknown>
   ? {
       /**
        * Returns the render state of the current widget to pass to the render function.

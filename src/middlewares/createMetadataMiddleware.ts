@@ -105,7 +105,7 @@ export function createMetadataMiddleware(): InternalMiddleware {
       },
 
       unsubscribe() {
-        payloadContainer.parentNode?.removeChild(payloadContainer);
+        payloadContainer.remove();
       },
     };
   };
