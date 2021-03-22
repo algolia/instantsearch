@@ -1,5 +1,6 @@
 import InstantSearch from '../lib/InstantSearch';
 import { UiState } from './widget';
+import { AtLeastOne } from './utils';
 
 export type MiddlewareDefinition = {
   onStateChange(options: { uiState: UiState }): void;
@@ -17,4 +18,4 @@ export type InternalMiddleware = (
 
 export type Middleware = (
   options: MiddlewareOptions
-) => Partial<MiddlewareDefinition>;
+) => AtLeastOne<MiddlewareDefinition>;
