@@ -86,6 +86,11 @@ export type NumericMenuRendererOptions = {
   hasNoResults: boolean;
 
   /**
+   * Indicates if search state can be refined.
+   */
+  canRefine: boolean;
+
+  /**
    * Sets the selected value and trigger a new search
    */
   refine: (facetValue: string) => void;
@@ -323,6 +328,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
           createURL: connectorState.createURL!(state),
           items: transformItems(prepareItems(state)),
           hasNoResults: results ? results.nbHits === 0 : true,
+          canRefine: Boolean(results && results.nbHits > 0),
           refine: connectorState.refine!,
           sendEvent: connectorState.sendEvent!,
           widgetParams,

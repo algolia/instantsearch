@@ -1109,6 +1109,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
               value: '%7B%22start%22:20%7D',
             },
           ],
+          canRefine: false,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
           widgetParams: {
@@ -1148,6 +1149,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect(renderState2.numericMenu).toEqual({
         numerics: {
           createURL: expect.any(Function),
+          canRefine: false,
           refine: renderState1.numericMenu!.numerics.refine,
           sendEvent: renderState1.numericMenu!.numerics.sendEvent,
           hasNoResults: true,
@@ -1229,6 +1231,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           },
         ],
         createURL: expect.any(Function),
+        canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         hasNoResults: true,
@@ -1279,6 +1282,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           },
         ],
         createURL: expect.any(Function),
+        canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         hasNoResults: true,
@@ -1334,6 +1338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
             value: '%7B%22start%22:20%7D',
           },
         ],
+        canRefine: false,
         refine: renderState1.refine,
         sendEvent: renderState1.sendEvent,
         widgetParams: {
@@ -1355,6 +1360,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           ],
         },
       });
+    });
+
+    it('returns canRefine: true when hits given', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          hits: [{ objectID: 'a' }, { objectID: 'b' }],
+        }),
+      ]);
+
+      const renderState = widget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      expect(renderState).toEqual(
+        expect.objectContaining({
+          hasNoResults: false,
+          canRefine: true,
+        })
+      );
     });
   });
 });
