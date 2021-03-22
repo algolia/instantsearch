@@ -41,11 +41,6 @@ const plugins = [
 ];
 
 const createConfiguration = ({ mode, filename }) => {
-  console.log('rollup/config.js', {
-    __DEV__: mode === 'development',
-    'process.env.NODE_ENV': JSON.stringify('production'),
-    __KEEP_DEPRECATION__: process.env.KEEP_DEPRECATION !== 'false',
-  });
   return {
     input: 'src/index.ts',
     output: {
