@@ -71,7 +71,7 @@ jobs:
             yarn add @types/algoliasearch@3.34.10 algoliasearch@3.35.1
       - run:
           name: Type Checking
-          command: yarn run type-check
+          command: yarn run type-check:v3
 
   'unit tests':
     <<: *defaults

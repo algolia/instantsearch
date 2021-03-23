@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig",
+  "exclude": [
+    "examples",
+    "es",
+    // this test has specific code for v3 and v4, so already checked in the v4 test
+    "src/middlewares/__tests__/createMetadataMiddleware.ts"
+  ]
+}

@@ -34,6 +34,7 @@
     "lint": "eslint --ext .js,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc",
+    "type-check:v3": "tsc --project tsconfig.v3.json",
     "type-check:js": "tsc --project tsconfig.checkjs.json",
     "type-check:watch": "yarn type-check --watch",
     "test": "jest",
