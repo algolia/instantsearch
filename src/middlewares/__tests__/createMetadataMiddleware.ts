@@ -1,3 +1,5 @@
+import algoliasearch from 'algoliasearch';
+import algoliasearchV3 from 'algoliasearch-v3';
 import { createMetadataMiddleware } from '..';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { wait } from '../../../test/utils/wait';
@@ -110,45 +112,220 @@ describe('createMetadataMiddleware', () => {
 
       expect(JSON.parse(document.head.querySelector('meta')!.content))
         .toMatchInlineSnapshot(`
+        Object {
+          "widgets": Array [
+            Object {
+              "params": Array [],
+              "type": "ais.searchBox",
+              "widgetType": "ais.searchBox",
+            },
+            Object {
+              "params": Array [],
+              "type": "ais.searchBox",
+              "widgetType": "ais.searchBox",
+            },
+            Object {
+              "params": Array [
+                "escapeHTML",
+              ],
+              "type": "ais.hits",
+              "widgetType": "ais.hits",
+            },
+            Object {
+              "params": Array [],
+              "type": "ais.index",
+              "widgetType": "ais.index",
+            },
+            Object {
+              "params": Array [],
+              "type": "ais.pagination",
+              "widgetType": "ais.pagination",
+            },
+            Object {
+              "params": Array [
+                "searchParameters",
+              ],
+              "type": "ais.configure",
+              "widgetType": "ais.configure",
+            },
+          ],
+        }
+      `);
+    });
+
+    describe('fills it with user agent after start', () => {
+      it('for the v4 client', async () => {
+        const fakeSearchClient = createSearchClient();
+        const searchClient = algoliasearch('', '');
+        // @ts-expect-error overriding the search method for testing
+        searchClient.search = fakeSearchClient.search;
+
+        // not using createMetadataMiddleware() here,
+        // since metadata is built into instantsearch
+        const search = instantsearch({
+          searchClient,
+          indexName: 'test',
+        });
+
+        search.start();
+
+        await wait(100);
+
+        expect(document.head).toMatchInlineSnapshot(`
+          <head>
+            <meta
+              content="{\\"widgets\\":[],\\"ua\\":\\"Algolia for JavaScript (4.8.6); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4)\\"}"
+              name="instantsearch:widgets"
+            />
+          </head>
+        `);
+
+        expect(JSON.parse(document.head.querySelector('meta')!.content))
+          .toMatchInlineSnapshot(`
+          Object {
+            "ua": "Algolia for JavaScript (4.8.6); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4)",
+            "widgets": Array [],
+          }
+        `);
+      });
+
+      it('for the v4 client with custom user agent', async () => {
+        const fakeSearchClient = createSearchClient();
+        const searchClient = algoliasearch('', '');
+        // @ts-expect-error overriding the search method for testing
+        searchClient.search = fakeSearchClient.search;
+
+        // not using createMetadataMiddleware() here,
+        // since metadata is built into instantsearch
+        const search = instantsearch({
+          searchClient,
+          indexName: 'test',
+        });
+
+        search.start();
+
+        searchClient.addAlgoliaAgent('test', 'cool');
+
+        await wait(100);
+
+        expect(document.head).toMatchInlineSnapshot(`
+          <head>
+            <meta
+              content="{\\"widgets\\":[],\\"ua\\":\\"Algolia for JavaScript (4.8.6); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4); test (cool)\\"}"
+              name="instantsearch:widgets"
+            />
+          </head>
+        `);
+
+        expect(JSON.parse(document.head.querySelector('meta')!.content))
+          .toMatchInlineSnapshot(`
+          Object {
+            "ua": "Algolia for JavaScript (4.8.6); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4); test (cool)",
+            "widgets": Array [],
+          }
+        `);
+      });
+
+      it('for the v3 client', async () => {
+        const fakeSearchClient = createSearchClient();
+        const searchClient = algoliasearchV3('qsdf', 'qsdf');
+        searchClient.search = fakeSearchClient.search;
+
+        // not using createMetadataMiddleware() here,
+        // since metadata is built into instantsearch
+        const search = instantsearch({
+          searchClient,
+          indexName: 'test',
+        });
+
+        search.start();
+
+        await wait(100);
+
+        expect(document.head).toMatchInlineSnapshot(`
+          <head>
+            <meta
+              content="{\\"widgets\\":[],\\"ua\\":\\"Algolia for JavaScript (3.35.1); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4)\\"}"
+              name="instantsearch:widgets"
+            />
+          </head>
+        `);
+
+        expect(JSON.parse(document.head.querySelector('meta')!.content))
+          .toMatchInlineSnapshot(`
 Object {
-  "widgets": Array [
-    Object {
-      "params": Array [],
-      "type": "ais.searchBox",
-      "widgetType": "ais.searchBox",
-    },
-    Object {
-      "params": Array [],
-      "type": "ais.searchBox",
-      "widgetType": "ais.searchBox",
-    },
-    Object {
-      "params": Array [
-        "escapeHTML",
-      ],
-      "type": "ais.hits",
-      "widgetType": "ais.hits",
-    },
-    Object {
-      "params": Array [],
-      "type": "ais.index",
-      "widgetType": "ais.index",
-    },
-    Object {
-      "params": Array [],
-      "type": "ais.pagination",
-      "widgetType": "ais.pagination",
-    },
-    Object {
-      "params": Array [
-        "searchParameters",
-      ],
-      "type": "ais.configure",
-      "widgetType": "ais.configure",
-    },
-  ],
+  "ua": "Algolia for JavaScript (3.35.1); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4)",
+  "widgets": Array [],
 }
 `);
+      });
+
+      it('for the v3 client with custom user agent', async () => {
+        const fakeSearchClient = createSearchClient();
+        const searchClient = algoliasearchV3('qsdf', 'qsdf');
+        searchClient.search = fakeSearchClient.search;
+
+        // not using createMetadataMiddleware() here,
+        // since metadata is built into instantsearch
+        const search = instantsearch({
+          searchClient,
+          indexName: 'test',
+        });
+
+        search.start();
+
+        searchClient.addAlgoliaAgent('test (cool)');
+
+        await wait(100);
+
+        expect(document.head).toMatchInlineSnapshot(`
+<head>
+  <meta
+    content="{\\"widgets\\":[],\\"ua\\":\\"Algolia for JavaScript (3.35.1); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4); test (cool)\\"}"
+    name="instantsearch:widgets"
+  />
+</head>
+`);
+
+        expect(JSON.parse(document.head.querySelector('meta')!.content))
+          .toMatchInlineSnapshot(`
+Object {
+  "ua": "Algolia for JavaScript (3.35.1); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4); test (cool)",
+  "widgets": Array [],
+}
+`);
+      });
+
+      it('for a custom client (does not error)', async () => {
+        const searchClient = createSearchClient();
+
+        // not using createMetadataMiddleware() here,
+        // since metadata is built into instantsearch
+        const search = instantsearch({
+          searchClient,
+          indexName: 'test',
+        });
+
+        search.start();
+
+        await wait(100);
+
+        expect(document.head).toMatchInlineSnapshot(`
+<head>
+  <meta
+    content="{\\"widgets\\":[]}"
+    name="instantsearch:widgets"
+  />
+</head>
+`);
+
+        expect(JSON.parse(document.head.querySelector('meta')!.content))
+          .toMatchInlineSnapshot(`
+Object {
+  "widgets": Array [],
+}
+`);
+      });
     });
   });
 });
