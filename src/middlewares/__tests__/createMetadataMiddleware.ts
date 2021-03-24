@@ -171,22 +171,17 @@ describe('createMetadataMiddleware', () => {
 
         await wait(100);
 
-        expect(document.head).toMatchInlineSnapshot(`
-          <head>
-            <meta
-              content="{\\"widgets\\":[],\\"ua\\":\\"Algolia for JavaScript (4.8.6); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4)\\"}"
-              name="instantsearch:widgets"
-            />
-          </head>
-        `);
+        expect(document.head.children).toHaveLength(1);
+        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(JSON.parse(document.head.querySelector('meta')!.content))
-          .toMatchInlineSnapshot(`
-          Object {
-            "ua": "Algolia for JavaScript (4.8.6); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4)",
-            "widgets": Array [],
-          }
-        `);
+        expect(
+          JSON.parse(document.head.querySelector('meta')!.content)
+        ).toEqual({
+          ua: expect.stringMatching(
+            /^Algolia for JavaScript \(4\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\)$/
+          ),
+          widgets: [],
+        });
       });
 
       it('for the v4 client with custom user agent', async () => {
@@ -208,22 +203,17 @@ describe('createMetadataMiddleware', () => {
 
         await wait(100);
 
-        expect(document.head).toMatchInlineSnapshot(`
-          <head>
-            <meta
-              content="{\\"widgets\\":[],\\"ua\\":\\"Algolia for JavaScript (4.8.6); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4); test (cool)\\"}"
-              name="instantsearch:widgets"
-            />
-          </head>
-        `);
+        expect(document.head.children).toHaveLength(1);
+        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(JSON.parse(document.head.querySelector('meta')!.content))
-          .toMatchInlineSnapshot(`
-          Object {
-            "ua": "Algolia for JavaScript (4.8.6); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4); test (cool)",
-            "widgets": Array [],
-          }
-        `);
+        expect(
+          JSON.parse(document.head.querySelector('meta')!.content)
+        ).toEqual({
+          ua: expect.stringMatching(
+            /^Algolia for JavaScript \(4\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\); test \(cool\)$/
+          ),
+          widgets: [],
+        });
       });
 
       it('for the v3 client', async () => {
@@ -242,22 +232,17 @@ describe('createMetadataMiddleware', () => {
 
         await wait(100);
 
-        expect(document.head).toMatchInlineSnapshot(`
-          <head>
-            <meta
-              content="{\\"widgets\\":[],\\"ua\\":\\"Algolia for JavaScript (3.35.1); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4)\\"}"
-              name="instantsearch:widgets"
-            />
-          </head>
-        `);
+        expect(document.head.children).toHaveLength(1);
+        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(JSON.parse(document.head.querySelector('meta')!.content))
-          .toMatchInlineSnapshot(`
-Object {
-  "ua": "Algolia for JavaScript (3.35.1); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4)",
-  "widgets": Array [],
-}
-`);
+        expect(
+          JSON.parse(document.head.querySelector('meta')!.content)
+        ).toEqual({
+          ua: expect.stringMatching(
+            /^Algolia for JavaScript \(3\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\)$/
+          ),
+          widgets: [],
+        });
       });
 
       it('for the v3 client with custom user agent', async () => {
@@ -278,22 +263,17 @@ Object {
 
         await wait(100);
 
-        expect(document.head).toMatchInlineSnapshot(`
-<head>
-  <meta
-    content="{\\"widgets\\":[],\\"ua\\":\\"Algolia for JavaScript (3.35.1); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4); test (cool)\\"}"
-    name="instantsearch:widgets"
-  />
-</head>
-`);
+        expect(document.head.children).toHaveLength(1);
+        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(JSON.parse(document.head.querySelector('meta')!.content))
-          .toMatchInlineSnapshot(`
-Object {
-  "ua": "Algolia for JavaScript (3.35.1); Node.js (12.14.1); instantsearch.js (4.17.0); JS Helper (3.4.4); test (cool)",
-  "widgets": Array [],
-}
-`);
+        expect(
+          JSON.parse(document.head.querySelector('meta')!.content)
+        ).toEqual({
+          ua: expect.stringMatching(
+            /^Algolia for JavaScript \(3\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\); test \(cool\)$/
+          ),
+          widgets: [],
+        });
       });
 
       it('for a custom client (does not error)', async () => {
@@ -310,21 +290,14 @@ Object {
 
         await wait(100);
 
-        expect(document.head).toMatchInlineSnapshot(`
-<head>
-  <meta
-    content="{\\"widgets\\":[]}"
-    name="instantsearch:widgets"
-  />
-</head>
-`);
+        expect(document.head.children).toHaveLength(1);
+        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(JSON.parse(document.head.querySelector('meta')!.content))
-          .toMatchInlineSnapshot(`
-Object {
-  "widgets": Array [],
-}
-`);
+        expect(
+          JSON.parse(document.head.querySelector('meta')!.content)
+        ).toEqual({
+          widgets: [],
+        });
       });
     });
   });
