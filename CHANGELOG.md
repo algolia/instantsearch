@@ -9,16 +9,10 @@
 
 ### Features
 
-* **currentRefinements:** implement canRefine ([#4690](https://github.com/algolia/instantsearch.js/issues/4690)) ([f02416c](https://github.com/algolia/instantsearch.js/commit/f02416cf226ec3f7c2238b3e0902ec6f78381515))
 * **metadata:** expose client's algolia agent ([#4694](https://github.com/algolia/instantsearch.js/issues/4694)) ([3d0cb5b](https://github.com/algolia/instantsearch.js/commit/3d0cb5b69056674246efb1acf33e143ac7ae4915))
 * **ts:** convert connectRefinementList, refinementList ([#4658](https://github.com/algolia/instantsearch.js/issues/4658)) ([794b2d3](https://github.com/algolia/instantsearch.js/commit/794b2d3316ae7ee79cfa0643565b65e5bec5c7c1))
 * **ts:** convert stats, connectStats ([#4681](https://github.com/algolia/instantsearch.js/issues/4681)) ([37bbd01](https://github.com/algolia/instantsearch.js/commit/37bbd016a83d5cb66d1f78c0865f7677fa7098fb))
 * **ts:** update to typescript 4 ([#4654](https://github.com/algolia/instantsearch.js/issues/4654)) ([638e437](https://github.com/algolia/instantsearch.js/commit/638e437fdd80af0cfd38818f9da37a50f8f4343f))
-
-
-### Reverts
-
-* Revert "feat(currentRefinements): implement canRefine (#4690)" (#4696) ([73d2761](https://github.com/algolia/instantsearch.js/commit/73d276171c3c3ded0924c58702914967e9cad151)), closes [#4690](https://github.com/algolia/instantsearch.js/issues/4690) [#4696](https://github.com/algolia/instantsearch.js/issues/4696)
 
 
 
