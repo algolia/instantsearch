@@ -185,7 +185,9 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
-            state.toggleRefinement(hierarchicalFacetName, facetValue)
+            state
+              .resetPage()
+              .toggleFacetRefinement(hierarchicalFacetName, facetValue)
           );
         }
 
@@ -201,7 +203,9 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         if (!this._refine) {
           this._refine = function(facetValue) {
             sendEvent('click', facetValue);
-            helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+            helper
+              .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+              .search();
           };
         }
 

@@ -161,17 +161,19 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
 
     const connectorState = {
       createURLFactory: (isRefined, { state, createURL }) => () => {
+        state = state.resetPage();
+
         const valuesToRemove = isRefined ? on : off;
         if (valuesToRemove) {
           valuesToRemove.forEach(v => {
-            state.removeDisjunctiveFacetRefinement(attribute, v);
+            state = state.removeDisjunctiveFacetRefinement(attribute, v);
           });
         }
 
         const valuesToAdd = isRefined ? off : on;
         if (valuesToAdd) {
           valuesToAdd.forEach(v => {
-            state.addDisjunctiveFacetRefinement(attribute, v);
+            state = state.addDisjunctiveFacetRefinement(attribute, v);
           });
         }
 
