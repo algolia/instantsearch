@@ -45,7 +45,7 @@ export type ClearRefinementsRendererOptions = {
   hasRefinements: boolean;
 
   /**
-   * Indicates if search state is refined.
+   * Indicates if search state can be refined.
    */
   canRefine: boolean;
 
