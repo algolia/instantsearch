@@ -39,7 +39,8 @@ export const createInstantSearch = (
     _createURL: jest.fn(() => '#'),
     onStateChange: null,
     setUiState: jest.fn(),
-    onInternalStateChange: jest.fn(),
+    // if it's deferred, we can't test it has been called
+    onInternalStateChange: jest.fn() as any,
     createURL: jest.fn(() => '#'),
     addWidget: jest.fn(),
     addWidgets: jest.fn(),
