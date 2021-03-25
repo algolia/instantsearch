@@ -1609,7 +1609,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       indexName: 'indexName',
       searchClient,
     });
-
     const onMiddlewareStateChange = jest.fn();
     const middleware = () => {
       return {
@@ -1634,7 +1633,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
   });
 
-  test('notifies all middlewarel in multi-index when called multiple times', () => {
+  test('notifies all middlewares in multi-index when called multiple times', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
