@@ -1609,6 +1609,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       indexName: 'indexName',
       searchClient,
     });
+
     const onMiddlewareStateChange = jest.fn();
     const middleware = () => {
       return {
@@ -1629,6 +1630,58 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
       uiState: {
         indexName: {},
+      },
+    });
+  });
+
+  test('notifies all middlewarel in multi-index when called multiple times', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})({}),
+      index({ indexName: 'test' }),
+    ]);
+
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+
+    search.EXPERIMENTAL_use(middleware);
+    search.start();
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(0);
+
+    search.setUiState({
+      indexName: {},
+      test: {},
+    });
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: {
+        indexName: {},
+        test: {},
+      },
+    });
+
+    search.setUiState({
+      indexName: { query: 'test' },
+      test: {},
+    });
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(2);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: {
+        indexName: { query: 'test' },
+        test: {},
       },
     });
   });
