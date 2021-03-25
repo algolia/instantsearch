@@ -1434,7 +1434,7 @@ describe('use', () => {
     const middleware = jest.fn(() => middlewareSpy);
 
     search.addWidgets([searchBox]);
-    search.EXPERIMENTAL_use(middleware);
+    search.use(middleware);
 
     expect(middleware).toHaveBeenCalledTimes(1);
     expect(middleware).toHaveBeenCalledWith({ instantSearchInstance: search });
@@ -1509,7 +1509,7 @@ describe('use', () => {
     const middlewareAfterStart = jest.fn(() => middlewareAfterStartSpy);
 
     search.addWidgets([searchBox({})]);
-    search.EXPERIMENTAL_use(middlewareBeforeStart);
+    search.use(middlewareBeforeStart);
     search.start();
 
     expect(middlewareBeforeStart).toHaveBeenCalledTimes(1);
@@ -1517,7 +1517,7 @@ describe('use', () => {
       instantSearchInstance: search,
     });
 
-    search.EXPERIMENTAL_use(middlewareAfterStart);
+    search.use(middlewareAfterStart);
 
     // The first middleware should still have been only called once
     expect(middlewareBeforeStart).toHaveBeenCalledTimes(1);
@@ -1630,7 +1630,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       };
     };
 
-    search.EXPERIMENTAL_use(middleware);
+    search.use(middleware);
     search.start();
     expect(onMiddlewareStateChange).toHaveBeenCalledTimes(0);
 
@@ -1669,7 +1669,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       };
     };
 
-    search.EXPERIMENTAL_use(middleware);
+    search.use(middleware);
     search.start();
     expect(onMiddlewareStateChange).toHaveBeenCalledTimes(0);
 
@@ -1973,7 +1973,7 @@ describe('onStateChange', () => {
     };
 
     search.addWidgets([searchBox({})]);
-    search.EXPERIMENTAL_use(middleware);
+    search.use(middleware);
     search.start();
 
     expect(middlewareOnStateChange).toHaveBeenCalledTimes(0);
