@@ -573,7 +573,7 @@ See ${createDocumentationLink({
     this.scheduleSearch();
   }
 
-  public onInternalStateChange = () => {
+  public onInternalStateChange = defer(() => {
     const nextUiState = this.mainIndex.getWidgetUiState({});
 
     this.middleware.forEach(m => {
@@ -581,7 +581,7 @@ See ${createDocumentationLink({
         uiState: nextUiState,
       });
     });
-  };
+  });
 
   public createURL(nextState: UiState = {}): string {
     if (!this.started) {

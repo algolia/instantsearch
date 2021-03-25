@@ -1409,7 +1409,7 @@ describe('refresh', () => {
 });
 
 describe('use', () => {
-  it('hooks middleware into the lifecycle before the instance starts', () => {
+  it('hooks middleware into the lifecycle before the instance starts', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1450,10 +1450,14 @@ describe('use', () => {
     // Checks that `mainIndex.init` was called before subscribing the middleware.
     expect(widgetsInitCallOrder).toBeLessThan(middlewareSubscribeCallOrder);
 
+    await runAllMicroTasks();
+
     expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(0);
 
     button.click();
+
+    await runAllMicroTasks();
 
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
@@ -1466,6 +1470,8 @@ describe('use', () => {
 
     search.dispose();
 
+    await runAllMicroTasks();
+
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
       uiState: {
@@ -1475,7 +1481,7 @@ describe('use', () => {
     expect(middlewareSpy.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
-  it('hooks middleware into the lifecycle after the instance starts', () => {
+  it('hooks middleware into the lifecycle after the instance starts', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1520,6 +1526,8 @@ describe('use', () => {
       instantSearchInstance: search,
     });
 
+    await runAllMicroTasks();
+
     // The first middleware subscribe function should have been only called once
     expect(middlewareBeforeStartSpy.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.subscribe).toHaveBeenCalledTimes(1);
@@ -1527,6 +1535,8 @@ describe('use', () => {
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(0);
 
     button.click();
+
+    await runAllMicroTasks();
 
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(1);
@@ -1546,6 +1556,8 @@ describe('use', () => {
     });
 
     search.dispose();
+
+    await runAllMicroTasks();
 
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(2);
@@ -1603,7 +1615,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     expect(searchClient.search).toHaveBeenCalledTimes(2);
   });
 
-  test('notifies all middleware', () => {
+  test('notifies all middleware', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1625,6 +1637,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     search.setUiState({
       indexName: {},
     });
+
+    await runAllMicroTasks();
+
     expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
       uiState: {
@@ -1633,7 +1648,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
   });
 
-  test('notifies all middlewares in multi-index when called multiple times', () => {
+  test('notifies all middlewares in multi-index when called multiple times', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1663,7 +1678,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       test: {},
     });
 
-    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(2);
+    await runAllMicroTasks();
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
       uiState: {
         indexName: {},
@@ -1676,7 +1693,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       test: {},
     });
 
-    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(4);
+    await runAllMicroTasks();
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(2);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
       uiState: {
         indexName: { query: 'test' },
