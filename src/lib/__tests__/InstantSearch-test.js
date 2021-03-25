@@ -1663,7 +1663,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       test: {},
     });
 
-    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(2);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
       uiState: {
         indexName: {},
@@ -1676,7 +1676,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       test: {},
     });
 
-    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(2);
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(4);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
       uiState: {
         indexName: { query: 'test' },

@@ -556,7 +556,7 @@ See ${createDocumentationLink({
         });
       }
 
-      indexWidget.getHelper()!.overrideStateWithoutTriggeringChangeEvent(
+      indexWidget.getHelper()!.setState(
         indexWidget.getWidgetSearchParameters(indexWidget.getHelper()!.state, {
           uiState: nextUiState[indexWidget.getIndexId()],
         })
@@ -571,7 +571,6 @@ See ${createDocumentationLink({
     setIndexHelperState(this.mainIndex);
 
     this.scheduleSearch();
-    this.onInternalStateChange();
   }
 
   public onInternalStateChange = () => {
