@@ -7,11 +7,12 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectRatingMenu', () => {
-  const getInitializedWidget = (config = {}, unmount) => {
+  const getInitializedWidget = (config = {}, unmount = () => {}) => {
     const rendering = jest.fn();
     const makeWidget = connectRatingMenu(rendering, unmount);
     const instantSearchInstance = createInstantSearch();
@@ -22,19 +23,21 @@ describe('connectRatingMenu', () => {
       ...config,
     });
 
-    const initialConfig = widget.getWidgetSearchParameters(
+    const initialConfig = widget.getWidgetSearchParameters!(
       new SearchParameters({}),
       { uiState: {} }
     );
-    const helper = jsHelper({}, '', initialConfig);
+    const helper = jsHelper(createSearchClient(), '', initialConfig);
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      instantSearchInstance,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      })
+    );
 
     const { refine } = rendering.mock.calls[0][0];
 
@@ -44,6 +47,7 @@ describe('connectRatingMenu', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
+        // @ts-expect-error
         connectRatingMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -54,6 +58,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
     it('throws without attribute', () => {
       expect(() => {
+        // @ts-expect-error
         connectRatingMenu(() => {})({ attribute: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`attribute\` option is required.
@@ -101,19 +106,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(widgetParams).toEqual({ attribute });
     }
 
-    widget.render({
-      results: new SearchResults(helper.state, [
-        {
-          facets: {
-            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
-          },
-        },
-        {},
-      ]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            },
+          }),
+          createSingleSearchResponse({}),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     {
       // Should call the rendering a second time, with isFirstRendering to false
@@ -130,6 +137,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         {
           count: 1000,
           isRefined: false,
+          label: '4',
           name: '4',
           value: '4',
           stars: [true, true, true, true, false],
@@ -137,6 +145,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         {
           count: 1050,
           isRefined: false,
+          label: '3',
           name: '3',
           value: '3',
           stars: [true, true, true, false, false],
@@ -144,6 +153,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         {
           count: 1070,
           isRefined: false,
+          label: '2',
           name: '2',
           value: '2',
           stars: [true, true, false, false, false],
@@ -151,6 +161,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         {
           count: 1080,
           isRefined: false,
+          label: '1',
           name: '1',
           value: '1',
           stars: [true, false, false, false, false],
@@ -174,23 +185,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     ]);
     expect(helper.search).toHaveBeenCalledTimes(1);
 
-    widget.render({
-      results: new SearchResults(helper.state, [
-        {
-          facets: {
-            [attribute]: { 3: 50, 4: 900, 5: 100 },
-          },
-        },
-        {
-          facets: {
-            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
-          },
-        },
-      ]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              [attribute]: { 3: 50, 4: 900, 5: 100 },
+            },
+          }),
+          createSingleSearchResponse({
+            facets: {
+              [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            },
+          }),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     {
       // Second rendering
@@ -201,6 +214,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         {
           count: 1000,
           isRefined: false,
+          label: '4',
           name: '4',
           value: '4',
           stars: [true, true, true, true, false],
@@ -208,6 +222,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         {
           count: 1050,
           isRefined: true,
+          label: '3',
           name: '3',
           value: '3',
           stars: [true, true, true, false, false],
@@ -215,6 +230,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         {
           count: 1070,
           isRefined: false,
+          label: '2',
           name: '2',
           value: '2',
           stars: [true, true, false, false, false],
@@ -222,6 +238,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         {
           count: 1080,
           isRefined: false,
+          label: '1',
           name: '1',
           value: '1',
           stars: [true, false, false, false, false],
@@ -255,23 +272,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     ]);
     expect(helper.search).toHaveBeenCalledTimes(1);
 
-    widget.render({
-      results: new SearchResults(helper.state, [
-        {
-          facets: {
-            [attribute]: { 3: 50, 4: 900, 5: 100 },
-          },
-        },
-        {
-          facets: {
-            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
-          },
-        },
-      ]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              [attribute]: { 3: 50, 4: 900, 5: 100 },
+            },
+          }),
+          createSingleSearchResponse({
+            facets: {
+              [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            },
+          }),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     // Second rendering
     expect(helper.getRefinements(attribute)).toEqual([
@@ -294,7 +313,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const { widget, helper } = getInitializedWidget();
 
       expect(() =>
-        widget.dispose({ helper, state: helper.state })
+        widget.dispose!({ helper, state: helper.state })
       ).not.toThrow();
     });
 
@@ -302,7 +321,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const unmount = jest.fn();
       const { widget, helper } = getInitializedWidget({}, unmount);
 
-      widget.dispose({ state: helper.state });
+      widget.dispose!({ helper, state: helper.state });
 
       expect(unmount).toHaveBeenCalledTimes(1);
     });
@@ -312,7 +331,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const makeWidget = connectRatingMenu(render);
       const indexName = 'indexName';
       const attribute = 'grade';
-      const helper = jsHelper({}, indexName, {
+      const helper = jsHelper(createSearchClient(), indexName, {
         disjunctiveFacets: [attribute],
         numericRefinements: {
           [attribute]: {
@@ -338,7 +357,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         })
       );
 
-      const nextState = widget.dispose({ state: helper.state });
+      const nextState = widget.dispose!({ helper, state: helper.state });
 
       expect(nextState).toEqual(
         new SearchParameters({
@@ -358,12 +377,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     test('returns the `uiState` empty', () => {
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
-      const helper = jsHelper({}, '');
+      const helper = jsHelper(createSearchClient(), '');
       const widget = makeWidget({
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -377,7 +396,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     test('returns the `uiState` with a refinement', () => {
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper(createSearchClient(), '', {
         disjunctiveFacets: ['grade'],
         numericRefinements: {
           grade: {
@@ -390,7 +409,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -408,7 +427,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     test('returns the `uiState` without namespace overridden', () => {
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper(createSearchClient(), '', {
         disjunctiveFacets: ['grade'],
         numericRefinements: {
           grade: {
@@ -421,7 +440,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {
           ratingMenu: {
             rating: 4,
@@ -450,7 +469,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
       });
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['grade'],
         numericRefinements: {
           grade: {
@@ -484,7 +503,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
       });
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['grade'],
         numericRefinements: {
           grade: {
@@ -519,6 +538,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
             {
               count: 1000,
               isRefined: false,
+              label: '4',
               name: '4',
               stars: [true, true, true, true, false],
               value: '4',
@@ -526,6 +546,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
             {
               count: 1050,
               isRefined: false,
+              label: '3',
               name: '3',
               stars: [true, true, true, false, false],
               value: '3',
@@ -533,6 +554,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
             {
               count: 1070,
               isRefined: true,
+              label: '2',
               name: '2',
               stars: [true, true, false, false, false],
               value: '2',
@@ -540,6 +562,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
             {
               count: 1080,
               isRefined: false,
+              label: '1',
               name: '1',
               stars: [true, false, false, false, false],
               value: '1',
@@ -547,7 +570,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           ],
           createURL: expect.any(Function),
           refine: expect.any(Function),
-          sendEvent: renderState1.ratingMenu.grade.sendEvent,
+          sendEvent: renderState1.ratingMenu!.grade.sendEvent,
           hasNoResults: true,
           widgetParams: {
             attribute: 'grade',
@@ -565,7 +588,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
       });
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['grade'],
         numericRefinements: {
           grade: {
@@ -597,7 +620,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
       });
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['grade'],
         numericRefinements: {
           grade: {
@@ -631,6 +654,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           {
             count: 1000,
             isRefined: false,
+            label: '4',
             name: '4',
             stars: [true, true, true, true, false],
             value: '4',
@@ -638,6 +662,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           {
             count: 1050,
             isRefined: false,
+            label: '3',
             name: '3',
             stars: [true, true, true, false, false],
             value: '3',
@@ -645,6 +670,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           {
             count: 1070,
             isRefined: true,
+            label: '2',
             name: '2',
             stars: [true, true, false, false, false],
             value: '2',
@@ -652,6 +678,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           {
             count: 1080,
             isRefined: false,
+            label: '1',
             name: '1',
             stars: [true, false, false, false, false],
             value: '1',
@@ -672,12 +699,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     test('returns the `SearchParameters` with the default value', () => {
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
-      const helper = jsHelper({}, '');
+      const helper = jsHelper(createSearchClient(), '');
       const widget = makeWidget({
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
@@ -686,7 +713,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           index: '',
           disjunctiveFacets: ['grade'],
           numericRefinements: {
-            grade: [],
+            grade: {},
           },
         })
       );
@@ -695,7 +722,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     test('returns the `SearchParameters` without the previous value', () => {
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper(createSearchClient(), '', {
         numericRefinements: {
           grade: {
             '>=': [2],
@@ -707,7 +734,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
@@ -716,7 +743,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           index: '',
           disjunctiveFacets: ['grade'],
           numericRefinements: {
-            grade: [],
+            grade: {},
           },
         })
       );
@@ -725,15 +752,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     test('returns the `SearchParameters` with the value from `uiState`', () => {
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
-      const helper = jsHelper({}, '');
+      const helper = jsHelper(createSearchClient(), '');
       const widget = makeWidget({
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           ratingMenu: {
-            grade: '3',
+            grade: 3,
           },
         },
       });
@@ -755,7 +782,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper(createSearchClient(), '', {
         disjunctiveFacets: ['grade'],
         numericRefinements: {
           grade: {
@@ -768,10 +795,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           ratingMenu: {
-            grade: '3',
+            grade: 3,
           },
         },
       });
