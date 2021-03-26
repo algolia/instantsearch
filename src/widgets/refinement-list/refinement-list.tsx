@@ -16,7 +16,10 @@ import { component } from '../../lib/suit';
 import { Template, WidgetFactory, RendererOptions } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
-import { SearchBoxTemplates, SearchBoxCSSClasses } from '../search-box/types';
+import {
+  SearchBoxTemplates,
+  SearchBoxRendererCSSClasses,
+} from '../search-box/search-box';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -223,7 +226,9 @@ const renderer = ({
   searchableIsAlwaysActive,
 }: {
   containerNode: HTMLElement;
-  cssClasses: RefinementListOwnCSSClasses & { searchable: SearchBoxCSSClasses };
+  cssClasses: RefinementListOwnCSSClasses & {
+    searchable: SearchBoxRendererCSSClasses;
+  };
   renderState: {
     templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
     searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;

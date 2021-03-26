@@ -1,9 +1,13 @@
 import { render } from 'preact';
 import searchBox from '../search-box';
+import algoliaSearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+
+const mockedRender = render as jest.Mock;
 
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
@@ -14,24 +18,19 @@ jest.mock('preact', () => {
 });
 
 describe('searchBox()', () => {
-  let helper;
+  let helper: AlgoliaSearchHelper;
 
   beforeEach(() => {
-    render.mockClear();
+    mockedRender.mockClear();
 
-    helper = {
-      setQuery: jest.fn(),
-      search: jest.fn(),
-      state: {
-        query: '',
-      },
-    };
+    helper = algoliaSearchHelper(createSearchClient(), '', { query: '' });
   });
 
   describe('Usage', () => {
     it('throws without container', () => {
       expect(() => {
         searchBox({
+          // @ts-expect-error
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -46,11 +45,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     test('renders during init()', () => {
       const widget = searchBox({ container: document.createElement('div') });
 
-      widget.init(createInitOptions({ helper }));
+      widget.init!(createInitOptions({ helper }));
 
-      const [firstRender] = render.mock.calls;
+      const [firstRender] = mockedRender.mock.calls;
 
-      expect(render).toHaveBeenCalledTimes(1);
+      expect(mockedRender).toHaveBeenCalledTimes(1);
       expect(firstRender[0].props).toMatchSnapshot();
     });
 
@@ -58,12 +57,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       const container = document.createElement('div');
       const widget = searchBox({ container });
 
-      widget.init(createInitOptions({ helper }));
-      widget.render(createRenderOptions({ helper }));
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper }));
 
-      const [firstRender, secondRender] = render.mock.calls;
+      const [firstRender, secondRender] = mockedRender.mock.calls;
 
-      expect(render).toHaveBeenCalledTimes(2);
+      expect(mockedRender).toHaveBeenCalledTimes(2);
       expect(firstRender[0].props).toMatchSnapshot();
       expect(firstRender[1]).toEqual(container);
       expect(secondRender[0].props).toMatchSnapshot();
@@ -75,9 +74,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         container: document.createElement('div'),
       });
 
-      widget.init(createInitOptions({ helper }));
+      widget.init!(createInitOptions({ helper }));
 
-      const [firstRender] = render.mock.calls;
+      const [firstRender] = mockedRender.mock.calls;
 
       expect(firstRender[0].props.cssClasses).toMatchSnapshot();
     });
@@ -85,15 +84,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     test('sets isSearchStalled', () => {
       const widget = searchBox({ container: document.createElement('div') });
 
-      widget.init(createInitOptions({ helper }));
-      widget.render(
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
         createRenderOptions({
           helper,
           searchMetadata: { isSearchStalled: true },
         })
       );
 
-      const [, secondRender] = render.mock.calls;
+      const [, secondRender] = mockedRender.mock.calls;
 
       expect(secondRender[0].props.isSearchStalled).toBe(true);
     });

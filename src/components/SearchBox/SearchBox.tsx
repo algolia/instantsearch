@@ -1,60 +1,60 @@
 /** @jsx h */
 
-import { h, Component } from 'preact';
-import PropTypes from 'prop-types';
+import { h, createRef, Component } from 'preact';
 import { noop } from '../../lib/utils';
 import Template from '../Template/Template';
+import {
+  SearchBoxRendererCSSClasses,
+  SearchBoxTemplates,
+} from '../../widgets/search-box/search-box';
 
-const SearchBoxCSSClasses = PropTypes.shape({
-  root: PropTypes.string.isRequired,
-  form: PropTypes.string.isRequired,
-  input: PropTypes.string.isRequired,
-  submit: PropTypes.string.isRequired,
-  submitIcon: PropTypes.string.isRequired,
-  reset: PropTypes.string.isRequired,
-  resetIcon: PropTypes.string.isRequired,
-  loadingIndicator: PropTypes.string.isRequired,
-  loadingIcon: PropTypes.string.isRequired,
+type SearchBoxProps = {
+  placeholder?: string;
+  cssClasses: SearchBoxRendererCSSClasses;
+  templates?: SearchBoxTemplates;
+  query?: string;
+  showSubmit?: boolean;
+  showReset?: boolean;
+  showLoadingIndicator?: boolean;
+  refine?: (value: string) => void;
+  autofocus?: boolean;
+  searchAsYouType?: boolean;
+  isSearchStalled?: boolean;
+  disabled?: boolean;
+  onChange?: (event: Event) => void;
+  onSubmit?: (event: Event) => void;
+  onReset?: (event: Event) => void;
+} & typeof defaultProps;
+
+const defaultProps = Object.freeze({
+  query: '',
+  showSubmit: true,
+  showReset: true,
+  showLoadingIndicator: true,
+  autofocus: false,
+  searchAsYouType: true,
+  isSearchStalled: false,
+  disabled: false,
+  onChange: noop,
+  onSubmit: noop,
+  onReset: noop,
+  refine: noop,
 });
 
-class SearchBox extends Component {
-  static propTypes = {
-    placeholder: PropTypes.string.isRequired,
-    cssClasses: SearchBoxCSSClasses.isRequired,
-    templates: PropTypes.object.isRequired,
-    query: PropTypes.string,
-    showSubmit: PropTypes.bool,
-    showReset: PropTypes.bool,
-    showLoadingIndicator: PropTypes.bool,
-    refine: PropTypes.func,
-    autofocus: PropTypes.bool,
-    searchAsYouType: PropTypes.bool,
-    isSearchStalled: PropTypes.bool,
-    disabled: PropTypes.bool,
-    onChange: PropTypes.func,
-    onSubmit: PropTypes.func,
-    onReset: PropTypes.func,
-  };
+type SearchBoxState = {
+  query: string;
+  focused: boolean;
+};
 
-  static defaultProps = {
-    query: '',
-    showSubmit: true,
-    showReset: true,
-    showLoadingIndicator: true,
-    autofocus: false,
-    searchAsYouType: true,
-    isSearchStalled: false,
-    disabled: false,
-    onChange: noop,
-    onSubmit: noop,
-    onReset: noop,
-    refine: noop,
-  };
+class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
+  public static defaultProps = defaultProps;
 
-  state = {
+  public state = {
     query: this.props.query,
     focused: false,
   };
+
+  private input = createRef<HTMLInputElement>();
 
   /**
    * This public method is used in the RefinementList SFFV search box
@@ -63,13 +63,13 @@ class SearchBox extends Component {
    * @see RefinementList#componentWillReceiveProps
    * @return {undefined}
    */
-  resetInput() {
+  public resetInput() {
     this.setState({ query: '' });
   }
 
-  onInput = event => {
+  private onInput = (event: Event) => {
     const { searchAsYouType, refine, onChange } = this.props;
-    const query = event.target.value;
+    const query = (event.target as HTMLInputElement).value;
 
     if (searchAsYouType) {
       refine(query);
@@ -79,7 +79,7 @@ class SearchBox extends Component {
     onChange(event);
   };
 
-  componentWillReceiveProps(nextProps) {
+  public componentWillReceiveProps(nextProps: SearchBoxProps) {
     /**
      * when the user is typing, we don't want to replace the query typed
      * by the user (state.query) with the query exposed by the connector (props.query)
@@ -90,12 +90,14 @@ class SearchBox extends Component {
     }
   }
 
-  onSubmit = event => {
+  private onSubmit = (event: Event) => {
     const { searchAsYouType, refine, onSubmit } = this.props;
 
     event.preventDefault();
     event.stopPropagation();
-    this.input.blur();
+    if (this.input.current) {
+      this.input.current.blur();
+    }
 
     if (!searchAsYouType) {
       refine(this.state.query);
@@ -106,11 +108,13 @@ class SearchBox extends Component {
     return false;
   };
 
-  onReset = event => {
+  private onReset = (event: Event) => {
     const { refine, onReset } = this.props;
     const query = '';
 
-    this.input.focus();
+    if (this.input.current) {
+      this.input.current.focus();
+    }
 
     refine(query);
     this.setState({ query });
@@ -118,15 +122,15 @@ class SearchBox extends Component {
     onReset(event);
   };
 
-  onBlur = () => {
+  private onBlur = () => {
     this.setState({ focused: false });
   };
 
-  onFocus = () => {
+  private onFocus = () => {
     this.setState({ focused: true });
   };
 
-  render() {
+  public render() {
     const {
       cssClasses,
       placeholder,
@@ -146,10 +150,11 @@ class SearchBox extends Component {
           className={cssClasses.form}
           noValidate
           onSubmit={this.onSubmit}
+          // @ts-ignore `onReset` attibute is missing in preact 10.0.0 JSX types
           onReset={this.onReset}
         >
           <input
-            ref={inputRef => (this.input = inputRef)}
+            ref={this.input}
             value={this.state.query}
             disabled={this.props.disabled}
             className={cssClasses.input}
@@ -158,6 +163,7 @@ class SearchBox extends Component {
             autoFocus={autofocus}
             autoComplete="off"
             autoCorrect="off"
+            // @ts-ignore `autoCapitalize` attibute is missing in preact 10.0.0 JSX types
             autoCapitalize="off"
             spellCheck="false"
             maxLength={512}
