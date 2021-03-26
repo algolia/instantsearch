@@ -2,11 +2,12 @@
 
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import RefinementList from '../RefinementList';
+import RefinementList, { RefinementListProps } from '../RefinementList';
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
+import { RefinementListItemData } from '../../../widgets/refinement-list/refinement-list';
 
 const templates = {
-  item({ value, count, isRefined }) {
+  item({ value, count, isRefined }: RefinementListItemData) {
     return `
   <label>
     <input
@@ -24,12 +25,15 @@ const templates = {
   <button data-testid="show-more">Show more</button>
     `;
   },
+  searchableNoResults: 'No results',
 };
 
 const defaultProps = {
   createURL: () => '#',
   templateProps: {
+    templatesConfig: {},
     templates,
+    useCustomCompileOptions: {},
   },
   toggleRefinement: () => {},
 };
@@ -41,7 +45,6 @@ describe('RefinementList', () => {
         ...defaultProps,
         cssClasses: {
           root: 'root',
-          searchable: {},
         },
       };
 
@@ -56,9 +59,10 @@ describe('RefinementList', () => {
         ...defaultProps,
         cssClasses: {
           item: 'item',
-          searchable: {},
         },
-        facetValues: [{ value: 'foo', isRefined: true }],
+        facetValues: [
+          { value: 'foo', label: 'foo', count: 1, isRefined: true },
+        ],
       };
 
       const { container } = render(<RefinementList {...props} />);
@@ -72,11 +76,10 @@ describe('RefinementList', () => {
         ...defaultProps,
         cssClasses: {
           selectedItem: 'active',
-          searchable: {},
         },
         facetValues: [
-          { value: 'foo', isRefined: true },
-          { value: 'bar', isRefined: false },
+          { value: 'foo', label: 'foo', count: 1, isRefined: true },
+          { value: 'bar', label: 'bar', count: 2, isRefined: false },
         ],
       };
 
@@ -93,8 +96,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
+          { value: 'foo', label: 'foo', count: 1, isRefined: false },
+          { value: 'bar', label: 'bar', count: 2, isRefined: false },
         ],
       };
 
@@ -109,8 +112,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: true },
+          { value: 'foo', label: 'foo', count: 1, isRefined: false },
+          { value: 'bar', label: 'bar', count: 2, isRefined: true },
         ],
       };
 
@@ -141,7 +144,9 @@ describe('RefinementList', () => {
           },
         ],
         templateProps: {
+          templatesConfig: {},
           templates: defaultTemplates,
+          useCustomCompileOptions: {},
         },
         cssClasses: {
           labelText: 'labelText',
@@ -178,7 +183,9 @@ describe('RefinementList', () => {
           },
         ],
         templateProps: {
+          templatesConfig: {},
           templates: defaultTemplates,
+          useCustomCompileOptions: {},
         },
         cssClasses: {
           labelText: 'labelText',
@@ -198,8 +205,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          { value: 'foo', count: 42, isRefined: false },
-          { value: 'bar', count: 16, isRefined: false },
+          { value: 'foo', label: 'foo', count: 42, isRefined: false },
+          { value: 'bar', label: 'bar', count: 16, isRefined: false },
         ],
       };
 
@@ -216,9 +223,9 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
+          { value: 'foo', label: 'foo', count: 1, isRefined: false },
+          { value: 'bar', label: 'bar', count: 2, isRefined: false },
+          { value: 'baz', label: 'baz', count: 3, isRefined: false },
         ],
         showMore: true,
         isShowingMore: false,
@@ -235,9 +242,9 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
+          { value: 'foo', label: 'foo', count: 1, isRefined: false },
+          { value: 'bar', label: 'bar', count: 2, isRefined: false },
+          { value: 'baz', label: 'baz', count: 3, isRefined: false },
         ],
         showMore: false,
         isShowingMore: false,
@@ -256,16 +263,18 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         toggleRefinement,
-        createURL: () => {},
+        createURL: () => '',
         cssClasses: {
           item: 'item',
         },
         facetValues: [
           {
             value: 'foo',
+            label: 'foo',
+            count: 1,
             data: [
-              { value: 'bar', isRefined: false },
-              { value: 'baz', isRefined: false },
+              { value: 'bar', label: 'bar', count: 2, isRefined: false },
+              { value: 'baz', label: 'baz', count: 3, isRefined: false },
             ],
             isRefined: false,
           },
@@ -280,36 +289,41 @@ describe('RefinementList', () => {
       ] = container.querySelectorAll('.item');
 
       fireEvent.click(mainItem);
-      expect(toggleRefinement).toHaveBeenCalledWith('foo', false);
+      expect(toggleRefinement).toHaveBeenCalledWith('foo');
 
       fireEvent.click(firstSubItem);
-      expect(toggleRefinement).toHaveBeenCalledWith('bar', false);
+      expect(toggleRefinement).toHaveBeenCalledWith('bar');
 
       fireEvent.click(secondISubtem);
-      expect(toggleRefinement).toHaveBeenCalledWith('baz', false);
+      expect(toggleRefinement).toHaveBeenCalledWith('baz');
     });
 
     it('should add depth class for each depth', () => {
       const props = {
         ...defaultProps,
-        createURL: () => {},
+        createURL: () => '',
         cssClasses: {
           depth: 'depth-',
         },
         facetValues: [
           {
             value: 'foo',
+            label: 'foo',
+            count: 1,
             data: [
-              { value: 'bar', isRefined: false },
-              { value: 'baz', isRefined: false },
+              { value: 'bar', label: 'bar', count: 2, isRefined: false },
+              { value: 'baz', label: 'baz', count: 3, isRefined: false },
             ],
             isRefined: false,
           },
         ],
         templateProps: {
+          templatesConfig: {},
           templates: {
-            item: item => item.value,
+            item: (item: RefinementListItemData) => item.value,
+            showMoreText: '',
           },
+          useCustomCompileOptions: {},
         },
       };
 
@@ -324,16 +338,18 @@ describe('RefinementList', () => {
     it('should not add root class on sub lists', () => {
       const props = {
         ...defaultProps,
-        createURL: () => {},
+        createURL: () => '',
         cssClasses: {
           root: 'my-root',
         },
         facetValues: [
           {
             value: 'foo',
+            label: 'foo',
+            count: 1,
             data: [
-              { value: 'bar', isRefined: false },
-              { value: 'baz', isRefined: false },
+              { value: 'bar', label: 'bar', count: 2, isRefined: false },
+              { value: 'baz', label: 'baz', count: 3, isRefined: false },
             ],
             isRefined: false,
           },
@@ -380,12 +396,19 @@ describe('RefinementList', () => {
 
     it('without facets', () => {
       const props = {
-        container: document.createElement('div'),
+        createURL: () => '',
         attribute: 'attribute',
         facetValues: [],
         cssClasses,
         className: 'customClassName',
-        templateProps: {},
+        templateProps: {
+          templatesConfig: {},
+          templates: {
+            item: (item: RefinementListItemData) => item.value,
+            showMoreText: '',
+          },
+          useCustomCompileOptions: {},
+        },
         toggleRefinement: () => {},
       };
       const { container } = render(<RefinementList {...props} />);
@@ -394,8 +417,8 @@ describe('RefinementList', () => {
     });
 
     it('without facets from search', () => {
-      const props = {
-        container: document.createElement('div'),
+      const props: RefinementListProps = {
+        createURL: () => '',
         attribute: 'attribute',
         facetValues: [],
         cssClasses,
@@ -404,17 +427,22 @@ describe('RefinementList', () => {
         searchPlaceholder: 'Search',
         searchFacetValues: x => x,
         templateProps: {
+          templatesConfig: {},
           templates: {
-            item: item => item.value,
+            item: (item: RefinementListItemData) => item.value,
             searchableNoResults: x => JSON.stringify(x),
+            showMoreText: '',
           },
+          useCustomCompileOptions: {},
         },
         searchBoxTemplateProps: {
+          templatesConfig: {},
           templates: {
             reset: 'reset',
             submit: 'submit',
             loadingIndicator: 'loadingIndicator',
           },
+          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
       };
@@ -425,15 +453,16 @@ describe('RefinementList', () => {
 
     it('with facets', () => {
       const props = {
-        container: document.createElement('div'),
         attribute: 'attribute',
         facetValues: [
           {
+            value: '',
             label: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
+            value: '',
             label: 'Google',
             count: 1000,
             isRefined: true,
@@ -442,12 +471,15 @@ describe('RefinementList', () => {
         cssClasses,
         className: 'customClassName',
         templateProps: {
+          templatesConfig: {},
           templates: {
-            item: item => item.value,
+            item: (item: RefinementListItemData) => item.value,
+            showMoreText: '',
           },
+          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
-        createURL: () => {},
+        createURL: () => '',
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -455,16 +487,17 @@ describe('RefinementList', () => {
     });
 
     it('with facets and show more', () => {
-      const props = {
-        container: document.createElement('div'),
+      const props: RefinementListProps = {
         attribute: 'attribute',
         facetValues: [
           {
+            value: '',
             label: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
+            value: '',
             label: 'Google',
             count: 1000,
             isRefined: true,
@@ -476,13 +509,15 @@ describe('RefinementList', () => {
         isShowingMore: false,
         canToggleShowMore: true,
         templateProps: {
+          templatesConfig: {},
           templates: {
-            item: item => item.value,
-            showMoreText: x => JSON.stringify(x),
+            item: (item: RefinementListItemData) => item.value,
+            showMoreText: (x: any) => JSON.stringify(x),
           },
+          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
-        createURL: () => {},
+        createURL: () => '',
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -490,16 +525,17 @@ describe('RefinementList', () => {
     });
 
     it('with facets and disabled show more', () => {
-      const props = {
-        container: document.createElement('div'),
+      const props: RefinementListProps = {
         attribute: 'attribute',
         facetValues: [
           {
+            value: '',
             label: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
+            value: '',
             label: 'Google',
             count: 1000,
             isRefined: true,
@@ -511,13 +547,15 @@ describe('RefinementList', () => {
         isShowingMore: false,
         canToggleShowMore: false,
         templateProps: {
+          templatesConfig: {},
           templates: {
-            item: item => item.value,
-            showMoreText: x => JSON.stringify(x),
+            item: (item: RefinementListItemData) => item.value,
+            showMoreText: (x: any) => JSON.stringify(x),
           },
+          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
-        createURL: () => {},
+        createURL: () => '',
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -525,16 +563,17 @@ describe('RefinementList', () => {
     });
 
     it('with facets from search', () => {
-      const props = {
-        container: document.createElement('div'),
+      const props: RefinementListProps = {
         attribute: 'attribute',
         facetValues: [
           {
+            value: '',
             label: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
+            value: '',
             label: 'Google',
             count: 1000,
             isRefined: true,
@@ -546,19 +585,24 @@ describe('RefinementList', () => {
         searchPlaceholder: 'Search',
         searchFacetValues: x => x,
         templateProps: {
+          templatesConfig: {},
           templates: {
-            item: item => item.value,
+            item: (item: RefinementListItemData) => item.value,
+            showMoreText: '',
           },
+          useCustomCompileOptions: {},
         },
         searchBoxTemplateProps: {
+          templatesConfig: {},
           templates: {
             reset: 'reset',
             submit: 'submit',
             loadingIndicator: 'loadingIndicator',
           },
+          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
-        createURL: () => {},
+        createURL: () => '',
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -568,33 +612,35 @@ describe('RefinementList', () => {
     it('should not refine on click on already refined items', () => {
       const toggleRefinement = jest.fn();
       const props = {
-        container: document.createElement('div'),
         facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: true },
-          { value: 'baz', isRefined: false },
+          { value: 'foo', label: 'foo', count: 1, isRefined: false },
+          { value: 'bar', label: 'bar', count: 2, isRefined: true },
+          { value: 'baz', label: 'baz', count: 3, isRefined: false },
         ],
         cssClasses: {
           item: 'item',
         },
         templateProps: {
+          templatesConfig: {},
           templates: {
-            item: item => `
+            item: (item: RefinementListItemData) => `
               <label>
                 <input type="radio" checked="${item.isRefined}" />
                 ${item.value}
               </span>
             `,
+            showMoreText: '',
           },
+          useCustomCompileOptions: {},
         },
         toggleRefinement,
-        createURL: () => {},
+        createURL: () => '',
       };
 
       const { container } = render(<RefinementList {...props} />);
       const checkedItem = container.querySelector('.item [checked="true"]');
 
-      fireEvent.click(checkedItem);
+      fireEvent.click(checkedItem!);
 
       expect(toggleRefinement).toHaveBeenCalledTimes(0);
     });

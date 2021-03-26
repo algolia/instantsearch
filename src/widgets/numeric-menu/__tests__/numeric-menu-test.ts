@@ -13,7 +13,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { RefinementListProps } from '../../../components/RefinementList/types';
+import { RefinementListProps } from '../../../components/RefinementList/RefinementList';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

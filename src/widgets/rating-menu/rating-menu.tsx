@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList';
+import RefinementList, {
+  RefinementListCSSClasses,
+} from '../../components/RefinementList/RefinementList';
 import connectRatingMenu, {
   RatingMenuConnectorParams,
   RatingMenuRendererOptions,
@@ -108,7 +110,7 @@ const renderer = ({
   renderState,
 }: {
   containerNode: HTMLElement;
-  cssClasses: Record<string, string>;
+  cssClasses: RefinementListCSSClasses;
   templates: Partial<RatingMenuTemplates>;
   renderState: { templateProps?: PreparedTemplateProps<RatingMenuTemplates> };
 }) => (
