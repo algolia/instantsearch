@@ -1615,7 +1615,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     expect(searchClient.search).toHaveBeenCalledTimes(2);
   });
 
-  test('notifies all middleware', async () => {
+  test('notifies all middlewares', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
