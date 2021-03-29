@@ -87,6 +87,10 @@ import {
   StatsConnectorParams,
   StatsRendererOptions,
 } from '../connectors/stats/connectStats';
+import {
+  SortByConnectorParams,
+  SortByRendererOptions,
+} from '../connectors/sort-by/connectSortBy';
 
 export type ScopedResult = {
   indexId: string;
@@ -357,6 +361,7 @@ export type IndexRenderState = Partial<{
     RelevantSortRendererOptions,
     RelevantSortConnectorParams
   >;
+  sortBy: WidgetRenderState<SortByRendererOptions, SortByConnectorParams>;
   stats: WidgetRenderState<StatsRendererOptions, StatsConnectorParams>;
 }>;
 
