@@ -9,6 +9,7 @@ type WidgetMetaData = {
 
 type Payload = {
   widgets: WidgetMetaData[];
+  ua?: string;
 };
 
 function extractPayload(
@@ -93,6 +94,12 @@ export function createMetadataMiddleware(): Middleware {
       subscribe() {
         // using setTimeout here to delay extraction until widgets have been added in a tick (e.g. Vue)
         setTimeout(() => {
+          const client = instantSearchInstance.client as any;
+          payload.ua =
+            client.transporter && client.transporter.userAgent
+              ? client.transporter.userAgent.value
+              : client._ua;
+
           extractPayload(
             instantSearchInstance.mainIndex.getWidgets(),
             instantSearchInstance,

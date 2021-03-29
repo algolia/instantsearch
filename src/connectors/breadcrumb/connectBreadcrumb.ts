@@ -5,7 +5,7 @@ import {
   isEqual,
   noop,
 } from '../../lib/utils';
-import { SearchResults } from 'algoliasearch-helper';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { Connector, TransformItems, CreateURL } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -107,6 +107,22 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
     const [hierarchicalFacetName] = attributes;
 
+    function getRefinedState(state: SearchParameters, facetValue: string) {
+      if (!facetValue) {
+        const breadcrumb = state.getHierarchicalFacetBreadcrumb(
+          hierarchicalFacetName
+        );
+        if (breadcrumb.length > 0) {
+          return state
+            .resetPage()
+            .toggleFacetRefinement(hierarchicalFacetName, breadcrumb[0]);
+        }
+      }
+      return state
+        .resetPage()
+        .toggleFacetRefinement(hierarchicalFacetName, facetValue);
+    }
+
     return {
       $$type: 'ais.breadcrumb',
 
@@ -166,44 +182,13 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         if (!connectorState.createURL) {
           connectorState.createURL = facetValue => {
-            if (!facetValue) {
-              const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
-                hierarchicalFacetName
-              );
-              if (breadcrumb.length > 0) {
-                return createURL(
-                  helper.state.toggleFacetRefinement(
-                    hierarchicalFacetName,
-                    breadcrumb[0]
-                  )
-                );
-              }
-            }
-            return createURL(
-              helper.state.toggleFacetRefinement(
-                hierarchicalFacetName,
-                facetValue
-              )
-            );
+            return createURL(getRefinedState(helper.state, facetValue));
           };
         }
 
         if (!connectorState.refine) {
           connectorState.refine = facetValue => {
-            if (!facetValue) {
-              const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
-                hierarchicalFacetName
-              );
-              if (breadcrumb.length > 0) {
-                helper
-                  .toggleRefinement(hierarchicalFacetName, breadcrumb[0])
-                  .search();
-              }
-            } else {
-              helper
-                .toggleRefinement(hierarchicalFacetName, facetValue)
-                .search();
-            }
+            helper.setState(getRefinedState(helper.state, facetValue)).search();
           };
         }
 
