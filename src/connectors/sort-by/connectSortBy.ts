@@ -132,14 +132,9 @@ const connectSortBy: SortByConnector = function connectSortBy(
       dispose({ state }) {
         unmountFn();
 
-        warning(
-          connectorState.initialIndex !== undefined,
-          "The index name can't be undefined when unmounting."
-        );
-
         return connectorState.initialIndex
           ? state.setIndex(connectorState.initialIndex)
-          : undefined;
+          : state;
       },
 
       getRenderState(renderState, renderOptions) {

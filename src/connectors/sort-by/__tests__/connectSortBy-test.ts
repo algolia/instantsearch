@@ -133,17 +133,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     );
   });
 
-  it('warns when an undefined index name is given on unmount', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectSortBy(rendering);
-    const widget = makeWidget({ items: [] });
-    const helper = algoliasearchHelper(createSearchClient(), 'test');
-
-    expect(() => widget.dispose!({ helper, state: helper.state })).toWarnDev(
-      "[InstantSearch.js]: The index name can't be undefined when unmounting."
-    );
-  });
-
   it('does not throw without the unmount function', () => {
     const rendering = jest.fn();
     const makeWidget = connectSortBy(rendering);
