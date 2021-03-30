@@ -9,11 +9,19 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import connectMenu from '../connectMenu';
+import connectMenu, {
+  MenuConnectorParams,
+  MenuRendererOptions,
+} from '../connectMenu';
+import { WidgetFactory } from '../../../types';
 
 describe('connectMenu', () => {
-  let rendering;
-  let makeWidget;
+  let rendering: jest.Mock<any, [MenuRendererOptions, boolean]>;
+  let makeWidget: WidgetFactory<
+    MenuRendererOptions,
+    MenuConnectorParams,
+    MenuConnectorParams
+  >;
 
   beforeEach(() => {
     rendering = jest.fn();
@@ -90,7 +98,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       expect(
-        widget.getWidgetSearchParameters(new SearchParameters(), {
+        widget.getWidgetSearchParameters!(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -116,7 +124,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       expect(
-        widget.getWidgetSearchParameters(new SearchParameters(), {
+        widget.getWidgetSearchParameters!(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -144,7 +152,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       limit: 9,
     });
 
-    const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+    const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},
     });
     expect(config).toEqual(
@@ -168,11 +176,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     // test that rendering has been called during init with isFirstRendering = true
     expect(rendering).toHaveBeenCalledTimes(1);
@@ -188,12 +197,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       true
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [createSingleSearchResponse()]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering).toHaveBeenCalledTimes(2);
@@ -217,18 +230,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      instantSearchInstance: createInstantSearch(),
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance: createInstantSearch(),
+      })
+    );
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
@@ -237,15 +252,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     refine('value');
     expect(helper.hasRefinements('category')).toBe(true);
 
-    widget.render({
-      results: new SearchResults(helper.state, [
-        createSingleSearchResponse(),
-        createSingleSearchResponse(),
-      ]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderRefine } = secondRenderingOptions;
@@ -263,17 +280,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     // During the first rendering there are no facet values
     // The function get an empty array so that it doesn't break
@@ -283,29 +301,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       expect.anything()
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          hits: [],
-          facets: {
-            category: {
-              Decoration: 880,
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            facets: {
+              category: {
+                Decoration: 880,
+              },
             },
-          },
-        }),
-        createSingleSearchResponse({
-          facets: {
-            category: {
-              Decoration: 880,
-              Outdoor: 47,
+          }),
+          createSingleSearchResponse({
+            facets: {
+              category: {
+                Decoration: 880,
+                Outdoor: 47,
+              },
             },
-          },
-        }),
-      ]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+          }),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -342,28 +362,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     // when this widget gets mounted
     const helper = jsHelper(createSearchClient(), '', {});
 
-    widget.render({
-      results: new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          hits: [],
-          facets: {
-            category: {
-              Decoration: 880,
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            facets: {
+              category: {
+                Decoration: 880,
+              },
             },
-          },
-        }),
-        createSingleSearchResponse({
-          facets: {
-            category: {
-              Decoration: 880,
-              Outdoor: 47,
+          }),
+          createSingleSearchResponse({
+            facets: {
+              category: {
+                Decoration: 880,
+                Outdoor: 47,
+              },
             },
-          },
-        }),
-      ]),
-      state: helper.state,
-      helper,
-    });
+          }),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({ items: [] }),
@@ -384,16 +406,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
 
-    widget.init({
-      helper,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -402,28 +426,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       expect.anything()
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          hits: [],
-          facets: {
-            category: {
-              Decoration: 880,
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            facets: {
+              category: {
+                Decoration: 880,
+              },
             },
-          },
-        }),
-        createSingleSearchResponse({
-          facets: {
-            category: {
-              Decoration: 880,
-              Outdoor: 47,
+          }),
+          createSingleSearchResponse({
+            facets: {
+              category: {
+                Decoration: 880,
+                Outdoor: 47,
+              },
             },
-          },
-        }),
-      ]),
-      state: helper.state,
-      helper,
-    });
+          }),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -443,10 +469,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters!!(new SearchParameters(), {
+        uiState: {},
+      })
     );
     expect(() =>
-      widget.dispose!({ helper, state: helper.state })
+      widget.dispose!!({ helper, state: helper.state })
     ).not.toThrow();
   });
 
@@ -570,7 +598,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       expect(
-        widget.getWidgetSearchParameters(new SearchParameters(), {
+        widget.getWidgetSearchParameters!(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -598,7 +626,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       expect(
-        widget.getWidgetSearchParameters(new SearchParameters(), {
+        widget.getWidgetSearchParameters!(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -627,17 +655,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+      const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
         uiState: {},
       });
       const helper = jsHelper(createSearchClient(), '', config);
       helper.search = jest.fn();
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
 
       expect(rendering).toHaveBeenLastCalledWith(
         expect.objectContaining({
@@ -657,7 +687,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+      const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
         uiState: {},
       });
       const helper = jsHelper(createSearchClient(), '', config);
@@ -665,35 +695,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       helper.search = jest.fn();
       helper.toggleRefinement('category', 'Decoration');
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
 
-      widget.render({
-        results: new SearchResults(helper.state, [
-          createSingleSearchResponse({
-            hits: [],
-            facets: {
-              category: {
-                Decoration: 880,
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  Decoration: 880,
+                },
               },
-            },
-          }),
-          createSingleSearchResponse({
-            facets: {
-              category: {
-                Decoration: 880,
-                Outdoor: 47,
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  Decoration: 880,
+                  Outdoor: 47,
+                },
               },
-            },
-          }),
-        ]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
 
       // Then
       const firstRenderingOptions =
@@ -723,7 +757,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+      const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
         uiState: {},
       });
       const helper = jsHelper(createSearchClient(), '', config);
@@ -731,34 +765,38 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       helper.search = jest.fn();
       helper.toggleRefinement('category', 'Decoration');
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
 
-      widget.render({
-        results: new SearchResults(helper.state, [
-          createSingleSearchResponse({
-            hits: [],
-            facets: {
-              category: {
-                Decoration: 880,
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  Decoration: 880,
+                },
               },
-            },
-          }),
-          createSingleSearchResponse({
-            facets: {
-              category: {
-                Decoration: 880,
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  Decoration: 880,
+                },
               },
-            },
-          }),
-        ]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
 
       const firstRenderingOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
@@ -774,10 +812,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
+          helper,
         }
       );
 
@@ -801,10 +840,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
+          helper,
         }
       );
 
@@ -832,7 +872,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState(
+      const actual = widget.getWidgetUiState!(
         {
           menu: {
             categories: 'Phone',
@@ -840,6 +880,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         },
         {
           searchParameters: helper.state,
+          helper,
         }
       );
 
@@ -859,7 +900,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
@@ -892,7 +933,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
@@ -914,7 +955,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           menu: {
             brand: 'Apple',
@@ -951,7 +992,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           menu: {
             brand: 'Apple',
@@ -978,7 +1019,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters(helper.state, {
+        const actual = widget.getWidgetSearchParameters!(helper.state, {
           uiState: {},
         });
 
@@ -992,7 +1033,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           limit: 5,
         });
 
-        const actual = widget.getWidgetSearchParameters(helper.state, {
+        const actual = widget.getWidgetSearchParameters!(helper.state, {
           uiState: {},
         });
 
@@ -1006,7 +1047,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           showMore: true,
         });
 
-        const actual = widget.getWidgetSearchParameters(helper.state, {
+        const actual = widget.getWidgetSearchParameters!(helper.state, {
           uiState: {},
         });
 
@@ -1021,7 +1062,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           showMoreLimit: 15,
         });
 
-        const actual = widget.getWidgetSearchParameters(helper.state, {
+        const actual = widget.getWidgetSearchParameters!(helper.state, {
           uiState: {},
         });
 
@@ -1037,7 +1078,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters(helper.state, {
+        const actual = widget.getWidgetSearchParameters!(helper.state, {
           uiState: {},
         });
 
@@ -1054,7 +1095,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           limit: 110,
         });
 
-        const actual = widget.getWidgetSearchParameters(helper.state, {
+        const actual = widget.getWidgetSearchParameters!(helper.state, {
           uiState: {},
         });
 
@@ -1075,7 +1116,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
+        widget.getWidgetSearchParameters!(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1097,36 +1138,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-        instantSearchInstance: createInstantSearch(),
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          instantSearchInstance: createInstantSearch(),
+        })
+      );
 
-      widget.render({
-        results: new SearchResults(helper.state, [
-          createSingleSearchResponse({
-            hits: [],
-            facets: {
-              myFacet: {
-                Decoration: 880,
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                myFacet: {
+                  Decoration: 880,
+                },
               },
-            },
-          }),
-          createSingleSearchResponse({
-            facets: {
-              myFacet: {
-                Decoration: 880,
-                Outdoor: 47,
+            }),
+            createSingleSearchResponse({
+              facets: {
+                myFacet: {
+                  Decoration: 880,
+                  Outdoor: 47,
+                },
               },
-            },
-          }),
-        ]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
 
       const { refine } = rendering.mock.calls[0][0];
 
@@ -1148,7 +1193,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
 
-      const newState = widget.dispose({ state: helper.state });
+      const newState = widget.dispose!({ state: helper.state, helper });
 
       expect(newState).toEqual(
         new SearchParameters({
@@ -1168,7 +1213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
+        widget.getWidgetSearchParameters!(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1190,7 +1235,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
 
-      const newState = widget.dispose({ state: helper.state });
+      const newState = widget.dispose!({ state: helper.state, helper });
 
       expect(newState).toEqual(
         new SearchParameters({
@@ -1206,7 +1251,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         limit: 10,
         showMore: true,
       });
-      const newState = widget.dispose({ state });
+      const helper = jsHelper(
+        createSearchClient(),
+        'test',
+        widget.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+      const newState = widget.dispose!({ state, helper });
 
       expect(newState).toEqual(new SearchParameters());
     });
@@ -1221,18 +1274,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters(new SearchParameters(), {
+        widget.getWidgetSearchParameters!(new SearchParameters(), {
           uiState: {},
         })
       );
       helper.search = jest.fn();
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-        instantSearchInstance,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          instantSearchInstance,
+        })
+      );
 
       return { instantSearchInstance, helper };
     };
