@@ -328,7 +328,7 @@ ${
         return {
           items: facetValues,
           hasNoResults: results ? results.nbHits === 0 : true,
-          canRefine: Boolean(results && results.nbHits > 0),
+          canRefine: facetValues.length > 0,
           refine: connectorState.toggleRefinementFactory(helper),
           sendEvent,
           createURL: connectorState.createURLFactory({ state, createURL }),

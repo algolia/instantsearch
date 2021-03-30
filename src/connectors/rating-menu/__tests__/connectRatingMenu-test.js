@@ -547,7 +547,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
             },
           ],
           createURL: expect.any(Function),
-          canRefine: false,
+          canRefine: true,
           refine: expect.any(Function),
           sendEvent: renderState1.ratingMenu.grade.sendEvent,
           hasNoResults: true,
@@ -661,7 +661,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           },
         ],
         createURL: expect.any(Function),
-        canRefine: false,
+        canRefine: true,
         refine: expect.any(Function),
         sendEvent: renderState1.sendEvent,
         hasNoResults: true,
@@ -669,48 +669,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           attribute: 'grade',
         },
       });
-    });
-
-    it('returns canRefine as true when it has hits', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
-      const ratingMenuWidget = createRatingMenu({
-        attribute: 'grade',
-      });
-      const helper = jsHelper({}, 'indexName', {
-        disjunctiveFacets: ['grade'],
-        numericRefinements: {
-          grade: {
-            '>=': [2],
-          },
-        },
-      });
-
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          hits: [{ objectID: 'a' }],
-          nbHits: 1,
-          facets: {
-            grade: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
-          },
-        }),
-      ]);
-
-      const renderOptions = createRenderOptions({
-        helper,
-        state: helper.state,
-        results,
-      });
-
-      const renderState = ratingMenuWidget.getWidgetRenderState(renderOptions);
-
-      expect(renderState).toEqual(
-        expect.objectContaining({
-          canRefine: true,
-          hasNoResults: false,
-        })
-      );
     });
   });
 
