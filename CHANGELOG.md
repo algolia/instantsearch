@@ -1,3 +1,21 @@
+# [4.18.0](https://github.com/algolia/instantsearch.js/compare/v4.17.0...v4.18.0) (2021-03-24)
+
+
+### Bug Fixes
+
+* **createURL:** correctly remove page in state ([#4679](https://github.com/algolia/instantsearch.js/issues/4679)) ([48c080e](https://github.com/algolia/instantsearch.js/commit/48c080ef85b974e68e1c80ceffea7a0138407a1e))
+* **utils:** circular dependency in createSendEventForHits ([#4680](https://github.com/algolia/instantsearch.js/issues/4680)) ([045f33b](https://github.com/algolia/instantsearch.js/commit/045f33bc6184fb04501e39a5a97e1e969095389a))
+
+
+### Features
+
+* **metadata:** expose client's algolia agent ([#4694](https://github.com/algolia/instantsearch.js/issues/4694)) ([3d0cb5b](https://github.com/algolia/instantsearch.js/commit/3d0cb5b69056674246efb1acf33e143ac7ae4915))
+* **ts:** convert connectRefinementList, refinementList ([#4658](https://github.com/algolia/instantsearch.js/issues/4658)) ([794b2d3](https://github.com/algolia/instantsearch.js/commit/794b2d3316ae7ee79cfa0643565b65e5bec5c7c1))
+* **ts:** convert stats, connectStats ([#4681](https://github.com/algolia/instantsearch.js/issues/4681)) ([37bbd01](https://github.com/algolia/instantsearch.js/commit/37bbd016a83d5cb66d1f78c0865f7677fa7098fb))
+* **ts:** update to typescript 4 ([#4654](https://github.com/algolia/instantsearch.js/issues/4654)) ([638e437](https://github.com/algolia/instantsearch.js/commit/638e437fdd80af0cfd38818f9da37a50f8f4343f))
+
+
+
 # [4.17.0](https://github.com/algolia/instantsearch.js/compare/v4.16.1...v4.17.0) (2021-03-09)
 
 

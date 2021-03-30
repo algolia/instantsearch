@@ -1424,7 +1424,7 @@ describe('refresh', () => {
 });
 
 describe('use', () => {
-  it('hooks middleware into the lifecycle before the instance starts', () => {
+  it('hooks middleware into the lifecycle before the instance starts', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1449,7 +1449,7 @@ describe('use', () => {
     const middleware = jest.fn(() => middlewareSpy);
 
     search.addWidgets([searchBox]);
-    search.EXPERIMENTAL_use(middleware);
+    search.use(middleware);
 
     expect(middleware).toHaveBeenCalledTimes(1);
     expect(middleware).toHaveBeenCalledWith({ instantSearchInstance: search });
@@ -1465,10 +1465,14 @@ describe('use', () => {
     // Checks that `mainIndex.init` was called before subscribing the middleware.
     expect(widgetsInitCallOrder).toBeLessThan(middlewareSubscribeCallOrder);
 
+    await runAllMicroTasks();
+
     expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(0);
 
     button.click();
+
+    await runAllMicroTasks();
 
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
@@ -1481,6 +1485,8 @@ describe('use', () => {
 
     search.dispose();
 
+    await runAllMicroTasks();
+
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
       uiState: {
@@ -1490,7 +1496,7 @@ describe('use', () => {
     expect(middlewareSpy.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
-  it('hooks middleware into the lifecycle after the instance starts', () => {
+  it('hooks middleware into the lifecycle after the instance starts', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1518,7 +1524,7 @@ describe('use', () => {
     const middlewareAfterStart = jest.fn(() => middlewareAfterStartSpy);
 
     search.addWidgets([searchBox({})]);
-    search.EXPERIMENTAL_use(middlewareBeforeStart);
+    search.use(middlewareBeforeStart);
     search.start();
 
     expect(middlewareBeforeStart).toHaveBeenCalledTimes(1);
@@ -1526,7 +1532,7 @@ describe('use', () => {
       instantSearchInstance: search,
     });
 
-    search.EXPERIMENTAL_use(middlewareAfterStart);
+    search.use(middlewareAfterStart);
 
     // The first middleware should still have been only called once
     expect(middlewareBeforeStart).toHaveBeenCalledTimes(1);
@@ -1535,6 +1541,8 @@ describe('use', () => {
       instantSearchInstance: search,
     });
 
+    await runAllMicroTasks();
+
     // The first middleware subscribe function should have been only called once
     expect(middlewareBeforeStartSpy.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.subscribe).toHaveBeenCalledTimes(1);
@@ -1542,6 +1550,8 @@ describe('use', () => {
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(0);
 
     button.click();
+
+    await runAllMicroTasks();
 
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(1);
@@ -1561,6 +1571,8 @@ describe('use', () => {
     });
 
     search.dispose();
+
+    await runAllMicroTasks();
 
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(2);
@@ -1618,7 +1630,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     expect(searchClient.search).toHaveBeenCalledTimes(2);
   });
 
-  test('notifies all middleware', () => {
+  test('notifies all middlewares', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1633,17 +1645,76 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       };
     };
 
-    search.EXPERIMENTAL_use(middleware);
+    search.use(middleware);
     search.start();
     expect(onMiddlewareStateChange).toHaveBeenCalledTimes(0);
 
     search.setUiState({
       indexName: {},
     });
+
+    await runAllMicroTasks();
+
     expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
       uiState: {
         indexName: {},
+      },
+    });
+  });
+
+  test('notifies all middlewares in multi-index when called multiple times', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})({}),
+      index({ indexName: 'test' }),
+    ]);
+
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+
+    search.use(middleware);
+    search.start();
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(0);
+
+    search.setUiState({
+      indexName: {},
+      test: {},
+    });
+
+    await runAllMicroTasks();
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: {
+        indexName: {},
+        test: {},
+      },
+    });
+
+    search.setUiState({
+      indexName: { query: 'test' },
+      test: {},
+    });
+
+    await runAllMicroTasks();
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(2);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: {
+        indexName: { query: 'test' },
+        test: {},
       },
     });
   });
@@ -1917,7 +1988,7 @@ describe('onStateChange', () => {
     };
 
     search.addWidgets([searchBox({})]);
-    search.EXPERIMENTAL_use(middleware);
+    search.use(middleware);
     search.start();
 
     expect(middlewareOnStateChange).toHaveBeenCalledTimes(0);

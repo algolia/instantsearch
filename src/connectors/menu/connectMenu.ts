@@ -232,7 +232,9 @@ const connectMenu: MenuConnector = function connectMenu(
         if (!_createURL) {
           _createURL = (facetValue: string) =>
             createURL(
-              helper.state.toggleFacetRefinement(attribute, facetValue)
+              helper.state
+                .resetPage()
+                .toggleFacetRefinement(attribute, facetValue)
             );
         }
 
