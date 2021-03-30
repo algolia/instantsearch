@@ -70,13 +70,13 @@ export type RefinementListProps = {
   children?: h.JSX.Element;
 };
 
-const defaultProps = Object.freeze({
+const defaultProps = {
   cssClasses: {},
   depth: 0,
-});
+};
 
 type RefinementListPropsWithDefaultProps = RefinementListProps &
-  typeof defaultProps;
+  Readonly<typeof defaultProps>;
 
 type RefinementListItemTemplateData = TRefinementListItem & {
   url: string;
@@ -224,7 +224,6 @@ class RefinementList extends Component<RefinementListPropsWithDefaultProps> {
 
     while (parent !== originalEvent.currentTarget) {
       if (
-        parent &&
         parent.tagName === 'LABEL' &&
         (parent.querySelector('input[type="checkbox"]') ||
           parent.querySelector('input[type="radio"]'))
