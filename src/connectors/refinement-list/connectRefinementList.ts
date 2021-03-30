@@ -435,7 +435,9 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
 
         return {
           createURL: facetValue =>
-            createURL(state.toggleFacetRefinement(attribute, facetValue)),
+            createURL(
+              state.resetPage().toggleFacetRefinement(attribute, facetValue)
+            ),
           items,
           refine: triggerRefine,
           searchForItems: searchFacetValues,

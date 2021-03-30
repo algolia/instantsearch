@@ -138,14 +138,18 @@ describe('RoutingManager', () => {
 
       search.start();
 
-      search.once('render', () => {
+      search.once('render', async () => {
         // initialization is done at this point
         expect(widget.render).toHaveBeenCalledTimes(1);
         expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
 
+        await runAllMicroTasks();
+
         expect(router.write).toHaveBeenCalledTimes(0);
 
         search.mainIndex.getHelper()!.setQuery('q'); // routing write updates on change
+
+        await runAllMicroTasks();
 
         expect(router.write).toHaveBeenCalledTimes(1);
         expect(router.write).toHaveBeenCalledWith({
@@ -301,6 +305,8 @@ describe('RoutingManager', () => {
       // Trigger an update - push a change
       fakeSearchBox.refine('Apple');
 
+      await runAllMicroTasks();
+
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
         indexName: {
@@ -403,6 +409,8 @@ describe('RoutingManager', () => {
       // Trigger an update - push a change
       fakeSearchBox.refine('Apple');
 
+      await runAllMicroTasks();
+
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
         indexName: {
@@ -412,6 +420,8 @@ describe('RoutingManager', () => {
 
       // Trigger an update - push a change
       fakeSearchBox.refine('Apple iPhone');
+
+      await runAllMicroTasks();
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
@@ -492,6 +502,8 @@ describe('RoutingManager', () => {
       // Trigger an update - push a change
       fakeSearchBox.refine('Apple');
 
+      await runAllMicroTasks();
+
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
         indexName: {
@@ -502,6 +514,8 @@ describe('RoutingManager', () => {
       // Trigger change without UI state change
       search.removeWidgets([fakeHitsPerPage1]);
 
+      await runAllMicroTasks();
+
       expect(router.write).toHaveBeenCalledTimes(1);
 
       await runAllMicroTasks();
@@ -509,6 +523,8 @@ describe('RoutingManager', () => {
       triggerChange = true;
       // Trigger change without UI state change but with a route change
       search.removeWidgets([fakeHitsPerPage2]);
+
+      await runAllMicroTasks();
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({

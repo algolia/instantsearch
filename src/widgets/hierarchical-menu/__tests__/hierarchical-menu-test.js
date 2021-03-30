@@ -50,7 +50,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
       results = { getFacetValues: jest.fn(() => data) };
       helper = algoliasearchHelper({}, '');
-      helper.toggleRefinement = jest.fn().mockReturnThis();
+      helper.toggleFacetRefinement = jest.fn().mockReturnThis();
       helper.search = jest.fn();
       state = new SearchParameters();
       state.toggleRefinement = jest.fn();
@@ -174,8 +174,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const elementToggleRefinement = firstRender[0].props.toggleRefinement;
       elementToggleRefinement('mom');
 
-      expect(helper.toggleRefinement).toHaveBeenCalledTimes(1);
-      expect(helper.toggleRefinement).toHaveBeenCalledWith('hello', 'mom');
+      expect(helper.toggleFacetRefinement).toHaveBeenCalledTimes(1);
+      expect(helper.toggleFacetRefinement).toHaveBeenCalledWith('hello', 'mom');
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
 

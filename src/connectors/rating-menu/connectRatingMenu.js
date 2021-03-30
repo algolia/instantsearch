@@ -200,27 +200,28 @@ ${
 }`;
     };
 
-    const toggleRefinement = (helper, facetValue) => {
-      sendEvent('click', facetValue);
-      const isRefined = getRefinedStar(helper.state) === Number(facetValue);
-      helper.removeNumericRefinement(attribute);
+    function getRefinedState(state, facetValue) {
+      const isRefined = getRefinedStar(state) === Number(facetValue);
+
+      const emptyState = state.resetPage().removeNumericRefinement(attribute);
+
       if (!isRefined) {
-        helper
+        return emptyState
           .addNumericRefinement(attribute, '<=', max)
           .addNumericRefinement(attribute, '>=', facetValue);
       }
-      helper.search();
+      return emptyState;
+    }
+
+    const toggleRefinement = (helper, facetValue) => {
+      sendEvent('click', facetValue);
+      helper.setState(getRefinedState(helper.state, facetValue)).search();
     };
 
     const connectorState = {
       toggleRefinementFactory: helper => toggleRefinement.bind(this, helper),
       createURLFactory: ({ state, createURL }) => value =>
-        createURL(
-          state
-            .removeNumericRefinement(attribute)
-            .addNumericRefinement(attribute, '<=', max)
-            .addNumericRefinement(attribute, '>=', value)
-        ),
+        createURL(getRefinedState(state, value)),
     };
 
     return {
