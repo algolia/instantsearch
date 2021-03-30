@@ -7,6 +7,7 @@ import version from '../version';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import connectPagination from '../../connectors/pagination/connectPagination';
 import index from '../../widgets/index/index';
+import searchBox from '../../widgets/search-box/search-box';
 import { noop, warning } from '../utils';
 import {
   createSearchClient,
@@ -1573,6 +1574,62 @@ describe('use', () => {
     });
     expect(middlewareBeforeStartSpy.unsubscribe).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.unsubscribe).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('unuse', () => {
+  it('unsubscribes middleware', async () => {
+    const indexName = 'indexName';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+    const middlewareSpy1 = {
+      onStateChange: jest.fn(),
+      subscribe: jest.fn(),
+      unsubscribe: jest.fn(),
+    };
+    const middleware1 = jest.fn(() => middlewareSpy1);
+    const middlewareSpy2 = {
+      onStateChange: jest.fn(),
+      subscribe: jest.fn(),
+      unsubscribe: jest.fn(),
+    };
+    const middleware2 = jest.fn(() => middlewareSpy2);
+
+    search.addWidgets([
+      searchBox({ container: document.createElement('div') }),
+    ]);
+    search.use(middleware1, middleware2);
+    search.start();
+
+    await runAllMicroTasks();
+
+    expect(middlewareSpy1.subscribe).toHaveBeenCalledTimes(1);
+    expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(0);
+    expect(middlewareSpy2.subscribe).toHaveBeenCalledTimes(1);
+    expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(0);
+
+    search.renderState[indexName].searchBox.refine('cat');
+    await runAllMicroTasks();
+    expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(1);
+    expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(1);
+
+    search.renderState[indexName].searchBox.refine('is');
+    await runAllMicroTasks();
+    expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(2);
+    expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(2);
+
+    search.unuse(middleware1);
+
+    expect(middlewareSpy1.unsubscribe).toHaveBeenCalledTimes(1);
+    expect(middlewareSpy2.unsubscribe).toHaveBeenCalledTimes(0);
+
+    search.renderState[indexName].searchBox.refine('good');
+    await runAllMicroTasks();
+    expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(2);
+    expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(3);
   });
 });
 
