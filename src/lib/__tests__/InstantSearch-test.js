@@ -7,7 +7,7 @@ import version from '../version';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import connectPagination from '../../connectors/pagination/connectPagination';
 import index from '../../widgets/index/index';
-import searchBox from '../../widgets/search-box/search-box';
+import searchBoxOriginal from '../../widgets/search-box/search-box';
 import { noop, warning } from '../utils';
 import {
   createSearchClient,
@@ -1599,7 +1599,7 @@ describe('unuse', () => {
     const middleware2 = jest.fn(() => middlewareSpy2);
 
     search.addWidgets([
-      searchBox({ container: document.createElement('div') }),
+      searchBoxOriginal({ container: document.createElement('div') }),
     ]);
     search.use(middleware1, middleware2);
     search.start();
