@@ -1,3 +1,18 @@
+# [4.19.0](https://github.com/algolia/instantsearch.js/compare/v4.18.0...v4.19.0) (2021-03-30)
+
+
+### Bug Fixes
+
+* **setUiState:** make sure previous ui state is stored ([#4699](https://github.com/algolia/instantsearch.js/issues/4699)) ([0f5d688](https://github.com/algolia/instantsearch.js/commit/0f5d6888c5e77c750d264ed19be3418d920266af))
+
+
+### Features
+
+* **relevantSort:** implement canRefine ([#4693](https://github.com/algolia/instantsearch.js/issues/4693)) ([24d9ded](https://github.com/algolia/instantsearch.js/commit/24d9ded0c0e3246b91fe16ab1d1d579c17d68731))
+* **ts:** convert sortBy, connectSortBy ([#4700](https://github.com/algolia/instantsearch.js/issues/4700)) ([86de1e0](https://github.com/algolia/instantsearch.js/commit/86de1e0a675c91b75e72463e6b11df62739d69b5))
+
+
+
 # [4.18.0](https://github.com/algolia/instantsearch.js/compare/v4.17.0...v4.18.0) (2021-03-24)
 
 
