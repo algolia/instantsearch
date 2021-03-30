@@ -1109,7 +1109,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
               value: '%7B%22start%22:20%7D',
             },
           ],
-          canRefine: false,
+          canRefine: true,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
           widgetParams: {
@@ -1149,7 +1149,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect(renderState2.numericMenu).toEqual({
         numerics: {
           createURL: expect.any(Function),
-          canRefine: false,
+          canRefine: true,
           refine: renderState1.numericMenu!.numerics.refine,
           sendEvent: renderState1.numericMenu!.numerics.sendEvent,
           hasNoResults: true,
@@ -1231,7 +1231,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           },
         ],
         createURL: expect.any(Function),
-        canRefine: false,
+        canRefine: true,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         hasNoResults: true,
@@ -1282,7 +1282,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           },
         ],
         createURL: expect.any(Function),
-        canRefine: false,
+        canRefine: true,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         hasNoResults: true,
@@ -1338,7 +1338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
             value: '%7B%22start%22:20%7D',
           },
         ],
-        canRefine: false,
+        canRefine: true,
         refine: renderState1.refine,
         sendEvent: renderState1.sendEvent,
         widgetParams: {
@@ -1362,29 +1362,50 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       });
     });
 
-    it('returns canRefine: true when hits given', () => {
-      const [widget, helper] = getInitializedWidget();
+    it('returns canRefine: false when there is no items', () => {
+      const rendering = jest.fn<any, [NumericMenuRendererOptions, boolean]>();
+      const makeWidget = connectNumericMenu(rendering);
+      const widget = makeWidget({
+        attribute: 'numerics',
+        items: [
+          { label: 'below 10', end: 10 },
+          { label: '10 - 20', start: 10, end: 20 },
+          { label: 'more than 20', start: 20 },
+        ],
+        transformItems: () => [],
+      });
 
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          hits: [{ objectID: 'a' }, { objectID: 'b' }],
-        }),
-      ]);
+      const helper = jsHelper(createSearchClient(), '');
+      helper.search = () => helper;
 
-      const renderState = widget.getWidgetRenderState(
-        createRenderOptions({
+      widget.init!(
+        createInitOptions({
           helper,
           state: helper.state,
-          results,
         })
       );
 
-      expect(renderState).toEqual(
-        expect.objectContaining({
-          hasNoResults: false,
-          canRefine: true,
-        })
+      const renderState = widget.getWidgetRenderState(
+        createInitOptions({ state: helper.state, helper })
       );
+
+      expect(renderState).toEqual({
+        items: [],
+        createURL: expect.any(Function),
+        canRefine: false,
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        hasNoResults: true,
+        widgetParams: {
+          attribute: 'numerics',
+          items: [
+            { label: 'below 10', end: 10 },
+            { label: '10 - 20', start: 10, end: 20 },
+            { label: 'more than 20', start: 20 },
+          ],
+          transformItems: expect.any(Function),
+        },
+      });
     });
   });
 });

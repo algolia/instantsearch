@@ -324,11 +324,13 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
           });
         }
 
+        const facetValues = transformItems(prepareItems(state));
+
         return {
           createURL: connectorState.createURL!(state),
-          items: transformItems(prepareItems(state)),
+          items: facetValues,
           hasNoResults: results ? results.nbHits === 0 : true,
-          canRefine: Boolean(results && results.nbHits > 0),
+          canRefine: facetValues.length > 0,
           refine: connectorState.refine!,
           sendEvent: connectorState.sendEvent!,
           widgetParams,
