@@ -3,7 +3,7 @@
 import { h } from 'preact';
 import Template from '../Template/Template';
 
-type RefinementListItemProps = {
+export type RefinementListItemProps = {
   facetValueToRefine: string;
   handleClick: (args: {
     facetValueToRefine: string;

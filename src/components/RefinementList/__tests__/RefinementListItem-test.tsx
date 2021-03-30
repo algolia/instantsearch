@@ -3,27 +3,12 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { ReactElementLike } from 'prop-types';
-import RefinementListItem from '../RefinementListItem';
-
-type Props = {
-  facetValue: string;
-  facetValueToRefine: string;
-  isRefined: boolean;
-  handleClick: jest.Mock<any, any>;
-  className: string;
-  templateData: {
-    template: string;
-  };
-  templateKey: string;
-  templateProps: {
-    template: string;
-  };
-  subItems: h.JSX.Element;
-};
+import RefinementListItem, {
+  RefinementListItemProps,
+} from '../RefinementListItem';
 
 describe('RefinementListItem', () => {
-  const props: Props = {
-    facetValue: 'Hello',
+  const props: RefinementListItemProps = {
     facetValueToRefine: 'wi',
     isRefined: false,
     handleClick: jest.fn(),
@@ -47,7 +32,7 @@ describe('RefinementListItem', () => {
     expect(props.handleClick).toHaveBeenCalledTimes(1);
   });
 
-  function render(askedProps: Props) {
+  function render(askedProps: RefinementListItemProps) {
     return shallow(
       (<RefinementListItem {...askedProps} />) as ReactElementLike
     );
