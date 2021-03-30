@@ -289,7 +289,6 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
   });
 
   it('accepts middleware with partial methods', () => {
-    // eslint-disable-next-line no-new
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
