@@ -311,7 +311,7 @@ Object {
     it('sends view event when hits are rendered', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
-      search.EXPERIMENTAL_use(insights);
+      search.use(insights);
 
       search.addWidgets([
         infiniteHits({
@@ -352,7 +352,7 @@ Object {
     it('sends click event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
-      search.EXPERIMENTAL_use(insights);
+      search.use(insights);
 
       search.addWidgets([
         infiniteHits({
@@ -396,7 +396,7 @@ Object {
     it('sends conversion event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
-      search.EXPERIMENTAL_use(insights);
+      search.use(insights);
 
       search.addWidgets([
         infiniteHits({

@@ -881,6 +881,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
       expect(renderState.toggleRefinement).toEqual({
         createURL: expect.any(Function),
+        canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         state: helper.state,
@@ -927,6 +928,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
       expect(renderState.toggleRefinement).toEqual({
         createURL: expect.any(Function),
+        canRefine: true,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         state: helper.state,
@@ -974,6 +976,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
       expect(renderState).toEqual({
         createURL: expect.any(Function),
+        canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         state: helper.state,
@@ -1019,6 +1022,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
       expect(renderState).toEqual({
         createURL: expect.any(Function),
+        canRefine: true,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         state: helper.state,

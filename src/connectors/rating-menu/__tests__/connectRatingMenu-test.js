@@ -467,6 +467,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         grade: {
           items: [],
           createURL: expect.any(Function),
+          canRefine: false,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
           hasNoResults: true,
@@ -546,6 +547,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
             },
           ],
           createURL: expect.any(Function),
+          canRefine: true,
           refine: expect.any(Function),
           sendEvent: renderState1.ratingMenu.grade.sendEvent,
           hasNoResults: true,
@@ -581,6 +583,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(renderState1).toEqual({
         items: [],
         createURL: expect.any(Function),
+        canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         hasNoResults: true,
@@ -658,6 +661,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           },
         ],
         createURL: expect.any(Function),
+        canRefine: true,
         refine: expect.any(Function),
         sendEvent: renderState1.sendEvent,
         hasNoResults: true,

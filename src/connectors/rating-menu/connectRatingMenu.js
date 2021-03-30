@@ -66,6 +66,7 @@ const createSendEvent = ({
  * @property {StarRatingItems[]} items Possible star ratings the user can apply.
  * @property {function(string): string} createURL Creates an URL for the next
  * state (takes the item value as parameter). Takes the value of an item as parameter.
+ * @property {boolean} canRefine Indicates if search state can be refined.
  * @property {function(string)} refine Selects a rating to filter the results
  * (takes the filter value as parameter). Takes the value of an item as parameter.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
@@ -328,6 +329,7 @@ ${
         return {
           items: facetValues,
           hasNoResults: results ? results.nbHits === 0 : true,
+          canRefine: facetValues.length > 0,
           refine: connectorState.toggleRefinementFactory(helper),
           sendEvent,
           createURL: connectorState.createURLFactory({ state, createURL }),

@@ -78,7 +78,7 @@ describe('hits', () => {
     it('sends view event when hits are rendered', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
-      search.EXPERIMENTAL_use(insights);
+      search.use(insights);
 
       search.addWidgets([
         hits({
@@ -119,7 +119,7 @@ describe('hits', () => {
     it('sends click event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
-      search.EXPERIMENTAL_use(insights);
+      search.use(insights);
 
       search.addWidgets([
         hits({
@@ -163,7 +163,7 @@ describe('hits', () => {
     it('sends conversion event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
-      search.EXPERIMENTAL_use(insights);
+      search.use(insights);
 
       search.addWidgets([
         hits({
