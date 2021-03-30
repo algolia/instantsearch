@@ -40,8 +40,14 @@ export type ClearRefinementsRendererOptions = {
 
   /**
    * Indicates if search state is refined.
+   * @deprecated prefer reading canRefine
    */
   hasRefinements: boolean;
+
+  /**
+   * Indicates if search state can be refined.
+   */
+  canRefine: boolean;
 
   /**
    * Creates a url for the next state when refinements are cleared.
@@ -176,10 +182,13 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
             )
           );
 
+        const canRefine = connectorState.attributesToClear.some(
+          attributeToClear => attributeToClear.items.length > 0
+        );
+
         return {
-          hasRefinements: connectorState.attributesToClear.some(
-            attributeToClear => attributeToClear.items.length > 0
-          ),
+          canRefine,
+          hasRefinements: canRefine,
           refine: cachedRefine,
           createURL: cachedCreateURL,
           widgetParams,
