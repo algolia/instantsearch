@@ -2,45 +2,25 @@
 
 import { h, Component } from 'preact';
 import { renderTemplate, isEqual } from '../../lib/utils';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import { Templates } from '../../types';
 
-type TemplateProps = {
-  data?: Record<string, any>;
-  rootProps?: Record<string, any>;
-  rootTagName?: string;
-  templateKey?: string;
-  templates?: Record<
-    string,
-    | string
-    | ((data: any, bindEvent: (...args: any[]) => string) => string)
-    | undefined
-  >;
-  templatesConfig?: {
-    helpers?: Record<
-      string,
-      (text: string, render: (value: any) => string) => string
-    >;
-    // https://github.com/twitter/hogan.js/#compilation-options
-    compileOptions?: {
-      asString?: boolean;
-      sectionTags?: Array<{
-        o?: string;
-        c?: string;
-      }>;
-      delimiters?: string;
-      disableLambda?: boolean;
-    };
-  };
-  useCustomCompileOptions?: Record<string, boolean | undefined>;
-  bindEvent?: (...args: any[]) => string;
-} & typeof defaultProps;
-
-const defaultProps = Object.freeze({
+const defaultProps = {
   data: {},
   rootTagName: 'div',
   useCustomCompileOptions: {},
   templates: {},
   templatesConfig: {},
-});
+};
+
+type TemplateProps = {
+  data?: Record<string, any>;
+  rootProps?: Record<string, any>;
+  rootTagName?: keyof h.JSX.IntrinsicElements;
+  templateKey: string;
+  bindEvent?: (...args: any[]) => string;
+} & PreparedTemplateProps<Templates> &
+  Readonly<typeof defaultProps>;
 
 class Template extends Component<TemplateProps> {
   public static readonly defaultProps = defaultProps;
@@ -54,12 +34,11 @@ class Template extends Component<TemplateProps> {
   }
 
   public render() {
-    const RootTagName = (this.props.rootTagName as unknown) as (
-      props: h.JSX.HTMLAttributes
-    ) => h.JSX.Element;
-    const useCustomCompileOptions =
-      this.props.templateKey &&
-      this.props.useCustomCompileOptions[this.props.templateKey];
+    const RootTagName = this.props.rootTagName;
+
+    const useCustomCompileOptions = this.props.useCustomCompileOptions[
+      this.props.templateKey
+    ];
     const compileOptions = useCustomCompileOptions
       ? this.props.templatesConfig.compileOptions
       : {};
