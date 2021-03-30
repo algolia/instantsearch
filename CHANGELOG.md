@@ -9,12 +9,8 @@
 ### Features
 
 * **relevantSort:** implement canRefine ([#4693](https://github.com/algolia/instantsearch.js/issues/4693)) ([24d9ded](https://github.com/algolia/instantsearch.js/commit/24d9ded0c0e3246b91fe16ab1d1d579c17d68731))
+* **currentRefinements:** implement canRefine ([#4690](https://github.com/algolia/instantsearch.js/issues/4690)) ([f02416c](https://github.com/algolia/instantsearch.js/commit/f02416cf226ec3f7c2238b3e0902ec6f78381515))
 * **ts:** convert sortBy, connectSortBy ([#4700](https://github.com/algolia/instantsearch.js/issues/4700)) ([86de1e0](https://github.com/algolia/instantsearch.js/commit/86de1e0a675c91b75e72463e6b11df62739d69b5))
-
-
-### Reverts
-
-* Revert "Revert "feat(currentRefinements): implement canRefine (#4690)" (#4696)" ([910e0ff](https://github.com/algolia/instantsearch.js/commit/910e0ffab14d938b35fd1ab27316b249e515ba79)), closes [#4690](https://github.com/algolia/instantsearch.js/issues/4690) [#4696](https://github.com/algolia/instantsearch.js/issues/4696)
 
 
 
