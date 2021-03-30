@@ -100,7 +100,7 @@ const connectRelevantSort: RelevantSortConnector = function connectRelevantSort(
             typeof appliedRelevancyStrictness !== 'undefined' &&
             appliedRelevancyStrictness > 0,
           isVirtualReplica,
-          canRefine: isVirtualReplica && results?.nbHits! > 0,
+          canRefine: isVirtualReplica,
           refine: connectorState.refine,
           widgetParams,
         };

@@ -193,7 +193,7 @@ describe('connectRelevantSort', () => {
       expect(renderState2.relevantSort).toEqual({
         isRelevantSorted: true,
         isVirtualReplica: true,
-        canRefine: false,
+        canRefine: true,
         refine: expect.any(Function),
         widgetParams: {},
       });
@@ -230,86 +230,6 @@ describe('connectRelevantSort', () => {
         })
       );
       expect(widgetRenderState2).toEqual({
-        isRelevantSorted: true,
-        isVirtualReplica: true,
-        canRefine: false,
-        refine: expect.any(Function),
-        widgetParams: {},
-      });
-    });
-
-    it('return canRefine as true with relevant sorted hits', () => {
-      const helper = createHelper();
-      const makeWidget = connectRelevantSort(noop);
-      const widget = makeWidget({});
-
-      const widgetRenderState = widget.getWidgetRenderState(
-        createRenderOptions({
-          helper,
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              hits: [{ objectID: 'a' }],
-              nbSortedHits: 1,
-              nbHits: 10,
-              appliedRelevancyStrictness: 20,
-            }),
-          ]),
-        })
-      );
-      expect(widgetRenderState).toEqual({
-        isRelevantSorted: true,
-        isVirtualReplica: true,
-        canRefine: true,
-        refine: expect.any(Function),
-        widgetParams: {},
-      });
-    });
-
-    it('return canRefine as true with 0 relevant sorted hit', () => {
-      const helper = createHelper();
-      const makeWidget = connectRelevantSort(noop);
-      const widget = makeWidget({});
-
-      const widgetRenderState = widget.getWidgetRenderState(
-        createRenderOptions({
-          helper,
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              hits: [],
-              nbSortedHits: 0,
-              nbHits: 10,
-              appliedRelevancyStrictness: 20,
-            }),
-          ]),
-        })
-      );
-      expect(widgetRenderState).toEqual({
-        isRelevantSorted: true,
-        isVirtualReplica: true,
-        canRefine: true,
-        refine: expect.any(Function),
-        widgetParams: {},
-      });
-    });
-
-    it('return canRefine as true with normally sorted hits', () => {
-      const helper = createHelper();
-      const makeWidget = connectRelevantSort(noop);
-      const widget = makeWidget({});
-
-      const widgetRenderState = widget.getWidgetRenderState(
-        createRenderOptions({
-          helper,
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              hits: [{ objectID: 'a' }],
-              nbHits: 1,
-              appliedRelevancyStrictness: 10,
-            }),
-          ]),
-        })
-      );
-      expect(widgetRenderState).toEqual({
         isRelevantSorted: true,
         isVirtualReplica: true,
         canRefine: true,
