@@ -4,11 +4,18 @@ import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import RefinementList, { RefinementListProps } from '../RefinementList';
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
-import { RefinementListItemData } from '../../../widgets/refinement-list/refinement-list';
+import {
+  RefinementListItemData,
+  RefinementListRendererCSSClasses,
+} from '../../../widgets/refinement-list/refinement-list';
 
-const templates = {
-  item({ value, count, isRefined }: RefinementListItemData) {
-    return `
+const defaultProps = {
+  createURL: () => '#',
+  templateProps: {
+    templatesConfig: {},
+    templates: {
+      item({ value, count, isRefined }: RefinementListItemData) {
+        return `
   <label>
     <input
       type="checkbox"
@@ -19,31 +26,56 @@ const templates = {
     <span data-testid="count">${count}</span>
   </label>
   `;
-  },
-  showMoreText() {
-    return `
+      },
+      showMoreText() {
+        return `
   <button data-testid="show-more">Show more</button>
     `;
-  },
-  searchableNoResults: 'No results',
-};
-
-const defaultProps = {
-  createURL: () => '#',
-  templateProps: {
-    templatesConfig: {},
-    templates,
+      },
+      searchableNoResults: 'No results',
+    },
     useCustomCompileOptions: {},
   },
   toggleRefinement: () => {},
+  cssClasses: {
+    root: 'ais-RefinementList',
+    noRefinementRoot: 'ais-RefinementList--noRefinement',
+    list: 'ais-RefinementList-list',
+    item: 'ais-RefinementList-item',
+    selectedItem: 'ais-RefinementList-item--selected',
+    searchBox: 'ais-RefinementList-searchBox',
+    label: 'ais-RefinementList-label',
+    checkbox: 'ais-RefinementList-checkbox',
+    labelText: 'ais-RefinementList-labelText',
+    count: 'ais-RefinementList-count',
+    noResults: 'ais-RefinementList-noResults',
+    showMore: 'ais-RefinementList-showMore',
+    disabledShowMore: 'ais-RefinementList-showMore--disabled',
+    searchable: {
+      root: 'ais-SearchBox',
+      form: 'ais-SearchBox-form',
+      input: 'ais-SearchBox-input',
+      submit: 'ais-SearchBox-submit',
+      submitIcon: 'ais-SearchBox-submitIcon',
+      reset: 'ais-SearchBox-reset',
+      resetIcon: 'ais-SearchBox-resetIcon',
+      loadingIndicator: 'ais-SearchBox-loadingIndicator',
+      loadingIcon: 'ais-SearchBox-loadingIcon',
+    },
+  },
 };
+type TestDefaultTemplates = typeof defaultProps.templateProps.templates;
 
 describe('RefinementList', () => {
   describe('cssClasses', () => {
     it('should add the `root` class to the root element', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         cssClasses: {
+          ...defaultProps.cssClasses,
           root: 'root',
         },
       };
@@ -55,9 +87,13 @@ describe('RefinementList', () => {
     });
 
     it('should set item classes to the refinements', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         cssClasses: {
+          ...defaultProps.cssClasses,
           item: 'item',
         },
         facetValues: [
@@ -72,9 +108,13 @@ describe('RefinementList', () => {
     });
 
     it('should set active classes to the active refinements', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         cssClasses: {
+          ...defaultProps.cssClasses,
           selectedItem: 'active',
         },
         facetValues: [
@@ -93,7 +133,10 @@ describe('RefinementList', () => {
 
   describe('items', () => {
     it('should have the correct names', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
@@ -109,7 +152,10 @@ describe('RefinementList', () => {
     });
 
     it('should correctly set if refined or not', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
@@ -125,7 +171,10 @@ describe('RefinementList', () => {
     });
 
     it('should escape the items in the default template to prevent XSS', () => {
-      const props = {
+      const props: RefinementListProps<
+        typeof defaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         facetValues: [
           {
@@ -149,6 +198,7 @@ describe('RefinementList', () => {
           useCustomCompileOptions: {},
         },
         cssClasses: {
+          ...defaultProps.cssClasses,
           labelText: 'labelText',
         },
       };
@@ -163,7 +213,10 @@ describe('RefinementList', () => {
     });
 
     it('should allow HTML in the items when SFFV', () => {
-      const props = {
+      const props: RefinementListProps<
+        typeof defaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         isFromSearch: true,
         facetValues: [
@@ -188,6 +241,7 @@ describe('RefinementList', () => {
           useCustomCompileOptions: {},
         },
         cssClasses: {
+          ...defaultProps.cssClasses,
           labelText: 'labelText',
         },
       };
@@ -202,7 +256,10 @@ describe('RefinementList', () => {
 
   describe('count', () => {
     it('should pass the count to the templateData', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 42, isRefined: false },
@@ -220,7 +277,10 @@ describe('RefinementList', () => {
 
   describe('showMore', () => {
     it('adds a showMore link when the feature is enabled', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
@@ -239,7 +299,10 @@ describe('RefinementList', () => {
     });
 
     it('does not add a showMore link when the feature is disabled', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
@@ -260,11 +323,15 @@ describe('RefinementList', () => {
   describe('sublist', () => {
     it('should create a subList with the sub values', () => {
       const toggleRefinement = jest.fn();
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         toggleRefinement,
         createURL: () => '',
         cssClasses: {
+          ...defaultProps.cssClasses,
           item: 'item',
         },
         facetValues: [
@@ -298,48 +365,15 @@ describe('RefinementList', () => {
       expect(toggleRefinement).toHaveBeenCalledWith('baz');
     });
 
-    it('should add depth class for each depth', () => {
-      const props = {
-        ...defaultProps,
-        createURL: () => '',
-        cssClasses: {
-          depth: 'depth-',
-        },
-        facetValues: [
-          {
-            value: 'foo',
-            label: 'foo',
-            count: 1,
-            data: [
-              { value: 'bar', label: 'bar', count: 2, isRefined: false },
-              { value: 'baz', label: 'baz', count: 3, isRefined: false },
-            ],
-            isRefined: false,
-          },
-        ],
-        templateProps: {
-          templatesConfig: {},
-          templates: {
-            item: (item: RefinementListItemData) => item.value,
-            showMoreText: '',
-          },
-          useCustomCompileOptions: {},
-        },
-      };
-
-      const { container } = render(<RefinementList {...props} />);
-      const mainItem = container.querySelector('ul');
-      const subItem = container.querySelector('ul ul');
-
-      expect(mainItem).toHaveClass('depth-0');
-      expect(subItem).toHaveClass('depth-1');
-    });
-
     it('should not add root class on sub lists', () => {
-      const props = {
+      const props: RefinementListProps<
+        TestDefaultTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         ...defaultProps,
         createURL: () => '',
         cssClasses: {
+          ...defaultProps.cssClasses,
           root: 'my-root',
         },
         facetValues: [
@@ -395,7 +429,16 @@ describe('RefinementList', () => {
     };
 
     it('without facets', () => {
-      const props = {
+      const templates = {
+        item: (item: RefinementListItemData) => item.value,
+        showMoreText: '',
+      };
+      type TestTemplates = typeof templates;
+
+      const props: RefinementListProps<
+        TestTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         createURL: () => '',
         attribute: 'attribute',
         facetValues: [],
@@ -403,10 +446,7 @@ describe('RefinementList', () => {
         className: 'customClassName',
         templateProps: {
           templatesConfig: {},
-          templates: {
-            item: (item: RefinementListItemData) => item.value,
-            showMoreText: '',
-          },
+          templates,
           useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
@@ -417,7 +457,17 @@ describe('RefinementList', () => {
     });
 
     it('without facets from search', () => {
-      const props: RefinementListProps = {
+      const templates = {
+        item: (item: RefinementListItemData) => item.value,
+        searchableNoResults: x => JSON.stringify(x),
+        showMoreText: '',
+      };
+      type TestTemplates = typeof templates;
+
+      const props: RefinementListProps<
+        TestTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         createURL: () => '',
         attribute: 'attribute',
         facetValues: [],
@@ -428,11 +478,7 @@ describe('RefinementList', () => {
         searchFacetValues: x => x,
         templateProps: {
           templatesConfig: {},
-          templates: {
-            item: (item: RefinementListItemData) => item.value,
-            searchableNoResults: x => JSON.stringify(x),
-            showMoreText: '',
-          },
+          templates,
           useCustomCompileOptions: {},
         },
         searchBoxTemplateProps: {
@@ -452,7 +498,16 @@ describe('RefinementList', () => {
     });
 
     it('with facets', () => {
-      const props = {
+      const templates = {
+        item: (item: RefinementListItemData) => item.value,
+        showMoreText: '',
+      };
+      type TestTemplates = typeof templates;
+
+      const props: RefinementListProps<
+        TestTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         attribute: 'attribute',
         facetValues: [
           {
@@ -472,10 +527,7 @@ describe('RefinementList', () => {
         className: 'customClassName',
         templateProps: {
           templatesConfig: {},
-          templates: {
-            item: (item: RefinementListItemData) => item.value,
-            showMoreText: '',
-          },
+          templates,
           useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
@@ -487,7 +539,16 @@ describe('RefinementList', () => {
     });
 
     it('with facets and show more', () => {
-      const props: RefinementListProps = {
+      const templates = {
+        item: (item: RefinementListItemData) => item.value,
+        showMoreText: (x: any) => JSON.stringify(x),
+      };
+      type TestTemplates = typeof templates;
+
+      const props: RefinementListProps<
+        TestTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         attribute: 'attribute',
         facetValues: [
           {
@@ -525,7 +586,16 @@ describe('RefinementList', () => {
     });
 
     it('with facets and disabled show more', () => {
-      const props: RefinementListProps = {
+      const templates = {
+        item: (item: RefinementListItemData) => item.value,
+        showMoreText: (x: any) => JSON.stringify(x),
+      };
+      type TestTemplates = typeof templates;
+
+      const props: RefinementListProps<
+        TestTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         attribute: 'attribute',
         facetValues: [
           {
@@ -563,7 +633,16 @@ describe('RefinementList', () => {
     });
 
     it('with facets from search', () => {
-      const props: RefinementListProps = {
+      const templates = {
+        item: (item: RefinementListItemData) => item.value,
+        showMoreText: '',
+      };
+      type TestTemplates = typeof templates;
+
+      const props: RefinementListProps<
+        TestTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         attribute: 'attribute',
         facetValues: [
           {
@@ -586,10 +665,7 @@ describe('RefinementList', () => {
         searchFacetValues: x => x,
         templateProps: {
           templatesConfig: {},
-          templates: {
-            item: (item: RefinementListItemData) => item.value,
-            showMoreText: '',
-          },
+          templates,
           useCustomCompileOptions: {},
         },
         searchBoxTemplateProps: {
@@ -611,26 +687,34 @@ describe('RefinementList', () => {
 
     it('should not refine on click on already refined items', () => {
       const toggleRefinement = jest.fn();
-      const props = {
+
+      const templates = {
+        item: (item: RefinementListItemData) => `
+              <label>
+                <input type="radio" checked="${item.isRefined}" />
+                ${item.value}
+              </span>
+            `,
+        showMoreText: '',
+      };
+      type TestTemplates = typeof templates;
+
+      const props: RefinementListProps<
+        TestTemplates,
+        RefinementListRendererCSSClasses
+      > = {
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
           { value: 'bar', label: 'bar', count: 2, isRefined: true },
           { value: 'baz', label: 'baz', count: 3, isRefined: false },
         ],
         cssClasses: {
+          ...defaultProps.cssClasses,
           item: 'item',
         },
         templateProps: {
           templatesConfig: {},
-          templates: {
-            item: (item: RefinementListItemData) => `
-              <label>
-                <input type="radio" checked="${item.isRefined}" />
-                ${item.value}
-              </span>
-            `,
-            showMoreText: '',
-          },
+          templates,
           useCustomCompileOptions: {},
         },
         toggleRefinement,

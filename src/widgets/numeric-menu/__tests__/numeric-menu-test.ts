@@ -1,5 +1,6 @@
 import { render as preactRender, VNode } from 'preact';
-import numericMenu from '../numeric-menu';
+import defaultTemplates from '../defaultTemplates';
+import numericMenu, { NumericMenuCSSClasses } from '../numeric-menu';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
@@ -85,8 +86,12 @@ describe('numericMenu()', () => {
     widget.render!(createRenderOptions({ state, results }));
     widget.render!(createRenderOptions({ state, results }));
 
-    const firstRender = render.mock.calls[0][0] as VNode<RefinementListProps>;
-    const secondRender = render.mock.calls[1][0] as VNode<RefinementListProps>;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      RefinementListProps<typeof defaultTemplates, NumericMenuCSSClasses>
+    >;
+    const secondRender = render.mock.calls[1][0] as VNode<
+      RefinementListProps<typeof defaultTemplates, NumericMenuCSSClasses>
+    >;
     const firstContainer = render.mock.calls[0][1];
     const secondContainer = render.mock.calls[1][1];
 
@@ -109,8 +114,13 @@ describe('numericMenu()', () => {
     widget.init!(createInitOptions({ helper }));
     widget.render!(createRenderOptions({ state, results }));
 
-    const firstRender = render.mock.calls[0][0] as VNode<RefinementListProps>;
-    const { facetValues } = firstRender.props as RefinementListProps;
+    const firstRender = render.mock.calls[0][0] as VNode<
+      RefinementListProps<typeof defaultTemplates, NumericMenuCSSClasses>
+    >;
+    const { facetValues } = firstRender.props as RefinementListProps<
+      typeof defaultTemplates,
+      NumericMenuCSSClasses
+    >;
 
     expect(facetValues).toEqual([
       {

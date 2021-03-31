@@ -24,7 +24,7 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('RefinementList');
 const searchBoxSuit = component('SearchBox');
 
-export type RefinementListOwnTemplates = {
+type RefinementListOwnTemplates = {
   /**
    * Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
    */
@@ -154,6 +154,10 @@ type RefinementListSearchableCSSClasses = {
 
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
+
+export type RefinementListRendererCSSClasses = RefinementListOwnCSSClasses & {
+  searchable: SearchBoxCSSClasses;
+};
 
 export type RefinementListWidgetParams = {
   /**

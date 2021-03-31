@@ -8,53 +8,24 @@ import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
 import SearchBox from '../SearchBox/SearchBox';
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
-import { RefinementListOwnTemplates } from '../../widgets/refinement-list/refinement-list';
-import { RatingMenuTemplates } from '../../widgets/rating-menu/rating-menu';
-import { MenuTemplates } from '../../widgets/menu/menu';
 import { SearchBoxTemplates } from '../../widgets/search-box/types';
-import { CreateURL } from '../../types';
+import { CreateURL, Templates } from '../../types';
 
-export type RefinementListCSSClasses = {
-  depth?: string;
-  root?: string;
-  noRefinementRoot?: string;
-  list?: string;
-  item?: string;
-  selectedItem?: string;
-  parentItem?: string;
-  childList?: string;
-  searchBox?: string;
-  label?: string;
-  checkbox?: string;
-  labelText?: string;
-  count?: string;
-  noResults?: string;
-  showMore?: string;
-  disabledShowMore?: string;
-  disabledItem?: string;
-  searchable?: {
-    root: string;
-    form: string;
-    input: string;
-    submit: string;
-    submitIcon: string;
-    reset: string;
-    resetIcon: string;
-    loadingIndicator: string;
-    loadingIcon: string;
-  };
+type CSSClasses = {
+  searchable?: Record<string, string>;
+  [key: string]: any;
 };
 
-export type RefinementListProps = {
+export type RefinementListProps<
+  TTemplates extends Templates,
+  TCSSClasses extends CSSClasses
+> = {
   createURL: CreateURL<string>;
-  cssClasses?: RefinementListCSSClasses;
+  cssClasses: TCSSClasses;
   depth?: number;
   facetValues?: TRefinementListItem[];
   attribute?: string;
-  templateProps?:
-    | PreparedTemplateProps<RefinementListOwnTemplates>
-    | PreparedTemplateProps<RatingMenuTemplates>
-    | PreparedTemplateProps<MenuTemplates>;
+  templateProps?: PreparedTemplateProps<TTemplates>;
   searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
   toggleRefinement: (value: string) => void;
   searchFacetValues?: (query: string) => void;
@@ -75,24 +46,42 @@ const defaultProps = {
   depth: 0,
 };
 
-type RefinementListPropsWithDefaultProps = RefinementListProps &
+type RefinementListPropsWithDefaultProps<
+  TTemplates extends Templates,
+  TCSSClasses extends CSSClasses
+> = RefinementListProps<TTemplates, TCSSClasses> &
   Readonly<typeof defaultProps>;
 
-type RefinementListItemTemplateData = TRefinementListItem & {
+type RefinementListItemTemplateData<
+  TTemplates extends Templates,
+  TCSSClasses extends CSSClasses
+> = TRefinementListItem & {
   url: string;
-} & Pick<RefinementListProps, 'attribute' | 'cssClasses' | 'isFromSearch'>;
+} & Pick<
+    RefinementListProps<TTemplates, TCSSClasses>,
+    'attribute' | 'cssClasses' | 'isFromSearch'
+  >;
 
-class RefinementList extends Component<RefinementListPropsWithDefaultProps> {
+class RefinementList<
+  TTemplates extends Templates,
+  TCSSClasses extends CSSClasses
+> extends Component<
+  RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+> {
   public static defaultProps = defaultProps;
 
   private searchBox = createRef<SearchBox>();
 
-  public constructor(props: RefinementListPropsWithDefaultProps) {
+  public constructor(
+    props: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+  ) {
     super(props);
     this.handleItemClick = this.handleItemClick.bind(this);
   }
 
-  public shouldComponentUpdate(nextProps: RefinementListPropsWithDefaultProps) {
+  public shouldComponentUpdate(
+    nextProps: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+  ) {
     const areFacetValuesDifferent = !isEqual(
       this.props.facetValues,
       nextProps.facetValues
@@ -122,7 +111,10 @@ class RefinementList extends Component<RefinementListPropsWithDefaultProps> {
     }
 
     const url = this.props.createURL(facetValue.value);
-    const templateData: RefinementListItemTemplateData = {
+    const templateData: RefinementListItemTemplateData<
+      TTemplates,
+      TCSSClasses
+    > = {
       ...facetValue,
       url,
       attribute: this.props.attribute,
@@ -244,7 +236,7 @@ class RefinementList extends Component<RefinementListPropsWithDefaultProps> {
   }
 
   public componentWillReceiveProps(
-    nextProps: RefinementListPropsWithDefaultProps
+    nextProps: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
   ) {
     if (this.searchBox.current && !nextProps.isFromSearch) {
       this.searchBox.current.resetInput();
@@ -260,12 +252,6 @@ class RefinementList extends Component<RefinementListPropsWithDefaultProps> {
   }
 
   public render() {
-    // Adding `-lvl0` classes
-    const cssClassList = cx(this.props.cssClasses.list, {
-      [`${this.props.cssClasses.depth}${this.props.depth}`]: this.props
-        .cssClasses.depth,
-    });
-
     const showMoreButtonClassName = cx(
       this.props.cssClasses.showMore,
       this.props.cssClasses.disabledShowMore && {
@@ -323,7 +309,7 @@ class RefinementList extends Component<RefinementListPropsWithDefaultProps> {
 
     const facetValues = this.props.facetValues &&
       this.props.facetValues.length > 0 && (
-        <ul className={cssClassList}>
+        <ul className={this.props.cssClasses.list}>
           {this.props.facetValues.map(this._generateFacetItem, this)}
         </ul>
       );

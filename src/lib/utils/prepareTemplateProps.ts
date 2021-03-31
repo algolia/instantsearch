@@ -1,11 +1,7 @@
 import uniq from './uniq';
-import { Template } from '../../types';
+import { Templates } from '../../types';
 
 type TemplatesConfig = Record<string, unknown>;
-
-type Templates = {
-  [key: string]: Template<any>;
-};
 
 export type PreparedTemplateProps<TTemplates extends Templates> = {
   templatesConfig: TemplatesConfig;

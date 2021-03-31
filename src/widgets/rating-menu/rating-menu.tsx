@@ -2,9 +2,7 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList, {
-  RefinementListCSSClasses,
-} from '../../components/RefinementList/RefinementList';
+import RefinementList from '../../components/RefinementList/RefinementList';
 import connectRatingMenu, {
   RatingMenuConnectorParams,
   RatingMenuRendererOptions,
@@ -80,6 +78,12 @@ export type RatingMenuCSSClasses = {
   count: string | string[];
 };
 
+type RatingMenuRendererCSSClasses = Required<
+  {
+    [key in keyof RatingMenuCSSClasses]: string;
+  }
+>;
+
 export type RatingMenuWidgetParams = {
   /**
    * Place where to insert the widget in your webpage.
@@ -110,7 +114,7 @@ const renderer = ({
   renderState,
 }: {
   containerNode: HTMLElement;
-  cssClasses: RefinementListCSSClasses;
+  cssClasses: RatingMenuRendererCSSClasses;
   templates: Partial<RatingMenuTemplates>;
   renderState: { templateProps?: PreparedTemplateProps<RatingMenuTemplates> };
 }) => (
