@@ -718,35 +718,35 @@ Array [
 
       expect(renderArgs).toMatchInlineSnapshot(
         {
-          helper: expect.any(Object),
-          results: expect.any(Object),
+          helper: expect.anything(),
+          results: expect.anything(),
           scopedResults: expect.arrayContaining([
             expect.objectContaining({
-              helper: expect.any(Object),
+              helper: expect.anything(),
               indexId: expect.any(String),
-              results: expect.any(Object),
+              results: expect.anything(),
             }),
           ]),
-          state: expect.any(Object),
-          instantSearchInstance: expect.any(Object),
+          state: expect.anything(),
+          instantSearchInstance: expect.anything(),
         },
         `
 Object {
   "createURL": [Function],
-  "helper": Any<Object>,
-  "instantSearchInstance": Any<Object>,
-  "results": Any<Object>,
+  "helper": Anything,
+  "instantSearchInstance": Anything,
+  "results": Anything,
   "scopedResults": ArrayContaining [
     ObjectContaining {
-      "helper": Any<Object>,
+      "helper": Anything,
       "indexId": Any<String>,
-      "results": Any<Object>,
+      "results": Anything,
     },
   ],
   "searchMetadata": Object {
     "isSearchStalled": false,
   },
-  "state": Any<Object>,
+  "state": Anything,
   "templatesConfig": Object {},
 }
 `

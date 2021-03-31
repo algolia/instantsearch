@@ -187,7 +187,11 @@ function augmentInstantSearch(
     widget.render({
       helper: localHelper,
       results,
-      scopedResults: parent.getScopedResults(),
+      scopedResults: parent.getScopedResults().map(result =>
+        Object.assign(result, {
+          results: search.__initialSearchResults[result.indexId],
+        })
+      ),
       state,
       templatesConfig: {},
       createURL: parent.createURL,
