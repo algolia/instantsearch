@@ -5,6 +5,7 @@ import algoliasearchHelper, {
 
 import connectPagination, {
   PaginationConnectorParams,
+  PaginationRendererOptions,
 } from '../connectPagination';
 import {
   createInitOptions,
@@ -17,7 +18,7 @@ describe('connectPagination', () => {
   const getInitializedWidget = (
     widgetParams: PaginationConnectorParams = {}
   ) => {
-    const renderFn = jest.fn();
+    const renderFn = jest.fn<any, [PaginationRendererOptions, boolean]>();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget(widgetParams);
 
@@ -445,6 +446,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         pages: [],
         createURL: expect.any(Function),
         refine: expect.any(Function),
+        canRefine: false,
         widgetParams: {},
       });
     });
@@ -461,6 +463,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         pages: [],
         createURL: expect.any(Function),
         refine: expect.any(Function),
+        canRefine: false,
         widgetParams: { padding: 5 },
       });
     });
@@ -487,6 +490,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         pages: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         createURL: expect.any(Function),
         refine: expect.any(Function),
+        canRefine: true,
         widgetParams: { padding: 5 },
       });
     });
@@ -519,6 +523,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         pages: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
         createURL: expect.any(Function),
         refine: expect.any(Function),
+        canRefine: true,
         widgetParams: { padding: 5 },
       });
     });
@@ -551,6 +556,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         pages: [89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99],
         createURL: expect.any(Function),
         refine: expect.any(Function),
+        canRefine: true,
         widgetParams: { padding: 5 },
       });
     });
@@ -562,6 +568,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const refine2 = widget.getWidgetRenderState(createInitOptions()).refine;
 
       expect(refine2).toBe(refine1);
+    });
+
+    it('gives `canRefine` as false for a single page', () => {
+      const [widget] = getInitializedWidget();
+
+      const { canRefine } = widget.getWidgetRenderState(
+        createRenderOptions({
+          results: new SearchResults(new SearchParameters(), [
+            createSingleSearchResponse({ nbPages: 1 }),
+          ]),
+        })
+      );
+
+      expect(canRefine).toBe(false);
+    });
+
+    it('gives `canRefine` as true for a multiple pages', () => {
+      const [widget] = getInitializedWidget();
+
+      const { canRefine } = widget.getWidgetRenderState(
+        createRenderOptions({
+          results: new SearchResults(new SearchParameters(), [
+            createSingleSearchResponse({ nbPages: 2 }),
+          ]),
+        })
+      );
+
+      expect(canRefine).toBe(true);
     });
   });
 
@@ -601,6 +635,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
           pages: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
           createURL: expect.any(Function),
           refine: expect.any(Function),
+          canRefine: true,
           widgetParams: { padding: 5 },
         },
       });

@@ -1599,6 +1599,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
             max: 0,
             min: 0,
           },
+          canRefine: false,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
           start: [0, 1000],
@@ -1633,6 +1634,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
             min: 10,
             max: 30,
           },
+          canRefine: true,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
           start: [0, 1000],
@@ -1676,6 +1678,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           max: 0,
           min: 0,
         },
+        canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         start: [0, 1000],
@@ -1707,9 +1710,54 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           max: 30,
           min: 10,
         },
+        canRefine: true,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         start: [0, 1000],
+        widgetParams: {
+          attribute: 'price',
+          precision: 0,
+        },
+      });
+    });
+
+    it('canRefine returns false when the result range is empty', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRange = connectRange(renderFn, unmountFn);
+      const rangeWidget = createRange({
+        attribute: 'price',
+      });
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        disjunctiveFacets: ['price'],
+      });
+
+      const renderState = rangeWidget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: createFacetStatsResults({
+            min: 1000,
+            max: 1000,
+            helper,
+            attribute: 'price',
+          }),
+        })
+      );
+
+      expect(renderState).toEqual({
+        format: {
+          from: expect.any(Function),
+          to: expect.any(Function),
+        },
+        range: {
+          max: 1000,
+          min: 1000,
+        },
+        canRefine: false,
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        start: [-Infinity, Infinity],
         widgetParams: {
           attribute: 'price',
           precision: 0,

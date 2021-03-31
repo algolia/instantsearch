@@ -3,7 +3,7 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectSortBy from '../connectSortBy';
+import connectSortBy, { SortByRendererOptions } from '../connectSortBy';
 import index from '../../../widgets/index/index';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
@@ -17,6 +17,7 @@ describe('connectSortBy', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
+        // @ts-expect-error
         connectSortBy()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -27,6 +28,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
     it('throws without items', () => {
       expect(() => {
+        // @ts-expect-error
         connectSortBy(() => {})({ items: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`items\` option expects an array of objects.
@@ -37,6 +39,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
     it('throws with non-array items', () => {
       expect(() => {
+        // @ts-expect-error
         connectSortBy(() => {})({ items: 'items' });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`items\` option expects an array of objects.
@@ -80,10 +83,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     ];
     const widget = makeWidget({ items });
 
-    const helper = algoliasearchHelper({}, items[0].value);
+    const helper = algoliasearchHelper(createSearchClient(), items[0].value);
     helper.search = jest.fn();
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         state: helper.state,
@@ -105,9 +108,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       true
     );
 
-    widget.render(
+    widget.render!(
       createRenderOptions({
-        results: new SearchResults(helper.state, [{}]),
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
         state: helper.state,
         helper,
       })
@@ -136,9 +141,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       { label: 'Sort products by price', value: 'priceASC' },
     ];
     const widget = makeWidget({ items });
-    const helper = algoliasearchHelper({}, items[0].value);
+    const helper = algoliasearchHelper(createSearchClient(), items[0].value);
 
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+    expect(() =>
+      widget.dispose!({ helper, state: helper.state })
+    ).not.toThrow();
   });
 
   it('Renders with transformed items', () => {
@@ -158,10 +165,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         allItems.map(item => ({ ...item, label: 'transformed' })),
     });
 
-    const helper = algoliasearchHelper({}, items[0].value);
+    const helper = algoliasearchHelper(createSearchClient(), items[0].value);
     helper.search = jest.fn();
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         state: helper.state,
@@ -179,9 +186,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect.anything()
     );
 
-    widget.render(
+    widget.render!(
       createRenderOptions({
-        results: new SearchResults(helper.state, [{}]),
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
         helper,
         state: helper.state,
         instantSearchInstance,
@@ -214,10 +223,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       items,
     });
 
-    const helper = algoliasearchHelper({}, items[0].value);
+    const helper = algoliasearchHelper(createSearchClient(), items[0].value);
     helper.search = jest.fn();
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         state: helper.state,
@@ -237,9 +246,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
-    widget.render(
+    widget.render!(
       createRenderOptions({
-        results: new SearchResults(helper.state, [{}]),
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
         state: helper.state,
         helper,
       })
@@ -279,9 +290,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       );
 
       const renderState1 = sortBy.getRenderState(
-        {
-          sortBy: {},
-        },
+        {},
         createInitOptions({ helper })
       );
 
@@ -303,11 +312,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         },
       });
 
-      sortBy.init(createInitOptions({ helper }));
-      sortBy.getWidgetRenderState({ helper }).refine('index_desc');
+      sortBy.init!(createInitOptions({ helper }));
+      sortBy
+        .getWidgetRenderState(createInitOptions({ helper }))
+        .refine('index_desc');
 
       const renderState2 = sortBy.getRenderState(
-        { sortBy: {} },
+        {},
         createRenderOptions({
           helper,
           state: helper.state,
@@ -382,8 +393,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         },
       });
 
-      sortBy.init(createInitOptions({ helper }));
-      sortBy.getWidgetRenderState({ helper }).refine('index_default');
+      sortBy.init!(createInitOptions({ helper }));
+      sortBy
+        .getWidgetRenderState(createInitOptions({ helper }))
+        .refine('index_default');
 
       const renderState2 = sortBy.getWidgetRenderState(
         createRenderOptions({
@@ -429,7 +442,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const instantSearchInstance = createInstantSearch({
           indexName: '',
         });
-        const helper = algoliasearchHelper({}, 'index_featured');
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'index_featured'
+        );
         helper.search = jest.fn();
 
         const items = [
@@ -439,7 +455,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         ];
         const widget = customSortBy({ items });
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             state: helper.state,
@@ -459,7 +475,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const instantSearchInstance = createInstantSearch({
           indexName: '',
         });
-        const helper = algoliasearchHelper({}, 'index_initial');
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'index_initial'
+        );
         helper.search = jest.fn();
 
         const items = [
@@ -470,7 +489,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const widget = customSortBy({ items });
 
         expect(() => {
-          widget.init(
+          widget.init!(
             createInitOptions({
               helper,
               state: helper.state,
@@ -491,7 +510,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
-      const rendering = jest.fn();
+      const rendering = jest.fn<any, [SortByRendererOptions, boolean]>();
       const makeWidget = connectSortBy(rendering);
       const instantSearchInstance = createInstantSearch({
         indexName: 'relevance',
@@ -506,10 +525,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         ...config,
       });
 
-      const helper = algoliasearchHelper({}, 'relevance');
+      const helper = algoliasearchHelper(createSearchClient(), 'relevance');
       helper.search = jest.fn();
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -519,7 +538,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       const { refine } = rendering.mock.calls[0][0];
 
-      return [widget, helper, refine];
+      return [widget, helper, refine] as const;
     };
 
     describe('getWidgetUiState', () => {
@@ -527,7 +546,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const [widget, helper] = getInitializedWidget();
 
         const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -541,7 +560,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         refine('priceASC');
 
         const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -556,14 +575,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         refine('priceASC');
 
-        const uiStateBefore = widget.getWidgetUiState(
+        const uiStateBefore = widget.getWidgetUiState!(
           {},
           {
             searchParameters: helper.state,
             helper,
           }
         );
-        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -594,7 +613,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         // Simulate an URLSync
         helper.setQueryParameter('index', 'indexNamePrice');
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             state: helper.state,
@@ -602,7 +621,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
 
-        const actual = widget.getWidgetUiState(
+        const actual = widget.getWidgetUiState!(
           {},
           {
             searchParameters: helper.state,
@@ -639,7 +658,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         );
         helper.search = jest.fn();
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             state: helper.state,
@@ -648,7 +667,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
 
-        const actual = widget.getWidgetUiState(
+        const actual = widget.getWidgetUiState!(
           {},
           {
             searchParameters: helper.state,
@@ -666,7 +685,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         const uiState = {};
         const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
+        const searchParametersAfter = widget.getWidgetSearchParameters!(
           searchParametersBefore,
           { uiState }
         );
@@ -682,7 +701,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         };
 
         const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
+        const searchParametersAfter = widget.getWidgetSearchParameters!(
           searchParametersBefore,
           { uiState }
         );
@@ -701,7 +720,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         const uiState = {};
         const searchParametersBefore = new SearchParameters(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
+        const searchParametersAfter = widget.getWidgetSearchParameters!(
           searchParametersBefore,
           { uiState }
         );
@@ -724,7 +743,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           ],
         });
 
-        const actual = widget.getWidgetSearchParameters(
+        const actual = widget.getWidgetSearchParameters!(
           new SearchParameters({
             index: 'relevance',
           }),
