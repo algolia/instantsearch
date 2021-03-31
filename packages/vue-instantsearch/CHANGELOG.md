@@ -1,3 +1,17 @@
+# [3.6.0](https://github.com/algolia/vue-instantsearch/compare/v3.5.0...v3.6.0) (2021-03-31)
+
+
+### Bug Fixes
+
+* **ssr:** correctly pass scopedResults.results ([#943](https://github.com/algolia/vue-instantsearch/issues/943)) ([118e0a3](https://github.com/algolia/vue-instantsearch/commit/118e0a39b8a047930520220da757ff0175cec12d)), closes [#940](https://github.com/algolia/vue-instantsearch/issues/940)
+
+
+### Features
+
+* **ssr:** expose clone component ([#937](https://github.com/algolia/vue-instantsearch/issues/937)) ([4741c7b](https://github.com/algolia/vue-instantsearch/commit/4741c7b64be92d70745fa36b55c2f7e8690347bd)), closes [#936](https://github.com/algolia/vue-instantsearch/issues/936)
+
+
+
 # [3.5.0](https://github.com/algolia/vue-instantsearch/compare/v3.4.3...v3.5.0) (2021-03-03)
 
 
