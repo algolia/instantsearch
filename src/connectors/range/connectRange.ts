@@ -42,6 +42,11 @@ export type RangeRendererOptions = {
   refine(rangeValue: RangeBoundaries): void;
 
   /**
+   * Indicates whether this widget can be refined
+   */
+  canRefine: boolean;
+
+  /**
    * Send an event to the insights middleware
    */
   sendEvent: SendEventForFacet;
@@ -401,6 +406,7 @@ const connectRange: ConnectRange = function connectRange(
 
         return {
           refine,
+          canRefine: currentRange.min !== currentRange.max,
           format: rangeFormatter,
           range: currentRange,
           sendEvent: createSendEvent(

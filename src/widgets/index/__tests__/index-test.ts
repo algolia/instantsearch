@@ -1904,7 +1904,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       it('updates the local `uiState` when they differ on first render', () => {
         const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({
-          onInternalStateChange: jest.fn(),
+          onInternalStateChange: jest.fn() as any,
         });
 
         instance.addWidgets([createSearchBox()]);
@@ -1967,7 +1967,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const topLevelInstance = index({ indexName: 'topLevelIndexName' });
         const subLevelInstance = index({ indexName: 'subLevelIndexName' });
         const instantSearchInstance = createInstantSearch({
-          onInternalStateChange: jest.fn(),
+          onInternalStateChange: jest.fn() as any,
         });
 
         topLevelInstance.addWidgets([
@@ -2173,6 +2173,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             ...renderState,
             pagination: {
               refine: paginationRefine,
+              canRefine: false,
               createURL: paginationCreateURL,
               isFirstPage: true,
               isLastPage: true,
@@ -2207,6 +2208,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
               },
               pagination: {
                 refine: paginationRefine,
+                canRefine: false,
                 createURL: paginationCreateURL,
                 isFirstPage: true,
                 isLastPage: true,
@@ -2240,6 +2242,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
               },
               pagination: {
                 refine: paginationRefine,
+                canRefine: false,
                 createURL: paginationCreateURL,
                 isFirstPage: true,
                 isLastPage: true,
@@ -2286,6 +2289,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             ...renderState,
             pagination: {
               refine: () => {},
+              canRefine: false,
               createURL: () => '',
               isFirstPage: true,
               isLastPage: true,

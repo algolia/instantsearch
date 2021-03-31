@@ -172,6 +172,7 @@ describe('connectRelevantSort', () => {
       expect(renderState1.relevantSort).toEqual({
         isRelevantSorted: false,
         isVirtualReplica: false,
+        canRefine: false,
         refine: expect.any(Function),
         widgetParams: {},
       });
@@ -192,6 +193,7 @@ describe('connectRelevantSort', () => {
       expect(renderState2.relevantSort).toEqual({
         isRelevantSorted: true,
         isVirtualReplica: true,
+        canRefine: true,
         refine: expect.any(Function),
         widgetParams: {},
       });
@@ -210,6 +212,7 @@ describe('connectRelevantSort', () => {
       expect(widgetRenderState1).toEqual({
         isRelevantSorted: false,
         isVirtualReplica: false,
+        canRefine: false,
         refine: expect.any(Function),
         widgetParams: {},
       });
@@ -229,6 +232,7 @@ describe('connectRelevantSort', () => {
       expect(widgetRenderState2).toEqual({
         isRelevantSorted: true,
         isVirtualReplica: true,
+        canRefine: true,
         refine: expect.any(Function),
         widgetParams: {},
       });

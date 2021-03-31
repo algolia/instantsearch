@@ -61,6 +61,7 @@ const createSendEvent = ({ instantSearchInstance, attribute, on, helper }) => (
  * @typedef {Object} ToggleRenderingOptions
  * @property {ToggleValue} value The current toggle value.
  * @property {function():string} createURL Creates an URL for the next state.
+ * @property {boolean} canRefine Indicates if search state can be refined.
  * @property {function(value)} refine Updates to the next state by applying the toggle refinement.
  * @property {Object} widgetParams All original `CustomToggleWidgetParams` forwarded to the `renderFn`.
  */
@@ -308,6 +309,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             createURL,
           }),
           sendEvent,
+          canRefine: Boolean(results ? nextRefinement.count : null),
           refine: toggleRefinementFactory(helper),
           widgetParams,
         };

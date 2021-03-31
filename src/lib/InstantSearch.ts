@@ -556,7 +556,7 @@ See ${createDocumentationLink({
         });
       }
 
-      indexWidget.getHelper()!.overrideStateWithoutTriggeringChangeEvent(
+      indexWidget.getHelper()!.setState(
         indexWidget.getWidgetSearchParameters(indexWidget.getHelper()!.state, {
           uiState: nextUiState[indexWidget.getIndexId()],
         })
@@ -571,10 +571,9 @@ See ${createDocumentationLink({
     setIndexHelperState(this.mainIndex);
 
     this.scheduleSearch();
-    this.onInternalStateChange();
   }
 
-  public onInternalStateChange = () => {
+  public onInternalStateChange = defer(() => {
     const nextUiState = this.mainIndex.getWidgetUiState({});
 
     this.middleware.forEach(m => {
@@ -582,7 +581,7 @@ See ${createDocumentationLink({
         uiState: nextUiState,
       });
     });
-  };
+  });
 
   public createURL(nextState: UiState = {}): string {
     if (!this.started) {

@@ -1,4 +1,4 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import sortBy from '../sort-by';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
@@ -7,18 +7,19 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
-
   module.render = jest.fn();
-
   return module;
 });
 
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
+      // @ts-expect-error
       sortBy({ container: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -51,7 +52,7 @@ describe('sortBy()', () => {
     cssClasses = {
       root: ['custom-root', 'cx'],
       select: 'custom-select',
-      item: 'custom-item',
+      option: 'custom-option',
     };
     widget = sortBy({ container, items, cssClasses });
 
@@ -71,11 +72,36 @@ describe('sortBy()', () => {
     widget.render(createRenderOptions({ helper, results }));
 
     const [firstRender, secondRender] = render.mock.calls;
+    // @ts-expect-error
     const { children, ...rootProps } = firstRender[0].props;
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(rootProps).toMatchSnapshot();
-    expect(children.props).toMatchSnapshot();
+    expect(rootProps).toMatchInlineSnapshot(`
+      Object {
+        "className": "ais-SortBy custom-root cx",
+      }
+    `);
+    expect(children.props).toMatchInlineSnapshot(`
+      Object {
+        "cssClasses": Object {
+          "option": "ais-SortBy-option custom-option",
+          "root": "ais-SortBy custom-root cx",
+          "select": "ais-SortBy-select custom-select",
+        },
+        "currentValue": "index-a",
+        "options": Array [
+          Object {
+            "label": "Index A",
+            "value": "index-a",
+          },
+          Object {
+            "label": "Index B",
+            "value": "index-b",
+          },
+        ],
+        "setValue": [Function],
+      }
+    `);
     expect(firstRender[1]).toEqual(container);
     expect(secondRender[1]).toEqual(container);
   });
@@ -93,6 +119,7 @@ describe('sortBy()', () => {
 
     const [firstRender] = render.mock.calls;
 
+    // @ts-expect-error
     expect(firstRender[0].props.children.props.options).toEqual([
       {
         label: 'Index A',
@@ -105,12 +132,5 @@ describe('sortBy()', () => {
         value: 'index-b',
       },
     ]);
-  });
-
-  it('sets the underlying index', () => {
-    widget.setIndex('index-b');
-
-    expect(helper.setIndex).toHaveBeenCalledTimes(1);
-    expect(helper.search).toHaveBeenCalledTimes(1);
   });
 });

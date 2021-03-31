@@ -113,6 +113,11 @@ export type RatingMenuRendererOptions = {
   createURL: CreateURL<string>;
 
   /**
+   *  Indicates if search state can be refined.
+   */
+  canRefine: boolean;
+
+  /**
    * Selects a rating to filter the results (takes the filter value as parameter). Takes the value of an item as parameter.
    */
   refine: (value: string) => void;
@@ -368,6 +373,7 @@ const connectRatingMenu: ConnectRatingMenu = function connectRatingMenu(
         return {
           items: facetValues,
           hasNoResults: results ? results.nbHits === 0 : true,
+          canRefine: facetValues.length > 0,
           refine: connectorState.toggleRefinementFactory(helper),
           sendEvent,
           createURL: connectorState.createURLFactory({ state, createURL }),

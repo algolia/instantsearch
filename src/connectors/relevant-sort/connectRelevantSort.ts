@@ -6,8 +6,24 @@ export type RelevantSortConnectorParams = Record<string, unknown>;
 type Refine = (relevancyStrictness: number) => void;
 
 export type RelevantSortRendererOptions = {
+  /**
+   * Indicates if it has appliedRelevancyStrictness greater than zero
+   */
   isRelevantSorted: boolean;
+
+  /**
+   * Indicates if the results come from a virtual replica
+   */
   isVirtualReplica: boolean;
+
+  /**
+   * Indicates if search state can be refined
+   */
+  canRefine: boolean;
+
+  /**
+   * Sets the value as relevancyStrictness and trigger a new search
+   */
   refine: Refine;
 };
 
@@ -77,11 +93,14 @@ const connectRelevantSort: RelevantSortConnector = function connectRelevantSort(
 
         const { appliedRelevancyStrictness } = results || {};
 
+        const isVirtualReplica = appliedRelevancyStrictness !== undefined;
+
         return {
           isRelevantSorted:
             typeof appliedRelevancyStrictness !== 'undefined' &&
             appliedRelevancyStrictness > 0,
-          isVirtualReplica: appliedRelevancyStrictness !== undefined,
+          isVirtualReplica,
+          canRefine: isVirtualReplica,
           refine: connectorState.refine,
           widgetParams,
         };
