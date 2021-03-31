@@ -9,13 +9,15 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import connectAutocomplete from '../connectAutocomplete';
+import connectAutocomplete, {
+  AutocompleteRendererOptions,
+} from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import { SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = jest.fn();
+    const renderFn = jest.fn<any, [AutocompleteRendererOptions, boolean]>();
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget({
       ...config,
@@ -34,7 +36,7 @@ describe('connectAutocomplete', () => {
 
     const { refine } = renderFn.mock.calls[0][0];
 
-    return [widget, helper, refine];
+    return [widget, helper, refine] as const;
   };
 
   it('throws without render function', () => {
@@ -556,7 +558,7 @@ search.addWidgets([
     test('should give back the object unmodified if the default value is selected', () => {
       const [widget, helper] = getInitializedWidget();
       const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -567,7 +569,7 @@ search.addWidgets([
       const [widget, helper, refine] = getInitializedWidget();
       refine('some query');
       const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -579,14 +581,14 @@ search.addWidgets([
     test('should give back the same instance if the value is already in the uiState', () => {
       const [widget, helper, refine] = getInitializedWidget();
       refine('query');
-      const uiStateBefore = widget.getWidgetUiState(
+      const uiStateBefore = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
           helper,
         }
       );
-      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -604,7 +606,7 @@ search.addWidgets([
         })
       );
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {
           query: 'Apple',
         },
@@ -628,7 +630,7 @@ search.addWidgets([
         })
       );
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
@@ -652,7 +654,7 @@ search.addWidgets([
         })
       );
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
@@ -676,7 +678,7 @@ search.addWidgets([
         })
       );
 
-      const actual = widget.getWidgetSearchParameters(helper.state, {
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
         uiState: {},
       });
 
