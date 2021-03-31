@@ -155,8 +155,8 @@ class InstantSearch extends EventEmitter {
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: Array<{
-    middleware: Middleware;
-    middlewareDefinition: MiddlewareDefinition;
+    creator: Middleware;
+    instance: MiddlewareDefinition;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
 
@@ -271,8 +271,8 @@ See ${createDocumentationLink({
     const newMiddlewareList = middleware.map(fn => {
       const newMiddleware = fn({ instantSearchInstance: this });
       this.middleware.push({
-        middleware: fn,
-        middlewareDefinition: newMiddleware,
+        creator: fn,
+        instance: newMiddleware,
       });
       return newMiddleware;
     });
@@ -293,11 +293,11 @@ See ${createDocumentationLink({
    */
   public unuse(...middlewareToUnuse: Middleware[]): this {
     this.middleware
-      .filter(m => middlewareToUnuse.includes(m.middleware))
-      .forEach(m => m.middlewareDefinition.unsubscribe());
+      .filter(m => middlewareToUnuse.includes(m.creator))
+      .forEach(m => m.instance.unsubscribe());
 
     this.middleware = this.middleware.filter(
-      m => !middlewareToUnuse.includes(m.middleware)
+      m => !middlewareToUnuse.includes(m.creator)
     );
 
     return this;
@@ -474,8 +474,8 @@ See ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
-    this.middleware.forEach(({ middlewareDefinition }) => {
-      middlewareDefinition.subscribe();
+    this.middleware.forEach(({ instance }) => {
+      instance.subscribe();
     });
 
     mainHelper.search();
@@ -515,8 +515,8 @@ See ${createDocumentationLink({
     this.mainHelper = null;
     this.helper = null;
 
-    this.middleware.forEach(({ middlewareDefinition }) => {
-      middlewareDefinition.unsubscribe();
+    this.middleware.forEach(({ instance }) => {
+      instance.unsubscribe();
     });
   }
 
@@ -594,8 +594,8 @@ See ${createDocumentationLink({
   public onInternalStateChange = defer(() => {
     const nextUiState = this.mainIndex.getWidgetUiState({});
 
-    this.middleware.forEach(({ middlewareDefinition }) => {
-      middlewareDefinition.onStateChange({
+    this.middleware.forEach(({ instance }) => {
+      instance.onStateChange({
         uiState: nextUiState,
       });
     });
