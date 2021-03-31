@@ -40,7 +40,39 @@ function searchOnlyWithDerivedHelpers(helper) {
   });
 }
 
-function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
+function defaultCloneComponent(componentInstance) {
+  const options = {
+    serverPrefetch: undefined,
+    fetch: undefined,
+    _base: undefined,
+    name: 'ais-ssr-root-component',
+    // copy over global Vue APIs
+    router: componentInstance.$router,
+    store: componentInstance.$store,
+  };
+
+  const Extended = componentInstance.$vnode
+    ? componentInstance.$vnode.componentOptions.Ctor.extend(options)
+    : Vue.component(Object.assign({}, componentInstance.$options, options));
+
+  const app = new Extended({
+    propsData: componentInstance.$options.propsData,
+  });
+
+  // https://stackoverflow.com/a/48195006/3185307
+  app.$slots = componentInstance.$slots;
+  app.$root = componentInstance.$root;
+  app.$options.serverPrefetch = [];
+
+  return app;
+}
+
+function augmentInstantSearch(
+  instantSearchOptions,
+  searchClient,
+  indexName,
+  cloneComponent
+) {
   /* eslint-disable no-param-reassign */
 
   const helper = algoliaHelper(searchClient, indexName);
@@ -68,32 +100,7 @@ function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
 
     return Promise.resolve()
       .then(() => {
-        const options = {
-          serverPrefetch: undefined,
-          fetch: undefined,
-          _base: undefined,
-          name: 'ais-ssr-root-component',
-          // copy over global Vue APIs
-          router: componentInstance.$router,
-          store: componentInstance.$store,
-        };
-
-        const Extended = componentInstance.$vnode
-          ? componentInstance.$vnode.componentOptions.Ctor.extend(options)
-          : Vue.component(
-              Object.assign({}, componentInstance.$options, options)
-            );
-
-        app = new Extended({
-          propsData: componentInstance.$options.propsData,
-        });
-
-        // https://stackoverflow.com/a/48195006/3185307
-        app.$slots = componentInstance.$slots;
-
-        app.$root = componentInstance.$root;
-
-        app.$options.serverPrefetch = [];
+        app = cloneComponent(componentInstance);
 
         app.instantsearch.helper = helper;
         app.instantsearch.mainHelper = helper;
@@ -235,7 +242,11 @@ function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
 }
 
 export function createServerRootMixin(instantSearchOptions = {}) {
-  const { searchClient, indexName } = instantSearchOptions;
+  const {
+    searchClient,
+    indexName,
+    $cloneComponent = defaultCloneComponent,
+  } = instantSearchOptions;
 
   if (!searchClient || !indexName) {
     throw new Error(
@@ -246,7 +257,8 @@ export function createServerRootMixin(instantSearchOptions = {}) {
   const search = augmentInstantSearch(
     instantSearchOptions,
     searchClient,
-    indexName
+    indexName,
+    $cloneComponent
   );
 
   // put this in the user's root Vue instance
