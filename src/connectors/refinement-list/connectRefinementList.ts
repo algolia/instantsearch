@@ -51,10 +51,6 @@ export type RefinementListItem = {
    * Indicates if the list item is refined.
    */
   isRefined: boolean;
-  /**
-   * List item childrens.
-   */
-  data?: RefinementListItem[];
 };
 
 export type RefinementListConnectorParams = {

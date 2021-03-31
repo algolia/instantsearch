@@ -8,6 +8,7 @@ import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
 import SearchBox from '../SearchBox/SearchBox';
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
+import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import { SearchBoxTemplates } from '../../widgets/search-box/types';
 import { CreateURL, Templates } from '../../types';
 
@@ -23,7 +24,7 @@ export type RefinementListProps<
   createURL: CreateURL<string>;
   cssClasses: TCSSClasses;
   depth?: number;
-  facetValues?: TRefinementListItem[];
+  facetValues?: TRefinementListItem[] | HierarchicalMenuItem[];
   attribute?: string;
   templateProps?: PreparedTemplateProps<TTemplates>;
   searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
@@ -55,12 +56,18 @@ type RefinementListPropsWithDefaultProps<
 type RefinementListItemTemplateData<
   TTemplates extends Templates,
   TCSSClasses extends CSSClasses
-> = TRefinementListItem & {
+> = (TRefinementListItem | HierarchicalMenuItem) & {
   url: string;
 } & Pick<
     RefinementListProps<TTemplates, TCSSClasses>,
     'attribute' | 'cssClasses' | 'isFromSearch'
   >;
+
+function isHierarchicalMenuItem(
+  facetValue: TRefinementListItem | HierarchicalMenuItem
+): facetValue is HierarchicalMenuItem {
+  return (facetValue as HierarchicalMenuItem).data !== undefined;
+}
 
 class RefinementList<
   TTemplates extends Templates,
@@ -94,9 +101,15 @@ class RefinementList<
     this.props.toggleRefinement(facetValueToRefine);
   }
 
-  private _generateFacetItem(facetValue: TRefinementListItem) {
+  private _generateFacetItem(
+    facetValue: TRefinementListItem | HierarchicalMenuItem
+  ) {
     let subItems;
-    if (facetValue.data && facetValue.data.length > 0) {
+    if (
+      isHierarchicalMenuItem(facetValue) &&
+      Array.isArray(facetValue.data) &&
+      facetValue.data.length > 0
+    ) {
       const { root, ...cssClasses } = this.props.cssClasses;
       subItems = (
         <RefinementList
@@ -135,7 +148,9 @@ class RefinementList<
       [this.props.cssClasses.selectedItem]: facetValue.isRefined,
       [this.props.cssClasses.disabledItem]: !facetValue.count,
       [this.props.cssClasses.parentItem]:
-        facetValue.data && facetValue.data.length > 0,
+        isHierarchicalMenuItem(facetValue) &&
+        Array.isArray(facetValue.data) &&
+        facetValue.data.length > 0,
     });
 
     return (
@@ -300,7 +315,9 @@ class RefinementList<
     const facetValues = this.props.facetValues &&
       this.props.facetValues.length > 0 && (
         <ul className={this.props.cssClasses.list}>
-          {this.props.facetValues.map(this._generateFacetItem, this)}
+          {(this.props.facetValues as Array<
+            TRefinementListItem | HierarchicalMenuItem
+          >).map(this._generateFacetItem, this)}
         </ul>
       );
 

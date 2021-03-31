@@ -3,13 +3,24 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import connectHierarchicalMenu, {
+  HierarchicalMenuItem,
+  HierarchicalMenuConnectorParams,
+  HierarchicalMenuRendererOptions,
+} from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import defaultTemplates from './defaultTemplates';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import {
+  TransformItems,
+  Template,
+  WidgetFactory,
+  RendererOptions,
+} from '../../types';
 import { component } from '../../lib/suit';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -17,12 +28,163 @@ const withUsage = createDocumentationMessageGenerator({
 });
 const suit = component('HierarchicalMenu');
 
+type HierarchicalMenuTemplates = {
+  /**
+   * Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+   */
+  item: Template;
+  /**
+   * Template used for the show more text, provided with `isShowingMore` data property.
+   */
+  showMoreText: Template;
+};
+
+export type HierarchicalMenuCSSClasses = {
+  /**
+   * CSS class to add to the root element.
+   */
+  root: string | string[];
+  /**
+   * CSS class to add to the root element when no refinements.
+   */
+  noRefinementRoot: string | string[];
+  /**
+   * CSS class to add to the list element.
+   */
+  list: string | string[];
+  /**
+   * CSS class to add to the child list element.
+   */
+  childList: string | string[];
+  /**
+   * CSS class to add to each item element.
+   */
+  item: string | string[];
+  /**
+   * CSS class to add to each selected item element.
+   */
+  selectedItem: string | string[];
+  /**
+   * CSS class to add to each parent item element.
+   */
+  parentItem: string | string[];
+  /**
+   * CSS class to add to each link (when using the default template).
+   */
+  link: string | string[];
+  /**
+   * CSS class to add to each label (when using the default template).
+   */
+  label: string | string[];
+  /**
+   * CSS class to add to each count element (when using the default template).
+   */
+  count: string | string[];
+  /**
+   * CSS class to add to the show more element.
+   */
+  showMore: string | string[];
+  /**
+   * CSS class to add to the disabled show more element.
+   */
+  disabledShowMore: string | string[];
+};
+
+type HierarchicalMenuRendererCSSClasses = Required<
+  {
+    [key in keyof HierarchicalMenuCSSClasses]: string;
+  }
+>;
+
+export type HierarchicalMenuWidgetParams = {
+  /**
+   * CSS Selector or HTMLElement to insert the widget.
+   */
+  container: string | HTMLElement;
+  /**
+   * Array of attributes to use to generate the hierarchy of the menu.
+   */
+  attributes: string[];
+  /**
+   * Separator used in the attributes to separate level values.
+   */
+  separator?: string;
+  /**
+   * Prefix path to use if the first level is not the root level.
+   */
+  rootPath?: string;
+  /**
+   * Show the siblings of the selected parent level of the current refined value.
+   */
+  showParentLevel?: boolean;
+  /**
+   * Max number of values to display.
+   */
+  limit?: number;
+  /**
+   * Whether to display the "show more" button.
+   */
+  showMore?: boolean;
+  /**
+   * Max number of values to display when showing more.
+   * does not impact the root level.
+   *
+   * The hierarchical menu is able to show or hide the siblings with `showParentLevel`.
+   *
+   * With `showParentLevel` set to `true` (default):
+   * - Parent lvl0
+   *   - **lvl1**
+   *     - **lvl2**
+   *     - lvl2
+   *     - lvl2
+   *   - lvl 1
+   *   - lvl 1
+   * - Parent lvl0
+   * - Parent lvl0
+   *
+   * With `showParentLevel` set to `false`:
+   * - Parent lvl0
+   *   - **lvl1**
+   *     - **lvl2**
+   * - Parent lvl0
+   * - Parent lvl0
+   */
+  showMoreLimit?: number;
+  /**
+   * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+   * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+   */
+  sortBy?:
+    | Array<'count' | 'isRefined' | 'name:asc' | 'name:desc'>
+    | (() => void);
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: TransformItems<HierarchicalMenuItem>;
+  /**
+   * Templates to use for the widget.
+   */
+  templates?: Partial<HierarchicalMenuTemplates>;
+  /**
+   * CSS classes to add to the wrapping elements.
+   */
+  cssClasses?: Partial<HierarchicalMenuCSSClasses>;
+};
+
 const renderer = ({
   cssClasses,
   containerNode,
   showMore,
   templates,
   renderState,
+}: {
+  cssClasses: HierarchicalMenuRendererCSSClasses;
+  containerNode: HTMLElement;
+  showMore: boolean;
+  templates: Partial<HierarchicalMenuTemplates>;
+  renderState: {
+    templateProps?: PreparedTemplateProps<HierarchicalMenuTemplates>;
+  };
 }) => (
   {
     createURL,
@@ -32,8 +194,9 @@ const renderer = ({
     isShowingMore,
     toggleShowMore,
     canToggleShowMore,
-  },
-  isFirstRendering
+  }: HierarchicalMenuRendererOptions &
+    RendererOptions<HierarchicalMenuConnectorParams>,
+  isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -59,67 +222,6 @@ const renderer = ({
     containerNode
   );
 };
-
-/**
- * @typedef {Object} HierarchicalMenuCSSClasses
- * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element when no refinements.
- * @property {string|string[]} [list] CSS class to add to the list element.
- * @property {string|string[]} [childList] CSS class to add to the child list element.
- * @property {string|string[]} [item] CSS class to add to each item element.
- * @property {string|string[]} [selectedItem] CSS class to add to each selected item element.
- * @property {string|string[]} [parentItem] CSS class to add to each parent item element.
- * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
- * @property {string|string[]} [label] CSS class to add to each label (when using the default template).
- * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
- * @property {string|string[]} [showMore] CSS class to add to the show more element.
- * @property {string|string[]} [disabledShowMore] CSS class to add to the disabled show more element.
- */
-
-/**
- * @typedef {Object} HierarchicalMenuTemplates
- * @property {string|function(object):string} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property {string|function} [showMoreText] Template used for the show more text, provided with `isShowingMore` data property.
- */
-
-/**
- * @typedef {Object} HierarchicalMenuWidgetParams
- * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
- * @property {string} [separator = " > "] Separator used in the attributes to separate level values.
- * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
- * @property {boolean} [showParentLevel = true] Show the siblings of the selected parent level of the current refined value. This
- * @property {number} [limit = 10] Max number of values to display.
- * @property {boolean} [showMore = false] Whether to display the "show more" button.
- * @property {number} [showMoreLimit = 20] Max number of values to display when showing more.
- * does not impact the root level.
- *
- * The hierarchical menu is able to show or hide the siblings with `showParentLevel`.
- *
- * With `showParentLevel` set to `true` (default):
- * - Parent lvl0
- *   - **lvl1**
- *     - **lvl2**
- *     - lvl2
- *     - lvl2
- *   - lvl 1
- *   - lvl 1
- * - Parent lvl0
- * - Parent lvl0
- *
- * With `showParentLevel` set to `false`:
- * - Parent lvl0
- *   - **lvl1**
- *     - **lvl2**
- * - Parent lvl0
- * - Parent lvl0
- * @property {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *
- * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- * @property {HierarchicalMenuTemplates} [templates] Templates to use for the widget.
- * @property {HierarchicalMenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
- */
 
 /**
  * The hierarchical menu widget is used to create a navigation based on a hierarchy of facet attributes.
@@ -172,7 +274,15 @@ const renderer = ({
  *   })
  * ]);
  */
-export default function hierarchicalMenu(widgetParams) {
+export type HierarchicalMenuWidget = WidgetFactory<
+  HierarchicalMenuRendererOptions,
+  HierarchicalMenuConnectorParams,
+  HierarchicalMenuWidgetParams
+>;
+
+const hierarchicalMenu: HierarchicalMenuWidget = function hierarchicalMenu(
+  widgetParams
+) {
   const {
     container,
     attributes,
@@ -250,4 +360,6 @@ export default function hierarchicalMenu(widgetParams) {
     }),
     $$widgetType: 'ais.hierarchicalMenu',
   };
-}
+};
+
+export default hierarchicalMenu;

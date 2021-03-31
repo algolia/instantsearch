@@ -5,45 +5,120 @@ import {
   createSendEventForFacet,
   isEqual,
   noop,
+  SendEventForFacet,
 } from '../../lib/utils';
+import { SearchResults } from 'algoliasearch-helper';
+import {
+  Connector,
+  CreateURL,
+  TransformItems,
+  RenderOptions,
+  Widget,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hierarchical-menu',
   connector: true,
 });
 
-/**
- * @typedef {Object} HierarchicalMenuItem
- * @property {string} value Value of the menu item.
- * @property {string} label Human-readable value of the menu item.
- * @property {number} count Number of matched results after refinement is applied.
- * @property {isRefined} boolean Indicates if the refinement is applied.
- * @property {Object} [data = undefined] n+1 level of items, same structure HierarchicalMenuItem (default: `undefined`).
- */
+export type HierarchicalMenuItem = {
+  /**
+   * Value of the menu item.
+   */
+  value: string;
+  /**
+   * Human-readable value of the menu item.
+   */
+  label: string;
+  /**
+   * Number of matched results after refinement is applied.
+   */
+  count: number;
+  /**
+   * Indicates if the refinement is applied.
+   */
+  isRefined: boolean;
+  /**
+   * n+1 level of items, same structure HierarchicalMenuItem
+   */
+  data?: HierarchicalMenuItem[] | null;
+};
 
-/**
- * @typedef {Object} CustomHierarchicalMenuWidgetParams
- * @property {string[]} attributes Attributes to use to generate the hierarchy of the menu.
- * @property {string} [separator = '>'] Separator used in the attributes to separate level values.
- * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
- * @property {boolean} [showParentLevel=false] Show the siblings of the selected parent levels of the current refined value. This
- * does not impact the root level.
- * @property {number} [limit = 10] Max number of values to display.
- * @property {boolean} [showMore = false] Whether to display the "show more" button.
- * @property {number} [showMoreLimit = 20] Max number of values to display when showing more.
- * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *
- * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- */
+export type HierarchicalMenuConnectorParams = {
+  /**
+   *  Attributes to use to generate the hierarchy of the menu.
+   */
+  attributes: string[];
+  /**
+   * Separator used in the attributes to separate level values.
+   */
+  separator?: string;
+  /**
+   * Prefix path to use if the first level is not the root level.
+   */
+  rootPath?: string | null;
 
-/**
- * @typedef {Object} HierarchicalMenuRenderingOptions
- * @property {function(item.value): string} createURL Creates an url for the next state for a clicked item.
- * @property {HierarchicalMenuItem[]} items Values to be rendered.
- * @property {function(item.value)} refine Sets the path of the hierarchical filter and triggers a new search.
- * @property {Object} widgetParams All original `CustomHierarchicalMenuWidgetParams` forwarded to the `renderFn`.
- */
+  /**
+   * Show the siblings of the selected parent levels of the current refined value. This
+   * does not impact the root level.
+   */
+  showParentLevel?: boolean;
+  /**
+   * Max number of values to display.
+   */
+  limit?: number;
+  /**
+   * Whether to display the "show more" button.
+   */
+  showMore?: boolean;
+  /**
+   * Max number of values to display when showing more.
+   */
+  showMoreLimit?: number;
+  /**
+   * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+   * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+   */
+  sortBy?:
+    | Array<'count' | 'isRefined' | 'name:asc' | 'name:desc'>
+    | (() => void);
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: TransformItems<HierarchicalMenuItem>;
+};
+
+export type HierarchicalMenuRendererOptions = {
+  /**
+   * Creates an url for the next state for a clicked item.
+   */
+  createURL: CreateURL<string>;
+  /**
+   * Values to be rendered.
+   */
+  items: HierarchicalMenuItem[];
+  /**
+   * Sets the path of the hierarchical filter and triggers a new search.
+   */
+  refine: (value: string) => void;
+  /**
+   * True if the menu is displaying all the menu items.
+   */
+  isShowingMore: boolean;
+  /**
+   * Toggles the number of values displayed between `limit` and `showMoreLimit`.
+   */
+  toggleShowMore: () => void;
+  /**
+   * `true` if the toggleShowMore button can be activated (enough items to display more or
+   * already displaying more than `limit` items)
+   */
+  canToggleShowMore: boolean;
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEventForFacet;
+};
 
 /**
  * **HierarchicalMenu** connector provides the logic to build a custom widget
@@ -58,10 +133,18 @@ const withUsage = createDocumentationMessageGenerator({
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetParams)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
-export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
+export type ConnectHierarchicalMenu = Connector<
+  HierarchicalMenuRendererOptions,
+  HierarchicalMenuConnectorParams
+>;
+
+const connectHierarchicalMenu: ConnectHierarchicalMenu = function connectHierarchicalMenu(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
+  return widgetParams => {
     const {
       attributes,
       separator = ' > ',
@@ -71,8 +154,8 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       showMore = false,
       showMoreLimit = 20,
       sortBy = ['name:asc'],
-      transformItems = items => items,
-    } = widgetParams;
+      transformItems = (items => items) as TransformItems<HierarchicalMenuItem>,
+    } = widgetParams || {};
 
     if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
       throw new Error(
@@ -90,7 +173,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     // so that we can always map $hierarchicalFacetName => real attributes
     // we use the first attribute name
     const [hierarchicalFacetName] = attributes;
-    let sendEvent;
+    let sendEvent: HierarchicalMenuRendererOptions['sendEvent'];
 
     // Provide the same function to the `renderFn` so that way the user
     // has to only bind it once when `isFirstRendering` for instance
@@ -99,21 +182,46 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       toggleShowMore();
     }
 
+    let _refine: HierarchicalMenuRendererOptions['refine'] | undefined;
+
+    let isShowingMore = false;
+
+    function createToggleShowMore(
+      renderOptions: RenderOptions,
+      widget: Widget
+    ) {
+      return () => {
+        isShowingMore = !isShowingMore;
+        widget.render!(renderOptions);
+      };
+    }
+
+    function getLimit() {
+      return isShowingMore ? showMoreLimit : limit;
+    }
+
+    function _prepareFacetValues(
+      facetValues: SearchResults.HierarchicalFacet[]
+    ): HierarchicalMenuItem[] {
+      return facetValues
+        .slice(0, getLimit())
+        .map(({ name: label, path: value, data, ...subValue }) => {
+          const item: HierarchicalMenuItem = {
+            ...subValue,
+            label,
+            value,
+          };
+          if (Array.isArray(data)) {
+            item.data = _prepareFacetValues(data);
+          } else if (data !== undefined) {
+            item.data = data;
+          }
+          return item;
+        });
+    }
+
     return {
       $$type: 'ais.hierarchicalMenu',
-
-      isShowingMore: false,
-
-      createToggleShowMore(renderOptions) {
-        return () => {
-          this.isShowingMore = !this.isShowingMore;
-          this.render(renderOptions);
-        };
-      },
-
-      getLimit() {
-        return this.isShowingMore ? showMoreLimit : limit;
-      },
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
@@ -127,21 +235,10 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         );
       },
 
-      _prepareFacetValues(facetValues) {
-        return facetValues
-          .slice(0, this.getLimit())
-          .map(({ name: label, path: value, ...subValue }) => {
-            if (Array.isArray(subValue.data)) {
-              subValue.data = this._prepareFacetValues(subValue.data);
-            }
-            return { ...subValue, label, value };
-          });
-      },
-
       render(renderOptions) {
         const { instantSearchInstance } = renderOptions;
 
-        toggleShowMore = this.createToggleShowMore(renderOptions);
+        toggleShowMore = createToggleShowMore(renderOptions, this);
 
         renderFn(
           {
@@ -182,8 +279,11 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         instantSearchInstance,
         helper,
       }) {
+        let items: HierarchicalMenuRendererOptions['items'] = [];
+        let canToggleShowMore = false;
+
         // Bind createURL to this specific attribute
-        function _createURL(facetValue) {
+        function _createURL(facetValue: string) {
           return createURL(
             state
               .resetPage()
@@ -196,12 +296,12 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             instantSearchInstance,
             helper,
             attribute: hierarchicalFacetName,
-            widgetType: this.$$type,
+            widgetType: this.$$type!,
           });
         }
 
-        if (!this._refine) {
-          this._refine = function(facetValue) {
+        if (!_refine) {
+          _refine = function(facetValue) {
             sendEvent('click', facetValue);
             helper
               .toggleFacetRefinement(hierarchicalFacetName, facetValue)
@@ -209,41 +309,42 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           };
         }
 
-        const facetValues = results
-          ? results.getFacetValues(hierarchicalFacetName, { sortBy }).data || []
-          : [];
-        const items = transformItems(
-          results ? this._prepareFacetValues(facetValues) : []
-        );
+        if (results) {
+          const facetValues = results.getFacetValues(hierarchicalFacetName, {
+            sortBy,
+          });
+          const facetItems =
+            facetValues && !Array.isArray(facetValues) && facetValues.data
+              ? facetValues.data
+              : [];
 
-        const getHasExhaustiveItems = () => {
-          if (!results) {
-            return false;
-          }
-
-          const currentLimit = this.getLimit();
           // If the limit is the max number of facet retrieved it is impossible to know
           // if the facets are exhaustive. The only moment we are sure it is exhaustive
           // is when it is strictly under the number requested unless we know that another
           // widget has requested more values (maxValuesPerFacet > getLimit()).
           // Because this is used for making the search of facets unable or not, it is important
           // to be conservative here.
-          return state.maxValuesPerFacet > currentLimit
-            ? facetValues.length <= currentLimit
-            : facetValues.length < currentLimit;
-        };
+          const hasExhaustiveItems =
+            (state.maxValuesPerFacet || 0) > getLimit()
+              ? facetItems.length <= getLimit()
+              : facetItems.length < getLimit();
+
+          canToggleShowMore =
+            showMore && (isShowingMore || !hasExhaustiveItems);
+
+          items = transformItems(_prepareFacetValues(facetItems));
+        }
 
         return {
           items,
-          refine: this._refine,
+          refine: _refine,
           canRefine: items.length > 0,
           createURL: _createURL,
           sendEvent,
           widgetParams,
-          isShowingMore: this.isShowingMore,
+          isShowingMore,
           toggleShowMore: cachedToggleShowMore,
-          canToggleShowMore:
-            showMore && (this.isShowingMore || !getHasExhaustiveItems()),
+          canToggleShowMore,
         };
       },
 
@@ -290,6 +391,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             attributes,
             separator,
             rootPath,
+            // @ts-ignore `showParentLevel` is missing in the SearchParameters.HierarchicalFacet declaration
             showParentLevel,
           });
 
@@ -322,4 +424,6 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
     };
   };
-}
+};
+
+export default connectHierarchicalMenu;
