@@ -134,7 +134,8 @@ class RefinementList<
     const refinementListItemClassName = cx(this.props.cssClasses.item, {
       [this.props.cssClasses.selectedItem]: facetValue.isRefined,
       [this.props.cssClasses.disabledItem]: !facetValue.count,
-      [this.props.cssClasses.parentItem]: hasChildren,
+      [this.props.cssClasses.parentItem]:
+        facetValue.data && facetValue.data.length > 0,
     });
 
     return (
@@ -244,14 +245,11 @@ class RefinementList<
   }
 
   public render() {
-    const showMoreButtonClassName = cx(
-      this.props.cssClasses.showMore,
-      this.props.cssClasses.disabledShowMore && {
-        [this.props.cssClasses.disabledShowMore]: !(
-          this.props.showMore === true && this.props.canToggleShowMore
-        ),
-      }
-    );
+    const showMoreButtonClassName = cx(this.props.cssClasses.showMore, {
+      [this.props.cssClasses.disabledShowMore]: !(
+        this.props.showMore === true && this.props.canToggleShowMore
+      ),
+    });
 
     const showMoreButton = this.props.showMore === true && (
       <Template
@@ -318,7 +316,7 @@ class RefinementList<
 
     const rootClassName = cx(
       this.props.cssClasses.root,
-      this.props.cssClasses.noRefinementRoot && {
+      {
         [this.props.cssClasses.noRefinementRoot]:
           !this.props.facetValues || this.props.facetValues.length === 0,
       },
