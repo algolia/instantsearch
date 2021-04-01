@@ -3,8 +3,16 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import ratingMenu from '../rating-menu';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import ratingMenu from '../rating-menu';
+
+const mockedRender = render as jest.Mock;
 
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
@@ -17,6 +25,7 @@ jest.mock('preact', () => {
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
+      // @ts-expect-error
       ratingMenu({ container: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -28,25 +37,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
 describe('ratingMenu()', () => {
   const attribute = 'anAttrName';
-  let container;
-  let widget;
-  let helper;
-  let createURL;
-  let results;
+  let container: HTMLDivElement;
+  let widget: ReturnType<typeof ratingMenu>;
+  let helper: jsHelper.AlgoliaSearchHelper;
+  let createURL: () => string;
+  let results: SearchResults;
 
   beforeEach(() => {
-    render.mockClear();
+    mockedRender.mockClear();
 
     container = document.createElement('div');
     widget = ratingMenu({
       container,
       attribute,
-      cssClasses: { body: ['body', 'cx'] },
     });
     helper = jsHelper(
-      {},
+      createSearchClient(),
       '',
-      widget.getWidgetSearchParameters(new SearchParameters({}), {
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -56,42 +64,45 @@ describe('ratingMenu()', () => {
     jest.spyOn(helper, 'removeNumericRefinement');
     helper.search = jest.fn();
 
-    results = {
-      getFacetValues: jest.fn().mockReturnValue([]),
-      hits: [],
-    };
+    results = new SearchResults(helper.state, [createSingleSearchResponse()]);
     createURL = () => '#';
-    widget.init({
-      helper,
-      state: helper.state,
-      instantSearchInstance: createInstantSearch({
-        templatesConfig: undefined,
-      }),
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        instantSearchInstance: createInstantSearch({
+          templatesConfig: undefined,
+        }),
+      })
+    );
   });
 
   it('configures the underlying disjunctive facet', () => {
     expect(
-      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['anAttrName'],
         numericRefinements: {
-          anAttrName: [],
+          anAttrName: {},
         },
       })
     );
   });
 
   it('calls twice render(<RefinementList props />, container)', () => {
-    widget.render({ state: helper.state, helper, results, createURL });
-    widget.render({ state: helper.state, helper, results, createURL });
+    widget.render!(
+      createRenderOptions({ state: helper.state, helper, results, createURL })
+    );
+    widget.render!(
+      createRenderOptions({ state: helper.state, helper, results, createURL })
+    );
 
-    const [firstRender, secondRender] = render.mock.calls;
+    const [firstRender, secondRender] = mockedRender.mock.calls;
 
     const { children, ...rootProps } = firstRender[0].props;
 
-    expect(render).toHaveBeenCalledTimes(2);
+    expect(mockedRender).toHaveBeenCalledTimes(2);
     expect(rootProps).toMatchSnapshot();
     expect(firstRender[1]).toEqual(container);
     expect(secondRender[1]).toEqual(container);
@@ -100,29 +111,31 @@ describe('ratingMenu()', () => {
   it('hide the count==0 when there is a refinement', () => {
     helper.addNumericRefinement(attribute, '>=', 1);
     const _results = new SearchResults(helper.state, [
-      {
+      createSingleSearchResponse({
         facets: {
           [attribute]: { 1: 42 },
         },
-      },
-      {},
+      }),
     ]);
 
-    widget.render({
-      state: helper.state,
-      helper,
-      results: _results,
-      createURL,
-    });
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        helper,
+        results: _results,
+        createURL,
+      })
+    );
 
-    const [firstRender] = render.mock.calls;
+    const [firstRender] = mockedRender.mock.calls;
 
-    expect(render).toHaveBeenCalledTimes(1);
+    expect(mockedRender).toHaveBeenCalledTimes(1);
     expect(firstRender[0].props.facetValues).toEqual([
       {
         count: 42,
         isRefined: true,
         name: '1',
+        label: '1',
         value: '1',
         stars: [true, false, false, false, false],
       },
@@ -131,7 +144,9 @@ describe('ratingMenu()', () => {
 
   it("doesn't call the refinement functions if not refined", () => {
     helper.getRefinements = jest.fn().mockReturnValue([]);
-    widget.render({ state: helper.state, helper, results, createURL });
+    widget.render!(
+      createRenderOptions({ state: helper.state, helper, results, createURL })
+    );
 
     expect(helper.clearRefinements).toHaveBeenCalledTimes(0);
     expect(helper.addNumericRefinement).toHaveBeenCalledTimes(0);
@@ -141,7 +156,9 @@ describe('ratingMenu()', () => {
   it('refines the search', () => {
     helper.getRefinements = jest.fn().mockReturnValue([]);
     widget
-      .getWidgetRenderState({ state: helper.state, helper, results, createURL })
+      .getWidgetRenderState(
+        createRenderOptions({ state: helper.state, helper, results, createURL })
+      )
       .refine('3');
 
     expect(helper.state).toEqual(
@@ -161,9 +178,11 @@ describe('ratingMenu()', () => {
 
   it('toggles the refinements', () => {
     helper.addNumericRefinement(attribute, '>=', 2);
-    helper.addNumericRefinement.mockReset();
+    (helper.addNumericRefinement as jest.Mock).mockReset();
     widget
-      .getWidgetRenderState({ state: helper.state, helper, results, createURL })
+      .getWidgetRenderState(
+        createRenderOptions({ state: helper.state, helper, results, createURL })
+      )
       .refine('2');
 
     expect(helper.state).toEqual(
@@ -183,7 +202,9 @@ describe('ratingMenu()', () => {
   it('toggles the refinements with another facet', () => {
     helper.getRefinements = jest.fn().mockReturnValue([{ value: '2' }]);
     widget
-      .getWidgetRenderState({ state: helper.state, helper, results, createURL })
+      .getWidgetRenderState(
+        createRenderOptions({ state: helper.state, helper, results, createURL })
+      )
       .refine('4');
 
     expect(helper.state).toEqual(
@@ -205,51 +226,55 @@ describe('ratingMenu()', () => {
     const _widget = ratingMenu({
       container,
       attribute,
-      cssClasses: { body: ['body', 'cx'] },
     });
     const _helper = jsHelper(
-      {},
+      createSearchClient(),
       '',
-      _widget.getWidgetSearchParameters(new SearchParameters({}), {
+      _widget.getWidgetSearchParameters!(new SearchParameters({}), {
         uiState: {},
       })
     );
     _helper.search = jest.fn();
 
-    _widget.init({
-      helper: _helper,
-      state: _helper.state,
-      createURL: () => '#',
-      instantSearchInstance: {
-        templatesConfig: {},
-      },
-    });
+    _widget.init!(
+      createInitOptions({
+        helper: _helper,
+        state: _helper.state,
+        createURL: () => '#',
+        instantSearchInstance: createInstantSearch({
+          templatesConfig: {},
+        }),
+      })
+    );
 
-    _widget.render({
-      results: new SearchResults(_helper.state, [
-        {
-          facets: {
-            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
-          },
-        },
-        {},
-      ]),
-      state: _helper.state,
-      helper: _helper,
-      createURL: () => '#',
-      instantSearchInstance: {
-        templatesConfig: {},
-      },
-    });
+    _widget.render!(
+      createRenderOptions({
+        results: new SearchResults(_helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            },
+          }),
+        ]),
+        state: _helper.state,
+        helper: _helper,
+        createURL: () => '#',
+        instantSearchInstance: createInstantSearch({
+          templatesConfig: {},
+        }),
+      })
+    );
 
     expect(
-      render.mock.calls[render.mock.calls.length - 1][0].props.facetValues
+      mockedRender.mock.calls[mockedRender.mock.calls.length - 1][0].props
+        .facetValues
     ).toEqual([
       {
         count: 1000,
         isRefined: false,
 
         name: '4',
+        label: '4',
         value: '4',
         stars: [true, true, true, true, false],
       },
@@ -258,6 +283,7 @@ describe('ratingMenu()', () => {
         isRefined: false,
 
         name: '3',
+        label: '3',
         value: '3',
         stars: [true, true, true, false, false],
       },
@@ -266,6 +292,7 @@ describe('ratingMenu()', () => {
         isRefined: false,
 
         name: '2',
+        label: '2',
         value: '2',
         stars: [true, true, false, false, false],
       },
@@ -274,6 +301,7 @@ describe('ratingMenu()', () => {
         isRefined: false,
 
         name: '1',
+        label: '1',
         value: '1',
         stars: [true, false, false, false, false],
       },

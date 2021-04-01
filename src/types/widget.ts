@@ -1,5 +1,4 @@
 import { Index } from '../widgets/index/index';
-import { CreateURL } from '.';
 import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
@@ -67,6 +66,10 @@ import {
   AnswersRendererOptions,
   AnswersConnectorParams,
 } from '../connectors/answers/connectAnswers';
+import {
+  RatingMenuConnectorParams,
+  RatingMenuRendererOptions,
+} from '../connectors/rating-menu/connectRatingMenu';
 import {
   RangeConnectorParams,
   RangeRendererOptions,
@@ -293,22 +296,8 @@ export type IndexRenderState = Partial<{
   };
   ratingMenu: {
     [attribute: string]: WidgetRenderState<
-      {
-        items: Array<{
-          stars: boolean[];
-          name: string;
-          value: string;
-          count: number;
-          isRefined: boolean;
-        }>;
-        hasNoResults: boolean;
-        refine(value: number): void;
-        createURL: CreateURL<string>;
-      },
-      {
-        attribute: string;
-        max?: number;
-      }
+      RatingMenuRendererOptions,
+      RatingMenuConnectorParams
     >;
   };
   numericMenu: {

@@ -22,6 +22,7 @@ Object {
     Object {
       "count": 0,
       "isRefined": false,
+      "label": "4",
       "name": "4",
       "stars": Array [
         true,
@@ -35,6 +36,7 @@ Object {
     Object {
       "count": 0,
       "isRefined": false,
+      "label": "3",
       "name": "3",
       "stars": Array [
         true,
@@ -48,6 +50,7 @@ Object {
     Object {
       "count": 0,
       "isRefined": false,
+      "label": "2",
       "name": "2",
       "stars": Array [
         true,
@@ -61,6 +64,7 @@ Object {
     Object {
       "count": 0,
       "isRefined": false,
+      "label": "1",
       "name": "1",
       "stars": Array [
         true,
