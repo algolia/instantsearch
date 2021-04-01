@@ -1,7 +1,22 @@
 import uniq from './uniq';
 import { Templates } from '../../types';
 
-type TemplatesConfig = Record<string, unknown>;
+type TemplatesConfig = {
+  helpers?: Record<
+    string,
+    (text: string, render: (value: any) => string) => string
+  >;
+  // https://github.com/twitter/hogan.js/#compilation-options
+  compileOptions?: {
+    asString?: boolean;
+    sectionTags?: Array<{
+      o?: string;
+      c?: string;
+    }>;
+    delimiters?: string;
+    disableLambda?: boolean;
+  };
+};
 
 export type PreparedTemplateProps<TTemplates extends Templates> = {
   templatesConfig: TemplatesConfig;
