@@ -57,7 +57,6 @@ export type HierarchicalMenuConnectorParams = {
    * Prefix path to use if the first level is not the root level.
    */
   rootPath?: string | null;
-
   /**
    * Show the siblings of the selected parent levels of the current refined value. This
    * does not impact the root level.
