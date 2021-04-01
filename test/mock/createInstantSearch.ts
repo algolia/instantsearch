@@ -51,6 +51,7 @@ export const createInstantSearch = (
     removeWidgets: jest.fn(),
     use: jest.fn(),
     EXPERIMENTAL_use: jest.fn(),
+    unuse: jest.fn(),
     // methods from EventEmitter
     addListener: jest.fn(),
     removeListener: jest.fn(),
