@@ -1,85 +1,58 @@
-export const ANONYMOUS_TOKEN = 'anonymous-user-id-1';
+import {
+  AlgoliaAnalytics,
+  getFunctionalInterface,
+  getRequesterForBrowser,
+  processQueue,
+} from 'search-insights/index-browser.cjs';
 
-export type AlgoliaAnalytics = {
-  setUserToken(userToken: string): void;
-  init({ appId, apiKey }): void;
-  _get(key: string, callback: (value: any) => void): void;
-  onUserTokenChange(
-    callback: (value: string) => void,
-    options?: { immediate?: boolean }
-  ): void;
-  viewedObjectIDs(...args: any[]): void;
-};
-
-export function createAlgoliaAnalytics(): AlgoliaAnalytics {
-  let values: any = {};
-  const setValues = obj => {
-    values = {
-      ...values,
-      ...obj,
-    };
-  };
-  let userTokenCallback;
-  const setUserToken = userToken => {
-    setValues({ _userToken: userToken });
-    if (userTokenCallback) {
-      userTokenCallback(userToken);
-    }
-  };
-  const init = ({ appId, apiKey }) => {
-    setValues({ _hasCredentials: true, _appId: appId, _apiKey: apiKey });
-    setUserToken(ANONYMOUS_TOKEN);
-  };
-  const _get = (key, callback) => callback(values[key]);
-  const onUserTokenChange = (callback, { immediate = false } = {}) => {
-    userTokenCallback = callback;
-    if (immediate) {
-      callback(values._userToken);
-    }
-  };
-  const viewedObjectIDs = jest.fn();
+export function createInsights() {
+  const analytics = mockSendingEvents(
+    new AlgoliaAnalytics({
+      requestFn: getRequesterForBrowser(),
+    })
+  );
+  const insightsClient = jest.fn(getFunctionalInterface(analytics));
 
   return {
-    setUserToken,
-    init,
-    _get,
-    onUserTokenChange,
-    viewedObjectIDs,
+    analytics,
+    insightsClient,
   };
 }
 
-export function createInsightsClient(instance = createAlgoliaAnalytics()) {
-  return (methodName, ...args) => {
-    if (!instance[methodName]) {
-      throw new Error(`${methodName} doesn't exist in this mocked instance`);
-    }
-    instance[methodName](...args);
-  };
-}
-
-export function createInsightsUmdVersion(
-  algoliaAnalytics = createAlgoliaAnalytics()
-) {
+export function createInsightsUmdVersion() {
   const globalObject: any = {};
+  globalObject.AlgoliaAnalyticsObject = 'aa';
   globalObject.aa = (...args) => {
     globalObject.aa.queue = globalObject.aa.queue || [];
     globalObject.aa.queue.push(args);
   };
+  const analytics = mockSendingEvents(
+    new AlgoliaAnalytics({
+      requestFn: getRequesterForBrowser(),
+    })
+  );
 
   return {
+    analytics,
     insightsClient: globalObject.aa,
     libraryLoadedAndProcessQueue: () => {
-      const _aa = createInsightsClient(algoliaAnalytics);
-      const queue = globalObject.aa.queue;
-      queue.forEach(([methodName, ...args]) => {
-        _aa(methodName, ...args);
-      });
-      queue.push = ([methodName, ...args]) => {
-        _aa(methodName, ...args);
-      };
-      return {
-        algoliaAnalytics,
-      };
+      processQueue.call(analytics, globalObject);
     },
   };
+}
+
+function mockSendingEvents(analytics: AlgoliaAnalytics) {
+  analytics.viewedFilters = jest.fn(analytics.viewedFilters);
+  analytics.viewedObjectIDs = jest.fn(analytics.viewedObjectIDs);
+  analytics.clickedFilters = jest.fn(analytics.clickedFilters);
+  analytics.clickedObjectIDs = jest.fn(analytics.clickedObjectIDs);
+  analytics.clickedObjectIDsAfterSearch = jest.fn(
+    analytics.clickedObjectIDsAfterSearch
+  );
+  analytics.convertedFilters = jest.fn(analytics.convertedFilters);
+  analytics.convertedObjectIDs = jest.fn(analytics.convertedObjectIDs);
+  analytics.convertedObjectIDsAfterSearch = jest.fn(
+    analytics.convertedObjectIDsAfterSearch
+  );
+  return analytics;
 }

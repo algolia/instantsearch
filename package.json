@@ -136,6 +136,7 @@
     "rollup-plugin-replace": "2.2.0",
     "rollup-plugin-uglify": "6.0.4",
     "scriptjs": "2.5.9",
+    "search-insights": "https://pkg.csb.dev/algolia/search-insights.js/commit/0b3c26c5/search-insights",
     "semver": "6.3.0",
     "shelljs": "0.8.3",
     "shipjs": "0.21.0",

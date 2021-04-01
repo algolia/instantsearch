@@ -3,19 +3,15 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import { createInsightsMiddleware } from '../';
 import { createInstantSearch } from '../../../test/mock/createInstantSearch';
 import {
-  createAlgoliaAnalytics,
-  createInsightsClient,
+  createInsights,
   createInsightsUmdVersion,
-  AlgoliaAnalytics,
-  ANONYMOUS_TOKEN,
 } from '../../../test/mock/createInsightsClient';
 import { warning } from '../../lib/utils';
 import { SearchClient } from '../../types';
 
 describe('insights', () => {
   const createTestEnvironment = () => {
-    const analytics = createAlgoliaAnalytics();
-    const insightsClient = jest.fn(createInsightsClient(analytics));
+    const { analytics, insightsClient } = createInsights();
     const instantSearchInstance = createInstantSearch({
       client: algoliasearch('myAppId', 'myApiKey'),
     });
@@ -37,11 +33,13 @@ describe('insights', () => {
     };
   };
 
-  const createUmdTestEnvironment = (algoliaAnalytics?: AlgoliaAnalytics) => {
+  const createUmdTestEnvironment = () => {
     const {
+      analytics,
       insightsClient,
       libraryLoadedAndProcessQueue,
-    } = createInsightsUmdVersion(algoliaAnalytics);
+    } = createInsightsUmdVersion();
+
     const instantSearchInstance = createInstantSearch({
       client: algoliasearch('myAppId', 'myApiKey'),
     });
@@ -54,6 +52,7 @@ describe('insights', () => {
       getHelper: () => helper,
     };
     return {
+      analytics,
       insightsClient,
       libraryLoadedAndProcessQueue,
       instantSearchInstance,
@@ -124,12 +123,12 @@ describe('insights', () => {
     });
 
     it('does not throw when an event is sent right after the creation in UMD', () => {
-      const algoliaAnalytics = createAlgoliaAnalytics();
       const {
+        analytics,
         insightsClient,
         libraryLoadedAndProcessQueue,
         instantSearchInstance,
-      } = createUmdTestEnvironment(algoliaAnalytics);
+      } = createUmdTestEnvironment();
 
       const middleware = createInsightsMiddleware({
         insightsClient,
@@ -147,7 +146,7 @@ describe('insights', () => {
         },
         widgetType: 'ais.hits',
       });
-      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
 
       // But, the library hasn't been loaded yet, so the event stays in the queue.
       expect(insightsClient.queue[insightsClient.queue.length - 1]).toEqual([
@@ -157,8 +156,8 @@ describe('insights', () => {
 
       // When the library is loaded later, it consumes the queue and sends the event.
       libraryLoadedAndProcessQueue();
-      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
-      expect(algoliaAnalytics.viewedObjectIDs).toHaveBeenCalledWith({
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith({
         eventName: 'Hits Viewed',
         index: '',
         objectIDs: ['1', '2'],
@@ -266,7 +265,7 @@ describe('insights', () => {
         insightsClient,
       })({ instantSearchInstance });
       middleware.subscribe();
-      expect(getUserToken()).toEqual(ANONYMOUS_TOKEN);
+      expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
     });
 
     it('applies userToken which was set before init', () => {
@@ -334,7 +333,7 @@ describe('insights', () => {
         expect(getUserToken()).toEqual('token-from-queue');
       });
 
-      it('ignores userToken set before init', () => {
+      it('does not override userToken set before init with anonymous token', () => {
         const {
           insightsClient,
           instantSearchInstance,
@@ -350,7 +349,7 @@ describe('insights', () => {
           insightsClient,
         })({ instantSearchInstance });
         middleware.subscribe();
-        expect(getUserToken()).toEqual(ANONYMOUS_TOKEN);
+        expect(getUserToken()).toEqual('token-from-queue-before-init');
       });
     });
   });
@@ -371,14 +370,18 @@ describe('insights', () => {
       instantSearchInstance.sendEventToInsights({
         insightsMethod: 'viewedObjectIDs',
         widgetType: 'ais.customWidget',
-        eventType: 'click',
+        eventType: 'view',
         payload: {
-          hello: 'world',
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
         },
       });
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
       expect(analytics.viewedObjectIDs).toHaveBeenCalledWith({
-        hello: 'world',
+        index: 'my-index',
+        eventName: 'My Hits Viewed',
+        objectIDs: ['obj1'],
       });
     });
 
