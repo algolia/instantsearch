@@ -131,19 +131,11 @@ class RefinementList<
       key += `/${facetValue.count}`;
     }
 
-    const refinementListItemClassName = cx(
-      this.props.cssClasses.item,
-      this.props.cssClasses.selectedItem && {
-        [this.props.cssClasses.selectedItem]: facetValue.isRefined,
-      },
-      this.props.cssClasses.disabledItem && {
-        [this.props.cssClasses.disabledItem]: !facetValue.count,
-      },
-      this.props.cssClasses.parentItem && {
-        [this.props.cssClasses.parentItem]:
-          facetValue.data && facetValue.data.length > 0,
-      }
-    );
+    const refinementListItemClassName = cx(this.props.cssClasses.item, {
+      [this.props.cssClasses.selectedItem]: facetValue.isRefined,
+      [this.props.cssClasses.disabledItem]: !facetValue.count,
+      [this.props.cssClasses.parentItem]: hasChildren,
+    });
 
     return (
       <RefinementListItem
