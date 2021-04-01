@@ -20,6 +20,7 @@ import {
   Template,
   WidgetFactory,
   RendererOptions,
+  SortBy,
 } from '../../types';
 import { component } from '../../lib/suit';
 
@@ -32,11 +33,16 @@ type HierarchicalMenuTemplates = {
   /**
    * Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
    */
-  item: Template;
+  item: Template<{
+    name: string;
+    count: number;
+    isRefined: boolean;
+    url: string;
+  }>;
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
    */
-  showMoreText: Template;
+  showMoreText: Template<{ isShowingMore: boolean }>;
 };
 
 export type HierarchicalMenuCSSClasses = {
@@ -115,21 +121,6 @@ export type HierarchicalMenuWidgetParams = {
   rootPath?: string;
   /**
    * Show the siblings of the selected parent level of the current refined value.
-   */
-  showParentLevel?: boolean;
-  /**
-   * Max number of values to display.
-   */
-  limit?: number;
-  /**
-   * Whether to display the "show more" button.
-   */
-  showMore?: boolean;
-  /**
-   * Max number of values to display when showing more.
-   * does not impact the root level.
-   *
-   * The hierarchical menu is able to show or hide the siblings with `showParentLevel`.
    *
    * With `showParentLevel` set to `true` (default):
    * - Parent lvl0
@@ -149,14 +140,25 @@ export type HierarchicalMenuWidgetParams = {
    * - Parent lvl0
    * - Parent lvl0
    */
+  showParentLevel?: boolean;
+  /**
+   * Max number of values to display.
+   */
+  limit?: number;
+  /**
+   * Whether to display the "show more" button.
+   */
+  showMore?: boolean;
+  /**
+   * Max number of values to display when showing more.
+   * does not impact the root level.
+   */
   showMoreLimit?: number;
   /**
    * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
    * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
    */
-  sortBy?:
-    | Array<'count' | 'isRefined' | 'name:asc' | 'name:desc'>
-    | (() => void);
+  sortBy?: SortBy<HierarchicalMenuItem>;
   /**
    * Function to transform the items passed to the templates.
    */

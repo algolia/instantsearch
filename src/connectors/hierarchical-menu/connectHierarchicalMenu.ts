@@ -14,6 +14,7 @@ import {
   TransformItems,
   RenderOptions,
   Widget,
+  SortBy,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -41,7 +42,7 @@ export type HierarchicalMenuItem = {
   /**
    * n+1 level of items, same structure HierarchicalMenuItem
    */
-  data?: HierarchicalMenuItem[] | null;
+  data: HierarchicalMenuItem[] | null;
 };
 
 export type HierarchicalMenuConnectorParams = {
@@ -78,9 +79,7 @@ export type HierarchicalMenuConnectorParams = {
    * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
    * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
    */
-  sortBy?:
-    | Array<'count' | 'isRefined' | 'name:asc' | 'name:desc'>
-    | (() => void);
+  sortBy?: SortBy<HierarchicalMenuItem>;
   /**
    * Function to transform the items passed to the templates.
    */
@@ -100,6 +99,10 @@ export type HierarchicalMenuRendererOptions = {
    * Sets the path of the hierarchical filter and triggers a new search.
    */
   refine: (value: string) => void;
+  /**
+   *  Indicates if search state can be refined.
+   */
+  canRefine: boolean;
   /**
    * True if the menu is displaying all the menu items.
    */
@@ -209,11 +212,10 @@ const connectHierarchicalMenu: ConnectHierarchicalMenu = function connectHierarc
             ...subValue,
             label,
             value,
+            data: null,
           };
           if (Array.isArray(data)) {
             item.data = _prepareFacetValues(data);
-          } else if (data !== undefined) {
-            item.data = data;
           }
           return item;
         });

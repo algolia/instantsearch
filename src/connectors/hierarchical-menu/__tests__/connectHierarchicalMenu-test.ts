@@ -497,7 +497,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           createInitOptions({ helper })
         ).hierarchicalMenu
       ).toEqual({
-        anotherCategory: expect.any(Object),
+        anotherCategory: renderState.hierarchicalMenu.anotherCategory,
         category: {
           items: [],
           refine: expect.any(Function),
