@@ -18,7 +18,7 @@ import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 import {
   SearchBoxTemplates,
-  SearchBoxRendererCSSClasses,
+  SearchBoxCSSClasses,
 } from '../search-box/search-box';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -158,6 +158,14 @@ type RefinementListSearchableCSSClasses = {
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
 
+export type RefinementListRendererCSSClasses = {
+  [key in keyof RefinementListOwnCSSClasses]: string;
+} & {
+  searchable: {
+    [key in keyof SearchBoxCSSClasses]: string;
+  };
+};
+
 export type RefinementListWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
@@ -226,9 +234,7 @@ const renderer = ({
   searchableIsAlwaysActive,
 }: {
   containerNode: HTMLElement;
-  cssClasses: RefinementListOwnCSSClasses & {
-    searchable: SearchBoxRendererCSSClasses;
-  };
+  cssClasses: RefinementListRendererCSSClasses;
   renderState: {
     templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
     searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;

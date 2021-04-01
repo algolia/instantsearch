@@ -24,9 +24,9 @@ type SearchBoxProps = {
   onChange?: (event: Event) => void;
   onSubmit?: (event: Event) => void;
   onReset?: (event: Event) => void;
-} & typeof defaultProps;
+};
 
-const defaultProps = Object.freeze({
+const defaultProps = {
   query: '',
   showSubmit: true,
   showReset: true,
@@ -39,14 +39,20 @@ const defaultProps = Object.freeze({
   onSubmit: noop,
   onReset: noop,
   refine: noop,
-});
+};
+
+type SearchBoxPropsWithDefaultProps = SearchBoxProps &
+  Readonly<typeof defaultProps>;
 
 type SearchBoxState = {
   query: string;
   focused: boolean;
 };
 
-class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
+class SearchBox extends Component<
+  SearchBoxPropsWithDefaultProps,
+  SearchBoxState
+> {
   public static defaultProps = defaultProps;
 
   public state = {
@@ -79,7 +85,7 @@ class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
     onChange(event);
   };
 
-  public componentWillReceiveProps(nextProps: SearchBoxProps) {
+  public componentWillReceiveProps(nextProps: SearchBoxPropsWithDefaultProps) {
     /**
      * when the user is typing, we don't want to replace the query typed
      * by the user (state.query) with the query exposed by the connector (props.query)
