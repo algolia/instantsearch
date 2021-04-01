@@ -1,13 +1,14 @@
-import { render } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import searchBox from '../search-box';
 import algoliaSearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 
-const mockedRender = render as jest.Mock;
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
@@ -21,7 +22,7 @@ describe('searchBox()', () => {
   let helper: AlgoliaSearchHelper;
 
   beforeEach(() => {
-    mockedRender.mockClear();
+    render.mockClear();
 
     helper = algoliaSearchHelper(createSearchClient(), '', { query: '' });
   });
@@ -47,9 +48,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       widget.init!(createInitOptions({ helper }));
 
-      const [firstRender] = mockedRender.mock.calls;
+      expect(render).toHaveBeenCalledTimes(1);
 
-      expect(mockedRender).toHaveBeenCalledTimes(1);
+      const firstRender = render.mock.calls[0] as [VNode, Element];
+
       expect(firstRender[0].props).toMatchSnapshot();
     });
 
@@ -60,11 +62,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper }));
 
-      const [firstRender, secondRender] = mockedRender.mock.calls;
+      expect(render).toHaveBeenCalledTimes(2);
 
-      expect(mockedRender).toHaveBeenCalledTimes(2);
+      const firstRender = render.mock.calls[0] as [VNode, Element];
+
       expect(firstRender[0].props).toMatchSnapshot();
       expect(firstRender[1]).toEqual(container);
+
+      const secondRender = render.mock.calls[1] as [VNode, Element];
+
       expect(secondRender[0].props).toMatchSnapshot();
       expect(secondRender[1]).toEqual(container);
     });
@@ -76,9 +82,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       widget.init!(createInitOptions({ helper }));
 
-      const [firstRender] = mockedRender.mock.calls;
+      expect(render).toHaveBeenCalledTimes(1);
 
-      expect(firstRender[0].props.cssClasses).toMatchSnapshot();
+      const firstRender = render.mock.calls[0] as [
+        VNode<{ cssClasses: Record<string, string> }>,
+        Element
+      ];
+
+      // Cast our props as an object (exluding `string` and `number` from VNode.props)
+      const props = firstRender[0].props!;
+      const { cssClasses } = firstRender[0].props as Exclude<
+        typeof props,
+        string | number
+      >;
+
+      expect(cssClasses).toMatchSnapshot();
     });
 
     test('sets isSearchStalled', () => {
@@ -92,9 +110,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         })
       );
 
-      const [, secondRender] = mockedRender.mock.calls;
+      expect(render).toHaveBeenCalledTimes(2);
 
-      expect(secondRender[0].props.isSearchStalled).toBe(true);
+      const secondRender = render.mock.calls[1] as [
+        VNode<{ isSearchStalled: boolean }>,
+        Element
+      ];
+
+      // Cast our props as an object (exluding `string` and `number` from VNode.props)
+      const props = secondRender[0].props!;
+      const { isSearchStalled } = secondRender[0].props as Exclude<
+        typeof props,
+        string | number
+      >;
+
+      expect(isSearchStalled).toBe(true);
     });
   });
 });
