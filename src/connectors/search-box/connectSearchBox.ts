@@ -33,7 +33,7 @@ export type SearchBoxConnectorParams = {
 
 export type SearchBoxRendererOptions = {
   /**
-   * he query from the last search.
+   * The query from the last search.
    */
   query: string;
   /**
@@ -78,7 +78,7 @@ const connectSearchBox: ConnectSearchBox = function connectSearchBox(
       };
     }
 
-    let _refine: (value: string) => void;
+    let _refine: SearchBoxRendererOptions['refine'];
     let _clear = () => {};
     function _cachedClear() {
       _clear();
@@ -132,7 +132,7 @@ const connectSearchBox: ConnectSearchBox = function connectSearchBox(
             }
           };
 
-          _refine = (query: string) => {
+          _refine = (query) => {
             if (queryHook) {
               queryHook(query, setQueryAndSearch);
               return;

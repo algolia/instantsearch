@@ -176,18 +176,6 @@ const renderer = ({
  * reason is usually placed on top, and not hidden so that the user can start searching right
  * away.
  *
- * @type {WidgetFactory}
- * @devNovel SearchBox
- * @category basic
- * @param {SearchBoxWidgetParams} widgetParams Options used to configure a SearchBox widget.
- * @return {Widget} Creates a new instance of the SearchBox widget.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.searchBox({
- *     container: '#q',
- *     placeholder: 'Search for products',
- *   })
- * ]);
  */
 export type SearchBoxWidget = WidgetFactory<
   SearchBoxRendererOptions,

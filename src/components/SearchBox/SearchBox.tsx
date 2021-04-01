@@ -150,7 +150,7 @@ class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
           className={cssClasses.form}
           noValidate
           onSubmit={this.onSubmit}
-          // @ts-ignore `onReset` attibute is missing in preact 10.0.0 JSX types
+          // @ts-expect-error `onReset` attibute is missing in preact 10.0.0 JSX types
           onReset={this.onReset}
         >
           <input
@@ -163,7 +163,7 @@ class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
             autoFocus={autofocus}
             autoComplete="off"
             autoCorrect="off"
-            // @ts-ignore `autoCapitalize` attibute is missing in preact 10.0.0 JSX types
+            // @ts-expect-error `autoCapitalize` attibute is missing in preact 10.0.0 JSX types
             autoCapitalize="off"
             spellCheck="false"
             maxLength={512}
