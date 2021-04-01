@@ -3,6 +3,7 @@
 import { h } from 'preact';
 import Template from '../Template';
 import { mount, shallow } from 'enzyme';
+import { ReactElementLike } from 'prop-types';
 
 function getProps({
   templates = { test: '' },
@@ -10,7 +11,7 @@ function getProps({
   templateKey = 'test',
   rootProps = {},
   useCustomCompileOptions = {},
-  templatesConfig = { helper: {}, compileOptions: {} },
+  templatesConfig = { helpers: {}, compileOptions: {} },
   ...props
 }) {
   return {
@@ -30,16 +31,16 @@ describe('Template', () => {
       templates: { test: 'it configures compilation <%options%>' },
       data: { options: 'delimiters' },
       useCustomCompileOptions: { test: true },
-      templatesConfig: { compileOptions: { delimiters: '<% %>' } },
+      templatesConfig: { helpers: {}, compileOptions: { delimiters: '<% %>' } },
     });
-    const wrapper = mount(<Template {...props} />);
+    const wrapper = mount((<Template {...props} />) as ReactElementLike);
 
     expect(wrapper).toMatchSnapshot();
   });
 
   it('can configure custom rootTagName', () => {
     const props = getProps({ rootTagName: 'span' });
-    const wrapper = mount(<Template {...props} />);
+    const wrapper = mount((<Template {...props} />) as ReactElementLike);
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -50,25 +51,19 @@ describe('Template', () => {
     const props = getProps({
       rootProps: { className: 'className', onClick },
     });
-    const wrapper = mount(<Template {...props} />);
+    const wrapper = mount((<Template {...props} />) as ReactElementLike);
 
     expect(wrapper).toMatchSnapshot();
   });
 
   describe('shouldComponentUpdate', () => {
-    let container;
-
-    beforeEach(() => {
-      container = document.createElement('div');
-    });
-
     it('does not call render when no change in data', () => {
       const props = getProps({
         data: {
           items: [],
         },
       });
-      const wrapper = shallow(<Template {...props} />, container);
+      const wrapper = shallow((<Template {...props} />) as ReactElementLike);
       const onRender = jest.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({ data: { items: [] } });
@@ -82,7 +77,7 @@ describe('Template', () => {
           items: [],
         },
       });
-      const wrapper = shallow(<Template {...props} />, container);
+      const wrapper = shallow((<Template {...props} />) as ReactElementLike);
       const onRender = jest.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({ data: { items: [1] } });
@@ -92,7 +87,7 @@ describe('Template', () => {
 
     it('calls render when templateKey changes', () => {
       const props = getProps({});
-      const wrapper = shallow(<Template {...props} />, container);
+      const wrapper = shallow((<Template {...props} />) as ReactElementLike);
       const onRender = jest.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({
@@ -107,7 +102,7 @@ describe('Template', () => {
 
     it('calls render when rootProps changes', () => {
       const props = getProps({});
-      const wrapper = shallow(<Template {...props} />, container);
+      const wrapper = shallow((<Template {...props} />) as ReactElementLike);
       const onRender = jest.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({
@@ -125,7 +120,7 @@ describe('Template', () => {
           className: 'initialClassName',
         },
       });
-      const wrapper = shallow(<Template {...props} />, container);
+      const wrapper = shallow((<Template {...props} />) as ReactElementLike);
       const onRender = jest.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({
