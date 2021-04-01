@@ -548,3 +548,7 @@ export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
 export type TemplateWithBindEvent<TTemplateData = void> =
   | string
   | ((data: TTemplateData, bindEvent: BindEventForHits) => string);
+
+export type Templates = {
+  [key: string]: Template<any> | TemplateWithBindEvent<any> | undefined;
+};
