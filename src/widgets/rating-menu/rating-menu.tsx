@@ -78,11 +78,9 @@ export type RatingMenuCSSClasses = {
   count: string | string[];
 };
 
-type RatingMenuRendererCSSClasses = Required<
-  {
-    [key in keyof RatingMenuCSSClasses]: string;
-  }
->;
+type RatingMenuRendererCSSClasses = {
+  [key in keyof RatingMenuCSSClasses]: string;
+};
 
 export type RatingMenuWidgetParams = {
   /**

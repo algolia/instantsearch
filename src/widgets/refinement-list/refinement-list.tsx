@@ -92,71 +92,75 @@ type RefinementListOwnCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root: string;
+  root: string | string[];
   /**
    * CSS class to add to the root element when no refinements.
    */
-  noRefinementRoot: string;
+  noRefinementRoot: string | string[];
   /**
    * CSS class to add to the root element with no results.
    */
-  noResults: string;
+  noResults: string | string[];
   /**
    * CSS class to add to the list element.
    */
-  list: string;
+  list: string | string[];
   /**
    * CSS class to add to each item element.
    */
-  item: string;
+  item: string | string[];
   /**
    * CSS class to add to each selected element.
    */
-  selectedItem: string;
+  selectedItem: string | string[];
   /**
    * CSS class to add to each label element (when using the default template).
    */
-  label: string;
+  label: string | string[];
   /**
    * CSS class to add to each checkbox element (when using the default template).
    */
-  checkbox: string;
+  checkbox: string | string[];
   /**
    * CSS class to add to each label text element.
    */
-  labelText: string;
+  labelText: string | string[];
   /**
    * CSS class to add to the show more element
    */
-  showMore: string;
+  showMore: string | string[];
   /**
    * CSS class to add to the disabled show more element
    */
-  disabledShowMore: string;
+  disabledShowMore: string | string[];
   /**
    * CSS class to add to each count element (when using the default template).
    */
-  count: string;
+  count: string | string[];
 };
 
 type RefinementListSearchableCSSClasses = {
-  searchBox: string;
-  searchableRoot: string;
-  searchableForm: string;
-  searchableInput: string;
-  searchableSubmit: string;
-  searchableSubmitIcon: string;
-  searchableReset: string;
-  searchableResetIcon: string;
-  searchableLoadingIndicator: string;
-  searchableLoadingIcon: string;
+  searchBox: string | string[];
+  searchableRoot: string | string[];
+  searchableForm: string | string[];
+  searchableInput: string | string[];
+  searchableSubmit: string | string[];
+  searchableSubmitIcon: string | string[];
+  searchableReset: string | string[];
+  searchableResetIcon: string | string[];
+  searchableLoadingIndicator: string | string[];
+  searchableLoadingIcon: string | string[];
 };
 
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
 
-export type RefinementListRendererCSSClasses = RefinementListOwnCSSClasses & {
-  searchable: SearchBoxCSSClasses;
+export type RefinementListRendererCSSClasses = {
+  [key in keyof RefinementListOwnCSSClasses]: string;
+} & {
+  searchable: {
+    [key in keyof SearchBoxCSSClasses]: string;
+  };
 };
 
 export type RefinementListWidgetParams = {
@@ -227,7 +231,7 @@ const renderer = ({
   searchableIsAlwaysActive,
 }: {
   containerNode: HTMLElement;
-  cssClasses: RefinementListOwnCSSClasses & { searchable: SearchBoxCSSClasses };
+  cssClasses: RefinementListRendererCSSClasses;
   renderState: {
     templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
     searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
