@@ -132,7 +132,7 @@ const connectSearchBox: ConnectSearchBox = function connectSearchBox(
             }
           };
 
-          _refine = (query) => {
+          _refine = query => {
             if (queryHook) {
               queryHook(query, setQueryAndSearch);
               return;
