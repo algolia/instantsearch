@@ -93,6 +93,12 @@ export type NumericMenuCSSClasses = {
   radio?: string | string[];
 };
 
+type NumericMenuRendererCSSClasses = Required<
+  {
+    [key in keyof NumericMenuCSSClasses]: string;
+  }
+>;
+
 export type NumericMenuTemplates = {
   /**
    * Item template, provided with `label` (the name in the configuration), `isRefined`, `url`, `value` (the setting for the filter) data properties.
@@ -129,7 +135,7 @@ export type NumericMenuTemplates = {
     /**
      * The CSS classes provided to the widget.
      */
-    cssClasses: NumericMenuCSSClasses;
+    cssClasses: NumericMenuRendererCSSClasses;
   }>;
 };
 

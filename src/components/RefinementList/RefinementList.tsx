@@ -1,37 +1,102 @@
 /** @jsx h */
 
-import { h, Component } from 'preact';
-import PropTypes from 'prop-types';
+import { h, createRef, Component } from 'preact';
 import cx from 'classnames';
 import { isSpecialClick, isEqual } from '../../lib/utils';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
 import SearchBox from '../SearchBox/SearchBox';
+import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
+import { SearchBoxTemplates } from '../../widgets/search-box/types';
+import { CreateURL, Templates } from '../../types';
 
-class RefinementList extends Component {
-  constructor(props) {
+type CSSClasses = {
+  searchable?: Record<string, string>;
+  [key: string]: any;
+};
+
+export type RefinementListProps<
+  TTemplates extends Templates,
+  TCSSClasses extends CSSClasses
+> = {
+  createURL: CreateURL<string>;
+  cssClasses: TCSSClasses;
+  depth?: number;
+  facetValues?: TRefinementListItem[];
+  attribute?: string;
+  templateProps?: PreparedTemplateProps<TTemplates>;
+  searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
+  toggleRefinement: (value: string) => void;
+  searchFacetValues?: (query: string) => void;
+  searchPlaceholder?: string;
+  isFromSearch?: boolean;
+  showMore?: boolean;
+  toggleShowMore?: () => void;
+  isShowingMore?: boolean;
+  hasExhaustiveItems?: boolean;
+  canToggleShowMore?: boolean;
+  searchIsAlwaysActive?: boolean;
+  className?: string;
+  children?: h.JSX.Element;
+};
+
+const defaultProps = {
+  cssClasses: {},
+  depth: 0,
+};
+
+type RefinementListPropsWithDefaultProps<
+  TTemplates extends Templates,
+  TCSSClasses extends CSSClasses
+> = RefinementListProps<TTemplates, TCSSClasses> &
+  Readonly<typeof defaultProps>;
+
+type RefinementListItemTemplateData<
+  TTemplates extends Templates,
+  TCSSClasses extends CSSClasses
+> = TRefinementListItem & {
+  url: string;
+} & Pick<
+    RefinementListProps<TTemplates, TCSSClasses>,
+    'attribute' | 'cssClasses' | 'isFromSearch'
+  >;
+
+class RefinementList<
+  TTemplates extends Templates,
+  TCSSClasses extends CSSClasses
+> extends Component<
+  RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+> {
+  public static defaultProps = defaultProps;
+
+  private searchBox = createRef<SearchBox>();
+
+  public constructor(
+    props: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+  ) {
     super(props);
     this.handleItemClick = this.handleItemClick.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const isStateDifferent = this.state !== nextState;
+  public shouldComponentUpdate(
+    nextProps: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+  ) {
     const areFacetValuesDifferent = !isEqual(
       this.props.facetValues,
       nextProps.facetValues
     );
 
-    return isStateDifferent || areFacetValuesDifferent;
+    return areFacetValuesDifferent;
   }
 
-  refine(facetValueToRefine, isRefined) {
-    this.props.toggleRefinement(facetValueToRefine, isRefined);
+  private refine(facetValueToRefine: string) {
+    this.props.toggleRefinement(facetValueToRefine);
   }
 
-  _generateFacetItem(facetValue) {
+  private _generateFacetItem(facetValue: TRefinementListItem) {
     let subItems;
-    const hasChildren = facetValue.data && facetValue.data.length > 0;
-    if (hasChildren) {
+    if (facetValue.data && facetValue.data.length > 0) {
       const { root, ...cssClasses } = this.props.cssClasses;
       subItems = (
         <RefinementList
@@ -46,7 +111,10 @@ class RefinementList extends Component {
     }
 
     const url = this.props.createURL(facetValue.value);
-    const templateData = {
+    const templateData: RefinementListItemTemplateData<
+      TTemplates,
+      TCSSClasses
+    > = {
       ...facetValue,
       url,
       attribute: this.props.attribute,
@@ -63,6 +131,13 @@ class RefinementList extends Component {
       key += `/${facetValue.count}`;
     }
 
+    const refinementListItemClassName = cx(this.props.cssClasses.item, {
+      [this.props.cssClasses.selectedItem]: facetValue.isRefined,
+      [this.props.cssClasses.disabledItem]: !facetValue.count,
+      [this.props.cssClasses.parentItem]:
+        facetValue.data && facetValue.data.length > 0,
+    });
+
     return (
       <RefinementListItem
         templateKey="item"
@@ -70,11 +145,7 @@ class RefinementList extends Component {
         facetValueToRefine={facetValue.value}
         handleClick={this.handleItemClick}
         isRefined={facetValue.isRefined}
-        className={cx(this.props.cssClasses.item, {
-          [this.props.cssClasses.selectedItem]: facetValue.isRefined,
-          [this.props.cssClasses.disabledItem]: !facetValue.count,
-          [this.props.cssClasses.parentItem]: hasChildren,
-        })}
+        className={refinementListItemClassName}
         subItems={subItems}
         templateData={templateData}
         templateProps={this.props.templateProps}
@@ -97,10 +168,25 @@ class RefinementList extends Component {
   //
   // Finally, we always stop propagation of the event to avoid multiple levels RefinementLists to fail: click
   // on child would click on parent also
-  handleItemClick({ facetValueToRefine, originalEvent, isRefined }) {
+  private handleItemClick({
+    facetValueToRefine,
+    isRefined,
+    originalEvent,
+  }: {
+    facetValueToRefine: string;
+    isRefined: boolean;
+    originalEvent: MouseEvent;
+  }) {
     if (isSpecialClick(originalEvent)) {
       // do not alter the default browser behavior
       // if one special key is down
+      return;
+    }
+
+    if (
+      !(originalEvent.target instanceof HTMLElement) ||
+      !(originalEvent.target.parentNode instanceof HTMLElement)
+    ) {
       return;
     }
 
@@ -115,7 +201,7 @@ class RefinementList extends Component {
     }
 
     if (originalEvent.target.tagName === 'INPUT') {
-      this.refine(facetValueToRefine, isRefined);
+      this.refine(facetValueToRefine);
       return;
     }
 
@@ -130,39 +216,35 @@ class RefinementList extends Component {
         return;
       }
 
-      if (parent.tagName === 'A' && parent.href) {
+      if (parent.tagName === 'A' && (parent as HTMLAnchorElement).href) {
         originalEvent.preventDefault();
       }
 
-      parent = parent.parentNode;
+      parent = parent.parentNode as HTMLElement;
     }
 
     originalEvent.stopPropagation();
 
-    this.refine(facetValueToRefine, isRefined);
+    this.refine(facetValueToRefine);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.searchBox && !nextProps.isFromSearch) {
-      this.searchBox.resetInput();
+  public componentWillReceiveProps(
+    nextProps: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+  ) {
+    if (this.searchBox.current && !nextProps.isFromSearch) {
+      this.searchBox.current.resetInput();
     }
   }
 
-  refineFirstValue() {
-    const firstValue = this.props.facetValues[0];
+  private refineFirstValue() {
+    const firstValue = this.props.facetValues && this.props.facetValues[0];
     if (firstValue) {
       const actualValue = firstValue.value;
       this.props.toggleRefinement(actualValue);
     }
   }
 
-  render() {
-    // Adding `-lvl0` classes
-    const cssClassList = cx(this.props.cssClasses.list, {
-      [`${this.props.cssClasses.depth}${this.props.depth}`]: this.props
-        .cssClasses.depth,
-    });
-
+  public render() {
     const showMoreButtonClassName = cx(this.props.cssClasses.showMore, {
       [this.props.cssClasses.disabledShowMore]: !(
         this.props.showMore === true && this.props.canToggleShowMore
@@ -191,18 +273,22 @@ class RefinementList extends Component {
 
     const templates = this.props.searchBoxTemplateProps
       ? this.props.searchBoxTemplateProps.templates
-      : {};
+      : undefined;
 
     const searchBox = this.props.searchFacetValues && (
       <div className={this.props.cssClasses.searchBox}>
         <SearchBox
-          ref={searchBoxRef => (this.searchBox = searchBoxRef)}
+          ref={this.searchBox}
           placeholder={this.props.searchPlaceholder}
           disabled={shouldDisableSearchBox}
-          cssClasses={this.props.cssClasses.searchable}
+          cssClasses={this.props.cssClasses.searchable!}
           templates={templates}
-          onChange={event => this.props.searchFacetValues(event.target.value)}
-          onReset={() => this.props.searchFacetValues('')}
+          onChange={(event: Event) =>
+            this.props.searchFacetValues!(
+              (event.target as HTMLInputElement).value
+            )
+          }
+          onReset={() => this.props.searchFacetValues!('')}
           onSubmit={() => this.refineFirstValue()}
           // This sets the search box to a controlled state because
           // we don't rely on the `refine` prop but on `onChange`.
@@ -213,14 +299,14 @@ class RefinementList extends Component {
 
     const facetValues = this.props.facetValues &&
       this.props.facetValues.length > 0 && (
-        <ul className={cssClassList}>
+        <ul className={this.props.cssClasses.list}>
           {this.props.facetValues.map(this._generateFacetItem, this)}
         </ul>
       );
 
     const noResults = this.props.searchFacetValues &&
       this.props.isFromSearch &&
-      this.props.facetValues.length === 0 && (
+      (!this.props.facetValues || this.props.facetValues.length === 0) && (
         <Template
           {...this.props.templateProps}
           templateKey="searchableNoResults"
@@ -228,17 +314,17 @@ class RefinementList extends Component {
         />
       );
 
+    const rootClassName = cx(
+      this.props.cssClasses.root,
+      {
+        [this.props.cssClasses.noRefinementRoot]:
+          !this.props.facetValues || this.props.facetValues.length === 0,
+      },
+      this.props.className
+    );
+
     return (
-      <div
-        className={cx(
-          this.props.cssClasses.root,
-          {
-            [this.props.cssClasses.noRefinementRoot]:
-              !this.props.facetValues || this.props.facetValues.length === 0,
-          },
-          this.props.className
-        )}
-      >
+      <div className={rootClassName}>
         {this.props.children}
         {searchBox}
         {facetValues}
@@ -248,62 +334,5 @@ class RefinementList extends Component {
     );
   }
 }
-
-RefinementList.propTypes = {
-  Template: PropTypes.func,
-  createURL: PropTypes.func,
-  cssClasses: PropTypes.shape({
-    depth: PropTypes.string,
-    root: PropTypes.string,
-    noRefinementRoot: PropTypes.string,
-    list: PropTypes.string,
-    item: PropTypes.string,
-    selectedItem: PropTypes.string,
-    parentItem: PropTypes.string,
-    childList: PropTypes.string,
-    searchBox: PropTypes.string,
-    label: PropTypes.string,
-    checkbox: PropTypes.string,
-    labelText: PropTypes.string,
-    count: PropTypes.string,
-    noResults: PropTypes.string,
-    showMore: PropTypes.string,
-    disabledShowMore: PropTypes.string,
-    disabledItem: PropTypes.string,
-    searchable: PropTypes.shape({
-      root: PropTypes.string,
-      form: PropTypes.string,
-      input: PropTypes.string,
-      submit: PropTypes.string,
-      submitIcon: PropTypes.string,
-      reset: PropTypes.string,
-      resetIcon: PropTypes.string,
-      loadingIndicator: PropTypes.string,
-      loadingIcon: PropTypes.string,
-    }),
-  }).isRequired,
-  depth: PropTypes.number,
-  facetValues: PropTypes.array,
-  attribute: PropTypes.string,
-  templateProps: PropTypes.object.isRequired,
-  searchBoxTemplateProps: PropTypes.object,
-  toggleRefinement: PropTypes.func.isRequired,
-  searchFacetValues: PropTypes.func,
-  searchPlaceholder: PropTypes.string,
-  isFromSearch: PropTypes.bool,
-  showMore: PropTypes.bool,
-  toggleShowMore: PropTypes.func,
-  isShowingMore: PropTypes.bool,
-  hasExhaustiveItems: PropTypes.bool,
-  canToggleShowMore: PropTypes.bool,
-  searchIsAlwaysActive: PropTypes.bool,
-  className: PropTypes.string,
-  children: PropTypes.element,
-};
-
-RefinementList.defaultProps = {
-  cssClasses: {},
-  depth: 0,
-};
 
 export default RefinementList;

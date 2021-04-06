@@ -2,11 +2,13 @@
 
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import RefinementListItem from '../RefinementListItem';
+import { ReactElementLike } from 'prop-types';
+import RefinementListItem, {
+  RefinementListItemProps,
+} from '../RefinementListItem';
 
 describe('RefinementListItem', () => {
-  const props = {
-    facetValue: 'Hello',
+  const props: RefinementListItemProps = {
     facetValueToRefine: 'wi',
     isRefined: false,
     handleClick: jest.fn(),
@@ -18,7 +20,9 @@ describe('RefinementListItem', () => {
   };
 
   it('renders an item', () => {
-    const wrapper = shallow(<RefinementListItem {...props} />);
+    const wrapper = shallow(
+      (<RefinementListItem {...props} />) as ReactElementLike
+    );
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -28,7 +32,9 @@ describe('RefinementListItem', () => {
     expect(props.handleClick).toHaveBeenCalledTimes(1);
   });
 
-  function render(askedProps) {
-    return shallow(<RefinementListItem {...askedProps} />);
+  function render(askedProps: RefinementListItemProps) {
+    return shallow(
+      (<RefinementListItem {...askedProps} />) as ReactElementLike
+    );
   }
 });

@@ -1,8 +1,22 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import PropTypes from 'prop-types';
 import Template from '../Template/Template';
+
+export type RefinementListItemProps = {
+  facetValueToRefine: string;
+  handleClick: (args: {
+    facetValueToRefine: string;
+    isRefined: boolean;
+    originalEvent: MouseEvent;
+  }) => void;
+  isRefined: boolean;
+  subItems?: h.JSX.Element;
+  templateData: Record<string, any>;
+  templateKey: string;
+  templateProps?: Record<string, any>;
+  className: string;
+};
 
 function RefinementListItem({
   className,
@@ -13,7 +27,7 @@ function RefinementListItem({
   templateKey,
   templateData,
   subItems,
-}) {
+}: RefinementListItemProps) {
   return (
     <li
       className={className}
@@ -34,16 +48,5 @@ function RefinementListItem({
     </li>
   );
 }
-
-RefinementListItem.propTypes = {
-  facetValueToRefine: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  handleClick: PropTypes.func.isRequired,
-  isRefined: PropTypes.bool.isRequired,
-  subItems: PropTypes.object,
-  templateData: PropTypes.object.isRequired,
-  templateKey: PropTypes.string.isRequired,
-  templateProps: PropTypes.object.isRequired,
-  className: PropTypes.string.isRequired,
-};
 
 export default RefinementListItem;
