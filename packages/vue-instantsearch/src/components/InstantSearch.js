@@ -69,6 +69,10 @@ export default createInstantSearchComponent({
         return false;
       },
     },
+    middlewares: {
+      type: Array,
+      default: null,
+    },
   },
   data() {
     return {

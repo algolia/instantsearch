@@ -34,6 +34,22 @@ export const createInstantSearchComponent = component =>
           // private InstantSearch.js API:
           this.instantSearchInstance._searchFunction = searchFunction;
         },
+        middlewares: {
+          immediate: true,
+          handler(next, prev) {
+            (prev || [])
+              .filter(middleware => (next || []).indexOf(middleware) === -1)
+              .forEach(middlewareToRemove => {
+                this.instantSearchInstance.unuse(middlewareToRemove);
+              });
+
+            (next || [])
+              .filter(middleware => (prev || []).indexOf(middleware) === -1)
+              .forEach(middlewareToAdd => {
+                this.instantSearchInstance.use(middlewareToAdd);
+              });
+          },
+        },
       },
       created() {
         const searchClient = this.instantSearchInstance.client;
