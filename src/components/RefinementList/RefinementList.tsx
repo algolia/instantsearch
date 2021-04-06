@@ -315,9 +315,8 @@ class RefinementList<
     const facetValues = this.props.facetValues &&
       this.props.facetValues.length > 0 && (
         <ul className={this.props.cssClasses.list}>
-          {(this.props.facetValues as Array<
-            TRefinementListItem | HierarchicalMenuItem
-          >).map(this._generateFacetItem, this)}
+          {// @ts-expect-error until TS > 4.2.3 is used https://github.com/microsoft/TypeScript/commit/b217f22e798c781f55d17da72ed099a9dee5c650
+          this.props.facetValues.map(this._generateFacetItem, this)}
         </ul>
       );
 
