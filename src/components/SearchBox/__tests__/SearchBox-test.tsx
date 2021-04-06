@@ -2,6 +2,7 @@
 
 import { h } from 'preact';
 import { mount } from 'enzyme';
+import { ReactElementLike } from 'prop-types';
 import { render, fireEvent } from '@testing-library/preact';
 import SearchBox from '../SearchBox';
 
@@ -29,7 +30,9 @@ describe('SearchBox', () => {
   describe('Props', () => {
     describe('cssClasses', () => {
       test('sets all CSS classes', () => {
-        const wrapper = mount(<SearchBox {...defaultProps} />);
+        const wrapper = mount(
+          (<SearchBox {...defaultProps} />) as ReactElementLike
+        );
 
         expect(wrapper.find('div').hasClass('root')).toEqual(true);
         expect(wrapper.find('form').hasClass('form')).toEqual(true);
@@ -50,7 +53,7 @@ describe('SearchBox', () => {
           ...defaultProps,
           query: 'Initial query',
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('input').props().value).toBe('Initial query');
       });
@@ -62,7 +65,7 @@ describe('SearchBox', () => {
           ...defaultProps,
           placeholder: 'Custom placeholder',
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('input').props().placeholder).toBe(
           'Custom placeholder'
@@ -75,7 +78,7 @@ describe('SearchBox', () => {
         const props = {
           ...defaultProps,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('.submit').props().hidden).toBe(false);
       });
@@ -85,7 +88,7 @@ describe('SearchBox', () => {
           ...defaultProps,
           showSubmit: false,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('.submit').props().hidden).toBe(true);
       });
@@ -96,7 +99,7 @@ describe('SearchBox', () => {
         const props = {
           ...defaultProps,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('.reset').props().hidden).toBe(true);
       });
@@ -106,7 +109,7 @@ describe('SearchBox', () => {
           ...defaultProps,
           query: 'query',
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('.reset').props().hidden).toBe(false);
       });
@@ -116,7 +119,7 @@ describe('SearchBox', () => {
           ...defaultProps,
           showReset: false,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('.reset').props().hidden).toBe(true);
       });
@@ -128,7 +131,7 @@ describe('SearchBox', () => {
           ...defaultProps,
           showLoadingIndicator: false,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.exists('.loadingIndicator')).toBe(false);
       });
@@ -139,7 +142,7 @@ describe('SearchBox', () => {
           showLoadingIndicator: true,
           isSearchStalled: false,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('.loadingIndicator').props().hidden).toBe(true);
       });
@@ -150,7 +153,7 @@ describe('SearchBox', () => {
           showLoadingIndicator: true,
           isSearchStalled: true,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
         expect(wrapper.find('.loadingIndicator').props().hidden).toBe(false);
       });
@@ -177,7 +180,7 @@ describe('SearchBox', () => {
         ...defaultProps,
         disabled: true,
       };
-      const wrapper = mount(<SearchBox {...props} />);
+      const wrapper = mount((<SearchBox {...props} />) as ReactElementLike);
 
       expect(wrapper.find('input').props().disabled).toBe(true);
     });
@@ -194,7 +197,7 @@ describe('SearchBox', () => {
           query: 'Initial query',
         };
         const { container, rerender } = render(<SearchBox {...props} />);
-        const input = container.querySelector('input');
+        const input = container.querySelector('input')!;
         expect(input.value).toEqual('Initial query');
 
         fireEvent.focus(input);
@@ -209,7 +212,7 @@ describe('SearchBox', () => {
           query: 'Initial query',
         };
         const { container, rerender } = render(<SearchBox {...props} />);
-        const input = container.querySelector('input');
+        const input = container.querySelector('input')!;
         expect(input.value).toEqual('Initial query');
 
         fireEvent.blur(input);
@@ -227,7 +230,7 @@ describe('SearchBox', () => {
           refine,
         };
         const { container } = render(<SearchBox {...props} />);
-        const input = container.querySelector('input');
+        const input = container.querySelector('input')!;
 
         fireEvent.input(input, {
           target: { value: 'hello' },
@@ -246,7 +249,7 @@ describe('SearchBox', () => {
           searchAsYouType: false,
         };
         const { container } = render(<SearchBox {...props} />);
-        const input = container.querySelector('input');
+        const input = container.querySelector('input')!;
 
         expect(input.value).toEqual('Query 1');
 
@@ -265,8 +268,8 @@ describe('SearchBox', () => {
           refine,
         };
         const { container } = render(<SearchBox {...props} />);
-        const form = container.querySelector('form');
-        const input = container.querySelector('input');
+        const form = container.querySelector('form')!;
+        const input = container.querySelector('input')!;
 
         fireEvent.input(input, {
           target: { value: 'hello' },
@@ -289,7 +292,7 @@ describe('SearchBox', () => {
           onChange,
         };
         const { container } = render(<SearchBox {...props} />);
-        const input = container.querySelector('input');
+        const input = container.querySelector('input')!;
 
         fireEvent.input(input, {
           target: { value: 'hello' },
@@ -307,7 +310,7 @@ describe('SearchBox', () => {
           onSubmit,
         };
         const { container } = render(<SearchBox {...props} />);
-        const form = container.querySelector('form');
+        const form = container.querySelector('form')!;
 
         fireEvent.submit(form);
 
@@ -323,8 +326,8 @@ describe('SearchBox', () => {
             searchAsYouType: true,
           };
           const { container } = render(<SearchBox {...props} />);
-          const input = container.querySelector('input');
-          const resetButton = container.querySelector('button[type="reset"]');
+          const input = container.querySelector('input')!;
+          const resetButton = container.querySelector('button[type="reset"]')!;
 
           fireEvent.change(input, {
             target: { value: 'hello' },
@@ -344,9 +347,9 @@ describe('SearchBox', () => {
             searchAsYouType: false,
           };
           const { container } = render(<SearchBox {...props} />);
-          const form = container.querySelector('form');
-          const input = container.querySelector('input');
-          const resetButton = container.querySelector('button[type="reset"]');
+          const form = container.querySelector('form')!;
+          const input = container.querySelector('input')!;
+          const resetButton = container.querySelector('button[type="reset"]')!;
 
           fireEvent.input(input, { target: { value: 'hello' } });
           fireEvent.submit(form);
@@ -366,7 +369,7 @@ describe('SearchBox', () => {
             onReset,
           };
           const { container } = render(<SearchBox {...props} />);
-          const resetButton = container.querySelector('button[type="reset"]');
+          const resetButton = container.querySelector('button[type="reset"]')!;
 
           fireEvent.click(resetButton);
 
@@ -381,8 +384,8 @@ describe('SearchBox', () => {
             searchAsYouType: true,
           };
           const { container } = render(<SearchBox {...props} />);
-          const input = container.querySelector('input');
-          const form = container.querySelector('form');
+          const input = container.querySelector('input')!;
+          const form = container.querySelector('form')!;
 
           fireEvent.change(input, {
             target: { value: 'hello' },
@@ -402,8 +405,8 @@ describe('SearchBox', () => {
             searchAsYouType: false,
           };
           const { container } = render(<SearchBox {...props} />);
-          const form = container.querySelector('form');
-          const input = container.querySelector('input');
+          const form = container.querySelector('form')!;
+          const input = container.querySelector('input')!;
 
           fireEvent.input(input, { target: { value: 'hello' } });
           fireEvent.submit(form);
@@ -423,7 +426,7 @@ describe('SearchBox', () => {
             onReset,
           };
           const { container } = render(<SearchBox {...props} />);
-          const form = container.querySelector('form');
+          const form = container.querySelector('form')!;
 
           fireEvent.reset(form);
 
@@ -435,7 +438,9 @@ describe('SearchBox', () => {
 
   describe('Rendering', () => {
     test('with default props', () => {
-      expect(mount(<SearchBox {...defaultProps} />)).toMatchSnapshot();
+      expect(
+        mount((<SearchBox {...defaultProps} />) as ReactElementLike)
+      ).toMatchSnapshot();
     });
 
     test('sets search input attributes', () => {
@@ -462,7 +467,9 @@ describe('SearchBox', () => {
         },
       };
 
-      expect(mount(<SearchBox {...props} />)).toMatchSnapshot();
+      expect(
+        mount((<SearchBox {...props} />) as ReactElementLike)
+      ).toMatchSnapshot();
     });
   });
 });
