@@ -42,11 +42,18 @@ export type InsightsInit = (
   }
 ) => void;
 
+export type InsightsGetUserToken = (
+  method: 'getUserToken',
+  options?: any,
+  callback?: (err: any, userToken: string) => void
+) => void;
+
 export type InsightsClient = InsightsSendEvent &
   InsightsOnUserTokenChange &
   InsightsGetUserToken &
   InsightsInit &
-  InsightsSetUserToken & {
+  InsightsSetUserToken &
+  InsightsGetUserToken & {
     queue?: Array<[string, any]>;
   };
 

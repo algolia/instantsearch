@@ -99,6 +99,7 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
             );
           }
         };
+        const hasUserToken = () => Boolean((helper.state as any).userToken);
 
         helper.setState(helper.state.setQueryParameter('clickAnalytics', true));
 
@@ -126,7 +127,14 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
           if (onEvent) {
             onEvent(event, _insightsClient);
           } else if (event.insightsMethod) {
-            insightsClient(event.insightsMethod, event.payload);
+            if (hasUserToken()) {
+              insightsClient(event.insightsMethod, event.payload);
+            } else {
+              warning(
+                false,
+                'Cannot send event to Algolia Insights because `userToken` is not set.'
+              );
+            }
           } else {
             warning(
               false,
