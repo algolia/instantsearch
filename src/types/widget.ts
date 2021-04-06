@@ -1,5 +1,4 @@
 import { Index } from '../widgets/index/index';
-import { CreateURL } from '.';
 import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
@@ -68,6 +67,10 @@ import {
   AnswersConnectorParams,
 } from '../connectors/answers/connectAnswers';
 import {
+  RatingMenuConnectorParams,
+  RatingMenuRendererOptions,
+} from '../connectors/rating-menu/connectRatingMenu';
+import {
   RangeConnectorParams,
   RangeRendererOptions,
 } from '../connectors/range/connectRange';
@@ -87,6 +90,10 @@ import {
   StatsConnectorParams,
   StatsRendererOptions,
 } from '../connectors/stats/connectStats';
+import {
+  SortByConnectorParams,
+  SortByRendererOptions,
+} from '../connectors/sort-by/connectSortBy';
 
 export type ScopedResult = {
   indexId: string;
@@ -289,22 +296,8 @@ export type IndexRenderState = Partial<{
   };
   ratingMenu: {
     [attribute: string]: WidgetRenderState<
-      {
-        items: Array<{
-          stars: boolean[];
-          name: string;
-          value: string;
-          count: number;
-          isRefined: boolean;
-        }>;
-        hasNoResults: boolean;
-        refine(value: number): void;
-        createURL: CreateURL<string>;
-      },
-      {
-        attribute: string;
-        max?: number;
-      }
+      RatingMenuRendererOptions,
+      RatingMenuConnectorParams
     >;
   };
   numericMenu: {
@@ -357,6 +350,7 @@ export type IndexRenderState = Partial<{
     RelevantSortRendererOptions,
     RelevantSortConnectorParams
   >;
+  sortBy: WidgetRenderState<SortByRendererOptions, SortByConnectorParams>;
   stats: WidgetRenderState<StatsRendererOptions, StatsConnectorParams>;
 }>;
 
@@ -554,3 +548,7 @@ export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
 export type TemplateWithBindEvent<TTemplateData = void> =
   | string
   | ((data: TTemplateData, bindEvent: BindEventForHits) => string);
+
+export type Templates = {
+  [key: string]: Template<any> | TemplateWithBindEvent<any> | undefined;
+};

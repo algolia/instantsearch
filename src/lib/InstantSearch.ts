@@ -154,7 +154,10 @@ class InstantSearch extends EventEmitter {
   public _createURL: CreateURL<UiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
-  public middleware: MiddlewareDefinition[] = [];
+  public middleware: Array<{
+    creator: Middleware;
+    instance: MiddlewareDefinition;
+  }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
 
   public constructor(options: InstantSearchOptions) {
@@ -263,9 +266,6 @@ See ${createDocumentationLink({
 
   /**
    * Hooks a middleware into the InstantSearch lifecycle.
-   *
-   * This method is considered as experimental and is subject to change in
-   * minor versions.
    */
   public use(...middleware: Middleware[]): this {
     const newMiddlewareList = middleware.map(fn => {
@@ -275,7 +275,10 @@ See ${createDocumentationLink({
         onStateChange: noop,
         ...fn({ instantSearchInstance: this }),
       };
-      this.middleware.push(newMiddleware);
+      this.middleware.push({
+        creator: fn,
+        instance: newMiddleware,
+      });
       return newMiddleware;
     });
 
@@ -286,6 +289,21 @@ See ${createDocumentationLink({
         m.subscribe();
       });
     }
+
+    return this;
+  }
+
+  /**
+   * Removes a middleware from the InstantSearch lifecycle.
+   */
+  public unuse(...middlewareToUnuse: Middleware[]): this {
+    this.middleware
+      .filter(m => middlewareToUnuse.includes(m.creator))
+      .forEach(m => m.instance.unsubscribe());
+
+    this.middleware = this.middleware.filter(
+      m => !middlewareToUnuse.includes(m.creator)
+    );
 
     return this;
   }
@@ -461,8 +479,8 @@ See ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
-    this.middleware.forEach(m => {
-      m.subscribe();
+    this.middleware.forEach(({ instance }) => {
+      instance.subscribe();
     });
 
     mainHelper.search();
@@ -502,8 +520,8 @@ See ${createDocumentationLink({
     this.mainHelper = null;
     this.helper = null;
 
-    this.middleware.forEach(m => {
-      m.unsubscribe();
+    this.middleware.forEach(({ instance }) => {
+      instance.unsubscribe();
     });
   }
 
@@ -581,8 +599,8 @@ See ${createDocumentationLink({
   public onInternalStateChange = defer(() => {
     const nextUiState = this.mainIndex.getWidgetUiState({});
 
-    this.middleware.forEach(m => {
-      m.onStateChange({
+    this.middleware.forEach(({ instance }) => {
+      instance.onStateChange({
         uiState: nextUiState,
       });
     });

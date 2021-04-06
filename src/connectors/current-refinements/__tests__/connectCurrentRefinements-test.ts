@@ -137,6 +137,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
         expect(renderState.currentRefinements).toEqual({
           items: [],
+          canRefine: false,
           refine: expect.any(Function),
           createURL: expect.any(Function),
           widgetParams: {},
@@ -220,6 +221,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
               ],
             },
           ],
+          canRefine: true,
           refine: expect.any(Function),
           createURL: expect.any(Function),
           widgetParams: {},
@@ -242,6 +244,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       expect(renderState).toEqual({
         items: [],
+        canRefine: false,
         refine: expect.any(Function),
         createURL: expect.any(Function),
         widgetParams: {},
@@ -324,6 +327,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
             ],
           },
         ],
+        canRefine: true,
         refine: expect.any(Function),
         createURL: expect.any(Function),
         widgetParams: {},

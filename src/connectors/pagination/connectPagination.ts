@@ -32,6 +32,9 @@ export type PaginationRendererOptions = {
   /** Sets the current page and triggers a search. */
   refine(page: number): void;
 
+  /** true if this search returned more than one page */
+  canRefine: boolean;
+
   /** The number of the page currently displayed. */
   currentRefinement: number;
 
@@ -163,6 +166,7 @@ const connectPagination: ConnectPagination = function connectPagination(
         return {
           createURL: connectorState.createURL(state),
           refine: connectorState.refine,
+          canRefine: nbPages > 1,
           currentRefinement: page,
           nbHits: results?.nbHits || 0,
           nbPages,

@@ -1,10 +1,17 @@
 import {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import {
   checkRendering,
   createDocumentationLink,
   createDocumentationMessageGenerator,
   noop,
   warning,
 } from '../../lib/utils';
+import { Connector, InstantSearch, CreateURL } from '../../types';
+import { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'rating-menu',
@@ -16,7 +23,16 @@ const $$type = 'ais.ratingMenu';
 const MAX_VALUES_PER_FACET_API_LIMIT = 1000;
 const STEP = 1;
 
-const createSendEvent = ({
+type SendEvent = (...args: [InsightsEvent] | [string, string, string?]) => void;
+
+type CreateSendEvent = (createSendEventArgs: {
+  instantSearchInstance: InstantSearch;
+  helper: AlgoliaSearchHelper;
+  getRefinedStar: () => number | number[] | undefined;
+  attribute: string;
+}) => SendEvent;
+
+const createSendEvent: CreateSendEvent = ({
   instantSearchInstance,
   helper,
   getRefinedStar,
@@ -46,31 +62,81 @@ const createSendEvent = ({
   }
 };
 
-/**
- * @typedef {Object} StarRatingItems
- * @property {string} name Name corresponding to the number of stars.
- * @property {string} value Number of stars as string.
- * @property {number} count Count of matched results corresponding to the number of stars.
- * @property {boolean[]} stars Array of length of maximum rating value with stars to display or not.
- * @property {boolean} isRefined Indicates if star rating refinement is applied.
- */
+type StarRatingItems = {
+  /**
+   * Name corresponding to the number of stars.
+   */
+  name: string;
+  /**
+   * Human-readable name corresponding to the number of stars.
+   */
+  label: string;
+  /**
+   * Number of stars as string.
+   */
+  value: string;
+  /**
+   * Count of matched results corresponding to the number of stars.
+   */
+  count: number;
+  /**
+   *  Array of length of maximum rating value with stars to display or not.
+   */
+  stars: boolean[];
+  /**
+   * Indicates if star rating refinement is applied.
+   */
+  isRefined: boolean;
+};
 
-/**
- * @typedef {Object} CustomStarRatingWidgetParams
- * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
- * @property {number} [max = 5] The maximum rating value.
- */
+export type RatingMenuConnectorParams = {
+  /**
+   * Name of the attribute for faceting (eg. "free_shipping").
+   */
+  attribute: string;
 
-/**
- * @typedef {Object} StarRatingRenderingOptions
- * @property {StarRatingItems[]} items Possible star ratings the user can apply.
- * @property {function(string): string} createURL Creates an URL for the next
- * state (takes the item value as parameter). Takes the value of an item as parameter.
- * @property {function(string)} refine Selects a rating to filter the results
- * (takes the filter value as parameter). Takes the value of an item as parameter.
- * @property {boolean} hasNoResults `true` if the last search contains no result.
- * @property {Object} widgetParams All original `CustomStarRatingWidgetParams` forwarded to the `renderFn`.
- */
+  /**
+   * The maximum rating value.
+   */
+  max?: number;
+};
+
+export type RatingMenuRendererOptions = {
+  /**
+   * Possible star ratings the user can apply.
+   */
+  items: StarRatingItems[];
+
+  /**
+   * Creates an URL for the next state (takes the item value as parameter). Takes the value of an item as parameter.
+   */
+  createURL: CreateURL<string>;
+
+  /**
+   *  Indicates if search state can be refined.
+   */
+  canRefine: boolean;
+
+  /**
+   * Selects a rating to filter the results (takes the filter value as parameter). Takes the value of an item as parameter.
+   */
+  refine: (value: string) => void;
+
+  /**
+   * `true` if the last search contains no result.
+   */
+  hasNoResults: boolean;
+
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEvent;
+};
+
+export type ConnectRatingMenu = Connector<
+  RatingMenuRendererOptions,
+  RatingMenuConnectorParams
+>;
 
 /**
  * **StarRating** connector provides the logic to build a custom widget that will let
@@ -79,69 +145,22 @@ const createSendEvent = ({
  * The connector provides to the rendering: `refine()` to select a value and
  * `items` that are the values that can be selected. `refine` should be used
  * with `items.value`.
- * @type {Connector}
- * @param {function(StarRatingRenderingOptions, boolean)} renderFn Rendering function for the custom **StarRating** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomStarRatingWidgetParams)} Re-usable widget factory for a custom **StarRating** widget.
- * @example
- * // custom `renderFn` to render the custom StarRating widget
- * function renderFn(StarRatingRenderingOptions, isFirstRendering) {
- *   if (isFirstRendering) {
- *     StarRatingRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
- *   }
- *
- *   StarRatingRenderingOptions.widgetParams.containerNode
- *     .find('li[data-refine-value]')
- *     .each(function() { $(this).off('click'); });
- *
- *   var listHTML = StarRatingRenderingOptions.items.map(function(item) {
- *     return '<li data-refine-value="' + item.value + '">' +
- *       '<a href="' + StarRatingRenderingOptions.createURL(item.value) + '">' +
- *       item.stars.map(function(star) { return star === false ? '☆' : '★'; }).join(' ') +
- *       '& up (' + item.count + ')' +
- *       '</a></li>';
- *   });
- *
- *   StarRatingRenderingOptions.widgetParams.containerNode
- *     .find('ul')
- *     .html(listHTML);
- *
- *   StarRatingRenderingOptions.widgetParams.containerNode
- *     .find('li[data-refine-value]')
- *     .each(function() {
- *       $(this).on('click', function(event) {
- *         event.preventDefault();
- *         event.stopPropagation();
- *
- *         StarRatingRenderingOptions.refine($(this).data('refine-value'));
- *       });
- *     });
- * }
- *
- * // connect `renderFn` to StarRating logic
- * var customStarRating = instantsearch.connectors.connectRatingMenu(renderFn);
- *
- * // mount widget on the page
- * search.addWidgets([
- *   customStarRating({
- *     containerNode: $('#custom-rating-menu-container'),
- *     attribute: 'rating',
- *     max: 5,
- *   })
- * ]);
  */
-export default function connectRatingMenu(renderFn, unmountFn = noop) {
+const connectRatingMenu: ConnectRatingMenu = function connectRatingMenu(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
-    const { attribute, max = 5 } = widgetParams;
-    let sendEvent;
+  return widgetParams => {
+    const { attribute, max = 5 } = widgetParams || {};
+    let sendEvent: SendEvent;
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
-    const getRefinedStar = state => {
+    const getRefinedStar = (state: SearchParameters) => {
       const values = state.getNumericRefinements(attribute);
 
       if (!values['>=']?.length) {
@@ -151,7 +170,9 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       return values['>='][0];
     };
 
-    const getFacetsMaxDecimalPlaces = facetResults => {
+    const getFacetsMaxDecimalPlaces = (
+      facetResults: SearchResults.FacetValue[]
+    ) => {
       let maxDecimalPlaces = 0;
       facetResults.forEach(facetResult => {
         const [, decimal = ''] = facetResult.name.split('.');
@@ -164,6 +185,10 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       maxDecimalPlaces,
       maxFacets,
       maxValuesPerFacet,
+    }: {
+      maxDecimalPlaces: number;
+      maxFacets: number;
+      maxValuesPerFacet: number;
     }) => {
       const maxDecimalPlacesInRange = Math.max(
         0,
@@ -174,7 +199,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         Math.pow(10, maxDecimalPlacesInRange) * max
       );
 
-      const solutions = [];
+      const solutions: string[] = [];
 
       if (maxFacets > MAX_VALUES_PER_FACET_API_LIMIT) {
         solutions.push(
@@ -192,33 +217,49 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       }
 
       return `The ${attribute} attribute can have ${maxFacets} different values (0 to ${max} with a maximum of ${maxDecimalPlaces} decimals = ${maxFacets}) but you retrieved only ${maxValuesPerFacet} facet values. Therefore the number of results that match the refinements can be incorrect.
-${
-  solutions.length
-    ? `To resolve this problem you can:\n${solutions.join('\n')}`
-    : ``
-}`;
+    ${
+      solutions.length
+        ? `To resolve this problem you can:\n${solutions.join('\n')}`
+        : ``
+    }`;
     };
 
-    function getRefinedState(state, facetValue) {
+    function getRefinedState(state: SearchParameters, facetValue: string) {
       const isRefined = getRefinedStar(state) === Number(facetValue);
 
-      const emptyState = state.resetPage().removeNumericRefinement(attribute);
+      const emptyState = state.resetPage().removeNumericRefinement(attribute!);
 
       if (!isRefined) {
         return emptyState
-          .addNumericRefinement(attribute, '<=', max)
-          .addNumericRefinement(attribute, '>=', facetValue);
+          .addNumericRefinement(attribute!, '<=', max)
+          .addNumericRefinement(attribute!, '>=', Number(facetValue));
       }
       return emptyState;
     }
 
-    const toggleRefinement = (helper, facetValue) => {
+    const toggleRefinement = (
+      helper: AlgoliaSearchHelper,
+      facetValue: string
+    ) => {
       sendEvent('click', facetValue);
       helper.setState(getRefinedState(helper.state, facetValue)).search();
     };
 
-    const connectorState = {
-      toggleRefinementFactory: helper => toggleRefinement.bind(this, helper),
+    type ConnectorState = {
+      toggleRefinementFactory: (
+        helper: AlgoliaSearchHelper
+      ) => (facetValue: string) => void;
+      createURLFactory: ({
+        state,
+        createURL,
+      }: {
+        state: SearchParameters;
+        createURL: (createURLState: SearchParameters) => string;
+      }) => (value: string) => string;
+    };
+
+    const connectorState: ConnectorState = {
+      toggleRefinementFactory: helper => toggleRefinement.bind(null, helper),
       createURLFactory: ({ state, createURL }) => value =>
         createURL(getRefinedState(state, value)),
     };
@@ -267,7 +308,7 @@ ${
         instantSearchInstance,
         createURL,
       }) {
-        let facetValues = [];
+        let facetValues: StarRatingItems[] = [];
 
         if (!sendEvent) {
           sendEvent = createSendEvent({
@@ -279,7 +320,10 @@ ${
         }
 
         if (results) {
-          const facetResults = results.getFacetValues(attribute);
+          const facetResults = results.getFacetValues(
+            attribute,
+            {}
+          ) as SearchResults.FacetValue[];
           const maxValuesPerFacet = facetResults.length;
 
           const maxDecimalPlaces = getFacetsMaxDecimalPlaces(facetResults);
@@ -311,12 +355,13 @@ ${
             }
 
             const stars = [...new Array(Math.floor(max / STEP))].map(
-              (v, i) => i * STEP < star
+              (_v, i) => i * STEP < star
             );
 
             facetValues.push({
               stars,
               name: String(star),
+              label: String(star),
               value: String(star),
               count,
               isRefined,
@@ -328,6 +373,7 @@ ${
         return {
           items: facetValues,
           hasNoResults: results ? results.nbHits === 0 : true,
+          canRefine: facetValues.length > 0,
           refine: connectorState.toggleRefinementFactory(helper),
           sendEvent,
           createURL: connectorState.createURLFactory({ state, createURL }),
@@ -369,7 +415,7 @@ ${
           return withDisjunctiveFacet.setQueryParameters({
             numericRefinements: {
               ...withDisjunctiveFacet.numericRefinements,
-              [attribute]: [],
+              [attribute]: {},
             },
           });
         }
@@ -380,4 +426,6 @@ ${
       },
     };
   };
-}
+};
+
+export default connectRatingMenu;

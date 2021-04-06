@@ -1,11 +1,32 @@
 /** @jsx h */
 
 import { h, Component } from 'preact';
-import PropTypes from 'prop-types';
 import { renderTemplate, isEqual } from '../../lib/utils';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import { Templates } from '../../types';
 
-class Template extends Component {
-  shouldComponentUpdate(nextProps) {
+const defaultProps = {
+  data: {},
+  rootTagName: 'div',
+  useCustomCompileOptions: {},
+  templates: {},
+  templatesConfig: {},
+};
+
+type TemplateProps = {
+  data?: Record<string, any>;
+  rootProps?: Record<string, any>;
+  rootTagName?: keyof h.JSX.IntrinsicElements;
+  templateKey: string;
+  bindEvent?: (...args: any[]) => string;
+} & PreparedTemplateProps<Templates> &
+  Readonly<typeof defaultProps>;
+
+// @TODO: Template should be a generic and receive TData to pass to Templates (to avoid TTemplateData to be set as `any`)
+class Template extends Component<TemplateProps> {
+  public static readonly defaultProps = defaultProps;
+
+  public shouldComponentUpdate(nextProps: TemplateProps) {
     return (
       !isEqual(this.props.data, nextProps.data) ||
       this.props.templateKey !== nextProps.templateKey ||
@@ -13,8 +34,9 @@ class Template extends Component {
     );
   }
 
-  render() {
+  public render() {
     const RootTagName = this.props.rootTagName;
+
     const useCustomCompileOptions = this.props.useCustomCompileOptions[
       this.props.templateKey
     ];
@@ -45,40 +67,5 @@ class Template extends Component {
     );
   }
 }
-
-Template.propTypes = {
-  data: PropTypes.object,
-  rootProps: PropTypes.object,
-  rootTagName: PropTypes.string,
-  templateKey: PropTypes.string,
-  templates: PropTypes.objectOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.func])
-  ),
-  templatesConfig: PropTypes.shape({
-    helpers: PropTypes.objectOf(PropTypes.func),
-    // https://github.com/twitter/hogan.js/#compilation-options
-    compileOptions: PropTypes.shape({
-      asString: PropTypes.bool,
-      sectionTags: PropTypes.arrayOf(
-        PropTypes.shape({
-          o: PropTypes.string,
-          c: PropTypes.string,
-        })
-      ),
-      delimiters: PropTypes.string,
-      disableLambda: PropTypes.bool,
-    }),
-  }),
-  useCustomCompileOptions: PropTypes.objectOf(PropTypes.bool),
-  bindEvent: PropTypes.func,
-};
-
-Template.defaultProps = {
-  data: {},
-  rootTagName: 'div',
-  useCustomCompileOptions: {},
-  templates: {},
-  templatesConfig: {},
-};
 
 export default Template;

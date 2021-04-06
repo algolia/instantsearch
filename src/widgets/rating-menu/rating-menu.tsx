@@ -3,7 +3,10 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
+import connectRatingMenu, {
+  RatingMenuConnectorParams,
+  RatingMenuRendererOptions,
+} from '../../connectors/rating-menu/connectRatingMenu';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -11,13 +14,111 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
+import { RendererOptions, WidgetFactory } from '../../types';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
 const suit = component('RatingMenu');
 
-const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
-  { refine, items, createURL, instantSearchInstance },
-  isFirstRendering
+export type RatingMenuTemplates = {
+  /**
+   * Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+   */
+  item: string | ((data: any) => string);
+};
+
+export type RatingMenuCSSClasses = {
+  /**
+   * CSS class to add to the root element.
+   */
+  root: string | string[];
+  /**
+   * CSS class to add to the root element when there's no refinements.
+   */
+  noRefinementRoot: string | string[];
+  /**
+   * CSS class to add to the list element.
+   */
+  list: string | string[];
+  /**
+   * CSS class to add to each item element.
+   */
+  item: string | string[];
+  /**
+   * CSS class to add the selected item element.
+   */
+  selectedItem: string | string[];
+  /**
+   * CSS class to add a disabled item element.
+   */
+  disabledItem: string | string[];
+  /**
+   * CSS class to add to each link element.
+   */
+  link: string | string[];
+  /**
+   * CSS class to add to each star element (when using the default template).
+   */
+  starIcon: string | string[];
+  /**
+   * CSS class to add to each full star element (when using the default template).
+   */
+  fullStarIcon: string | string[];
+  /**
+   * CSS class to add to each empty star element (when using the default template).
+   */
+  emptyStarIcon: string | string[];
+  /**
+   * CSS class to add to each label.
+   */
+  label: string | string[];
+  /**
+   * CSS class to add to each counter.
+   */
+  count: string | string[];
+};
+
+export type RatingMenuWidgetParams = {
+  /**
+   * Place where to insert the widget in your webpage.
+   */
+  container: string | HTMLElement;
+  /**
+   * Name of the attribute in your records that contains the ratings.
+   */
+  attribute: string;
+  /**
+   * The maximum rating value.
+   */
+  max?: number;
+  /**
+   * Templates to use for the widget.
+   */
+  templates?: Partial<RatingMenuTemplates>;
+  /**
+   * CSS classes to add.
+   */
+  cssClasses?: Partial<RatingMenuCSSClasses>;
+};
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  templates,
+  renderState,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: Record<string, string>;
+  templates: Partial<RatingMenuTemplates>;
+  renderState: { templateProps?: PreparedTemplateProps<RatingMenuTemplates> };
+}) => (
+  {
+    refine,
+    items,
+    createURL,
+    instantSearchInstance,
+  }: RatingMenuRendererOptions & RendererOptions<RatingMenuConnectorParams>,
+  isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -54,36 +155,6 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
 };
 
 /**
- * @typedef {Object} RatingMenuWidgetTemplates
- * @property  {string|function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- */
-
-/**
- * @typedef {Object} RatingMenuWidgetCssClasses
- * @property  {string|string[]} [root] CSS class to add to the root element.
- * @property  {string|string[]} [noRefinementRoot] CSS class to add to the root element when there's no refinements.
- * @property  {string|string[]} [list] CSS class to add to the list element.
- * @property  {string|string[]} [item] CSS class to add to each item element.
- * @property  {string|string[]} [selectedItem] CSS class to add the selected item element.
- * @property  {string|string[]} [disabledItem] CSS class to add a disabled item element.
- * @property  {string|string[]} [link] CSS class to add to each link element.
- * @property  {string|string[]} [starIcon] CSS class to add to each star element (when using the default template).
- * @property  {string|string[]} [fullStarIcon] CSS class to add to each full star element (when using the default template).
- * @property  {string|string[]} [emptyStarIcon] CSS class to add to each empty star element (when using the default template).
- * @property  {string|string[]} [label] CSS class to add to each label.
- * @property  {string|string[]} [count] CSS class to add to each counter.
- */
-
-/**
- * @typedef {Object} RatingMenuWidgetParams
- * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
- * @property {string} attribute Name of the attribute in your records that contains the ratings.
- * @property {number} [max = 5] The maximum rating value.
- * @property {RatingMenuWidgetTemplates} [templates] Templates to use for the widget.
- * @property {RatingMenuWidgetCssClasses} [cssClasses] CSS classes to add.
- */
-
-/**
  * Rating menu is used for displaying grade like filters. The values are normalized within boundaries.
  *
  * The maximum value can be set (with `max`), the minimum is always 0.
@@ -109,7 +180,13 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
  *   })
  * ]);
  */
-export default function ratingMenu(widgetParams) {
+export type RatingMenuWidget = WidgetFactory<
+  RatingMenuRendererOptions,
+  RatingMenuConnectorParams,
+  RatingMenuWidgetParams
+>;
+
+const ratingMenu: RatingMenuWidget = function ratingMenu(widgetParams) {
   const {
     container,
     attribute,
@@ -168,4 +245,6 @@ export default function ratingMenu(widgetParams) {
     ...makeWidget({ attribute, max }),
     $$widgetType: 'ais.ratingMenu',
   };
-}
+};
+
+export default ratingMenu;
