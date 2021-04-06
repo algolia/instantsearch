@@ -8,11 +8,14 @@ import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
 import SearchBox from '../SearchBox/SearchBox';
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
-import { SearchBoxTemplates } from '../../widgets/search-box/types';
+import {
+  SearchBoxRendererCSSClasses,
+  SearchBoxTemplates,
+} from '../../widgets/search-box/search-box';
 import { CreateURL, Templates } from '../../types';
 
 type CSSClasses = {
-  searchable?: Record<string, string>;
+  searchable?: SearchBoxRendererCSSClasses;
   [key: string]: any;
 };
 
