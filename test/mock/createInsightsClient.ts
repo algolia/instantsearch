@@ -1,14 +1,9 @@
-import {
-  AlgoliaAnalytics,
-  getFunctionalInterface,
-  getRequesterForBrowser,
-  processQueue,
-} from 'search-insights/index-browser.cjs';
+import { AlgoliaAnalytics } from 'search-insights/index-browser.cjs';
 
 export function createInsights() {
   const analytics = mockSendingEvents(
     new AlgoliaAnalytics({
-      requestFn: getRequesterForBrowser(),
+      requestFn: jest.fn(),
     })
   );
   const insightsClient = jest.fn(getFunctionalInterface(analytics));
@@ -28,7 +23,7 @@ export function createInsightsUmdVersion() {
   };
   const analytics = mockSendingEvents(
     new AlgoliaAnalytics({
-      requestFn: getRequesterForBrowser(),
+      requestFn: jest.fn(),
     })
   );
 
@@ -36,7 +31,7 @@ export function createInsightsUmdVersion() {
     analytics,
     insightsClient: globalObject.aa,
     libraryLoadedAndProcessQueue: () => {
-      processQueue.call(analytics, globalObject);
+      processQueue(analytics, globalObject);
     },
   };
 }
@@ -55,4 +50,40 @@ function mockSendingEvents(analytics: AlgoliaAnalytics) {
     analytics.convertedObjectIDsAfterSearch
   );
   return analytics;
+}
+
+function getFunctionalInterface(instance: AlgoliaAnalytics) {
+  return (functionName: string, ...functionArguments: any[]) => {
+    instance[functionName](...functionArguments);
+  };
+}
+
+function processQueue(instance: AlgoliaAnalytics, globalObject: any) {
+  // Set pointer which allows renaming of the script
+  const pointer = globalObject.AlgoliaAnalyticsObject as string;
+
+  if (pointer) {
+    const _aa = getFunctionalInterface(instance);
+
+    // `aa` is the user facing function, which is defined in the install snippet.
+    //  - before library is initialized  `aa` fills a queue
+    //  - after library is initialized  `aa` calls `_aa`
+    const aa = globalObject[pointer];
+    aa.queue = aa.queue || [];
+
+    const queue: IArguments[] = aa.queue;
+
+    // Loop queue and execute functions in the queue
+    queue.forEach((args: IArguments) => {
+      const [functionName, ...functionArguments] = [].slice.call(args);
+      _aa(functionName, ...functionArguments);
+    });
+
+    // @ts-expect-error array.push function is expected to return
+    //                  the length of the array after push but we don't need it here
+    queue.push = (args: IArguments) => {
+      const [functionName, ...functionArguments] = [].slice.call(args);
+      _aa(functionName, ...functionArguments);
+    };
+  }
 }
