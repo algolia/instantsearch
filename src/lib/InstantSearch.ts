@@ -269,7 +269,12 @@ See ${createDocumentationLink({
    */
   public use(...middleware: Middleware[]): this {
     const newMiddlewareList = middleware.map(fn => {
-      const newMiddleware = fn({ instantSearchInstance: this });
+      const newMiddleware = {
+        subscribe: noop,
+        unsubscribe: noop,
+        onStateChange: noop,
+        ...fn({ instantSearchInstance: this }),
+      };
       this.middleware.push({
         creator: fn,
         instance: newMiddleware,
