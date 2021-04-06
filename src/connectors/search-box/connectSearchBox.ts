@@ -1,13 +1,26 @@
+import { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
+import { Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'search-box',
   connector: true,
 });
+
+export type SearchBoxConnectorParams = {
+  /**
+   * A function that will be called every time
+   * a new value for the query is set. The first parameter is the query and the second is a
+   * function to actually trigger the search. The function takes the query as the parameter.
+   *
+   * This queryHook can be used to debounce the number of searches done from the searchBox.
+   */
+  queryHook?: (query: string, hook: (value: string) => void) => void;
+};
 
 /**
  * @typedef {Object} CustomSearchBoxWidgetParams
@@ -18,64 +31,54 @@ const withUsage = createDocumentationMessageGenerator({
  * This queryHook can be used to debounce the number of searches done from the searchBox.
  */
 
-/**
- * @typedef {Object} SearchBoxRenderingOptions
- * @property {string} query The query from the last search.
- * @property {function(string)} refine Sets a new query and searches.
- * @property {function()} clear Remove the query and perform search.
- * @property {Object} widgetParams All original `CustomSearchBoxWidgetParams` forwarded to the `renderFn`.
- * @property {boolean} isSearchStalled `true` if the search results takes more than a certain time to come back
- * from Algolia servers. This can be configured on the InstantSearch constructor with the attribute
- * `stalledSearchDelay` which is 200ms, by default.
- */
+export type SearchBoxRendererOptions = {
+  /**
+   * The query from the last search.
+   */
+  query: string;
+  /**
+   * Sets a new query and searches.
+   */
+  refine: (value: string) => void;
+  /**
+   * Remove the query and perform search.
+   */
+  clear: () => void;
+  /**
+   * `true` if the search results takes more than a certain time to come back
+   * from Algolia servers. This can be configured on the InstantSearch constructor with the attribute
+   * `stalledSearchDelay` which is 200ms, by default.
+   */
+  isSearchStalled: boolean;
+};
+
+export type ConnectSearchBox = Connector<
+  SearchBoxRendererOptions,
+  SearchBoxConnectorParams
+>;
 
 /**
  * **SearchBox** connector provides the logic to build a widget that will let the user search for a query.
  *
  * The connector provides to the rendering: `refine()` to set the query. The behaviour of this function
  * may be impacted by the `queryHook` widget parameter.
- * @type {Connector}
- * @param {function(SearchBoxRenderingOptions, boolean)} renderFn Rendering function for the custom **SearchBox** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomSearchBoxWidgetParams)} Re-usable widget factory for a custom **SearchBox** widget.
- * @example
- * // custom `renderFn` to render the custom SearchBox widget
- * function renderFn(SearchBoxRenderingOptions, isFirstRendering) {
- *   if (isFirstRendering) {
- *     SearchBoxRenderingOptions.widgetParams.containerNode.html('<input type="text" />');
- *     SearchBoxRenderingOptions.widgetParams.containerNode
- *       .find('input')
- *       .on('keyup', function() {
- *         SearchBoxRenderingOptions.refine($(this).val());
- *       });
- *     SearchBoxRenderingOptions.widgetParams.containerNode
- *       .find('input')
- *       .val(SearchBoxRenderingOptions.query);
- *   }
- * }
- *
- * // connect `renderFn` to SearchBox logic
- * var customSearchBox = instantsearch.connectors.connectSearchBox(renderFn);
- *
- * // mount widget on the page
- * search.addWidgets([
- *   customSearchBox({
- *     containerNode: $('#custom-searchbox'),
- *   })
- * ]);
  */
-export default function connectSearchBox(renderFn, unmountFn = noop) {
+const connectSearchBox: ConnectSearchBox = function connectSearchBox(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
-    const { queryHook } = widgetParams;
+  return widgetParams => {
+    const { queryHook } = widgetParams || {};
 
-    function clear(helper) {
+    function clear(helper: AlgoliaSearchHelper) {
       return function() {
         helper.setQuery('').search();
       };
     }
 
+    let _refine: SearchBoxRendererOptions['refine'];
     let _clear = () => {};
     function _cachedClear() {
       _clear();
@@ -122,14 +125,14 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
 
       getWidgetRenderState({ helper, searchMetadata }) {
-        if (!this._refine) {
-          const setQueryAndSearch = query => {
+        if (!_refine) {
+          const setQueryAndSearch = (query: string) => {
             if (query !== helper.state.query) {
               helper.setQuery(query).search();
             }
           };
 
-          this._refine = query => {
+          _refine = query => {
             if (queryHook) {
               queryHook(query, setQueryAndSearch);
               return;
@@ -143,7 +146,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
 
         return {
           query: helper.state.query || '',
-          refine: this._refine,
+          refine: _refine,
           clear: _cachedClear,
           widgetParams,
           isSearchStalled: searchMetadata.isSearchStalled,
@@ -168,4 +171,6 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
     };
   };
-}
+};
+
+export default connectSearchBox;

@@ -1,7 +1,7 @@
 import {
   InsightsClient,
   InsightsClientMethod,
-  Middleware,
+  InternalMiddleware,
   Hit,
 } from '../types';
 import { getInsightsAnonymousUserTokenInternal } from '../helpers';
@@ -30,7 +30,9 @@ export type InsightsProps = {
   ) => void;
 };
 
-export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
+export type CreateInsightsMiddleware = (
+  props: InsightsProps
+) => InternalMiddleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
   const { insightsClient: _insightsClient, insightsInitParams, onEvent } =
