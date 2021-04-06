@@ -1,3 +1,21 @@
+# [4.20.0](https://github.com/algolia/instantsearch.js/compare/v4.19.0...v4.20.0) (2021-04-06)
+
+
+### Features
+
+* **clearRefinements:** implement canRefine ([#4684](https://github.com/algolia/instantsearch.js/issues/4684)) ([a898f09](https://github.com/algolia/instantsearch.js/commit/a898f09bddca5db1f6782104375df3873d49c688))
+* **currentRefinements:** implement canRefine ([#4697](https://github.com/algolia/instantsearch.js/issues/4697)) ([4db75ba](https://github.com/algolia/instantsearch.js/commit/4db75baa9ff2e18f871547511d8f1234eea9d41b))
+* **hierarchicalMenu:** implement canRefine ([#4685](https://github.com/algolia/instantsearch.js/issues/4685)) ([0d2e450](https://github.com/algolia/instantsearch.js/commit/0d2e450aed2aaac72ae7ff7f1bb322ce6992c8ba))
+* **middleware:** add unuse method ([#4708](https://github.com/algolia/instantsearch.js/issues/4708)) ([8e3c406](https://github.com/algolia/instantsearch.js/commit/8e3c406c8f29bcae56d2f82f07cbd087043346fe))
+* **pagination:** implement canRefine ([#4683](https://github.com/algolia/instantsearch.js/issues/4683)) ([3ae51e6](https://github.com/algolia/instantsearch.js/commit/3ae51e60543984463a13b25e64aa2f879c91313e))
+* **range:** implement canRefine ([#4686](https://github.com/algolia/instantsearch.js/issues/4686)) ([a99ab6f](https://github.com/algolia/instantsearch.js/commit/a99ab6f968b791ffa31cd17dda598c293e73b88e))
+* **ratingMenu:** implement canRefine ([#4691](https://github.com/algolia/instantsearch.js/issues/4691)) ([42191a0](https://github.com/algolia/instantsearch.js/commit/42191a097a048a325234dd3f40f7799145628cd6))
+* **toggleRefinement:** implement canRefine ([#4689](https://github.com/algolia/instantsearch.js/issues/4689)) ([48dc7f8](https://github.com/algolia/instantsearch.js/commit/48dc7f8423c92b21bcd59856bf2fc685ae4aba69))
+* **ts:** convert rating-menu to TypeScript ([#4701](https://github.com/algolia/instantsearch.js/issues/4701)) ([f14ca08](https://github.com/algolia/instantsearch.js/commit/f14ca0891237a7a49b09d881cddedb93efc3a266))
+* **ts:** convert Template component to TypeScript ([#4703](https://github.com/algolia/instantsearch.js/issues/4703)) ([0688571](https://github.com/algolia/instantsearch.js/commit/068857137b85d1065bc5997514461d72fe595130))
+
+
+
 # [4.19.0](https://github.com/algolia/instantsearch.js/compare/v4.18.0...v4.19.0) (2021-03-30)
 
 
