@@ -9,13 +9,16 @@ import RefinementListItem from './RefinementListItem';
 import SearchBox from '../SearchBox/SearchBox';
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import { SearchBoxTemplates } from '../../widgets/search-box/types';
+import { SearchBoxTemplates } from '../../widgets/search-box/search-box';
 import { CreateURL, Templates } from '../../types';
 
 type CSSClasses = {
   searchable?: Record<string, string>;
   [key: string]: any;
 };
+
+type FacetValue = TRefinementListItem | HierarchicalMenuItem;
+type FacetValues = TRefinementListItem[] | HierarchicalMenuItem[];
 
 export type RefinementListProps<
   TTemplates extends Templates,
@@ -24,7 +27,7 @@ export type RefinementListProps<
   createURL: CreateURL<string>;
   cssClasses: TCSSClasses;
   depth?: number;
-  facetValues?: TRefinementListItem[] | HierarchicalMenuItem[];
+  facetValues?: FacetValues;
   attribute?: string;
   templateProps?: PreparedTemplateProps<TTemplates>;
   searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
@@ -56,7 +59,7 @@ type RefinementListPropsWithDefaultProps<
 type RefinementListItemTemplateData<
   TTemplates extends Templates,
   TCSSClasses extends CSSClasses
-> = (TRefinementListItem | HierarchicalMenuItem) & {
+> = FacetValue & {
   url: string;
 } & Pick<
     RefinementListProps<TTemplates, TCSSClasses>,
@@ -64,7 +67,7 @@ type RefinementListItemTemplateData<
   >;
 
 function isHierarchicalMenuItem(
-  facetValue: TRefinementListItem | HierarchicalMenuItem
+  facetValue: FacetValue
 ): facetValue is HierarchicalMenuItem {
   return (facetValue as HierarchicalMenuItem).data !== undefined;
 }
@@ -101,9 +104,7 @@ class RefinementList<
     this.props.toggleRefinement(facetValueToRefine);
   }
 
-  private _generateFacetItem(
-    facetValue: TRefinementListItem | HierarchicalMenuItem
-  ) {
+  private _generateFacetItem(facetValue: FacetValue) {
     let subItems;
     if (
       isHierarchicalMenuItem(facetValue) &&
