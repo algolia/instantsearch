@@ -188,25 +188,29 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       }
     };
 
-    const getShowPrevious = (
-      helper: Helper,
-      cachedHits: InfiniteHitsCachedHits
-    ): (() => void) => () => {
+    const getShowPrevious = (helper: Helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
       // avoid updating the browser URL when the user displays the previous page.
       helper
         .overrideStateWithoutTriggeringChangeEvent({
           ...helper.state,
-          page: getFirstReceivedPage(helper.state, cachedHits) - 1,
+          page:
+            getFirstReceivedPage(
+              helper.state,
+              cache.read({ state: helper.state }) || {}
+            ) - 1,
         })
         .searchWithoutTriggeringOnStateChange();
     };
-    const getShowMore = (
-      helper: Helper,
-      cachedHits: InfiniteHitsCachedHits
-    ): (() => void) => () => {
+
+    const getShowMore = (helper: Helper): (() => void) => () => {
       helper
-        .setPage(getLastReceivedPage(helper.state, cachedHits) + 1)
+        .setPage(
+          getLastReceivedPage(
+            helper.state,
+            cache.read({ state: helper.state }) || {}
+          ) + 1
+        )
         .search();
     };
 
@@ -252,8 +256,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         const cachedHits = cache.read({ state }) || {};
 
         if (!results) {
-          showPrevious = getShowPrevious(helper, cachedHits);
-          showMore = getShowMore(helper, cachedHits);
+          showPrevious = getShowPrevious(helper);
+          showMore = getShowMore(helper);
           sendEvent = createSendEventForHits({
             instantSearchInstance,
             index: helper.getIndex(),
