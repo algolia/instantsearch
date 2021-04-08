@@ -1,4 +1,10 @@
-const getButtonInnerElement = (status, errorCode, isListening) => {
+import { VoiceSearchTemplates } from './voice-search';
+
+const getButtonInnerElement = (
+  status: string,
+  errorCode: string,
+  isListening: boolean
+) => {
   if (status === 'error' && errorCode === 'not-allowed') {
     return `<line x1="1" y1="1" x2="23" y2="23"></line>
             <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path>
@@ -15,7 +21,7 @@ const getButtonInnerElement = (status, errorCode, isListening) => {
           <line x1="8" y1="23" x2="16" y2="23"></line>`;
 };
 
-export default {
+const defaultTemplates: VoiceSearchTemplates = {
   buttonText({ status, errorCode, isListening }) {
     return `<svg
        xmlns="http://www.w3.org/2000/svg"
@@ -33,3 +39,5 @@ export default {
   },
   status: `<p>{{transcript}}</p>`,
 };
+
+export default defaultTemplates;
