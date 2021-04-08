@@ -255,6 +255,38 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(thirdRenderOptions.results).toEqual(previousResults);
   });
 
+  it('Renders previous page after showing next page', () => {
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
+    const widget = makeWidget({});
+
+    const helper = algoliasearchHelper(createSearchClient(), '', {});
+    helper.setPage(4);
+    helper.overrideStateWithoutTriggeringChangeEvent = jest.fn(() => helper);
+    helper.searchWithoutTriggeringOnStateChange = jest.fn();
+
+    widget.init!(
+      createInitOptions({
+        state: helper.state,
+        helper,
+      })
+    );
+
+    const { showMore, showPrevious } = widget.getWidgetRenderState(
+      createRenderOptions({
+        state: helper.state,
+        helper,
+      })
+    );
+    showMore();
+    expect(helper.state.page).toBe(5);
+
+    showPrevious();
+    expect(
+      helper.overrideStateWithoutTriggeringChangeEvent
+    ).toHaveBeenCalledWith(expect.objectContaining({ page: 3 }));
+  });
+
   it('Provides the hits and flush hists cache on query changes', () => {
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
