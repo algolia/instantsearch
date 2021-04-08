@@ -142,6 +142,9 @@
     "typescript": "4.1.5",
     "webpack": "4.41.5"
   },
+  "resolutions": {
+    "places.js/algoliasearch": "3.35.0"
+  },
   "bundlesize": [
     {
       "path": "./dist/instantsearch.production.min.js",
