@@ -1,4 +1,4 @@
-import { render } from 'preact';
+import { render as preactRender, VNode } from 'preact';
 import jsHelper, {
   SearchResults,
   SearchParameters,
@@ -11,9 +11,9 @@ import {
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import ratingMenu from '../rating-menu';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
-const mockedRender = render as jest.Mock;
-
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -44,7 +44,7 @@ describe('ratingMenu()', () => {
   let results: SearchResults;
 
   beforeEach(() => {
-    mockedRender.mockClear();
+    render.mockClear();
 
     container = document.createElement('div');
     widget = ratingMenu({
@@ -98,11 +98,11 @@ describe('ratingMenu()', () => {
       createRenderOptions({ state: helper.state, helper, results, createURL })
     );
 
-    const [firstRender, secondRender] = mockedRender.mock.calls;
+    const [firstRender, secondRender] = render.mock.calls;
 
-    const { children, ...rootProps } = firstRender[0].props;
+    const { children, ...rootProps } = (firstRender[0] as VNode<any>).props;
 
-    expect(mockedRender).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledTimes(2);
     expect(rootProps).toMatchSnapshot();
     expect(firstRender[1]).toEqual(container);
     expect(secondRender[1]).toEqual(container);
@@ -127,10 +127,10 @@ describe('ratingMenu()', () => {
       })
     );
 
-    const [firstRender] = mockedRender.mock.calls;
+    const [firstRender] = render.mock.calls;
 
-    expect(mockedRender).toHaveBeenCalledTimes(1);
-    expect(firstRender[0].props.facetValues).toEqual([
+    expect(render).toHaveBeenCalledTimes(1);
+    expect((firstRender[0] as VNode<any>).props.facetValues).toEqual([
       {
         count: 42,
         isRefined: true,
@@ -266,7 +266,7 @@ describe('ratingMenu()', () => {
     );
 
     expect(
-      mockedRender.mock.calls[mockedRender.mock.calls.length - 1][0].props
+      (render.mock.calls[render.mock.calls.length - 1][0] as VNode<any>).props
         .facetValues
     ).toEqual([
       {
