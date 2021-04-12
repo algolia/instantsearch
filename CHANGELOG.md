@@ -1,3 +1,26 @@
+# [4.21.0](https://github.com/algolia/instantsearch.js/compare/v4.20.0...v4.21.0) (2021-04-12)
+
+
+### Bug Fixes
+
+* **infiniteHits:** fix wrong behavior of showPrevious regarding cachedHits ([#4725](https://github.com/algolia/instantsearch.js/issues/4725)) ([40b27b6](https://github.com/algolia/instantsearch.js/commit/40b27b668ec1dcb8608b299c941e0003b43911d3))
+* **ratingMenu:** use url in default template ([#4728](https://github.com/algolia/instantsearch.js/issues/4728)) ([31d9c50](https://github.com/algolia/instantsearch.js/commit/31d9c50344818cd4f4e62993a981ec3616d8b88e))
+
+
+### Features
+
+* **middleware:** accept partial methods ([#4673](https://github.com/algolia/instantsearch.js/issues/4673)) ([8f2aad2](https://github.com/algolia/instantsearch.js/commit/8f2aad2f0465cc883681143f350a11c24ce694e2))
+* **ts:** convert hierarchical-menu to TypeScript ([#4711](https://github.com/algolia/instantsearch.js/issues/4711)) ([870e2f7](https://github.com/algolia/instantsearch.js/commit/870e2f7285d58c48196356cd88fb4aca66feb7aa))
+* **ts:** convert RefinementList component to TypeScript ([#4702](https://github.com/algolia/instantsearch.js/issues/4702)) ([fd562de](https://github.com/algolia/instantsearch.js/commit/fd562de5e50e3889abaa9ef8151faa1b5179d7f6))
+* **ts:** convert search-box to TypeScript ([#4710](https://github.com/algolia/instantsearch.js/issues/4710)) ([e73257a](https://github.com/algolia/instantsearch.js/commit/e73257a466082207c0289f22bad523334d101aae))
+
+
+### Reverts
+
+* Revert "chore(ci): consistent modern yarn version (#4726)" ([e016b73](https://github.com/algolia/instantsearch.js/commit/e016b7358e9635f0120bca205cffa6510ecfbfca)), closes [#4726](https://github.com/algolia/instantsearch.js/issues/4726)
+
+
+
 # [4.20.0](https://github.com/algolia/instantsearch.js/compare/v4.19.0...v4.20.0) (2021-04-06)
 
 
