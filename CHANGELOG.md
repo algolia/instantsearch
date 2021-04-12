@@ -15,11 +15,6 @@
 * **ts:** convert search-box to TypeScript ([#4710](https://github.com/algolia/instantsearch.js/issues/4710)) ([e73257a](https://github.com/algolia/instantsearch.js/commit/e73257a466082207c0289f22bad523334d101aae))
 
 
-### Reverts
-
-* Revert "chore(ci): consistent modern yarn version (#4726)" ([e016b73](https://github.com/algolia/instantsearch.js/commit/e016b7358e9635f0120bca205cffa6510ecfbfca)), closes [#4726](https://github.com/algolia/instantsearch.js/issues/4726)
-
-
 
 # [4.20.0](https://github.com/algolia/instantsearch.js/compare/v4.19.0...v4.20.0) (2021-04-06)
 
