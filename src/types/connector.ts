@@ -1,7 +1,8 @@
 import { SearchResults } from 'algoliasearch-helper';
-import { Hits, InstantSearch } from './instantsearch';
+import { InstantSearch } from './instantsearch';
 import { InsightsClient } from './insights';
 import { WidgetFactory } from './widget';
+import { Hits } from './results';
 
 /**
  * The base renderer options. All render functions receive

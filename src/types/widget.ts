@@ -5,7 +5,8 @@ import {
   SearchResults,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { InstantSearch, Hit, GeoLoc } from './instantsearch';
+import { InstantSearch } from './instantsearch';
+import { Hit, GeoLoc } from './results';
 import { BindEventForHits, SendEventForHits } from '../lib/utils';
 import {
   AutocompleteRendererOptions,
