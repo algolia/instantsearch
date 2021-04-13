@@ -2,7 +2,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { HelperChangeEvent, Connector, TransformItems } from '../../types';
+import { Connector, TransformItems } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -110,7 +110,7 @@ function applyRuleContexts(
     trackedFilters: ParamTrackedFilters;
     transformRuleContexts: ParamTransformRuleContexts;
   },
-  event: HelperChangeEvent
+  event: { state: SearchParameters }
 ): void {
   const {
     helper,
@@ -179,7 +179,7 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
     // We store the initial rule contexts applied before creating the widget
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
-    let onHelperChange: (event: HelperChangeEvent) => void;
+    let onHelperChange: (event: { state: SearchParameters }) => void;
 
     return {
       $$type: 'ais.queryRules',
