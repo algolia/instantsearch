@@ -1,5 +1,5 @@
 import InstantSearch from '../lib/InstantSearch';
-import { UiState } from './widget';
+import { UiState } from './ui-state';
 import { AtLeastOne } from './utils';
 
 export type MiddlewareDefinition = {

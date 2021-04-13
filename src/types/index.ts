@@ -13,6 +13,7 @@ export * from './insights';
 
 // widget-related
 export * from './connector';
+export * from './widget-factory';
 export * from './widget';
 export * from './ui-state';
 export * from './render-state';

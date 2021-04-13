@@ -1,7 +1,7 @@
 import { SearchResults } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 import { InsightsClient } from './insights';
-import { WidgetFactory } from './widget';
+import { WidgetFactory } from './widget-factory';
 import { Hits } from './results';
 
 /**

@@ -51,7 +51,7 @@ export type IndexUiState = Partial<{
     boundingBox: string;
   };
   relevantSort: {
-    relevancyStrictness: number;
+    relevancyStrictness: number | undefined;
   };
   sortBy: string;
   page: number;
