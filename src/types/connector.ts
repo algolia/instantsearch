@@ -1,14 +1,14 @@
 import { SearchResults } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 import { InsightsClient } from './insights';
-import { WidgetFactory } from './widget-factory';
 import { Hits } from './results';
+import { Widget, WidgetDescription } from './widget';
 
 /**
  * The base renderer options. All render functions receive
  * the options below plus the specific options per connector.
  */
-export type RendererOptions<TWidgetParams> = {
+export type RenderState<TWidgetParams> = {
   /**
    * The original widget params. Useful as you may
    * need them while using the render function.
@@ -40,11 +40,11 @@ export type RendererOptions<TWidgetParams> = {
 /**
  * The render function.
  */
-export type Renderer<TRenderOptions, TWidgetParams> = (
+export type Renderer<TRenderState, TWidgetParams> = (
   /**
    * The base render options plus the specific options of the widget.
    */
-  renderOptions: TRenderOptions & RendererOptions<TWidgetParams>,
+  renderState: TRenderState & RenderState<TWidgetParams>,
 
   /**
    * If is the first run.
@@ -61,22 +61,27 @@ export type Unmounter = () => void;
  * The connector handles the business logic and exposes
  * a simplified API to the rendering function.
  */
-export type Connector<TRendererOptions, TConnectorParams> = <TWidgetParams>(
+export type Connector<
+  TWidgetDescription extends WidgetDescription,
+  TConnectorParams
+> = <TWidgetParams>(
   /**
    * The render function.
    */
-  renderFn: Renderer<TRendererOptions, TConnectorParams & TWidgetParams>,
-
+  renderFn: Renderer<
+    TWidgetDescription['renderState'],
+    TConnectorParams & TWidgetParams
+  >,
   /**
    * The called function when unmounting a widget.
    */
   unmountFn?: Unmounter
-) => WidgetFactory<
-  TRendererOptions,
-  // a connector doesn't know the difference between TWidgetParams and the
-  // TConnectorParams for the context of rendering.
-  TConnectorParams & TWidgetParams,
-  TConnectorParams & TWidgetParams
+) => (
+  widgetParams: TConnectorParams & TWidgetParams
+) => Widget<
+  TWidgetDescription & {
+    widgetParams: typeof widgetParams;
+  }
 >;
 
 /**

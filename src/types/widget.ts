@@ -6,7 +6,8 @@ import {
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 import { IndexUiState, UiState } from './ui-state';
-import { IndexRenderState } from './render-state';
+import { IndexRenderState, WidgetRenderState } from './render-state';
+import { Expand, RequiredKeys } from './utils';
 
 export type ScopedResult = {
   indexId: string;
@@ -110,102 +111,150 @@ export type BuiltinWidgetTypes =
   | 'ais.toggleRefinement'
   | 'ais.voiceSearch';
 
-/**
- * Widgets are the building blocks of InstantSearch.js. Any valid widget must
- * have at least a `render` or a `init` function.
- */
-export type Widget<
-  TWidgetOptions extends { renderState: unknown } = { renderState: unknown }
-> = {
+export type WidgetParams = {
+  widgetParams: NonNullable<unknown>;
+};
+
+export type WidgetDescription = {
+  $$type: string;
+  $$widgetType?: string;
+  renderState?: Record<string, unknown>;
+  indexRenderState?: Record<string, unknown>;
+  indexUiState?: Record<string, unknown>;
+};
+
+type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
-   * Identifier for official connectors and widgets
+   * Identifier for connectors and widgets.
    */
-  $$type?: BuiltinTypes;
+  $$type: TWidgetDescription['$$type'];
 
   /**
-   * Identifier for official widgets
+   * Called once before the first search.
    */
-  $$widgetType?: BuiltinWidgetTypes;
-
+  init?: (options: InitOptions) => void;
   /**
-   * Called once before the first search
+   * Called after each search response has been received.
    */
-  init?(options: InitOptions): void;
-  /**
-   * Called after each search response has been received
-   */
-  render?(options: RenderOptions): void;
+  render?: (options: RenderOptions) => void;
   /**
    * Called when this widget is unmounted. Used to remove refinements set by
    * during this widget's initialization and life time.
    */
-  dispose?(options: DisposeOptions): SearchParameters | void;
+  dispose?: (options: DisposeOptions) => SearchParameters | void;
+};
+
+type RequiredWidgetType<TWidgetDescription extends WidgetDescription> = {
+  /**
+   * Identifier for widgets.
+   */
+  $$widgetType: TWidgetDescription['$$widgetType'];
+};
+
+type WidgetType<
+  TWidgetDescription extends WidgetDescription
+> = TWidgetDescription extends RequiredKeys<WidgetDescription, '$$widgetType'>
+  ? RequiredWidgetType<TWidgetDescription>
+  : Partial<RequiredWidgetType<TWidgetDescription>>;
+
+type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and
    * the search parameters applied.
-   * @param uiState current state
-   * @param widgetStateOptions extra information to calculate uiState
+   *
+   * @param uiState - Current state.
+   * @param widgetStateOptions - Extra information to calculate uiState.
    */
-  getWidgetUiState?(
-    uiState: IndexUiState,
+  getWidgetUiState: (
+    uiState: Expand<Partial<TWidgetDescription['indexUiState'] & IndexUiState>>,
     widgetUiStateOptions: {
       searchParameters: SearchParameters;
       helper: Helper;
     }
-  ): IndexUiState;
+  ) => Partial<IndexUiState & TWidgetDescription['indexUiState']>;
+
   /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and
    * the search parameters applied.
+   *
    * @deprecated Use `getWidgetUiState` instead.
-   * @param uiState current state
-   * @param widgetStateOptions extra information to calculate uiState
+   * @param uiState - Current state.
+   * @param widgetStateOptions - Extra information to calculate uiState.
    */
-  getWidgetState?: Widget<TWidgetOptions>['getWidgetUiState'];
+  getWidgetState?: RequiredUiStateLifeCycle<
+    TWidgetDescription
+  >['getWidgetUiState'];
+
   /**
    * This function is required for a widget to behave correctly when a URL is
-   * loaded via e.g. routing. It receives the current UiState and applied search
+   * loaded via e.g. Routing. It receives the current UiState and applied search
    * parameters, and is expected to return a new search parameters.
-   * @param state applied search parameters
-   * @param widgetSearchParametersOptions extra information to calculate next searchParameters
+   *
+   * @param state - Applied search parameters.
+   * @param widgetSearchParametersOptions - Extra information to calculate next searchParameters.
    */
-  getWidgetSearchParameters?(
+  getWidgetSearchParameters: (
     state: SearchParameters,
     widgetSearchParametersOptions: {
-      uiState: IndexUiState;
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
     }
-  ): SearchParameters;
-} & (TWidgetOptions['renderState'] extends Record<string, unknown>
-  ? {
-      /**
-       * Returns the render state of the current widget to pass to the render function.
-       */
-      getWidgetRenderState(
-        renderOptions: InitOptions | RenderOptions
-      ): TWidgetOptions['renderState'];
-      /**
-       * Returns IndexRenderState of the current index component tree
-       * to build the render state of the whole app.
-       */
-      getRenderState(
-        renderState: IndexRenderState,
-        renderOptions: InitOptions | RenderOptions
-      ): IndexRenderState;
-    }
-  : {
-      /**
-       * Returns the render state of the current widget to pass to the render function.
-       */
-      getWidgetRenderState?(
-        renderOptions: InitOptions | RenderOptions
-      ): unknown;
-      /**
-       * Returns IndexRenderState of the current index component tree
-       * to build the render state of the whole app.
-       */
-      getRenderState?(
-        renderState: IndexRenderState,
-        renderOptions: InitOptions | RenderOptions
-      ): IndexRenderState;
-    });
+  ) => SearchParameters;
+};
+
+type UiStateLifeCycle<
+  TWidgetDescription extends WidgetDescription
+> = TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>
+  ? RequiredUiStateLifeCycle<TWidgetDescription>
+  : Partial<RequiredUiStateLifeCycle<TWidgetDescription>>;
+
+type RequiredRenderStateLifeCycle<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = {
+  /**
+   * Returns the render state of the current widget to pass to the render function.
+   */
+  getWidgetRenderState: (
+    renderOptions: InitOptions | RenderOptions
+  ) => Expand<
+    WidgetRenderState<
+      TWidgetDescription['renderState'],
+      TWidgetDescription['widgetParams']
+    >
+  >;
+  /**
+   * Returns IndexRenderState of the current index component tree
+   * to build the render state of the whole app.
+   */
+  getRenderState: (
+    renderState: Expand<
+      IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
+    >,
+    renderOptions: InitOptions | RenderOptions
+  ) => IndexRenderState & TWidgetDescription['indexRenderState'];
+};
+
+type RenderStateLifeCycle<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = TWidgetDescription extends RequiredKeys<
+  WidgetDescription,
+  'renderState' | 'indexRenderState'
+> &
+  WidgetParams
+  ? RequiredRenderStateLifeCycle<TWidgetDescription>
+  : Partial<RequiredRenderStateLifeCycle<TWidgetDescription>>;
+
+export type Widget<
+  TWidgetDescription extends WidgetDescription & WidgetParams = {
+    $$type: string;
+    widgetParams: unknown;
+  }
+> = Expand<
+  RequiredWidgetLifeCycle<TWidgetDescription> &
+    WidgetType<TWidgetDescription> &
+    UiStateLifeCycle<TWidgetDescription> &
+    RenderStateLifeCycle<TWidgetDescription>
+>;
