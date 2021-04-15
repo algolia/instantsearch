@@ -12,13 +12,14 @@ import {
 import connectMenu, {
   MenuConnectorParams,
   MenuRenderState,
+  MenuWidgetDescription,
 } from '../connectMenu';
 import { WidgetFactory } from '../../../types';
 
 describe('connectMenu', () => {
   let rendering: jest.Mock<any, [MenuRenderState, boolean]>;
   let makeWidget: WidgetFactory<
-    MenuRenderState,
+    MenuWidgetDescription,
     MenuConnectorParams,
     MenuConnectorParams
   >;

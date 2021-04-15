@@ -38,7 +38,7 @@ export type ToggleRefinementWidgetDescription = {
     };
   };
   indexUiState: {
-    toggleRefinement: {
+    toggle: {
       [attribute: string]: boolean;
     };
   };
