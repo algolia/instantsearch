@@ -9,7 +9,7 @@ import hierarchicalMenu, {
 } from '../hierarchical-menu';
 import {
   HierarchicalMenuConnectorParams,
-  HierarchicalMenuRenderState,
+  HierarchicalMenuWidgetDescription,
 } from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import {
   createInitOptions,
@@ -17,7 +17,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { Widget, WidgetRenderState } from '../../../types';
+import { Widget } from '../../../types';
 
 const mockedRender = render as jest.Mock;
 
@@ -33,11 +33,8 @@ describe('hierarchicalMenu()', () => {
   let container: HTMLDivElement;
   let attributes: string[];
   let options: HierarchicalMenuConnectorParams & HierarchicalMenuWidgetParams;
-  let widget: Widget<{
-    renderState: WidgetRenderState<
-      HierarchicalMenuRenderState,
-      HierarchicalMenuConnectorParams
-    >;
+  let widget: Widget<HierarchicalMenuWidgetDescription & {
+    widgetParams: HierarchicalMenuConnectorParams;
   }>;
 
   beforeEach(() => {
