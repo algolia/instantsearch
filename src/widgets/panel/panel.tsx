@@ -10,13 +10,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
-import {
-  Template,
-  RenderOptions,
-  WidgetFactory,
-  Widget,
-  Expand,
-} from '../../types';
+import { Template, RenderOptions, WidgetFactory, Expand } from '../../types';
 
 export type PanelCSSClasses = {
   /**
@@ -69,8 +63,8 @@ type ContainerWidgetFactory = WidgetFactory<
   {
     $$type: string;
   },
-  { container: string | HTMLElement; [key: string]: any },
-  Record<string, unknown>
+  Record<string, unknown>,
+  { container: string | HTMLElement }
 >;
 
 export type PanelTemplates<TWidget extends ContainerWidgetFactory> = {
