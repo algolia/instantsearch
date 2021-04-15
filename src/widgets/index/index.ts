@@ -47,18 +47,26 @@ type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
   initialSearchParameters: SearchParameters;
 };
 
-export type Index = Widget & {
+export type IndexWidgetDescription = {
+  $$type: 'ais.index';
+  $$widgetType: 'ais.index';
+};
+
+export type Index = Omit<
+  Widget<IndexWidgetDescription & { widgetParams: never }>,
+  'getWidgetUiState' | 'getWidgetState'
+> & {
   getIndexName(): string;
   getIndexId(): string;
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
   getScopedResults(): ScopedResult[];
   getParent(): Index | null;
-  getWidgets(): Widget[];
+  getWidgets(): Array<Widget | Index>;
   createURL(state: SearchParameters): string;
 
-  addWidgets(widgets: Widget[]): Index;
-  removeWidgets(widgets: Widget[]): Index;
+  addWidgets(widgets: Array<Widget | Index>): Index;
+  removeWidgets(widgets: Array<Widget | Index>): Index;
 
   init(options: IndexInitOptions): void;
   render(options: IndexRenderOptions): void;
@@ -75,7 +83,7 @@ export type Index = Widget & {
   refreshUiState(): void;
 };
 
-export function isIndexWidget(widget: Widget): widget is Index {
+export function isIndexWidget(widget: Widget | Index): widget is Index {
   return widget.$$type === 'ais.index';
 }
 
@@ -113,27 +121,29 @@ type WidgetUiStateOptions = Parameters<
 >[1];
 
 function getLocalWidgetsUiState(
-  widgets: Widget[],
+  widgets: Array<Widget | Index>,
   widgetStateOptions: WidgetUiStateOptions,
   initialUiState: IndexUiState = {}
-): IndexUiState {
-  return widgets
-    .filter(widget => !isIndexWidget(widget))
-    .reduce<IndexUiState>((uiState, widget) => {
-      if (!widget.getWidgetUiState && !widget.getWidgetState) {
-        return uiState;
-      }
+) {
+  return widgets.reduce((uiState, widget) => {
+    if (isIndexWidget(widget)) {
+      return uiState;
+    }
 
-      if (widget.getWidgetUiState) {
-        return widget.getWidgetUiState(uiState, widgetStateOptions);
-      }
+    if (!widget.getWidgetUiState && !widget.getWidgetState) {
+      return uiState;
+    }
 
-      return widget.getWidgetState!(uiState, widgetStateOptions);
-    }, initialUiState);
+    if (widget.getWidgetUiState) {
+      return widget.getWidgetUiState(uiState, widgetStateOptions);
+    }
+
+    return widget.getWidgetState!(uiState, widgetStateOptions);
+  }, initialUiState);
 }
 
 function getLocalWidgetsSearchParameters(
-  widgets: Widget[],
+  widgets: Array<Widget | Index>,
   widgetSearchParametersOptions: LocalWidgetSearchParametersOptions
 ): SearchParameters {
   const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
@@ -149,7 +159,7 @@ function getLocalWidgetsSearchParameters(
     }, initialSearchParameters);
 }
 
-function resetPageFromWidgets(widgets: Widget[]): void {
+function resetPageFromWidgets(widgets: Array<Widget | Index>): void {
   const indexWidgets = widgets.filter(isIndexWidget);
 
   if (indexWidgets.length === 0) {
@@ -168,7 +178,9 @@ function resetPageFromWidgets(widgets: Widget[]): void {
   });
 }
 
-function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
+function resolveScopedResultsFromWidgets(
+  widgets: Array<Widget | Index>
+): ScopedResult[] {
   const indexWidgets = widgets.filter(isIndexWidget);
 
   return indexWidgets.reduce<ScopedResult[]>((scopedResults, current) => {
@@ -190,7 +202,7 @@ const index = (props: IndexProps): Index => {
 
   const { indexName, indexId = indexName } = props;
 
-  let localWidgets: Widget[] = [];
+  let localWidgets: Array<Widget | Index> = [];
   let localUiState: IndexUiState = {};
   let localInstantSearchInstance: InstantSearch | null = null;
   let localParent: Index | null = null;

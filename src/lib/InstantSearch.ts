@@ -339,7 +339,7 @@ See ${createDocumentationLink({
    * Widgets can be added either before or after InstantSearch has started.
    * @param widgets The array of widgets to add to InstantSearch.
    */
-  public addWidgets(widgets: Widget[]) {
+  public addWidgets(widgets: Array<Widget | Index>) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(
@@ -374,7 +374,7 @@ See ${createDocumentationLink({
    *
    * The widget must implement a `dispose()` method to clear its state.
    */
-  public removeWidget(widget: Widget) {
+  public removeWidget(widget: Widget | Index) {
     warning(
       false,
       'removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
@@ -389,7 +389,7 @@ See ${createDocumentationLink({
    *
    * The widgets must implement a `dispose()` method to clear their states.
    */
-  public removeWidgets(widgets: Widget[]) {
+  public removeWidgets(widgets: Array<Widget | Index>) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(

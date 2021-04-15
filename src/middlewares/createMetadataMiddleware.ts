@@ -13,7 +13,7 @@ type Payload = {
 };
 
 function extractPayload(
-  widgets: Array<Widget<{ renderState: any }>>,
+  widgets: Array<Widget | Index>,
   instantSearchInstance: InstantSearch,
   payload: Payload
 ) {
@@ -40,8 +40,8 @@ function extractPayload(
     if (widget.getWidgetRenderState) {
       const renderState = widget.getWidgetRenderState(initOptions);
 
-      if (renderState && renderState.widgetParams) {
-        widgetParams = renderState.widgetParams;
+      if (renderState && typeof renderState.widgetParams === 'object') {
+        widgetParams = renderState.widgetParams!;
       }
     }
 
