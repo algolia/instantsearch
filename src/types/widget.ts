@@ -258,3 +258,20 @@ export type Widget<
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>
 >;
+
+/**
+ * Transforms the given items.
+ */
+export type TransformItems<TItem> = (items: TItem[]) => TItem[];
+
+/**
+ * Transforms the given items.
+ */
+export type SortBy<TItem> =
+  | ((a: TItem, b: TItem) => number)
+  | Array<'count' | 'isRefined' | 'name:asc' | 'name:desc'>;
+
+/**
+ * Creates the URL for the given value.
+ */
+export type CreateURL<TValue> = (value: TValue) => string;
