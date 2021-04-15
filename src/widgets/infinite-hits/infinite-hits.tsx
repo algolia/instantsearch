@@ -134,10 +134,7 @@ const renderer = ({
   renderState,
   templates,
   showPrevious: hasShowPrevious,
-}): Renderer<
-  InfiniteHitsRenderState,
-  Partial<InfiniteHitsWidgetParams>
-> => (
+}): Renderer<InfiniteHitsRenderState, Partial<InfiniteHitsWidgetParams>> => (
   {
     hits,
     results,
