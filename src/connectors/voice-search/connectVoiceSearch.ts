@@ -4,7 +4,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Connector } from '../../types';
+import { Connector, WidgetRenderState } from '../../types';
 import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper';
 import {
   CreateVoiceSearchHelper,
@@ -25,15 +25,29 @@ export type VoiceSearchConnectorParams = {
   createVoiceSearchHelper?: CreateVoiceSearchHelper;
 };
 
-export type VoiceSearchRendererOptions = {
+export type VoiceSearchRenderState = {
   isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: () => void;
   voiceListeningState: VoiceListeningState;
 };
 
+export type VoiceSearchWidgetDescription = {
+  $$type: 'ais.voiceSearch';
+  renderState: VoiceSearchRenderState;
+  indexRenderState: {
+    voiceSearch: WidgetRenderState<
+      VoiceSearchRenderState,
+      VoiceSearchConnectorParams
+    >;
+  };
+  indexUiState: {
+    query: string;
+  };
+};
+
 export type VoiceSearchConnector = Connector<
-  VoiceSearchRendererOptions,
+  VoiceSearchWidgetDescription,
   VoiceSearchConnectorParams
 >;
 

@@ -12,6 +12,7 @@ import {
   CreateURL,
   InitOptions,
   RenderOptions,
+  WidgetRenderState,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -19,7 +20,7 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type HitsPerPageRendererOptionsItem = {
+export type HitsPerPageRenderStateItem = {
   /**
    * Label to display in the option.
    */
@@ -64,14 +65,14 @@ export type HitsPerPageConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<HitsPerPageRendererOptionsItem>;
+  transformItems?: TransformItems<HitsPerPageRenderStateItem>;
 };
 
-export type HitsPerPageRendererOptions = {
+export type HitsPerPageRenderState = {
   /**
    * Array of objects defining the different values and labels.
    */
-  items: HitsPerPageRendererOptionsItem[];
+  items: HitsPerPageRenderStateItem[];
 
   /**
    * Creates the URL for a single item name in the list.
@@ -91,8 +92,22 @@ export type HitsPerPageRendererOptions = {
   hasNoResults: boolean;
 };
 
+export type HitsPerPageWidgetDescription = {
+  $$type: 'ais.hitsPerPage';
+  renderState: HitsPerPageRenderState;
+  indexRenderState: {
+    hitsPerPage: WidgetRenderState<
+      HitsPerPageRenderState,
+      HitsPerPageConnectorParams
+    >;
+  };
+  indexUiState: {
+    hitsPerPage: number;
+  };
+};
+
 export type HitsPerPageConnector = Connector<
-  HitsPerPageRendererOptions,
+  HitsPerPageWidgetDescription,
   HitsPerPageConnectorParams
 >;
 
@@ -106,7 +121,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
     const {
       items: userItems,
       transformItems = (items => items) as TransformItems<
-        HitsPerPageRendererOptionsItem
+        HitsPerPageRenderStateItem
       >,
     } = widgetParams || {};
 
@@ -148,7 +163,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
       createURLFactory: (props: {
         state: SearchParameters;
         createURL: (InitOptions | RenderOptions)['createURL'];
-      }) => HitsPerPageRendererOptions['createURL'];
+      }) => HitsPerPageRenderState['createURL'];
     };
 
     const connectorState: ConnectorState = {

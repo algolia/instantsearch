@@ -3,7 +3,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Connector } from '../../types';
+import { Connector, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'stats',
@@ -15,7 +15,7 @@ const withUsage = createDocumentationMessageGenerator({
  * search statistics (hits number and processing time).
  */
 
-export type StatsRendererOptions = {
+export type StatsRenderState = {
   /**
    * The maximum number of hits per page returned by Algolia.
    */
@@ -52,8 +52,16 @@ export type StatsRendererOptions = {
 
 export type StatsConnectorParams = Record<string, unknown>;
 
+export type StatsWidgetDescription = {
+  $$type: 'ais.stats';
+  renderState: StatsRenderState;
+  indexRenderState: {
+    stats: WidgetRenderState<StatsRenderState, StatsConnectorParams>;
+  };
+};
+
 export type StatsConnector = Connector<
-  StatsRendererOptions,
+  StatsWidgetDescription,
   StatsConnectorParams
 >;
 

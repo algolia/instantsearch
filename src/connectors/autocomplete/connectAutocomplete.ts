@@ -9,7 +9,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import { Hits, Connector } from '../../types';
+import { Hits, Connector, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
@@ -25,7 +25,7 @@ export type AutocompleteConnectorParams = {
   escapeHTML?: boolean;
 };
 
-export type AutocompleteRendererOptions = {
+export type AutocompleteRenderState = {
   /**
    * The current value of the query.
    */
@@ -62,8 +62,20 @@ export type AutocompleteRendererOptions = {
   refine: (query: string) => void;
 };
 
+export type AutocompleteWidgetDescription = {
+  $$type: 'ais.autocomplete';
+  renderState: AutocompleteRenderState;
+  indexRenderState: {
+    autocomplete: WidgetRenderState<
+      AutocompleteRenderState,
+      AutocompleteConnectorParams
+    >;
+  };
+  indexUiState: { query: string };
+};
+
 export type AutocompleteConnector = Connector<
-  AutocompleteRendererOptions,
+  AutocompleteWidgetDescription,
   AutocompleteConnectorParams
 >;
 

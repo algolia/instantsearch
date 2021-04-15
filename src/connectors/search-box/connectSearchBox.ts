@@ -4,7 +4,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Connector } from '../../types';
+import { Connector, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'search-box',
@@ -31,7 +31,7 @@ export type SearchBoxConnectorParams = {
  * This queryHook can be used to debounce the number of searches done from the searchBox.
  */
 
-export type SearchBoxRendererOptions = {
+export type SearchBoxRenderState = {
   /**
    * The query from the last search.
    */
@@ -52,8 +52,22 @@ export type SearchBoxRendererOptions = {
   isSearchStalled: boolean;
 };
 
-export type ConnectSearchBox = Connector<
-  SearchBoxRendererOptions,
+export type SearchBoxWidgetDescription = {
+  $$type: 'ais.searchBox';
+  renderState: SearchBoxRenderState;
+  indexRenderState: {
+    searchBox: WidgetRenderState<
+      SearchBoxRenderState,
+      SearchBoxConnectorParams
+    >;
+  };
+  indexUiState: {
+    query: string;
+  };
+};
+
+export type SearchBoxConnector = Connector<
+  SearchBoxWidgetDescription,
   SearchBoxConnectorParams
 >;
 
@@ -63,7 +77,7 @@ export type ConnectSearchBox = Connector<
  * The connector provides to the rendering: `refine()` to set the query. The behaviour of this function
  * may be impacted by the `queryHook` widget parameter.
  */
-const connectSearchBox: ConnectSearchBox = function connectSearchBox(
+const connectSearchBox: SearchBoxConnector = function connectSearchBox(
   renderFn,
   unmountFn = noop
 ) {
@@ -78,7 +92,7 @@ const connectSearchBox: ConnectSearchBox = function connectSearchBox(
       };
     }
 
-    let _refine: SearchBoxRendererOptions['refine'];
+    let _refine: SearchBoxRenderState['refine'];
     let _clear = () => {};
     function _cachedClear() {
       _clear();

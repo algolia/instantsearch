@@ -11,6 +11,7 @@ import {
   SortBy,
   TransformItems,
   Widget,
+  WidgetRenderState,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -66,7 +67,7 @@ export type MenuConnectorParams = {
   transformItems?: TransformItems<MenuItem>;
 };
 
-export type MenuRendererOptions = {
+export type MenuRenderState = {
   /**
    * The elements that can be refined for the current search results.
    */
@@ -102,7 +103,28 @@ export type MenuRendererOptions = {
   sendEvent: SendEventForFacet;
 };
 
-export type MenuConnector = Connector<MenuRendererOptions, MenuConnectorParams>;
+export type MenuWidgetDescription = {
+  $$type: 'ais.menu';
+  renderState: MenuRenderState;
+  indexRenderState: {
+    menu: {
+      [attribute: string]: WidgetRenderState<
+        MenuRenderState,
+        MenuConnectorParams
+      >;
+    };
+  };
+  indexUiState: {
+    menu: {
+      [attribute: string]: string;
+    };
+  };
+};
+
+export type MenuConnector = Connector<
+  MenuWidgetDescription,
+  MenuConnectorParams
+>;
 
 /**
  * **Menu** connector provides the logic to build a widget that will give the user the ability to choose a single value for a specific facet. The typical usage of menu is for navigation in categories.
@@ -139,9 +161,13 @@ const connectMenu: MenuConnector = function connectMenu(
       );
     }
 
-    let sendEvent: MenuRendererOptions['sendEvent'] | undefined;
-    let _createURL: MenuRendererOptions['createURL'] | undefined;
-    let _refine: MenuRendererOptions['refine'] | undefined;
+    type ThisWidget = Widget<
+      MenuWidgetDescription & { widgetParams: typeof widgetParams }
+    >;
+
+    let sendEvent: MenuRenderState['sendEvent'] | undefined;
+    let _createURL: MenuRenderState['createURL'] | undefined;
+    let _refine: MenuRenderState['refine'] | undefined;
 
     // Provide the same function to the `renderFn` so that way the user
     // has to only bind it once when `isFirstRendering` for instance
@@ -149,7 +175,7 @@ const connectMenu: MenuConnector = function connectMenu(
     let toggleShowMore = () => {};
     function createToggleShowMore(
       renderOptions: RenderOptions,
-      widget: Widget
+      widget: ThisWidget
     ) {
       return () => {
         isShowingMore = !isShowingMore;
@@ -217,7 +243,7 @@ const connectMenu: MenuConnector = function connectMenu(
           helper,
         } = renderOptions;
 
-        let items: MenuRendererOptions['items'] = [];
+        let items: MenuRenderState['items'] = [];
         let canToggleShowMore = false;
 
         if (!sendEvent) {

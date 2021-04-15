@@ -3,7 +3,7 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectSortBy, { SortByRendererOptions } from '../connectSortBy';
+import connectSortBy, { SortByRenderState } from '../connectSortBy';
 import index from '../../../widgets/index/index';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
@@ -510,7 +510,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
-      const rendering = jest.fn<any, [SortByRendererOptions, boolean]>();
+      const rendering = jest.fn<any, [SortByRenderState, boolean]>();
       const makeWidget = connectSortBy(rendering);
       const instantSearchInstance = createInstantSearch({
         indexName: 'relevance',

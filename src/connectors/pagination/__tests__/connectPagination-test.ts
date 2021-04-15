@@ -5,7 +5,7 @@ import algoliasearchHelper, {
 
 import connectPagination, {
   PaginationConnectorParams,
-  PaginationRendererOptions,
+  PaginationRenderState,
 } from '../connectPagination';
 import {
   createInitOptions,
@@ -18,7 +18,7 @@ describe('connectPagination', () => {
   const getInitializedWidget = (
     widgetParams: PaginationConnectorParams = {}
   ) => {
-    const renderFn = jest.fn<any, [PaginationRendererOptions, boolean]>();
+    const renderFn = jest.fn<any, [PaginationRenderState, boolean]>();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget(widgetParams);
 

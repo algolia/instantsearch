@@ -14,6 +14,7 @@ import {
   Hit,
   FindAnswersOptions,
   FindAnswersResponse,
+  WidgetRenderState,
 } from '../../types';
 
 type IndexWithAnswers = {
@@ -31,7 +32,7 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type AnswersRendererOptions = {
+export type AnswersRenderState = {
   /**
    * The matched hits from Algolia API.
    */
@@ -89,8 +90,16 @@ export type AnswersConnectorParams = {
   extraParameters?: FindAnswersOptions;
 };
 
+export type AnswersWidgetDescription = {
+  $$type: 'ais.answers';
+  renderState: AnswersRenderState;
+  indexRenderState: {
+    answers: WidgetRenderState<AnswersRenderState, AnswersConnectorParams>;
+  };
+};
+
 export type AnswersConnector = Connector<
-  AnswersRendererOptions,
+  AnswersWidgetDescription,
   AnswersConnectorParams
 >;
 

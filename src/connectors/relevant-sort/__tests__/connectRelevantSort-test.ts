@@ -249,7 +249,7 @@ describe('connectRelevantSort', () => {
         {},
         { helper, searchParameters: helper.state }
       );
-      expect(widgetUiState.relevantSort?.relevancyStrictness).toBeUndefined();
+      expect(widgetUiState.relevantSort).toBeUndefined();
     });
 
     it('add refined parameters', () => {
@@ -266,7 +266,7 @@ describe('connectRelevantSort', () => {
       expect(
         widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
       ).toEqual({
-        relevantSort: { relevancyStrictness: 25 },
+        relevantSort: 25,
       });
     });
 
@@ -277,11 +277,11 @@ describe('connectRelevantSort', () => {
 
       expect(
         widget.getWidgetUiState!(
-          { relevantSort: { relevancyStrictness: 25 } },
+          { relevantSort: 25 },
           { helper, searchParameters: helper.state }
         )
       ).toEqual({
-        relevantSort: { relevancyStrictness: undefined },
+        relevantSort: undefined,
       });
 
       const { refine } = widget.getWidgetRenderState(
@@ -292,11 +292,11 @@ describe('connectRelevantSort', () => {
       // applies 30 from searchParameters
       expect(
         widget.getWidgetUiState!(
-          { relevantSort: { relevancyStrictness: 25 } },
+          { relevantSort: 25 },
           { helper, searchParameters: helper.state }
         )
       ).toEqual({
-        relevantSort: { relevancyStrictness: 30 },
+        relevantSort: 30,
       });
     });
   });
@@ -323,9 +323,7 @@ describe('connectRelevantSort', () => {
         new SearchParameters(),
         {
           uiState: {
-            relevantSort: {
-              relevancyStrictness: 15,
-            },
+            relevantSort: 15,
           },
         }
       );
@@ -364,9 +362,7 @@ describe('connectRelevantSort', () => {
         new SearchParameters(),
         {
           uiState: {
-            relevantSort: {
-              relevancyStrictness: 15,
-            },
+            relevantSort: 15,
           },
         }
       );

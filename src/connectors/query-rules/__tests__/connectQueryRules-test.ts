@@ -10,9 +10,7 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import connectQueryRules, {
-  QueryRulesRendererOptions,
-} from '../connectQueryRules';
+import connectQueryRules from '../connectQueryRules';
 
 describe('connectQueryRules', () => {
   function createWidget() {
@@ -200,12 +198,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     test('does not throw without the unmount function', () => {
       const helper = createFakeHelper();
       const rendering = () => {};
-      const makeWidget = connectQueryRules<QueryRulesRendererOptions>(
-        rendering
-      );
-      const widget = makeWidget({
-        items: [] as any[],
-      });
+      const makeWidget = connectQueryRules(rendering);
+      const widget = makeWidget({});
 
       widget.init!(
         createInitOptions({

@@ -1,11 +1,11 @@
-import { Connector } from '../../types';
+import { Connector, WidgetRenderState } from '../../types';
 import { noop } from '../../lib/utils';
 
 export type RelevantSortConnectorParams = Record<string, unknown>;
 
 type Refine = (relevancyStrictness: number) => void;
 
-export type RelevantSortRendererOptions = {
+export type RelevantSortRenderState = {
   /**
    * Indicates if it has appliedRelevancyStrictness greater than zero
    */
@@ -27,8 +27,22 @@ export type RelevantSortRendererOptions = {
   refine: Refine;
 };
 
+export type RelevantSortWidgetDescription = {
+  $$type: 'ais.relevantSort';
+  renderState: RelevantSortRenderState;
+  indexRenderState: {
+    relevantSort: WidgetRenderState<
+      RelevantSortRenderState,
+      RelevantSortConnectorParams
+    >;
+  };
+  indexUiState: {
+    relevantSort: number;
+  };
+};
+
 export type RelevantSortConnector = Connector<
-  RelevantSortRendererOptions,
+  RelevantSortWidgetDescription,
   RelevantSortConnectorParams
 >;
 
@@ -109,17 +123,15 @@ const connectRelevantSort: RelevantSortConnector = function connectRelevantSort(
       getWidgetSearchParameters(state, { uiState }) {
         return state.setQueryParameter(
           'relevancyStrictness',
-          uiState.relevantSort?.relevancyStrictness ?? state.relevancyStrictness
+          uiState.relevantSort ?? state.relevancyStrictness
         );
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
         return {
           ...uiState,
-          relevantSort: {
-            ...uiState.relevantSort,
-            relevancyStrictness: searchParameters.relevancyStrictness,
-          },
+          relevantSort:
+            uiState.relevantSort || searchParameters.relevancyStrictness,
         };
       },
     };
