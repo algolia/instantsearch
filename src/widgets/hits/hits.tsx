@@ -4,7 +4,8 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import connectHits, {
   HitsConnectorParams,
-  HitsRendererOptions,
+  HitsRenderState,
+  HitsWidgetDescription,
 } from '../../connectors/hits/connectHits';
 import Hits from '../../components/Hits/Hits';
 import defaultTemplates from './defaultTemplates';
@@ -34,7 +35,7 @@ const renderer = ({
   cssClasses,
   containerNode,
   templates,
-}): Renderer<HitsRendererOptions, Partial<HitsWidgetParams>> => (
+}): Renderer<HitsRenderState, Partial<HitsWidgetParams>> => (
   { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
   isFirstRendering
 ) => {
@@ -94,16 +95,11 @@ export type HitsTemplates = {
   empty?: Template;
 
   /**
-   * Template to use for each result. This template will receive an object containing a single record. The record will
-   * have a new property `__hitIndex` for the position of the record in the list of displayed hits.
+   * Template to use for each result. This template will receive an object containing a single record.
    *
    * @default ''
    */
-  item?: TemplateWithBindEvent<
-    Hit & {
-      __hitIndex: number;
-    }
-  >;
+  item?: TemplateWithBindEvent<Hit>;
 };
 
 export type HitsWidgetParams = {
@@ -124,7 +120,7 @@ export type HitsWidgetParams = {
 };
 
 export type HitsWidget = WidgetFactory<
-  HitsRendererOptions,
+  HitsWidgetDescription & { $$widgetType: 'ais.hits' },
   HitsConnectorParams,
   HitsWidgetParams
 >;

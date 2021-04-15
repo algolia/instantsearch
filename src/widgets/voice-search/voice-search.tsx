@@ -10,7 +10,8 @@ import {
 import { component } from '../../lib/suit';
 import connectVoiceSearch, {
   VoiceSearchConnectorParams,
-  VoiceSearchRendererOptions,
+  VoiceSearchRenderState,
+  VoiceSearchWidgetDescription,
 } from '../../connectors/voice-search/connectVoiceSearch';
 import VoiceSearchComponent, {
   VoiceSearchComponentCSSClasses,
@@ -61,13 +62,13 @@ type VoiceSearchRendererWidgetParams = {
 } & VoiceSearchWidgetParams;
 
 type VoiceSearch = WidgetFactory<
-  VoiceSearchRendererOptions,
+  VoiceSearchWidgetDescription & { $$type: 'ais.voiceSearch' },
   VoiceSearchConnectorParams,
   VoiceSearchWidgetParams
 >;
 
 const renderer: Renderer<
-  VoiceSearchRendererOptions,
+  VoiceSearchRenderState,
   VoiceSearchRendererWidgetParams
 > = ({
   isBrowserSupported,

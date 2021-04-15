@@ -5,7 +5,8 @@ import cx from 'classnames';
 import Stats from '../../components/Stats/Stats';
 import connectStats, {
   StatsConnectorParams,
-  StatsRendererOptions,
+  StatsRenderState,
+  StatsWidgetDescription,
 } from '../../connectors/stats/connectStats';
 import {
   prepareTemplateProps,
@@ -39,7 +40,7 @@ export type StatsTemplates = {
       hasManyResults: boolean;
       hasNoResults: boolean;
       hasOneResult: boolean;
-    } & StatsRendererOptions
+    } & StatsRenderState
   >;
 };
 
@@ -61,7 +62,7 @@ export type StatsWidgetParams = {
 };
 
 export type StatsWidget = WidgetFactory<
-  StatsRendererOptions,
+  StatsWidgetDescription & { $$widgetType: 'ais.stats' },
   StatsConnectorParams,
   StatsWidgetParams
 >;
@@ -87,7 +88,7 @@ const renderer = ({
   cssClasses,
   containerNode,
   templates,
-}): Renderer<StatsRendererOptions, Partial<StatsWidgetParams>> => (
+}): Renderer<StatsRenderState, Partial<StatsWidgetParams>> => (
   {
     hitsPerPage,
     nbHits,

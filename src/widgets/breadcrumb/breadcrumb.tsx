@@ -4,7 +4,7 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb, {
-  BreadcrumbRendererOptions,
+  BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
 } from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates';
@@ -113,7 +113,7 @@ export type BreadcrumbWidgetParams = {
 };
 
 export type BreadcrumbWidget = WidgetFactory<
-  BreadcrumbRendererOptions,
+  BreadcrumbWidgetDescription & { $$widgetType: 'ais.breadcrumb' },
   BreadcrumbConnectorParams,
   BreadcrumbWidgetParams
 >;

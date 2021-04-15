@@ -5,7 +5,8 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectMenu, {
   MenuConnectorParams,
-  MenuRendererOptions,
+  MenuRenderState,
+  MenuWidgetDescription,
 } from '../../connectors/menu/connectMenu';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -119,7 +120,7 @@ const renderer = ({
     isShowingMore,
     toggleShowMore,
     canToggleShowMore,
-  }: MenuRendererOptions & RendererOptions<MenuConnectorParams>,
+  }: MenuRenderState & RendererOptions<MenuConnectorParams>,
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
@@ -153,7 +154,7 @@ const renderer = ({
 };
 
 export type MenuWidget = WidgetFactory<
-  MenuRendererOptions,
+  MenuWidgetDescription & { $$widgetType: 'ais.menu' },
   MenuConnectorParams,
   MenuWidgetParams
 >;

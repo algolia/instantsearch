@@ -2,12 +2,14 @@ import { PlainSearchParameters } from 'algoliasearch-helper';
 import { noop } from '../../lib/utils';
 import connectConfigureRelatedItems, {
   ConfigureRelatedItemsConnectorParams,
+  ConfigureRelatedItemsWidgetDescription,
 } from '../../connectors/configure-related-items/connectConfigureRelatedItems';
-import { ConfigureRendererOptions } from '../../connectors/configure/connectConfigure';
 import { WidgetFactory } from '../../types';
 
 export type ConfigureRelatedItemsWidget = WidgetFactory<
-  ConfigureRendererOptions,
+  ConfigureRelatedItemsWidgetDescription & {
+    $$widgetType: 'ais.configureRelatedItems';
+  },
   ConfigureRelatedItemsConnectorParams,
   ConfigureRelatedItemsWidgetParams
 >;

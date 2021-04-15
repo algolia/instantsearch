@@ -4,8 +4,8 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
 import connectCurrentRefinements, {
-  CurrentRefinementsRendererOptions,
   CurrentRefinementsConnectorParams,
+  CurrentRefinementsWidgetDescription,
 } from '../../connectors/current-refinements/connectCurrentRefinements';
 import {
   getContainerNode,
@@ -82,7 +82,9 @@ const renderer = ({ items, widgetParams }, isFirstRender) => {
 };
 
 export type CurrentRefinementsWidget = WidgetFactory<
-  CurrentRefinementsRendererOptions,
+  CurrentRefinementsWidgetDescription & {
+    $$widgetType: 'ais.currentRefinements';
+  },
   CurrentRefinementsConnectorParams,
   CurrentRefinementsWidgetParams
 >;

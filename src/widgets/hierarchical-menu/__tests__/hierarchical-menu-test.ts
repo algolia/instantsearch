@@ -9,7 +9,7 @@ import hierarchicalMenu, {
 } from '../hierarchical-menu';
 import {
   HierarchicalMenuConnectorParams,
-  HierarchicalMenuRendererOptions,
+  HierarchicalMenuRenderState,
 } from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import {
   createInitOptions,
@@ -35,7 +35,7 @@ describe('hierarchicalMenu()', () => {
   let options: HierarchicalMenuConnectorParams & HierarchicalMenuWidgetParams;
   let widget: Widget<{
     renderState: WidgetRenderState<
-      HierarchicalMenuRendererOptions,
+      HierarchicalMenuRenderState,
       HierarchicalMenuConnectorParams
     >;
   }>;

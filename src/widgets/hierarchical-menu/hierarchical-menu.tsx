@@ -6,7 +6,8 @@ import RefinementList from '../../components/RefinementList/RefinementList';
 import connectHierarchicalMenu, {
   HierarchicalMenuItem,
   HierarchicalMenuConnectorParams,
-  HierarchicalMenuRendererOptions,
+  HierarchicalMenuRenderState,
+  HierarchicalMenuWidgetDescription,
 } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import defaultTemplates from './defaultTemplates';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
@@ -196,7 +197,7 @@ const renderer = ({
     isShowingMore,
     toggleShowMore,
     canToggleShowMore,
-  }: HierarchicalMenuRendererOptions &
+  }: HierarchicalMenuRenderState &
     RendererOptions<HierarchicalMenuConnectorParams>,
   isFirstRendering: boolean
 ) => {
@@ -277,7 +278,7 @@ const renderer = ({
  * ]);
  */
 export type HierarchicalMenuWidget = WidgetFactory<
-  HierarchicalMenuRendererOptions,
+  HierarchicalMenuWidgetDescription & { $$widgetType: 'ais.hierarchicalMenu' },
   HierarchicalMenuConnectorParams,
   HierarchicalMenuWidgetParams
 >;
