@@ -152,7 +152,9 @@ export type PanelWidget = <TWidgetFactory extends ContainerWidgetFactory>(
   panelWidgetParams?: PanelWidgetParams<TWidgetFactory>
 ) => (
   widgetFactory: TWidgetFactory
-) => (widgetParams: Parameters<TWidgetFactory>[0]) => Widget;
+) => (
+  widgetParams: Parameters<TWidgetFactory>[0]
+) => ReturnType<TWidgetFactory>;
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
