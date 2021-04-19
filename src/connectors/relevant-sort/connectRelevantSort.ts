@@ -131,7 +131,7 @@ const connectRelevantSort: RelevantSortConnector = function connectRelevantSort(
         return {
           ...uiState,
           relevantSort:
-            uiState.relevantSort || searchParameters.relevancyStrictness,
+            searchParameters.relevancyStrictness || uiState.relevantSort,
         };
       },
     };

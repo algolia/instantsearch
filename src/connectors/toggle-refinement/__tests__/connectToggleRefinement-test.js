@@ -880,26 +880,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       );
 
       expect(renderState.toggleRefinement).toEqual({
-        createURL: expect.any(Function),
-        canRefine: false,
-        refine: expect.any(Function),
-        sendEvent: expect.any(Function),
-        state: helper.state,
-        value: {
-          count: null,
-          isRefined: false,
-          name: 'isShippingFree',
-          offFacetValue: {
-            count: 0,
+        isShippingFree: {
+          createURL: expect.any(Function),
+          canRefine: false,
+          refine: expect.any(Function),
+          sendEvent: expect.any(Function),
+          value: {
+            count: null,
             isRefined: false,
+            name: 'isShippingFree',
+            offFacetValue: {
+              count: 0,
+              isRefined: false,
+            },
+            onFacetValue: {
+              count: 0,
+              isRefined: false,
+            },
           },
-          onFacetValue: {
-            count: 0,
-            isRefined: false,
+          widgetParams: {
+            attribute: 'isShippingFree',
           },
-        },
-        widgetParams: {
-          attribute: 'isShippingFree',
         },
       });
     });
@@ -927,26 +928,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       );
 
       expect(renderState.toggleRefinement).toEqual({
-        createURL: expect.any(Function),
-        canRefine: true,
-        refine: expect.any(Function),
-        sendEvent: expect.any(Function),
-        state: helper.state,
-        value: {
-          count: 45,
-          isRefined: false,
-          name: 'isShippingFree',
-          offFacetValue: {
-            count: 85,
-            isRefined: false,
-          },
-          onFacetValue: {
+        isShippingFree: {
+          createURL: expect.any(Function),
+          canRefine: true,
+          refine: expect.any(Function),
+          sendEvent: expect.any(Function),
+          value: {
             count: 45,
             isRefined: false,
+            name: 'isShippingFree',
+            offFacetValue: {
+              count: 85,
+              isRefined: false,
+            },
+            onFacetValue: {
+              count: 45,
+              isRefined: false,
+            },
           },
-        },
-        widgetParams: {
-          attribute: 'isShippingFree',
+          widgetParams: {
+            attribute: 'isShippingFree',
+          },
         },
       });
     });
@@ -979,7 +981,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        state: helper.state,
         value: {
           count: null,
           isRefined: true,
@@ -1025,7 +1026,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         canRefine: true,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        state: helper.state,
         value: {
           count: 345,
           isRefined: false,

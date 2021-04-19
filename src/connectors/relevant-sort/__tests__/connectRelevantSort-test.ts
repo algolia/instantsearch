@@ -281,7 +281,7 @@ describe('connectRelevantSort', () => {
           { helper, searchParameters: helper.state }
         )
       ).toEqual({
-        relevantSort: undefined,
+        relevantSort: 25,
       });
 
       const { refine } = widget.getWidgetRenderState(
