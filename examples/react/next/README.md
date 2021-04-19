@@ -1,4 +1,4 @@
-This example shows how to do server side rendering with next.js and React InstantSearch. There's a live example here: https://react-instantsearch-algolia-nextjs.now.sh/.
+This example shows how to do server side rendering with next.js and React InstantSearch. There's a live example here: https://codesandbox.io/s/github/algolia/react-instantsearch/tree/master/examples/next.
 
 ## Clone the example
 
