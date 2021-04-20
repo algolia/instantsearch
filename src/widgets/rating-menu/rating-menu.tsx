@@ -78,6 +78,10 @@ export type RatingMenuCSSClasses = {
   count: string | string[];
 };
 
+type RatingMenuRendererCSSClasses = {
+  [key in keyof RatingMenuCSSClasses]: string;
+};
+
 export type RatingMenuWidgetParams = {
   /**
    * Place where to insert the widget in your webpage.
@@ -108,7 +112,7 @@ const renderer = ({
   renderState,
 }: {
   containerNode: HTMLElement;
-  cssClasses: Record<string, string>;
+  cssClasses: RatingMenuRendererCSSClasses;
   templates: Partial<RatingMenuTemplates>;
   renderState: { templateProps?: PreparedTemplateProps<RatingMenuTemplates> };
 }) => (

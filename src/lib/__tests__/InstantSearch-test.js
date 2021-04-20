@@ -287,6 +287,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
     );
   });
+
+  it('accepts middleware with partial methods', () => {
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+
+    const subscribe = jest.fn();
+    search.use(() => ({
+      subscribe,
+    }));
+    search.start();
+    expect(subscribe).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('InstantSearch', () => {

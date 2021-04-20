@@ -1,0 +1,288 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hierarchicalMenu() render calls render 1`] = `
+Object {
+  "canToggleShowMore": false,
+  "createURL": [Function],
+  "cssClasses": Object {
+    "childList": "ais-HierarchicalMenu-list--child",
+    "count": "ais-HierarchicalMenu-count",
+    "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
+    "item": "ais-HierarchicalMenu-item",
+    "label": "ais-HierarchicalMenu-label",
+    "link": "ais-HierarchicalMenu-link",
+    "list": "ais-HierarchicalMenu-list",
+    "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
+    "parentItem": "ais-HierarchicalMenu-item--parent",
+    "root": "ais-HierarchicalMenu",
+    "selectedItem": "ais-HierarchicalMenu-item--selected",
+    "showMore": "ais-HierarchicalMenu-showMore",
+  },
+  "depth": 0,
+  "facetValues": Array [
+    Object {
+      "count": 1,
+      "data": Array [],
+      "isRefined": false,
+      "label": "foo",
+      "value": "",
+    },
+    Object {
+      "count": 2,
+      "data": Array [],
+      "isRefined": false,
+      "label": "bar",
+      "value": "",
+    },
+  ],
+  "isShowingMore": false,
+  "showMore": false,
+  "templateProps": Object {
+    "templates": Object {
+      "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+      "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
+    },
+    "templatesConfig": Object {},
+    "useCustomCompileOptions": Object {
+      "item": false,
+      "showMoreText": false,
+    },
+  },
+  "toggleRefinement": [Function],
+  "toggleShowMore": [Function],
+}
+`;
+
+exports[`hierarchicalMenu() render has a templates option 1`] = `
+Object {
+  "canToggleShowMore": false,
+  "createURL": [Function],
+  "cssClasses": Object {
+    "childList": "ais-HierarchicalMenu-list--child",
+    "count": "ais-HierarchicalMenu-count",
+    "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
+    "item": "ais-HierarchicalMenu-item",
+    "label": "ais-HierarchicalMenu-label",
+    "link": "ais-HierarchicalMenu-link",
+    "list": "ais-HierarchicalMenu-list",
+    "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
+    "parentItem": "ais-HierarchicalMenu-item--parent",
+    "root": "ais-HierarchicalMenu",
+    "selectedItem": "ais-HierarchicalMenu-item--selected",
+    "showMore": "ais-HierarchicalMenu-showMore",
+  },
+  "depth": 0,
+  "facetValues": Array [
+    Object {
+      "count": 1,
+      "data": Array [],
+      "isRefined": false,
+      "label": "foo",
+      "value": "",
+    },
+    Object {
+      "count": 2,
+      "data": Array [],
+      "isRefined": false,
+      "label": "bar",
+      "value": "",
+    },
+  ],
+  "isShowingMore": false,
+  "showMore": false,
+  "templateProps": Object {
+    "templates": Object {
+      "item": "item2",
+      "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
+    },
+    "templatesConfig": Object {},
+    "useCustomCompileOptions": Object {
+      "item": true,
+      "showMoreText": false,
+    },
+  },
+  "toggleRefinement": [Function],
+  "toggleShowMore": [Function],
+}
+`;
+
+exports[`hierarchicalMenu() render has a transformItems options 1`] = `
+Object {
+  "canToggleShowMore": false,
+  "createURL": [Function],
+  "cssClasses": Object {
+    "childList": "ais-HierarchicalMenu-list--child",
+    "count": "ais-HierarchicalMenu-count",
+    "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
+    "item": "ais-HierarchicalMenu-item",
+    "label": "ais-HierarchicalMenu-label",
+    "link": "ais-HierarchicalMenu-link",
+    "list": "ais-HierarchicalMenu-list",
+    "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
+    "parentItem": "ais-HierarchicalMenu-item--parent",
+    "root": "ais-HierarchicalMenu",
+    "selectedItem": "ais-HierarchicalMenu-item--selected",
+    "showMore": "ais-HierarchicalMenu-showMore",
+  },
+  "depth": 0,
+  "facetValues": Array [
+    Object {
+      "count": 1,
+      "data": Array [],
+      "isRefined": false,
+      "label": "foo",
+      "transformed": true,
+      "value": "",
+    },
+    Object {
+      "count": 2,
+      "data": Array [],
+      "isRefined": false,
+      "label": "bar",
+      "transformed": true,
+      "value": "",
+    },
+  ],
+  "isShowingMore": false,
+  "showMore": false,
+  "templateProps": Object {
+    "templates": Object {
+      "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+      "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
+    },
+    "templatesConfig": Object {},
+    "useCustomCompileOptions": Object {
+      "item": false,
+      "showMoreText": false,
+    },
+  },
+  "toggleRefinement": [Function],
+  "toggleShowMore": [Function],
+}
+`;
+
+exports[`hierarchicalMenu() render sets facetValues to empty array when no results 1`] = `
+Object {
+  "canToggleShowMore": false,
+  "createURL": [Function],
+  "cssClasses": Object {
+    "childList": "ais-HierarchicalMenu-list--child",
+    "count": "ais-HierarchicalMenu-count",
+    "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
+    "item": "ais-HierarchicalMenu-item",
+    "label": "ais-HierarchicalMenu-label",
+    "link": "ais-HierarchicalMenu-link",
+    "list": "ais-HierarchicalMenu-list",
+    "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
+    "parentItem": "ais-HierarchicalMenu-item--parent",
+    "root": "ais-HierarchicalMenu",
+    "selectedItem": "ais-HierarchicalMenu-item--selected",
+    "showMore": "ais-HierarchicalMenu-showMore",
+  },
+  "depth": 0,
+  "facetValues": Array [],
+  "isShowingMore": false,
+  "showMore": false,
+  "templateProps": Object {
+    "templates": Object {
+      "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+      "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
+    },
+    "templatesConfig": Object {},
+    "useCustomCompileOptions": Object {
+      "item": false,
+      "showMoreText": false,
+    },
+  },
+  "toggleRefinement": [Function],
+  "toggleShowMore": [Function],
+}
+`;
+
+exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
+Object {
+  "canToggleShowMore": false,
+  "createURL": [Function],
+  "cssClasses": Object {
+    "childList": "ais-HierarchicalMenu-list--child childList",
+    "count": "ais-HierarchicalMenu-count count",
+    "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled disabledShowMore",
+    "item": "ais-HierarchicalMenu-item item",
+    "label": "ais-HierarchicalMenu-label label",
+    "link": "ais-HierarchicalMenu-link link",
+    "list": "ais-HierarchicalMenu-list list",
+    "noRefinementRoot": "ais-HierarchicalMenu--noRefinement noRefinementRoot",
+    "parentItem": "ais-HierarchicalMenu-item--parent parentItem",
+    "root": "ais-HierarchicalMenu root",
+    "selectedItem": "ais-HierarchicalMenu-item--selected selectedItem",
+    "showMore": "ais-HierarchicalMenu-showMore showMore",
+  },
+  "depth": 0,
+  "facetValues": Array [
+    Object {
+      "count": 1,
+      "data": Array [],
+      "isRefined": false,
+      "label": "foo",
+      "value": "",
+    },
+    Object {
+      "count": 2,
+      "data": Array [],
+      "isRefined": false,
+      "label": "bar",
+      "value": "",
+    },
+  ],
+  "isShowingMore": false,
+  "showMore": false,
+  "templateProps": Object {
+    "templates": Object {
+      "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+      "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
+    },
+    "templatesConfig": Object {},
+    "useCustomCompileOptions": Object {
+      "item": false,
+      "showMoreText": false,
+    },
+  },
+  "toggleRefinement": [Function],
+  "toggleShowMore": [Function],
+}
+`;

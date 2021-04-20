@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchBox Rendering with custom templates 1`] = `
+Array [
+  <div
+    className="root"
+  >
+    <form
+      action=""
+      className="form"
+      noValidate={true}
+      onReset={[Function]}
+      onSubmit={[Function]}
+      role="search"
+    >
+      <input
+        autoCapitalize="off"
+        autoComplete="off"
+        autoCorrect="off"
+        autoFocus={false}
+        className="input"
+        disabled={false}
+        maxLength={512}
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onInput={[Function]}
+        placeholder=""
+        spellCheck="false"
+        type="search"
+        value=""
+      />
+      Array [
+        <button
+          className="submit"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "submit template",
+            }
+          }
+          hidden={false}
+          title="Submit the search query."
+          type="submit"
+        />,
+      ]
+      Array [
+        <button
+          className="reset"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "reset template",
+            }
+          }
+          hidden={true}
+          title="Clear the search query."
+          type="reset"
+        />,
+      ]
+      Array [
+        <span
+          className="loadingIndicator"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "loadingIndicator template",
+            }
+          }
+          hidden={true}
+        />,
+      ]
+    </form>
+  </div>,
+]
+`;
+
+exports[`SearchBox Rendering with default props 1`] = `
+Array [
+  <div
+    className="root"
+  >
+    <form
+      action=""
+      className="form"
+      noValidate={true}
+      onReset={[Function]}
+      onSubmit={[Function]}
+      role="search"
+    >
+      <input
+        autoCapitalize="off"
+        autoComplete="off"
+        autoCorrect="off"
+        autoFocus={false}
+        className="input"
+        disabled={false}
+        maxLength={512}
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onInput={[Function]}
+        placeholder=""
+        spellCheck="false"
+        type="search"
+        value=""
+      />
+      Array [
+        <button
+          className="submit"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "submit",
+            }
+          }
+          hidden={false}
+          title="Submit the search query."
+          type="submit"
+        />,
+      ]
+      Array [
+        <button
+          className="reset"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "reset",
+            }
+          }
+          hidden={true}
+          title="Clear the search query."
+          type="reset"
+        />,
+      ]
+      Array [
+        <span
+          className="loadingIndicator"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "loadingIndicator",
+            }
+          }
+          hidden={true}
+        />,
+      ]
+    </form>
+  </div>,
+]
+`;

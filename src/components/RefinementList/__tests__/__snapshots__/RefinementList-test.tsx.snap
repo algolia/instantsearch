@@ -1,0 +1,218 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RefinementList rendering with facets 1`] = `
+<div>
+  <div
+    class="root customClassName"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <div />
+      </li>
+      <li
+        class="item selectedItem"
+      >
+        <div />
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`RefinementList rendering with facets and disabled show more 1`] = `
+<div>
+  <div
+    class="root customClassName"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <div />
+      </li>
+      <li
+        class="item selectedItem"
+      >
+        <div />
+      </li>
+    </ul>
+    <button
+      class="showMore disabledShowMore"
+      disabled=""
+    >
+      {"isShowingMore":false}
+    </button>
+  </div>
+</div>
+`;
+
+exports[`RefinementList rendering with facets and show more 1`] = `
+<div>
+  <div
+    class="root customClassName"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <div />
+      </li>
+      <li
+        class="item selectedItem"
+      >
+        <div />
+      </li>
+    </ul>
+    <button
+      class="showMore"
+    >
+      {"isShowingMore":false}
+    </button>
+  </div>
+</div>
+`;
+
+exports[`RefinementList rendering with facets from search 1`] = `
+<div>
+  <div
+    class="root customClassName"
+  >
+    <div
+      class="searchBox"
+    >
+      <div
+        class="root"
+      >
+        <form
+          action=""
+          class="form"
+          novalidate=""
+          role="search"
+        >
+          <input
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            class="input"
+            maxlength="512"
+            placeholder="Search"
+            spellcheck="false"
+            type="search"
+          />
+          <button
+            class="submit"
+            title="Submit the search query."
+            type="submit"
+          >
+            submit
+          </button>
+          <button
+            class="reset"
+            hidden=""
+            title="Clear the search query."
+            type="reset"
+          >
+            reset
+          </button>
+          <span
+            class="loadingIndicator"
+            hidden=""
+          >
+            loadingIndicator
+          </span>
+        </form>
+      </div>
+    </div>
+    <ul
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <div />
+      </li>
+      <li
+        class="item selectedItem"
+      >
+        <div />
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`RefinementList rendering without facets 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot customClassName"
+  />
+</div>
+`;
+
+exports[`RefinementList rendering without facets from search 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot customClassName"
+  >
+    <div
+      class="searchBox"
+    >
+      <div
+        class="root"
+      >
+        <form
+          action=""
+          class="form"
+          novalidate=""
+          role="search"
+        >
+          <input
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            class="input"
+            maxlength="512"
+            placeholder="Search"
+            spellcheck="false"
+            type="search"
+          />
+          <button
+            class="submit"
+            title="Submit the search query."
+            type="submit"
+          >
+            submit
+          </button>
+          <button
+            class="reset"
+            hidden=""
+            title="Clear the search query."
+            type="reset"
+          >
+            reset
+          </button>
+          <span
+            class="loadingIndicator"
+            hidden=""
+          >
+            loadingIndicator
+          </span>
+        </form>
+      </div>
+    </div>
+    <div
+      class="noResults"
+    >
+      {}
+    </div>
+  </div>
+</div>
+`;

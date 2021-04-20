@@ -1,4 +1,4 @@
-import { InstantSearch, Middleware, Widget } from '../types';
+import { InstantSearch, InternalMiddleware, Widget } from '../types';
 import { Index } from '../widgets/index/index';
 
 type WidgetMetaData = {
@@ -80,7 +80,7 @@ export function isMetadataEnabled() {
  * - widget name
  * - connector name
  */
-export function createMetadataMiddleware(): Middleware {
+export function createMetadataMiddleware(): InternalMiddleware {
   return ({ instantSearchInstance }) => {
     const payload: Payload = {
       widgets: [],

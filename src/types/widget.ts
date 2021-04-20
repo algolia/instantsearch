@@ -6,7 +6,6 @@ import {
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch, Hit, GeoLoc } from './instantsearch';
-import { TransformItems } from './connector';
 import { BindEventForHits, SendEventForHits } from '../lib/utils';
 import {
   AutocompleteRendererOptions,
@@ -82,6 +81,10 @@ import {
   MenuConnectorParams,
   MenuRendererOptions,
 } from '../connectors/menu/connectMenu';
+import {
+  HierarchicalMenuConnectorParams,
+  HierarchicalMenuRendererOptions,
+} from '../connectors/hierarchical-menu/connectHierarchicalMenu';
 import {
   RefinementListRendererOptions,
   RefinementListConnectorParams,
@@ -256,25 +259,8 @@ export type IndexRenderState = Partial<{
   };
   hierarchicalMenu: {
     [attribute: string]: WidgetRenderState<
-      {
-        items: any[];
-        refine(facetValue: any): void;
-        createURL(facetValue: any): string;
-        isShowingMore: boolean;
-        toggleShowMore(): void;
-        canToggleShowMore: boolean;
-      },
-      {
-        attributes: string[];
-        separator: string;
-        rootPath: string | null;
-        showParentLevel: boolean;
-        limit: number;
-        showMore: boolean;
-        showMoreLimit: number;
-        sortBy: any;
-        transformItems: TransformItems<any>;
-      }
+      HierarchicalMenuRendererOptions,
+      HierarchicalMenuConnectorParams
     >;
   };
   hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
@@ -548,3 +534,7 @@ export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
 export type TemplateWithBindEvent<TTemplateData = void> =
   | string
   | ((data: TTemplateData, bindEvent: BindEventForHits) => string);
+
+export type Templates = {
+  [key: string]: Template<any> | TemplateWithBindEvent<any> | undefined;
+};

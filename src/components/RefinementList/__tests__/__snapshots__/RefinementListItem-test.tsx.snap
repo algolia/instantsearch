@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RefinementListItem renders an item 1`] = `
+<li
+  className="item class"
+  onClick={[Function]}
+>
+  <Template
+    data={
+      Object {
+        "template": "data",
+      }
+    }
+    rootTagName="div"
+    template="props"
+    templateKey="item key"
+    templates={Object {}}
+    templatesConfig={Object {}}
+    useCustomCompileOptions={Object {}}
+  />
+  <div />
+</li>
+`;

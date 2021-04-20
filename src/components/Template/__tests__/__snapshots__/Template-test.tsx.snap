@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Template can configure compilation options 1`] = `
+Array [
+  <div
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "it configures compilation delimiters",
+      }
+    }
+  />,
+]
+`;
+
+exports[`Template can configure custom rootTagName 1`] = `
+Array [
+  <span
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+  />,
+]
+`;
+
+exports[`Template forward rootProps to the first node 1`] = `
+Array [
+  <div
+    className="className"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+    onClick={[Function]}
+  />,
+]
+`;

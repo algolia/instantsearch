@@ -1,3 +1,39 @@
+# [4.21.0](https://github.com/algolia/instantsearch.js/compare/v4.20.0...v4.21.0) (2021-04-12)
+
+
+### Bug Fixes
+
+* **infiniteHits:** fix wrong behavior of showPrevious regarding cachedHits ([#4725](https://github.com/algolia/instantsearch.js/issues/4725)) ([40b27b6](https://github.com/algolia/instantsearch.js/commit/40b27b668ec1dcb8608b299c941e0003b43911d3))
+* **ratingMenu:** use url in default template ([#4728](https://github.com/algolia/instantsearch.js/issues/4728)) ([31d9c50](https://github.com/algolia/instantsearch.js/commit/31d9c50344818cd4f4e62993a981ec3616d8b88e))
+
+
+### Features
+
+* **middleware:** accept partial methods ([#4673](https://github.com/algolia/instantsearch.js/issues/4673)) ([8f2aad2](https://github.com/algolia/instantsearch.js/commit/8f2aad2f0465cc883681143f350a11c24ce694e2))
+* **ts:** convert hierarchical-menu to TypeScript ([#4711](https://github.com/algolia/instantsearch.js/issues/4711)) ([870e2f7](https://github.com/algolia/instantsearch.js/commit/870e2f7285d58c48196356cd88fb4aca66feb7aa))
+* **ts:** convert RefinementList component to TypeScript ([#4702](https://github.com/algolia/instantsearch.js/issues/4702)) ([fd562de](https://github.com/algolia/instantsearch.js/commit/fd562de5e50e3889abaa9ef8151faa1b5179d7f6))
+* **ts:** convert search-box to TypeScript ([#4710](https://github.com/algolia/instantsearch.js/issues/4710)) ([e73257a](https://github.com/algolia/instantsearch.js/commit/e73257a466082207c0289f22bad523334d101aae))
+
+
+
+# [4.20.0](https://github.com/algolia/instantsearch.js/compare/v4.19.0...v4.20.0) (2021-04-06)
+
+
+### Features
+
+* **clearRefinements:** implement canRefine ([#4684](https://github.com/algolia/instantsearch.js/issues/4684)) ([a898f09](https://github.com/algolia/instantsearch.js/commit/a898f09bddca5db1f6782104375df3873d49c688))
+* **currentRefinements:** implement canRefine ([#4697](https://github.com/algolia/instantsearch.js/issues/4697)) ([4db75ba](https://github.com/algolia/instantsearch.js/commit/4db75baa9ff2e18f871547511d8f1234eea9d41b))
+* **hierarchicalMenu:** implement canRefine ([#4685](https://github.com/algolia/instantsearch.js/issues/4685)) ([0d2e450](https://github.com/algolia/instantsearch.js/commit/0d2e450aed2aaac72ae7ff7f1bb322ce6992c8ba))
+* **middleware:** add unuse method ([#4708](https://github.com/algolia/instantsearch.js/issues/4708)) ([8e3c406](https://github.com/algolia/instantsearch.js/commit/8e3c406c8f29bcae56d2f82f07cbd087043346fe))
+* **pagination:** implement canRefine ([#4683](https://github.com/algolia/instantsearch.js/issues/4683)) ([3ae51e6](https://github.com/algolia/instantsearch.js/commit/3ae51e60543984463a13b25e64aa2f879c91313e))
+* **range:** implement canRefine ([#4686](https://github.com/algolia/instantsearch.js/issues/4686)) ([a99ab6f](https://github.com/algolia/instantsearch.js/commit/a99ab6f968b791ffa31cd17dda598c293e73b88e))
+* **ratingMenu:** implement canRefine ([#4691](https://github.com/algolia/instantsearch.js/issues/4691)) ([42191a0](https://github.com/algolia/instantsearch.js/commit/42191a097a048a325234dd3f40f7799145628cd6))
+* **toggleRefinement:** implement canRefine ([#4689](https://github.com/algolia/instantsearch.js/issues/4689)) ([48dc7f8](https://github.com/algolia/instantsearch.js/commit/48dc7f8423c92b21bcd59856bf2fc685ae4aba69))
+* **ts:** convert rating-menu to TypeScript ([#4701](https://github.com/algolia/instantsearch.js/issues/4701)) ([f14ca08](https://github.com/algolia/instantsearch.js/commit/f14ca0891237a7a49b09d881cddedb93efc3a266))
+* **ts:** convert Template component to TypeScript ([#4703](https://github.com/algolia/instantsearch.js/issues/4703)) ([0688571](https://github.com/algolia/instantsearch.js/commit/068857137b85d1065bc5997514461d72fe595130))
+
+
+
 # [4.19.0](https://github.com/algolia/instantsearch.js/compare/v4.18.0...v4.19.0) (2021-03-30)
 
 

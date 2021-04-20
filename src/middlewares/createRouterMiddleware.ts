@@ -4,7 +4,7 @@ import {
   Router,
   StateMapping,
   UiState,
-  Middleware,
+  InternalMiddleware,
   RouteState,
 } from '../types';
 import { isEqual } from '../lib/utils';
@@ -14,7 +14,7 @@ export type RouterProps = {
   stateMapping?: StateMapping;
 };
 
-export type RoutingManager = (props?: RouterProps) => Middleware;
+export type RoutingManager = (props?: RouterProps) => InternalMiddleware;
 
 export const createRouterMiddleware: RoutingManager = (props = {}) => {
   const {
