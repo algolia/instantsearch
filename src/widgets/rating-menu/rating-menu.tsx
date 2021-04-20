@@ -15,7 +15,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { RendererOptions, WidgetFactory } from '../../types';
+import { RendererOptions, Template, WidgetFactory } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
@@ -25,7 +25,12 @@ export type RatingMenuTemplates = {
   /**
    * Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
    */
-  item: string | ((data: any) => string);
+  item: Template<{
+    name: string;
+    count: number;
+    isRefined: boolean;
+    url: string;
+  }>;
 };
 
 export type RatingMenuCSSClasses = {
