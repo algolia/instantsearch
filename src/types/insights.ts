@@ -28,10 +28,10 @@ export type InsightsOnUserTokenChange = (
   options?: { immediate?: boolean }
 ) => void;
 
-export type InsightsGet = (
-  method: '_get',
-  key: string,
-  callback: (value: any) => void
+export type InsightsGetUserToken = (
+  method: 'getUserToken',
+  options?: any,
+  callback?: (userToken: string) => void
 ) => void;
 
 export type InsightsInit = (
@@ -44,7 +44,7 @@ export type InsightsInit = (
 
 export type InsightsClient = InsightsSendEvent &
   InsightsOnUserTokenChange &
-  InsightsGet &
+  InsightsGetUserToken &
   InsightsInit &
   InsightsSetUserToken & {
     queue?: Array<[string, any]>;

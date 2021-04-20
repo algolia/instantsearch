@@ -75,7 +75,7 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
           ([method]) => method === 'setUserToken'
         ) || [];
     }
-    insightsClient('_get', '_userToken', (userToken: string) => {
+    insightsClient('getUserToken', null, (userToken: string) => {
       // If user has called `aa('setUserToken', 'my-user-token')` before creating
       // the `insights` middleware, we store them temporarily and
       // set it later on.
