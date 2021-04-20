@@ -21,7 +21,7 @@ import { RelevantSortWidgetDescription } from '../connectors/relevant-sort/conne
 import { SearchBoxWidgetDescription } from '../connectors/search-box/connectSearchBox';
 import { SortByWidgetDescription } from '../connectors/sort-by/connectSortBy';
 import { StatsWidgetDescription } from '../connectors/stats/connectStats';
-import { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/types';
+import { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/connectToggleRefinement';
 import { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
 import { AnalyticsWidgetDescription } from '../widgets/analytics/analytics';
 import { PlacesWidgetDescription } from '../widgets/places/places';
