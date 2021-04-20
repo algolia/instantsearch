@@ -86,25 +86,6 @@ describe('insights', () => {
   });
 
   describe('initialize', () => {
-    it('initialize insightsClient', () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment();
-      expect.assertions(3);
-
-      insightsClient('setUserToken', 'abc');
-      createInsightsMiddleware({
-        insightsClient,
-      })({ instantSearchInstance });
-      insightsClient('_get', '_hasCredentials', hasCredentials => {
-        expect(hasCredentials).toBe(true);
-      });
-      insightsClient('_get', '_appId', appId => {
-        expect(appId).toBe('myAppId');
-      });
-      insightsClient('_get', '_apiKey', apiKey => {
-        expect(apiKey).toBe('myApiKey');
-      });
-    });
-
     it('passes initParams to insightsClient', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
       createInsightsMiddleware({
@@ -299,7 +280,7 @@ describe('insights', () => {
         insightsClient('setUserToken', 'token-from-queue');
         libraryLoadedAndProcessQueue();
 
-        insightsClient('_get', '_userToken', userToken => {
+        insightsClient('getUserToken', null, (_error, userToken) => {
           expect(userToken).toEqual('token-from-queue');
         });
 
@@ -322,7 +303,7 @@ describe('insights', () => {
         insightsClient('init', { appId: 'myAppId', apiKey: 'myApiKey' });
         insightsClient('setUserToken', 'token-from-queue');
 
-        insightsClient('_get', '_userToken', userToken => {
+        insightsClient('getUserToken', null, (_error, userToken) => {
           expect(userToken).toEqual('token-from-queue');
         });
 

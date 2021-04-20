@@ -31,7 +31,7 @@ export type InsightsOnUserTokenChange = (
 export type InsightsGetUserToken = (
   method: 'getUserToken',
   options?: any,
-  callback?: (userToken: string) => void
+  callback?: (error: any, userToken: string) => void
 ) => void;
 
 export type InsightsInit = (
