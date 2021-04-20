@@ -21,6 +21,7 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
+  transformIgnorePatterns: ['node_modules/(?!(search-insights)/)'],
   globals: {
     __DEV__: true,
   },
