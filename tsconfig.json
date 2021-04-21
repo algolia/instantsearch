@@ -19,5 +19,10 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true
   },
-  "exclude": ["examples", "es"]
+  "exclude": [
+    "examples",
+    "es",
+    "src/middlewares/__tests__/createInsightsMiddleware.ts",
+    "test/mock/createInsightsClient.ts"
+  ]
 }
