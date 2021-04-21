@@ -8,6 +8,7 @@ import index from '../../../widgets/index/index';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -144,7 +145,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     const helper = algoliasearchHelper(createSearchClient(), items[0].value);
 
     expect(() =>
-      widget.dispose!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 

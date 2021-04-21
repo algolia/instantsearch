@@ -5,6 +5,7 @@ import algoliasearchHelper, {
 import { SearchClient, HitAttributeHighlightResult } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -837,7 +838,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose!({ helper, state: helper.state });
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -850,7 +851,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const widget = makeWidget({});
 
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
 
@@ -871,10 +872,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         TAG_PLACEHOLDER.highlightPostTag
       );
 
-      const nextState = widget.dispose!({
-        helper,
-        state: helper.state,
-      }) as SearchParameters;
+      const nextState = widget.dispose!(
+        createDisposeOptions({
+          helper,
+          state: helper.state,
+        })
+      ) as SearchParameters;
 
       expect(nextState.highlightPreTag).toBeUndefined();
       expect(nextState.highlightPostTag).toBeUndefined();
@@ -895,10 +898,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(helper.state.highlightPreTag).toBe('<mark>');
       expect(helper.state.highlightPostTag).toBe('</mark>');
 
-      const nextState = widget.dispose!({
-        helper,
-        state: helper.state,
-      }) as SearchParameters;
+      const nextState = widget.dispose!(
+        createDisposeOptions({
+          helper,
+          state: helper.state,
+        })
+      ) as SearchParameters;
 
       expect(nextState.highlightPreTag).toBe('<mark>');
       expect(nextState.highlightPostTag).toBe('</mark>');
@@ -915,10 +920,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(helper.state.page).toBe(5);
 
-      const nextState = widget.dispose!({
-        helper,
-        state: helper.state,
-      }) as SearchParameters;
+      const nextState = widget.dispose!(
+        createDisposeOptions({
+          helper,
+          state: helper.state,
+        })
+      ) as SearchParameters;
 
       expect(nextState.page).toBeUndefined();
     });

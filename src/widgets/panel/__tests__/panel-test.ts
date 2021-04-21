@@ -199,7 +199,7 @@ describe('Lifecycle', () => {
 
     widgetWithPanel.init!(createInitOptions());
     widgetWithPanel.render!(createRenderOptions());
-    widgetWithPanel.dispose!(createRenderOptions());
+    widgetWithPanel.dispose!(createDisposeOptions());
 
     expect(widget.init).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenCalledTimes(1);

@@ -5,6 +5,7 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import connectRange from '../connectRange';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -1261,7 +1262,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
 
@@ -1279,7 +1280,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      const newState = widget.dispose!({ helper, state: helper.state });
+      const newState = widget.dispose!(
+        createDisposeOptions({ helper, state: helper.state })
+      );
 
       expect(newState).toEqual(new SearchParameters({ index: indexName }));
     });
@@ -1323,7 +1326,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      const newState = widget.dispose!({ helper, state: helper.state });
+      const newState = widget.dispose!(
+        createDisposeOptions({ helper, state: helper.state })
+      );
 
       expect(newState).toEqual(new SearchParameters({ index: indexName }));
     });

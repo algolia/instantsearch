@@ -9,6 +9,7 @@ import connectNumericMenu, {
 } from '../connectNumericMenu';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -734,7 +735,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     const helper = jsHelper(createSearchClient(), '');
 
     expect(() =>
-      widget.dispose!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 

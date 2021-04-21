@@ -5,6 +5,7 @@ import algoliasearchHelper, {
 import { warning } from '../../../lib/utils';
 import connectHierarchicalMenu from '../connectHierarchicalMenu';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -393,7 +394,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         })
       );
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
 
@@ -412,9 +413,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         })
       );
 
-      expect(widget.dispose!({ helper, state: helper.state })).toEqual(
-        new SearchParameters({ index: indexName })
-      );
+      expect(
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
+      ).toEqual(new SearchParameters({ index: indexName }));
     });
 
     it('unsets refinement', () => {
@@ -448,9 +449,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         category: ['zombo.com'],
       });
 
-      expect(widget.dispose!({ helper, state: helper.state })).toEqual(
-        new SearchParameters({ index: indexName })
-      );
+      expect(
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
+      ).toEqual(new SearchParameters({ index: indexName }));
     });
   });
 
