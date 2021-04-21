@@ -8,6 +8,7 @@
       :refine="refine"
       :can-refine="canRefine"
       :range="state.range"
+      :send-event="state.sendEvent"
     >
       <form
         :class="suit('form')"

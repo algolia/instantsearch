@@ -8,6 +8,7 @@
       :can-refine="state.canRefine"
       :refine="refine"
       :createURL="state.createURL"
+      :send-event="state.sendEvent"
     >
       <select
         :class="suit('select')"

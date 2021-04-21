@@ -11,6 +11,7 @@
       :refine="state.refine"
       :createURL="state.createURL"
       :toggle-show-more="state.toggleShowMore"
+      :send-event="state.sendEvent"
     >
       <hierarchical-menu-list
         :items="state.items"

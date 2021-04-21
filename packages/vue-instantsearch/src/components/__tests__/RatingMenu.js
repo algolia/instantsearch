@@ -148,3 +148,26 @@ it('calls the Panel mixin with `hasNoResults`', () => {
 
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
+
+it('exposes send-event method for insights middleware', () => {
+  const sendEvent = jest.fn();
+  __setState({
+    createURL: () => '#',
+    items: [],
+    sendEvent,
+  });
+
+  const wrapper = mount(RatingMenu, {
+    propsData: defaultProps,
+    scopedSlots: {
+      default: `
+      <div slot-scope="{ sendEvent }">
+        <button @click="sendEvent()">Send Event</button>
+      </div>
+      `,
+    },
+  });
+
+  wrapper.find('button').trigger('click');
+  expect(sendEvent).toHaveBeenCalledTimes(1);
+});

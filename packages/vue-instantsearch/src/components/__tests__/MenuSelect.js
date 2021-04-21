@@ -224,6 +224,28 @@ it('calls the Panel mixin with `canRefine`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
+it('exposes send-event method for insights middleware', () => {
+  const sendEvent = jest.fn();
+  __setState({
+    ...defaultState,
+    sendEvent,
+  });
+
+  const wrapper = mount(MenuSelect, {
+    propsData: defaultProps,
+    scopedSlots: {
+      default: `
+      <div slot-scope="{ sendEvent }">
+        <button @click="sendEvent()">Send Event</button>
+      </div>
+      `,
+    },
+  });
+
+  wrapper.find('button').trigger('click');
+  expect(sendEvent).toHaveBeenCalledTimes(1);
+});
+
 describe('custom item slot', () => {
   // can not be <template>
   // https://github.com/vuejs/vue-test-utils/pull/507
