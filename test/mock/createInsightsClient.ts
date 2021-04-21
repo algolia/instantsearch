@@ -3,7 +3,10 @@ export const ANONYMOUS_TOKEN = 'anonymous-user-id-1';
 export type AlgoliaAnalytics = {
   setUserToken(userToken: string): void;
   init({ appId, apiKey }): void;
-  _get(key: string, callback: (value: any) => void): void;
+  getUserToken(
+    options: any,
+    callback: (error: any, userToken: string) => void
+  ): void;
   onUserTokenChange(
     callback: (value: string) => void,
     options?: { immediate?: boolean }
@@ -30,7 +33,8 @@ export function createAlgoliaAnalytics(): AlgoliaAnalytics {
     setValues({ _hasCredentials: true, _appId: appId, _apiKey: apiKey });
     setUserToken(ANONYMOUS_TOKEN);
   };
-  const _get = (key, callback) => callback(values[key]);
+  const getUserToken = (_options, callback) =>
+    callback(null, values._userToken);
   const onUserTokenChange = (callback, { immediate = false } = {}) => {
     userTokenCallback = callback;
     if (immediate) {
@@ -42,7 +46,7 @@ export function createAlgoliaAnalytics(): AlgoliaAnalytics {
   return {
     setUserToken,
     init,
-    _get,
+    getUserToken,
     onUserTokenChange,
     viewedObjectIDs,
   };
