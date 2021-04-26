@@ -8,7 +8,6 @@ import {
 } from '../../../test/mock/createInsightsClient';
 import { warning } from '../../lib/utils';
 import { SearchClient } from '../../types';
-import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 
 describe('insights', () => {
   const createTestEnvironment = () => {
