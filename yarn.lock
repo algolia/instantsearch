@@ -12801,9 +12801,10 @@ scriptjs@2.5.9:
   resolved "https://registry.yarnpkg.com/scriptjs/-/scriptjs-2.5.9.tgz#343915cd2ec2ed9bfdde2b9875cd28f59394b35f"
   integrity sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==
 
-"search-insights@https://pkg.csb.dev/algolia/search-insights.js/commit/761a3f68/search-insights":
-  version "1.7.1"
-  resolved "https://pkg.csb.dev/algolia/search-insights.js/commit/761a3f68/search-insights#ac87007c2071d12cf831b9de9d770b37f37bbad9"
+search-insights@1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/search-insights/-/search-insights-1.7.2.tgz#85b9dd944d3107ad5f3c3833184a85b759240ee6"
+  integrity sha512-gOu7UtMJTaX/MEgMy1+HqUR/y08HBetYldknOZ2lkZr0EgAVxzg9cioQN3rzY45DBh9pXqaV+qCsLofcloPaiw==
 
 select@^1.1.2:
   version "1.1.2"
