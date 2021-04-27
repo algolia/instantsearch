@@ -2,7 +2,6 @@ import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { createInsightsMiddleware } from '../';
 import { createInstantSearch } from '../../../test/mock/createInstantSearch';
-import { createSearchClient } from '../../../test/mock/createSearchClient';
 import {
   createInsights,
   createInsightsUmdVersion,
