@@ -103,7 +103,7 @@ describe('insights', () => {
       });
     });
 
-    it('does not throw without userToken in UMD (1)', () => {
+    it('does not throw without userToken in UMD with the library loaded after the event', () => {
       const {
         insightsClient,
         libraryLoadedAndProcessQueue,
@@ -136,7 +136,7 @@ describe('insights', () => {
       );
     });
 
-    it('does not throw without userToken in UMD (2)', () => {
+    it('does not throw without userToken in UMD with the library loaded before the event', () => {
       const {
         insightsClient,
         libraryLoadedAndProcessQueue,
@@ -149,7 +149,6 @@ describe('insights', () => {
       })({ instantSearchInstance });
       middleware.subscribe();
 
-      // When the library is loaded later, it consumes the queue and sends the event.
       libraryLoadedAndProcessQueue();
 
       expect(() => {
