@@ -44,7 +44,6 @@ export type InsightsInit = (
 
 export type InsightsClient = InsightsSendEvent &
   InsightsOnUserTokenChange &
-  InsightsGetUserToken &
   InsightsInit &
   InsightsSetUserToken &
   InsightsGetUserToken & {
