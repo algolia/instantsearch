@@ -177,23 +177,33 @@ describe('insights', () => {
 
     it('adds user agent', () => {
       const {
+        analytics,
         insightsClient,
         instantSearchInstance,
         searchClient,
       } = createTestEnvironment();
-      const addAlgoliaAgent = jest.fn();
       // @ts-ignore
-      searchClient.addAlgoliaAgent = addAlgoliaAgent;
+      searchClient.addAlgoliaAgent = jest.fn();
 
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      const times = addAlgoliaAgent.mock.calls.length;
+      const times = (searchClient.addAlgoliaAgent as jest.Mock).mock.calls
+        .length;
 
       middleware.subscribe();
 
-      expect(addAlgoliaAgent).toHaveBeenCalledTimes(times + 1);
-      expect(addAlgoliaAgent).toHaveBeenLastCalledWith('insights-middleware');
+      expect(searchClient.addAlgoliaAgent as jest.Mock).toHaveBeenCalledTimes(
+        times + 1
+      );
+      expect(
+        searchClient.addAlgoliaAgent as jest.Mock
+      ).toHaveBeenLastCalledWith('insights-middleware');
+
+      expect(analytics.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+      expect(analytics.addAlgoliaAgent).toHaveBeenCalledWith(
+        'insights-middleware'
+      );
     });
   });
 
