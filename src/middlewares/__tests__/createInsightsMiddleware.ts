@@ -2,6 +2,7 @@ import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { createInsightsMiddleware } from '../';
 import { createInstantSearch } from '../../../test/mock/createInstantSearch';
+import { createSearchClient } from '../../../test/mock/createSearchClient';
 import {
   createInsights,
   createInsightsUmdVersion,
@@ -12,8 +13,9 @@ import { SearchClient } from '../../types';
 describe('insights', () => {
   const createTestEnvironment = () => {
     const { analytics, insightsClient } = createInsights();
+    const searchClient = algoliasearch('myAppId', 'myApiKey');
     const instantSearchInstance = createInstantSearch({
-      client: algoliasearch('myAppId', 'myApiKey'),
+      client: searchClient,
     });
     const helper = algoliasearchHelper({} as SearchClient, '');
     const getUserToken = () => {
@@ -28,6 +30,7 @@ describe('insights', () => {
       analytics,
       insightsClient,
       instantSearchInstance,
+      searchClient,
       helper,
       getUserToken,
     };
@@ -170,6 +173,27 @@ describe('insights', () => {
       helper.setPage(100);
       middleware.subscribe();
       expect(helper.state.page).toBe(100);
+    });
+
+    it('adds user agent', () => {
+      const {
+        insightsClient,
+        instantSearchInstance,
+        searchClient,
+      } = createTestEnvironment();
+      const addAlgoliaAgent = jest.fn();
+      // @ts-ignore
+      searchClient.addAlgoliaAgent = addAlgoliaAgent;
+
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      const times = addAlgoliaAgent.mock.calls.length;
+
+      middleware.subscribe();
+
+      expect(addAlgoliaAgent).toHaveBeenCalledTimes(times + 1);
+      expect(addAlgoliaAgent).toHaveBeenLastCalledWith('insights-middleware');
     });
   });
 
