@@ -1,3 +1,12 @@
+## [4.21.1](https://github.com/algolia/instantsearch.js/compare/v4.21.0...v4.21.1) (2021-04-27)
+
+
+### Bug Fixes
+
+* **insights:** use getUserToken method instead of _get ([#4744](https://github.com/algolia/instantsearch.js/issues/4744)) ([05d05a9](https://github.com/algolia/instantsearch.js/commit/05d05a9a8ad79e4ec8b183a3d17c2360430c302e))
+
+
+
 # [4.21.0](https://github.com/algolia/instantsearch.js/compare/v4.20.0...v4.21.0) (2021-04-12)
 
 
