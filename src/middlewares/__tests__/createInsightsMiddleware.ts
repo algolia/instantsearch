@@ -247,6 +247,25 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       middleware.subscribe();
       expect(helper.state.page).toBe(100);
     });
+
+    it('adds user agent', () => {
+      const {
+        analytics,
+        insightsClient,
+        instantSearchInstance,
+      } = createTestEnvironment();
+
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+
+      middleware.subscribe();
+
+      expect(analytics.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+      expect(analytics.addAlgoliaAgent).toHaveBeenCalledWith(
+        'insights-middleware'
+      );
+    });
   });
 
   describe('userToken', () => {

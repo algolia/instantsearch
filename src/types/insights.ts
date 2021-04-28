@@ -42,7 +42,13 @@ export type InsightsInit = (
   }
 ) => void;
 
-export type InsightsClient = InsightsSendEvent &
+export type InsightsAddAlgoliaAgent = (
+  method: 'addAlgoliaAgent',
+  algoliaAgent: string
+) => void;
+
+export type InsightsClient = InsightsAddAlgoliaAgent &
+  InsightsSendEvent &
   InsightsOnUserTokenChange &
   InsightsInit &
   InsightsSetUserToken &
