@@ -20,7 +20,7 @@ jest.mock('preact', () => {
 
 describe('menuSelect', () => {
   describe('Usage', () => {
-    it('throws without container ', () => {
+    it('throws without container', () => {
       expect(() => {
         // @ts-ignore
         menuSelect({ container: undefined });

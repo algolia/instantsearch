@@ -272,6 +272,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     }
   });
 
+  // eslint-disable-next-line jest/no-done-callback
   it('provides the same `refine` and `clear` function references', done => {
     const initRenderState: Record<string, any> = {};
     const createSearchBox = connectSearchBox(
@@ -280,7 +281,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
           initRenderState.refine = refine;
           initRenderState.clear = clear;
         } else {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(refine).toBe(initRenderState.refine);
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(clear).toBe(initRenderState.clear);
           done();
         }

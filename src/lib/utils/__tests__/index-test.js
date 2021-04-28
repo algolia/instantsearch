@@ -168,6 +168,7 @@ describe('utils.renderTemplate', () => {
       expect(actual).toBe(expectation);
     });
 
+    // eslint-disable-next-line jest/no-done-callback
     it('expect to set the context (`this`) to the template `data`', done => {
       const templateKey = 'test';
       const templates = {
