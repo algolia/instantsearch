@@ -3,7 +3,7 @@ import { processQueue } from 'search-insights/lib/_processQueue';
 import { getFunctionalInterface } from 'search-insights/lib/_getFunctionalInterface';
 
 export function createInsights() {
-  const analytics = mockSendingEvents(
+  const analytics = mockMethods(
     new AlgoliaAnalytics({
       requestFn: jest.fn(),
     })
@@ -23,7 +23,7 @@ export function createInsightsUmdVersion() {
     globalObject.aa.queue = globalObject.aa.queue || [];
     globalObject.aa.queue.push(args);
   };
-  const analytics = mockSendingEvents(
+  const analytics = mockMethods(
     new AlgoliaAnalytics({
       requestFn: jest.fn(),
     })
@@ -38,7 +38,9 @@ export function createInsightsUmdVersion() {
   };
 }
 
-function mockSendingEvents(analytics: AlgoliaAnalytics) {
+function mockMethods(analytics: AlgoliaAnalytics) {
+  analytics.addAlgoliaAgent = jest.fn(analytics.addAlgoliaAgent);
+
   analytics.viewedFilters = jest.fn(analytics.viewedFilters);
   analytics.viewedObjectIDs = jest.fn(analytics.viewedObjectIDs);
   analytics.clickedFilters = jest.fn(analytics.clickedFilters);
