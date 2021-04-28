@@ -39,6 +39,7 @@ export const createInstantSearch = (
     _createURL: jest.fn(() => '#'),
     onStateChange: null,
     setUiState: jest.fn(),
+    getUiState: jest.fn(() => ({})),
     // Since we defer `onInternalStateChange` with our `defer` util which
     // creates a scoped deferred function, we're not able to spy that method.
     // We'll therefore need to override it when calling `createInstantSearch`.
