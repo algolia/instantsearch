@@ -83,7 +83,9 @@ export type IndexWidget = Omit<
   refreshUiState(): void;
 };
 
-export function isIndexWidget(widget: Widget | IndexWidget): widget is IndexWidget {
+export function isIndexWidget(
+  widget: Widget | IndexWidget
+): widget is IndexWidget {
   return widget.$$type === 'ais.index';
 }
 
