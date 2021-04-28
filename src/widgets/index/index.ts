@@ -28,7 +28,7 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',
 });
 
-type IndexProps = {
+type IndexWidgetParams = {
   indexName: string;
   indexId?: string;
 };
@@ -52,8 +52,8 @@ export type IndexWidgetDescription = {
   $$widgetType: 'ais.index';
 };
 
-export type Index = Omit<
-  Widget<IndexWidgetDescription & { widgetParams: never }>,
+export type IndexWidget = Omit<
+  Widget<IndexWidgetDescription & { widgetParams: IndexWidgetParams }>,
   'getWidgetUiState' | 'getWidgetState'
 > & {
   getIndexName(): string;
@@ -61,12 +61,12 @@ export type Index = Omit<
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
   getScopedResults(): ScopedResult[];
-  getParent(): Index | null;
-  getWidgets(): Array<Widget | Index>;
+  getParent(): IndexWidget | null;
+  getWidgets(): Array<Widget | IndexWidget>;
   createURL(state: SearchParameters): string;
 
-  addWidgets(widgets: Array<Widget | Index>): Index;
-  removeWidgets(widgets: Array<Widget | Index>): Index;
+  addWidgets(widgets: Array<Widget | IndexWidget>): IndexWidget;
+  removeWidgets(widgets: Array<Widget | IndexWidget>): IndexWidget;
 
   init(options: IndexInitOptions): void;
   render(options: IndexRenderOptions): void;
@@ -83,7 +83,7 @@ export type Index = Omit<
   refreshUiState(): void;
 };
 
-export function isIndexWidget(widget: Widget | Index): widget is Index {
+export function isIndexWidget(widget: Widget | IndexWidget): widget is IndexWidget {
   return widget.$$type === 'ais.index';
 }
 
@@ -121,7 +121,7 @@ type WidgetUiStateOptions = Parameters<
 >[1];
 
 function getLocalWidgetsUiState(
-  widgets: Array<Widget | Index>,
+  widgets: Array<Widget | IndexWidget>,
   widgetStateOptions: WidgetUiStateOptions,
   initialUiState: IndexUiState = {}
 ) {
@@ -143,7 +143,7 @@ function getLocalWidgetsUiState(
 }
 
 function getLocalWidgetsSearchParameters(
-  widgets: Array<Widget | Index>,
+  widgets: Array<Widget | IndexWidget>,
   widgetSearchParametersOptions: LocalWidgetSearchParametersOptions
 ): SearchParameters {
   const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
@@ -159,7 +159,7 @@ function getLocalWidgetsSearchParameters(
     }, initialSearchParameters);
 }
 
-function resetPageFromWidgets(widgets: Array<Widget | Index>): void {
+function resetPageFromWidgets(widgets: Array<Widget | IndexWidget>): void {
   const indexWidgets = widgets.filter(isIndexWidget);
 
   if (indexWidgets.length === 0) {
@@ -179,7 +179,7 @@ function resetPageFromWidgets(widgets: Array<Widget | Index>): void {
 }
 
 function resolveScopedResultsFromWidgets(
-  widgets: Array<Widget | Index>
+  widgets: Array<Widget | IndexWidget>
 ): ScopedResult[] {
   const indexWidgets = widgets.filter(isIndexWidget);
 
@@ -195,17 +195,17 @@ function resolveScopedResultsFromWidgets(
   }, []);
 }
 
-const index = (props: IndexProps): Index => {
-  if (props === undefined || props.indexName === undefined) {
+const index = (widgetParams: IndexWidgetParams): IndexWidget => {
+  if (widgetParams === undefined || widgetParams.indexName === undefined) {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
-  const { indexName, indexId = indexName } = props;
+  const { indexName, indexId = indexName } = widgetParams;
 
-  let localWidgets: Array<Widget | Index> = [];
+  let localWidgets: Array<Widget | IndexWidget> = [];
   let localUiState: IndexUiState = {};
   let localInstantSearchInstance: InstantSearch | null = null;
-  let localParent: Index | null = null;
+  let localParent: IndexWidget | null = null;
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
 
@@ -363,7 +363,11 @@ const index = (props: IndexProps): Index => {
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         const nextState = widgets.reduce((state, widget) => {
           // the `dispose` method exists at this point we already assert it
-          const next = widget.dispose!({ helper: helper!, state });
+          const next = widget.dispose!({
+            helper: helper!,
+            state,
+            parent: this,
+          });
 
           return next || state;
         }, helper!.state);
@@ -499,9 +503,9 @@ const index = (props: IndexProps): Index => {
         helper!.lastResults = results;
       });
 
-      // We compute the render state before calling `render` in a separate loop
+      // We compute the render state before calling `init` in a separate loop
       // to construct the whole render state object that is then passed to
-      // `render`.
+      // `init`.
       localWidgets.forEach(widget => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
@@ -653,7 +657,11 @@ const index = (props: IndexProps): Index => {
           // `dispose` because the index is removed. We can't call `removeWidgets`
           // because we want to keep the widgets on the instance, to allow idempotent
           // operations on `add` & `remove`.
-          widget.dispose({ helper: helper!, state: helper!.state });
+          widget.dispose({
+            helper: helper!,
+            state: helper!.state,
+            parent: this,
+          });
         }
       });
 

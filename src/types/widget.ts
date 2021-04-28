@@ -1,4 +1,4 @@
-import { Index } from '../widgets/index/index';
+import { IndexWidget } from '../widgets/index/index';
 import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
@@ -17,7 +17,7 @@ export type ScopedResult = {
 
 type SharedRenderOptions = {
   instantSearchInstance: InstantSearch;
-  parent: Index | null;
+  parent: IndexWidget | null;
   templatesConfig: Record<string, unknown>;
   scopedResults: ScopedResult[];
   state: SearchParameters;

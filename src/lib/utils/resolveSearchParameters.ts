@@ -1,7 +1,7 @@
 import { SearchParameters } from 'algoliasearch-helper';
-import { Index } from '../../widgets/index/index';
+import { IndexWidget } from '../../widgets/index/index';
 
-const resolveSearchParameters = (current: Index): SearchParameters[] => {
+const resolveSearchParameters = (current: IndexWidget): SearchParameters[] => {
   let parent = current.getParent();
   let states = [current.getHelper()!.state];
 
