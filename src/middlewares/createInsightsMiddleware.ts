@@ -88,11 +88,6 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
     return {
       onStateChange() {},
       subscribe() {
-        if (
-          typeof instantSearchInstance.client.addAlgoliaAgent === 'function'
-        ) {
-          instantSearchInstance.client.addAlgoliaAgent(`insights-middleware`);
-        }
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
         // At the time this middleware is subscribed, `mainIndex.init()` is already called.

@@ -12,9 +12,8 @@ import { SearchClient } from '../../types';
 describe('insights', () => {
   const createTestEnvironment = () => {
     const { analytics, insightsClient } = createInsights();
-    const searchClient = algoliasearch('myAppId', 'myApiKey');
     const instantSearchInstance = createInstantSearch({
-      client: searchClient,
+      client: algoliasearch('myAppId', 'myApiKey'),
     });
     const helper = algoliasearchHelper({} as SearchClient, '');
     const getUserToken = () => {
@@ -29,7 +28,6 @@ describe('insights', () => {
       analytics,
       insightsClient,
       instantSearchInstance,
-      searchClient,
       helper,
       getUserToken,
     };
@@ -179,25 +177,13 @@ describe('insights', () => {
         analytics,
         insightsClient,
         instantSearchInstance,
-        searchClient,
       } = createTestEnvironment();
-      // @ts-ignore
-      searchClient.addAlgoliaAgent = jest.fn();
 
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      const times = (searchClient.addAlgoliaAgent as jest.Mock).mock.calls
-        .length;
 
       middleware.subscribe();
-
-      expect(searchClient.addAlgoliaAgent as jest.Mock).toHaveBeenCalledTimes(
-        times + 1
-      );
-      expect(
-        searchClient.addAlgoliaAgent as jest.Mock
-      ).toHaveBeenLastCalledWith('insights-middleware');
 
       expect(analytics.addAlgoliaAgent).toHaveBeenCalledTimes(1);
       expect(analytics.addAlgoliaAgent).toHaveBeenCalledWith(
