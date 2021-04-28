@@ -135,7 +135,7 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
                 `
 Cannot send event to Algolia Insights because \`userToken\` is not set.
 
-See https://www.algolia.com/doc/guides/building-search-ui/going-further/send-insights-events/js/#setting-the-usertoken
+See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-further/send-insights-events/js/#setting-the-usertoken
 `
               );
             }
