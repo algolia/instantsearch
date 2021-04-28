@@ -50,9 +50,9 @@ export type InsightsAddAlgoliaAgent = (
 export type InsightsClient = InsightsAddAlgoliaAgent &
   InsightsSendEvent &
   InsightsOnUserTokenChange &
-  InsightsGetUserToken &
   InsightsInit &
-  InsightsSetUserToken & {
+  InsightsSetUserToken &
+  InsightsGetUserToken & {
     queue?: Array<[string, any]>;
   };
 

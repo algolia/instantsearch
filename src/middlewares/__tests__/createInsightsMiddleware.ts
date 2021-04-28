@@ -103,9 +103,8 @@ describe('insights', () => {
       });
     });
 
-    it('does not throw when an event is sent right after the creation in UMD', () => {
+    it('does not throw without userToken in UMD with the library loaded after the event', () => {
       const {
-        analytics,
         insightsClient,
         libraryLoadedAndProcessQueue,
         instantSearchInstance,
@@ -113,6 +112,7 @@ describe('insights', () => {
 
       const middleware = createInsightsMiddleware({
         insightsClient,
+        insightsInitParams: { useCookie: false },
       })({ instantSearchInstance });
       middleware.subscribe();
 
@@ -127,22 +127,98 @@ describe('insights', () => {
         },
         widgetType: 'ais.hits',
       });
-      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
-
-      // But, the library hasn't been loaded yet, so the event stays in the queue.
-      expect(insightsClient.queue[insightsClient.queue.length - 1]).toEqual([
-        'viewedObjectIDs',
-        { eventName: 'Hits Viewed', index: '', objectIDs: ['1', '2'] },
-      ]);
 
       // When the library is loaded later, it consumes the queue and sends the event.
+      expect(() => {
+        libraryLoadedAndProcessQueue();
+      }).not.toThrow(
+        "Before calling any methods on the analytics, you first need to call 'setUserToken' function or include 'userToken' in the event payload."
+      );
+    });
+
+    it('does not throw without userToken in UMD with the library loaded before the event', () => {
+      const {
+        insightsClient,
+        libraryLoadedAndProcessQueue,
+        instantSearchInstance,
+      } = createUmdTestEnvironment();
+
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+        insightsInitParams: { useCookie: false },
+      })({ instantSearchInstance });
+      middleware.subscribe();
+
       libraryLoadedAndProcessQueue();
-      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
-      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith({
-        eventName: 'Hits Viewed',
-        index: '',
-        objectIDs: ['1', '2'],
-      });
+
+      expect(() => {
+        // It tries to send an event.
+        instantSearchInstance.sendEventToInsights({
+          eventType: 'view',
+          insightsMethod: 'viewedObjectIDs',
+          payload: {
+            eventName: 'Hits Viewed',
+            index: '',
+            objectIDs: ['1', '2'],
+          },
+          widgetType: 'ais.hits',
+        });
+      }).not.toThrow(
+        "Before calling any methods on the analytics, you first need to call 'setUserToken' function or include 'userToken' in the event payload."
+      );
+    });
+
+    it('does not throw without userToken in CJS', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+        insightsInitParams: { useCookie: false },
+      })({ instantSearchInstance });
+      middleware.subscribe();
+
+      expect(() => {
+        // It tries to send an event.
+        instantSearchInstance.sendEventToInsights({
+          eventType: 'view',
+          insightsMethod: 'viewedObjectIDs',
+          payload: {
+            eventName: 'Hits Viewed',
+            index: '',
+            objectIDs: ['1', '2'],
+          },
+          widgetType: 'ais.hits',
+        });
+      }).not.toThrow(
+        "Before calling any methods on the analytics, you first need to call 'setUserToken' function or include 'userToken' in the event payload."
+      );
+    });
+
+    it('warns when userToken is not set', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+        insightsInitParams: { useCookie: false },
+      })({ instantSearchInstance });
+      middleware.subscribe();
+
+      expect(() =>
+        instantSearchInstance.sendEventToInsights({
+          eventType: 'view',
+          insightsMethod: 'viewedObjectIDs',
+          payload: {
+            eventName: 'Hits Viewed',
+            index: '',
+            objectIDs: ['1', '2'],
+          },
+          widgetType: 'ais.hits',
+        })
+      ).toWarnDev(
+        `[InstantSearch.js]: Cannot send event to Algolia Insights because \`userToken\` is not set.
+
+See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-further/send-insights-events/js/#setting-the-usertoken`
+      );
     });
 
     it('applies clickAnalytics', () => {
