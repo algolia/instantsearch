@@ -215,7 +215,9 @@ describe('insights', () => {
           widgetType: 'ais.hits',
         })
       ).toWarnDev(
-        '[InstantSearch.js]: Cannot send event to Algolia Insights because `userToken` is not set.'
+        `[InstantSearch.js]: Cannot send event to Algolia Insights because \`userToken\` is not set.
+
+See https://www.algolia.com/doc/guides/building-search-ui/going-further/send-insights-events/js/#setting-the-usertoken`
       );
     });
 
