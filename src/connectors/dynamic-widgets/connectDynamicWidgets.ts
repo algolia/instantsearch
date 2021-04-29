@@ -27,7 +27,9 @@ export type DynamicWidgetsConnectorParams = {
 export type DynamicWidgetsWidgetDescription = {
   $$type: 'ais.dynamicWidgets';
   renderState: DynamicWidgetsRenderState;
-  indexRenderState: Record<string, unknown>;
+  indexRenderState: {
+    dynamicWidgets: DynamicWidgetsRenderState;
+  };
 };
 
 export type DynamicWidgetsConnector = Connector<
@@ -127,8 +129,11 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
 
         unmountFn();
       },
-      getRenderState(renderState) {
-        return renderState;
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          dynamicWidgets: this.getWidgetRenderState(renderOptions),
+        };
       },
       getWidgetRenderState({ results }) {
         if (!results) {

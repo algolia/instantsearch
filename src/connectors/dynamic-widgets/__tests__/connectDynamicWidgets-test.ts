@@ -6,7 +6,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { runAllMacroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
@@ -225,7 +225,7 @@ describe('connectDynamicWidgets', () => {
 
         dynamicWidgets.render!(createRenderOptions({ parent }));
 
-        await runAllMacroTasks();
+        await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
           Array [
@@ -273,7 +273,7 @@ describe('connectDynamicWidgets', () => {
 
         dynamicWidgets.render!(createRenderOptions({ parent }));
 
-        await runAllMacroTasks();
+        await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
           Array [
@@ -334,7 +334,7 @@ describe('connectDynamicWidgets', () => {
           })
         );
 
-        await runAllMacroTasks();
+        await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
           Array [
@@ -357,7 +357,7 @@ describe('connectDynamicWidgets', () => {
           })
         );
 
-        await runAllMacroTasks();
+        await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
           Array [
@@ -383,7 +383,7 @@ describe('connectDynamicWidgets', () => {
           })
         );
 
-        await runAllMacroTasks();
+        await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
           Array [
@@ -466,7 +466,7 @@ describe('connectDynamicWidgets', () => {
 
       parent.removeWidgets([dynamicWidgets]);
 
-      await runAllMacroTasks();
+      await wait(0);
 
       expect(parent.getWidgets()).toMatchInlineSnapshot(`Array []`);
     });
@@ -556,7 +556,7 @@ describe('connectDynamicWidgets', () => {
   });
 
   describe('getRenderState', () => {
-    it('returns the given render state', () => {
+    it('returns the render state for init', () => {
       const renderFn = jest.fn();
       const widgetParams = {
         transformItems() {
@@ -575,7 +575,42 @@ describe('connectDynamicWidgets', () => {
 
       expect(
         dynamicWidgets.getRenderState(existingRenderState, createInitOptions())
-      ).toEqual(existingRenderState);
+      ).toEqual({
+        dynamicWidgets: {
+          attributesToRender: [],
+          widgetParams,
+        },
+      });
+    });
+
+    it('returns the render state for render', () => {
+      const renderFn = jest.fn();
+      const widgetParams = {
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      };
+      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(renderFn)(
+        widgetParams
+      );
+
+      const existingRenderState = {};
+
+      expect(
+        dynamicWidgets.getRenderState(
+          existingRenderState,
+          createRenderOptions()
+        )
+      ).toEqual({
+        dynamicWidgets: {
+          attributesToRender: ['test1'],
+          widgetParams,
+        },
+      });
     });
   });
 });
