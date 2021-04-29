@@ -99,7 +99,12 @@ export type HitsTemplates = {
    *
    * @default ''
    */
-  item?: TemplateWithBindEvent<Hit>;
+  item?: TemplateWithBindEvent<
+    Hit & {
+      // @deprecated the index in the hits array, use __position instead, which is the absolute position
+      __hitIndex: number;
+    }
+  >;
 };
 
 export type HitsWidgetParams = {
