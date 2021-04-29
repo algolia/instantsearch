@@ -41,10 +41,15 @@ describe('connectDynamicWidgets', () => {
 
     it('correct usage', () => {
       expect(() =>
+        // @ts-expect-error
         EXPERIMENTAL_connectDynamicWidgets(() => {})({
           widgets: [],
         })
-      ).not.toThrow();
+      ).toThrowErrorMatchingInlineSnapshot(`
+        "the \`transformItems\` option is required to be a function.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+      `);
     });
 
     it('transformItems', () => {
@@ -64,6 +69,9 @@ describe('connectDynamicWidgets', () => {
       it('calls the render function', () => {
         const renderFn = jest.fn();
         const widgetParams = {
+          transformItems() {
+            return ['test1'];
+          },
           widgets: [
             connectMenu(() => {})({ attribute: 'test1' }),
             connectHierarchicalMenu(() => {})({
@@ -95,6 +103,9 @@ describe('connectDynamicWidgets', () => {
     describe('widgets', () => {
       it('adds all widgets to the parent', () => {
         const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
+          transformItems() {
+            return [];
+          },
           widgets: [
             connectMenu(() => {})({ attribute: 'test1' }),
             connectHierarchicalMenu(() => {})({
@@ -135,6 +146,9 @@ describe('connectDynamicWidgets', () => {
       it('calls the render function', () => {
         const renderFn = jest.fn();
         const widgetParams = {
+          transformItems() {
+            return [];
+          },
           widgets: [
             connectMenu(() => {})({ attribute: 'test1' }),
             connectHierarchicalMenu(() => {})({
@@ -189,8 +203,11 @@ describe('connectDynamicWidgets', () => {
     });
 
     describe('widgets', () => {
-      it('removes all widgets by default', async () => {
+      it('removes all widgets if transformItems says so', async () => {
         const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
+          transformItems() {
+            return [];
+          },
           widgets: [
             connectMenu(() => {})({ attribute: 'test1' }),
             connectHierarchicalMenu(() => {})({
@@ -513,8 +530,11 @@ describe('connectDynamicWidgets', () => {
       });
     });
 
-    it('returns widgetParams and empty attributes on render', () => {
+    it('returns widgetParams and the result of transformItems render (empty)', () => {
       const widgetParams = {
+        transformItems() {
+          return [];
+        },
         widgets: [
           connectMenu(() => {})({ attribute: 'test1' }),
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),

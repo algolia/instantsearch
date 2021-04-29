@@ -51,10 +51,25 @@ describe('dynamicWidgets()', () => {
       `);
     });
 
+    test('transformItems is required', () => {
+      expect(() =>
+        // @ts-expect-error
+        EXPERIMENTAL_dynamicWidgets({
+          container: document.createElement('div'),
+          widgets: [],
+        })
+      ).toThrowErrorMatchingInlineSnapshot(`
+        "the \`transformItems\` option is required to be a function.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+      `);
+    });
+
     test('correct usage', () => {
       expect(() =>
         EXPERIMENTAL_dynamicWidgets({
           container: document.createElement('div'),
+          transformItems: items => items,
           widgets: [],
         })
       ).not.toThrowError();
@@ -67,6 +82,7 @@ describe('dynamicWidgets()', () => {
 
       const widget = EXPERIMENTAL_dynamicWidgets({
         container: rootContainer,
+        transformItems: items => items,
         widgets: [
           container =>
             menu({

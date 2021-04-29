@@ -18,7 +18,7 @@ export type DynamicWidgetsRenderState = {
 
 export type DynamicWidgetsConnectorParams = {
   widgets: Widget[];
-  transformItems?(
+  transformItems(
     items: string[],
     metadata: { results: SearchResults }
   ): string[];
@@ -44,7 +44,24 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { widgets, transformItems = items => items } = widgetParams;
+    const { widgets, transformItems } = widgetParams;
+
+    if (
+      !widgets ||
+      !Array.isArray(widgets) ||
+      widgets.some(widget => typeof widget !== 'object')
+    ) {
+      throw new Error(
+        withUsage('The `widgets` option expects an array of widgets.')
+      );
+    }
+
+    // @TODO once the attributes are computed from the results, make this optional
+    if (typeof transformItems !== 'function') {
+      throw new Error(
+        withUsage('the `transformItems` option is required to be a function.')
+      );
+    }
 
     if (
       !widgets ||
