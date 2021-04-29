@@ -1,9 +1,12 @@
+/* global google EventListener */
+
 import {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
   GeoHit,
 } from '../../connectors/geo-search/types';
 import { GeoLoc, Template, WidgetFactory } from '../../types';
+import { HTMLMarkerArguments } from './createHTMLMarker';
 
 export type GeoSearchTemplates = {
   HTMLMarker: Template<GeoHit>;
@@ -33,18 +36,24 @@ export type GeoSearchCSSClasses = {
   reset: string | string[];
 };
 
+export type GeoSearchMarker<TOptions> = {
+  createOptions?(item: GeoHit): TOptions;
+  events: {
+    [key: string]: EventListener;
+  };
+};
+
 export type GeoSearchWidgetParams = {
   initialZoom?: number;
   initialPosition?: GeoLoc;
   templates?: Partial<GeoSearchTemplates>;
   cssClasses?: Partial<GeoSearchCSSClasses>;
-  builtInMarker?: Record<string, unknown>;
-  customHTMLMarker?: any;
+  builtInMarker?: GeoSearchMarker<google.maps.MarkerOptions>;
+  customHTMLMarker?: GeoSearchMarker<HTMLMarkerArguments>;
   enableRefine?: boolean;
   enableClearMapRefinement?: boolean;
   enableRefineControl?: boolean;
   container: string | HTMLElement;
-  // eslint-disable-next-line no-undef
   googleReference: typeof google;
 };
 
