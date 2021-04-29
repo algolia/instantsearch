@@ -24,9 +24,9 @@ module.exports = {
     '@typescript-eslint/naming-convention': [
       'error',
       {
-        "selector": "variable",
-        "modifiers": ["destructured"],
-        "format": null
+        selector: 'variable',
+        modifiers: ['destructured'],
+        format: null,
       },
       {
         selector: 'variable',
@@ -57,6 +57,8 @@ module.exports = {
       files: ['*.ts', '*.tsx'],
       rules: {
         'valid-jsdoc': 'off',
+        'no-redeclare': 'off',
+        '@typescript-eslint/no-redeclare': ['error'],
       },
     },
     {
