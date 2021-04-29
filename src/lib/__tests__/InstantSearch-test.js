@@ -2015,6 +2015,16 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
   });
 });
 
+describe('getUiState', () => {
+  test.todo('retrieves empty ui state without widgets');
+
+  test.todo('retrieves the ui state without refinements');
+
+  test.todo('retrieves the correct ui state after one refinement');
+
+  test.todo('retrieves the correct ui state after multiple refinements');
+});
+
 describe('onStateChange', () => {
   test('does not trigger an internal state change', () => {
     const searchClient = createSearchClient();
