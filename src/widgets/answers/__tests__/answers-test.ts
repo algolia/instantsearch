@@ -4,10 +4,8 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import { fireEvent } from '@testing-library/preact';
 import instantsearch from '../../../index.es';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import {
-  runAllMacroTasks,
-  runAllMicroTasks,
-} from '../../../../test/utils/runAllMicroTasks';
+import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 import answers from '../answers';
 import searchBox from '../../search-box/search-box';
 
@@ -148,7 +146,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       );
       expect(answersContainer.querySelector('.root')).toHaveClass('empty');
 
-      await runAllMacroTasks(30);
+      await wait(30);
 
       // debounced render
       expect(answersContainer.querySelector('.root')).not.toHaveClass('empty');

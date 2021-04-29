@@ -1,4 +1,4 @@
-import { runAllMacroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 import { debounce } from '../debounce';
 
 describe('debounce', () => {
@@ -8,7 +8,7 @@ describe('debounce', () => {
     debouncedFunction('a');
     debouncedFunction('b');
 
-    await runAllMacroTasks(100);
+    await wait(100);
 
     expect(originalFunction).toHaveBeenCalledTimes(1);
     expect(originalFunction).toHaveBeenLastCalledWith('b');
@@ -24,7 +24,7 @@ describe('debounce', () => {
       debouncedFunction('b');
     }, 100);
 
-    await runAllMacroTasks(250);
+    await wait(250);
 
     expect(originalFunction).toHaveBeenCalledTimes(2);
     expect(originalFunction).toHaveBeenLastCalledWith('b');
