@@ -597,8 +597,11 @@ See ${createDocumentationLink({
   }
 
   public getUiState(): UiState {
-    // We refresh the index UI state to make sure changes from `refine` are taken in account
-    this.mainIndex.refreshUiState();
+    if (this.started) {
+      // We refresh the index UI state to make sure changes from `refine` are taken in account
+      this.mainIndex.refreshUiState();
+    }
+
     return this.mainIndex.getWidgetUiState({});
   }
 
