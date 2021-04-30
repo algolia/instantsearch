@@ -24,8 +24,8 @@ function parseItem(value) {
   }
   const [startStr, endStr] = value.split(':');
   return {
-    start: startStr.length > 0 ? parseInt(startStr, 10) : null,
-    end: endStr.length > 0 ? parseInt(endStr, 10) : null,
+    start: startStr.length > 0 ? parseFloat(startStr) : null,
+    end: endStr.length > 0 ? parseFloat(endStr) : null,
   };
 }
 

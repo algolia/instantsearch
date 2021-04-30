@@ -25,6 +25,7 @@ describe('connectNumericMenu', () => {
         {},
         { results }
       );
+
       expect(props).toEqual({
         items: [
           { label: 'All', value: '', isRefined: true, noRefinement: false },
@@ -112,6 +113,37 @@ describe('connectNumericMenu', () => {
           {
             label: 'Maybe ok?',
             value: '100:200',
+            isRefined: false,
+            noRefinement: false,
+          },
+          { label: 'All', value: '', isRefined: true, noRefinement: false },
+        ],
+        currentRefinement: '',
+        canRefine: true,
+      });
+
+      props = connect.getProvidedProps(
+        {
+          items: [
+            { label: 'is 0', start: 0, end: 0 },
+            { label: 'in 0..0.5', start: 0, end: 0.5 },
+          ],
+          contextValue,
+        },
+        {},
+        { results }
+      );
+      expect(props).toEqual({
+        items: [
+          {
+            label: 'is 0',
+            value: '0:0',
+            isRefined: false,
+            noRefinement: false,
+          },
+          {
+            label: 'in 0..0.5',
+            value: '0:0.5',
             isRefined: false,
             noRefinement: false,
           },
@@ -337,6 +369,16 @@ describe('connectNumericMenu', () => {
       expect(params.getNumericRefinements('facet')).toEqual({
         '>=': [0],
         '<=': [0],
+      });
+
+      params = connect.getSearchParameters(
+        initSP,
+        { attribute: 'facet', contextValue },
+        { multiRange: { facet: '0:0.5' } }
+      );
+      expect(params.getNumericRefinements('facet')).toEqual({
+        '>=': [0],
+        '<=': [0.5],
       });
     });
 
