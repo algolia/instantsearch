@@ -3,14 +3,14 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Connector } from '../../types';
+import { Connector, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'powered-by',
   connector: true,
 });
 
-export type PoweredByRendererOptions = {
+export type PoweredByRenderState = {
   /** the url to redirect to on click */
   url: string;
 };
@@ -20,8 +20,19 @@ export type PoweredByConnectorParams = {
   url?: string;
 };
 
+export type PoweredByWidgetDescription = {
+  $$type: 'ais.poweredBy';
+  renderState: PoweredByRenderState;
+  indexRenderState: {
+    poweredBy: WidgetRenderState<
+      PoweredByRenderState,
+      PoweredByConnectorParams
+    >;
+  };
+};
+
 export type PoweredByConnector = Connector<
-  PoweredByRendererOptions,
+  PoweredByWidgetDescription,
   PoweredByConnectorParams
 >;
 

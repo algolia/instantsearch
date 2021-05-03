@@ -1,8 +1,15 @@
 import {
   AlgoliaSearchHelper as Helper,
+  PlainSearchParameters,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { Hits, Connector, TransformItems, Hit } from '../../types';
+import {
+  Hits,
+  Connector,
+  TransformItems,
+  Hit,
+  WidgetRenderState,
+} from '../../types';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -70,7 +77,7 @@ export type InfiniteHitsConnectorParams = {
   cache?: InfiniteHitsCache;
 };
 
-export type InfiniteHitsRendererOptions = {
+export type InfiniteHitsRenderState = {
   /**
    * Loads the previous results.
    */
@@ -112,19 +119,33 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type InfiniteHitsWidgetDescription = {
+  $$type: 'ais.infiniteHits';
+  renderState: InfiniteHitsRenderState;
+  indexRenderState: {
+    infiniteHits: WidgetRenderState<
+      InfiniteHitsRenderState,
+      InfiniteHitsConnectorParams
+    >;
+  };
+  indexUiState: {
+    page: number;
+  };
+};
+
 export type InfiniteHitsConnector = Connector<
-  InfiniteHitsRendererOptions,
+  InfiniteHitsWidgetDescription,
   InfiniteHitsConnectorParams
 >;
 
-function getStateWithoutPage(state) {
+function getStateWithoutPage(state: PlainSearchParameters) {
   const { page, ...rest } = state || {};
   return rest;
 }
 
 function getInMemoryCache(): InfiniteHitsCache {
   let cachedHits: InfiniteHitsCachedHits | null = null;
-  let cachedState = undefined;
+  let cachedState: PlainSearchParameters | null = null;
   return {
     read({ state }) {
       return isEqual(cachedState, getStateWithoutPage(state))

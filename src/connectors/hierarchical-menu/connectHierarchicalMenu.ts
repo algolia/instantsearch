@@ -15,6 +15,7 @@ import {
   RenderOptions,
   Widget,
   SortBy,
+  WidgetRenderState,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -86,7 +87,7 @@ export type HierarchicalMenuConnectorParams = {
   transformItems?: TransformItems<HierarchicalMenuItem>;
 };
 
-export type HierarchicalMenuRendererOptions = {
+export type HierarchicalMenuRenderState = {
   /**
    * Creates an url for the next state for a clicked item.
    */
@@ -122,6 +123,29 @@ export type HierarchicalMenuRendererOptions = {
   sendEvent: SendEventForFacet;
 };
 
+export type HierarchicalMenuWidgetDescription = {
+  $$type: 'ais.hierarchicalMenu';
+  renderState: HierarchicalMenuRenderState;
+  indexRenderState: {
+    hierarchicalMenu: {
+      [rootAttribute: string]: WidgetRenderState<
+        HierarchicalMenuRenderState,
+        HierarchicalMenuConnectorParams
+      >;
+    };
+  };
+  indexUiState: {
+    hierarchicalMenu: {
+      [rootAttribute: string]: string[];
+    };
+  };
+};
+
+export type HierarchicalMenuConnector = Connector<
+  HierarchicalMenuWidgetDescription,
+  HierarchicalMenuConnectorParams
+>;
+
 /**
  * **HierarchicalMenu** connector provides the logic to build a custom widget
  * that will give the user the ability to explore facets in a tree-like structure.
@@ -135,12 +159,7 @@ export type HierarchicalMenuRendererOptions = {
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetParams)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
-export type ConnectHierarchicalMenu = Connector<
-  HierarchicalMenuRendererOptions,
-  HierarchicalMenuConnectorParams
->;
-
-const connectHierarchicalMenu: ConnectHierarchicalMenu = function connectHierarchicalMenu(
+const connectHierarchicalMenu: HierarchicalMenuConnector = function connectHierarchicalMenu(
   renderFn,
   unmountFn = noop
 ) {
@@ -171,11 +190,15 @@ const connectHierarchicalMenu: ConnectHierarchicalMenu = function connectHierarc
       );
     }
 
+    type ThisWidget = Widget<
+      HierarchicalMenuWidgetDescription & { widgetParams: typeof widgetParams }
+    >;
+
     // we need to provide a hierarchicalFacet name for the search state
     // so that we can always map $hierarchicalFacetName => real attributes
     // we use the first attribute name
     const [hierarchicalFacetName] = attributes;
-    let sendEvent: HierarchicalMenuRendererOptions['sendEvent'];
+    let sendEvent: HierarchicalMenuRenderState['sendEvent'];
 
     // Provide the same function to the `renderFn` so that way the user
     // has to only bind it once when `isFirstRendering` for instance
@@ -184,13 +207,13 @@ const connectHierarchicalMenu: ConnectHierarchicalMenu = function connectHierarc
       toggleShowMore();
     }
 
-    let _refine: HierarchicalMenuRendererOptions['refine'] | undefined;
+    let _refine: HierarchicalMenuRenderState['refine'] | undefined;
 
     let isShowingMore = false;
 
     function createToggleShowMore(
       renderOptions: RenderOptions,
-      widget: Widget
+      widget: ThisWidget
     ) {
       return () => {
         isShowingMore = !isShowingMore;
@@ -280,7 +303,7 @@ const connectHierarchicalMenu: ConnectHierarchicalMenu = function connectHierarc
         instantSearchInstance,
         helper,
       }) {
-        let items: HierarchicalMenuRendererOptions['items'] = [];
+        let items: HierarchicalMenuRenderState['items'] = [];
         let canToggleShowMore = false;
 
         // Bind createURL to this specific attribute

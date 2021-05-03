@@ -2,7 +2,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { Connector, TransformItems } from '../../types';
+import { Connector, TransformItems, WidgetRenderState } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -32,7 +32,7 @@ export type QueryRulesConnectorParams = {
   transformItems?: ParamTransformItems;
 };
 
-export type QueryRulesRendererOptions = {
+export type QueryRulesRenderState = {
   items: any[];
 };
 
@@ -146,8 +146,19 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
   }
 }
 
+export type QueryRulesWidgetDescription = {
+  $$type: 'ais.queryRules';
+  renderState: QueryRulesRenderState;
+  indexRenderState: {
+    queryRules: WidgetRenderState<
+      QueryRulesRenderState,
+      QueryRulesConnectorParams
+    >;
+  };
+};
+
 export type QueryRulesConnector = Connector<
-  QueryRulesRendererOptions,
+  QueryRulesWidgetDescription,
   QueryRulesConnectorParams
 >;
 

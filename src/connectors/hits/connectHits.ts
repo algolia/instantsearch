@@ -11,7 +11,14 @@ import {
   BindEventForHits,
   noop,
 } from '../../lib/utils';
-import { TransformItems, Connector, Hits, Hit, AlgoliaHit } from '../../types';
+import {
+  TransformItems,
+  Connector,
+  Hits,
+  Hit,
+  AlgoliaHit,
+  WidgetRenderState,
+} from '../../types';
 import { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -19,7 +26,7 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type HitsRendererOptions = {
+export type HitsRenderState = {
   /**
    * The matched hits from Algolia API.
    */
@@ -55,7 +62,18 @@ export type HitsConnectorParams = {
   transformItems?: TransformItems<Hit>;
 };
 
-export type HitsConnector = Connector<HitsRendererOptions, HitsConnectorParams>;
+export type HitsWidgetDescription = {
+  $$type: 'ais.hits';
+  renderState: HitsRenderState;
+  indexRenderState: {
+    hits: WidgetRenderState<HitsRenderState, HitsConnectorParams>;
+  };
+};
+
+export type HitsConnector = Connector<
+  HitsWidgetDescription,
+  HitsConnectorParams
+>;
 
 const connectHits: HitsConnector = function connectHits(
   renderFn,

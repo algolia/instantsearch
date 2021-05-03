@@ -8,7 +8,7 @@ import { Widget, WidgetDescription } from './widget';
  * The base renderer options. All render functions receive
  * the options below plus the specific options per connector.
  */
-export type RenderState<TWidgetParams> = {
+export type RendererOptions<TWidgetParams> = {
   /**
    * The original widget params. Useful as you may
    * need them while using the render function.
@@ -44,7 +44,7 @@ export type Renderer<TRenderState, TWidgetParams> = (
   /**
    * The base render options plus the specific options of the widget.
    */
-  renderState: TRenderState & RenderState<TWidgetParams>,
+  renderState: TRenderState & RendererOptions<TWidgetParams>,
 
   /**
    * If is the first run.

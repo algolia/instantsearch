@@ -10,14 +10,14 @@ import {
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectAutocomplete, {
-  AutocompleteRendererOptions,
+  AutocompleteRenderState,
 } from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import { SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = jest.fn<any, [AutocompleteRendererOptions, boolean]>();
+    const renderFn = jest.fn<any, [AutocompleteRenderState, boolean]>();
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget({
       ...config,

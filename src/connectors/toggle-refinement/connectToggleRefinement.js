@@ -218,7 +218,10 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          toggleRefinement: this.getWidgetRenderState(renderOptions),
+          toggleRefinement: {
+            ...renderState.toggleRefinement,
+            [attribute]: this.getWidgetRenderState(renderOptions),
+          },
         };
       },
 
@@ -303,7 +306,6 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             onFacetValue,
             offFacetValue,
           },
-          state,
           createURL: connectorState.createURLFactory(isRefined, {
             state,
             createURL,

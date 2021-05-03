@@ -6,7 +6,12 @@ import {
   convertNumericRefinementsToFilters,
   noop,
 } from '../../lib/utils';
-import { Connector, CreateURL, TransformItems } from '../../types';
+import {
+  Connector,
+  CreateURL,
+  TransformItems,
+  WidgetRenderState,
+} from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
 import { InsightsEvent } from '../../middlewares';
 
@@ -32,7 +37,7 @@ export type NumericMenuConnectorParamsItem = {
   end?: number;
 };
 
-export type NumericMenuRendererOptionsItem = {
+export type NumericMenuRenderStateItem = {
   /**
    *  Name of the option.
    */
@@ -66,19 +71,19 @@ export type NumericMenuConnectorParams = {
   /**
    * Function to transform the items passed to the templates
    */
-  transformItems?: TransformItems<NumericMenuRendererOptionsItem>;
+  transformItems?: TransformItems<NumericMenuRenderStateItem>;
 };
 
-export type NumericMenuRendererOptions = {
+export type NumericMenuRenderState = {
   /**
    * The list of available choices
    */
-  items: NumericMenuRendererOptionsItem[];
+  items: NumericMenuRenderStateItem[];
 
   /**
    * Creates URLs for the next state, the string is the name of the selected option
    */
-  createURL: CreateURL<NumericMenuRendererOptionsItem['value']>;
+  createURL: CreateURL<NumericMenuRenderStateItem['value']>;
 
   /**
    * `true` if the last search contains no result
@@ -96,8 +101,27 @@ export type NumericMenuRendererOptions = {
   sendEvent: SendEventForFacet;
 };
 
+export type NumericMenuWidgetDescription = {
+  $$type: 'ais.numericMenu';
+  renderState: NumericMenuRenderState;
+  indexRenderState: {
+    numericMenu: {
+      [attribute: string]: WidgetRenderState<
+        NumericMenuRenderState,
+        NumericMenuConnectorParams
+      >;
+    };
+  };
+  indexUiState: {
+    numericMenu: {
+      // @TODO: this could possibly become `${number}:${number}` later
+      [attribute: string]: string;
+    };
+  };
+};
+
 export type NumericMenuConnector = Connector<
-  NumericMenuRendererOptions,
+  NumericMenuWidgetDescription,
   NumericMenuConnectorParams
 >;
 
@@ -148,9 +172,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     const {
       attribute = '',
       items = [],
-      transformItems = (x => x) as TransformItems<
-        NumericMenuRendererOptionsItem
-      >,
+      transformItems = (x => x) as TransformItems<NumericMenuRenderStateItem>,
     } = widgetParams || {};
 
     if (attribute === '') {

@@ -4,7 +4,7 @@ import {
   noop,
 } from '../../lib/utils';
 import Paginator from './Paginator';
-import { Connector } from '../../types';
+import { Connector, WidgetRenderState } from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -25,7 +25,7 @@ export type PaginationConnectorParams = {
   padding?: number;
 };
 
-export type PaginationRendererOptions = {
+export type PaginationRenderState = {
   /** Creates URLs for the next state, the number is the page to generate the URL for. */
   createURL(page: number): string;
 
@@ -54,8 +54,22 @@ export type PaginationRendererOptions = {
   isLastPage: boolean;
 };
 
-type ConnectPagination = Connector<
-  PaginationRendererOptions,
+export type PaginationWidgetDescription = {
+  $$type: 'ais.pagination';
+  renderState: PaginationRenderState;
+  indexRenderState: {
+    pagination: WidgetRenderState<
+      PaginationRenderState,
+      PaginationConnectorParams
+    >;
+  };
+  indexUiState: {
+    page: number;
+  };
+};
+
+type PaginationConnector = Connector<
+  PaginationWidgetDescription,
   PaginationConnectorParams
 >;
 
@@ -66,7 +80,7 @@ type ConnectPagination = Connector<
  * When using the pagination with Algolia, you should be aware that the engine won't provide you pages
  * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
  */
-const connectPagination: ConnectPagination = function connectPagination(
+const connectPagination: PaginationConnector = function connectPagination(
   renderFn,
   unmountFn = noop
 ) {

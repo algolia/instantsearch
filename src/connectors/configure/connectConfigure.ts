@@ -3,7 +3,7 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
-import { Connector } from '../../types';
+import { Connector, WidgetRenderState } from '../../types';
 import {
   createDocumentationMessageGenerator,
   isPlainObject,
@@ -24,7 +24,7 @@ export type ConfigureConnectorParams = {
   searchParameters: PlainSearchParameters;
 };
 
-export type ConfigureRendererOptions = {
+export type ConfigureRenderState = {
   /**
    * Refine the given search parameters.
    */
@@ -54,8 +54,22 @@ function getInitialSearchParameters(
   );
 }
 
+export type ConfigureWidgetDescription = {
+  $$type: 'ais.configure';
+  renderState: ConfigureRenderState;
+  indexRenderState: {
+    configure: WidgetRenderState<
+      ConfigureRenderState,
+      ConfigureConnectorParams
+    >;
+  };
+  indexUiState: {
+    configure: PlainSearchParameters;
+  };
+};
+
 export type ConfigureConnector = Connector<
-  ConfigureRendererOptions,
+  ConfigureWidgetDescription,
   ConfigureConnectorParams
 >;
 

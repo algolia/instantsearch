@@ -155,7 +155,12 @@ type WidgetType<
   TWidgetDescription extends WidgetDescription
 > = TWidgetDescription extends RequiredKeys<WidgetDescription, '$$widgetType'>
   ? RequiredWidgetType<TWidgetDescription>
-  : Partial<RequiredWidgetType<TWidgetDescription>>;
+  : {
+      /**
+       * Identifier for widgets.
+       */
+      $$widgetType?: string;
+    };
 
 type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**

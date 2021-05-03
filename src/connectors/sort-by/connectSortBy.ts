@@ -5,7 +5,7 @@ import {
   warning,
   noop,
 } from '../../lib/utils';
-import { Connector, TransformItems } from '../../types';
+import { Connector, TransformItems, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'sort-by',
@@ -40,7 +40,7 @@ export type SortByConnectorParams = {
   transformItems?: TransformItems<SortByItem>;
 };
 
-export type SortByRendererOptions = {
+export type SortByRenderState = {
   /**
    * The initially selected index.
    */
@@ -63,8 +63,19 @@ export type SortByRendererOptions = {
   hasNoResults: boolean;
 };
 
+export type SortByWidgetDescription = {
+  $$type: 'ais.sortBy';
+  renderState: SortByRenderState;
+  indexRenderState: {
+    sortBy: WidgetRenderState<SortByRenderState, SortByConnectorParams>;
+  };
+  indexUiState: {
+    sortBy: string;
+  };
+};
+
 export type SortByConnector = Connector<
-  SortByRendererOptions,
+  SortByWidgetDescription,
   SortByConnectorParams
 >;
 

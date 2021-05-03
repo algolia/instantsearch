@@ -7,11 +7,11 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 
-import connectStats, { StatsRendererOptions } from '../connectStats';
+import connectStats, { StatsRenderState } from '../connectStats';
 
 describe('connectStats', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = jest.fn<any, [StatsRendererOptions, boolean]>();
+    const renderFn = jest.fn<any, [StatsRenderState, boolean]>();
     const makeWidget = connectStats(renderFn);
     const widget = makeWidget({
       ...config,

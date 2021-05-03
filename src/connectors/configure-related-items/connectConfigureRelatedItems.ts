@@ -10,7 +10,7 @@ import {
   getPropertyByPath,
 } from '../../lib/utils';
 import connectConfigure, {
-  ConfigureRendererOptions,
+  ConfigureWidgetDescription,
 } from '../configure/connectConfigure';
 
 export type MatchingPatterns = {
@@ -57,8 +57,12 @@ function createOptionalFilter({
   return `${attributeName}:${attributeValue}<score=${attributeScore || 1}>`;
 }
 
+export type ConfigureRelatedItemsWidgetDescription = {
+  $$type: 'ais.configureRelatedItems';
+} & Omit<ConfigureWidgetDescription, '$$type'>;
+
 export type ConfigureRelatedItemsConnector = Connector<
-  ConfigureRendererOptions,
+  ConfigureRelatedItemsWidgetDescription,
   ConfigureRelatedItemsConnectorParams
 >;
 
