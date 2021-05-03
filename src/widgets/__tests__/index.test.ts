@@ -124,6 +124,9 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
       case 'EXPERIMENTAL_dynamicWidgets': {
         const EXPERIMENTAL_dynamicWidgets = widget as Widgets['EXPERIMENTAL_dynamicWidgets'];
         return EXPERIMENTAL_dynamicWidgets({
+          transformItems(items) {
+            return items;
+          },
           container,
           widgets: [],
         });
