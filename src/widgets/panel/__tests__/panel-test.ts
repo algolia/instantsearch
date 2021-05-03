@@ -76,7 +76,7 @@ describe('Usage', () => {
   });
 
   test('with a widget without `container` throws', () => {
-    const fakeWidget = () => ({});
+    const fakeWidget = () => ({ $$type: 'mock.widget' });
     const fakeWithPanel = panel()(fakeWidget);
 
     expect(() => {
@@ -186,6 +186,7 @@ describe('Lifecycle', () => {
 
   test('calls the inner widget lifecycle', () => {
     const widget = {
+      $$type: 'mock.widget',
       init: jest.fn(),
       render: jest.fn(),
       dispose: jest.fn(),
@@ -210,6 +211,7 @@ describe('Lifecycle', () => {
       facets: ['brands'],
     });
     const widget = {
+      $$type: 'mock.widget',
       init: jest.fn(),
       dispose: jest.fn(() => nextSearchParameters),
     };
