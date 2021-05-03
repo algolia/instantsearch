@@ -1,5 +1,5 @@
 import { InstantSearch, InternalMiddleware, Widget } from '../types';
-import { Index } from '../widgets/index/index';
+import { IndexWidget } from '../widgets/index/index';
 
 type WidgetMetaData = {
   type: string | undefined;
@@ -13,7 +13,7 @@ type Payload = {
 };
 
 function extractPayload(
-  widgets: Array<Widget<{ renderState: any }>>,
+  widgets: Array<Widget | IndexWidget>,
   instantSearchInstance: InstantSearch,
   payload: Payload
 ) {
@@ -40,8 +40,8 @@ function extractPayload(
     if (widget.getWidgetRenderState) {
       const renderState = widget.getWidgetRenderState(initOptions);
 
-      if (renderState && renderState.widgetParams) {
-        widgetParams = renderState.widgetParams;
+      if (renderState && typeof renderState.widgetParams === 'object') {
+        widgetParams = renderState.widgetParams!;
       }
     }
 
@@ -58,7 +58,7 @@ function extractPayload(
 
     if (widget.$$type === 'ais.index') {
       extractPayload(
-        (widget as Index).getWidgets(),
+        (widget as IndexWidget).getWidgets(),
         instantSearchInstance,
         payload
       );
