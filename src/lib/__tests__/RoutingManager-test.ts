@@ -123,7 +123,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const widget = {
+      const widget = createWidget({
         render: jest.fn(),
         getWidgetUiState: jest.fn((uiState, { searchParameters }) => ({
           ...uiState,
@@ -132,7 +132,7 @@ describe('RoutingManager', () => {
         getWidgetSearchParameters: jest.fn(
           searchParameters => searchParameters
         ),
-      };
+      });
 
       search.addWidgets([widget]);
 
@@ -180,12 +180,12 @@ describe('RoutingManager', () => {
         },
       });
 
-      const widget = {
+      const widget = createWidget({
         render: jest.fn(),
         getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) =>
           searchParameters.setQuery(uiState.query)
         ),
-      };
+      });
 
       search.addWidgets([widget]);
 

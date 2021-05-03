@@ -1,21 +1,21 @@
-import { WidgetRenderState } from './render-state';
-import { Widget } from './widget';
+import { Widget, WidgetDescription } from './widget';
 
 /**
  * The function that creates a new widget.
  */
-export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
+export type WidgetFactory<
+  TWidgetDescription extends WidgetDescription,
+  TConnectorParams,
+  TWidgetParams
+> = (
   /**
    * The params of the widget.
    */
-  widgetParams: TConnectorParams & TWidgetParams
-) => Widget<{
-  renderState: WidgetRenderState<
-    TRendererOptions,
-    // widgetParams sent to the connector of builtin widgets are actually
-    // the connector params, therefore renderState uses TConnectorParams only
-    TConnectorParams
-  >;
-}>;
+  widgetParams: TWidgetParams & TConnectorParams
+) => Widget<
+  TWidgetDescription & {
+    widgetParams: TConnectorParams;
+  }
+>;
 
-export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
+export type UnknownWidgetFactory = WidgetFactory<{ $$type: string }, any, any>;
