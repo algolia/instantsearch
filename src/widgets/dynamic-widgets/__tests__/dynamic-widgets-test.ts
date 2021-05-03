@@ -6,7 +6,7 @@ import { index, searchBox, menu, EXPERIMENTAL_dynamicWidgets } from '../..';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { runAllMacroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
@@ -187,7 +187,7 @@ describe('dynamicWidgets()', () => {
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
-      await runAllMacroTasks();
+      await wait(0);
 
       expect(rootContainer).toMatchInlineSnapshot(`
         <div>
@@ -262,7 +262,7 @@ describe('dynamicWidgets()', () => {
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
-      await runAllMacroTasks();
+      await wait(0);
 
       expect(rootContainer).toMatchInlineSnapshot(`
         <div>
@@ -343,7 +343,7 @@ describe('dynamicWidgets()', () => {
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
-      await runAllMacroTasks();
+      await wait(0);
 
       expect(rootContainer).toMatchInlineSnapshot(`
         <div>
@@ -469,7 +469,7 @@ describe('dynamicWidgets()', () => {
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
-      await runAllMacroTasks();
+      await wait(0);
 
       expect(indexWidget.getWidgets()).toMatchInlineSnapshot(`
         Array [
@@ -547,7 +547,7 @@ describe('dynamicWidgets()', () => {
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
-      await runAllMacroTasks();
+      await wait(0);
 
       expect(rootContainer).toMatchInlineSnapshot(`
         <div>
