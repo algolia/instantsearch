@@ -3,101 +3,10 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
-  PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
-import { Hit, GeoLoc } from './results';
-import { BindEventForHits, SendEventForHits } from '../lib/utils';
-import {
-  AutocompleteRendererOptions,
-  AutocompleteConnectorParams,
-} from '../connectors/autocomplete/connectAutocomplete';
-import {
-  BreadcrumbRendererOptions,
-  BreadcrumbConnectorParams,
-} from '../connectors/breadcrumb/connectBreadcrumb';
-import {
-  ClearRefinementsRendererOptions,
-  ClearRefinementsConnectorParams,
-} from '../connectors/clear-refinements/connectClearRefinements';
-import {
-  ConfigureRendererOptions,
-  ConfigureConnectorParams,
-} from '../connectors/configure/connectConfigure';
-import {
-  CurrentRefinementsRendererOptions,
-  CurrentRefinementsConnectorParams,
-} from '../connectors/current-refinements/connectCurrentRefinements';
-import {
-  HitsPerPageConnectorParams,
-  HitsPerPageRendererOptions,
-} from '../connectors/hits-per-page/connectHitsPerPage';
-import {
-  HitsRendererOptions,
-  HitsConnectorParams,
-} from '../connectors/hits/connectHits';
-import {
-  InfiniteHitsRendererOptions,
-  InfiniteHitsConnectorParams,
-} from '../connectors/infinite-hits/connectInfiniteHits';
-import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
-import { PlacesWidgetParams } from '../widgets/places/places';
-import {
-  NumericMenuConnectorParams,
-  NumericMenuRendererOptions,
-} from '../connectors/numeric-menu/connectNumericMenu';
-import {
-  PoweredByConnectorParams,
-  PoweredByRendererOptions,
-} from '../connectors/powered-by/connectPoweredBy';
-import {
-  VoiceSearchRendererOptions,
-  VoiceSearchConnectorParams,
-} from '../connectors/voice-search/connectVoiceSearch';
-import {
-  QueryRulesRendererOptions,
-  QueryRulesConnectorParams,
-} from '../connectors/query-rules/connectQueryRules';
-import {
-  PaginationRendererOptions,
-  PaginationConnectorParams,
-} from '../connectors/pagination/connectPagination';
-import {
-  AnswersRendererOptions,
-  AnswersConnectorParams,
-} from '../connectors/answers/connectAnswers';
-import {
-  RatingMenuConnectorParams,
-  RatingMenuRendererOptions,
-} from '../connectors/rating-menu/connectRatingMenu';
-import {
-  RangeConnectorParams,
-  RangeRendererOptions,
-} from '../connectors/range/connectRange';
-import {
-  RelevantSortConnectorParams,
-  RelevantSortRendererOptions,
-} from '../connectors/relevant-sort/connectRelevantSort';
-import {
-  MenuConnectorParams,
-  MenuRendererOptions,
-} from '../connectors/menu/connectMenu';
-import {
-  HierarchicalMenuConnectorParams,
-  HierarchicalMenuRendererOptions,
-} from '../connectors/hierarchical-menu/connectHierarchicalMenu';
-import {
-  RefinementListRendererOptions,
-  RefinementListConnectorParams,
-} from '../connectors/refinement-list/connectRefinementList';
-import {
-  StatsConnectorParams,
-  StatsRendererOptions,
-} from '../connectors/stats/connectStats';
-import {
-  SortByConnectorParams,
-  SortByRendererOptions,
-} from '../connectors/sort-by/connectSortBy';
+import { IndexUiState, UiState } from './ui-state';
+import { IndexRenderState } from './render-state';
 
 export type ScopedResult = {
   indexId: string;
@@ -133,220 +42,73 @@ export type DisposeOptions = {
   state: SearchParameters;
 };
 
-export type WidgetUiStateOptions = {
-  searchParameters: SearchParameters;
-  helper: Helper;
-};
+export type BuiltinTypes =
+  | 'ais.analytics'
+  | 'ais.answers'
+  | 'ais.autocomplete'
+  | 'ais.breadcrumb'
+  | 'ais.clearRefinements'
+  | 'ais.configure'
+  | 'ais.configureRelatedItems'
+  | 'ais.currentRefinements'
+  | 'ais.geoSearch'
+  | 'ais.hierarchicalMenu'
+  | 'ais.hits'
+  | 'ais.hitsPerPage'
+  | 'ais.index'
+  | 'ais.infiniteHits'
+  | 'ais.menu'
+  | 'ais.numericMenu'
+  | 'ais.pagination'
+  | 'ais.places'
+  | 'ais.poweredBy'
+  | 'ais.queryRules'
+  // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
+  | 'ais.range'
+  | 'ais.rangeSlider'
+  | 'ais.rangeInput'
+  | 'ais.ratingMenu'
+  | 'ais.refinementList'
+  | 'ais.searchBox'
+  | 'ais.relevantSort'
+  | 'ais.sortBy'
+  | 'ais.stats'
+  | 'ais.toggleRefinement'
+  | 'ais.voiceSearch';
 
-export type WidgetSearchParametersOptions = {
-  uiState: IndexUiState;
-};
-
-export type IndexUiState = {
-  query?: string;
-  refinementList?: {
-    [attribute: string]: string[];
-  };
-  menu?: {
-    [attribute: string]: string;
-  };
-  /**
-   * The list of hierarchical menus.
-   * Nested levels must contain the record separator.
-   *
-   * @example ['Audio', 'Audio > Headphones']
-   */
-  hierarchicalMenu?: {
-    [attribute: string]: string[];
-  };
-  /**
-   * The numeric menu as a tuple.
-   *
-   * @example ':5'
-   * @example '5:10'
-   * @example '10:'
-   */
-  numericMenu?: {
-    [attribute: string]: string;
-  };
-  ratingMenu?: {
-    [attribute: string]: number;
-  };
-  /**
-   * The range as a tuple.
-   *
-   * @example '100:500'
-   */
-  range?: {
-    [attribute: string]: string;
-  };
-  toggle?: {
-    [attribute: string]: boolean;
-  };
-  geoSearch?: {
-    /**
-     * The rectangular area in geo coordinates.
-     * The rectangle is defined by two diagonally opposite points, hence by 4 floats separated by commas.
-     *
-     * @example '47.3165,4.9665,47.3424,5.0201'
-     */
-    boundingBox: string;
-  };
-  relevantSort?: {
-    relevancyStrictness?: number;
-  };
-  sortBy?: string;
-  page?: number;
-  hitsPerPage?: number;
-  configure?: PlainSearchParameters;
-  places?: {
-    query: string;
-    /**
-     * The central geolocation.
-     *
-     * @example '48.8546,2.3477'
-     */
-    position: string;
-  };
-};
-
-export type UiState = {
-  [indexId: string]: IndexUiState;
-};
-
-export type RenderState = {
-  [indexId: string]: IndexRenderState;
-};
-
-export type IndexRenderState = Partial<{
-  searchBox: WidgetRenderState<
-    {
-      query: string;
-      refine(query: string): void;
-      clear(): void;
-      isSearchStalled: boolean;
-    },
-    {
-      queryHook?(query: string, refine: (value: string) => void): void;
-    }
-  >;
-  autocomplete: WidgetRenderState<
-    AutocompleteRendererOptions,
-    AutocompleteConnectorParams
-  >;
-  breadcrumb: {
-    [attribute: string]: WidgetRenderState<
-      BreadcrumbRendererOptions,
-      BreadcrumbConnectorParams
-    >;
-  };
-  clearRefinements: WidgetRenderState<
-    ClearRefinementsRendererOptions,
-    ClearRefinementsConnectorParams
-  >;
-  configure: WidgetRenderState<
-    ConfigureRendererOptions,
-    ConfigureConnectorParams
-  >;
-  currentRefinements: WidgetRenderState<
-    CurrentRefinementsRendererOptions,
-    CurrentRefinementsConnectorParams
-  >;
-  menu: {
-    [attribute: string]: WidgetRenderState<
-      MenuRendererOptions,
-      MenuConnectorParams
-    >;
-  };
-  hierarchicalMenu: {
-    [attribute: string]: WidgetRenderState<
-      HierarchicalMenuRendererOptions,
-      HierarchicalMenuConnectorParams
-    >;
-  };
-  hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
-  infiniteHits: WidgetRenderState<
-    InfiniteHitsRendererOptions,
-    InfiniteHitsConnectorParams
-  >;
-  analytics: WidgetRenderState<unknown, AnalyticsWidgetParams>;
-  places: WidgetRenderState<unknown, PlacesWidgetParams>;
-  poweredBy: WidgetRenderState<
-    PoweredByRendererOptions,
-    PoweredByConnectorParams
-  >;
-  range: {
-    [attribute: string]: WidgetRenderState<
-      RangeRendererOptions,
-      RangeConnectorParams
-    >;
-  };
-  ratingMenu: {
-    [attribute: string]: WidgetRenderState<
-      RatingMenuRendererOptions,
-      RatingMenuConnectorParams
-    >;
-  };
-  numericMenu: {
-    [attribute: string]: WidgetRenderState<
-      NumericMenuRendererOptions,
-      NumericMenuConnectorParams
-    >;
-  };
-  voiceSearch: WidgetRenderState<
-    VoiceSearchRendererOptions,
-    VoiceSearchConnectorParams
-  >;
-  geoSearch: {
-    currentRefinement?: {
-      northEast: GeoLoc;
-      southWest: GeoLoc;
-    };
-    position?: GeoLoc;
-    items: Array<Hit & Required<Pick<Hit, '_geoLoc'>>>;
-    refine(position: { northEast: GeoLoc; southWest: GeoLoc }): void;
-    clearMapRefinement(): void;
-    hasMapMoveSinceLastRefine(): boolean;
-    isRefineOnMapMove(): boolean;
-    isRefinedWithMap(): boolean;
-    setMapMoveSinceLastRefine(): void;
-    toggleRefineOnMapMove(): void;
-    sendEvent: SendEventForHits;
-    widgetParams: any;
-  };
-  queryRules: WidgetRenderState<
-    QueryRulesRendererOptions,
-    QueryRulesConnectorParams
-  >;
-  hitsPerPage: WidgetRenderState<
-    HitsPerPageRendererOptions,
-    HitsPerPageConnectorParams
-  >;
-  pagination: WidgetRenderState<
-    PaginationRendererOptions,
-    PaginationConnectorParams
-  >;
-  refinementList: {
-    [attribute: string]: WidgetRenderState<
-      RefinementListRendererOptions,
-      RefinementListConnectorParams
-    >;
-  };
-  answers: WidgetRenderState<AnswersRendererOptions, AnswersConnectorParams>;
-  relevantSort: WidgetRenderState<
-    RelevantSortRendererOptions,
-    RelevantSortConnectorParams
-  >;
-  sortBy: WidgetRenderState<SortByRendererOptions, SortByConnectorParams>;
-  stats: WidgetRenderState<StatsRendererOptions, StatsConnectorParams>;
-}>;
-
-export type WidgetRenderState<
-  TWidgetRenderState,
-  TWidgetParams
-> = TWidgetRenderState & {
-  widgetParams: TWidgetParams;
-};
+export type BuiltinWidgetTypes =
+  | 'ais.analytics'
+  | 'ais.answers'
+  | 'ais.autocomplete'
+  | 'ais.breadcrumb'
+  | 'ais.clearRefinements'
+  | 'ais.configure'
+  | 'ais.configureRelatedItems'
+  | 'ais.currentRefinements'
+  | 'ais.geoSearch'
+  | 'ais.hierarchicalMenu'
+  | 'ais.hits'
+  | 'ais.hitsPerPage'
+  | 'ais.index'
+  | 'ais.infiniteHits'
+  | 'ais.menu'
+  | 'ais.menuSelect'
+  | 'ais.numericMenu'
+  | 'ais.pagination'
+  | 'ais.places'
+  | 'ais.poweredBy'
+  | 'ais.queryRuleCustomData'
+  | 'ais.queryRuleContext'
+  | 'ais.rangeInput'
+  | 'ais.rangeSlider'
+  | 'ais.ratingMenu'
+  | 'ais.refinementList'
+  | 'ais.searchBox'
+  | 'ais.relevantSort'
+  | 'ais.sortBy'
+  | 'ais.stats'
+  | 'ais.toggleRefinement'
+  | 'ais.voiceSearch';
 
 /**
  * Widgets are the building blocks of InstantSearch.js. Any valid widget must
@@ -358,76 +120,13 @@ export type Widget<
   /**
    * Identifier for official connectors and widgets
    */
-  $$type?:
-    | 'ais.analytics'
-    | 'ais.answers'
-    | 'ais.autocomplete'
-    | 'ais.breadcrumb'
-    | 'ais.clearRefinements'
-    | 'ais.configure'
-    | 'ais.configureRelatedItems'
-    | 'ais.currentRefinements'
-    | 'ais.geoSearch'
-    | 'ais.hierarchicalMenu'
-    | 'ais.hits'
-    | 'ais.hitsPerPage'
-    | 'ais.index'
-    | 'ais.infiniteHits'
-    | 'ais.menu'
-    | 'ais.numericMenu'
-    | 'ais.pagination'
-    | 'ais.places'
-    | 'ais.poweredBy'
-    | 'ais.queryRules'
-    // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
-    | 'ais.range'
-    | 'ais.rangeSlider'
-    | 'ais.rangeInput'
-    | 'ais.ratingMenu'
-    | 'ais.refinementList'
-    | 'ais.searchBox'
-    | 'ais.relevantSort'
-    | 'ais.sortBy'
-    | 'ais.stats'
-    | 'ais.toggleRefinement'
-    | 'ais.voiceSearch';
+  $$type?: BuiltinTypes;
 
   /**
    * Identifier for official widgets
    */
-  $$widgetType?:
-    | 'ais.analytics'
-    | 'ais.answers'
-    | 'ais.autocomplete'
-    | 'ais.breadcrumb'
-    | 'ais.clearRefinements'
-    | 'ais.configure'
-    | 'ais.configureRelatedItems'
-    | 'ais.currentRefinements'
-    | 'ais.geoSearch'
-    | 'ais.hierarchicalMenu'
-    | 'ais.hits'
-    | 'ais.hitsPerPage'
-    | 'ais.index'
-    | 'ais.infiniteHits'
-    | 'ais.menu'
-    | 'ais.menuSelect'
-    | 'ais.numericMenu'
-    | 'ais.pagination'
-    | 'ais.places'
-    | 'ais.poweredBy'
-    | 'ais.queryRuleCustomData'
-    | 'ais.queryRuleContext'
-    | 'ais.rangeInput'
-    | 'ais.rangeSlider'
-    | 'ais.ratingMenu'
-    | 'ais.refinementList'
-    | 'ais.searchBox'
-    | 'ais.relevantSort'
-    | 'ais.sortBy'
-    | 'ais.stats'
-    | 'ais.toggleRefinement'
-    | 'ais.voiceSearch';
+  $$widgetType?: BuiltinWidgetTypes;
+
   /**
    * Called once before the first search
    */
@@ -450,7 +149,10 @@ export type Widget<
    */
   getWidgetUiState?(
     uiState: IndexUiState,
-    widgetUiStateOptions: WidgetUiStateOptions
+    widgetUiStateOptions: {
+      searchParameters: SearchParameters;
+      helper: Helper;
+    }
   ): IndexUiState;
   /**
    * This function is required for a widget to be taken in account for routing.
@@ -460,10 +162,7 @@ export type Widget<
    * @param uiState current state
    * @param widgetStateOptions extra information to calculate uiState
    */
-  getWidgetState?(
-    uiState: IndexUiState,
-    widgetStateOptions: WidgetUiStateOptions
-  ): IndexUiState;
+  getWidgetState?: Widget<TWidgetOptions>['getWidgetUiState'];
   /**
    * This function is required for a widget to behave correctly when a URL is
    * loaded via e.g. routing. It receives the current UiState and applied search
@@ -473,7 +172,9 @@ export type Widget<
    */
   getWidgetSearchParameters?(
     state: SearchParameters,
-    widgetSearchParametersOptions: WidgetSearchParametersOptions
+    widgetSearchParametersOptions: {
+      uiState: IndexUiState;
+    }
   ): SearchParameters;
 } & (TWidgetOptions['renderState'] extends Record<string, unknown>
   ? {
@@ -508,34 +209,3 @@ export type Widget<
         renderOptions: InitOptions | RenderOptions
       ): IndexRenderState;
     });
-
-/**
- * The function that creates a new widget.
- */
-export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
-  /**
-   * The params of the widget.
-   */
-  widgetParams: TConnectorParams & TWidgetParams
-) => Widget<{
-  renderState: WidgetRenderState<
-    TRendererOptions,
-    // widgetParams sent to the connector of builtin widgets are actually
-    // the connector params, therefore renderState uses TConnectorParams only
-    TConnectorParams
-  >;
-}>;
-
-export type Template<TTemplateData = void> =
-  | string
-  | ((data: TTemplateData) => string);
-
-export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
-
-export type TemplateWithBindEvent<TTemplateData = void> =
-  | string
-  | ((data: TTemplateData, bindEvent: BindEventForHits) => string);
-
-export type Templates = {
-  [key: string]: Template<any> | TemplateWithBindEvent<any> | undefined;
-};

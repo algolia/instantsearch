@@ -13,8 +13,6 @@ import {
   Widget,
   InitOptions,
   RenderOptions,
-  WidgetUiStateOptions,
-  WidgetSearchParametersOptions,
   ScopedResult,
   SearchClient,
 } from '../../types';
@@ -42,6 +40,9 @@ type IndexInitOptions = Pick<
 
 type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
 
+type WidgetSearchParametersOptions = Parameters<
+  NonNullable<Widget['getWidgetSearchParameters']>
+>[1];
 type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
   initialSearchParameters: SearchParameters;
 };
@@ -106,6 +107,10 @@ function privateHelperSetState(
     });
   }
 }
+
+type WidgetUiStateOptions = Parameters<
+  NonNullable<Widget['getWidgetUiState']>
+>[1];
 
 function getLocalWidgetsUiState(
   widgets: Widget[],
