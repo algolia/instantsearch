@@ -5,7 +5,7 @@ import ClearRefinements from '../../components/ClearRefinements/ClearRefinements
 import cx from 'classnames';
 import connectClearRefinements, {
   ClearRefinementsConnectorParams,
-  ClearRefinementsRendererOptions,
+  ClearRefinementsWidgetDescription,
 } from '../../connectors/clear-refinements/connectClearRefinements';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -87,7 +87,7 @@ export type ClearRefinementsWidgetParams = {
 };
 
 export type ClearRefinementsWidget = WidgetFactory<
-  ClearRefinementsRendererOptions,
+  ClearRefinementsWidgetDescription & { $$widgetType: 'ais.clearRefinements' },
   ClearRefinementsConnectorParams,
   ClearRefinementsWidgetParams
 >;

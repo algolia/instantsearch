@@ -5,7 +5,8 @@ import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
 import connectHitsPerPage, {
   HitsPerPageConnectorParams,
-  HitsPerPageRendererOptions,
+  HitsPerPageRenderState,
+  HitsPerPageWidgetDescription,
 } from '../../connectors/hits-per-page/connectHitsPerPage';
 import {
   getContainerNode,
@@ -21,8 +22,8 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('HitsPerPage');
 
 const renderer = ({ containerNode, cssClasses }) => (
-  { items, refine }: HitsPerPageRendererOptions,
-  isFirstRendering
+  { items, refine }: HitsPerPageRenderState,
+  isFirstRendering: boolean
 ) => {
   if (isFirstRendering) return;
 
@@ -72,7 +73,7 @@ export type HitsPerPageWidgetParams = {
 };
 
 export type HitsPerPageWidget = WidgetFactory<
-  HitsPerPageRendererOptions,
+  HitsPerPageWidgetDescription & { $$widgetType: 'ais.hitsPerPage' },
   HitsPerPageConnectorParams,
   HitsPerPageWidgetParams
 >;

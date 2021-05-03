@@ -7,10 +7,11 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { RendererOptions, WidgetFactory, Template } from '../../types';
+import { WidgetFactory, Template, RendererOptions } from '../../types';
 import connectSearchBox, {
   SearchBoxConnectorParams,
-  SearchBoxRendererOptions,
+  SearchBoxRenderState,
+  SearchBoxWidgetDescription,
 } from '../../connectors/search-box/connectSearchBox';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import defaultTemplates from './defaultTemplates';
@@ -150,7 +151,7 @@ const renderer = ({
   refine,
   query,
   isSearchStalled,
-}: SearchBoxRendererOptions & RendererOptions<SearchBoxConnectorParams>) => {
+}: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
   render(
     <SearchBox
       query={query}
@@ -178,7 +179,7 @@ const renderer = ({
  *
  */
 export type SearchBoxWidget = WidgetFactory<
-  SearchBoxRendererOptions,
+  SearchBoxWidgetDescription & { $$widgetType: 'ais.searchBox' },
   SearchBoxConnectorParams,
   SearchBoxWidgetParams
 >;

@@ -6,8 +6,9 @@ import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import connectInfiniteHits, {
   InfiniteHitsConnectorParams,
-  InfiniteHitsRendererOptions,
+  InfiniteHitsRenderState,
   InfiniteHitsCache,
+  InfiniteHitsWidgetDescription,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
   prepareTemplateProps,
@@ -94,7 +95,12 @@ export type InfiniteHitsTemplates = {
   /**
    * The template to use for each result.
    */
-  item?: TemplateWithBindEvent<Hit>;
+  item?: TemplateWithBindEvent<
+    Hit & {
+      // @deprecated the index in the hits array, use __position instead, which is the absolute position
+      __hitIndex: number;
+    }
+  >;
 };
 
 export type InfiniteHitsWidgetParams = {
@@ -122,7 +128,7 @@ export type InfiniteHitsWidgetParams = {
 };
 
 export type InfiniteHitsWidget = WidgetFactory<
-  InfiniteHitsRendererOptions,
+  InfiniteHitsWidgetDescription & { $$widgetType: 'ais.infiniteHits' },
   InfiniteHitsConnectorParams,
   InfiniteHitsWidgetParams
 >;
@@ -133,10 +139,7 @@ const renderer = ({
   renderState,
   templates,
   showPrevious: hasShowPrevious,
-}): Renderer<
-  InfiniteHitsRendererOptions,
-  Partial<InfiniteHitsWidgetParams>
-> => (
+}): Renderer<InfiniteHitsRenderState, Partial<InfiniteHitsWidgetParams>> => (
   {
     hits,
     results,

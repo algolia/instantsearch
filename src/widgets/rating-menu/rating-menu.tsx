@@ -4,8 +4,9 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectRatingMenu, {
+  RatingMenuWidgetDescription,
   RatingMenuConnectorParams,
-  RatingMenuRendererOptions,
+  RatingMenuRenderState,
 } from '../../connectors/rating-menu/connectRatingMenu';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -121,7 +122,7 @@ const renderer = ({
     items,
     createURL,
     instantSearchInstance,
-  }: RatingMenuRendererOptions & RendererOptions<RatingMenuConnectorParams>,
+  }: RatingMenuRenderState & RendererOptions<RatingMenuConnectorParams>,
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
@@ -185,7 +186,7 @@ const renderer = ({
  * ]);
  */
 export type RatingMenuWidget = WidgetFactory<
-  RatingMenuRendererOptions,
+  RatingMenuWidgetDescription & { $$widgetType: 'ais.ratingMenu' },
   RatingMenuConnectorParams,
   RatingMenuWidgetParams
 >;

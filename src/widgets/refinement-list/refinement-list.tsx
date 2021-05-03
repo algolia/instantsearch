@@ -4,8 +4,9 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectRefinementList, {
-  RefinementListRendererOptions,
+  RefinementListRenderState,
   RefinementListConnectorParams,
+  RefinementListWidgetDescription,
 } from '../../connectors/refinement-list/connectRefinementList';
 import {
   prepareTemplateProps,
@@ -257,8 +258,7 @@ const renderer = ({
     isShowingMore,
     hasExhaustiveItems,
     canToggleShowMore,
-  }: RefinementListRendererOptions &
-    RendererOptions<RefinementListConnectorParams>,
+  }: RefinementListRenderState & RendererOptions<RefinementListConnectorParams>,
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
@@ -298,7 +298,7 @@ const renderer = ({
 };
 
 export type RefinementListWidget = WidgetFactory<
-  RefinementListRendererOptions,
+  RefinementListWidgetDescription & { $$widgetType: 'ais.refinementList' },
   RefinementListConnectorParams,
   RefinementListWidgetParams
 >;

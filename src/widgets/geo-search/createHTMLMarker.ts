@@ -1,5 +1,17 @@
 /* global google EventListener */
 
+export type HTMLMarkerArguments = {
+  __id: string;
+  position: google.maps.LatLngLiteral;
+  map: google.maps.Map;
+  template: string;
+  className: string;
+  anchor?: {
+    x: number;
+    y: number;
+  };
+};
+
 const createHTMLMarker = (googleReference: typeof google) => {
   class HTMLMarker extends googleReference.maps.OverlayView {
     public __id: string;
@@ -25,14 +37,7 @@ const createHTMLMarker = (googleReference: typeof google) => {
         x: 0,
         y: 0,
       },
-    }: {
-      __id: HTMLMarker['__id'];
-      position: google.maps.LatLngLiteral;
-      map: google.maps.Map;
-      template: string;
-      className: string;
-      anchor?: HTMLMarker['anchor'];
-    }) {
+    }: HTMLMarkerArguments) {
       super();
 
       this.__id = __id;
