@@ -842,6 +842,7 @@ describe('utils.deprecate', () => {
 
   it('expect to call initial function and print message', () => {
     const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
     const fn = utils.deprecate(sum, 'message');
 
     const expectation = fn(1, 2, 3);
@@ -856,6 +857,7 @@ describe('utils.deprecate', () => {
 
   it('expect to call initial function twice and print message once', () => {
     const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
     const fn = utils.deprecate(sum, 'message');
 
     const expectation0 = fn(1, 2, 3);
@@ -876,6 +878,7 @@ describe('utils.warning', () => {
 
   beforeEach(() => {
     warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
   });
 
   afterEach(() => {
