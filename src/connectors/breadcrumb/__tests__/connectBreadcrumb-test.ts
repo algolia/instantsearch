@@ -7,6 +7,7 @@ import connectBreadcrumb from '../connectBreadcrumb';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -1021,7 +1022,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       const widget = makeWidget({ attributes: ['category'] });
 
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
 
@@ -1044,7 +1045,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         })
       );
 
-      const newState = widget.dispose!({ helper, state: helper.state });
+      const newState = widget.dispose!(
+        createDisposeOptions({ helper, state: helper.state })
+      );
 
       expect(newState).toBeUndefined();
     });

@@ -6,7 +6,8 @@ import Selector from '../../components/Selector/Selector';
 import connectSortBy, {
   SortByConnectorParams,
   SortByItem,
-  SortByRendererOptions,
+  SortByRenderState,
+  SortByWidgetDescription,
 } from '../../connectors/sort-by/connectSortBy';
 import {
   getContainerNode,
@@ -64,7 +65,7 @@ export type SortByWidgetParams = {
 };
 
 export type SortByWidget = WidgetFactory<
-  SortByRendererOptions,
+  SortByWidgetDescription & { $$widgetType: 'ais.sortBy' },
   SortByConnectorParams,
   SortByWidgetParams
 >;
@@ -72,7 +73,7 @@ export type SortByWidget = WidgetFactory<
 const renderer = ({
   containerNode,
   cssClasses,
-}): Renderer<SortByRendererOptions, SortByWidgetParams> => (
+}): Renderer<SortByRenderState, SortByWidgetParams> => (
   { currentRefinement, options, refine },
   isFirstRendering
 ) => {

@@ -5,6 +5,7 @@ import { fireEvent } from '@testing-library/preact';
 import instantsearch from '../../../index.es';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 import answers from '../answers';
 import searchBox from '../../search-box/search-box';
 
@@ -94,7 +95,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       );
     });
 
-    it('renders the answers', async done => {
+    it('renders the answers', async () => {
       const answersContainer = document.createElement('div');
       const searchBoxContainer = document.createElement('div');
       const search = instantsearch({
@@ -145,17 +146,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       );
       expect(answersContainer.querySelector('.root')).toHaveClass('empty');
 
-      setTimeout(() => {
-        // debounced render
-        expect(answersContainer.querySelector('.root')).not.toHaveClass(
-          'empty'
-        );
-        expect(answersContainer.querySelectorAll('.item').length).toEqual(1);
-        expect(answersContainer.querySelector('.item')!.innerHTML).toEqual(
-          'title: Hello'
-        );
-        done();
-      }, 30);
+      await wait(30);
+
+      // debounced render
+      expect(answersContainer.querySelector('.root')).not.toHaveClass('empty');
+      expect(answersContainer.querySelectorAll('.item').length).toEqual(1);
+      expect(answersContainer.querySelector('.item')!.innerHTML).toEqual(
+        'title: Hello'
+      );
     });
   });
 });

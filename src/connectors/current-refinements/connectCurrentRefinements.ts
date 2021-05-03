@@ -15,7 +15,12 @@ import {
   FacetRefinement,
   NumericRefinement,
 } from '../../lib/utils/getRefinements';
-import { Connector, TransformItems, CreateURL } from '../../types';
+import {
+  Connector,
+  TransformItems,
+  CreateURL,
+  WidgetRenderState,
+} from '../../types';
 
 export type CurrentRefinementsConnectorParamsRefinement = {
   /**
@@ -106,7 +111,7 @@ export type CurrentRefinementsConnectorParams = {
   transformItems?: TransformItems<CurrentRefinementsConnectorParamsItem>;
 };
 
-export type CurrentRefinementsRendererOptions = {
+export type CurrentRefinementsRenderState = {
   /**
    * All the currently refined items, grouped by attribute.
    */
@@ -133,8 +138,19 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type CurrentRefinementsWidgetDescription = {
+  $$type: 'ais.currentRefinements';
+  renderState: CurrentRefinementsRenderState;
+  indexRenderState: {
+    currentRefinements: WidgetRenderState<
+      CurrentRefinementsRenderState,
+      CurrentRefinementsConnectorParams
+    >;
+  };
+};
+
 export type CurrentRefinementsConnector = Connector<
-  CurrentRefinementsRendererOptions,
+  CurrentRefinementsWidgetDescription,
   CurrentRefinementsConnectorParams
 >;
 

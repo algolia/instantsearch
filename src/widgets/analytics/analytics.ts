@@ -1,6 +1,6 @@
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createDocumentationMessageGenerator, warning } from '../../lib/utils';
-import { WidgetFactory } from '../../types';
+import { WidgetFactory, WidgetRenderState } from '../../types';
 
 export type AnalyticsWidgetParamsPushFunction = (
   /**
@@ -61,8 +61,20 @@ export type AnalyticsWidgetParams = {
 
 const withUsage = createDocumentationMessageGenerator({ name: 'analytics' });
 
+export type AnalyticsWidgetDescription = {
+  $$type: 'ais.analytics';
+  $$widgetType: 'ais.analytics';
+  renderState: Record<string, unknown>;
+  indexRenderState: {
+    analytics: WidgetRenderState<
+      Record<string, unknown>,
+      AnalyticsWidgetParams
+    >;
+  };
+};
+
 export type AnalyticsWidget = WidgetFactory<
-  unknown,
+  AnalyticsWidgetDescription,
   AnalyticsWidgetParams,
   AnalyticsWidgetParams
 >;

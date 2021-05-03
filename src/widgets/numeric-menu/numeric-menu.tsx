@@ -4,8 +4,8 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectNumericMenu, {
-  NumericMenuRendererOptions,
   NumericMenuConnectorParams,
+  NumericMenuWidgetDescription,
 } from '../../connectors/numeric-menu/connectNumericMenu';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -27,7 +27,7 @@ const renderer = ({
   templates,
 }) => (
   { createURL, instantSearchInstance, refine, items },
-  isFirstRendering
+  isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -146,11 +146,6 @@ export type NumericMenuWidgetParams = {
   container: string | HTMLElement;
 
   /**
-   * Name of the attribute for filtering.
-   */
-  attribute: string;
-
-  /**
    * Templates to use for the widget.
    */
   templates?: NumericMenuTemplates;
@@ -162,7 +157,7 @@ export type NumericMenuWidgetParams = {
 };
 
 export type NumericMenuWidget = WidgetFactory<
-  NumericMenuRendererOptions,
+  NumericMenuWidgetDescription & { $$widgetType: 'ais.numericMenu' },
   NumericMenuConnectorParams,
   NumericMenuWidgetParams
 >;

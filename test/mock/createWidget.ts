@@ -72,13 +72,18 @@ export const createDisposeOptions = (
   return {
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,
+    parent: instantSearchInstance.mainIndex,
     ...args,
   };
 };
 
-export const createWidget = (args: Partial<Widget> = {}): Widget => ({
-  init: jest.fn(),
-  render: jest.fn(),
-  dispose: jest.fn(),
-  ...args,
-});
+export const createWidget = <TWidget extends Widget>(
+  args: Partial<TWidget> = {}
+): TWidget =>
+  (({
+    $$type: 'mock.widget',
+    init: jest.fn(),
+    render: jest.fn(),
+    dispose: jest.fn(),
+    ...args,
+  } as unknown) as TWidget);

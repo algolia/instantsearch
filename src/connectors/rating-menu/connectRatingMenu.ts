@@ -10,7 +10,12 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import { Connector, InstantSearch, CreateURL } from '../../types';
+import {
+  Connector,
+  InstantSearch,
+  CreateURL,
+  WidgetRenderState,
+} from '../../types';
 import { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -101,7 +106,7 @@ export type RatingMenuConnectorParams = {
   max?: number;
 };
 
-export type RatingMenuRendererOptions = {
+export type RatingMenuRenderState = {
   /**
    * Possible star ratings the user can apply.
    */
@@ -133,8 +138,26 @@ export type RatingMenuRendererOptions = {
   sendEvent: SendEvent;
 };
 
-export type ConnectRatingMenu = Connector<
-  RatingMenuRendererOptions,
+export type RatingMenuWidgetDescription = {
+  $$type: 'ais.ratingMenu';
+  renderState: RatingMenuRenderState;
+  indexRenderState: {
+    ratingMenu: {
+      [attribute: string]: WidgetRenderState<
+        RatingMenuRenderState,
+        RatingMenuConnectorParams
+      >;
+    };
+  };
+  indexUiState: {
+    ratingMenu: {
+      [attribute: string]: number;
+    };
+  };
+};
+
+export type RatingMenuConnector = Connector<
+  RatingMenuWidgetDescription,
   RatingMenuConnectorParams
 >;
 
@@ -146,7 +169,7 @@ export type ConnectRatingMenu = Connector<
  * `items` that are the values that can be selected. `refine` should be used
  * with `items.value`.
  */
-const connectRatingMenu: ConnectRatingMenu = function connectRatingMenu(
+const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
   renderFn,
   unmountFn = noop
 ) {

@@ -10,12 +10,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
-import {
-  Template,
-  RenderOptions,
-  UnknownWidgetFactory,
-  Widget,
-} from '../../types';
+import { Template, RenderOptions, WidgetFactory } from '../../types';
 
 export type PanelCSSClasses = {
   /**
@@ -64,7 +59,18 @@ export type PanelCSSClasses = {
   footer?: string | string[];
 };
 
-export type PanelTemplates<TWidget extends UnknownWidgetFactory> = {
+type AnyWidgetFactory = WidgetFactory<
+  {
+    $$type: string;
+  },
+  Record<string, any>,
+  // @TODO: this really should be _at least_ { container: string | HTMLElement }
+  // but that or { container: string | HTMLElement; [key: string]: any }
+  // still doesn't allow wider types with another key required.
+  any
+>;
+
+export type PanelTemplates<TWidget extends AnyWidgetFactory> = {
   /**
    * Template to use for the header.
    */
@@ -81,32 +87,35 @@ export type PanelTemplates<TWidget extends UnknownWidgetFactory> = {
   collapseButtonText?: Template<{ collapsed: boolean }>;
 };
 
-export type PanelRenderOptions<
-  TWidget extends UnknownWidgetFactory
-> = RenderOptions &
-  (ReturnType<TWidget>['getWidgetRenderState'] extends (
-    renderOptions: any
-  ) => infer TRenderState
+type GetWidgetRenderState<TWidgetFactory extends AnyWidgetFactory> = ReturnType<
+  TWidgetFactory
+>['getWidgetRenderState'] extends (renderOptions: any) => infer TRenderState
+  ? TRenderState extends Record<string, unknown>
     ? TRenderState
-    : Record<string, any>);
+    : never
+  : Record<string, unknown>;
 
-export type PanelWidgetParams<TWidget extends UnknownWidgetFactory> = {
+export type PanelRenderOptions<
+  TWidgetFactory extends AnyWidgetFactory
+> = RenderOptions & GetWidgetRenderState<TWidgetFactory>;
+
+export type PanelWidgetParams<TWidgetFactory extends AnyWidgetFactory> = {
   /**
    * A function that is called on each render to determine if the
    * panel should be hidden based on the render options.
    */
-  hidden?(options: PanelRenderOptions<TWidget>): boolean;
+  hidden?(options: PanelRenderOptions<TWidgetFactory>): boolean;
 
   /**
    * A function that is called on each render to determine if the
    * panel should be collapsed based on the render options.
    */
-  collapsed?(options: PanelRenderOptions<TWidget>): boolean;
+  collapsed?(options: PanelRenderOptions<TWidgetFactory>): boolean;
 
   /**
    * The templates to use for the widget.
    */
-  templates?: PanelTemplates<TWidget>;
+  templates?: PanelTemplates<TWidgetFactory>;
 
   /**
    * The CSS classes to override.
@@ -117,7 +126,7 @@ export type PanelWidgetParams<TWidget extends UnknownWidgetFactory> = {
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
 
-const renderer = <TWidget extends UnknownWidgetFactory>({
+const renderer = <TWidget extends AnyWidgetFactory>({
   containerNode,
   bodyContainerNode,
   cssClasses,
@@ -137,13 +146,13 @@ const renderer = <TWidget extends UnknownWidgetFactory>({
   );
 };
 
-export type PanelWidget = <TWidget extends UnknownWidgetFactory>(
-  panelWidgetParams?: PanelWidgetParams<TWidget>
-) => <
-  TWidgetParams extends { container: HTMLElement | string; [key: string]: any }
->(
-  widgetFactory: TWidget
-) => (widgetParams: TWidgetParams) => Widget;
+export type PanelWidget = <TWidgetFactory extends AnyWidgetFactory>(
+  panelWidgetParams?: PanelWidgetParams<TWidgetFactory>
+) => (
+  widgetFactory: TWidgetFactory
+) => (
+  widgetParams: Parameters<TWidgetFactory>[0]
+) => ReturnType<TWidgetFactory>;
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
@@ -202,15 +211,15 @@ const panel: PanelWidget = panelWidgetParams => {
   };
 
   return widgetFactory => widgetParams => {
-    const { container } = widgetParams || {};
-
-    if (!container) {
+    if (!(widgetParams && widgetParams.container)) {
       throw new Error(
         withUsage(
           `The \`container\` option is required in the widget within the panel.`
         )
       );
     }
+
+    const containerNode = getContainerNode(widgetParams.container);
 
     const defaultTemplates = {
       header: '',
@@ -229,7 +238,7 @@ const panel: PanelWidget = panelWidgetParams => {
     };
 
     const renderPanel = renderer<typeof widgetFactory>({
-      containerNode: getContainerNode(container),
+      containerNode,
       bodyContainerNode,
       cssClasses,
       templates: {
@@ -250,10 +259,14 @@ const panel: PanelWidget = panelWidgetParams => {
       container: bodyContainerNode,
     });
 
+    // TypeScript somehow loses track of the ...widget type, since it's
+    // not directly returned. Eventually the "as ReturnType<typeof widgetFactory>"
+    // will not be needed anymore.
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {
       ...widget,
       dispose(...args) {
-        render(null, getContainerNode(container));
+        render(null, containerNode);
 
         if (typeof widget.dispose === 'function') {
           return widget.dispose.call(this, ...args);
@@ -265,9 +278,9 @@ const panel: PanelWidget = panelWidgetParams => {
         const [renderOptions] = args;
 
         const options = {
-          ...(widget.getWidgetRenderState
+          ...((widget.getWidgetRenderState
             ? widget.getWidgetRenderState(renderOptions)
-            : {}),
+            : {}) as GetWidgetRenderState<typeof widgetFactory>),
           ...renderOptions,
         };
 
@@ -282,7 +295,7 @@ const panel: PanelWidget = panelWidgetParams => {
           widget.render.call(this, ...args);
         }
       },
-    };
+    } as ReturnType<typeof widgetFactory>;
   };
 };
 

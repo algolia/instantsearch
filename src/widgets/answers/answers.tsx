@@ -12,8 +12,9 @@ import {
 import { component } from '../../lib/suit';
 import Answers from '../../components/Answers/Answers';
 import connectAnswers, {
-  AnswersRendererOptions,
+  AnswersRenderState,
   AnswersConnectorParams,
+  AnswersWidgetDescription,
 } from '../../connectors/answers/connectAnswers';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'answers' });
@@ -24,7 +25,7 @@ const renderer = ({
   cssClasses,
   containerNode,
   templates,
-}): Renderer<AnswersRendererOptions, Partial<AnswersWidgetParams>> => (
+}): Renderer<AnswersRenderState, Partial<AnswersWidgetParams>> => (
   { hits, isLoading, instantSearchInstance },
   isFirstRendering
 ) => {
@@ -118,7 +119,7 @@ export type AnswersWidgetParams = {
 };
 
 export type AnswersWidget = WidgetFactory<
-  AnswersRendererOptions,
+  AnswersWidgetDescription & { $$widgetType: 'ais.answers' },
   AnswersConnectorParams,
   AnswersWidgetParams
 >;

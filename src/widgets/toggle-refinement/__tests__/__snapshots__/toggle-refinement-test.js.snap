@@ -2,7 +2,6 @@
 
 exports[`toggleRefinement() Lifecycle render supports negative numeric off or on values 1`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
@@ -37,7 +36,6 @@ Object {
 
 exports[`toggleRefinement() Lifecycle render supports negative numeric off or on values 2`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
@@ -72,7 +70,6 @@ Object {
 
 exports[`toggleRefinement() Lifecycle render understands cssClasses 1`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox test-checkbox",
     "label": "ais-ToggleRefinement-label test-label",
@@ -107,7 +104,6 @@ Object {
 
 exports[`toggleRefinement() Lifecycle render when refined 1`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
@@ -142,7 +138,6 @@ Object {
 
 exports[`toggleRefinement() Lifecycle render when refined 2`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
@@ -177,7 +172,6 @@ Object {
 
 exports[`toggleRefinement() Lifecycle render with facet values 1`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
@@ -212,7 +206,6 @@ Object {
 
 exports[`toggleRefinement() Lifecycle render with facet values 2`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
@@ -247,7 +240,6 @@ Object {
 
 exports[`toggleRefinement() Lifecycle render without facet values 1`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
@@ -282,7 +274,6 @@ Object {
 
 exports[`toggleRefinement() Lifecycle render without facet values 2`] = `
 Object {
-  "createURL": [Function],
   "cssClasses": Object {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",

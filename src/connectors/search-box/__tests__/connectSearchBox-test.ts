@@ -4,6 +4,7 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import connectSearchBox from '../connectSearchBox';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -271,6 +272,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     }
   });
 
+  // eslint-disable-next-line jest/no-done-callback
   it('provides the same `refine` and `clear` function references', done => {
     const initRenderState: Record<string, any> = {};
     const createSearchBox = connectSearchBox(
@@ -279,7 +281,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
           initRenderState.refine = refine;
           initRenderState.clear = clear;
         } else {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(refine).toBe(initRenderState.refine);
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(clear).toBe(initRenderState.clear);
           done();
         }
@@ -500,7 +504,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose!({ helper, state: helper.state });
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -513,7 +517,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       const widget = makeWidget({});
 
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
 
@@ -528,10 +532,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(helper.state.query).toBe('Apple');
 
-      const nextState = widget.dispose!({
-        helper,
-        state: helper.state,
-      }) as SearchParameters;
+      const nextState = widget.dispose!(
+        createDisposeOptions({
+          helper,
+          state: helper.state,
+        })
+      ) as SearchParameters;
 
       expect(nextState.query).toBeUndefined();
     });
@@ -561,7 +567,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       });
     });
 
-    test('should give back the same instance if the value is alreay in the uiState', () => {
+    test('should give back the same instance if the value is already in the uiState', () => {
       const [widget, helper, refine] = getInitializedWidget();
       refine('query');
       const uiStateBefore = widget.getWidgetUiState(

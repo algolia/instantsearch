@@ -8,7 +8,12 @@ import {
   uniq,
   mergeSearchParameters,
 } from '../../lib/utils';
-import { TransformItems, CreateURL, Connector } from '../../types';
+import {
+  TransformItems,
+  CreateURL,
+  Connector,
+  WidgetRenderState,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
@@ -32,7 +37,7 @@ export type ClearRefinementsConnectorParams = {
   transformItems?: TransformItems<string>;
 };
 
-export type ClearRefinementsRendererOptions = {
+export type ClearRefinementsRenderState = {
   /**
    * Triggers the clear of all the currently refined values.
    */
@@ -55,8 +60,19 @@ export type ClearRefinementsRendererOptions = {
   createURL: CreateURL<void>;
 };
 
+export type ClearRefinementsWidgetDescription = {
+  $$type: 'ais.clearRefinements';
+  renderState: ClearRefinementsRenderState;
+  indexRenderState: {
+    clearRefinements: WidgetRenderState<
+      ClearRefinementsRenderState,
+      ClearRefinementsConnectorParams
+    >;
+  };
+};
+
 export type ClearRefinementsConnector = Connector<
-  ClearRefinementsRendererOptions,
+  ClearRefinementsWidgetDescription,
   ClearRefinementsConnectorParams
 >;
 

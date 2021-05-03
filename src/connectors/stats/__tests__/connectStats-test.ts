@@ -3,15 +3,16 @@ const SearchResults = jsHelper.SearchResults;
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 
-import connectStats, { StatsRendererOptions } from '../connectStats';
+import connectStats, { StatsRenderState } from '../connectStats';
 
 describe('connectStats', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = jest.fn<any, [StatsRendererOptions, boolean]>();
+    const renderFn = jest.fn<any, [StatsRenderState, boolean]>();
     const makeWidget = connectStats(renderFn);
     const widget = makeWidget({
       ...config,
@@ -427,7 +428,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
     const widget = makeWidget({});
     const helper = jsHelper(createSearchClient(), '');
     expect(() =>
-      widget.dispose!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 });

@@ -4,6 +4,7 @@ import { Widget } from '../../types';
 const connectHits = (renderFn: any, unmountFn: any) => (
   widgetParams = {}
 ): Widget => ({
+  $$type: 'ais.hits',
   init() {},
   render({ results, instantSearchInstance }) {
     const hits = results.hits;

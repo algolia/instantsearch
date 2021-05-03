@@ -5,6 +5,7 @@ import algoliasearchHelper, {
 import { connectHitsPerPage } from '../..';
 import { HitsPerPageConnectorParams } from '../connectHitsPerPage';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -607,7 +608,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose!({ helper, state: helper.state });
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -626,7 +627,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       });
 
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
 
@@ -648,10 +649,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
       expect(helper.state.hitsPerPage).toBe(5);
 
-      const nextState = widget.dispose!({
-        helper,
-        state: helper.state,
-      }) as SearchParameters;
+      const nextState = widget.dispose!(
+        createDisposeOptions({
+          helper,
+          state: helper.state,
+        })
+      ) as SearchParameters;
 
       expect(nextState.hitsPerPage).toBeUndefined();
     });

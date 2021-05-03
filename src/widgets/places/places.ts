@@ -1,6 +1,6 @@
 /** @ts-ignore */
 import * as Places from 'places.js';
-import { WidgetFactory } from '../../types';
+import { WidgetFactory, WidgetRenderState } from '../../types';
 
 // using the type like this requires only one ts-ignore
 type StaticOptions = Places.StaticOptions;
@@ -29,8 +29,23 @@ type PlacesWidgetState = {
   isInitialLatLngViaIPSet: boolean;
 };
 
+export type PlacesWidgetDescription = {
+  $$type: 'ais.places';
+  $$widgetType: 'ais.places';
+  renderState: Record<string, unknown>;
+  indexRenderState: {
+    places: WidgetRenderState<Record<string, unknown>, PlacesWidgetParams>;
+  };
+  indexUiState: {
+    places: {
+      query: string;
+      position: string;
+    };
+  };
+};
+
 export type PlacesWidget = WidgetFactory<
-  unknown,
+  PlacesWidgetDescription,
   PlacesWidgetParams,
   PlacesWidgetParams
 >;

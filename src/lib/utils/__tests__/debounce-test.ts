@@ -1,20 +1,20 @@
+import { wait } from '../../../../test/utils/wait';
 import { debounce } from '../debounce';
 
 describe('debounce', () => {
-  it('debounces the function', done => {
+  it('debounces the function', async () => {
     const originalFunction = jest.fn();
     const debouncedFunction = debounce(originalFunction, 100);
     debouncedFunction('a');
     debouncedFunction('b');
 
-    setTimeout(() => {
-      expect(originalFunction).toHaveBeenCalledTimes(1);
-      expect(originalFunction).toHaveBeenLastCalledWith('b');
-      done();
-    }, 100);
+    await wait(100);
+
+    expect(originalFunction).toHaveBeenCalledTimes(1);
+    expect(originalFunction).toHaveBeenLastCalledWith('b');
   });
 
-  it('executes all the calls if they are not within the debounce time', done => {
+  it('executes all the calls if they are not within the debounce time', async () => {
     const originalFunction = jest.fn();
     const debouncedFunction = debounce(originalFunction, 100);
 
@@ -24,11 +24,10 @@ describe('debounce', () => {
       debouncedFunction('b');
     }, 100);
 
-    setTimeout(() => {
-      expect(originalFunction).toHaveBeenCalledTimes(2);
-      expect(originalFunction).toHaveBeenLastCalledWith('b');
-      done();
-    }, 250);
+    await wait(250);
+
+    expect(originalFunction).toHaveBeenCalledTimes(2);
+    expect(originalFunction).toHaveBeenLastCalledWith('b');
   });
 
   it('returns a promise', async () => {

@@ -10,7 +10,8 @@ import { component } from '../../lib/suit';
 import { WidgetFactory, Renderer, Template } from '../../types';
 import connectQueryRules, {
   QueryRulesConnectorParams,
-  QueryRulesRendererOptions,
+  QueryRulesRenderState,
+  QueryRulesWidgetDescription,
 } from '../../connectors/query-rules/connectQueryRules';
 import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 
@@ -35,7 +36,7 @@ type QueryRuleCustomDataRendererWidgetParams = {
 } & QueryRuleCustomDataWidgetParams;
 
 type QueryRuleCustomDataWidget = WidgetFactory<
-  QueryRulesRendererOptions,
+  QueryRulesWidgetDescription & { $$widgetType: 'ais.queryRuleCustomData' },
   QueryRulesConnectorParams,
   QueryRuleCustomDataWidgetParams
 >;
@@ -47,7 +48,7 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('QueryRuleCustomData');
 
 const renderer: Renderer<
-  QueryRulesRendererOptions,
+  QueryRulesRenderState,
   QueryRuleCustomDataRendererWidgetParams
 > = ({ items, widgetParams }) => {
   const { container, cssClasses, templates } = widgetParams;

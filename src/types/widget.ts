@@ -1,102 +1,13 @@
-import { Index } from '../widgets/index/index';
+import { IndexWidget } from '../widgets/index/index';
 import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
-  PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { InstantSearch, Hit, GeoLoc } from './instantsearch';
-import { BindEventForHits, SendEventForHits } from '../lib/utils';
-import {
-  AutocompleteRendererOptions,
-  AutocompleteConnectorParams,
-} from '../connectors/autocomplete/connectAutocomplete';
-import {
-  BreadcrumbRendererOptions,
-  BreadcrumbConnectorParams,
-} from '../connectors/breadcrumb/connectBreadcrumb';
-import {
-  ClearRefinementsRendererOptions,
-  ClearRefinementsConnectorParams,
-} from '../connectors/clear-refinements/connectClearRefinements';
-import {
-  ConfigureRendererOptions,
-  ConfigureConnectorParams,
-} from '../connectors/configure/connectConfigure';
-import {
-  CurrentRefinementsRendererOptions,
-  CurrentRefinementsConnectorParams,
-} from '../connectors/current-refinements/connectCurrentRefinements';
-import {
-  HitsPerPageConnectorParams,
-  HitsPerPageRendererOptions,
-} from '../connectors/hits-per-page/connectHitsPerPage';
-import {
-  HitsRendererOptions,
-  HitsConnectorParams,
-} from '../connectors/hits/connectHits';
-import {
-  InfiniteHitsRendererOptions,
-  InfiniteHitsConnectorParams,
-} from '../connectors/infinite-hits/connectInfiniteHits';
-import { AnalyticsWidgetParams } from '../widgets/analytics/analytics';
-import { PlacesWidgetParams } from '../widgets/places/places';
-import {
-  NumericMenuConnectorParams,
-  NumericMenuRendererOptions,
-} from '../connectors/numeric-menu/connectNumericMenu';
-import {
-  PoweredByConnectorParams,
-  PoweredByRendererOptions,
-} from '../connectors/powered-by/connectPoweredBy';
-import {
-  VoiceSearchRendererOptions,
-  VoiceSearchConnectorParams,
-} from '../connectors/voice-search/connectVoiceSearch';
-import {
-  QueryRulesRendererOptions,
-  QueryRulesConnectorParams,
-} from '../connectors/query-rules/connectQueryRules';
-import {
-  PaginationRendererOptions,
-  PaginationConnectorParams,
-} from '../connectors/pagination/connectPagination';
-import {
-  AnswersRendererOptions,
-  AnswersConnectorParams,
-} from '../connectors/answers/connectAnswers';
-import {
-  RatingMenuConnectorParams,
-  RatingMenuRendererOptions,
-} from '../connectors/rating-menu/connectRatingMenu';
-import {
-  RangeConnectorParams,
-  RangeRendererOptions,
-} from '../connectors/range/connectRange';
-import {
-  RelevantSortConnectorParams,
-  RelevantSortRendererOptions,
-} from '../connectors/relevant-sort/connectRelevantSort';
-import {
-  MenuConnectorParams,
-  MenuRendererOptions,
-} from '../connectors/menu/connectMenu';
-import {
-  HierarchicalMenuConnectorParams,
-  HierarchicalMenuRendererOptions,
-} from '../connectors/hierarchical-menu/connectHierarchicalMenu';
-import {
-  RefinementListRendererOptions,
-  RefinementListConnectorParams,
-} from '../connectors/refinement-list/connectRefinementList';
-import {
-  StatsConnectorParams,
-  StatsRendererOptions,
-} from '../connectors/stats/connectStats';
-import {
-  SortByConnectorParams,
-  SortByRendererOptions,
-} from '../connectors/sort-by/connectSortBy';
+import { InstantSearch } from './instantsearch';
+import { IndexUiState, UiState } from './ui-state';
+import { IndexRenderState, WidgetRenderState } from './render-state';
+import { Expand, RequiredKeys } from './utils';
 
 export type ScopedResult = {
   indexId: string;
@@ -106,7 +17,7 @@ export type ScopedResult = {
 
 type SharedRenderOptions = {
   instantSearchInstance: InstantSearch;
-  parent: Index | null;
+  parent: IndexWidget | null;
   templatesConfig: Record<string, unknown>;
   scopedResults: ScopedResult[];
   state: SearchParameters;
@@ -130,411 +41,243 @@ export type RenderOptions = SharedRenderOptions & {
 export type DisposeOptions = {
   helper: Helper;
   state: SearchParameters;
+  parent: IndexWidget;
 };
 
-export type WidgetUiStateOptions = {
-  searchParameters: SearchParameters;
-  helper: Helper;
+export type BuiltinTypes =
+  | 'ais.analytics'
+  | 'ais.answers'
+  | 'ais.autocomplete'
+  | 'ais.breadcrumb'
+  | 'ais.clearRefinements'
+  | 'ais.configure'
+  | 'ais.configureRelatedItems'
+  | 'ais.currentRefinements'
+  | 'ais.geoSearch'
+  | 'ais.hierarchicalMenu'
+  | 'ais.hits'
+  | 'ais.hitsPerPage'
+  | 'ais.index'
+  | 'ais.infiniteHits'
+  | 'ais.menu'
+  | 'ais.numericMenu'
+  | 'ais.pagination'
+  | 'ais.places'
+  | 'ais.poweredBy'
+  | 'ais.queryRules'
+  // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
+  | 'ais.range'
+  | 'ais.rangeSlider'
+  | 'ais.rangeInput'
+  | 'ais.ratingMenu'
+  | 'ais.refinementList'
+  | 'ais.searchBox'
+  | 'ais.relevantSort'
+  | 'ais.sortBy'
+  | 'ais.stats'
+  | 'ais.toggleRefinement'
+  | 'ais.voiceSearch';
+
+export type BuiltinWidgetTypes =
+  | 'ais.analytics'
+  | 'ais.answers'
+  | 'ais.autocomplete'
+  | 'ais.breadcrumb'
+  | 'ais.clearRefinements'
+  | 'ais.configure'
+  | 'ais.configureRelatedItems'
+  | 'ais.currentRefinements'
+  | 'ais.geoSearch'
+  | 'ais.hierarchicalMenu'
+  | 'ais.hits'
+  | 'ais.hitsPerPage'
+  | 'ais.index'
+  | 'ais.infiniteHits'
+  | 'ais.menu'
+  | 'ais.menuSelect'
+  | 'ais.numericMenu'
+  | 'ais.pagination'
+  | 'ais.places'
+  | 'ais.poweredBy'
+  | 'ais.queryRuleCustomData'
+  | 'ais.queryRuleContext'
+  | 'ais.rangeInput'
+  | 'ais.rangeSlider'
+  | 'ais.ratingMenu'
+  | 'ais.refinementList'
+  | 'ais.searchBox'
+  | 'ais.relevantSort'
+  | 'ais.sortBy'
+  | 'ais.stats'
+  | 'ais.toggleRefinement'
+  | 'ais.voiceSearch';
+
+export type WidgetParams = {
+  widgetParams: NonNullable<unknown>;
 };
 
-export type WidgetSearchParametersOptions = {
-  uiState: IndexUiState;
+export type WidgetDescription = {
+  $$type: string;
+  $$widgetType?: string;
+  renderState?: Record<string, unknown>;
+  indexRenderState?: Record<string, unknown>;
+  indexUiState?: Record<string, unknown>;
 };
 
-export type IndexUiState = {
-  query?: string;
-  refinementList?: {
-    [attribute: string]: string[];
-  };
-  menu?: {
-    [attribute: string]: string;
-  };
+type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
-   * The list of hierarchical menus.
-   * Nested levels must contain the record separator.
-   *
-   * @example ['Audio', 'Audio > Headphones']
+   * Identifier for connectors and widgets.
    */
-  hierarchicalMenu?: {
-    [attribute: string]: string[];
-  };
-  /**
-   * The numeric menu as a tuple.
-   *
-   * @example ':5'
-   * @example '5:10'
-   * @example '10:'
-   */
-  numericMenu?: {
-    [attribute: string]: string;
-  };
-  ratingMenu?: {
-    [attribute: string]: number;
-  };
-  /**
-   * The range as a tuple.
-   *
-   * @example '100:500'
-   */
-  range?: {
-    [attribute: string]: string;
-  };
-  toggle?: {
-    [attribute: string]: boolean;
-  };
-  geoSearch?: {
-    /**
-     * The rectangular area in geo coordinates.
-     * The rectangle is defined by two diagonally opposite points, hence by 4 floats separated by commas.
-     *
-     * @example '47.3165,4.9665,47.3424,5.0201'
-     */
-    boundingBox: string;
-  };
-  relevantSort?: {
-    relevancyStrictness?: number;
-  };
-  sortBy?: string;
-  page?: number;
-  hitsPerPage?: number;
-  configure?: PlainSearchParameters;
-  places?: {
-    query: string;
-    /**
-     * The central geolocation.
-     *
-     * @example '48.8546,2.3477'
-     */
-    position: string;
-  };
-};
-
-export type UiState = {
-  [indexId: string]: IndexUiState;
-};
-
-export type RenderState = {
-  [indexId: string]: IndexRenderState;
-};
-
-export type IndexRenderState = Partial<{
-  searchBox: WidgetRenderState<
-    {
-      query: string;
-      refine(query: string): void;
-      clear(): void;
-      isSearchStalled: boolean;
-    },
-    {
-      queryHook?(query: string, refine: (value: string) => void): void;
-    }
-  >;
-  autocomplete: WidgetRenderState<
-    AutocompleteRendererOptions,
-    AutocompleteConnectorParams
-  >;
-  breadcrumb: {
-    [attribute: string]: WidgetRenderState<
-      BreadcrumbRendererOptions,
-      BreadcrumbConnectorParams
-    >;
-  };
-  clearRefinements: WidgetRenderState<
-    ClearRefinementsRendererOptions,
-    ClearRefinementsConnectorParams
-  >;
-  configure: WidgetRenderState<
-    ConfigureRendererOptions,
-    ConfigureConnectorParams
-  >;
-  currentRefinements: WidgetRenderState<
-    CurrentRefinementsRendererOptions,
-    CurrentRefinementsConnectorParams
-  >;
-  menu: {
-    [attribute: string]: WidgetRenderState<
-      MenuRendererOptions,
-      MenuConnectorParams
-    >;
-  };
-  hierarchicalMenu: {
-    [attribute: string]: WidgetRenderState<
-      HierarchicalMenuRendererOptions,
-      HierarchicalMenuConnectorParams
-    >;
-  };
-  hits: WidgetRenderState<HitsRendererOptions, HitsConnectorParams>;
-  infiniteHits: WidgetRenderState<
-    InfiniteHitsRendererOptions,
-    InfiniteHitsConnectorParams
-  >;
-  analytics: WidgetRenderState<unknown, AnalyticsWidgetParams>;
-  places: WidgetRenderState<unknown, PlacesWidgetParams>;
-  poweredBy: WidgetRenderState<
-    PoweredByRendererOptions,
-    PoweredByConnectorParams
-  >;
-  range: {
-    [attribute: string]: WidgetRenderState<
-      RangeRendererOptions,
-      RangeConnectorParams
-    >;
-  };
-  ratingMenu: {
-    [attribute: string]: WidgetRenderState<
-      RatingMenuRendererOptions,
-      RatingMenuConnectorParams
-    >;
-  };
-  numericMenu: {
-    [attribute: string]: WidgetRenderState<
-      NumericMenuRendererOptions,
-      NumericMenuConnectorParams
-    >;
-  };
-  voiceSearch: WidgetRenderState<
-    VoiceSearchRendererOptions,
-    VoiceSearchConnectorParams
-  >;
-  geoSearch: {
-    currentRefinement?: {
-      northEast: GeoLoc;
-      southWest: GeoLoc;
-    };
-    position?: GeoLoc;
-    items: Array<Hit & Required<Pick<Hit, '_geoLoc'>>>;
-    refine(position: { northEast: GeoLoc; southWest: GeoLoc }): void;
-    clearMapRefinement(): void;
-    hasMapMoveSinceLastRefine(): boolean;
-    isRefineOnMapMove(): boolean;
-    isRefinedWithMap(): boolean;
-    setMapMoveSinceLastRefine(): void;
-    toggleRefineOnMapMove(): void;
-    sendEvent: SendEventForHits;
-    widgetParams: any;
-  };
-  queryRules: WidgetRenderState<
-    QueryRulesRendererOptions,
-    QueryRulesConnectorParams
-  >;
-  hitsPerPage: WidgetRenderState<
-    HitsPerPageRendererOptions,
-    HitsPerPageConnectorParams
-  >;
-  pagination: WidgetRenderState<
-    PaginationRendererOptions,
-    PaginationConnectorParams
-  >;
-  refinementList: {
-    [attribute: string]: WidgetRenderState<
-      RefinementListRendererOptions,
-      RefinementListConnectorParams
-    >;
-  };
-  answers: WidgetRenderState<AnswersRendererOptions, AnswersConnectorParams>;
-  relevantSort: WidgetRenderState<
-    RelevantSortRendererOptions,
-    RelevantSortConnectorParams
-  >;
-  sortBy: WidgetRenderState<SortByRendererOptions, SortByConnectorParams>;
-  stats: WidgetRenderState<StatsRendererOptions, StatsConnectorParams>;
-}>;
-
-export type WidgetRenderState<
-  TWidgetRenderState,
-  TWidgetParams
-> = TWidgetRenderState & {
-  widgetParams: TWidgetParams;
-};
-
-/**
- * Widgets are the building blocks of InstantSearch.js. Any valid widget must
- * have at least a `render` or a `init` function.
- */
-export type Widget<
-  TWidgetOptions extends { renderState: unknown } = { renderState: unknown }
-> = {
-  /**
-   * Identifier for official connectors and widgets
-   */
-  $$type?:
-    | 'ais.analytics'
-    | 'ais.answers'
-    | 'ais.autocomplete'
-    | 'ais.breadcrumb'
-    | 'ais.clearRefinements'
-    | 'ais.configure'
-    | 'ais.configureRelatedItems'
-    | 'ais.currentRefinements'
-    | 'ais.geoSearch'
-    | 'ais.hierarchicalMenu'
-    | 'ais.hits'
-    | 'ais.hitsPerPage'
-    | 'ais.index'
-    | 'ais.infiniteHits'
-    | 'ais.menu'
-    | 'ais.numericMenu'
-    | 'ais.pagination'
-    | 'ais.places'
-    | 'ais.poweredBy'
-    | 'ais.queryRules'
-    // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
-    | 'ais.range'
-    | 'ais.rangeSlider'
-    | 'ais.rangeInput'
-    | 'ais.ratingMenu'
-    | 'ais.refinementList'
-    | 'ais.searchBox'
-    | 'ais.relevantSort'
-    | 'ais.sortBy'
-    | 'ais.stats'
-    | 'ais.toggleRefinement'
-    | 'ais.voiceSearch';
+  $$type: TWidgetDescription['$$type'];
 
   /**
-   * Identifier for official widgets
+   * Called once before the first search.
    */
-  $$widgetType?:
-    | 'ais.analytics'
-    | 'ais.answers'
-    | 'ais.autocomplete'
-    | 'ais.breadcrumb'
-    | 'ais.clearRefinements'
-    | 'ais.configure'
-    | 'ais.configureRelatedItems'
-    | 'ais.currentRefinements'
-    | 'ais.geoSearch'
-    | 'ais.hierarchicalMenu'
-    | 'ais.hits'
-    | 'ais.hitsPerPage'
-    | 'ais.index'
-    | 'ais.infiniteHits'
-    | 'ais.menu'
-    | 'ais.menuSelect'
-    | 'ais.numericMenu'
-    | 'ais.pagination'
-    | 'ais.places'
-    | 'ais.poweredBy'
-    | 'ais.queryRuleCustomData'
-    | 'ais.queryRuleContext'
-    | 'ais.rangeInput'
-    | 'ais.rangeSlider'
-    | 'ais.ratingMenu'
-    | 'ais.refinementList'
-    | 'ais.searchBox'
-    | 'ais.relevantSort'
-    | 'ais.sortBy'
-    | 'ais.stats'
-    | 'ais.toggleRefinement'
-    | 'ais.voiceSearch';
+  init?: (options: InitOptions) => void;
   /**
-   * Called once before the first search
+   * Called after each search response has been received.
    */
-  init?(options: InitOptions): void;
-  /**
-   * Called after each search response has been received
-   */
-  render?(options: RenderOptions): void;
+  render?: (options: RenderOptions) => void;
   /**
    * Called when this widget is unmounted. Used to remove refinements set by
    * during this widget's initialization and life time.
    */
-  dispose?(options: DisposeOptions): SearchParameters | void;
+  dispose?: (options: DisposeOptions) => SearchParameters | void;
+};
+
+type RequiredWidgetType<TWidgetDescription extends WidgetDescription> = {
   /**
-   * This function is required for a widget to be taken in account for routing.
-   * It will derive a uiState for this widget based on the existing uiState and
-   * the search parameters applied.
-   * @param uiState current state
-   * @param widgetStateOptions extra information to calculate uiState
+   * Identifier for widgets.
    */
-  getWidgetUiState?(
-    uiState: IndexUiState,
-    widgetUiStateOptions: WidgetUiStateOptions
-  ): IndexUiState;
-  /**
-   * This function is required for a widget to be taken in account for routing.
-   * It will derive a uiState for this widget based on the existing uiState and
-   * the search parameters applied.
-   * @deprecated Use `getWidgetUiState` instead.
-   * @param uiState current state
-   * @param widgetStateOptions extra information to calculate uiState
-   */
-  getWidgetState?(
-    uiState: IndexUiState,
-    widgetStateOptions: WidgetUiStateOptions
-  ): IndexUiState;
-  /**
-   * This function is required for a widget to behave correctly when a URL is
-   * loaded via e.g. routing. It receives the current UiState and applied search
-   * parameters, and is expected to return a new search parameters.
-   * @param state applied search parameters
-   * @param widgetSearchParametersOptions extra information to calculate next searchParameters
-   */
-  getWidgetSearchParameters?(
-    state: SearchParameters,
-    widgetSearchParametersOptions: WidgetSearchParametersOptions
-  ): SearchParameters;
-} & (TWidgetOptions['renderState'] extends Record<string, unknown>
-  ? {
-      /**
-       * Returns the render state of the current widget to pass to the render function.
-       */
-      getWidgetRenderState(
-        renderOptions: InitOptions | RenderOptions
-      ): TWidgetOptions['renderState'];
-      /**
-       * Returns IndexRenderState of the current index component tree
-       * to build the render state of the whole app.
-       */
-      getRenderState(
-        renderState: IndexRenderState,
-        renderOptions: InitOptions | RenderOptions
-      ): IndexRenderState;
-    }
+  $$widgetType: TWidgetDescription['$$widgetType'];
+};
+
+type WidgetType<
+  TWidgetDescription extends WidgetDescription
+> = TWidgetDescription extends RequiredKeys<WidgetDescription, '$$widgetType'>
+  ? RequiredWidgetType<TWidgetDescription>
   : {
       /**
-       * Returns the render state of the current widget to pass to the render function.
+       * Identifier for widgets.
        */
-      getWidgetRenderState?(
-        renderOptions: InitOptions | RenderOptions
-      ): unknown;
-      /**
-       * Returns IndexRenderState of the current index component tree
-       * to build the render state of the whole app.
-       */
-      getRenderState?(
-        renderState: IndexRenderState,
-        renderOptions: InitOptions | RenderOptions
-      ): IndexRenderState;
-    });
+      $$widgetType?: string;
+    };
+
+type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
+  /**
+   * This function is required for a widget to be taken in account for routing.
+   * It will derive a uiState for this widget based on the existing uiState and
+   * the search parameters applied.
+   *
+   * @param uiState - Current state.
+   * @param widgetStateOptions - Extra information to calculate uiState.
+   */
+  getWidgetUiState: (
+    uiState: Expand<Partial<TWidgetDescription['indexUiState'] & IndexUiState>>,
+    widgetUiStateOptions: {
+      searchParameters: SearchParameters;
+      helper: Helper;
+    }
+  ) => Partial<IndexUiState & TWidgetDescription['indexUiState']>;
+
+  /**
+   * This function is required for a widget to be taken in account for routing.
+   * It will derive a uiState for this widget based on the existing uiState and
+   * the search parameters applied.
+   *
+   * @deprecated Use `getWidgetUiState` instead.
+   * @param uiState - Current state.
+   * @param widgetStateOptions - Extra information to calculate uiState.
+   */
+  getWidgetState?: RequiredUiStateLifeCycle<
+    TWidgetDescription
+  >['getWidgetUiState'];
+
+  /**
+   * This function is required for a widget to behave correctly when a URL is
+   * loaded via e.g. Routing. It receives the current UiState and applied search
+   * parameters, and is expected to return a new search parameters.
+   *
+   * @param state - Applied search parameters.
+   * @param widgetSearchParametersOptions - Extra information to calculate next searchParameters.
+   */
+  getWidgetSearchParameters: (
+    state: SearchParameters,
+    widgetSearchParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => SearchParameters;
+};
+
+type UiStateLifeCycle<
+  TWidgetDescription extends WidgetDescription
+> = TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>
+  ? RequiredUiStateLifeCycle<TWidgetDescription>
+  : Partial<RequiredUiStateLifeCycle<TWidgetDescription>>;
+
+type RequiredRenderStateLifeCycle<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = {
+  /**
+   * Returns the render state of the current widget to pass to the render function.
+   */
+  getWidgetRenderState: (
+    renderOptions: InitOptions | RenderOptions
+  ) => Expand<
+    WidgetRenderState<
+      TWidgetDescription['renderState'],
+      TWidgetDescription['widgetParams']
+    >
+  >;
+  /**
+   * Returns IndexRenderState of the current index component tree
+   * to build the render state of the whole app.
+   */
+  getRenderState: (
+    renderState: Expand<
+      IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
+    >,
+    renderOptions: InitOptions | RenderOptions
+  ) => IndexRenderState & TWidgetDescription['indexRenderState'];
+};
+
+type RenderStateLifeCycle<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = TWidgetDescription extends RequiredKeys<
+  WidgetDescription,
+  'renderState' | 'indexRenderState'
+> &
+  WidgetParams
+  ? RequiredRenderStateLifeCycle<TWidgetDescription>
+  : Partial<RequiredRenderStateLifeCycle<TWidgetDescription>>;
+
+export type Widget<
+  TWidgetDescription extends WidgetDescription & WidgetParams = {
+    $$type: string;
+    widgetParams: unknown;
+  }
+> = Expand<
+  RequiredWidgetLifeCycle<TWidgetDescription> &
+    WidgetType<TWidgetDescription> &
+    UiStateLifeCycle<TWidgetDescription> &
+    RenderStateLifeCycle<TWidgetDescription>
+>;
 
 /**
- * The function that creates a new widget.
+ * Transforms the given items.
  */
-export type WidgetFactory<TRendererOptions, TConnectorParams, TWidgetParams> = (
-  /**
-   * The params of the widget.
-   */
-  widgetParams: TConnectorParams & TWidgetParams
-) => Widget<{
-  renderState: WidgetRenderState<
-    TRendererOptions,
-    // widgetParams sent to the connector of builtin widgets are actually
-    // the connector params, therefore renderState uses TConnectorParams only
-    TConnectorParams
-  >;
-}>;
+export type TransformItems<TItem> = (items: TItem[]) => TItem[];
 
-export type Template<TTemplateData = void> =
-  | string
-  | ((data: TTemplateData) => string);
+/**
+ * Transforms the given items.
+ */
+export type SortBy<TItem> =
+  | ((a: TItem, b: TItem) => number)
+  | Array<'count' | 'isRefined' | 'name:asc' | 'name:desc'>;
 
-export type UnknownWidgetFactory = WidgetFactory<any, any, any>;
-
-export type TemplateWithBindEvent<TTemplateData = void> =
-  | string
-  | ((data: TTemplateData, bindEvent: BindEventForHits) => string);
-
-export type Templates = {
-  [key: string]: Template<any> | TemplateWithBindEvent<any> | undefined;
-};
+/**
+ * Creates the URL for the given value.
+ */
+export type CreateURL<TValue> = (value: TValue) => string;

@@ -1,6 +1,6 @@
 import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import EventEmitter from 'events';
-import index, { Index, isIndexWidget } from '../widgets/index/index';
+import index, { IndexWidget, isIndexWidget } from '../widgets/index/index';
 import version from './version';
 import createHelpers from './createHelpers';
 import {
@@ -143,7 +143,7 @@ class InstantSearch extends EventEmitter {
   public onStateChange: InstantSearchOptions['onStateChange'] | null = null;
   public helper: AlgoliaSearchHelper | null;
   public mainHelper: AlgoliaSearchHelper | null;
-  public mainIndex: Index;
+  public mainIndex: IndexWidget;
   public started: boolean;
   public templatesConfig: Record<string, unknown>;
   public renderState: RenderState = {};
@@ -339,7 +339,7 @@ See ${createDocumentationLink({
    * Widgets can be added either before or after InstantSearch has started.
    * @param widgets The array of widgets to add to InstantSearch.
    */
-  public addWidgets(widgets: Widget[]) {
+  public addWidgets(widgets: Array<Widget | IndexWidget>) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(
@@ -374,7 +374,7 @@ See ${createDocumentationLink({
    *
    * The widget must implement a `dispose()` method to clear its state.
    */
-  public removeWidget(widget: Widget) {
+  public removeWidget(widget: Widget | IndexWidget) {
     warning(
       false,
       'removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
@@ -389,7 +389,7 @@ See ${createDocumentationLink({
    *
    * The widgets must implement a `dispose()` method to clear their states.
    */
-  public removeWidgets(widgets: Widget[]) {
+  public removeWidgets(widgets: Array<Widget | IndexWidget>) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(
@@ -571,7 +571,7 @@ See ${createDocumentationLink({
         ? uiState(this.mainIndex.getWidgetUiState({}))
         : uiState;
 
-    const setIndexHelperState = (indexWidget: Index) => {
+    const setIndexHelperState = (indexWidget: IndexWidget) => {
       if (__DEV__) {
         checkIndexUiState({
           index: indexWidget,

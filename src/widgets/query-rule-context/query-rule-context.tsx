@@ -3,8 +3,8 @@ import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 import connectQueryRules, {
   ParamTrackedFilters,
   ParamTransformRuleContexts,
-  QueryRulesRendererOptions,
   QueryRulesConnectorParams,
+  QueryRulesWidgetDescription,
 } from '../../connectors/query-rules/connectQueryRules';
 
 type QueryRuleContextWidgetParams = {
@@ -13,7 +13,7 @@ type QueryRuleContextWidgetParams = {
 };
 
 type QueryRuleContext = WidgetFactory<
-  QueryRulesRendererOptions,
+  QueryRulesWidgetDescription & { $$widgetType: 'ais.queryRuleContext' },
   QueryRulesConnectorParams,
   QueryRuleContextWidgetParams
 >;

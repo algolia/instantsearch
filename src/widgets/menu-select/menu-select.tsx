@@ -4,7 +4,8 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import connectMenu, {
   MenuConnectorParams,
-  MenuRendererOptions,
+  MenuRenderState,
+  MenuWidgetDescription,
 } from '../../connectors/menu/connectMenu';
 import MenuSelect from '../../components/MenuSelect/MenuSelect';
 import defaultTemplates from './defaultTemplates';
@@ -85,7 +86,7 @@ const renderer = ({
     refine,
     items,
     instantSearchInstance,
-  }: MenuRendererOptions & RendererOptions<MenuConnectorParams>,
+  }: MenuRenderState & RendererOptions<MenuConnectorParams>,
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
@@ -109,7 +110,7 @@ const renderer = ({
 };
 
 export type MenuSelectWidget = WidgetFactory<
-  MenuRendererOptions,
+  MenuWidgetDescription & { $$widgetType: 'ais.menuSelect' },
   MenuConnectorParams,
   MenuSelectWidgetParams
 >;

@@ -109,6 +109,7 @@ const createFakeHitsPerPage = (): Widget =>
 
 describe('RoutingManager', () => {
   describe('within instantsearch', () => {
+    // eslint-disable-next-line jest/no-done-callback
     test('should write in the router on searchParameters change', done => {
       const searchClient = createSearchClient();
       const router = createFakeRouter({
@@ -123,7 +124,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const widget = {
+      const widget = createWidget({
         render: jest.fn(),
         getWidgetUiState: jest.fn((uiState, { searchParameters }) => ({
           ...uiState,
@@ -132,7 +133,7 @@ describe('RoutingManager', () => {
         getWidgetSearchParameters: jest.fn(
           searchParameters => searchParameters
         ),
-      };
+      });
 
       search.addWidgets([widget]);
 
@@ -162,6 +163,7 @@ describe('RoutingManager', () => {
       });
     });
 
+    // eslint-disable-next-line jest/no-done-callback
     test('should update the searchParameters on router state update', done => {
       const searchClient = createSearchClient();
 
@@ -180,12 +182,12 @@ describe('RoutingManager', () => {
         },
       });
 
-      const widget = {
+      const widget = createWidget({
         render: jest.fn(),
         getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) =>
           searchParameters.setQuery(uiState.query)
         ),
-      };
+      });
 
       search.addWidgets([widget]);
 
@@ -212,7 +214,8 @@ describe('RoutingManager', () => {
       });
     });
 
-    test('should apply state mapping on differences after searchfunction', done => {
+    // eslint-disable-next-line jest/no-done-callback
+    test('should apply state mapping on differences after searchFunction', done => {
       const searchClient = createSearchClient();
 
       const router = createFakeRouter({

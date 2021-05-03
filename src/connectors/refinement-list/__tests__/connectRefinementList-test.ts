@@ -6,6 +6,7 @@ import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectRefinementList from '../connectRefinementList';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -2070,7 +2071,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     );
 
     expect(() =>
-      widget.dispose!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 
@@ -2156,10 +2157,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         })
       );
 
-      const newState = widget.dispose!({
-        state: helper.state,
-        helper,
-      });
+      const newState = widget.dispose!(
+        createDisposeOptions({
+          state: helper.state,
+          helper,
+        })
+      );
 
       expect(newState).toEqual(
         new SearchParameters({
@@ -2249,10 +2252,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         })
       );
 
-      const newState = widget.dispose!({
-        state: helper.state,
-        helper,
-      });
+      const newState = widget.dispose!(
+        createDisposeOptions({
+          state: helper.state,
+          helper,
+        })
+      );
 
       expect(newState).toEqual(
         new SearchParameters({

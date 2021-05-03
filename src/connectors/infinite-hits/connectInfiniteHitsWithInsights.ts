@@ -1,6 +1,6 @@
 import { withInsights } from '../../lib/insights';
 import connectInfiniteHits, {
-  InfiniteHitsRendererOptions,
+  InfiniteHitsWidgetDescription,
   InfiniteHitsConnectorParams,
 } from './connectInfiniteHits';
 import { Connector } from '../../types';
@@ -12,7 +12,7 @@ import { Connector } from '../../types';
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare type ImportWorkaround = Connector<
-  InfiniteHitsRendererOptions,
+  InfiniteHitsWidgetDescription,
   InfiniteHitsConnectorParams
 >;
 

@@ -1,8 +1,4 @@
-import {
-  AlgoliaSearchHelper,
-  SearchForFacetValues,
-  SearchResults,
-} from 'algoliasearch-helper';
+import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import {
   escapeFacets,
   TAG_PLACEHOLDER,
@@ -20,9 +16,9 @@ import {
   RenderOptions,
   Widget,
   InitOptions,
-  WidgetRenderState,
   FacetHit,
   CreateURL,
+  WidgetRenderState,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -51,10 +47,6 @@ export type RefinementListItem = {
    * Indicates if the list item is refined.
    */
   isRefined: boolean;
-  /**
-   * List item childrens.
-   */
-  data?: RefinementListItem[];
 };
 
 export type RefinementListConnectorParams = {
@@ -94,7 +86,7 @@ export type RefinementListConnectorParams = {
   transformItems?: TransformItems<RefinementListItem>;
 };
 
-export type RefinementListRendererOptions = {
+export type RefinementListRenderState = {
   /**
    * The list of filtering values returned from Algolia API.
    */
@@ -142,15 +134,28 @@ export type RefinementListRendererOptions = {
   toggleShowMore(): void;
 };
 
+export type RefinementListWidgetDescription = {
+  $$type: 'ais.refinementList';
+  renderState: RefinementListRenderState;
+  indexRenderState: {
+    refinementList: {
+      [attribute: string]: WidgetRenderState<
+        RefinementListRenderState,
+        RefinementListConnectorParams
+      >;
+    };
+  };
+  indexUiState: {
+    refinementList: {
+      [attribute: string]: string[];
+    };
+  };
+};
+
 export type RefinementListConnector = Connector<
-  RefinementListRendererOptions,
+  RefinementListWidgetDescription,
   RefinementListConnectorParams
 >;
-
-type RefinementListRenderOptions = (InitOptions | RenderOptions) & {
-  isFromSearch: true;
-  results: SearchForFacetValues.Result;
-};
 
 /**
  * **RefinementList** connector provides the logic to build a custom widget that
@@ -182,12 +187,9 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
       transformItems = (items => items) as TransformItems<RefinementListItem>,
     } = widgetParams || {};
 
-    type ThisWidget = Widget<{
-      renderState: WidgetRenderState<
-        RefinementListRendererOptions,
-        typeof widgetParams & RefinementListConnectorParams
-      >;
-    }>;
+    type ThisWidget = Widget<
+      RefinementListWidgetDescription & { widgetParams: typeof widgetParams }
+    >;
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
@@ -220,8 +222,8 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
     let lastResultsFromMainSearch: SearchResults;
     let lastItemsFromMainSearch: RefinementListItem[] = [];
     let hasExhaustiveItems = true;
-    let triggerRefine: RefinementListRendererOptions['refine'] | undefined;
-    let sendEvent: RefinementListRendererOptions['sendEvent'] | undefined;
+    let triggerRefine: RefinementListRenderState['refine'] | undefined;
+    let sendEvent: RefinementListRenderState['sendEvent'] | undefined;
 
     let isShowingMore = false;
     // Provide the same function to the `renderFn` so that way the user
@@ -233,7 +235,7 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
 
     function createToggleShowMore(
       renderOptions: RenderOptions,
-      widget: Widget
+      widget: ThisWidget
     ) {
       return () => {
         isShowingMore = !isShowingMore;
@@ -246,13 +248,14 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
     }
 
     let searchForFacetValues: (
-      renderOptions: RefinementListRenderOptions
-    ) => RefinementListRendererOptions['searchForItems'] = () => () => {};
+      renderOptions: RenderOptions | InitOptions
+    ) => RefinementListRenderState['searchForItems'] = () => () => {};
+
     const createSearchForFacetValues = function(
       helper: AlgoliaSearchHelper,
       widget: ThisWidget
     ) {
-      return (renderOptions: RefinementListRenderOptions) => (
+      return (renderOptions: RenderOptions | InitOptions) => (
         query: string
       ) => {
         const { instantSearchInstance } = renderOptions;
@@ -301,9 +304,6 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
                 }))
               );
 
-              const canToggleShowMore =
-                isShowingMore && lastItemsFromMainSearch.length > limit;
-
               renderFn(
                 {
                   ...widget.getWidgetRenderState({
@@ -311,10 +311,10 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
                     results: lastResultsFromMainSearch,
                   }),
                   items: normalizedFacetValues,
-                  canToggleShowMore,
+                  canToggleShowMore: false,
                   canRefine: true,
-                  instantSearchInstance,
                   isFromSearch: true,
+                  instantSearchInstance,
                 },
                 false
               );
@@ -356,13 +356,12 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
         };
       },
 
-      getWidgetRenderState(renderOptions: RefinementListRenderOptions) {
+      getWidgetRenderState(renderOptions) {
         const {
           results,
           state,
           createURL,
           instantSearchInstance,
-          isFromSearch = false,
           helper,
         } = renderOptions;
         let items: RefinementListItem[] = [];
@@ -385,25 +384,13 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
         }
 
         if (results) {
-          if (!isFromSearch) {
-            const values = results.getFacetValues(attribute, { sortBy });
-            facetValues = values && Array.isArray(values) ? values : [];
-            items = transformItems(
-              facetValues.slice(0, getLimit()).map(formatItems)
-            );
-          } else {
-            facetValues = escapeFacetValues
-              ? escapeFacets(results.facetHits)
-              : results.facetHits;
-
-            items = transformItems(
-              facetValues.map(({ value, ...item }) => ({
-                ...item,
-                value,
-                label: value,
-              }))
-            );
-          }
+          const values = results.getFacetValues(attribute, {
+            sortBy,
+          });
+          facetValues = values && Array.isArray(values) ? values : [];
+          items = transformItems(
+            facetValues.slice(0, getLimit()).map(formatItems)
+          );
 
           const maxValuesPerFacetConfig = state.maxValuesPerFacet;
           const currentLimit = getLimit();
@@ -433,7 +420,7 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
 
         const canShowLess =
           isShowingMore && lastItemsFromMainSearch.length > limit;
-        const canShowMore = showMore && !isFromSearch && !hasExhaustiveItems;
+        const canShowMore = showMore && !hasExhaustiveItems;
 
         const canToggleShowMore = canShowLess || canShowMore;
 
@@ -445,8 +432,8 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
           items,
           refine: triggerRefine,
           searchForItems: searchFacetValues,
-          isFromSearch,
-          canRefine: isFromSearch || items.length > 0,
+          isFromSearch: false,
+          canRefine: items.length > 0,
           widgetParams,
           isShowingMore,
           canToggleShowMore,

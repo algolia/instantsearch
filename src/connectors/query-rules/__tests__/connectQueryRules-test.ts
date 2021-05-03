@@ -6,13 +6,12 @@ import algoliasearchHelper, {
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import connectQueryRules, {
-  QueryRulesRendererOptions,
-} from '../connectQueryRules';
+import connectQueryRules from '../connectQueryRules';
 
 describe('connectQueryRules', () => {
   function createWidget() {
@@ -192,7 +191,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         })
       );
 
-      widget.dispose!({ helper, state: helper.state });
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -200,12 +199,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     test('does not throw without the unmount function', () => {
       const helper = createFakeHelper();
       const rendering = () => {};
-      const makeWidget = connectQueryRules<QueryRulesRendererOptions>(
-        rendering
-      );
-      const widget = makeWidget({
-        items: [] as any[],
-      });
+      const makeWidget = connectQueryRules(rendering);
+      const widget = makeWidget({});
 
       widget.init!(
         createInitOptions({
@@ -215,7 +210,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       );
 
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
   });
@@ -969,7 +964,9 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           'ais-brand-Apple',
         ]);
 
-        const nextState = widget.dispose!({ helper, state: helper.state });
+        const nextState = widget.dispose!(
+          createDisposeOptions({ helper, state: helper.state })
+        );
 
         expect((nextState as SearchParameters).ruleContexts).toEqual([
           'initial-rule',
@@ -1008,7 +1005,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
         expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung']);
 
-        widget.dispose!({ helper, state: helper.state });
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
 
         helper.setState({
           disjunctiveFacetsRefinements: {

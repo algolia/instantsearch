@@ -767,6 +767,7 @@ describe('start', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
+  // eslint-disable-next-line jest/no-done-callback
   it('triggers a search with errors', done => {
     const searchClient = createSearchClient({
       search: jest.fn(() => Promise.reject(new Error('SERVER_ERROR'))),
@@ -1113,6 +1114,7 @@ describe('scheduleRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
   });
 
+  // eslint-disable-next-line jest/no-done-callback
   it('emits a `render` event once the render is complete', done => {
     const search = new InstantSearch({
       indexName: 'indexName',

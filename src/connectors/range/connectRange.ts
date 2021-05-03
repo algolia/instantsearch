@@ -13,7 +13,7 @@ import {
   SendEventForFacet,
 } from '../../lib/utils';
 import { InsightsEvent } from '../../middlewares';
-import { Connector, InstantSearch } from '../../types';
+import { Connector, InstantSearch, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator(
   { name: 'range-input', connector: true },
@@ -32,7 +32,7 @@ export type Range = {
   max: RangeMax;
 };
 
-export type RangeRendererOptions = {
+export type RangeRenderState = {
   /**
    * Sets a range to filter the results on. Both values
    * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a
@@ -93,8 +93,27 @@ export type RangeConnectorParams = {
   precision?: number;
 };
 
-export type ConnectRange = Connector<
-  RangeRendererOptions,
+export type RangeWidgetDescription = {
+  $$type: 'ais.range';
+  renderState: RangeRenderState;
+  indexRenderState: {
+    range: {
+      [attribute: string]: WidgetRenderState<
+        RangeRenderState,
+        RangeConnectorParams
+      >;
+    };
+  };
+  indexUiState: {
+    range: {
+      // @TODO: this could possibly become `${number}:${number}` later
+      [attribute: string]: string;
+    };
+  };
+};
+
+export type RangeConnector = Connector<
+  RangeWidgetDescription,
   RangeConnectorParams
 >;
 
@@ -114,7 +133,7 @@ function toPrecision({ min, max, precision }) {
  * This connectors provides a `refine()` function that accepts bounds. It will also provide
  * information about the min and max bounds for the current result set.
  */
-const connectRange: ConnectRange = function connectRange(
+const connectRange: RangeConnector = function connectRange(
   renderFn,
   unmountFn = noop
 ) {

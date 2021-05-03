@@ -1,5 +1,6 @@
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -116,7 +117,7 @@ describe('connectInfiniteHitsWithInsights', () => {
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     const widget = makeWidget({});
     expect(() =>
-      widget.dispose!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 });

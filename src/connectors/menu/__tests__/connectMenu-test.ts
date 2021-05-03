@@ -6,19 +6,21 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import connectMenu, {
   MenuConnectorParams,
-  MenuRendererOptions,
+  MenuRenderState,
+  MenuWidgetDescription,
 } from '../connectMenu';
 import { WidgetFactory } from '../../../types';
 
 describe('connectMenu', () => {
-  let rendering: jest.Mock<any, [MenuRendererOptions, boolean]>;
+  let rendering: jest.Mock<any, [MenuRenderState, boolean]>;
   let makeWidget: WidgetFactory<
-    MenuRendererOptions,
+    MenuWidgetDescription,
     MenuConnectorParams,
     MenuConnectorParams
   >;
@@ -474,7 +476,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       })
     );
     expect(() =>
-      widget.dispose!!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 
@@ -1193,7 +1195,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
 
-      const newState = widget.dispose!({ state: helper.state, helper });
+      const newState = widget.dispose!(
+        createDisposeOptions({ state: helper.state, helper })
+      );
 
       expect(newState).toEqual(
         new SearchParameters({
@@ -1235,7 +1239,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
 
-      const newState = widget.dispose!({ state: helper.state, helper });
+      const newState = widget.dispose!(
+        createDisposeOptions({ state: helper.state, helper })
+      );
 
       expect(newState).toEqual(
         new SearchParameters({
@@ -1259,7 +1265,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
       helper.search = jest.fn();
-      const newState = widget.dispose!({ state, helper });
+      const newState = widget.dispose!(createDisposeOptions({ state, helper }));
 
       expect(newState).toEqual(new SearchParameters());
     });

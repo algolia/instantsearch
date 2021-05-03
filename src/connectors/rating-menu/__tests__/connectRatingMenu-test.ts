@@ -4,6 +4,7 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import connectRatingMenu from '../connectRatingMenu';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -313,7 +314,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const { widget, helper } = getInitializedWidget();
 
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
 
@@ -321,7 +322,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const unmount = jest.fn();
       const { widget, helper } = getInitializedWidget({}, unmount);
 
-      widget.dispose!({ helper, state: helper.state });
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
 
       expect(unmount).toHaveBeenCalledTimes(1);
     });
@@ -357,7 +358,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         })
       );
 
-      const nextState = widget.dispose!({ helper, state: helper.state });
+      const nextState = widget.dispose!(
+        createDisposeOptions({ helper, state: helper.state })
+      );
 
       expect(nextState).toEqual(
         new SearchParameters({

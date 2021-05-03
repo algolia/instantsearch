@@ -10,7 +10,8 @@ import { component } from '../../lib/suit';
 import { WidgetFactory, Renderer, Template } from '../../types';
 import connectRelevantSort, {
   RelevantSortConnectorParams,
-  RelevantSortRendererOptions,
+  RelevantSortRenderState,
+  RelevantSortWidgetDescription,
 } from '../../connectors/relevant-sort/connectRelevantSort';
 import RelevantSort from '../../components/RelevantSort/RelevantSort';
 import defaultTemplates from './defaultTemplates';
@@ -39,7 +40,7 @@ type RelevantSortRendererWidgetParams = {
 } & RelevantSortWidgetParams;
 
 type RelevantSortWidget = WidgetFactory<
-  RelevantSortRendererOptions,
+  RelevantSortWidgetDescription & { $$widgetType: 'ais.relevantSort' },
   RelevantSortConnectorParams,
   RelevantSortWidgetParams
 >;
@@ -51,7 +52,7 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('RelevantSort');
 
 const renderer: Renderer<
-  RelevantSortRendererOptions,
+  RelevantSortRenderState,
   RelevantSortRendererWidgetParams
 > = ({ isRelevantSorted, isVirtualReplica, refine, widgetParams }) => {
   const { container, cssClasses, templates } = widgetParams;

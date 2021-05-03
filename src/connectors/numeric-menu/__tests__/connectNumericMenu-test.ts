@@ -4,11 +4,12 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import connectNumericMenu, {
   NumericMenuConnectorParamsItem,
-  NumericMenuRendererOptions,
-  NumericMenuRendererOptionsItem,
+  NumericMenuRenderState,
+  NumericMenuRenderStateItem,
 } from '../connectNumericMenu';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -20,7 +21,7 @@ const encodeValue = (
 ) => window.encodeURI(JSON.stringify({ start, end }));
 const mapOptionsToItems: (
   item: NumericMenuConnectorParamsItem
-) => NumericMenuRendererOptionsItem = ({ start, end, label }) => ({
+) => NumericMenuRenderStateItem = ({ start, end, label }) => ({
   label,
   value: encodeValue(start, end),
   isRefined: false,
@@ -28,7 +29,7 @@ const mapOptionsToItems: (
 
 describe('connectNumericMenu', () => {
   const getInitializedWidget = () => {
-    const rendering = jest.fn<any, [NumericMenuRendererOptions, boolean]>();
+    const rendering = jest.fn<any, [NumericMenuRenderState, boolean]>();
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
@@ -734,7 +735,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     const helper = jsHelper(createSearchClient(), '');
 
     expect(() =>
-      widget.dispose!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 

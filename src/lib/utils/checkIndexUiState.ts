@@ -1,6 +1,6 @@
 import capitalize from './capitalize';
 import { warning } from './logger';
-import { Index } from '../../widgets/index/index';
+import { IndexWidget } from '../../widgets/index/index';
 import { Widget, IndexUiState } from '../../types';
 import { keys } from './typedObject';
 
@@ -98,7 +98,7 @@ const stateToWidgetsMap: StateToWidgets = {
 };
 
 type CheckIndexUiStateParams = {
-  index: Index;
+  index: IndexWidget;
   indexUiState: IndexUiState;
 };
 

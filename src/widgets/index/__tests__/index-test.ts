@@ -574,6 +574,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           expect(widget.dispose).toHaveBeenCalledWith({
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
+            parent: instance,
           });
         });
       });
@@ -2186,7 +2187,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           };
         }),
       });
-      const renderStateWidget = {
+      const renderStateWidget = createWidget({
         init({ renderState }) {
           expect(renderState).toEqual({
             indexName: {
@@ -2255,7 +2256,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             },
           });
         },
-      };
+      });
 
       search.addWidgets([
         searchBox,
@@ -2676,6 +2677,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.dispose).toHaveBeenCalledWith({
           state: helper!.state,
           helper,
+          parent: instance,
         });
       });
     });

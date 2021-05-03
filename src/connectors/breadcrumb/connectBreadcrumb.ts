@@ -6,7 +6,12 @@ import {
   noop,
 } from '../../lib/utils';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { Connector, TransformItems, CreateURL } from '../../types';
+import {
+  Connector,
+  TransformItems,
+  CreateURL,
+  WidgetRenderState,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'breadcrumb',
@@ -49,7 +54,7 @@ export type BreadcrumbConnectorParams = {
   separator?: string;
 };
 
-export type BreadcrumbRendererOptions = {
+export type BreadcrumbRenderState = {
   /**
    * Creates the URL for a single item name in the list.
    */
@@ -71,8 +76,21 @@ export type BreadcrumbRendererOptions = {
   canRefine: boolean;
 };
 
+export type BreadcrumbWidgetDescription = {
+  $$type: 'ais.breadcrumb';
+  renderState: BreadcrumbRenderState;
+  indexRenderState: {
+    breadcrumb: {
+      [rootAttribute: string]: WidgetRenderState<
+        BreadcrumbRenderState,
+        BreadcrumbConnectorParams
+      >;
+    };
+  };
+};
+
 export type BreadcrumbConnector = Connector<
-  BreadcrumbRendererOptions,
+  BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams
 >;
 
@@ -83,8 +101,8 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
   checkRendering(renderFn, withUsage());
 
   type ConnectorState = {
-    refine?: BreadcrumbRendererOptions['refine'];
-    createURL?: BreadcrumbRendererOptions['createURL'];
+    refine?: BreadcrumbRenderState['refine'];
+    createURL?: BreadcrumbRenderState['createURL'];
   };
 
   const connectorState: ConnectorState = {};

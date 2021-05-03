@@ -5,9 +5,10 @@ import algoliasearchHelper, {
 
 import connectPagination, {
   PaginationConnectorParams,
-  PaginationRendererOptions,
+  PaginationRenderState,
 } from '../connectPagination';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -18,7 +19,7 @@ describe('connectPagination', () => {
   const getInitializedWidget = (
     widgetParams: PaginationConnectorParams = {}
   ) => {
-    const renderFn = jest.fn<any, [PaginationRendererOptions, boolean]>();
+    const renderFn = jest.fn<any, [PaginationRenderState, boolean]>();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget(widgetParams);
 
@@ -308,7 +309,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose!({ helper, state: helper.state });
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -321,7 +322,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const widget = makeWidget({});
 
       expect(() =>
-        widget.dispose!({ helper, state: helper.state })
+        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
     });
 
@@ -336,7 +337,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
       expect(helper.state.page).toBe(5);
 
-      const nextState = widget.dispose!({ helper, state: helper.state });
+      const nextState = widget.dispose!(
+        createDisposeOptions({ helper, state: helper.state })
+      );
 
       // error used for typescript
       if (!nextState) {

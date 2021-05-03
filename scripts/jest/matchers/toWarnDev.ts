@@ -1,10 +1,4 @@
 /* eslint-disable no-console */
-/* global CustomMatcherResult */
-/*
- * The `no-redeclare` rule sends a false positive with
- * an incompatibility with TypeScript namespaces.
- * See: https://github.com/typescript-eslint/typescript-eslint/issues/60
- */
 
 import jestDiff from 'jest-diff';
 
@@ -13,7 +7,7 @@ declare global {
   namespace jest {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
     interface Matchers<R> {
-      toWarnDev(expectedMessage?: string): CustomMatcherResult;
+      toWarnDev(expectedMessage?: string): jest.CustomMatcherResult;
     }
   }
 }
@@ -29,7 +23,7 @@ const matcher: jest.ExpectExtendMap = {
     if (!__DEV__) {
       callback();
 
-      return { pass: true, message: '' };
+      return { pass: true, message: () => '' };
     }
 
     const originalWarnMethod = console.warn;
@@ -66,7 +60,7 @@ ${jestDiff(expectedMessage, actualWarning)}`,
       };
     }
 
-    return { pass: true, message: '' };
+    return { pass: true, message: () => '' };
   },
 };
 

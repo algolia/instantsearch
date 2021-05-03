@@ -1,8 +1,8 @@
 import connectConfigure, {
-  ConfigureRendererOptions,
   ConfigureConnectorParams,
+  ConfigureWidgetDescription,
 } from '../../connectors/configure/connectConfigure';
-import { Widget, WidgetRenderState } from '../../types';
+import { Widget } from '../../types';
 import { noop } from '../../lib/utils';
 
 /**
@@ -13,12 +13,12 @@ export type ConfigureWidgetParams = ConfigureConnectorParams['searchParameters']
 
 export type ConfigureWidget = (
   widgetParams: ConfigureWidgetParams
-) => Widget<{
-  renderState: WidgetRenderState<
-    ConfigureRendererOptions,
-    ConfigureConnectorParams
-  >;
-}>;
+) => Widget<
+  ConfigureWidgetDescription & {
+    $$widgetType: 'ais.configure';
+    widgetParams: ConfigureConnectorParams;
+  }
+>;
 
 const configure: ConfigureWidget = function configure(widgetParams) {
   // This is a renderless widget that falls back to the connector's

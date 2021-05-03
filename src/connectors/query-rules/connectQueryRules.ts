@@ -2,7 +2,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { HelperChangeEvent, Connector, TransformItems } from '../../types';
+import { Connector, TransformItems, WidgetRenderState } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -32,7 +32,7 @@ export type QueryRulesConnectorParams = {
   transformItems?: ParamTransformItems;
 };
 
-export type QueryRulesRendererOptions = {
+export type QueryRulesRenderState = {
   items: any[];
 };
 
@@ -110,7 +110,7 @@ function applyRuleContexts(
     trackedFilters: ParamTrackedFilters;
     transformRuleContexts: ParamTransformRuleContexts;
   },
-  event: HelperChangeEvent
+  event: { state: SearchParameters }
 ): void {
   const {
     helper,
@@ -146,8 +146,19 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
   }
 }
 
+export type QueryRulesWidgetDescription = {
+  $$type: 'ais.queryRules';
+  renderState: QueryRulesRenderState;
+  indexRenderState: {
+    queryRules: WidgetRenderState<
+      QueryRulesRenderState,
+      QueryRulesConnectorParams
+    >;
+  };
+};
+
 export type QueryRulesConnector = Connector<
-  QueryRulesRendererOptions,
+  QueryRulesWidgetDescription,
   QueryRulesConnectorParams
 >;
 
@@ -179,7 +190,7 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
     // We store the initial rule contexts applied before creating the widget
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
-    let onHelperChange: (event: HelperChangeEvent) => void;
+    let onHelperChange: (event: { state: SearchParameters }) => void;
 
     return {
       $$type: 'ais.queryRules',

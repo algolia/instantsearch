@@ -1,7 +1,7 @@
 import { withInsights } from '../../lib/insights';
 import connectHits, {
-  HitsRendererOptions,
   HitsConnectorParams,
+  HitsWidgetDescription,
 } from './connectHits';
 import { Connector } from '../../types';
 
@@ -12,7 +12,7 @@ import { Connector } from '../../types';
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare type ImportWorkaround = Connector<
-  HitsRendererOptions,
+  HitsWidgetDescription,
   HitsConnectorParams
 >;
 
