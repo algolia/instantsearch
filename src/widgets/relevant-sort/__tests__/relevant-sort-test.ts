@@ -9,7 +9,7 @@ import {
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+  const module = jest.requireActual('preact');
 
   module.render = jest.fn();
 

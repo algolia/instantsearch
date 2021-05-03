@@ -109,6 +109,7 @@ const createFakeHitsPerPage = (): Widget =>
 
 describe('RoutingManager', () => {
   describe('within instantsearch', () => {
+    // eslint-disable-next-line jest/no-done-callback
     test('should write in the router on searchParameters change', done => {
       const searchClient = createSearchClient();
       const router = createFakeRouter({
@@ -162,6 +163,7 @@ describe('RoutingManager', () => {
       });
     });
 
+    // eslint-disable-next-line jest/no-done-callback
     test('should update the searchParameters on router state update', done => {
       const searchClient = createSearchClient();
 
@@ -212,7 +214,8 @@ describe('RoutingManager', () => {
       });
     });
 
-    test('should apply state mapping on differences after searchfunction', done => {
+    // eslint-disable-next-line jest/no-done-callback
+    test('should apply state mapping on differences after searchFunction', done => {
       const searchClient = createSearchClient();
 
       const router = createFakeRouter({
