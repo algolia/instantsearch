@@ -3,6 +3,7 @@ const SearchResults = jsHelper.SearchResults;
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -427,7 +428,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
     const widget = makeWidget({});
     const helper = jsHelper(createSearchClient(), '');
     expect(() =>
-      widget.dispose!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 });

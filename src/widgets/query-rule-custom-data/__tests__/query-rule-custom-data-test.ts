@@ -3,7 +3,10 @@ import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
 } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createInitOptions } from '../../../../test/mock/createWidget';
+import {
+  createDisposeOptions,
+  createInitOptions,
+} from '../../../../test/mock/createWidget';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import queryRuleCustomData from '../query-rule-custom-data';
 import { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData';
@@ -203,10 +206,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
         expect(render).toHaveBeenCalledTimes(1);
 
-        widget.dispose!({
-          helper,
-          state: helper.state,
-        });
+        widget.dispose!(
+          createDisposeOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         expect(render).toHaveBeenCalledTimes(2);
         expect(render).toHaveBeenCalledWith(null, container);

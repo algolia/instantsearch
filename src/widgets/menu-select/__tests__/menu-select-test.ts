@@ -3,6 +3,7 @@ import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -121,10 +122,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
 
         expect(render).toHaveBeenCalledTimes(0);
 
-        const newState = widget.dispose!({
-          state: helper.state,
-          helper,
-        });
+        const newState = widget.dispose!(
+          createDisposeOptions({
+            state: helper.state,
+            helper,
+          })
+        );
 
         expect(render).toHaveBeenCalledTimes(1);
         expect(render).toHaveBeenLastCalledWith(null, container);

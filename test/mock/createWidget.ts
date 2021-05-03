@@ -72,6 +72,7 @@ export const createDisposeOptions = (
   return {
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,
+    parent: instantSearchInstance.mainIndex,
     ...args,
   };
 };

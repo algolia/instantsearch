@@ -41,6 +41,7 @@ export type RenderOptions = SharedRenderOptions & {
 export type DisposeOptions = {
   helper: Helper;
   state: SearchParameters;
+  parent: IndexWidget;
 };
 
 export type BuiltinTypes =

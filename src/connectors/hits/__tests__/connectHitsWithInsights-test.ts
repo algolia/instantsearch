@@ -2,6 +2,7 @@ import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -100,7 +101,7 @@ describe('connectHitsWithInsights', () => {
     const widget = makeWidget({});
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     expect(() => {
-      widget.dispose!({ helper, state: helper.state });
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
     }).not.toThrow();
   });
 });

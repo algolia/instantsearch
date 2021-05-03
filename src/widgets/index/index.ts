@@ -365,7 +365,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         const nextState = widgets.reduce((state, widget) => {
           // the `dispose` method exists at this point we already assert it
-          const next = widget.dispose!({ helper: helper!, state });
+          const next = widget.dispose!({
+            helper: helper!,
+            state,
+            parent: this,
+          });
 
           return next || state;
         }, helper!.state);
@@ -655,7 +659,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           // `dispose` because the index is removed. We can't call `removeWidgets`
           // because we want to keep the widgets on the instance, to allow idempotent
           // operations on `add` & `remove`.
-          widget.dispose({ helper: helper!, state: helper!.state });
+          widget.dispose({
+            helper: helper!,
+            state: helper!.state,
+            parent: this,
+          });
         }
       });
 

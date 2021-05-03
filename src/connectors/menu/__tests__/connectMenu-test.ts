@@ -6,6 +6,7 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
@@ -475,7 +476,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       })
     );
     expect(() =>
-      widget.dispose!!({ helper, state: helper.state })
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
     ).not.toThrow();
   });
 
@@ -1194,7 +1195,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
 
-      const newState = widget.dispose!({ state: helper.state, helper });
+      const newState = widget.dispose!(
+        createDisposeOptions({ state: helper.state, helper })
+      );
 
       expect(newState).toEqual(
         new SearchParameters({
@@ -1236,7 +1239,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
 
-      const newState = widget.dispose!({ state: helper.state, helper });
+      const newState = widget.dispose!(
+        createDisposeOptions({ state: helper.state, helper })
+      );
 
       expect(newState).toEqual(
         new SearchParameters({
@@ -1260,7 +1265,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })
       );
       helper.search = jest.fn();
-      const newState = widget.dispose!({ state, helper });
+      const newState = widget.dispose!(createDisposeOptions({ state, helper }));
 
       expect(newState).toEqual(new SearchParameters());
     });
