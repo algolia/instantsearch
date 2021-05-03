@@ -1,7 +1,9 @@
-import { render } from 'preact';
+import { render as originalRender } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
 import refinementList from '../refinement-list';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
+const render = castToJestMock(originalRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -88,6 +90,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         };
 
         renderWidget({ cssClasses });
+        // @ts-expect-error
         const actual = render.mock.calls[0][0].props.cssClasses;
 
         expect(actual.root).toMatchInlineSnapshot(
@@ -175,6 +178,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const [firstRender] = render.mock.calls;
 
+      // @ts-expect-error
       expect(firstRender[0].props).toMatchSnapshot();
     });
   });

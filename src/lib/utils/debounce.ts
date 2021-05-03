@@ -13,7 +13,6 @@ export function debounce<TFunction extends Func>(
 ): DebouncedFunction<TFunction> {
   let lastTimeout: ReturnType<typeof setTimeout> | null = null;
   return function(...args) {
-    // @ts-ignore-next-line
     return new Promise((resolve, reject) => {
       if (lastTimeout) {
         clearTimeout(lastTimeout);
