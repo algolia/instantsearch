@@ -121,6 +121,16 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
           attributes: ['attr1', 'attr2'],
         });
       }
+      case 'EXPERIMENTAL_dynamicWidgets': {
+        const EXPERIMENTAL_dynamicWidgets = widget as Widgets['EXPERIMENTAL_dynamicWidgets'];
+        return EXPERIMENTAL_dynamicWidgets({
+          transformItems(items) {
+            return items;
+          },
+          container,
+          widgets: [],
+        });
+      }
       case 'EXPERIMENTAL_answers': {
         const EXPERIMENTAL_answers = widget as Widgets['EXPERIMENTAL_answers'];
         return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });

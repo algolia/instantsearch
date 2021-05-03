@@ -3,6 +3,7 @@ import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../src/index';
 import defaultPlayground from '../playgrounds/default';
 import { configure } from '../../src/widgets';
+import { InstantSearch } from '../../src/types';
 
 export const withHits = (
   storyFn: ({
@@ -12,7 +13,7 @@ export const withHits = (
   }: {
     container: HTMLElement;
     instantsearch: any;
-    search: any;
+    search: InstantSearch;
   }) => void,
   searchOptions?: any
 ) => () => {
