@@ -13,7 +13,7 @@ import { RefinementListWidgetDescription } from '../connectors/refinement-list/c
 import { RelevantSortWidgetDescription } from '../connectors/relevant-sort/connectRelevantSort';
 import { SearchBoxWidgetDescription } from '../connectors/search-box/connectSearchBox';
 import { SortByWidgetDescription } from '../connectors/sort-by/connectSortBy';
-import { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/types';
+import { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/connectToggleRefinement';
 import { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
 import { PlacesWidgetDescription } from '../widgets/places/places';
 
