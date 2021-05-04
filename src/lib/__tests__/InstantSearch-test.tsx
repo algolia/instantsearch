@@ -784,7 +784,7 @@ describe('start', () => {
   // eslint-disable-next-line jest/no-done-callback
   it('triggers a search with errors', done => {
     const searchClient = createSearchClient({
-      // @ts-expect-error
+      // @ts-ignore (this fails in v4, not in v3, therefore not ts-expect-error)
       search: jest.fn(() => Promise.reject(new Error('SERVER_ERROR'))),
     });
 
