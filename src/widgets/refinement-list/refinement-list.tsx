@@ -141,10 +141,13 @@ type RefinementListOwnCSSClasses = {
    * CSS class to add to each count element (when using the default template).
    */
   count: string | string[];
+  /**
+   * CSS class to add to the searchable container.
+   */
+  searchBox: string | string[];
 };
 
 type RefinementListSearchableCSSClasses = {
-  searchBox: string | string[];
   searchableRoot: string | string[];
   searchableForm: string | string[];
   searchableInput: string | string[];
