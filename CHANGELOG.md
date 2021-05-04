@@ -1,3 +1,12 @@
+# [6.11.0](https://github.com/algolia/react-instantsearch/compare/v6.10.3...v6.11.0) (2021-05-04)
+
+
+### Features
+
+* **connectNumericMenu:** add support for floating point values ([#3047](https://github.com/algolia/react-instantsearch/issues/3047)) ([091bf57](https://github.com/algolia/react-instantsearch/commit/091bf57))
+
+
+
 ## [6.10.3](https://github.com/algolia/react-instantsearch/compare/v6.10.2...v6.10.3) (2021-03-03)
 
 
