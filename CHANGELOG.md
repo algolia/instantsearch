@@ -5,6 +5,9 @@
 
 * **insights:** do not throw when userToken is not given ([#4724](https://github.com/algolia/instantsearch.js/issues/4724)) ([8241b29](https://github.com/algolia/instantsearch.js/commit/8241b2909c981a6bb52e9f4f9b6bacb7bc60263b))
 * **insights:** use getUserToken method instead of _get ([#4744](https://github.com/algolia/instantsearch.js/issues/4744)) ([05d05a9](https://github.com/algolia/instantsearch.js/commit/05d05a9a8ad79e4ec8b183a3d17c2360430c302e))
+* **relevantSort:** remove "relevantSort" nesting, since there's only one property ([#4735](https://github.com/algolia/instantsearch.js/issues/4735)) ([f742083](https://github.com/algolia/instantsearch.js/commit/f74208396159524086341be4acf84d2af2b44135))
+* **connectToggleRefinement:** nest getRenderState per attribute ([#4743](https://github.com/algolia/instantsearch.js/issues/4743)) ([b9c884d](https://github.com/algolia/instantsearch.js/commit/b9c884daa406e1be63482ed198674b2ba22e66f2))
+* **connectToggleRefinement:** remove search parameters from render state ([#4743](https://github.com/algolia/instantsearch.js/issues/4743)) ([b9c884d](https://github.com/algolia/instantsearch.js/commit/b9c884daa406e1be63482ed198674b2ba22e66f2))
 
 
 ### Features
