@@ -2042,7 +2042,7 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
 });
 
 describe('getUiState', () => {
-  test('retrieves empty ui state without widgets', () => {
+  test('retrieves empty UI state without widgets', () => {
     const indexName = 'indexName';
     const searchClient = createSearchClient();
     const search = new InstantSearch({
