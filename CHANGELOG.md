@@ -1,3 +1,24 @@
+# [4.22.0](https://github.com/algolia/instantsearch.js/compare/v4.21.0...v4.22.0) (2021-05-05)
+
+
+### Bug Fixes
+
+* **insights:** do not throw when userToken is not given ([#4724](https://github.com/algolia/instantsearch.js/issues/4724)) ([8241b29](https://github.com/algolia/instantsearch.js/commit/8241b2909c981a6bb52e9f4f9b6bacb7bc60263b))
+* **insights:** use getUserToken method instead of _get ([#4744](https://github.com/algolia/instantsearch.js/issues/4744)) ([05d05a9](https://github.com/algolia/instantsearch.js/commit/05d05a9a8ad79e4ec8b183a3d17c2360430c302e))
+* **relevantSort:** remove "relevantSort" nesting, since there's only one property ([#4735](https://github.com/algolia/instantsearch.js/issues/4735)) ([f742083](https://github.com/algolia/instantsearch.js/commit/f74208396159524086341be4acf84d2af2b44135))
+* **connectToggleRefinement:** nest getRenderState per attribute ([#4743](https://github.com/algolia/instantsearch.js/issues/4743)) ([b9c884d](https://github.com/algolia/instantsearch.js/commit/b9c884daa406e1be63482ed198674b2ba22e66f2))
+* **connectToggleRefinement:** remove search parameters from render state ([#4743](https://github.com/algolia/instantsearch.js/issues/4743)) ([b9c884d](https://github.com/algolia/instantsearch.js/commit/b9c884daa406e1be63482ed198674b2ba22e66f2))
+
+
+### Features
+
+* **core:** add getUiState function ([#4750](https://github.com/algolia/instantsearch.js/issues/4750)) ([adce212](https://github.com/algolia/instantsearch.js/commit/adce2127de6c652ee6364e889a525d9d0ff6efdd))
+* **dynamicWidgets:** implementation ([#4687](https://github.com/algolia/instantsearch.js/issues/4687)) ([2e7ccc9](https://github.com/algolia/instantsearch.js/commit/2e7ccc91c8d2e4aa50c82a186cce057907042ed4))
+* **ts:** migrate toggleRefinement & connectToggleRefinement ([#4743](https://github.com/algolia/instantsearch.js/issues/4743)) ([b9c884d](https://github.com/algolia/instantsearch.js/commit/b9c884daa406e1be63482ed198674b2ba22e66f2))
+* **widget:** add access to "parent" in dispose ([#4745](https://github.com/algolia/instantsearch.js/issues/4745)) ([3fca986](https://github.com/algolia/instantsearch.js/commit/3fca986542e8b18312a6c6be810bf5fb986804a4))
+
+
+
 # [4.21.0](https://github.com/algolia/instantsearch.js/compare/v4.20.0...v4.21.0) (2021-04-12)
 
 
