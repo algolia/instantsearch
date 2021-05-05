@@ -1,9 +1,12 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import jsHelper, { SearchParameters } from 'algoliasearch-helper';
 import toggleRefinement from '../toggle-refinement';
 import RefinementList from '../../../components/RefinementList/RefinementList';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -52,7 +55,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       let createURL;
 
       beforeEach(() => {
-        helper = jsHelper({}, '');
+        helper = jsHelper(createSearchClient(), '');
         helper.state.isDisjunctiveFacetRefined = jest
           .fn()
           .mockReturnValue(false);
@@ -125,6 +128,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
         const [firstRender] = render.mock.calls;
 
+        // @ts-expect-error
         expect(firstRender[0].props).toMatchSnapshot();
       });
 
@@ -152,7 +156,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
         const [firstRender, secondRender] = render.mock.calls;
 
+        // @ts-expect-error
         expect(firstRender[0].props).toMatchSnapshot();
+        // @ts-expect-error
         expect(secondRender[0].props).toMatchSnapshot();
       });
 
@@ -177,8 +183,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           new SearchParameters({}),
           { uiState: {} }
         );
-        const altHelper = jsHelper({}, '', config);
-        altHelper.search = () => {};
+        const altHelper = jsHelper(createSearchClient(), '', config);
 
         widget.init({
           state: altHelper.state,
@@ -192,7 +197,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         const [firstRender, secondRender] = render.mock.calls;
 
         // The first call is not the one expected, because of the new init rendering..
+        // @ts-expect-error
         expect(firstRender[0].props).toMatchSnapshot();
+        // @ts-expect-error
         expect(secondRender[0].props).toMatchSnapshot();
 
         widget
@@ -204,6 +211,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           })
           .refine({ isRefined: true });
 
+        // @ts-expect-error
         expect(altHelper.state.isDisjunctiveFacetRefined(attribute, 5)).toBe(
           false
         );
@@ -233,7 +241,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
         const [firstRender, secondRender] = render.mock.calls;
 
+        // @ts-expect-error
         expect(firstRender[0].props).toMatchSnapshot();
+        // @ts-expect-error
         expect(secondRender[0].props).toMatchSnapshot();
       });
 
@@ -266,7 +276,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
         const [firstRender, secondRender] = render.mock.calls;
 
+        // @ts-expect-error
         expect(firstRender[0].props).toMatchSnapshot();
+        // @ts-expect-error
         expect(secondRender[0].props).toMatchSnapshot();
       });
 
@@ -292,6 +304,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.render({ results, helper, state });
 
         const [firstRender] = render.mock.calls;
+        // @ts-expect-error
         const { refine } = firstRender[0].props;
 
         expect(typeof refine).toEqual('function');
@@ -324,7 +337,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       }
 
       beforeEach(() => {
-        helper = jsHelper({}, '');
+        helper = jsHelper(createSearchClient(), '');
         helper.removeDisjunctiveFacetRefinement = jest.fn();
         helper.addDisjunctiveFacetRefinement = jest.fn();
         helper.search = jest.fn();
@@ -400,8 +413,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
             new SearchParameters({}),
             { uiState: {} }
           );
-          const altHelper = jsHelper({}, '', config);
-          altHelper.search = () => {};
+          const altHelper = jsHelper(createSearchClient(), '', config);
 
           const createURL = () => '#';
 
@@ -471,7 +483,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           new SearchParameters({}),
           { uiState: {} }
         );
-        const helper = jsHelper({}, '', config);
+        const helper = jsHelper(createSearchClient(), '', config);
 
         // When
         widget.init({

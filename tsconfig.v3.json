@@ -9,6 +9,8 @@
     // they import files from node_modules/search-insights directly
     // and it causes the type-checking to fail.
     "src/middlewares/__tests__/createInsightsMiddleware.ts",
-    "test/mock/createInsightsClient.ts"
+    "test/mock/createInsightsClient.ts",
+    // v3 has a wrong definition for optionalWords (only accepts string[])
+    "src/connectors/voice-search/__tests__/connectVoiceSearch-test.ts"
   ]
 }

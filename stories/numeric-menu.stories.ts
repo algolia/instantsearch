@@ -19,7 +19,6 @@ storiesOf('Refinements/NumericMenu', module)
           ],
           cssClasses: {
             item: 'facet-value',
-            count: 'facet-count pull-right',
             selectedItem: 'facet-active',
           },
         }),
@@ -42,7 +41,6 @@ storiesOf('Refinements/NumericMenu', module)
           ],
           cssClasses: {
             item: 'facet-value',
-            count: 'facet-count pull-right',
             selectedItem: 'facet-active',
           },
           transformItems: items =>

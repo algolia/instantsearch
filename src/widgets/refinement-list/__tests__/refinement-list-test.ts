@@ -1,7 +1,13 @@
-import { render } from 'preact';
+import { render as originalRender, VNode } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
-import refinementList from '../refinement-list';
+import refinementList, {
+  RefinementListRendererCSSClasses,
+  RefinementListTemplates,
+} from '../refinement-list';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { RefinementListProps } from '../../../components/RefinementList/RefinementList';
 
+const render = castToJestMock(originalRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -88,7 +94,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         };
 
         renderWidget({ cssClasses });
-        const actual = render.mock.calls[0][0].props.cssClasses;
+        const { props } = render.mock.calls[0][0] as VNode<
+          RefinementListProps<
+            RefinementListTemplates,
+            RefinementListRendererCSSClasses
+          >
+        >;
+
+        const actual = (props as RefinementListProps<
+          RefinementListTemplates,
+          RefinementListRendererCSSClasses
+        >).cssClasses;
 
         expect(actual.root).toMatchInlineSnapshot(
           `"ais-RefinementList root cx"`
@@ -173,9 +189,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
       widget.render({ results, helper, state });
 
-      const [firstRender] = render.mock.calls;
+      const { props } = render.mock.calls[0][0] as VNode;
 
-      expect(firstRender[0].props).toMatchSnapshot();
+      expect(props).toMatchSnapshot();
     });
   });
 
