@@ -4,15 +4,17 @@ import { h, render, createRef } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
 import version from '../version';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
-import connectPagination from '../../connectors/pagination/connectPagination';
-import index from '../../widgets/index/index';
+import { connectSearchBox, connectPagination } from '../../connectors';
+import { index } from '../../widgets';
 import { noop, warning } from '../utils';
 import {
   createSearchClient,
   createControlledSearchClient,
 } from '../../../test/mock/createSearchClient';
-import { createWidget } from '../../../test/mock/createWidget';
+import {
+  createRenderOptions,
+  createWidget,
+} from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 
 jest.useFakeTimers();
@@ -101,6 +103,9 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   });
 
   it('throws if insightsClient is not a function', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
+
     expect(() => {
       // eslint-disable-next-line no-new
       new InstantSearch({
@@ -273,6 +278,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     const searchClient = createSearchClient({
       addAlgoliaAgent: jest.fn(),
     });
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
 
     expect(() => {
       // eslint-disable-next-line no-new
@@ -333,6 +340,8 @@ describe('InstantSearch', () => {
 
   it('warns deprecated usage of `searchParameters`', () => {
     warning.cache = {};
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
 
     expect(() => {
       // eslint-disable-next-line no-new
@@ -435,6 +444,9 @@ describe('addWidget(s)', () => {
   });
 
   it('forwards the call of `addWidget` to the main index', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
+
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -465,6 +477,9 @@ describe('addWidget(s)', () => {
   });
 
   it('returns the search instance when calling `addWidget`', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
+
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -499,6 +514,9 @@ describe('removeWidget(s)', () => {
   });
 
   it('forwards the call to `removeWidget` to the main index', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
+
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -537,6 +555,9 @@ describe('removeWidget(s)', () => {
   });
 
   it('returns the search instance when calling `removeWidget`', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
+
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1974,6 +1995,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
   });
 
   it('warns if UI state contains unmounted widgets in development mode', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
+
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -2014,6 +2038,176 @@ search.addWidgets([
 If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
 
 See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
+  });
+});
+
+describe('getUiState', () => {
+  test('retrieves empty UI state without widgets', () => {
+    const indexName = 'indexName';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: {},
+    });
+  });
+
+  test('retrieves the ui state without refinements', () => {
+    const indexName = 'indexName';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})(),
+      connectPagination(() => {})(),
+    ]);
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: {},
+    });
+  });
+
+  test('retrieves the ui state without refinements (multi-index)', () => {
+    const indexName = 'indexName';
+    const secondIndexName = 'indexName2';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})(),
+      connectPagination(() => {})(),
+      index({ indexName: secondIndexName }).addWidgets([
+        connectSearchBox(() => {})(),
+      ]),
+    ]);
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: {},
+      [secondIndexName]: {},
+    });
+  });
+
+  test('retrieves the correct ui state after one refinement', () => {
+    const indexName = 'indexName';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})(),
+      connectPagination(() => {})(),
+    ]);
+
+    search.start();
+
+    search.mainIndex
+      .getWidgets()[0]
+      .getWidgetRenderState(createRenderOptions())
+      .refine('test');
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: {
+        query: 'test',
+      },
+    });
+  });
+
+  test('retrieves the correct ui state after multiple refinements', () => {
+    const indexName = 'indexName';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})(),
+      connectPagination(() => {})(),
+    ]);
+
+    search.start();
+
+    search.mainIndex
+      .getWidgets()[0]
+      .getWidgetRenderState(createRenderOptions())
+      .refine('test');
+
+    search.mainIndex
+      .getWidgets()[1]
+      .getWidgetRenderState(createRenderOptions())
+      .refine(3);
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: {
+        query: 'test',
+        page: 4,
+      },
+    });
+  });
+
+  test('retrieves the correct ui state after multiple refinements (multi-index)', () => {
+    const indexName = 'indexName';
+    const secondIndexName = 'indexName2';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})(),
+      connectPagination(() => {})(),
+      index({ indexName: secondIndexName }).addWidgets([
+        connectSearchBox(() => {})(),
+        connectPagination(() => {})(),
+      ]),
+    ]);
+
+    search.start();
+
+    search.mainIndex
+      .getWidgets()[0]
+      .getWidgetRenderState(createRenderOptions())
+      .refine('test');
+
+    search.mainIndex
+      .getWidgets()[1]
+      .getWidgetRenderState(createRenderOptions())
+      .refine(3);
+
+    search.mainIndex
+      .getWidgets()[2]
+      .getWidgets()[0]
+      .getWidgetRenderState(createRenderOptions())
+      .refine('test2');
+
+    search.mainIndex
+      .getWidgets()[2]
+      .getWidgets()[1]
+      .getWidgetRenderState(createRenderOptions())
+      .refine(39);
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: {
+        query: 'test',
+        page: 4,
+      },
+      [secondIndexName]: {
+        query: 'test2',
+        page: 40,
+      },
+    });
   });
 });
 
