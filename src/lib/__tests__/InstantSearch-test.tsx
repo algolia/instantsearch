@@ -17,6 +17,24 @@ import {
 } from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 import { castToJestMock } from '../../../test/utils/castToJestMock';
+import { IndexWidget } from '../../widgets/index/index';
+import { Widget } from '../../types';
+import {
+  PaginationConnectorParams,
+  PaginationWidgetDescription,
+} from '../../connectors/pagination/connectPagination';
+import {
+  SearchBoxWidgetDescription,
+  SearchBoxConnectorParams,
+} from '../../connectors/search-box/connectSearchBox';
+
+type SearchBoxWidgetInstance = Widget<
+  SearchBoxWidgetDescription & { widgetParams: SearchBoxConnectorParams }
+>;
+
+type PaginationWidgetInstance = Widget<
+  PaginationWidgetDescription & { widgetParams: PaginationConnectorParams }
+>;
 
 jest.useFakeTimers();
 
@@ -2084,8 +2102,8 @@ describe('getUiState', () => {
     });
 
     search.addWidgets([
-      connectSearchBox(() => {})(),
-      connectPagination(() => {})(),
+      connectSearchBox(() => {})({}),
+      connectPagination(() => {})({}),
     ]);
 
     expect(search.getUiState()).toEqual({
@@ -2103,10 +2121,10 @@ describe('getUiState', () => {
     });
 
     search.addWidgets([
-      connectSearchBox(() => {})(),
-      connectPagination(() => {})(),
+      connectSearchBox(() => {})({}),
+      connectPagination(() => {})({}),
       index({ indexName: secondIndexName }).addWidgets([
-        connectSearchBox(() => {})(),
+        connectSearchBox(() => {})({}),
       ]),
     ]);
 
@@ -2125,14 +2143,13 @@ describe('getUiState', () => {
     });
 
     search.addWidgets([
-      connectSearchBox(() => {})(),
-      connectPagination(() => {})(),
+      connectSearchBox(() => {})({}),
+      connectPagination(() => {})({}),
     ]);
 
     search.start();
 
-    search.mainIndex
-      .getWidgets()[0]
+    (search.mainIndex.getWidgets()[0] as SearchBoxWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine('test');
 
@@ -2152,19 +2169,17 @@ describe('getUiState', () => {
     });
 
     search.addWidgets([
-      connectSearchBox(() => {})(),
-      connectPagination(() => {})(),
+      connectSearchBox(() => {})({}),
+      connectPagination(() => {})({}),
     ]);
 
     search.start();
 
-    search.mainIndex
-      .getWidgets()[0]
+    (search.mainIndex.getWidgets()[0] as SearchBoxWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine('test');
 
-    search.mainIndex
-      .getWidgets()[1]
+    (search.mainIndex.getWidgets()[1] as PaginationWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine(3);
 
@@ -2186,35 +2201,29 @@ describe('getUiState', () => {
     });
 
     search.addWidgets([
-      connectSearchBox(() => {})(),
-      connectPagination(() => {})(),
+      connectSearchBox(() => {})({}),
+      connectPagination(() => {})({}),
       index({ indexName: secondIndexName }).addWidgets([
-        connectSearchBox(() => {})(),
-        connectPagination(() => {})(),
+        connectSearchBox(() => {})({}),
+        connectPagination(() => {})({}),
       ]),
     ]);
 
     search.start();
 
-    search.mainIndex
-      .getWidgets()[0]
+    (search.mainIndex.getWidgets()[0] as SearchBoxWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine('test');
 
-    search.mainIndex
-      .getWidgets()[1]
+    (search.mainIndex.getWidgets()[1] as PaginationWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine(3);
 
-    search.mainIndex
-      .getWidgets()[2]
-      .getWidgets()[0]
+    ((search.mainIndex.getWidgets()[2] as IndexWidget).getWidgets()[0] as SearchBoxWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine('test2');
 
-    search.mainIndex
-      .getWidgets()[2]
-      .getWidgets()[1]
+    ((search.mainIndex.getWidgets()[2] as IndexWidget).getWidgets()[1] as PaginationWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine(39);
 
