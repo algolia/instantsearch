@@ -30,7 +30,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 
 describe('poweredBy', () => {
   let widget: ReturnType<typeof poweredBy>;
-  let container: string | HTMLElement;
+  let container: HTMLElement;
   let helper: AlgoliaSearchHelper;
 
   beforeEach(() => {
