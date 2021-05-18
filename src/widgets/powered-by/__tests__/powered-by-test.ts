@@ -59,17 +59,16 @@ describe('poweredBy', () => {
     const firstContainer = render.mock.calls[0][1];
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect(firstRender.props).toMatchInlineSnapshot(`
-      Object {
-        "cssClasses": Object {
-          "link": "ais-PoweredBy-link link",
-          "logo": "ais-PoweredBy-logo logo",
-          "root": "ais-PoweredBy ais-PoweredBy--light root",
-        },
-        "theme": "light",
-        "url": "https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby",
-      }
-    `);
+    expect(firstRender.props).toEqual({
+      cssClasses: {
+        link: 'ais-PoweredBy-link link',
+        logo: 'ais-PoweredBy-logo logo',
+        root: 'ais-PoweredBy ais-PoweredBy--light root',
+      },
+      theme: 'light',
+      url:
+        'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
+    });
     expect(firstContainer).toEqual(container);
   });
 });
