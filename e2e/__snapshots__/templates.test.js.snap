@@ -3308,6 +3308,38 @@ Array [
 ]
 `;
 
+exports[`Templates InstantSearch.js widget File content: .eslintignore 1`] = `
+"# Vendors
+node_modules
+
+# Artifacts
+dist"
+`;
+
+exports[`Templates InstantSearch.js widget File content: .eslintrc.cjs 1`] = `
+"module.exports = {
+  extends: ['algolia', 'algolia/jest', 'algolia/typescript'],
+  rules: {
+    '@typescript-eslint/explicit-function-return-type': 'off',
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.ts'],
+      },
+    },
+  },
+  overrides: [
+    {
+      files: ['*.cjs'],
+      rules: {
+        'import/no-commonjs': 'off',
+      },
+    },
+  ],
+};"
+`;
+
 exports[`Templates InstantSearch.js widget File content: .gitignore 1`] = `
 "node_modules/
 npm-debug.log
@@ -3472,7 +3504,7 @@ search.addWidgets([
 \`\`\`"
 `;
 
-exports[`Templates InstantSearch.js widget File content: babel.config.js 1`] = `
+exports[`Templates InstantSearch.js widget File content: babel.config.cjs 1`] = `
 "/* eslint-disable import/no-commonjs */
 module.exports = (api) => {
   const isCJS = process.env.BABEL_ENV === 'cjs';
@@ -3919,9 +3951,11 @@ exports[`Templates InstantSearch.js widget File content: tsconfig.json 1`] = `
 
 exports[`Templates InstantSearch.js widget Folder structure: contains the right files 1`] = `
 Array [
+  ".eslintignore",
+  ".eslintrc.cjs",
   ".gitignore",
   "README.md",
-  "babel.config.js",
+  "babel.config.cjs",
   "package.json",
   "src/connector.ts",
   "src/index.ts",
