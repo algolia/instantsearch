@@ -1,32 +1,27 @@
 /** @jsx h */
 
 import { h } from 'preact';
+import cx from 'classnames';
 import { PoweredByCSSClasses } from '../../widgets/powered-by/powered-by';
-
-export type PoweredByComponentCSSClasses = Required<
-  {
-    [TClassName in keyof PoweredByCSSClasses]: string;
-  }
->;
 
 export type PoweredByProps = {
   url: string;
   theme: string;
-  cssClasses: PoweredByComponentCSSClasses;
+  cssClasses: PoweredByCSSClasses;
 };
 
 const PoweredBy = ({ url, theme, cssClasses }: PoweredByProps) => (
-  <div className={cssClasses.root}>
+  <div className={cx(cssClasses.root)}>
     <a
       href={url}
       target="_blank"
-      className={cssClasses.link}
+      className={cx(cssClasses.link)}
       aria-label="Search by Algolia"
       rel="noopener noreferrer"
     >
       <svg
         height="1.2em"
-        className={cssClasses.logo}
+        className={cx(cssClasses.logo)}
         viewBox="0 0 168 24"
         // This style is necessary as long as it's not included in InstantSearch.css.
         // For now, InstantSearch.css sets a maximum width of 70px.
