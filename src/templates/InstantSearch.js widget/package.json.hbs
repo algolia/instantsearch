@@ -1,0 +1,83 @@
+{
+  "name": "{{ packageName }}",
+  "version": "1.0.0",
+  "description": "{{ description }}",
+  "keywords": [
+    "instantsearch-widget",
+    "instantsearch",
+    "widget",
+    "connector",
+    "algolia"
+  ],
+  "license": "MIT",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js"
+  },
+  "jsdelivr": "./dist/umd/index.js",
+  "unpkg": "./dist/umd/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "start": "parcel example/index.html",
+    "prebuild": "rm -rf dist",
+    "build": "npm run build:umd && npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:umd": "parcel build src/index.ts --global {{ camelCaseName }} --out-dir dist/umd --out-file index.js --experimental-scope-hoisting",
+    "build:cjs": "BABEL_ENV=cjs babel src --extensions '.js,.ts' --out-dir dist/cjs --ignore '**/__tests__' --source-maps && BABEL_ENV=cjs babel src/index.ts --out-file dist/cjs/index.js --source-maps",
+    "build:esm": "BABEL_ENV=esm babel src --extensions '.js,.ts' --out-dir dist/esm --ignore '**/__tests__' --source-maps",
+    "build:types": "tsc --build tsconfig.declaration.json",
+    "test": "npm run lint && npm run test:types && npm run test:unit",
+    "test:unit": "jest",
+    "test:types": "tsc",
+    "lint": "eslint --ext .js,.ts .",
+    "release": "standard-version"
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "instantsearch.js": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.13.10",
+    "@babel/core": "7.13.10",
+    "@babel/eslint-parser": "7.13.8",
+    "@babel/preset-env": "7.13.8",
+    "@babel/preset-typescript": "7.13.0",
+    "@testing-library/dom": "7.30.0",
+    "@testing-library/jest-dom": "5.11.9",
+    "@types/node": "14.14.31",
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.1",
+    "@typescript-eslint/eslint-plugin": "4.16.1",
+    "@typescript-eslint/parser": "4.16.1",
+    "algoliasearch": "4.8.5",
+    "algoliasearch-helper": "3.4.4",
+    "babel-jest": "26.6.3",
+    "babel-plugin-add-import-extension": "1.5.0",
+    "eslint": "7.21.0",
+    "eslint-config-algolia": "18.0.0",
+    "eslint-config-prettier": "8.1.0",
+    "eslint-plugin-eslint-comments": "3.2.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jest": "24.1.5",
+    "eslint-plugin-jsdoc": "32.2.0",
+    "eslint-plugin-prettier": "3.3.1",
+    "instantsearch.js": "{{ libraryVersion }}-experimental-typescript.0",
+    "jest": "26.6.3",
+    "parcel-bundler": "1.12.5",
+    "prettier": "2.2.1",
+    "standard-version": "9.3.0",
+    "ts-node": "9.1.1",
+    "typescript": "4.2.2"
+  },
+  "browserslist": [
+    "last 2 chrome versions",
+    "last 2 firefox versions",
+    "last 2 edge versions",
+    "last 2 safari versions",
+    "IE 11"
+  ]
+}

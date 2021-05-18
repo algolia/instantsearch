@@ -1,7 +1,6 @@
-const path = require('path');
 const loadJsonFile = require('load-json-file');
 const utils = require('../../utils');
-const getConfiguration = require('../getConfiguration');
+const { getConfiguration, getLibraryVersion } = require('../getConfiguration');
 
 jest.mock('load-json-file');
 
@@ -15,18 +14,6 @@ test('without template throws', async () => {
 
   await expect(getConfiguration({})).rejects.toThrow(
     new Error('The template is required in the config.')
-  );
-});
-
-test('with template transforms to its relative path', async () => {
-  const configuration = await getConfiguration({
-    answers: { template: 'InstantSearch.js' },
-  });
-
-  expect(configuration).toEqual(
-    expect.objectContaining({
-      template: path.resolve('src/templates/InstantSearch.js'),
-    })
   );
 });
 
@@ -54,13 +41,14 @@ test('without stable version available', async () => {
     Promise.resolve(['1.0.0-beta.0'])
   );
 
-  const configuration = await getConfiguration({
-    answers: {
+  const libraryVersion = await getLibraryVersion(
+    {
       template: 'InstantSearch.js',
     },
-  });
+    utils.getAppTemplateConfig(utils.getTemplatePath('InstantSearch.js'))
+  );
 
-  expect(configuration.libraryVersion).toBe('1.0.0-beta.0');
+  expect(libraryVersion).toBe('1.0.0-beta.0');
 });
 
 test('with config file overrides all options', async () => {

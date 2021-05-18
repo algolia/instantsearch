@@ -3308,6 +3308,623 @@ Array [
 ]
 `;
 
+exports[`Templates InstantSearch.js widget File content: .gitignore 1`] = `
+"node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+dist/"
+`;
+
+exports[`Templates InstantSearch.js widget File content: README.md 1`] = `
+"# instantsearch.js-app
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
+
+
+
+## Install
+
+\`\`\`bash
+npm install @algolia/instantsearch.js-app
+# or
+yarn add @algolia/instantsearch.js-app
+\`\`\`
+
+## Widget
+
+### Usage
+
+\`\`\`js
+import instantsearch from 'instantsearch.js';
+import algoliasearch from 'algoliasearch/lite';
+import { instantsearchJsApp } from '@algolia/instantsearch.js-app';
+
+const searchClient = algoliasearch('appId', 'apiKey');
+
+const search = instantsearch({
+  indexName: 'indexName',
+  searchClient,
+});
+
+search.addWidgets([
+  instantsearchJsApp({
+    // widget parameters
+  }),
+]);
+
+search.start();
+\`\`\`
+
+### Options
+
+#### container
+
+> \`string | Element\` | **required**
+
+The element to insert the widget into.
+
+This can be either a valid CSS Selector:
+
+\`\`\`js
+instantsearchJsApp({
+  container: '#instantsearch.js-app',
+  // ...
+});
+\`\`\`
+
+or an \`HTMLElement\`:
+
+\`\`\`js
+instantsearchJsApp({
+  container: document.querySelector('#instantsearch.js-app'),
+  // ...
+});
+\`\`\`
+\`\`\`
+
+#### option1
+
+> \`...\` | **required**
+
+REPLACE WITH THE DESCRIPTION FOR THIS OPTION
+
+\`\`\`js
+instantsearchJsApp({
+  option1: 'value',
+  // ...
+});
+\`\`\`
+
+
+## Connector
+
+### Usage
+
+\`\`\`js
+import { connectInstantsearchJsApp } from '@algolia/instantsearch.js-app';
+
+// 1. Create a render function
+const renderInstantsearchJsApp = (renderOptions, isFirstRender) => {
+  // Rendering logic
+};
+
+// 2. Create the custom widget
+const customInstantsearchJsApp = connectInstantsearchJsApp(
+  renderInstantsearchJsApp
+);
+
+// 3. Instantiate
+search.addWidgets([
+  customInstantsearchJsApp({
+    // instance params
+  }),
+]);
+\`\`\`
+
+### Options
+
+#### option1
+
+> \`...\`
+
+REPLACE WITH THE DESCRIPTION FOR THIS RENDERING ITEM
+
+
+\`\`\`js
+const renderInstantsearchJsApp = (renderOptions, isFirstRender) => {
+  // show how to use this render option
+};
+
+const customInstantsearchJsApp = connectInstantsearchJsApp(
+  renderInstantsearchJsApp,
+);
+
+search.addWidgets([
+  customInstantsearchJsApp({
+    // ...
+  }),
+]);
+\`\`\`
+
+#### widgetParams
+
+> \`object\`
+
+All original widget options forwarded to the render function.
+
+\`\`\`js
+const renderInstantsearchJsApp = (renderOptions, isFirstRender) => {
+  const { widgetParams } = renderOptions;
+  widgetParams.container.innerHTML = '...';
+};
+
+const customInstantsearchJsApp = connectInstantsearchJsApp(
+  renderInstantsearchJsApp,
+);
+
+search.addWidgets([
+  customInstantsearchJsApp({
+    container: document.querySelector('#instantsearch.js-app'),
+    // ...
+  }),
+]);
+\`\`\`"
+`;
+
+exports[`Templates InstantSearch.js widget File content: babel.config.js 1`] = `
+"/* eslint-disable import/no-commonjs */
+module.exports = (api) => {
+  const isCJS = process.env.BABEL_ENV === 'cjs';
+  const isESM = process.env.BABEL_ENV === 'esm';
+  const isTest = process.env.NODE_ENV === 'test';
+  const removeEmpty = (x) => x.filter(Boolean);
+
+  /*
+   * Cache babel result according to the current environment
+   * https://babeljs.io/docs/en/config-files#apicache
+   */
+  api.cache(() => \`\${process.env.NODE_ENV}-\${process.env.BABEL_ENV}\`);
+
+  return {
+    presets: [
+      /*
+       * Apply transforms for TypeScript
+       * https://babeljs.io/docs/en/babel-preset-typescript
+       */
+      '@babel/preset-typescript',
+      /*
+       * Apply transforms depending of the target environement
+       * https://babeljs.io/docs/en/babel-preset-env
+       */
+      [
+        '@babel/preset-env',
+        {
+          targets: Object.assign(
+            {},
+            /*
+             * For tests only target the current Node.js version
+             * Otherwise it uses the values from the \`browserslist\` entry in \`package.json\`
+             * https://babeljs.io/docs/en/babel-preset-env#targetsnode
+             */
+            isTest && {
+              node: 'current',
+            }
+          ),
+          /*
+           * Transform the modules type for the CommonJS build
+           * Otherwise keep the ECMAScript modules syntax
+           * https://babeljs.io/docs/en/babel-preset-env#modules
+           */
+          modules: isCJS ? 'commonjs' : false,
+        },
+      ],
+    ],
+    plugins: removeEmpty(
+      /*
+       * Add extensions to import and export declarations
+       * ECMAScript modules syntax require extensions when using the \`import\` keyword to resolve relative or absolute specifiers
+       * https://github.com/karlprieb/babel-plugin-add-import-extension
+       * https://nodejs.org/dist/latest-v14.x/docs/api/esm.html#esm_mandatory_file_extensions
+       */
+      [isESM && 'add-import-extension']
+    ),
+  };
+};"
+`;
+
+exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
+"{
+  \\"name\\": \\"@algolia/instantsearch.js-app\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"description\\": \\"\\",
+  \\"keywords\\": [
+    \\"instantsearch-widget\\",
+    \\"instantsearch\\",
+    \\"widget\\",
+    \\"connector\\",
+    \\"algolia\\"
+  ],
+  \\"license\\": \\"MIT\\",
+  \\"main\\": \\"./dist/cjs/index.js\\",
+  \\"module\\": \\"./dist/esm/index.js\\",
+  \\"exports\\": {
+    \\"import\\": \\"./dist/esm/index.js\\",
+    \\"require\\": \\"./dist/cjs/index.js\\"
+  },
+  \\"jsdelivr\\": \\"./dist/umd/index.js\\",
+  \\"unpkg\\": \\"./dist/umd/index.js\\",
+  \\"types\\": \\"./dist/esm/index.d.ts\\",
+  \\"type\\": \\"module\\",
+  \\"scripts\\": {
+    \\"start\\": \\"parcel example/index.html\\",
+    \\"prebuild\\": \\"rm -rf dist\\",
+    \\"build\\": \\"npm run build:umd && npm run build:cjs && npm run build:esm && npm run build:types\\",
+    \\"build:umd\\": \\"parcel build src/index.ts --global instantsearchJsApp --out-dir dist/umd --out-file index.js --experimental-scope-hoisting\\",
+    \\"build:cjs\\": \\"BABEL_ENV=cjs babel src --extensions '.js,.ts' --out-dir dist/cjs --ignore '**/__tests__' --source-maps && BABEL_ENV=cjs babel src/index.ts --out-file dist/cjs/index.js --source-maps\\",
+    \\"build:esm\\": \\"BABEL_ENV=esm babel src --extensions '.js,.ts' --out-dir dist/esm --ignore '**/__tests__' --source-maps\\",
+    \\"build:types\\": \\"tsc --build tsconfig.declaration.json\\",
+    \\"test\\": \\"npm run lint && npm run test:types && npm run test:unit\\",
+    \\"test:unit\\": \\"jest\\",
+    \\"test:types\\": \\"tsc\\",
+    \\"lint\\": \\"eslint --ext .js,.ts .\\",
+    \\"release\\": \\"standard-version\\"
+  },
+  \\"files\\": [
+    \\"dist\\"
+  ],
+  \\"peerDependencies\\": {
+    \\"instantsearch.js\\": \\"^4.0.0\\"
+  },
+  \\"browserslist\\": [
+    \\"last 2 chrome versions\\",
+    \\"last 2 firefox versions\\",
+    \\"last 2 edge versions\\",
+    \\"last 2 safari versions\\",
+    \\"IE 11\\"
+  ],
+  \\"partialDependencies\\": {}
+}"
+`;
+
+exports[`Templates InstantSearch.js widget File content: src/connector.ts 1`] = `
+"import type { InstantsearchJsAppConnector } from './types';
+
+/*
+ * Creates the connector
+ * The connector takes the renderer and the unmounter as parameters and returns a widget factory.
+ * This factory is a plain function that takes the connectorParams as parameters and returns a widget.
+ * This widget is defined as a plain JS object with methods that will be called during InstantSearch.js lifecycle.
+ * Theses methods are of 2 types:
+ * - Lifecycle methods (\`init\`, \`render\`, \`dispose\`)
+ *   Are called at precise points during the InstantSearch.js global lifecycle.
+
+ *   Can be called internally anytime by InstantSearch.
+ */
+export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function connectInstantsearchJsApp(
+  renderFn,
+  unmountFn = () => {}
+) {
+  return (widgetParams) => {
+    const {
+      // TODO: read from connector parameters
+     } = widgetParams;
+
+    return {
+      $$type: 'algolia.instantsearch.js-app',
+      /*
+       * Sets up the widget during the InstantSearch initialization.
+       * It is called before the first search and is a good place to call the \`renderFn\` function to set up the initial DOM (a placeholder for example).
+       */
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
+
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance,
+          },
+          true
+        );
+      },
+
+      /*
+       * Re-render the widget with the new information from the search, including results.
+       * This method is called each time we receive results from Algolia.
+       */
+      render(renderOptions) {
+        const { instantSearchInstance } = renderOptions;
+
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      /*
+       * Called when this widget is unmounted.
+       * Can be used to remove refinements set by during this widget's initialization and life time.
+       */
+      dispose() {
+        unmountFn();
+      },
+
+      /*
+       * Derive a \`uiState\` for this widget based on the existing \`uiState\` and the search parameters applied.
+       * This method is required for a widget to be taken in account for routing.
+       * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
+       */
+      getWidgetUiState(uiState, { searchParameters }) {
+
+        return {
+          ...uiState,
+          // add this widget's ui state
+        };
+      },
+
+      /*
+       * It receives the current UiState and applied search parameters, and is
+       * expected to return a new search parameters.
+       * This method is required for a widget to be taken in account for routing.
+       */
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        // add this widget's search parameters
+        return searchParameters;
+      },
+
+      /*
+       * Returns IndexRenderState of the current index component tree to build the render state of the whole app.
+       * This method is required for a widget to be taken in account for routing.
+       * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
+       */
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          // call this.getWidgetRenderState(renderOptions)
+        };
+      },
+
+      /*
+       * Returns the render state of the current widget.
+       * The render state will be passed to the \`renderFn\` function by the \`init\` and \`render\` methods.
+       * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
+       */
+      getWidgetRenderState({ results }) {
+        if (!results) {
+          // default rendering state without results
+          return {};
+        }
+
+        // rendering state when there are results
+        return {};
+      },
+    };
+  };
+};"
+`;
+
+exports[`Templates InstantSearch.js widget File content: src/index.ts 1`] = `
+"export { instantsearchJsApp } from './widget';
+export { connectInstantsearchJsApp } from './connector';
+export { createInstantsearchJsAppRenderer } from './renderer';"
+`;
+
+exports[`Templates InstantSearch.js widget File content: src/renderer.ts 1`] = `
+"import type { InstantsearchJsAppRendererCreator } from './types';
+
+/*
+ * Creates the render and dispose functions
+ * This function is called once by the connector when the widget is created and is returning
+ *  - the \`render\` function used to render the widget
+ *  - the \`dispose\` function used to clean the changes made by the widget
+ * It can also be used to keep references of objects that must be reused between renders
+ */
+export const createInstantsearchJsAppRenderer: InstantsearchJsAppRendererCreator = ({
+  container,
+}) => {
+
+  const containerNode: Element =
+    typeof container === 'string'
+      ? document.querySelector(container)!
+      : container;
+
+  const root = document.createElement('div');
+
+  return {
+    /*
+     * The render function passed to the connector
+     * This function is called when we need to render the widget.
+     * The render appends when:
+     * - the widget is added to InstantSearch
+     * - we receive new results from Algolia
+     */
+    render(renderOptions, isFirstRender) {
+      /*
+       * \`renderOptions\` contains all options passed by the connector to the renderer, it contains everything needed for the rendering of the component
+       */
+
+      if (isFirstRender) {
+        /*
+         * When the widget is rendered for the first time \`isFirstRender\` is set to \`true\`
+         * This is when we will create everything that must be reused between renders (containers, event listeners, etc.)
+         */
+        containerNode.appendChild(root);
+      }
+
+      /*
+       * Rendering
+       */
+    },
+    /*
+     * The dispose function passed to the connector
+     * This function is called when the widget is removed from InstantSearch.
+     * It must be used to remove any changes made by the render function (DOM changes, global event listeners, etc.)
+     */
+    dispose() {
+      containerNode.removeChild(root);
+    },
+  };
+};"
+`;
+
+exports[`Templates InstantSearch.js widget File content: src/types.ts 1`] = `
+"import type { Renderer, Connector, WidgetFactory } from 'instantsearch.js';
+
+/*
+ * Parameters send only to the widget creator function
+ * These parameters will be used by the widget creator to create the widget renderer and factory
+ */
+export type InstantsearchJsAppWidgetParams = {
+  container: Element | string;
+  // TODO: add the widget params
+};
+
+/*
+ * Parameters send to the widget creator function
+ * These parameters will be used by the widget creator to manage the widget logic
+ */
+export type InstantsearchJsAppConnectorParams = {
+  // TODO: add the widget params
+};
+
+export type InstantsearchJsAppRenderState = {
+  // TODO: add the render state params
+};
+
+type InstantsearchJsAppWidgetDescription = {
+  $$type: 'algolia.instantsearch.js-app';
+  renderState: InstantsearchJsAppRenderState;
+  indexRenderState: {
+    instantsearchJsApp: {
+      // TODO: add the return type of getRenderState
+    };
+  };
+  indexUiState: {
+    instantsearchJsApp: {
+      // TODO: add the return type of getWidgetUiState
+    }
+  };
+};
+
+/*
+ * Connector type, constructed from the Renderer and Connector parameters
+ */
+export type InstantsearchJsAppConnector = Connector<
+  InstantsearchJsAppWidgetDescription,
+  InstantsearchJsAppConnectorParams
+>;
+
+/*
+ * Renderer type, constructed from the Renderer and Connector parameters
+ */
+export type InstantsearchJsAppRendererCreator = (
+  widgetParams: InstantsearchJsAppWidgetParams
+) => {
+  render: Renderer<
+    InstantsearchJsAppWidgetDescription['renderState'],
+    InstantsearchJsAppConnectorParams
+  >;
+  dispose: () => void;
+};
+
+/*
+ * Widget type, constructed from the Renderer, Connector and Widget parameters
+ */
+export type InstantsearchJsAppWidgetCreator = WidgetFactory<
+  InstantsearchJsAppWidgetDescription & {
+    $$widgetType: 'algolia.instantsearch.js-app';
+  },
+  InstantsearchJsAppConnectorParams,
+  InstantsearchJsAppWidgetParams
+>;"
+`;
+
+exports[`Templates InstantSearch.js widget File content: src/widget.ts 1`] = `
+"import { connectInstantsearchJsApp } from './connector';
+import { createInstantsearchJsAppRenderer } from './renderer';
+import type {
+  InstantsearchJsAppWidgetCreator,
+  InstantsearchJsAppConnectorParams,
+  InstantsearchJsAppWidgetParams,
+} from './types';
+
+/*
+ * Widget creator
+ * Returns a widget instance
+ */
+export const instantsearchJsApp: InstantsearchJsAppWidgetCreator = function InstantsearchJsApp(
+  widgetParams
+) {
+  const rendererWidgetParams: InstantsearchJsAppWidgetParams = {
+    container: widgetParams.container,
+    // TODO: pick the widget-only parameters from the widgetParams
+  };
+
+  const { render, dispose } = createInstantsearchJsAppRenderer(
+    rendererWidgetParams
+  );
+
+  const createWidget = connectInstantsearchJsApp(render, dispose);
+
+  const connectorParams: InstantsearchJsAppConnectorParams = {
+    // TODO: pick the connector-only parameters from the widgetParams
+  };
+
+  return {
+    ...createWidget(connectorParams),
+    $$widgetType: 'algolia.instantsearch.js-app',
+  };
+};"
+`;
+
+exports[`Templates InstantSearch.js widget File content: tsconfig.declaration.json 1`] = `
+"{
+  \\"extends\\": \\"./tsconfig\\",
+  \\"compilerOptions\\": {
+    \\"outDir\\": \\"dist/esm\\",
+    \\"stripInternal\\": true,
+    \\"noEmit\\": false,
+    \\"declaration\\": true,
+    \\"emitDeclarationOnly\\": true
+  },
+  \\"include\\": [\\"src\\"],
+  \\"exclude\\": [\\"**/__tests__\\",\\"**/index.cjs.ts\\"]
+}"
+`;
+
+exports[`Templates InstantSearch.js widget File content: tsconfig.json 1`] = `
+"{
+  \\"compilerOptions\\": {
+    \\"target\\": \\"ESNext\\",
+    \\"moduleResolution\\": \\"node\\",
+    \\"noEmit\\": true,
+    \\"strict\\": true,
+    \\"skipLibCheck\\": true,
+    \\"allowSyntheticDefaultImports\\": true
+  },
+  \\"exclude\\": [\\"dist\\"]
+}"
+`;
+
+exports[`Templates InstantSearch.js widget Folder structure: contains the right files 1`] = `
+Array [
+  ".gitignore",
+  "README.md",
+  "babel.config.js",
+  "package.json",
+  "src/connector.ts",
+  "src/index.ts",
+  "src/renderer.ts",
+  "src/types.ts",
+  "src/widget.ts",
+  "tsconfig.declaration.json",
+  "tsconfig.json",
+]
+`;
+
 exports[`Templates JavaScript Client File content: .editorconfig 1`] = `
 "root = true
 

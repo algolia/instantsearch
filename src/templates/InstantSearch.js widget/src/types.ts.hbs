@@ -1,0 +1,69 @@
+import type { Renderer, Connector, WidgetFactory } from 'instantsearch.js';
+
+/*
+ * Parameters send only to the widget creator function
+ * These parameters will be used by the widget creator to create the widget renderer and factory
+ */
+export type {{ pascalCaseName }}WidgetParams = {
+  container: Element | string;
+  // TODO: add the widget params
+};
+
+/*
+ * Parameters send to the widget creator function
+ * These parameters will be used by the widget creator to manage the widget logic
+ */
+export type {{ pascalCaseName }}ConnectorParams = {
+  // TODO: add the widget params
+};
+
+export type {{ pascalCaseName }}RenderState = {
+  // TODO: add the render state params
+};
+
+type {{ pascalCaseName }}WidgetDescription = {
+  $$type: '{{ widgetType }}';
+  renderState: {{ pascalCaseName }}RenderState;
+  indexRenderState: {
+    {{ camelCaseName }}: {
+      // TODO: add the return type of getRenderState
+    };
+  };
+  indexUiState: {
+    {{ camelCaseName }}: {
+      // TODO: add the return type of getWidgetUiState
+    }
+  };
+};
+
+/*
+ * Connector type, constructed from the Renderer and Connector parameters
+ */
+export type {{ pascalCaseName }}Connector = Connector<
+  {{ pascalCaseName }}WidgetDescription,
+  {{ pascalCaseName }}ConnectorParams
+>;
+
+/*
+ * Renderer type, constructed from the Renderer and Connector parameters
+ */
+export type {{ pascalCaseName }}RendererCreator = (
+  widgetParams: {{ pascalCaseName }}WidgetParams
+) => {
+  render: Renderer<
+    {{ pascalCaseName }}WidgetDescription['renderState'],
+    {{ pascalCaseName }}ConnectorParams
+  >;
+  dispose: () => void;
+};
+
+/*
+ * Widget type, constructed from the Renderer, Connector and Widget parameters
+ */
+export type {{ pascalCaseName }}WidgetCreator = WidgetFactory<
+  {{ pascalCaseName }}WidgetDescription & {
+    $$widgetType: '{{ widgetType }}';
+  },
+  {{ pascalCaseName }}ConnectorParams,
+  {{ pascalCaseName }}WidgetParams
+>;

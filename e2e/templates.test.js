@@ -37,7 +37,7 @@ describe('Templates', () => {
           name: templateConfig.appName,
           template: templateName,
           // We fetch the earliest supported version in order to not change
-          // the test output everytime we release a new version of a library.
+          // the test output every time we release a new version of a library.
           libraryVersion: await getEarliestLibraryVersion({
             libraryName: templateConfig.libraryName,
             supportedVersion: templateConfig.supportedVersion,
@@ -48,6 +48,7 @@ describe('Templates', () => {
           searchPlaceholder: 'Search placeholder',
           attributesToDisplay: ['attribute1', 'attribute2'],
           attributesForFaceting: ['facet1', 'facet2'],
+          organization: 'algolia',
         };
 
         configFilePath = `${temporaryDirectory}/${templateConfig.appName}.config.json`;
