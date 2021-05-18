@@ -3661,7 +3661,9 @@ export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function c
 
         return {
           ...uiState,
-          // add this widget's ui state
+          instantsearchJsApp: {
+            // TODO: add this widget's ui state
+          }
         };
       },
 
@@ -3683,7 +3685,9 @@ export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function c
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          // call this.getWidgetRenderState(renderOptions)
+          instantsearchJsApp: {
+            // TODO: call this.getWidgetRenderState(renderOptions), possibly nested per attribute
+          }
         };
       },
 
@@ -3695,11 +3699,15 @@ export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function c
       getWidgetRenderState({ results }) {
         if (!results) {
           // default rendering state without results
-          return {};
+          return {
+            widgetParams,
+          };
         }
 
         // rendering state when there are results
-        return {};
+        return {
+          widgetParams,
+        };
       },
     };
   };

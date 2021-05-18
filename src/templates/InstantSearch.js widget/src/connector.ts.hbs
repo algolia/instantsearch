@@ -71,7 +71,9 @@ export const connect{{ pascalCaseName }}: {{ pascalCaseName }}Connector = functi
 
         return {
           ...uiState,
-          // add this widget's ui state
+          {{ camelCaseName }}: {
+            // TODO: add this widget's ui state
+          }
         };
       },
 
@@ -93,7 +95,9 @@ export const connect{{ pascalCaseName }}: {{ pascalCaseName }}Connector = functi
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          // call this.getWidgetRenderState(renderOptions)
+          {{ camelCaseName }}: {
+            // TODO: call this.getWidgetRenderState(renderOptions), possibly nested per attribute
+          }
         };
       },
 
@@ -105,11 +109,15 @@ export const connect{{ pascalCaseName }}: {{ pascalCaseName }}Connector = functi
       getWidgetRenderState({ results }) {
         if (!results) {
           // default rendering state without results
-          return {};
+          return {
+            widgetParams,
+          };
         }
 
         // rendering state when there are results
-        return {};
+        return {
+          widgetParams,
+        };
       },
     };
   };
