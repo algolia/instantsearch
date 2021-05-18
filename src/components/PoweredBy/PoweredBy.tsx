@@ -3,11 +3,9 @@
 import { h } from 'preact';
 import { PoweredByCSSClasses } from '../../widgets/powered-by/powered-by';
 
-export type PoweredByComponentCSSClasses = Required<
-  {
-    [TClassName in keyof PoweredByCSSClasses]: string;
-  }
->;
+export type PoweredByComponentCSSClasses = {
+  [TClassName in keyof PoweredByCSSClasses]: string;
+};
 
 export type PoweredByProps = {
   url: string;
