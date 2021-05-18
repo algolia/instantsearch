@@ -1,20 +1,19 @@
 /** @jsx h */
 
 import { h } from 'preact';
+import { PoweredByCSSClasses } from '../../widgets/powered-by/powered-by';
 
-type CSSClasses = {
-  root: string;
-  link: string;
-  logo: string;
+export type PoweredByComponentCSSClasses = {
+  [TClassName in keyof PoweredByCSSClasses]: string;
 };
 
-type Props = {
+export type PoweredByProps = {
   url: string;
   theme: string;
-  cssClasses: CSSClasses;
+  cssClasses: PoweredByComponentCSSClasses;
 };
 
-const PoweredBy = ({ url, theme, cssClasses }: Props) => (
+const PoweredBy = ({ url, theme, cssClasses }: PoweredByProps) => (
   <div className={cssClasses.root}>
     <a
       href={url}
