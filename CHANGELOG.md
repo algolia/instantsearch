@@ -1,3 +1,22 @@
+# [4.7.0](https://github.com/algolia/create-instantsearch-app/compare/4.6.0...4.7.0) (2021-05-19)
+
+
+### Bug Fixes
+
+* **templates:** add `main` entry point ([#447](https://github.com/algolia/create-instantsearch-app/issues/447)) ([988336d](https://github.com/algolia/create-instantsearch-app/commit/988336dac4e92ce545e9ea0ebb79565f5043f61a))
+* **templates:** remove `main` entry points for Vue and React ([51c5f3c](https://github.com/algolia/create-instantsearch-app/commit/51c5f3cdc73d32a0008fc2bdb05ab3378ba2d422))
+* **templates:** update to latest Parcel version ([#454](https://github.com/algolia/create-instantsearch-app/issues/454)) ([7bb892e](https://github.com/algolia/create-instantsearch-app/commit/7bb892ea0d61db2562b2e76246e928ec7deb3b96))
+* **templates:** use function component in React template ([#445](https://github.com/algolia/create-instantsearch-app/issues/445)) ([17f8cc9](https://github.com/algolia/create-instantsearch-app/commit/17f8cc98c3e0b1bb1930cd94e88033c6d8b10071))
+
+
+### Features
+
+* **template:** add widget template ([#455](https://github.com/algolia/create-instantsearch-app/issues/455)) ([e48f9c6](https://github.com/algolia/create-instantsearch-app/commit/e48f9c6cd1721625e2de5f43336ab812ef70cae2))
+* **templates:** update Autocomplete.js template to Satellite ([#450](https://github.com/algolia/create-instantsearch-app/issues/450)) ([1ce212b](https://github.com/algolia/create-instantsearch-app/commit/1ce212bd206c5e09c3ee2873bf41720e8aa85dcb))
+* **vue:** update vue template for vue-instantsearch 3 ([#452](https://github.com/algolia/create-instantsearch-app/issues/452)) ([2b3d6ff](https://github.com/algolia/create-instantsearch-app/commit/2b3d6ffd106b6cf3969b075a1451d8ec4ed4b381))
+
+
+
 # [4.6.0](https://github.com/algolia/create-instantsearch-app/compare/4.5.0...4.6.0) (2019-12-18)
 
 
