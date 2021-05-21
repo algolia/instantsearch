@@ -242,7 +242,7 @@ const connectRange: RangeConnector = function connectRange(
           );
         }
 
-        return resolvedState;
+        return resolvedState.resetPage();
       }
 
       return null;
