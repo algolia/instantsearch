@@ -667,6 +667,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       return helper;
     };
 
+    it('resets the page', () => {
+      const helper = createHelper();
+      helper.setPage(5);
+      const widget = connectRange(rendering)({
+        attribute,
+      });
+
+      const { refine } = widget.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      refine([10, 490]);
+
+      expect(helper.state.page).toBe(0);
+    });
+
     it('expect to refine when range are not set', () => {
       const helper = createHelper();
       const widget = connectRange(rendering)({
