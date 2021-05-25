@@ -1,3 +1,17 @@
+# [4.23.0](https://github.com/algolia/instantsearch.js/compare/v4.22.0...v4.23.0) (2021-05-25)
+
+
+### Bug Fixes
+
+* **range:** reset the page on refine ([#4760](https://github.com/algolia/instantsearch.js/issues/4760)) ([24e3b34](https://github.com/algolia/instantsearch.js/commit/24e3b34c944ec32b414e845550e9c6c02b39cb92)), closes [#4759](https://github.com/algolia/instantsearch.js/issues/4759)
+
+
+### Features
+
+* **ts:** convert poweredBy widget ([#4756](https://github.com/algolia/instantsearch.js/issues/4756)) ([142660a](https://github.com/algolia/instantsearch.js/commit/142660a2bc0ab7212265a9ff6dadf7a7f1081c69))
+
+
+
 # [4.22.0](https://github.com/algolia/instantsearch.js/compare/v4.21.0...v4.22.0) (2021-05-05)
 
 
