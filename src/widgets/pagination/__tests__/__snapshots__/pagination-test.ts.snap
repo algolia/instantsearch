@@ -20,7 +20,6 @@ Object {
   "currentPage": 0,
   "isFirstPage": true,
   "isLastPage": false,
-  "nbHits": 200,
   "nbPages": 20,
   "pages": Array [
     0,
@@ -42,7 +41,6 @@ Object {
     "next": "›",
     "previous": "‹",
   },
-  "totalPages": undefined,
 }
 `;
 
@@ -66,7 +64,6 @@ Object {
   "currentPage": 0,
   "isFirstPage": true,
   "isLastPage": false,
-  "nbHits": 200,
   "nbPages": 20,
   "pages": Array [
     0,
@@ -88,6 +85,5 @@ Object {
     "next": "›",
     "previous": "‹",
   },
-  "totalPages": undefined,
 }
 `;
