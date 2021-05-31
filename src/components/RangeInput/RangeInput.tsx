@@ -1,49 +1,62 @@
 /** @jsx h */
 
 import { h, Component } from 'preact';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template/Template';
+import {
+  RangeInputCSSClasses,
+  RangeInputTemplates,
+} from '../../widgets/range-input/range-input';
+import { Range, RangeBoundaries } from '../../connectors/range/connectRange';
 
-class RangeInput extends Component {
-  constructor(props) {
-    super(props);
+export type RangeInputComponentCSSClasses = {
+  [TClassName in keyof RangeInputCSSClasses]: string;
+};
 
-    this.state = {
-      min: props.values.min,
-      max: props.values.max,
-    };
-  }
+export type RangeInputProps = {
+  min?: number;
+  max?: number;
+  step: number;
+  values: Partial<Range>;
+  cssClasses: RangeInputComponentCSSClasses;
+  templateProps: {
+    templates: RangeInputTemplates;
+  };
+  refine(rangeValue: RangeBoundaries): void;
+};
 
-  componentWillReceiveProps(nextProps) {
+class RangeInput extends Component<RangeInputProps, Partial<Range>> {
+  public state = {
+    min: this.props.values.min,
+    max: this.props.values.max,
+  };
+
+  public componentWillReceiveProps(nextProps: RangeInputProps) {
     this.setState({
       min: nextProps.values.min,
       max: nextProps.values.max,
     });
   }
 
-  onInput = name => event => {
+  private onInput = (key: string) => (event: Event) => {
+    const { value } = event.currentTarget as HTMLInputElement;
+
     this.setState({
-      [name]: event.currentTarget.value,
+      [key]: Number(value),
     });
   };
 
-  onSubmit = event => {
+  private onSubmit = (event: Event) => {
     event.preventDefault();
 
-    this.props.refine([
-      this.state.min && Number(this.state.min),
-      this.state.max && Number(this.state.max),
-    ]);
+    this.props.refine([this.state.min, this.state.max]);
   };
 
-  render() {
+  public render() {
     const { min: minValue, max: maxValue } = this.state;
     const { min, max, step, cssClasses, templateProps } = this.props;
-    const isDisabled = min >= max;
-
+    const isDisabled = min && max ? min >= max : false;
     const hasRefinements = Boolean(minValue || maxValue);
-
     const rootClassNames = cx(cssClasses.root, {
       [cssClasses.noRefinement]: !hasRefinements,
     });
@@ -60,7 +73,7 @@ class RangeInput extends Component {
               step={step}
               value={minValue ?? ''}
               onInput={this.onInput('min')}
-              placeholder={min}
+              placeholder={min?.toString()}
               disabled={isDisabled}
             />
           </label>
@@ -83,7 +96,7 @@ class RangeInput extends Component {
               step={step}
               value={maxValue ?? ''}
               onInput={this.onInput('max')}
-              placeholder={max}
+              placeholder={max?.toString()}
               disabled={isDisabled}
             />
           </label>
@@ -103,33 +116,5 @@ class RangeInput extends Component {
     );
   }
 }
-
-RangeInput.propTypes = {
-  min: PropTypes.number.isRequired,
-  max: PropTypes.number.isRequired,
-  step: PropTypes.number.isRequired,
-  values: PropTypes.shape({
-    min: PropTypes.number,
-    max: PropTypes.number,
-  }).isRequired,
-  cssClasses: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-    noRefinement: PropTypes.string.isRequired,
-    form: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    input: PropTypes.string.isRequired,
-    inputMin: PropTypes.string.isRequired,
-    inputMax: PropTypes.string.isRequired,
-    separator: PropTypes.string.isRequired,
-    submit: PropTypes.string.isRequired,
-  }).isRequired,
-  templateProps: PropTypes.shape({
-    templates: PropTypes.shape({
-      separatorText: PropTypes.string.isRequired,
-      submitText: PropTypes.string.isRequired,
-    }).isRequired,
-  }),
-  refine: PropTypes.func.isRequired,
-};
 
 export default RangeInput;

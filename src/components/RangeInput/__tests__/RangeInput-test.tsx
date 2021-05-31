@@ -3,10 +3,11 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { render, fireEvent } from '@testing-library/preact';
-import RangeInput from '../RangeInput';
+import RangeInput, { RangeInputProps } from '../RangeInput';
+import { ReactElementLike } from 'prop-types';
 
 describe('RangeInput', () => {
-  const defaultProps = {
+  const defaultProps: RangeInputProps = {
     min: 0,
     max: 500,
     step: 1,
@@ -31,12 +32,11 @@ describe('RangeInput', () => {
     refine: () => {},
   };
 
-  const shallowRender = props =>
-    shallow(<RangeInput {...defaultProps} {...props} />);
+  const shallowRender = (props?: Partial<RangeInputProps>) =>
+    shallow((<RangeInput {...defaultProps} {...props} />) as ReactElementLike);
 
   it('expect to render', () => {
-    const props = {};
-    const component = shallowRender(props);
+    const component = shallowRender();
 
     expect(component).toMatchSnapshot();
   });
@@ -125,7 +125,9 @@ describe('RangeInput', () => {
     it('expect to update the state when min change', () => {
       const props = {};
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
-      const [minInput] = container.querySelectorAll('input[type="number"]');
+      const [minInput] = container.querySelectorAll<HTMLInputElement>(
+        'input[type="number"]'
+      );
 
       fireEvent.input(minInput, { target: { value: 20 } });
 
@@ -135,7 +137,9 @@ describe('RangeInput', () => {
     it('expect to update the state when max change', () => {
       const props = {};
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
-      const [, maxInput] = container.querySelectorAll('input[type="number"]');
+      const [, maxInput] = container.querySelectorAll<HTMLInputElement>(
+        'input[type="number"]'
+      );
 
       fireEvent.input(maxInput, { target: { value: 480 } });
 
@@ -150,7 +154,7 @@ describe('RangeInput', () => {
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
-      const [minInput, maxInput] = container.querySelectorAll(
+      const [minInput, maxInput] = container.querySelectorAll<HTMLInputElement>(
         'input[type="number"]'
       );
 
@@ -161,7 +165,11 @@ describe('RangeInput', () => {
         target: { value: 480 },
       });
 
-      fireEvent.submit(container.querySelector('form'));
+      const form = container.querySelector('form');
+
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       expect(props.refine).toHaveBeenCalledWith([20, 480]);
     });
@@ -172,7 +180,7 @@ describe('RangeInput', () => {
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
-      const [minInput, maxInput] = container.querySelectorAll(
+      const [minInput, maxInput] = container.querySelectorAll<HTMLInputElement>(
         'input[type="number"]'
       );
 
@@ -183,7 +191,11 @@ describe('RangeInput', () => {
         target: { value: 480.05 },
       });
 
-      fireEvent.submit(container.querySelector('form'));
+      const form = container.querySelector('form');
+
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       expect(props.refine).toHaveBeenCalledWith([20.05, 480.05]);
     });
@@ -194,13 +206,19 @@ describe('RangeInput', () => {
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
-      const [minInput] = container.querySelectorAll('input[type="number"]');
+      const [minInput] = container.querySelectorAll<HTMLInputElement>(
+        'input[type="number"]'
+      );
 
       fireEvent.input(minInput, {
         target: { value: 20 },
       });
 
-      fireEvent.submit(container.querySelector('form'));
+      const form = container.querySelector('form');
+
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       expect(props.refine).toHaveBeenCalledWith([20, undefined]);
     });
@@ -211,13 +229,19 @@ describe('RangeInput', () => {
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
-      const [, maxInput] = container.querySelectorAll('input[type="number"]');
+      const [, maxInput] = container.querySelectorAll<HTMLInputElement>(
+        'input[type="number"]'
+      );
 
       fireEvent.input(maxInput, {
         target: { value: 480 },
       });
 
-      fireEvent.submit(container.querySelector('form'));
+      const form = container.querySelector('form');
+
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       expect(props.refine).toHaveBeenCalledWith([undefined, 480]);
     });
@@ -228,7 +252,11 @@ describe('RangeInput', () => {
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
-      fireEvent.submit(container.querySelector('form'));
+      const form = container.querySelector('form');
+
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       expect(props.refine).toHaveBeenCalledWith([undefined, undefined]);
     });

@@ -1,10 +1,17 @@
 /** @jsx h */
 
 import { render as preactRender, VNode } from 'preact';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import rangeInput from '../range-input';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import {
+  createDisposeOptions,
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { InstantSearch } from '../../../types';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -17,19 +24,20 @@ jest.mock('preact', () => {
 
 describe('rangeInput', () => {
   const attribute = 'aNumAttr';
-  const createContainer = () => document.createElement('div');
-  const instantSearchInstance = {};
-  const createHelper = () =>
-    algoliasearchHelper(createSearchClient(), 'indexName', {
-      disjunctiveFacets: [attribute],
-    });
+  let container: HTMLElement;
+  let helper: AlgoliaSearchHelper;
+  let instantSearchInstance: InstantSearch;
 
-  afterEach(() => {
-    render.mockReset();
+  beforeEach(() => {
+    render.mockClear();
+    container = document.createElement('div');
+    instantSearchInstance = createInstantSearch();
+    helper = algoliasearchHelper(createSearchClient(), '', {});
   });
 
   describe('Usage', () => {
     it('throws without container', () => {
+      // @ts-expect-error
       expect(() => rangeInput({ container: undefined }))
         .toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -39,7 +47,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('is a widget', () => {
-      const container = document.createElement('div');
       const widget = rangeInput({ container, attribute: 'price' });
 
       expect(widget).toEqual(
@@ -54,8 +61,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   describe('Lifecycle', () => {
     describe('dispose', () => {
       it('unmounts the component', () => {
-        const container = document.createElement('div');
-        const helper = createHelper();
         const widget = rangeInput({
           attribute: 'price',
           container,
@@ -63,10 +68,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
         expect(render).toHaveBeenCalledTimes(0);
 
-        widget.dispose({
-          state: helper.state,
-          helper,
-        });
+        widget.dispose!(
+          createDisposeOptions({
+            state: helper.state,
+            helper,
+          })
+        );
 
         expect(render).toHaveBeenCalledTimes(1);
         expect(render).toHaveBeenLastCalledWith(null, container);
@@ -75,8 +82,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('expect to render with results', () => {
-    const container = createContainer();
-    const helper = createHelper();
     const results = {
       disjunctiveFacets: [
         {
@@ -94,8 +99,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       attribute,
     });
 
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    // @ts-expect-error
+    widget.render!(createRenderOptions({ results, helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -106,17 +112,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('expect to render without results', () => {
-    const container = createContainer();
-    const helper = createHelper();
-    const results = [];
-
     const widget = rangeInput({
       container,
       attribute,
     });
 
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    widget.render!(createRenderOptions({ helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -125,10 +127,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('expect to render with custom classNames', () => {
-    const container = createContainer();
-    const helper = createHelper();
-    const results = [];
-
     const widget = rangeInput({
       container,
       attribute,
@@ -145,8 +143,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       },
     });
 
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    widget.render!(createRenderOptions({ helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -155,10 +153,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('expect to render with custom templates', () => {
-    const container = createContainer();
-    const helper = createHelper();
-    const results = [];
-
     const widget = rangeInput({
       container,
       attribute,
@@ -168,8 +162,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       },
     });
 
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    widget.render!(createRenderOptions({ helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -178,18 +172,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('expect to render with min', () => {
-    const container = createContainer();
-    const helper = createHelper();
-    const results = [];
-
     const widget = rangeInput({
       container,
       attribute,
       min: 20,
     });
 
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    widget.render!(createRenderOptions({ helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -198,18 +188,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('expect to render with max', () => {
-    const container = createContainer();
-    const helper = createHelper();
-    const results = [];
-
     const widget = rangeInput({
       container,
       attribute,
       max: 480,
     });
 
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    widget.render!(createRenderOptions({ helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -218,8 +204,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('expect to render with refinement', () => {
-    const container = createContainer();
-    const helper = createHelper();
     const results = {
       disjunctiveFacets: [
         {
@@ -240,8 +224,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       attribute,
     });
 
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    // @ts-expect-error
+    widget.render!(createRenderOptions({ results, helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -254,10 +239,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('expect to render with refinement at boundaries', () => {
-    const container = createContainer();
-    const helper = createHelper();
-    const results = {};
-
     helper.addNumericRefinement(attribute, '>=', 10);
     helper.addNumericRefinement(attribute, '<=', 500);
 
@@ -268,8 +249,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       max: 500,
     });
 
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    widget.render!(createRenderOptions({ helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -283,18 +264,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
   describe('precision', () => {
     it('expect to render with default precision', () => {
-      const container = createContainer();
-      const helper = createHelper();
-      const results = [];
-
       const widget = rangeInput({
         container,
         attribute,
         precision: 2,
       });
 
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
+      widget.init!(createInitOptions({ helper, instantSearchInstance }));
+      widget.render!(createRenderOptions({ helper }));
 
       const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -303,18 +280,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('expect to render with precision of 0', () => {
-      const container = createContainer();
-      const helper = createHelper();
-      const results = [];
-
       const widget = rangeInput({
         container,
         attribute,
         precision: 0,
       });
 
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
+      widget.init!(createInitOptions({ helper, instantSearchInstance }));
+      widget.render!(createRenderOptions({ helper }));
 
       const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -323,18 +296,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('expect to render with precision of 1', () => {
-      const container = createContainer();
-      const helper = createHelper();
-      const results = [];
-
       const widget = rangeInput({
         container,
         attribute,
         precision: 1,
       });
 
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
+      widget.init!(createInitOptions({ helper, instantSearchInstance }));
+      widget.render!(createRenderOptions({ helper }));
 
       const firstRender = render.mock.calls[0][0] as VNode;
 
