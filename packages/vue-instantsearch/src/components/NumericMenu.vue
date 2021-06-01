@@ -8,6 +8,7 @@
       :can-refine="canRefine"
       :refine="state.refine"
       :createURL="state.createURL"
+      :send-event="state.sendEvent"
     >
       <ul :class="[suit('list')]">
         <li

@@ -17,6 +17,7 @@
       :createURL="state.createURL"
       :is-from-search="state.isFromSearch"
       :can-refine="state.canRefine"
+      :send-event="state.sendEvent"
     >
       <div
         :class="suit('searchBox')"

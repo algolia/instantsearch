@@ -60,7 +60,7 @@ it('exposes insights prop to the default slot', () => {
       default: `
         <ul slot-scope="{ items, insights }">
           <li v-for="(item, itemIndex) in items" >
-          
+
             <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
               Add to cart
             </button>
@@ -99,4 +99,25 @@ it('exposes insights prop to the item slot', () => {
     eventName: 'Add to cart',
     objectIDs: ['two'],
   });
+});
+
+it('exposes send-event method for insights middleware', () => {
+  const sendEvent = jest.fn();
+  __setState({
+    ...defaultState,
+    sendEvent,
+  });
+
+  const wrapper = mount(Hits, {
+    scopedSlots: {
+      default: `
+      <div slot-scope="{ sendEvent }">
+        <button @click="sendEvent()">Send Event</button>
+      </div>
+      `,
+    },
+  });
+
+  wrapper.find('button').trigger('click');
+  expect(sendEvent).toHaveBeenCalledTimes(1);
 });

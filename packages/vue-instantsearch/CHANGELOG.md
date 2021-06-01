@@ -1,3 +1,13 @@
+# [3.7.0](https://github.com/algolia/vue-instantsearch/compare/v3.6.0...v3.7.0) (2021-04-27)
+
+
+### Features
+
+* **insights:** expose `send-event` in widgets ([#953](https://github.com/algolia/vue-instantsearch/issues/953)) ([e2e42a4](https://github.com/algolia/vue-instantsearch/commit/e2e42a4180796728cff5d7b02949b857e5918d3c))
+* **middlewares:** add middlewares prop to ais-instant-search ([#939](https://github.com/algolia/vue-instantsearch/issues/939)) ([513017a](https://github.com/algolia/vue-instantsearch/commit/513017a47d38ccddd0557c01ce732e6e5e7648d6))
+
+
+
 # [3.6.0](https://github.com/algolia/vue-instantsearch/compare/v3.5.0...v3.6.0) (2021-03-31)
 
 

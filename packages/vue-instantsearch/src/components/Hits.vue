@@ -6,6 +6,7 @@
     <slot
       :items="items"
       :insights="state.insights"
+      :send-event="state.sendEvent"
     >
       <ol :class="suit('list')">
         <li
