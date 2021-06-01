@@ -46,11 +46,12 @@
   },
   "dependencies": {
     "algoliasearch-helper": "^3.1.0",
-    "instantsearch.js": "^4.20.0"
+    "instantsearch.js": "^4.20.0",
+    "vue-demi": "npm:@eunjae-lee/vue-demi@0.9.3"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.32.0 < 5",
-    "vue": "^2.6.0",
+    "vue": "^2.6.0 || >=3.0.0-rc.0",
     "vue-server-renderer": "^2.6.11"
   },
   "devDependencies": {
@@ -114,11 +115,11 @@
   "bundlesize": [
     {
       "path": "./dist/vue-instantsearch.js",
-      "maxSize": "52.75 kB"
+      "maxSize": "53.00 kB"
     },
     {
       "path": "./dist/vue-instantsearch.common.js",
-      "maxSize": "16.25 kB"
+      "maxSize": "16.50 kB"
     }
   ],
   "resolutions": {
