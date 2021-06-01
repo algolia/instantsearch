@@ -7,7 +7,7 @@ import {
 import clearRefinements from '../clear-refinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { ClearRefinementsProps } from '../../../components/ClearRefinements/types';
+import { ClearRefinementsProps } from '../../../components/ClearRefinements/ClearRefinements';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
