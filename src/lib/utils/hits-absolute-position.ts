@@ -1,12 +1,12 @@
-import { Hit } from '../../types';
+import { AlgoliaHit } from '../../types';
 
-export const addAbsolutePosition = <THit = Hit>(
+export function addAbsolutePosition<THit extends AlgoliaHit>(
   hits: THit[],
   page: number,
   hitsPerPage: number
-): THit[] => {
+): Array<THit & { __position: number }> {
   return hits.map((hit, idx) => ({
     ...hit,
     __position: hitsPerPage * page + idx + 1,
   }));
-};
+}
