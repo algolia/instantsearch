@@ -2,20 +2,19 @@ import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
-import { configure, hits } from '../src/widgets';
 
 storiesOf('Results/Hits', module)
   .add(
     'default',
-    withHits(({ search, container }) => {
-      search.addWidgets([hits({ container })]);
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([instantsearch.widgets.hits({ container })]);
     })
   )
   .add(
     'with transformed items',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           transformItems: items =>
             items.map(item => ({
@@ -30,7 +29,7 @@ storiesOf('Results/Hits', module)
     'with highlight function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           templates: {
             item(hit) {
@@ -46,9 +45,9 @@ storiesOf('Results/Hits', module)
   )
   .add(
     'with highlight helper',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           templates: {
             item:
@@ -62,7 +61,7 @@ storiesOf('Results/Hits', module)
     'with reverseHighlight function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           templates: {
             item(hit) {
@@ -78,9 +77,9 @@ storiesOf('Results/Hits', module)
   )
   .add(
     'with reverseHighlight helper',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           templates: {
             item:
@@ -94,13 +93,13 @@ storiesOf('Results/Hits', module)
     'with snippet function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        configure({
+        instantsearch.widgets.configure({
           attributesToSnippet: ['name', 'description'],
         }),
       ]);
 
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           templates: {
             item(hit) {
@@ -122,15 +121,15 @@ storiesOf('Results/Hits', module)
   )
   .add(
     'with snippet helper',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        configure({
+        instantsearch.widgets.configure({
           attributesToSnippet: ['name', 'description'],
         }),
       ]);
 
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           templates: {
             item: `
@@ -145,13 +144,13 @@ storiesOf('Results/Hits', module)
     'with reverseSnippet function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        configure({
+        instantsearch.widgets.configure({
           attributesToSnippet: ['name', 'description'],
         }),
       ]);
 
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           templates: {
             item(hit) {
@@ -173,15 +172,15 @@ storiesOf('Results/Hits', module)
   )
   .add(
     'with reverseSnippet helper',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        configure({
+        instantsearch.widgets.configure({
           attributesToSnippet: ['name', 'description'],
         }),
       ]);
 
       search.addWidgets([
-        hits({
+        instantsearch.widgets.hits({
           container,
           templates: {
             item: `
@@ -195,16 +194,16 @@ storiesOf('Results/Hits', module)
   .add(
     'with insights function',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         search.addWidgets([
-          configure({
+          instantsearch.widgets.configure({
             attributesToSnippet: ['name', 'description'],
             clickAnalytics: true,
           }),
         ]);
 
         search.addWidgets([
-          hits({
+          instantsearch.widgets.hits({
             container,
             templates: {
               item: item => `
@@ -228,16 +227,16 @@ storiesOf('Results/Hits', module)
   .add(
     'with insights helper',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         search.addWidgets([
-          configure({
+          instantsearch.widgets.configure({
             attributesToSnippet: ['name', 'description'],
             clickAnalytics: true,
           }),
         ]);
 
         search.addWidgets([
-          hits({
+          instantsearch.widgets.hits({
             container,
             templates: {
               item: `

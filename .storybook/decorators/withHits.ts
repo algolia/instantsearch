@@ -5,6 +5,8 @@ import defaultPlayground from '../playgrounds/default';
 import { configure } from '../../src/widgets';
 import { InstantSearch } from '../../src/types';
 
+type InstantSearchUMDModule = typeof instantsearch;
+
 export const withHits = (
   storyFn: ({
     container,
@@ -12,7 +14,7 @@ export const withHits = (
     search,
   }: {
     container: HTMLElement;
-    instantsearch: any;
+    instantsearch: InstantSearchUMDModule;
     search: InstantSearch;
   }) => void,
   searchOptions?: any

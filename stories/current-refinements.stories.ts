@@ -1,17 +1,16 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { currentRefinements } from '../src/widgets';
 
 storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'default',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
           }),
         ]);
@@ -33,12 +32,12 @@ storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'with refinementList',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
           }),
         ]);
@@ -72,7 +71,7 @@ storiesOf('Refinements/CurrentRefinements', module)
         ]);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
           }),
         ]);
@@ -109,7 +108,7 @@ storiesOf('Refinements/CurrentRefinements', module)
         ]);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
           }),
         ]);
@@ -147,7 +146,7 @@ storiesOf('Refinements/CurrentRefinements', module)
       ]);
 
       search.addWidgets([
-        currentRefinements({
+        instantsearch.widgets.currentRefinements({
           container: currentRefinementsContainer,
         }),
       ]);
@@ -156,12 +155,12 @@ storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'with numericMenu',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
           }),
         ]);
@@ -195,7 +194,7 @@ storiesOf('Refinements/CurrentRefinements', module)
         ]);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
           }),
         ]);
@@ -214,12 +213,12 @@ storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'with only price included',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
             includedAttributes: ['price'],
           }),
@@ -239,12 +238,12 @@ storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'with price and query excluded',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
             excludedAttributes: ['query', 'price'],
           }),
@@ -267,12 +266,12 @@ storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'with query',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
             excludedAttributes: [],
           }),
@@ -295,12 +294,12 @@ storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'with transformed items',
     withHits(
-      ({ search, container }) => {
+      ({ search, container, instantsearch }) => {
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
         search.addWidgets([
-          currentRefinements({
+          instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
             transformItems: items =>
               items.map(refinementItem => ({
@@ -347,7 +346,7 @@ storiesOf('Refinements/CurrentRefinements', module)
       container.appendChild(refinementListContainer2);
 
       search.addWidgets([
-        currentRefinements({
+        instantsearch.widgets.currentRefinements({
           container: currentRefinementsContainer1,
         }),
 
