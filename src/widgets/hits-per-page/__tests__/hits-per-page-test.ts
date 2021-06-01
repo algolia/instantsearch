@@ -2,7 +2,7 @@ import { render as preactRender, VNode, ComponentChildren } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
 import hitsPerPage from '../hits-per-page';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { SelectorProps } from '../../../components/Selector/types';
+import { SelectorProps } from '../../../components/Selector/Selector';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
