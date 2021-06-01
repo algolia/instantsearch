@@ -1,7 +1,8 @@
 import instantsearch from 'instantsearch.js/es';
 import { createInstantSearchComponent } from '../util/createInstantSearchComponent';
 import { warn } from '../util/warn';
-import { isVue3, h } from 'vue-demi';
+import { isVue3 } from 'vue-demi';
+import { h } from 'vue';
 
 const oldApiWarning = `Vue InstantSearch: You used the prop api-key or app-id.
 These have been replaced by search-client.
