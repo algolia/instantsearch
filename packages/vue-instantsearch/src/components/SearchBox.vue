@@ -78,6 +78,10 @@ export default {
       type: String,
       default: undefined,
     },
+    modelValue: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -86,25 +90,33 @@ export default {
   },
   computed: {
     isControlled() {
-      return typeof this.value !== 'undefined';
+      return (
+        typeof this.value !== 'undefined' ||
+        typeof this.modelValue !== 'undefined'
+      );
+    },
+    model() {
+      return this.value || this.modelValue;
     },
     currentRefinement: {
       get() {
         // if the input is controlled, but not up to date
         // this means it didn't search, and we should pretend it was `set`
-        if (this.isControlled && this.value !== this.localValue) {
+        if (this.isControlled && this.model !== this.localValue) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          this.localValue = this.value;
-          this.$emit('input', this.value);
-          this.state.refine(this.value);
+          this.localValue = this.model;
+          this.$emit('input', this.model);
+          this.$emit('update:modelValue', this.model);
+          this.state.refine(this.model);
         }
-        return this.value || this.state.query || '';
+        return this.model || this.state.query || '';
       },
       set(val) {
         this.localValue = val;
         this.state.refine(val);
         if (this.isControlled) {
           this.$emit('input', val);
+          this.$emit('update:modelValue', val);
         }
       },
     },
