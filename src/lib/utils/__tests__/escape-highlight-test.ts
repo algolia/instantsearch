@@ -7,13 +7,19 @@ describe('escapeHits()', () => {
         _highlightResult: {
           foobar: {
             value: '<script>__ais-highlight__foobar__/ais-highlight__</script>',
+            matchLevel: 'full' as const,
+            matchedWords: [],
           },
         },
         _snippetResult: {
           foobar: {
             value: '<script>__ais-highlight__foobar__/ais-highlight__</script>',
+            matchLevel: 'full' as const,
+            matchedWords: [],
           },
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
@@ -22,17 +28,23 @@ describe('escapeHits()', () => {
         _highlightResult: {
           foobar: {
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+            matchLevel: 'full' as const,
+            matchedWords: [],
           },
         },
         _snippetResult: {
           foobar: {
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+            matchLevel: 'full' as const,
+            matchedWords: [],
           },
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
-    output.__escaped = true;
+    (output as any).__escaped = true;
     expect(escapeHits(hits)).toEqual(output);
   });
 
@@ -44,6 +56,8 @@ describe('escapeHits()', () => {
             bar: {
               value:
                 '<script>__ais-highlight__foobar__/ais-highlight__</script>',
+              matchLevel: 'full' as const,
+              matchedWords: [],
             },
           },
         },
@@ -52,9 +66,13 @@ describe('escapeHits()', () => {
             bar: {
               value:
                 '<script>__ais-highlight__foobar__/ais-highlight__</script>',
+              matchLevel: 'full' as const,
+              matchedWords: [],
             },
           },
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
@@ -64,6 +82,8 @@ describe('escapeHits()', () => {
           foo: {
             bar: {
               value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
             },
           },
         },
@@ -71,13 +91,17 @@ describe('escapeHits()', () => {
           foo: {
             bar: {
               value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
             },
           },
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
-    output.__escaped = true;
+    (output as any).__escaped = true;
     expect(escapeHits(hits)).toEqual(output);
   });
 
@@ -88,9 +112,13 @@ describe('escapeHits()', () => {
           foobar: [
             {
               value: '<script>__ais-highlight__bar__/ais-highlight__</script>',
+              matchLevel: 'full' as const,
+              matchedWords: [],
             },
             {
               value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+              matchLevel: 'full' as const,
+              matchedWords: [],
             },
           ],
         },
@@ -98,12 +126,18 @@ describe('escapeHits()', () => {
           foobar: [
             {
               value: '<script>__ais-highlight__bar__/ais-highlight__</script>',
+              matchLevel: 'full' as const,
+              matchedWords: [],
             },
             {
               value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+              matchLevel: 'full' as const,
+              matchedWords: [],
             },
           ],
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
@@ -111,20 +145,38 @@ describe('escapeHits()', () => {
       {
         _highlightResult: {
           foobar: [
-            { value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;' },
-            { value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;' },
+            {
+              value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
+            },
+            {
+              value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
+            },
           ],
         },
         _snippetResult: {
           foobar: [
-            { value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;' },
-            { value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;' },
+            {
+              value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
+            },
+            {
+              value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
+            },
           ],
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
-    output.__escaped = true;
+    (output as any).__escaped = true;
     expect(escapeHits(hits)).toEqual(output);
   });
 
@@ -138,6 +190,8 @@ describe('escapeHits()', () => {
                 bar: {
                   value:
                     '<script>__ais-highlight__bar__/ais-highlight__</script>',
+                  matchLevel: 'full' as const,
+                  matchedWords: [],
                 },
               },
             },
@@ -146,6 +200,8 @@ describe('escapeHits()', () => {
                 bar: {
                   value:
                     '<script>__ais-highlight__foo__/ais-highlight__</script>',
+                  matchLevel: 'full' as const,
+                  matchedWords: [],
                 },
               },
             },
@@ -158,6 +214,8 @@ describe('escapeHits()', () => {
                 bar: {
                   value:
                     '<script>__ais-highlight__bar__/ais-highlight__</script>',
+                  matchLevel: 'full' as const,
+                  matchedWords: [],
                 },
               },
             },
@@ -166,11 +224,15 @@ describe('escapeHits()', () => {
                 bar: {
                   value:
                     '<script>__ais-highlight__foo__/ais-highlight__</script>',
+                  matchLevel: 'full' as const,
+                  matchedWords: [],
                 },
               },
             },
           ],
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
@@ -182,6 +244,8 @@ describe('escapeHits()', () => {
               foo: {
                 bar: {
                   value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
+                  matchLevel: 'full' as const,
+                  matchedWords: [],
                 },
               },
             },
@@ -189,6 +253,8 @@ describe('escapeHits()', () => {
               foo: {
                 bar: {
                   value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+                  matchLevel: 'full' as const,
+                  matchedWords: [],
                 },
               },
             },
@@ -200,6 +266,8 @@ describe('escapeHits()', () => {
               foo: {
                 bar: {
                   value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
+                  matchLevel: 'full' as const,
+                  matchedWords: [],
                 },
               },
             },
@@ -207,14 +275,18 @@ describe('escapeHits()', () => {
               foo: {
                 bar: {
                   value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+                  matchLevel: 'full' as const,
+                  matchedWords: [],
                 },
               },
             },
           ],
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
-    output.__escaped = true;
+    (output as any).__escaped = true;
     expect(escapeHits(hits)).toEqual(output);
   });
 
@@ -224,8 +296,12 @@ describe('escapeHits()', () => {
         _highlightResult: {
           foobar: {
             value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+            matchLevel: 'full' as const,
+            matchedWords: [],
           },
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
@@ -237,12 +313,16 @@ describe('escapeHits()', () => {
         _highlightResult: {
           foobar: {
             value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+            matchLevel: 'full' as const,
+            matchedWords: [],
           },
         },
+        objectID: '1',
+        __position: 1,
       },
     ];
 
-    output.__escaped = true;
+    (output as any).__escaped = true;
 
     expect(hits).toEqual(output);
   });
@@ -252,8 +332,12 @@ describe('escapeHits()', () => {
       _highlightResult: {
         foobar: {
           value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+          matchLevel: 'full' as const,
+          matchedWords: [],
         },
       },
+      objectID: '1',
+      __position: 1,
     };
 
     const hits = [hit];
@@ -264,8 +348,12 @@ describe('escapeHits()', () => {
       _highlightResult: {
         foobar: {
           value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+          matchLevel: 'full' as const,
+          matchedWords: [],
         },
       },
+      objectID: '1',
+      __position: 1,
     });
   });
 });
