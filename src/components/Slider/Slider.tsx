@@ -7,7 +7,7 @@ import { range } from '../../lib/utils';
 import Pit from './Pit';
 import { RangeBoundaries } from '../../connectors/range/connectRange';
 
-type Props = {
+export type SliderProps = {
   refine(values: RangeBoundaries): void;
   min?: number;
   max?: number;
@@ -25,7 +25,7 @@ type Props = {
   };
 };
 
-class Slider extends Component<Props> {
+class Slider extends Component<SliderProps> {
   private get isDisabled() {
     return this.props.min! >= this.props.max!;
   }

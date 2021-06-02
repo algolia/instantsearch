@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import Slider from '../Slider';
+import Slider, { SliderProps } from '../Slider';
 import { ReactElementLike } from 'prop-types';
 
 describe('Slider', () => {
@@ -73,7 +73,7 @@ describe('Slider', () => {
   });
 
   it('expect to call handleChange on change', () => {
-    const props = {
+    const props: SliderProps = {
       refine: jest.fn(),
       min: 0,
       max: 500,
