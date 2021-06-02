@@ -37,7 +37,7 @@ describe('rangeInput', () => {
 
   describe('Usage', () => {
     it('throws without container', () => {
-      // @ts-expect-error
+      // @ts-expect-error container shouldn't be undefined
       expect(() => rangeInput({ container: undefined }))
         .toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -100,7 +100,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     widget.init!(createInitOptions({ helper, instantSearchInstance }));
-    // @ts-expect-error
+    // @ts-expect-error SearchResults are missing properties that are not useful for this test
     widget.render!(createRenderOptions({ results, helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
@@ -225,7 +225,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     widget.init!(createInitOptions({ helper, instantSearchInstance }));
-    // @ts-expect-error
+    // @ts-expect-error SearchResults are missing properties that are not useful for this test
     widget.render!(createRenderOptions({ results, helper }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
