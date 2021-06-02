@@ -3,17 +3,30 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import Slider from '../../components/Slider/Slider';
-import connectRange from '../../connectors/range/connectRange';
+import connectRange, {
+  RangeBoundaries,
+  RangeConnectorParams,
+  RangeRenderState,
+  RangeWidgetDescription,
+} from '../../connectors/range/connectRange';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
+import { Renderer, WidgetFactory } from '../../types';
+import { RangeInputWidgetParams } from '../range-input/range-input';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-slider' });
 const suit = component('RangeSlider');
 
-const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
+const renderer = ({
+  containerNode,
+  cssClasses,
+  pips,
+  step,
+  tooltips,
+}): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> => (
   { refine, range, start },
   isFirstRendering
 ) => {
@@ -31,9 +44,9 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
   // Clamp values to the range for avoid extra rendering & refinement
   // Should probably be done on the connector side, but we need to stay
   // backward compatible so we still need to pass [-Infinity, Infinity]
-  const values = [
-    minFinite > maxRange ? maxRange : minFinite,
-    maxFinite < minRange ? minRange : maxFinite,
+  const values: RangeBoundaries = [
+    minFinite! > maxRange! ? maxRange : minFinite,
+    maxFinite! < minRange! ? minRange : maxFinite,
   ];
 
   render(
@@ -51,34 +64,80 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
   );
 };
 
-/**
- * @typedef {Object} RangeSliderCssClasses
- * @property  {string|string[]} [root] CSS class to add to the root element.
- * @property  {string|string[]} [disabledRoot] CSS class to add to the disabled root element.
- */
+export type RangeSliderCssClasses = {
+  /**
+   * CSS class to add to the root element.
+   */
+  root?: string | string[];
+  /**
+   * CSS class to add to the disabled root element.
+   */
+  disabledRoot?: string | string[];
+};
 
-/**
- * @typedef {Object} RangeSliderTooltipOptions
- * @property {function(number):string} format The function takes the raw value as input, and should return
- * a string for the label that should be used for this value.
- * `format: function(rawValue) {return '$' + Math.round(rawValue).toLocaleString()}`
- */
+type RangeSliderTooltipOptions = {
+  /**
+   * The function takes the raw value as input, and should return
+   * a string for the label that should be used for this value.
+   * @example
+   * { format(rawValue) {return '$' + Math.round(rawValue).toLocaleString() } }
+   */
+  format(value: number): string;
+};
 
-/**
- * @typedef {Object} RangeSliderWidgetParams
- * @property  {string|HTMLElement} container CSS Selector or DOMElement to insert the widget.
- * @property  {string} attribute Name of the attribute for faceting.
- * @property  {boolean|RangeSliderTooltipOptions} [tooltips=true] Should we show tooltips or not.
- * The default tooltip will show the raw value.
- * You can also provide an object with a format function as an attribute.
- * So that you can format the tooltip display value as you want
- * @property  {RangeSliderCssClasses} [cssClasses] CSS classes to add to the wrapping elements.
- * @property  {boolean} [pips=true] Show slider pips.
- * @property  {number} [precision = 0] Number of digits after decimal point to use.
- * @property  {number} [step] Every handle move will jump that number of steps.
- * @property  {number} [min] Minimal slider value, default to automatically computed from the result set.
- * @property  {number} [max] Maximal slider value, defaults to automatically computed from the result set.
- */
+export type RangeSliderWidgetParams = {
+  /**
+   * CSS Selector or DOMElement to insert the widget.
+   */
+  container: string | HTMLElement;
+  /**
+   * Name of the attribute for faceting.;
+   */
+  attribute: string;
+  /**
+   * Should we show tooltips or not.
+   * The default tooltip will show the raw value.
+   * You can also provide an object with a format function as an attribute.
+   * So that you can format the tooltip display value as you want.
+   * @default true
+   */
+  tooltips?: boolean | RangeSliderTooltipOptions;
+  /**
+   * CSS classes to add to the wrapping elements.
+   */
+  cssClasses?: RangeSliderCssClasses;
+  /**
+   * Show slider pips.
+   * @default true
+   */
+  pips?: boolean;
+  /**
+   * Number of digits after decimal point to use.
+   * @default 0
+   */
+  precision?: number;
+  /**
+   * Every handle move will jump that number of steps.
+   */
+  step?: number;
+  /**
+   * Minimal slider value, default to automatically computed from the result set.
+   */
+  min?: number;
+  /**
+   * Maximal slider value, defaults to automatically computed from the result set.
+   */
+  max?: number;
+};
+
+export type RangeSliderWidget = WidgetFactory<
+  Omit<RangeWidgetDescription, '$$type'> & {
+    $$widgetType: 'ais.rangeSlider';
+    $$type: 'ais.rangeSlider';
+  },
+  RangeConnectorParams,
+  RangeSliderWidgetParams
+>;
 
 /**
  * The range slider is a widget which provides a user-friendly way to filter the
@@ -90,26 +149,8 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  * in your Algolia settings.
  *
  * The values inside this attribute must be JavaScript numbers (not strings).
- *
- * @type {WidgetFactory}
- * @devNovel RangeSlider
- * @category filter
- * @param {RangeSliderWidgetParams} widgetParams RangeSlider widget options.
- * @return {Widget} A new RangeSlider widget instance.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.rangeSlider({
- *     container: '#price',
- *     attribute: 'price',
- *     tooltips: {
- *       format: function(rawValue) {
- *         return '$' + Math.round(rawValue).toLocaleString();
- *       }
- *     }
- *   })
- * ]);
  */
-export default function rangeSlider(widgetParams) {
+const rangeSlider: RangeSliderWidget = function rangeSlider(widgetParams) {
   const {
     container,
     attribute,
@@ -139,7 +180,6 @@ export default function rangeSlider(widgetParams) {
     step,
     pips,
     tooltips,
-    renderState: {},
     cssClasses,
   });
 
@@ -153,4 +193,6 @@ export default function rangeSlider(widgetParams) {
     $$type: 'ais.rangeSlider',
     $$widgetType: 'ais.rangeSlider',
   };
-}
+};
+
+export default rangeSlider;

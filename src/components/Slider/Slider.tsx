@@ -5,12 +5,13 @@ import Rheostat from './Rheostat';
 import cx from 'classnames';
 import { range } from '../../lib/utils';
 import Pit from './Pit';
+import { RangeBoundaries } from '../../connectors/range/connectRange';
 
 type Props = {
-  refine(values: number[]): void;
-  min: number;
-  max: number;
-  values: number[];
+  refine(values: RangeBoundaries): void;
+  min?: number;
+  max?: number;
+  values: RangeBoundaries;
   pips?: boolean;
   step: number;
   tooltips?:
@@ -26,7 +27,7 @@ type Props = {
 
 class Slider extends Component<Props> {
   private get isDisabled() {
-    return this.props.min >= this.props.max;
+    return this.props.min! >= this.props.max!;
   }
 
   private handleChange = ({ values }) => {
@@ -84,7 +85,7 @@ class Slider extends Component<Props> {
     const { tooltips, step, pips, values, cssClasses } = this.props;
 
     const { min, max } = this.isDisabled
-      ? { min: this.props.min, max: this.props.max + 0.001 }
+      ? { min: this.props.min, max: this.props.max! + 0.001 }
       : this.props;
 
     const snapPoints = this.computeSnapPoints({ min, max, step });
@@ -106,7 +107,7 @@ class Slider extends Component<Props> {
           pitPoints={pitPoints}
           snap={true}
           snapPoints={snapPoints}
-          values={this.isDisabled ? [min, max] : values}
+          values={(this.isDisabled ? [min, max] : values) as number[]}
           disabled={this.isDisabled}
         />
       </div>
