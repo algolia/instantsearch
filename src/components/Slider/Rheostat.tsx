@@ -6,8 +6,20 @@
 
 /** @jsx h */
 
-import { h, Component } from 'preact';
-import PropTypes from 'prop-types';
+import {
+  h,
+  Component,
+  ComponentChildren,
+  ComponentType,
+  createRef,
+} from 'preact';
+
+type BoundingBox = {
+  height: number;
+  left: number;
+  top: number;
+  width: number;
+};
 
 const KEYS = {
   DOWN: 40,
@@ -19,15 +31,15 @@ const KEYS = {
   PAGE_UP: 33,
   RIGHT: 39,
   UP: 38,
-};
+} as const;
 const PERCENT_EMPTY = 0;
 const PERCENT_FULL = 100;
 
-function getPosition(value, min, max) {
+function getPosition(value: number, min: number, max: number) {
   return ((value - min) / (max - min)) * 100;
 }
 
-function getValue(pos, min, max) {
+function getValue(pos: number, min: number, max: number) {
   const decimal = pos / 100;
 
   if (pos === 0) {
@@ -39,38 +51,82 @@ function getValue(pos, min, max) {
   return Math.round((max - min) * decimal + min);
 }
 
-function getClassName(props) {
+function getClassName(props: Props) {
   const orientation =
     props.orientation === 'vertical'
       ? 'rheostat-vertical'
       : 'rheostat-horizontal';
 
-  return ['rheostat', orientation].concat(props.className.split(' ')).join(' ');
+  return ['rheostat', orientation]
+    .concat(props.className!.split(' '))
+    .join(' ');
 }
 
-const PropTypeArrOfNumber = PropTypes.arrayOf(PropTypes.number);
-const PropTypeReactComponent = PropTypes.oneOfType([
-  PropTypes.func,
-  PropTypes.string,
-]);
-
-function getHandleFor(ev) {
-  return Number(ev.currentTarget.getAttribute('data-handle-key'));
+function getHandleFor(ev: Event) {
+  return Number(
+    (ev.currentTarget as HTMLElement).getAttribute('data-handle-key')
+  );
 }
 
-function killEvent(ev) {
+function killEvent(ev: Event) {
   ev.stopPropagation();
   ev.preventDefault();
 }
 
-class Button extends Component {
-  render() {
-    return <button {...this.props} type="button" />;
-  }
+function Button(props: h.JSX.IntrinsicElements['button']) {
+  return <button {...props} type="button" />;
 }
 
-class Rheostat extends Component {
-  static defaultProps = {
+// Preact doesn't have builtin types for Style, h.JSX.HTMLAttributes['style'] is just object
+// maybe migrate to csstype later?
+type Style = {
+  position?: 'absolute';
+  top?: number | string;
+  left?: number | string;
+  height?: string;
+  width?: string;
+};
+
+export type PitProps = {
+  children: number | string;
+  style: Style;
+};
+
+type Props = {
+  children?: ComponentChildren;
+  className?: string;
+  disabled?: boolean;
+  handle?: ComponentType<h.JSX.HTMLAttributes>;
+  max?: number;
+  min?: number;
+  onClick?(...args: unknown[]): unknown;
+  onChange?(...args: unknown[]): unknown;
+  onKeyPress?(...args: unknown[]): unknown;
+  onSliderDragEnd?(...args: unknown[]): unknown;
+  onSliderDragMove?(...args: unknown[]): unknown;
+  onSliderDragStart?(...args: unknown[]): unknown;
+  onValuesUpdated?(...args: unknown[]): unknown;
+  orientation?: 'horizontal' | 'vertical';
+  pitComponent?: ComponentType<PitProps>;
+  pitPoints?: number[];
+  progressBar?: ComponentType<h.JSX.HTMLAttributes>;
+  snap?: boolean;
+  snapPoints?: number[];
+  values?: number[];
+};
+
+type State = {
+  className: string;
+  handlePos: number[];
+  handleDimensions: number;
+  mousePos: { x: number; y: number } | null;
+  sliderBox: Partial<BoundingBox>;
+  slidingIndex: number | null;
+  values: number[];
+};
+
+class Rheostat extends Component<Props, State> {
+  public static defaultProps = {
     className: '',
     children: null,
     disabled: false,
@@ -93,19 +149,23 @@ class Rheostat extends Component {
     values: [PERCENT_EMPTY],
   };
 
-  state = {
+  public state: State = {
     className: getClassName(this.props),
-    handlePos: this.props.values.map(value =>
-      getPosition(value, this.props.min, this.props.max)
+    // non-null thanks to defaultProps
+    handlePos: this.props.values!.map(value =>
+      getPosition(value, this.props.min!, this.props.max!)
     ),
     handleDimensions: 0,
     mousePos: null,
     sliderBox: {},
     slidingIndex: null,
-    values: this.props.values,
+    // non-null thanks to defaultProps
+    values: this.props.values!,
   };
 
-  constructor(props) {
+  private rheostat = createRef<HTMLAnchorElement>();
+
+  public constructor(props: Props) {
     super(props);
 
     this.getPublicState = this.getPublicState.bind(this);
@@ -136,7 +196,7 @@ class Rheostat extends Component {
     this.updateNewValues = this.updateNewValues.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  public componentWillReceiveProps(nextProps: Required<Props>) {
     const { className, disabled, min, max, orientation } = this.props;
     const { values, slidingIndex } = this.state;
 
@@ -165,17 +225,16 @@ class Rheostat extends Component {
     }
   }
 
-  getPublicState() {
+  private getPublicState() {
     const { min, max } = this.props;
     const { values } = this.state;
 
     return { max, min, values };
   }
 
-  getSliderBoundingBox() {
-    const node = this.rheostat.getDOMNode
-      ? this.rheostat.getDOMNode()
-      : this.rheostat;
+  private getSliderBoundingBox(): BoundingBox {
+    // only gets called after render, so it will always be defined
+    const node = this.rheostat.current!;
     const rect = node.getBoundingClientRect();
 
     return {
@@ -186,7 +245,7 @@ class Rheostat extends Component {
     };
   }
 
-  getProgressStyle(idx) {
+  private getProgressStyle(idx: number): Style {
     const { handlePos } = this.state;
 
     const value = handlePos[idx];
@@ -205,20 +264,20 @@ class Rheostat extends Component {
       : { left: `${prevValue}%`, width: `${diffValue}%` };
   }
 
-  getMinValue(idx) {
+  private getMinValue(idx: number) {
     return this.state.values[idx - 1]
-      ? Math.max(this.props.min, this.state.values[idx - 1])
+      ? Math.max(this.props.min!, this.state.values[idx - 1])
       : this.props.min;
   }
 
-  getMaxValue(idx) {
+  private getMaxValue(idx: number) {
     return this.state.values[idx + 1]
-      ? Math.min(this.props.max, this.state.values[idx + 1])
+      ? Math.min(this.props.max!, this.state.values[idx + 1])
       : this.props.max;
   }
 
-  getHandleDimensions(ev, sliderBox) {
-    const handleNode = ev.currentTarget || null;
+  private getHandleDimensions(ev: Event, sliderBox: BoundingBox) {
+    const handleNode = (ev.currentTarget as HTMLElement) || null;
 
     if (!handleNode) return 0;
 
@@ -227,18 +286,19 @@ class Rheostat extends Component {
       : ((handleNode.clientWidth / sliderBox.width) * PERCENT_FULL) / 2;
   }
 
-  getClosestSnapPoint(value) {
-    if (!this.props.snapPoints.length) return value;
+  private getClosestSnapPoint(value: number) {
+    // non-null thanks to defaultProps
+    if (!this.props.snapPoints!.length) return value;
 
-    return this.props.snapPoints.reduce((snapTo, snap) =>
+    return this.props.snapPoints!.reduce((snapTo, snap) =>
       Math.abs(snapTo - value) < Math.abs(snap - value) ? snapTo : snap
     );
   }
 
-  getSnapPosition(positionPercent) {
+  private getSnapPosition(positionPercent: number) {
     if (!this.props.snap) return positionPercent;
 
-    const { max, min } = this.props;
+    const { max, min } = this.props as Required<Props>;
 
     const value = getValue(positionPercent, min, max);
 
@@ -247,9 +307,9 @@ class Rheostat extends Component {
     return getPosition(snapValue, min, max);
   }
 
-  getNextPositionForKey(idx, keyCode) {
+  private getNextPositionForKey(idx: number, keyCode: number) {
     const { handlePos, values } = this.state;
-    const { max, min, snapPoints } = this.props;
+    const { max, min, snapPoints } = this.props as Required<Props>;
 
     const shouldSnap = this.props.snap;
 
@@ -264,13 +324,15 @@ class Rheostat extends Component {
       stepValue = 100 / (max - min);
     }
 
-    let currentIndex = null;
+    let currentIndex: number | null = null;
 
     if (shouldSnap) {
       currentIndex = snapPoints.indexOf(this.getClosestSnapPoint(values[idx]));
     }
 
-    const stepMultiplier = {
+    type StepMultiplier = { [key: number]: (value: number) => number };
+
+    const stepMultiplier: StepMultiplier = {
       [KEYS.LEFT]: v => v * -1,
       [KEYS.RIGHT]: v => v,
       [KEYS.UP]: v => v,
@@ -283,7 +345,9 @@ class Rheostat extends Component {
       proposedPercentage += stepMultiplier[keyCode](stepValue);
 
       if (shouldSnap) {
-        if (proposedPercentage > originalPercentage) {
+        if (!currentIndex) {
+          // nothing happens
+        } else if (proposedPercentage > originalPercentage) {
           // move cursor right unless overflow
           if (currentIndex < snapPoints.length - 1) {
             proposedValue = snapPoints[currentIndex + 1];
@@ -314,9 +378,9 @@ class Rheostat extends Component {
       : proposedPercentage;
   }
 
-  getNextState(idx, proposedPosition) {
+  private getNextState(idx, proposedPosition) {
     const { handlePos } = this.state;
-    const { max, min } = this.props;
+    const { max, min } = this.props as Required<Props>;
 
     const actualPosition = this.validatePosition(idx, proposedPosition);
 
@@ -330,17 +394,17 @@ class Rheostat extends Component {
     };
   }
 
-  getClosestHandle(positionPercent) {
+  private getClosestHandle(positionPercent: number) {
     const { handlePos } = this.state;
 
-    return handlePos.reduce((closestIdx, node, idx) => {
+    return handlePos.reduce((closestIdx, _node, idx) => {
       const challenger = Math.abs(handlePos[idx] - positionPercent);
       const current = Math.abs(handlePos[closestIdx] - positionPercent);
       return challenger < current ? idx : closestIdx;
     }, 0);
   }
 
-  setStartSlide(ev, x, y) {
+  private setStartSlide(ev: MouseEvent, x: number, y: number) {
     const sliderBox = this.getSliderBoundingBox();
 
     this.setState({
@@ -351,21 +415,16 @@ class Rheostat extends Component {
     });
   }
 
-  startMouseSlide(ev) {
+  private startMouseSlide(ev: MouseEvent) {
     this.setStartSlide(ev, ev.clientX, ev.clientY);
 
-    if (typeof document.addEventListener === 'function') {
-      document.addEventListener('mousemove', this.handleMouseSlide, false);
-      document.addEventListener('mouseup', this.endSlide, false);
-    } else {
-      document.attachEvent('onmousemove', this.handleMouseSlide);
-      document.attachEvent('onmouseup', this.endSlide);
-    }
+    document.addEventListener('mousemove', this.handleMouseSlide, false);
+    document.addEventListener('mouseup', this.endSlide, false);
 
     killEvent(ev);
   }
 
-  startTouchSlide(ev) {
+  private startTouchSlide(ev) {
     if (ev.changedTouches.length > 1) return;
 
     const touch = ev.changedTouches[0];
@@ -380,13 +439,13 @@ class Rheostat extends Component {
     killEvent(ev);
   }
 
-  handleMouseSlide(ev) {
+  private handleMouseSlide(ev) {
     if (this.state.slidingIndex === null) return;
     this.handleSlide(ev.clientX, ev.clientY);
     killEvent(ev);
   }
 
-  handleTouchSlide(ev) {
+  private handleTouchSlide(ev) {
     if (this.state.slidingIndex === null) return;
 
     if (ev.changedTouches.length > 1) {
@@ -400,49 +459,44 @@ class Rheostat extends Component {
     killEvent(ev);
   }
 
-  handleSlide(x, y) {
+  private handleSlide(x: number, y: number) {
     const { slidingIndex: idx, sliderBox } = this.state;
 
     const positionPercent =
       this.props.orientation === 'vertical'
-        ? ((y - sliderBox.top) / sliderBox.height) * PERCENT_FULL
-        : ((x - sliderBox.left) / sliderBox.width) * PERCENT_FULL;
+        ? ((y - sliderBox.top!) / sliderBox.height!) * PERCENT_FULL
+        : ((x - sliderBox.left!) / sliderBox.width!) * PERCENT_FULL;
 
-    this.slideTo(idx, positionPercent);
+    this.slideTo(idx!, positionPercent);
 
-    if (this.canMove(idx, positionPercent)) {
+    if (this.canMove(idx!, positionPercent)) {
       // update mouse positions
-      this.setState({ x, y });
+      this.setState({ mousePos: { x, y } });
       if (this.props.onSliderDragMove) this.props.onSliderDragMove();
     }
   }
 
-  endSlide() {
+  private endSlide() {
     const idx = this.state.slidingIndex;
 
     this.setState({ slidingIndex: null });
 
-    if (typeof document.removeEventListener === 'function') {
-      document.removeEventListener('mouseup', this.endSlide, false);
-      document.removeEventListener('touchend', this.endSlide, false);
-      document.removeEventListener('touchmove', this.handleTouchSlide, false);
-      document.removeEventListener('mousemove', this.handleMouseSlide, false);
-    } else {
-      document.detachEvent('onmousemove', this.handleMouseSlide);
-      document.detachEvent('onmouseup', this.endSlide);
-    }
+    document.removeEventListener('mouseup', this.endSlide, false);
+    document.removeEventListener('touchend', this.endSlide, false);
+    document.removeEventListener('touchmove', this.handleTouchSlide, false);
+    document.removeEventListener('mousemove', this.handleMouseSlide, false);
 
     if (this.props.onSliderDragEnd) this.props.onSliderDragEnd();
     if (this.props.snap) {
-      const positionPercent = this.getSnapPosition(this.state.handlePos[idx]);
-      this.slideTo(idx, positionPercent, () => this.fireChangeEvent());
+      const positionPercent = this.getSnapPosition(this.state.handlePos[idx!]);
+      this.slideTo(idx!, positionPercent, () => this.fireChangeEvent());
     } else {
       this.fireChangeEvent();
     }
   }
 
-  handleClick(ev) {
-    if (ev.target.getAttribute('data-handle-key')) {
+  private handleClick(ev: MouseEvent) {
+    if ((ev.target as HTMLDivElement).getAttribute('data-handle-key')) {
       return;
     }
 
@@ -467,11 +521,11 @@ class Rheostat extends Component {
     if (this.props.onClick) this.props.onClick();
   }
 
-  handleKeydown(ev) {
+  private handleKeydown(ev: KeyboardEvent) {
     const idx = getHandleFor(ev);
 
     if (ev.keyCode === KEYS.ESC) {
-      ev.currentTarget.blur();
+      (ev.currentTarget as HTMLElement).blur();
       return;
     }
 
@@ -489,7 +543,7 @@ class Rheostat extends Component {
 
   // Make sure the proposed position respects the bounds and
   // does not collide with other handles too much.
-  validatePosition(idx, proposedPosition) {
+  private validatePosition(idx: number, proposedPosition: number) {
     const { handlePos, handleDimensions } = this.state;
 
     return Math.max(
@@ -505,7 +559,7 @@ class Rheostat extends Component {
     );
   }
 
-  validateValues(proposedValues, props) {
+  private validateValues(proposedValues: number[], props: Required<Props>) {
     const { max, min } = props || this.props;
 
     return proposedValues.map((value, idx, values) => {
@@ -519,7 +573,7 @@ class Rheostat extends Component {
     });
   }
 
-  canMove(idx, proposedPosition) {
+  public canMove(idx: number, proposedPosition: number) {
     const { handlePos, handleDimensions } = this.state;
 
     if (proposedPosition < PERCENT_EMPTY) return false;
@@ -542,12 +596,16 @@ class Rheostat extends Component {
     return true;
   }
 
-  fireChangeEvent() {
+  public fireChangeEvent() {
     const { onChange } = this.props;
     if (onChange) onChange(this.getPublicState());
   }
 
-  slideTo(idx, proposedPosition, onAfterSet) {
+  public slideTo(
+    idx: number,
+    proposedPosition: number,
+    onAfterSet?: () => void
+  ) {
     const nextState = this.getNextState(idx, proposedPosition);
 
     this.setState(nextState, () => {
@@ -557,7 +615,7 @@ class Rheostat extends Component {
     });
   }
 
-  updateNewValues(nextProps) {
+  public updateNewValues(nextProps: Required<Props>) {
     const { slidingIndex } = this.state;
 
     // Don't update while the slider is sliding
@@ -578,7 +636,7 @@ class Rheostat extends Component {
     );
   }
 
-  render() {
+  public render() {
     const {
       children,
       disabled,
@@ -589,21 +647,19 @@ class Rheostat extends Component {
       pitComponent: PitComponent,
       pitPoints,
       progressBar: ProgressBar,
-    } = this.props;
+    } = this.props as Required<Props>; // all required thanks to defaultProps
     const { className, handlePos, values } = this.state;
 
     return (
       <div
         className={className}
-        ref={ref => {
-          this.rheostat = ref;
-        }}
-        onClick={!disabled && this.handleClick}
+        ref={this.rheostat}
+        onClick={disabled ? undefined : this.handleClick}
         style={{ position: 'relative' }}
       >
         <div className="rheostat-background" />
         {handlePos.map((pos, idx) => {
-          const handleStyle =
+          const handleStyle: Style =
             orientation === 'vertical'
               ? { top: `${pos}%`, position: 'absolute' }
               : { left: `${pos}%`, position: 'absolute' };
@@ -617,10 +673,10 @@ class Rheostat extends Component {
               data-handle-key={idx}
               className="rheostat-handle"
               key={`handle-${idx}`}
-              onClick={this.killEvent}
-              onKeyDown={!disabled && this.handleKeydown}
-              onMouseDown={!disabled && this.startMouseSlide}
-              onTouchStart={!disabled && this.startTouchSlide}
+              onClick={killEvent}
+              onKeyDown={disabled ? undefined : this.handleKeydown}
+              onMouseDown={disabled ? undefined : this.startMouseSlide}
+              onTouchStart={disabled ? undefined : this.startTouchSlide}
               role="slider"
               style={handleStyle}
               tabIndex={0}
@@ -628,7 +684,7 @@ class Rheostat extends Component {
           );
         })}
 
-        {handlePos.map((node, idx, arr) => {
+        {handlePos.map((_node, idx, arr) => {
           if (idx === 0 && arr.length > 1) {
             return null;
           }
@@ -645,7 +701,7 @@ class Rheostat extends Component {
         {PitComponent &&
           pitPoints.map(n => {
             const pos = getPosition(n, min, max);
-            const pitStyle =
+            const pitStyle: Style =
               orientation === 'vertical'
                 ? { top: `${pos}%`, position: 'absolute' }
                 : { left: `${pos}%`, position: 'absolute' };
@@ -661,49 +717,5 @@ class Rheostat extends Component {
     );
   }
 }
-
-Rheostat.propTypes = {
-  // any children you pass in
-  children: PropTypes.node,
-  // standard class name you'd like to apply to the root element
-  className: PropTypes.string,
-  // prevent the slider from moving when clicked
-  disabled: PropTypes.bool,
-  // a custom handle you can pass in
-  handle: PropTypeReactComponent,
-  // the maximum possible value
-  max: PropTypes.number,
-  // the minimum possible value
-  min: PropTypes.number,
-  // called on click
-  onClick: PropTypes.func,
-  // called whenever the user is done changing values on the slider
-  onChange: PropTypes.func,
-  // called on key press
-  onKeyPress: PropTypes.func,
-  // called when you finish dragging a handle
-  onSliderDragEnd: PropTypes.func,
-  // called every time the slider is dragged and the value changes
-  onSliderDragMove: PropTypes.func,
-  // called when you start dragging a handle
-  onSliderDragStart: PropTypes.func,
-  // called whenever the user is actively changing the values on the slider
-  // (dragging, clicked, keypress)
-  onValuesUpdated: PropTypes.func,
-  // the orientation
-  orientation: PropTypes.oneOf(['horizontal', 'vertical']),
-  // a component for rendering the pits
-  pitComponent: PropTypeReactComponent,
-  // the points that pits are rendered on
-  pitPoints: PropTypeArrOfNumber,
-  // a custom progress bar you can pass in
-  progressBar: PropTypeReactComponent,
-  // should we snap?
-  snap: PropTypes.bool,
-  // the points we should snap to
-  snapPoints: PropTypeArrOfNumber,
-  // the values
-  values: PropTypeArrOfNumber,
-};
 
 export default Rheostat;

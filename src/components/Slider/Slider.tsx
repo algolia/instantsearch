@@ -2,41 +2,41 @@
 
 import { h, Component } from 'preact';
 import Rheostat from './Rheostat';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { range } from '../../lib/utils';
 import Pit from './Pit';
 
-class Slider extends Component {
-  static propTypes = {
-    refine: PropTypes.func.isRequired,
-    min: PropTypes.number.isRequired,
-    max: PropTypes.number.isRequired,
-    values: PropTypes.arrayOf(PropTypes.number).isRequired,
-    pips: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
-    step: PropTypes.number.isRequired,
-    tooltips: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.shape({ format: PropTypes.func.isRequired }),
-    ]),
-    cssClasses: PropTypes.shape({
-      root: PropTypes.string.isRequired,
-      disabledRoot: PropTypes.string.isRequired,
-    }).isRequired,
+type Props = {
+  refine(values: number[]): void;
+  min: number;
+  max: number;
+  values: number[];
+  pips?: boolean;
+  step: number;
+  tooltips?:
+    | boolean
+    | {
+        format(value: number): string;
+      };
+  cssClasses: {
+    root: string;
+    disabledRoot: string;
   };
+};
 
-  get isDisabled() {
+class Slider extends Component<Props> {
+  private get isDisabled() {
     return this.props.min >= this.props.max;
   }
 
-  handleChange = ({ values }) => {
+  private handleChange = ({ values }) => {
     if (!this.isDisabled) {
       this.props.refine(values);
     }
   };
 
   // creates an array number where to display a pit point on the slider
-  computeDefaultPitPoints({ min, max }) {
+  private computeDefaultPitPoints({ min, max }) {
     const totalLength = max - min;
     const steps = 34;
     const stepsLength = totalLength / steps;
@@ -53,12 +53,12 @@ class Slider extends Component {
   }
 
   // creates an array of values where the slider should snap to
-  computeSnapPoints({ min, max, step }) {
+  private computeSnapPoints({ min, max, step }) {
     if (!step) return undefined;
     return [...range({ start: min, end: max, step }), max];
   }
 
-  createHandleComponent = tooltips => props => {
+  private createHandleComponent = tooltips => props => {
     // display only two decimals after comma,
     // and apply `tooltips.format()` if any
     const roundedValue =
@@ -80,7 +80,7 @@ class Slider extends Component {
     );
   };
 
-  render() {
+  public render() {
     const { tooltips, step, pips, values, cssClasses } = this.props;
 
     const { min, max } = this.isDisabled
