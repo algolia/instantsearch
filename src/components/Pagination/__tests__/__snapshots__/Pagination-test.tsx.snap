@@ -13,14 +13,14 @@ Array [
           className="item pageItem selectedItem"
         >
           <a
-            aria-label={1}
+            aria-label="1"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 1,
+                "__html": "1",
               }
             }
-            href="[0]"
+            href="0"
             onClick={[Function]}
           />
         </li>,
@@ -30,14 +30,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={2}
+            aria-label="2"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 2,
+                "__html": "2",
               }
             }
-            href="[1]"
+            href="1"
             onClick={[Function]}
           />
         </li>,
@@ -47,14 +47,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={3}
+            aria-label="3"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 3,
+                "__html": "3",
               }
             }
-            href="[2]"
+            href="2"
             onClick={[Function]}
           />
         </li>,
@@ -64,14 +64,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={4}
+            aria-label="4"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 4,
+                "__html": "4",
               }
             }
-            href="[3]"
+            href="3"
             onClick={[Function]}
           />
         </li>,
@@ -81,14 +81,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={5}
+            aria-label="5"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 5,
+                "__html": "5",
               }
             }
-            href="[4]"
+            href="4"
             onClick={[Function]}
           />
         </li>,
@@ -98,14 +98,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={6}
+            aria-label="6"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 6,
+                "__html": "6",
               }
             }
-            href="[5]"
+            href="5"
             onClick={[Function]}
           />
         </li>,
@@ -115,14 +115,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={7}
+            aria-label="7"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 7,
+                "__html": "7",
               }
             }
-            href="[6]"
+            href="6"
             onClick={[Function]}
           />
         </li>,
@@ -152,7 +152,7 @@ Array [
                 "__html": "",
               }
             }
-            href="[0]"
+            href="0"
             onClick={[Function]}
           />
         </li>,
@@ -169,7 +169,7 @@ Array [
                 "__html": "",
               }
             }
-            href="[18]"
+            href="18"
             onClick={[Function]}
           />
         </li>,
@@ -179,14 +179,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={14}
+            aria-label="14"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 14,
+                "__html": "14",
               }
             }
-            href="[13]"
+            href="13"
             onClick={[Function]}
           />
         </li>,
@@ -196,14 +196,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={15}
+            aria-label="15"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 15,
+                "__html": "15",
               }
             }
-            href="[14]"
+            href="14"
             onClick={[Function]}
           />
         </li>,
@@ -213,14 +213,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={16}
+            aria-label="16"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 16,
+                "__html": "16",
               }
             }
-            href="[15]"
+            href="15"
             onClick={[Function]}
           />
         </li>,
@@ -230,14 +230,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={17}
+            aria-label="17"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 17,
+                "__html": "17",
               }
             }
-            href="[16]"
+            href="16"
             onClick={[Function]}
           />
         </li>,
@@ -247,14 +247,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={18}
+            aria-label="18"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 18,
+                "__html": "18",
               }
             }
-            href="[17]"
+            href="17"
             onClick={[Function]}
           />
         </li>,
@@ -264,14 +264,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={19}
+            aria-label="19"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 19,
+                "__html": "19",
               }
             }
-            href="[18]"
+            href="18"
             onClick={[Function]}
           />
         </li>,
@@ -281,14 +281,14 @@ Array [
           className="item pageItem selectedItem"
         >
           <a
-            aria-label={20}
+            aria-label="20"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 20,
+                "__html": "20",
               }
             }
-            href="[19]"
+            href="19"
             onClick={[Function]}
           />
         </li>,
@@ -353,14 +353,14 @@ Array [
           className="item pageItem selectedItem"
         >
           <a
-            aria-label={1}
+            aria-label="1"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 1,
+                "__html": "1",
               }
             }
-            href="[0]"
+            href="0"
             onClick={[Function]}
           />
         </li>,
@@ -370,14 +370,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={2}
+            aria-label="2"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 2,
+                "__html": "2",
               }
             }
-            href="[1]"
+            href="1"
             onClick={[Function]}
           />
         </li>,
@@ -387,14 +387,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={3}
+            aria-label="3"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 3,
+                "__html": "3",
               }
             }
-            href="[2]"
+            href="2"
             onClick={[Function]}
           />
         </li>,
@@ -404,14 +404,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={4}
+            aria-label="4"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 4,
+                "__html": "4",
               }
             }
-            href="[3]"
+            href="3"
             onClick={[Function]}
           />
         </li>,
@@ -421,14 +421,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={5}
+            aria-label="5"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 5,
+                "__html": "5",
               }
             }
-            href="[4]"
+            href="4"
             onClick={[Function]}
           />
         </li>,
@@ -438,14 +438,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={6}
+            aria-label="6"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 6,
+                "__html": "6",
               }
             }
-            href="[5]"
+            href="5"
             onClick={[Function]}
           />
         </li>,
@@ -455,14 +455,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={7}
+            aria-label="7"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 7,
+                "__html": "7",
               }
             }
-            href="[6]"
+            href="6"
             onClick={[Function]}
           />
         </li>,
@@ -479,7 +479,7 @@ Array [
                 "__html": "",
               }
             }
-            href="[19]"
+            href="19"
             onClick={[Function]}
           />
         </li>,
@@ -530,14 +530,14 @@ Array [
           className="item pageItem selectedItem"
         >
           <a
-            aria-label={1}
+            aria-label="1"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 1,
+                "__html": "1",
               }
             }
-            href="[0]"
+            href="0"
             onClick={[Function]}
           />
         </li>,
@@ -588,14 +588,14 @@ Array [
           className="item pageItem selectedItem"
         >
           <a
-            aria-label={1}
+            aria-label="1"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 1,
+                "__html": "1",
               }
             }
-            href="[0]"
+            href="0"
             onClick={[Function]}
           />
         </li>,
@@ -605,14 +605,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={2}
+            aria-label="2"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 2,
+                "__html": "2",
               }
             }
-            href="[1]"
+            href="1"
             onClick={[Function]}
           />
         </li>,
@@ -622,14 +622,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={3}
+            aria-label="3"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 3,
+                "__html": "3",
               }
             }
-            href="[2]"
+            href="2"
             onClick={[Function]}
           />
         </li>,
@@ -639,14 +639,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={4}
+            aria-label="4"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 4,
+                "__html": "4",
               }
             }
-            href="[3]"
+            href="3"
             onClick={[Function]}
           />
         </li>,
@@ -656,14 +656,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={5}
+            aria-label="5"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 5,
+                "__html": "5",
               }
             }
-            href="[4]"
+            href="4"
             onClick={[Function]}
           />
         </li>,
@@ -673,14 +673,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={6}
+            aria-label="6"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 6,
+                "__html": "6",
               }
             }
-            href="[5]"
+            href="5"
             onClick={[Function]}
           />
         </li>,
@@ -690,14 +690,14 @@ Array [
           className="item pageItem"
         >
           <a
-            aria-label={7}
+            aria-label="7"
             className="link"
             dangerouslySetInnerHTML={
               Object {
-                "__html": 7,
+                "__html": "7",
               }
             }
-            href="[6]"
+            href="6"
             onClick={[Function]}
           />
         </li>,

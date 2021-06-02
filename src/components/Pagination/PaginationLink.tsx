@@ -1,9 +1,23 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import PropTypes from 'prop-types';
 
-function PaginationLink({
+export type PaginationLinkCSSClasses = {
+  item: string;
+  link: string;
+};
+
+export type PaginationLinkProps = {
+  ariaLabel: string;
+  cssClasses: PaginationLinkCSSClasses;
+  handleClick(pageNumber: number, event: MouseEvent): void;
+  isDisabled: boolean;
+  label: string;
+  pageNumber: number;
+  url?: string;
+};
+
+const PaginationLink = ({
   cssClasses,
   label,
   ariaLabel,
@@ -11,7 +25,7 @@ function PaginationLink({
   isDisabled,
   handleClick,
   pageNumber,
-}) {
+}: PaginationLinkProps) => {
   if (isDisabled) {
     return (
       <li className={cssClasses.item}>
@@ -38,20 +52,6 @@ function PaginationLink({
       />
     </li>
   );
-}
-
-PaginationLink.propTypes = {
-  ariaLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
-  cssClasses: PropTypes.shape({
-    item: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-  }).isRequired,
-  handleClick: PropTypes.func.isRequired,
-  isDisabled: PropTypes.bool,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  pageNumber: PropTypes.number,
-  url: PropTypes.string,
 };
 
 export default PaginationLink;

@@ -207,16 +207,9 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           const initialEscaped = (results.hits as ReturnType<typeof escapeHits>)
             .__escaped;
 
-          results.hits = addAbsolutePosition<typeof results.hits[0]>(
-            results.hits,
-            0,
-            nbHits
-          );
+          results.hits = addAbsolutePosition(results.hits, 0, nbHits);
 
-          results.hits = addQueryID<typeof results.hits[0]>(
-            results.hits,
-            results.queryID
-          );
+          results.hits = addQueryID(results.hits, results.queryID);
 
           // Make sure the escaped tag stays, even after mapping over the hits.
           // This prevents the hits from being double-escaped if there are multiple

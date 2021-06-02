@@ -1,6 +1,9 @@
-import { Hit } from '../../types';
+import { AlgoliaHit } from '../../types';
 
-export function addQueryID<THit = Hit>(hits: THit[], queryID?: string): THit[] {
+export function addQueryID<THit extends AlgoliaHit>(
+  hits: THit[],
+  queryID?: string
+): Array<THit & { __queryID?: string }> {
   if (!queryID) {
     return hits;
   }

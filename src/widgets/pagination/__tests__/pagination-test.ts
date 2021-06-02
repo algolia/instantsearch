@@ -1,10 +1,22 @@
-import { render } from 'preact';
-import getContainerNode from '../../../lib/utils/getContainerNode';
-import pagination from '../pagination';
-import { createRenderOptions } from '../../../../test/mock/createWidget';
-import { SearchResults, SearchParameters } from 'algoliasearch-helper';
+import { render as preactRender } from 'preact';
+import utilsGetContainerNode from '../../../lib/utils/getContainerNode';
+import pagination, {
+  PaginationCSSClasses,
+  PaginationWidgetParams,
+} from '../pagination';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -13,6 +25,7 @@ jest.mock('preact', () => {
   return module;
 });
 
+const getContainerNode = castToJestMock(utilsGetContainerNode);
 jest.mock('../../../lib/utils/getContainerNode', () => {
   const module = jest.requireActual('../../../lib/utils/getContainerNode');
 
@@ -25,6 +38,7 @@ jest.mock('../../../lib/utils/getContainerNode', () => {
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
+      // @ts-expect-error
       pagination({ container: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -35,11 +49,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 });
 
 describe('pagination()', () => {
-  let container;
-  let widget;
-  let results;
+  let widget: ReturnType<typeof pagination>;
+  let container: HTMLElement;
   let helper;
-  let cssClasses;
+  let results;
+  let cssClasses: PaginationCSSClasses;
 
   beforeEach(() => {
     render.mockClear();
@@ -72,30 +86,48 @@ describe('pagination()', () => {
       search: jest.fn(),
       state: {},
     };
-    widget.init({ helper });
+    widget.init!(createInitOptions({ helper }));
   });
 
   it('sets the page', () => {
-    widget.getWidgetRenderState({ helper }).refine(42);
+    widget.getWidgetRenderState(createInitOptions({ helper })).refine(42);
     expect(helper.setPage).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
   it('calls twice render(<Pagination props />, container)', () => {
-    widget.render({ results, helper, state: { page: 0 } });
-    widget.render({ results, helper, state: { page: 0 } });
+    const { state } = algoliasearchHelper(createSearchClient(), '', {
+      page: 0,
+    });
+
+    widget.render!(
+      createRenderOptions({
+        results,
+        helper,
+        state,
+      })
+    );
+    widget.render!(
+      createRenderOptions({
+        results,
+        helper,
+        state,
+      })
+    );
 
     const [firstRender, secondRender] = render.mock.calls;
 
     expect(render).toHaveBeenCalledTimes(2);
+    // @ts-expect-error
     expect(firstRender[0].props).toMatchSnapshot();
     expect(firstRender[1]).toEqual(container);
+    // @ts-expect-error
     expect(secondRender[0].props).toMatchSnapshot();
     expect(secondRender[1]).toEqual(container);
   });
 
   describe('mocking getContainerNode', () => {
-    let scrollIntoView;
+    let scrollIntoView: jest.Mock;
 
     beforeEach(() => {
       scrollIntoView = jest.fn();
@@ -103,23 +135,35 @@ describe('pagination()', () => {
 
     it('should not scroll', () => {
       widget = pagination({ container, scrollTo: false });
-      widget.init({ helper });
-      widget.getWidgetRenderState({ helper }).refine(2);
+      widget.init!(createInitOptions({ helper }));
+      widget.getWidgetRenderState(createInitOptions({ helper })).refine(2);
       expect(scrollIntoView).toHaveBeenCalledTimes(0);
     });
 
-    it('should scroll to body', () => {
+    it('should scrollto body', () => {
+      const { state } = algoliasearchHelper(createSearchClient(), '', {
+        page: 0,
+      });
+
+      // @ts-expect-error
       getContainerNode.mockImplementation(input =>
         input === 'body' ? { scrollIntoView } : input
       );
 
       widget = pagination({ container });
 
-      widget.init({ helper });
-      widget.render({ results, helper, state: { page: 0 } });
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({
+          results,
+          helper,
+          state,
+        })
+      );
 
       const [firstRender] = render.mock.calls;
 
+      // @ts-expect-error
       firstRender[0].props.setCurrentPage(2);
 
       expect(scrollIntoView).toHaveBeenCalledTimes(1);
@@ -128,11 +172,11 @@ describe('pagination()', () => {
 });
 
 describe('pagination MaxPage', () => {
-  let container;
-  let widget;
+  let widget: ReturnType<typeof pagination>;
+  let container: HTMLElement;
   let results;
-  let cssClasses;
-  let paginationOptions;
+  let cssClasses: PaginationCSSClasses;
+  let paginationOptions: PaginationWidgetParams;
 
   beforeEach(() => {
     container = document.createElement('div');
