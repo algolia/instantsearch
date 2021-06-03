@@ -1,4 +1,5 @@
 import { Widget } from '../../src/types';
+import { IndexWidget } from '../../src/widgets/index/index';
 
 const setDisabledState = (element: HTMLButtonElement, state: boolean) => {
   element.disabled = state;
@@ -8,7 +9,7 @@ const setDisabledState = (element: HTMLButtonElement, state: boolean) => {
 export const withLifecycle = (
   search: any,
   container: HTMLElement,
-  fn: (node: HTMLElement) => Widget
+  fn: (node: HTMLElement) => Widget | IndexWidget
 ) => {
   const actions = document.createElement('div');
   actions.style.marginBottom = '15px';

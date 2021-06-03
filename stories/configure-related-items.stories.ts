@@ -1,18 +1,11 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import {
-  EXPERIMENTAL_configureRelatedItems,
-  configure,
-  hits,
-  index,
-} from '../src/widgets';
-import { connectHits, connectPagination } from '../src/connectors';
 import { HitsWidgetParams } from '../src/widgets/hits/hits';
 import { AlgoliaHit } from '../src/types';
 
 storiesOf('Basics/ConfigureRelatedItems', module).add(
   'default',
-  withHits(({ search, container }) => {
+  withHits(({ search, container, instantsearch }) => {
     const productContainer = document.createElement('div');
     const itemsContainer = document.createElement('div');
     const previousPageContainer = document.createElement('div');
@@ -28,7 +21,7 @@ storiesOf('Basics/ConfigureRelatedItems', module).add(
     );
     container.appendChild(relatedContainer);
 
-    const pagination = connectPagination<{
+    const pagination = instantsearch.connectors.connectPagination<{
       previousPageContainer: HTMLElement;
       nextPageContainer: HTMLElement;
     }>(
@@ -72,7 +65,7 @@ storiesOf('Basics/ConfigureRelatedItems', module).add(
       referenceHit: null,
     };
 
-    const relatedHits = connectHits<HitsWidgetParams>(
+    const relatedHits = instantsearch.connectors.connectHits<HitsWidgetParams>(
       ({ hits: items, widgetParams, instantSearchInstance }) => {
         const [hit] = items;
 
@@ -87,30 +80,32 @@ storiesOf('Basics/ConfigureRelatedItems', module).add(
         }
 
         instantSearchInstance.addWidgets([
-          index({
-            indexName: instantSearchInstance.mainIndex.getIndexName(),
-          }).addWidgets([
-            configure({
-              hitsPerPage: 4,
-            }),
-            EXPERIMENTAL_configureRelatedItems({
-              hit,
-              matchingPatterns: {
-                brand: { score: 3 },
-                type: { score: 10 },
-                categories: { score: 2 },
-              },
-            }),
-            pagination({
-              previousPageContainer,
-              nextPageContainer,
-              totalPages: 3,
-            }),
-            hits({
-              container: widgetParams.container,
-              templates: {
-                item(item) {
-                  return `
+          instantsearch.widgets
+            .index({
+              indexName: instantSearchInstance.mainIndex.getIndexName(),
+            })
+            .addWidgets([
+              instantsearch.widgets.configure({
+                hitsPerPage: 4,
+              }),
+              instantsearch.widgets.EXPERIMENTAL_configureRelatedItems({
+                hit,
+                matchingPatterns: {
+                  brand: { score: 3 },
+                  type: { score: 10 },
+                  categories: { score: 2 },
+                },
+              }),
+              pagination({
+                previousPageContainer,
+                nextPageContainer,
+                totalPages: 3,
+              }),
+              instantsearch.widgets.hits({
+                container: widgetParams.container,
+                templates: {
+                  item(item) {
+                    return `
               <li class="ais-RelatedHits-item">
                 <div class="ais-RelatedHits-item-image">
                   <img src="${item.image}" alt="${item.name}">
@@ -121,20 +116,20 @@ storiesOf('Basics/ConfigureRelatedItems', module).add(
                 </div>
               </li>
               `;
+                  },
+                  empty: '',
                 },
-                empty: '',
-              },
-            }),
-          ]),
+              }),
+            ]),
         ]);
       }
     );
 
     search.addWidgets([
-      configure({
+      instantsearch.widgets.configure({
         hitsPerPage: 1,
       }),
-      hits({
+      instantsearch.widgets.hits({
         container: productContainer,
         templates: {
           item: `

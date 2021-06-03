@@ -1,6 +1,5 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import relevantSort from '../src/widgets/relevant-sort/relevant-sort';
 
 const searchOptions = {
   appId: 'C7RIRJRYR9',
@@ -10,9 +9,9 @@ const searchOptions = {
 
 storiesOf('Sorting/RelevantSort', module).add(
   'default',
-  withHits(({ search, container }) => {
+  withHits(({ search, container, instantsearch }) => {
     search.addWidgets([
-      relevantSort({
+      instantsearch.widgets.relevantSort({
         container,
         cssClasses: {
           root: 'my-RelevantSort',
