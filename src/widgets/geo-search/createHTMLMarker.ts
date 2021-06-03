@@ -5,14 +5,24 @@ export type HTMLMarkerArguments = {
   position: google.maps.LatLngLiteral;
   map: google.maps.Map;
   template: string;
+  title?: string;
   className: string;
-  anchor?: {
-    x: number;
-    y: number;
-  };
+  anchor?: { x: number; y: number };
 };
 
-const createHTMLMarker = (googleReference: typeof google) => {
+interface Marker {
+  __id: string;
+  anchor: { x: number; y: number };
+  offset?: { x: number; y: number };
+  listeners: { [key: string]: EventListener };
+  latLng: google.maps.LatLng;
+  element: HTMLDivElement;
+  getPosition(): google.maps.LatLng;
+}
+
+const createHTMLMarker = (
+  googleReference: typeof google
+): new (args: HTMLMarkerArguments) => google.maps.OverlayView & Marker => {
   class HTMLMarker extends googleReference.maps.OverlayView {
     public __id: string;
     public anchor: {
@@ -123,7 +133,7 @@ const createHTMLMarker = (googleReference: typeof google) => {
 
   // we have to cast this to a regular OverlayView to prevent internal class being exposed
   // which TypeScript doesn't allow.
-  return (HTMLMarker as unknown) as google.maps.OverlayView;
+  return HTMLMarker;
 };
 
 export default createHTMLMarker;

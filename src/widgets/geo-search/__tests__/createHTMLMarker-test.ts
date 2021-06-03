@@ -1,16 +1,17 @@
+/* global google */
 import createHTMLMarker from '../createHTMLMarker';
 
 describe('createHTMLMarker', () => {
   class FakeOverlayView {
-    setMap = jest.fn();
+    public setMap = jest.fn();
 
-    getPanes = jest.fn(() => ({
+    public getPanes = jest.fn(() => ({
       overlayMouseTarget: {
         appendChild: jest.fn(),
       },
     }));
 
-    getProjection = jest.fn(() => ({
+    public getProjection = jest.fn(() => ({
       fromLatLngToDivPixel: jest.fn(() => ({
         x: 0,
         y: 0,
@@ -19,21 +20,21 @@ describe('createHTMLMarker', () => {
   }
 
   const createFakeGoogleReference = () => ({
-    maps: {
+    maps: ({
       LatLng: jest.fn(x => x),
       // Required to be a constructor since
       // we extend from it in the Marker class
       OverlayView: FakeOverlayView,
-    },
+    } as unknown) as typeof google.maps,
   });
 
   const createFakeParams = ({ ...rest } = {}) => ({
-    __id: 123456789,
+    __id: '123456789',
     position: {
       lat: 10,
       lng: 12,
     },
-    map: 'map-instance-placeholder',
+    map: ('map-instance-placeholder' as unknown) as google.maps.Map,
     template: '<div>Hello</div>',
     className: 'ais-geo-search-marker',
     ...rest,
@@ -46,7 +47,7 @@ describe('createHTMLMarker', () => {
 
     const marker = new HTMLMarker(params);
 
-    expect(marker.__id).toBe(123456789);
+    expect(marker.__id).toBe('123456789');
     expect(marker.anchor).toEqual({ x: 0, y: 0 });
     expect(marker.listeners).toEqual({});
     expect(marker.latLng).toEqual({ lat: 10, lng: 12 });
@@ -85,7 +86,9 @@ describe('createHTMLMarker', () => {
 
       const marker = new HTMLMarker(params);
 
-      marker.getPanes.mockImplementationOnce(() => ({ overlayMouseTarget }));
+      (marker.getPanes as jest.Mock).mockImplementationOnce(() => ({
+        overlayMouseTarget,
+      }));
 
       marker.onAdd();
 
@@ -101,6 +104,7 @@ describe('createHTMLMarker', () => {
 
       const marker = new HTMLMarker(params);
 
+      // @ts-expect-error sufficient for the test
       marker.element.getBoundingClientRect = () => ({
         width: 50,
         height: 30,
@@ -123,6 +127,7 @@ describe('createHTMLMarker', () => {
 
       const marker = new HTMLMarker(params);
 
+      // @ts-expect-error sufficient for the test
       marker.element.getBoundingClientRect = () => ({
         width: 50,
         height: 30,
@@ -145,6 +150,7 @@ describe('createHTMLMarker', () => {
 
       const marker = new HTMLMarker(params);
 
+      // @ts-expect-error sufficient for the test
       marker.element.getBoundingClientRect = () => ({
         width: 50,
       });
@@ -167,7 +173,7 @@ describe('createHTMLMarker', () => {
 
       const marker = new HTMLMarker(params);
 
-      marker.getProjection.mockImplementationOnce(() => ({
+      (marker.getProjection as jest.Mock).mockImplementationOnce(() => ({
         fromLatLngToDivPixel,
       }));
 
@@ -195,7 +201,7 @@ describe('createHTMLMarker', () => {
 
       const marker = new HTMLMarker(params);
 
-      marker.getProjection.mockImplementationOnce(() => ({
+      (marker.getProjection as jest.Mock).mockImplementationOnce(() => ({
         fromLatLngToDivPixel,
       }));
 
