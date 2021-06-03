@@ -1,3 +1,4 @@
+/* global google */
 import { PlacesInstance } from 'places.js';
 import * as widgets from '..';
 import { Widget } from '../../types';
@@ -50,7 +51,11 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
         const geoSearch = widget as Widgets['geoSearch'];
         return geoSearch({
           container,
-          googleReference: { maps: { OverlayView: class OverlayView {} } },
+          googleReference: {
+            maps: ({
+              OverlayView: class OverlayView {},
+            } as unknown) as typeof google.maps,
+          },
         });
       }
       case 'hierarchicalMenu': {
