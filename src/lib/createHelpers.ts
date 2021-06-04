@@ -9,24 +9,27 @@ import {
   ReverseSnippetOptions,
   insights,
 } from '../helpers';
-import { Hit, InsightsClientMethod, InsightsClientPayload } from '../types';
+import {
+  Hit,
+  HoganHelpers,
+  InsightsClientMethod,
+  InsightsClientPayload,
+} from '../types';
 
-type HoganRenderer = (value: any) => string;
-
-type HoganHelpers = {
-  formatNumber: (value: number, render: HoganRenderer) => string;
-  highlight: (options: string, render: HoganRenderer) => string;
-  reverseHighlight: (options: string, render: HoganRenderer) => string;
-  snippet: (options: string, render: HoganRenderer) => string;
-  reverseSnippet: (options: string, render: HoganRenderer) => string;
-  insights: (options: string, render: HoganRenderer) => string;
-};
+type DefaultHoganHelpers = HoganHelpers<
+  | 'formatNumber'
+  | 'highlight'
+  | 'reverseHighlight'
+  | 'snippet'
+  | 'reverseSnippet'
+  | 'insights'
+>;
 
 export default function hoganHelpers({
   numberLocale,
 }: {
   numberLocale?: string;
-}): HoganHelpers {
+}): DefaultHoganHelpers {
   return {
     formatNumber(value, render) {
       return Number(render(value)).toLocaleString(numberLocale);
