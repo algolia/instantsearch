@@ -4,16 +4,15 @@ import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
 import { BreadcrumbCSSClasses } from '../../widgets/breadcrumb/breadcrumb';
+import { ComponentCSSClasses } from '../../types';
 
 type BreadcrumbItem = {
   value: string;
   label: string;
 };
 
-export type BreadcrumbComponentCSSClasses = Required<
-  {
-    [TClassName in keyof BreadcrumbCSSClasses]: string;
-  }
+export type BreadcrumbComponentCSSClasses = ComponentCSSClasses<
+  BreadcrumbCSSClasses
 >;
 
 type BreadcrumbTemplates = {

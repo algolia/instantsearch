@@ -5,16 +5,14 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import cx from 'classnames';
 import Template from '../Template/Template';
 import { PanelCSSClasses, PanelTemplates } from '../../widgets/panel/panel';
-import { RenderOptions, UnknownWidgetFactory } from '../../types';
+import {
+  ComponentCSSClasses,
+  RenderOptions,
+  UnknownWidgetFactory,
+} from '../../types';
 
-type PanelComponentCSSClasses = Required<
-  Omit<
-    {
-      [TClassName in keyof PanelCSSClasses]: string;
-    },
-    // `collapseIcon` is only used in the default templates of the widget
-    'collapseIcon'
-  >
+export type PanelComponentCSSClasses = ComponentCSSClasses<
+  Omit<PanelCSSClasses, 'collapseIcon'>
 >;
 
 export type PanelProps<TWidget extends UnknownWidgetFactory> = {

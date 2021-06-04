@@ -8,11 +8,10 @@ import {
   RangeInputTemplates,
 } from '../../widgets/range-input/range-input';
 import { Range, RangeBoundaries } from '../../connectors/range/connectRange';
+import { ComponentCSSClasses } from '../../types';
 
-export type RangeInputComponentCSSClasses = Required<
-  {
-    [TClassName in keyof RangeInputCSSClasses]: string;
-  }
+export type RangeInputComponentCSSClasses = ComponentCSSClasses<
+  RangeInputCSSClasses
 >;
 
 export type RangeInputProps = {

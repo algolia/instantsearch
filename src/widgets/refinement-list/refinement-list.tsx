@@ -14,7 +14,12 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { Template, WidgetFactory, RendererOptions } from '../../types';
+import {
+  Template,
+  WidgetFactory,
+  RendererOptions,
+  ComponentCSSClasses,
+} from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 import {
@@ -162,17 +167,11 @@ type RefinementListSearchableCSSClasses = {
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
 
-export type RefinementListRendererCSSClasses = Required<
-  {
-    [TClassName in keyof RefinementListOwnCSSClasses]: string;
-  } & {
-    searchable: Required<
-      {
-        [TClassName in keyof SearchBoxCSSClasses]: string;
-      }
-    >;
-  }
->;
+export type RefinementListRendererCSSClasses = ComponentCSSClasses<
+  RefinementListOwnCSSClasses
+> & {
+  searchable: ComponentCSSClasses<SearchBoxCSSClasses>;
+};
 
 export type RefinementListWidgetParams = {
   /**

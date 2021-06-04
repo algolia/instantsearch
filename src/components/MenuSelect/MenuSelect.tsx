@@ -9,11 +9,10 @@ import {
   MenuSelectTemplates,
 } from '../../widgets/menu-select/menu-select';
 import { MenuRenderState } from '../../connectors/menu/connectMenu';
+import { ComponentCSSClasses } from '../../types';
 
-export type MenuSelectComponentCSSClasses = Required<
-  {
-    [TClassName in keyof MenuSelectCSSClasses]: string;
-  }
+export type MenuSelectComponentCSSClasses = ComponentCSSClasses<
+  MenuSelectCSSClasses
 >;
 
 type MenuItem = {

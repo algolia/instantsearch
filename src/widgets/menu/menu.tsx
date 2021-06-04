@@ -15,7 +15,12 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { RendererOptions, Template, WidgetFactory } from '../../types';
+import {
+  ComponentCSSClasses,
+  RendererOptions,
+  Template,
+  WidgetFactory,
+} from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
@@ -84,11 +89,7 @@ export type MenuTemplates = {
   }>;
 };
 
-type MenuRendererCSSClasses = Required<
-  {
-    [TClassName in keyof MenuCSSClasses]: string;
-  }
->;
+export type MenuRendererCSSClasses = ComponentCSSClasses<MenuCSSClasses>;
 
 export type MenuWidgetParams = {
   /**

@@ -9,11 +9,10 @@ import {
   PaginationCSSClasses,
   PaginationTemplates,
 } from '../../widgets/pagination/pagination';
+import { ComponentCSSClasses } from '../../types';
 
-export type PaginationComponentCSSClasses = Required<
-  {
-    [TClassName in keyof PaginationCSSClasses]: string;
-  }
+export type PaginationComponentCSSClasses = ComponentCSSClasses<
+  PaginationCSSClasses
 >;
 
 export type PaginationProps = {

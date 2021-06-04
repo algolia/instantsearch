@@ -22,6 +22,7 @@ import {
   WidgetFactory,
   RendererOptions,
   SortBy,
+  ComponentCSSClasses,
 } from '../../types';
 import { component } from '../../lib/suit';
 
@@ -97,10 +98,8 @@ export type HierarchicalMenuCSSClasses = {
   disabledShowMore?: string | string[];
 };
 
-type HierarchicalMenuRendererCSSClasses = Required<
-  {
-    [TClassName in keyof HierarchicalMenuCSSClasses]: string;
-  }
+export type HierarchicalMenuRendererCSSClasses = ComponentCSSClasses<
+  HierarchicalMenuCSSClasses
 >;
 
 export type HierarchicalMenuWidgetParams = {

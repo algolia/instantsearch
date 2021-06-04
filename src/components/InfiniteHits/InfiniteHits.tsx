@@ -4,17 +4,15 @@ import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
 import { SearchResults } from 'algoliasearch-helper';
-import { Hits } from '../../types';
+import { ComponentCSSClasses, Hits } from '../../types';
 import {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
 } from '../../widgets/infinite-hits/infinite-hits';
 import { SendEventForHits, BindEventForHits } from '../../lib/utils';
 
-export type InfiniteHitsComponentCSSClasses = Required<
-  {
-    [TClassName in keyof InfiniteHitsCSSClasses]: string;
-  }
+export type InfiniteHitsComponentCSSClasses = ComponentCSSClasses<
+  InfiniteHitsCSSClasses
 >;
 
 export type InfiniteHitsProps = {

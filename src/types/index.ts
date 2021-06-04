@@ -5,6 +5,9 @@ export * from './utils';
 export * from './algoliasearch';
 export * from './results';
 
+// component-related
+export * from './component';
+
 // instantsearch-related
 export * from './instantsearch';
 export * from './middleware';

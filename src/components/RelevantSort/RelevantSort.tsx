@@ -6,11 +6,10 @@ import {
   RelevantSortCSSClasses,
   RelevantSortTemplates,
 } from '../../widgets/relevant-sort/relevant-sort';
+import { ComponentCSSClasses } from '../../types';
 
-export type RelevantSortComponentCSSClasses = Required<
-  {
-    [TClassName in keyof RelevantSortCSSClasses]: string;
-  }
+export type RelevantSortComponentCSSClasses = ComponentCSSClasses<
+  RelevantSortCSSClasses
 >;
 
 type RelevantSortProps = {

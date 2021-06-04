@@ -6,6 +6,7 @@ import {
   ToggleRefinementValue,
 } from '../../connectors/toggle-refinement/connectToggleRefinement';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import { ComponentCSSClasses } from '../../types';
 import {
   ToggleRefinementTemplates,
   ToggleRefinementCSSClasses,
@@ -13,9 +14,9 @@ import {
 
 import Template from '../Template/Template';
 
-export type ToggleRefinementComponentCSSClasses = {
-  [TClassName in keyof ToggleRefinementCSSClasses]: string;
-};
+export type ToggleRefinementComponentCSSClasses = ComponentCSSClasses<
+  ToggleRefinementCSSClasses
+>;
 
 export type ToggleRefinementProps = {
   currentRefinement: ToggleRefinementValue;

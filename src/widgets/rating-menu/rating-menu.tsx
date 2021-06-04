@@ -15,7 +15,11 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { RendererOptions, WidgetFactory } from '../../types';
+import {
+  ComponentCSSClasses,
+  RendererOptions,
+  WidgetFactory,
+} from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
@@ -79,10 +83,8 @@ export type RatingMenuCSSClasses = {
   count?: string | string[];
 };
 
-type RatingMenuRendererCSSClasses = Required<
-  {
-    [TClassName in keyof RatingMenuCSSClasses]: string;
-  }
+export type RatingMenuRendererCSSClasses = ComponentCSSClasses<
+  RatingMenuCSSClasses
 >;
 
 export type RatingMenuWidgetParams = {
