@@ -96,79 +96,83 @@ type RefinementListOwnCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root: string | string[];
+  root?: string | string[];
   /**
    * CSS class to add to the root element when no refinements.
    */
-  noRefinementRoot: string | string[];
+  noRefinementRoot?: string | string[];
   /**
    * CSS class to add to the root element with no results.
    */
-  noResults: string | string[];
+  noResults?: string | string[];
   /**
    * CSS class to add to the list element.
    */
-  list: string | string[];
+  list?: string | string[];
   /**
    * CSS class to add to each item element.
    */
-  item: string | string[];
+  item?: string | string[];
   /**
    * CSS class to add to each selected element.
    */
-  selectedItem: string | string[];
+  selectedItem?: string | string[];
   /**
    * CSS class to add to each label element (when using the default template).
    */
-  label: string | string[];
+  label?: string | string[];
   /**
    * CSS class to add to each checkbox element (when using the default template).
    */
-  checkbox: string | string[];
+  checkbox?: string | string[];
   /**
    * CSS class to add to each label text element.
    */
-  labelText: string | string[];
+  labelText?: string | string[];
   /**
    * CSS class to add to the show more element
    */
-  showMore: string | string[];
+  showMore?: string | string[];
   /**
    * CSS class to add to the disabled show more element
    */
-  disabledShowMore: string | string[];
+  disabledShowMore?: string | string[];
   /**
    * CSS class to add to each count element (when using the default template).
    */
-  count: string | string[];
+  count?: string | string[];
   /**
    * CSS class to add to the searchable container.
    */
-  searchBox: string | string[];
+  searchBox?: string | string[];
 };
 
 type RefinementListSearchableCSSClasses = {
-  searchableRoot: string | string[];
-  searchableForm: string | string[];
-  searchableInput: string | string[];
-  searchableSubmit: string | string[];
-  searchableSubmitIcon: string | string[];
-  searchableReset: string | string[];
-  searchableResetIcon: string | string[];
-  searchableLoadingIndicator: string | string[];
-  searchableLoadingIcon: string | string[];
+  searchableRoot?: string | string[];
+  searchableForm?: string | string[];
+  searchableInput?: string | string[];
+  searchableSubmit?: string | string[];
+  searchableSubmitIcon?: string | string[];
+  searchableReset?: string | string[];
+  searchableResetIcon?: string | string[];
+  searchableLoadingIndicator?: string | string[];
+  searchableLoadingIcon?: string | string[];
 };
 
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
 
-export type RefinementListRendererCSSClasses = {
-  [key in keyof RefinementListOwnCSSClasses]: string;
-} & {
-  searchable: {
-    [key in keyof SearchBoxCSSClasses]: string;
-  };
-};
+export type RefinementListRendererCSSClasses = Required<
+  {
+    [TClassName in keyof RefinementListOwnCSSClasses]: string;
+  } & {
+    searchable: Required<
+      {
+        [TClassName in keyof SearchBoxCSSClasses]: string;
+      }
+    >;
+  }
+>;
 
 export type RefinementListWidgetParams = {
   /**
@@ -203,7 +207,7 @@ export type RefinementListWidgetParams = {
   /**
    * CSS classes to add to the wrapping elements.
    */
-  cssClasses?: Partial<RefinementListCSSClasses>;
+  cssClasses?: RefinementListCSSClasses;
 };
 
 export const defaultTemplates: RefinementListOwnTemplates = {

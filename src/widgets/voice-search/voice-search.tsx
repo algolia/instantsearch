@@ -24,9 +24,9 @@ const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
 
 export type VoiceSearchCSSClasses = {
-  root: string | string[];
-  button: string | string[];
-  status: string | string[];
+  root?: string | string[];
+  button?: string | string[];
+  status?: string | string[];
 };
 
 type VoiceSearchTemplateProps = {
@@ -45,7 +45,7 @@ export type VoiceSearchTemplates = {
 
 export type VoiceSearchWidgetParams = {
   container: string | HTMLElement;
-  cssClasses?: Partial<VoiceSearchCSSClasses>;
+  cssClasses?: VoiceSearchCSSClasses;
   templates?: Partial<VoiceSearchTemplates>;
   searchAsYouSpeak?: boolean;
   language?: string;

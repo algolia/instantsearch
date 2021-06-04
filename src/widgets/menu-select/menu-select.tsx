@@ -7,7 +7,9 @@ import connectMenu, {
   MenuRenderState,
   MenuWidgetDescription,
 } from '../../connectors/menu/connectMenu';
-import MenuSelect from '../../components/MenuSelect/MenuSelect';
+import MenuSelect, {
+  MenuSelectComponentCSSClasses,
+} from '../../components/MenuSelect/MenuSelect';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -25,19 +27,19 @@ export type MenuSelectCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root: string;
+  root?: string;
   /**
    * CSS class to add to the root when there are no items to display
    */
-  noRefinementRoot: string;
+  noRefinementRoot?: string;
   /**
    * CSS class to add to the select element.
    */
-  select: string;
+  select?: string;
   /**
    * CSS class to add to the option element.
    */
-  option: string;
+  option?: string;
 };
 
 export type MenuSelectTemplates = {
@@ -68,7 +70,7 @@ export type MenuSelectWidgetParams = {
   /**
    * CSS classes to add to the wrapping elements.
    */
-  cssClasses?: Partial<MenuSelectCSSClasses>;
+  cssClasses?: MenuSelectCSSClasses;
 };
 
 const renderer = ({
@@ -78,7 +80,7 @@ const renderer = ({
   templates,
 }: {
   containerNode: HTMLElement;
-  cssClasses: MenuSelectCSSClasses;
+  cssClasses: MenuSelectComponentCSSClasses;
   renderState: { templateProps?: PreparedTemplateProps<MenuSelectTemplates> };
   templates: Partial<MenuSelectTemplates>;
 }) => (

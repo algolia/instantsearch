@@ -10,9 +10,11 @@ import {
   PaginationTemplates,
 } from '../../widgets/pagination/pagination';
 
-export type PaginationComponentCSSClasses = {
-  [TClassName in keyof PaginationCSSClasses]: string;
-};
+export type PaginationComponentCSSClasses = Required<
+  {
+    [TClassName in keyof PaginationCSSClasses]: string;
+  }
+>;
 
 export type PaginationProps = {
   createURL(value: number): string;

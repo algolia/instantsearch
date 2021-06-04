@@ -3,22 +3,22 @@
 import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
-import { AnswersTemplates } from '../../widgets/answers/answers';
+import {
+  AnswersCSSClasses,
+  AnswersTemplates,
+} from '../../widgets/answers/answers';
 import { Hits } from '../../types';
 
-type AnswersCSSClasses = {
-  root: string;
-  emptyRoot: string;
-  header: string;
-  loader: string;
-  list: string;
-  item: string;
-};
+export type AnswerComponentCSSClasses = Required<
+  {
+    [TClassName in keyof AnswersCSSClasses]: string;
+  }
+>;
 
 export type AnswersProps = {
   hits: Hits;
   isLoading: boolean;
-  cssClasses: AnswersCSSClasses;
+  cssClasses: AnswerComponentCSSClasses;
   templateProps: {
     [key: string]: any;
     templates: AnswersTemplates;

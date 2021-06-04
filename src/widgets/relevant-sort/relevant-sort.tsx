@@ -13,14 +13,16 @@ import connectRelevantSort, {
   RelevantSortRenderState,
   RelevantSortWidgetDescription,
 } from '../../connectors/relevant-sort/connectRelevantSort';
-import RelevantSort from '../../components/RelevantSort/RelevantSort';
+import RelevantSort, {
+  RelevantSortComponentCSSClasses,
+} from '../../components/RelevantSort/RelevantSort';
 import defaultTemplates from './defaultTemplates';
 
-export type RelevantSortCSSClasses = Partial<{
-  root: string;
-  text: string;
-  button: string;
-}>;
+export type RelevantSortCSSClasses = {
+  root?: string;
+  text?: string;
+  button?: string;
+};
 
 export type RelevantSortTemplates = Partial<{
   text: Template<{ isRelevantSorted: boolean }>;
@@ -59,7 +61,7 @@ const renderer: Renderer<
 
   render(
     <RelevantSort
-      cssClasses={cssClasses}
+      cssClasses={cssClasses as RelevantSortComponentCSSClasses}
       templates={templates}
       isRelevantSorted={isRelevantSorted}
       isVirtualReplica={isVirtualReplica}
@@ -80,7 +82,7 @@ const relevantSort: RelevantSortWidget = widgetParams => {
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  const cssClasses: RelevantSortCSSClasses = {
+  const cssClasses: RelevantSortComponentCSSClasses = {
     root: cx(suit(), userCssClasses.root),
     text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
     button: cx(suit({ descendantName: 'button' }), userCssClasses.button),

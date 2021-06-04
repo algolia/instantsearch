@@ -7,8 +7,14 @@ import {
   RelevantSortTemplates,
 } from '../../widgets/relevant-sort/relevant-sort';
 
+export type RelevantSortComponentCSSClasses = Required<
+  {
+    [TClassName in keyof RelevantSortCSSClasses]: string;
+  }
+>;
+
 type RelevantSortProps = {
-  cssClasses: RelevantSortCSSClasses;
+  cssClasses: RelevantSortComponentCSSClasses;
   templates: RelevantSortTemplates;
   isRelevantSorted: boolean;
   isVirtualReplica: boolean;

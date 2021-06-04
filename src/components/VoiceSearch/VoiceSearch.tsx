@@ -3,14 +3,17 @@
 import { h } from 'preact';
 import Template from '../Template/Template';
 
-import { VoiceSearchTemplates } from '../../widgets/voice-search/voice-search';
+import {
+  VoiceSearchCSSClasses,
+  VoiceSearchTemplates,
+} from '../../widgets/voice-search/voice-search';
 import { VoiceListeningState } from '../../lib/voiceSearchHelper/types';
 
-export type VoiceSearchComponentCSSClasses = {
-  root: string;
-  button: string;
-  status: string;
-};
+export type VoiceSearchComponentCSSClasses = Required<
+  {
+    [TClassName in keyof VoiceSearchCSSClasses]: string;
+  }
+>;
 
 export type VoiceSearchProps = {
   cssClasses: VoiceSearchComponentCSSClasses;

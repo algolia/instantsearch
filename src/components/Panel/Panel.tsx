@@ -10,7 +10,7 @@ import { RenderOptions, UnknownWidgetFactory } from '../../types';
 type PanelComponentCSSClasses = Required<
   Omit<
     {
-      [TKey in keyof PanelCSSClasses]: string;
+      [TClassName in keyof PanelCSSClasses]: string;
     },
     // `collapseIcon` is only used in the default templates of the widget
     'collapseIcon'

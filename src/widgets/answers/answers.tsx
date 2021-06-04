@@ -73,32 +73,32 @@ export type AnswersCSSClasses = {
   /**
    * CSS class to add to the root element of the widget.
    */
-  root: string | string[];
+  root?: string | string[];
 
   /**
    * CSS class to add to the wrapping element when no results.
    */
-  emptyRoot: string | string[];
+  emptyRoot?: string | string[];
 
   /**
    * CSS classes to add to the header.
    */
-  header: string | string[];
+  header?: string | string[];
 
   /**
    * CSS classes to add to the loader.
    */
-  loader: string | string[];
+  loader?: string | string[];
 
   /**
    * CSS class to add to the list of results.
    */
-  list: string | string[];
+  list?: string | string[];
 
   /**
    * CSS class to add to each result.
    */
-  item: string | string[];
+  item?: string | string[];
 };
 
 export type AnswersWidgetParams = {
@@ -115,7 +115,7 @@ export type AnswersWidgetParams = {
   /**
    * The CSS classes to override.
    */
-  cssClasses?: Partial<AnswersCSSClasses>;
+  cssClasses?: AnswersCSSClasses;
 };
 
 export type AnswersWidget = WidgetFactory<

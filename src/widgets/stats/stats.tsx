@@ -23,12 +23,12 @@ export type StatsCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root: string | string[];
+  root?: string | string[];
 
   /**
    * CSS class to add to the text span element.
    */
-  text: string | string[];
+  text?: string | string[];
 };
 
 export type StatsTemplates = {
@@ -58,7 +58,7 @@ export type StatsWidgetParams = {
   /**
    * CSS classes to add.
    */
-  cssClasses?: Partial<StatsCSSClasses>;
+  cssClasses?: StatsCSSClasses;
 };
 
 export type StatsWidget = WidgetFactory<

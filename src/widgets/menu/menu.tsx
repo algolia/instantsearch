@@ -25,43 +25,43 @@ export type MenuCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root: string;
+  root?: string;
   /**
    * CSS class to add to the root element when no refinements.
    */
-  noRefinementRoot: string;
+  noRefinementRoot?: string;
   /**
    * CSS class to add to the list element.
    */
-  list: string;
+  list?: string;
   /**
    * CSS class to add to each item element.
    */
-  item: string;
+  item?: string;
   /**
    * CSS class to add to each selected item element.
    */
-  selectedItem: string;
+  selectedItem?: string;
   /**
    * CSS class to add to each link (when using the default template).
    */
-  link: string;
+  link?: string;
   /**
    * CSS class to add to each label (when using the default template).
    */
-  label: string;
+  label?: string;
   /**
    * CSS class to add to each count element (when using the default template).
    */
-  count: string;
+  count?: string;
   /**
    * CSS class to add to the show more button.
    */
-  showMore: string;
+  showMore?: string;
   /**
    * CSS class to add to the disabled show more button.
    */
-  disabledShowMore: string;
+  disabledShowMore?: string;
 };
 
 export type MenuTemplates = {
@@ -84,6 +84,12 @@ export type MenuTemplates = {
   }>;
 };
 
+type MenuRendererCSSClasses = Required<
+  {
+    [TClassName in keyof MenuCSSClasses]: string;
+  }
+>;
+
 export type MenuWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
@@ -96,7 +102,7 @@ export type MenuWidgetParams = {
   /**
    * CSS classes to add to the wrapping elements.
    */
-  cssClasses?: Partial<MenuCSSClasses>;
+  cssClasses?: MenuCSSClasses;
 };
 
 const renderer = ({
@@ -107,7 +113,7 @@ const renderer = ({
   showMore,
 }: {
   containerNode: HTMLElement;
-  cssClasses: MenuCSSClasses;
+  cssClasses: MenuRendererCSSClasses;
   renderState: { templateProps?: PreparedTemplateProps<MenuTemplates> };
   templates: Partial<MenuTemplates>;
   showMore?: boolean;

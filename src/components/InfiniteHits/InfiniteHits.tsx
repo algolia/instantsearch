@@ -5,22 +5,20 @@ import cx from 'classnames';
 import Template from '../Template/Template';
 import { SearchResults } from 'algoliasearch-helper';
 import { Hits } from '../../types';
-import { InfiniteHitsTemplates } from '../../widgets/infinite-hits/infinite-hits';
+import {
+  InfiniteHitsCSSClasses,
+  InfiniteHitsTemplates,
+} from '../../widgets/infinite-hits/infinite-hits';
 import { SendEventForHits, BindEventForHits } from '../../lib/utils';
 
-type InfiniteHitsCSSClasses = {
-  root: string;
-  emptyRoot: string;
-  list: string;
-  item: string;
-  loadPrevious: string;
-  disabledLoadPrevious: string;
-  loadMore: string;
-  disabledLoadMore: string;
-};
+export type InfiniteHitsComponentCSSClasses = Required<
+  {
+    [TClassName in keyof InfiniteHitsCSSClasses]: string;
+  }
+>;
 
 export type InfiniteHitsProps = {
-  cssClasses: InfiniteHitsCSSClasses;
+  cssClasses: InfiniteHitsComponentCSSClasses;
   hits: Hits;
   results: SearchResults;
   hasShowPrevious: boolean;

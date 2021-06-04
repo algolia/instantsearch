@@ -6,17 +6,16 @@ import { isSpecialClick, isEqual } from '../../lib/utils';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
-import SearchBox from '../SearchBox/SearchBox';
+import SearchBox, {
+  SearchBoxComponentCSSClasses,
+} from '../SearchBox/SearchBox';
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import {
-  SearchBoxRendererCSSClasses,
-  SearchBoxTemplates,
-} from '../../widgets/search-box/search-box';
+import { SearchBoxTemplates } from '../../widgets/search-box/search-box';
 import { CreateURL, Templates } from '../../types';
 
 type CSSClasses = {
-  searchable?: SearchBoxRendererCSSClasses;
+  searchable?: SearchBoxComponentCSSClasses;
   [key: string]: any;
 };
 

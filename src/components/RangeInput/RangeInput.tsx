@@ -9,9 +9,11 @@ import {
 } from '../../widgets/range-input/range-input';
 import { Range, RangeBoundaries } from '../../connectors/range/connectRange';
 
-export type RangeInputComponentCSSClasses = {
-  [TClassName in keyof RangeInputCSSClasses]: string;
-};
+export type RangeInputComponentCSSClasses = Required<
+  {
+    [TClassName in keyof RangeInputCSSClasses]: string;
+  }
+>;
 
 export type RangeInputProps = {
   min?: number;

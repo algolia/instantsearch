@@ -50,56 +50,56 @@ export type HierarchicalMenuCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root: string | string[];
+  root?: string | string[];
   /**
    * CSS class to add to the root element when no refinements.
    */
-  noRefinementRoot: string | string[];
+  noRefinementRoot?: string | string[];
   /**
    * CSS class to add to the list element.
    */
-  list: string | string[];
+  list?: string | string[];
   /**
    * CSS class to add to the child list element.
    */
-  childList: string | string[];
+  childList?: string | string[];
   /**
    * CSS class to add to each item element.
    */
-  item: string | string[];
+  item?: string | string[];
   /**
    * CSS class to add to each selected item element.
    */
-  selectedItem: string | string[];
+  selectedItem?: string | string[];
   /**
    * CSS class to add to each parent item element.
    */
-  parentItem: string | string[];
+  parentItem?: string | string[];
   /**
    * CSS class to add to each link (when using the default template).
    */
-  link: string | string[];
+  link?: string | string[];
   /**
    * CSS class to add to each label (when using the default template).
    */
-  label: string | string[];
+  label?: string | string[];
   /**
    * CSS class to add to each count element (when using the default template).
    */
-  count: string | string[];
+  count?: string | string[];
   /**
    * CSS class to add to the show more element.
    */
-  showMore: string | string[];
+  showMore?: string | string[];
   /**
    * CSS class to add to the disabled show more element.
    */
-  disabledShowMore: string | string[];
+  disabledShowMore?: string | string[];
 };
 
 type HierarchicalMenuRendererCSSClasses = Required<
   {
-    [key in keyof HierarchicalMenuCSSClasses]: string;
+    [TClassName in keyof HierarchicalMenuCSSClasses]: string;
   }
 >;
 
@@ -171,7 +171,7 @@ export type HierarchicalMenuWidgetParams = {
   /**
    * CSS classes to add to the wrapping elements.
    */
-  cssClasses?: Partial<HierarchicalMenuCSSClasses>;
+  cssClasses?: HierarchicalMenuCSSClasses;
 };
 
 const renderer = ({

@@ -5,8 +5,14 @@ import cx from 'classnames';
 import { StatsCSSClasses, StatsTemplates } from '../../widgets/stats/stats';
 import Template from '../Template/Template';
 
+export type StatsComponentCSSClasses = Required<
+  {
+    [TClassName in keyof StatsCSSClasses]: string;
+  }
+>;
+
 type StatsProps = {
-  cssClasses: StatsCSSClasses;
+  cssClasses: StatsComponentCSSClasses;
   templateProps: {
     [key: string]: any;
     templates: StatsTemplates;

@@ -95,7 +95,7 @@ export type NumericMenuCSSClasses = {
 
 type NumericMenuRendererCSSClasses = Required<
   {
-    [key in keyof NumericMenuCSSClasses]: string;
+    [TClassName in keyof NumericMenuCSSClasses]: string;
   }
 >;
 

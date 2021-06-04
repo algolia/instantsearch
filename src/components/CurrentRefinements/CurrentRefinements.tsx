@@ -8,9 +8,11 @@ import {
 } from '../../connectors/current-refinements/connectCurrentRefinements';
 import { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
 
-export type CurrentRefinementsComponentCSSClasses = {
-  [TClassName in keyof CurrentRefinementsCSSClasses]: string;
-};
+export type CurrentRefinementsComponentCSSClasses = Required<
+  {
+    [TClassName in keyof CurrentRefinementsCSSClasses]: string;
+  }
+>;
 
 export type CurrentRefinementsProps = {
   items: CurrentRefinementsConnectorParamsItem[];

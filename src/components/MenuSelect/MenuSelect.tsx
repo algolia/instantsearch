@@ -10,6 +10,12 @@ import {
 } from '../../widgets/menu-select/menu-select';
 import { MenuRenderState } from '../../connectors/menu/connectMenu';
 
+export type MenuSelectComponentCSSClasses = Required<
+  {
+    [TClassName in keyof MenuSelectCSSClasses]: string;
+  }
+>;
+
 type MenuItem = {
   /**
    * The value of the menu item.
@@ -30,7 +36,7 @@ type MenuItem = {
 };
 
 type Props = {
-  cssClasses: MenuSelectCSSClasses;
+  cssClasses: MenuSelectComponentCSSClasses;
   items: MenuItem[];
   refine: MenuRenderState['refine'];
   templateProps: {

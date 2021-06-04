@@ -13,10 +13,12 @@ import connectQueryRules, {
   QueryRulesRenderState,
   QueryRulesWidgetDescription,
 } from '../../connectors/query-rules/connectQueryRules';
-import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
+import CustomData, {
+  QueryRuleCustomDataComponentCSSClasses,
+} from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 
 export type QueryRuleCustomDataCSSClasses = {
-  root: string;
+  root?: string;
 };
 
 export type QueryRuleCustomDataTemplates = {
@@ -26,7 +28,7 @@ export type QueryRuleCustomDataTemplates = {
 type QueryRuleCustomDataWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: QueryRuleCustomDataCSSClasses;
-  templates?: Partial<QueryRuleCustomDataTemplates>;
+  templates?: QueryRuleCustomDataTemplates;
 };
 
 type QueryRuleCustomDataRendererWidgetParams = {
@@ -54,7 +56,11 @@ const renderer: Renderer<
   const { container, cssClasses, templates } = widgetParams;
 
   render(
-    <CustomData cssClasses={cssClasses} templates={templates} items={items} />,
+    <CustomData
+      cssClasses={cssClasses as QueryRuleCustomDataComponentCSSClasses}
+      templates={templates}
+      items={items}
+    />,
     container
   );
 };

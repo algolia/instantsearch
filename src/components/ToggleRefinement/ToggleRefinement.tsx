@@ -8,10 +8,15 @@ import {
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import {
   ToggleRefinementTemplates,
-  ToggleRefinementComponentCSSClasses,
+  ToggleRefinementCSSClasses,
 } from '../../widgets/toggle-refinement/toggle-refinement';
 
 import Template from '../Template/Template';
+
+export type ToggleRefinementComponentCSSClasses = {
+  [TClassName in keyof ToggleRefinementCSSClasses]: string;
+};
+
 export type ToggleRefinementProps = {
   currentRefinement: ToggleRefinementValue;
   refine: ToggleRefinementRenderState['refine'];
