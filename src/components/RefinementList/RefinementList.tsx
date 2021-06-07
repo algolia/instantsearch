@@ -12,22 +12,40 @@ import SearchBox, {
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import { SearchBoxTemplates } from '../../widgets/search-box/search-box';
-import { CreateURL, Templates } from '../../types';
+import { ComponentCSSClasses, CreateURL, Templates } from '../../types';
+import { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
+import { RatingMenuRendererCSSClasses } from '../../widgets/rating-menu/rating-menu';
+import { HierarchicalMenuRendererCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 
-type CSSClasses = {
+type RefinementListOptionalClasses =
+  | 'noResults'
+  | 'checkbox'
+  | 'labelText'
+  | 'showMore'
+  | 'disabledShowMore'
+  | 'searchBox';
+
+type RefinementListWidgetCSSClasses = ComponentCSSClasses<
+  RefinementListOwnCSSClasses
+>;
+
+type RefinementListRequired = Omit<
+  RefinementListWidgetCSSClasses,
+  RefinementListOptionalClasses
+> &
+  Partial<Pick<RefinementListWidgetCSSClasses, RefinementListOptionalClasses>>;
+
+export type RefinementListComponentCSSClasses = RefinementListRequired & {
   searchable?: SearchBoxComponentCSSClasses;
-  [key: string]: any;
-};
+} & Partial<Pick<RatingMenuRendererCSSClasses, 'disabledItem'>> &
+  Partial<Pick<HierarchicalMenuRendererCSSClasses, 'childList' | 'parentItem'>>;
 
 type FacetValue = TRefinementListItem | HierarchicalMenuItem;
 type FacetValues = TRefinementListItem[] | HierarchicalMenuItem[];
 
-export type RefinementListProps<
-  TTemplates extends Templates,
-  TCSSClasses extends CSSClasses
-> = {
+export type RefinementListProps<TTemplates extends Templates> = {
   createURL: CreateURL<string>;
-  cssClasses: TCSSClasses;
+  cssClasses: RefinementListComponentCSSClasses;
   depth?: number;
   facetValues?: FacetValues;
   attribute?: string;
@@ -53,18 +71,15 @@ const defaultProps = {
 };
 
 type RefinementListPropsWithDefaultProps<
-  TTemplates extends Templates,
-  TCSSClasses extends CSSClasses
-> = RefinementListProps<TTemplates, TCSSClasses> &
-  Readonly<typeof defaultProps>;
+  TTemplates extends Templates
+> = RefinementListProps<TTemplates> & Readonly<typeof defaultProps>;
 
 type RefinementListItemTemplateData<
-  TTemplates extends Templates,
-  TCSSClasses extends CSSClasses
+  TTemplates extends Templates
 > = FacetValue & {
   url: string;
 } & Pick<
-    RefinementListProps<TTemplates, TCSSClasses>,
+    RefinementListProps<TTemplates>,
     'attribute' | 'cssClasses' | 'isFromSearch'
   >;
 
@@ -74,25 +89,20 @@ function isHierarchicalMenuItem(
   return (facetValue as HierarchicalMenuItem).data !== undefined;
 }
 
-class RefinementList<
-  TTemplates extends Templates,
-  TCSSClasses extends CSSClasses
-> extends Component<
-  RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+class RefinementList<TTemplates extends Templates> extends Component<
+  RefinementListPropsWithDefaultProps<TTemplates>
 > {
   public static defaultProps = defaultProps;
 
   private searchBox = createRef<SearchBox>();
 
-  public constructor(
-    props: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
-  ) {
+  public constructor(props: RefinementListPropsWithDefaultProps<TTemplates>) {
     super(props);
     this.handleItemClick = this.handleItemClick.bind(this);
   }
 
   public shouldComponentUpdate(
-    nextProps: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+    nextProps: RefinementListPropsWithDefaultProps<TTemplates>
   ) {
     const areFacetValuesDifferent = !isEqual(
       this.props.facetValues,
@@ -114,10 +124,13 @@ class RefinementList<
       facetValue.data.length > 0
     ) {
       const { root, ...cssClasses } = this.props.cssClasses;
+
       subItems = (
         <RefinementList
           {...this.props}
-          cssClasses={cssClasses}
+          // We want to keep `root` required for external usage but not for the
+          // sub items.
+          cssClasses={cssClasses as RefinementListComponentCSSClasses}
           depth={this.props.depth + 1}
           facetValues={facetValue.data}
           showMore={false}
@@ -127,10 +140,7 @@ class RefinementList<
     }
 
     const url = this.props.createURL(facetValue.value);
-    const templateData: RefinementListItemTemplateData<
-      TTemplates,
-      TCSSClasses
-    > = {
+    const templateData: RefinementListItemTemplateData<TTemplates> = {
       ...facetValue,
       url,
       attribute: this.props.attribute,
@@ -149,8 +159,9 @@ class RefinementList<
 
     const refinementListItemClassName = cx(this.props.cssClasses.item, {
       [this.props.cssClasses.selectedItem]: facetValue.isRefined,
-      [this.props.cssClasses.disabledItem]: !facetValue.count,
-      [this.props.cssClasses.parentItem]:
+      // cx allows `undefined` as a key but typescript doesn't
+      [this.props.cssClasses.disabledItem!]: !facetValue.count,
+      [this.props.cssClasses.parentItem!]:
         isHierarchicalMenuItem(facetValue) &&
         Array.isArray(facetValue.data) &&
         facetValue.data.length > 0,
@@ -247,7 +258,7 @@ class RefinementList<
   }
 
   public componentWillReceiveProps(
-    nextProps: RefinementListPropsWithDefaultProps<TTemplates, TCSSClasses>
+    nextProps: RefinementListPropsWithDefaultProps<TTemplates>
   ) {
     if (this.searchBox.current && !nextProps.isFromSearch) {
       this.searchBox.current.resetInput();
@@ -264,7 +275,7 @@ class RefinementList<
 
   public render() {
     const showMoreButtonClassName = cx(this.props.cssClasses.showMore, {
-      [this.props.cssClasses.disabledShowMore]: !(
+      [this.props.cssClasses.disabledShowMore!]: !(
         this.props.showMore === true && this.props.canToggleShowMore
       ),
     });

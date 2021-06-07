@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList';
+import RefinementList, {
+  RefinementListComponentCSSClasses,
+} from '../../components/RefinementList/RefinementList';
 import connectRefinementList, {
   RefinementListRenderState,
   RefinementListConnectorParams,
@@ -14,18 +16,10 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import {
-  Template,
-  WidgetFactory,
-  RendererOptions,
-  ComponentCSSClasses,
-} from '../../types';
+import { Template, WidgetFactory, RendererOptions } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
-import {
-  SearchBoxTemplates,
-  SearchBoxCSSClasses,
-} from '../search-box/search-box';
+import { SearchBoxTemplates } from '../search-box/search-box';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -97,7 +91,7 @@ export type RefinementListItemData = {
   cssClasses: RefinementListCSSClasses;
 };
 
-type RefinementListOwnCSSClasses = {
+export type RefinementListOwnCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
@@ -167,12 +161,6 @@ type RefinementListSearchableCSSClasses = {
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
 
-export type RefinementListRendererCSSClasses = ComponentCSSClasses<
-  RefinementListOwnCSSClasses
-> & {
-  searchable: ComponentCSSClasses<SearchBoxCSSClasses>;
-};
-
 export type RefinementListWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
@@ -241,7 +229,7 @@ const renderer = ({
   searchableIsAlwaysActive,
 }: {
   containerNode: HTMLElement;
-  cssClasses: RefinementListRendererCSSClasses;
+  cssClasses: RefinementListComponentCSSClasses;
   renderState: {
     templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
     searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;

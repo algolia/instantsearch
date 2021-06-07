@@ -1,11 +1,8 @@
 import { render as originalRender, VNode } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
-import refinementList, {
-  RefinementListRendererCSSClasses,
-  RefinementListTemplates,
-} from '../refinement-list';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import refinementList, { RefinementListTemplates } from '../refinement-list';
 import { RefinementListProps } from '../../../components/RefinementList/RefinementList';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
 const render = castToJestMock(originalRender);
 jest.mock('preact', () => {
@@ -95,16 +92,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
         renderWidget({ cssClasses });
         const { props } = render.mock.calls[0][0] as VNode<
-          RefinementListProps<
-            RefinementListTemplates,
-            RefinementListRendererCSSClasses
-          >
+          RefinementListProps<RefinementListTemplates>
         >;
 
-        const actual = (props as RefinementListProps<
-          RefinementListTemplates,
-          RefinementListRendererCSSClasses
-        >).cssClasses;
+        const actual = (props as RefinementListProps<RefinementListTemplates>)
+          .cssClasses;
 
         expect(actual.root).toMatchInlineSnapshot(
           `"ais-RefinementList root cx"`
@@ -145,31 +137,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         expect(actual.disabledShowMore).toMatchInlineSnapshot(
           `"ais-RefinementList-showMore--disabled disabledShowMore"`
         );
-        expect(actual.searchable.root).toMatchInlineSnapshot(
+        expect(actual.searchable!.root).toMatchInlineSnapshot(
           `"ais-SearchBox searchableRoot"`
         );
-        expect(actual.searchable.form).toMatchInlineSnapshot(
+        expect(actual.searchable!.form).toMatchInlineSnapshot(
           `"ais-SearchBox-form searchableForm"`
         );
-        expect(actual.searchable.input).toMatchInlineSnapshot(
+        expect(actual.searchable!.input).toMatchInlineSnapshot(
           `"ais-SearchBox-input searchableInput"`
         );
-        expect(actual.searchable.submit).toMatchInlineSnapshot(
+        expect(actual.searchable!.submit).toMatchInlineSnapshot(
           `"ais-SearchBox-submit searchableSubmit"`
         );
-        expect(actual.searchable.submitIcon).toMatchInlineSnapshot(
+        expect(actual.searchable!.submitIcon).toMatchInlineSnapshot(
           `"ais-SearchBox-submitIcon searchableSubmitIcon"`
         );
-        expect(actual.searchable.reset).toMatchInlineSnapshot(
+        expect(actual.searchable!.reset).toMatchInlineSnapshot(
           `"ais-SearchBox-reset searchableReset"`
         );
-        expect(actual.searchable.resetIcon).toMatchInlineSnapshot(
+        expect(actual.searchable!.resetIcon).toMatchInlineSnapshot(
           `"ais-SearchBox-resetIcon searchableResetIcon"`
         );
-        expect(actual.searchable.loadingIndicator).toMatchInlineSnapshot(
+        expect(actual.searchable!.loadingIndicator).toMatchInlineSnapshot(
           `"ais-SearchBox-loadingIndicator searchableLoadingIndicator"`
         );
-        expect(actual.searchable.loadingIcon).toMatchInlineSnapshot(
+        expect(actual.searchable!.loadingIcon).toMatchInlineSnapshot(
           `"ais-SearchBox-loadingIcon searchableLoadingIcon"`
         );
       });
