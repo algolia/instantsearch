@@ -12,6 +12,7 @@ import {
 } from '../../types';
 
 export type PanelComponentCSSClasses = ComponentCSSClasses<
+  // `collapseIcon` is only used in the default templates of the widget
   Omit<PanelCSSClasses, 'collapseIcon'>
 >;
 
