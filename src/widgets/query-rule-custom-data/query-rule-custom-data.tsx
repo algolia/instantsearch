@@ -7,7 +7,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Renderer, Template } from '../../types';
+import { WidgetFactory, Template } from '../../types';
 import connectQueryRules, {
   QueryRulesConnectorParams,
   QueryRulesRenderState,
@@ -16,9 +16,10 @@ import connectQueryRules, {
 import CustomData, {
   QueryRuleCustomDataComponentCSSClasses,
 } from '../../components/QueryRuleCustomData/QueryRuleCustomData';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type QueryRuleCustomDataCSSClasses = {
-  root?: string;
+  root?: string | string[];
 };
 
 export type QueryRuleCustomDataTemplates = {
@@ -30,12 +31,6 @@ type QueryRuleCustomDataWidgetParams = {
   cssClasses?: QueryRuleCustomDataCSSClasses;
   templates?: QueryRuleCustomDataTemplates;
 };
-
-type QueryRuleCustomDataRendererWidgetParams = {
-  container: HTMLElement;
-  cssClasses: QueryRuleCustomDataCSSClasses;
-  templates: QueryRuleCustomDataTemplates;
-} & QueryRuleCustomDataWidgetParams;
 
 type QueryRuleCustomDataWidget = WidgetFactory<
   QueryRulesWidgetDescription & { $$widgetType: 'ais.queryRuleCustomData' },
@@ -49,19 +44,25 @@ const withUsage = createDocumentationMessageGenerator({
 
 const suit = component('QueryRuleCustomData');
 
-const renderer: Renderer<
-  QueryRulesRenderState,
-  QueryRuleCustomDataRendererWidgetParams
-> = ({ items, widgetParams }) => {
-  const { container, cssClasses, templates } = widgetParams;
-
+const renderer = ({
+  containerNode,
+  cssClasses,
+  templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: QueryRuleCustomDataComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<QueryRuleCustomDataTemplates>;
+  };
+  templates: QueryRuleCustomDataTemplates;
+}) => ({ items }: QueryRulesRenderState) => {
   render(
     <CustomData
       cssClasses={cssClasses as QueryRuleCustomDataComponentCSSClasses}
       templates={templates}
       items={items}
     />,
-    container
+    containerNode
   );
 };
 
@@ -82,6 +83,7 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
     root: cx(suit(), userCssClasses.root),
   };
 
+  const containerNode = getContainerNode(container);
   const defaultTemplates = {
     default: ({ items }) => JSON.stringify(items, null, 2),
   };
@@ -90,16 +92,19 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
     ...userTemplates,
   };
 
-  const containerNode = getContainerNode(container);
-  const makeWidget = connectQueryRules(renderer, () => {
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    renderState: {},
+    templates,
+  });
+
+  const makeWidget = connectQueryRules(specializedRenderer, () => {
     render(null, containerNode);
   });
 
   return {
     ...makeWidget({
-      container: containerNode,
-      cssClasses,
-      templates,
       transformItems,
     }),
     $$widgetType: 'ais.queryRuleCustomData',

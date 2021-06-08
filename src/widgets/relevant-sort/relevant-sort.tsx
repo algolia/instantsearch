@@ -7,7 +7,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Renderer, Template } from '../../types';
+import { WidgetFactory, Template } from '../../types';
 import connectRelevantSort, {
   RelevantSortConnectorParams,
   RelevantSortRenderState,
@@ -17,6 +17,7 @@ import RelevantSort, {
   RelevantSortComponentCSSClasses,
 } from '../../components/RelevantSort/RelevantSort';
 import defaultTemplates from './defaultTemplates';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type RelevantSortCSSClasses = {
   root?: string;
@@ -35,12 +36,6 @@ type RelevantSortWidgetParams = {
   templates?: RelevantSortTemplates;
 };
 
-type RelevantSortRendererWidgetParams = {
-  container: HTMLElement;
-  cssClasses: RelevantSortCSSClasses;
-  templates: RelevantSortTemplates;
-} & RelevantSortWidgetParams;
-
 type RelevantSortWidget = WidgetFactory<
   RelevantSortWidgetDescription & { $$widgetType: 'ais.relevantSort' },
   RelevantSortConnectorParams,
@@ -53,21 +48,31 @@ const withUsage = createDocumentationMessageGenerator({
 
 const suit = component('RelevantSort');
 
-const renderer: Renderer<
-  RelevantSortRenderState,
-  RelevantSortRendererWidgetParams
-> = ({ isRelevantSorted, isVirtualReplica, refine, widgetParams }) => {
-  const { container, cssClasses, templates } = widgetParams;
-
+const renderer = ({
+  containerNode,
+  cssClasses,
+  templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: RelevantSortComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<RelevantSortTemplates>;
+  };
+  templates: RelevantSortTemplates;
+}) => ({
+  isRelevantSorted,
+  isVirtualReplica,
+  refine,
+}: RelevantSortRenderState) => {
   render(
     <RelevantSort
-      cssClasses={cssClasses as RelevantSortComponentCSSClasses}
+      cssClasses={cssClasses}
       templates={templates}
       isRelevantSorted={isRelevantSorted}
       isVirtualReplica={isVirtualReplica}
       refine={refine}
     />,
-    container
+    containerNode
   );
 };
 
@@ -82,28 +87,30 @@ const relevantSort: RelevantSortWidget = widgetParams => {
     throw new Error(withUsage('The `container` option is required.'));
   }
 
+  const containerNode = getContainerNode(container);
   const cssClasses: RelevantSortComponentCSSClasses = {
     root: cx(suit(), userCssClasses.root),
     text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
     button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
   };
-
   const templates: RelevantSortTemplates = {
     ...defaultTemplates,
     ...userTemplates,
   };
 
-  const containerNode = getContainerNode(container);
-  const makeWidget = connectRelevantSort(renderer, () => {
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    renderState: {},
+    templates,
+  });
+
+  const makeWidget = connectRelevantSort(specializedRenderer, () => {
     render(null, containerNode);
   });
 
   return {
-    ...makeWidget({
-      container: containerNode,
-      cssClasses,
-      templates,
-    }),
+    ...makeWidget({}),
     $$widgetType: 'ais.relevantSort',
   };
 };
