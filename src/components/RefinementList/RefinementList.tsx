@@ -14,8 +14,8 @@ import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connect
 import { SearchBoxTemplates } from '../../widgets/search-box/search-box';
 import { ComponentCSSClasses, CreateURL, Templates } from '../../types';
 import { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
-import { RatingMenuRendererCSSClasses } from '../../widgets/rating-menu/rating-menu';
-import { HierarchicalMenuRendererCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
+import { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
+import { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 
 type RefinementListOptionalClasses =
   | 'noResults'
@@ -37,8 +37,10 @@ type RefinementListRequired = Omit<
 
 export type RefinementListComponentCSSClasses = RefinementListRequired & {
   searchable?: SearchBoxComponentCSSClasses;
-} & Partial<Pick<RatingMenuRendererCSSClasses, 'disabledItem'>> &
-  Partial<Pick<HierarchicalMenuRendererCSSClasses, 'childList' | 'parentItem'>>;
+} & Partial<Pick<RatingMenuComponentCSSClasses, 'disabledItem'>> &
+  Partial<
+    Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
+  >;
 
 type FacetValue = TRefinementListItem | HierarchicalMenuItem;
 type FacetValues = TRefinementListItem[] | HierarchicalMenuItem[];

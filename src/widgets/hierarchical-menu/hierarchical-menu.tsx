@@ -98,7 +98,7 @@ export type HierarchicalMenuCSSClasses = {
   disabledShowMore?: string | string[];
 };
 
-export type HierarchicalMenuRendererCSSClasses = ComponentCSSClasses<
+export type HierarchicalMenuComponentCSSClasses = ComponentCSSClasses<
   HierarchicalMenuCSSClasses
 >;
 
@@ -180,7 +180,7 @@ const renderer = ({
   templates,
   renderState,
 }: {
-  cssClasses: HierarchicalMenuRendererCSSClasses;
+  cssClasses: HierarchicalMenuComponentCSSClasses;
   containerNode: HTMLElement;
   showMore: boolean;
   templates: Partial<HierarchicalMenuTemplates>;

@@ -93,7 +93,7 @@ export type NumericMenuCSSClasses = {
   radio?: string | string[];
 };
 
-export type NumericMenuRendererCSSClasses = ComponentCSSClasses<
+export type NumericMenuComponentCSSClasses = ComponentCSSClasses<
   NumericMenuCSSClasses
 >;
 
@@ -133,7 +133,7 @@ export type NumericMenuTemplates = {
     /**
      * The CSS classes provided to the widget.
      */
-    cssClasses: NumericMenuRendererCSSClasses;
+    cssClasses: NumericMenuComponentCSSClasses;
   }>;
 };
 

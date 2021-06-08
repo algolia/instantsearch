@@ -83,7 +83,7 @@ export type RatingMenuCSSClasses = {
   count?: string | string[];
 };
 
-export type RatingMenuRendererCSSClasses = ComponentCSSClasses<
+export type RatingMenuComponentCSSClasses = ComponentCSSClasses<
   RatingMenuCSSClasses
 >;
 
@@ -117,7 +117,7 @@ const renderer = ({
   renderState,
 }: {
   containerNode: HTMLElement;
-  cssClasses: RatingMenuRendererCSSClasses;
+  cssClasses: RatingMenuComponentCSSClasses;
   templates: Partial<RatingMenuTemplates>;
   renderState: { templateProps?: PreparedTemplateProps<RatingMenuTemplates> };
 }) => (

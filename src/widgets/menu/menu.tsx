@@ -89,7 +89,7 @@ export type MenuTemplates = {
   }>;
 };
 
-export type MenuRendererCSSClasses = ComponentCSSClasses<MenuCSSClasses>;
+export type MenuComponentCSSClasses = ComponentCSSClasses<MenuCSSClasses>;
 
 export type MenuWidgetParams = {
   /**
@@ -114,7 +114,7 @@ const renderer = ({
   showMore,
 }: {
   containerNode: HTMLElement;
-  cssClasses: MenuRendererCSSClasses;
+  cssClasses: MenuComponentCSSClasses;
   renderState: { templateProps?: PreparedTemplateProps<MenuTemplates> };
   templates: Partial<MenuTemplates>;
   showMore?: boolean;
