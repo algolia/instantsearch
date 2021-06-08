@@ -2,7 +2,7 @@ import hogan, { HoganOptions, Template } from 'hogan.js';
 import { Templates, HoganHelpers } from '../../types';
 import { BindEventForHits } from './createSendEventForHits';
 
-type ActualHoganHelpers = {
+type TransformedHoganHelpers = {
   [helper: string]: () => (text: string) => string;
 };
 
