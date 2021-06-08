@@ -1,21 +1,10 @@
 import uniq from './uniq';
-import { Templates } from '../../types';
+import { HoganHelpers, Templates } from '../../types';
+import { HoganOptions } from 'hogan.js';
 
 type TemplatesConfig = {
-  helpers?: Record<
-    string,
-    (text: string, render: (value: any) => string) => string
-  >;
-  // https://github.com/twitter/hogan.js/#compilation-options
-  compileOptions?: {
-    asString?: boolean;
-    sectionTags?: Array<{
-      o?: string;
-      c?: string;
-    }>;
-    delimiters?: string;
-    disableLambda?: boolean;
-  };
+  helpers?: HoganHelpers;
+  compileOptions?: HoganOptions;
 };
 
 export type PreparedTemplateProps<TTemplates extends Templates> = {
