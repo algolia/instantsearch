@@ -27,19 +27,19 @@ export type MenuSelectCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root?: string;
+  root?: string | string[];
   /**
    * CSS class to add to the root when there are no items to display
    */
-  noRefinementRoot?: string;
+  noRefinementRoot?: string | string[];
   /**
    * CSS class to add to the select element.
    */
-  select?: string;
+  select?: string | string[];
   /**
    * CSS class to add to the option element.
    */
-  option?: string;
+  option?: string | string[];
 };
 
 export type MenuSelectTemplates = {

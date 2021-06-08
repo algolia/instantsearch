@@ -30,43 +30,43 @@ export type MenuCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root?: string;
+  root?: string | string[];
   /**
    * CSS class to add to the root element when no refinements.
    */
-  noRefinementRoot?: string;
+  noRefinementRoot?: string | string[];
   /**
    * CSS class to add to the list element.
    */
-  list?: string;
+  list?: string | string[];
   /**
    * CSS class to add to each item element.
    */
-  item?: string;
+  item?: string | string[];
   /**
    * CSS class to add to each selected item element.
    */
-  selectedItem?: string;
+  selectedItem?: string | string[];
   /**
    * CSS class to add to each link (when using the default template).
    */
-  link?: string;
+  link?: string | string[];
   /**
    * CSS class to add to each label (when using the default template).
    */
-  label?: string;
+  label?: string | string[];
   /**
    * CSS class to add to each count element (when using the default template).
    */
-  count?: string;
+  count?: string | string[];
   /**
    * CSS class to add to the show more button.
    */
-  showMore?: string;
+  showMore?: string | string[];
   /**
    * CSS class to add to the disabled show more button.
    */
-  disabledShowMore?: string;
+  disabledShowMore?: string | string[];
 };
 
 export type MenuTemplates = {
