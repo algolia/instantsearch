@@ -15,7 +15,7 @@ function transformHelpersToHogan(
   compileOptions?: HoganOptions,
   data?: Record<string, any>
 ) {
-  return Object.keys(helpers).reduce<ActualHoganHelpers>(
+  return Object.keys(helpers).reduce< TransformedHoganHelpers>(
     (acc, helperKey) => ({
       ...acc,
       [helperKey]() {
