@@ -1,3 +1,12 @@
+## [6.11.1](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.11.1) (2021-06-09)
+
+
+### Bug Fixes
+
+* **RefinementList:** prevent searchable component to refine on empty list ([#3059](https://github.com/algolia/react-instantsearch/issues/3059)) ([04f3644](https://github.com/algolia/react-instantsearch/commit/04f3644))
+
+
+
 # [6.11.0](https://github.com/algolia/react-instantsearch/compare/v6.10.3...v6.11.0) (2021-05-04)
 
 
