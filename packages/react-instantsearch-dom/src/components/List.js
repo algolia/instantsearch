@@ -131,7 +131,7 @@ class List extends Component {
           onSubmit={e => {
             e.preventDefault();
             e.stopPropagation();
-            if (isFromSearch) {
+            if (isFromSearch && items.length > 0) {
               selectItem(items[0], this.resetQuery);
             }
           }}
