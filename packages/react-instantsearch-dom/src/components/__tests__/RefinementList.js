@@ -330,5 +330,34 @@ describe('RefinementList', () => {
 
       wrapper.unmount();
     });
+
+    it('hit enter on an empty search values results list should do nothing', () => {
+      const emptyRefinementList = (
+        <RefinementList
+          refine={refine}
+          searchable
+          searchForItems={searchForItems}
+          createURL={() => '#'}
+          items={[]}
+          isFromSearch={true}
+          canRefine={true}
+        />
+      );
+
+      refine.mockClear();
+      const wrapper = mount(emptyRefinementList);
+      const input = wrapper.find('input[type="search"]');
+      input.props().value = 'white';
+
+      wrapper.find('form').simulate('submit');
+
+      expect(refine.mock.calls).toHaveLength(0);
+      expect(input.props().value).toBe('white');
+
+      const selectedRefinements = wrapper.find('li');
+      expect(selectedRefinements).toHaveLength(0);
+
+      wrapper.unmount();
+    });
   });
 });
