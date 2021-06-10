@@ -1,3 +1,6 @@
+3.4.5 - 2021-06-10
+ * feat(ts): document renderingContent (#823) https://github.com/algolia/algoliasearch-helper-js/commit/7b176a7bbc38de193ac1c6a34dacde63059e4b3b
+
 3.4.4 - 2021-02-16
  * fix(ts): add rootPath to HierarchicalFacet https://github.com/algolia/algoliasearch-helper-js/commit/06fb959f119cc0e7b91268154c01e0f6f4aa3ba1
 
