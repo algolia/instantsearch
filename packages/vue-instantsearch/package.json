@@ -19,15 +19,17 @@
   "version": "3.7.0",
   "files": [
     "dist",
-    "src",
-    "es"
+    "src"
   ],
-  "main": "dist/vue-instantsearch.common.js",
-  "module": "es/src/instantsearch.js",
+  "main": "dist/vue2/cjs",
+  "module": "dist/vue2/es",
   "sideEffects": false,
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
-    "build": "rm -rf dist es && rollup -c",
+    "prebuild": "rm -rf dist",
+    "build": "yarn build:vue2 && yarn build:vue3",
+    "build:vue2": "./scripts/build-vue2.sh",
+    "build:vue3": "./scripts/build-vue3.sh",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook:build": "build-storybook -c .storybook -o website/stories",
     "examples:build": "yarn build && ./examples/build.sh",
@@ -47,8 +49,8 @@
   "dependencies": {
     "algoliasearch-helper": "^3.1.0",
     "instantsearch.js": "^4.20.0",
-    "vue-demi": "npm:@eunjae-lee/vue-demi@0.9.3",
-    "mitt": "^2.1.0"
+    "mitt": "^2.1.0",
+    "vue-demi": "npm:@eunjae-lee/vue-demi@0.10.4"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.32.0 < 5",
@@ -60,6 +62,7 @@
     "@storybook/addon-knobs": "3.4.11",
     "@storybook/addon-options": "3.4.11",
     "@storybook/vue": "3.4.11",
+    "@vue/compiler-sfc": "3.0.11",
     "@vue/test-utils": "1.0.0-beta.25",
     "@wdio/cli": "^5.11.13",
     "@wdio/jasmine-framework": "^5.11.0",
@@ -98,7 +101,8 @@
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.1.0",
     "rollup-plugin-terser": "4.0.4",
-    "rollup-plugin-vue": "3.0.0",
+    "rollup-plugin-vue2": "npm:rollup-plugin-vue@3.0.0",
+    "rollup-plugin-vue3": "npm:rollup-plugin-vue@6.0.0",
     "rollup-watch": "4.3.1",
     "shipjs": "0.20.0-beta.3",
     "vue": "2.5.18",
@@ -115,12 +119,20 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/vue-instantsearch.js",
+      "path": "./dist/vue2/umd/index.js",
       "maxSize": "53.00 kB"
     },
     {
-      "path": "./dist/vue-instantsearch.common.js",
+      "path": "./dist/vue2/cjs/index.js",
       "maxSize": "16.50 kB"
+    },
+    {
+      "path": "./dist/vue3/umd/index.js",
+      "maxSize": "54.50 kB"
+    },
+    {
+      "path": "./dist/vue3/cjs/index.js",
+      "maxSize": "18.00 kB"
     }
   ],
   "resolutions": {
