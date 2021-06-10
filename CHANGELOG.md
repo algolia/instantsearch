@@ -1,3 +1,18 @@
+# [4.8.0](https://github.com/algolia/create-instantsearch-app/compare/4.7.0...4.8.0) (2021-06-10)
+
+
+### Bug Fixes
+
+* type error on react widget template ([b5d296c](https://github.com/algolia/create-instantsearch-app/commit/b5d296cad30a73f58d7e16baf0ab3bf72682c70e))
+* update e2e snapshots ([7319133](https://github.com/algolia/create-instantsearch-app/commit/7319133350f902a330d8322eb02abdc341a7cca9))
+
+
+### Features
+
+* **template:** add widget template for react ([#456](https://github.com/algolia/create-instantsearch-app/issues/456)) ([cf2c81b](https://github.com/algolia/create-instantsearch-app/commit/cf2c81bf76601dea82556f89df2846321384b1b9))
+
+
+
 # [4.7.0](https://github.com/algolia/create-instantsearch-app/compare/4.6.0...4.7.0) (2021-05-19)
 
 
