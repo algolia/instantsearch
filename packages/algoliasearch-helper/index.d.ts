@@ -1235,6 +1235,45 @@ declare namespace algoliasearchHelper {
     userData: any[];
 
     /**
+     * Content defining how the search interface should be rendered.
+     * This is set via the settings for a default value and can be overridden via rules
+     */
+    renderingContent?: {
+      /**
+       * defining how facets should be ordered
+       */
+      facetOrdering?: {
+        /**
+         * the ordering of facets (widgets)
+         */
+        facet?: {
+          /**
+           * Ordered facet lists
+           */
+          order: string[];
+        };
+        /**
+         * the ordering of facet values, within an individual list
+         */
+        values?: {
+          [facet: string]: {
+            /**
+             * Ordered facet values
+             */
+            order: string[];
+            /**
+             * How to display the remaining items.
+             * - facet count (descending)
+             * - alphabetical (ascending)
+             * - hidden (show only pinned values)
+             */
+            sortRemainingBy: 'count' | 'alpha' | 'hidden';
+          };
+        };
+      };
+    };
+
+    /**
      * queryID is the unique identifier of the query used to generate the current search results.
      * This value is only available if the `clickAnalytics` search parameter is set to `true`.
      */
