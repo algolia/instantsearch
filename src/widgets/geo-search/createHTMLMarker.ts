@@ -131,8 +131,6 @@ const createHTMLMarker = (
     }
   }
 
-  // we have to cast this to a regular OverlayView to prevent internal class being exposed
-  // which TypeScript doesn't allow.
   return HTMLMarker;
 };
 

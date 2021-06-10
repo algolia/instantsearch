@@ -34,23 +34,23 @@ export type GeoSearchTemplates = {
 
 export type GeoSearchCSSClasses = {
   /** The root div of the widget. */
-  root: string | string[];
+  root?: string | string[];
   /** The map container of the widget. */
-  map: string | string[];
+  map?: string | string[];
   /** The control element of the widget. */
-  control: string | string[];
+  control?: string | string[];
   /** The label of the control element. */
-  label: string | string[];
+  label?: string | string[];
   /** The selected label of the control element. */
-  selectedLabel: string | string[];
+  selectedLabel?: string | string[];
   /** The input of the control element. */
-  input: string | string[];
+  input?: string | string[];
   /** The redo search button. */
-  redo: string | string[];
+  redo?: string | string[];
   /** The disabled redo search button. */
-  disabledRedo: string | string[];
+  disabledRedo?: string | string[];
   /** The reset refinement button. */
-  reset: string | string[];
+  reset?: string | string[];
 };
 
 export type GeoSearchMarker<TOptions> = {
@@ -94,7 +94,7 @@ export type GeoSearchWidgetParams = {
   /** Templates to use for the widget. */
   templates?: Partial<GeoSearchTemplates>;
   /** CSS classes to add to the wrapping elements. */
-  cssClasses?: Partial<GeoSearchCSSClasses>;
+  cssClasses?: GeoSearchCSSClasses;
   /**
    * Options for customize the built-in Google Maps marker. This option is
    * ignored when the `customHTMLMarker` is provided.
