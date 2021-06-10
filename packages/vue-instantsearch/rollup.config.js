@@ -39,15 +39,15 @@ const plugins = [
   filesize(),
 ];
 
+const external = id =>
+  ['algoliasearch-helper', 'instantsearch.js', 'vue', 'mitt', 'vue-demi'].some(
+    dep => id === dep || id.startsWith(`${dep}/`)
+  );
+
 export default [
   {
     input: 'src/instantsearch.js',
-    external: [
-      'algoliasearch-helper',
-      'instantsearch.js/es',
-      'instantsearch.js/es/connectors',
-      'vue',
-    ],
+    external,
     output: [
       {
         sourcemap: true,
@@ -60,12 +60,7 @@ export default [
   },
   {
     input: 'src/instantsearch.js',
-    external: [
-      'algoliasearch-helper',
-      'instantsearch.js/es',
-      'instantsearch.js/es/connectors',
-      'vue',
-    ],
+    external,
     output: [
       {
         sourcemap: true,
