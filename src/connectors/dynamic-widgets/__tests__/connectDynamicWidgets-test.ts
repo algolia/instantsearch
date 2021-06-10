@@ -39,17 +39,12 @@ describe('connectDynamicWidgets', () => {
       `);
     });
 
-    it('correct usage', () => {
+    it('minimal usage', () => {
       expect(() =>
-        // @ts-expect-error
         EXPERIMENTAL_connectDynamicWidgets(() => {})({
           widgets: [],
         })
-      ).toThrowErrorMatchingInlineSnapshot(`
-        "the \`transformItems\` option is required to be a function.
-
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
-      `);
+      ).not.toThrow();
     });
 
     it('transformItems', () => {
