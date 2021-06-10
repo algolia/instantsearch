@@ -1,3 +1,4 @@
+import { isVue3 } from 'vue-demi';
 import mitt from 'mitt';
 
 export const PANEL_EMITTER_NAMESPACE = 'instantSearchPanelEmitter';
@@ -28,7 +29,7 @@ export const createPanelProviderMixin = () => ({
       this.updateCanRefine(value);
     });
   },
-  beforeDestroy() {
+  [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
     this.emitter.all.clear();
   },
   methods: {

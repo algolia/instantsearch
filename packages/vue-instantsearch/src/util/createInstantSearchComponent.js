@@ -1,7 +1,7 @@
 import { createSuitMixin } from '../mixins/suit';
 import { version } from '../../package.json'; // rollup does pick only what needed from json
 import { _objectSpread } from './polyfills';
-import { version as vueVersion } from 'vue-demi';
+import { isVue3, version as vueVersion } from 'vue-demi';
 
 export const createInstantSearchComponent = component =>
   _objectSpread(
@@ -68,7 +68,7 @@ export const createInstantSearchComponent = component =>
           }
         });
       },
-      beforeDestroy() {
+      [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
         if (this.instantSearchInstance.started) {
           this.instantSearchInstance.dispose();
         }

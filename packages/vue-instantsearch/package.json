@@ -132,7 +132,7 @@
     },
     {
       "path": "./dist/vue3/cjs/index.js",
-      "maxSize": "18.00 kB"
+      "maxSize": "18.25 kB"
     }
   ],
   "resolutions": {
