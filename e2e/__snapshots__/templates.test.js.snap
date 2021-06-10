@@ -5821,7 +5821,7 @@ exports[`Templates React InstantSearch widget File content: src/lib/component.ts
 import type { ProvidedProps } from './connector'
 
 type Props = ProvidedProps & {
-  refine: () => {}
+  refine: () => void;
 };
 
 export const ReactInstantsearchAppComponent = ({}: Props) => {
