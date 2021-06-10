@@ -1,10 +1,20 @@
-import { render } from 'preact';
-import algoliasearchHelper from 'algoliasearch-helper';
+/* global google */
+import { render as preactRender } from 'preact';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import createHTMLMarker from '../createHTMLMarker';
 import renderer from '../GeoSearchRenderer';
 import geoSearch from '../geo-search';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import {
+  createDisposeOptions,
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
+const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -54,8 +64,8 @@ describe('GeoSearch', () => {
   const createFakeGoogleReference = ({
     mapInstance = createFakeMapInstance(),
     markerInstance = createFakeMarkerInstance(),
-  } = {}) => ({
-    maps: {
+  } = {}): typeof google => ({
+    maps: ({
       LatLng: jest.fn(),
       LatLngBounds: jest.fn((southWest, northEast) => ({
         northEast,
@@ -99,30 +109,29 @@ describe('GeoSearch', () => {
           })),
         })),
       },
-    },
+    } as unknown) as typeof google.maps,
   });
 
   const createContainer = () => document.createElement('div');
   const createFakeInstantSearch = () =>
     createInstantSearch({ templatesConfig: undefined });
   const createFakeHelper = () =>
-    algoliasearchHelper(
-      {
-        search() {
-          return Promise.resolve({ results: [{}] });
-        },
-      },
-      'indexName'
-    );
+    algoliasearchHelper(createSearchClient(), 'indexName');
 
-  const lastRenderArgs = fn => fn.mock.calls[fn.mock.calls.length - 1][0];
-  const lastRenderState = fn => lastRenderArgs(fn).widgetParams.renderState;
+  const lastRenderArgs = (fn: jest.Mock) =>
+    fn.mock.calls[fn.mock.calls.length - 1][0];
+  const lastRenderState = (fn: jest.Mock) =>
+    lastRenderArgs(fn).widgetParams.renderState;
 
-  const simulateMapReadyEvent = google => {
-    google.maps.event.addListenerOnce.mock.calls[0][2]();
+  const simulateMapReadyEvent = (google: typeof window['google']) => {
+    castToJestMock(google.maps.event.addListenerOnce).mock.calls[0][2]();
   };
 
-  const simulateEvent = (fn, eventName, event) => {
+  const simulateEvent = (
+    fn: { addListener: jest.Mock },
+    eventName: string,
+    event?: any
+  ) => {
     fn.addListener.mock.calls.find(call => call.includes(eventName))[1](event);
   };
 
@@ -135,6 +144,7 @@ describe('GeoSearch', () => {
     it('throws without render function', () => {
       expect(() => {
         geoSearch({
+          // @ts-expect-error
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -156,24 +166,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       container,
     });
 
-    widget.init({
-      instantSearchInstance,
-      helper,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        instantSearchInstance,
+        helper,
+        state: helper.state,
+      })
+    );
 
-    widget.render({
-      helper,
-      instantSearchInstance,
-      results: {
-        hits: [],
-      },
-    });
+    widget.render!(
+      createRenderOptions({
+        helper,
+        instantSearchInstance,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+          }),
+        ]),
+      })
+    );
 
     const [firstRender] = render.mock.calls;
 
     expect(container.innerHTML).toMatchSnapshot();
-    expect(firstRender[0].props).toMatchSnapshot();
+    expect((firstRender[0] as any).props).toMatchSnapshot();
     expect(firstRender[1]).toBe(container.querySelector('.ais-GeoSearch-tree'));
   });
 
@@ -199,24 +215,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
-    widget.init({
-      helper,
-      instantSearchInstance,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      })
+    );
 
-    widget.render({
-      helper,
-      instantSearchInstance,
-      results: {
-        hits: [],
-      },
-    });
+    widget.render!(
+      createRenderOptions({
+        helper,
+        instantSearchInstance,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+          }),
+        ]),
+      })
+    );
 
     const [firstRender] = render.mock.calls;
 
     expect(container.innerHTML).toMatchSnapshot();
-    expect(firstRender[0].props).toMatchSnapshot();
+    expect((firstRender[0] as any).props).toMatchSnapshot();
     expect(firstRender[1]).toBe(container.querySelector('.ais-GeoSearch-tree'));
   });
 
@@ -234,23 +256,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
-    widget.init({
-      helper,
-      instantSearchInstance,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      })
+    );
 
-    widget.render({
-      helper,
-      instantSearchInstance,
-      results: {
-        hits: [],
-      },
-    });
+    widget.render!(
+      createRenderOptions({
+        helper,
+        instantSearchInstance,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+          }),
+        ]),
+      })
+    );
 
     const [firstRender] = render.mock.calls;
 
-    expect(firstRender[0].props.templateProps.templates).toEqual({
+    expect((firstRender[0] as any).props.templateProps.templates).toEqual({
       HTMLMarker: '<p>Your custom HTML Marker</p>',
       reset: 'Clear the map refinement',
       toggle: 'Search when the map move',
@@ -269,11 +297,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       container,
     });
 
-    widget.init({
-      helper,
-      instantSearchInstance,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      })
+    );
 
     expect(googleReference.maps.Map).toHaveBeenCalledWith(expect.anything(), {
       mapTypeControl: false,
@@ -296,19 +326,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       googleReference,
       container,
       mapOptions: {
+        // @ts-expect-error wrong value
         otherMapSpecific: 'value',
         clickableIcons: true,
         zoomControlOptions: {
-          position: 'right:bottom',
+          position: 'right:bottom' as any,
         },
       },
     });
 
-    widget.init({
-      helper,
-      instantSearchInstance,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      })
+    );
 
     expect(googleReference.maps.Map).toHaveBeenCalledWith(expect.anything(), {
       otherMapSpecific: 'value',
@@ -333,26 +366,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       container,
     });
 
-    widget.init({
-      helper,
-      instantSearchInstance,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      })
+    );
 
-    widget.render({
-      helper,
-      instantSearchInstance,
-      results: {
-        hits: [],
-      },
-    });
+    widget.render!(
+      createRenderOptions({
+        helper,
+        instantSearchInstance,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+          }),
+        ]),
+      })
+    );
 
     expect(render).toHaveBeenCalledTimes(1);
 
-    widget.dispose({
-      helper,
-      state: helper.state,
-    });
+    widget.dispose!(
+      createDisposeOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(render).toHaveBeenCalledWith(null, container);
@@ -371,11 +412,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
       expect(googleReference.maps.event.addListenerOnce).toHaveBeenCalledWith(
         mapInstance,
@@ -422,11 +465,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
       simulateMapReadyEvent(googleReference);
 
@@ -458,11 +503,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
       simulateMapReadyEvent(googleReference);
 
@@ -498,11 +545,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
       simulateMapReadyEvent(googleReference);
 
@@ -531,11 +580,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           container,
         });
 
-        widget.init({
-          helper,
-          instantSearchInstance,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            instantSearchInstance,
+            state: helper.state,
+          })
+        );
 
         simulateMapReadyEvent(googleReference);
 
@@ -544,13 +595,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.any(Function)
         );
 
-        widget.render({
-          helper,
-          instantSearchInstance,
-          results: {
-            hits: [],
-          },
-        });
+        widget.render!(
+          createRenderOptions({
+            helper,
+            instantSearchInstance,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                hits: [],
+              }),
+            ]),
+          })
+        );
 
         expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
           false
@@ -573,11 +628,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           container,
         });
 
-        widget.init({
-          helper,
-          instantSearchInstance,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            instantSearchInstance,
+            state: helper.state,
+          })
+        );
 
         simulateMapReadyEvent(googleReference);
 
@@ -586,13 +643,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.any(Function)
         );
 
-        widget.render({
-          helper,
-          instantSearchInstance,
-          results: {
-            hits: [],
-          },
-        });
+        widget.render!(
+          createRenderOptions({
+            helper,
+            instantSearchInstance,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                hits: [],
+              }),
+            ]),
+          })
+        );
 
         expect(lastRenderState(renderer).isPendingRefine).toBe(false);
 
@@ -614,11 +675,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           enableRefineOnMapMove: false,
         });
 
-        widget.init({
-          helper,
-          instantSearchInstance,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            instantSearchInstance,
+            state: helper.state,
+          })
+        );
 
         simulateMapReadyEvent(googleReference);
 
@@ -627,13 +690,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.any(Function)
         );
 
-        widget.render({
-          helper,
-          instantSearchInstance,
-          results: {
-            hits: [],
-          },
-        });
+        widget.render!(
+          createRenderOptions({
+            helper,
+            instantSearchInstance,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                hits: [],
+              }),
+            ]),
+          })
+        );
 
         expect(lastRenderState(renderer).isPendingRefine).toBe(false);
 
@@ -654,11 +721,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           container,
         });
 
-        widget.init({
-          helper,
-          instantSearchInstance,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            instantSearchInstance,
+            state: helper.state,
+          })
+        );
 
         simulateMapReadyEvent(googleReference);
 
@@ -696,11 +765,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           enableRefine: false,
         });
 
-        widget.init({
-          helper,
-          instantSearchInstance,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            instantSearchInstance,
+            state: helper.state,
+          })
+        );
 
         simulateMapReadyEvent(googleReference);
 
@@ -736,29 +807,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
-      expect(googleReference.maps.Marker.mock.calls).toEqual([
-        [expect.objectContaining({ __id: 123 })],
-        [expect.objectContaining({ __id: 456 })],
-        [expect.objectContaining({ __id: 789 })],
+      expect(
+        ((googleReference.maps.Marker as unknown) as jest.Mock).mock.calls
+      ).toEqual([
+        [expect.objectContaining({ __id: '123' })],
+        [expect.objectContaining({ __id: '456' })],
+        [expect.objectContaining({ __id: '789' })],
       ]);
     });
 
@@ -778,29 +857,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
-      expect(googleReference.maps.Marker.mock.calls).toEqual([
-        [expect.objectContaining({ __id: 123, title: 'ID: 123' })],
-        [expect.objectContaining({ __id: 456, title: 'ID: 456' })],
-        [expect.objectContaining({ __id: 789, title: 'ID: 789' })],
+      expect(
+        ((googleReference.maps.Marker as unknown) as jest.Mock).mock.calls
+      ).toEqual([
+        [expect.objectContaining({ __id: '123', title: 'ID: 123' })],
+        [expect.objectContaining({ __id: '456', title: 'ID: 456' })],
+        [expect.objectContaining({ __id: '789', title: 'ID: 789' })],
       ]);
     });
 
@@ -829,23 +916,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 234, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '234', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       // 2 events for each hit
       expect(markerInstance.addListener).toHaveBeenCalledTimes(6);
@@ -858,15 +951,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       expect(onClick).toHaveBeenCalledWith({
         event: { type: 'click' },
-        item: { objectID: 123, _geoloc: true },
-        marker: expect.objectContaining({ __id: 123 }),
+        item: { objectID: '123', _geoloc: true },
+        marker: expect.objectContaining({ __id: '123' }),
         map: mapInstance,
       });
 
       expect(onMouseOver).toHaveBeenCalledWith({
         event: { type: 'mouseover' },
-        item: { objectID: 123, _geoloc: true },
-        marker: expect.objectContaining({ __id: 123 }),
+        item: { objectID: '123', _geoloc: true },
+        marker: expect.objectContaining({ __id: '123' }),
         map: mapInstance,
       });
     });
@@ -878,7 +971,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const googleReference = createFakeGoogleReference();
       const HTMLMarker = jest.fn(createFakeMarkerInstance);
 
-      createHTMLMarker.mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
 
       const widget = geoSearch({
         googleReference,
@@ -886,47 +979,53 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         customHTMLMarker: true,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(HTMLMarker).toHaveBeenCalledTimes(3);
       expect(HTMLMarker.mock.calls).toEqual([
         [
           expect.objectContaining({
-            __id: 123,
+            __id: '123',
             template: '<p>Your custom HTML Marker</p>',
           }),
         ],
         [
           expect.objectContaining({
-            __id: 456,
+            __id: '456',
             template: '<p>Your custom HTML Marker</p>',
           }),
         ],
         [
           expect.objectContaining({
-            __id: 789,
+            __id: '789',
             template: '<p>Your custom HTML Marker</p>',
           }),
         ],
       ]);
 
-      createHTMLMarker.mockRestore();
+      (createHTMLMarker as jest.Mock).mockRestore();
     });
 
     it('expect to render custom HTML markers with given options', () => {
@@ -936,7 +1035,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const googleReference = createFakeGoogleReference();
       const HTMLMarker = jest.fn(createFakeMarkerInstance);
 
-      createHTMLMarker.mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
 
       const widget = geoSearch({
         googleReference,
@@ -951,50 +1050,56 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(HTMLMarker).toHaveBeenCalledTimes(3);
       expect(HTMLMarker.mock.calls).toEqual([
         [
           expect.objectContaining({
-            __id: 123,
+            __id: '123',
             title: 'ID: 123',
             template: '<p>123</p>',
           }),
         ],
         [
           expect.objectContaining({
-            __id: 456,
+            __id: '456',
             title: 'ID: 456',
             template: '<p>456</p>',
           }),
         ],
         [
           expect.objectContaining({
-            __id: 789,
+            __id: '789',
             title: 'ID: 789',
             template: '<p>789</p>',
           }),
         ],
       ]);
 
-      createHTMLMarker.mockRestore();
+      (createHTMLMarker as jest.Mock).mockRestore();
     });
 
     it('expect to render custom HTML markers with only the template provided', () => {
@@ -1004,7 +1109,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const googleReference = createFakeGoogleReference();
       const HTMLMarker = jest.fn(createFakeMarkerInstance);
 
-      createHTMLMarker.mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
 
       const widget = geoSearch({
         googleReference,
@@ -1014,47 +1119,53 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(HTMLMarker).toHaveBeenCalledTimes(3);
       expect(HTMLMarker.mock.calls).toEqual([
         [
           expect.objectContaining({
-            __id: 123,
+            __id: '123',
             template: '<p>123</p>',
           }),
         ],
         [
           expect.objectContaining({
-            __id: 456,
+            __id: '456',
             template: '<p>456</p>',
           }),
         ],
         [
           expect.objectContaining({
-            __id: 789,
+            __id: '789',
             template: '<p>789</p>',
           }),
         ],
       ]);
 
-      createHTMLMarker.mockRestore();
+      (createHTMLMarker as jest.Mock).mockRestore();
     });
 
     it('expect to render custom HTML markers with only the object provided', () => {
@@ -1064,7 +1175,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const googleReference = createFakeGoogleReference();
       const HTMLMarker = jest.fn(createFakeMarkerInstance);
 
-      createHTMLMarker.mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
 
       const widget = geoSearch({
         googleReference,
@@ -1076,50 +1187,56 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(HTMLMarker).toHaveBeenCalledTimes(3);
       expect(HTMLMarker.mock.calls).toEqual([
         [
           expect.objectContaining({
-            __id: 123,
+            __id: '123',
             title: 'ID: 123',
             template: '<p>Your custom HTML Marker</p>',
           }),
         ],
         [
           expect.objectContaining({
-            __id: 456,
+            __id: '456',
             title: 'ID: 456',
             template: '<p>Your custom HTML Marker</p>',
           }),
         ],
         [
           expect.objectContaining({
-            __id: 789,
+            __id: '789',
             title: 'ID: 789',
             template: '<p>Your custom HTML Marker</p>',
           }),
         ],
       ]);
 
-      createHTMLMarker.mockRestore();
+      (createHTMLMarker as jest.Mock).mockRestore();
     });
 
     it('expect to setup listeners on custom HTML markers', () => {
@@ -1137,7 +1254,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const onClick = jest.fn();
       const onMouseOver = jest.fn();
 
-      createHTMLMarker.mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
 
       const widget = geoSearch({
         googleReference,
@@ -1150,23 +1267,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 234, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '234', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       // 2 events for each hit
       expect(markerInstance.addListener).toHaveBeenCalledTimes(6);
@@ -1179,19 +1302,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       expect(onClick).toHaveBeenCalledWith({
         event: { type: 'click' },
-        item: { objectID: 123, _geoloc: true },
-        marker: expect.objectContaining({ __id: 123 }),
+        item: { objectID: '123', _geoloc: true },
+        marker: expect.objectContaining({ __id: '123' }),
         map: mapInstance,
       });
 
       expect(onMouseOver).toHaveBeenCalledWith({
         event: { type: 'mouseover' },
-        item: { objectID: 123, _geoloc: true },
-        marker: expect.objectContaining({ __id: 123 }),
+        item: { objectID: '123', _geoloc: true },
+        marker: expect.objectContaining({ __id: '123' }),
         map: mapInstance,
       });
 
-      createHTMLMarker.mockRestore();
+      (createHTMLMarker as jest.Mock).mockRestore();
     });
   });
 
@@ -1208,31 +1331,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(markerInstance.setMap).not.toHaveBeenCalled();
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
       expect(lastRenderState(renderer).markers).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ __id: 123 }),
-          expect.objectContaining({ __id: 456 }),
-          expect.objectContaining({ __id: 789 }),
+          expect.objectContaining({ __id: '123' }),
+          expect.objectContaining({ __id: '456' }),
+          expect.objectContaining({ __id: '789' }),
         ])
       );
     });
@@ -1249,19 +1378,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+            }),
+          ]),
+        })
+      );
 
       expect(markerInstance.setMap).not.toHaveBeenCalled();
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(0);
@@ -1280,47 +1415,57 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
-      googleReference.maps.Marker.mockClear();
+      ((googleReference.maps.Marker as unknown) as jest.Mock).mockClear();
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-            { objectID: 101, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+                { objectID: '101', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(markerInstance.setMap).not.toHaveBeenCalled();
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(1);
       expect(lastRenderState(renderer).markers).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ __id: 123 }),
-          expect.objectContaining({ __id: 456 }),
-          expect.objectContaining({ __id: 789 }),
-          expect.objectContaining({ __id: 101 }),
+          expect.objectContaining({ __id: '123' }),
+          expect.objectContaining({ __id: '456' }),
+          expect.objectContaining({ __id: '789' }),
+          expect.objectContaining({ __id: '101' }),
         ])
       );
     });
@@ -1337,38 +1482,48 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-            { objectID: 789, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+                { objectID: '789', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
-      googleReference.maps.Marker.mockClear();
+      ((googleReference.maps.Marker as unknown) as jest.Mock).mockClear();
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [{ objectID: '123', _geoloc: true }],
+            }),
+          ]),
+        })
+      );
 
       expect(googleReference.maps.Marker).not.toHaveBeenCalled();
       expect(markerInstance.setMap).toHaveBeenCalledTimes(2);
       expect(lastRenderState(renderer).markers).toEqual(
-        expect.arrayContaining([expect.objectContaining({ __id: 123 })])
+        expect.arrayContaining([expect.objectContaining({ __id: '123' })])
       );
     });
   });
@@ -1386,19 +1541,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [{ objectID: '123', _geoloc: true }],
+            }),
+          ]),
+        })
+      );
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
@@ -1410,16 +1571,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(2);
       expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
@@ -1459,21 +1624,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
       simulateMapReadyEvent(googleReference);
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [{ objectID: '123', _geoloc: true }],
+            }),
+          ]),
+        })
+      );
 
       expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
@@ -1505,16 +1676,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       // Simulate refine
       simulateEvent(mapInstance, 'idle');
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(2);
@@ -1538,6 +1713,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       // Simulate the current refinement
       helper.setQueryParameter(
         'insideBoundingBox',
+        // @ts-expect-error class uses strings
         '48.84174222399724, 2.367719162523599, 48.81614630305218, 2.284205902635904'
       );
 
@@ -1546,19 +1722,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [{ objectID: '123', _geoloc: true }],
+            }),
+          ]),
+        })
+      );
 
       expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
@@ -1571,16 +1753,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [
-            { objectID: 123, _geoloc: true },
-            { objectID: 456, _geoloc: true },
-          ],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { objectID: '123', _geoloc: true },
+                { objectID: '456', _geoloc: true },
+              ],
+            }),
+          ]),
+        })
+      );
 
       expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(2);
@@ -1606,19 +1792,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [{ objectID: '123', _geoloc: true }],
+            }),
+          ]),
+        })
+      );
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(mapInstance.setZoom).toHaveBeenCalledTimes(0);
@@ -1626,13 +1818,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+            }),
+          ]),
+        })
+      );
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
 
@@ -1663,32 +1859,42 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [{ objectID: '123', _geoloc: true }],
+            }),
+          ]),
+        })
+      );
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(mapInstance.setZoom).toHaveBeenCalledTimes(0);
       expect(mapInstance.setCenter).toHaveBeenCalledTimes(0);
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+            }),
+          ]),
+        })
+      );
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
 
@@ -1716,21 +1922,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        })
+      );
 
       simulateMapReadyEvent(googleReference);
 
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
+      widget.render!(
+        createRenderOptions({
+          helper,
+          instantSearchInstance,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [{ objectID: '123', _geoloc: true }],
+            }),
+          ]),
+        })
+      );
 
       expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);

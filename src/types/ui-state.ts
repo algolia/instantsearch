@@ -1,6 +1,6 @@
 import { AutocompleteWidgetDescription } from '../connectors/autocomplete/connectAutocomplete';
 import { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
-import { GeoSearchWidgetDescription } from '../connectors/geo-search/types';
+import { GeoSearchWidgetDescription } from '../connectors/geo-search/connectGeoSearch';
 import { HierarchicalMenuWidgetDescription } from '../connectors/hierarchical-menu/connectHierarchicalMenu';
 import { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
 import { InfiniteHitsWidgetDescription } from '../connectors/infinite-hits/connectInfiniteHits';
