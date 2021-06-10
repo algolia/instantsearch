@@ -2,6 +2,7 @@
 import { PlacesInstance } from 'places.js';
 import * as widgets from '..';
 import { Widget } from '../../types';
+import { IndexWidget } from '../index/index';
 
 /**
  * Checklist when adding a new widget
@@ -24,7 +25,7 @@ const entries = Object.entries as <TObject extends Record<string, unknown>>(
 type Widgets = typeof widgets;
 type WidgetNames = keyof typeof widgets;
 
-function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
+function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
   return entries(widgets).map(([name, widget]) => {
     return [name, initiateWidget(name, widget)];
   });
@@ -32,7 +33,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
   function initiateWidget<TName extends WidgetNames>(
     name: TName,
     widget: Widgets[TName]
-  ) {
+  ): Widget | IndexWidget {
     const container = document.createElement('div');
 
     switch (name) {
@@ -141,7 +142,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget]> {
         return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
       }
       default: {
-        return widget({ container, attribute: 'attr' });
+        return widget({ container, attribute: 'attr' }) as Widget;
       }
     }
   }
