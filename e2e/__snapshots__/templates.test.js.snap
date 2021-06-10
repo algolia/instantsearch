@@ -5536,6 +5536,450 @@ Array [
 ]
 `;
 
+exports[`Templates React InstantSearch widget File content: .eslintignore 1`] = `
+"/dist
+node_modules/"
+`;
+
+exports[`Templates React InstantSearch widget File content: .eslintrc.cjs 1`] = `
+"// eslint-disable-next-line import/no-commonjs
+module.exports = {
+  extends: ['algolia', 'algolia/jest', 'algolia/react', 'algolia/typescript'],
+  rules: {
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    'jest/expect-expect': 'off',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+};"
+`;
+
+exports[`Templates React InstantSearch widget File content: .gitignore 1`] = `
+"node_modules
+.DS_Store
+dist
+dist-ssr
+*.local"
+`;
+
+exports[`Templates React InstantSearch widget File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
+`;
+
+exports[`Templates React InstantSearch widget File content: README.md 1`] = `
+"# react-instantsearch-app
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
+
+
+
+## Install
+
+\`\`\`bash
+npm install @algolia/react-instantsearch-app
+# or
+yarn add @algolia/react-instantsearch-app
+\`\`\`
+
+## Widget
+
+### Usage
+
+\`\`\`jsx
+import instantsearch from 'instantsearch.js';
+import algoliasearch from 'algoliasearch/lite';
+import { ReactInstantsearchApp } from '@algolia/react-instantsearch-app';
+
+const searchClient = algoliasearch('appId', 'apiKey');
+
+const App = () => (
+  <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+    <ReactInstantsearchApp />
+  </InstantSearch>
+);
+\`\`\`
+
+## Connector
+
+### Usage
+
+\`\`\`jsx
+import { connectReactInstantsearchApp } from '@algolia/react-instantsearch-app';
+
+// 1. Create a render function
+const RenderReactInstantsearchApp = (renderOptions, isFirstRender) => {
+  // Rendering logic
+};
+
+// 2. Create the custom widget
+const CustomReactInstantsearchApp = connectReactInstantsearchApp(
+  RenderReactInstantsearchApp
+);
+
+// 3. Instantiate
+const App = () => (
+  <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+    <CustomReactInstantsearchApp />
+  </InstantSearch>
+);
+\`\`\`
+
+## Test
+
+\`\`\`bash
+npm test
+# or
+yarn test
+\`\`\`
+
+## Build
+
+\`\`\`bash
+npm run build
+# or
+yarn build
+\`\`\`
+
+## Release
+
+\`\`\`bash
+npm run release
+# or
+yarn release
+\`\`\`
+
+### First Release
+
+\`\`\`bash
+npm run release -- --first-release
+# or
+yarn release --first-release
+\`\`\`
+
+This will tag a release without bumping the version.
+
+When you are ready, push the git tag and run \`npm publish\`.
+
+If you want to publish it as a public scoped package, run \`npm publish --access public\` the first time.
+
+[To know more about \`standard-version\`, read this →](https://github.com/conventional-changelog/standard-version#cli-usage)"
+`;
+
+exports[`Templates React InstantSearch widget File content: babel.config.cjs 1`] = `
+"// eslint-disable-next-line import/no-commonjs
+module.exports = {
+  presets: [
+    ['@babel/preset-env', { targets: { node: 'current' } }],
+    '@babel/preset-react',
+    '@babel/preset-typescript',
+  ],
+};"
+`;
+
+exports[`Templates React InstantSearch widget File content: example/index.html 1`] = `
+"<!DOCTYPE html>
+<html lang=\\"en\\">
+  <head>
+    <meta charset=\\"UTF-8\\" />
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\" />
+    <title>@algolia/react-instantsearch-app | example</title>
+  </head>
+  <body>
+    <div id=\\"root\\"></div>
+    <script type=\\"module\\" src=\\"./index.tsx\\"></script>
+  </body>
+</html>"
+`;
+
+exports[`Templates React InstantSearch widget File content: example/index.tsx 1`] = `
+"import algoliasearch from 'algoliasearch/lite';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
+
+import { ReactInstantsearchApp } from '../src';
+
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
+
+ReactDOM.render(
+  <React.StrictMode>
+    <InstantSearch indexName=\\"instant_search\\" searchClient={searchClient}>
+      <ReactInstantsearchApp />
+      <SearchBox />
+      <Hits />
+    </InstantSearch>
+  </React.StrictMode>,
+  document.getElementById('root')
+);"
+`;
+
+exports[`Templates React InstantSearch widget File content: package.json 1`] = `
+"{
+  \\"name\\": \\"@algolia/react-instantsearch-app\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"description\\": \\"\\",
+  \\"keywords\\": [
+    \\"instantsearch-widget\\",
+    \\"instantsearch\\",
+    \\"react-instantsearch\\",
+    \\"react-instantsearch-widget-react-instantsearch-app\\",
+    \\"widget\\",
+    \\"connector\\",
+    \\"algolia\\"
+  ],
+  \\"license\\": \\"MIT\\",
+  \\"main\\": \\"./dist/index.cjs.js\\",
+  \\"module\\": \\"./dist/index.es.js\\",
+  \\"exports\\": {
+    \\"import\\": \\"./dist/index.es.js\\",
+    \\"require\\": \\"./dist/index.cjs.js\\"
+  },
+  \\"jsdelivr\\": \\"./dist/index.umd.js\\",
+  \\"unpkg\\": \\"./dist/index.umd.js\\",
+  \\"types\\": \\"./dist/index.d.ts\\",
+  \\"type\\": \\"module\\",
+  \\"files\\": [
+    \\"dist\\"
+  ],
+  \\"scripts\\": {
+    \\"start\\": \\"vite example\\",
+    \\"prebuild\\": \\"rm -rf dist\\",
+    \\"build\\": \\"vite build && npm run build:types\\",
+    \\"build:types\\": \\"tsc -p tsconfig.declaration.json\\",
+    \\"lint\\": \\"eslint --ext .js,.ts,.tsx .\\",
+    \\"lint:fix\\": \\"npm run lint --fix\\",
+    \\"test\\": \\"NODE_OPTIONS=--experimental-vm-modules jest\\",
+    \\"test:watch\\": \\"npm test -- --watch\\",
+    \\"test:types\\": \\"tsc\\",
+    \\"prerelease\\": \\"npm run build\\",
+    \\"release\\": \\"standard-version\\"
+  },
+  \\"partialDependencies\\": {}
+}"
+`;
+
+exports[`Templates React InstantSearch widget File content: src/index.tsx 1`] = `
+"export { connectReactInstantsearchApp } from './lib/connector';
+export { ReactInstantsearchAppComponent } from './lib/component';
+export { ReactInstantsearchApp } from './lib/widget';"
+`;
+
+exports[`Templates React InstantSearch widget File content: src/lib/__tests__/dummy-test.tsx 1`] = `
+"import { render } from '@testing-library/react';
+import React from 'react';
+import { InstantSearch, Hits } from 'react-instantsearch-dom';
+
+import { ReactInstantsearchApp } from '../widget';
+
+const runAllMicroTasks = (): Promise<void> => new Promise(setImmediate);
+
+describe('nothing', () => {
+  it('tests nothing', async () => {
+    const searchClient = {
+      search(_requests: any[]) {
+        return Promise.resolve({
+          results: [
+            {
+              hits: [
+                {
+                  objectID: 'a',
+                  name: 'test',
+                },
+              ],
+            },
+          ],
+        });
+      },
+    };
+
+    const { debug } = render(
+      <InstantSearch indexName=\\"test_index\\" searchClient={searchClient}>
+        <ReactInstantsearchApp />
+        <Hits hitComponent={({ hit }: { hit: any }) => hit.name} />
+      </InstantSearch>
+    );
+
+    await runAllMicroTasks();
+    debug();
+  });
+});"
+`;
+
+exports[`Templates React InstantSearch widget File content: src/lib/component.tsx 1`] = `
+"import React from 'react';
+
+import type { ProvidedProps } from './connector'
+
+type Props = ProvidedProps & {
+  refine: () => {}
+};
+
+export const ReactInstantsearchAppComponent = ({}: Props) => {
+  return (
+    <div>
+      {/* TODO: render something */}
+    </div>
+  );
+};"
+`;
+
+exports[`Templates React InstantSearch widget File content: src/lib/connector.ts 1`] = `
+"import { createConnector } from 'react-instantsearch-dom';
+
+export type ProvidedProps = {
+  // TODO: fill props that are returned by \`getProvidedProps\`
+};
+
+export const connectReactInstantsearchApp = createConnector({
+  displayName: 'ReactInstantsearchApp',
+
+  getProvidedProps(props, searchState, searchResults): ProvidedProps {
+    return {
+      // TODO: return a props for the component
+    };
+  },
+
+  refine(props, searchState, nextRefinement) {
+    return {
+      // TODO: return a next searchState
+    };
+  },
+
+  cleanUp(props, searchState, context) {
+    return {
+      // TODO: return a searchState where this widget is removed from the widget tree
+    };
+  },
+
+  getSearchParameters(searchParameters, props, searchState) {
+    // TODO: update and return the searchParameters
+    return searchParameters;
+  },
+});"
+`;
+
+exports[`Templates React InstantSearch widget File content: src/lib/widget.tsx 1`] = `
+"import { ReactInstantsearchAppComponent } from './component';
+import { connectReactInstantsearchApp } from './connector';
+
+import type { ElementType } from 'react';
+
+type WidgetParams = {
+  /**
+   * Placeholder text for input element.
+   */
+  placeholder?: string;
+};
+
+export const ReactInstantsearchApp: ElementType<WidgetParams> =
+  connectReactInstantsearchApp(ReactInstantsearchAppComponent);"
+`;
+
+exports[`Templates React InstantSearch widget File content: tsconfig.declaration.json 1`] = `
+"{
+  \\"extends\\": \\"./tsconfig\\",
+  \\"compilerOptions\\": {
+    \\"outDir\\": \\"dist\\",
+    \\"noEmit\\": false,
+    \\"declaration\\": true,
+    \\"emitDeclarationOnly\\": true
+  },
+  \\"exclude\\": [\\"example/index.tsx\\", \\"**/__tests__\\"]
+}"
+`;
+
+exports[`Templates React InstantSearch widget File content: tsconfig.json 1`] = `
+"{
+  \\"compilerOptions\\": {
+    \\"target\\": \\"ESNext\\",
+    \\"lib\\": [\\"DOM\\", \\"DOM.Iterable\\", \\"ESNext\\"],
+    \\"types\\": [\\"vite/client\\", \\"node\\", \\"jest\\"],
+    \\"allowJs\\": false,
+    \\"skipLibCheck\\": true,
+    \\"esModuleInterop\\": false,
+    \\"allowSyntheticDefaultImports\\": true,
+    \\"strict\\": true,
+    \\"forceConsistentCasingInFileNames\\": true,
+    \\"module\\": \\"ESNext\\",
+    \\"moduleResolution\\": \\"Node\\",
+    \\"resolveJsonModule\\": true,
+    \\"isolatedModules\\": true,
+    \\"noEmit\\": true,
+    \\"jsx\\": \\"react\\"
+  },
+  \\"include\\": [\\"./src\\", \\"example/index.tsx\\"]
+}"
+`;
+
+exports[`Templates React InstantSearch widget File content: vite.config.ts 1`] = `
+"import path from 'path';
+
+import reactRefresh from '@vitejs/plugin-react-refresh';
+import vite from 'vite';
+
+// import { defineConfig } from 'vite' -> fails when type:module in package.json
+// it seems related to https://github.com/vitejs/vite/issues/1560
+// so far this is the workaround.
+const { defineConfig } = vite;
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [reactRefresh()],
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, 'src/index.tsx'),
+      name: 'SampleCustom',
+      fileName: 'index',
+      formats: ['es', 'cjs', 'umd'],
+    },
+    rollupOptions: {
+      // make sure to externalize deps that shouldn't be bundled
+      // into your library
+      external: ['react', 'react-dom', 'react-instantsearch-dom'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react-instantsearch-dom': 'ReactInstantSearchDOM',
+        },
+      },
+    },
+  },
+});"
+`;
+
+exports[`Templates React InstantSearch widget Folder structure: contains the right files 1`] = `
+Array [
+  ".eslintignore",
+  ".eslintrc.cjs",
+  ".gitignore",
+  ".prettierrc",
+  "README.md",
+  "babel.config.cjs",
+  "example/index.html",
+  "example/index.tsx",
+  "package.json",
+  "src/index.tsx",
+  "src/lib/__tests__/dummy-test.tsx",
+  "src/lib/component.tsx",
+  "src/lib/connector.ts",
+  "src/lib/widget.tsx",
+  "tsconfig.declaration.json",
+  "tsconfig.json",
+  "vite.config.ts",
+]
+`;
+
 exports[`Templates Vue InstantSearch 1 File content: .editorconfig 1`] = `
 "root = true
 

@@ -1,0 +1,32 @@
+import { createConnector } from 'react-instantsearch-dom';
+
+export type ProvidedProps = {
+  // TODO: fill props that are returned by `getProvidedProps`
+}
+
+export const connect{{ pascalCaseName }} = createConnector({
+  displayName: '{{ pascalCaseName }}',
+
+  getProvidedProps(props, searchState, searchResults): ProvidedProps {
+    return {
+      // TODO: return a props for the component
+    };
+  },
+
+  refine(props, searchState, nextRefinement) {
+    return {
+      // TODO: return a next searchState
+    };
+  },
+
+  cleanUp(props, searchState, context) {
+    return {
+      // TODO: return a searchState where this widget is removed from the widget tree
+    };
+  },
+
+  getSearchParameters(searchParameters, props, searchState) {
+    // TODO: update and return the searchParameters
+    return searchParameters;
+  },
+});
