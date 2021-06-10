@@ -3,19 +3,20 @@ import { action } from '@storybook/addon-actions';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import createInfoBox from '../.storybook/utils/create-info-box';
 import algoliaPlaces from 'places.js';
-import places from '../src/widgets/places/places';
-import { configure } from '../src/widgets';
 import injectScript from 'scriptjs';
 
 const API_KEY = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
 
-const withHitsAndConfigure = (fn, options) =>
+const withHitsAndConfigure = (
+  fn: Parameters<typeof withHits>[0],
+  options?: Parameters<typeof withHits>[1]
+) =>
   withHits(
     args => {
-      const { search } = args;
+      const { search, instantsearch } = args;
 
       search.addWidgets([
-        configure({
+        instantsearch.widgets.configure({
           aroundLatLngViaIP: true,
           hitsPerPage: 20,
         }),
@@ -79,7 +80,7 @@ stories
     withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         search.addWidgets([
-          configure({
+          instantsearch.widgets.configure({
             aroundLatLngViaIP: false,
             aroundLatLng: '37.7793, -122.419',
           }),
@@ -107,11 +108,11 @@ stories.add(
       container.appendChild(mapElement);
 
       search.addWidgets([
-        configure({
+        instantsearch.widgets.configure({
           aroundRadius: 20000,
         }),
 
-        places({
+        instantsearch.widgets.places({
           placesReference: algoliaPlaces,
           container: placesElement,
           defaultPosition: ['37.7793', '-122.419'],
@@ -292,6 +293,7 @@ stories
             builtInMarker: {
               events: {
                 click: ({ item, marker, map }) => {
+                  // @ts-expect-error .storybook/utils/create-info-box.js
                   if (InfoWindow.getMap()) {
                     InfoWindow.close();
                   }
@@ -413,6 +415,7 @@ stories
               }),
               events: {
                 click: ({ item, marker, map }) => {
+                  // @ts-expect-error .storybook/utils/create-info-box.js
                   if (InfoWindow.getMap()) {
                     InfoWindow.close();
                   }
@@ -517,8 +520,8 @@ stories
           });
         };
 
-        containerElement.addEventListener('mouseover', event => {
-          const hitElement = event.target.closest('.hit');
+        containerElement!.addEventListener('mouseover', event => {
+          const hitElement = (event.target as HTMLElement).closest('.hit');
 
           if (hitElement) {
             removeActiveMarkerClassNames();
@@ -533,7 +536,7 @@ stories
           }
         });
 
-        containerElement.addEventListener('mouseleave', () => {
+        containerElement!.addEventListener('mouseleave', () => {
           removeActiveMarkerClassNames();
         });
 

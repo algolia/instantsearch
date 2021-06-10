@@ -50,6 +50,16 @@ describe('getPropertyByPath', () => {
     it('gets undefined for an undefined object', () => {
       expect(getPropertyByPath(undefined, 'algolia')).toBe(undefined);
     });
+
+    it('should stop traversing when property is not an object', () => {
+      const object = {
+        nested: {
+          names: ['name'],
+        },
+      };
+
+      expect(getPropertyByPath(object, 'nested.name')).toBe(undefined);
+    });
   });
 
   describe('path as array', () => {
@@ -111,6 +121,16 @@ describe('getPropertyByPath', () => {
 
     it('gets undefined for an undefined object', () => {
       expect(getPropertyByPath(undefined, ['algolia'])).toBe(undefined);
+    });
+
+    it('should stop traversing when property is not an object', () => {
+      const object = {
+        nested: {
+          names: ['name'],
+        },
+      };
+
+      expect(getPropertyByPath(object, ['nested', 'name'])).toBe(undefined);
     });
 
     it('gets a path with . in the parts', () => {

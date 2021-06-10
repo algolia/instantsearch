@@ -22,10 +22,10 @@ Object {
       "separatorText": "to",
       "submitText": "Go",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
-      "separatorText": true,
-      "submitText": true,
+      "separatorText": false,
+      "submitText": false,
     },
   },
   "values": Object {
@@ -57,7 +57,7 @@ Object {
       "separatorText": "custom separator",
       "submitText": "custom submit",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "separatorText": true,
       "submitText": true,
@@ -92,10 +92,10 @@ Object {
       "separatorText": "to",
       "submitText": "Go",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
-      "separatorText": true,
-      "submitText": true,
+      "separatorText": false,
+      "submitText": false,
     },
   },
   "values": Object {
@@ -127,10 +127,10 @@ Object {
       "separatorText": "to",
       "submitText": "Go",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
-      "separatorText": true,
-      "submitText": true,
+      "separatorText": false,
+      "submitText": false,
     },
   },
   "values": Object {
@@ -162,10 +162,10 @@ Object {
       "separatorText": "to",
       "submitText": "Go",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
-      "separatorText": true,
-      "submitText": true,
+      "separatorText": false,
+      "submitText": false,
     },
   },
   "values": Object {
@@ -197,10 +197,10 @@ Object {
       "separatorText": "to",
       "submitText": "Go",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
-      "separatorText": true,
-      "submitText": true,
+      "separatorText": false,
+      "submitText": false,
     },
   },
   "values": Object {

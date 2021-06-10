@@ -1,18 +1,11 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import {
-  refinementList,
-  menu,
-  panel,
-  hierarchicalMenu,
-  EXPERIMENTAL_dynamicWidgets,
-} from '../src/widgets';
 
 storiesOf('Basics/DynamicWidgets', module).add(
   'default',
-  withHits(({ search, container: rootContainer }) => {
+  withHits(({ search, container: rootContainer, instantsearch }) => {
     search.addWidgets([
-      EXPERIMENTAL_dynamicWidgets({
+      instantsearch.widgets.EXPERIMENTAL_dynamicWidgets({
         transformItems(_attributes, { results }) {
           if (results._state.query === 'dog') {
             return ['categories'];
@@ -24,14 +17,19 @@ storiesOf('Basics/DynamicWidgets', module).add(
         },
         container: rootContainer,
         widgets: [
-          container => menu({ container, attribute: 'categories' }),
           container =>
-            panel({ templates: { header: 'brand' } })(refinementList)({
+            instantsearch.widgets.menu({ container, attribute: 'categories' }),
+          container =>
+            instantsearch.widgets.panel({ templates: { header: 'brand' } })(
+              instantsearch.widgets.refinementList
+            )({
               container,
               attribute: 'brand',
             }),
           container =>
-            panel({ templates: { header: 'hierarchy' } })(hierarchicalMenu)({
+            instantsearch.widgets.panel({ templates: { header: 'hierarchy' } })(
+              instantsearch.widgets.hierarchicalMenu
+            )({
               container,
               attributes: [
                 'hierarchicalCategories.lvl0',

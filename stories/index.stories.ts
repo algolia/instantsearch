@@ -1,7 +1,6 @@
 import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import { hitsItemTemplate } from '../.storybook/playgrounds/default';
-import { configure, hits } from '../src/widgets';
 
 storiesOf('Basics/Index', module)
   .add(
@@ -31,10 +30,10 @@ storiesOf('Basics/Index', module)
         instantsearch.widgets
           .index({ indexName: 'instant_search_price_asc' })
           .addWidgets([
-            configure({
+            instantsearch.widgets.configure({
               hitsPerPage: 2,
             }),
-            hits({
+            instantsearch.widgets.hits({
               container: instantSearchPriceAscHits,
               templates: {
                 item: hitsItemTemplate,
@@ -48,10 +47,10 @@ storiesOf('Basics/Index', module)
         instantsearch.widgets
           .index({ indexName: 'instant_search_rating_asc' })
           .addWidgets([
-            configure({
+            instantsearch.widgets.configure({
               hitsPerPage: 1,
             }),
-            hits({
+            instantsearch.widgets.hits({
               container: instantSearchRatingAscHits,
               templates: {
                 item: hitsItemTemplate,
@@ -95,10 +94,10 @@ storiesOf('Basics/Index', module)
         instantsearch.widgets
           .index({ indexName: 'instant_search_price_asc' })
           .addWidgets([
-            configure({
+            instantsearch.widgets.configure({
               hitsPerPage: 2,
             }),
-            hits({
+            instantsearch.widgets.hits({
               container: instantSearchPriceAscHits,
               templates: {
                 item: hitsItemTemplate,
@@ -114,10 +113,10 @@ storiesOf('Basics/Index', module)
             instantsearch.widgets
               .index({ indexName: 'instant_search_rating_asc' })
               .addWidgets([
-                configure({
+                instantsearch.widgets.configure({
                   hitsPerPage: 1,
                 }),
-                hits({
+                instantsearch.widgets.hits({
                   container: instantSearchRatingAscHits,
                   templates: {
                     item: hitsItemTemplate,
@@ -153,10 +152,10 @@ storiesOf('Basics/Index', module)
         instantsearch.widgets
           .index({ indexName: 'instant_search_price_asc' })
           .addWidgets([
-            configure({
+            instantsearch.widgets.configure({
               hitsPerPage: 2,
             }),
-            hits({
+            instantsearch.widgets.hits({
               container: instantSearchPriceAscHits,
               templates: {
                 item: hitsItemTemplate,

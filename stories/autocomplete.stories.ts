@@ -1,7 +1,5 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { connectAutocomplete } from '../src/connectors';
-import { configure } from '../src/widgets';
 
 storiesOf('Basics/Autocomplete', module).add(
   'default',
@@ -10,34 +8,33 @@ storiesOf('Basics/Autocomplete', module).add(
 
     container.appendChild(instantSearchAutocomplete);
 
-    const customAutocomplete = connectAutocomplete<{ container: HTMLElement }>(
-      (renderOptions, isFirstRender) => {
-        const {
-          indices,
-          currentRefinement,
-          refine,
-          widgetParams,
-        } = renderOptions;
+    const customAutocomplete = instantsearch.connectors.connectAutocomplete<{
+      container: HTMLElement;
+    }>((renderOptions, isFirstRender) => {
+      const {
+        indices,
+        currentRefinement,
+        refine,
+        widgetParams,
+      } = renderOptions;
 
-        if (isFirstRender) {
-          const input = document.createElement('input');
-          input.classList.add('ais-SearchBox-input');
-          const list = document.createElement('ul');
+      if (isFirstRender) {
+        const input = document.createElement('input');
+        input.classList.add('ais-SearchBox-input');
+        const list = document.createElement('ul');
 
-          input.addEventListener('input', (event: any) => {
-            refine(event.currentTarget.value);
-          });
+        input.addEventListener('input', (event: any) => {
+          refine(event.currentTarget.value);
+        });
 
-          widgetParams.container.appendChild(input);
-          widgetParams.container.appendChild(list);
-        }
+        widgetParams.container.appendChild(input);
+        widgetParams.container.appendChild(list);
+      }
 
-        widgetParams.container.querySelector(
-          'input'
-        )!.value = currentRefinement;
-        widgetParams.container.querySelector('ul')!.innerHTML = indices
-          .map(
-            ({ indexName, hits }) => `
+      widgetParams.container.querySelector('input')!.value = currentRefinement;
+      widgetParams.container.querySelector('ul')!.innerHTML = indices
+        .map(
+          ({ indexName, hits }) => `
 <li>
   Index: <strong>${indexName}</strong>
   <ol>
@@ -49,16 +46,15 @@ storiesOf('Basics/Autocomplete', module).add(
   </ol>
 </li>
 `
-          )
-          .join('');
-      }
-    );
+        )
+        .join('');
+    });
 
     search.addWidgets([
       instantsearch.widgets
         .index({ indexName: 'instant_search_price_asc' })
         .addWidgets([
-          configure({
+          instantsearch.widgets.configure({
             hitsPerPage: 3,
           }),
 
@@ -69,7 +65,7 @@ storiesOf('Basics/Autocomplete', module).add(
           instantsearch.widgets
             .index({ indexName: 'instant_search_rating_asc' })
             .addWidgets([
-              configure({
+              instantsearch.widgets.configure({
                 hitsPerPage: 2,
               }),
             ]),

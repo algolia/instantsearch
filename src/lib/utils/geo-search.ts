@@ -15,9 +15,9 @@ export function aroundLatLngToPosition(value: string) {
   };
 }
 
-type LatLng = Array<[number, number, number, number]>;
+export type LatLng = Array<[number, number, number, number]>;
 
-export function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
+function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
   const [
     [neLat, neLng, swLat, swLng] = [undefined, undefined, undefined, undefined],
   ] = value;
@@ -42,7 +42,7 @@ export function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
   };
 }
 
-export function insideBoundingBoxStringToBoundingBox(value: string) {
+function insideBoundingBoxStringToBoundingBox(value: string) {
   const [neLat, neLng, swLat, swLng] = value.split(',').map(parseFloat);
 
   // Since the value provided is the one send with the request, the API should

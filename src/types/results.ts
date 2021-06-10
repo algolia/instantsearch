@@ -9,6 +9,7 @@ export type HitHighlightResult = {
   [attribute: string]:
     | HitAttributeHighlightResult
     | HitAttributeHighlightResult[]
+    | HitHighlightResult[]
     | HitHighlightResult;
 };
 
@@ -19,8 +20,9 @@ export type HitAttributeSnippetResult = Pick<
 
 export type HitSnippetResult = {
   [attribute: string]:
-    | HitAttributeSnippetResult
     | HitAttributeSnippetResult[]
+    | HitSnippetResult[]
+    | HitAttributeSnippetResult
     | HitSnippetResult;
 };
 

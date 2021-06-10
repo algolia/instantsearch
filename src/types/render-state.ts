@@ -4,7 +4,7 @@ import { BreadcrumbWidgetDescription } from '../connectors/breadcrumb/connectBre
 import { ClearRefinementsWidgetDescription } from '../connectors/clear-refinements/connectClearRefinements';
 import { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
 import { CurrentRefinementsWidgetDescription } from '../connectors/current-refinements/connectCurrentRefinements';
-import { GeoSearchWidgetDescription } from '../connectors/geo-search/types';
+import { GeoSearchWidgetDescription } from '../connectors/geo-search/connectGeoSearch';
 import { HierarchicalMenuWidgetDescription } from '../connectors/hierarchical-menu/connectHierarchicalMenu';
 import { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
 import { HitsWidgetDescription } from '../connectors/hits/connectHits';

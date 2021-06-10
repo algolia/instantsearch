@@ -1,6 +1,5 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { EXPERIMENTAL_answers as answers } from '../src/widgets';
 import '../.storybook/static/answers.css';
 
 const searchOptions = {
@@ -12,7 +11,7 @@ const searchOptions = {
 storiesOf('Results/Answers', module)
   .add(
     'default',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       const p = document.createElement('p');
       p.innerText = `Try to search for "sarah jones"`;
       const answersContainer = document.createElement('div');
@@ -20,7 +19,7 @@ storiesOf('Results/Answers', module)
       container.appendChild(answersContainer);
 
       search.addWidgets([
-        answers({
+        instantsearch.widgets.EXPERIMENTAL_answers({
           container: answersContainer,
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
@@ -35,7 +34,7 @@ storiesOf('Results/Answers', module)
   )
   .add(
     'with header',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       const p = document.createElement('p');
       p.innerText = `Try to search for "sarah jones"`;
       const answersContainer = document.createElement('div');
@@ -43,7 +42,7 @@ storiesOf('Results/Answers', module)
       container.appendChild(answersContainer);
 
       search.addWidgets([
-        answers({
+        instantsearch.widgets.EXPERIMENTAL_answers({
           container: answersContainer,
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
@@ -61,7 +60,7 @@ storiesOf('Results/Answers', module)
   )
   .add(
     'with loader',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       const p = document.createElement('p');
       p.innerText = `Try to search for "sarah jones"`;
       const answersContainer = document.createElement('div');
@@ -69,7 +68,7 @@ storiesOf('Results/Answers', module)
       container.appendChild(answersContainer);
 
       search.addWidgets([
-        answers({
+        instantsearch.widgets.EXPERIMENTAL_answers({
           container: answersContainer,
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
@@ -88,7 +87,7 @@ storiesOf('Results/Answers', module)
   )
   .add(
     'full example',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       const p = document.createElement('p');
       p.innerText = `Try to search for "sarah jones"`;
       const answersContainer = document.createElement('div');
@@ -96,7 +95,7 @@ storiesOf('Results/Answers', module)
       container.appendChild(answersContainer);
 
       search.addWidgets([
-        answers({
+        instantsearch.widgets.EXPERIMENTAL_answers({
           container: answersContainer,
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],

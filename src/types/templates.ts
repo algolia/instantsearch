@@ -11,3 +11,8 @@ export type TemplateWithBindEvent<TTemplateData = void> =
 export type Templates = {
   [key: string]: Template<any> | TemplateWithBindEvent<any> | undefined;
 };
+
+export type HoganHelpers<TKeys extends string = string> = Record<
+  TKeys,
+  (text: string, render: (value: string) => string) => string
+>;

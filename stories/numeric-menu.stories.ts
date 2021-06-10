@@ -1,13 +1,12 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { numericMenu } from '../src/widgets';
 
 storiesOf('Refinements/NumericMenu', module)
   .add(
     'default',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        numericMenu({
+        instantsearch.widgets.numericMenu({
           container,
           attribute: 'price',
           items: [
@@ -27,9 +26,9 @@ storiesOf('Refinements/NumericMenu', module)
   )
   .add(
     'with transformed items',
-    withHits(({ search, container }) => {
+    withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        numericMenu({
+        instantsearch.widgets.numericMenu({
           container,
           attribute: 'price',
           items: [
