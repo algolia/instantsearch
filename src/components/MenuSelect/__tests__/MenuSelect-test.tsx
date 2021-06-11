@@ -4,6 +4,7 @@ import { h } from 'preact';
 import MenuSelect from '../MenuSelect';
 import { mount } from 'enzyme';
 import defaultTemplates from '../../../widgets/menu-select/defaultTemplates';
+import { ReactElementLike } from 'prop-types';
 
 describe('MenuSelect', () => {
   const cssClasses = {
@@ -16,15 +17,15 @@ describe('MenuSelect', () => {
   it('should render <MenuSelect /> with items', () => {
     const props = {
       items: [
-        { value: 'foo', label: 'foo' },
-        { value: 'bar', label: 'bar' },
+        { value: 'foo', label: 'foo', count: 0, isRefined: false },
+        { value: 'bar', label: 'bar', count: 0, isRefined: false },
       ],
       refine: () => {},
       templateProps: { templates: defaultTemplates },
       cssClasses,
     };
 
-    const wrapper = mount(<MenuSelect {...props} />);
+    const wrapper = mount((<MenuSelect {...props} />) as ReactElementLike);
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -37,7 +38,7 @@ describe('MenuSelect', () => {
       cssClasses,
     };
 
-    const wrapper = mount(<MenuSelect {...props} />);
+    const wrapper = mount((<MenuSelect {...props} />) as ReactElementLike);
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -45,8 +46,8 @@ describe('MenuSelect', () => {
   it('should render <MenuSelect /> with custom templates', () => {
     const props = {
       items: [
-        { value: 'foo', label: 'foo' },
-        { value: 'bar', label: 'bar' },
+        { value: 'foo', label: 'foo', count: 0, isRefined: false },
+        { value: 'bar', label: 'bar', count: 0, isRefined: false },
       ],
       refine: () => {},
       templateProps: {
@@ -58,7 +59,7 @@ describe('MenuSelect', () => {
       cssClasses,
     };
 
-    const wrapper = mount(<MenuSelect {...props} />);
+    const wrapper = mount((<MenuSelect {...props} />) as ReactElementLike);
 
     expect(wrapper).toMatchSnapshot();
   });

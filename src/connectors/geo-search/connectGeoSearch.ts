@@ -1,52 +1,145 @@
+import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
 import {
   checkRendering,
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
   createDocumentationMessageGenerator,
   createSendEventForHits,
+  SendEventForHits,
   noop,
 } from '../../lib/utils';
+import {
+  Connector,
+  GeoLoc,
+  Hit,
+  InitOptions,
+  RenderOptions,
+  TransformItems,
+  WidgetRenderState,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'geo-search',
   connector: true,
 });
 
+// in this connector, we assume insideBoundingBox is only a string,
+// even though in the helper it's defined as number[][] alone.
+// This can be done, since the connector assumes "control" of the parameter
+function getBoundingBoxAsString(state: SearchParameters) {
+  return ((state.insideBoundingBox as unknown) as string) || '';
+}
+function setBoundingBoxAsString(state: SearchParameters, value: string) {
+  return state.setQueryParameter(
+    'insideBoundingBox',
+    (value as unknown) as number[][]
+  );
+}
+
+export type GeoHit = Hit & Required<Pick<Hit, '_geoLoc'>>;
+
+type Bounds = {
+  /**
+   * The top right corner of the map view.
+   */
+  northEast: GeoLoc;
+  /**
+   * The bottom left corner of the map view.
+   */
+  southWest: GeoLoc;
+};
+
+export type GeoSearchRenderState = {
+  /**
+   * Reset the current bounding box refinement.
+   */
+  clearMapRefinement(): void;
+  /**
+   * The current bounding box of the search.
+   */
+  currentRefinement?: Bounds;
+  /**
+   * Return true if the map has move since the last refinement.
+   */
+  hasMapMoveSinceLastRefine(): boolean;
+  /**
+   * Return true if the current refinement is set with the map bounds.
+   */
+  isRefinedWithMap(): boolean;
+  /**
+   * Return true if the user is able to refine on map move.
+   */
+  isRefineOnMapMove(): boolean;
+  /**
+   * The matched hits from Algolia API.
+   */
+  items: GeoHit[];
+  /**
+   * The current position of the search.
+   */
+  position?: GeoLoc;
+  /**
+   * Sets a bounding box to filter the results from the given map bounds.
+   */
+  refine(bounds: Bounds): void;
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEventForHits;
+  /**
+   * Set the fact that the map has moved since the last refinement, should be
+   * called on each map move. The call to the function triggers a new rendering
+   * only when the value change.
+   */
+  setMapMoveSinceLastRefine(): void;
+  /**
+   * Toggle the fact that the user is able to refine on map move.
+   */
+  toggleRefineOnMapMove(): void;
+};
+
+export type GeoSearchConnectorParams = {
+  /**
+   * If true, refine will be triggered as you move the map.
+   * @default true
+   */
+  enableRefineOnMapMove?: boolean;
+  /**
+   * Function to transform the items passed to the templates.
+   * @default items => items
+   */
+  transformItems?: TransformItems<GeoHit>;
+};
+
 const $$type = 'ais.geoSearch';
 
-/**
- * @typedef {Object} LatLng
- * @property {number} lat The latitude in degrees.
- * @property {number} lng The longitude in degrees.
- */
+export type GeoSearchWidgetDescription = {
+  $$type: 'ais.geoSearch';
+  renderState: GeoSearchRenderState;
+  indexRenderState: {
+    geoSearch: WidgetRenderState<
+      GeoSearchRenderState,
+      GeoSearchConnectorParams
+    >;
+  };
+  indexUiState: {
+    geoSearch: {
+      /**
+       * The rectangular area in geo coordinates.
+       * The rectangle is defined by two diagonally opposite points,
+       * hence by 4 floats separated by commas.
+       *
+       * @example '47.3165,4.9665,47.3424,5.0201'
+       */
+      boundingBox: string;
+    };
+  };
+};
 
-/**
- * @typedef {Object} Bounds
- * @property {LatLng} northEast The top right corner of the map view.
- * @property {LatLng} southWest The bottom left corner of the map view.
- */
-
-/**
- * @typedef {Object} CustomGeoSearchWidgetParams
- * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- */
-
-/**
- * @typedef {Object} GeoSearchRenderingOptions
- * @property {Object[]} items The matched hits from Algolia API.
- * @property {LatLng} position The current position of the search.
- * @property {Bounds} currentRefinement The current bounding box of the search.
- * @property {function(Bounds)} refine Sets a bounding box to filter the results from the given map bounds.
- * @property {function()} clearMapRefinement Reset the current bounding box refinement.
- * @property {function(): boolean} isRefinedWithMap Return true if the current refinement is set with the map bounds.
- * @property {function()} toggleRefineOnMapMove Toggle the fact that the user is able to refine on map move.
- * @property {function(): boolean} isRefineOnMapMove Return true if the user is able to refine on map move.
- * @property {function()} setMapMoveSinceLastRefine Set the fact that the map has moved since the last refinement, should be call on each map move. The call to the function triggers a new rendering only when the value change.
- * @property {function(): boolean} hasMapMoveSinceLastRefine Return true if the map has move since the last refinement.
- * @property {Object} widgetParams All original `CustomGeoSearchWidgetParams` forwarded to the `renderFn`.
- * @property {LatLng} [position] The current position of the search.
- */
+export type GeoSearchConnector = Connector<
+  GeoSearchWidgetDescription,
+  GeoSearchConnectorParams
+>;
 
 /**
  * The **GeoSearch** connector provides the logic to build a widget that will display the results on a map. It also provides a way to search for results based on their position. The connector provides functions to manage the search experience (search on map interaction or control the interaction for example).
@@ -56,61 +149,15 @@ const $$type = 'ais.geoSearch';
  * Note that the GeoSearch connector uses the [geosearch](https://www.algolia.com/doc/guides/searching/geo-search) capabilities of Algolia. Your hits **must** have a `_geoloc` attribute in order to be passed to the rendering function.
  *
  * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
- *
- * @param {function(GeoSearchRenderingOptions, boolean)} renderFn Rendering function for the custom **GeoSearch** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomGeoSearchWidgetParams)} Re-usable widget factory for a custom **GeoSearch** widget.
- * @staticExample
- * // This example use Leaflet for the rendering, be sure to have the library correctly setup
- * // before trying the demo. You can find more details in their documentation (link below).
- * // We choose Leaflet for the example but you can use any libraries that you want.
- * // See: http://leafletjs.com/examples/quick-start
- *
- * let map = null;
- * let markers = [];
- *
- * // custom `renderFn` to render the custom GeoSearch widget
- * function renderFn(GeoSearchRenderingOptions, isFirstRendering) {
- *   const { items, widgetParams } = GeoSearchRenderingOptions;
- *
- *   if (isFirstRendering) {
- *     map = L.map(widgetParams.container);
- *
- *     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
- *       attribution:
- *         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
- *     }).addTo(map);
- *   }
- *
- *   markers.forEach(marker => marker.remove());
- *
- *   markers = items.map(({ _geoloc }) =>
- *     L.marker([_geoloc.lat, _geoloc.lng]).addTo(map)
- *   );
- *
- *   if (markers.length) {
- *     map.fitBounds(L.featureGroup(markers).getBounds());
- *   }
- * }
- *
- * // connect `renderFn` to GeoSearch logic
- * const customGeoSearch = instantsearch.connectors.connectGeoSearch(renderFn);
- *
- * // mount widget on the page
- * search.addWidgets([
- *   customGeoSearch({
- *     container: document.getElementById('custom-geo-search'),
- *   })
- * ]);
  */
-const connectGeoSearch = (renderFn, unmountFn = noop) => {
+const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
+  return widgetParams => {
     const {
       enableRefineOnMapMove = true,
-      transformItems = items => items,
-    } = widgetParams;
+      transformItems = (items => items) as TransformItems<GeoHit>,
+    } = widgetParams || {};
 
     const widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
@@ -122,55 +169,77 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
       internalSetMapMoveSinceLastRefine: noop,
     };
 
-    const getPositionFromState = state =>
-      state.aroundLatLng && aroundLatLngToPosition(state.aroundLatLng);
+    const getPositionFromState = (state: SearchParameters) =>
+      state.aroundLatLng
+        ? aroundLatLngToPosition(state.aroundLatLng)
+        : undefined;
 
-    const getCurrentRefinementFromState = state =>
+    const getCurrentRefinementFromState = (state: SearchParameters) =>
       state.insideBoundingBox &&
       insideBoundingBoxToBoundingBox(state.insideBoundingBox);
 
-    const refine = helper => ({ northEast: ne, southWest: sw }) => {
+    const refine = (helper: AlgoliaSearchHelper) => ({
+      northEast: ne,
+      southWest: sw,
+    }: Bounds) => {
       const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
 
-      helper.setQueryParameter('insideBoundingBox', boundingBox).search();
+      helper
+        .setState(setBoundingBoxAsString(helper.state, boundingBox).resetPage())
+        .search();
 
       widgetState.hasMapMoveSinceLastRefine = false;
       widgetState.lastRefineBoundingBox = boundingBox;
     };
 
-    const clearMapRefinement = helper => () => {
+    const clearMapRefinement = (helper: AlgoliaSearchHelper) => () => {
       helper.setQueryParameter('insideBoundingBox', undefined).search();
     };
 
-    const isRefinedWithMap = state => () => Boolean(state.insideBoundingBox);
+    const isRefinedWithMap = (state: SearchParameters) => () =>
+      Boolean(state.insideBoundingBox);
 
     const toggleRefineOnMapMove = () =>
       widgetState.internalToggleRefineOnMapMove();
-    const createInternalToggleRefinementOnMapMove = (render, args) => () => {
+    const createInternalToggleRefinementOnMapMove = <
+      TRenderOptions extends RenderOptions | InitOptions
+    >(
+      renderOptions: TRenderOptions,
+      // false positive eslint because of generics
+      // eslint-disable-next-line no-shadow
+      render: (renderOptions: TRenderOptions) => void
+    ) => () => {
       widgetState.isRefineOnMapMove = !widgetState.isRefineOnMapMove;
 
-      render(args);
+      render(renderOptions);
     };
 
     const isRefineOnMapMove = () => widgetState.isRefineOnMapMove;
 
     const setMapMoveSinceLastRefine = () =>
       widgetState.internalSetMapMoveSinceLastRefine();
-    const createInternalSetMapMoveSinceLastRefine = (render, args) => () => {
+    const createInternalSetMapMoveSinceLastRefine = <
+      TRenderOptions extends RenderOptions | InitOptions
+    >(
+      renderOptions: TRenderOptions,
+      // false positive eslint because of generics
+      // eslint-disable-next-line no-shadow
+      render: (renderOptions: TRenderOptions) => void
+    ) => () => {
       const shouldTriggerRender =
         widgetState.hasMapMoveSinceLastRefine !== true;
 
       widgetState.hasMapMoveSinceLastRefine = true;
 
       if (shouldTriggerRender) {
-        render(args);
+        render(renderOptions);
       }
     };
 
     const hasMapMoveSinceLastRefine = () =>
       widgetState.hasMapMoveSinceLastRefine;
 
-    let sendEvent;
+    let sendEvent: SendEventForHits;
 
     return {
       $$type,
@@ -180,13 +249,13 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
         const isFirstRendering = true;
 
         widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
-          noop,
-          initArgs
+          initArgs,
+          noop
         );
 
         widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
-          noop,
-          initArgs
+          initArgs,
+          noop
         );
 
         renderFn(
@@ -223,16 +292,17 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
         }
 
         widgetState.lastRefinePosition = state.aroundLatLng || '';
-        widgetState.lastRefineBoundingBox = state.insideBoundingBox || '';
+
+        widgetState.lastRefineBoundingBox = getBoundingBoxAsString(state);
 
         widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
-          this.render.bind(this),
-          renderArgs
+          renderArgs,
+          this.render!.bind(this)
         );
 
         widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
-          this.render.bind(this),
-          renderArgs
+          renderArgs,
+          this.render!.bind(this)
         );
 
         const widgetRenderState = this.getWidgetRenderState(renderArgs);
@@ -294,7 +364,7 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
-        const boundingBox = searchParameters.insideBoundingBox;
+        const boundingBox = getBoundingBoxAsString(searchParameters);
 
         if (
           !boundingBox ||
@@ -321,8 +391,8 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
           );
         }
 
-        return searchParameters.setQueryParameter(
-          'insideBoundingBox',
+        return setBoundingBoxAsString(
+          searchParameters,
           uiState.geoSearch.boundingBox
         );
       },

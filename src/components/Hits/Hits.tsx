@@ -1,11 +1,36 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template/Template';
+import { SearchResults } from 'algoliasearch-helper';
+import { BindEventForHits, SendEventForHits } from '../../lib/utils';
+import { Hits as HitsArray } from '../../types';
+import { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
 
-const Hits = ({ results, hits, bindEvent, cssClasses, templateProps }) => {
+export type HitsComponentCSSClasses = Required<
+  { [key in keyof HitsCSSClasses]: string }
+>;
+
+export type HitsProps = {
+  results: SearchResults;
+  hits: HitsArray;
+  sendEvent?: SendEventForHits;
+  bindEvent?: BindEventForHits;
+  cssClasses: HitsComponentCSSClasses;
+  templateProps: {
+    [key: string]: any;
+    templates: HitsTemplates;
+  };
+};
+
+const Hits = ({
+  results,
+  hits,
+  bindEvent,
+  cssClasses,
+  templateProps,
+}: HitsProps) => {
   if (results.hits.length === 0) {
     return (
       <Template
@@ -22,7 +47,7 @@ const Hits = ({ results, hits, bindEvent, cssClasses, templateProps }) => {
   return (
     <div className={cssClasses.root}>
       <ol className={cssClasses.list}>
-        {hits.map((hit, position) => (
+        {hits.map((hit, index) => (
           <Template
             {...templateProps}
             templateKey="item"
@@ -31,7 +56,7 @@ const Hits = ({ results, hits, bindEvent, cssClasses, templateProps }) => {
             key={hit.objectID}
             data={{
               ...hit,
-              __hitIndex: position,
+              __hitIndex: index,
             }}
             bindEvent={bindEvent}
           />
@@ -39,20 +64,6 @@ const Hits = ({ results, hits, bindEvent, cssClasses, templateProps }) => {
       </ol>
     </div>
   );
-};
-
-Hits.propTypes = {
-  cssClasses: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-    emptyRoot: PropTypes.string.isRequired,
-    item: PropTypes.string.isRequired,
-    list: PropTypes.string.isRequired,
-  }).isRequired,
-  hits: PropTypes.array.isRequired,
-  results: PropTypes.object.isRequired,
-  sendEvent: PropTypes.func.isRequired,
-  bindEvent: PropTypes.func.isRequired,
-  templateProps: PropTypes.object.isRequired,
 };
 
 Hits.defaultProps = {

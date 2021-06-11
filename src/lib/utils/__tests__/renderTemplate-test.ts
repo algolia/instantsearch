@@ -73,12 +73,14 @@ describe('renderTemplate', () => {
     const actual1 = () =>
       renderTemplate({
         templateKey: 'test',
+        // @ts-expect-error wrong usage
         templates: { test: null },
       });
 
     const actual2 = () =>
       renderTemplate({
         templateKey: 'test',
+        // @ts-expect-error wrong usage
         templates: { test: 10 },
       });
 
@@ -118,8 +120,7 @@ describe('renderTemplate', () => {
       expect(actual).toBe(expectation);
     });
 
-    // eslint-disable-next-line jest/no-done-callback
-    it('expect to set the context (`this`) to the template `data`', done => {
+    it('expect to set the context (`this`) to the template `data`', () => {
       const templateKey = 'test';
       const templates = {
         test: '{{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}',
@@ -133,7 +134,7 @@ describe('renderTemplate', () => {
         emphasis() {
           // context will be different when using arrow function (lexical scope used)
           expect(this).toBe(data);
-          done();
+          return 'irrelevant return';
         },
       };
 
@@ -144,7 +145,7 @@ describe('renderTemplate', () => {
         helpers,
       });
 
-      const expectation = '';
+      const expectation = 'irrelevant return';
 
       expect(actual).toBe(expectation);
     });
