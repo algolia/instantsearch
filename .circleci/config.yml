@@ -99,18 +99,6 @@ jobs:
             yarn run website:build
             yarn run test:e2e:saucelabs
 
-  'type check js (optional)':
-    <<: *defaults
-    steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
-      - run:
-          name: Type Checking including JS files
-          command: yarn run type-check:js
-
   'release if needed':
     <<: *defaults
     steps:
@@ -147,7 +135,6 @@ workflows:
       - unit tests
       - lint
       - type check algoliasearch v3
-      - type check js (optional)
       - e2e tests
       - 'release if needed':
           filters:
