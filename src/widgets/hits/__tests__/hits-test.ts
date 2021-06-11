@@ -4,7 +4,7 @@ import { SearchClient } from '../../../types';
 import hits from '../hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import { HitsProps } from '../../../components/Hits/types';
+import { HitsProps } from '../../../components/Hits/Hits';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

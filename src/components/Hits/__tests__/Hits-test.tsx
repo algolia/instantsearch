@@ -5,7 +5,10 @@ import { shallow, mount } from 'enzyme';
 import { highlight } from '../../../helpers';
 import { TAG_REPLACEMENT } from '../../../lib/utils';
 import Template from '../../Template/Template';
-import Hits from '../Hits';
+import Hits, { HitsProps } from '../Hits';
+import { ReactElementLike } from 'prop-types';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 describe('Hits', () => {
   const cssClasses = {
@@ -18,11 +21,11 @@ describe('Hits', () => {
   function shallowRender(extraProps = {}) {
     const props = {
       cssClasses,
-      templateProps: {},
+      templateProps: { templates: {} },
       ...extraProps,
     };
 
-    return shallow(<Hits {...props} />);
+    return shallow((<Hits {...props} />) as ReactElementLike);
   }
 
   describe('no results', () => {
@@ -225,15 +228,19 @@ describe('Hits', () => {
         {
           objectID: 'one',
           foo: 'bar',
+          __position: 1,
         },
         {
           objectID: 'two',
           foo: 'baz',
+          __position: 2,
         },
       ];
 
-      const props = {
-        results: { hits },
+      const props: HitsProps = {
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({ hits }),
+        ]),
         hits,
         templateProps: {
           templates: {
@@ -243,7 +250,7 @@ describe('Hits', () => {
         cssClasses,
       };
 
-      const wrapper = mount(<Hits {...props} />);
+      const wrapper = mount((<Hits {...props} />) as ReactElementLike);
 
       expect(wrapper).toMatchSnapshot();
     });
@@ -256,8 +263,11 @@ describe('Hits', () => {
           _highlightResult: {
             name: {
               value: `${TAG_REPLACEMENT.highlightPreTag}name 1${TAG_REPLACEMENT.highlightPostTag}`,
+              matchLevel: 'full' as const,
+              matchedWords: ['name'],
             },
           },
+          __position: 1,
         },
         {
           objectID: 'two',
@@ -265,13 +275,18 @@ describe('Hits', () => {
           _highlightResult: {
             name: {
               value: `${TAG_REPLACEMENT.highlightPreTag}name 2${TAG_REPLACEMENT.highlightPostTag}`,
+              matchLevel: 'full' as const,
+              matchedWords: ['name'],
             },
           },
+          __position: 2,
         },
       ];
 
-      const props = {
-        results: { hits },
+      const props: HitsProps = {
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({ hits }),
+        ]),
         hits,
         templateProps: {
           templates: {
@@ -286,7 +301,7 @@ describe('Hits', () => {
         cssClasses,
       };
 
-      const wrapper = mount(<Hits {...props} />);
+      const wrapper = mount((<Hits {...props} />) as ReactElementLike);
 
       expect(wrapper).toMatchSnapshot();
     });
