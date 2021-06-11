@@ -56,6 +56,7 @@ function createFacetStatsResults({
 describe('rangeSlider', () => {
   describe('Usage', () => {
     it('throws without container', () => {
+      // @ts-expect-error wrong usage
       expect(() => rangeSlider({ container: undefined }))
         .toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
