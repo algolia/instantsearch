@@ -1,4 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils';
+import mitt from 'mitt';
 import {
   createPanelProviderMixin,
   createPanelConsumerMixin,
@@ -7,9 +8,11 @@ import {
 } from '../panel';
 
 const createFakeEmitter = () => ({
-  $on: jest.fn(),
-  $emit: jest.fn(),
-  $destroy: jest.fn(),
+  on: jest.fn(),
+  emit: jest.fn(),
+  all: {
+    clear: jest.fn(),
+  },
 });
 
 const createFakeComponent = localVue =>
@@ -40,8 +43,8 @@ describe('createPanelProviderMixin', () => {
       },
     });
 
-    expect(emitter.$on).toHaveBeenCalledTimes(1);
-    expect(emitter.$on).toHaveBeenCalledWith(
+    expect(emitter.on).toHaveBeenCalledTimes(1);
+    expect(emitter.on).toHaveBeenCalledWith(
       PANEL_CHANGE_EVENT,
       expect.any(Function)
     );
@@ -61,12 +64,12 @@ describe('createPanelProviderMixin', () => {
 
     wrapper.destroy();
 
-    expect(emitter.$destroy).toHaveBeenCalledTimes(1);
+    expect(emitter.all.clear).toHaveBeenCalledTimes(1);
   });
 
   it('updates canRefine on PANEL_CHANGE_EVENT', () => {
     const LocalVue = createLocalVue();
-    const emitter = new LocalVue();
+    const emitter = mitt();
     const Test = createFakeComponent(LocalVue);
     const next = false;
 
@@ -79,7 +82,7 @@ describe('createPanelProviderMixin', () => {
 
     expect(wrapper.vm.canRefine).toBe(true);
 
-    emitter.$emit(PANEL_CHANGE_EVENT, next);
+    emitter.emit(PANEL_CHANGE_EVENT, next);
 
     expect(wrapper.vm.canRefine).toBe(false);
   });
@@ -108,15 +111,15 @@ describe('createPanelConsumerMixin', () => {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
     wrapper.vm.state = {
       attributeName: true,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(2);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
+    expect(emitter.emit).toHaveBeenCalledTimes(2);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
   });
 
   it('emits once when both values are set', () => {
@@ -139,14 +142,14 @@ describe('createPanelConsumerMixin', () => {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
     wrapper.vm.state = {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
   });
 
   it('emits once on init of the component', () => {
@@ -169,8 +172,8 @@ describe('createPanelConsumerMixin', () => {
       attributeName: true,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
   });
 
   it('do not emit when the next value is not set', () => {
@@ -193,12 +196,12 @@ describe('createPanelConsumerMixin', () => {
       attributeName: true,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
     wrapper.vm.state = null;
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
   });
 
   it('do not emit when the previous and next value are equal', () => {
@@ -221,20 +224,20 @@ describe('createPanelConsumerMixin', () => {
       attributeName: true,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
     wrapper.vm.state = {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(2);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
+    expect(emitter.emit).toHaveBeenCalledTimes(2);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
     wrapper.vm.state = {
       attributeName: false,
     };
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(2);
+    expect(emitter.emit).toHaveBeenCalledTimes(2);
   });
 });
