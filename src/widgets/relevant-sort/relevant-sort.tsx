@@ -15,6 +15,7 @@ import connectRelevantSort, {
 } from '../../connectors/relevant-sort/connectRelevantSort';
 import RelevantSort, {
   RelevantSortComponentCSSClasses,
+  RelevantSortComponentTemplates,
 } from '../../components/RelevantSort/RelevantSort';
 import defaultTemplates from './defaultTemplates';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
@@ -25,10 +26,10 @@ export type RelevantSortCSSClasses = {
   button?: string;
 };
 
-export type RelevantSortTemplates = Partial<{
-  text: Template<{ isRelevantSorted: boolean }>;
-  button: Template<{ isRelevantSorted: boolean }>;
-}>;
+export type RelevantSortTemplates = {
+  text?: Template<{ isRelevantSorted: boolean }>;
+  button?: Template<{ isRelevantSorted: boolean }>;
+};
 
 type RelevantSortWidgetParams = {
   container: string | HTMLElement;
@@ -56,9 +57,9 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: RelevantSortComponentCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<RelevantSortTemplates>;
+    templateProps?: PreparedTemplateProps<RelevantSortComponentTemplates>;
   };
-  templates: RelevantSortTemplates;
+  templates: RelevantSortComponentTemplates;
 }) => ({
   isRelevantSorted,
   isVirtualReplica,
@@ -79,8 +80,8 @@ const renderer = ({
 const relevantSort: RelevantSortWidget = widgetParams => {
   const {
     container,
-    templates: userTemplates = {} as RelevantSortTemplates,
-    cssClasses: userCssClasses = {} as RelevantSortCSSClasses,
+    templates: userTemplates = {},
+    cssClasses: userCssClasses = {},
   } = widgetParams;
 
   if (!container) {
@@ -88,12 +89,12 @@ const relevantSort: RelevantSortWidget = widgetParams => {
   }
 
   const containerNode = getContainerNode(container);
-  const cssClasses: RelevantSortComponentCSSClasses = {
+  const cssClasses = {
     root: cx(suit(), userCssClasses.root),
     text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
     button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
   };
-  const templates: RelevantSortTemplates = {
+  const templates = {
     ...defaultTemplates,
     ...userTemplates,
   };

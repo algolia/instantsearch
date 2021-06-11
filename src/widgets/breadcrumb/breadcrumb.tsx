@@ -6,6 +6,7 @@ import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb, {
   BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
+  BreadcrumbRenderState,
 } from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -14,12 +15,17 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Template } from '../../types';
+import { WidgetFactory, Template, Renderer } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');
 
-const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
+const renderer = ({
+  containerNode,
+  cssClasses,
+  renderState,
+  templates,
+}): Renderer<BreadcrumbRenderState, Partial<BreadcrumbWidgetParams>> => (
   { canRefine, createURL, instantSearchInstance, items, refine },
   isFirstRendering
 ) => {

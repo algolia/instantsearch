@@ -4,6 +4,7 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import ToggleRefinement, {
   ToggleRefinementComponentCSSClasses,
+  ToggleRefinementComponentTemplates,
 } from '../../components/ToggleRefinement/ToggleRefinement';
 import connectToggleRefinement, {
   ToggleRefinementConnectorParams,
@@ -35,9 +36,9 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: ToggleRefinementComponentCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<ToggleRefinementTemplates>;
+    templateProps?: PreparedTemplateProps<ToggleRefinementComponentTemplates>;
   };
-  templates: Partial<ToggleRefinementTemplates>;
+  templates: ToggleRefinementComponentTemplates;
 }) => (
   {
     value,
@@ -48,7 +49,9 @@ const renderer = ({
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
+    renderState.templateProps = prepareTemplateProps<
+      ToggleRefinementComponentTemplates
+    >({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -88,8 +91,10 @@ export type ToggleRefinementCSSClasses = {
 };
 
 export type ToggleRefinementTemplates = {
-  /** the text that describes the toggle action */
-  labelText: Template<ToggleRefinementValue>;
+  /**
+   * the text that describes the toggle action
+   */
+  labelText?: Template<ToggleRefinementValue>;
 };
 
 export type ToggleRefinementWidgetParams = {
@@ -101,7 +106,7 @@ export type ToggleRefinementWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<ToggleRefinementTemplates>;
+  templates?: ToggleRefinementTemplates;
 
   /**
    * CSS classes to be added.

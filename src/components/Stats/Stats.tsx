@@ -4,15 +4,17 @@ import { h } from 'preact';
 import cx from 'classnames';
 import { StatsCSSClasses, StatsTemplates } from '../../widgets/stats/stats';
 import Template from '../Template/Template';
-import { ComponentCSSClasses } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates } from '../../types';
 
 export type StatsComponentCSSClasses = ComponentCSSClasses<StatsCSSClasses>;
+
+export type StatsComponentTemplates = ComponentTemplates<StatsTemplates>;
 
 type StatsProps = {
   cssClasses: StatsComponentCSSClasses;
   templateProps: {
     [key: string]: any;
-    templates: StatsTemplates;
+    templates: StatsComponentTemplates;
   };
   hitsPerPage: number | undefined;
   nbHits: number;

@@ -29,12 +29,12 @@ export type RangeInputTemplates = {
    * The label of the separator, between min and max.
    * @default "to"
    */
-  separatorText: Template;
+  separatorText?: Template;
   /**
    * The label of the submit button
    * @default "Go"
    */
-  submitText: Template;
+  submitText?: Template;
 };
 
 export type RangeInputCSSClasses = {
@@ -101,7 +101,7 @@ export type RangeInputWidgetParams = {
   /**
    * Labels to use for the widget.
    */
-  templates?: Partial<RangeInputTemplates>;
+  templates?: RangeInputTemplates;
   /**
    * CSS classes to add.
    */

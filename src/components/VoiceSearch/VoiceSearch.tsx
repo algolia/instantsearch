@@ -8,10 +8,14 @@ import {
   VoiceSearchTemplates,
 } from '../../widgets/voice-search/voice-search';
 import { VoiceListeningState } from '../../lib/voiceSearchHelper/types';
-import { ComponentCSSClasses } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates } from '../../types';
 
 export type VoiceSearchComponentCSSClasses = ComponentCSSClasses<
   VoiceSearchCSSClasses
+>;
+
+export type VoiceSearchComponentTemplates = ComponentTemplates<
+  VoiceSearchTemplates
 >;
 
 export type VoiceSearchProps = {
@@ -20,7 +24,7 @@ export type VoiceSearchProps = {
   isListening: boolean;
   toggleListening: () => void;
   voiceListeningState: VoiceListeningState;
-  templates: VoiceSearchTemplates;
+  templates: VoiceSearchComponentTemplates;
 };
 
 const VoiceSearch = ({

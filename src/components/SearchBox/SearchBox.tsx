@@ -7,16 +7,20 @@ import {
   SearchBoxCSSClasses,
   SearchBoxTemplates,
 } from '../../widgets/search-box/search-box';
-import { ComponentCSSClasses } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates } from '../../types';
 
 export type SearchBoxComponentCSSClasses = ComponentCSSClasses<
   SearchBoxCSSClasses
 >;
 
+export type SearchBoxComponentTemplates = ComponentTemplates<
+  SearchBoxTemplates
+>;
+
 type SearchBoxProps = {
   placeholder?: string;
   cssClasses: SearchBoxComponentCSSClasses;
-  templates?: SearchBoxTemplates;
+  templates: SearchBoxComponentTemplates;
   query?: string;
   showSubmit?: boolean;
   showReset?: boolean;

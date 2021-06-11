@@ -142,22 +142,22 @@ export type PaginationTemplates = {
   /**
    * Label for the Previous link.
    */
-  previous: string;
+  previous?: string;
 
   /**
    * Label for the Next link.
    */
-  next: string;
+  next?: string;
 
   /**
    * Label for the First link.
    */
-  first: string;
+  first?: string;
 
   /**
    * Label for the Last link.
    */
-  last: string;
+  last?: string;
 };
 
 export type PaginationWidgetParams = {
@@ -210,7 +210,7 @@ export type PaginationWidgetParams = {
   /**
    * Text to display in the links.
    */
-  templates?: Partial<PaginationTemplates>;
+  templates?: PaginationTemplates;
 
   /**
    * CSS classes to be added.

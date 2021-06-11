@@ -1,4 +1,4 @@
-import { VoiceSearchTemplates } from './voice-search';
+import { VoiceSearchComponentTemplates } from '../../components/VoiceSearch/VoiceSearch';
 
 const getButtonInnerElement = (
   status: string,
@@ -21,7 +21,7 @@ const getButtonInnerElement = (
           <line x1="8" y1="23" x2="16" y2="23"></line>`;
 };
 
-const defaultTemplates: VoiceSearchTemplates = {
+const defaultTemplates: VoiceSearchComponentTemplates = {
   buttonText({ status, errorCode, isListening }) {
     return `<svg
        xmlns="http://www.w3.org/2000/svg"

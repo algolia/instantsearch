@@ -9,17 +9,21 @@ import {
   PaginationCSSClasses,
   PaginationTemplates,
 } from '../../widgets/pagination/pagination';
-import { ComponentCSSClasses } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates } from '../../types';
 
 export type PaginationComponentCSSClasses = ComponentCSSClasses<
   PaginationCSSClasses
+>;
+
+export type PaginationComponentTemplates = ComponentTemplates<
+  PaginationTemplates
 >;
 
 export type PaginationProps = {
   createURL(value: number): string;
   cssClasses: PaginationComponentCSSClasses;
   currentPage: number;
-  templates: PaginationTemplates;
+  templates: PaginationComponentTemplates;
   nbPages?: number;
   pages?: number[];
   isFirstPage: boolean;

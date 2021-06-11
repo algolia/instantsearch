@@ -9,10 +9,14 @@ import {
   MenuSelectTemplates,
 } from '../../widgets/menu-select/menu-select';
 import { MenuRenderState } from '../../connectors/menu/connectMenu';
-import { ComponentCSSClasses } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates } from '../../types';
 
 export type MenuSelectComponentCSSClasses = ComponentCSSClasses<
   MenuSelectCSSClasses
+>;
+
+export type MenuSelectComponentTemplates = ComponentTemplates<
+  MenuSelectTemplates
 >;
 
 type MenuItem = {
@@ -39,7 +43,7 @@ type Props = {
   items: MenuItem[];
   refine: MenuRenderState['refine'];
   templateProps: {
-    templates: MenuSelectTemplates;
+    templates: MenuSelectComponentTemplates;
   };
 };
 

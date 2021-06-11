@@ -4,6 +4,7 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList, {
   RefinementListComponentCSSClasses,
+  RefinementListWidgetTemplates,
 } from '../../components/RefinementList/RefinementList';
 import connectRefinementList, {
   RefinementListRenderState,
@@ -20,6 +21,7 @@ import { Template, WidgetFactory, RendererOptions } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 import { SearchBoxTemplates } from '../search-box/search-box';
+import { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -27,34 +29,34 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('RefinementList');
 const searchBoxSuit = component('SearchBox');
 
-type RefinementListOwnTemplates = {
+export type RefinementListOwnTemplates = {
   /**
    * Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
    */
-  item: Template<RefinementListItemData>;
+  item?: Template<RefinementListItemData>;
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
    */
-  showMoreText: Template;
+  showMoreText?: Template;
   /**
    * Templates to use for search for facet values when there are no results.
    */
-  searchableNoResults: Template;
+  searchableNoResults?: Template;
 };
 
 type RefinementListSearchableTemplates = {
   /**
    * Templates to use for search for facet values submit button.
    */
-  searchableSubmit: SearchBoxTemplates['submit'];
+  searchableSubmit?: SearchBoxTemplates['submit'];
   /**
    * Templates to use for search for facet values reset button.
    */
-  searchableReset: SearchBoxTemplates['reset'];
+  searchableReset?: SearchBoxTemplates['reset'];
   /**
    * Templates to use for the search for facet values loading indicator.
    */
-  searchableLoadingIndicator: SearchBoxTemplates['loadingIndicator'];
+  searchableLoadingIndicator?: SearchBoxTemplates['loadingIndicator'];
 };
 
 export type RefinementListTemplates = RefinementListSearchableTemplates &
@@ -190,14 +192,14 @@ export type RefinementListWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<RefinementListTemplates>;
+  templates?: RefinementListTemplates;
   /**
    * CSS classes to add to the wrapping elements.
    */
   cssClasses?: RefinementListCSSClasses;
 };
 
-export const defaultTemplates: RefinementListOwnTemplates = {
+export const defaultTemplates: RefinementListWidgetTemplates = {
   item: `<label class="{{cssClasses.label}}">
   <input type="checkbox"
          class="{{cssClasses.checkbox}}"
@@ -231,11 +233,11 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: RefinementListComponentCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
-    searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
+    templateProps?: PreparedTemplateProps<RefinementListWidgetTemplates>;
+    searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
   };
-  templates: Partial<RefinementListOwnTemplates>;
-  searchBoxTemplates: Partial<SearchBoxTemplates>;
+  templates: RefinementListWidgetTemplates;
+  searchBoxTemplates: SearchBoxComponentTemplates;
   showMore?: boolean;
   searchable?: boolean;
   searchablePlaceholder?: string;
@@ -256,12 +258,16 @@ const renderer = ({
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
+    renderState.templateProps = prepareTemplateProps<
+      RefinementListWidgetTemplates
+    >({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
-    renderState.searchBoxTemplateProps = prepareTemplateProps({
+    renderState.searchBoxTemplateProps = prepareTemplateProps<
+      SearchBoxComponentTemplates
+    >({
       defaultTemplates: searchBoxDefaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: searchBoxTemplates,
@@ -274,8 +280,8 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      templateProps={renderState.templateProps}
-      searchBoxTemplateProps={renderState.searchBoxTemplateProps}
+      templateProps={renderState.templateProps!}
+      searchBoxTemplateProps={renderState.searchBoxTemplateProps!}
       toggleRefinement={refine}
       searchFacetValues={searchable ? searchForItems : undefined}
       searchPlaceholder={searchablePlaceholder}
@@ -332,7 +338,7 @@ const refinementList: RefinementListWidget = function refinementList(
     searchableEscapeFacetValues = true,
     searchableIsAlwaysActive = true,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = defaultTemplates as RefinementListTemplates,
+    templates: userTemplates = {},
     transformItems,
   } = widgetParams || {};
 
@@ -413,15 +419,21 @@ const refinementList: RefinementListWidget = function refinementList(
       ),
     },
   };
+  const templates = {
+    ...defaultTemplates,
+    ...userTemplates,
+  };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    templates: userTemplates,
+    templates,
     searchBoxTemplates: {
-      submit: userTemplates.searchableSubmit,
-      reset: userTemplates.searchableReset,
-      loadingIndicator: userTemplates.searchableLoadingIndicator,
+      submit: templates.searchableSubmit || searchBoxDefaultTemplates.submit,
+      reset: templates.searchableReset || searchBoxDefaultTemplates.reset,
+      loadingIndicator:
+        templates.searchableLoadingIndicator ||
+        searchBoxDefaultTemplates.loadingIndicator,
     },
     renderState: {},
     searchable,

@@ -9,6 +9,7 @@ import connectMenu, {
 } from '../../connectors/menu/connectMenu';
 import MenuSelect, {
   MenuSelectComponentCSSClasses,
+  MenuSelectComponentTemplates,
 } from '../../components/MenuSelect/MenuSelect';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -46,7 +47,7 @@ export type MenuSelectTemplates = {
   /**
    * Item template, provided with `label`, `count`, `isRefined` and `value` data properties.
    */
-  item: Template<{
+  item?: Template<{
     label: string;
     value: string;
     count: number;
@@ -55,7 +56,7 @@ export type MenuSelectTemplates = {
   /**
    * Label of the "see all" option in the select.
    */
-  defaultOption: Template;
+  defaultOption?: Template;
 };
 
 export type MenuSelectWidgetParams = {
@@ -66,7 +67,7 @@ export type MenuSelectWidgetParams = {
   /**
    * Customize the output through templating.
    */
-  templates?: Partial<MenuSelectTemplates>;
+  templates?: MenuSelectTemplates;
   /**
    * CSS classes to add to the wrapping elements.
    */
@@ -81,8 +82,10 @@ const renderer = ({
 }: {
   containerNode: HTMLElement;
   cssClasses: MenuSelectComponentCSSClasses;
-  renderState: { templateProps?: PreparedTemplateProps<MenuSelectTemplates> };
-  templates: Partial<MenuSelectTemplates>;
+  renderState: {
+    templateProps?: PreparedTemplateProps<MenuSelectComponentTemplates>;
+  };
+  templates: MenuSelectComponentTemplates;
 }) => (
   {
     refine,
@@ -92,7 +95,9 @@ const renderer = ({
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
+    renderState.templateProps = prepareTemplateProps<
+      MenuSelectComponentTemplates
+    >({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -124,7 +129,7 @@ const menuSelect: MenuSelectWidget = function menuSelect(widgetParams) {
     sortBy = ['name:asc'],
     limit = 10,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates: userTemplates = {},
     transformItems,
   } = widgetParams || {};
 
@@ -141,6 +146,10 @@ const menuSelect: MenuSelectWidget = function menuSelect(widgetParams) {
     ),
     select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
     option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
+  };
+  const templates = {
+    ...defaultTemplates,
+    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

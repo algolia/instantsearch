@@ -8,10 +8,14 @@ import {
   RangeInputTemplates,
 } from '../../widgets/range-input/range-input';
 import { Range, RangeBoundaries } from '../../connectors/range/connectRange';
-import { ComponentCSSClasses } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates } from '../../types';
 
 export type RangeInputComponentCSSClasses = ComponentCSSClasses<
   RangeInputCSSClasses
+>;
+
+export type RangeInputComponentTemplates = ComponentTemplates<
+  RangeInputTemplates
 >;
 
 export type RangeInputProps = {
@@ -21,7 +25,7 @@ export type RangeInputProps = {
   values: Partial<Range>;
   cssClasses: RangeInputComponentCSSClasses;
   templateProps: {
-    templates: RangeInputTemplates;
+    templates: RangeInputComponentTemplates;
   };
   refine(rangeValue: RangeBoundaries): void;
 };

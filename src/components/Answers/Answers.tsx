@@ -7,9 +7,11 @@ import {
   AnswersCSSClasses,
   AnswersTemplates,
 } from '../../widgets/answers/answers';
-import { ComponentCSSClasses, Hits } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates, Hits } from '../../types';
 
 export type AnswerComponentCSSClasses = ComponentCSSClasses<AnswersCSSClasses>;
+
+export type AnswerComponentTemplates = ComponentTemplates<AnswersTemplates>;
 
 export type AnswersProps = {
   hits: Hits;
@@ -17,7 +19,7 @@ export type AnswersProps = {
   cssClasses: AnswerComponentCSSClasses;
   templateProps: {
     [key: string]: any;
-    templates: AnswersTemplates;
+    templates: AnswerComponentTemplates;
   };
 };
 

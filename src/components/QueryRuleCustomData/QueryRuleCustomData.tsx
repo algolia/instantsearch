@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { ComponentCSSClasses } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates } from '../../types';
 import {
   QueryRuleCustomDataCSSClasses,
   QueryRuleCustomDataTemplates,
@@ -12,9 +12,13 @@ export type QueryRuleCustomDataComponentCSSClasses = ComponentCSSClasses<
   QueryRuleCustomDataCSSClasses
 >;
 
+export type QueryRuleCustomDataComponentTemplates = ComponentTemplates<
+  QueryRuleCustomDataTemplates
+>;
+
 export type QueryRuleCustomDataProps = {
   cssClasses: QueryRuleCustomDataComponentCSSClasses;
-  templates: QueryRuleCustomDataTemplates;
+  templates: QueryRuleCustomDataComponentTemplates;
   items: any[];
 };
 

@@ -15,6 +15,7 @@ import connectQueryRules, {
 } from '../../connectors/query-rules/connectQueryRules';
 import CustomData, {
   QueryRuleCustomDataComponentCSSClasses,
+  QueryRuleCustomDataComponentTemplates,
 } from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
@@ -23,7 +24,7 @@ export type QueryRuleCustomDataCSSClasses = {
 };
 
 export type QueryRuleCustomDataTemplates = {
-  default: Template<{ items: any[] }>;
+  default?: Template<{ items: any[] }>;
 };
 
 type QueryRuleCustomDataWidgetParams = {
@@ -52,9 +53,11 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: QueryRuleCustomDataComponentCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<QueryRuleCustomDataTemplates>;
+    templateProps?: PreparedTemplateProps<
+      QueryRuleCustomDataComponentTemplates
+    >;
   };
-  templates: QueryRuleCustomDataTemplates;
+  templates: QueryRuleCustomDataComponentTemplates;
 }) => ({ items }: QueryRulesRenderState) => {
   render(
     <CustomData
@@ -87,7 +90,7 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
   const defaultTemplates = {
     default: ({ items }) => JSON.stringify(items, null, 2),
   };
-  const templates: QueryRuleCustomDataTemplates = {
+  const templates = {
     ...defaultTemplates,
     ...userTemplates,
   };

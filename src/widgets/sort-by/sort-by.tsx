@@ -23,15 +23,15 @@ export type SortByWidgetCssClasses = {
   /**
    * CSS classes added to the outer `<div>`.
    */
-  root: string | string[];
+  root?: string | string[];
   /**
    * CSS classes added to the parent `<select>`.
    */
-  select: string | string[];
+  select?: string | string[];
   /**
    * CSS classes added to each `<option>`.
    */
-  option: string | string[];
+  option?: string | string[];
 };
 
 export type SortByIndexDefinition = {
@@ -57,7 +57,7 @@ export type SortByWidgetParams = {
   /**
    * CSS classes to be added.
    */
-  cssClasses?: Partial<SortByWidgetCssClasses>;
+  cssClasses?: SortByWidgetCssClasses;
   /**
    * Function to transform the items passed to the templates.
    */

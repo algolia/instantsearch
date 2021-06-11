@@ -6,15 +6,19 @@ import {
   RelevantSortCSSClasses,
   RelevantSortTemplates,
 } from '../../widgets/relevant-sort/relevant-sort';
-import { ComponentCSSClasses } from '../../types';
+import { ComponentCSSClasses, ComponentTemplates } from '../../types';
 
 export type RelevantSortComponentCSSClasses = ComponentCSSClasses<
   RelevantSortCSSClasses
 >;
 
+export type RelevantSortComponentTemplates = ComponentTemplates<
+  RelevantSortTemplates
+>;
+
 type RelevantSortProps = {
   cssClasses: RelevantSortComponentCSSClasses;
-  templates: RelevantSortTemplates;
+  templates: RelevantSortComponentTemplates;
   isRelevantSorted: boolean;
   isVirtualReplica: boolean;
   refine(relevancyStrictness: number | undefined): void;
