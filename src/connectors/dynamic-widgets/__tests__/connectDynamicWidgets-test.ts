@@ -42,25 +42,6 @@ describe('connectDynamicWidgets', () => {
         See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
       `);
     });
-
-    it('minimal usage', () => {
-      expect(() =>
-        EXPERIMENTAL_connectDynamicWidgets(() => {})({
-          widgets: [],
-        })
-      ).not.toThrow();
-    });
-
-    it('transformItems', () => {
-      expect(() =>
-        EXPERIMENTAL_connectDynamicWidgets(() => {})({
-          widgets: [],
-          transformItems(items, { results }) {
-            return items.map(item => item + results.nbHits);
-          },
-        })
-      ).not.toThrow();
-    });
   });
 
   describe('init', () => {

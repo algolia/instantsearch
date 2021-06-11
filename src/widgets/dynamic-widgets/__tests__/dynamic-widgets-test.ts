@@ -51,15 +51,6 @@ describe('dynamicWidgets()', () => {
       `);
     });
 
-    test('transformItems is not required', () => {
-      expect(() =>
-        EXPERIMENTAL_dynamicWidgets({
-          container: document.createElement('div'),
-          widgets: [],
-        })
-      ).not.toThrowError();
-    });
-
     test('all options', () => {
       expect(() =>
         EXPERIMENTAL_dynamicWidgets({
