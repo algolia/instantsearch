@@ -8,14 +8,14 @@ export type SelectorOption = {
   label: string;
 };
 
-export type SelectorCSSClasses = {
-  root?: string | string[];
-  select?: string | string[];
-  option?: string | string[];
+export type SelectorComponentCSSClasses = {
+  root: string;
+  select: string;
+  option: string;
 };
 
 export type SelectorProps = {
-  cssClasses: SelectorCSSClasses;
+  cssClasses: SelectorComponentCSSClasses;
   currentValue?: string | number;
   options: SelectorOption[];
   setValue(value: SelectorOption['value']): void;

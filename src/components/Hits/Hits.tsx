@@ -5,12 +5,10 @@ import cx from 'classnames';
 import Template from '../Template/Template';
 import { SearchResults } from 'algoliasearch-helper';
 import { BindEventForHits, SendEventForHits } from '../../lib/utils';
-import { Hits as HitsArray } from '../../types';
+import { ComponentCSSClasses, Hits as HitsArray } from '../../types';
 import { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
 
-export type HitsComponentCSSClasses = Required<
-  { [key in keyof HitsCSSClasses]: string }
->;
+export type HitsComponentCSSClasses = ComponentCSSClasses<HitsCSSClasses>;
 
 export type HitsProps = {
   results: SearchResults;
