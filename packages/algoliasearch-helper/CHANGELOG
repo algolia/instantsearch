@@ -1,3 +1,6 @@
+3.5.3 - 2021-06-14
+ * fix(ts): correct required for getFacetValues https://github.com/algolia/algoliasearch-helper-js/commit/55a909fe1ef892b3e76ddc109155336c77875292
+
 3.5.2 - 2021-06-14
  * fix(facetOrdering): hierarchical attributes sort by path https://github.com/algolia/algoliasearch-helper-js/commit/c1d9764b7ed9492356a8b9ccfdb980fe0361c46f
 
