@@ -1,3 +1,6 @@
+3.5.2 - 2021-06-14
+ * fix(facetOrdering): hierarchical attributes sort by path https://github.com/algolia/algoliasearch-helper-js/commit/c1d9764b7ed9492356a8b9ccfdb980fe0361c46f
+
 3.5.1 - 2021-06-14
  * fix(ts): correctly optional renderingContent https://github.com/algolia/algoliasearch-helper-js/commit/41d27f8336f48dd2eaec53afafcceb81a58d0dfb
 
