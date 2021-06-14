@@ -1,3 +1,6 @@
+3.5.0 - 2021-06-14
+ * feat(getFacetValues): process facetOrdering (#822) https://github.com/algolia/algoliasearch-helper-js/commit/8c7ff444407cc7855c4d76b15954f4a6864d0b5d
+
 3.4.5 - 2021-06-10
  * feat(ts): document renderingContent (#823) https://github.com/algolia/algoliasearch-helper-js/commit/7b176a7bbc38de193ac1c6a34dacde63059e4b3b
 
