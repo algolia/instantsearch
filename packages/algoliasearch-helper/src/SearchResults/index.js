@@ -659,20 +659,29 @@ function extractNormalizedFacetValues(results, attribute) {
 }
 
 /**
- * Sort nodes of a hierarchical facet results
+ * Sort nodes of a hierarchical or disjunctive facet results
  * @private
- * @param {HierarchicalFacet} node node to upon which we want to apply the sort
+ * @param {function} sortFn
+ * @param {HierarchicalFacet|Array} node node upon which we want to apply the sort
+ * @param {string[]} names attribute names
+ * @param {number} [level=0] current index in the names array
  */
-function recSort(sortFn, node) {
+function recSort(sortFn, node, names, level) {
+  level = level || 0;
+
+  if (Array.isArray(node)) {
+    return sortFn(node, names[level]);
+  }
+
   if (!node.data || node.data.length === 0) {
     return node;
   }
 
   var children = node.data.map(function(childNode) {
-    return recSort(sortFn, childNode);
+    return recSort(sortFn, childNode, names, level + 1);
   });
-  var sortedChildren = sortFn(children);
-  var newNode = merge({}, node, {data: sortedChildren});
+  var sortedChildren = sortFn(children, names[level]);
+  var newNode = defaultsPure({data: sortedChildren}, node);
   return newNode;
 }
 
@@ -680,6 +689,70 @@ SearchResults.DEFAULT_SORT = ['isRefined:desc', 'count:desc', 'name:asc'];
 
 function vanillaSortFn(order, data) {
   return data.sort(order);
+}
+
+/**
+ * @typedef FacetOrdering
+ * @type {Object}
+ * @property {string[]} [order]
+ * @property {'count' | 'alpha' | 'hidden'} [sortRemainingBy]
+ */
+
+/**
+ * Sorts facet arrays via their facet ordering
+ * @param {Array} facetValues the values
+ * @param {FacetOrdering} facetOrdering the ordering
+ * @returns {Array}
+ */
+function sortViaFacetOrdering(facetValues, facetOrdering) {
+  var orderedFacets = [];
+  var remainingFacets = [];
+
+  var order = facetOrdering.order || [];
+  /**
+   * an object with the keys being the values in order, the values their index:
+   * ['one', 'two'] -> { one: 0, two: 1 }
+   */
+  var reverseOrder = order.reduce(function(acc, name, i) {
+    acc[name] = i;
+    return acc;
+  }, {});
+
+  facetValues.forEach(function(item) {
+    if (reverseOrder[item.name] !== undefined) {
+      orderedFacets[reverseOrder[item.name]] = item;
+    } else {
+      remainingFacets.push(item);
+    }
+  });
+
+  var sortRemainingBy = facetOrdering.sortRemainingBy;
+  var ordering;
+  if (sortRemainingBy === 'hidden') {
+    return orderedFacets;
+  } else if (sortRemainingBy === 'alpha') {
+    ordering = [['name'], ['asc']];
+  } else {
+    ordering = [['count'], ['desc']];
+  }
+
+  return orderedFacets.concat(
+    orderBy(remainingFacets, ordering[0], ordering[1])
+  );
+}
+
+/**
+ * @param {SearchResults} results the search results class
+ * @param {string} attribute the attribute to retrieve ordering of
+ * @returns {FacetOrdering=}
+ */
+function getFacetOrdering(results, attribute) {
+  return (
+    results.renderingContent &&
+    results.renderingContent.facetOrdering &&
+    results.renderingContent.facetOrdering.values &&
+    results.renderingContent.facetOrdering.values[attribute]
+  );
 }
 
 /**
@@ -694,6 +767,9 @@ function vanillaSortFn(order, data) {
  * might not be respected if you have facet values that are already refined.
  * @param {string} attribute attribute name
  * @param {object} opts configuration options.
+ * @param {boolean} [opts.facetOrdering]
+ * Force the use of facetOrdering from the result if a sortBy is present. If
+ * sortBy isn't present, facetOrdering will be used automatically.
  * @param {Array.<string> | function} opts.sortBy
  * When using strings, it consists of
  * the name of the [FacetValue](#SearchResults.FacetValue) or the
@@ -733,30 +809,41 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
     return undefined;
   }
 
-  var options = defaultsPure({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
+  var options = defaultsPure({}, opts, {
+    sortBy: SearchResults.DEFAULT_SORT,
+    // if no sortBy is given, attempt to sort based on facetOrdering
+    // if it is given, we still allow to sort via facet ordering first
+    facetOrdering: !(opts && opts.sortBy)
+  });
 
-  if (Array.isArray(options.sortBy)) {
-    var order = formatSort(options.sortBy, SearchResults.DEFAULT_SORT);
-    if (Array.isArray(facetValues)) {
-      return orderBy(facetValues, order[0], order[1]);
-    }
-    // If facetValues is not an array, it's an object thus a hierarchical facet object
-    return recSort(function(hierarchicalFacetValues) {
-      return orderBy(hierarchicalFacetValues, order[0], order[1]);
-    }, facetValues);
-  } else if (typeof options.sortBy === 'function') {
-    if (Array.isArray(facetValues)) {
-      return facetValues.sort(options.sortBy);
-    }
-    // If facetValues is not an array, it's an object thus a hierarchical facet object
-    return recSort(function(data) {
-      return vanillaSortFn(options.sortBy, data);
-    }, facetValues);
+  var results = this;
+  var attributes;
+  if (Array.isArray(facetValues)) {
+    attributes = [attribute];
+  } else {
+    var config = results._state.getHierarchicalFacetByName(facetValues.name);
+    attributes = config.attributes;
   }
-  throw new Error(
-    'options.sortBy is optional but if defined it must be ' +
-    'either an array of string (predicates) or a sorting function'
-  );
+
+  return recSort(function(data, facetName) {
+    if (options.facetOrdering) {
+      var facetOrdering = getFacetOrdering(results, facetName);
+      if (Boolean(facetOrdering)) {
+        return sortViaFacetOrdering(data, facetOrdering);
+      }
+    }
+
+    if (Array.isArray(options.sortBy)) {
+      var order = formatSort(options.sortBy, SearchResults.DEFAULT_SORT);
+      return orderBy(data, order[0], order[1]);
+    } else if (typeof options.sortBy === 'function') {
+      return vanillaSortFn(options.sortBy, data);
+    }
+    throw new Error(
+      'options.sortBy is optional but if defined it must be ' +
+        'either an array of string (predicates) or a sorting function'
+    );
+  }, facetValues, attributes);
 };
 
 /**
