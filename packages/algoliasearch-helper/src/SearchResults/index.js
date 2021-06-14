@@ -719,8 +719,10 @@ function sortViaFacetOrdering(facetValues, facetOrdering) {
   }, {});
 
   facetValues.forEach(function(item) {
-    if (reverseOrder[item.name] !== undefined) {
-      orderedFacets[reverseOrder[item.name]] = item;
+    // hierarchical facets get sorted using their raw name
+    var name = item.path || item.name;
+    if (reverseOrder[name] !== undefined) {
+      orderedFacets[reverseOrder[name]] = item;
     } else {
       remainingFacets.push(item);
     }
@@ -731,7 +733,7 @@ function sortViaFacetOrdering(facetValues, facetOrdering) {
   if (sortRemainingBy === 'hidden') {
     return orderedFacets;
   } else if (sortRemainingBy === 'alpha') {
-    ordering = [['name'], ['asc']];
+    ordering = [['path', 'name'], ['asc', 'asc']];
   } else {
     ordering = [['count'], ['desc']];
   }

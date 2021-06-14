@@ -275,6 +275,14 @@ describe('hierarchical facet', function() {
               isRefined: false,
               exhaustive: true,
               data: null
+            },
+            {
+              name: 'Useless Gift Cards',
+              path: 'Best Buy Gift Cards > Useless Gift Cards',
+              count: 12,
+              isRefined: false,
+              exhaustive: true,
+              data: null
             }
           ]
         },
@@ -374,6 +382,14 @@ describe('hierarchical facet', function() {
               isRefined: false,
               exhaustive: true,
               data: null
+            },
+            {
+              name: 'Useless Gift Cards',
+              path: 'Best Buy Gift Cards > Useless Gift Cards',
+              count: 12,
+              isRefined: false,
+              exhaustive: true,
+              data: null
             }
           ]
         },
@@ -466,6 +482,14 @@ describe('hierarchical facet', function() {
               isRefined: false,
               exhaustive: true,
               data: null
+            },
+            {
+              name: 'Useless Gift Cards',
+              path: 'Best Buy Gift Cards > Useless Gift Cards',
+              count: 12,
+              isRefined: false,
+              exhaustive: true,
+              data: null
             }
           ]
         },
@@ -555,6 +579,14 @@ describe('hierarchical facet', function() {
               name: 'Swag Gift Cards',
               path: 'Best Buy Gift Cards > Swag Gift Cards',
               count: 20,
+              isRefined: false,
+              exhaustive: true,
+              data: null
+            },
+            {
+              name: 'Useless Gift Cards',
+              path: 'Best Buy Gift Cards > Useless Gift Cards',
+              count: 12,
               isRefined: false,
               exhaustive: true,
               data: null
@@ -658,6 +690,14 @@ describe('hierarchical facet', function() {
               isRefined: false,
               exhaustive: true,
               data: null
+            },
+            {
+              name: 'Useless Gift Cards',
+              path: 'Best Buy Gift Cards > Useless Gift Cards',
+              count: 12,
+              isRefined: false,
+              exhaustive: true,
+              data: null
             }
           ]
         }
@@ -678,7 +718,7 @@ describe('hierarchical facet', function() {
               sortRemainingBy: 'hidden'
             },
             'hierarchicalCategories.lvl1': {
-              order: ['Swag Gift Cards'],
+              order: ['Best Buy Gift Cards > Entertainment Gift Cards'],
               sortRemainingBy: 'count'
             }
           }
@@ -708,6 +748,14 @@ describe('hierarchical facet', function() {
           exhaustive: true,
           data: [
             {
+              name: 'Entertainment Gift Cards',
+              path: 'Best Buy Gift Cards > Entertainment Gift Cards',
+              count: 17,
+              isRefined: true,
+              exhaustive: true,
+              data: null
+            },
+            {
               name: 'Swag Gift Cards',
               path: 'Best Buy Gift Cards > Swag Gift Cards',
               count: 20,
@@ -716,10 +764,10 @@ describe('hierarchical facet', function() {
               data: null
             },
             {
-              name: 'Entertainment Gift Cards',
-              path: 'Best Buy Gift Cards > Entertainment Gift Cards',
-              count: 17,
-              isRefined: true,
+              name: 'Useless Gift Cards',
+              path: 'Best Buy Gift Cards > Useless Gift Cards',
+              count: 12,
+              isRefined: false,
               exhaustive: true,
               data: null
             }
