@@ -1250,7 +1250,7 @@ declare namespace algoliasearchHelper {
           /**
            * Ordered facet lists
            */
-          order: string[];
+          order?: string[];
         };
         /**
          * the ordering of facet values, within an individual list
@@ -1260,14 +1260,14 @@ declare namespace algoliasearchHelper {
             /**
              * Ordered facet values
              */
-            order: string[];
+            order?: string[];
             /**
              * How to display the remaining items.
              * - facet count (descending)
              * - alphabetical (ascending)
              * - hidden (show only pinned values)
              */
-            sortRemainingBy: 'count' | 'alpha' | 'hidden';
+            sortRemainingBy?: 'count' | 'alpha' | 'hidden';
           };
         };
       };
@@ -1352,7 +1352,10 @@ declare namespace algoliasearchHelper {
      */
     getFacetValues(
       attribute: string,
-      opts: any
+      opts: {
+        sortBy: string[],
+        facetOrdering: boolean;
+      }
     ): SearchResults.FacetValue[] | SearchResults.HierarchicalFacet | undefined;
 
     /**
