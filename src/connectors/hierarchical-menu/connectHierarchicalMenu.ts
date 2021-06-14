@@ -23,6 +23,8 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const DEFAULT_SORT = ['name:asc'];
+
 export type HierarchicalMenuItem = {
   /**
    * Value of the menu item.
@@ -174,7 +176,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector = function connectHiera
       limit = 10,
       showMore = false,
       showMoreLimit = 20,
-      sortBy = ['name:asc'],
+      sortBy = DEFAULT_SORT,
       transformItems = (items => items) as TransformItems<HierarchicalMenuItem>,
     } = widgetParams || {};
 
@@ -273,11 +275,6 @@ const connectHierarchicalMenu: HierarchicalMenuConnector = function connectHiera
         );
       },
 
-      /**
-       * @param {Object} param0 cleanup arguments
-       * @param {any} param0.state current search parameters
-       * @returns {any} next search parameters
-       */
       dispose({ state }) {
         unmountFn();
 
@@ -336,6 +333,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector = function connectHiera
         if (results) {
           const facetValues = results.getFacetValues(hierarchicalFacetName, {
             sortBy,
+            facetOrdering: sortBy === DEFAULT_SORT,
           });
           const facetItems =
             facetValues && !Array.isArray(facetValues) && facetValues.data

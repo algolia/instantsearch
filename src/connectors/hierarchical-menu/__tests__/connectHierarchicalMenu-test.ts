@@ -691,6 +691,219 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         canToggleShowMore: false,
       });
     });
+
+    test('uses facetOrdering if available for items', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHierarchicalMenu = connectHierarchicalMenu(
+        renderFn,
+        unmountFn
+      );
+      const hierarchicalMenu = createHierarchicalMenu({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        hierarchicalMenu.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {
+            hierarchicalMenu: {
+              category: ['Decoration'],
+            },
+          },
+        })
+      );
+
+      hierarchicalMenu.init!(createInitOptions({ helper }));
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                category: {
+                  order: ['Outdoor'],
+                  sortRemainingBy: 'alpha',
+                },
+                subCategory: {
+                  order: ['Decoration > Frames & pictures'],
+                  sortRemainingBy: 'count',
+                },
+              },
+            },
+          },
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+            subCategory: {
+              'Decoration > Candle holders & candles': 193,
+              'Decoration > Frames & pictures': 173,
+            },
+          },
+        }),
+        createSingleSearchResponse({
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
+          },
+        }),
+      ]);
+
+      const renderState = hierarchicalMenu.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results,
+        })
+      );
+
+      expect(renderState.items).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "count": 47,
+            "data": null,
+            "exhaustive": true,
+            "isRefined": false,
+            "label": "Outdoor",
+            "value": "Outdoor",
+          },
+          Object {
+            "count": 880,
+            "data": Array [
+              Object {
+                "count": 173,
+                "data": null,
+                "exhaustive": true,
+                "isRefined": false,
+                "label": "Frames & pictures",
+                "value": "Decoration > Frames & pictures",
+              },
+              Object {
+                "count": 193,
+                "data": null,
+                "exhaustive": true,
+                "isRefined": false,
+                "label": "Candle holders & candles",
+                "value": "Decoration > Candle holders & candles",
+              },
+            ],
+            "exhaustive": true,
+            "isRefined": true,
+            "label": "Decoration",
+            "value": "Decoration",
+          },
+        ]
+      `);
+    });
+
+    test('sortBy overrides facetOrdering if available for items', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHierarchicalMenu = connectHierarchicalMenu(
+        renderFn,
+        unmountFn
+      );
+      const hierarchicalMenu = createHierarchicalMenu({
+        attributes: ['category', 'subCategory'],
+        sortBy: ['name:asc'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        hierarchicalMenu.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {
+            hierarchicalMenu: {
+              category: ['Decoration'],
+            },
+          },
+        })
+      );
+
+      hierarchicalMenu.init!(createInitOptions({ helper }));
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                category: {
+                  order: ['Outdoor'],
+                  sortRemainingBy: 'alpha',
+                },
+                subCategory: {
+                  order: ['Decoration > Frames & pictures'],
+                  sortRemainingBy: 'count',
+                },
+              },
+            },
+          },
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+            subCategory: {
+              'Decoration > Candle holders & candles': 193,
+              'Decoration > Frames & pictures': 173,
+            },
+          },
+        }),
+        createSingleSearchResponse({
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
+          },
+        }),
+      ]);
+
+      const renderState = hierarchicalMenu.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results,
+        })
+      );
+
+      expect(renderState.items).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "count": 880,
+            "data": Array [
+              Object {
+                "count": 193,
+                "data": null,
+                "exhaustive": true,
+                "isRefined": false,
+                "label": "Candle holders & candles",
+                "value": "Decoration > Candle holders & candles",
+              },
+              Object {
+                "count": 173,
+                "data": null,
+                "exhaustive": true,
+                "isRefined": false,
+                "label": "Frames & pictures",
+                "value": "Decoration > Frames & pictures",
+              },
+            ],
+            "exhaustive": true,
+            "isRefined": true,
+            "label": "Decoration",
+            "value": "Decoration",
+          },
+          Object {
+            "count": 47,
+            "data": null,
+            "exhaustive": true,
+            "isRefined": false,
+            "label": "Outdoor",
+            "value": "Outdoor",
+          },
+        ]
+      `);
+    });
   });
 
   describe('getWidgetUiState', () => {

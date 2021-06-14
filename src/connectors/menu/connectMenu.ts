@@ -19,6 +19,8 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const DEFAULT_SORT = ['isRefined', 'name:asc'];
+
 export type MenuItem = {
   /**
    * The value of the menu item.
@@ -147,7 +149,7 @@ const connectMenu: MenuConnector = function connectMenu(
       limit = 10,
       showMore = false,
       showMoreLimit = 20,
-      sortBy = ['isRefined', 'name:asc'],
+      sortBy = DEFAULT_SORT,
       transformItems = (items => items) as TransformItems<MenuItem>,
     } = widgetParams || {};
 
@@ -286,6 +288,7 @@ const connectMenu: MenuConnector = function connectMenu(
         if (results) {
           const facetValues = results.getFacetValues(attribute, {
             sortBy,
+            facetOrdering: sortBy === DEFAULT_SORT,
           });
           const facetItems =
             facetValues && !Array.isArray(facetValues) && facetValues.data

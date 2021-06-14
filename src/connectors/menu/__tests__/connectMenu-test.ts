@@ -560,7 +560,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
   });
 
   describe('getWidgetRenderState', () => {
-    test('returns the widget render state', () => {
+    test('returns the widget render state (init)', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createMenu = connectMenu(renderFn, unmountFn);
@@ -588,6 +588,202 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         canToggleShowMore: false,
         widgetParams: { attribute: 'brand' },
       });
+    });
+
+    test('returns the widget render state (render)', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+      });
+      const helper = jsHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      );
+
+      const renderState1 = menu.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              facets: {
+                brand: {
+                  Apple: 100,
+                  Samsung: 1,
+                },
+              },
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState1).toEqual({
+        items: [
+          {
+            count: 100,
+            data: null,
+            exhaustive: true,
+            isRefined: false,
+            label: 'Apple',
+            value: 'Apple',
+          },
+          {
+            count: 1,
+            data: null,
+            exhaustive: true,
+            isRefined: false,
+            label: 'Samsung',
+            value: 'Samsung',
+          },
+        ],
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        canRefine: true,
+        isShowingMore: false,
+        toggleShowMore: expect.any(Function),
+        canToggleShowMore: false,
+        widgetParams: { attribute: 'brand' },
+      });
+    });
+
+    test('uses facetOrdering if available for items', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+      });
+      const helper = jsHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      );
+
+      const renderState1 = menu.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              renderingContent: {
+                facetOrdering: {
+                  values: {
+                    brand: {
+                      order: ['Samsung'],
+                      sortRemainingBy: 'count',
+                    },
+                  },
+                },
+              },
+              facets: {
+                brand: {
+                  Apple: 100,
+                  Algolia: 3,
+                  Samsung: 1,
+                },
+              },
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState1.items).toEqual([
+        {
+          count: 1,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Samsung',
+          value: 'Samsung',
+        },
+        {
+          count: 100,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Apple',
+          value: 'Apple',
+        },
+        {
+          count: 3,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Algolia',
+          value: 'Algolia',
+        },
+      ]);
+    });
+
+    test('uses sortBy instead of facetOrdering if available for items', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createMenu = connectMenu(renderFn, unmountFn);
+      const menu = createMenu({
+        attribute: 'brand',
+        sortBy: ['name:asc'],
+      });
+      const helper = jsHelper(
+        createSearchClient(),
+        'indexName',
+        menu.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      );
+
+      const renderState1 = menu.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              renderingContent: {
+                facetOrdering: {
+                  values: {
+                    brand: {
+                      order: ['Samsung'],
+                      sortRemainingBy: 'count',
+                    },
+                  },
+                },
+              },
+              facets: {
+                brand: {
+                  Apple: 100,
+                  Algolia: 3,
+                  Samsung: 1,
+                },
+              },
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState1.items).toEqual([
+        {
+          count: 3,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Algolia',
+          value: 'Algolia',
+        },
+        {
+          count: 100,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Apple',
+          value: 'Apple',
+        },
+        {
+          count: 1,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Samsung',
+          value: 'Samsung',
+        },
+      ]);
     });
   });
 

@@ -26,6 +26,8 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const DEFAULT_SORT = ['isRefined', 'count:desc', 'name:asc'];
+
 export type RefinementListItem = {
   /**
    * The value of the refinement list item.
@@ -182,7 +184,7 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
       limit = 10,
       showMore = false,
       showMoreLimit = 20,
-      sortBy = ['isRefined', 'count:desc', 'name:asc'],
+      sortBy = DEFAULT_SORT,
       escapeFacetValues = true,
       transformItems = (items => items) as TransformItems<RefinementListItem>,
     } = widgetParams || {};
@@ -386,6 +388,7 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
         if (results) {
           const values = results.getFacetValues(attribute, {
             sortBy,
+            facetOrdering: sortBy === DEFAULT_SORT,
           });
           facetValues = values && Array.isArray(values) ? values : [];
           items = transformItems(

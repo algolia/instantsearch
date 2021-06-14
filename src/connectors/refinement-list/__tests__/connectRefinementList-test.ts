@@ -2589,6 +2589,153 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         })
       );
     });
+
+    it('uses facetOrdering if available for items', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRefinementList = connectRefinementList(renderFn, unmountFn);
+      const refinementListWidget = createRefinementList({ attribute: 'brand' });
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Samsung'],
+        },
+      });
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                brand: {
+                  order: ['Microsoft'],
+                  sortRemainingBy: 'alpha',
+                },
+              },
+            },
+          },
+          hits: [],
+          facets: {
+            brand: {
+              Apple: 88,
+              Microsoft: 66,
+              Samsung: 44,
+            },
+          },
+        }),
+      ]);
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState = refinementListWidget.getWidgetRenderState(
+        renderOptions
+      );
+
+      expect(renderState.items).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "count": 66,
+            "highlighted": "Microsoft",
+            "isRefined": false,
+            "label": "Microsoft",
+            "value": "Microsoft",
+          },
+          Object {
+            "count": 88,
+            "highlighted": "Apple",
+            "isRefined": true,
+            "label": "Apple",
+            "value": "Apple",
+          },
+          Object {
+            "count": 44,
+            "highlighted": "Samsung",
+            "isRefined": true,
+            "label": "Samsung",
+            "value": "Samsung",
+          },
+        ]
+      `);
+    });
+
+    it('uses sortBy instead of facetOrdering if available for items', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRefinementList = connectRefinementList(renderFn, unmountFn);
+      const refinementListWidget = createRefinementList({
+        attribute: 'brand',
+        sortBy: ['isRefined'],
+      });
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Samsung'],
+        },
+      });
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                brand: {
+                  order: ['Microsoft'],
+                  sortRemainingBy: 'alpha',
+                },
+              },
+            },
+          },
+          hits: [],
+          facets: {
+            brand: {
+              Apple: 88,
+              Microsoft: 66,
+              Samsung: 44,
+            },
+          },
+        }),
+      ]);
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState = refinementListWidget.getWidgetRenderState(
+        renderOptions
+      );
+
+      expect(renderState.items).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "count": 88,
+            "highlighted": "Apple",
+            "isRefined": true,
+            "label": "Apple",
+            "value": "Apple",
+          },
+          Object {
+            "count": 44,
+            "highlighted": "Samsung",
+            "isRefined": true,
+            "label": "Samsung",
+            "value": "Samsung",
+          },
+          Object {
+            "count": 66,
+            "highlighted": "Microsoft",
+            "isRefined": false,
+            "label": "Microsoft",
+            "value": "Microsoft",
+          },
+        ]
+      `);
+    });
   });
 
   describe('getWidgetSearchParameters', () => {

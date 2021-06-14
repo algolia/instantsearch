@@ -54,7 +54,7 @@
   "dependencies": {
     "@types/googlemaps": "^3.39.6",
     "@types/hogan.js": "^3.0.0",
-    "algoliasearch-helper": "^3.4.5",
+    "algoliasearch-helper": "^3.5.3",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
