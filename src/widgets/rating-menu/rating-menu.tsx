@@ -15,7 +15,11 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { RendererOptions, WidgetFactory } from '../../types';
+import {
+  ComponentCSSClasses,
+  RendererOptions,
+  WidgetFactory,
+} from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
@@ -32,56 +36,56 @@ export type RatingMenuCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root: string | string[];
+  root?: string | string[];
   /**
    * CSS class to add to the root element when there's no refinements.
    */
-  noRefinementRoot: string | string[];
+  noRefinementRoot?: string | string[];
   /**
    * CSS class to add to the list element.
    */
-  list: string | string[];
+  list?: string | string[];
   /**
    * CSS class to add to each item element.
    */
-  item: string | string[];
+  item?: string | string[];
   /**
    * CSS class to add the selected item element.
    */
-  selectedItem: string | string[];
+  selectedItem?: string | string[];
   /**
    * CSS class to add a disabled item element.
    */
-  disabledItem: string | string[];
+  disabledItem?: string | string[];
   /**
    * CSS class to add to each link element.
    */
-  link: string | string[];
+  link?: string | string[];
   /**
    * CSS class to add to each star element (when using the default template).
    */
-  starIcon: string | string[];
+  starIcon?: string | string[];
   /**
    * CSS class to add to each full star element (when using the default template).
    */
-  fullStarIcon: string | string[];
+  fullStarIcon?: string | string[];
   /**
    * CSS class to add to each empty star element (when using the default template).
    */
-  emptyStarIcon: string | string[];
+  emptyStarIcon?: string | string[];
   /**
    * CSS class to add to each label.
    */
-  label: string | string[];
+  label?: string | string[];
   /**
    * CSS class to add to each counter.
    */
-  count: string | string[];
+  count?: string | string[];
 };
 
-type RatingMenuRendererCSSClasses = {
-  [key in keyof RatingMenuCSSClasses]: string;
-};
+export type RatingMenuComponentCSSClasses = ComponentCSSClasses<
+  RatingMenuCSSClasses
+>;
 
 export type RatingMenuWidgetParams = {
   /**
@@ -103,7 +107,7 @@ export type RatingMenuWidgetParams = {
   /**
    * CSS classes to add.
    */
-  cssClasses?: Partial<RatingMenuCSSClasses>;
+  cssClasses?: RatingMenuCSSClasses;
 };
 
 const renderer = ({
@@ -113,7 +117,7 @@ const renderer = ({
   renderState,
 }: {
   containerNode: HTMLElement;
-  cssClasses: RatingMenuRendererCSSClasses;
+  cssClasses: RatingMenuComponentCSSClasses;
   templates: Partial<RatingMenuTemplates>;
   renderState: { templateProps?: PreparedTemplateProps<RatingMenuTemplates> };
 }) => (

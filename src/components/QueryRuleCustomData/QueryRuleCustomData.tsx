@@ -1,14 +1,19 @@
 /** @jsx h */
 
 import { h } from 'preact';
+import { ComponentCSSClasses } from '../../types';
 import {
   QueryRuleCustomDataCSSClasses,
   QueryRuleCustomDataTemplates,
 } from '../../widgets/query-rule-custom-data/query-rule-custom-data';
 import Template from '../Template/Template';
 
+export type QueryRuleCustomDataComponentCSSClasses = ComponentCSSClasses<
+  QueryRuleCustomDataCSSClasses
+>;
+
 export type QueryRuleCustomDataProps = {
-  cssClasses: QueryRuleCustomDataCSSClasses;
+  cssClasses: QueryRuleCustomDataComponentCSSClasses;
   templates: QueryRuleCustomDataTemplates;
   items: any[];
 };

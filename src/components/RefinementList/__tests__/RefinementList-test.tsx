@@ -4,10 +4,7 @@ import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import RefinementList, { RefinementListProps } from '../RefinementList';
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
-import {
-  RefinementListItemData,
-  RefinementListRendererCSSClasses,
-} from '../../../widgets/refinement-list/refinement-list';
+import { RefinementListItemData } from '../../../widgets/refinement-list/refinement-list';
 
 const defaultProps = {
   createURL: () => '#',
@@ -69,10 +66,7 @@ type TestDefaultTemplates = typeof defaultProps.templateProps.templates;
 describe('RefinementList', () => {
   describe('cssClasses', () => {
     it('should add the `root` class to the root element', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         cssClasses: {
           ...defaultProps.cssClasses,
@@ -87,10 +81,7 @@ describe('RefinementList', () => {
     });
 
     it('should set item classes to the refinements', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         cssClasses: {
           ...defaultProps.cssClasses,
@@ -108,10 +99,7 @@ describe('RefinementList', () => {
     });
 
     it('should set active classes to the active refinements', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         cssClasses: {
           ...defaultProps.cssClasses,
@@ -133,10 +121,7 @@ describe('RefinementList', () => {
 
   describe('items', () => {
     it('should have the correct names', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
@@ -152,10 +137,7 @@ describe('RefinementList', () => {
     });
 
     it('should correctly set if refined or not', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
@@ -171,10 +153,7 @@ describe('RefinementList', () => {
     });
 
     it('should escape the items in the default template to prevent XSS', () => {
-      const props: RefinementListProps<
-        typeof defaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<typeof defaultTemplates> = {
         ...defaultProps,
         facetValues: [
           {
@@ -213,10 +192,7 @@ describe('RefinementList', () => {
     });
 
     it('should allow HTML in the items when SFFV', () => {
-      const props: RefinementListProps<
-        typeof defaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<typeof defaultTemplates> = {
         ...defaultProps,
         isFromSearch: true,
         facetValues: [
@@ -256,10 +232,7 @@ describe('RefinementList', () => {
 
   describe('count', () => {
     it('should pass the count to the templateData', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 42, isRefined: false },
@@ -277,10 +250,7 @@ describe('RefinementList', () => {
 
   describe('showMore', () => {
     it('adds a showMore link when the feature is enabled', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
@@ -299,10 +269,7 @@ describe('RefinementList', () => {
     });
 
     it('does not add a showMore link when the feature is disabled', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
@@ -323,10 +290,7 @@ describe('RefinementList', () => {
   describe('sublist', () => {
     it('should create a subList with the sub values', () => {
       const toggleRefinement = jest.fn();
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         toggleRefinement,
         createURL: () => '',
@@ -378,10 +342,7 @@ describe('RefinementList', () => {
     });
 
     it('should not add root class on sub lists', () => {
-      const props: RefinementListProps<
-        TestDefaultTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         createURL: () => '',
         cssClasses: {
@@ -459,10 +420,7 @@ describe('RefinementList', () => {
       };
       type TestTemplates = typeof templates;
 
-      const props: RefinementListProps<
-        TestTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestTemplates> = {
         createURL: () => '',
         attribute: 'attribute',
         facetValues: [],
@@ -488,10 +446,7 @@ describe('RefinementList', () => {
       };
       type TestTemplates = typeof templates;
 
-      const props: RefinementListProps<
-        TestTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestTemplates> = {
         createURL: () => '',
         attribute: 'attribute',
         facetValues: [],
@@ -528,10 +483,7 @@ describe('RefinementList', () => {
       };
       type TestTemplates = typeof templates;
 
-      const props: RefinementListProps<
-        TestTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestTemplates> = {
         attribute: 'attribute',
         facetValues: [
           {
@@ -569,10 +521,7 @@ describe('RefinementList', () => {
       };
       type TestTemplates = typeof templates;
 
-      const props: RefinementListProps<
-        TestTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestTemplates> = {
         attribute: 'attribute',
         facetValues: [
           {
@@ -616,10 +565,7 @@ describe('RefinementList', () => {
       };
       type TestTemplates = typeof templates;
 
-      const props: RefinementListProps<
-        TestTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestTemplates> = {
         attribute: 'attribute',
         facetValues: [
           {
@@ -663,10 +609,7 @@ describe('RefinementList', () => {
       };
       type TestTemplates = typeof templates;
 
-      const props: RefinementListProps<
-        TestTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestTemplates> = {
         attribute: 'attribute',
         facetValues: [
           {
@@ -723,10 +666,7 @@ describe('RefinementList', () => {
       };
       type TestTemplates = typeof templates;
 
-      const props: RefinementListProps<
-        TestTemplates,
-        RefinementListRendererCSSClasses
-      > = {
+      const props: RefinementListProps<TestTemplates> = {
         facetValues: [
           { value: 'foo', label: 'foo', count: 1, isRefined: false },
           { value: 'bar', label: 'bar', count: 2, isRefined: true },

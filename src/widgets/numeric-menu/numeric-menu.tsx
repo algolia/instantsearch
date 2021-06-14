@@ -14,7 +14,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { Template, WidgetFactory } from '../../types';
+import { ComponentCSSClasses, Template, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');
@@ -93,10 +93,8 @@ export type NumericMenuCSSClasses = {
   radio?: string | string[];
 };
 
-type NumericMenuRendererCSSClasses = Required<
-  {
-    [key in keyof NumericMenuCSSClasses]: string;
-  }
+export type NumericMenuComponentCSSClasses = ComponentCSSClasses<
+  NumericMenuCSSClasses
 >;
 
 export type NumericMenuTemplates = {
@@ -135,7 +133,7 @@ export type NumericMenuTemplates = {
     /**
      * The CSS classes provided to the widget.
      */
-    cssClasses: NumericMenuRendererCSSClasses;
+    cssClasses: NumericMenuComponentCSSClasses;
   }>;
 };
 

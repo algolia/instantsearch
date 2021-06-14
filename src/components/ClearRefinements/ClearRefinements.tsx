@@ -8,11 +8,10 @@ import {
   ClearRefinementsCSSClasses,
   ClearRefinementsTemplates,
 } from '../../widgets/clear-refinements/clear-refinements';
+import { ComponentCSSClasses } from '../../types';
 
-type ClearRefinementsComponentCSSClasses = Required<
-  {
-    [key in keyof ClearRefinementsCSSClasses]: string;
-  }
+export type ClearRefinementsComponentCSSClasses = ComponentCSSClasses<
+  ClearRefinementsCSSClasses
 >;
 
 export type ClearRefinementsProps = {

@@ -4,13 +4,18 @@ import { h, createRef, Component } from 'preact';
 import { noop } from '../../lib/utils';
 import Template from '../Template/Template';
 import {
-  SearchBoxRendererCSSClasses,
+  SearchBoxCSSClasses,
   SearchBoxTemplates,
 } from '../../widgets/search-box/search-box';
+import { ComponentCSSClasses } from '../../types';
+
+export type SearchBoxComponentCSSClasses = ComponentCSSClasses<
+  SearchBoxCSSClasses
+>;
 
 type SearchBoxProps = {
   placeholder?: string;
-  cssClasses: SearchBoxRendererCSSClasses;
+  cssClasses: SearchBoxComponentCSSClasses;
   templates?: SearchBoxTemplates;
   query?: string;
   showSubmit?: boolean;
