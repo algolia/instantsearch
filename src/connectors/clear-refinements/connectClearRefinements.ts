@@ -95,8 +95,9 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
     } = widgetParams || {};
 
     if (
-      (widgetParams || {}).includedAttributes &&
-      (widgetParams || {}).excludedAttributes
+      widgetParams &&
+      widgetParams.includedAttributes &&
+      widgetParams.excludedAttributes
     ) {
       throw new Error(
         withUsage(
