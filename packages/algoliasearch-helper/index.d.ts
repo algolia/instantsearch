@@ -1353,8 +1353,8 @@ declare namespace algoliasearchHelper {
     getFacetValues(
       attribute: string,
       opts: {
-        sortBy: any;
-        facetOrdering: boolean;
+        sortBy?: any;
+        facetOrdering?: boolean;
       }
     ): SearchResults.FacetValue[] | SearchResults.HierarchicalFacet | undefined;
 
