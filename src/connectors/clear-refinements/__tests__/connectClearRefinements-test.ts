@@ -21,6 +21,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 `);
     });
 
+    it('does not throw when widgetParams is not given', () => {
+      const customClearRefinements = connectClearRefinements(() => {});
+
+      expect(() => {
+        // @ts-expect-error widgetParams could be undefined
+        // because it's supposed to work without any.
+        customClearRefinements();
+      }).not.toThrowError();
+    });
+
     it('throws with both `includedAttributes` and `excludedAttributes`', () => {
       const customClearRefinements = connectClearRefinements(() => {});
 
