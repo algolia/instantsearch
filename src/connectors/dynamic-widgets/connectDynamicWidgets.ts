@@ -18,7 +18,7 @@ export type DynamicWidgetsRenderState = {
 
 export type DynamicWidgetsConnectorParams = {
   widgets: Widget[];
-  transformItems(
+  transformItems?(
     items: string[],
     metadata: { results: SearchResults }
   ): string[];
@@ -44,7 +44,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { widgets, transformItems } = widgetParams;
+    const { widgets, transformItems = items => items } = widgetParams;
 
     if (
       !widgets ||
@@ -53,13 +53,6 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
     ) {
       throw new Error(
         withUsage('The `widgets` option expects an array of widgets.')
-      );
-    }
-
-    // @TODO once the attributes are computed from the results, make this optional
-    if (typeof transformItems !== 'function') {
-      throw new Error(
-        withUsage('the `transformItems` option is required to be a function.')
       );
     }
 
@@ -157,11 +150,13 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
           return { attributesToRender: [], widgetParams };
         }
 
-        // @TODO: retrieve the facet order out of the results:
-        // results.renderContext.facetOrder.map(facet => facet.attribute)
-        const attributesToRender = transformItems([], { results });
+        const attributesToRender =
+          results.renderingContent?.facetOrdering?.facet?.order ?? [];
 
-        return { attributesToRender, widgetParams };
+        return {
+          attributesToRender: transformItems(attributesToRender, { results }),
+          widgetParams,
+        };
       },
     };
   };

@@ -41,39 +41,39 @@ export type RangeInputCSSClasses = {
   /**
    * CSS class to add to the root element.
    */
-  root: string | string[];
+  root?: string | string[];
   /**
    * CSS class to add to the root element when there's no refinements.
    */
-  noRefinement: string | string[];
+  noRefinement?: string | string[];
   /**
    * CSS class to add to the form element.
    */
-  form: string | string[];
+  form?: string | string[];
   /**
    * CSS class to add to the label element.
    */
-  label: string | string[];
+  label?: string | string[];
   /**
    * CSS class to add to the input element.
    */
-  input: string | string[];
+  input?: string | string[];
   /**
    * CSS class to add to the min input element.
    */
-  inputMin: string | string[];
+  inputMin?: string | string[];
   /**
    * CSS class to add to the max input element.
    */
-  separator: string | string[];
+  separator?: string | string[];
   /**
    * CSS class to add to the separator of the form.
    */
-  inputMax: string | string[];
+  inputMax?: string | string[];
   /**
    * CSS class to add to the submit button of the form.
    */
-  submit: string | string[];
+  submit?: string | string[];
 };
 
 export type RangeInputWidgetParams = {
@@ -105,7 +105,7 @@ export type RangeInputWidgetParams = {
   /**
    * CSS classes to add.
    */
-  cssClasses?: Partial<RangeInputCSSClasses>;
+  cssClasses?: RangeInputCSSClasses;
 };
 
 const renderer = ({

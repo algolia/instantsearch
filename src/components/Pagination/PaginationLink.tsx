@@ -2,14 +2,14 @@
 
 import { h } from 'preact';
 
-export type PaginationLinkCSSClasses = {
+export type PaginationLinkComponentCSSClasses = {
   item: string;
   link: string;
 };
 
 export type PaginationLinkProps = {
   ariaLabel: string;
-  cssClasses: PaginationLinkCSSClasses;
+  cssClasses: PaginationLinkComponentCSSClasses;
   handleClick(pageNumber: number, event: MouseEvent): void;
   isDisabled: boolean;
   label: string;

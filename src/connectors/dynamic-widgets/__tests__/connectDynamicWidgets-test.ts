@@ -8,8 +8,12 @@ import {
 } from '../../../../test/mock/createWidget';
 import { wait } from '../../../../test/utils/wait';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '../../../../test/mock/createAPIResponse';
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
+import { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -37,30 +41,6 @@ describe('connectDynamicWidgets', () => {
 
         See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
       `);
-    });
-
-    it('correct usage', () => {
-      expect(() =>
-        // @ts-expect-error
-        EXPERIMENTAL_connectDynamicWidgets(() => {})({
-          widgets: [],
-        })
-      ).toThrowErrorMatchingInlineSnapshot(`
-        "the \`transformItems\` option is required to be a function.
-
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
-      `);
-    });
-
-    it('transformItems', () => {
-      expect(() =>
-        EXPERIMENTAL_connectDynamicWidgets(() => {})({
-          widgets: [],
-          transformItems(items, { results }) {
-            return items.map(item => item + results.nbHits);
-          },
-        })
-      ).not.toThrow();
     });
   });
 
@@ -552,6 +532,37 @@ describe('connectDynamicWidgets', () => {
       });
     });
 
+    it('returns widgetParams and attributesToRender (with results)', () => {
+      const widgetParams = {
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      };
+      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})(
+        widgetParams
+      );
+
+      expect(
+        dynamicWidgets.getWidgetRenderState(
+          createRenderOptions({
+            results: new SearchResults(new SearchParameters(), [
+              createSingleSearchResponse({
+                renderingContent: {
+                  facetOrdering: {
+                    facet: { order: ['test1', 'test2'] },
+                  },
+                },
+              }),
+            ]),
+          })
+        )
+      ).toEqual({
+        attributesToRender: ['test1', 'test2'],
+        widgetParams,
+      });
+    });
+
     it('returns widgetParams and the result of transformItems render', () => {
       const widgetParams = {
         transformItems() {
@@ -570,6 +581,42 @@ describe('connectDynamicWidgets', () => {
         dynamicWidgets.getWidgetRenderState(createRenderOptions())
       ).toEqual({
         attributesToRender: ['test1', 'test2'],
+        widgetParams,
+      });
+    });
+
+    it('returns widgetParams and the result of transformItems render (using result)', () => {
+      const widgetParams: DynamicWidgetsConnectorParams = {
+        transformItems(items) {
+          return items.sort((a, b) => b.localeCompare(a));
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      };
+      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})(
+        widgetParams
+      );
+
+      expect(
+        dynamicWidgets.getWidgetRenderState(
+          createRenderOptions(
+            createRenderOptions({
+              results: new SearchResults(new SearchParameters(), [
+                createSingleSearchResponse({
+                  renderingContent: {
+                    facetOrdering: {
+                      facet: { order: ['test1', 'test2'] },
+                    },
+                  },
+                }),
+              ]),
+            })
+          )
+        )
+      ).toEqual({
+        attributesToRender: ['test2', 'test1'],
         widgetParams,
       });
     });

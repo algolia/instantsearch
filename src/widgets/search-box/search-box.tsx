@@ -13,7 +13,9 @@ import connectSearchBox, {
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
 } from '../../connectors/search-box/connectSearchBox';
-import SearchBox from '../../components/SearchBox/SearchBox';
+import SearchBox, {
+  SearchBoxComponentCSSClasses,
+} from '../../components/SearchBox/SearchBox';
 import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
@@ -38,46 +40,40 @@ export type SearchBoxCSSClasses = {
   /**
    * CSS class to add to the wrapping `<div>`
    */
-  root: string | string[];
+  root?: string | string[];
   /**
    * CSS class to add to the form
    */
-  form: string | string[];
+  form?: string | string[];
   /**
    * CSS class to add to the input.
    */
-  input: string | string[];
+  input?: string | string[];
   /**
    * CSS classes added to the submit button.
    */
-  submit: string | string[];
+  submit?: string | string[];
   /**
    * CSS classes added to the submit icon.
    */
-  submitIcon: string | string[];
+  submitIcon?: string | string[];
   /**
    * CSS classes added to the reset button.
    */
-  reset: string | string[];
+  reset?: string | string[];
   /**
    * CSS classes added to the reset icon.
    */
-  resetIcon: string | string[];
+  resetIcon?: string | string[];
   /**
    * CSS classes added to the loading indicator element.
    */
-  loadingIndicator: string | string[];
+  loadingIndicator?: string | string[];
   /**
    * CSS classes added to the loading indicator icon.
    */
-  loadingIcon: string | string[];
+  loadingIcon?: string | string[];
 };
-
-export type SearchBoxRendererCSSClasses = Required<
-  {
-    [key in keyof SearchBoxCSSClasses]: string;
-  }
->;
 
 export type SearchBoxWidgetParams = {
   /**
@@ -113,7 +109,7 @@ export type SearchBoxWidgetParams = {
   /**
    * CSS classes to add
    */
-  cssClasses?: Partial<SearchBoxCSSClasses>;
+  cssClasses?: SearchBoxCSSClasses;
 
   /**
    * Templates used for customizing the rendering of the searchbox
@@ -139,7 +135,7 @@ const renderer = ({
   showLoadingIndicator,
 }: {
   containerNode: HTMLElement;
-  cssClasses: SearchBoxRendererCSSClasses;
+  cssClasses: SearchBoxComponentCSSClasses;
   placeholder: string;
   templates: SearchBoxTemplates;
   autofocus: boolean;

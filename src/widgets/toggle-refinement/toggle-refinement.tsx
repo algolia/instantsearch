@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
+import ToggleRefinement, {
+  ToggleRefinementComponentCSSClasses,
+} from '../../components/ToggleRefinement/ToggleRefinement';
 import connectToggleRefinement, {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
@@ -67,18 +69,22 @@ const renderer = ({
 };
 
 export type ToggleRefinementCSSClasses = {
-  /** CSS class to add to the root element. */
-  root: string | string[];
-  /** CSS class to add to the label wrapping element. */
-  label: string | string[];
-  /** CSS class to add to the checkbox. */
-  checkbox: string | string[];
-  /** CSS class to add to the label text. */
-  labelText: string | string[];
-};
-
-export type ToggleRefinementComponentCSSClasses = {
-  [key in keyof ToggleRefinementCSSClasses]: string;
+  /**
+   * CSS class to add to the root element.
+   */
+  root?: string | string[];
+  /**
+   * CSS class to add to the label wrapping element.
+   */
+  label?: string | string[];
+  /**
+   * CSS class to add to the checkbox.
+   */
+  checkbox?: string | string[];
+  /**
+   * CSS class to add to the label text.
+   */
+  labelText?: string | string[];
 };
 
 export type ToggleRefinementTemplates = {
@@ -100,7 +106,7 @@ export type ToggleRefinementWidgetParams = {
   /**
    * CSS classes to be added.
    */
-  cssClasses?: Partial<ToggleRefinementCSSClasses>;
+  cssClasses?: ToggleRefinementCSSClasses;
 };
 
 export type ToggleRefinementWidget = WidgetFactory<
