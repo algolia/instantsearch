@@ -1,3 +1,20 @@
+# [4.24.0](https://github.com/algolia/instantsearch.js/compare/v4.23.0...v4.24.0) (2021-06-15)
+
+
+### Bug Fixes
+
+* **clearRefinements:** do not throw when widgetParams is not given ([#4778](https://github.com/algolia/instantsearch.js/issues/4778)) ([6b1a375](https://github.com/algolia/instantsearch.js/commit/6b1a375ed7139c0b98993c0cb7ab40838e1f2288))
+* **ts:** make `CSSClasses` types consistent ([#4774](https://github.com/algolia/instantsearch.js/issues/4774)) ([99008a9](https://github.com/algolia/instantsearch.js/commit/99008a985ddc61ce197200df51fdcf385914064d))
+
+
+### Features
+
+* **dynamicWidgets:** add default attributesToRender & transformItems ([#4776](https://github.com/algolia/instantsearch.js/issues/4776)) ([44dab44](https://github.com/algolia/instantsearch.js/commit/44dab44282da58b36a707ad80aff4c18477abccd))
+* **ts:** convert pagination widget and component ([#4765](https://github.com/algolia/instantsearch.js/issues/4765)) ([34eb950](https://github.com/algolia/instantsearch.js/commit/34eb9500a2d7072814fd715e1c2217ed22de30d1))
+* **ts:** convert rangeInput widget and component ([#4766](https://github.com/algolia/instantsearch.js/issues/4766)) ([40b1a82](https://github.com/algolia/instantsearch.js/commit/40b1a82f9df4b16708fceefbba77a8fb49c7dc41))
+
+
+
 # [4.23.0](https://github.com/algolia/instantsearch.js/compare/v4.22.0...v4.23.0) (2021-05-25)
 
 
