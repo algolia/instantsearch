@@ -64,6 +64,11 @@ export type MenuConnectorParams = {
    */
   sortBy?: SortBy<MenuItem>;
   /**
+   * Apply the sorting of facet values defined in settings
+   * Defaults to `true` if sortBy is not given
+   */
+  facetOrdering?: boolean;
+  /**
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<MenuItem>;
@@ -150,6 +155,7 @@ const connectMenu: MenuConnector = function connectMenu(
       showMore = false,
       showMoreLimit = 20,
       sortBy = DEFAULT_SORT,
+      facetOrdering = sortBy === DEFAULT_SORT,
       transformItems = (items => items) as TransformItems<MenuItem>,
     } = widgetParams || {};
 
@@ -288,7 +294,7 @@ const connectMenu: MenuConnector = function connectMenu(
         if (results) {
           const facetValues = results.getFacetValues(attribute, {
             sortBy,
-            facetOrdering: sortBy === DEFAULT_SORT,
+            facetOrdering,
           });
           const facetItems =
             facetValues && !Array.isArray(facetValues) && facetValues.data

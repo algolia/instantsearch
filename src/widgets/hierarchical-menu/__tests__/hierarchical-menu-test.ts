@@ -133,18 +133,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
       expect(results.getFacetValues).toHaveBeenCalledTimes(1);
       expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
+        facetOrdering: true,
         sortBy: ['name:asc'],
       });
     });
 
     it('has a sortBy option', () => {
-      widget = hierarchicalMenu({ ...options, sortBy: ['name:asc'] });
+      widget = hierarchicalMenu({ ...options, sortBy: ['name:desc'] });
 
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ results, state }));
 
       expect(results.getFacetValues).toHaveBeenCalledTimes(1);
       expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
+        facetOrdering: false,
+        sortBy: ['name:desc'],
+      });
+    });
+
+    it('has a facetOrdering option', () => {
+      widget = hierarchicalMenu({ ...options, facetOrdering: false });
+
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ results, state }));
+
+      expect(results.getFacetValues).toHaveBeenCalledTimes(1);
+      expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
+        facetOrdering: false,
         sortBy: ['name:asc'],
       });
     });

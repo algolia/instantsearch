@@ -649,47 +649,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
     });
 
-    test('uses facetOrdering if available for items', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createMenu = connectMenu(renderFn, unmountFn);
-      const menu = createMenu({
-        attribute: 'brand',
-      });
-      const helper = jsHelper(
-        createSearchClient(),
-        'indexName',
-        menu.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
-      );
-
-      const renderState1 = menu.getWidgetRenderState(
-        createRenderOptions({
-          helper,
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              renderingContent: {
-                facetOrdering: {
-                  values: {
-                    brand: {
-                      order: ['Samsung'],
-                      sortRemainingBy: 'count',
-                    },
-                  },
-                },
-              },
-              facets: {
-                brand: {
-                  Apple: 100,
-                  Algolia: 3,
-                  Samsung: 1,
-                },
-              },
-            }),
-          ]),
-        })
-      );
-
-      expect(renderState1.items).toEqual([
+    describe('facetOrdering', () => {
+      const resultsViaFacetOrdering = [
         {
           count: 1,
           data: null,
@@ -714,51 +675,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           label: 'Algolia',
           value: 'Algolia',
         },
-      ]);
-    });
-
-    test('uses sortBy instead of facetOrdering if available for items', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createMenu = connectMenu(renderFn, unmountFn);
-      const menu = createMenu({
-        attribute: 'brand',
-        sortBy: ['name:asc'],
-      });
-      const helper = jsHelper(
-        createSearchClient(),
-        'indexName',
-        menu.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
-      );
-
-      const renderState1 = menu.getWidgetRenderState(
-        createRenderOptions({
-          helper,
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              renderingContent: {
-                facetOrdering: {
-                  values: {
-                    brand: {
-                      order: ['Samsung'],
-                      sortRemainingBy: 'count',
-                    },
-                  },
-                },
-              },
-              facets: {
-                brand: {
-                  Apple: 100,
-                  Algolia: 3,
-                  Samsung: 1,
-                },
-              },
-            }),
-          ]),
-        })
-      );
-
-      expect(renderState1.items).toEqual([
+      ];
+      const resultsViaSortBy = [
         {
           count: 3,
           data: null,
@@ -783,7 +701,75 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           label: 'Samsung',
           value: 'Samsung',
         },
-      ]);
+      ];
+
+      test.each`
+        ordered  | facetOrdering | sortBy          | expected
+        ${true}  | ${true}       | ${undefined}    | ${resultsViaFacetOrdering}
+        ${false} | ${true}       | ${undefined}    | ${resultsViaSortBy}
+        ${true}  | ${true}       | ${['name:asc']} | ${resultsViaFacetOrdering}
+        ${false} | ${true}       | ${['name:asc']} | ${resultsViaSortBy}
+        ${true}  | ${undefined}  | ${undefined}    | ${resultsViaFacetOrdering}
+        ${false} | ${undefined}  | ${undefined}    | ${resultsViaSortBy}
+        ${true}  | ${undefined}  | ${['name:asc']} | ${resultsViaSortBy}
+        ${false} | ${undefined}  | ${['name:asc']} | ${resultsViaSortBy}
+        ${true}  | ${false}      | ${undefined}    | ${resultsViaSortBy}
+        ${false} | ${false}      | ${undefined}    | ${resultsViaSortBy}
+        ${true}  | ${false}      | ${['name:asc']} | ${resultsViaSortBy}
+        ${false} | ${false}      | ${['name:asc']} | ${resultsViaSortBy}
+      `(
+        'renderingContent present: $ordered, facetOrdering: $facetOrdering, sortBy: $sortBy',
+        ({ ordered, facetOrdering, sortBy, expected }) => {
+          const renderFn = jest.fn();
+          const unmountFn = jest.fn();
+          const createMenu = connectMenu(renderFn, unmountFn);
+          const menu = createMenu({
+            attribute: 'brand',
+            sortBy,
+            facetOrdering,
+          });
+          const helper = jsHelper(
+            createSearchClient(),
+            'indexName',
+            menu.getWidgetSearchParameters!(new SearchParameters(), {
+              uiState: {},
+            })
+          );
+
+          const renderingContent = ordered
+            ? {
+                facetOrdering: {
+                  values: {
+                    brand: {
+                      order: ['Samsung'],
+                      sortRemainingBy: 'count' as const,
+                    },
+                  },
+                },
+              }
+            : undefined;
+
+          const renderState1 = menu.getWidgetRenderState(
+            createRenderOptions({
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  renderingContent,
+                  facets: {
+                    brand: {
+                      Apple: 100,
+                      Algolia: 3,
+                      Samsung: 1,
+                    },
+                  },
+                }),
+              ]),
+            })
+          );
+
+          expect(renderState1.items).toEqual(expected);
+        }
+      );
     });
   });
 

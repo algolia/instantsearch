@@ -79,6 +79,11 @@ export type RefinementListConnectorParams = {
    */
   sortBy?: SortBy<RefinementListItem>;
   /**
+   * Apply the sorting of facet values defined in settings.
+   * Defaults to `true` if sortBy is not given
+   */
+  facetOrdering?: boolean;
+  /**
    * Escapes the content of the facet values.
    */
   escapeFacetValues?: boolean;
@@ -185,6 +190,7 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
       showMore = false,
       showMoreLimit = 20,
       sortBy = DEFAULT_SORT,
+      facetOrdering = sortBy === DEFAULT_SORT,
       escapeFacetValues = true,
       transformItems = (items => items) as TransformItems<RefinementListItem>,
     } = widgetParams || {};
@@ -388,7 +394,7 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
         if (results) {
           const values = results.getFacetValues(attribute, {
             sortBy,
-            facetOrdering: sortBy === DEFAULT_SORT,
+            facetOrdering,
           });
           facetValues = values && Array.isArray(values) ? values : [];
           items = transformItems(
