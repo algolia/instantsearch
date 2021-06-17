@@ -47,8 +47,6 @@ export type RefinementListComponentCSSClasses = RefinementListRequired & {
     Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
   >;
 
-// Templates types
-
 export type RefinementListWidgetTemplates = Required<
   RefinementListOwnTemplates
 >;
