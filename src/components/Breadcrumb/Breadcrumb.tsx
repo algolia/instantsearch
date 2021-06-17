@@ -7,7 +7,7 @@ import {
   BreadcrumbCSSClasses,
   BreadcrumbTemplates,
 } from '../../widgets/breadcrumb/breadcrumb';
-import { ComponentCSSClasses, ComponentTemplates } from '../../types';
+import { ComponentCSSClasses } from '../../types';
 
 type BreadcrumbItem = {
   value: string;
@@ -18,9 +18,7 @@ export type BreadcrumbComponentCSSClasses = ComponentCSSClasses<
   BreadcrumbCSSClasses
 >;
 
-export type BreadcrumbComponentTemplates = ComponentTemplates<
-  BreadcrumbTemplates
->;
+export type BreadcrumbComponentTemplates = Required<BreadcrumbTemplates>;
 
 export type BreadcrumbProps = {
   items: BreadcrumbItem[];

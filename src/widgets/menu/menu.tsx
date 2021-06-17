@@ -17,7 +17,6 @@ import {
 import { component } from '../../lib/suit';
 import {
   ComponentCSSClasses,
-  ComponentTemplates,
   RendererOptions,
   Template,
   WidgetFactory,
@@ -92,7 +91,7 @@ export type MenuTemplates = {
 
 export type MenuComponentCSSClasses = ComponentCSSClasses<MenuCSSClasses>;
 
-export type MenuComponentTemplates = ComponentTemplates<MenuTemplates>;
+export type MenuComponentTemplates = Required<MenuTemplates>;
 
 export type MenuWidgetParams = {
   /**

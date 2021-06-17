@@ -23,7 +23,6 @@ import {
   RendererOptions,
   SortBy,
   ComponentCSSClasses,
-  ComponentTemplates,
 } from '../../types';
 import { component } from '../../lib/suit';
 
@@ -103,7 +102,7 @@ export type HierarchicalMenuComponentCSSClasses = ComponentCSSClasses<
   HierarchicalMenuCSSClasses
 >;
 
-export type HierarchicalMenuComponentTemplates = ComponentTemplates<
+export type HierarchicalMenuComponentTemplates = Required<
   HierarchicalMenuTemplates
 >;
 

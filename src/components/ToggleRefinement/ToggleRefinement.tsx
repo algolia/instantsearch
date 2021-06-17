@@ -6,7 +6,7 @@ import {
   ToggleRefinementValue,
 } from '../../connectors/toggle-refinement/connectToggleRefinement';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
-import { ComponentCSSClasses, ComponentTemplates } from '../../types';
+import { ComponentCSSClasses } from '../../types';
 import {
   ToggleRefinementTemplates,
   ToggleRefinementCSSClasses,
@@ -18,7 +18,7 @@ export type ToggleRefinementComponentCSSClasses = ComponentCSSClasses<
   ToggleRefinementCSSClasses
 >;
 
-export type ToggleRefinementComponentTemplates = ComponentTemplates<
+export type ToggleRefinementComponentTemplates = Required<
   ToggleRefinementTemplates
 >;
 

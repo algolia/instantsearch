@@ -8,15 +8,13 @@ import {
   RangeInputTemplates,
 } from '../../widgets/range-input/range-input';
 import { Range, RangeBoundaries } from '../../connectors/range/connectRange';
-import { ComponentCSSClasses, ComponentTemplates } from '../../types';
+import { ComponentCSSClasses } from '../../types';
 
 export type RangeInputComponentCSSClasses = ComponentCSSClasses<
   RangeInputCSSClasses
 >;
 
-export type RangeInputComponentTemplates = ComponentTemplates<
-  RangeInputTemplates
->;
+export type RangeInputComponentTemplates = Required<RangeInputTemplates>;
 
 export type RangeInputProps = {
   min?: number;

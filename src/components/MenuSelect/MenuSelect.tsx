@@ -9,15 +9,13 @@ import {
   MenuSelectTemplates,
 } from '../../widgets/menu-select/menu-select';
 import { MenuRenderState } from '../../connectors/menu/connectMenu';
-import { ComponentCSSClasses, ComponentTemplates } from '../../types';
+import { ComponentCSSClasses } from '../../types';
 
 export type MenuSelectComponentCSSClasses = ComponentCSSClasses<
   MenuSelectCSSClasses
 >;
 
-export type MenuSelectComponentTemplates = ComponentTemplates<
-  MenuSelectTemplates
->;
+export type MenuSelectComponentTemplates = Required<MenuSelectTemplates>;
 
 type MenuItem = {
   /**

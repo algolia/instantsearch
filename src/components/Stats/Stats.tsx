@@ -4,11 +4,11 @@ import { h } from 'preact';
 import cx from 'classnames';
 import { StatsCSSClasses, StatsTemplates } from '../../widgets/stats/stats';
 import Template from '../Template/Template';
-import { ComponentCSSClasses, ComponentTemplates } from '../../types';
+import { ComponentCSSClasses } from '../../types';
 
 export type StatsComponentCSSClasses = ComponentCSSClasses<StatsCSSClasses>;
 
-export type StatsComponentTemplates = ComponentTemplates<StatsTemplates>;
+export type StatsComponentTemplates = Required<StatsTemplates>;
 
 type StatsProps = {
   cssClasses: StatsComponentCSSClasses;

@@ -7,11 +7,11 @@ import {
   AnswersCSSClasses,
   AnswersTemplates,
 } from '../../widgets/answers/answers';
-import { ComponentCSSClasses, ComponentTemplates, Hits } from '../../types';
+import { ComponentCSSClasses, Hits } from '../../types';
 
 export type AnswersComponentCSSClasses = ComponentCSSClasses<AnswersCSSClasses>;
 
-export type AnswersComponentTemplates = ComponentTemplates<AnswersTemplates>;
+export type AnswersComponentTemplates = Required<AnswersTemplates>;
 
 export type AnswersProps = {
   hits: Hits;

@@ -7,7 +7,6 @@ import Template from '../Template/Template';
 import { PanelCSSClasses, PanelTemplates } from '../../widgets/panel/panel';
 import {
   ComponentCSSClasses,
-  ComponentTemplates,
   RenderOptions,
   UnknownWidgetFactory,
 } from '../../types';
@@ -19,7 +18,7 @@ export type PanelComponentCSSClasses = ComponentCSSClasses<
 
 export type PanelComponentTemplates<
   TWidget extends UnknownWidgetFactory
-> = ComponentTemplates<PanelTemplates<TWidget>>;
+> = Required<PanelTemplates<TWidget>>;
 
 export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;

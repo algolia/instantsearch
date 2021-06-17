@@ -17,7 +17,6 @@ import {
 import { component } from '../../lib/suit';
 import {
   ComponentCSSClasses,
-  ComponentTemplates,
   RendererOptions,
   Template,
   WidgetFactory,
@@ -94,9 +93,7 @@ export type RatingMenuComponentCSSClasses = ComponentCSSClasses<
   RatingMenuCSSClasses
 >;
 
-export type RatingMenuComponentTemplates = ComponentTemplates<
-  RatingMenuTemplates
->;
+export type RatingMenuComponentTemplates = Required<RatingMenuTemplates>;
 
 export type RatingMenuWidgetParams = {
   /**

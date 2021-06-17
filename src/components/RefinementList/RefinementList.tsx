@@ -13,12 +13,7 @@ import SearchBox, {
 import defaultSearchBoxTemplates from '../../widgets/search-box/defaultTemplates';
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import {
-  ComponentCSSClasses,
-  ComponentTemplates,
-  CreateURL,
-  Templates,
-} from '../../types';
+import { ComponentCSSClasses, CreateURL, Templates } from '../../types';
 import {
   RefinementListOwnCSSClasses,
   RefinementListOwnTemplates,
@@ -54,7 +49,7 @@ export type RefinementListComponentCSSClasses = RefinementListRequired & {
 
 // Templates types
 
-export type RefinementListWidgetTemplates = ComponentTemplates<
+export type RefinementListWidgetTemplates = Required<
   RefinementListOwnTemplates
 >;
 
