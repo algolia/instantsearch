@@ -9,17 +9,17 @@ import {
 } from '../../widgets/answers/answers';
 import { ComponentCSSClasses, ComponentTemplates, Hits } from '../../types';
 
-export type AnswerComponentCSSClasses = ComponentCSSClasses<AnswersCSSClasses>;
+export type AnswersComponentCSSClasses = ComponentCSSClasses<AnswersCSSClasses>;
 
-export type AnswerComponentTemplates = ComponentTemplates<AnswersTemplates>;
+export type AnswersComponentTemplates = ComponentTemplates<AnswersTemplates>;
 
 export type AnswersProps = {
   hits: Hits;
   isLoading: boolean;
-  cssClasses: AnswerComponentCSSClasses;
+  cssClasses: AnswersComponentCSSClasses;
   templateProps: {
     [key: string]: any;
-    templates: AnswerComponentTemplates;
+    templates: AnswersComponentTemplates;
   };
 };
 
