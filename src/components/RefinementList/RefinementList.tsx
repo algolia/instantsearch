@@ -311,8 +311,6 @@ class RefinementList<TTemplates extends Templates> extends Component<
       this.props.searchIsAlwaysActive !== true &&
       !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
 
-    const { templates } = this.props.searchBoxTemplateProps || {};
-
     const searchBox = this.props.searchFacetValues && (
       <div className={this.props.cssClasses.searchBox}>
         <SearchBox
@@ -320,7 +318,10 @@ class RefinementList<TTemplates extends Templates> extends Component<
           placeholder={this.props.searchPlaceholder}
           disabled={shouldDisableSearchBox}
           cssClasses={this.props.cssClasses.searchable!}
-          templates={{ ...defaultSearchBoxTemplates, ...templates }}
+          templates={{
+            ...defaultSearchBoxTemplates,
+            ...this.props.searchBoxTemplateProps?.templates,
+          }}
           onChange={(event: Event) =>
             this.props.searchFacetValues!(
               (event.target as HTMLInputElement).value
