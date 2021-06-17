@@ -72,7 +72,7 @@ const renderer = ({
 const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
   const {
     container,
-    cssClasses: userCssClasses = {} as QueryRuleCustomDataCSSClasses,
+    cssClasses: userCssClasses = {},
     templates: userTemplates = {},
     transformItems = (items =>
       items) as QueryRulesConnectorParams['transformItems'],

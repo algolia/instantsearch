@@ -138,8 +138,8 @@ const renderer = ({
 const stats: StatsWidget = widgetParams => {
   const {
     container,
-    cssClasses: userCssClasses = {} as StatsCSSClasses,
-    templates: userTemplates = {} as StatsTemplates,
+    cssClasses: userCssClasses = {},
+    templates: userTemplates = {},
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
