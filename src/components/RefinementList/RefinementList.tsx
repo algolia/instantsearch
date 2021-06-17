@@ -14,10 +14,7 @@ import defaultSearchBoxTemplates from '../../widgets/search-box/defaultTemplates
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import { ComponentCSSClasses, CreateURL, Templates } from '../../types';
-import {
-  RefinementListOwnCSSClasses,
-  RefinementListOwnTemplates,
-} from '../../widgets/refinement-list/refinement-list';
+import { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
 import { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
 import { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 
@@ -46,10 +43,6 @@ export type RefinementListComponentCSSClasses = RefinementListRequired & {
   Partial<
     Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
   >;
-
-export type RefinementListWidgetTemplates = Required<
-  RefinementListOwnTemplates
->;
 
 type FacetValue = TRefinementListItem | HierarchicalMenuItem;
 type FacetValues = TRefinementListItem[] | HierarchicalMenuItem[];

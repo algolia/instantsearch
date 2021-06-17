@@ -4,7 +4,6 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList, {
   RefinementListComponentCSSClasses,
-  RefinementListWidgetTemplates,
 } from '../../components/RefinementList/RefinementList';
 import connectRefinementList, {
   RefinementListRenderState,
@@ -58,6 +57,8 @@ type RefinementListSearchableTemplates = {
    */
   searchableLoadingIndicator?: SearchBoxTemplates['loadingIndicator'];
 };
+
+type RefinementListWidgetTemplates = Required<RefinementListOwnTemplates>;
 
 export type RefinementListTemplates = RefinementListSearchableTemplates &
   RefinementListOwnTemplates;
