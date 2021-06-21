@@ -85,7 +85,7 @@ jobs:
           name: Unit tests
           command: yarn run test --maxWorkers=4
       - store_test_results:
-           path: junit/jest/
+          path: junit/jest/
 
   'e2e tests':
     <<: *defaults
@@ -96,13 +96,13 @@ jobs:
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
       - run:
-        name: Build example
-        command: yarn run website:build
+          name: Build example
+          command: yarn run website:build
       - run:
           name: End-2-End tests
           command: yarn run test:e2e:saucelabs
       - store_test_results:
-           path: junit/wdio/
+          path: junit/wdio/
 
   'release if needed':
     <<: *defaults
