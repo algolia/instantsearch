@@ -10,8 +10,11 @@ exports.config = {
       'junit',
       {
         outputDir: `${__dirname}/junit/wdio`,
-        outputFileFormat(options) {
-          return `results-${options.cid}.${options.capabilities}.xml`;
+        outputFileFormat({
+          cid,
+          capabilities: { browserName, browserVersion },
+        }) {
+          return `results-${cid}.${browserName}-${browserVersion}.xml`;
         },
         addFileAttribute: true,
       },
