@@ -96,10 +96,13 @@ jobs:
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
       - run:
+        name: Build example
+        command: yarn run website:build
+      - run:
           name: End-2-End tests
-          command: |
-            yarn run website:build
-            yarn run test:e2e:saucelabs
+          command: yarn run test:e2e:saucelabs
+      - store_test_results:
+           path: junit/wdio/
 
   'release if needed':
     <<: *defaults
