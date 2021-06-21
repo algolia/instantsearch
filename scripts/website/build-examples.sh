@@ -22,6 +22,6 @@ if [ -z "$1" ]; then
     fi
   done
 else
-  cd examples
+  cd examples/$1
   build_example $1
 fi
