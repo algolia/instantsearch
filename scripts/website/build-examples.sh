@@ -9,7 +9,8 @@ mkdir website/examples
 
 build_example() {
   example=$1
-  name=$2
+  name=$(basename "$example")
+
   echo "Building $name example..."
 
   (
@@ -23,10 +24,9 @@ build_example() {
 if [ -z "$1" ]; then
   for example in examples/*; do
     if [ -d "$example" ]; then
-      name=$(basename "$example")
-      build_example $example $name
+      build_example $example
     fi
   done
 else
-  build_example examples/$1 $1
+  build_example examples/$1
 fi
