@@ -14,7 +14,10 @@ import defaultSearchBoxTemplates from '../../widgets/search-box/defaultTemplates
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import { ComponentCSSClasses, CreateURL, Templates } from '../../types';
-import { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
+import {
+  RefinementListOwnCSSClasses,
+  RefinementListOwnTemplates,
+} from '../../widgets/refinement-list/refinement-list';
 import { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
 import { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 
@@ -31,18 +34,22 @@ type RefinementListWidgetCSSClasses = ComponentCSSClasses<
   RefinementListOwnCSSClasses
 >;
 
-type RefinementListRequired = Omit<
+type RefinementListRequiredCSSClasses = Omit<
   RefinementListWidgetCSSClasses,
   RefinementListOptionalClasses
 > &
   Partial<Pick<RefinementListWidgetCSSClasses, RefinementListOptionalClasses>>;
 
-export type RefinementListComponentCSSClasses = RefinementListRequired & {
+export type RefinementListComponentCSSClasses = RefinementListRequiredCSSClasses & {
   searchable?: SearchBoxComponentCSSClasses;
 } & Partial<Pick<RatingMenuComponentCSSClasses, 'disabledItem'>> &
   Partial<
     Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
   >;
+
+export type RefinementListComponentTemplates = Required<
+  RefinementListOwnTemplates
+>;
 
 type FacetValue = TRefinementListItem | HierarchicalMenuItem;
 type FacetValues = TRefinementListItem[] | HierarchicalMenuItem[];
