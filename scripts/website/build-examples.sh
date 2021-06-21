@@ -8,20 +8,25 @@ rm -rf website/examples
 mkdir website/examples
 
 build_example() {
-  name=$1
+  example=$1
+  name=$2
   echo "Building $name example..."
 
-  (cd "$example" && yarn && yarn build && cp -r "dist/" "../../website/examples/$name/")
+  (
+    cd "$example" &&
+    yarn &&
+    yarn build &&
+    cp -r "dist/" "../../website/examples/$name/"
+  )
 }
 
 if [ -z "$1" ]; then
   for example in examples/*; do
     if [ -d "$example" ]; then
       name=$(basename "$example")
-      build_example $name
+      build_example $example $name
     fi
   done
 else
-  cd examples/$1
-  build_example $1
+  build_example examples/$1 $1
 fi
