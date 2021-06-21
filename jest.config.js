@@ -32,7 +32,7 @@ module.exports = {
     [
       'jest-junit',
       {
-        outputDirectory: 'junit',
+        outputDirectory: 'junit/jest',
         suiteNameTemplate: '{filepath}',
         ancestorSeparator: ' › ',
         addFileAttribute: 'true',
