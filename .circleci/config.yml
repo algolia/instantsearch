@@ -84,6 +84,8 @@ jobs:
       - run:
           name: Unit tests
           command: yarn run test --maxWorkers=4
+      - store_test_results:
+           path: junit/jest/
 
   'e2e tests':
     <<: *defaults
