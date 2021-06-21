@@ -97,7 +97,7 @@ jobs:
       - save_cache: *save_yarn_cache
       - run:
           name: Build example
-          command: yarn run website:build
+          command: yarn run website:build e-commerce
       - run:
           name: End-2-End tests
           command: yarn run test:e2e:saucelabs
