@@ -1,3 +1,12 @@
+## [4.24.1](https://github.com/algolia/instantsearch.js/compare/v4.24.0...v4.24.1) (2021-06-23)
+
+
+### Bug Fixes
+
+* **mainHelper:** allow a mainHelper to be set before start ([#4790](https://github.com/algolia/instantsearch.js/issues/4790)) ([e8329ae](https://github.com/algolia/instantsearch.js/commit/e8329aecb386755a039cf10850e394d0d71f29f4))
+
+
+
 # [4.24.0](https://github.com/algolia/instantsearch.js/compare/v4.23.0...v4.24.0) (2021-06-15)
 
 
