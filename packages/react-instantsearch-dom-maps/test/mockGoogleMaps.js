@@ -15,6 +15,22 @@ export class FakeOverlayView {
   }));
 }
 
+export const MockLatLngBounds = jest.fn((ne, sw) => ({
+  northEast: ne,
+  southWest: sw,
+  equals(oldBounds) {
+    if (!oldBounds) {
+      return false;
+    }
+    return (
+      oldBounds.northEast.lat === this.northEast.lat &&
+      oldBounds.northEast.lng === this.northEast.lng &&
+      oldBounds.southWest.lat === this.southWest.lat &&
+      oldBounds.southWest.lng === this.southWest.lng
+    );
+  },
+}));
+
 export const createFakeMapInstance = () => ({
   addListener: jest.fn(() => ({
     remove: jest.fn(),
@@ -23,10 +39,9 @@ export const createFakeMapInstance = () => ({
   setCenter: jest.fn(),
   getZoom: jest.fn(),
   setZoom: jest.fn(),
-  getBounds: jest.fn(() => ({
-    getNorthEast: jest.fn(),
-    getSouthWest: jest.fn(),
-  })),
+  getBounds: jest.fn(
+    () => new MockLatLngBounds({ lat: 0, lng: 0 }, { lat: 0, lng: 0 })
+  ),
   getProjection: jest.fn(() => ({
     fromPointToLatLng: jest.fn(() => ({
       lat: jest.fn(),
@@ -58,9 +73,7 @@ export const createFakeGoogleReference = ({
 } = {}) => ({
   maps: {
     LatLng: jest.fn(x => x),
-    LatLngBounds: jest.fn(() => ({
-      extend: jest.fn().mockReturnThis(),
-    })),
+    LatLngBounds: MockLatLngBounds,
     Map: jest.fn(() => mapInstance),
     Marker: jest.fn(() => markerInstance),
     ControlPosition: {

@@ -67,17 +67,21 @@ class GoogleMaps extends Component {
     }
 
     if (boundingBox) {
-      this.lockUserInteration(() => {
-        this.instance.fitBounds(
-          new google.maps.LatLngBounds(
-            boundingBox.southWest,
-            boundingBox.northEast
-          ),
-          boundingBoxPadding
+      this.lockUserInteraction(() => {
+        const oldBounds = this.instance.getBounds();
+
+        // south west and north east are swapped
+        const newBounds = new google.maps.LatLngBounds(
+          boundingBox.southWest,
+          boundingBox.northEast
         );
+
+        if (!newBounds.equals(oldBounds)) {
+          this.instance.fitBounds(newBounds, boundingBoxPadding);
+        }
       });
     } else {
-      this.lockUserInteration(() => {
+      this.lockUserInteraction(() => {
         this.instance.setZoom(initialZoom);
         this.instance.setCenter(initialPosition);
       });
@@ -124,7 +128,7 @@ class GoogleMaps extends Component {
     );
   };
 
-  lockUserInteration(functionThatAltersTheMapPosition) {
+  lockUserInteraction(functionThatAltersTheMapPosition) {
     this.isUserInteraction = false;
     functionThatAltersTheMapPosition();
     this.isUserInteraction = true;
