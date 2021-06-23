@@ -425,7 +425,10 @@ See ${createDocumentationLink({
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
     // DerivedHelper scoped into the `index` widgets.
-    const mainHelper = algoliasearchHelper(this.client, this.indexName);
+    // In Vue InstantSearch' hydrate, a main helper gets set before start, so
+    // we need to respect this helper as a way to keep all listeners correct.
+    const mainHelper =
+      this.mainHelper || algoliasearchHelper(this.client, this.indexName);
 
     mainHelper.search = () => {
       // This solution allows us to keep the exact same API for the users but
