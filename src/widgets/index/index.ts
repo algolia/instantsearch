@@ -28,7 +28,7 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',
 });
 
-type IndexWidgetParams = {
+export type IndexWidgetParams = {
   indexName: string;
   indexId?: string;
 };
