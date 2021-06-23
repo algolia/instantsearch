@@ -1,3 +1,4 @@
+import { HoganHelpers } from '../../../types';
 import renderTemplate from '../renderTemplate';
 
 describe('renderTemplate', () => {
@@ -19,8 +20,10 @@ describe('renderTemplate', () => {
 
   it('expect to process templates as function', () => {
     const templateKey = 'test';
-    const templates = { test: data => `it works with ${data.type}` };
     const data = { type: 'functions' };
+    const templates = {
+      test: (d: typeof data) => `it works with ${d.type}`,
+    };
 
     const actual = renderTemplate({
       templateKey,
@@ -104,7 +107,7 @@ describe('renderTemplate', () => {
         feature: 'helpers',
       };
 
-      const helpers = {
+      const helpers: HoganHelpers<'emphasis'> = {
         emphasis: (text, render) => `<em>${render(text)}</em>`,
       };
 

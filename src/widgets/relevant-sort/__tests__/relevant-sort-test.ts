@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import relevantSort from '../relevant-sort';
+import relevantSort, { RelevantSortTemplates } from '../relevant-sort';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
@@ -16,7 +16,7 @@ jest.mock('preact', () => {
   return module;
 });
 
-const templates = {
+const templates: RelevantSortTemplates = {
   text: '',
   button: ({ isRelevantSorted }) => {
     return isRelevantSorted ? 'See all results' : 'See relevant results';

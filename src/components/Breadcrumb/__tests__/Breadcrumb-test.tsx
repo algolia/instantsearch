@@ -3,6 +3,7 @@
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import Breadcrumb, { BreadcrumbProps } from '../Breadcrumb';
+import { prepareTemplateProps } from '../../../lib/utils';
 
 const defaultProps: BreadcrumbProps = {
   items: [],
@@ -17,12 +18,14 @@ const defaultProps: BreadcrumbProps = {
     link: 'link',
     separator: 'separator',
   },
-  templateProps: {
-    templates: {
+  templateProps: prepareTemplateProps({
+    defaultTemplates: {
       home: 'home',
       separator: ' > ',
     },
-  },
+    templates: {},
+    templatesConfig: {},
+  }),
 };
 
 describe('Breadcrumb', () => {

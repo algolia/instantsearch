@@ -13,6 +13,7 @@ import {
   CreateURL,
   Connector,
   WidgetRenderState,
+  ScopedResult,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -223,6 +224,11 @@ function getAttributesToClear({
   includedAttributes,
   excludedAttributes,
   transformItems,
+}: {
+  scopedResult: ScopedResult;
+  includedAttributes: string[];
+  excludedAttributes: string[];
+  transformItems: TransformItems<string>;
 }): AttributesToClear {
   const includesQuery =
     includedAttributes.indexOf('query') !== -1 ||

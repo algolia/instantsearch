@@ -7,7 +7,7 @@ describe('createInfiniteHitsSessionStorageCache', () => {
   // @ts-expect-error
   delete window.sessionStorage;
 
-  let store = {};
+  let store: Record<string, unknown> = {};
   const getItem = jest.fn(key => store[key]);
   const setItem = jest.fn((key, value) => {
     store[key] = value;

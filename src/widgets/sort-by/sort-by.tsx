@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Selector from '../../components/Selector/Selector';
+import Selector, {
+  SelectorComponentCSSClasses,
+} from '../../components/Selector/Selector';
 import connectSortBy, {
   SortByConnectorParams,
   SortByItem,
@@ -73,6 +75,9 @@ export type SortByWidget = WidgetFactory<
 const renderer = ({
   containerNode,
   cssClasses,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: SelectorComponentCSSClasses;
 }): Renderer<SortByRenderState, SortByWidgetParams> => (
   { currentRefinement, options, refine },
   isFirstRendering

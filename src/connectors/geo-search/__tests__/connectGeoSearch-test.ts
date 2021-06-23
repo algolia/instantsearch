@@ -97,8 +97,9 @@ describe('connectGeoSearch', () => {
     };
   };
 
-  const firstRenderArgs = fn => fn.mock.calls[0][0];
-  const lastRenderArgs = fn => fn.mock.calls[fn.mock.calls.length - 1][0];
+  const firstRenderArgs = (fn: jest.Mock) => fn.mock.calls[0][0];
+  const lastRenderArgs = (fn: jest.Mock) =>
+    fn.mock.calls[fn.mock.calls.length - 1][0];
 
   describe('Usage', () => {
     it('throws without render function', () => {

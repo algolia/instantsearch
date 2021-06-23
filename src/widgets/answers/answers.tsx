@@ -10,21 +10,32 @@ import {
   prepareTemplateProps,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import Answers from '../../components/Answers/Answers';
+import Answers, {
+  AnswersComponentCSSClasses,
+  AnswersComponentTemplates,
+} from '../../components/Answers/Answers';
 import connectAnswers, {
   AnswersRenderState,
   AnswersConnectorParams,
   AnswersWidgetDescription,
 } from '../../connectors/answers/connectAnswers';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'answers' });
 const suit = component('Answers');
 
 const renderer = ({
-  renderState,
-  cssClasses,
   containerNode,
+  cssClasses,
+  renderState,
   templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: AnswersComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<AnswersComponentTemplates>;
+  };
+  templates: AnswersTemplates;
 }): Renderer<AnswersRenderState, Partial<AnswersWidgetParams>> => (
   { hits, isLoading, instantSearchInstance },
   isFirstRendering
@@ -43,7 +54,7 @@ const renderer = ({
       cssClasses={cssClasses}
       hits={hits}
       isLoading={isLoading}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
     />,
     containerNode
   );

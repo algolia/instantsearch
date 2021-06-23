@@ -1,6 +1,12 @@
 import { render as preactRender } from 'preact';
 import stats from '../stats';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -8,8 +14,6 @@ jest.mock('preact', () => {
   module.render = jest.fn();
   return module;
 });
-
-const instantSearchInstance = { templatesConfig: undefined };
 
 describe('Usage', () => {
   it('throws without container', () => {
@@ -25,33 +29,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/"
 });
 
 describe('stats()', () => {
-  let container;
-  let widget;
+  let container: HTMLElement;
+  let widget: ReturnType<typeof stats>;
 
   beforeEach(() => {
     container = document.createElement('div');
     widget = stats({ container, cssClasses: { text: ['text', 'cx'] } });
 
-    widget.init({
-      helper: { state: {} },
-      instantSearchInstance,
-    });
+    widget.init!(createInitOptions());
 
     render.mockClear();
   });
 
   it('calls twice render(<Stats props />, container)', () => {
-    const results = {
-      hits: [{}, {}],
-      nbHits: 20,
-      page: 0,
-      nbPages: 10,
-      hitsPerPage: 2,
-      processingTimeMS: 42,
-      query: 'a query',
-    };
-    widget.render({ results, instantSearchInstance });
-    widget.render({ results, instantSearchInstance });
+    const results = new SearchResults(new SearchParameters(), [
+      createSingleSearchResponse({
+        nbHits: 20,
+        page: 0,
+        nbPages: 10,
+        hitsPerPage: 2,
+        processingTimeMS: 42,
+        query: 'a query',
+      }),
+    ]);
+    widget.render!(createRenderOptions({ results }));
+    widget.render!(createRenderOptions({ results }));
 
     const [firstRender, secondRender] = render.mock.calls;
 
@@ -87,7 +89,7 @@ describe('stats()', () => {
           {{/areHitsSorted}}
           found in {{processingTimeMS}}ms",
           },
-          "templatesConfig": undefined,
+          "templatesConfig": Object {},
           "useCustomCompileOptions": Object {
             "text": false,
           },
@@ -126,7 +128,7 @@ describe('stats()', () => {
           {{/areHitsSorted}}
           found in {{processingTimeMS}}ms",
           },
-          "templatesConfig": undefined,
+          "templatesConfig": Object {},
           "useCustomCompileOptions": Object {
             "text": false,
           },
@@ -137,18 +139,19 @@ describe('stats()', () => {
   });
 
   it('renders sorted hits', () => {
-    const results = {
-      hits: [{}, {}],
-      nbHits: 20,
-      nbSortedHits: 16,
-      appliedRelevancyStrictness: 20,
-      page: 0,
-      nbPages: 10,
-      hitsPerPage: 2,
-      processingTimeMS: 42,
-      query: 'second query',
-    };
-    widget.render({ results, instantSearchInstance });
+    const results = new SearchResults(new SearchParameters(), [
+      createSingleSearchResponse({
+        nbHits: 20,
+        nbSortedHits: 16,
+        appliedRelevancyStrictness: 20,
+        page: 0,
+        nbPages: 10,
+        hitsPerPage: 2,
+        processingTimeMS: 42,
+        query: 'second query',
+      }),
+    ]);
+    widget.render!(createRenderOptions({ results }));
 
     const [firstRender] = render.mock.calls;
     // @ts-expect-error

@@ -80,7 +80,7 @@ describe('getRefinements', () => {
 
   it('should not retrieve any query refinements if `clearsQuery` if false', () => {
     helper.setQuery('a query');
-    const expected = [];
+    const expected: never[] = [];
     const clearsQuery = false;
     expect(getRefinements(results, helper.state, clearsQuery)).toEqual(
       expected

@@ -16,13 +16,13 @@ export function convertNumericRefinementsToFilters(
     }
   */
   const filters: string[] = [];
-  Object.keys(filtersObj)
+  (Object.keys(filtersObj) as SearchParameters.Operator[])
     .filter(
       operator =>
-        Array.isArray(filtersObj[operator]) && filtersObj[operator].length > 0
+        Array.isArray(filtersObj[operator]) && filtersObj[operator]!.length > 0
     )
     .forEach(operator => {
-      filtersObj[operator].forEach(value => {
+      filtersObj[operator]!.forEach(value => {
         filters.push(`${attribute}${operator}${value}`);
       });
     });

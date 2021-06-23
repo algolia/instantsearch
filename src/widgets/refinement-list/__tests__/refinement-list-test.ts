@@ -1,8 +1,20 @@
 import { render as originalRender, VNode } from 'preact';
-import { SearchParameters } from 'algoliasearch-helper';
-import refinementList, { RefinementListTemplates } from '../refinement-list';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import refinementList, {
+  RefinementListTemplates,
+  RefinementListWidgetParams,
+} from '../refinement-list';
 import { RefinementListProps } from '../../../components/RefinementList/RefinementList';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { RefinementListConnectorParams } from '../../../connectors/refinement-list/connectRefinementList';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 const render = castToJestMock(originalRender);
 jest.mock('preact', () => {
@@ -13,12 +25,9 @@ jest.mock('preact', () => {
   return module;
 });
 
-const instantSearchInstance = { templatesConfig: {} };
-
 describe('refinementList()', () => {
-  let container;
-  let options;
-  let widget;
+  let container: HTMLElement;
+  let widget: ReturnType<typeof refinementList>;
 
   beforeEach(() => {
     render.mockClear();
@@ -28,10 +37,9 @@ describe('refinementList()', () => {
 
   describe('instantiated with wrong parameters', () => {
     it('should fail if no container', () => {
-      options = { container: undefined, attribute: 'foo' };
-
       expect(() => {
-        refinementList(options);
+        // @ts-expect-error
+        refinementList({ attribute: 'foo' });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
 
@@ -41,24 +49,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   describe('render', () => {
-    const helper = {};
-    let results;
-    let state;
-    let createURL;
+    const helper = algoliasearchHelper(createSearchClient(), '');
+    let results: SearchResults;
+    let state: SearchParameters;
+    let createURL: () => string;
+    let options: RefinementListWidgetParams & RefinementListConnectorParams;
 
-    function renderWidget(userOptions) {
+    function renderWidget(userOptions: Partial<RefinementListWidgetParams>) {
       widget = refinementList({ ...options, ...userOptions });
-      widget.init({ helper, createURL, instantSearchInstance });
-      return widget.render({ results, helper, state });
+      widget.init!(createInitOptions({ helper, createURL }));
+      return widget.render!(createRenderOptions({ results, helper, state }));
     }
 
     beforeEach(() => {
       options = { container, attribute: 'attribute' };
-      results = {
+      results = ({
         getFacetValues: jest
           .fn()
           .mockReturnValue([{ name: 'foo' }, { name: 'bar' }]),
-      };
+      } as unknown) as SearchResults;
       state = SearchParameters.make({});
       createURL = () => '#';
     });
@@ -174,12 +183,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           items.map(item => ({ ...item, transformed: true })),
       });
 
-      widget.init({
-        helper,
-        createURL,
-        instantSearchInstance,
-      });
-      widget.render({ results, helper, state });
+      widget.init!(
+        createInitOptions({
+          helper,
+          createURL,
+        })
+      );
+      widget.render!(createRenderOptions({ results, helper, state }));
 
       const { props } = render.mock.calls[0][0] as VNode;
 

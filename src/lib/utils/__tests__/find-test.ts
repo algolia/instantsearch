@@ -3,7 +3,7 @@ import find from '../find';
 describe('find', () => {
   describe('with native array method', () => {
     test('with empty array', () => {
-      const items = [];
+      const items: never[] = [];
       const actual = find(items, item => item === 'hello');
 
       expect(actual).toEqual(undefined);
@@ -45,7 +45,7 @@ describe('find', () => {
     });
 
     test('with empty array', () => {
-      const items = [];
+      const items: never[] = [];
       const actual = find(items, item => item === 'hello');
 
       expect(actual).toEqual(undefined);

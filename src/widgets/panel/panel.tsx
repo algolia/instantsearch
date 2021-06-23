@@ -9,7 +9,7 @@ import {
   warning,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import Panel from '../../components/Panel/Panel';
+import Panel, { PanelComponentCSSClasses } from '../../components/Panel/Panel';
 import { Template, RenderOptions, WidgetFactory } from '../../types';
 
 export type PanelCSSClasses = Partial<{
@@ -131,7 +131,22 @@ const renderer = <TWidget extends AnyWidgetFactory>({
   bodyContainerNode,
   cssClasses,
   templates,
-}) => ({ options, hidden, collapsible, collapsed }) => {
+}: {
+  containerNode: HTMLElement;
+  bodyContainerNode: HTMLElement;
+  cssClasses: PanelComponentCSSClasses;
+  templates: Required<PanelTemplates<TWidget>>;
+}) => ({
+  options,
+  hidden,
+  collapsible,
+  collapsed,
+}: {
+  options: RenderOptions | Record<string, never>;
+  hidden: boolean;
+  collapsible: boolean;
+  collapsed: boolean;
+}) => {
   render(
     <Panel<TWidget>
       cssClasses={cssClasses}
@@ -221,7 +236,7 @@ const panel: PanelWidget = panelWidgetParams => {
 
     const containerNode = getContainerNode(widgetParams.container);
 
-    const defaultTemplates = {
+    const defaultTemplates: Required<PanelTemplates<typeof widgetFactory>> = {
       header: '',
       footer: '',
       collapseButtonText: ({ collapsed: isCollapsed }) =>

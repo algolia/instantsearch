@@ -1,7 +1,7 @@
 import { deprecate, warning } from '../logger';
 
 describe('deprecate', () => {
-  const sum = (...args) => args.reduce((acc, _) => acc + _, 0);
+  const sum = (...args: number[]) => args.reduce((acc, _) => acc + _, 0);
 
   it('expect to call initial function and print message', () => {
     const warn = jest.spyOn(global.console, 'warn');
@@ -37,7 +37,7 @@ describe('deprecate', () => {
 });
 
 describe('warning', () => {
-  let warn;
+  let warn: jest.SpiedFunction<typeof global.console.warn>;
 
   beforeEach(() => {
     warn = jest.spyOn(global.console, 'warn');

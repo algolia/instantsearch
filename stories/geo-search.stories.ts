@@ -30,7 +30,7 @@ const withHitsAndConfigure = (
     }
   );
 
-const injectGoogleMaps = fn => {
+const injectGoogleMaps = (fn: () => void) => {
   injectScript(
     `https://maps.googleapis.com/maps/api/js?v=weekly&key=${API_KEY}`,
     fn

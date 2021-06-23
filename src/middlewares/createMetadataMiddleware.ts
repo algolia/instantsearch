@@ -35,7 +35,7 @@ function extractPayload(
   };
 
   widgets.forEach(widget => {
-    let widgetParams = {};
+    let widgetParams: { [key: string]: any } = {};
 
     if (widget.getWidgetRenderState) {
       const renderState = widget.getWidgetRenderState(initOptions);

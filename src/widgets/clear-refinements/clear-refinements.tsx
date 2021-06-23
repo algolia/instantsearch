@@ -1,10 +1,14 @@
 /** @jsx h */
 
 import { h, render } from 'preact';
-import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
+import ClearRefinements, {
+  ClearRefinementsComponentCSSClasses,
+  ClearRefinementsComponentTemplates,
+} from '../../components/ClearRefinements/ClearRefinements';
 import cx from 'classnames';
 import connectClearRefinements, {
   ClearRefinementsConnectorParams,
+  ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
 } from '../../connectors/clear-refinements/connectClearRefinements';
 import defaultTemplates from './defaultTemplates';
@@ -14,17 +18,30 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Template } from '../../types';
+import { WidgetFactory, Template, Renderer } from '../../types';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
 });
 const suit = component('ClearRefinements');
 
-const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
-  { refine, hasRefinements, instantSearchInstance },
-  isFirstRendering
-) => {
+const renderer = ({
+  containerNode,
+  cssClasses,
+  renderState,
+  templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: ClearRefinementsComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<ClearRefinementsComponentTemplates>;
+  };
+  templates: ClearRefinementsTemplates;
+}): Renderer<
+  ClearRefinementsRenderState,
+  Partial<ClearRefinementsWidgetParams>
+> => ({ refine, hasRefinements, instantSearchInstance }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -39,7 +56,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
       refine={refine}
       cssClasses={cssClasses}
       hasRefinements={hasRefinements}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
     />,
     containerNode
   );

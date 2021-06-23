@@ -3,6 +3,7 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import Pagination, {
+  PaginationComponentCSSClasses,
   PaginationComponentTemplates,
 } from '../../components/Pagination/Pagination';
 import connectPagination, {
@@ -36,6 +37,15 @@ const renderer = ({
   showPrevious,
   showNext,
   scrollToNode,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: PaginationComponentCSSClasses;
+  templates: PaginationComponentTemplates;
+  showFirst: boolean;
+  showLast: boolean;
+  showPrevious: boolean;
+  showNext: boolean;
+  scrollToNode: HTMLElement | false;
 }): Renderer<PaginationRenderState, Partial<PaginationWidgetParams>> => (
   {
     createURL,

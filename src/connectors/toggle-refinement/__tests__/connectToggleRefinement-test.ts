@@ -2,7 +2,9 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectToggleRefinement from '../connectToggleRefinement';
+import connectToggleRefinement, {
+  ToggleRefinementRenderState,
+} from '../connectToggleRefinement';
 import {
   createDisposeOptions,
   createInitOptions,
@@ -717,7 +719,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
   });
 
   it('sets user-provided "on" value on refine (falsy)', () => {
-    let caughtRefine;
+    let caughtRefine: ToggleRefinementRenderState['refine'];
     const makeWidget = connectToggleRefinement(({ refine }) => {
       caughtRefine = refine;
     });
@@ -765,7 +767,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
 
     // toggle the value
-    caughtRefine();
+    caughtRefine!();
 
     expect(helper.state.disjunctiveFacetsRefinements).toEqual(
       expect.objectContaining({
@@ -775,7 +777,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
   });
 
   it('sets user-provided "on" value on refine (array)', () => {
-    let caughtRefine;
+    let caughtRefine: ToggleRefinementRenderState['refine'];
     const makeWidget = connectToggleRefinement(({ refine }) => {
       caughtRefine = refine;
     });
@@ -825,7 +827,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
 
     // toggle the value
-    caughtRefine();
+    caughtRefine!();
 
     expect(helper.state.disjunctiveFacetsRefinements).toEqual(
       expect.objectContaining({

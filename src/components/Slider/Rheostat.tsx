@@ -92,11 +92,28 @@ export type PitProps = {
   style: Style;
 };
 
+export type HandleProps = {
+  'aria-valuemax'?: number;
+  'aria-valuemin'?: number;
+  'aria-valuenow'?: number;
+  'aria-disabled': boolean;
+  'data-handle-key': number;
+  className: 'rheostat-handle';
+  key: string;
+  onClick: (e: MouseEvent) => void;
+  onKeyDown?: (e: KeyboardEvent) => void;
+  onMouseDown?: (e: MouseEvent) => void;
+  onTouchStart?: (e: TouchEvent) => void;
+  role: 'slider';
+  style: h.JSX.HTMLAttributes['style'];
+  tabIndex: number;
+};
+
 type Props = {
   children?: ComponentChildren;
   className?: string;
   disabled?: boolean;
-  handle?: ComponentType<h.JSX.HTMLAttributes>;
+  handle?: ComponentType<HandleProps>;
   max?: number;
   min?: number;
   onClick?(...args: unknown[]): unknown;
@@ -291,7 +308,7 @@ class Rheostat extends Component<Props, State> {
     if (!this.props.snapPoints!.length) return value;
 
     return this.props.snapPoints!.reduce((snapTo, snap) =>
-      Math.abs(snapTo - value) < Math.abs(snap - value) ? snapTo : snap
+      Math.abs(snapTo! - value) < Math.abs(snap - value) ? snapTo : snap
     );
   }
 
@@ -378,7 +395,7 @@ class Rheostat extends Component<Props, State> {
       : proposedPercentage;
   }
 
-  private getNextState(idx, proposedPosition) {
+  private getNextState(idx: number, proposedPosition: number) {
     const { handlePos } = this.state;
     const { max, min } = this.props as Required<Props>;
 
@@ -404,7 +421,7 @@ class Rheostat extends Component<Props, State> {
     }, 0);
   }
 
-  private setStartSlide(ev: MouseEvent, x: number, y: number) {
+  private setStartSlide(ev: MouseEvent | TouchEvent, x: number, y: number) {
     const sliderBox = this.getSliderBoundingBox();
 
     this.setState({
@@ -424,7 +441,7 @@ class Rheostat extends Component<Props, State> {
     killEvent(ev);
   }
 
-  private startTouchSlide(ev) {
+  private startTouchSlide(ev: TouchEvent) {
     if (ev.changedTouches.length > 1) return;
 
     const touch = ev.changedTouches[0];
@@ -439,13 +456,13 @@ class Rheostat extends Component<Props, State> {
     killEvent(ev);
   }
 
-  private handleMouseSlide(ev) {
+  private handleMouseSlide(ev: MouseEvent) {
     if (this.state.slidingIndex === null) return;
     this.handleSlide(ev.clientX, ev.clientY);
     killEvent(ev);
   }
 
-  private handleTouchSlide(ev) {
+  private handleTouchSlide(ev: TouchEvent) {
     if (this.state.slidingIndex === null) return;
 
     if (ev.changedTouches.length > 1) {

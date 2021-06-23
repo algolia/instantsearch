@@ -6,7 +6,10 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import rangeSlider from '../range-slider';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import { createRenderOptions } from '../../../../test/mock/createWidget';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { InstantSearch } from '../../../types';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
@@ -83,7 +86,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
     let container: HTMLDivElement;
     let helper: AlgoliaSearchHelper;
-    let widget;
+    let widget: ReturnType<typeof rangeSlider>;
     let instantSearchInstance: InstantSearch;
 
     beforeEach(() => {
@@ -106,8 +109,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         step: 1,
       });
 
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results: [], helper });
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      widget.init!(createInitOptions({ helper, instantSearchInstance }));
+      widget.render!(
+        createRenderOptions({
+          results,
+          helper,
+        })
+      );
 
       const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -179,8 +191,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
             uiState: {},
           })
         );
-        widget.init({ helper, instantSearchInstance });
-        widget.render({ results: {}, helper });
+        const results = new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]);
+        widget.init!(createInitOptions({ helper, instantSearchInstance }));
+        widget.render!(createRenderOptions({ results, helper }));
 
         const firstRender = render.mock.calls[0][0] as VNode;
 
@@ -189,17 +204,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       });
 
       it('will use the results max when only min passed', () => {
-        const results = {
-          disjunctiveFacets: [
-            {
-              name: attribute,
-              stats: {
-                min: 1.99,
-                max: 4999.98,
-              },
-            },
-          ],
-        };
         widget = rangeSlider({
           container,
           attribute,
@@ -213,8 +217,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
             uiState: {},
           })
         );
-        widget.init({ helper, instantSearchInstance });
-        widget.render({ results, helper });
+        const results = new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              [attribute]: {},
+            },
+            facets_stats: {
+              [attribute]: {
+                min: 1.99,
+                max: 4999.98,
+                avg: 2,
+                sum: 100000,
+              },
+            },
+          }),
+        ]);
+        widget.init!(createInitOptions({ helper, instantSearchInstance }));
+        widget.render!(createRenderOptions({ results, helper }));
 
         expect(render).toHaveBeenCalledTimes(1);
 
@@ -248,18 +267,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       });
 
       it('will use the results min when only max is passed', () => {
-        const results = {
-          disjunctiveFacets: [
-            {
-              name: attribute,
-              stats: {
-                min: 1.99,
-                max: 4999.98,
-              },
-            },
-          ],
-        };
-
         widget = rangeSlider({
           container,
           attribute,
@@ -272,8 +279,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
             uiState: {},
           })
         );
-        widget.init({ helper, instantSearchInstance });
-        widget.render({ results, helper });
+        const results = new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              [attribute]: {},
+            },
+            facets_stats: {
+              [attribute]: {
+                min: 1.99,
+                max: 4999.98,
+                avg: 2,
+                sum: 100000,
+              },
+            },
+          }),
+        ]);
+        widget.init!(createInitOptions({ helper, instantSearchInstance }));
+        widget.render!(createRenderOptions({ results, helper }));
 
         expect(render).toHaveBeenCalledTimes(1);
 
@@ -293,7 +315,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        widget.init({ helper, instantSearchInstance });
+        widget.init!(createInitOptions({ helper, instantSearchInstance }));
 
         results = createFacetStatsResults({
           helper,
@@ -322,8 +344,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       });
 
       it('calls twice render', () => {
-        widget.render({ results, helper });
-        widget.render({ results, helper });
+        widget.render!(createRenderOptions({ results, helper }));
+        widget.render!(createRenderOptions({ results, helper }));
 
         const firstRender = render.mock.calls[0][0] as VNode;
         const secondRender = render.mock.calls[1][0] as VNode;
@@ -335,7 +357,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
       it('does not call the refinement functions if not refined', () => {
         const state0 = helper.state;
-        widget.render({ results, helper });
+        widget.render!(createRenderOptions({ results, helper }));
         const state1 = helper.state;
 
         expect(state0).toEqual(state1);
@@ -417,12 +439,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           cssClasses: { root: '' },
         });
 
-        widget.init({ helper, instantSearchInstance });
+        widget.init!(createInitOptions({ helper, instantSearchInstance }));
 
         helper.addNumericRefinement(attribute, '>=', 5550);
         helper.addNumericRefinement(attribute, '<=', 6000);
 
-        widget.render({ results, helper });
+        widget.render!(createRenderOptions({ results, helper }));
 
         const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
 
@@ -437,12 +459,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           cssClasses: { root: '' },
         });
 
-        widget.init({ helper, instantSearchInstance });
+        widget.init!(createInitOptions({ helper, instantSearchInstance }));
 
         helper.addNumericRefinement(attribute, '>=', -50);
         helper.addNumericRefinement(attribute, '<=', 0);
 
-        widget.render({ results, helper });
+        widget.render!(createRenderOptions({ results, helper }));
 
         const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
 

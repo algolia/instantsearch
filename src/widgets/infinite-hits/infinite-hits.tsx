@@ -3,7 +3,10 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import { SearchResults } from 'algoliasearch-helper';
-import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
+import InfiniteHits, {
+  InfiniteHitsComponentCSSClasses,
+  InfiniteHitsComponentTemplates,
+} from '../../components/InfiniteHits/InfiniteHits';
 import connectInfiniteHits, {
   InfiniteHitsConnectorParams,
   InfiniteHitsRenderState,
@@ -27,6 +30,7 @@ import {
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
 import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -134,11 +138,19 @@ export type InfiniteHitsWidget = WidgetFactory<
 >;
 
 const renderer = ({
-  cssClasses,
   containerNode,
+  cssClasses,
   renderState,
   templates,
   showPrevious: hasShowPrevious,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: InfiniteHitsComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<InfiniteHitsComponentTemplates>;
+  };
+  templates: InfiniteHitsTemplates;
+  showPrevious?: boolean;
 }): Renderer<InfiniteHitsRenderState, Partial<InfiniteHitsWidgetParams>> => (
   {
     hits,
@@ -170,7 +182,7 @@ const renderer = ({
       hasShowPrevious={hasShowPrevious}
       showPrevious={showPrevious}
       showMore={showMore}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       isFirstPage={isFirstPage}
       isLastPage={isLastPage}
       insights={insights as InsightsClientWrapper}

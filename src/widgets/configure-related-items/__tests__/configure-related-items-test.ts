@@ -1,5 +1,7 @@
 import configureRelatedItems from '../configure-related-items';
-import connectConfigureRelatedItems from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
+import connectConfigureRelatedItems, {
+  ConfigureRelatedItemsConnectorParams,
+} from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
 jest.mock(
@@ -13,7 +15,7 @@ describe('configureRelatedItems', () => {
       () => makeWidget
     );
 
-    const widgetParams = {
+    const widgetParams: ConfigureRelatedItemsConnectorParams = {
       hit: { objectID: '1' },
       matchingPatterns: {},
       transformSearchParameters: x => x,

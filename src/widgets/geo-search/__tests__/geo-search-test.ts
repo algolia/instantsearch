@@ -2,7 +2,7 @@
 import { render as preactRender } from 'preact';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import createHTMLMarker from '../createHTMLMarker';
-import renderer from '../GeoSearchRenderer';
+import originalRenderer from '../GeoSearchRenderer';
 import geoSearch from '../geo-search';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
@@ -23,6 +23,7 @@ jest.mock('preact', () => {
   return module;
 });
 
+const renderer = castToJestMock(originalRenderer);
 jest.mock('../GeoSearchRenderer', () => {
   const module = jest.requireActual('../GeoSearchRenderer');
 
@@ -118,9 +119,9 @@ describe('GeoSearch', () => {
   const createFakeHelper = () =>
     algoliasearchHelper(createSearchClient(), 'indexName');
 
-  const lastRenderArgs = (fn: jest.Mock) =>
+  const lastRenderArgs = (fn: jest.MockedFunction<typeof originalRenderer>) =>
     fn.mock.calls[fn.mock.calls.length - 1][0];
-  const lastRenderState = (fn: jest.Mock) =>
+  const lastRenderState = (fn: jest.MockedFunction<typeof originalRenderer>) =>
     lastRenderArgs(fn).widgetParams.renderState;
 
   const simulateMapReadyEvent = (google: typeof window['google']) => {

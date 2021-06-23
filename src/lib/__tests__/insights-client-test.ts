@@ -16,8 +16,11 @@ const connectHits = (renderFn: any, unmountFn: any) => (
 });
 
 const createWidgetWithInsights = ({
+  // @ts-ignore can not import types in this file?
   renderFn,
+  // @ts-ignore can not import types in this file?
   instantSearchInstance,
+  // @ts-ignore can not import types in this file?
   results,
 }): Widget => {
   const connectHitsWithInsights = withInsights(connectHits as any);

@@ -13,7 +13,7 @@ import connectAutocomplete, {
   AutocompleteRenderState,
 } from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import { SearchClient } from '../../../types';
+import { Hit, SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
@@ -534,7 +534,7 @@ search.addWidgets([
         createRenderOptions({ helper })
       );
 
-      const hits = [];
+      const hits: Hit[] = [];
       // @ts-ignore-next-line
       hits.__escaped = true;
 

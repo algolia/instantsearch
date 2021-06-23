@@ -23,7 +23,7 @@ export function createSendEventForFacet({
   attribute: string;
   widgetType: string;
 }): SendEventForFacet {
-  const sendEventForFacet: SendEventForFacet = (...args) => {
+  const sendEventForFacet: SendEventForFacet = (...args: any[]) => {
     const [eventType, facetValue, eventName = 'Filter Applied'] = args;
     if (args.length === 1 && typeof args[0] === 'object') {
       instantSearchInstance.sendEventToInsights(args[0]);

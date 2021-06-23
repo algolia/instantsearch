@@ -11,6 +11,7 @@ import {
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
+  AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
@@ -51,8 +52,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 describe('pagination()', () => {
   let widget: ReturnType<typeof pagination>;
   let container: HTMLElement;
-  let helper;
-  let results;
+  let helper: AlgoliaSearchHelper;
+  let results: SearchResults;
   let cssClasses: PaginationCSSClasses;
 
   beforeEach(() => {
@@ -75,17 +76,20 @@ describe('pagination()', () => {
       link: 'link',
     };
     widget = pagination({ container, scrollTo: false, cssClasses });
-    results = {
-      hits: [{ first: 'hit', second: 'hit' }],
-      nbHits: 200,
-      hitsPerPage: 10,
-      nbPages: 20,
-    };
-    helper = {
+
+    helper = ({
       setPage: jest.fn(),
       search: jest.fn(),
-      state: {},
-    };
+      state: new SearchParameters(),
+    } as unknown) as AlgoliaSearchHelper;
+    results = new SearchResults(helper.state, [
+      createSingleSearchResponse({
+        hits: [{ first: 'hit', second: 'hit', objectID: '1' }],
+        nbHits: 200,
+        hitsPerPage: 10,
+        nbPages: 20,
+      }),
+    ]);
     widget.init!(createInitOptions({ helper }));
   });
 
@@ -174,7 +178,7 @@ describe('pagination()', () => {
 describe('pagination MaxPage', () => {
   let widget: ReturnType<typeof pagination>;
   let container: HTMLElement;
-  let results;
+  let results: SearchResults;
   let cssClasses: PaginationCSSClasses;
   let paginationOptions: PaginationWidgetParams;
 

@@ -32,14 +32,14 @@ export type InfiniteHitsCachedHits = {
 type Read = ({
   state,
 }: {
-  state: Partial<SearchParameters>;
+  state: PlainSearchParameters;
 }) => InfiniteHitsCachedHits | null;
 
 type Write = ({
   state,
   hits,
 }: {
-  state: Partial<SearchParameters>;
+  state: PlainSearchParameters;
   hits: InfiniteHitsCachedHits;
 }) => void;
 

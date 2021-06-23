@@ -162,6 +162,7 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
           for (const equal in filter['=']) {
             // eslint-disable-next-line max-depth
             if (filter['='].hasOwnProperty(equal)) {
+              // @ts-ignore somehow 'equal' is a string, even though it's a number?
               equals.push(filter['='][equal]);
             }
           }

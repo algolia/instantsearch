@@ -2,8 +2,8 @@
 // Custom types to support both algoliasearch
 // `v3` and algoliasearch `v4` clients.
 
-import algoliasearch from 'algoliasearch';
-import * as AlgoliaSearch from 'algoliasearch';
+import algoliasearch from 'algoliasearch/lite';
+import * as AlgoliaSearch from 'algoliasearch/lite';
 /** @ts-ignore */
 import * as ClientSearch from '@algolia/client-search';
 
@@ -28,11 +28,17 @@ type DummySearchClientV4 = {
 
 type DefaultSearchClient = ReturnType<typeof algoliasearch>;
 
+type SearchIndex = ReturnType<DefaultSearchClient['initIndex']>;
+
 export type SearchClient = {
   search: DefaultSearchClient['search'];
   searchForFacetValues: DefaultSearchClient['searchForFacetValues'];
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
-  initIndex?: DefaultSearchClient['initIndex'];
+  initIndex?: (
+    indexName: string
+  ) => SearchIndex extends { findAnswers: any }
+    ? Partial<Pick<SearchIndex, 'findAnswers'>>
+    : SearchIndex;
 };
 
 export type MultiResponse<THit = any> = {
@@ -48,6 +54,12 @@ export type SearchResponse<
 export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
   : SearchForFacetValuesResponseV3;
+
+export type FindAnswersParameters = SearchIndex extends {
+  findAnswers: (...params: infer Params) => any;
+}
+  ? Params
+  : any;
 
 export type FindAnswersOptions = DefaultSearchClient extends DummySearchClientV4
   ? ClientSearch.FindAnswersOptions

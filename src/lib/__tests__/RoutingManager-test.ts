@@ -49,7 +49,7 @@ const createFakeHistory = (
     entries = [],
     listeners = [],
   }: HistoryState = {} as HistoryState
-): any => {
+) => {
   const state: HistoryState = {
     index,
     entries,
@@ -57,7 +57,7 @@ const createFakeHistory = (
   };
 
   return {
-    subscribe(listener: () => void) {
+    subscribe(listener: (entry: Entry) => void) {
       state.listeners.push(listener);
     },
     push(value: Entry) {

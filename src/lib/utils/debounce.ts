@@ -1,9 +1,11 @@
+import { Awaited } from '../../types';
+
 type Func = (...args: any[]) => any;
 
-type DebouncedFunction<TFunction extends Func> = (
+export type DebouncedFunction<TFunction extends Func> = (
   this: ThisParameterType<TFunction>,
   ...args: Parameters<TFunction>
-) => Promise<ReturnType<TFunction>>;
+) => Promise<Awaited<ReturnType<TFunction>>>;
 
 // Debounce a function call to the trailing edge.
 // The debounced function returns a promise.

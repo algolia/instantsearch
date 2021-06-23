@@ -58,7 +58,9 @@ storiesOf('Basics/Panel', module)
   .add(
     'with range slider',
     withHits(({ search, container, instantsearch }) => {
-      const priceSlider = instantsearch.widgets.panel({
+      const priceSlider = instantsearch.widgets.panel<
+        typeof instantsearch.widgets.rangeSlider
+      >({
         templates: {
           header: 'Price',
           footer: 'Footer',

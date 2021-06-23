@@ -82,9 +82,10 @@ describe('Pagination', () => {
     };
     const preventDefault = jest.fn();
     const component = new Pagination({ ...defaultProps, ...props });
-    ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach(e => {
-      const event = { preventDefault };
-      event[e] = true;
+    const modifiers = ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'] as const;
+    modifiers.forEach(e => {
+      const event: Partial<KeyboardEvent> = { preventDefault };
+      (event as any)[e] = true;
       // @ts-expect-error
       component.handleClick(42, event);
 

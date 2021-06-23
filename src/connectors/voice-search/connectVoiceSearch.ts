@@ -176,7 +176,10 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
         if (typeof additionalQueryParameters === 'function') {
           const additional = additionalQueryParameters({ query: '' });
           const toReset = additional
-            ? Object.keys(additional).reduce((acc, current) => {
+            ? (Object.keys(additional) as Array<
+                keyof PlainSearchParameters
+              >).reduce<PlainSearchParameters>((acc, current) => {
+                // @ts-ignore search parameters is typed as readonly
                 acc[current] = undefined;
                 return acc;
               }, {})

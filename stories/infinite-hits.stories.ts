@@ -78,7 +78,7 @@ storiesOf('Results/InfiniteHits', module)
         ]);
       },
       {
-        insightsClient: (method, payload) =>
+        insightsClient: (method: string, payload: any) =>
           action(`[InsightsClient] sent "${method}" with payload`)(payload),
       }
     )

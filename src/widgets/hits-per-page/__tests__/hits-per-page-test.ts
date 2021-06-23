@@ -1,8 +1,19 @@
 import { render as preactRender, VNode, ComponentChildren } from 'preact';
-import { SearchParameters } from 'algoliasearch-helper';
-import hitsPerPage from '../hits-per-page';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import hitsPerPage, { HitsPerPageCSSClasses } from '../hits-per-page';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { SelectorProps } from '../../../components/Selector/Selector';
+import { HitsPerPageConnectorParamsItem } from '../../../connectors/hits-per-page/connectHitsPerPage';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -26,13 +37,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 });
 
 describe('hitsPerPage()', () => {
-  let container;
-  let items;
-  let cssClasses;
-  let widget;
-  let helper;
-  let results;
-  let state;
+  let container: HTMLElement;
+  let items: HitsPerPageConnectorParamsItem[];
+  let cssClasses: HitsPerPageCSSClasses;
+  let widget: ReturnType<typeof hitsPerPage>;
+  let helper: AlgoliaSearchHelper;
+  let results: SearchResults;
+  let state: SearchParameters;
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -46,20 +57,16 @@ describe('hitsPerPage()', () => {
       option: 'custom-option',
     };
     widget = hitsPerPage({ container, items, cssClasses });
-    helper = {
-      state: {
-        hitsPerPage: 20,
-      },
-      setQueryParameter: jest.fn().mockReturnThis(),
-      search: jest.fn(),
-    };
-    state = {
-      hitsPerPage: 10,
-    };
-    results = {
-      hits: [],
-      nbHits: 0,
-    };
+    helper = algoliasearchHelper(createSearchClient(), '', {
+      hitsPerPage: 20,
+    });
+    state = new SearchParameters({ hitsPerPage: 10 });
+    results = new SearchResults(helper.state, [
+      createSingleSearchResponse({
+        hits: [],
+        nbHits: 0,
+      }),
+    ]);
 
     render.mockClear();
   });
@@ -85,9 +92,9 @@ describe('hitsPerPage()', () => {
   });
 
   it('calls twice render(<Selector props />, container)', () => {
-    widget.init({ helper, state: helper.state });
-    widget.render({ results, state });
-    widget.render({ results, state });
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(createRenderOptions({ results, state }));
+    widget.render!(createRenderOptions({ results, state }));
 
     const firstRender = render.mock.calls[0][0] as VNode;
     const { children, ...rootProps } = firstRender.props as any;
@@ -108,8 +115,8 @@ describe('hitsPerPage()', () => {
         widgetItems.map(item => ({ ...item, transformed: true })),
     });
 
-    widget.init({ helper, state: helper.state });
-    widget.render({ results, state });
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(createRenderOptions({ results, state }));
 
     const selectorRender = ((render.mock.calls[0][0] as VNode).props as {
       children: ComponentChildren;
@@ -135,10 +142,11 @@ describe('hitsPerPage()', () => {
 
   it('should warn without name attribute in a passed item', () => {
     items.length = 0;
+    // @ts-expect-error wrong item
     items.push({ label: 'Label without a value' });
 
     expect(() => {
-      widget.init({ state: helper.state, helper });
+      widget.init!(createInitOptions({ state: helper.state, helper }));
     }).toWarnDev(
       `[InstantSearch.js]: The \`items\` option of \`hitsPerPage\` does not contain the "hits per page" value coming from the state: 20.
 
@@ -150,7 +158,7 @@ You may want to add another entry to the \`items\` option with this value.`
     helper.state.hitsPerPage = -1;
 
     expect(() => {
-      widget.init({ state: helper.state, helper });
+      widget.init!(createInitOptions({ state: helper.state, helper }));
     }).toWarnDev(
       `[InstantSearch.js]: The \`items\` option of \`hitsPerPage\` does not contain the "hits per page" value coming from the state: -1.
 
@@ -162,7 +170,7 @@ You may want to add another entry to the \`items\` option with this value.`
     delete helper.state.hitsPerPage;
 
     expect(() => {
-      widget.init({ state: helper.state, helper });
+      widget.init!(createInitOptions({ state: helper.state, helper }));
     }).not.toThrow(/No item in `items`/);
   });
 });

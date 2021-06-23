@@ -16,3 +16,5 @@ export type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 export type RequiredKeys<TObject, TKeys extends keyof TObject> = Expand<
   Required<Pick<TObject, TKeys>> & Omit<TObject, TKeys>
 >;
+
+export type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;

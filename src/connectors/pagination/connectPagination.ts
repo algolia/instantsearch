@@ -4,7 +4,7 @@ import {
   noop,
 } from '../../lib/utils';
 import Paginator from './Paginator';
-import { Connector, WidgetRenderState } from '../../types';
+import { Connector, CreateURL, WidgetRenderState } from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -27,7 +27,7 @@ export type PaginationConnectorParams = {
 
 export type PaginationRenderState = {
   /** Creates URLs for the next state, the number is the page to generate the URL for. */
-  createURL(page: number): string;
+  createURL: CreateURL<number>;
 
   /** Sets the current page and triggers a search. */
   refine(page: number): void;
@@ -102,7 +102,7 @@ const connectPagination: PaginationConnector = function connectPagination(
 
     const connectorState: ConnectorState = {};
 
-    function getMaxPage({ nbPages }) {
+    function getMaxPage({ nbPages }: { nbPages: number }) {
       return totalPages !== undefined ? Math.min(totalPages, nbPages) : nbPages;
     }
 

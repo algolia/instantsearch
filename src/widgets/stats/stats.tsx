@@ -2,7 +2,10 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Stats, { StatsComponentTemplates } from '../../components/Stats/Stats';
+import Stats, {
+  StatsComponentCSSClasses,
+  StatsComponentTemplates,
+} from '../../components/Stats/Stats';
 import connectStats, {
   StatsConnectorParams,
   StatsRenderState,
@@ -15,6 +18,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { Renderer, Template, WidgetFactory } from '../../types';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');
@@ -88,6 +92,13 @@ const renderer = ({
   cssClasses,
   containerNode,
   templates,
+}: {
+  renderState: {
+    templateProps?: PreparedTemplateProps<StatsComponentTemplates>;
+  };
+  cssClasses: StatsComponentCSSClasses;
+  containerNode: HTMLElement;
+  templates: StatsTemplates;
 }): Renderer<StatsRenderState, Partial<StatsWidgetParams>> => (
   {
     hitsPerPage,
@@ -123,7 +134,7 @@ const renderer = ({
       page={page}
       processingTimeMS={processingTimeMS}
       query={query}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
     />,
     containerNode
   );
@@ -144,7 +155,7 @@ const stats: StatsWidget = widgetParams => {
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses: StatsCSSClasses = {
+  const cssClasses: StatsComponentCSSClasses = {
     root: cx(suit(), userCssClasses.root),
     text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
   };

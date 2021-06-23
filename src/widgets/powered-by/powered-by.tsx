@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import PoweredBy from '../../components/PoweredBy/PoweredBy';
+import PoweredBy, {
+  PoweredByComponentCSSClasses,
+} from '../../components/PoweredBy/PoweredBy';
 import connectPoweredBy, {
   PoweredByConnectorParams,
   PoweredByRenderState,
@@ -21,6 +23,9 @@ const withUsage = createDocumentationMessageGenerator({ name: 'powered-by' });
 const renderer = ({
   containerNode,
   cssClasses,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: PoweredByComponentCSSClasses;
 }): Renderer<PoweredByRenderState, Partial<PoweredByWidgetParams>> => (
   { url, widgetParams },
   isFirstRendering

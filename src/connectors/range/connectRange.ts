@@ -117,7 +117,15 @@ export type RangeConnector = Connector<
   RangeConnectorParams
 >;
 
-function toPrecision({ min, max, precision }) {
+function toPrecision({
+  min,
+  max,
+  precision,
+}: {
+  min?: number;
+  max?: number;
+  precision: number;
+}) {
   const pow = Math.pow(10, precision);
 
   return {

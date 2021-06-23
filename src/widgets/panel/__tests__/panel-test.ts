@@ -8,6 +8,7 @@ import {
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
 import algoliasearchHelper from 'algoliasearch-helper';
+import { Widget } from '../../../types';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -91,10 +92,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/panel/js/"
 });
 
 describe('Templates', () => {
-  let widgetFactory;
+  let widgetFactory: () => Widget<{
+    $$type: '';
+    widgetParams: Record<string, any>;
+  }>;
 
   beforeEach(() => {
-    const widget = {
+    const widget: Widget<{
+      $$type: '';
+      widgetParams: Record<string, any>;
+    }> = {
+      $$type: '',
       init: jest.fn(),
       render: jest.fn(),
       dispose: jest.fn(),

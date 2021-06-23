@@ -7,9 +7,9 @@ import { SearchResults } from 'algoliasearch-helper';
 import { BindEventForHits, SendEventForHits } from '../../lib/utils';
 import { ComponentCSSClasses, Hits as HitsArray } from '../../types';
 import { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type HitsComponentCSSClasses = ComponentCSSClasses<HitsCSSClasses>;
-
 export type HitsComponentTemplates = Required<HitsTemplates>;
 
 export type HitsProps = {
@@ -18,10 +18,7 @@ export type HitsProps = {
   sendEvent?: SendEventForHits;
   bindEvent?: BindEventForHits;
   cssClasses: HitsComponentCSSClasses;
-  templateProps: {
-    [key: string]: any;
-    templates: HitsComponentTemplates;
-  };
+  templateProps: PreparedTemplateProps<HitsComponentTemplates>;
 };
 
 const Hits = ({

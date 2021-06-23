@@ -1,10 +1,21 @@
 import { render as preactRender, VNode } from 'preact';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  PlainSearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
 import { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { InfiniteHitsCache } from '../../../connectors/infinite-hits/connectInfiniteHits';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -29,10 +40,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 });
 
 describe('infiniteHits()', () => {
-  let container;
-  let widget;
-  let results;
-  let helper;
+  let container: HTMLElement;
+  let widget: ReturnType<typeof infiniteHits>;
+  let results: SearchResults;
+  let helper: AlgoliaSearchHelper;
 
   beforeEach(() => {
     render.mockClear();
@@ -48,21 +59,23 @@ describe('infiniteHits()', () => {
       cssClasses: { root: ['root', 'cx'] },
       showPrevious: false,
     });
-    widget.init({ helper, instantSearchInstance: {} });
-    results = {
-      hits: [{ first: 'hit', second: 'hit' }],
-      hitsPerPage: 2,
-      page: 1,
-    };
+    widget.init!(createInitOptions({ helper }));
+    results = new SearchResults(helper.state, [
+      createSingleSearchResponse({
+        hits: [{ objectID: '1' }, { objectID: '2' }],
+        hitsPerPage: 2,
+        page: 1,
+      }),
+    ]);
   });
 
   it('calls twice render(<Hits props />, container)', () => {
-    const state = { page: 0 };
+    const state = new SearchParameters({ page: 0 });
     const instantSearchInstance = createInstantSearch();
-    widget.init({ helper, instantSearchInstance });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
 
-    widget.render({ results, state });
-    widget.render({ results, state });
+    widget.render!(createRenderOptions({ results, state }));
+    widget.render!(createRenderOptions({ results, state }));
 
     const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
     const secondRender = render.mock.calls[1][0] as VNode<InfiniteHitsProps>;
@@ -77,7 +90,7 @@ describe('infiniteHits()', () => {
   });
 
   it('renders transformed items', () => {
-    const state = { page: 0 };
+    const state = new SearchParameters({ page: 0 });
 
     widget = infiniteHits({
       container,
@@ -87,13 +100,14 @@ describe('infiniteHits()', () => {
       showPrevious: false,
     });
 
-    widget.init({ helper, instantSearchInstance: createInstantSearch() });
+    widget.init!(createInitOptions({ helper }));
 
-    widget.render({
-      results,
-      state,
-      instantSearchInstance: {},
-    });
+    widget.render!(
+      createRenderOptions({
+        results,
+        state,
+      })
+    );
 
     const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
 
@@ -101,16 +115,25 @@ describe('infiniteHits()', () => {
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
-    const instantSearchInstance = createInstantSearch();
-    widget.init({ helper, instantSearchInstance });
-    widget.render({
-      results: { ...results, page: 0, nbPages: 2 },
-      state: { page: 0 },
-    });
-    widget.render({
-      results: { ...results, page: 1, nbPages: 2 },
-      state: { page: 1 },
-    });
+    widget.init!(createInitOptions({ helper }));
+    const state1 = new SearchParameters({ page: 0 });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(state1, [
+          createSingleSearchResponse({ page: 0, nbPages: 2 }),
+        ]),
+        state: state1,
+      })
+    );
+    const state2 = new SearchParameters({ page: 1 });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(state2, [
+          createSingleSearchResponse({ page: 1, nbPages: 2 }),
+        ]),
+        state: state2,
+      })
+    );
 
     const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
     const firstProps = firstRender.props as InfiniteHitsProps;
@@ -129,11 +152,11 @@ describe('infiniteHits()', () => {
   it('updates the search state properly when showMore is called', () => {
     expect(helper.state.page).toBeUndefined();
 
-    const state = { page: 0 };
+    const state = new SearchParameters({ page: 0 });
     const instantSearchInstance = createInstantSearch();
-    widget.init({ helper, instantSearchInstance });
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
 
-    widget.render({ results, state });
+    widget.render!(createRenderOptions({ results, state }));
 
     const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
     const { showMore } = firstRender.props as InfiniteHitsProps;
@@ -145,27 +168,46 @@ describe('infiniteHits()', () => {
   });
 
   it('should add __position key with absolute position', () => {
-    results = { ...results, page: 4, hitsPerPage: 10 };
-    const state = { page: results.page };
-    const instantSearchInstance = createInstantSearch();
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, state });
+    const state = new SearchParameters({ page: 4 });
+    results = new SearchResults(state, [
+      createSingleSearchResponse({
+        hits: [{ objectID: '1' }, { objectID: '2' }],
+        page: state.page,
+        hitsPerPage: 10,
+      }),
+    ]);
+    widget.init!(createInitOptions({ helper }));
+    widget.render!(createRenderOptions({ results, state }));
 
     expect(results.hits[0].__position).toEqual(41);
   });
 
   it('if it is the first page, then the props should contain isFirstPage true', () => {
-    const state = { page: 0 };
-    const instantSearchInstance = createInstantSearch();
-    widget.init({ helper, instantSearchInstance });
-    widget.render({
-      results: { ...results, page: 0, nbPages: 2 },
-      state,
-    });
-    widget.render({
-      results: { ...results, page: 1, nbPages: 2 },
-      state,
-    });
+    widget.init!(createInitOptions({ helper }));
+    {
+      const state = new SearchParameters({ page: 0 });
+
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(state, [
+            createSingleSearchResponse({ page: state.page, nbPages: 2 }),
+          ]),
+          state,
+        })
+      );
+    }
+    {
+      const state = new SearchParameters({ page: 1 });
+
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(state, [
+            createSingleSearchResponse({ page: state.page, nbPages: 2 }),
+          ]),
+          state,
+        })
+      );
+    }
 
     expect(render).toHaveBeenCalledTimes(2);
 
@@ -185,13 +227,18 @@ describe('infiniteHits()', () => {
 
   it('if it is not the first page, then the props should contain isFirstPage false', () => {
     helper.setPage(1);
-    widget.init({ helper, instantSearchInstance: createInstantSearch() });
+    widget.init!(createInitOptions({ helper }));
 
-    const state = { page: 1 };
-    widget.render({
-      results: { ...results, page: 1, nbPages: 2 },
-      state,
-    });
+    const state = new SearchParameters({ page: 1 });
+
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(state, [
+          createSingleSearchResponse({ page: state.page, nbPages: 2 }),
+        ]),
+        state,
+      })
+    );
 
     const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
     const { isFirstPage } = firstRender.props as InfiniteHitsProps;
@@ -203,14 +250,14 @@ describe('infiniteHits()', () => {
   });
 
   describe('cache', () => {
-    const getStateWithoutPage = state => {
+    const getStateWithoutPage = (state: PlainSearchParameters) => {
       const { page, ...rest } = state || {};
       return rest;
     };
-    const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+    const isEqual = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
     let cachedState: any = undefined;
     let cachedHits: any = undefined;
-    const customCache = {
+    const customCache: InfiniteHitsCache = {
       read({ state }) {
         return isEqual(cachedState, getStateWithoutPage(state))
           ? cachedHits
@@ -228,7 +275,6 @@ describe('infiniteHits()', () => {
     });
 
     it('write hits to cache', () => {
-      const state = { page: 0, query: 'hello' };
       widget = infiniteHits({
         container,
         escapeHTML: true,
@@ -237,50 +283,76 @@ describe('infiniteHits()', () => {
         showPrevious: false,
         cache: customCache,
       });
-      widget.init({ helper, instantSearchInstance: createInstantSearch() });
+      widget.init!(createInitOptions({ helper }));
       expect(cachedState).toMatchInlineSnapshot(`undefined`);
       expect(cachedHits).toMatchInlineSnapshot(`undefined`);
-      widget.render({
-        results: {
-          page: 0,
-          hits: [{ title: 'first' }, { title: 'second' }],
-          hitsPerPage: 2,
-        },
-        state,
-      });
+
+      {
+        const state = new SearchParameters({ page: 0, query: 'hello' });
+
+        widget.render!(
+          createRenderOptions({
+            results: new SearchResults(state, [
+              createSingleSearchResponse({
+                hits: [
+                  { objectID: '1', title: 'first' },
+                  { objectID: '2', title: 'second' },
+                ],
+                page: state.page,
+                hitsPerPage: 2,
+              }),
+            ]),
+            state,
+          })
+        );
+      }
+
       expect(cachedState).toMatchInlineSnapshot(`
         Object {
+          "disjunctiveFacets": Array [],
+          "disjunctiveFacetsRefinements": Object {},
+          "facets": Array [],
+          "facetsExcludes": Object {},
+          "facetsRefinements": Object {},
+          "hierarchicalFacets": Array [],
+          "hierarchicalFacetsRefinements": Object {},
+          "numericRefinements": Object {},
           "query": "hello",
+          "tagRefinements": Array [],
         }
       `);
       expect(cachedHits).toMatchInlineSnapshot(`
-  Object {
-    "0": Array [
-      Object {
-        "__position": 1,
-        "title": "first",
-      },
-      Object {
-        "__position": 2,
-        "title": "second",
-      },
-    ],
-  }
-  `);
+        Object {
+          "0": Array [
+            Object {
+              "__position": 1,
+              "objectID": "1",
+              "title": "first",
+            },
+            Object {
+              "__position": 2,
+              "objectID": "2",
+              "title": "second",
+            },
+          ],
+        }
+      `);
       const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
       const { hits } = firstRender.props as InfiniteHitsProps;
       expect(hits).toMatchInlineSnapshot(`
-  Array [
-    Object {
-      "__position": 1,
-      "title": "first",
-    },
-    Object {
-      "__position": 2,
-      "title": "second",
-    },
-  ]
-  `);
+        Array [
+          Object {
+            "__position": 1,
+            "objectID": "1",
+            "title": "first",
+          },
+          Object {
+            "__position": 2,
+            "objectID": "2",
+            "title": "second",
+          },
+        ]
+      `);
     });
 
     it('render hits from cache', () => {
@@ -294,10 +366,14 @@ describe('infiniteHits()', () => {
           title: 'second',
         },
       ];
-      cachedState = {
-        query: 'hello',
-      };
-      const state = { page: 0, query: 'hello' };
+      cachedState = JSON.parse(
+        JSON.stringify(
+          new SearchParameters({
+            query: 'hello',
+          })
+        )
+      );
+      const state = new SearchParameters({ page: 0, query: 'hello' });
       widget = infiniteHits({
         container,
         escapeHTML: true,
@@ -306,30 +382,35 @@ describe('infiniteHits()', () => {
         showPrevious: false,
         cache: customCache,
       });
-      widget.init({ helper, instantSearchInstance: createInstantSearch() });
-      widget.render({
-        results: {
-          page: 0,
-          hits: [],
-          hitsPerPage: 2,
-        },
-        state,
-      });
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(state, [
+            createSingleSearchResponse({
+              page: state.page,
+              hits: [],
+              hitsPerPage: 2,
+            }),
+          ]),
+          state,
+        })
+      );
+
       const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
       const { hits } = firstRender.props as InfiniteHitsProps;
 
       expect(hits).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "__position": 1,
-    "title": "first",
-  },
-  Object {
-    "__position": 2,
-    "title": "second",
-  },
-]
-`);
+        Array [
+          Object {
+            "__position": 1,
+            "title": "first",
+          },
+          Object {
+            "__position": 2,
+            "title": "second",
+          },
+        ]
+      `);
     });
   });
 });

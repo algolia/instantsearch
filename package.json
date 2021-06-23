@@ -82,6 +82,7 @@
     "@types/jest": "^26.0.22",
     "@types/jest-diff": "^24.3.0",
     "@types/qs": "^6.5.3",
+    "@types/scriptjs": "0.0.2",
     "@types/storybook__addon-actions": "^3.4.2",
     "@typescript-eslint/eslint-plugin": "4.15.1",
     "@typescript-eslint/parser": "4.15.1",

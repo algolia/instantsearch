@@ -3,9 +3,28 @@ import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../src/index';
 import defaultPlayground from '../playgrounds/default';
 import { configure } from '../../src/widgets';
-import { InstantSearch } from '../../src/types';
+import { InstantSearch, InstantSearchOptions } from '../../src/types';
 
 type InstantSearchUMDModule = typeof instantsearch;
+
+export type Playground = (options: {
+  search: InstantSearch;
+  instantsearch: InstantSearchUMDModule;
+  leftPanel: HTMLDivElement;
+  rightPanel: HTMLDivElement;
+}) => void;
+
+type InstantSearchOptionalParameters = 'searchClient' | 'indexName';
+
+type SearchOptions = Omit<
+  InstantSearchOptions,
+  InstantSearchOptionalParameters
+> &
+  Partial<Pick<InstantSearchOptions, InstantSearchOptionalParameters>> & {
+    appId?: string;
+    apiKey?: string;
+    playground?: Playground;
+  };
 
 export const withHits = (
   storyFn: ({
@@ -17,7 +36,7 @@ export const withHits = (
     instantsearch: InstantSearchUMDModule;
     search: InstantSearch;
   }) => void,
-  searchOptions?: any
+  searchOptions?: SearchOptions
 ) => () => {
   const {
     appId = 'latency',
@@ -38,6 +57,7 @@ export const withHits = (
         },
         read: () => ({}),
         createURL: () => '',
+        dispose: () => {},
         onUpdate: () => {},
       },
     },
@@ -82,6 +102,7 @@ export const withHits = (
 
   playground({
     search,
+    instantsearch,
     leftPanel: leftPanelPlaygroundElement,
     rightPanel: rightPanelPlaygroundElement,
   });

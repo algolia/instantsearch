@@ -135,7 +135,7 @@ export function createSendEventForHits({
   index: string;
   widgetType: string;
 }): SendEventForHits {
-  const sendEventForHits: SendEventForHits = (...args) => {
+  const sendEventForHits: SendEventForHits = (...args: any[]) => {
     const payload = buildPayload({
       widgetType,
       index,
@@ -156,7 +156,7 @@ export function createBindEventForHits({
   index: string;
   widgetType: string;
 }): BindEventForHits {
-  const bindEventForHits: BindEventForHits = (...args) => {
+  const bindEventForHits: BindEventForHits = (...args: any[]) => {
     const payload = buildPayload({
       widgetType,
       index,
