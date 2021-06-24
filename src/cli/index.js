@@ -273,6 +273,7 @@ async function run() {
   const alternativeNames = createNameAlternatives({
     ...configuration,
     ...answers,
+    templateConfig,
   });
 
   const libraryVersion = await getLibraryVersion(

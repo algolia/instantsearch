@@ -6,7 +6,7 @@ module.exports = {
   libraryName: 'react-instantsearch',
   supportedVersion: '>= 6.0.0 < 7.0.0',
   templateName: 'react-instantsearch-widget',
-  appName: 'react-instantsearch-app',
+  packageNamePrefix: 'react-instantsearch-widget-',
   keywords: [
     'algolia',
     'InstantSearch',

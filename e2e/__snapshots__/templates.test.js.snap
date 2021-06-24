@@ -3349,7 +3349,7 @@ dist/"
 `;
 
 exports[`Templates InstantSearch.js widget File content: README.md 1`] = `
-"# instantsearch.js-app
+"# date-picker
 
 _This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
@@ -3358,9 +3358,9 @@ _This project was generated with [create-instantsearch-app](https://github.com/a
 ## Install
 
 \`\`\`bash
-npm install @algolia/instantsearch.js-app
+npm install @algolia/instantsearch-widget-date-picker
 # or
-yarn add @algolia/instantsearch.js-app
+yarn add @algolia/instantsearch-widget-date-picker
 \`\`\`
 
 ## Widget
@@ -3370,7 +3370,7 @@ yarn add @algolia/instantsearch.js-app
 \`\`\`js
 import instantsearch from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
-import { instantsearchJsApp } from '@algolia/instantsearch.js-app';
+import { datePicker } from '@algolia/instantsearch-widget-date-picker';
 
 const searchClient = algoliasearch('appId', 'apiKey');
 
@@ -3380,7 +3380,7 @@ const search = instantsearch({
 });
 
 search.addWidgets([
-  instantsearchJsApp({
+  datePicker({
     // widget parameters
   }),
 ]);
@@ -3399,8 +3399,8 @@ The element to insert the widget into.
 This can be either a valid CSS Selector:
 
 \`\`\`js
-instantsearchJsApp({
-  container: '#instantsearch.js-app',
+datePicker({
+  container: '#date-picker',
   // ...
 });
 \`\`\`
@@ -3408,8 +3408,8 @@ instantsearchJsApp({
 or an \`HTMLElement\`:
 
 \`\`\`js
-instantsearchJsApp({
-  container: document.querySelector('#instantsearch.js-app'),
+datePicker({
+  container: document.querySelector('#date-picker'),
   // ...
 });
 \`\`\`
@@ -3422,7 +3422,7 @@ instantsearchJsApp({
 REPLACE WITH THE DESCRIPTION FOR THIS OPTION
 
 \`\`\`js
-instantsearchJsApp({
+datePicker({
   option1: 'value',
   // ...
 });
@@ -3434,21 +3434,21 @@ instantsearchJsApp({
 ### Usage
 
 \`\`\`js
-import { connectInstantsearchJsApp } from '@algolia/instantsearch.js-app';
+import { connectDatePicker } from '@algolia/instantsearch-widget-date-picker';
 
 // 1. Create a render function
-const renderInstantsearchJsApp = (renderOptions, isFirstRender) => {
+const renderDatePicker = (renderOptions, isFirstRender) => {
   // Rendering logic
 };
 
 // 2. Create the custom widget
-const customInstantsearchJsApp = connectInstantsearchJsApp(
-  renderInstantsearchJsApp
+const customDatePicker = connectDatePicker(
+  renderDatePicker
 );
 
 // 3. Instantiate
 search.addWidgets([
-  customInstantsearchJsApp({
+  customDatePicker({
     // instance params
   }),
 ]);
@@ -3464,16 +3464,16 @@ REPLACE WITH THE DESCRIPTION FOR THIS RENDERING ITEM
 
 
 \`\`\`js
-const renderInstantsearchJsApp = (renderOptions, isFirstRender) => {
+const renderDatePicker = (renderOptions, isFirstRender) => {
   // show how to use this render option
 };
 
-const customInstantsearchJsApp = connectInstantsearchJsApp(
-  renderInstantsearchJsApp,
+const customDatePicker = connectDatePicker(
+  renderDatePicker,
 );
 
 search.addWidgets([
-  customInstantsearchJsApp({
+  customDatePicker({
     // ...
   }),
 ]);
@@ -3486,18 +3486,18 @@ search.addWidgets([
 All original widget options forwarded to the render function.
 
 \`\`\`js
-const renderInstantsearchJsApp = (renderOptions, isFirstRender) => {
+const renderDatePicker = (renderOptions, isFirstRender) => {
   const { widgetParams } = renderOptions;
   widgetParams.container.innerHTML = '...';
 };
 
-const customInstantsearchJsApp = connectInstantsearchJsApp(
-  renderInstantsearchJsApp,
+const customDatePicker = connectDatePicker(
+  renderDatePicker,
 );
 
 search.addWidgets([
-  customInstantsearchJsApp({
-    container: document.querySelector('#instantsearch.js-app'),
+  customDatePicker({
+    container: document.querySelector('#date-picker'),
     // ...
   }),
 ]);
@@ -3567,7 +3567,7 @@ module.exports = (api) => {
 
 exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
 "{
-  \\"name\\": \\"@algolia/instantsearch.js-app\\",
+  \\"name\\": \\"@algolia/instantsearch-widget-date-picker\\",
   \\"version\\": \\"1.0.0\\",
   \\"description\\": \\"\\",
   \\"keywords\\": [
@@ -3592,7 +3592,7 @@ exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
     \\"start\\": \\"parcel example/index.html\\",
     \\"prebuild\\": \\"rm -rf dist\\",
     \\"build\\": \\"npm run build:umd && npm run build:cjs && npm run build:esm && npm run build:types\\",
-    \\"build:umd\\": \\"parcel build src/index.ts --global instantsearchJsApp --out-dir dist/umd --out-file index.js --experimental-scope-hoisting\\",
+    \\"build:umd\\": \\"parcel build src/index.ts --global datePicker --out-dir dist/umd --out-file index.js --experimental-scope-hoisting\\",
     \\"build:cjs\\": \\"BABEL_ENV=cjs babel src --extensions '.js,.ts' --out-dir dist/cjs --ignore '**/__tests__' --source-maps && BABEL_ENV=cjs babel src/index.ts --out-file dist/cjs/index.js --source-maps\\",
     \\"build:esm\\": \\"BABEL_ENV=esm babel src --extensions '.js,.ts' --out-dir dist/esm --ignore '**/__tests__' --source-maps\\",
     \\"build:types\\": \\"tsc --build tsconfig.declaration.json\\",
@@ -3620,7 +3620,7 @@ exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
 `;
 
 exports[`Templates InstantSearch.js widget File content: src/connector.ts 1`] = `
-"import type { InstantsearchJsAppConnector } from './types';
+"import type { DatePickerConnector } from './types';
 
 /*
  * Creates the connector
@@ -3633,7 +3633,7 @@ exports[`Templates InstantSearch.js widget File content: src/connector.ts 1`] = 
 
  *   Can be called internally anytime by InstantSearch.
  */
-export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function connectInstantsearchJsApp(
+export const connectDatePicker: DatePickerConnector = function connectDatePicker(
   renderFn,
   unmountFn = () => {}
 ) {
@@ -3643,7 +3643,7 @@ export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function c
      } = widgetParams;
 
     return {
-      $$type: 'algolia.instantsearch.js-app',
+      $$type: 'algolia.date-picker',
       /*
        * Sets up the widget during the InstantSearch initialization.
        * It is called before the first search and is a good place to call the \`renderFn\` function to set up the initial DOM (a placeholder for example).
@@ -3693,7 +3693,7 @@ export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function c
 
         return {
           ...uiState,
-          instantsearchJsApp: {
+          datePicker: {
             // TODO: add this widget's ui state
           }
         };
@@ -3717,7 +3717,7 @@ export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function c
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          instantsearchJsApp: {
+          datePicker: {
             // TODO: call this.getWidgetRenderState(renderOptions), possibly nested per attribute
           }
         };
@@ -3747,13 +3747,13 @@ export const connectInstantsearchJsApp: InstantsearchJsAppConnector = function c
 `;
 
 exports[`Templates InstantSearch.js widget File content: src/index.ts 1`] = `
-"export { instantsearchJsApp } from './widget';
-export { connectInstantsearchJsApp } from './connector';
-export { createInstantsearchJsAppRenderer } from './renderer';"
+"export { datePicker } from './widget';
+export { connectDatePicker } from './connector';
+export { createDatePickerRenderer } from './renderer';"
 `;
 
 exports[`Templates InstantSearch.js widget File content: src/renderer.ts 1`] = `
-"import type { InstantsearchJsAppRendererCreator } from './types';
+"import type { DatePickerRendererCreator } from './types';
 
 /*
  * Creates the render and dispose functions
@@ -3762,7 +3762,7 @@ exports[`Templates InstantSearch.js widget File content: src/renderer.ts 1`] = `
  *  - the \`dispose\` function used to clean the changes made by the widget
  * It can also be used to keep references of objects that must be reused between renders
  */
-export const createInstantsearchJsAppRenderer: InstantsearchJsAppRendererCreator = ({
+export const createDatePickerRenderer: DatePickerRendererCreator = ({
   container,
 }) => {
 
@@ -3817,7 +3817,7 @@ exports[`Templates InstantSearch.js widget File content: src/types.ts 1`] = `
  * Parameters send only to the widget creator function
  * These parameters will be used by the widget creator to create the widget renderer and factory
  */
-export type InstantsearchJsAppWidgetParams = {
+export type DatePickerWidgetParams = {
   container: Element | string;
   // TODO: add the widget params
 };
@@ -3826,24 +3826,24 @@ export type InstantsearchJsAppWidgetParams = {
  * Parameters send to the widget creator function
  * These parameters will be used by the widget creator to manage the widget logic
  */
-export type InstantsearchJsAppConnectorParams = {
+export type DatePickerConnectorParams = {
   // TODO: add the widget params
 };
 
-export type InstantsearchJsAppRenderState = {
+export type DatePickerRenderState = {
   // TODO: add the render state params
 };
 
-type InstantsearchJsAppWidgetDescription = {
-  $$type: 'algolia.instantsearch.js-app';
-  renderState: InstantsearchJsAppRenderState;
+type DatePickerWidgetDescription = {
+  $$type: 'algolia.date-picker';
+  renderState: DatePickerRenderState;
   indexRenderState: {
-    instantsearchJsApp: {
+    datePicker: {
       // TODO: add the return type of getRenderState
     };
   };
   indexUiState: {
-    instantsearchJsApp: {
+    datePicker: {
       // TODO: add the return type of getWidgetUiState
     }
   };
@@ -3852,20 +3852,20 @@ type InstantsearchJsAppWidgetDescription = {
 /*
  * Connector type, constructed from the Renderer and Connector parameters
  */
-export type InstantsearchJsAppConnector = Connector<
-  InstantsearchJsAppWidgetDescription,
-  InstantsearchJsAppConnectorParams
+export type DatePickerConnector = Connector<
+  DatePickerWidgetDescription,
+  DatePickerConnectorParams
 >;
 
 /*
  * Renderer type, constructed from the Renderer and Connector parameters
  */
-export type InstantsearchJsAppRendererCreator = (
-  widgetParams: InstantsearchJsAppWidgetParams
+export type DatePickerRendererCreator = (
+  widgetParams: DatePickerWidgetParams
 ) => {
   render: Renderer<
-    InstantsearchJsAppWidgetDescription['renderState'],
-    InstantsearchJsAppConnectorParams
+    DatePickerWidgetDescription['renderState'],
+    DatePickerConnectorParams
   >;
   dispose: () => void;
 };
@@ -3873,49 +3873,49 @@ export type InstantsearchJsAppRendererCreator = (
 /*
  * Widget type, constructed from the Renderer, Connector and Widget parameters
  */
-export type InstantsearchJsAppWidgetCreator = WidgetFactory<
-  InstantsearchJsAppWidgetDescription & {
-    $$widgetType: 'algolia.instantsearch.js-app';
+export type DatePickerWidgetCreator = WidgetFactory<
+  DatePickerWidgetDescription & {
+    $$widgetType: 'algolia.date-picker';
   },
-  InstantsearchJsAppConnectorParams,
-  InstantsearchJsAppWidgetParams
+  DatePickerConnectorParams,
+  DatePickerWidgetParams
 >;"
 `;
 
 exports[`Templates InstantSearch.js widget File content: src/widget.ts 1`] = `
-"import { connectInstantsearchJsApp } from './connector';
-import { createInstantsearchJsAppRenderer } from './renderer';
+"import { connectDatePicker } from './connector';
+import { createDatePickerRenderer } from './renderer';
 import type {
-  InstantsearchJsAppWidgetCreator,
-  InstantsearchJsAppConnectorParams,
-  InstantsearchJsAppWidgetParams,
+  DatePickerWidgetCreator,
+  DatePickerConnectorParams,
+  DatePickerWidgetParams,
 } from './types';
 
 /*
  * Widget creator
  * Returns a widget instance
  */
-export const instantsearchJsApp: InstantsearchJsAppWidgetCreator = function InstantsearchJsApp(
+export const datePicker: DatePickerWidgetCreator = function DatePicker(
   widgetParams
 ) {
-  const rendererWidgetParams: InstantsearchJsAppWidgetParams = {
+  const rendererWidgetParams: DatePickerWidgetParams = {
     container: widgetParams.container,
     // TODO: pick the widget-only parameters from the widgetParams
   };
 
-  const { render, dispose } = createInstantsearchJsAppRenderer(
+  const { render, dispose } = createDatePickerRenderer(
     rendererWidgetParams
   );
 
-  const createWidget = connectInstantsearchJsApp(render, dispose);
+  const createWidget = connectDatePicker(render, dispose);
 
-  const connectorParams: InstantsearchJsAppConnectorParams = {
+  const connectorParams: DatePickerConnectorParams = {
     // TODO: pick the connector-only parameters from the widgetParams
   };
 
   return {
     ...createWidget(connectorParams),
-    $$widgetType: 'algolia.instantsearch.js-app',
+    $$widgetType: 'algolia.date-picker',
   };
 };"
 `;
@@ -5574,7 +5574,7 @@ exports[`Templates React InstantSearch widget File content: .prettierrc 1`] = `
 `;
 
 exports[`Templates React InstantSearch widget File content: README.md 1`] = `
-"# react-instantsearch-app
+"# date-picker
 
 _This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
@@ -5583,9 +5583,9 @@ _This project was generated with [create-instantsearch-app](https://github.com/a
 ## Install
 
 \`\`\`bash
-npm install @algolia/react-instantsearch-app
+npm install @algolia/react-instantsearch-widget-date-picker
 # or
-yarn add @algolia/react-instantsearch-app
+yarn add @algolia/react-instantsearch-widget-date-picker
 \`\`\`
 
 ## Widget
@@ -5595,13 +5595,13 @@ yarn add @algolia/react-instantsearch-app
 \`\`\`jsx
 import instantsearch from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
-import { ReactInstantsearchApp } from '@algolia/react-instantsearch-app';
+import { DatePicker } from '@algolia/react-instantsearch-widget-date-picker';
 
 const searchClient = algoliasearch('appId', 'apiKey');
 
 const App = () => (
   <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
-    <ReactInstantsearchApp />
+    <DatePicker />
   </InstantSearch>
 );
 \`\`\`
@@ -5611,22 +5611,22 @@ const App = () => (
 ### Usage
 
 \`\`\`jsx
-import { connectReactInstantsearchApp } from '@algolia/react-instantsearch-app';
+import { connectDatePicker } from '@algolia/react-instantsearch-widget-date-picker';
 
 // 1. Create a render function
-const RenderReactInstantsearchApp = (renderOptions, isFirstRender) => {
+const RenderDatePicker = (renderOptions, isFirstRender) => {
   // Rendering logic
 };
 
 // 2. Create the custom widget
-const CustomReactInstantsearchApp = connectReactInstantsearchApp(
-  RenderReactInstantsearchApp
+const CustomDatePicker = connectDatePicker(
+  RenderDatePicker
 );
 
 // 3. Instantiate
 const App = () => (
   <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
-    <CustomReactInstantsearchApp />
+    <CustomDatePicker />
   </InstantSearch>
 );
 \`\`\`
@@ -5689,7 +5689,7 @@ exports[`Templates React InstantSearch widget File content: example/index.html 1
   <head>
     <meta charset=\\"UTF-8\\" />
     <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\" />
-    <title>@algolia/react-instantsearch-app | example</title>
+    <title>@algolia/react-instantsearch-widget-date-picker | example</title>
   </head>
   <body>
     <div id=\\"root\\"></div>
@@ -5704,7 +5704,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
 
-import { ReactInstantsearchApp } from '../src';
+import { DatePicker } from '../src';
 
 const searchClient = algoliasearch(
   'latency',
@@ -5714,7 +5714,7 @@ const searchClient = algoliasearch(
 ReactDOM.render(
   <React.StrictMode>
     <InstantSearch indexName=\\"instant_search\\" searchClient={searchClient}>
-      <ReactInstantsearchApp />
+      <DatePicker />
       <SearchBox />
       <Hits />
     </InstantSearch>
@@ -5725,14 +5725,14 @@ ReactDOM.render(
 
 exports[`Templates React InstantSearch widget File content: package.json 1`] = `
 "{
-  \\"name\\": \\"@algolia/react-instantsearch-app\\",
+  \\"name\\": \\"@algolia/react-instantsearch-widget-date-picker\\",
   \\"version\\": \\"1.0.0\\",
   \\"description\\": \\"\\",
   \\"keywords\\": [
     \\"instantsearch-widget\\",
     \\"instantsearch\\",
     \\"react-instantsearch\\",
-    \\"react-instantsearch-widget-react-instantsearch-app\\",
+    \\"react-instantsearch-widget-date-picker\\",
     \\"widget\\",
     \\"connector\\",
     \\"algolia\\"
@@ -5769,9 +5769,9 @@ exports[`Templates React InstantSearch widget File content: package.json 1`] = `
 `;
 
 exports[`Templates React InstantSearch widget File content: src/index.tsx 1`] = `
-"export { connectReactInstantsearchApp } from './lib/connector';
-export { ReactInstantsearchAppComponent } from './lib/component';
-export { ReactInstantsearchApp } from './lib/widget';"
+"export { connectDatePicker } from './lib/connector';
+export { DatePickerComponent } from './lib/component';
+export { DatePicker } from './lib/widget';"
 `;
 
 exports[`Templates React InstantSearch widget File content: src/lib/__tests__/dummy-test.tsx 1`] = `
@@ -5779,7 +5779,7 @@ exports[`Templates React InstantSearch widget File content: src/lib/__tests__/du
 import React from 'react';
 import { InstantSearch, Hits } from 'react-instantsearch-dom';
 
-import { ReactInstantsearchApp } from '../widget';
+import { DatePicker } from '../widget';
 
 const runAllMicroTasks = (): Promise<void> => new Promise(setImmediate);
 
@@ -5804,7 +5804,7 @@ describe('nothing', () => {
 
     const { debug } = render(
       <InstantSearch indexName=\\"test_index\\" searchClient={searchClient}>
-        <ReactInstantsearchApp />
+        <DatePicker />
         <Hits hitComponent={({ hit }: { hit: any }) => hit.name} />
       </InstantSearch>
     );
@@ -5824,7 +5824,7 @@ type Props = ProvidedProps & {
   refine: () => void;
 };
 
-export const ReactInstantsearchAppComponent = ({}: Props) => {
+export const DatePickerComponent = ({}: Props) => {
   return (
     <div>
       {/* TODO: render something */}
@@ -5840,8 +5840,8 @@ export type ProvidedProps = {
   // TODO: fill props that are returned by \`getProvidedProps\`
 };
 
-export const connectReactInstantsearchApp = createConnector({
-  displayName: 'ReactInstantsearchApp',
+export const connectDatePicker = createConnector({
+  displayName: 'DatePicker',
 
   getProvidedProps(props, searchState, searchResults): ProvidedProps {
     return {
@@ -5869,8 +5869,8 @@ export const connectReactInstantsearchApp = createConnector({
 `;
 
 exports[`Templates React InstantSearch widget File content: src/lib/widget.tsx 1`] = `
-"import { ReactInstantsearchAppComponent } from './component';
-import { connectReactInstantsearchApp } from './connector';
+"import { DatePickerComponent } from './component';
+import { connectDatePicker } from './connector';
 
 import type { ElementType } from 'react';
 
@@ -5881,8 +5881,8 @@ type WidgetParams = {
   placeholder?: string;
 };
 
-export const ReactInstantsearchApp: ElementType<WidgetParams> =
-  connectReactInstantsearchApp(ReactInstantsearchAppComponent);"
+export const DatePicker: ElementType<WidgetParams> =
+  connectDatePicker(DatePickerComponent);"
 `;
 
 exports[`Templates React InstantSearch widget File content: tsconfig.declaration.json 1`] = `

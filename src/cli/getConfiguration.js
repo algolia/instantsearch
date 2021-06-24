@@ -8,9 +8,10 @@ function capitalize(str) {
   return str.substr(0, 1).toUpperCase() + str.substr(1);
 }
 
-function createNameAlternatives({ organization, name }) {
+function createNameAlternatives({ organization, name, templateConfig }) {
   return {
-    packageName: `@${organization}/${name}`,
+    packageName: `@${organization}/${templateConfig.packageNamePrefix ||
+      ''}${name}`,
     widgetType: `${organization}.${name}`,
     camelCaseName: camelCase(name),
     pascalCaseName: capitalize(camelCase(name)),
