@@ -12,7 +12,12 @@ export const createWidgetMixin = ({ connector } = {}) => ({
         );
       },
     },
-    getProvidedParentIndex: '$_ais_getParentIndex',
+    getParentIndex: {
+      from: '$_ais_getParentIndex',
+      default() {
+        return () => this.instantSearchInstance.mainIndex;
+      },
+    },
   },
   data() {
     return {
@@ -68,11 +73,6 @@ Read more on using connectors: https://alg.li/vue-custom`
     },
   },
   methods: {
-    getParentIndex() {
-      return this.getProvidedParentIndex
-        ? this.getProvidedParentIndex()
-        : this.instantSearchInstance.mainIndex;
-    },
     updateState(state = {}, isFirstRender) {
       if (!isFirstRender) {
         // Avoid updating the state on first render
