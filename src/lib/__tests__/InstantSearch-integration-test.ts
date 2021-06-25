@@ -1,8 +1,4 @@
-import {
-  getByText,
-  fireEvent,
-  getByPlaceholderText,
-} from '@testing-library/dom';
+import { getByText, fireEvent } from '@testing-library/dom';
 import instantsearch from '../../index.es';
 import { configure, searchBox } from '../../widgets';
 import { connectConfigure } from '../../connectors';
@@ -52,7 +48,7 @@ describe('configure', () => {
 });
 
 describe('middleware', () => {
-  it("runs middleware's onStateChange uiState has changed", async () => {
+  it("runs middlewares' onStateChange uiState has changed", async () => {
     const container = document.createElement('div');
     const search = instantsearch({
       indexName: 'instant_search',
@@ -76,7 +72,7 @@ describe('middleware', () => {
 
     search.start();
 
-    fireEvent.input(getByPlaceholderText(container, 'search'), {
+    fireEvent.input(container.querySelector('input')!, {
       target: { value: 'q' },
     });
 
@@ -84,7 +80,7 @@ describe('middleware', () => {
     expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
   });
 
-  it("runs middleware's onStateChange uiState has changed and onStateChange was provided", async () => {
+  it("runs middlewares' onStateChange uiState has changed and onStateChange was provided", async () => {
     const container = document.createElement('div');
     const search = instantsearch({
       indexName: 'instant_search',
@@ -111,7 +107,7 @@ describe('middleware', () => {
 
     search.start();
 
-    fireEvent.input(getByPlaceholderText(container, 'search'), {
+    fireEvent.input(container.querySelector('input')!, {
       target: { value: 'q' },
     });
 
