@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 
 import Stats from '../Stats.vue';
 

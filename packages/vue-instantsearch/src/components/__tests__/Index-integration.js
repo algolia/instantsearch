@@ -1,5 +1,5 @@
 jest.unmock('instantsearch.js/es');
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Index from '../Index';
 import instantsearch from 'instantsearch.js/es';
 import { createWidgetMixin } from '../../mixins/widget';

@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Template from '../__Template.vue';
 import { __setState } from '../../mixins/widget';
 jest.mock('../../mixins/widget');

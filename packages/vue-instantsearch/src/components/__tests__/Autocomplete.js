@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Autocomplete from '../Autocomplete.vue';
 import { __setState } from '../../mixins/widget';
 jest.mock('../../mixins/widget');

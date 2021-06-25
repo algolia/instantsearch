@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import RefinementList from '../RefinementList.vue';
 import { __setState } from '../../mixins/widget';
 

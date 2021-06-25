@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import _renderToString from 'vue-server-renderer/basic';
 import Router from 'vue-router';
 import Vuex from 'vuex';

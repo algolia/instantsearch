@@ -1,10 +1,9 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { createWidgetMixin } from '../widget';
 
-const createFakeComponent = localVue =>
-  localVue.component('Test', {
-    render: () => null,
-  });
+const createFakeComponent = () => ({
+  render: () => null,
+});
 
 const createFakeInstance = () => ({
   addWidgets: jest.fn(),
@@ -20,9 +19,8 @@ const createFakeIndexWidget = () => ({
 
 describe('on root index', () => {
   it('adds a widget on create', () => {
-    const localVue = createLocalVue();
     const instance = createFakeInstance();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const widget = { render: () => {} };
     const factory = jest.fn(() => widget);
@@ -47,9 +45,8 @@ describe('on root index', () => {
   });
 
   it('removes a widget on destroy', () => {
-    const localVue = createLocalVue();
     const instance = createFakeInstance();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const widget = {
       render: () => {},
@@ -79,9 +76,8 @@ describe('on root index', () => {
   });
 
   it('updates widget on widget params change', () => {
-    const localVue = createLocalVue();
     const instance = createFakeInstance();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const widget = {
       render: () => {},
@@ -132,9 +128,8 @@ describe('on root index', () => {
   });
 
   it('updates local state on connector render', () => {
-    const localVue = createLocalVue();
     const instance = createFakeInstance();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const widget = { render: () => {} };
     const factory = jest.fn(() => widget);
@@ -174,10 +169,9 @@ describe('on root index', () => {
 
 describe('on child index', () => {
   it('adds a widget on create', () => {
-    const localVue = createLocalVue();
     const instance = createFakeInstance();
     const indexWidget = createFakeIndexWidget();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const widget = { render: () => {} };
     const factory = jest.fn(() => widget);
@@ -203,10 +197,9 @@ describe('on child index', () => {
   });
 
   it('removes a widget on destroy', () => {
-    const localVue = createLocalVue();
     const instance = createFakeInstance();
     const indexWidget = createFakeIndexWidget();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const widget = {
       render: () => {},
@@ -237,10 +230,9 @@ describe('on child index', () => {
   });
 
   it('updates widget on widget params change', () => {
-    const localVue = createLocalVue();
     const instance = createFakeInstance();
     const indexWidget = createFakeIndexWidget();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const widget = {
       render: () => {},
@@ -292,10 +284,9 @@ describe('on child index', () => {
   });
 
   it('updates local state on connector render', () => {
-    const localVue = createLocalVue();
     const instance = createFakeInstance();
     const indexWidget = createFakeIndexWidget();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const widget = { render: () => {} };
     const factory = jest.fn(() => widget);

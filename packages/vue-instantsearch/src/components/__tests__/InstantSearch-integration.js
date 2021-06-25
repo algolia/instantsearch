@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import InstantSearch from '../InstantSearch';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../../util/testutils/client';

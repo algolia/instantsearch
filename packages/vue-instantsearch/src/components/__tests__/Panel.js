@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Panel from '../Panel.vue';
 
 describe('default render', () => {

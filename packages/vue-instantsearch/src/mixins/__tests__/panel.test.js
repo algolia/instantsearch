@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import mitt from 'mitt';
 import {
   createPanelProviderMixin,
@@ -15,10 +15,9 @@ const createFakeEmitter = () => ({
   },
 });
 
-const createFakeComponent = localVue =>
-  localVue.component('Test', {
-    render: () => null,
-  });
+const createFakeComponent = () => ({
+  render: () => null,
+});
 
 describe('createPanelProviderMixin', () => {
   it('provides the emitter', () => {
@@ -32,9 +31,8 @@ describe('createPanelProviderMixin', () => {
   });
 
   it('registers to PANEL_CHANGE_EVENT on created', () => {
-    const localVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     mount(Test, {
       mixins: [createPanelProviderMixin()],
@@ -51,9 +49,8 @@ describe('createPanelProviderMixin', () => {
   });
 
   it('clears the Vue instance on beforeDestroy', () => {
-    const LocalVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(LocalVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [createPanelProviderMixin()],
@@ -68,9 +65,8 @@ describe('createPanelProviderMixin', () => {
   });
 
   it('updates canRefine on PANEL_CHANGE_EVENT', () => {
-    const LocalVue = createLocalVue();
     const emitter = mitt();
-    const Test = createFakeComponent(LocalVue);
+    const Test = createFakeComponent();
     const next = false;
 
     const wrapper = mount(Test, {
@@ -92,9 +88,8 @@ describe('createPanelConsumerMixin', () => {
   const mapStateToCanRefine = state => state.attributeName;
 
   it('emits PANEL_CHANGE_EVENT on `state.attributeName` change', () => {
-    const localVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -123,9 +118,8 @@ describe('createPanelConsumerMixin', () => {
   });
 
   it('emits once when both values are set', () => {
-    const localVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -153,9 +147,8 @@ describe('createPanelConsumerMixin', () => {
   });
 
   it('emits once on init of the component', () => {
-    const localVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -177,9 +170,8 @@ describe('createPanelConsumerMixin', () => {
   });
 
   it('do not emit when the next value is not set', () => {
-    const localVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -205,9 +197,8 @@ describe('createPanelConsumerMixin', () => {
   });
 
   it('do not emit when the previous and next value are equal', () => {
-    const localVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [

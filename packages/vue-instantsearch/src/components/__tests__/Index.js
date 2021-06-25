@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Index from '../Index';
 import { __setWidget } from '../../mixins/widget';
 jest.mock('../../mixins/widget');

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import instantsearch from 'instantsearch.js/es';
 import InstantSearch from '../InstantSearch';
 import { version } from '../../../package.json';

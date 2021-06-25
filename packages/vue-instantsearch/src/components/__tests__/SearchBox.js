@@ -1,5 +1,5 @@
 import SearchBox from '../SearchBox.vue';
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 jest.mock('../../mixins/widget');
 

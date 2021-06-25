@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import instantsearch from 'instantsearch.js/es';
 import Vue from 'vue';
 import InstantSearchSsr from '../InstantSearchSsr';
