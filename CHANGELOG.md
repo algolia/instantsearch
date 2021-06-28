@@ -1,3 +1,12 @@
+## [6.11.2](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.11.2) (2021-06-28)
+
+
+### Bug Fixes
+
+* **maps:** leave zoom in place if the bounds did not change ([#3050](https://github.com/algolia/react-instantsearch/issues/3050)) ([c430598](https://github.com/algolia/react-instantsearch/commit/c430598))
+
+
+
 ## [6.11.1](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.11.1) (2021-06-09)
 
 
