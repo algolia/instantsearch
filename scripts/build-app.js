@@ -18,8 +18,11 @@ if (!templateName) {
   process.exit(1);
 }
 
+const appName = path.basename(appPath);
+
 execSync(
   `yarn start ${appPath} \
+    --name "${appName}" \
     --template "${templateName}"`,
   { stdio: 'inherit' }
 );

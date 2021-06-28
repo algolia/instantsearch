@@ -4,6 +4,7 @@ const { execSync } = require('child_process');
 describe('Installation', () => {
   let temporaryDirectory;
   let appPath;
+  const appName = 'test-app';
 
   beforeAll(() => {
     temporaryDirectory = execSync(
@@ -18,7 +19,7 @@ describe('Installation', () => {
   });
 
   beforeEach(() => {
-    appPath = `${temporaryDirectory}/test-app`;
+    appPath = `${temporaryDirectory}/${appName}`;
     execSync(`mkdir ${appPath}`);
   });
 
@@ -30,6 +31,7 @@ describe('Installation', () => {
     test('get skipped with the `no-installation` flag', () => {
       execSync(
         `yarn start ${appPath} \
+          --name ${appName} \
           --template "InstantSearch.js" \
           --no-installation`,
         { stdio: 'ignore' }
@@ -43,6 +45,7 @@ describe('Installation', () => {
     test('without conflict generates files', () => {
       execSync(
         `yarn start ${appPath} \
+          --name ${appName} \
           --template "InstantSearch.js" \
           --no-installation`,
         { stdio: 'ignore' }
@@ -57,6 +60,7 @@ describe('Installation', () => {
       expect(() => {
         execSync(
           `yarn start ${appPath} \
+          --name ${appName} \
           --template "InstantSearch.js" \
           --no-installation`,
           { stdio: 'ignore' }
@@ -76,6 +80,7 @@ describe('Installation', () => {
       expect(() => {
         execSync(
           `yarn start ${appPath}/file \
+          --name ${appName} \
           --template "InstantSearch.js" \
           --no-installation`,
           { stdio: 'ignore' }

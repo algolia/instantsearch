@@ -5,6 +5,7 @@ const program = require('commander');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const latestSemver = require('latest-semver');
+const os = require('os');
 
 const createInstantSearchApp = require('../api');
 const {
@@ -25,14 +26,14 @@ const {
 } = require('./getConfiguration');
 const { version } = require('../../package.json');
 
-let appPath;
+let appPathFromArgument;
 let options = {};
 
 program
   .version(version, '-v, --version')
   .arguments('<project-directory>')
   .usage(`${chalk.green('<project-directory>')} [options]`)
-  .option('--name <name>', 'The name of the application')
+  .option('--name <name>', 'The name of the application or widget')
   .option('--app-id <appId>', 'The application ID')
   .option('--api-key <apiKey>', 'The Algolia search API key')
   .option('--index-name <indexName>', 'The main index of your search')
@@ -49,52 +50,18 @@ program
   .option('--config <config>', 'The configuration file to get the options from')
   .option('--no-installation', 'Ignore dependency installation')
   .action((dest, opts) => {
-    appPath = dest;
+    appPathFromArgument = dest;
     options = opts;
   })
   .parse(process.argv);
 
-if (!appPath) {
-  console.log('Please specify the project directory:');
-  console.log();
-  console.log(
-    `  ${chalk.cyan('create-instantsearch-app')} ${chalk.green(
-      '<project-directory>'
-    )}`
-  );
-  console.log();
-  console.log('For example:');
-  console.log(
-    `  ${chalk.cyan('create-instantsearch-app')} ${chalk.green(
-      'my-instantsearch-app'
-    )}`
-  );
-  console.log();
-  console.log(
-    `Run ${chalk.cyan('create-instantsearch-app --help')} to see all options.`
-  );
-
-  process.exit(1);
-}
-
-const optionsFromArguments = getOptionsFromArguments(options.rawArgs);
-const appName = optionsFromArguments.name || path.basename(appPath);
+const optionsFromArguments = getOptionsFromArguments(options.rawArgs || []);
 const attributesToDisplay = (optionsFromArguments.attributesToDisplay || '')
   .split(',')
   .filter(Boolean)
   .map(x => x.trim());
 
-try {
-  checkAppPath(appPath);
-  checkAppName(appName);
-} catch (err) {
-  console.error(err.message);
-  console.log();
-
-  process.exit(1);
-}
-
-const questions = {
+const getQuestions = ({ appName }) => ({
   application: [
     {
       type: 'list',
@@ -212,9 +179,55 @@ const questions = {
       },
     },
   ],
-};
+});
 
 async function run() {
+  let appPath = appPathFromArgument;
+  if (!appPath) {
+    const answers = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'appPath',
+        message: 'Project directory',
+      },
+    ]);
+    appPath = answers.appPath;
+  }
+  if (appPath.startsWith('~/')) {
+    appPath = path.join(os.homedir(), appPath.slice(2));
+  }
+  try {
+    checkAppPath(appPath);
+  } catch (err) {
+    console.error(err.message);
+    console.log();
+
+    process.exit(1);
+  }
+
+  let appName = optionsFromArguments.name;
+  if (!appName) {
+    appName = (
+      await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'appName',
+          message: 'The name of the application or widget',
+          default: path.basename(appPath),
+        },
+      ])
+    ).appName;
+  }
+
+  try {
+    checkAppName(appName);
+  } catch (err) {
+    console.error(err.message);
+    console.log();
+
+    process.exit(1);
+  }
+
   console.log();
   console.log(`Creating a new InstantSearch app in ${chalk.green(appPath)}.`);
   console.log();
@@ -264,7 +277,7 @@ async function run() {
     templateConfig.category === 'Widget' ? 'widget' : 'application';
 
   const answers = await inquirer.prompt(
-    questions[implementationType].filter(question =>
+    getQuestions({ appName })[implementationType].filter(question =>
       isQuestionAsked({ question, args: optionsFromArguments })
     ),
     { ...optionsFromArguments, template }
