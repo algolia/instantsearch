@@ -1,8 +1,10 @@
 # {{name}}
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
-
 {{ description }}
+
+---
+
+[![MIT](https://img.shields.io/npm/l/{{ packageName }})](./LICENSE) [![NPM version](http://img.shields.io/npm/v/{{ packageName }}.svg)](https://npmjs.org/package/{{ packageName }})
 
 ## Install
 
@@ -39,6 +41,11 @@ search.start();
 
 ### Options
 
+| Option | Type | Required | Default | Description |
+| :-- | :-- | :-- | :-- | --- |
+| [`container`](#container) | `string` or `HTMLElement` | true | - | The element to insert the widget into. |
+| [`option1`](#option1) | `...` | true | - | REPLACE WITH THE DESCRIPTION FOR THIS OPTION |
+
 #### container
 
 > `string | Element` | **required**
@@ -62,7 +69,6 @@ or an `HTMLElement`:
   // ...
 });
 ```
-```
 
 #### option1
 
@@ -76,7 +82,6 @@ REPLACE WITH THE DESCRIPTION FOR THIS OPTION
   // ...
 });
 ```
-
 
 ## Connector
 
@@ -110,7 +115,6 @@ search.addWidgets([
 > `...`
 
 REPLACE WITH THE DESCRIPTION FOR THIS RENDERING ITEM
-
 
 ```js
 const render{{ pascalCaseName }} = (renderOptions, isFirstRender) => {
@@ -151,3 +155,18 @@ search.addWidgets([
   }),
 ]);
 ```
+
+## Contributing
+
+To start contributing to code, you need to:
+
+1. [Fork the project](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
+2. [Clone the repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)
+3. Install the dependencies: `yarn`
+4. Run the development mode: `yarn start`
+
+Please read [our contribution process](./CONTRIBUTING.md) to learn more.
+
+---
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._

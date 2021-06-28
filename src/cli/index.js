@@ -290,6 +290,7 @@ async function run() {
       libraryVersion,
       template: templatePath,
       installation: program.installation,
+      currentYear: new Date().getFullYear(),
     },
     templateConfig.tasks
   );

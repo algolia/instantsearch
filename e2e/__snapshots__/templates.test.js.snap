@@ -3348,12 +3348,82 @@ yarn-error.log
 dist/"
 `;
 
+exports[`Templates InstantSearch.js widget File content: CONTRIBUTING.md 1`] = `
+"# Contribution Guide
+
+## Test
+
+\`\`\`bash
+npm test
+# or
+yarn test
+\`\`\`
+
+## Build
+
+\`\`\`bash
+npm run build
+# or
+yarn build
+\`\`\`
+
+## Release
+
+\`\`\`bash
+npm run release
+# or
+yarn release
+\`\`\`
+
+### First Release
+
+\`\`\`bash
+npm run release -- --first-release
+# or
+yarn release --first-release
+\`\`\`
+
+This will tag a release without bumping the version.
+
+When you are ready, push the git tag and run \`npm publish\`.
+
+If you want to publish it as a public scoped package, run \`npm publish --access public\` the first time.
+
+[To know more about \`standard-version\`, read this →](https://github.com/conventional-changelog/standard-version#cli-usage)"
+`;
+
+exports[`Templates InstantSearch.js widget File content: LICENSE.md 1`] = `
+"The MIT License (MIT)
+
+Copyright (c) 2021-present algolia.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the \\"Software\\"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED \\"AS IS\\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE."
+`;
+
 exports[`Templates InstantSearch.js widget File content: README.md 1`] = `
 "# date-picker
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 
+---
+
+[![MIT](https://img.shields.io/npm/l/@algolia/instantsearch-widget-date-picker)](./LICENSE) [![NPM version](http://img.shields.io/npm/v/@algolia/instantsearch-widget-date-picker.svg)](https://npmjs.org/package/@algolia/instantsearch-widget-date-picker)
 
 ## Install
 
@@ -3390,6 +3460,11 @@ search.start();
 
 ### Options
 
+| Option | Type | Required | Default | Description |
+| :-- | :-- | :-- | :-- | --- |
+| [\`container\`](#container) | \`string\` or \`HTMLElement\` | true | - | The element to insert the widget into. |
+| [\`option1\`](#option1) | \`...\` | true | - | REPLACE WITH THE DESCRIPTION FOR THIS OPTION |
+
 #### container
 
 > \`string | Element\` | **required**
@@ -3413,7 +3488,6 @@ datePicker({
   // ...
 });
 \`\`\`
-\`\`\`
 
 #### option1
 
@@ -3427,7 +3501,6 @@ datePicker({
   // ...
 });
 \`\`\`
-
 
 ## Connector
 
@@ -3461,7 +3534,6 @@ search.addWidgets([
 > \`...\`
 
 REPLACE WITH THE DESCRIPTION FOR THIS RENDERING ITEM
-
 
 \`\`\`js
 const renderDatePicker = (renderOptions, isFirstRender) => {
@@ -3501,7 +3573,22 @@ search.addWidgets([
     // ...
   }),
 ]);
-\`\`\`"
+\`\`\`
+
+## Contributing
+
+To start contributing to code, you need to:
+
+1. [Fork the project](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
+2. [Clone the repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)
+3. Install the dependencies: \`yarn\`
+4. Run the development mode: \`yarn start\`
+
+Please read [our contribution process](./CONTRIBUTING.md) to learn more.
+
+---
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._"
 `;
 
 exports[`Templates InstantSearch.js widget File content: babel.config.cjs 1`] = `
@@ -3573,6 +3660,7 @@ exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
   \\"keywords\\": [
     \\"instantsearch-widget\\",
     \\"instantsearch\\",
+    \\"instantsearch-widget-date-picker\\",
     \\"widget\\",
     \\"connector\\",
     \\"algolia\\"
@@ -3954,6 +4042,8 @@ Array [
   ".eslintignore",
   ".eslintrc.cjs",
   ".gitignore",
+  "CONTRIBUTING.md",
+  "LICENSE.md",
   "README.md",
   "babel.config.cjs",
   "package.json",
@@ -5573,12 +5663,90 @@ exports[`Templates React InstantSearch widget File content: .prettierrc 1`] = `
 }"
 `;
 
+exports[`Templates React InstantSearch widget File content: CONTRIBUTING.md 1`] = `
+"# Contribution Guide
+
+## Test
+
+\`\`\`bash
+npm test
+# or
+yarn test
+\`\`\`
+
+## Build
+
+\`\`\`bash
+npm run build
+# or
+yarn build
+\`\`\`
+
+## Run example
+
+\`\`\`bash
+npm start
+# or
+yarn start
+\`\`\`
+
+## Release
+
+\`\`\`bash
+npm run release
+# or
+yarn release
+\`\`\`
+
+### First Release
+
+\`\`\`bash
+npm run release -- --first-release
+# or
+yarn release --first-release
+\`\`\`
+
+This will tag a release without bumping the version.
+
+When you are ready, push the git tag and run \`npm publish\`.
+
+If you want to publish it as a public scoped package, run \`npm publish --access public\` the first time.
+
+[To know more about \`standard-version\`, read this →](https://github.com/conventional-changelog/standard-version#cli-usage)"
+`;
+
+exports[`Templates React InstantSearch widget File content: LICENSE.md 1`] = `
+"The MIT License (MIT)
+
+Copyright (c) 2021-present algolia.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the \\"Software\\"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED \\"AS IS\\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE."
+`;
+
 exports[`Templates React InstantSearch widget File content: README.md 1`] = `
 "# date-picker
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 
+---
+
+[![MIT](https://img.shields.io/npm/l/@algolia/react-instantsearch-widget-date-picker)](./LICENSE) [![NPM version](http://img.shields.io/npm/v/@algolia/react-instantsearch-widget-date-picker.svg)](https://npmjs.org/package/@algolia/react-instantsearch-widget-date-picker)
 
 ## Install
 
@@ -5606,6 +5774,18 @@ const App = () => (
 );
 \`\`\`
 
+### Options
+
+| Option | Type | Required | Default | Description |
+| :-- | :-- | :-- | :-- | --- |
+| [\`option1\`](#option1) | \`string\` | true | - | REPLACE WITH THE DESCRIPTION FOR THIS OPTION |
+
+#### option1
+
+> \`string\` | **required**
+
+REPLACE WITH THE DESCRIPTION FOR THIS OPTION
+
 ## Connector
 
 ### Usage
@@ -5631,45 +5811,20 @@ const App = () => (
 );
 \`\`\`
 
-## Test
+## Contributing
 
-\`\`\`bash
-npm test
-# or
-yarn test
-\`\`\`
+To start contributing to code, you need to:
 
-## Build
+1. [Fork the project](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
+2. [Clone the repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)
+3. Install the dependencies: \`yarn\`
+4. Run the development mode: \`yarn start\`
 
-\`\`\`bash
-npm run build
-# or
-yarn build
-\`\`\`
+Please read [our contribution process](./CONTRIBUTING.md) to learn more.
 
-## Release
+---
 
-\`\`\`bash
-npm run release
-# or
-yarn release
-\`\`\`
-
-### First Release
-
-\`\`\`bash
-npm run release -- --first-release
-# or
-yarn release --first-release
-\`\`\`
-
-This will tag a release without bumping the version.
-
-When you are ready, push the git tag and run \`npm publish\`.
-
-If you want to publish it as a public scoped package, run \`npm publish --access public\` the first time.
-
-[To know more about \`standard-version\`, read this →](https://github.com/conventional-changelog/standard-version#cli-usage)"
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._"
 `;
 
 exports[`Templates React InstantSearch widget File content: babel.config.cjs 1`] = `
@@ -5964,6 +6119,8 @@ Array [
   ".eslintrc.cjs",
   ".gitignore",
   ".prettierrc",
+  "CONTRIBUTING.md",
+  "LICENSE.md",
   "README.md",
   "babel.config.cjs",
   "example/index.html",
