@@ -417,7 +417,6 @@ describe('RefinementList', () => {
       const templates = {
         item: (item: RefinementListItemData) => item.value,
         showMoreText: '',
-        searchableNoResults: 'No results',
       };
       type TestTemplates = typeof templates;
 
@@ -481,7 +480,6 @@ describe('RefinementList', () => {
       const templates = {
         item: (item: RefinementListItemData) => item.value,
         showMoreText: '',
-        searchableNoResults: 'No results',
       };
       type TestTemplates = typeof templates;
 
@@ -520,7 +518,6 @@ describe('RefinementList', () => {
       const templates = {
         item: (item: RefinementListItemData) => item.value,
         showMoreText: (x: any) => JSON.stringify(x),
-        searchableNoResults: 'No results',
       };
       type TestTemplates = typeof templates;
 
@@ -562,7 +559,6 @@ describe('RefinementList', () => {
       const templates = {
         item: (item: RefinementListItemData) => item.value,
         showMoreText: (x: any) => JSON.stringify(x),
-        searchableNoResults: 'No results',
       };
       type TestTemplates = typeof templates;
 
@@ -604,7 +600,6 @@ describe('RefinementList', () => {
       const templates = {
         item: (item: RefinementListItemData) => item.value,
         showMoreText: '',
-        searchableNoResults: 'No results',
       };
       type TestTemplates = typeof templates;
 
@@ -662,7 +657,6 @@ describe('RefinementList', () => {
               </span>
             `,
         showMoreText: '',
-        searchableNoResults: 'No results',
       };
       type TestTemplates = typeof templates;
 
