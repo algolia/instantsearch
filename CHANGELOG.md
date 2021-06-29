@@ -1,3 +1,15 @@
+## [4.24.2](https://github.com/algolia/instantsearch.js/compare/v4.24.1...v4.24.2) (2021-06-29)
+
+
+### Bug Fixes
+
+* **index:** export `IndexWidgetParams` type ([#4793](https://github.com/algolia/instantsearch.js/issues/4793)) ([91bdea1](https://github.com/algolia/instantsearch.js/commit/91bdea18f3768265937e2d3aca4acaa05c24e426))
+* **onStateChange:** propagate change to middleware ([#4796](https://github.com/algolia/instantsearch.js/issues/4796)) ([57c32c0](https://github.com/algolia/instantsearch.js/commit/57c32c0a43bd2c6cbdd3f8ea7eac8109e3024f2a))
+* **relevantSort:** export `RelevantSortWidgetParams` type ([#4794](https://github.com/algolia/instantsearch.js/issues/4794)) ([1a10b59](https://github.com/algolia/instantsearch.js/commit/1a10b59938c6121f58510726b67ee6dfa1aa1b7c))
+* **sortBy:** do not write the default state ([#4798](https://github.com/algolia/instantsearch.js/issues/4798)) ([1d8a40e](https://github.com/algolia/instantsearch.js/commit/1d8a40ecc8e6e48746113ec3ec0d975e14bec1ea))
+
+
+
 ## [4.24.1](https://github.com/algolia/instantsearch.js/compare/v4.24.0...v4.24.1) (2021-06-23)
 
 
