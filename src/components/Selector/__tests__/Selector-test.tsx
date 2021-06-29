@@ -2,8 +2,7 @@
 
 import { h } from 'preact';
 import Selector from '../Selector';
-import { mount } from 'enzyme';
-import { ReactElementLike } from 'prop-types';
+import { mount } from '../../../../test/utils/enzyme';
 
 describe('Selector', () => {
   it('should render <Selector/> with strings', () => {
@@ -20,7 +19,7 @@ describe('Selector', () => {
         { value: 'index-b', label: 'Index B' },
       ],
     };
-    const tree = mount((<Selector {...props} />) as ReactElementLike);
+    const tree = mount(<Selector {...props} />);
 
     expect(tree).toMatchSnapshot();
   });
@@ -39,7 +38,7 @@ describe('Selector', () => {
         { value: 20, label: '20 results per page' },
       ],
     };
-    const tree = mount((<Selector {...props} />) as ReactElementLike);
+    const tree = mount(<Selector {...props} />);
 
     expect(tree).toMatchSnapshot();
   });

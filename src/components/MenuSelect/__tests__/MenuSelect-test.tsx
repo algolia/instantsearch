@@ -2,9 +2,8 @@
 
 import { h } from 'preact';
 import MenuSelect from '../MenuSelect';
-import { mount } from 'enzyme';
+import { mount } from '../../../../test/utils/enzyme';
 import defaultTemplates from '../../../widgets/menu-select/defaultTemplates';
-import { ReactElementLike } from 'prop-types';
 
 describe('MenuSelect', () => {
   const cssClasses = {
@@ -25,7 +24,7 @@ describe('MenuSelect', () => {
       cssClasses,
     };
 
-    const wrapper = mount((<MenuSelect {...props} />) as ReactElementLike);
+    const wrapper = mount(<MenuSelect {...props} />);
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -38,7 +37,7 @@ describe('MenuSelect', () => {
       cssClasses,
     };
 
-    const wrapper = mount((<MenuSelect {...props} />) as ReactElementLike);
+    const wrapper = mount(<MenuSelect {...props} />);
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -59,7 +58,7 @@ describe('MenuSelect', () => {
       cssClasses,
     };
 
-    const wrapper = mount((<MenuSelect {...props} />) as ReactElementLike);
+    const wrapper = mount(<MenuSelect {...props} />);
 
     expect(wrapper).toMatchSnapshot();
   });

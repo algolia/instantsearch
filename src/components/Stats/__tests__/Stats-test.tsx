@@ -1,12 +1,11 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { mount } from '../../../../test/utils/enzyme';
+import { render } from '@testing-library/preact';
 import Stats from '../Stats';
 import defaultTemplates from '../../../widgets/stats/defaultTemplates';
 import createHelpers from '../../../lib/createHelpers';
-import { render } from '@testing-library/preact';
-import { ReactElementLike } from 'prop-types';
 
 describe('Stats', () => {
   const cssClasses = {
@@ -16,12 +15,7 @@ describe('Stats', () => {
 
   it('should render <Template data= />', () => {
     const wrapper = mount(
-      (
-        <Stats
-          {...getProps()}
-          templateProps={{ templates: defaultTemplates }}
-        />
-      ) as ReactElementLike
+      <Stats {...getProps()} templateProps={{ templates: defaultTemplates }} />
     );
 
     const defaultProps = {
