@@ -52,7 +52,7 @@
     "scripts/transforms"
   ],
   "dependencies": {
-    "@types/googlemaps": "^3.39.6",
+    "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "algoliasearch-helper": "^3.4.5",
     "classnames": "^2.2.5",
