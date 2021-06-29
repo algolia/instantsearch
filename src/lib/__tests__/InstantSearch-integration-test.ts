@@ -48,7 +48,7 @@ describe('configure', () => {
 });
 
 describe('middleware', () => {
-  it("runs middlewares' onStateChange uiState has changed", async () => {
+  it("runs middlewares' onStateChange when uiState changes", async () => {
     const container = document.createElement('div');
     const search = instantsearch({
       indexName: 'instant_search',
@@ -80,7 +80,7 @@ describe('middleware', () => {
     expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
   });
 
-  it("runs middlewares' onStateChange uiState has changed and onStateChange was provided", async () => {
+  it("runs middlewares' onStateChange when uiState changes with user-provided onStateChange param", async () => {
     const container = document.createElement('div');
     const search = instantsearch({
       indexName: 'instant_search',
