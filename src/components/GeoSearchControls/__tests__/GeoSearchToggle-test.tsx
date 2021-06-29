@@ -3,6 +3,7 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import GeoSearchToggle from '../GeoSearchToggle';
+import { ReactElementLike } from 'prop-types';
 
 describe('GeoSearchToggle', () => {
   const defaultProps = {
@@ -18,9 +19,11 @@ describe('GeoSearchToggle', () => {
     };
 
     const wrapper = shallow(
-      <GeoSearchToggle {...props}>
-        Clear the current map refinement
-      </GeoSearchToggle>
+      (
+        <GeoSearchToggle {...props}>
+          Clear the current map refinement
+        </GeoSearchToggle>
+      ) as ReactElementLike
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -33,9 +36,11 @@ describe('GeoSearchToggle', () => {
     };
 
     const wrapper = shallow(
-      <GeoSearchToggle {...props}>
-        Clear the current map refinement
-      </GeoSearchToggle>
+      (
+        <GeoSearchToggle {...props}>
+          Clear the current map refinement
+        </GeoSearchToggle>
+      ) as ReactElementLike
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -48,9 +53,11 @@ describe('GeoSearchToggle', () => {
     };
 
     const wrapper = shallow(
-      <GeoSearchToggle {...props}>
-        Clear the current map refinement
-      </GeoSearchToggle>
+      (
+        <GeoSearchToggle {...props}>
+          Clear the current map refinement
+        </GeoSearchToggle>
+      ) as ReactElementLike
     );
 
     expect(props.onToggle).not.toHaveBeenCalled();

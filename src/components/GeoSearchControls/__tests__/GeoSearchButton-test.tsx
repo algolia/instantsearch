@@ -3,6 +3,7 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import GeoSearchButton from '../GeoSearchButton';
+import { ReactElementLike } from 'prop-types';
 
 describe('GeoSearchButton', () => {
   const defaultProps = {
@@ -16,9 +17,11 @@ describe('GeoSearchButton', () => {
     };
 
     const wrapper = shallow(
-      <GeoSearchButton {...props}>
-        Clear the current map refinement
-      </GeoSearchButton>
+      (
+        <GeoSearchButton {...props}>
+          Clear the current map refinement
+        </GeoSearchButton>
+      ) as ReactElementLike
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -31,9 +34,11 @@ describe('GeoSearchButton', () => {
     };
 
     const wrapper = shallow(
-      <GeoSearchButton {...props}>
-        Clear the current map refinement
-      </GeoSearchButton>
+      (
+        <GeoSearchButton {...props}>
+          Clear the current map refinement
+        </GeoSearchButton>
+      ) as ReactElementLike
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -46,9 +51,11 @@ describe('GeoSearchButton', () => {
     };
 
     const wrapper = shallow(
-      <GeoSearchButton {...props}>
-        Clear the current map refinement
-      </GeoSearchButton>
+      (
+        <GeoSearchButton {...props}>
+          Clear the current map refinement
+        </GeoSearchButton>
+      ) as ReactElementLike
     );
 
     expect(props.onClick).not.toHaveBeenCalled();
