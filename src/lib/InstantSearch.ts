@@ -597,6 +597,7 @@ See ${createDocumentationLink({
     setIndexHelperState(this.mainIndex);
 
     this.scheduleSearch();
+    this.onInternalStateChange();
   }
 
   public getUiState(): UiState {
