@@ -1,10 +1,9 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { mount } from '../../../../test/utils/enzyme';
 import Pagination, { PaginationProps } from '../Pagination';
 import Paginator from '../../../connectors/pagination/Paginator';
-import { ReactElementLike } from 'prop-types';
 
 describe('Pagination', () => {
   const pager = new Paginator({
@@ -38,17 +37,13 @@ describe('Pagination', () => {
   };
 
   it('should render five elements', () => {
-    const wrapper = mount(
-      (<Pagination {...defaultProps} />) as ReactElementLike
-    );
+    const wrapper = mount(<Pagination {...defaultProps} />);
 
     expect(wrapper).toMatchSnapshot();
   });
 
   it('should display the first/last link', () => {
-    const wrapper = mount(
-      (<Pagination {...defaultProps} showFirst showLast />) as ReactElementLike
-    );
+    const wrapper = mount(<Pagination {...defaultProps} showFirst showLast />);
 
     expect(wrapper.find('.firstPageItem')).toHaveLength(1);
     expect(wrapper.find('.lastPageItem')).toHaveLength(1);
@@ -56,9 +51,7 @@ describe('Pagination', () => {
   });
 
   it('should add the noRefinement CSS class with a single page', () => {
-    const wrapper = mount(
-      (<Pagination {...defaultProps} nbPages={1} />) as ReactElementLike
-    );
+    const wrapper = mount(<Pagination {...defaultProps} nbPages={1} />);
 
     expect(wrapper.find('.noRefinementRoot')).toHaveLength(1);
     expect(wrapper).toMatchSnapshot();
@@ -66,19 +59,17 @@ describe('Pagination', () => {
 
   it('should disable last page if already on it', () => {
     const wrapper = mount(
-      (
-        <Pagination
-          {...defaultProps}
-          showFirst
-          showLast
-          showPrevious
-          showNext
-          pages={[13, 14, 15, 16, 17, 18, 19]}
-          currentPage={19}
-          isFirstPage={false}
-          isLastPage={true}
-        />
-      ) as ReactElementLike
+      <Pagination
+        {...defaultProps}
+        showFirst
+        showLast
+        showPrevious
+        showNext
+        pages={[13, 14, 15, 16, 17, 18, 19]}
+        currentPage={19}
+        isFirstPage={false}
+        isLastPage={true}
+      />
     );
 
     expect(wrapper.find('.lastPageItem').hasClass('disabledItem')).toBe(true);
@@ -114,20 +105,18 @@ describe('Pagination', () => {
       padding: 3,
     });
     const wrapper = mount(
-      (
-        <Pagination
-          {...defaultProps}
-          showFirst
-          showLast
-          showPrevious
-          showNext
-          currentPage={0}
-          nbPages={0}
-          pages={localPager.pages()}
-          isFirstPage={localPager.isFirstPage()}
-          isLastPage={localPager.isLastPage()}
-        />
-      ) as ReactElementLike
+      <Pagination
+        {...defaultProps}
+        showFirst
+        showLast
+        showPrevious
+        showNext
+        currentPage={0}
+        nbPages={0}
+        pages={localPager.pages()}
+        isFirstPage={localPager.isFirstPage()}
+        isLastPage={localPager.isLastPage()}
+      />
     );
 
     expect(wrapper).toMatchSnapshot();

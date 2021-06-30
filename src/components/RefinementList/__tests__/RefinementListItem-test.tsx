@@ -1,8 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from 'enzyme';
-import { ReactElementLike } from 'prop-types';
+import { shallow } from '../../../../test/utils/enzyme';
 import RefinementListItem, {
   RefinementListItemProps,
 } from '../RefinementListItem';
@@ -20,9 +19,7 @@ describe('RefinementListItem', () => {
   };
 
   it('renders an item', () => {
-    const wrapper = shallow(
-      (<RefinementListItem {...props} />) as ReactElementLike
-    );
+    const wrapper = shallow(<RefinementListItem {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -33,8 +30,6 @@ describe('RefinementListItem', () => {
   });
 
   function render(askedProps: RefinementListItemProps) {
-    return shallow(
-      (<RefinementListItem {...askedProps} />) as ReactElementLike
-    );
+    return shallow(<RefinementListItem {...askedProps} />);
   }
 });
