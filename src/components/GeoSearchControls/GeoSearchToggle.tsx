@@ -1,7 +1,14 @@
 /** @jsx h */
 
-import { h } from 'preact';
-import PropTypes from 'prop-types';
+import { h, ComponentChildren } from 'preact';
+
+type Props = {
+  classNameLabel: string;
+  classNameInput: string;
+  checked: boolean;
+  onToggle(event: Event): void;
+  children: ComponentChildren;
+};
 
 const GeoSearchToggle = ({
   classNameLabel,
@@ -9,7 +16,7 @@ const GeoSearchToggle = ({
   checked,
   onToggle,
   children,
-}) => (
+}: Props) => (
   <label className={classNameLabel}>
     <input
       className={classNameInput}
@@ -20,13 +27,5 @@ const GeoSearchToggle = ({
     {children}
   </label>
 );
-
-GeoSearchToggle.propTypes = {
-  classNameLabel: PropTypes.string.isRequired,
-  classNameInput: PropTypes.string.isRequired,
-  checked: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-};
 
 export default GeoSearchToggle;
