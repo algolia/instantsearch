@@ -171,7 +171,7 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on select change', () => {
+  it('calls refine on select change', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -194,14 +194,14 @@ describe('default render', () => {
     // Simulate the change
     select.element.value = 'Apple';
 
-    select.trigger('change');
+    await select.trigger('change');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('Apple');
   });
 });
 
-it('calls the Panel mixin with `canRefine`', () => {
+it('calls the Panel mixin with `canRefine`', async () => {
   __setState({ ...defaultState });
 
   const wrapper = mount(MenuSelect, {
@@ -213,7 +213,7 @@ it('calls the Panel mixin with `canRefine`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       canRefine: false,
     },
@@ -224,7 +224,7 @@ it('calls the Panel mixin with `canRefine`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
@@ -242,7 +242,7 @@ it('exposes send-event method for insights middleware', () => {
     },
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });
 
@@ -371,7 +371,7 @@ describe('custom default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on select change', () => {
+  it('calls refine on select change', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -397,7 +397,7 @@ describe('custom default render', () => {
     // Simulate the change
     select.element.value = 'Apple';
 
-    select.trigger('change');
+    await select.trigger('change');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('Apple');

@@ -203,7 +203,7 @@ it('renders correctly when not on the first page', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('expect to call showPrevious on click', () => {
+it('expect to call showPrevious on click', async () => {
   const showPrevious = jest.fn();
 
   __setState({
@@ -219,12 +219,12 @@ it('expect to call showPrevious on click', () => {
 
   expect(showPrevious).toHaveBeenCalledTimes(0);
 
-  wrapper.find('.ais-InfiniteHits-loadPrevious').trigger('click');
+  await wrapper.find('.ais-InfiniteHits-loadPrevious').trigger('click');
 
   expect(showPrevious).toHaveBeenCalledTimes(1);
 });
 
-it('expect to call showMore on click', () => {
+it('expect to call showMore on click', async () => {
   const showMore = jest.fn();
 
   __setState({
@@ -236,12 +236,12 @@ it('expect to call showMore on click', () => {
 
   expect(showMore).not.toHaveBeenCalled();
 
-  wrapper.find('.ais-InfiniteHits-loadMore').trigger('click');
+  await wrapper.find('.ais-InfiniteHits-loadMore').trigger('click');
 
   expect(showMore).toHaveBeenCalled();
 });
 
-it('exposes insights prop to the default slot', () => {
+it('exposes insights prop to the default slot', async () => {
   const insights = jest.fn();
 
   __setState({
@@ -262,14 +262,14 @@ it('exposes insights prop to the default slot', () => {
       `,
     },
   });
-  wrapper.find('#add-to-cart-00002').trigger('click');
+  await wrapper.find('#add-to-cart-00002').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
     eventName: 'Add to cart',
     objectIDs: ['00002'],
   });
 });
 
-it('exposes insights prop to the item slot', () => {
+it('exposes insights prop to the item slot', async () => {
   const insights = jest.fn();
 
   __setState({
@@ -288,14 +288,14 @@ it('exposes insights prop to the item slot', () => {
       `,
     },
   });
-  wrapper.find('#add-to-cart-00002').trigger('click');
+  await wrapper.find('#add-to-cart-00002').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
     eventName: 'Add to cart',
     objectIDs: ['00002'],
   });
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
@@ -312,6 +312,6 @@ it('exposes send-event method for insights middleware', () => {
     },
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });

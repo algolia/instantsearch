@@ -10,7 +10,7 @@ describe('renders correctly', () => {
       isRelevantSorted: false,
     });
     const wrapper = mount(RelevantSort);
-    expect(wrapper.html()).toMatchInlineSnapshot(`undefined`);
+    expect(wrapper.html()).toMatchInlineSnapshot(`""`);
   });
 
   test('not relevant sorted', () => {
@@ -56,7 +56,7 @@ describe('renders correctly', () => {
   });
 });
 
-it("calls the connector's refine function with 0 and undefined", () => {
+it("calls the connector's refine function with 0 and undefined", async () => {
   __setState({
     isRelevantSorted: true,
     isVirtualReplica: true,
@@ -69,12 +69,12 @@ it("calls the connector's refine function with 0 and undefined", () => {
 
   const button = wrapper.find('button');
 
-  button.trigger('click');
+  await button.trigger('click');
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(0);
 
-  button.trigger('click');
+  await button.trigger('click');
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(undefined);
 
-  button.trigger('click');
+  await button.trigger('click');
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(0);
 });

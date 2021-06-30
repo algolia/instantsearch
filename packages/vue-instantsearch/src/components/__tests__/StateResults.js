@@ -21,7 +21,7 @@ it('renders explanation if no slot is used', () => {
 it("doesn't render if no results", () => {
   __setState({});
   const wrapper = mount(StateResults);
-  expect(wrapper.html()).toBeUndefined();
+  expect(wrapper.html()).toBe('');
 });
 
 it('gives state & results to default slot', () => {

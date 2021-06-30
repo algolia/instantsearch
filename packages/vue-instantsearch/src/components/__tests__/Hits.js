@@ -48,7 +48,7 @@ it('renders correctly', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('exposes insights prop to the default slot', () => {
+it('exposes insights prop to the default slot', async () => {
   const insights = jest.fn();
   __setState({
     ...defaultState,
@@ -69,14 +69,14 @@ it('exposes insights prop to the default slot', () => {
       `,
     },
   });
-  wrapper.find('#add-to-cart-two').trigger('click');
+  await wrapper.find('#add-to-cart-two').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
     eventName: 'Add to cart',
     objectIDs: ['two'],
   });
 });
 
-it('exposes insights prop to the item slot', () => {
+it('exposes insights prop to the item slot', async () => {
   const insights = jest.fn();
   __setState({
     ...defaultState,
@@ -94,14 +94,14 @@ it('exposes insights prop to the item slot', () => {
       `,
     },
   });
-  wrapper.find('#add-to-cart-two').trigger('click');
+  await wrapper.find('#add-to-cart-two').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
     eventName: 'Add to cart',
     objectIDs: ['two'],
   });
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
@@ -118,6 +118,6 @@ it('exposes send-event method for insights middleware', () => {
     },
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });

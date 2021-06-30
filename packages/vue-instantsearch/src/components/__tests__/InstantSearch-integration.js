@@ -101,7 +101,7 @@ describe('middlewares', () => {
     });
 
     const [middleware2, middlewareSpy2] = createFakeMiddleware();
-    wrapper.setData({
+    await wrapper.setData({
       middlewares: [middleware1, middleware2],
     });
     await Vue.nextTick();
@@ -168,7 +168,7 @@ describe('middlewares', () => {
       uiState: { indexName: { query: 'a' } },
     });
 
-    wrapper.setData({
+    await wrapper.setData({
       middlewares: [middleware1],
     });
     await Vue.nextTick();

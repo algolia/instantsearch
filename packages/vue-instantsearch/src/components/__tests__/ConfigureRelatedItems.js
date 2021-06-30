@@ -27,5 +27,5 @@ it('renders nothing', () => {
     propsData: props,
   });
 
-  expect(wrapper.html()).toBeUndefined();
+  expect(wrapper.html()).toBe('');
 });

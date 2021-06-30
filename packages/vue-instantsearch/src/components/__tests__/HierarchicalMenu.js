@@ -396,7 +396,7 @@ describe('default render', () => {
     expect(showMoreButton.html()).toMatchSnapshot();
   });
 
-  it('renders correctly with show more label toggled', () => {
+  it('renders correctly with show more label toggled', async () => {
     __setState({
       ...defaultState,
     });
@@ -411,9 +411,9 @@ describe('default render', () => {
 
     const button = wrapper.find('button');
 
-    button.trigger('click');
+    await button.trigger('click');
 
-    wrapper.setData({
+    await wrapper.setData({
       state: {
         isShowingMore: true,
       },
@@ -423,7 +423,7 @@ describe('default render', () => {
     expect(button.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -435,7 +435,7 @@ describe('default render', () => {
       propsData: defaultProps,
     });
 
-    wrapper
+    await wrapper
       .find('.ais-HierarchicalMenu-list--lvl2')
       .findAll('a')
       .at(1)
@@ -445,7 +445,7 @@ describe('default render', () => {
     expect(refine).toHaveBeenCalledWith('Apple > MacBook > MacBook 15"');
   });
 
-  it('calls toggleShowMore on button click', () => {
+  it('calls toggleShowMore on button click', async () => {
     const toggleShowMore = jest.fn();
     __setState({
       ...defaultState,
@@ -460,13 +460,13 @@ describe('default render', () => {
       },
     });
 
-    wrapper.find('button').trigger('click');
+    await wrapper.find('button').trigger('click');
 
     expect(toggleShowMore).toHaveBeenCalledTimes(1);
   });
 });
 
-it('calls the Panel mixin with `items.length`', () => {
+it('calls the Panel mixin with `items.length`', async () => {
   __setState({ ...defaultState });
 
   const wrapper = mount(HierarchicalMenu, {
@@ -478,7 +478,7 @@ it('calls the Panel mixin with `items.length`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       items: [],
     },
@@ -489,7 +489,7 @@ it('calls the Panel mixin with `items.length`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
@@ -507,7 +507,7 @@ it('exposes send-event method for insights middleware', () => {
     },
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });
 
@@ -615,7 +615,7 @@ describe('custom default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('renders correctly with a show more button toggled', () => {
+  it('renders correctly with a show more button toggled', async () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
@@ -640,7 +640,7 @@ describe('custom default render', () => {
     expect(wrapper.find('button').text()).toBe('View more');
     expect(wrapper.html()).toMatchSnapshot();
 
-    wrapper.find('button').trigger('click');
+    await wrapper.find('button').trigger('click');
 
     expect(wrapper.find('button').text()).toBe('View less');
     expect(wrapper.html()).toMatchSnapshot();
@@ -663,7 +663,7 @@ describe('custom default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -678,7 +678,7 @@ describe('custom default render', () => {
       },
     });
 
-    wrapper
+    await wrapper
       .findAll('ol')
       .at(1)
       .findAll('a')
@@ -689,7 +689,7 @@ describe('custom default render', () => {
     expect(refine).toHaveBeenCalledWith('Apple > MacBook');
   });
 
-  it('calls toggleShowMore on button click', () => {
+  it('calls toggleShowMore on button click', async () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
@@ -710,7 +710,7 @@ describe('custom default render', () => {
 
     expect(wrapper.vm.state.isShowingMore).toBe(false);
 
-    wrapper.find('button').trigger('click');
+    await wrapper.find('button').trigger('click');
 
     expect(wrapper.vm.state.isShowingMore).toBe(true);
   });
@@ -744,10 +744,12 @@ describe('custom showMoreLabel render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('renders correctly with a custom show more label toggled', () => {
+  it('renders correctly with a custom show more label toggled', async () => {
     __setState({
       ...defaultState,
-      toggleShowMore: () => wrapper.setData({ state: { isShowingMore: true } }),
+      toggleShowMore: () => {
+        wrapper.setData({ state: { isShowingMore: true } });
+      },
     });
 
     const wrapper = mount(HierarchicalMenu, {
@@ -761,7 +763,7 @@ describe('custom showMoreLabel render', () => {
       },
     });
 
-    wrapper.find('button').trigger('click');
+    await wrapper.find('button').trigger('click');
 
     expect(wrapper.find('.ais-HierarchicalMenu-showMore').text()).toBe(
       'Voir moins'

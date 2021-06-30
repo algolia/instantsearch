@@ -146,23 +146,23 @@ test('with not stalled search displays the submit and hides reset, loader', () =
   ).toBe('hidden');
 });
 
-test('blurs input on form submit', () => {
+test('blurs input on form submit', async () => {
   __setState(defaultState);
   const wrapper = mount(SearchBox);
   const input = wrapper.find('.ais-SearchBox-input');
   input.element.blur = jest.fn();
 
-  wrapper.find('.ais-SearchBox-form').trigger('submit');
+  await wrapper.find('.ais-SearchBox-form').trigger('submit');
 
   expect(input.element.blur).toHaveBeenCalledTimes(1);
 });
 
-test('refine on empty string on form reset', () => {
+test('refine on empty string on form reset', async () => {
   const state = { ...defaultState, refine: jest.fn() };
   __setState(state);
   const wrapper = mount(SearchBox);
 
-  wrapper.find('.ais-SearchBox-form').trigger('reset');
+  await wrapper.find('.ais-SearchBox-form').trigger('reset');
 
   expect(state.refine).toHaveBeenCalledWith('');
 });

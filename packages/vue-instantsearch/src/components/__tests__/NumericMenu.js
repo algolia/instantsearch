@@ -161,7 +161,7 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on radio change', () => {
+  it('calls refine on radio change', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -179,7 +179,7 @@ describe('default render', () => {
 
     const input = wrapper.findAll('.ais-NumericMenu-radio').at(3);
 
-    input.trigger('change');
+    await input.trigger('change');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('100'));
@@ -187,7 +187,7 @@ describe('default render', () => {
   });
 });
 
-it('calls the Panel mixin with `hasNoResults`', () => {
+it('calls the Panel mixin with `hasNoResults`', async () => {
   __setState({ ...defaultState });
 
   const wrapper = mount(NumericMenu, {
@@ -199,7 +199,7 @@ it('calls the Panel mixin with `hasNoResults`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       hasNoResults: true,
     },
@@ -210,7 +210,7 @@ it('calls the Panel mixin with `hasNoResults`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
@@ -228,7 +228,7 @@ it('exposes send-event method for insights middleware', () => {
     },
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });
 
@@ -336,7 +336,7 @@ describe('custom default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -357,7 +357,7 @@ describe('custom default render', () => {
 
     const link = wrapper.findAll('a').at(3);
 
-    link.trigger('click');
+    await link.trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('100'));

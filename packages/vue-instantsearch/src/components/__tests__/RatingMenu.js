@@ -85,7 +85,7 @@ it('renders correctly when refined', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('calls refine when clicked on link', () => {
+it('calls refine when clicked on link', async () => {
   __setState({
     createURL: () => '#',
     items: [
@@ -121,12 +121,12 @@ it('calls refine when clicked on link', () => {
     propsData: defaultProps,
   });
 
-  wrapper.find('.ais-RatingMenu-link').trigger('click');
+  await wrapper.find('.ais-RatingMenu-link').trigger('click');
 
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('1');
 });
 
-it('calls the Panel mixin with `hasNoResults`', () => {
+it('calls the Panel mixin with `hasNoResults`', async () => {
   __setState({ hasNoResults: false });
 
   const wrapper = mount(RatingMenu, {
@@ -138,7 +138,7 @@ it('calls the Panel mixin with `hasNoResults`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       hasNoResults: true,
     },
@@ -149,7 +149,7 @@ it('calls the Panel mixin with `hasNoResults`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     createURL: () => '#',
@@ -168,6 +168,6 @@ it('exposes send-event method for insights middleware', () => {
     },
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });

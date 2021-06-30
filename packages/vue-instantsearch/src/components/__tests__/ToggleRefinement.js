@@ -162,7 +162,7 @@ describe('default render', () => {
   });
 });
 
-it('calls the Panel mixin with `value.count`', () => {
+it('calls the Panel mixin with `value.count`', async () => {
   __setState({
     ...defaultState,
     value: {
@@ -182,7 +182,7 @@ it('calls the Panel mixin with `value.count`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       value: {
         count: 0,
@@ -195,7 +195,7 @@ it('calls the Panel mixin with `value.count`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
@@ -213,7 +213,7 @@ it('exposes send-event method for insights middleware', () => {
     },
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });
 
@@ -297,7 +297,7 @@ describe('custom default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -312,7 +312,7 @@ describe('custom default render', () => {
       },
     });
 
-    wrapper.find('a').trigger('click');
+    await wrapper.find('a').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith(defaultValue);

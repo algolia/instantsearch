@@ -116,7 +116,7 @@ it('renders correctly (with slot used)', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('Allows a change in `index-name`', () => {
+it('Allows a change in `index-name`', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
@@ -124,7 +124,7 @@ it('Allows a change in `index-name`', () => {
     },
   });
 
-  wrapper.setProps({
+  await wrapper.setProps({
     indexName: 'doggie_bowl',
   });
 
@@ -135,7 +135,7 @@ it('Allows a change in `index-name`', () => {
   expect(helper.search).toHaveBeenCalledTimes(1);
 });
 
-it('Allows a change in `search-client`', () => {
+it('Allows a change in `search-client`', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
@@ -145,7 +145,7 @@ it('Allows a change in `search-client`', () => {
 
   const newClient = { cats: 'rule', dogs: 'drool' };
 
-  wrapper.setProps({
+  await wrapper.setProps({
     searchClient: newClient,
   });
 
@@ -156,7 +156,7 @@ it('Allows a change in `search-client`', () => {
   expect(helper.search).toHaveBeenCalledTimes(1);
 });
 
-it('Allows a change in `search-function`', () => {
+it('Allows a change in `search-function`', async () => {
   const oldValue = () => {};
   const newValue = () => {};
 
@@ -170,14 +170,14 @@ it('Allows a change in `search-function`', () => {
 
   expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(oldValue);
 
-  wrapper.setProps({
+  await wrapper.setProps({
     searchFunction: newValue,
   });
 
   expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(newValue);
 });
 
-it('Allows a change in `stalled-search-delay`', () => {
+it('Allows a change in `stalled-search-delay`', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
@@ -189,7 +189,7 @@ it('Allows a change in `stalled-search-delay`', () => {
 
   expect(wrapper.vm.instantSearchInstance._stalledSearchDelay).toEqual(200);
 
-  wrapper.setProps({
+  await wrapper.setProps({
     stalledSearchDelay: 50,
   });
 
@@ -255,7 +255,7 @@ it('does not warn when `routing` have either `router` or `stateMapping`', () => 
   expect(warn).toHaveBeenCalledTimes(0);
 });
 
-it('Does not allow a change in `routing`', () => {
+it('Does not allow a change in `routing`', async () => {
   global.console.error = jest.fn();
   const wrapper = mount(InstantSearch, {
     propsData: {
@@ -264,12 +264,16 @@ it('Does not allow a change in `routing`', () => {
     },
   });
 
-  wrapper.setProps({
+  await wrapper.setProps({
     routing: false,
   });
 
   // Vue catches this error and throws it to the console
-  expect(global.console.error.mock.calls[0][0]).toMatchInlineSnapshot(`
+  expect(
+    global.console.error.mock.calls[
+      global.console.error.mock.calls.length - 1
+    ][0]
+  ).toMatchInlineSnapshot(`
 [Error: routing configuration can not be changed dynamically at this point.
 
 Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md]

@@ -1,5 +1,6 @@
 import { mount } from '../../../test/utils';
 import mitt from 'mitt';
+import Vue from 'vue';
 import {
   createPanelProviderMixin,
   createPanelConsumerMixin,
@@ -87,7 +88,7 @@ describe('createPanelProviderMixin', () => {
 describe('createPanelConsumerMixin', () => {
   const mapStateToCanRefine = state => state.attributeName;
 
-  it('emits PANEL_CHANGE_EVENT on `state.attributeName` change', () => {
+  it('emits PANEL_CHANGE_EVENT on `state.attributeName` change', async () => {
     const emitter = createFakeEmitter();
     const Test = createFakeComponent();
 
@@ -102,22 +103,28 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: false,
+      },
+    });
 
     expect(emitter.emit).toHaveBeenCalledTimes(1);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
-    wrapper.vm.state = {
-      attributeName: true,
-    };
+    // ↓ this should be replaceable with `wrapper.setData()` but it didn't
+    // trigger the watcher in `createPanelConsumerMixin`.
+    // It's probably a bug from vue-test-utils.
+    // https://github.com/vuejs/vue-test-utils/issues/1756
+    // https://github.com/vuejs/vue-test-utils/issues/149
+    wrapper.vm.$set(wrapper.vm, 'state', { attributeName: true });
+    await Vue.nextTick();
 
     expect(emitter.emit).toHaveBeenCalledTimes(2);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
   });
 
-  it('emits once when both values are set', () => {
+  it('emits once when both values are set', async () => {
     const emitter = createFakeEmitter();
     const Test = createFakeComponent();
 
@@ -132,21 +139,25 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: false,
+      },
+    });
 
     expect(emitter.emit).toHaveBeenCalledTimes(1);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: false,
+      },
+    });
 
     expect(emitter.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('emits once on init of the component', () => {
+  it('emits once on init of the component', async () => {
     const emitter = createFakeEmitter();
     const Test = createFakeComponent();
 
@@ -161,15 +172,17 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: true,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: true,
+      },
+    });
 
     expect(emitter.emit).toHaveBeenCalledTimes(1);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
   });
 
-  it('do not emit when the next value is not set', () => {
+  it('do not emit when the next value is not set', async () => {
     const emitter = createFakeEmitter();
     const Test = createFakeComponent();
 
@@ -184,19 +197,22 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: true,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: true,
+      },
+    });
 
     expect(emitter.emit).toHaveBeenCalledTimes(1);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
-    wrapper.vm.state = null;
+    wrapper.vm.$set(wrapper.vm, 'state', null);
+    await Vue.nextTick();
 
     expect(emitter.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('do not emit when the previous and next value are equal', () => {
+  it('do not emit when the previous and next value are equal', async () => {
     const emitter = createFakeEmitter();
     const Test = createFakeComponent();
 
@@ -211,23 +227,23 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: true,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: true,
+      },
+    });
 
     expect(emitter.emit).toHaveBeenCalledTimes(1);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
+    await Vue.nextTick();
 
     expect(emitter.emit).toHaveBeenCalledTimes(2);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
+    await Vue.nextTick();
 
     expect(emitter.emit).toHaveBeenCalledTimes(2);
   });

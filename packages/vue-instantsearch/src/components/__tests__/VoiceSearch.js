@@ -22,10 +22,10 @@ const buttonTextScopedSlot = `
 `;
 
 describe('button', () => {
-  it('calls toggleListening when the button is clicked', () => {
+  it('calls toggleListening when the button is clicked', async () => {
     __setState(defaultState);
     const wrapper = mount(VoiceSearch);
-    wrapper.find('button').trigger('click');
+    await wrapper.find('button').trigger('click');
     expect(wrapper.vm.state.toggleListening).toHaveBeenCalledTimes(1);
   });
 });

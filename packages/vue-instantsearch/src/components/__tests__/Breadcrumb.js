@@ -145,7 +145,7 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on root click', () => {
+  it('calls refine on root click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -157,7 +157,7 @@ describe('default render', () => {
       propsData: defaultProps,
     });
 
-    wrapper
+    await wrapper
       .findAll('a')
       .at(0)
       .trigger('click');
@@ -166,7 +166,7 @@ describe('default render', () => {
     expect(refine).toHaveBeenCalledWith();
   });
 
-  it('calls refine on item click', () => {
+  it('calls refine on item click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -178,7 +178,7 @@ describe('default render', () => {
       propsData: defaultProps,
     });
 
-    wrapper
+    await wrapper
       .findAll('a')
       .at(1)
       .trigger('click');
@@ -189,7 +189,7 @@ describe('default render', () => {
 });
 
 describe('panel', () => {
-  it('calls the Panel mixin with `canRefine`', () => {
+  it('calls the Panel mixin with `canRefine`', async () => {
     __setState({ ...defaultState });
 
     const wrapper = mount(Breadcrumb, {
@@ -201,7 +201,7 @@ describe('panel', () => {
 
     expect(mapStateToCanRefine()).toBe(true);
 
-    wrapper.setData({
+    await wrapper.setData({
       state: {
         canRefine: false,
       },
@@ -279,7 +279,7 @@ describe('custom default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -294,7 +294,7 @@ describe('custom default render', () => {
       },
     });
 
-    wrapper
+    await wrapper
       .findAll('a')
       .at(0)
       .trigger('click');

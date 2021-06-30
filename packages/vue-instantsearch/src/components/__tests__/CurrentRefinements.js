@@ -167,7 +167,7 @@ describe.each([
   });
 });
 
-it('calls the Panel mixin with `canRefine`', () => {
+it('calls the Panel mixin with `canRefine`', async () => {
   __setState({ items: [{}] });
 
   const wrapper = mount(CurrentRefinements);
@@ -177,7 +177,7 @@ it('calls the Panel mixin with `canRefine`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       items: [],
     },
@@ -188,7 +188,7 @@ it('calls the Panel mixin with `canRefine`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('calls `refine` with a refinement', () => {
+it('calls `refine` with a refinement', async () => {
   const spies = [jest.fn(), jest.fn()];
 
   __setState({
@@ -223,7 +223,7 @@ it('calls `refine` with a refinement', () => {
   });
 
   const wrapper = mount(CurrentRefinements);
-  wrapper.find('.ais-CurrentRefinements-delete').trigger('click');
+  await wrapper.find('.ais-CurrentRefinements-delete').trigger('click');
 
   expect(spies[0]).toHaveBeenLastCalledWith({
     attribute: 'brands',

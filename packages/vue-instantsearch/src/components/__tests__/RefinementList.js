@@ -127,7 +127,7 @@ it("allows search bar classes override when it's searchable", () => {
   );
 });
 
-it("disables show more if can't refine", () => {
+it("disables show more if can't refine", async () => {
   __setState({
     ...defaultState,
     canToggleShowMore: false,
@@ -144,14 +144,14 @@ it("disables show more if can't refine", () => {
   expect(showMore.attributes().disabled).toBe('disabled');
   expect(showMore.classes()).toContain('ais-RefinementList-showMore--disabled');
 
-  wrapper.setData({ state: { canToggleShowMore: true } });
+  await wrapper.setData({ state: { canToggleShowMore: true } });
   expect(showMore.attributes().disabled).toBeUndefined();
   expect(showMore.classes()).not.toContain(
     'ais-RefinementList-showMore--disabled'
   );
 });
 
-it('behaves correctly', () => {
+it('behaves correctly', async () => {
   __setState({
     ...defaultState,
     refine: jest.fn(),
@@ -162,11 +162,11 @@ it('behaves correctly', () => {
     },
   });
   const button = wrapper.find('input[type="checkbox"]');
-  button.trigger('click');
+  await button.trigger('click');
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('yo');
 });
 
-it('calls the Panel mixin with `canRefine`', () => {
+it('calls the Panel mixin with `canRefine`', async () => {
   __setState({ ...defaultState });
 
   const wrapper = mount(RefinementList, {
@@ -178,7 +178,7 @@ it('calls the Panel mixin with `canRefine`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       canRefine: false,
     },
@@ -189,7 +189,7 @@ it('calls the Panel mixin with `canRefine`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
@@ -207,6 +207,6 @@ it('exposes send-event method for insights middleware', () => {
     },
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });

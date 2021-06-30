@@ -66,7 +66,7 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on button click', () => {
+  it('calls refine on button click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -76,7 +76,7 @@ describe('default render', () => {
 
     const wrapper = mount(ClearRefinements);
 
-    wrapper.find('button').trigger('click');
+    await wrapper.find('button').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
   });
@@ -138,7 +138,7 @@ describe('custom default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -152,7 +152,7 @@ describe('custom default render', () => {
       },
     });
 
-    wrapper.find('a').trigger('click');
+    await wrapper.find('a').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
   });
@@ -177,7 +177,7 @@ describe('custom resetLabel render', () => {
   });
 });
 
-it('calls the Panel mixin with `hasRefinement`', () => {
+it('calls the Panel mixin with `hasRefinement`', async () => {
   __setState({
     hasRefinements: true,
   });
@@ -189,7 +189,7 @@ it('calls the Panel mixin with `hasRefinement`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       hasRefinements: false,
     },
