@@ -46,6 +46,16 @@ describe('MenuSelect', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('default menu select with custom id', () => {
+    const id = 'menu-select';
+    const wrapper = mount(
+      <MenuSelect id={id} refine={() => {}} items={[]} canRefine={false} />
+    );
+
+    const select = wrapper.find('select').getDOMNode();
+    expect(select.getAttribute('id')).toEqual(id);
+  });
+
   it('default menu select with no refinement', () => {
     const tree = renderer
       .create(<MenuSelect refine={() => {}} items={[]} canRefine={false} />)
