@@ -25,6 +25,26 @@ describe('SortBy', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
+  it('should forward the id to Select', () => {
+    const id = 'ais-select';
+    const wrapper = mount(
+      <SortBy
+        id={id}
+        items={[
+          { value: 'index1' },
+          { value: 'index2' },
+          { value: 'index3' },
+          { value: 'index4' },
+        ]}
+        currentRefinement={'index1'}
+        refine={() => null}
+      />
+    );
+
+    const select = wrapper.find('select').getDOMNode();
+    expect(select.getAttribute('id')).toEqual(id);
+  });
+
   it('refines its value on change', () => {
     const refine = jest.fn();
     const wrapper = mount(
