@@ -25,6 +25,14 @@ describe('SearchBox', () => {
     instance.unmount();
   });
 
+  it('applies its default props with custom inputId', () => {
+    const inputId = 'search-box';
+    const wrapper = mount(<SearchBox inputId={inputId} refine={() => null} />);
+
+    const input = wrapper.find('input').getDOMNode();
+    expect(input.getAttribute('id')).toEqual(inputId);
+  });
+
   it('transfers the autoFocus prop to the underlying input element', () => {
     const instance = renderer.create(
       <SearchBox refine={() => null} autoFocus />
