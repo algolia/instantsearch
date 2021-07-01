@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "2.2.2",
-    "algoliasearch": "4.8.5",
+    "algoliasearch": "4.9.3",
     "expo": "37.0.3",
     "lodash": "4.17.15",
     "prop-types": "15.6.2",

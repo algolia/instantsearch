@@ -13,6 +13,7 @@ import { MultiResponse } from '../types/algoliasearch';
 import { ConnectorDescription } from '../core/createConnector';
 
 type ResultsState = {
+  metadata: never[];
   state: PlainSearchParameters;
   rawResults: MultiResponse;
 };
@@ -62,7 +63,7 @@ type Props = {
     props: object;
   }) => void;
   stalledSearchDelay?: number;
-  resultsState: ResultsState | { [indexId: string]: ResultsState };
+  resultsState?: ResultsState | { [indexId: string]: ResultsState };
 };
 
 type State = {

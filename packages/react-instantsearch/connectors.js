@@ -4,6 +4,7 @@ export { connectConfigure } from 'react-instantsearch-core';
 export {
   EXPERIMENTAL_connectConfigureRelatedItems,
 } from 'react-instantsearch-core';
+export { EXPERIMENTAL_connectDynamicWidgets } from 'react-instantsearch-core';
 export { connectCurrentRefinements } from 'react-instantsearch-core';
 export { connectGeoSearch } from 'react-instantsearch-core';
 export { connectHierarchicalMenu } from 'react-instantsearch-core';
