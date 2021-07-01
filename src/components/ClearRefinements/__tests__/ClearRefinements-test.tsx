@@ -2,8 +2,7 @@
 
 import { h } from 'preact';
 import ClearRefinements from '../ClearRefinements';
-import { mount } from 'enzyme';
-import { ReactElementLike } from 'prop-types';
+import { mount } from '../../../../test/utils/enzyme';
 
 describe('ClearRefinements', () => {
   const defaultProps = {
@@ -23,18 +22,14 @@ describe('ClearRefinements', () => {
   };
 
   it('should render <ClearRefinements />', () => {
-    const wrapper = mount(
-      (<ClearRefinements {...defaultProps} />) as ReactElementLike
-    );
+    const wrapper = mount(<ClearRefinements {...defaultProps} />);
 
     expect(wrapper).toMatchSnapshot();
   });
 
   it('should render <ClearRefinements /> with a specific class when no refinements', () => {
     const wrapper = mount(
-      (
-        <ClearRefinements {...defaultProps} hasRefinements={false} />
-      ) as ReactElementLike
+      <ClearRefinements {...defaultProps} hasRefinements={false} />
     );
 
     expect(wrapper).toMatchSnapshot();

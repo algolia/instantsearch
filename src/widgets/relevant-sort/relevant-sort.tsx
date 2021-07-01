@@ -31,7 +31,7 @@ export type RelevantSortTemplates = {
   button?: Template<{ isRelevantSorted: boolean }>;
 };
 
-type RelevantSortWidgetParams = {
+export type RelevantSortWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: RelevantSortCSSClasses;
   templates?: RelevantSortTemplates;

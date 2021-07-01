@@ -177,13 +177,12 @@ const connectSortBy: SortByConnector = function connectSortBy(
       getWidgetUiState(uiState, { searchParameters }) {
         const currentIndex = searchParameters.index;
 
-        if (currentIndex === connectorState.initialIndex) {
-          return uiState;
-        }
-
         return {
           ...uiState,
-          sortBy: currentIndex,
+          sortBy:
+            currentIndex !== connectorState.initialIndex
+              ? currentIndex
+              : undefined,
         };
       },
 

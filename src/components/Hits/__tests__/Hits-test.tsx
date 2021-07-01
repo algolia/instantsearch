@@ -1,12 +1,11 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow, mount } from 'enzyme';
+import { shallow, mount } from '../../../../test/utils/enzyme';
 import { highlight } from '../../../helpers';
 import { TAG_REPLACEMENT } from '../../../lib/utils';
 import Template from '../../Template/Template';
 import Hits, { HitsProps } from '../Hits';
-import { ReactElementLike } from 'prop-types';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
@@ -25,7 +24,7 @@ describe('Hits', () => {
       ...extraProps,
     };
 
-    return shallow((<Hits {...props} />) as ReactElementLike);
+    return shallow(<Hits {...props} />);
   }
 
   describe('no results', () => {
@@ -250,7 +249,7 @@ describe('Hits', () => {
         cssClasses,
       };
 
-      const wrapper = mount((<Hits {...props} />) as ReactElementLike);
+      const wrapper = mount(<Hits {...props} />);
 
       expect(wrapper).toMatchSnapshot();
     });
@@ -301,7 +300,7 @@ describe('Hits', () => {
         cssClasses,
       };
 
-      const wrapper = mount((<Hits {...props} />) as ReactElementLike);
+      const wrapper = mount(<Hits {...props} />);
 
       expect(wrapper).toMatchSnapshot();
     });

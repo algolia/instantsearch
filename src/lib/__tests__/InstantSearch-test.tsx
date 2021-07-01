@@ -850,6 +850,28 @@ describe('start', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
 `);
   });
+
+  it('keeps a mainHelper already set on the instance (Vue SSR)', () => {
+    const searchClient = createSearchClient();
+    const instance = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const helper = algoliasearchHelper(searchClient, '');
+
+    // explicitly setting the mainHelper before start is used to force render to
+    // happen before the results of the first search are done. We need to make
+    // sure no extra helper is created, as that can cause certain things (like routing)
+    // to be listening to the wrong helper.
+    instance.mainHelper = helper;
+
+    expect(instance.mainHelper).toBe(helper);
+
+    instance.start();
+
+    expect(instance.mainHelper).toBe(helper);
+  });
 });
 
 describe('dispose', () => {
