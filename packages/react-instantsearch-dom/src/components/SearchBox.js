@@ -86,6 +86,7 @@ class SearchBox extends Component {
       PropTypes.func,
       PropTypes.exact({ current: PropTypes.object }),
     ]),
+    inputId: PropTypes.string,
   };
 
   static defaultProps = {
@@ -221,6 +222,7 @@ class SearchBox extends Component {
   render() {
     const {
       className,
+      inputId,
       translate,
       autoFocus,
       loadingIndicator,
@@ -257,6 +259,7 @@ class SearchBox extends Component {
         >
           <input
             ref={this.onInputMount}
+            id={inputId}
             type="search"
             placeholder={translate('placeholder')}
             autoFocus={autoFocus}
