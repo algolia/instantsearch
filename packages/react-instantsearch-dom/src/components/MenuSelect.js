@@ -8,6 +8,7 @@ const cx = createClassNames('MenuSelect');
 
 class MenuSelect extends Component {
   static propTypes = {
+    id: PropTypes.string,
     items: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string.isRequired,
@@ -44,13 +45,14 @@ class MenuSelect extends Component {
   };
 
   render() {
-    const { items, canRefine, translate, className } = this.props;
+    const { id, items, canRefine, translate, className } = this.props;
 
     return (
       <div
         className={classNames(cx('', !canRefine && '-noRefinement'), className)}
       >
         <select
+          id={id}
           value={this.selectedValue}
           onChange={this.handleSelectChange}
           className={cx('select')}

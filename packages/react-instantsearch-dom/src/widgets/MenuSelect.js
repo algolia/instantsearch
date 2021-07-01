@@ -9,6 +9,7 @@ import MenuSelect from '../components/MenuSelect';
  * @kind widget
  * @requirements The attribute passed to the `attribute` prop must be present in "attributes for faceting"
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
+ * @propType {string} id - the id of the select input
  * @propType {string} attribute - the name of the attribute in the record
  * @propType {string} [defaultRefinement] - the value of the item selected by default
  * @propType {number} [limit=10] - the minimum number of diplayed items
