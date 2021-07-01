@@ -10,6 +10,7 @@ import HitsPerPage from '../components/HitsPerPage';
  *
  * @name HitsPerPage
  * @kind widget
+ * @propType {string} id - The id of the select input
  * @propType {{value: number, label: string}[]} items - List of available options.
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.

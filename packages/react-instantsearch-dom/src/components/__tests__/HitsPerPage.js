@@ -52,6 +52,27 @@ describe('HitsPerPage', () => {
         .toJSON()
     ).toMatchSnapshot());
 
+  it('should forward the id to Select', () => {
+    const id = 'ais-select';
+    const wrapper = mount(
+      <HitsPerPage
+        id={id}
+        createURL={() => '#'}
+        items={[
+          { value: 2, label: '2 hits per page' },
+          { value: 4, label: '4 hits per page' },
+          { value: 6, label: '6 hits per page' },
+          { value: 8, label: '8 hits per page' },
+        ]}
+        refine={() => null}
+        currentRefinement={2}
+      />
+    );
+
+    const selectedValue = wrapper.find('select').getDOMNode();
+    expect(selectedValue.getAttribute('id')).toEqual(id);
+  });
+
   it('refines its value on change', () => {
     const refine = jest.fn();
     const wrapper = mount(

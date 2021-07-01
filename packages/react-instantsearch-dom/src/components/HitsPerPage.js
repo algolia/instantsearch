@@ -8,6 +8,7 @@ const cx = createClassNames('HitsPerPage');
 
 class HitsPerPage extends Component {
   static propTypes = {
+    id: PropTypes.string,
     items: PropTypes.arrayOf(
       PropTypes.shape({
         value: PropTypes.number.isRequired,
@@ -24,11 +25,12 @@ class HitsPerPage extends Component {
   };
 
   render() {
-    const { items, currentRefinement, refine, className } = this.props;
+    const { id, items, currentRefinement, refine, className } = this.props;
 
     return (
       <div className={classNames(cx(''), className)}>
         <Select
+          id={id}
           onSelect={refine}
           selectedItem={currentRefinement}
           items={items}
