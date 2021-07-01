@@ -13,7 +13,7 @@
     "react-test-renderer": "16.8.6"
   },
   "dependencies": {
-    "algoliasearch": "4.8.5",
+    "algoliasearch": "4.9.3",
     "antd": "3.23.2",
     "lodash": "4.17.15",
     "prop-types": "15.6.0",
