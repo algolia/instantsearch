@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 export default class Select extends Component {
   static propTypes = {
     cx: PropTypes.func.isRequired,
+    id: PropTypes.string,
     onSelect: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(
       PropTypes.shape({
@@ -24,10 +25,11 @@ export default class Select extends Component {
   };
 
   render() {
-    const { cx, items, selectedItem } = this.props;
+    const { cx, id, items, selectedItem } = this.props;
 
     return (
       <select
+        id={id}
         className={cx('select')}
         value={selectedItem}
         onChange={this.onChange}

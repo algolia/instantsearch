@@ -8,6 +8,7 @@ const cx = createClassNames('SortBy');
 
 class SortBy extends Component {
   static propTypes = {
+    id: PropTypes.string,
     items: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
@@ -24,11 +25,12 @@ class SortBy extends Component {
   };
 
   render() {
-    const { items, currentRefinement, refine, className } = this.props;
+    const { id, items, currentRefinement, refine, className } = this.props;
 
     return (
       <div className={classNames(cx(''), className)}>
         <Select
+          id={id}
           cx={cx}
           items={items}
           selectedItem={currentRefinement}

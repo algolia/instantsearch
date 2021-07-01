@@ -7,6 +7,7 @@ import SortBy from '../components/SortBy';
  * @requirements Algolia handles sorting by creating replica indices. [Read more about sorting](https://www.algolia.com/doc/guides/relevance/sorting/) on
  * the Algolia website.
  * @kind widget
+ * @propType {string} id - The id of the select input
  * @propType {{value: string, label: string}[]} items - The list of indexes to search in.
  * @propType {string} defaultRefinement - The default selected index.
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
