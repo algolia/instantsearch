@@ -29,7 +29,6 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('RefinementList');
 const searchBoxSuit = component('SearchBox');
 
-// CSS types
 export type RefinementListOwnCSSClasses = {
   /**
    * CSS class to add to the root element.
@@ -100,7 +99,6 @@ type RefinementListSearchableCSSClasses = {
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
 
-// Templates types
 export type RefinementListItemData = {
   /**
    * The number of occurrences of the facet in the result set.
@@ -201,7 +199,7 @@ export type RefinementListWidgetParams = {
   cssClasses?: RefinementListCSSClasses;
 };
 
-export const defaultTemplates = {
+export const defaultTemplates: RefinementListComponentTemplates = {
   item: `<label class="{{cssClasses.label}}">
   <input type="checkbox"
          class="{{cssClasses.checkbox}}"
@@ -238,8 +236,8 @@ const renderer = ({
     templateProps?: PreparedTemplateProps<RefinementListComponentTemplates>;
     searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
   };
-  templates: RefinementListComponentTemplates;
-  searchBoxTemplates: SearchBoxComponentTemplates;
+  templates: RefinementListOwnTemplates;
+  searchBoxTemplates: SearchBoxTemplates;
   showMore?: boolean;
   searchable?: boolean;
   searchablePlaceholder?: string;
@@ -260,16 +258,12 @@ const renderer = ({
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps<
-      RefinementListComponentTemplates
-    >({
+    renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
-    renderState.searchBoxTemplateProps = prepareTemplateProps<
-      SearchBoxComponentTemplates
-    >({
+    renderState.searchBoxTemplateProps = prepareTemplateProps({
       defaultTemplates: searchBoxDefaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: searchBoxTemplates,
@@ -340,7 +334,7 @@ const refinementList: RefinementListWidget = function refinementList(
     searchableEscapeFacetValues = true,
     searchableIsAlwaysActive = true,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = {},
+    templates = {},
     transformItems,
   } = widgetParams || {};
 
@@ -421,21 +415,15 @@ const refinementList: RefinementListWidget = function refinementList(
       ),
     },
   };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
-  };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     templates,
     searchBoxTemplates: {
-      submit: templates.searchableSubmit || searchBoxDefaultTemplates.submit,
-      reset: templates.searchableReset || searchBoxDefaultTemplates.reset,
-      loadingIndicator:
-        templates.searchableLoadingIndicator ||
-        searchBoxDefaultTemplates.loadingIndicator,
+      submit: templates.searchableSubmit,
+      reset: templates.searchableReset,
+      loadingIndicator: templates.searchableLoadingIndicator,
     },
     renderState: {},
     searchable,

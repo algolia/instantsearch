@@ -95,9 +95,7 @@ const renderer = ({
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps<
-      MenuSelectComponentTemplates
-    >({
+    renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,

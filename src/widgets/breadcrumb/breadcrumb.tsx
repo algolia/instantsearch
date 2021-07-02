@@ -131,7 +131,7 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetParams) {
     separator,
     rootPath,
     transformItems,
-    templates = defaultTemplates,
+    templates: userTemplates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 
@@ -158,6 +158,10 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetParams) {
       userCssClasses.separator
     ),
     link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
+  };
+  const templates = {
+    ...defaultTemplates,
+    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

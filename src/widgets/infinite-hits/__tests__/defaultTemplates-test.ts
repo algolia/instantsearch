@@ -20,6 +20,7 @@ describe('hits defaultTemplates', () => {
   }
 }`;
 
+    // @ts-expect-error `item` is considered as not callable
     expect(defaultTemplates.item(item)).toBe(expected);
   });
 

@@ -21,7 +21,7 @@ describe('Hits', () => {
   function shallowRender(extraProps = {}) {
     const props = {
       cssClasses,
-      templateProps: { templates: {} },
+      templateProps: { templates: { empty: 'No results', item: 'item' } },
       ...extraProps,
     };
 
@@ -245,6 +245,7 @@ describe('Hits', () => {
         templateProps: {
           templates: {
             item: 'item',
+            empty: 'No results',
           },
         },
         cssClasses,
@@ -296,6 +297,7 @@ describe('Hits', () => {
                 hit,
               });
             },
+            empty: 'No results',
           },
         },
         cssClasses,

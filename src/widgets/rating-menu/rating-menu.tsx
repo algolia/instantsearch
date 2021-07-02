@@ -140,9 +140,7 @@ const renderer = ({
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps<
-      RatingMenuComponentTemplates
-    >({
+    renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,

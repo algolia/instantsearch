@@ -49,9 +49,7 @@ const renderer = ({
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps<
-      ToggleRefinementComponentTemplates
-    >({
+    renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -139,7 +137,7 @@ const toggleRefinement = function toggleRefinement(widgetParams) {
     container,
     attribute,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates: userTemplates = {},
     on = true,
     off,
   } = widgetParams || {};
@@ -157,6 +155,10 @@ const toggleRefinement = function toggleRefinement(widgetParams) {
       suit({ descendantName: 'labelText' }),
       userCssClasses.labelText
     ),
+  };
+  const templates = {
+    ...defaultTemplates,
+    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

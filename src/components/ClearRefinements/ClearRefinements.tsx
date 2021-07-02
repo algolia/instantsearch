@@ -14,13 +14,17 @@ export type ClearRefinementsComponentCSSClasses = ComponentCSSClasses<
   ClearRefinementsCSSClasses
 >;
 
+export type ClearRefinementsComponentTemplates = Required<
+  ClearRefinementsTemplates
+>;
+
 export type ClearRefinementsProps = {
   refine: ClearRefinementsRenderState['refine'];
   cssClasses: ClearRefinementsComponentCSSClasses;
   hasRefinements: ClearRefinementsRenderState['hasRefinements'];
   templateProps: {
     [key: string]: any;
-    templates: ClearRefinementsTemplates;
+    templates: ClearRefinementsComponentTemplates;
   };
 };
 

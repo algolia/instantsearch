@@ -135,7 +135,7 @@ const hits: HitsWidget = function hits(widgetParams) {
     container,
     escapeHTML,
     transformItems,
-    templates = defaultTemplates,
+    templates: userTemplates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 
@@ -149,6 +149,10 @@ const hits: HitsWidget = function hits(widgetParams) {
     emptyRoot: cx(suit({ modifierName: 'empty' }), userCssClasses.emptyRoot),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+  };
+  const templates = {
+    ...defaultTemplates,
+    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

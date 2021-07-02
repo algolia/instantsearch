@@ -32,6 +32,8 @@ export type GeoSearchTemplates = {
   redo?: Template;
 };
 
+export type GeoSearchComponentTemplates = Required<GeoSearchTemplates>;
+
 export type GeoSearchCSSClasses = {
   /** The root div of the widget. */
   root?: string | string[];

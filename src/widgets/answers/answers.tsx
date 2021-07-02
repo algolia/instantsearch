@@ -134,7 +134,7 @@ const answersWidget: AnswersWidget = widgetParams => {
     renderDebounceTime,
     escapeHTML,
     extraParameters,
-    templates: userTemplates = {},
+    templates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 
@@ -150,10 +150,6 @@ const answersWidget: AnswersWidget = widgetParams => {
     loader: cx(suit({ descendantName: 'loader' }), userCssClasses.loader),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

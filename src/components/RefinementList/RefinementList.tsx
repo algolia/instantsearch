@@ -10,7 +10,6 @@ import SearchBox, {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../SearchBox/SearchBox';
-import defaultSearchBoxTemplates from '../../widgets/search-box/defaultTemplates';
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import {
@@ -68,19 +67,21 @@ export type RefinementListProps<TTemplates extends Templates> = {
   facetValues?: FacetValues;
   attribute?: string;
   templateProps: PreparedTemplateProps<TTemplates>;
-  searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
   toggleRefinement: (value: string) => void;
-  searchFacetValues?: (query: string) => void;
-  searchPlaceholder?: string;
-  isFromSearch?: boolean;
   showMore?: boolean;
   toggleShowMore?: () => void;
   isShowingMore?: boolean;
   hasExhaustiveItems?: boolean;
   canToggleShowMore?: boolean;
-  searchIsAlwaysActive?: boolean;
   className?: string;
   children?: h.JSX.Element;
+
+  // searchable props are optional, but will definitely be present in a searchable context
+  isFromSearch?: boolean;
+  searchIsAlwaysActive?: boolean;
+  searchFacetValues?: (query: string) => void;
+  searchPlaceholder?: string;
+  searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
 };
 
 const defaultProps = {
@@ -325,10 +326,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
           placeholder={this.props.searchPlaceholder}
           disabled={shouldDisableSearchBox}
           cssClasses={this.props.cssClasses.searchable!}
-          templates={{
-            ...defaultSearchBoxTemplates,
-            ...this.props.searchBoxTemplateProps?.templates,
-          }}
+          templates={this.props.searchBoxTemplateProps!.templates}
           onChange={(event: Event) =>
             this.props.searchFacetValues!(
               (event.target as HTMLInputElement).value

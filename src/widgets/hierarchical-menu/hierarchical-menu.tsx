@@ -205,9 +205,7 @@ const renderer = ({
   isFirstRendering: boolean
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps<
-      HierarchicalMenuComponentTemplates
-    >({
+    renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
