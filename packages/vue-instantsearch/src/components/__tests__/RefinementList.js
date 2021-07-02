@@ -196,15 +196,20 @@ it('exposes send-event method for insights middleware', async () => {
     sendEvent,
   });
 
-  const wrapper = mount(RefinementList, {
-    propsData: { attribute: 'something' },
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
+  const wrapper = mount({
+    components: { RefinementList },
+    data() {
+      return { props: { attribute: 'something' } };
     },
+    template: `
+      <RefinementList v-bind="props">
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </RefinementList>
+    `,
   });
 
   await wrapper.find('button').trigger('click');

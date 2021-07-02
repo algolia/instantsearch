@@ -83,15 +83,14 @@ describe('default render', () => {
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlot = `
-    <div
-      slot-scope="{ canRefine, refine, createURL }"
-      :class="[!canRefine && 'no-refinement']"
-    >
-      <a :href="createURL()" @click.prevent="refine">
-        Clear refinements
-      </a>
-    </div>
+  const defaultSlot = `
+    <template v-slot="{ canRefine, refine, createURL }">
+      <div :class="[!canRefine && 'no-refinement']">
+        <a :href="createURL()" @click.prevent="refine">
+          Clear refinements
+        </a>
+      </div>
+    </template>
   `;
 
   it('renders correctly', () => {
@@ -99,10 +98,13 @@ describe('custom default render', () => {
       ...defaultState,
     });
 
-    const wrapper = mount(ClearRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { ClearRefinements },
+      template: `
+        <ClearRefinements>
+          ${defaultSlot}
+        </ClearRefinements>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -114,10 +116,13 @@ describe('custom default render', () => {
       hasRefinements: false,
     });
 
-    const wrapper = mount(ClearRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { ClearRefinements },
+      template: `
+        <ClearRefinements>
+          ${defaultSlot}
+        </ClearRefinements>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -129,10 +134,13 @@ describe('custom default render', () => {
       createURL: () => `/clear/refinements`,
     });
 
-    const wrapper = mount(ClearRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { ClearRefinements },
+      template: `
+        <ClearRefinements>
+          ${defaultSlot}
+        </ClearRefinements>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -146,10 +154,13 @@ describe('custom default render', () => {
       refine,
     });
 
-    const wrapper = mount(ClearRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { ClearRefinements },
+      template: `
+        <ClearRefinements>
+          ${defaultSlot}
+        </ClearRefinements>
+      `,
     });
 
     await wrapper.find('a').trigger('click');

@@ -16,10 +16,12 @@ const defaultProps = {
   hitsPerPage: 5,
 };
 
-const defaultScopedSlots = `
-  <span slot-scope="{ searchParameters }">
-    hitsPerPage: {{ searchParameters.hitsPerPage }}
-  </span>
+const defaultSlot = `
+  <template v-slot="{ searchParameters }">
+    <span>
+      hitsPerPage: {{ searchParameters.hitsPerPage }}
+    </span>
+  </template>
 `;
 
 it('accepts SearchParameters from attributes', () => {
@@ -49,11 +51,16 @@ it('renders null without scoped slots', () => {
 it('renders null without state', () => {
   __setState(null);
 
-  const wrapper = mount(Configure, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: defaultScopedSlots,
+  const wrapper = mount({
+    components: { Configure },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <Configure v-bind="props">
+        ${defaultSlot}
+      </Configure>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();
@@ -62,11 +69,16 @@ it('renders null without state', () => {
 it('renders with scoped slots', () => {
   __setState({ ...defaultState });
 
-  const wrapper = mount(Configure, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: defaultScopedSlots,
+  const wrapper = mount({
+    components: { Configure },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <Configure v-bind="props">
+        ${defaultSlot}
+      </Configure>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();

@@ -51,20 +51,22 @@ storiesOf('ais-numeric-menu', module)
           { label: '>= 500$', start: 500 },
         ]"
       >
-        <ul slot-scope="{ items, canRefine, refine, createURL }">
-          <li
-            v-for="item in items"
-            :key="item.label"
-            :style="{ fontWeight: item.isRefined ? 600 : 400 }"
-          >
-            <a
-              :href="createURL(item.value)"
-              @click.prevent="refine(item.value)"
+        <template v-slot="{ items, canRefine, refine, createURL }">
+          <ul>
+            <li
+              v-for="item in items"
+              :key="item.label"
+              :style="{ fontWeight: item.isRefined ? 600 : 400 }"
             >
-              {{ item.label }}
-            </a>
-          </li>
-        </ul>
+              <a
+                :href="createURL(item.value)"
+                @click.prevent="refine(item.value)"
+              >
+                {{ item.label }}
+              </a>
+            </li>
+          </ul>
+        </template>
       </ais-numeric-menu>
     `,
   }))

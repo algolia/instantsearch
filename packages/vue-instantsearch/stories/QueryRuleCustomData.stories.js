@@ -7,23 +7,25 @@ storiesOf('ais-query-rule-custom-data', module)
       indexName: 'instant_search_movies',
       filters: '<ais-refinement-list attribute="genre" />',
       hits: `
-      <ol slot-scope="{ items }" class="playground-hits">
-        <li
-          v-for="item in items"
-          :key="item.objectID"
-          class="playground-hits-item"
-        >
-          <div
-            class="playground-hits-image"
-            :style="{ backgroundImage: 'url(' + item.image + ')' }"
-          />
-          <article>
-            <header>
-              <strong><ais-highlight attribute="title" :hit="item"/></strong>
-            </header>
-          </article>
-        </li>
-      </ol>
+      <template v-slot="{ items }">
+        <ol class="playground-hits">
+          <li
+            v-for="item in items"
+            :key="item.objectID"
+            class="playground-hits-item"
+          >
+            <div
+              class="playground-hits-image"
+              :style="{ backgroundImage: 'url(' + item.image + ')' }"
+            />
+            <article>
+              <header>
+                <strong><ais-highlight attribute="title" :hit="item"/></strong>
+              </header>
+            </article>
+          </li>
+        </ol>
+      </template>
       `,
     })
   )
@@ -34,7 +36,7 @@ storiesOf('ais-query-rule-custom-data', module)
         <li>On query <q>music</q>: "This is it" appears.</li>
       </ul>
       <ais-query-rule-custom-data>
-        <template slot="item" slot-scope="{ item }">
+        <template v-slot:item="{ item }">
           <h2>{{ item.title }}</h2>
           <a :href="item.link">
             <img
@@ -56,7 +58,7 @@ storiesOf('ais-query-rule-custom-data', module)
         <li>On any other query: "Kill Bill" appears.</li>
       </ul>
       <ais-query-rule-custom-data :transform-items="transformItems">
-        <template slot="item" slot-scope="{ item }">
+        <template v-slot:item="{ item }">
           <h2>{{ item.title }}</h2>
           <a :href="item.link">
             <img

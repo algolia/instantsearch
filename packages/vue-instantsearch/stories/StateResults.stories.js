@@ -7,26 +7,25 @@ storiesOf('ais-state-results', module)
       indexName: 'demo-query-rules',
       filters: '<ais-refinement-list attribute="genre" />',
       hits: `
-      <ol
-        slot-scope="{ items }"
-        class="playground-hits"
-      >
-        <li
-          v-for="item in items"
-          :key="item.objectID"
-          class="playground-hits-item"
-        >
-          <div
-            class="playground-hits-image"
-            :style="{ backgroundImage: 'url(' + item.image + ')' }"
-          />
-          <div class="playground-hits-desc">
-            <p>
-              <ais-highlight attribute="title" :hit="item" />
-            </p>
-          </div>
-        </li>
-      </ol>
+      <template v-slot="{ items }">
+        <ol class="playground-hits">
+          <li
+            v-for="item in items"
+            :key="item.objectID"
+            class="playground-hits-item"
+          >
+            <div
+              class="playground-hits-image"
+              :style="{ backgroundImage: 'url(' + item.image + ')' }"
+            />
+            <div class="playground-hits-desc">
+              <p>
+                <ais-highlight attribute="title" :hit="item" />
+              </p>
+            </div>
+          </li>
+        </ol>
+      </template>
       `,
     })
   )
@@ -38,17 +37,17 @@ storiesOf('ais-state-results', module)
     <div>
       <ais-search-box />
       <ais-state-results>
-        <template slot-scope="{ state: { query } }">
+        <template v-slot="{ state: { query } }">
           <ais-hits v-if="query">
-            <h3
-              slot="item"
-              slot-scope="{ item }"
-              :tabindex="0"
-              @click="alert(item)"
-              @keyup.enter="alert(item)"
-            >
-              <ais-highlight :hit="item" attribute="title"/>
-            </h3>
+            <template v-slot:item="{ item }">
+              <h3
+                :tabindex="0"
+                @click="alert(item)"
+                @keyup.enter="alert(item)"
+              >
+                <ais-highlight :hit="item" attribute="title"/>
+              </h3>
+            </template>
           </ais-hits>
         </template>
       </ais-state-results>
@@ -67,7 +66,7 @@ storiesOf('ais-state-results', module)
       <ais-search-box />
       <p>type "documentary"</p>
       <ais-state-results>
-        <template slot-scope="{ results: { userData } }">
+        <template v-slot="{ results: { userData } }">
           <div>
             <img
               v-for="{ banner_img_slug: src } in userData"
@@ -85,7 +84,7 @@ storiesOf('ais-state-results', module)
       <div>
         <ais-search-box />
         <ais-state-results>
-          <template slot-scope="{ state: { query }, results: { hits } }">
+          <template v-slot="{ state: { query }, results: { hits } }">
             <p v-if="hits.length === 0">
               No results found for the query: <q>{{ query }}</q>
             </p>
@@ -98,10 +97,12 @@ storiesOf('ais-state-results', module)
   .add('ssr debugger', () => ({
     template: `
       <ais-state-results>
-        <div slot-scope="{ state }">
-          <p>copy this to <code>findResultsState</code></p>
-          <pre>{{ cleanup(state) }}</pre>
-        </div>
+        <template v-slot="{ state }">
+          <div>
+            <p>copy this to <code>findResultsState</code></p>
+            <pre>{{ cleanup(state) }}</pre>
+          </div>
+        </template>
       </ais-state-results>
     `,
     methods: {

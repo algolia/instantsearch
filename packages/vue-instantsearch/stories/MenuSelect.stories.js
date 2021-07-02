@@ -35,7 +35,7 @@ storiesOf('ais-menu-select', module)
   .add('with a custom item slot', () => ({
     template: `
       <ais-menu-select attribute="categories">
-        <template slot="item" slot-scope="{ item }">
+        <template v-slot:item="{ item }">
           {{ item.label }}
         </template>
       </ais-menu-select>
@@ -62,23 +62,24 @@ storiesOf('ais-menu-select', module)
   .add('with a custom rendering', () => ({
     template: `
       <ais-menu-select attribute="categories">
-        <select
-          slot-scope="{ items, canRefine, refine }"
-          @change="refine($event.currentTarget.value)"
-          :disabled="!canRefine"
-        >
-          <option value="">
-            All
-          </option>
-          <option
-            v-for="item in items"
-            :key="item.value"
-            :value="item.value"
-            :selected="item.isRefined"
+        <template v-slot="{ items, canRefine, refine }">
+          <select
+            @change="refine($event.currentTarget.value)"
+            :disabled="!canRefine"
           >
-            {{item.label}}
-          </option>
-        </select>
+            <option value="">
+              All
+            </option>
+            <option
+              v-for="item in items"
+              :key="item.value"
+              :value="item.value"
+              :selected="item.isRefined"
+            >
+              {{item.label}}
+            </option>
+          </select>
+        </template>
       </ais-menu-select>
     `,
   }))

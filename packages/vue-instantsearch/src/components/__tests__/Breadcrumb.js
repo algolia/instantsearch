@@ -214,33 +214,37 @@ describe('panel', () => {
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlot = `
-    <ul
-      slot-scope="{ items, canRefine, refine, createURL }"
-      :class="[!canRefine && 'noRefinement']"
-    >
-      <li
-        v-for="(item, index) in items"
-        :key="item.label"
-      >
-        <a
-          :href="createURL(item.value)"
-          @click.prevent="refine(item.value)"
+  const defaultSlot = `
+    <template v-slot="{ items, canRefine, refine, createURL }">
+      <ul :class="[!canRefine && 'noRefinement']">
+        <li
+          v-for="(item, index) in items"
+          :key="item.label"
         >
-          {{ item.label }}
-        </a>
-      </li>
-    </ul>
+          <a
+            :href="createURL(item.value)"
+            @click.prevent="refine(item.value)"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </template>
   `;
 
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          ${defaultSlot}
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -253,11 +257,16 @@ describe('custom default render', () => {
       canRefine: false,
     });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          ${defaultSlot}
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -269,11 +278,16 @@ describe('custom default render', () => {
       createURL: value => `/${value}`,
     });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          ${defaultSlot}
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -287,11 +301,16 @@ describe('custom default render', () => {
       refine,
     });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          ${defaultSlot}
+        </Breadcrumb>
+      `,
     });
 
     await wrapper
@@ -314,7 +333,7 @@ describe('custom rootLabel render', () => {
 
     const wrapper = mount(Breadcrumb, {
       propsData: defaultProps,
-      scopedSlots: {
+      slots: {
         rootLabel: rootLabelSlot,
       },
     });
@@ -331,7 +350,7 @@ describe('custom rootLabel render', () => {
 
     const wrapper = mount(Breadcrumb, {
       propsData: defaultProps,
-      scopedSlots: {
+      slots: {
         rootLabel: rootLabelSlot,
       },
     });
@@ -350,7 +369,7 @@ describe('custom separator render', () => {
 
     const wrapper = mount(Breadcrumb, {
       propsData: defaultProps,
-      scopedSlots: {
+      slots: {
         separator: separatorSlot,
       },
     });

@@ -12,12 +12,14 @@ storiesOf('ais-snippet', module)
       />
 
       <ais-hits>
-        <div slot="item" slot-scope="{ item }">
-          <h2><ais-snippet attribute="name" :hit="item"></ais-snippet></h2>
-          <small>
-            <ais-snippet attribute="description" :hit="item"></ais-snippet>
-          </small>
-        </div>
+        <template v-slot:item="{ item }">
+          <div>
+            <h2><ais-snippet attribute="name" :hit="item"></ais-snippet></h2>
+            <small>
+              <ais-snippet attribute="description" :hit="item"></ais-snippet>
+            </small>
+          </div>
+        </template>
       </ais-hits>
     </div>
   `,
@@ -31,12 +33,14 @@ storiesOf('ais-snippet', module)
       />
 
       <ais-hits>
-        <div slot="item" slot-scope="{ item }">
-          <h2><ais-snippet attribute="name" :hit="item"></ais-snippet></h2>
-          <small>
-            <ais-snippet attribute="description" :hit="item" highlighted-tag-name="span"></ais-snippet>
-          </small>
-        </div>
+        <template v-slot:item="{ item }">
+          <div>
+            <h2><ais-snippet attribute="name" :hit="item"></ais-snippet></h2>
+            <small>
+              <ais-snippet attribute="description" :hit="item" highlighted-tag-name="span"></ais-snippet>
+            </small>
+          </div>
+        </template>
       </ais-hits>
     </div>
   `,

@@ -39,7 +39,7 @@ storiesOf('ais-range-input', module)
   .add('with a custom render', () => ({
     template: `
       <ais-range-input attribute="price">
-        <template slot-scope="{ refine, currentRefinement }">
+        <template v-slot="{ refine, currentRefinement }">
           <form  @submit.prevent="refine({ min, max })" >
             <label>
               <input
@@ -76,7 +76,7 @@ storiesOf('ais-range-input', module)
     template: `
       <ais-range-input attribute="price">
         <template
-          slot-scope="{
+          v-slot="{
             refine,
             currentRefinement: { min: minValue, max: maxValue },
             range: { min: minRange, max: maxRange }
@@ -103,7 +103,7 @@ storiesOf('ais-range-input', module)
       <v-container mt-4>
         <ais-range-input attribute="price">
           <template
-            slot-scope="{
+            v-slot="{
               refine,
               currentRefinement: { min: minValue, max: maxValue },
               range: { min: minRange, max: maxRange }

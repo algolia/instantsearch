@@ -15,10 +15,12 @@ const defaultState = {
   toggleListening: jest.fn(),
 };
 
-const buttonTextScopedSlot = `
-  <span slot-scope="{ isListening }">
-    {{isListening ? "Stop": "Start"}}
-  </span>
+const buttonTextSlot = `
+  <template v-slot:buttonText="{ isListening }">
+    <span>
+      {{isListening ? "Stop": "Start"}}
+    </span>
+  </template>
 `;
 
 describe('button', () => {
@@ -51,10 +53,13 @@ describe('Rendering', () => {
       ...defaultState,
       isListening: true,
     });
-    const wrapper = mount(VoiceSearch, {
-      scopedSlots: {
-        buttonText: buttonTextScopedSlot,
-      },
+    const wrapper = mount({
+      components: { VoiceSearch },
+      template: `
+        <VoiceSearch>
+          ${buttonTextSlot}
+        </VoiceSearch>
+      `,
     });
     expect(wrapper.find('button').text()).toBe('Stop');
   });
@@ -64,10 +69,13 @@ describe('Rendering', () => {
       ...defaultState,
       isListening: false,
     });
-    const wrapper = mount(VoiceSearch, {
-      scopedSlots: {
-        buttonText: buttonTextScopedSlot,
-      },
+    const wrapper = mount({
+      components: { VoiceSearch },
+      template: `
+        <VoiceSearch>
+          ${buttonTextSlot}
+        </VoiceSearch>
+      `,
     });
     expect(wrapper.find('button').text()).toBe('Start');
   });
@@ -84,19 +92,22 @@ describe('Rendering', () => {
       isListening: true,
       toggleListening: jest.fn(),
     });
-    const wrapper = mount(VoiceSearch, {
-      scopedSlots: {
-        status: `
-          <div slot-scope="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
-            <p>status: {{status}}</p>
-            <p>errorCode: {{errorCode}}</p>
-            <p>isListening: {{isListening}}</p>
-            <p>transcript: {{transcript}}</p>
-            <p>isSpeechFinal: {{isSpeechFinal}}</p>
-            <p>isBrowserSupported: {{isBrowserSupported}}</p>
-          </div>
-        `,
-      },
+    const wrapper = mount({
+      components: { VoiceSearch },
+      template: `
+        <VoiceSearch>
+          <template v-slot:status="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
+            <div>
+              <p>status: {{status}}</p>
+              <p>errorCode: {{errorCode}}</p>
+              <p>isListening: {{isListening}}</p>
+              <p>transcript: {{transcript}}</p>
+              <p>isSpeechFinal: {{isSpeechFinal}}</p>
+              <p>isBrowserSupported: {{isBrowserSupported}}</p>
+            </div>
+          </template>
+        </VoiceSearch>
+      `,
     });
     expect(wrapper.find('.ais-VoiceSearch-status').html()).toMatchSnapshot();
   });

@@ -80,7 +80,7 @@ storiesOf('ais-instant-search', module)
           <p>This is inside a <code>ais-instant-search</code>: <code>{{indexName}}</code></p>
           <ais-search-box show-loading-indicator/>
           <ais-hits>
-            <template slot="item" slot-scope="{item}">
+            <template v-slot:item="{item}">
               <p><ais-highlight :hit="item" attribute="name"/></p>
             </template>
           </ais-hits>

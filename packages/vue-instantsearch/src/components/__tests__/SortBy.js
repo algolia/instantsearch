@@ -51,32 +51,34 @@ it('renders correctly', () => {
 
 it('renders with scoped slots', () => {
   const defaultSlot = `
-  <select
-    slot-scope="{ items, refine, currentRefinement }"
-    @change="refine($event.currentTarget.value)"
-  >
-    <option
-      v-for="item in items"
-      :key="item.value"
-      :value="item.value"
-      :selected="item.value === currentRefinement"
-    >
-      {{item.label}}
-    </option>
-  </select>
+  <template v-slot="{ items, refine, currentRefinement }">
+    <select @change="refine($event.currentTarget.value)">
+      <option
+        v-for="item in items"
+        :key="item.value"
+        :value="item.value"
+        :selected="item.value === currentRefinement"
+      >
+        {{item.label}}
+      </option>
+    </select>
+  </template>
 `;
 
   __setState({
     ...defaultState,
   });
 
-  const wrapper = mount(SortBy, {
-    propsData: {
-      ...defaultProps,
+  const wrapper = mount({
+    components: { SortBy },
+    data() {
+      return { props: defaultProps };
     },
-    scopedSlots: {
-      default: defaultSlot,
-    },
+    template: `
+      <SortBy v-bind="props">
+        ${defaultSlot}
+      </SortBy>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();

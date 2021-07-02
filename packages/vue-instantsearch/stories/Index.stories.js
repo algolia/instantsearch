@@ -10,7 +10,7 @@ storiesOf('ais-index', module)
       <ais-search-box />
       <div>
         <ais-hits>
-          <template slot="item" slot-scope="{ item }">
+          <template v-slot:item="{ item }">
             <h3><ais-highlight :hit="item" attribute="name"/></h3>
           </template>
         </ais-hits>
@@ -18,7 +18,7 @@ storiesOf('ais-index', module)
       <hr />
       <ais-index index-name="instant_search">
         <ais-hits>
-          <template slot="item" slot-scope="{ item }">
+          <template v-slot:item="{ item }">
             <h3><ais-highlight :hit="item" attribute="name"/></h3>
           </template>
         </ais-hits>
@@ -48,7 +48,7 @@ storiesOf('ais-index', module)
         hitsPerPage="4"
       />
       <ais-hits>
-        <template slot="item" slot-scope="{ item }">
+        <template v-slot:item="{ item }">
           <h3><ais-highlight :hit="item" attribute="name"/></h3>
         </template>
       </ais-hits>
@@ -56,7 +56,7 @@ storiesOf('ais-index', module)
       <ais-index index-name="instant_search_rating_asc">
         <ais-refinement-list attribute="brand" />
         <ais-hits>
-          <template slot="item" slot-scope="{ item }">
+          <template v-slot:item="{ item }">
             <h3><ais-highlight :hit="item" attribute="name"/></h3>
           </template>
         </ais-hits>

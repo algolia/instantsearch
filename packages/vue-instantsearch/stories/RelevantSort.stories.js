@@ -18,7 +18,7 @@ storiesOf('ais-relevant-sort', module)
   .add('with custom text', () => ({
     template: `
       <ais-relevant-sort>
-        <template slot="text" slot-scope="{ isRelevantSorted }">
+        <template v-slot:text="{ isRelevantSorted }">
           <template v-if="isRelevantSorted">
             We removed some search results to show you the most relevant ones
           </template>
@@ -26,7 +26,7 @@ storiesOf('ais-relevant-sort', module)
             Currently showing all results
           </template>
         </template>
-        <template slot="button" slot-scope="{ isRelevantSorted }">
+        <template v-slot:button="{ isRelevantSorted }">
           <template v-if="isRelevantSorted">
             See all results
           </template>

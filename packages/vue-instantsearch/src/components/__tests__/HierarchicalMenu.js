@@ -496,15 +496,20 @@ it('exposes send-event method for insights middleware', async () => {
     sendEvent,
   });
 
-  const wrapper = mount(HierarchicalMenu, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
+  const wrapper = mount({
+    components: { HierarchicalMenu },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <HierarchicalMenu v-bind="props">
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </HierarchicalMenu>
+    `,
   });
 
   await wrapper.find('button').trigger('click');
@@ -512,54 +517,58 @@ it('exposes send-event method for insights middleware', async () => {
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlot = `
-    <div
-      slot-scope="state"
-      :class="[!state.canRefine && 'no-refinement']"
-    >
-      <ol>
-        <li
-          v-for="item in state.items"
-          :key="item.value"
-        >
-          <a
-            :href="state.createURL(item.value)"
-            @click.prevent="state.refine(item.value)"
+  const defaultSlot = `
+    <template v-slot="state">
+      <div :class="[!state.canRefine && 'no-refinement']">
+        <ol>
+          <li
+            v-for="item in state.items"
+            :key="item.value"
           >
-            {{item.label}} - {{item.count}}
-          </a>
-          <ol v-if="item.data">
-            <li
-              v-for="child in item.data"
-              :key="child.value"
+            <a
+              :href="state.createURL(item.value)"
+              @click.prevent="state.refine(item.value)"
             >
-              <a
-                :href="state.createURL(child.value)"
-                @click.prevent="state.refine(child.value)"
+              {{item.label}} - {{item.count}}
+            </a>
+            <ol v-if="item.data">
+              <li
+                v-for="child in item.data"
+                :key="child.value"
               >
-                {{child.label}} - {{child.count}}
-              </a>
-            </li>
-          </ol>
-        </li>
-      </ol>
-      <button
-        :disabled="!state.canToggleShowMore"
-        @click.prevent="state.toggleShowMore"
-      >
-        {{ state.isShowingMore ? 'View less' : 'View more' }}
-      </button>
-    </div>
+                <a
+                  :href="state.createURL(child.value)"
+                  @click.prevent="state.refine(child.value)"
+                >
+                  {{child.label}} - {{child.count}}
+                </a>
+              </li>
+            </ol>
+          </li>
+        </ol>
+        <button
+          :disabled="!state.canToggleShowMore"
+          @click.prevent="state.toggleShowMore"
+        >
+          {{ state.isShowingMore ? 'View less' : 'View more' }}
+        </button>
+      </div>
+    </template>
   `;
 
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${defaultSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -571,11 +580,16 @@ describe('custom default render', () => {
       items: [],
     });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${defaultSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -587,11 +601,16 @@ describe('custom default render', () => {
       createURL: value => `/categories/${value.replace(/ > /g, '/')}`,
     });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${defaultSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -602,14 +621,20 @@ describe('custom default render', () => {
       ...defaultState,
     });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: {
-        ...defaultProps,
-        limit: 1,
+    const props = {
+      ...defaultProps,
+      limit: 1,
+    };
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props };
       },
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${defaultSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -619,22 +644,29 @@ describe('custom default render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        wrapper.setData({
-          state: {
-            isShowingMore: true,
-          },
+        const component = wrapper.vm.$children[0];
+        component.$set(component, 'state', {
+          ...component.state,
+          isShowingMore: true,
         });
       },
     });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: {
-        ...defaultProps,
-        limit: 1,
+    const props = {
+      ...defaultProps,
+      limit: 1,
+    };
+
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props };
       },
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${defaultSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     expect(wrapper.find('button').text()).toBe('View more');
@@ -652,11 +684,16 @@ describe('custom default render', () => {
       canToggleShowMore: false,
     });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${defaultSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     expect(wrapper.find('button').attributes().disabled).toBe('disabled');
@@ -671,11 +708,16 @@ describe('custom default render', () => {
       refine,
     });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${defaultSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     await wrapper
@@ -693,48 +735,67 @@ describe('custom default render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        wrapper.setData({ state: { isShowingMore: true } });
+        const component = wrapper.vm.$children[0];
+        component.$set(component, 'state', {
+          ...component.state,
+          isShowingMore: true,
+        });
       },
     });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: {
-        ...defaultProps,
-        showMore: true,
-        limit: 1,
+    const props = {
+      ...defaultProps,
+      showMore: true,
+      limit: 1,
+    };
+
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props };
       },
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${defaultSlot}
+        </HierarchicalMenu>
+      `,
     });
 
-    expect(wrapper.vm.state.isShowingMore).toBe(false);
+    expect(wrapper.find('button').text()).toEqual('View more');
 
     await wrapper.find('button').trigger('click');
 
-    expect(wrapper.vm.state.isShowingMore).toBe(true);
+    expect(wrapper.find('button').text()).toEqual('View less');
   });
 });
 
 describe('custom showMoreLabel render', () => {
-  const showMoreLabelScopedSlot = `
-    <span slot-scope="{ isShowingMore }">
-      {{ isShowingMore ? 'Voir moins' : 'Voir plus' }}
-    </span>
+  const showMoreLabelSlot = `
+    <template v-slot:showMoreLabel="{ isShowingMore }">
+      <span>
+        {{ isShowingMore ? 'Voir moins' : 'Voir plus' }}
+      </span>
+    </template>
   `;
 
   it('renders correctly with a custom show more label', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: {
-        ...defaultProps,
-        showMore: true,
-        limit: 1,
+    const props = {
+      ...defaultProps,
+      showMore: true,
+      limit: 1,
+    };
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props };
       },
-      scopedSlots: {
-        showMoreLabel: showMoreLabelScopedSlot,
-      },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${showMoreLabelSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     expect(wrapper.find('.ais-HierarchicalMenu-showMore').text()).toBe(
@@ -748,19 +809,29 @@ describe('custom showMoreLabel render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        wrapper.setData({ state: { isShowingMore: true } });
+        const component = wrapper.vm.$children[0];
+        component.$set(component, 'state', {
+          ...component.state,
+          isShowingMore: true,
+        });
       },
     });
 
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: {
-        ...defaultProps,
-        showMore: true,
-        limit: 1,
+    const props = {
+      ...defaultProps,
+      showMore: true,
+      limit: 1,
+    };
+    const wrapper = mount({
+      components: { HierarchicalMenu },
+      data() {
+        return { props };
       },
-      scopedSlots: {
-        showMoreLabel: showMoreLabelScopedSlot,
-      },
+      template: `
+        <HierarchicalMenu v-bind="props">
+          ${showMoreLabelSlot}
+        </HierarchicalMenu>
+      `,
     });
 
     await wrapper.find('button').trigger('click');

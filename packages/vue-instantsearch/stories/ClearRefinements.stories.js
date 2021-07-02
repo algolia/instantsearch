@@ -48,13 +48,14 @@ storiesOf('ais-clear-refinements', module)
   .add('with a custom render', () => ({
     template: `
       <ais-clear-refinements>
-        <button
-          slot-scope="{ canRefine, refine }"
-          :disabled="!canRefine"
-          @click="refine()"
-        >
-          Clear the search query
-        </button>
+        <template v-slot="{ canRefine, refine }">
+          <button
+            :disabled="!canRefine"
+            @click="refine()"
+          >
+            Clear the search query
+          </button>
+        </template>
       </ais-clear-refinements>
     `,
   }))

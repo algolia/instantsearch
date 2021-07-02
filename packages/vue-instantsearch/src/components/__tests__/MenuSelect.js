@@ -231,15 +231,20 @@ it('exposes send-event method for insights middleware', async () => {
     sendEvent,
   });
 
-  const wrapper = mount(MenuSelect, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
+  const wrapper = mount({
+    components: { MenuSelect },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <MenuSelect v-bind="props">
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </MenuSelect>
+    `,
   });
 
   await wrapper.find('button').trigger('click');
@@ -247,29 +252,27 @@ it('exposes send-event method for insights middleware', async () => {
 });
 
 describe('custom item slot', () => {
-  // can not be <template>
-  // https://github.com/vuejs/vue-test-utils/pull/507
-  const customItemSlot = `
-    <span slot="item" slot-scope="{ item }">
-      {{ item.label }}
-    </span>
-  `;
-
   it('renders correctly', () => {
     __setState({
       ...defaultState,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        item: customItemSlot,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          <template v-slot:item="{ item }">
+            <span>
+              {{ item.label }}
+            </span>
+          </template>
+        </MenuSelect>
+      `,
     });
+
     expect(wrapper.html()).toMatchSnapshot();
 
     expect(
@@ -282,22 +285,23 @@ describe('custom item slot', () => {
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlots = `
-    <select
-      slot-scope="{ items, canRefine, refine }"
-      @change="refine($event.currentTarget.value)"
-      :disabled="!canRefine"
-    >
-      <option value="">All</option>
-      <option
-        v-for="item in items"
-        :key="item.value"
-        :value="item.value"
-        :selected="item.isRefined"
+  const defaultSlot = `
+    <template v-slot="{ items, canRefine, refine }">
+      <select
+        @change="refine($event.currentTarget.value)"
+        :disabled="!canRefine"
       >
-        {{item.label}}
-      </option>
-    </select>
+        <option value="">All</option>
+        <option
+          v-for="item in items"
+          :key="item.value"
+          :value="item.value"
+          :selected="item.isRefined"
+        >
+          {{item.label}}
+        </option>
+      </select>
+    </template>
   `;
 
   it('renders correctly', () => {
@@ -305,15 +309,16 @@ describe('custom default render', () => {
       ...defaultState,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlots,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          ${defaultSlot}
+        </MenuSelect>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -329,15 +334,16 @@ describe('custom default render', () => {
       ],
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlots,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          ${defaultSlot}
+        </MenuSelect>
+      `,
     });
 
     const selected = wrapper.find('[value="Samsung"]');
@@ -357,15 +363,16 @@ describe('custom default render', () => {
       items: [],
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlots,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          ${defaultSlot}
+        </MenuSelect>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -379,15 +386,16 @@ describe('custom default render', () => {
       refine,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlots,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          ${defaultSlot}
+        </MenuSelect>
+      `,
     });
 
     expect(refine).not.toHaveBeenCalled();

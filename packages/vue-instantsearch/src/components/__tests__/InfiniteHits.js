@@ -114,16 +114,19 @@ it('renders correctly with a custom rendering', () => {
     ...defaultState,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      default: `
-        <div slot-scope="{ items }">
-          <div v-for="item in items">
-            {{item.objectID}}
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot="{ items }">
+          <div>
+            <div v-for="item in items">
+              {{item.objectID}}
+            </div>
           </div>
-        </div>
-      `,
-    },
+        </template>
+      </InfiniteHits>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();
@@ -134,14 +137,17 @@ it('renders correctly with a custom item rendering', () => {
     ...defaultState,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      item: `
-        <div slot-scope="{ item }">
-          {{item.objectID}}
-        </div>
-      `,
-    },
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot:item="{ item }">
+          <div>
+            {{item.objectID}}
+          </div>
+        </template>
+      </InfiniteHits>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();
@@ -249,19 +255,23 @@ it('exposes insights prop to the default slot', async () => {
     insights,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      default: `
-        <ul slot-scope="{ items, insights }">
-          <li v-for="(item, itemIndex) in items" >
-            <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
-              Add to cart
-            </button>
-          </li>
-        </ul>
-      `,
-    },
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot="{ items, insights }">
+        <ul>
+        <li v-for="(item, itemIndex) in items" >
+          <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
+            Add to cart
+          </button>
+        </li>
+      </ul>
+        </template>
+      </InfiniteHits>
+    `,
   });
+
   await wrapper.find('#add-to-cart-00002').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
     eventName: 'Add to cart',
@@ -277,17 +287,21 @@ it('exposes insights prop to the item slot', async () => {
     insights,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      item: `
-          <div slot-scope="{ item, insights }">
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot:item="{ item, insights }">
+          <div>
             <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
               Add to cart
             </button>
           </div>
-      `,
-    },
+        </template>
+      </InfiniteHits>
+    `,
   });
+
   await wrapper.find('#add-to-cart-00002').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
     eventName: 'Add to cart',
@@ -302,14 +316,17 @@ it('exposes send-event method for insights middleware', async () => {
     sendEvent,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
-    },
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </InfiniteHits>
+    `,
   });
 
   await wrapper.find('button').trigger('click');

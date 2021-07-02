@@ -10,9 +10,11 @@ storiesOf('ais-hits', module)
   .add('with transform items', () => ({
     template: `
       <ais-hits :transform-items="transformItems">
-        <div slot="item" slot-scope="{ item }">
-          <h2>{{item.name}}</h2>
-        </div>
+        <template v-slot:item="{ item }">
+          <div>
+            <h2>{{item.name}}</h2>
+          </div>
+        </template>
       </ais-hits>
     `,
     methods: {
@@ -28,26 +30,30 @@ storiesOf('ais-hits', module)
   .add('custom rendering', () => ({
     template: `
     <ais-hits>
-      <div slot="item" slot-scope="{ item }">
-        <marquee>before one</marquee>
-        <h2>{{item.name}}</h2>
-        <small>{{item.description}}</small>
-      </div>
+      <template v-slot:item="{ item }">
+        <div>
+          <marquee>before one</marquee>
+          <h2>{{item.name}}</h2>
+          <small>{{item.description}}</small>
+        </div>
+      </template>
     </ais-hits>
   `,
   }))
   .add('custom rendering (all)', () => ({
     template: `
     <ais-hits>
-      <div slot-scope="{ items }">
-        <marquee>before everything</marquee>
-        <div
-          v-for="item in items"
-          :key="item.objectID"
-        >
-          custom objectID: {{item.objectID}}
+      <template v-slot="{ items }">
+        <div>
+          <marquee>before everything</marquee>
+          <div
+            v-for="item in items"
+            :key="item.objectID"
+          >
+            custom objectID: {{item.objectID}}
+          </div>
         </div>
-      </div>
+      </template>
     </ais-hits>`,
   }))
   .add('with a Panel', () => ({
@@ -72,15 +78,17 @@ storiesOf('ais-hits', module)
       <div>
         <ais-configure :clickAnalytics="true" />
         <ais-hits>
-          <div slot-scope="{ items, insights }">
-            <div
-              v-for="item in items"
-              :key="item.objectID"
-            >
-              custom objectID: {{item.objectID}}
-              <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+          <template v-slot="{ items, insights }">
+            <div>
+              <div
+                v-for="item in items"
+                :key="item.objectID"
+              >
+                custom objectID: {{item.objectID}}
+                <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+              </div>
             </div>
-          </div>
+          </template>
         </ais-hits>
       </div>
     `,
@@ -90,10 +98,12 @@ storiesOf('ais-hits', module)
       <div>
         <ais-configure :clickAnalytics="true" />
         <ais-hits>
-          <div slot="item" slot-scope="{ item, insights }">
-            custom objectID: {{item.objectID}}
-            <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
-          </div>
+          <template v-slot:item="{ item, insights }">
+            <div>
+              custom objectID: {{item.objectID}}
+              <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+            </div>
+          </template>
         </ais-hits>
       </div>
     `,

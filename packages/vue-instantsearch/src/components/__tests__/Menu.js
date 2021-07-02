@@ -344,15 +344,20 @@ it('exposes send-event method for insights middleware', async () => {
     sendEvent,
   });
 
-  const wrapper = mount(Menu, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
+  const wrapper = mount({
+    components: { Menu },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <Menu v-bind="props">
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </Menu>
+    `,
   });
 
   await wrapper.find('button').trigger('click');
@@ -360,41 +365,45 @@ it('exposes send-event method for insights middleware', async () => {
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlot = `
-    <div
-      slot-scope="state"
-      :class="[!state.canRefine && 'no-refinement']"
-    >
-      <ol>
-        <li
-          v-for="item in state.items"
-          :key="item.value"
-        >
-          <a
-            :href="state.createURL(item.value)"
-            @click.prevent="state.refine(item.value)"
+  const defaultSlot = `
+    <template v-slot="state">
+      <div :class="[!state.canRefine && 'no-refinement']">
+        <ol>
+          <li
+            v-for="item in state.items"
+            :key="item.value"
           >
-            {{item.label}} - {{item.count}}
-          </a>
-        </li>
-      </ol>
-      <button
-        :disabled="!state.canToggleShowMore"
-        @click.prevent="state.toggleShowMore"
-      >
-        {{ state.isShowingMore ? 'Show less' : 'Show more' }}
-      </button>
-    </div>
+            <a
+              :href="state.createURL(item.value)"
+              @click.prevent="state.refine(item.value)"
+            >
+              {{item.label}} - {{item.count}}
+            </a>
+          </li>
+        </ol>
+        <button
+          :disabled="!state.canToggleShowMore"
+          @click.prevent="state.toggleShowMore"
+        >
+          {{ state.isShowingMore ? 'Show less' : 'Show more' }}
+        </button>
+      </div>
+    </template>
   `;
 
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Menu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Menu v-bind="props">
+          ${defaultSlot}
+        </Menu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -407,11 +416,16 @@ describe('custom default render', () => {
       canRefine: false,
     });
 
-    const wrapper = mount(Menu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Menu v-bind="props">
+          ${defaultSlot}
+        </Menu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -423,11 +437,16 @@ describe('custom default render', () => {
       createURL: value => `/brand/${value}`,
     });
 
-    const wrapper = mount(Menu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Menu v-bind="props">
+          ${defaultSlot}
+        </Menu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -439,11 +458,16 @@ describe('custom default render', () => {
       isShowingMore: true,
     });
 
-    const wrapper = mount(Menu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Menu v-bind="props">
+          ${defaultSlot}
+        </Menu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -455,11 +479,16 @@ describe('custom default render', () => {
       canToggleShowMore: false,
     });
 
-    const wrapper = mount(Menu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Menu v-bind="props">
+          ${defaultSlot}
+        </Menu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -473,11 +502,16 @@ describe('custom default render', () => {
       refine,
     });
 
-    const wrapper = mount(Menu, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Menu v-bind="props">
+          ${defaultSlot}
+        </Menu>
+      `,
     });
 
     await wrapper.find('a').trigger('click');
@@ -495,13 +529,16 @@ describe('custom default render', () => {
       toggleShowMore,
     });
 
-    const wrapper = mount(Menu, {
-      propsData: {
-        ...defaultProps,
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props: defaultProps };
       },
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+      template: `
+        <Menu v-bind="props">
+          ${defaultSlot}
+        </Menu>
+      `,
     });
 
     await wrapper.find('button').trigger('click');
@@ -511,23 +548,31 @@ describe('custom default render', () => {
 });
 
 describe('custom showMoreLabel render', () => {
-  const showMoreLabelScopedSlot = `
-    <span slot-scope="{ isShowingMore }">
-      {{ isShowingMore ? 'Voir moins' : 'Voir plus' }}
-    </span>
+  const showMoreLabelSlot = `
+    <template v-slot:showMoreLabel="{ isShowingMore }">
+      <span>
+        {{ isShowingMore ? 'Voir moins' : 'Voir plus' }}
+      </span>
+    </template>
   `;
 
   it('renders correctly with a custom show more label', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Menu, {
-      propsData: {
-        ...defaultProps,
-        showMore: true,
+    const props = {
+      ...defaultProps,
+      showMore: true,
+    };
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props };
       },
-      scopedSlots: {
-        showMoreLabel: showMoreLabelScopedSlot,
-      },
+      template: `
+        <Menu v-bind="props">
+          ${showMoreLabelSlot}
+        </Menu>
+      `,
     });
 
     expect(wrapper.find('.ais-Menu-showMore').text()).toBe('Voir plus');
@@ -540,14 +585,20 @@ describe('custom showMoreLabel render', () => {
       isShowingMore: true,
     });
 
-    const wrapper = mount(Menu, {
-      propsData: {
-        ...defaultProps,
-        showMore: true,
+    const props = {
+      ...defaultProps,
+      showMore: true,
+    };
+    const wrapper = mount({
+      components: { Menu },
+      data() {
+        return { props };
       },
-      scopedSlots: {
-        showMoreLabel: showMoreLabelScopedSlot,
-      },
+      template: `
+        <Menu v-bind="props">
+          ${showMoreLabelSlot}
+        </Menu>
+      `,
     });
 
     expect(wrapper.find('.ais-Menu-showMore').text()).toBe('Voir moins');

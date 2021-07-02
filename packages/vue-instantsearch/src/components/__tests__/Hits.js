@@ -55,19 +55,22 @@ it('exposes insights prop to the default slot', async () => {
     insights,
   });
 
-  const wrapper = mount(Hits, {
-    scopedSlots: {
-      default: `
-        <ul slot-scope="{ items, insights }">
-          <li v-for="(item, itemIndex) in items" >
+  const wrapper = mount({
+    components: { Hits },
+    template: `
+      <Hits>
+        <template v-slot="{ items, insights }">
+          <ul>
+            <li v-for="(item, itemIndex) in items" >
 
-            <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
-              Add to cart
-            </button>
-          </li>
-        </ul>
-      `,
-    },
+              <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
+                Add to cart
+              </button>
+            </li>
+          </ul>
+        </template>
+      </Hits>
+    `,
   });
   await wrapper.find('#add-to-cart-two').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
@@ -83,16 +86,19 @@ it('exposes insights prop to the item slot', async () => {
     insights,
   });
 
-  const wrapper = mount(Hits, {
-    scopedSlots: {
-      item: `
-        <div slot-scope="{ item, insights }">
-          <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
-            Add to cart
-          </button>
-        </div>
-      `,
-    },
+  const wrapper = mount({
+    components: { Hits },
+    template: `
+      <Hits>
+        <template v-slot:item="{ item, insights }">
+          <div>
+            <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
+              Add to cart
+            </button>
+          </div>
+        </template>
+      </Hits>
+    `,
   });
   await wrapper.find('#add-to-cart-two').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
@@ -108,14 +114,17 @@ it('exposes send-event method for insights middleware', async () => {
     sendEvent,
   });
 
-  const wrapper = mount(Hits, {
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
-    },
+  const wrapper = mount({
+    components: { Hits },
+    template: `
+      <Hits>
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </Hits>
+    `,
   });
 
   await wrapper.find('button').trigger('click');

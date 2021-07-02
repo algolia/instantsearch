@@ -16,7 +16,7 @@ storiesOf('ais-rating-menu', module)
     template: `
       <div>
         <ais-rating-menu attribute="rating">
-          <template slot-scope="{ items, refine }">
+          <template v-slot="{ items, refine }">
             rating
             <ul>
               <li v-for="(item, key) in items" :key="key">

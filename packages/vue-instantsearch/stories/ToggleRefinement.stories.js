@@ -44,14 +44,12 @@ storiesOf('ais-toggle-refinement', module)
         attribute="free_shipping"
         label="Free Shipping"
       >
-        <a
-          slot-scope="{ value, refine, createURL }"
-          :href="createURL()"
-          @click.prevent="refine(value)"
-        >
-          <span>{{ value.name }}</span>
-          <span>{{ value.isRefined ? '(is enabled)' : '(is disabled)' }}</span>
-        </a>
+        <template v-slot="{ value, refine, createURL }">
+          <a :href="createURL()" @click.prevent="refine(value)">
+            <span>{{ value.name }}</span>
+            <span>{{ value.isRefined ? '(is enabled)' : '(is disabled)' }}</span>
+          </a>
+        </template>
       </ais-toggle-refinement>
     `,
   }))

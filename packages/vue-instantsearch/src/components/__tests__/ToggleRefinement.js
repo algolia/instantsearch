@@ -202,15 +202,18 @@ it('exposes send-event method for insights middleware', async () => {
     sendEvent,
   });
 
-  const wrapper = mount(Toggle, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
+  const wrapper = mount({
+    components: { Toggle },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <Toggle v-bind="props">
+        <template v-slot="{ sendEvent }">
+          <button @click="sendEvent()">Send Event</button>
+        </template>
+      </Toggle>
+    `,
   });
 
   await wrapper.find('button').trigger('click');
@@ -218,26 +221,32 @@ it('exposes send-event method for insights middleware', async () => {
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlot = `
-    <a
-      slot-scope="{ value, canRefine, refine, createURL }"
-      :href="createURL()"
-      :class="[!canRefine && 'noRefinement']"
-      @click.prevent="refine(value)"
-    >
-      <span>{{ value.name }}</span>
-      <span>{{ value.isRefined ? '(is enabled)' : '(is disabled)' }}</span>
-    </a>
+  const defaultSlot = `
+    <template v-slot="{ value, canRefine, refine, createURL }">
+      <a
+        :href="createURL()"
+        :class="[!canRefine && 'noRefinement']"
+        @click.prevent="refine(value)"
+      >
+        <span>{{ value.name }}</span>
+        <span>{{ value.isRefined ? '(is enabled)' : '(is disabled)' }}</span>
+      </a>
+    </template>
   `;
 
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Toggle, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Toggle },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Toggle v-bind="props">
+          ${defaultSlot}
+        </Toggle>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -252,11 +261,16 @@ describe('custom default render', () => {
       },
     });
 
-    const wrapper = mount(Toggle, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Toggle },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Toggle v-bind="props">
+          ${defaultSlot}
+        </Toggle>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -268,11 +282,16 @@ describe('custom default render', () => {
       createURL: () => `/free-shipping`,
     });
 
-    const wrapper = mount(Toggle, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Toggle },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Toggle v-bind="props">
+          ${defaultSlot}
+        </Toggle>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -287,11 +306,16 @@ describe('custom default render', () => {
       },
     });
 
-    const wrapper = mount(Toggle, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Toggle },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Toggle v-bind="props">
+          ${defaultSlot}
+        </Toggle>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -305,11 +329,16 @@ describe('custom default render', () => {
       refine,
     });
 
-    const wrapper = mount(Toggle, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Toggle },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Toggle v-bind="props">
+          ${defaultSlot}
+        </Toggle>
+      `,
     });
 
     await wrapper.find('a').trigger('click');
