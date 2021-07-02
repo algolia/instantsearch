@@ -3,9 +3,12 @@
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import GeoSearchControls from '../GeoSearchControls';
+import prepareTemplateProps from '../../../lib/utils/prepareTemplateProps';
 
 describe('GeoSearchControls', () => {
   const CSSClassesDefaultProps = {
+    root: 'root',
+    map: 'map',
     control: 'control',
     label: 'label',
     selectedLabel: 'label-selected',
@@ -14,6 +17,17 @@ describe('GeoSearchControls', () => {
     disabledRedo: 'redo-disabled',
     reset: 'reset',
   };
+
+  const templateProps = prepareTemplateProps({
+    defaultTemplates: {
+      toggle: 'toggle',
+      redo: 'redo',
+      reset: 'reset',
+      HTMLMarker: '',
+    },
+    templates: {},
+    templatesConfig: {},
+  });
 
   const defaultProps = {
     cssClasses: CSSClassesDefaultProps,
@@ -26,13 +40,7 @@ describe('GeoSearchControls', () => {
     onRefineToggle: () => {},
     onRefineClick: () => {},
     onClearClick: () => {},
-    templateProps: {
-      templates: {
-        toggle: 'toggle',
-        redo: 'redo',
-        reset: 'reset',
-      },
-    },
+    templateProps,
   };
 
   it('expect to render nothing with refine disabled', () => {
@@ -112,7 +120,7 @@ describe('GeoSearchControls', () => {
 
       expect(props.onRefineToggle).toHaveBeenCalledTimes(0);
 
-      fireEvent.change(container.querySelector('input'));
+      fireEvent.change(container.querySelector('input')!);
 
       expect(props.onRefineToggle).toHaveBeenCalledTimes(1);
     });
@@ -130,7 +138,7 @@ describe('GeoSearchControls', () => {
 
       expect(props.onRefineClick).toHaveBeenCalledTimes(0);
 
-      fireEvent.click(container.querySelector('button'));
+      fireEvent.click(container.querySelector('button')!);
 
       expect(props.onRefineClick).toHaveBeenCalledTimes(1);
     });
@@ -188,7 +196,7 @@ describe('GeoSearchControls', () => {
 
       expect(props.onRefineClick).toHaveBeenCalledTimes(0);
 
-      fireEvent.click(container.querySelector('button'));
+      fireEvent.click(container.querySelector('button')!);
 
       expect(props.onRefineClick).toHaveBeenCalledTimes(1);
     });
@@ -247,7 +255,7 @@ describe('GeoSearchControls', () => {
 
       expect(props.onClearClick).toHaveBeenCalledTimes(0);
 
-      fireEvent.click(container.querySelector('.reset'));
+      fireEvent.click(container.querySelector('.reset')!);
 
       expect(props.onClearClick).toHaveBeenCalledTimes(1);
     });

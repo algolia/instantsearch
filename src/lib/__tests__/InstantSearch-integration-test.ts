@@ -1,8 +1,10 @@
 import { getByText, fireEvent } from '@testing-library/dom';
 import instantsearch from '../../index.es';
-import { configure } from '../../widgets';
+import { configure, searchBox } from '../../widgets';
 import { connectConfigure } from '../../connectors';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
+import { MiddlewareDefinition } from '../../types';
+import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 
 describe('configure', () => {
   it('provides up-to-date uiState to onStateChange', () => {
@@ -42,5 +44,74 @@ describe('configure', () => {
     expect(onStateChange).toHaveBeenCalledWith({
       instant_search: { configure: { hitsPerPage: 4 } },
     });
+  });
+});
+
+describe('middleware', () => {
+  it("runs middlewares' onStateChange when uiState changes", async () => {
+    const container = document.createElement('div');
+    const search = instantsearch({
+      indexName: 'instant_search',
+      searchClient: createSearchClient(),
+    });
+
+    const middlewareDefinition: MiddlewareDefinition = {
+      onStateChange: jest.fn(),
+      subscribe: jest.fn(),
+      unsubscribe: jest.fn(),
+    };
+
+    search.use(() => middlewareDefinition);
+
+    search.addWidgets([
+      searchBox({
+        container,
+        placeholder: 'search',
+      }),
+    ]);
+
+    search.start();
+
+    fireEvent.input(container.querySelector('input')!, {
+      target: { value: 'q' },
+    });
+
+    await runAllMicroTasks();
+    expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
+  });
+
+  it("runs middlewares' onStateChange when uiState changes with user-provided onStateChange param", async () => {
+    const container = document.createElement('div');
+    const search = instantsearch({
+      indexName: 'instant_search',
+      searchClient: createSearchClient(),
+      onStateChange({ uiState, setUiState }) {
+        setUiState(uiState);
+      },
+    });
+
+    const middlewareDefinition: MiddlewareDefinition = {
+      onStateChange: jest.fn(),
+      subscribe: jest.fn(),
+      unsubscribe: jest.fn(),
+    };
+
+    search.use(() => middlewareDefinition);
+
+    search.addWidgets([
+      searchBox({
+        container,
+        placeholder: 'search',
+      }),
+    ]);
+
+    search.start();
+
+    fireEvent.input(container.querySelector('input')!, {
+      target: { value: 'q' },
+    });
+
+    await runAllMicroTasks();
+    expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
   });
 });

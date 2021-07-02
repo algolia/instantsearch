@@ -1,28 +1,25 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow } from '../../../../test/utils/enzyme';
 import Slider, { SliderProps } from '../Slider';
-import { ReactElementLike } from 'prop-types';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {
     const tree = shallow(
-      (
-        <Slider
-          refine={() => undefined}
-          min={0}
-          max={500}
-          values={[0, 0]}
-          pips={true}
-          step={2}
-          tooltips={true}
-          cssClasses={{
-            root: 'root',
-            disabledRoot: 'disabledRoot',
-          }}
-        />
-      ) as ReactElementLike
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={true}
+        step={2}
+        tooltips={true}
+        cssClasses={{
+          root: 'root',
+          disabledRoot: 'disabledRoot',
+        }}
+      />
     );
 
     expect(tree).toMatchSnapshot();
@@ -30,21 +27,19 @@ describe('Slider', () => {
 
   it('expect to render without pips', () => {
     const tree = shallow(
-      (
-        <Slider
-          refine={() => undefined}
-          min={0}
-          max={500}
-          values={[0, 0]}
-          pips={false}
-          step={2}
-          tooltips={true}
-          cssClasses={{
-            root: 'root',
-            disabledRoot: 'disabledRoot',
-          }}
-        />
-      ) as ReactElementLike
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={false}
+        step={2}
+        tooltips={true}
+        cssClasses={{
+          root: 'root',
+          disabledRoot: 'disabledRoot',
+        }}
+      />
     );
 
     expect(tree).toMatchSnapshot();
@@ -52,21 +47,19 @@ describe('Slider', () => {
 
   it('expect to render with CSS classes', () => {
     const tree = shallow(
-      (
-        <Slider
-          refine={() => undefined}
-          min={0}
-          max={500}
-          values={[0, 0]}
-          pips={false}
-          step={2}
-          tooltips={true}
-          cssClasses={{
-            root: 'root',
-            disabledRoot: 'disabledRoot',
-          }}
-        />
-      ) as ReactElementLike
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={false}
+        step={2}
+        tooltips={true}
+        cssClasses={{
+          root: 'root',
+          disabledRoot: 'disabledRoot',
+        }}
+      />
     );
 
     expect(tree).toMatchSnapshot();
@@ -87,9 +80,7 @@ describe('Slider', () => {
       },
     };
 
-    const Rheostat = shallow((<Slider {...props} />) as ReactElementLike).find(
-      'Rheostat'
-    );
+    const Rheostat = shallow(<Slider {...props} />).find('Rheostat');
 
     // @ts-expect-error onChange on Rheostat doesn't follow form event
     Rheostat.props().onChange!({ values: [0, 100] });

@@ -547,7 +547,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const [widget, helper] = getInitializedWidget();
 
         const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -561,7 +561,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         refine('priceASC');
 
         const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -576,19 +576,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         refine('priceASC');
 
-        const uiStateBefore = widget.getWidgetUiState!(
+        const uiStateBefore = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,
             helper,
           }
         );
-        const uiStateAfter = widget.getWidgetUiState!(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
 
         expect(uiStateAfter).toEqual(uiStateBefore);
+      });
+
+      test('should remove refinement if new refinement is the initial index', () => {
+        const [widget, helper] = getInitializedWidget();
+
+        expect(helper.state.index).toBe('relevance');
+
+        expect(
+          widget.getWidgetUiState(
+            {
+              sortBy: 'relevance',
+            },
+            {
+              searchParameters: helper.state,
+              helper,
+            }
+          )
+        ).toEqual({
+          sortBy: undefined,
+        });
       });
 
       test('should use the top-level `indexName` for the initial index', () => {
@@ -622,7 +642,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
 
-        const actual = widget.getWidgetUiState!(
+        const actual = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,
@@ -657,7 +677,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'indexNameParent'
         );
-        helper.search = jest.fn();
 
         widget.init!(
           createInitOptions({
@@ -668,7 +687,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
 
-        const actual = widget.getWidgetUiState!(
+        const actual = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,
