@@ -168,7 +168,7 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetParams) {
     attribute,
     items,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = {},
+    templates = {},
     transformItems,
   } = widgetParams || {};
 
@@ -196,10 +196,6 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetParams) {
       suit({ descendantName: 'labelText' }),
       userCssClasses.labelText
     ),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

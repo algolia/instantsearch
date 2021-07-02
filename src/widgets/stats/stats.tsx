@@ -136,11 +136,8 @@ const renderer = ({
  * results inside the engine.
  */
 const stats: StatsWidget = widgetParams => {
-  const {
-    container,
-    cssClasses: userCssClasses = {},
-    templates: userTemplates = {},
-  } = widgetParams || {};
+  const { container, cssClasses: userCssClasses = {}, templates = {} } =
+    widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -150,10 +147,6 @@ const stats: StatsWidget = widgetParams => {
   const cssClasses: StatsCSSClasses = {
     root: cx(suit(), userCssClasses.root),
     text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

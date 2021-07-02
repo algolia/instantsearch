@@ -95,7 +95,7 @@ export type ClearRefinementsWidget = WidgetFactory<
 const clearRefinements: ClearRefinementsWidget = widgetParams => {
   const {
     container,
-    templates: userTemplates = {},
+    templates = {},
     includedAttributes,
     excludedAttributes,
     transformItems,
@@ -115,10 +115,6 @@ const clearRefinements: ClearRefinementsWidget = widgetParams => {
       suit({ descendantName: 'button', modifierName: 'disabled' }),
       userCssClasses.disabledButton
     ),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

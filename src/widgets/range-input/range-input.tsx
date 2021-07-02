@@ -167,7 +167,7 @@ const rangeInput: RangeInputWidget = function rangeInput(widgetParams) {
     max,
     precision = 0,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = {},
+    templates = {},
   } = widgetParams || {};
 
   if (!container) {
@@ -175,11 +175,6 @@ const rangeInput: RangeInputWidget = function rangeInput(widgetParams) {
   }
 
   const containerNode = getContainerNode(container);
-
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
-  };
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),

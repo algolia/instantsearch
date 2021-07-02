@@ -7,6 +7,9 @@ describe('hits defaultTemplates', () => {
 
   it('has a `item` default template', () => {
     const item = {
+      __position: 0,
+      __hitIndex: 1,
+      objectID: '2',
       hello: 'there,',
       how: {
         are: 'you?',
@@ -14,14 +17,19 @@ describe('hits defaultTemplates', () => {
     };
 
     const expected = `{
+  "__position": 0,
+  "__hitIndex": 1,
+  "objectID": "2",
   "hello": "there,",
   "how": {
     "are": "you?"
   }
 }`;
 
-    // @ts-expect-error `item` is considered as not callable
-    expect(defaultTemplates.item(item)).toBe(expected);
+    expect(
+      typeof defaultTemplates.item === 'function' &&
+        defaultTemplates.item(item, () => '')
+    ).toBe(expected);
   });
 
   it('has a `showPreviousText` default template', () => {

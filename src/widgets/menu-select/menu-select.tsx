@@ -85,7 +85,7 @@ const renderer = ({
   renderState: {
     templateProps?: PreparedTemplateProps<MenuSelectComponentTemplates>;
   };
-  templates: MenuSelectComponentTemplates;
+  templates: MenuSelectTemplates;
 }) => (
   {
     refine,
@@ -127,7 +127,7 @@ const menuSelect: MenuSelectWidget = function menuSelect(widgetParams) {
     sortBy = ['name:asc'],
     limit = 10,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = {},
+    templates = {},
     transformItems,
   } = widgetParams || {};
 
@@ -144,10 +144,6 @@ const menuSelect: MenuSelectWidget = function menuSelect(widgetParams) {
     ),
     select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
     option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

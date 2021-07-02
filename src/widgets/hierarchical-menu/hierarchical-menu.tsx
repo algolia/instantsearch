@@ -187,7 +187,7 @@ const renderer = ({
   cssClasses: HierarchicalMenuComponentCSSClasses;
   containerNode: HTMLElement;
   showMore: boolean;
-  templates: HierarchicalMenuComponentTemplates;
+  templates: HierarchicalMenuTemplates;
   renderState: {
     templateProps?: PreparedTemplateProps<HierarchicalMenuComponentTemplates>;
   };
@@ -300,7 +300,7 @@ const hierarchicalMenu: HierarchicalMenuWidget = function hierarchicalMenu(
     showMoreLimit,
     sortBy,
     transformItems,
-    templates: userTemplates = {},
+    templates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 
@@ -338,10 +338,6 @@ const hierarchicalMenu: HierarchicalMenuWidget = function hierarchicalMenu(
       suit({ descendantName: 'showMore', modifierName: 'disabled' }),
       userCssClasses.disabledShowMore
     ),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

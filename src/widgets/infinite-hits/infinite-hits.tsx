@@ -188,7 +188,7 @@ const infiniteHits: InfiniteHitsWidget = widgetParams => {
     container,
     escapeHTML,
     transformItems,
-    templates: userTemplates = {},
+    templates = {},
     cssClasses: userCssClasses = {},
     showPrevious,
     cache,
@@ -217,10 +217,6 @@ const infiniteHits: InfiniteHitsWidget = widgetParams => {
       suit({ descendantName: 'loadMore', modifierName: 'disabled' }),
       userCssClasses.disabledLoadMore
     ),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

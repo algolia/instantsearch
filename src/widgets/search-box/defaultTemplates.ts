@@ -1,6 +1,5 @@
 import { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 
-/* eslint max-len: 0 */
 const defaultTemplate: SearchBoxComponentTemplates = {
   reset: `
 <svg class="{{cssClasses.resetIcon}}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="10" height="10">

@@ -126,7 +126,7 @@ const renderer = ({
 }: {
   containerNode: HTMLElement;
   cssClasses: RatingMenuComponentCSSClasses;
-  templates: RatingMenuComponentTemplates;
+  templates: RatingMenuTemplates;
   renderState: {
     templateProps?: PreparedTemplateProps<RatingMenuComponentTemplates>;
   };
@@ -211,7 +211,7 @@ const ratingMenu: RatingMenuWidget = function ratingMenu(widgetParams) {
     attribute,
     max = 5,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = {},
+    templates = {},
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -247,10 +247,6 @@ const ratingMenu: RatingMenuWidget = function ratingMenu(widgetParams) {
     ),
     label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
     count: cx(suit({ descendantName: 'count' }), userCssClasses.count),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

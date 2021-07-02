@@ -39,6 +39,10 @@ type QueryRuleCustomDataWidget = WidgetFactory<
   QueryRuleCustomDataWidgetParams
 >;
 
+export const defaultTemplates: QueryRuleCustomDataComponentTemplates = {
+  default: ({ items }) => JSON.stringify(items, null, 2),
+};
+
 const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-custom-data',
 });
@@ -87,9 +91,7 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
   };
 
   const containerNode = getContainerNode(container);
-  const defaultTemplates = {
-    default: ({ items }) => JSON.stringify(items, null, 2),
-  };
+
   const templates = {
     ...defaultTemplates,
     ...userTemplates,

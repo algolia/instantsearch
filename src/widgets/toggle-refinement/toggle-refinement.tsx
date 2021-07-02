@@ -38,7 +38,7 @@ const renderer = ({
   renderState: {
     templateProps?: PreparedTemplateProps<ToggleRefinementComponentTemplates>;
   };
-  templates: ToggleRefinementComponentTemplates;
+  templates: ToggleRefinementTemplates;
 }) => (
   {
     value,
@@ -137,7 +137,7 @@ const toggleRefinement = function toggleRefinement(widgetParams) {
     container,
     attribute,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = {},
+    templates = {},
     on = true,
     off,
   } = widgetParams || {};
@@ -155,10 +155,6 @@ const toggleRefinement = function toggleRefinement(widgetParams) {
       suit({ descendantName: 'labelText' }),
       userCssClasses.labelText
     ),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

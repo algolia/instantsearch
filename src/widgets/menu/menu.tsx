@@ -120,7 +120,7 @@ const renderer = ({
   renderState: {
     templateProps?: PreparedTemplateProps<MenuComponentTemplates>;
   };
-  templates: MenuComponentTemplates;
+  templates: MenuTemplates;
   showMore?: boolean;
 }) => (
   {
@@ -179,7 +179,7 @@ const menu: MenuWidget = function menu(widgetParams) {
     showMore,
     showMoreLimit,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = {},
+    templates = {},
     transformItems,
   } = widgetParams || {};
 
@@ -209,10 +209,6 @@ const menu: MenuWidget = function menu(widgetParams) {
       suit({ descendantName: 'showMore', modifierName: 'disabled' }),
       userCssClasses.disabledShowMore
     ),
-  };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
   };
 
   const specializedRenderer = renderer({

@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Pagination from '../../components/Pagination/Pagination';
+import Pagination, {
+  PaginationComponentTemplates,
+} from '../../components/Pagination/Pagination';
 import connectPagination, {
   PaginationConnectorParams,
   PaginationRenderState,
@@ -18,7 +20,7 @@ import { Renderer, WidgetFactory } from '../../types';
 const suit = component('Pagination');
 const withUsage = createDocumentationMessageGenerator({ name: 'pagination' });
 
-const defaultTemplates: PaginationTemplates = {
+const defaultTemplates: PaginationComponentTemplates = {
   previous: '‹',
   next: '›',
   first: '«',
@@ -286,7 +288,7 @@ const pagination: PaginationWidget = function pagination(widgetParams) {
     link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
   };
 
-  const templates: PaginationTemplates = {
+  const templates = {
     ...defaultTemplates,
     ...userTemplates,
   };
