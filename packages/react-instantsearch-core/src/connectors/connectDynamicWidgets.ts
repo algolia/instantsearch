@@ -26,8 +26,8 @@ export default createConnector({
     const facetOrder =
       (results.renderingContent &&
         results.renderingContent.facetOrdering &&
-        results.renderingContent.facetOrdering.facet &&
-        results.renderingContent.facetOrdering.facet.order) ||
+        results.renderingContent.facetOrdering.facets &&
+        results.renderingContent.facetOrdering.facets.order) ||
       [];
 
     return {
