@@ -1246,7 +1246,7 @@ declare namespace algoliasearchHelper {
         /**
          * the ordering of facets (widgets)
          */
-        facet?: {
+        facets?: {
           /**
            * Ordered facet lists
            */
