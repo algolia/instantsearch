@@ -161,6 +161,7 @@ export default createConnector({
     limit: PropTypes.number,
     showMoreLimit: PropTypes.number,
     transformItems: PropTypes.func,
+    facetOrdering: PropTypes.bool,
   },
 
   defaultProps: {
@@ -170,10 +171,11 @@ export default createConnector({
     separator: ' > ',
     rootPath: null,
     showParentLevel: true,
+    facetOrdering: true,
   },
 
   getProvidedProps(props, searchState, searchResults) {
-    const { showMore, limit, showMoreLimit } = props;
+    const { showMore, limit, showMoreLimit, facetOrdering } = props;
     const id = getId(props);
 
     const results = getResults(searchResults, {
@@ -194,7 +196,7 @@ export default createConnector({
       };
     }
     const itemsLimit = showMore ? showMoreLimit : limit;
-    const value = results.getFacetValues(id, { sortBy });
+    const value = results.getFacetValues(id, { sortBy, facetOrdering });
     const items = value.data
       ? transformValue(value.data, props, searchState, {
           ais: props.contextValue,

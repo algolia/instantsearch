@@ -1,4 +1,4 @@
-import { SearchParameters } from 'algoliasearch-helper';
+import { SearchResults, SearchParameters } from 'algoliasearch-helper';
 import connect from '../connectHierarchicalMenu';
 
 jest.mock('../../core/createConnector', () => x => x);
@@ -172,6 +172,159 @@ describe('connectHierarchicalMenu', () => {
         },
       ]);
       expect(props.items).toEqual(['items']);
+    });
+
+    it('facetValues results uses facetOrdering by default', () => {
+      const props = {
+        ...connect.defaultProps,
+        attributes: ['lvl0', 'lvl1'],
+        contextValue,
+      };
+      const searchState = { hierarchicalMenu: { lvl0: 'wat' } };
+      const state = connect.getSearchParameters(
+        new SearchParameters(),
+        props,
+        searchState
+      );
+      const results = new SearchResults(state, [
+        {
+          hits: [],
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                lvl0: {
+                  order: ['wat'],
+                },
+                lvl1: {
+                  order: ['wat > wut'],
+                },
+              },
+            },
+          },
+          facets: {
+            lvl0: {
+              wat: 20,
+              oy: 10,
+            },
+            lvl1: {
+              'wat > wot': 15,
+              'wat > wut': 5,
+            },
+          },
+        },
+      ]);
+
+      const providedProps = connect.getProvidedProps(props, searchState, {
+        results,
+      });
+      expect(providedProps.items).toEqual([
+        {
+          label: 'wat',
+          value: undefined,
+          count: 20,
+          isRefined: true,
+          items: [
+            {
+              label: 'wut',
+              value: 'wat > wut',
+              count: 5,
+              isRefined: false,
+              items: null,
+            },
+            {
+              label: 'wot',
+              value: 'wat > wot',
+              count: 15,
+              isRefined: false,
+              items: null,
+            },
+          ],
+        },
+        {
+          label: 'oy',
+          value: 'oy',
+          count: 10,
+          isRefined: false,
+          items: null,
+        },
+      ]);
+    });
+
+    it('facetValues results does not use facetOrdering if disabled', () => {
+      const props = {
+        attributes: ['lvl0', 'lvl1'],
+        facetOrdering: false,
+        contextValue,
+      };
+      const searchState = { hierarchicalMenu: { lvl0: 'wat' } };
+      const state = connect.getSearchParameters(
+        new SearchParameters(),
+        props,
+        searchState
+      );
+      const results = new SearchResults(state, [
+        {
+          hits: [],
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                lvl0: {
+                  order: ['wat'],
+                },
+                lvl1: {
+                  order: ['wat > wut'],
+                },
+              },
+            },
+          },
+          facets: {
+            lvl0: {
+              wat: 20,
+              oy: 10,
+            },
+            lvl1: {
+              'wat > wot': 15,
+              'wat > wut': 5,
+            },
+          },
+        },
+      ]);
+
+      const providedProps = connect.getProvidedProps(props, searchState, {
+        results,
+      });
+      expect(providedProps.items).toEqual([
+        {
+          label: 'oy',
+          value: 'oy',
+          count: 10,
+          isRefined: false,
+          items: null,
+        },
+        {
+          label: 'wat',
+          value: undefined,
+          count: 20,
+          isRefined: true,
+          items: [
+            // default ordering: alphabetical
+            {
+              label: 'wot',
+              value: 'wat > wot',
+              count: 15,
+              isRefined: false,
+              items: null,
+            },
+            {
+              label: 'wut',
+              value: 'wat > wut',
+              count: 5,
+              isRefined: false,
+              items: null,
+            },
+          ],
+        },
+      ]);
     });
 
     it('shows the effect of showMoreLimit when there is no transformItems', () => {

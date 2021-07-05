@@ -1,4 +1,4 @@
-import { SearchParameters } from 'algoliasearch-helper';
+import { SearchResults, SearchParameters } from 'algoliasearch-helper';
 import connect from '../connectRefinementList';
 
 jest.mock('../../core/createConnector', () => x => x);
@@ -239,6 +239,116 @@ describe('connectRefinementList', () => {
         },
       ]);
       expect(props.isFromSearch).toBe(true);
+    });
+
+    it('facetValues have facetOrdering by default', () => {
+      const userProps = {
+        ...connect.defaultProps,
+        attribute: 'ok',
+        contextValue,
+      };
+      const searchState = {
+        refinementList: { ok: ['wat'] },
+      };
+      const parameters = connect.getSearchParameters(
+        new SearchParameters(),
+        userProps,
+        searchState
+      );
+
+      const searchResults = new SearchResults(parameters, [
+        {
+          hits: [],
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                ok: {
+                  order: ['lol'],
+                },
+              },
+            },
+          },
+          facets: {
+            ok: {
+              wat: 20,
+              lol: 2000,
+            },
+          },
+        },
+      ]);
+
+      const providedProps = connect.getProvidedProps(userProps, searchState, {
+        results: searchResults,
+      });
+
+      expect(providedProps.items).toEqual([
+        {
+          count: 2000,
+          isRefined: false,
+          label: 'lol',
+          value: ['wat', 'lol'],
+        },
+        {
+          count: 20,
+          isRefined: true,
+          label: 'wat',
+          value: [],
+        },
+      ]);
+      expect(providedProps.isFromSearch).toBe(false);
+    });
+
+    it('facetValues results does not use facetOrdering if disabled', () => {
+      const userProps = { attribute: 'ok', facetOrdering: false, contextValue };
+      const searchState = {
+        refinementList: { ok: ['wat'] },
+      };
+      const parameters = connect.getSearchParameters(
+        new SearchParameters(),
+        userProps,
+        searchState
+      );
+
+      const searchResults = new SearchResults(parameters, [
+        {
+          hits: [],
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                ok: {
+                  order: ['lol'],
+                },
+              },
+            },
+          },
+          facets: {
+            ok: {
+              wat: 20,
+              lol: 2000,
+            },
+          },
+        },
+      ]);
+
+      const providedProps = connect.getProvidedProps(userProps, searchState, {
+        results: searchResults,
+      });
+
+      expect(providedProps.items).toEqual([
+        {
+          count: 20,
+          isRefined: true,
+          label: 'wat',
+          value: [],
+        },
+        {
+          count: 2000,
+          isRefined: false,
+          label: 'lol',
+          value: ['wat', 'lol'],
+        },
+      ]);
+      expect(providedProps.isFromSearch).toBe(false);
     });
 
     it("calling refine updates the widget's search state", () => {

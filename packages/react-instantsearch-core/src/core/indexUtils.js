@@ -6,6 +6,9 @@ export function getIndexId(context) {
     : context.ais.mainTargetedIndex;
 }
 
+/**
+ * @returns {import('algoliasearch-helper').SearchResults} results
+ */
 export function getResults(searchResults, context) {
   if (searchResults.results) {
     if (searchResults.results.hits) {
