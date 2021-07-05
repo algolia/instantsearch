@@ -1,3 +1,13 @@
+## [4.24.3](https://github.com/algolia/instantsearch.js/compare/v4.24.2...v4.24.3) (2021-07-05)
+
+
+### Bug Fixes
+
+* **dynamicWidgets:** read from facetOrdering.facets ([42d6c6c](https://github.com/algolia/instantsearch.js/commit/42d6c6cefc5f009a3cfc63ab3d628ed2811f1700))
+* **ts:** make template types consistent ([#4785](https://github.com/algolia/instantsearch.js/issues/4785)) ([e0fbd55](https://github.com/algolia/instantsearch.js/commit/e0fbd55b6b98dd64301f113fd394dce57552d94c))
+
+
+
 ## [4.24.2](https://github.com/algolia/instantsearch.js/compare/v4.24.1...v4.24.2) (2021-06-29)
 
 
