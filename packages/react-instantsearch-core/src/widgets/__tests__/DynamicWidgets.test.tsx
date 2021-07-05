@@ -126,7 +126,7 @@ describe('DynamicWidgets', () => {
             {
               ...resultsState.rawResults[0],
               renderingContent: {
-                facetOrdering: { facet: { order: ['test1', 'test2'] } },
+                facetOrdering: { facets: { order: ['test1', 'test2'] } },
               },
             },
           ],
@@ -138,7 +138,7 @@ describe('DynamicWidgets', () => {
             {
               ...resultsState.rawResults[0],
               renderingContent: {
-                facetOrdering: { facet: { order: ['test2', 'test1'] } },
+                facetOrdering: { facets: { order: ['test2', 'test1'] } },
               },
             },
           ],
@@ -150,7 +150,7 @@ describe('DynamicWidgets', () => {
             {
               ...resultsState.rawResults[0],
               renderingContent: {
-                facetOrdering: { facet: { order: ['test1'] } },
+                facetOrdering: { facets: { order: ['test1'] } },
               },
             },
           ],
