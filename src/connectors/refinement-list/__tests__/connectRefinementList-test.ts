@@ -2614,7 +2614,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           value: 'Samsung',
         },
       ];
-      const resultsViaSortBy = [
+      const resultsViaDefaultSortBy = [
         {
           count: 88,
           highlighted: 'Apple',
@@ -2637,13 +2637,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           value: 'Microsoft',
         },
       ];
+      const resultsViaSortBy = [
+        {
+          count: 44,
+          highlighted: 'Samsung',
+          isRefined: true,
+          label: 'Samsung',
+          value: 'Samsung',
+        },
+        {
+          count: 66,
+          highlighted: 'Microsoft',
+          isRefined: false,
+          label: 'Microsoft',
+          value: 'Microsoft',
+        },
+        {
+          count: 88,
+          highlighted: 'Apple',
+          isRefined: true,
+          label: 'Apple',
+          value: 'Apple',
+        },
+      ];
 
       test.each`
         facetOrderingInResult | sortBy           | expected
         ${true}               | ${undefined}     | ${resultsViaFacetOrdering}
-        ${false}              | ${undefined}     | ${resultsViaSortBy}
-        ${true}               | ${['isRefined']} | ${resultsViaSortBy}
-        ${false}              | ${['isRefined']} | ${resultsViaSortBy}
+        ${false}              | ${undefined}     | ${resultsViaDefaultSortBy}
+        ${true}               | ${['name:desc']} | ${resultsViaSortBy}
+        ${false}              | ${['name:desc']} | ${resultsViaSortBy}
       `(
         'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
         ({ facetOrderingInResult, sortBy, expected }) => {

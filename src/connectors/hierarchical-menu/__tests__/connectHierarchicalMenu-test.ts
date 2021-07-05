@@ -728,7 +728,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           value: 'Decoration',
         },
       ];
-      const resultsViaSortBy = [
+      const resultsViaDefaultSortBy = [
         {
           count: 880,
           data: [
@@ -763,13 +763,48 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           value: 'Outdoor',
         },
       ];
+      const resultsViaSortBy = [
+        {
+          count: 47,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Outdoor',
+          value: 'Outdoor',
+        },
+        {
+          count: 880,
+          data: [
+            {
+              count: 173,
+              data: null,
+              exhaustive: true,
+              isRefined: false,
+              label: 'Frames & pictures',
+              value: 'Decoration > Frames & pictures',
+            },
+            {
+              count: 193,
+              data: null,
+              exhaustive: true,
+              isRefined: false,
+              label: 'Candle holders & candles',
+              value: 'Decoration > Candle holders & candles',
+            },
+          ],
+          exhaustive: true,
+          isRefined: true,
+          label: 'Decoration',
+          value: 'Decoration',
+        },
+      ];
 
       test.each`
-        facetOrderingInResult | sortBy          | expected
-        ${true}               | ${undefined}    | ${resultsViaFacetOrdering}
-        ${false}              | ${undefined}    | ${resultsViaSortBy}
-        ${true}               | ${['name:asc']} | ${resultsViaSortBy}
-        ${false}              | ${['name:asc']} | ${resultsViaSortBy}
+        facetOrderingInResult | sortBy           | expected
+        ${true}               | ${undefined}     | ${resultsViaFacetOrdering}
+        ${false}              | ${undefined}     | ${resultsViaDefaultSortBy}
+        ${true}               | ${['name:desc']} | ${resultsViaSortBy}
+        ${false}              | ${['name:desc']} | ${resultsViaSortBy}
       `(
         'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
         ({ facetOrderingInResult, sortBy, expected }) => {

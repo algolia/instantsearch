@@ -676,7 +676,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           value: 'Algolia',
         },
       ];
-      const resultsViaSortBy = [
+      const resultsViaDefaultSortBy = [
         {
           count: 3,
           data: null,
@@ -702,13 +702,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           value: 'Samsung',
         },
       ];
+      const resultsViaSortBy = [
+        {
+          count: 1,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Samsung',
+          value: 'Samsung',
+        },
+        {
+          count: 100,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Apple',
+          value: 'Apple',
+        },
+        {
+          count: 3,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'Algolia',
+          value: 'Algolia',
+        },
+      ];
 
       test.each`
-        facetOrderingInResult | sortBy          | expected
-        ${true}               | ${undefined}    | ${resultsViaFacetOrdering}
-        ${false}              | ${undefined}    | ${resultsViaSortBy}
-        ${true}               | ${['name:asc']} | ${resultsViaSortBy}
-        ${false}              | ${['name:asc']} | ${resultsViaSortBy}
+        facetOrderingInResult | sortBy           | expected
+        ${true}               | ${undefined}     | ${resultsViaFacetOrdering}
+        ${false}              | ${undefined}     | ${resultsViaDefaultSortBy}
+        ${true}               | ${['name:desc']} | ${resultsViaSortBy}
+        ${false}              | ${['name:desc']} | ${resultsViaSortBy}
       `(
         'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
         ({ facetOrderingInResult, sortBy, expected }) => {
