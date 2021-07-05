@@ -550,7 +550,7 @@ describe('connectDynamicWidgets', () => {
               createSingleSearchResponse({
                 renderingContent: {
                   facetOrdering: {
-                    facet: { order: ['test1', 'test2'] },
+                    facets: { order: ['test1', 'test2'] },
                   },
                 },
               }),
@@ -607,7 +607,7 @@ describe('connectDynamicWidgets', () => {
                 createSingleSearchResponse({
                   renderingContent: {
                     facetOrdering: {
-                      facet: { order: ['test1', 'test2'] },
+                      facets: { order: ['test1', 'test2'] },
                     },
                   },
                 }),
