@@ -54,7 +54,7 @@
   "dependencies": {
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
-    "algoliasearch-helper": "^3.4.5",
+    "algoliasearch-helper": "^3.5.4",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
@@ -62,7 +62,7 @@
     "qs": "^6.5.1"
   },
   "devDependencies": {
-    "@algolia/client-search": "4.9.2",
+    "@algolia/client-search": "4.10.3",
     "@babel/cli": "7.8.4",
     "@babel/core": "7.9.6",
     "@babel/plugin-proposal-class-properties": "7.8.3",
@@ -93,7 +93,7 @@
     "@wdio/selenium-standalone-service": "5.16.5",
     "@wdio/spec-reporter": "5.16.5",
     "@wdio/static-server-service": "5.16.5",
-    "algoliasearch": "4.9.2",
+    "algoliasearch": "4.10.3",
     "algoliasearch-v3": "npm:algoliasearch@3.35.1",
     "babel-eslint": "10.0.3",
     "babel-jest": "26.6.3",
