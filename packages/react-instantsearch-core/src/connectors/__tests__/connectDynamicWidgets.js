@@ -95,7 +95,7 @@ describe('connectDynamicWidgets', () => {
         const searchState = {};
         const searchResults = createSingleIndexSearchResults({
           renderingContent: {
-            facetOrdering: { facet: { order: ['one', 'two'] } },
+            facetOrdering: { facets: { order: ['one', 'two'] } },
           },
         });
 
@@ -241,7 +241,7 @@ describe('connectDynamicWidgets', () => {
         const searchState = createMultiIndexSearchState();
         const searchResults = createMultiIndexSearchResults({
           renderingContent: {
-            facetOrdering: { facet: { order: ['one', 'two'] } },
+            facetOrdering: { facets: { order: ['one', 'two'] } },
           },
         });
 
