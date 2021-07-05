@@ -765,14 +765,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       ];
 
       test.each`
-        ordered  | sortBy          | expected
-        ${true}  | ${undefined}    | ${resultsViaFacetOrdering}
-        ${false} | ${undefined}    | ${resultsViaSortBy}
-        ${true}  | ${['name:asc']} | ${resultsViaSortBy}
-        ${false} | ${['name:asc']} | ${resultsViaSortBy}
+        facetOrderingInResult | sortBy          | expected
+        ${true}               | ${undefined}    | ${resultsViaFacetOrdering}
+        ${false}              | ${undefined}    | ${resultsViaSortBy}
+        ${true}               | ${['name:asc']} | ${resultsViaSortBy}
+        ${false}              | ${['name:asc']} | ${resultsViaSortBy}
       `(
-        'renderingContent present: $ordered, sortBy: $sortBy',
-        ({ ordered, sortBy, expected }) => {
+        'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
+        ({ facetOrderingInResult, sortBy, expected }) => {
           const renderFn = jest.fn();
           const unmountFn = jest.fn();
           const createHierarchicalMenu = connectHierarchicalMenu(
@@ -800,7 +800,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
           hierarchicalMenu.init!(createInitOptions({ helper }));
 
-          const renderingContent = ordered
+          const renderingContent = facetOrderingInResult
             ? {
                 facetOrdering: {
                   values: {

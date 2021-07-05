@@ -2639,14 +2639,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       ];
 
       test.each`
-        ordered  | sortBy           | expected
-        ${true}  | ${undefined}     | ${resultsViaFacetOrdering}
-        ${false} | ${undefined}     | ${resultsViaSortBy}
-        ${true}  | ${['isRefined']} | ${resultsViaSortBy}
-        ${false} | ${['isRefined']} | ${resultsViaSortBy}
+        facetOrderingInResult | sortBy           | expected
+        ${true}               | ${undefined}     | ${resultsViaFacetOrdering}
+        ${false}              | ${undefined}     | ${resultsViaSortBy}
+        ${true}               | ${['isRefined']} | ${resultsViaSortBy}
+        ${false}              | ${['isRefined']} | ${resultsViaSortBy}
       `(
-        'renderingContent present: $ordered, sortBy: $sortBy',
-        ({ ordered, sortBy, expected }) => {
+        'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
+        ({ facetOrderingInResult, sortBy, expected }) => {
           const renderFn = jest.fn();
           const unmountFn = jest.fn();
           const createRefinementList = connectRefinementList(
@@ -2667,7 +2667,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
             })
           );
 
-          const renderingContent = ordered
+          const renderingContent = facetOrderingInResult
             ? {
                 facetOrdering: {
                   values: {
