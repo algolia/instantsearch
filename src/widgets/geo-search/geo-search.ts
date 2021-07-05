@@ -21,39 +21,39 @@ import { GeoLoc, Template, WidgetFactory } from '../../types';
 const withUsage = createDocumentationMessageGenerator({ name: 'geo-search' });
 const suit = component('GeoSearch');
 
-export type GeoSearchTemplates = {
+export type GeoSearchTemplates = Partial<{
   /** Template to use for the marker. */
-  HTMLMarker?: Template<GeoHit>;
+  HTMLMarker: Template<GeoHit>;
   /** Template for the reset button. */
-  reset?: Template;
+  reset: Template;
   /** Template for the toggle label. */
-  toggle?: Template;
+  toggle: Template;
   /** Template for the redo button. */
-  redo?: Template;
-};
+  redo: Template;
+}>;
 
 export type GeoSearchComponentTemplates = Required<GeoSearchTemplates>;
 
-export type GeoSearchCSSClasses = {
+export type GeoSearchCSSClasses = Partial<{
   /** The root div of the widget. */
-  root?: string | string[];
+  root: string | string[];
   /** The map container of the widget. */
-  map?: string | string[];
+  map: string | string[];
   /** The control element of the widget. */
-  control?: string | string[];
+  control: string | string[];
   /** The label of the control element. */
-  label?: string | string[];
+  label: string | string[];
   /** The selected label of the control element. */
-  selectedLabel?: string | string[];
+  selectedLabel: string | string[];
   /** The input of the control element. */
-  input?: string | string[];
+  input: string | string[];
   /** The redo search button. */
-  redo?: string | string[];
+  redo: string | string[];
   /** The disabled redo search button. */
-  disabledRedo?: string | string[];
+  disabledRedo: string | string[];
   /** The reset refinement button. */
-  reset?: string | string[];
-};
+  reset: string | string[];
+}>;
 
 export type GeoSearchMarker<TOptions> = {
   /**

@@ -24,30 +24,30 @@ import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');
 
-export type MenuSelectCSSClasses = {
+export type MenuSelectCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the root when there are no items to display
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
   /**
    * CSS class to add to the select element.
    */
-  select?: string | string[];
+  select: string | string[];
   /**
    * CSS class to add to the option element.
    */
-  option?: string | string[];
-};
+  option: string | string[];
+}>;
 
-export type MenuSelectTemplates = {
+export type MenuSelectTemplates = Partial<{
   /**
    * Item template, provided with `label`, `count`, `isRefined` and `value` data properties.
    */
-  item?: Template<{
+  item: Template<{
     label: string;
     value: string;
     count: number;
@@ -56,8 +56,8 @@ export type MenuSelectTemplates = {
   /**
    * Label of the "see all" option in the select.
    */
-  defaultOption?: Template;
-};
+  defaultOption: Template;
+}>;
 
 export type MenuSelectWidgetParams = {
   /**

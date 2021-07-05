@@ -14,42 +14,42 @@ import {
 import { component } from '../../lib/suit';
 import { WidgetFactory } from '../../types';
 
-export type CurrentRefinementsCSSClasses = {
+export type CurrentRefinementsCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the list element.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS class to add to the each item element.
    */
-  item?: string | string[];
+  item: string | string[];
 
   /**
    * CSS class to add to the label element.
    */
-  label?: string | string[];
+  label: string | string[];
 
   /**
    * CSS class to add to the category element.
    */
-  category?: string | string[];
+  category: string | string[];
 
   /**
    * CSS class to add to the categoryLabel element.
    */
-  categoryLabel?: string | string[];
+  categoryLabel: string | string[];
 
   /**
    * CSS class to add to the delete element.
    */
-  delete?: string | string[];
-};
+  delete: string | string[];
+}>;
 
 export type CurrentRefinementsWidgetParams = {
   /**

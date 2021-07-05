@@ -49,11 +49,11 @@ const renderer = ({
   );
 };
 
-export type AnswersTemplates = {
+export type AnswersTemplates = Partial<{
   /**
    * Template to use for the header. This template will receive an object containing `hits` and `isLoading`.
    */
-  header?: Template<{
+  header: Template<{
     hits: Hit[];
     isLoading: boolean;
   }>;
@@ -61,45 +61,45 @@ export type AnswersTemplates = {
   /**
    * Template to use for the loader.
    */
-  loader?: Template;
+  loader: Template;
 
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item?: Template<Hit>;
-};
+  item: Template<Hit>;
+}>;
 
-export type AnswersCSSClasses = {
+export type AnswersCSSClasses = Partial<{
   /**
    * CSS class to add to the root element of the widget.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the wrapping element when no results.
    */
-  emptyRoot?: string | string[];
+  emptyRoot: string | string[];
 
   /**
    * CSS classes to add to the header.
    */
-  header?: string | string[];
+  header: string | string[];
 
   /**
    * CSS classes to add to the loader.
    */
-  loader?: string | string[];
+  loader: string | string[];
 
   /**
    * CSS class to add to the list of results.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS class to add to each result.
    */
-  item?: string | string[];
-};
+  item: string | string[];
+}>;
 
 export type AnswersWidgetParams = {
   /**

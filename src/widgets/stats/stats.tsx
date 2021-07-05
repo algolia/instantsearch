@@ -19,30 +19,30 @@ import { Renderer, Template, WidgetFactory } from '../../types';
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');
 
-export type StatsCSSClasses = {
+export type StatsCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the text span element.
    */
-  text?: string | string[];
-};
+  text: string | string[];
+}>;
 
-export type StatsTemplates = {
+export type StatsTemplates = Partial<{
   /**
    * Text template, provided with `hasManyResults`, `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbSortedHits`, `nbPages`, `areHitsSorted`, `page`, `processingTimeMS`, `query`.
    */
-  text?: Template<
+  text: Template<
     {
       hasManyResults: boolean;
       hasNoResults: boolean;
       hasOneResult: boolean;
     } & StatsRenderState
   >;
-};
+}>;
 
 export type StatsWidgetParams = {
   /**

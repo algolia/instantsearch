@@ -20,16 +20,16 @@ import RelevantSort, {
 import defaultTemplates from './defaultTemplates';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
-export type RelevantSortCSSClasses = {
-  root?: string;
-  text?: string;
-  button?: string;
-};
+export type RelevantSortCSSClasses = Partial<{
+  root: string;
+  text: string;
+  button: string;
+}>;
 
-export type RelevantSortTemplates = {
-  text?: Template<{ isRelevantSorted: boolean }>;
-  button?: Template<{ isRelevantSorted: boolean }>;
-};
+export type RelevantSortTemplates = Partial<{
+  text: Template<{ isRelevantSorted: boolean }>;
+  button: Template<{ isRelevantSorted: boolean }>;
+}>;
 
 export type RelevantSortWidgetParams = {
   container: string | HTMLElement;

@@ -37,22 +37,22 @@ const renderer = ({
   }
 };
 
-export type PoweredByCSSClasses = {
+export type PoweredByCSSClasses = Partial<{
   /**
    * CSS class to add to the wrapping element.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the link.
    */
-  link?: string | string[];
+  link: string | string[];
 
   /**
    * CSS class to add to the SVG logo.
    */
-  logo?: string | string[];
-};
+  logo: string | string[];
+}>;
 
 export type PoweredByWidgetParams = {
   /**

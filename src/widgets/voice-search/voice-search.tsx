@@ -24,11 +24,11 @@ import { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
 
-export type VoiceSearchCSSClasses = {
-  root?: string | string[];
-  button?: string | string[];
-  status?: string | string[];
-};
+export type VoiceSearchCSSClasses = Partial<{
+  root: string | string[];
+  button: string | string[];
+  status: string | string[];
+}>;
 
 type VoiceSearchTemplateProps = {
   status: string;
@@ -39,10 +39,10 @@ type VoiceSearchTemplateProps = {
   isBrowserSupported: boolean;
 };
 
-export type VoiceSearchTemplates = {
-  buttonText?: Template<VoiceSearchTemplateProps>;
-  status?: Template<VoiceSearchTemplateProps>;
-};
+export type VoiceSearchTemplates = Partial<{
+  buttonText: Template<VoiceSearchTemplateProps>;
+  status: Template<VoiceSearchTemplateProps>;
+}>;
 
 export type VoiceSearchWidgetParams = {
   container: string | HTMLElement;

@@ -78,89 +78,89 @@ const renderer = ({
   );
 };
 
-export type PaginationCSSClasses = {
+export type PaginationCSSClasses = Partial<{
   /**
    * CSS classes added to the root element of the widget.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the root element of the widget if there are no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
 
   /**
    * CSS classes added to the wrapping `<ul>`.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS classes added to each `<li>`.
    */
-  item?: string | string[];
+  item: string | string[];
 
   /**
    * CSS classes added to the first `<li>`.
    */
-  firstPageItem?: string | string[];
+  firstPageItem: string | string[];
 
   /**
    * CSS classes added to the last `<li>`.
    */
-  lastPageItem?: string | string[];
+  lastPageItem: string | string[];
 
   /**
    * CSS classes added to the previous `<li>`.
    */
-  previousPageItem?: string | string[];
+  previousPageItem: string | string[];
 
   /**
    * CSS classes added to the next `<li>`.
    */
-  nextPageItem?: string | string[];
+  nextPageItem: string | string[];
 
   /**
    * CSS classes added to page `<li>`.
    */
-  pageItem?: string | string[];
+  pageItem: string | string[];
 
   /**
    * CSS classes added to the selected `<li>`.
    */
-  selectedItem?: string | string[];
+  selectedItem: string | string[];
 
   /**
    * CSS classes added to the disabled `<li>`.
    */
-  disabledItem?: string | string[];
+  disabledItem: string | string[];
 
   /**
    * CSS classes added to each link.
    */
-  link?: string | string[];
-};
+  link: string | string[];
+}>;
 
-export type PaginationTemplates = {
+export type PaginationTemplates = Partial<{
   /**
    * Label for the Previous link.
    */
-  previous?: string;
+  previous: string;
 
   /**
    * Label for the Next link.
    */
-  next?: string;
+  next: string;
 
   /**
    * Label for the First link.
    */
-  first?: string;
+  first: string;
 
   /**
    * Label for the Last link.
    */
-  last?: string;
-};
+  last: string;
+}>;
 
 export type PaginationWidgetParams = {
   /**
