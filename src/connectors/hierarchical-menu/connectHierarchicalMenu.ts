@@ -81,13 +81,10 @@ export type HierarchicalMenuConnectorParams = {
   /**
    * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
    * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+   *
+   * If a facetOrdering is set in the index settings, it is used when sortBy isn't passed
    */
   sortBy?: SortBy<HierarchicalMenuItem>;
-  /**
-   * Apply the sorting of facet values defined in settings
-   * Defaults to `true` if sortBy is not given
-   */
-  facetOrdering?: boolean;
   /**
    * Function to transform the items passed to the templates.
    */
@@ -182,7 +179,6 @@ const connectHierarchicalMenu: HierarchicalMenuConnector = function connectHiera
       showMore = false,
       showMoreLimit = 20,
       sortBy = DEFAULT_SORT,
-      facetOrdering = sortBy === DEFAULT_SORT,
       transformItems = (items => items) as TransformItems<HierarchicalMenuItem>,
     } = widgetParams || {};
 
@@ -339,7 +335,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector = function connectHiera
         if (results) {
           const facetValues = results.getFacetValues(hierarchicalFacetName, {
             sortBy,
-            facetOrdering,
+            facetOrdering: sortBy === DEFAULT_SORT,
           });
           const facetItems =
             facetValues && !Array.isArray(facetValues) && facetValues.data

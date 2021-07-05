@@ -765,22 +765,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       ];
 
       test.each`
-        ordered  | facetOrdering | sortBy          | expected
-        ${true}  | ${true}       | ${undefined}    | ${resultsViaFacetOrdering}
-        ${false} | ${true}       | ${undefined}    | ${resultsViaSortBy}
-        ${true}  | ${true}       | ${['name:asc']} | ${resultsViaFacetOrdering}
-        ${false} | ${true}       | ${['name:asc']} | ${resultsViaSortBy}
-        ${true}  | ${undefined}  | ${undefined}    | ${resultsViaFacetOrdering}
-        ${false} | ${undefined}  | ${undefined}    | ${resultsViaSortBy}
-        ${true}  | ${undefined}  | ${['name:asc']} | ${resultsViaSortBy}
-        ${false} | ${undefined}  | ${['name:asc']} | ${resultsViaSortBy}
-        ${true}  | ${false}      | ${undefined}    | ${resultsViaSortBy}
-        ${false} | ${false}      | ${undefined}    | ${resultsViaSortBy}
-        ${true}  | ${false}      | ${['name:asc']} | ${resultsViaSortBy}
-        ${false} | ${false}      | ${['name:asc']} | ${resultsViaSortBy}
+        ordered  | sortBy          | expected
+        ${true}  | ${undefined}    | ${resultsViaFacetOrdering}
+        ${false} | ${undefined}    | ${resultsViaSortBy}
+        ${true}  | ${['name:asc']} | ${resultsViaSortBy}
+        ${false} | ${['name:asc']} | ${resultsViaSortBy}
       `(
-        'renderingContent present: $ordered, facetOrdering: $facetOrdering, sortBy: $sortBy',
-        ({ ordered, facetOrdering, sortBy, expected }) => {
+        'renderingContent present: $ordered, sortBy: $sortBy',
+        ({ ordered, sortBy, expected }) => {
           const renderFn = jest.fn();
           const unmountFn = jest.fn();
           const createHierarchicalMenu = connectHierarchicalMenu(
@@ -789,7 +781,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           );
           const hierarchicalMenu = createHierarchicalMenu({
             attributes: ['category', 'subCategory'],
-            facetOrdering,
             sortBy,
           });
           const helper = algoliasearchHelper(

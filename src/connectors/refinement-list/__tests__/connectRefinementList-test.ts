@@ -2639,22 +2639,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       ];
 
       test.each`
-        ordered  | facetOrdering | sortBy           | expected
-        ${true}  | ${true}       | ${undefined}     | ${resultsViaFacetOrdering}
-        ${false} | ${true}       | ${undefined}     | ${resultsViaSortBy}
-        ${true}  | ${true}       | ${['isRefined']} | ${resultsViaFacetOrdering}
-        ${false} | ${true}       | ${['isRefined']} | ${resultsViaSortBy}
-        ${true}  | ${undefined}  | ${undefined}     | ${resultsViaFacetOrdering}
-        ${false} | ${undefined}  | ${undefined}     | ${resultsViaSortBy}
-        ${true}  | ${undefined}  | ${['isRefined']} | ${resultsViaSortBy}
-        ${false} | ${undefined}  | ${['isRefined']} | ${resultsViaSortBy}
-        ${true}  | ${false}      | ${undefined}     | ${resultsViaSortBy}
-        ${false} | ${false}      | ${undefined}     | ${resultsViaSortBy}
-        ${true}  | ${false}      | ${['isRefined']} | ${resultsViaSortBy}
-        ${false} | ${false}      | ${['isRefined']} | ${resultsViaSortBy}
+        ordered  | sortBy           | expected
+        ${true}  | ${undefined}     | ${resultsViaFacetOrdering}
+        ${false} | ${undefined}     | ${resultsViaSortBy}
+        ${true}  | ${['isRefined']} | ${resultsViaSortBy}
+        ${false} | ${['isRefined']} | ${resultsViaSortBy}
       `(
-        'renderingContent present: $ordered, facetOrdering: $facetOrdering, sortBy: $sortBy',
-        ({ ordered, facetOrdering, sortBy, expected }) => {
+        'renderingContent present: $ordered, sortBy: $sortBy',
+        ({ ordered, sortBy, expected }) => {
           const renderFn = jest.fn();
           const unmountFn = jest.fn();
           const createRefinementList = connectRefinementList(
@@ -2664,7 +2656,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           const refinementList = createRefinementList({
             attribute: 'brand',
             sortBy,
-            facetOrdering,
           });
           const helper = jsHelper(
             createSearchClient(),

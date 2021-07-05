@@ -151,19 +151,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
     });
 
-    it('has a facetOrdering option', () => {
-      widget = hierarchicalMenu({ ...options, facetOrdering: false });
-
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
-
-      expect(results.getFacetValues).toHaveBeenCalledTimes(1);
-      expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
-        facetOrdering: false,
-        sortBy: ['name:asc'],
-      });
-    });
-
     it('has a templates option', () => {
       widget = hierarchicalMenu({
         ...options,

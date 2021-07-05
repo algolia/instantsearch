@@ -76,13 +76,12 @@ export type RefinementListConnectorParams = {
   showMoreLimit?: number;
   /**
    * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+   *
+   * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+   *
+   * If a facetOrdering is set in the index settings, it is used when sortBy isn't passed
    */
   sortBy?: SortBy<RefinementListItem>;
-  /**
-   * Apply the sorting of facet values defined in settings.
-   * Defaults to `true` if sortBy is not given
-   */
-  facetOrdering?: boolean;
   /**
    * Escapes the content of the facet values.
    */
@@ -190,7 +189,6 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
       showMore = false,
       showMoreLimit = 20,
       sortBy = DEFAULT_SORT,
-      facetOrdering = sortBy === DEFAULT_SORT,
       escapeFacetValues = true,
       transformItems = (items => items) as TransformItems<RefinementListItem>,
     } = widgetParams || {};
@@ -394,7 +392,7 @@ const connectRefinementList: RefinementListConnector = function connectRefinemen
         if (results) {
           const values = results.getFacetValues(attribute, {
             sortBy,
-            facetOrdering,
+            facetOrdering: sortBy === DEFAULT_SORT,
           });
           facetValues = values && Array.isArray(values) ? values : [];
           items = transformItems(
