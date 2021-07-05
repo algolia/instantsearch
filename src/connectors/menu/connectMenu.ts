@@ -19,6 +19,8 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const DEFAULT_SORT = ['isRefined', 'name:asc'];
+
 export type MenuItem = {
   /**
    * The value of the menu item.
@@ -59,6 +61,8 @@ export type MenuConnectorParams = {
    * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
    *
    * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+   *
+   * If a facetOrdering is set in the index settings, it is used when sortBy isn't passed
    */
   sortBy?: SortBy<MenuItem>;
   /**
@@ -147,7 +151,7 @@ const connectMenu: MenuConnector = function connectMenu(
       limit = 10,
       showMore = false,
       showMoreLimit = 20,
-      sortBy = ['isRefined', 'name:asc'],
+      sortBy = DEFAULT_SORT,
       transformItems = (items => items) as TransformItems<MenuItem>,
     } = widgetParams || {};
 
@@ -286,6 +290,7 @@ const connectMenu: MenuConnector = function connectMenu(
         if (results) {
           const facetValues = results.getFacetValues(attribute, {
             sortBy,
+            facetOrdering: sortBy === DEFAULT_SORT,
           });
           const facetItems =
             facetValues && !Array.isArray(facetValues) && facetValues.data

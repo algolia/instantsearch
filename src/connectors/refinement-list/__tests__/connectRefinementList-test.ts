@@ -2589,6 +2589,119 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         })
       );
     });
+
+    describe('facetOrdering', () => {
+      const resultsViaFacetOrdering = [
+        {
+          count: 66,
+          highlighted: 'Microsoft',
+          isRefined: false,
+          label: 'Microsoft',
+          value: 'Microsoft',
+        },
+        {
+          count: 88,
+          highlighted: 'Apple',
+          isRefined: true,
+          label: 'Apple',
+          value: 'Apple',
+        },
+        {
+          count: 44,
+          highlighted: 'Samsung',
+          isRefined: true,
+          label: 'Samsung',
+          value: 'Samsung',
+        },
+      ];
+      const resultsViaSortBy = [
+        {
+          count: 88,
+          highlighted: 'Apple',
+          isRefined: true,
+          label: 'Apple',
+          value: 'Apple',
+        },
+        {
+          count: 44,
+          highlighted: 'Samsung',
+          isRefined: true,
+          label: 'Samsung',
+          value: 'Samsung',
+        },
+        {
+          count: 66,
+          highlighted: 'Microsoft',
+          isRefined: false,
+          label: 'Microsoft',
+          value: 'Microsoft',
+        },
+      ];
+
+      test.each`
+        facetOrderingInResult | sortBy           | expected
+        ${true}               | ${undefined}     | ${resultsViaFacetOrdering}
+        ${false}              | ${undefined}     | ${resultsViaSortBy}
+        ${true}               | ${['isRefined']} | ${resultsViaSortBy}
+        ${false}              | ${['isRefined']} | ${resultsViaSortBy}
+      `(
+        'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
+        ({ facetOrderingInResult, sortBy, expected }) => {
+          const renderFn = jest.fn();
+          const unmountFn = jest.fn();
+          const createRefinementList = connectRefinementList(
+            renderFn,
+            unmountFn
+          );
+          const refinementList = createRefinementList({
+            attribute: 'brand',
+            sortBy,
+          });
+          const helper = jsHelper(
+            createSearchClient(),
+            'indexName',
+            refinementList.getWidgetSearchParameters!(new SearchParameters(), {
+              uiState: {
+                refinementList: { brand: ['Apple', 'Samsung'] },
+              },
+            })
+          );
+
+          const renderingContent = facetOrderingInResult
+            ? {
+                facetOrdering: {
+                  values: {
+                    brand: {
+                      order: ['Microsoft'],
+                      sortRemainingBy: 'alpha' as const,
+                    },
+                  },
+                },
+              }
+            : undefined;
+
+          const renderState1 = refinementList.getWidgetRenderState(
+            createRenderOptions({
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  renderingContent,
+                  facets: {
+                    brand: {
+                      Apple: 88,
+                      Microsoft: 66,
+                      Samsung: 44,
+                    },
+                  },
+                }),
+              ]),
+            })
+          );
+
+          expect(renderState1.items).toEqual(expected);
+        }
+      );
+    });
   });
 
   describe('getWidgetSearchParameters', () => {

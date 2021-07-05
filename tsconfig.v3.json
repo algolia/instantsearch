@@ -13,6 +13,9 @@
     // v3 has a wrong definition for optionalWords (only accepts string[])
     "src/connectors/voice-search/__tests__/connectVoiceSearch-test.ts",
     // v3 does not have renderingContent (only errors in the test)
-    "src/connectors/dynamic-widgets/__tests__/connectDynamicWidgets-test.ts"
+    "src/connectors/dynamic-widgets/__tests__/connectDynamicWidgets-test.ts",
+    "src/connectors/hierarchical-menu/__tests__/connectHierarchicalMenu-test.ts",
+    "src/connectors/menu/__tests__/connectMenu-test.ts",
+    "src/connectors/refinement-list/__tests__/connectRefinementList-test.ts"
   ]
 }
