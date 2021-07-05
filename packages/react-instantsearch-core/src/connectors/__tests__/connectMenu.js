@@ -1,4 +1,4 @@
-import { SearchParameters } from 'algoliasearch-helper';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import connect from '../connectMenu';
 
 jest.mock('../../core/createConnector', () => x => x);
@@ -245,6 +245,116 @@ describe('connectMenu', () => {
       ]);
     });
 
+    it('facetValues have facetOrdering by default', () => {
+      const userProps = {
+        ...connect.defaultProps,
+        attribute: 'ok',
+        contextValue,
+      };
+      const searchState = {
+        menu: { ok: 'wat' },
+      };
+      const parameters = connect.getSearchParameters(
+        new SearchParameters(),
+        userProps,
+        searchState
+      );
+
+      const searchResults = new SearchResults(parameters, [
+        {
+          hits: [],
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                ok: {
+                  order: ['wat'],
+                },
+              },
+            },
+          },
+          facets: {
+            ok: {
+              wat: 20,
+              lol: 2000,
+            },
+          },
+        },
+      ]);
+
+      const providedProps = connect.getProvidedProps(userProps, searchState, {
+        results: searchResults,
+      });
+
+      expect(providedProps.items).toEqual([
+        {
+          count: 20,
+          isRefined: true,
+          label: 'wat',
+          value: '',
+        },
+        {
+          count: 2000,
+          isRefined: false,
+          label: 'lol',
+          value: 'lol',
+        },
+      ]);
+      expect(providedProps.isFromSearch).toBe(false);
+    });
+
+    it('facetValues results does not use facetOrdering if disabled', () => {
+      const userProps = { attribute: 'ok', facetOrdering: false, contextValue };
+      const searchState = {
+        menu: { ok: 'wat' },
+      };
+      const parameters = connect.getSearchParameters(
+        new SearchParameters(),
+        userProps,
+        searchState
+      );
+
+      const searchResults = new SearchResults(parameters, [
+        {
+          hits: [],
+          renderingContent: {
+            facetOrdering: {
+              values: {
+                ok: {
+                  order: ['wat'],
+                },
+              },
+            },
+          },
+          facets: {
+            ok: {
+              wat: 20,
+              lol: 2000,
+            },
+          },
+        },
+      ]);
+
+      const providedProps = connect.getProvidedProps(userProps, searchState, {
+        results: searchResults,
+      });
+
+      expect(providedProps.items).toEqual([
+        {
+          count: 2000,
+          isRefined: false,
+          label: 'lol',
+          value: 'lol',
+        },
+        {
+          count: 20,
+          isRefined: true,
+          label: 'wat',
+          value: '',
+        },
+      ]);
+      expect(providedProps.isFromSearch).toBe(false);
+    });
+
     it("calling refine updates the widget's search state", () => {
       const nextState = connect.refine(
         { attribute: 'ok', contextValue },
@@ -435,13 +545,14 @@ describe('connectMenu', () => {
       };
 
       props = connect.getProvidedProps(
-        { attribute: 'ok', contextValue },
+        { ...connect.defaultProps, attribute: 'ok', contextValue },
         {},
         { results }
       );
 
       expect(results.getFacetValues).toHaveBeenCalledWith('ok', {
         sortBy: ['count:desc', 'name:asc'],
+        facetOrdering: true,
       });
 
       expect(props.items).toEqual([
@@ -479,13 +590,19 @@ describe('connectMenu', () => {
       };
 
       props = connect.getProvidedProps(
-        { attribute: 'ok', searchable: true, contextValue },
+        {
+          ...connect.defaultProps,
+          attribute: 'ok',
+          searchable: true,
+          contextValue,
+        },
         {},
         { results }
       );
 
       expect(results.getFacetValues).toHaveBeenCalledWith('ok', {
         sortBy: undefined,
+        facetOrdering: true,
       });
 
       expect(props.items).toEqual([

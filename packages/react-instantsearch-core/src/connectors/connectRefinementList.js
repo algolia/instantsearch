@@ -104,6 +104,7 @@ export default createConnector({
     ),
     searchable: PropTypes.bool,
     transformItems: PropTypes.func,
+    facetOrdering: PropTypes.bool,
   },
 
   defaultProps: {
@@ -111,6 +112,7 @@ export default createConnector({
     showMore: false,
     limit: 10,
     showMoreLimit: 20,
+    facetOrdering: true,
   },
 
   getProvidedProps(
@@ -120,7 +122,7 @@ export default createConnector({
     metadata,
     searchForFacetValuesResults
   ) {
-    const { attribute, searchable, indexContextValue } = props;
+    const { attribute, searchable, indexContextValue, facetOrdering } = props;
     const results = getResults(searchResults, {
       ais: props.contextValue,
       multiIndexContext: props.indexContextValue,
@@ -167,7 +169,7 @@ export default createConnector({
           count: v.count,
           isRefined: v.isRefined,
         }))
-      : results.getFacetValues(attribute, { sortBy }).map(v => ({
+      : results.getFacetValues(attribute, { sortBy, facetOrdering }).map(v => ({
           label: v.name,
           value: getValue(v.name, props, searchState, {
             ais: props.contextValue,
