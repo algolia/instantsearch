@@ -1,3 +1,6 @@
+3.5.4 - 2021-07-05
+ * fix(facetOrdering): facetOrdering.facets, not facetOrdering.facet https://github.com/algolia/algoliasearch-helper-js/commit/97d769adf68458a04605ca7ac0e35ade5c4bc646
+
 3.5.3 - 2021-06-14
  * fix(ts): correct required for getFacetValues https://github.com/algolia/algoliasearch-helper-js/commit/55a909fe1ef892b3e76ddc109155336c77875292
 
