@@ -3,6 +3,7 @@ import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
   connectHierarchicalMenu,
+  connectMenu,
   connectPagination,
   connectRefinementList,
 } from '../..';
@@ -39,7 +40,12 @@ const RefinementList = connectRefinementList(
 );
 
 const HierarchicalMenu = connectHierarchicalMenu(
-  ({ attributes }) => `HierarchicalMenu(${attributes.join(',')})`
+  ({ attributes }) => `HierarchicalMenu([${attributes.join(', ')}])`
+);
+
+const Menu = connectMenu(
+  ({ attribute, otherProp }) =>
+    `Menu(${attribute})${otherProp ? ` ${JSON.stringify({ otherProp })}` : ''}`
 );
 
 const Pagination = connectPagination(() => {
@@ -184,7 +190,7 @@ describe('DynamicWidgets', () => {
         expect(container).toMatchInlineSnapshot(`
           <div>
             RefinementList(test1)
-            HierarchicalMenu(test2,test3)
+            HierarchicalMenu([test2, test3])
           </div>
         `);
       }
@@ -198,7 +204,7 @@ describe('DynamicWidgets', () => {
 
         expect(container).toMatchInlineSnapshot(`
           <div>
-            HierarchicalMenu(test2,test3)
+            HierarchicalMenu([test2, test3])
             RefinementList(test1)
           </div>
         `);
@@ -229,7 +235,7 @@ describe('DynamicWidgets', () => {
           // @ts-ignore resultsState in InstantSearch is typed wrongly to deal with multi-index
           resultsState={resultsState}
         >
-          <DynamicWidgets transformItems={() => ['test1', 'test3']}>
+          <DynamicWidgets transformItems={() => ['test1', 'test3', 'test5']}>
             <RefinementList attribute="test1" />
             <RefinementList attribute="test2" />
             <Panel>
@@ -237,6 +243,12 @@ describe('DynamicWidgets', () => {
             </Panel>
             <Panel>
               <RefinementList attribute="test4" />
+            </Panel>
+            <Panel>
+              <HierarchicalMenu attributes={['test5', 'test5.1']} />
+            </Panel>
+            <Panel>
+              <HierarchicalMenu attributes={['test6', 'test6.1']} />
             </Panel>
           </DynamicWidgets>
         </InstantSearch>
@@ -252,6 +264,15 @@ describe('DynamicWidgets', () => {
               class="ais-Panel-body"
             >
               RefinementList(test3)
+            </div>
+          </div>
+          <div
+            class="ais-Panel"
+          >
+            <div
+              class="ais-Panel-body"
+            >
+              HierarchicalMenu([test5, test5.1])
             </div>
           </div>
         </div>
@@ -326,6 +347,87 @@ describe('DynamicWidgets', () => {
       ).toMatchInlineSnapshot(
         `[Error: Could not find "attribute" prop for UnknownComponent.]`
       );
+    });
+
+    test('does not render attributes without widget by default', () => {
+      const searchClient = createSearchClient();
+
+      const { container } = render(
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="test"
+          // @ts-ignore resultsState in InstantSearch is typed wrongly to deal with multi-index
+          resultsState={resultsState}
+        >
+          <DynamicWidgets transformItems={() => ['test1', 'test2', 'test3']}>
+            <RefinementList attribute="test1" />
+          </DynamicWidgets>
+        </InstantSearch>
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          RefinementList(test1)
+        </div>
+      `);
+    });
+
+    test("uses fallbackComponent component to create widgets that aren't explicitly declared", () => {
+      const searchClient = createSearchClient();
+
+      const { container } = render(
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="test"
+          // @ts-ignore resultsState in InstantSearch is typed wrongly to deal with multi-index
+          resultsState={resultsState}
+        >
+          <DynamicWidgets
+            transformItems={() => ['test1', 'test2', 'test3']}
+            fallbackComponent={Menu}
+          >
+            <RefinementList attribute="test1" />
+          </DynamicWidgets>
+        </InstantSearch>
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          RefinementList(test1)
+          Menu(test2)
+          Menu(test3)
+        </div>
+      `);
+    });
+
+    test("uses fallbackComponent callback to create widgets that aren't explicitly declared", () => {
+      const searchClient = createSearchClient();
+
+      const { container } = render(
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="test"
+          // @ts-ignore resultsState in InstantSearch is typed wrongly to deal with multi-index
+          resultsState={resultsState}
+        >
+          <DynamicWidgets
+            transformItems={() => ['test1', 'test2', 'test3']}
+            fallbackComponent={({ attribute }) => (
+              <Menu attribute={attribute} otherProp />
+            )}
+          >
+            <RefinementList attribute="test1" />
+          </DynamicWidgets>
+        </InstantSearch>
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          RefinementList(test1)
+          Menu(test2) {"otherProp":true}
+          Menu(test3) {"otherProp":true}
+        </div>
+      `);
     });
   });
 });

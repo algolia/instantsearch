@@ -1,4 +1,4 @@
-import React, { Fragment, ReactChild, ReactNode } from 'react';
+import React, { Fragment, ReactChild, ComponentType, ReactNode } from 'react';
 import { getDisplayName } from '../core/utils';
 import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
 
@@ -23,9 +23,14 @@ function getAttribute(component: ReactChild): string | undefined {
 type DynamicWidgetsProps = {
   children: ReactNode;
   attributesToRender: string[];
+  fallbackComponent?: ComponentType<{ attribute: string }>;
 };
 
-function DynamicWidgets({ children, attributesToRender }: DynamicWidgetsProps) {
+function DynamicWidgets({
+  children,
+  attributesToRender,
+  fallbackComponent: Fallback = () => null,
+}: DynamicWidgetsProps) {
   const widgets: Map<string, ReactChild> = new Map();
 
   React.Children.forEach(children, child => {
@@ -43,7 +48,9 @@ function DynamicWidgets({ children, attributesToRender }: DynamicWidgetsProps) {
   return (
     <>
       {attributesToRender.map(attribute => (
-        <Fragment key={attribute}>{widgets.get(attribute)}</Fragment>
+        <Fragment key={attribute}>
+          {widgets.get(attribute) || <Fallback attribute={attribute} />}
+        </Fragment>
       ))}
     </>
   );
