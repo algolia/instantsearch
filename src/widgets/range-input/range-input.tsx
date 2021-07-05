@@ -24,57 +24,57 @@ const defaultTemplates: RangeInputTemplates = {
   submitText: 'Go',
 };
 
-export type RangeInputTemplates = {
+export type RangeInputTemplates = Partial<{
   /**
    * The label of the separator, between min and max.
    * @default "to"
    */
-  separatorText?: Template;
+  separatorText: Template;
   /**
    * The label of the submit button
    * @default "Go"
    */
-  submitText?: Template;
-};
+  submitText: Template;
+}>;
 
-export type RangeInputCSSClasses = {
+export type RangeInputCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the root element when there's no refinements.
    */
-  noRefinement?: string | string[];
+  noRefinement: string | string[];
   /**
    * CSS class to add to the form element.
    */
-  form?: string | string[];
+  form: string | string[];
   /**
    * CSS class to add to the label element.
    */
-  label?: string | string[];
+  label: string | string[];
   /**
    * CSS class to add to the input element.
    */
-  input?: string | string[];
+  input: string | string[];
   /**
    * CSS class to add to the min input element.
    */
-  inputMin?: string | string[];
+  inputMin: string | string[];
   /**
    * CSS class to add to the max input element.
    */
-  separator?: string | string[];
+  separator: string | string[];
   /**
    * CSS class to add to the separator of the form.
    */
-  inputMax?: string | string[];
+  inputMax: string | string[];
   /**
    * CSS class to add to the submit button of the form.
    */
-  submit?: string | string[];
-};
+  submit: string | string[];
+}>;
 
 export type RangeInputWidgetParams = {
   /**

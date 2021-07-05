@@ -19,20 +19,20 @@ import { Renderer, TransformItems, WidgetFactory } from '../../types';
 const withUsage = createDocumentationMessageGenerator({ name: 'sort-by' });
 const suit = component('SortBy');
 
-export type SortByWidgetCssClasses = {
+export type SortByWidgetCssClasses = Partial<{
   /**
    * CSS classes added to the outer `<div>`.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS classes added to the parent `<select>`.
    */
-  select?: string | string[];
+  select: string | string[];
   /**
    * CSS classes added to each `<option>`.
    */
-  option?: string | string[];
-};
+  option: string | string[];
+}>;
 
 export type SortByIndexDefinition = {
   /**

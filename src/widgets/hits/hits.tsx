@@ -64,48 +64,48 @@ const renderer = ({
   );
 };
 
-export type HitsCSSClasses = {
+export type HitsCSSClasses = Partial<{
   /**
    * CSS class to add to the wrapping element.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the wrapping element when no results.
    */
-  emptyRoot?: string | string[];
+  emptyRoot: string | string[];
 
   /**
    * CSS class to add to the list of results.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS class to add to each result.
    */
-  item?: string | string[];
-};
+  item: string | string[];
+}>;
 
-export type HitsTemplates = {
+export type HitsTemplates = Partial<{
   /**
    * Template to use when there are no results.
    *
    * @default 'No Results'
    */
-  empty?: Template;
+  empty: Template;
 
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    *
    * @default ''
    */
-  item?: TemplateWithBindEvent<
+  item: TemplateWithBindEvent<
     Hit & {
       // @deprecated the index in the hits array, use __position instead, which is the absolute position
       __hitIndex: number;
     }
   >;
-};
+}>;
 
 export type HitsWidgetParams = {
   /**

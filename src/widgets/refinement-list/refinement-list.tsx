@@ -29,72 +29,72 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('RefinementList');
 const searchBoxSuit = component('SearchBox');
 
-export type RefinementListOwnCSSClasses = {
+export type RefinementListOwnCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the root element when no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
   /**
    * CSS class to add to the root element with no results.
    */
-  noResults?: string | string[];
+  noResults: string | string[];
   /**
    * CSS class to add to the list element.
    */
-  list?: string | string[];
+  list: string | string[];
   /**
    * CSS class to add to each item element.
    */
-  item?: string | string[];
+  item: string | string[];
   /**
    * CSS class to add to each selected element.
    */
-  selectedItem?: string | string[];
+  selectedItem: string | string[];
   /**
    * CSS class to add to each label element (when using the default template).
    */
-  label?: string | string[];
+  label: string | string[];
   /**
    * CSS class to add to each checkbox element (when using the default template).
    */
-  checkbox?: string | string[];
+  checkbox: string | string[];
   /**
    * CSS class to add to each label text element.
    */
-  labelText?: string | string[];
+  labelText: string | string[];
   /**
    * CSS class to add to the show more element
    */
-  showMore?: string | string[];
+  showMore: string | string[];
   /**
    * CSS class to add to the disabled show more element
    */
-  disabledShowMore?: string | string[];
+  disabledShowMore: string | string[];
   /**
    * CSS class to add to each count element (when using the default template).
    */
-  count?: string | string[];
+  count: string | string[];
   /**
    * CSS class to add to the searchable container.
    */
-  searchBox?: string | string[];
-};
+  searchBox: string | string[];
+}>;
 
-type RefinementListSearchableCSSClasses = {
-  searchableRoot?: string | string[];
-  searchableForm?: string | string[];
-  searchableInput?: string | string[];
-  searchableSubmit?: string | string[];
-  searchableSubmitIcon?: string | string[];
-  searchableReset?: string | string[];
-  searchableResetIcon?: string | string[];
-  searchableLoadingIndicator?: string | string[];
-  searchableLoadingIcon?: string | string[];
-};
+type RefinementListSearchableCSSClasses = Partial<{
+  searchableRoot: string | string[];
+  searchableForm: string | string[];
+  searchableInput: string | string[];
+  searchableSubmit: string | string[];
+  searchableSubmitIcon: string | string[];
+  searchableReset: string | string[];
+  searchableResetIcon: string | string[];
+  searchableLoadingIndicator: string | string[];
+  searchableLoadingIcon: string | string[];
+}>;
 
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
@@ -130,35 +130,35 @@ export type RefinementListItemData = {
   cssClasses: RefinementListCSSClasses;
 };
 
-export type RefinementListOwnTemplates = {
+export type RefinementListOwnTemplates = Partial<{
   /**
    * Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
    */
-  item?: Template<RefinementListItemData>;
+  item: Template<RefinementListItemData>;
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
    */
-  showMoreText?: Template;
+  showMoreText: Template;
   /**
    * Templates to use for search for facet values when there are no results.
    */
-  searchableNoResults?: Template;
-};
+  searchableNoResults: Template;
+}>;
 
-type RefinementListSearchableTemplates = {
+type RefinementListSearchableTemplates = Partial<{
   /**
    * Templates to use for search for facet values submit button.
    */
-  searchableSubmit?: SearchBoxTemplates['submit'];
+  searchableSubmit: SearchBoxTemplates['submit'];
   /**
    * Templates to use for search for facet values reset button.
    */
-  searchableReset?: SearchBoxTemplates['reset'];
+  searchableReset: SearchBoxTemplates['reset'];
   /**
    * Templates to use for the search for facet values loading indicator.
    */
-  searchableLoadingIndicator?: SearchBoxTemplates['loadingIndicator'];
-};
+  searchableLoadingIndicator: SearchBoxTemplates['loadingIndicator'];
+}>;
 
 export type RefinementListTemplates = RefinementListOwnTemplates &
   RefinementListSearchableTemplates;

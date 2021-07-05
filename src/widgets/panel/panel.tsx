@@ -12,52 +12,52 @@ import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
 import { Template, RenderOptions, WidgetFactory } from '../../types';
 
-export type PanelCSSClasses = {
+export type PanelCSSClasses = Partial<{
   /**
    * CSS classes to add to the root element of the widget.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS classes to add to the root element of the widget when there's no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
 
   /**
    * CSS classes to add to the root element when collapsible (`collapse` is defined).
    */
-  collapsibleRoot?: string | string[];
+  collapsibleRoot: string | string[];
 
   /**
    * CSS classes to add to the root element when collapsed.
    */
-  collapsedRoot?: string | string[];
+  collapsedRoot: string | string[];
 
   /**
    * CSS classes to add to the collapse button element.
    */
-  collapseButton?: string | string[];
+  collapseButton: string | string[];
 
   /**
    * CSS classes to add to the collapse icon of the button.
    */
-  collapseIcon?: string | string[];
+  collapseIcon: string | string[];
 
   /**
    * CSS classes to add to the header.
    */
-  header?: string | string[];
+  header: string | string[];
 
   /**
    * CSS classes to add to the body.
    */
-  body?: string | string[];
+  body: string | string[];
 
   /**
    * CSS classes to add to the footer.
    */
-  footer?: string | string[];
-};
+  footer: string | string[];
+}>;
 
 type AnyWidgetFactory = WidgetFactory<
   {
@@ -70,22 +70,22 @@ type AnyWidgetFactory = WidgetFactory<
   any
 >;
 
-export type PanelTemplates<TWidget extends AnyWidgetFactory> = {
+export type PanelTemplates<TWidget extends AnyWidgetFactory> = Partial<{
   /**
    * Template to use for the header.
    */
-  header?: Template<PanelRenderOptions<TWidget>>;
+  header: Template<PanelRenderOptions<TWidget>>;
 
   /**
    * Template to use for the footer.
    */
-  footer?: Template<PanelRenderOptions<TWidget>>;
+  footer: Template<PanelRenderOptions<TWidget>>;
 
   /**
    * Template to use for collapse button.
    */
-  collapseButtonText?: Template<{ collapsed: boolean }>;
-};
+  collapseButtonText: Template<{ collapsed: boolean }>;
+}>;
 
 type GetWidgetRenderState<TWidgetFactory extends AnyWidgetFactory> = ReturnType<
   TWidgetFactory

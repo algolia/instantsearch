@@ -69,31 +69,31 @@ const renderer = ({
   );
 };
 
-export type ToggleRefinementCSSClasses = {
+export type ToggleRefinementCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the label wrapping element.
    */
-  label?: string | string[];
+  label: string | string[];
   /**
    * CSS class to add to the checkbox.
    */
-  checkbox?: string | string[];
+  checkbox: string | string[];
   /**
    * CSS class to add to the label text.
    */
-  labelText?: string | string[];
-};
+  labelText: string | string[];
+}>;
 
-export type ToggleRefinementTemplates = {
+export type ToggleRefinementTemplates = Partial<{
   /**
    * the text that describes the toggle action
    */
-  labelText?: Template<ToggleRefinementValue>;
-};
+  labelText: Template<ToggleRefinementValue>;
+}>;
 
 export type ToggleRefinementWidgetParams = {
   /**

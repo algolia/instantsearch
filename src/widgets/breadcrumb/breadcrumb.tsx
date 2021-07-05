@@ -52,54 +52,54 @@ const renderer = ({
   );
 };
 
-export type BreadcrumbCSSClasses = {
+export type BreadcrumbCSSClasses = Partial<{
   /**
    * CSS class to add to the root element of the widget.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the root element of the widget if there are no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
 
   /**
    * CSS class to add to the list element.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS class to add to the items of the list. The items contains the link and the separator.
    */
-  item?: string | string[];
+  item: string | string[];
 
   /**
    * CSS class to add to the selected item in the list: the last one or the home if there are no refinements.
    */
-  selectedItem?: string | string[];
+  selectedItem: string | string[];
 
   /**
    * CSS class to add to the separator.
    */
-  separator?: string | string[];
+  separator: string | string[];
 
   /**
    * CSS class to add to the links in the items.
    */
-  link?: string | string[];
-};
+  link: string | string[];
+}>;
 
-export type BreadcrumbTemplates = {
+export type BreadcrumbTemplates = Partial<{
   /**
    * Label of the breadcrumb's first element.
    */
-  home?: Template;
+  home: Template;
 
   /**
    * Symbol used to separate the elements of the breadcrumb.
    */
-  separator?: Template;
-};
+  separator: Template;
+}>;
 
 export type BreadcrumbWidgetParams = {
   /**

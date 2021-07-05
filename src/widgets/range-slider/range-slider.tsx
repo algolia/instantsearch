@@ -64,16 +64,16 @@ const renderer = ({
   );
 };
 
-export type RangeSliderCssClasses = {
+export type RangeSliderCssClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the disabled root element.
    */
-  disabledRoot?: string | string[];
-};
+  disabledRoot: string | string[];
+}>;
 
 type RangeSliderTooltipOptions = {
   /**

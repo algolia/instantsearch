@@ -19,13 +19,13 @@ import CustomData, {
 } from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
-export type QueryRuleCustomDataCSSClasses = {
-  root?: string | string[];
-};
+export type QueryRuleCustomDataCSSClasses = Partial<{
+  root: string | string[];
+}>;
 
-export type QueryRuleCustomDataTemplates = {
-  default?: Template<{ items: any[] }>;
-};
+export type QueryRuleCustomDataTemplates = Partial<{
+  default: Template<{ items: any[] }>;
+}>;
 
 type QueryRuleCustomDataWidgetParams = {
   container: string | HTMLElement;

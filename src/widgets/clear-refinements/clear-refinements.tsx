@@ -45,29 +45,29 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   );
 };
 
-export type ClearRefinementsCSSClasses = {
+export type ClearRefinementsCSSClasses = Partial<{
   /**
    * CSS class to add to the wrapper element.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the button of the widget.
    */
-  button?: string | string[];
+  button: string | string[];
 
   /**
    * CSS class to add to the button when there are no refinements.
    */
-  disabledButton?: string | string[];
-};
+  disabledButton: string | string[];
+}>;
 
-export type ClearRefinementsTemplates = {
+export type ClearRefinementsTemplates = Partial<{
   /**
    * Template for the content of the button
    */
-  resetLabel?: Template;
-};
+  resetLabel: Template;
+}>;
 
 export type ClearRefinementsWidgetParams = {
   /**

@@ -22,59 +22,59 @@ import defaultTemplates from './defaultTemplates';
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');
 
-export type SearchBoxTemplates = {
+export type SearchBoxTemplates = Partial<{
   /**
    * Template used for displaying the submit button. Can accept a function or a Hogan string.
    */
-  submit?: Template;
+  submit: Template;
   /**
    * Template used for displaying the reset button. Can accept a function or a Hogan string.
    */
-  reset?: Template;
+  reset: Template;
   /**
    * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
    */
-  loadingIndicator?: Template;
-};
+  loadingIndicator: Template;
+}>;
 
-export type SearchBoxCSSClasses = {
+export type SearchBoxCSSClasses = Partial<{
   /**
    * CSS class to add to the wrapping `<div>`
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the form
    */
-  form?: string | string[];
+  form: string | string[];
   /**
    * CSS class to add to the input.
    */
-  input?: string | string[];
+  input: string | string[];
   /**
    * CSS classes added to the submit button.
    */
-  submit?: string | string[];
+  submit: string | string[];
   /**
    * CSS classes added to the submit icon.
    */
-  submitIcon?: string | string[];
+  submitIcon: string | string[];
   /**
    * CSS classes added to the reset button.
    */
-  reset?: string | string[];
+  reset: string | string[];
   /**
    * CSS classes added to the reset icon.
    */
-  resetIcon?: string | string[];
+  resetIcon: string | string[];
   /**
    * CSS classes added to the loading indicator element.
    */
-  loadingIndicator?: string | string[];
+  loadingIndicator: string | string[];
   /**
    * CSS classes added to the loading indicator icon.
    */
-  loadingIcon?: string | string[];
-};
+  loadingIcon: string | string[];
+}>;
 
 export type SearchBoxWidgetParams = {
   /**

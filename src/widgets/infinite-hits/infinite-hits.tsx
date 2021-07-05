@@ -34,74 +34,74 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('InfiniteHits');
 const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
-export type InfiniteHitsCSSClasses = {
+export type InfiniteHitsCSSClasses = Partial<{
   /**
    * The root element of the widget.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * The root container without results.
    */
-  emptyRoot?: string | string[];
+  emptyRoot: string | string[];
 
   /**
    * The list of results.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * The list item.
    */
-  item?: string | string[];
+  item: string | string[];
 
   /**
    * The “Show previous” button.
    */
-  loadPrevious?: string | string[];
+  loadPrevious: string | string[];
 
   /**
    * The disabled “Show previous” button.
    */
-  disabledLoadPrevious?: string | string[];
+  disabledLoadPrevious: string | string[];
 
   /**
    * The “Show more” button.
    */
-  loadMore?: string | string[];
+  loadMore: string | string[];
 
   /**
    * The disabled “Show more” button.
    */
-  disabledLoadMore?: string | string[];
-};
+  disabledLoadMore: string | string[];
+}>;
 
-export type InfiniteHitsTemplates = {
+export type InfiniteHitsTemplates = Partial<{
   /**
    * The template to use when there are no results.
    */
-  empty?: Template<{ results: SearchResults }>;
+  empty: Template<{ results: SearchResults }>;
 
   /**
    * The template to use for the “Show previous” label.
    */
-  showPreviousText?: Template;
+  showPreviousText: Template;
 
   /**
    * The template to use for the “Show more” label.
    */
-  showMoreText?: Template;
+  showMoreText: Template;
 
   /**
    * The template to use for each result.
    */
-  item?: TemplateWithBindEvent<
+  item: TemplateWithBindEvent<
     Hit & {
       // @deprecated the index in the hits array, use __position instead, which is the absolute position
       __hitIndex: number;
     }
   >;
-};
+}>;
 
 export type InfiniteHitsWidgetParams = {
   /**
