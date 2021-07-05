@@ -15,6 +15,7 @@ import connectSearchBox, {
 } from '../../connectors/search-box/connectSearchBox';
 import SearchBox, {
   SearchBoxComponentCSSClasses,
+  SearchBoxComponentTemplates,
 } from '../../components/SearchBox/SearchBox';
 import defaultTemplates from './defaultTemplates';
 
@@ -25,15 +26,15 @@ export type SearchBoxTemplates = {
   /**
    * Template used for displaying the submit button. Can accept a function or a Hogan string.
    */
-  submit: Template;
+  submit?: Template;
   /**
    * Template used for displaying the reset button. Can accept a function or a Hogan string.
    */
-  reset: Template;
+  reset?: Template;
   /**
    * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
    */
-  loadingIndicator: Template;
+  loadingIndicator?: Template;
 };
 
 export type SearchBoxCSSClasses = {
@@ -114,7 +115,7 @@ export type SearchBoxWidgetParams = {
   /**
    * Templates used for customizing the rendering of the searchbox
    */
-  templates?: Partial<SearchBoxTemplates>;
+  templates?: SearchBoxTemplates;
   /**
    * A function that is called every time a new search is done. You
    * will get the query as the first parameter and a search (query) function to call as the second parameter.
@@ -137,7 +138,7 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: SearchBoxComponentCSSClasses;
   placeholder: string;
-  templates: SearchBoxTemplates;
+  templates: SearchBoxComponentTemplates;
   autofocus: boolean;
   searchAsYouType: boolean;
   showReset: boolean;
@@ -191,7 +192,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showSubmit = true,
     showLoadingIndicator = true,
     queryHook,
-    templates,
+    templates: userTemplates = {},
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -222,12 +223,16 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
       userCssClasses.loadingIcon
     ),
   };
+  const templates = {
+    ...defaultTemplates,
+    ...userTemplates,
+  };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     placeholder,
-    templates: { ...defaultTemplates, ...templates },
+    templates,
     autofocus,
     searchAsYouType,
     showReset,

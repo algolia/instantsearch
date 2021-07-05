@@ -1,4 +1,5 @@
-export default {
+import { HierarchicalMenuComponentTemplates } from './hierarchical-menu';
+const defaultTemplates: HierarchicalMenuComponentTemplates = {
   item:
     '<a class="{{cssClasses.link}}" href="{{url}}">' +
     '<span class="{{cssClasses.label}}">{{label}}</span>' +
@@ -13,3 +14,5 @@ export default {
     {{/isShowingMore}}
   `,
 };
+
+export default defaultTemplates;

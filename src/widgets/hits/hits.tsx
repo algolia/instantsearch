@@ -135,7 +135,7 @@ const hits: HitsWidget = function hits(widgetParams) {
     container,
     escapeHTML,
     transformItems,
-    templates = defaultTemplates,
+    templates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 

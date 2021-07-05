@@ -18,6 +18,7 @@ import { component } from '../../lib/suit';
 import {
   ComponentCSSClasses,
   RendererOptions,
+  Template,
   WidgetFactory,
 } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
@@ -29,7 +30,12 @@ export type RatingMenuTemplates = {
   /**
    * Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
    */
-  item: string | ((data: any) => string);
+  item?: Template<{
+    name: string;
+    count: number;
+    isRefined: boolean;
+    url: string;
+  }>;
 };
 
 export type RatingMenuCSSClasses = {
@@ -87,6 +93,8 @@ export type RatingMenuComponentCSSClasses = ComponentCSSClasses<
   RatingMenuCSSClasses
 >;
 
+export type RatingMenuComponentTemplates = Required<RatingMenuTemplates>;
+
 export type RatingMenuWidgetParams = {
   /**
    * Place where to insert the widget in your webpage.
@@ -103,7 +111,7 @@ export type RatingMenuWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<RatingMenuTemplates>;
+  templates?: RatingMenuTemplates;
   /**
    * CSS classes to add.
    */
@@ -118,8 +126,10 @@ const renderer = ({
 }: {
   containerNode: HTMLElement;
   cssClasses: RatingMenuComponentCSSClasses;
-  templates: Partial<RatingMenuTemplates>;
-  renderState: { templateProps?: PreparedTemplateProps<RatingMenuTemplates> };
+  templates: RatingMenuTemplates;
+  renderState: {
+    templateProps?: PreparedTemplateProps<RatingMenuComponentTemplates>;
+  };
 }) => (
   {
     refine,
@@ -144,7 +154,7 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       toggleRefinement={refine}
     >
       <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
@@ -201,7 +211,7 @@ const ratingMenu: RatingMenuWidget = function ratingMenu(widgetParams) {
     attribute,
     max = 5,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates = {},
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

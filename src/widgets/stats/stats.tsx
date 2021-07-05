@@ -2,7 +2,7 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Stats from '../../components/Stats/Stats';
+import Stats, { StatsComponentTemplates } from '../../components/Stats/Stats';
 import connectStats, {
   StatsConnectorParams,
   StatsRenderState,
@@ -35,7 +35,7 @@ export type StatsTemplates = {
   /**
    * Text template, provided with `hasManyResults`, `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbSortedHits`, `nbPages`, `areHitsSorted`, `page`, `processingTimeMS`, `query`.
    */
-  text: Template<
+  text?: Template<
     {
       hasManyResults: boolean;
       hasNoResults: boolean;
@@ -53,7 +53,7 @@ export type StatsWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<StatsTemplates>;
+  templates?: StatsTemplates;
 
   /**
    * CSS classes to add.
@@ -67,7 +67,7 @@ export type StatsWidget = WidgetFactory<
   StatsWidgetParams
 >;
 
-export const defaultTemplates: StatsTemplates = {
+export const defaultTemplates: StatsComponentTemplates = {
   text: `
     {{#areHitsSorted}}
       {{#hasNoSortedResults}}No relevant results{{/hasNoSortedResults}}
@@ -136,11 +136,8 @@ const renderer = ({
  * results inside the engine.
  */
 const stats: StatsWidget = widgetParams => {
-  const {
-    container,
-    cssClasses: userCssClasses = {} as StatsCSSClasses,
-    templates = defaultTemplates,
-  } = widgetParams || {};
+  const { container, cssClasses: userCssClasses = {}, templates = {} } =
+    widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

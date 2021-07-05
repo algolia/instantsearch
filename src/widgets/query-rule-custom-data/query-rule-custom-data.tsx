@@ -15,6 +15,7 @@ import connectQueryRules, {
 } from '../../connectors/query-rules/connectQueryRules';
 import CustomData, {
   QueryRuleCustomDataComponentCSSClasses,
+  QueryRuleCustomDataComponentTemplates,
 } from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
@@ -23,7 +24,7 @@ export type QueryRuleCustomDataCSSClasses = {
 };
 
 export type QueryRuleCustomDataTemplates = {
-  default: Template<{ items: any[] }>;
+  default?: Template<{ items: any[] }>;
 };
 
 type QueryRuleCustomDataWidgetParams = {
@@ -37,6 +38,10 @@ type QueryRuleCustomDataWidget = WidgetFactory<
   QueryRulesConnectorParams,
   QueryRuleCustomDataWidgetParams
 >;
+
+export const defaultTemplates: QueryRuleCustomDataComponentTemplates = {
+  default: ({ items }) => JSON.stringify(items, null, 2),
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-custom-data',
@@ -52,9 +57,11 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: QueryRuleCustomDataComponentCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<QueryRuleCustomDataTemplates>;
+    templateProps?: PreparedTemplateProps<
+      QueryRuleCustomDataComponentTemplates
+    >;
   };
-  templates: QueryRuleCustomDataTemplates;
+  templates: QueryRuleCustomDataComponentTemplates;
 }) => ({ items }: QueryRulesRenderState) => {
   render(
     <CustomData
@@ -69,7 +76,7 @@ const renderer = ({
 const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
   const {
     container,
-    cssClasses: userCssClasses = {} as QueryRuleCustomDataCSSClasses,
+    cssClasses: userCssClasses = {},
     templates: userTemplates = {},
     transformItems = (items =>
       items) as QueryRulesConnectorParams['transformItems'],
@@ -84,10 +91,8 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
   };
 
   const containerNode = getContainerNode(container);
-  const defaultTemplates = {
-    default: ({ items }) => JSON.stringify(items, null, 2),
-  };
-  const templates: QueryRuleCustomDataTemplates = {
+
+  const templates = {
     ...defaultTemplates,
     ...userTemplates,
   };

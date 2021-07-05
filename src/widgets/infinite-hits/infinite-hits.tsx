@@ -188,7 +188,7 @@ const infiniteHits: InfiniteHitsWidget = widgetParams => {
     container,
     escapeHTML,
     transformItems,
-    templates = defaultTemplates,
+    templates = {},
     cssClasses: userCssClasses = {},
     showPrevious,
     cache,

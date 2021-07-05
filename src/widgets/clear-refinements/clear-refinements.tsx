@@ -95,7 +95,7 @@ export type ClearRefinementsWidget = WidgetFactory<
 const clearRefinements: ClearRefinementsWidget = widgetParams => {
   const {
     container,
-    templates = defaultTemplates,
+    templates = {},
     includedAttributes,
     excludedAttributes,
     transformItems,

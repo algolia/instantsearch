@@ -73,7 +73,7 @@ export type MenuTemplates = {
   /**
    * Item template. The string template gets the same values as the function.
    */
-  item: Template<{
+  item?: Template<{
     count: number;
     cssClasses: MenuCSSClasses;
     isRefined: boolean;
@@ -84,12 +84,14 @@ export type MenuTemplates = {
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
    */
-  showMoreText: Template<{
+  showMoreText?: Template<{
     isShowingMore: boolean;
   }>;
 };
 
 export type MenuComponentCSSClasses = ComponentCSSClasses<MenuCSSClasses>;
+
+export type MenuComponentTemplates = Required<MenuTemplates>;
 
 export type MenuWidgetParams = {
   /**
@@ -99,7 +101,7 @@ export type MenuWidgetParams = {
   /**
    * Customize the output through templating.
    */
-  templates?: Partial<MenuTemplates>;
+  templates?: MenuTemplates;
   /**
    * CSS classes to add to the wrapping elements.
    */
@@ -115,8 +117,10 @@ const renderer = ({
 }: {
   containerNode: HTMLElement;
   cssClasses: MenuComponentCSSClasses;
-  renderState: { templateProps?: PreparedTemplateProps<MenuTemplates> };
-  templates: Partial<MenuTemplates>;
+  renderState: {
+    templateProps?: PreparedTemplateProps<MenuComponentTemplates>;
+  };
+  templates: MenuTemplates;
   showMore?: boolean;
 }) => (
   {
@@ -150,7 +154,7 @@ const renderer = ({
       cssClasses={cssClasses}
       facetValues={facetValues}
       showMore={showMore}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       toggleRefinement={refine}
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
@@ -175,7 +179,7 @@ const menu: MenuWidget = function menu(widgetParams) {
     showMore,
     showMoreLimit,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates = {},
     transformItems,
   } = widgetParams || {};
 

@@ -35,7 +35,7 @@ type HierarchicalMenuTemplates = {
   /**
    * Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
    */
-  item: Template<{
+  item?: Template<{
     name: string;
     count: number;
     isRefined: boolean;
@@ -44,7 +44,7 @@ type HierarchicalMenuTemplates = {
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
    */
-  showMoreText: Template<{ isShowingMore: boolean }>;
+  showMoreText?: Template<{ isShowingMore: boolean }>;
 };
 
 export type HierarchicalMenuCSSClasses = {
@@ -100,6 +100,10 @@ export type HierarchicalMenuCSSClasses = {
 
 export type HierarchicalMenuComponentCSSClasses = ComponentCSSClasses<
   HierarchicalMenuCSSClasses
+>;
+
+export type HierarchicalMenuComponentTemplates = Required<
+  HierarchicalMenuTemplates
 >;
 
 export type HierarchicalMenuWidgetParams = {
@@ -166,7 +170,7 @@ export type HierarchicalMenuWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<HierarchicalMenuTemplates>;
+  templates?: HierarchicalMenuTemplates;
   /**
    * CSS classes to add to the wrapping elements.
    */
@@ -183,9 +187,9 @@ const renderer = ({
   cssClasses: HierarchicalMenuComponentCSSClasses;
   containerNode: HTMLElement;
   showMore: boolean;
-  templates: Partial<HierarchicalMenuTemplates>;
+  templates: HierarchicalMenuTemplates;
   renderState: {
-    templateProps?: PreparedTemplateProps<HierarchicalMenuTemplates>;
+    templateProps?: PreparedTemplateProps<HierarchicalMenuComponentTemplates>;
   };
 }) => (
   {
@@ -214,7 +218,7 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       toggleRefinement={refine}
       showMore={showMore}
       toggleShowMore={toggleShowMore}
@@ -296,7 +300,7 @@ const hierarchicalMenu: HierarchicalMenuWidget = function hierarchicalMenu(
     showMoreLimit,
     sortBy,
     transformItems,
-    templates = defaultTemplates,
+    templates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 

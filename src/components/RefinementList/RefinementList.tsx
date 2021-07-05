@@ -8,15 +8,24 @@ import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
 import SearchBox, {
   SearchBoxComponentCSSClasses,
+  SearchBoxComponentTemplates,
 } from '../SearchBox/SearchBox';
 import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import { SearchBoxTemplates } from '../../widgets/search-box/search-box';
-import { ComponentCSSClasses, CreateURL, Templates } from '../../types';
-import { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
+import {
+  ComponentCSSClasses,
+  CreateURL,
+  Templates,
+  Template as TemplateType,
+} from '../../types';
+import {
+  RefinementListOwnCSSClasses,
+  RefinementListOwnTemplates,
+} from '../../widgets/refinement-list/refinement-list';
 import { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
 import { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 
+// CSS types
 type RefinementListOptionalClasses =
   | 'noResults'
   | 'checkbox'
@@ -29,18 +38,24 @@ type RefinementListWidgetCSSClasses = ComponentCSSClasses<
   RefinementListOwnCSSClasses
 >;
 
-type RefinementListRequired = Omit<
+type RefinementListRequiredCSSClasses = Omit<
   RefinementListWidgetCSSClasses,
   RefinementListOptionalClasses
 > &
   Partial<Pick<RefinementListWidgetCSSClasses, RefinementListOptionalClasses>>;
 
-export type RefinementListComponentCSSClasses = RefinementListRequired & {
+export type RefinementListComponentCSSClasses = RefinementListRequiredCSSClasses & {
   searchable?: SearchBoxComponentCSSClasses;
 } & Partial<Pick<RatingMenuComponentCSSClasses, 'disabledItem'>> &
   Partial<
     Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
   >;
+
+export type RefinementListComponentTemplates = Required<
+  RefinementListOwnTemplates
+> & {
+  searchableNoResults?: TemplateType<void>;
+};
 
 type FacetValue = TRefinementListItem | HierarchicalMenuItem;
 type FacetValues = TRefinementListItem[] | HierarchicalMenuItem[];
@@ -51,20 +66,22 @@ export type RefinementListProps<TTemplates extends Templates> = {
   depth?: number;
   facetValues?: FacetValues;
   attribute?: string;
-  templateProps?: PreparedTemplateProps<TTemplates>;
-  searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
+  templateProps: PreparedTemplateProps<TTemplates>;
   toggleRefinement: (value: string) => void;
-  searchFacetValues?: (query: string) => void;
-  searchPlaceholder?: string;
-  isFromSearch?: boolean;
   showMore?: boolean;
   toggleShowMore?: () => void;
   isShowingMore?: boolean;
   hasExhaustiveItems?: boolean;
   canToggleShowMore?: boolean;
-  searchIsAlwaysActive?: boolean;
   className?: string;
   children?: h.JSX.Element;
+
+  // searchable props are optional, but will definitely be present in a searchable context
+  isFromSearch?: boolean;
+  searchIsAlwaysActive?: boolean;
+  searchFacetValues?: (query: string) => void;
+  searchPlaceholder?: string;
+  searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
 };
 
 const defaultProps = {
@@ -302,10 +319,6 @@ class RefinementList<TTemplates extends Templates> extends Component<
       this.props.searchIsAlwaysActive !== true &&
       !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
 
-    const templates = this.props.searchBoxTemplateProps
-      ? this.props.searchBoxTemplateProps.templates
-      : undefined;
-
     const searchBox = this.props.searchFacetValues && (
       <div className={this.props.cssClasses.searchBox}>
         <SearchBox
@@ -313,7 +326,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
           placeholder={this.props.searchPlaceholder}
           disabled={shouldDisableSearchBox}
           cssClasses={this.props.cssClasses.searchable!}
-          templates={templates}
+          templates={this.props.searchBoxTemplateProps!.templates}
           onChange={(event: Event) =>
             this.props.searchFacetValues!(
               (event.target as HTMLInputElement).value

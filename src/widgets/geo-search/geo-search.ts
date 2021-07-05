@@ -23,14 +23,16 @@ const suit = component('GeoSearch');
 
 export type GeoSearchTemplates = {
   /** Template to use for the marker. */
-  HTMLMarker: Template<GeoHit>;
+  HTMLMarker?: Template<GeoHit>;
   /** Template for the reset button. */
-  reset: Template;
+  reset?: Template;
   /** Template for the toggle label. */
-  toggle: Template;
+  toggle?: Template;
   /** Template for the redo button. */
-  redo: Template;
+  redo?: Template;
 };
+
+export type GeoSearchComponentTemplates = Required<GeoSearchTemplates>;
 
 export type GeoSearchCSSClasses = {
   /** The root div of the widget. */
@@ -92,7 +94,7 @@ export type GeoSearchWidgetParams = {
    */
   initialPosition?: GeoLoc;
   /** Templates to use for the widget. */
-  templates?: Partial<GeoSearchTemplates>;
+  templates?: GeoSearchTemplates;
   /** CSS classes to add to the wrapping elements. */
   cssClasses?: GeoSearchCSSClasses;
   /**

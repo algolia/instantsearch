@@ -4,6 +4,7 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList, {
   RefinementListComponentCSSClasses,
+  RefinementListComponentTemplates,
 } from '../../components/RefinementList/RefinementList';
 import connectRefinementList, {
   RefinementListRenderState,
@@ -20,76 +21,13 @@ import { Template, WidgetFactory, RendererOptions } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 import { SearchBoxTemplates } from '../search-box/search-box';
+import { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
 });
 const suit = component('RefinementList');
 const searchBoxSuit = component('SearchBox');
-
-type RefinementListOwnTemplates = {
-  /**
-   * Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
-   */
-  item: Template<RefinementListItemData>;
-  /**
-   * Template used for the show more text, provided with `isShowingMore` data property.
-   */
-  showMoreText: Template;
-  /**
-   * Templates to use for search for facet values when there are no results.
-   */
-  searchableNoResults: Template;
-};
-
-type RefinementListSearchableTemplates = {
-  /**
-   * Templates to use for search for facet values submit button.
-   */
-  searchableSubmit: SearchBoxTemplates['submit'];
-  /**
-   * Templates to use for search for facet values reset button.
-   */
-  searchableReset: SearchBoxTemplates['reset'];
-  /**
-   * Templates to use for the search for facet values loading indicator.
-   */
-  searchableLoadingIndicator: SearchBoxTemplates['loadingIndicator'];
-};
-
-export type RefinementListTemplates = RefinementListSearchableTemplates &
-  RefinementListOwnTemplates;
-
-export type RefinementListItemData = {
-  /**
-   * The number of occurrences of the facet in the result set.
-   */
-  count: number;
-  /**
-   * True if the value is selected.
-   */
-  isRefined: boolean;
-  /**
-   * The label to display.
-   */
-  label: string;
-  /**
-   * The value used for refining.
-   */
-  value: string;
-  /**
-   * The label highlighted (when using search for facet values). This value is displayed in the default template.
-   */
-  highlighted: string;
-  /**
-   * The url with this refinement selected.
-   */
-  url: string;
-  /**
-   * Object containing all the classes computed for the item.
-   */
-  cssClasses: RefinementListCSSClasses;
-};
 
 export type RefinementListOwnCSSClasses = {
   /**
@@ -161,6 +99,70 @@ type RefinementListSearchableCSSClasses = {
 export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
   RefinementListSearchableCSSClasses;
 
+export type RefinementListItemData = {
+  /**
+   * The number of occurrences of the facet in the result set.
+   */
+  count: number;
+  /**
+   * True if the value is selected.
+   */
+  isRefined: boolean;
+  /**
+   * The label to display.
+   */
+  label: string;
+  /**
+   * The value used for refining.
+   */
+  value: string;
+  /**
+   * The label highlighted (when using search for facet values). This value is displayed in the default template.
+   */
+  highlighted: string;
+  /**
+   * The url with this refinement selected.
+   */
+  url: string;
+  /**
+   * Object containing all the classes computed for the item.
+   */
+  cssClasses: RefinementListCSSClasses;
+};
+
+export type RefinementListOwnTemplates = {
+  /**
+   * Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
+   */
+  item?: Template<RefinementListItemData>;
+  /**
+   * Template used for the show more text, provided with `isShowingMore` data property.
+   */
+  showMoreText?: Template;
+  /**
+   * Templates to use for search for facet values when there are no results.
+   */
+  searchableNoResults?: Template;
+};
+
+type RefinementListSearchableTemplates = {
+  /**
+   * Templates to use for search for facet values submit button.
+   */
+  searchableSubmit?: SearchBoxTemplates['submit'];
+  /**
+   * Templates to use for search for facet values reset button.
+   */
+  searchableReset?: SearchBoxTemplates['reset'];
+  /**
+   * Templates to use for the search for facet values loading indicator.
+   */
+  searchableLoadingIndicator?: SearchBoxTemplates['loadingIndicator'];
+};
+
+export type RefinementListTemplates = RefinementListOwnTemplates &
+  RefinementListSearchableTemplates;
+
 export type RefinementListWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
@@ -190,14 +192,14 @@ export type RefinementListWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<RefinementListTemplates>;
+  templates?: RefinementListTemplates;
   /**
    * CSS classes to add to the wrapping elements.
    */
   cssClasses?: RefinementListCSSClasses;
 };
 
-export const defaultTemplates: RefinementListOwnTemplates = {
+export const defaultTemplates: RefinementListComponentTemplates = {
   item: `<label class="{{cssClasses.label}}">
   <input type="checkbox"
          class="{{cssClasses.checkbox}}"
@@ -231,11 +233,11 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: RefinementListComponentCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
-    searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
+    templateProps?: PreparedTemplateProps<RefinementListComponentTemplates>;
+    searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
   };
-  templates: Partial<RefinementListOwnTemplates>;
-  searchBoxTemplates: Partial<SearchBoxTemplates>;
+  templates: RefinementListOwnTemplates;
+  searchBoxTemplates: SearchBoxTemplates;
   showMore?: boolean;
   searchable?: boolean;
   searchablePlaceholder?: string;
@@ -274,7 +276,7 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       searchBoxTemplateProps={renderState.searchBoxTemplateProps}
       toggleRefinement={refine}
       searchFacetValues={searchable ? searchForItems : undefined}
@@ -332,7 +334,7 @@ const refinementList: RefinementListWidget = function refinementList(
     searchableEscapeFacetValues = true,
     searchableIsAlwaysActive = true,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = defaultTemplates as RefinementListTemplates,
+    templates = {},
     transformItems,
   } = widgetParams || {};
 
@@ -417,11 +419,11 @@ const refinementList: RefinementListWidget = function refinementList(
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    templates: userTemplates,
+    templates,
     searchBoxTemplates: {
-      submit: userTemplates.searchableSubmit,
-      reset: userTemplates.searchableReset,
-      loadingIndicator: userTemplates.searchableLoadingIndicator,
+      submit: templates.searchableSubmit,
+      reset: templates.searchableReset,
+      loadingIndicator: templates.searchableLoadingIndicator,
     },
     renderState: {},
     searchable,

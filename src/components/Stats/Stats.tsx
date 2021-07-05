@@ -8,11 +8,13 @@ import { ComponentCSSClasses } from '../../types';
 
 export type StatsComponentCSSClasses = ComponentCSSClasses<StatsCSSClasses>;
 
+export type StatsComponentTemplates = Required<StatsTemplates>;
+
 type StatsProps = {
   cssClasses: StatsComponentCSSClasses;
   templateProps: {
     [key: string]: any;
-    templates: StatsTemplates;
+    templates: StatsComponentTemplates;
   };
   hitsPerPage: number | undefined;
   nbHits: number;

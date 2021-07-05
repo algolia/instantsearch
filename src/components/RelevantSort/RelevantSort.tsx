@@ -12,9 +12,11 @@ export type RelevantSortComponentCSSClasses = ComponentCSSClasses<
   RelevantSortCSSClasses
 >;
 
+export type RelevantSortComponentTemplates = Required<RelevantSortTemplates>;
+
 type RelevantSortProps = {
   cssClasses: RelevantSortComponentCSSClasses;
-  templates: RelevantSortTemplates;
+  templates: RelevantSortComponentTemplates;
   isRelevantSorted: boolean;
   isVirtualReplica: boolean;
   refine(relevancyStrictness: number | undefined): void;

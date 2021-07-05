@@ -15,6 +15,8 @@ export type MenuSelectComponentCSSClasses = ComponentCSSClasses<
   MenuSelectCSSClasses
 >;
 
+export type MenuSelectComponentTemplates = Required<MenuSelectTemplates>;
+
 type MenuItem = {
   /**
    * The value of the menu item.
@@ -39,7 +41,7 @@ type Props = {
   items: MenuItem[];
   refine: MenuRenderState['refine'];
   templateProps: {
-    templates: MenuSelectTemplates;
+    templates: MenuSelectComponentTemplates;
   };
 };
 

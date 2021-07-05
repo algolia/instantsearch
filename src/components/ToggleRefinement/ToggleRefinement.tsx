@@ -18,11 +18,15 @@ export type ToggleRefinementComponentCSSClasses = ComponentCSSClasses<
   ToggleRefinementCSSClasses
 >;
 
+export type ToggleRefinementComponentTemplates = Required<
+  ToggleRefinementTemplates
+>;
+
 export type ToggleRefinementProps = {
   currentRefinement: ToggleRefinementValue;
   refine: ToggleRefinementRenderState['refine'];
   cssClasses: ToggleRefinementComponentCSSClasses;
-  templateProps: PreparedTemplateProps<ToggleRefinementTemplates>;
+  templateProps: PreparedTemplateProps<ToggleRefinementComponentTemplates>;
 };
 
 const ToggleRefinement = ({

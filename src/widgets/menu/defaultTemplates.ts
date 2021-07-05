@@ -1,4 +1,6 @@
-export default {
+import { MenuComponentTemplates } from './menu';
+
+const defaultTemplates: MenuComponentTemplates = {
   item:
     '<a class="{{cssClasses.link}}" href="{{url}}">' +
     '<span class="{{cssClasses.label}}">{{label}}</span>' +
@@ -13,3 +15,5 @@ export default {
     {{/isShowingMore}}
   `,
 };
+
+export default defaultTemplates;

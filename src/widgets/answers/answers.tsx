@@ -53,7 +53,7 @@ export type AnswersTemplates = {
   /**
    * Template to use for the header. This template will receive an object containing `hits` and `isLoading`.
    */
-  header: Template<{
+  header?: Template<{
     hits: Hit[];
     isLoading: boolean;
   }>;
@@ -61,12 +61,12 @@ export type AnswersTemplates = {
   /**
    * Template to use for the loader.
    */
-  loader: Template;
+  loader?: Template;
 
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<Hit>;
+  item?: Template<Hit>;
 };
 
 export type AnswersCSSClasses = {
@@ -110,7 +110,7 @@ export type AnswersWidgetParams = {
   /**
    * The templates to use for the widget.
    */
-  templates?: Partial<AnswersTemplates>;
+  templates?: AnswersTemplates;
 
   /**
    * The CSS classes to override.
@@ -134,7 +134,7 @@ const answersWidget: AnswersWidget = widgetParams => {
     renderDebounceTime,
     escapeHTML,
     extraParameters,
-    templates = defaultTemplates,
+    templates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 
