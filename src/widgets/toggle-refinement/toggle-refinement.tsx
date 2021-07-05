@@ -4,6 +4,7 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import ToggleRefinement, {
   ToggleRefinementComponentCSSClasses,
+  ToggleRefinementComponentTemplates,
 } from '../../components/ToggleRefinement/ToggleRefinement';
 import connectToggleRefinement, {
   ToggleRefinementConnectorParams,
@@ -35,9 +36,9 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: ToggleRefinementComponentCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<ToggleRefinementTemplates>;
+    templateProps?: PreparedTemplateProps<ToggleRefinementComponentTemplates>;
   };
-  templates: Partial<ToggleRefinementTemplates>;
+  templates: ToggleRefinementTemplates;
 }) => (
   {
     value,
@@ -68,29 +69,31 @@ const renderer = ({
   );
 };
 
-export type ToggleRefinementCSSClasses = {
+export type ToggleRefinementCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the label wrapping element.
    */
-  label?: string | string[];
+  label: string | string[];
   /**
    * CSS class to add to the checkbox.
    */
-  checkbox?: string | string[];
+  checkbox: string | string[];
   /**
    * CSS class to add to the label text.
    */
-  labelText?: string | string[];
-};
+  labelText: string | string[];
+}>;
 
-export type ToggleRefinementTemplates = {
-  /** the text that describes the toggle action */
+export type ToggleRefinementTemplates = Partial<{
+  /**
+   * the text that describes the toggle action
+   */
   labelText: Template<ToggleRefinementValue>;
-};
+}>;
 
 export type ToggleRefinementWidgetParams = {
   /**
@@ -101,7 +104,7 @@ export type ToggleRefinementWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<ToggleRefinementTemplates>;
+  templates?: ToggleRefinementTemplates;
 
   /**
    * CSS classes to be added.
@@ -134,7 +137,7 @@ const toggleRefinement = function toggleRefinement(widgetParams) {
     container,
     attribute,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates = {},
     on = true,
     off,
   } = widgetParams || {};

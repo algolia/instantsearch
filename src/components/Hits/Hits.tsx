@@ -10,6 +10,8 @@ import { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
 
 export type HitsComponentCSSClasses = ComponentCSSClasses<HitsCSSClasses>;
 
+export type HitsComponentTemplates = Required<HitsTemplates>;
+
 export type HitsProps = {
   results: SearchResults;
   hits: HitsArray;
@@ -18,7 +20,7 @@ export type HitsProps = {
   cssClasses: HitsComponentCSSClasses;
   templateProps: {
     [key: string]: any;
-    templates: HitsTemplates;
+    templates: HitsComponentTemplates;
   };
 };
 

@@ -15,13 +15,14 @@ import connectSearchBox, {
 } from '../../connectors/search-box/connectSearchBox';
 import SearchBox, {
   SearchBoxComponentCSSClasses,
+  SearchBoxComponentTemplates,
 } from '../../components/SearchBox/SearchBox';
 import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');
 
-export type SearchBoxTemplates = {
+export type SearchBoxTemplates = Partial<{
   /**
    * Template used for displaying the submit button. Can accept a function or a Hogan string.
    */
@@ -34,46 +35,46 @@ export type SearchBoxTemplates = {
    * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
    */
   loadingIndicator: Template;
-};
+}>;
 
-export type SearchBoxCSSClasses = {
+export type SearchBoxCSSClasses = Partial<{
   /**
    * CSS class to add to the wrapping `<div>`
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the form
    */
-  form?: string | string[];
+  form: string | string[];
   /**
    * CSS class to add to the input.
    */
-  input?: string | string[];
+  input: string | string[];
   /**
    * CSS classes added to the submit button.
    */
-  submit?: string | string[];
+  submit: string | string[];
   /**
    * CSS classes added to the submit icon.
    */
-  submitIcon?: string | string[];
+  submitIcon: string | string[];
   /**
    * CSS classes added to the reset button.
    */
-  reset?: string | string[];
+  reset: string | string[];
   /**
    * CSS classes added to the reset icon.
    */
-  resetIcon?: string | string[];
+  resetIcon: string | string[];
   /**
    * CSS classes added to the loading indicator element.
    */
-  loadingIndicator?: string | string[];
+  loadingIndicator: string | string[];
   /**
    * CSS classes added to the loading indicator icon.
    */
-  loadingIcon?: string | string[];
-};
+  loadingIcon: string | string[];
+}>;
 
 export type SearchBoxWidgetParams = {
   /**
@@ -114,7 +115,7 @@ export type SearchBoxWidgetParams = {
   /**
    * Templates used for customizing the rendering of the searchbox
    */
-  templates?: Partial<SearchBoxTemplates>;
+  templates?: SearchBoxTemplates;
   /**
    * A function that is called every time a new search is done. You
    * will get the query as the first parameter and a search (query) function to call as the second parameter.
@@ -137,7 +138,7 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: SearchBoxComponentCSSClasses;
   placeholder: string;
-  templates: SearchBoxTemplates;
+  templates: SearchBoxComponentTemplates;
   autofocus: boolean;
   searchAsYouType: boolean;
   showReset: boolean;
@@ -191,7 +192,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showSubmit = true,
     showLoadingIndicator = true,
     queryHook,
-    templates,
+    templates: userTemplates = {},
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -222,12 +223,16 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
       userCssClasses.loadingIcon
     ),
   };
+  const templates = {
+    ...defaultTemplates,
+    ...userTemplates,
+  };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     placeholder,
-    templates: { ...defaultTemplates, ...templates },
+    templates,
     autofocus,
     searchAsYouType,
     showReset,

@@ -14,13 +14,15 @@ export type VoiceSearchComponentCSSClasses = ComponentCSSClasses<
   VoiceSearchCSSClasses
 >;
 
+export type VoiceSearchComponentTemplates = Required<VoiceSearchTemplates>;
+
 export type VoiceSearchProps = {
   cssClasses: VoiceSearchComponentCSSClasses;
   isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: () => void;
   voiceListeningState: VoiceListeningState;
-  templates: VoiceSearchTemplates;
+  templates: VoiceSearchComponentTemplates;
 };
 
 const VoiceSearch = ({

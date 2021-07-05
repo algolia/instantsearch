@@ -26,50 +26,50 @@ import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');
 
-export type MenuCSSClasses = {
+export type MenuCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the root element when no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
   /**
    * CSS class to add to the list element.
    */
-  list?: string | string[];
+  list: string | string[];
   /**
    * CSS class to add to each item element.
    */
-  item?: string | string[];
+  item: string | string[];
   /**
    * CSS class to add to each selected item element.
    */
-  selectedItem?: string | string[];
+  selectedItem: string | string[];
   /**
    * CSS class to add to each link (when using the default template).
    */
-  link?: string | string[];
+  link: string | string[];
   /**
    * CSS class to add to each label (when using the default template).
    */
-  label?: string | string[];
+  label: string | string[];
   /**
    * CSS class to add to each count element (when using the default template).
    */
-  count?: string | string[];
+  count: string | string[];
   /**
    * CSS class to add to the show more button.
    */
-  showMore?: string | string[];
+  showMore: string | string[];
   /**
    * CSS class to add to the disabled show more button.
    */
-  disabledShowMore?: string | string[];
-};
+  disabledShowMore: string | string[];
+}>;
 
-export type MenuTemplates = {
+export type MenuTemplates = Partial<{
   /**
    * Item template. The string template gets the same values as the function.
    */
@@ -87,9 +87,11 @@ export type MenuTemplates = {
   showMoreText: Template<{
     isShowingMore: boolean;
   }>;
-};
+}>;
 
 export type MenuComponentCSSClasses = ComponentCSSClasses<MenuCSSClasses>;
+
+export type MenuComponentTemplates = Required<MenuTemplates>;
 
 export type MenuWidgetParams = {
   /**
@@ -99,7 +101,7 @@ export type MenuWidgetParams = {
   /**
    * Customize the output through templating.
    */
-  templates?: Partial<MenuTemplates>;
+  templates?: MenuTemplates;
   /**
    * CSS classes to add to the wrapping elements.
    */
@@ -115,8 +117,10 @@ const renderer = ({
 }: {
   containerNode: HTMLElement;
   cssClasses: MenuComponentCSSClasses;
-  renderState: { templateProps?: PreparedTemplateProps<MenuTemplates> };
-  templates: Partial<MenuTemplates>;
+  renderState: {
+    templateProps?: PreparedTemplateProps<MenuComponentTemplates>;
+  };
+  templates: MenuTemplates;
   showMore?: boolean;
 }) => (
   {
@@ -150,7 +154,7 @@ const renderer = ({
       cssClasses={cssClasses}
       facetValues={facetValues}
       showMore={showMore}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       toggleRefinement={refine}
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
@@ -175,7 +179,7 @@ const menu: MenuWidget = function menu(widgetParams) {
     showMore,
     showMoreLimit,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates = {},
     transformItems,
   } = widgetParams || {};
 

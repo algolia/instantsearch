@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow } from '../../../../test/utils/enzyme';
 import GeoSearchButton from '../GeoSearchButton';
 
 describe('GeoSearchButton', () => {

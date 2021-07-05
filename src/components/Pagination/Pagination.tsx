@@ -15,11 +15,13 @@ export type PaginationComponentCSSClasses = ComponentCSSClasses<
   PaginationCSSClasses
 >;
 
+export type PaginationComponentTemplates = Required<PaginationTemplates>;
+
 export type PaginationProps = {
   createURL(value: number): string;
   cssClasses: PaginationComponentCSSClasses;
   currentPage: number;
-  templates: PaginationTemplates;
+  templates: PaginationComponentTemplates;
   nbPages?: number;
   pages?: number[];
   isFirstPage: boolean;

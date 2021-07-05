@@ -151,7 +151,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWi
         }
 
         const attributesToRender =
-          results.renderingContent?.facetOrdering?.facet?.order ?? [];
+          results.renderingContent?.facetOrdering?.facets?.order ?? [];
 
         return {
           attributesToRender: transformItems(attributesToRender, { results }),

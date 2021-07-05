@@ -49,7 +49,7 @@ const renderer = ({
   );
 };
 
-export type AnswersTemplates = {
+export type AnswersTemplates = Partial<{
   /**
    * Template to use for the header. This template will receive an object containing `hits` and `isLoading`.
    */
@@ -67,39 +67,39 @@ export type AnswersTemplates = {
    * Template to use for each result. This template will receive an object containing a single record.
    */
   item: Template<Hit>;
-};
+}>;
 
-export type AnswersCSSClasses = {
+export type AnswersCSSClasses = Partial<{
   /**
    * CSS class to add to the root element of the widget.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the wrapping element when no results.
    */
-  emptyRoot?: string | string[];
+  emptyRoot: string | string[];
 
   /**
    * CSS classes to add to the header.
    */
-  header?: string | string[];
+  header: string | string[];
 
   /**
    * CSS classes to add to the loader.
    */
-  loader?: string | string[];
+  loader: string | string[];
 
   /**
    * CSS class to add to the list of results.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS class to add to each result.
    */
-  item?: string | string[];
-};
+  item: string | string[];
+}>;
 
 export type AnswersWidgetParams = {
   /**
@@ -110,7 +110,7 @@ export type AnswersWidgetParams = {
   /**
    * The templates to use for the widget.
    */
-  templates?: Partial<AnswersTemplates>;
+  templates?: AnswersTemplates;
 
   /**
    * The CSS classes to override.
@@ -134,7 +134,7 @@ const answersWidget: AnswersWidget = widgetParams => {
     renderDebounceTime,
     escapeHTML,
     extraParameters,
-    templates = defaultTemplates,
+    templates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 

@@ -12,9 +12,13 @@ export type QueryRuleCustomDataComponentCSSClasses = ComponentCSSClasses<
   QueryRuleCustomDataCSSClasses
 >;
 
+export type QueryRuleCustomDataComponentTemplates = Required<
+  QueryRuleCustomDataTemplates
+>;
+
 export type QueryRuleCustomDataProps = {
   cssClasses: QueryRuleCustomDataComponentCSSClasses;
-  templates: QueryRuleCustomDataTemplates;
+  templates: QueryRuleCustomDataComponentTemplates;
   items: any[];
 };
 

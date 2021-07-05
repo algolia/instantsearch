@@ -1,10 +1,9 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow } from '../../../../test/utils/enzyme';
 import { render, fireEvent } from '@testing-library/preact';
 import RangeInput, { RangeInputProps } from '../RangeInput';
-import { ReactElementLike } from 'prop-types';
 
 describe('RangeInput', () => {
   const defaultProps: RangeInputProps = {
@@ -33,7 +32,7 @@ describe('RangeInput', () => {
   };
 
   const shallowRender = (props?: Partial<RangeInputProps>) =>
-    shallow((<RangeInput {...defaultProps} {...props} />) as ReactElementLike);
+    shallow(<RangeInput {...defaultProps} {...props} />);
 
   it('expect to render', () => {
     const component = shallowRender();

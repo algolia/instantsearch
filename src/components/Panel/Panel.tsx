@@ -16,13 +16,17 @@ export type PanelComponentCSSClasses = ComponentCSSClasses<
   Omit<PanelCSSClasses, 'collapseIcon'>
 >;
 
+export type PanelComponentTemplates<
+  TWidget extends UnknownWidgetFactory
+> = Required<PanelTemplates<TWidget>>;
+
 export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;
   collapsible: boolean;
   isCollapsed: boolean;
   data: RenderOptions;
   cssClasses: PanelComponentCSSClasses;
-  templates: Required<PanelTemplates<TWidget>>;
+  templates: PanelComponentTemplates<TWidget>;
   bodyElement: HTMLElement;
 };
 

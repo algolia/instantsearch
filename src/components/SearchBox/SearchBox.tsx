@@ -13,10 +13,12 @@ export type SearchBoxComponentCSSClasses = ComponentCSSClasses<
   SearchBoxCSSClasses
 >;
 
+export type SearchBoxComponentTemplates = Required<SearchBoxTemplates>;
+
 type SearchBoxProps = {
   placeholder?: string;
   cssClasses: SearchBoxComponentCSSClasses;
-  templates?: SearchBoxTemplates;
+  templates: SearchBoxComponentTemplates;
   query?: string;
   showSubmit?: boolean;
   showReset?: boolean;

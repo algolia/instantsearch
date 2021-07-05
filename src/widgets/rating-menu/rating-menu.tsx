@@ -18,6 +18,7 @@ import { component } from '../../lib/suit';
 import {
   ComponentCSSClasses,
   RendererOptions,
+  Template,
   WidgetFactory,
 } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
@@ -25,67 +26,74 @@ import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
 const suit = component('RatingMenu');
 
-export type RatingMenuTemplates = {
+export type RatingMenuTemplates = Partial<{
   /**
    * Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
    */
-  item: string | ((data: any) => string);
-};
+  item: Template<{
+    name: string;
+    count: number;
+    isRefined: boolean;
+    url: string;
+  }>;
+}>;
 
-export type RatingMenuCSSClasses = {
+export type RatingMenuCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the root element when there's no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
   /**
    * CSS class to add to the list element.
    */
-  list?: string | string[];
+  list: string | string[];
   /**
    * CSS class to add to each item element.
    */
-  item?: string | string[];
+  item: string | string[];
   /**
    * CSS class to add the selected item element.
    */
-  selectedItem?: string | string[];
+  selectedItem: string | string[];
   /**
    * CSS class to add a disabled item element.
    */
-  disabledItem?: string | string[];
+  disabledItem: string | string[];
   /**
    * CSS class to add to each link element.
    */
-  link?: string | string[];
+  link: string | string[];
   /**
    * CSS class to add to each star element (when using the default template).
    */
-  starIcon?: string | string[];
+  starIcon: string | string[];
   /**
    * CSS class to add to each full star element (when using the default template).
    */
-  fullStarIcon?: string | string[];
+  fullStarIcon: string | string[];
   /**
    * CSS class to add to each empty star element (when using the default template).
    */
-  emptyStarIcon?: string | string[];
+  emptyStarIcon: string | string[];
   /**
    * CSS class to add to each label.
    */
-  label?: string | string[];
+  label: string | string[];
   /**
    * CSS class to add to each counter.
    */
-  count?: string | string[];
-};
+  count: string | string[];
+}>;
 
 export type RatingMenuComponentCSSClasses = ComponentCSSClasses<
   RatingMenuCSSClasses
 >;
+
+export type RatingMenuComponentTemplates = Required<RatingMenuTemplates>;
 
 export type RatingMenuWidgetParams = {
   /**
@@ -103,7 +111,7 @@ export type RatingMenuWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<RatingMenuTemplates>;
+  templates?: RatingMenuTemplates;
   /**
    * CSS classes to add.
    */
@@ -118,8 +126,10 @@ const renderer = ({
 }: {
   containerNode: HTMLElement;
   cssClasses: RatingMenuComponentCSSClasses;
-  templates: Partial<RatingMenuTemplates>;
-  renderState: { templateProps?: PreparedTemplateProps<RatingMenuTemplates> };
+  templates: RatingMenuTemplates;
+  renderState: {
+    templateProps?: PreparedTemplateProps<RatingMenuComponentTemplates>;
+  };
 }) => (
   {
     refine,
@@ -144,7 +154,7 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       toggleRefinement={refine}
     >
       <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
@@ -201,7 +211,7 @@ const ratingMenu: RatingMenuWidget = function ratingMenu(widgetParams) {
     attribute,
     max = 5,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates = {},
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

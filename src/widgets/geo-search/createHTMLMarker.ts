@@ -65,7 +65,7 @@ const createHTMLMarker = (
 
     public onAdd() {
       // Append the element to the map
-      this.getPanes().overlayMouseTarget.appendChild(this.element);
+      this.getPanes()!.overlayMouseTarget.appendChild(this.element);
 
       // Compute the offset onAdd & cache it because afterwards
       // it won't retrieve the correct values, we also avoid
@@ -83,7 +83,7 @@ const createHTMLMarker = (
     }
 
     public draw() {
-      const position = this.getProjection().fromLatLngToDivPixel(this.latLng);
+      const position = this.getProjection().fromLatLngToDivPixel(this.latLng)!;
 
       this.element.style.left = `${Math.round(position.x - this.offset!.x)}px`;
       this.element.style.top = `${Math.round(position.y - this.offset!.y)}px`;

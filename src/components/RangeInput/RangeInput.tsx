@@ -14,6 +14,8 @@ export type RangeInputComponentCSSClasses = ComponentCSSClasses<
   RangeInputCSSClasses
 >;
 
+export type RangeInputComponentTemplates = Required<RangeInputTemplates>;
+
 export type RangeInputProps = {
   min?: number;
   max?: number;
@@ -21,7 +23,7 @@ export type RangeInputProps = {
   values: Partial<Range>;
   cssClasses: RangeInputComponentCSSClasses;
   templateProps: {
-    templates: RangeInputTemplates;
+    templates: RangeInputComponentTemplates;
   };
   refine(rangeValue: RangeBoundaries): void;
 };

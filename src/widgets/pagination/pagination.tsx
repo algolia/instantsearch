@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Pagination from '../../components/Pagination/Pagination';
+import Pagination, {
+  PaginationComponentTemplates,
+} from '../../components/Pagination/Pagination';
 import connectPagination, {
   PaginationConnectorParams,
   PaginationRenderState,
@@ -18,7 +20,7 @@ import { Renderer, WidgetFactory } from '../../types';
 const suit = component('Pagination');
 const withUsage = createDocumentationMessageGenerator({ name: 'pagination' });
 
-const defaultTemplates: PaginationTemplates = {
+const defaultTemplates: PaginationComponentTemplates = {
   previous: '‹',
   next: '›',
   first: '«',
@@ -76,69 +78,69 @@ const renderer = ({
   );
 };
 
-export type PaginationCSSClasses = {
+export type PaginationCSSClasses = Partial<{
   /**
    * CSS classes added to the root element of the widget.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the root element of the widget if there are no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
 
   /**
    * CSS classes added to the wrapping `<ul>`.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS classes added to each `<li>`.
    */
-  item?: string | string[];
+  item: string | string[];
 
   /**
    * CSS classes added to the first `<li>`.
    */
-  firstPageItem?: string | string[];
+  firstPageItem: string | string[];
 
   /**
    * CSS classes added to the last `<li>`.
    */
-  lastPageItem?: string | string[];
+  lastPageItem: string | string[];
 
   /**
    * CSS classes added to the previous `<li>`.
    */
-  previousPageItem?: string | string[];
+  previousPageItem: string | string[];
 
   /**
    * CSS classes added to the next `<li>`.
    */
-  nextPageItem?: string | string[];
+  nextPageItem: string | string[];
 
   /**
    * CSS classes added to page `<li>`.
    */
-  pageItem?: string | string[];
+  pageItem: string | string[];
 
   /**
    * CSS classes added to the selected `<li>`.
    */
-  selectedItem?: string | string[];
+  selectedItem: string | string[];
 
   /**
    * CSS classes added to the disabled `<li>`.
    */
-  disabledItem?: string | string[];
+  disabledItem: string | string[];
 
   /**
    * CSS classes added to each link.
    */
-  link?: string | string[];
-};
+  link: string | string[];
+}>;
 
-export type PaginationTemplates = {
+export type PaginationTemplates = Partial<{
   /**
    * Label for the Previous link.
    */
@@ -158,7 +160,7 @@ export type PaginationTemplates = {
    * Label for the Last link.
    */
   last: string;
-};
+}>;
 
 export type PaginationWidgetParams = {
   /**
@@ -210,7 +212,7 @@ export type PaginationWidgetParams = {
   /**
    * Text to display in the links.
    */
-  templates?: Partial<PaginationTemplates>;
+  templates?: PaginationTemplates;
 
   /**
    * CSS classes to be added.
@@ -286,7 +288,7 @@ const pagination: PaginationWidget = function pagination(widgetParams) {
     link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
   };
 
-  const templates: PaginationTemplates = {
+  const templates = {
     ...defaultTemplates,
     ...userTemplates,
   };

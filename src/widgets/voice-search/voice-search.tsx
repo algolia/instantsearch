@@ -15,6 +15,7 @@ import connectVoiceSearch, {
 } from '../../connectors/voice-search/connectVoiceSearch';
 import VoiceSearchComponent, {
   VoiceSearchComponentCSSClasses,
+  VoiceSearchComponentTemplates,
 } from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
 import { WidgetFactory, Template, Renderer } from '../../types';
@@ -23,11 +24,11 @@ import { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
 
-export type VoiceSearchCSSClasses = {
-  root?: string | string[];
-  button?: string | string[];
-  status?: string | string[];
-};
+export type VoiceSearchCSSClasses = Partial<{
+  root: string | string[];
+  button: string | string[];
+  status: string | string[];
+}>;
 
 type VoiceSearchTemplateProps = {
   status: string;
@@ -38,15 +39,15 @@ type VoiceSearchTemplateProps = {
   isBrowserSupported: boolean;
 };
 
-export type VoiceSearchTemplates = {
+export type VoiceSearchTemplates = Partial<{
   buttonText: Template<VoiceSearchTemplateProps>;
   status: Template<VoiceSearchTemplateProps>;
-};
+}>;
 
 export type VoiceSearchWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: VoiceSearchCSSClasses;
-  templates?: Partial<VoiceSearchTemplates>;
+  templates?: VoiceSearchTemplates;
   searchAsYouSpeak?: boolean;
   language?: string;
   additionalQueryParameters?: (params: {
@@ -55,30 +56,26 @@ export type VoiceSearchWidgetParams = {
   createVoiceSearchHelper?: CreateVoiceSearchHelper;
 };
 
-type VoiceSearchRendererWidgetParams = {
-  container: HTMLElement;
-  cssClasses: VoiceSearchComponentCSSClasses;
-  templates: VoiceSearchTemplates;
-} & VoiceSearchWidgetParams;
-
 type VoiceSearch = WidgetFactory<
   VoiceSearchWidgetDescription & { $$type: 'ais.voiceSearch' },
   VoiceSearchConnectorParams,
   VoiceSearchWidgetParams
 >;
 
-const renderer: Renderer<
-  VoiceSearchRenderState,
-  VoiceSearchRendererWidgetParams
-> = ({
+const renderer = ({
+  containerNode,
+  cssClasses,
+  templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: VoiceSearchComponentCSSClasses;
+  templates: VoiceSearchComponentTemplates;
+}): Renderer<VoiceSearchRenderState, Partial<VoiceSearchWidgetParams>> => ({
   isBrowserSupported,
   isListening,
   toggleListening,
   voiceListeningState,
-  widgetParams,
 }) => {
-  const { container, cssClasses, templates } = widgetParams;
-
   render(
     <VoiceSearchComponent
       cssClasses={cssClasses}
@@ -88,15 +85,15 @@ const renderer: Renderer<
       toggleListening={toggleListening}
       voiceListeningState={voiceListeningState}
     />,
-    container
+    containerNode
   );
 };
 
 const voiceSearch: VoiceSearch = widgetParams => {
   const {
     container,
-    cssClasses: userCssClasses = {} as VoiceSearchCSSClasses,
-    templates,
+    cssClasses: userCssClasses = {},
+    templates: userTemplates = {},
     searchAsYouSpeak = false,
     language,
     additionalQueryParameters,
@@ -113,8 +110,18 @@ const voiceSearch: VoiceSearch = widgetParams => {
     button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
     status: cx(suit({ descendantName: 'status' }), userCssClasses.status),
   };
+  const templates = {
+    ...defaultTemplates,
+    ...userTemplates,
+  };
 
-  const makeWidget = connectVoiceSearch(renderer, () =>
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    templates,
+  });
+
+  const makeWidget = connectVoiceSearch(specializedRenderer, () =>
     render(null, containerNode)
   );
 
@@ -122,7 +129,7 @@ const voiceSearch: VoiceSearch = widgetParams => {
     ...makeWidget({
       container: containerNode,
       cssClasses,
-      templates: { ...defaultTemplates, ...templates },
+      templates,
       searchAsYouSpeak,
       language,
       additionalQueryParameters,

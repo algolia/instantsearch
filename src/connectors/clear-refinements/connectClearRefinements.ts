@@ -94,7 +94,11 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
       transformItems = (items => items) as TransformItems<string>,
     } = widgetParams || {};
 
-    if (widgetParams.includedAttributes && widgetParams.excludedAttributes) {
+    if (
+      widgetParams &&
+      widgetParams.includedAttributes &&
+      widgetParams.excludedAttributes
+    ) {
       throw new Error(
         withUsage(
           'The options `includedAttributes` and `excludedAttributes` cannot be used together.'

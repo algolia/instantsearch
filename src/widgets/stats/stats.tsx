@@ -2,7 +2,7 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Stats from '../../components/Stats/Stats';
+import Stats, { StatsComponentTemplates } from '../../components/Stats/Stats';
 import connectStats, {
   StatsConnectorParams,
   StatsRenderState,
@@ -19,19 +19,19 @@ import { Renderer, Template, WidgetFactory } from '../../types';
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');
 
-export type StatsCSSClasses = {
+export type StatsCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the text span element.
    */
-  text?: string | string[];
-};
+  text: string | string[];
+}>;
 
-export type StatsTemplates = {
+export type StatsTemplates = Partial<{
   /**
    * Text template, provided with `hasManyResults`, `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbSortedHits`, `nbPages`, `areHitsSorted`, `page`, `processingTimeMS`, `query`.
    */
@@ -42,7 +42,7 @@ export type StatsTemplates = {
       hasOneResult: boolean;
     } & StatsRenderState
   >;
-};
+}>;
 
 export type StatsWidgetParams = {
   /**
@@ -53,7 +53,7 @@ export type StatsWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<StatsTemplates>;
+  templates?: StatsTemplates;
 
   /**
    * CSS classes to add.
@@ -67,7 +67,7 @@ export type StatsWidget = WidgetFactory<
   StatsWidgetParams
 >;
 
-export const defaultTemplates: StatsTemplates = {
+export const defaultTemplates: StatsComponentTemplates = {
   text: `
     {{#areHitsSorted}}
       {{#hasNoSortedResults}}No relevant results{{/hasNoSortedResults}}
@@ -136,11 +136,8 @@ const renderer = ({
  * results inside the engine.
  */
 const stats: StatsWidget = widgetParams => {
-  const {
-    container,
-    cssClasses: userCssClasses = {} as StatsCSSClasses,
-    templates = defaultTemplates,
-  } = widgetParams || {};
+  const { container, cssClasses: userCssClasses = {}, templates = {} } =
+    widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

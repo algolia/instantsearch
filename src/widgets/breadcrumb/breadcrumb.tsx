@@ -6,6 +6,7 @@ import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb, {
   BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
+  BreadcrumbRenderState,
 } from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -14,12 +15,17 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Template } from '../../types';
+import { WidgetFactory, Template, Renderer } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');
 
-const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
+const renderer = ({
+  containerNode,
+  cssClasses,
+  renderState,
+  templates,
+}): Renderer<BreadcrumbRenderState, Partial<BreadcrumbWidgetParams>> => (
   { canRefine, createURL, instantSearchInstance, items, refine },
   isFirstRendering
 ) => {
@@ -46,54 +52,54 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   );
 };
 
-export type BreadcrumbCSSClasses = {
+export type BreadcrumbCSSClasses = Partial<{
   /**
    * CSS class to add to the root element of the widget.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the root element of the widget if there are no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
 
   /**
    * CSS class to add to the list element.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS class to add to the items of the list. The items contains the link and the separator.
    */
-  item?: string | string[];
+  item: string | string[];
 
   /**
    * CSS class to add to the selected item in the list: the last one or the home if there are no refinements.
    */
-  selectedItem?: string | string[];
+  selectedItem: string | string[];
 
   /**
    * CSS class to add to the separator.
    */
-  separator?: string | string[];
+  separator: string | string[];
 
   /**
    * CSS class to add to the links in the items.
    */
-  link?: string | string[];
-};
+  link: string | string[];
+}>;
 
-export type BreadcrumbTemplates = {
+export type BreadcrumbTemplates = Partial<{
   /**
    * Label of the breadcrumb's first element.
    */
-  home?: Template;
+  home: Template;
 
   /**
    * Symbol used to separate the elements of the breadcrumb.
    */
-  separator?: Template;
-};
+  separator: Template;
+}>;
 
 export type BreadcrumbWidgetParams = {
   /**
@@ -125,7 +131,7 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetParams) {
     separator,
     rootPath,
     transformItems,
-    templates = defaultTemplates,
+    templates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 

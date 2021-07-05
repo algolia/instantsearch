@@ -43,22 +43,22 @@ const renderer = ({ containerNode, cssClasses }) => (
   );
 };
 
-export type HitsPerPageCSSClasses = {
+export type HitsPerPageCSSClasses = Partial<{
   /**
    * CSS classes added to the outer `<div>`.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS classes added to the parent `<select>`.
    */
-  select?: string | string[];
+  select: string | string[];
 
   /**
    * CSS classes added to each `<option>`.
    */
-  option?: string | string[];
-};
+  option: string | string[];
+}>;
 
 export type HitsPerPageWidgetParams = {
   /**

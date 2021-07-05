@@ -51,57 +51,57 @@ const renderer = ({
   );
 };
 
-export type NumericMenuCSSClasses = {
+export type NumericMenuCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
 
   /**
    * CSS class to add to the root element when no refinements.
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
 
   /**
    * CSS class to add to the list element.
    */
-  list?: string | string[];
+  list: string | string[];
 
   /**
    * CSS class to add to each item element.
    */
-  item?: string | string[];
+  item: string | string[];
 
   /**
    * CSS class to add to each selected item element.
    */
-  selectedItem?: string | string[];
+  selectedItem: string | string[];
 
   /**
    * CSS class to add to each label element.
    */
-  label?: string | string[];
+  label: string | string[];
 
   /**
    * CSS class to add to each label text element.
    */
-  labelText?: string | string[];
+  labelText: string | string[];
 
   /**
    * CSS class to add to each radio element (when using the default template).
    */
-  radio?: string | string[];
-};
+  radio: string | string[];
+}>;
 
 export type NumericMenuComponentCSSClasses = ComponentCSSClasses<
   NumericMenuCSSClasses
 >;
 
-export type NumericMenuTemplates = {
+export type NumericMenuTemplates = Partial<{
   /**
    * Item template, provided with `label` (the name in the configuration), `isRefined`, `url`, `value` (the setting for the filter) data properties.
    */
-  item?: Template<{
+  item: Template<{
     /**
      * The name of the attribute.
      */
@@ -135,7 +135,9 @@ export type NumericMenuTemplates = {
      */
     cssClasses: NumericMenuComponentCSSClasses;
   }>;
-};
+}>;
+
+export type NumericMenuComponentTemplates = Required<NumericMenuTemplates>;
 
 export type NumericMenuWidgetParams = {
   /**
@@ -166,7 +168,7 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetParams) {
     attribute,
     items,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates = {},
     transformItems,
   } = widgetParams || {};
 

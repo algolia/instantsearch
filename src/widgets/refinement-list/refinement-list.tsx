@@ -4,6 +4,7 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList, {
   RefinementListComponentCSSClasses,
+  RefinementListComponentTemplates,
 } from '../../components/RefinementList/RefinementList';
 import connectRefinementList, {
   RefinementListRenderState,
@@ -20,6 +21,7 @@ import { Template, WidgetFactory, RendererOptions } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 import { SearchBoxTemplates } from '../search-box/search-box';
+import { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -27,38 +29,75 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('RefinementList');
 const searchBoxSuit = component('SearchBox');
 
-type RefinementListOwnTemplates = {
+export type RefinementListOwnCSSClasses = Partial<{
   /**
-   * Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
+   * CSS class to add to the root element.
    */
-  item: Template<RefinementListItemData>;
+  root: string | string[];
   /**
-   * Template used for the show more text, provided with `isShowingMore` data property.
+   * CSS class to add to the root element when no refinements.
    */
-  showMoreText: Template;
+  noRefinementRoot: string | string[];
   /**
-   * Templates to use for search for facet values when there are no results.
+   * CSS class to add to the root element with no results.
    */
-  searchableNoResults: Template;
-};
+  noResults: string | string[];
+  /**
+   * CSS class to add to the list element.
+   */
+  list: string | string[];
+  /**
+   * CSS class to add to each item element.
+   */
+  item: string | string[];
+  /**
+   * CSS class to add to each selected element.
+   */
+  selectedItem: string | string[];
+  /**
+   * CSS class to add to each label element (when using the default template).
+   */
+  label: string | string[];
+  /**
+   * CSS class to add to each checkbox element (when using the default template).
+   */
+  checkbox: string | string[];
+  /**
+   * CSS class to add to each label text element.
+   */
+  labelText: string | string[];
+  /**
+   * CSS class to add to the show more element
+   */
+  showMore: string | string[];
+  /**
+   * CSS class to add to the disabled show more element
+   */
+  disabledShowMore: string | string[];
+  /**
+   * CSS class to add to each count element (when using the default template).
+   */
+  count: string | string[];
+  /**
+   * CSS class to add to the searchable container.
+   */
+  searchBox: string | string[];
+}>;
 
-type RefinementListSearchableTemplates = {
-  /**
-   * Templates to use for search for facet values submit button.
-   */
-  searchableSubmit: SearchBoxTemplates['submit'];
-  /**
-   * Templates to use for search for facet values reset button.
-   */
-  searchableReset: SearchBoxTemplates['reset'];
-  /**
-   * Templates to use for the search for facet values loading indicator.
-   */
-  searchableLoadingIndicator: SearchBoxTemplates['loadingIndicator'];
-};
+type RefinementListSearchableCSSClasses = Partial<{
+  searchableRoot: string | string[];
+  searchableForm: string | string[];
+  searchableInput: string | string[];
+  searchableSubmit: string | string[];
+  searchableSubmitIcon: string | string[];
+  searchableReset: string | string[];
+  searchableResetIcon: string | string[];
+  searchableLoadingIndicator: string | string[];
+  searchableLoadingIcon: string | string[];
+}>;
 
-export type RefinementListTemplates = RefinementListSearchableTemplates &
-  RefinementListOwnTemplates;
+export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
+  RefinementListSearchableCSSClasses;
 
 export type RefinementListItemData = {
   /**
@@ -91,75 +130,38 @@ export type RefinementListItemData = {
   cssClasses: RefinementListCSSClasses;
 };
 
-export type RefinementListOwnCSSClasses = {
+export type RefinementListOwnTemplates = Partial<{
   /**
-   * CSS class to add to the root element.
+   * Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
    */
-  root?: string | string[];
+  item: Template<RefinementListItemData>;
   /**
-   * CSS class to add to the root element when no refinements.
+   * Template used for the show more text, provided with `isShowingMore` data property.
    */
-  noRefinementRoot?: string | string[];
+  showMoreText: Template;
   /**
-   * CSS class to add to the root element with no results.
+   * Templates to use for search for facet values when there are no results.
    */
-  noResults?: string | string[];
-  /**
-   * CSS class to add to the list element.
-   */
-  list?: string | string[];
-  /**
-   * CSS class to add to each item element.
-   */
-  item?: string | string[];
-  /**
-   * CSS class to add to each selected element.
-   */
-  selectedItem?: string | string[];
-  /**
-   * CSS class to add to each label element (when using the default template).
-   */
-  label?: string | string[];
-  /**
-   * CSS class to add to each checkbox element (when using the default template).
-   */
-  checkbox?: string | string[];
-  /**
-   * CSS class to add to each label text element.
-   */
-  labelText?: string | string[];
-  /**
-   * CSS class to add to the show more element
-   */
-  showMore?: string | string[];
-  /**
-   * CSS class to add to the disabled show more element
-   */
-  disabledShowMore?: string | string[];
-  /**
-   * CSS class to add to each count element (when using the default template).
-   */
-  count?: string | string[];
-  /**
-   * CSS class to add to the searchable container.
-   */
-  searchBox?: string | string[];
-};
+  searchableNoResults: Template;
+}>;
 
-type RefinementListSearchableCSSClasses = {
-  searchableRoot?: string | string[];
-  searchableForm?: string | string[];
-  searchableInput?: string | string[];
-  searchableSubmit?: string | string[];
-  searchableSubmitIcon?: string | string[];
-  searchableReset?: string | string[];
-  searchableResetIcon?: string | string[];
-  searchableLoadingIndicator?: string | string[];
-  searchableLoadingIcon?: string | string[];
-};
+type RefinementListSearchableTemplates = Partial<{
+  /**
+   * Templates to use for search for facet values submit button.
+   */
+  searchableSubmit: SearchBoxTemplates['submit'];
+  /**
+   * Templates to use for search for facet values reset button.
+   */
+  searchableReset: SearchBoxTemplates['reset'];
+  /**
+   * Templates to use for the search for facet values loading indicator.
+   */
+  searchableLoadingIndicator: SearchBoxTemplates['loadingIndicator'];
+}>;
 
-export type RefinementListCSSClasses = RefinementListOwnCSSClasses &
-  RefinementListSearchableCSSClasses;
+export type RefinementListTemplates = RefinementListOwnTemplates &
+  RefinementListSearchableTemplates;
 
 export type RefinementListWidgetParams = {
   /**
@@ -190,14 +192,14 @@ export type RefinementListWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: Partial<RefinementListTemplates>;
+  templates?: RefinementListTemplates;
   /**
    * CSS classes to add to the wrapping elements.
    */
   cssClasses?: RefinementListCSSClasses;
 };
 
-export const defaultTemplates: RefinementListOwnTemplates = {
+export const defaultTemplates: RefinementListComponentTemplates = {
   item: `<label class="{{cssClasses.label}}">
   <input type="checkbox"
          class="{{cssClasses.checkbox}}"
@@ -231,11 +233,11 @@ const renderer = ({
   containerNode: HTMLElement;
   cssClasses: RefinementListComponentCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
-    searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxTemplates>;
+    templateProps?: PreparedTemplateProps<RefinementListComponentTemplates>;
+    searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
   };
-  templates: Partial<RefinementListOwnTemplates>;
-  searchBoxTemplates: Partial<SearchBoxTemplates>;
+  templates: RefinementListOwnTemplates;
+  searchBoxTemplates: SearchBoxTemplates;
   showMore?: boolean;
   searchable?: boolean;
   searchablePlaceholder?: string;
@@ -274,7 +276,7 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       searchBoxTemplateProps={renderState.searchBoxTemplateProps}
       toggleRefinement={refine}
       searchFacetValues={searchable ? searchForItems : undefined}
@@ -332,7 +334,7 @@ const refinementList: RefinementListWidget = function refinementList(
     searchableEscapeFacetValues = true,
     searchableIsAlwaysActive = true,
     cssClasses: userCssClasses = {},
-    templates: userTemplates = defaultTemplates as RefinementListTemplates,
+    templates = {},
     transformItems,
   } = widgetParams || {};
 
@@ -417,11 +419,11 @@ const refinementList: RefinementListWidget = function refinementList(
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    templates: userTemplates,
+    templates,
     searchBoxTemplates: {
-      submit: userTemplates.searchableSubmit,
-      reset: userTemplates.searchableReset,
-      loadingIndicator: userTemplates.searchableLoadingIndicator,
+      submit: templates.searchableSubmit,
+      reset: templates.searchableReset,
+      loadingIndicator: templates.searchableLoadingIndicator,
     },
     renderState: {},
     searchable,

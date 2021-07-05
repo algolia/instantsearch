@@ -3,7 +3,10 @@
 import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
-import { BreadcrumbCSSClasses } from '../../widgets/breadcrumb/breadcrumb';
+import {
+  BreadcrumbCSSClasses,
+  BreadcrumbTemplates,
+} from '../../widgets/breadcrumb/breadcrumb';
 import { ComponentCSSClasses } from '../../types';
 
 type BreadcrumbItem = {
@@ -15,16 +18,13 @@ export type BreadcrumbComponentCSSClasses = ComponentCSSClasses<
   BreadcrumbCSSClasses
 >;
 
-type BreadcrumbTemplates = {
-  home: string;
-  separator: string;
-};
+export type BreadcrumbComponentTemplates = Required<BreadcrumbTemplates>;
 
 export type BreadcrumbProps = {
   items: BreadcrumbItem[];
   cssClasses: BreadcrumbComponentCSSClasses;
   templateProps: {
-    templates: BreadcrumbTemplates;
+    templates: BreadcrumbComponentTemplates;
   };
   createURL(value: string | undefined): string;
   refine(value: string | undefined): void;

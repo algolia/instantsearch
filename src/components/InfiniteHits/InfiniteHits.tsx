@@ -15,6 +15,8 @@ export type InfiniteHitsComponentCSSClasses = ComponentCSSClasses<
   InfiniteHitsCSSClasses
 >;
 
+export type InfiniteHitsComponentTemplates = Required<InfiniteHitsTemplates>;
+
 export type InfiniteHitsProps = {
   cssClasses: InfiniteHitsComponentCSSClasses;
   hits: Hits;
@@ -24,7 +26,7 @@ export type InfiniteHitsProps = {
   showMore: () => void;
   templateProps: {
     [key: string]: any;
-    templates: InfiniteHitsTemplates;
+    templates: InfiniteHitsComponentTemplates;
   };
   isFirstPage: boolean;
   isLastPage: boolean;

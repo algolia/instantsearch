@@ -544,10 +544,7 @@ describe('RefinementList', () => {
         canToggleShowMore: true,
         templateProps: {
           templatesConfig: {},
-          templates: {
-            item: (item: RefinementListItemData) => item.value,
-            showMoreText: (x: any) => JSON.stringify(x),
-          },
+          templates,
           useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
@@ -588,10 +585,7 @@ describe('RefinementList', () => {
         canToggleShowMore: false,
         templateProps: {
           templatesConfig: {},
-          templates: {
-            item: (item: RefinementListItemData) => item.value,
-            showMoreText: (x: any) => JSON.stringify(x),
-          },
+          templates,
           useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},

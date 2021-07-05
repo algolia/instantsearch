@@ -9,6 +9,7 @@ import connectMenu, {
 } from '../../connectors/menu/connectMenu';
 import MenuSelect, {
   MenuSelectComponentCSSClasses,
+  MenuSelectComponentTemplates,
 } from '../../components/MenuSelect/MenuSelect';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -23,26 +24,26 @@ import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');
 
-export type MenuSelectCSSClasses = {
+export type MenuSelectCSSClasses = Partial<{
   /**
    * CSS class to add to the root element.
    */
-  root?: string | string[];
+  root: string | string[];
   /**
    * CSS class to add to the root when there are no items to display
    */
-  noRefinementRoot?: string | string[];
+  noRefinementRoot: string | string[];
   /**
    * CSS class to add to the select element.
    */
-  select?: string | string[];
+  select: string | string[];
   /**
    * CSS class to add to the option element.
    */
-  option?: string | string[];
-};
+  option: string | string[];
+}>;
 
-export type MenuSelectTemplates = {
+export type MenuSelectTemplates = Partial<{
   /**
    * Item template, provided with `label`, `count`, `isRefined` and `value` data properties.
    */
@@ -56,7 +57,7 @@ export type MenuSelectTemplates = {
    * Label of the "see all" option in the select.
    */
   defaultOption: Template;
-};
+}>;
 
 export type MenuSelectWidgetParams = {
   /**
@@ -66,7 +67,7 @@ export type MenuSelectWidgetParams = {
   /**
    * Customize the output through templating.
    */
-  templates?: Partial<MenuSelectTemplates>;
+  templates?: MenuSelectTemplates;
   /**
    * CSS classes to add to the wrapping elements.
    */
@@ -81,8 +82,10 @@ const renderer = ({
 }: {
   containerNode: HTMLElement;
   cssClasses: MenuSelectComponentCSSClasses;
-  renderState: { templateProps?: PreparedTemplateProps<MenuSelectTemplates> };
-  templates: Partial<MenuSelectTemplates>;
+  renderState: {
+    templateProps?: PreparedTemplateProps<MenuSelectComponentTemplates>;
+  };
+  templates: MenuSelectTemplates;
 }) => (
   {
     refine,
@@ -124,7 +127,7 @@ const menuSelect: MenuSelectWidget = function menuSelect(widgetParams) {
     sortBy = ['name:asc'],
     limit = 10,
     cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
+    templates = {},
     transformItems,
   } = widgetParams || {};
 
