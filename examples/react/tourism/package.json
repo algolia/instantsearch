@@ -1,6 +1,6 @@
 {
   "name": "tourism",
-  "version": "6.11.2",
+  "version": "6.12.0",
   "private": true,
   "dependencies": {
     "algoliasearch": "4.9.3",
