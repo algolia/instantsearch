@@ -1,3 +1,21 @@
+# [6.12.0](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.12.0) (2021-07-06)
+
+
+### Bug Fixes
+
+* **HitsPerPage:** Adds id prop to HitsPerPage, Select components ([#3072](https://github.com/algolia/react-instantsearch/issues/3072)) ([bc75d75](https://github.com/algolia/react-instantsearch/commit/bc75d75))
+* **MenuSelect:** Adds id prop to MenuSelect ([#3073](https://github.com/algolia/react-instantsearch/issues/3073)) ([fddaaef](https://github.com/algolia/react-instantsearch/commit/fddaaef))
+* **SearchBox:** Adds inputId prop to SearchBox ([#3074](https://github.com/algolia/react-instantsearch/issues/3074)) ([a05f6a4](https://github.com/algolia/react-instantsearch/commit/a05f6a4))
+* **SortBy:** Adds `id` prop to `SortBy`, `Select` components ([#3068](https://github.com/algolia/react-instantsearch/issues/3068)) ([1f2797f](https://github.com/algolia/react-instantsearch/commit/1f2797f))
+
+
+### Features
+
+* **DynamicWidgets:** add implementation ([#3056](https://github.com/algolia/react-instantsearch/issues/3056)) ([691ef87](https://github.com/algolia/react-instantsearch/commit/691ef87))
+* **facets:** add a new option "facetOrdering" to Menu, RefinementList & HierarchicalMenu ([#3067](https://github.com/algolia/react-instantsearch/issues/3067)) ([731d9ba](https://github.com/algolia/react-instantsearch/commit/731d9ba))
+
+
+
 ## [6.11.2](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.11.2) (2021-06-28)
 
 
