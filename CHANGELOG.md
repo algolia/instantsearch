@@ -1,3 +1,12 @@
+# [4.25.0](https://github.com/algolia/instantsearch.js/compare/v4.24.3...v4.25.0) (2021-07-06)
+
+
+### Features
+
+* **facets:** apply result from facet ordering ([#4784](https://github.com/algolia/instantsearch.js/issues/4784)) ([9e9d839](https://github.com/algolia/instantsearch.js/commit/9e9d8394067bec35425b7d66f94fcce504faee7f))
+
+
+
 ## [4.24.3](https://github.com/algolia/instantsearch.js/compare/v4.24.2...v4.24.3) (2021-07-05)
 
 
