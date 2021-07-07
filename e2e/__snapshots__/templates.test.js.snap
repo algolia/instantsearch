@@ -3348,6 +3348,14 @@ yarn-error.log
 dist/"
 `;
 
+exports[`Templates InstantSearch.js widget File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
+`;
+
 exports[`Templates InstantSearch.js widget File content: CONTRIBUTING.md 1`] = `
 "# Contribution Guide
 
@@ -4042,6 +4050,7 @@ Array [
   ".eslintignore",
   ".eslintrc.cjs",
   ".gitignore",
+  ".prettierrc",
   "CONTRIBUTING.md",
   "LICENSE.md",
   "README.md",
