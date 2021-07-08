@@ -164,8 +164,7 @@ export type RefinementListTemplates = RefinementListOwnTemplates &
   RefinementListSearchableTemplates;
 export type RefinementListComponentTemplates = Required<
   RefinementListOwnTemplates
-> &
-  RefinementListSearchableTemplates;
+>;
 
 export type RefinementListWidgetParams = {
   /**

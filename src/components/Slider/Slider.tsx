@@ -12,6 +12,10 @@ import {
 } from '../../widgets/range-slider/range-slider';
 import { ComponentCSSClasses } from '../../types';
 
+export type RangeSliderComponentCSSClasses = ComponentCSSClasses<
+  RangeSliderCssClasses
+>;
+
 export type SliderProps = {
   refine(values: RangeBoundaries): void;
   min?: number;
@@ -20,7 +24,7 @@ export type SliderProps = {
   pips?: boolean;
   step?: number;
   tooltips?: RangeSliderWidgetParams['tooltips'];
-  cssClasses: ComponentCSSClasses<RangeSliderCssClasses>;
+  cssClasses: RangeSliderComponentCSSClasses;
 };
 
 class Slider extends Component<SliderProps> {
@@ -36,7 +40,7 @@ class Slider extends Component<SliderProps> {
 
   // creates an array number where to display a pit point on the slider
   private computeDefaultPitPoints({ min, max }: { min: number; max: number }) {
-    const totalLength = max! - min!;
+    const totalLength = max - min;
     const steps = 34;
     const stepsLength = totalLength / steps;
 
@@ -44,7 +48,7 @@ class Slider extends Component<SliderProps> {
       min,
       ...range({
         end: steps - 1,
-      }).map(step => min! + stepsLength * (step + 1)),
+      }).map(step => min + stepsLength * (step + 1)),
       max,
     ];
 
@@ -62,7 +66,7 @@ class Slider extends Component<SliderProps> {
     step?: number;
   }) {
     if (!step) return undefined;
-    return [...range({ start: min, end: max!, step }), max];
+    return [...range({ start: min, end: max, step }), max];
   }
 
   private createHandleComponent = (
@@ -95,6 +99,7 @@ class Slider extends Component<SliderProps> {
   public render() {
     const { tooltips, step, pips, values, cssClasses } = this.props;
 
+    // TODO: figure out why this.props needs to be non-null asserted
     const { min, max } = this.isDisabled
       ? { min: this.props.min!, max: this.props.max! + 0.001 }
       : (this.props as Required<SliderProps>);

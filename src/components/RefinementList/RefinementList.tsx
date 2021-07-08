@@ -51,13 +51,12 @@ type FacetValue = {
   isRefined: boolean;
   data?: HierarchicalMenuItem[] | null;
 };
-type FacetValues = FacetValue[];
 
 export type RefinementListProps<TTemplates extends Templates> = {
   createURL: CreateURL<string>;
   cssClasses: RefinementListComponentCSSClasses;
   depth?: number;
-  facetValues?: FacetValues;
+  facetValues?: FacetValue[];
   attribute?: string;
   templateProps: PreparedTemplateProps<TTemplates>;
   toggleRefinement: (value: string) => void;
