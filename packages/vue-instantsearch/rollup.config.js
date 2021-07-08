@@ -40,7 +40,7 @@ const plugins = [
 ];
 
 const external = id =>
-  ['algoliasearch-helper', 'instantsearch.js', 'vue', 'mitt', 'vue-demi'].some(
+  ['algoliasearch-helper', 'instantsearch.js', 'vue', 'mitt'].some(
     dep => id === dep || id.startsWith(`${dep}/`)
   );
 

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { isVue3 } from 'vue-demi';
+import { isVue3 } from '../util/vue';
 import { createPanelProviderMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 

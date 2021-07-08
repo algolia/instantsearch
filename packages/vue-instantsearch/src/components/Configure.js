@@ -1,7 +1,7 @@
 import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
 import { connectConfigure } from 'instantsearch.js/es/connectors';
-import { isVue3, h } from 'vue-demi';
+import { isVue3, h } from '../util/vue';
 
 export default {
   inheritAttrs: false,

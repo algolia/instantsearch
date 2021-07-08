@@ -1,6 +1,6 @@
 import instantsearch from 'instantsearch.js/es';
 import algoliaHelper from 'algoliasearch-helper';
-import { isVue3, Vue2, defineComponent } from 'vue-demi';
+import { isVue3, Vue2, defineComponent } from '../util/vue';
 const { SearchResults, SearchParameters } = algoliaHelper;
 import { warn } from './warn';
 

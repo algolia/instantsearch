@@ -1,7 +1,7 @@
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 import indexWidget from 'instantsearch.js/es/widgets/index/index';
-import { isVue3, h } from 'vue-demi';
+import { isVue3, h } from '../util/vue';
 
 // wrapped in a dummy function, since indexWidget doesn't render
 const connectIndex = () => indexWidget;

@@ -1,4 +1,4 @@
-import { isVue3 } from 'vue-demi';
+import { isVue3 } from '../../src/util/vue';
 
 export const mount = isVue3
   ? (component, options = {}) => {
