@@ -80,10 +80,8 @@ const wrapInsightsClient = (
   aa: InsightsClient | null,
   results: SearchResults,
   hits: Hits
-): InsightsClientWrapper => (
-  method: InsightsClientMethod,
-  payload: Partial<InsightsClientPayload>
-) => {
+): InsightsClientWrapper => (method, ...args) => {
+  const payload = args[0];
   warning(
     false,
     `\`insights\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
