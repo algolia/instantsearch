@@ -34,6 +34,8 @@ it('should have `name` the same as the suit class name everywhere', () => {
     expect(installedName).toBe(name);
     if (name === 'AisInstantSearchSsr') {
       expect(suitClass).toBe(`ais-InstantSearch`);
+    } else if (name === 'AisExperimentalDynamicWidgets') {
+      expect(suitClass).toBe(`ais-DynamicWidgets`);
     } else {
       expect(suitClass).toBe(`ais-${name.substr(3)}`);
     }

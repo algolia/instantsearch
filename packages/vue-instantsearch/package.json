@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "algoliasearch-helper": "^3.1.0",
-    "instantsearch.js": "^4.20.0"
+    "instantsearch.js": "^4.25.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.32.0 < 5",
@@ -114,11 +114,11 @@
   "bundlesize": [
     {
       "path": "./dist/vue-instantsearch.js",
-      "maxSize": "53.00 kB"
+      "maxSize": "54 kB"
     },
     {
       "path": "./dist/vue-instantsearch.common.js",
-      "maxSize": "16.50 kB"
+      "maxSize": "16.75 kB"
     }
   ],
   "resolutions": {
