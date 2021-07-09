@@ -54,12 +54,13 @@
   "dependencies": {
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
+    "@types/qs": "^6.5.3",
     "algoliasearch-helper": "^3.5.4",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
     "preact": "^10.0.0",
-    "qs": "^6.5.1"
+    "qs": "^6.5.1 < 6.10"
   },
   "devDependencies": {
     "@algolia/client-search": "4.10.3",
@@ -81,7 +82,6 @@
     "@types/enzyme": "^3.1.15",
     "@types/jest": "^26.0.22",
     "@types/jest-diff": "^24.3.0",
-    "@types/qs": "^6.5.3",
     "@types/scriptjs": "0.0.2",
     "@types/storybook__addon-actions": "^3.4.2",
     "@typescript-eslint/eslint-plugin": "4.15.1",
