@@ -4802,13 +4802,6 @@ algolia-aerial@^1.5.3:
   resolved "https://registry.yarnpkg.com/algolia-aerial/-/algolia-aerial-1.5.3.tgz#c8b8ca6bc484164ffc7b36717689a424ea6bfe6c"
   integrity sha512-LZTpVlYnhqNFd+ru/Spm73omhsagiRQLmjrosa5bJ6/I9OMRp4Sb9pYZkAxcx3RSr+ZNXZqthL7rpXqMFdrnPA==
 
-algoliasearch-helper@^3.4.3:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.4.3.tgz#69c5f32e053e38fd34a14847ae53703c1873efa8"
-  integrity sha512-ocnorp1rhNLeZgTadgkJF6UNQGEZZAh7xcanZxldqKI8hx8xtk5MuILitZwViedmBKrTwGXRrY9Dz8Mqdk4hlQ==
-  dependencies:
-    events "^1.1.1"
-
 algoliasearch-helper@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.5.3.tgz#fbf8b328bc103efdefde59a7d25eaffe85b2490f"
@@ -16795,27 +16788,6 @@ react-inspector@^2.3.0, react-inspector@^2.3.1:
     babel-runtime "^6.26.0"
     is-dom "^1.0.9"
     prop-types "^15.6.1"
-
-react-instantsearch-dom-maps@6.10.3:
-  version "6.10.3"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom-maps/-/react-instantsearch-dom-maps-6.10.3.tgz#4be3946a2ced62206974655c3cb5213dc15d0bed"
-  integrity sha512-lHy80eGiulnY7dea9bb55DCEeXetJsZ/1Kt+1z84Bxc5lGUyV7WjtIDobcOrUWaqo9Ci2i9+8K0CTpC+qmq1RQ==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    prop-types "^15.6.2"
-    scriptjs "^2.5.8"
-
-react-instantsearch-dom@6.10.3:
-  version "6.10.3"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-6.10.3.tgz#314946b338198400acdbb0c5d79277fcf5c18350"
-  integrity sha512-kxc6IEruxJrc7O9lsLV5o4YK/RkGt3l7D1Y51JfmYkgeLuQHApwgcy/TAIoSN7wfR/1DONFbX8Y5VhU9Wqh87Q==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    algoliasearch-helper "^3.4.3"
-    classnames "^2.2.5"
-    prop-types "^15.6.2"
-    react-fast-compare "^3.0.0"
-    react-instantsearch-core "^6.10.3"
 
 react-is@^16.3.0, react-is@^16.8.1:
   version "16.8.2"
