@@ -3,11 +3,12 @@
 import { h } from 'preact';
 import { shallow, mount } from '../../../../test/utils/enzyme';
 import { highlight } from '../../../helpers';
-import { TAG_REPLACEMENT } from '../../../lib/utils';
+import { prepareTemplateProps, TAG_REPLACEMENT } from '../../../lib/utils';
 import Template from '../../Template/Template';
 import Hits, { HitsProps } from '../Hits';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import defaultTemplates from '../../../widgets/hits/defaultTemplates';
 
 describe('Hits', () => {
   const cssClasses = {
@@ -17,10 +18,18 @@ describe('Hits', () => {
     list: 'list',
   };
 
-  function shallowRender(extraProps = {}) {
-    const props = {
+  function shallowRender(extraProps: Partial<HitsProps> = {}) {
+    const props: HitsProps = {
       cssClasses,
-      templateProps: { templates: { empty: 'No results', item: 'item' } },
+      templateProps: prepareTemplateProps({
+        templates: {},
+        defaultTemplates,
+        templatesConfig: {},
+      }),
+      results: new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse(),
+      ]),
+      hits: [],
       ...extraProps,
     };
 
@@ -30,11 +39,12 @@ describe('Hits', () => {
   describe('no results', () => {
     it('should use the empty template if no results', () => {
       const props = {
-        results: {
-          hits: [],
-        },
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({
+            hits: [],
+          }),
+        ]),
         hits: [],
-        cssClasses,
       };
 
       const wrapper = shallowRender(props);
@@ -43,14 +53,13 @@ describe('Hits', () => {
     });
 
     it('should set the empty CSS class when no results', () => {
-      const props = {
-        results: {
-          hits: [],
-        },
-        cssClasses,
-      };
-
-      const wrapper = shallowRender(props);
+      const wrapper = shallowRender({
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({
+            hits: [],
+          }),
+        ]),
+      });
 
       expect(wrapper.props().rootProps.className).toContain('root');
     });
@@ -61,22 +70,22 @@ describe('Hits', () => {
       const hits = [
         {
           objectID: 'one',
+          __position: 1,
           foo: 'bar',
         },
         {
           objectID: 'two',
+          __position: 2,
           foo: 'baz',
         },
       ];
       const props = {
-        results: { hits },
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({
+            hits,
+          }),
+        ]),
         hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
       };
 
       const wrapper = shallowRender(props).find(Template);
@@ -89,18 +98,17 @@ describe('Hits', () => {
       const hits = [
         {
           objectID: 'one',
+          __position: 1,
           foo: 'bar',
         },
       ];
       const props = {
-        results: { hits },
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({
+            hits,
+          }),
+        ]),
         hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
       };
 
       const wrapper = shallowRender(props).find(Template);
@@ -109,25 +117,26 @@ describe('Hits', () => {
     });
 
     it('should wrap the items in a root div element', () => {
+      const hits = [
+        {
+          objectID: 'one',
+          __position: 1,
+          foo: 'bar',
+        },
+        {
+          objectID: 'two',
+          __position: 2,
+          foo: 'baz',
+        },
+      ];
+
       const props = {
-        results: {
-          hits: [
-            {
-              objectID: 'one',
-              foo: 'bar',
-            },
-            {
-              objectID: 'two',
-              foo: 'baz',
-            },
-          ],
-        },
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({
+            hits,
+          }),
+        ]),
+        hits,
       };
 
       const wrapper = shallowRender(props);
@@ -140,22 +149,23 @@ describe('Hits', () => {
       const hits = [
         {
           objectID: 'one',
+          __position: 1,
           foo: 'bar',
         },
         {
           objectID: 'two',
+          __position: 2,
           foo: 'baz',
         },
       ];
+
       const props = {
-        results: { hits },
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({
+            hits,
+          }),
+        ]),
         hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
       };
 
       const wrapper = shallowRender(props).find({ templateKey: 'item' });
@@ -168,22 +178,23 @@ describe('Hits', () => {
       const hits = [
         {
           objectID: 'one',
+          __position: 1,
           foo: 'bar',
         },
         {
           objectID: 'two',
+          __position: 2,
           foo: 'baz',
         },
       ];
+
       const props = {
-        results: { hits },
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({
+            hits,
+          }),
+        ]),
         hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
       };
 
       const wrapper = shallowRender(props).find({ templateKey: 'item' });
@@ -196,22 +207,22 @@ describe('Hits', () => {
       const hits = [
         {
           objectID: 'BAR',
+          __position: 1,
           foo: 'bar',
         },
         {
           objectID: 'BAZ',
+          __position: 2,
           foo: 'baz',
         },
       ];
       const props = {
-        results: { hits },
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({
+            hits,
+          }),
+        ]),
         hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
       };
 
       const wrapper = shallowRender(props).find({ templateKey: 'item' });
@@ -241,12 +252,14 @@ describe('Hits', () => {
           createSingleSearchResponse({ hits }),
         ]),
         hits,
-        templateProps: {
+        templateProps: prepareTemplateProps({
           templates: {
             item: 'item',
             empty: 'No results',
           },
-        },
+          defaultTemplates,
+          templatesConfig: {},
+        }),
         cssClasses,
       };
 
@@ -288,7 +301,7 @@ describe('Hits', () => {
           createSingleSearchResponse({ hits }),
         ]),
         hits,
-        templateProps: {
+        templateProps: prepareTemplateProps({
           templates: {
             item(hit) {
               return highlight({
@@ -298,7 +311,9 @@ describe('Hits', () => {
             },
             empty: 'No results',
           },
-        },
+          defaultTemplates,
+          templatesConfig: {},
+        }),
         cssClasses,
       };
 

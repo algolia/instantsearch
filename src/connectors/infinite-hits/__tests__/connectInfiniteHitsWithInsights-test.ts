@@ -7,11 +7,11 @@ import {
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { InstantSearch, InitOptions, RenderOptions } from '../../../types';
+import { InstantSearch, InitOptions, RenderOptions, Hit } from '../../../types';
 import connectInfiniteHitsWithInsights from '../connectInfiniteHitsWithInsights';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
-  addAbsolutePosition: hits => hits,
+  addAbsolutePosition: (hits: Hit[]) => hits,
 }));
 
 describe('connectInfiniteHitsWithInsights', () => {

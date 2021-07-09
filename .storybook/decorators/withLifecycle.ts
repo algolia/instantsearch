@@ -1,4 +1,4 @@
-import { Widget } from '../../src/types';
+import { InstantSearch, Widget } from '../../src/types';
 import { IndexWidget } from '../../src/widgets/index/index';
 
 const setDisabledState = (element: HTMLButtonElement, state: boolean) => {
@@ -7,7 +7,7 @@ const setDisabledState = (element: HTMLButtonElement, state: boolean) => {
 };
 
 export const withLifecycle = (
-  search: any,
+  search: InstantSearch,
   container: HTMLElement,
   fn: (node: HTMLElement) => Widget | IndexWidget
 ) => {

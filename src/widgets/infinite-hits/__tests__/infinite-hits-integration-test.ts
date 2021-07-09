@@ -4,29 +4,36 @@ import instantsearch from '../../../index.es';
 import { infiniteHits, configure } from '../../';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
-
-function createSingleSearchResponse({ params: { hitsPerPage, page } }) {
-  return {
-    hits: Array(hitsPerPage)
-      .fill(undefined)
-      .map((_, index) => ({
-        title: `title ${page * hitsPerPage + index + 1}`,
-        objectID: `object-id${index}`,
-      })),
-    page,
-    hitsPerPage,
-  };
-}
+import { PlainSearchParameters } from 'algoliasearch-helper';
+import {
+  InfiniteHitsCache,
+  InfiniteHitsCachedHits,
+} from '../../../connectors/infinite-hits/connectInfiniteHits';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('infiniteHits', () => {
   const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
-    const searchClient: any = {
-      search: jest.fn(requests =>
-        Promise.resolve({
-          results: requests.map(request => createSingleSearchResponse(request)),
-        })
+    const searchClient = createSearchClient({
+      // have to cast here, because this function isn't generic
+      search: jest.fn(
+        requests =>
+          Promise.resolve({
+            results: requests.map(({ params: { page } = {} }) =>
+              createSingleSearchResponse({
+                hits: Array(hitsPerPage)
+                  .fill(undefined)
+                  .map((_, index) => ({
+                    title: `title ${page! * hitsPerPage + index + 1}`,
+                    objectID: `object-id${index}`,
+                  })),
+                page,
+                hitsPerPage,
+              })
+            ),
+          }) as any
       ),
-    };
+    });
     const search = instantsearch({
       indexName: 'instant_search',
       searchClient,
@@ -40,7 +47,7 @@ describe('infiniteHits', () => {
     return { search, searchClient };
   };
 
-  let container;
+  let container: HTMLElement;
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -48,17 +55,24 @@ describe('infiniteHits', () => {
 
   describe('cache', () => {
     function createCustomCache() {
-      const getStateWithoutPage = state => {
+      const getStateWithoutPage = (state: PlainSearchParameters) => {
         const { page, ...rest } = state || {};
         return rest;
       };
-      const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-      let cachedState = undefined;
-      let cachedHits = undefined;
-      const customCache: any = {
+      const isEqual = (a: any, b: any) =>
+        JSON.stringify(a) === JSON.stringify(b);
+      let cachedState: PlainSearchParameters | undefined = undefined;
+      let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
+
+      type Cache = InfiniteHitsCache & { clear(): void };
+      type MockedCache = {
+        [key in keyof Cache]: jest.MockedFunction<Cache[key]>;
+      };
+
+      const customCache: MockedCache = {
         read: jest.fn(({ state }) => {
           return isEqual(cachedState, getStateWithoutPage(state))
-            ? cachedHits
+            ? cachedHits!
             : null;
         }),
         write: jest.fn(({ state, hits }) => {
@@ -230,14 +244,17 @@ Object {
             {
               title: 'fake1',
               objectID: 'test-object-id1',
+              __position: 1,
             },
             {
               title: 'fake2',
               objectID: 'test-object-id2',
+              __position: 2,
             },
             {
               title: 'fake3',
               objectID: 'test-object-id3',
+              __position: 3,
             },
           ],
         },

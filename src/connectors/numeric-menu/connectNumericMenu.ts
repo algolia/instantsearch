@@ -9,10 +9,11 @@ import {
 import {
   Connector,
   CreateURL,
+  InstantSearch,
   TransformItems,
   WidgetRenderState,
 } from '../../types';
-import { SearchParameters } from 'algoliasearch-helper';
+import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
 import { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -127,9 +128,15 @@ export type NumericMenuConnector = Connector<
 
 const $$type = 'ais.numericMenu';
 
-const createSendEvent = ({ instantSearchInstance, helper, attribute }) => (
-  ...args: [InsightsEvent] | [string, string, string?]
-) => {
+const createSendEvent = ({
+  instantSearchInstance,
+  helper,
+  attribute,
+}: {
+  instantSearchInstance: InstantSearch;
+  helper: AlgoliaSearchHelper;
+  attribute: string;
+}) => (...args: [InsightsEvent] | [string, string, string?]) => {
   if (args.length === 1) {
     instantSearchInstance.sendEventToInsights(args[0]);
     return;
@@ -379,7 +386,9 @@ function isRefined(
   }
 
   if (option.start === undefined && option.end === undefined) {
-    return Object.keys(currentRefinements).every(
+    return (Object.keys(
+      currentRefinements
+    ) as SearchParameters.Operator[]).every(
       operator => (currentRefinements[operator] || []).length === 0
     );
   }

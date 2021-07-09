@@ -22,6 +22,7 @@ describe('isPlainObject', () => {
   test('with constructor should be false', () => {
     function Foo(): void {}
 
+    // @ts-expect-error we don't make foo an explicit contructor-having function
     const actual = isPlainObject(new Foo());
 
     expect(actual).toBe(false);

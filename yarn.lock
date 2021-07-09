@@ -2248,6 +2248,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/scriptjs@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@types/scriptjs/-/scriptjs-0.0.2.tgz#09a2287221a7a341fc6b95b005e4bfb2a5403538"
+  integrity sha1-CaIociGno0H8a5WwBeS/sqVANTg=
+
 "@types/selenium-standalone@^6.15.0":
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/@types/selenium-standalone/-/selenium-standalone-6.15.0.tgz#daa3ba1c5d46be614f84aecfe975ff5af4837a43"

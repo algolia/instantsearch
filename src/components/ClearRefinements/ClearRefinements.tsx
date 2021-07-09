@@ -9,6 +9,7 @@ import {
   ClearRefinementsTemplates,
 } from '../../widgets/clear-refinements/clear-refinements';
 import { ComponentCSSClasses } from '../../types';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type ClearRefinementsComponentCSSClasses = ComponentCSSClasses<
   ClearRefinementsCSSClasses
@@ -22,10 +23,7 @@ export type ClearRefinementsProps = {
   refine: ClearRefinementsRenderState['refine'];
   cssClasses: ClearRefinementsComponentCSSClasses;
   hasRefinements: ClearRefinementsRenderState['hasRefinements'];
-  templateProps: {
-    [key: string]: any;
-    templates: ClearRefinementsComponentTemplates;
-  };
+  templateProps: PreparedTemplateProps<ClearRefinementsComponentTemplates>;
 };
 
 const ClearRefinements = ({

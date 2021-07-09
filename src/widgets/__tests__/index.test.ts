@@ -1,7 +1,7 @@
 /* global google */
 import { PlacesInstance } from 'places.js';
 import * as widgets from '..';
-import { Widget } from '../../types';
+import { UnknownWidgetFactory, Widget } from '../../types';
 import { IndexWidget } from '../index/index';
 
 /**
@@ -142,7 +142,8 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
       }
       default: {
-        return widget({ container, attribute: 'attr' }) as Widget;
+        const defaultWidget = widget as UnknownWidgetFactory;
+        return defaultWidget({ container, attribute: 'attr' });
       }
     }
   }

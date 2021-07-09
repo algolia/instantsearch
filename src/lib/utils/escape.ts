@@ -22,7 +22,10 @@ const regexHasUnescapedHtml = RegExp(regexUnescapedHtml.source);
  */
 function escape(value: string): string {
   return value && regexHasUnescapedHtml.test(value)
-    ? value.replace(regexUnescapedHtml, character => htmlEscapes[character])
+    ? value.replace(
+        regexUnescapedHtml,
+        character => htmlEscapes[character as keyof typeof htmlEscapes]
+      )
     : value;
 }
 

@@ -14,14 +14,20 @@ import {
   find,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory } from '../../types';
+import { ComponentCSSClasses, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
 });
 const suit = component('HitsPerPage');
 
-const renderer = ({ containerNode, cssClasses }) => (
+const renderer = ({
+  containerNode,
+  cssClasses,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: ComponentCSSClasses<HitsPerPageCSSClasses>;
+}) => (
   { items, refine }: HitsPerPageRenderState,
   isFirstRendering: boolean
 ) => {

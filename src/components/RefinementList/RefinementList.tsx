@@ -10,18 +10,9 @@ import SearchBox, {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../SearchBox/SearchBox';
-import { RefinementListItem as TRefinementListItem } from '../../connectors/refinement-list/connectRefinementList';
 import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import {
-  ComponentCSSClasses,
-  CreateURL,
-  Templates,
-  Template as TemplateType,
-} from '../../types';
-import {
-  RefinementListOwnCSSClasses,
-  RefinementListOwnTemplates,
-} from '../../widgets/refinement-list/refinement-list';
+import { ComponentCSSClasses, CreateURL, Templates } from '../../types';
+import { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
 import { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
 import { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 
@@ -32,7 +23,8 @@ type RefinementListOptionalClasses =
   | 'labelText'
   | 'showMore'
   | 'disabledShowMore'
-  | 'searchBox';
+  | 'searchBox'
+  | 'count';
 
 type RefinementListWidgetCSSClasses = ComponentCSSClasses<
   RefinementListOwnCSSClasses
@@ -51,20 +43,20 @@ export type RefinementListComponentCSSClasses = RefinementListRequiredCSSClasses
     Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
   >;
 
-export type RefinementListComponentTemplates = Required<
-  RefinementListOwnTemplates
-> & {
-  searchableNoResults?: TemplateType<void>;
+type FacetValue = {
+  value: string;
+  label: string;
+  highlighted?: string;
+  count?: number;
+  isRefined: boolean;
+  data?: HierarchicalMenuItem[] | null;
 };
-
-type FacetValue = TRefinementListItem | HierarchicalMenuItem;
-type FacetValues = TRefinementListItem[] | HierarchicalMenuItem[];
 
 export type RefinementListProps<TTemplates extends Templates> = {
   createURL: CreateURL<string>;
   cssClasses: RefinementListComponentCSSClasses;
   depth?: number;
-  facetValues?: FacetValues;
+  facetValues?: FacetValue[];
   attribute?: string;
   templateProps: PreparedTemplateProps<TTemplates>;
   toggleRefinement: (value: string) => void;

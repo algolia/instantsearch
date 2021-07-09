@@ -1,4 +1,5 @@
 import algoliasearch from 'algoliasearch';
+// @ts-ignore (can't type a module that is imported with an alias?)
 import algoliasearchV3 from 'algoliasearch-v3';
 import { createMetadataMiddleware } from '..';
 import { createSearchClient } from '../../../test/mock/createSearchClient';

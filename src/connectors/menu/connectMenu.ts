@@ -7,6 +7,7 @@ import {
 } from '../../lib/utils';
 import {
   Connector,
+  CreateURL,
   RenderOptions,
   SortBy,
   TransformItems,
@@ -79,7 +80,7 @@ export type MenuRenderState = {
   /**
    * Creates the URL for a single item name in the list.
    */
-  createURL(value: string): string;
+  createURL: CreateURL<string>;
   /**
    * Filter the search to item value.
    */

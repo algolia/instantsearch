@@ -8,11 +8,13 @@ import {
   noop,
   escapeHits,
 } from '../../lib/utils';
+import { DebouncedFunction } from '../../lib/utils/debounce';
 import {
   Connector,
   Hits,
   Hit,
   FindAnswersOptions,
+  FindAnswersParameters,
   FindAnswersResponse,
   WidgetRenderState,
 } from '../../types';
@@ -134,7 +136,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
     let lastResult: Partial<FindAnswersResponse<Hit>>;
     let isLoading = false;
     const debouncedRender = debounce(renderFn, renderDebounceTime);
-    let debouncedRefine;
+
+    // this does not directly use DebouncedFunction<findAnswers>, since then the generic will disappear
+    let debouncedRefine: DebouncedFunction<(
+      ...params: FindAnswersParameters
+    ) => Promise<FindAnswersResponse<Hit>>>;
 
     return {
       $$type: 'ais.answers',

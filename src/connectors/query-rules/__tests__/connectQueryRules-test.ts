@@ -12,6 +12,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectQueryRules from '../connectQueryRules';
+import { TransformItems } from '../../../types';
 
 describe('connectQueryRules', () => {
   function createWidget() {
@@ -266,7 +267,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
     it('takes transformItems in account (empty)', () => {
       const { makeWidget } = createWidget();
-      const transformItems = items => {
+      const transformItems: TransformItems<any> = items => {
         items.push({ lions: true });
         return items;
       };
@@ -288,7 +289,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
     it('takes transformItems in account', () => {
       const { makeWidget } = createWidget();
-      const transformItems = items => {
+      const transformItems: TransformItems<any> = items => {
         items.push({ lions: true });
         return items;
       };

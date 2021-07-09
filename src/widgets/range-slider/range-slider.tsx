@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Slider from '../../components/Slider/Slider';
+import Slider, {
+  RangeSliderComponentCSSClasses,
+} from '../../components/Slider/Slider';
 import connectRange, {
   RangeBoundaries,
   RangeConnectorParams,
@@ -15,7 +17,6 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { Renderer, WidgetFactory } from '../../types';
-import { RangeInputWidgetParams } from '../range-input/range-input';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-slider' });
 const suit = component('RangeSlider');
@@ -26,7 +27,13 @@ const renderer = ({
   pips,
   step,
   tooltips,
-}): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> => (
+}: {
+  containerNode: HTMLElement;
+  cssClasses: RangeSliderComponentCSSClasses;
+  pips: boolean;
+  step?: number;
+  tooltips: RangeSliderWidgetParams['tooltips'];
+}): Renderer<RangeRenderState, Partial<RangeSliderWidgetParams>> => (
   { refine, range, start },
   isFirstRendering
 ) => {

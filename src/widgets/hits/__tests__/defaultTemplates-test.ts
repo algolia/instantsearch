@@ -7,23 +7,23 @@ describe('hits defaultTemplates', () => {
 
   it('has a `item` default template', () => {
     const item = {
-      __position: 0,
-      __hitIndex: 1,
-      objectID: '2',
+      objectID: '1',
       hello: 'there,',
       how: {
         are: 'you?',
       },
+      __position: 4,
+      __hitIndex: 3,
     };
 
     const expected = `{
-  "__position": 0,
-  "__hitIndex": 1,
-  "objectID": "2",
+  "objectID": "1",
   "hello": "there,",
   "how": {
     "are": "you?"
-  }
+  },
+  "__position": 4,
+  "__hitIndex": 3
 }`;
 
     expect(

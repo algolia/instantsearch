@@ -1,7 +1,8 @@
+import { PlainSearchParameters } from 'algoliasearch-helper';
 import { isEqual } from '../utils';
 import { InfiniteHitsCache } from '../../connectors/infinite-hits/connectInfiniteHits';
 
-function getStateWithoutPage(state) {
+function getStateWithoutPage(state: PlainSearchParameters) {
   const { page, ...rest } = state || {};
   return rest;
 }

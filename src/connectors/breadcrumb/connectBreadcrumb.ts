@@ -27,7 +27,7 @@ export type BreadcrumbConnectorParamsItem = {
   /**
    * Value of breadcrumb item.
    */
-  value: string;
+  value: string | null;
 };
 
 export type BreadcrumbConnectorParams = {
@@ -125,7 +125,10 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
     const [hierarchicalFacetName] = attributes;
 
-    function getRefinedState(state: SearchParameters, facetValue: string) {
+    function getRefinedState(
+      state: SearchParameters,
+      facetValue: string | null
+    ) {
       if (!facetValue) {
         const breadcrumb = state.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
@@ -246,8 +249,8 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
   };
 };
 
-function prepareItems(data) {
-  return data.reduce((result, currentItem) => {
+function prepareItems(data: SearchResults.HierarchicalFacet[]) {
+  return data.reduce<BreadcrumbConnectorParamsItem[]>((result, currentItem) => {
     if (currentItem.isRefined) {
       result.push({
         label: currentItem.name,
@@ -261,7 +264,7 @@ function prepareItems(data) {
   }, []);
 }
 
-function shiftItemsValues(array) {
+function shiftItemsValues(array: BreadcrumbConnectorParamsItem[]) {
   return array.map((x, idx) => ({
     label: x.label,
     value: idx + 1 === array.length ? null : array[idx + 1].value,

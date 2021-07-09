@@ -18,6 +18,11 @@ import defaultTemplates from './defaultTemplates';
 import createHTMLMarker, { HTMLMarkerArguments } from './createHTMLMarker';
 import { GeoLoc, Template, WidgetFactory } from '../../types';
 
+export type CreateMarker = (args: {
+  item: GeoHit;
+  map: google.maps.Map;
+}) => google.maps.OverlayView | google.maps.Marker;
+
 const withUsage = createDocumentationMessageGenerator({ name: 'geo-search' });
 const suit = component('GeoSearch');
 
@@ -184,7 +189,7 @@ const geoSearch: GeoSearchWidget = widgetParams => {
   };
 
   const defaultCustomHTMLMarker: GeoSearchMarker<Partial<
-    Partial<HTMLMarkerArguments>
+    HTMLMarkerArguments
   >> = {
     createOptions: () => ({}),
     events: {},
@@ -240,7 +245,7 @@ const geoSearch: GeoSearchWidget = widgetParams => {
     >),
   };
 
-  const createBuiltInMarker = ({ item, ...rest }) =>
+  const createBuiltInMarker: CreateMarker = ({ item, ...rest }) =>
     new googleReference.maps.Marker({
       ...builtInMarker.createOptions!(item),
       ...rest,
@@ -250,13 +255,7 @@ const geoSearch: GeoSearchWidget = widgetParams => {
     });
 
   const HTMLMarker = createHTMLMarker(googleReference);
-  const createCustomHTMLMarker = ({
-    item,
-    ...rest
-  }: {
-    item: GeoHit;
-    map: google.maps.Map;
-  }) =>
+  const createCustomHTMLMarker: CreateMarker = ({ item, ...rest }) =>
     new HTMLMarker({
       // this is only called when customHTMLMarker is defined
       ...(customHTMLMarker as GeoSearchMarker<Partial<HTMLMarkerArguments>>)
@@ -276,10 +275,7 @@ const geoSearch: GeoSearchWidget = widgetParams => {
     ? createBuiltInMarker
     : createCustomHTMLMarker;
 
-  // prettier-ignore
-  const markerOptions = !customHTMLMarker
-    ? builtInMarker
-    : customHTMLMarker;
+  const markerOptions = !customHTMLMarker ? builtInMarker : customHTMLMarker;
 
   const makeWidget = connectGeoSearch(renderer, () =>
     render(null, containerNode)
@@ -288,8 +284,6 @@ const geoSearch: GeoSearchWidget = widgetParams => {
   return {
     ...makeWidget({
       ...otherWidgetParams,
-      // @ts-expect-error pattern not used in other widgets, but the
-      // renderState is stored on the connectorParams for usage in the renderer
       renderState: {},
       container: containerNode,
       googleReference,

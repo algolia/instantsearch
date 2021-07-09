@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import Panel from '../Panel';
+import Panel, { PanelProps } from '../Panel';
 import { createRenderOptions } from '../../../../test/mock/createWidget';
 
 const cssClasses = {
@@ -162,7 +162,7 @@ describe('Panel', () => {
 
   describe('collapsible', () => {
     test('should render component with `collapsible` prop', () => {
-      const props = {
+      const props: PanelProps<any> = {
         ...getDefaultProps(),
         templates: {
           header: 'Header',
@@ -206,7 +206,7 @@ describe('Panel', () => {
     });
 
     test('should render component with `collapsible` and `collapsed` props', () => {
-      const props = {
+      const props: PanelProps<any> = {
         ...getDefaultProps(),
         collapsible: true,
         isCollapsed: true,
@@ -251,7 +251,7 @@ describe('Panel', () => {
     });
 
     test('should collapse on button click', () => {
-      const props = {
+      const props: PanelProps<any> = {
         ...getDefaultProps(),
         collapsible: true,
         isCollapsed: false,

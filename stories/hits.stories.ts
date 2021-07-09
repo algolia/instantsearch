@@ -219,7 +219,7 @@ storiesOf('Results/Hits', module)
         ]);
       },
       {
-        insightsClient: (method, payload) =>
+        insightsClient: (method: string, payload: any) =>
           action(`[InsightsClient] sent ${method} with payload`)(payload),
       }
     )
@@ -252,7 +252,7 @@ storiesOf('Results/Hits', module)
         ]);
       },
       {
-        insightsClient: (method, payload) =>
+        insightsClient: (method: string, payload: any) =>
           action(`[InsightsClient] sent ${method} with payload`)(payload),
       }
     )

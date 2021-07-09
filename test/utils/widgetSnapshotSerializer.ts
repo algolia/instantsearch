@@ -3,7 +3,7 @@ import { IndexWidget } from '../../src/widgets/index/index';
 import { getWidgetAttribute } from '../../src/lib/utils';
 import { createInitOptions } from '../mock/createWidget';
 
-function getAttribute(widget) {
+function getAttribute(widget: Widget | IndexWidget) {
   try {
     return getWidgetAttribute(widget, createInitOptions());
   } catch {

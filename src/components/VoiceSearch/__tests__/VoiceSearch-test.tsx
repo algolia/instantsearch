@@ -61,7 +61,7 @@ describe('VoiceSearch', () => {
     });
 
     it('with custom template for buttonText (1)', () => {
-      const props = {
+      const props: VoiceSearchProps = {
         ...defaultProps,
         isListening: true,
         templates: {
@@ -77,7 +77,7 @@ describe('VoiceSearch', () => {
     });
 
     it('with custom template for buttonText (2)', () => {
-      const props = {
+      const props: VoiceSearchProps = {
         ...defaultProps,
         isListening: false,
         templates: {

@@ -5,6 +5,7 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectNumericMenu, {
   NumericMenuConnectorParams,
+  NumericMenuRenderState,
   NumericMenuWidgetDescription,
 } from '../../connectors/numeric-menu/connectNumericMenu';
 import defaultTemplates from './defaultTemplates';
@@ -14,7 +15,13 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { ComponentCSSClasses, Template, WidgetFactory } from '../../types';
+import {
+  ComponentCSSClasses,
+  Renderer,
+  Template,
+  WidgetFactory,
+} from '../../types';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');
@@ -25,7 +32,15 @@ const renderer = ({
   cssClasses,
   renderState,
   templates,
-}) => (
+}: {
+  containerNode: HTMLElement;
+  attribute: string;
+  cssClasses: NumericMenuComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<NumericMenuTemplates>;
+  };
+  templates: NumericMenuTemplates;
+}): Renderer<NumericMenuRenderState, Partial<NumericMenuWidgetParams>> => (
   { createURL, instantSearchInstance, refine, items },
   isFirstRendering: boolean
 ) => {
@@ -43,7 +58,7 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
       toggleRefinement={refine}
       attribute={attribute}
     />,

@@ -7,7 +7,10 @@ import connectHits, {
   HitsRenderState,
   HitsWidgetDescription,
 } from '../../connectors/hits/connectHits';
-import Hits from '../../components/Hits/Hits';
+import Hits, {
+  HitsComponentCSSClasses,
+  HitsComponentTemplates,
+} from '../../components/Hits/Hits';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -25,6 +28,7 @@ import {
   InsightsClientWrapper,
 } from '../../types';
 import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
@@ -35,6 +39,13 @@ const renderer = ({
   cssClasses,
   containerNode,
   templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: HitsComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<HitsComponentTemplates>;
+  };
+  templates: HitsTemplates;
 }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> => (
   { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
   isFirstRendering

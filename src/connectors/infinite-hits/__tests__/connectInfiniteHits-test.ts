@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { SearchClient, HitAttributeHighlightResult } from '../../../types';
+import { SearchClient, HitAttributeHighlightResult, Hit } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createDisposeOptions,
@@ -18,7 +18,7 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
   // especially with the __escaped mark, we thus make sure the mock also has the
   // same behavior regarding the array.
-  addAbsolutePosition: hits => hits.map(x => x),
+  addAbsolutePosition: (hits: Hit[]) => hits.map(x => x),
 }));
 
 describe('connectInfiniteHits', () => {

@@ -14,7 +14,6 @@ import { SendEventForHits, BindEventForHits } from '../../lib/utils';
 export type InfiniteHitsComponentCSSClasses = ComponentCSSClasses<
   InfiniteHitsCSSClasses
 >;
-
 export type InfiniteHitsComponentTemplates = Required<InfiniteHitsTemplates>;
 
 export type InfiniteHitsProps = {

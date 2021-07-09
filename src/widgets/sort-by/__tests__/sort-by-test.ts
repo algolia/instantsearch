@@ -1,6 +1,9 @@
 import { render as preactRender } from 'preact';
-import algoliasearchHelper from 'algoliasearch-helper';
-import sortBy from '../sort-by';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper,
+  SearchResults,
+} from 'algoliasearch-helper';
+import sortBy, { SortByIndexDefinition } from '../sort-by';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -8,6 +11,7 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -30,12 +34,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 });
 
 describe('sortBy()', () => {
-  let container;
-  let items;
+  let container: HTMLElement;
+  let items: SortByIndexDefinition[];
   let cssClasses;
-  let widget;
-  let helper;
-  let results;
+  let widget: ReturnType<typeof sortBy>;
+  let helper: AlgoliaSearchHelper;
+  let results: SearchResults;
 
   beforeEach(() => {
     render.mockClear();
@@ -60,16 +64,18 @@ describe('sortBy()', () => {
     helper.setIndex = jest.fn().mockReturnThis();
     helper.search = jest.fn();
 
-    results = {
-      hits: [],
-      nbHits: 0,
-    };
-    widget.init(createInitOptions({ helper, instantSearchInstance }));
+    results = new SearchResults(helper.state, [
+      createSingleSearchResponse({
+        hits: [],
+        nbHits: 0,
+      }),
+    ]);
+    widget.init!(createInitOptions({ helper, instantSearchInstance }));
   });
 
   it('calls twice render(<Selector props />, container)', () => {
-    widget.render(createRenderOptions({ helper, results }));
-    widget.render(createRenderOptions({ helper, results }));
+    widget.render!(createRenderOptions({ helper, results }));
+    widget.render!(createRenderOptions({ helper, results }));
 
     const [firstRender, secondRender] = render.mock.calls;
     // @ts-expect-error
@@ -114,8 +120,8 @@ describe('sortBy()', () => {
         allItems.map(item => ({ ...item, transformed: true })),
     });
 
-    widget.init(createInitOptions({ helper }));
-    widget.render(createRenderOptions({ helper, results }));
+    widget.init!(createInitOptions({ helper }));
+    widget.render!(createRenderOptions({ helper, results }));
 
     const [firstRender] = render.mock.calls;
 

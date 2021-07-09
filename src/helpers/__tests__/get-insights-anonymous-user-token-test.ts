@@ -7,7 +7,7 @@ const DAY = 86400000; /* 1 day in ms*/
 const DATE_TOMORROW = new Date(Date.now() + DAY).toUTCString();
 const DATE_YESTERDAY = new Date(Date.now() - DAY).toUTCString();
 
-const resetCookie = cookieKey => {
+const resetCookie = (cookieKey: string) => {
   document.cookie = `${cookieKey}=;expires=Thu, 01-Jan-1970 00:00:01 GMT;`;
 };
 

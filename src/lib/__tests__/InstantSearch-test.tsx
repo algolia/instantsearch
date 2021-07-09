@@ -38,10 +38,14 @@ type PaginationWidgetInstance = Widget<
 
 jest.useFakeTimers();
 
+type AlgoliaHelperModule = typeof algoliasearchHelper;
+
 const algoliasearchHelper = castToJestMock(originalHelper);
 jest.mock('algoliasearch-helper', () => {
-  const module = jest.requireActual('algoliasearch-helper');
-  const mock = jest.fn((...args) => {
+  const module = jest.requireActual<AlgoliaHelperModule>(
+    'algoliasearch-helper'
+  );
+  const mock = jest.fn((...args: Parameters<AlgoliaHelperModule>) => {
     const helper = module(...args);
 
     const searchOnlyWithDerivedHelpers = helper.searchOnlyWithDerivedHelpers.bind(
@@ -56,6 +60,7 @@ jest.mock('algoliasearch-helper', () => {
   });
 
   Object.entries(module).forEach(([key, value]) => {
+    // @ts-expect-error Object.entries loses type safety
     mock[key] = value;
   });
 

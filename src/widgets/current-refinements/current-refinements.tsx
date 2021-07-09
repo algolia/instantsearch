@@ -5,6 +5,7 @@ import cx from 'classnames';
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
 import connectCurrentRefinements, {
   CurrentRefinementsConnectorParams,
+  CurrentRefinementsRenderState,
   CurrentRefinementsWidgetDescription,
 } from '../../connectors/current-refinements/connectCurrentRefinements';
 import {
@@ -12,7 +13,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory } from '../../types';
+import { ComponentCSSClasses, Renderer, WidgetFactory } from '../../types';
 
 export type CurrentRefinementsCSSClasses = Partial<{
   /**
@@ -68,12 +69,18 @@ const withUsage = createDocumentationMessageGenerator({
 });
 const suit = component('CurrentRefinements');
 
-const renderer = ({ items, widgetParams }, isFirstRender) => {
+const renderer: Renderer<
+  CurrentRefinementsRenderState,
+  Partial<CurrentRefinementsWidgetParams>
+> = ({ items, widgetParams }, isFirstRender) => {
   if (isFirstRender) {
     return;
   }
 
-  const { container, cssClasses } = widgetParams;
+  const { container, cssClasses } = widgetParams as {
+    container: HTMLElement;
+    cssClasses: ComponentCSSClasses<CurrentRefinementsCSSClasses>;
+  };
 
   render(
     <CurrentRefinements cssClasses={cssClasses} items={items} />,

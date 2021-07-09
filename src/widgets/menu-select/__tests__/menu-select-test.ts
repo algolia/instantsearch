@@ -1,5 +1,9 @@
 import { render as preactRender, VNode } from 'preact';
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
@@ -8,6 +12,7 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -33,17 +38,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
   });
 
   describe('Lifecycle', () => {
-    let data;
-    let results;
-    let state;
-    let helper;
+    let data: { data: Array<{ name: string }> };
+    let helper: AlgoliaSearchHelper;
+    let state: SearchParameters;
+    let results: SearchResults;
 
     beforeEach(() => {
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
-      results = { getFacetValues: jest.fn(() => data) };
       helper = algoliasearchHelper(createSearchClient(), 'index_name');
       helper.search = jest.fn();
       state = helper.state;
+      results = new SearchResults(helper.state, [createSingleSearchResponse()]);
+      // @ts-expect-error
+      results.getFacetValues = jest.fn(() => data);
 
       render.mockClear();
     });

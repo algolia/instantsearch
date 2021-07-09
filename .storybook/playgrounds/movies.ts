@@ -1,19 +1,17 @@
-import instantsearch from '../../src/index';
-import { panel } from '../../src/widgets';
+import { Playground } from '../decorators';
 
-function demoQueryRulesPlayground({
+const demoQueryRulesPlayground: Playground = function demoQueryRulesPlayground({
   search,
+  instantsearch,
   leftPanel,
   rightPanel,
-}: {
-  search: any;
-  leftPanel: HTMLElement;
-  rightPanel: HTMLElement;
 }) {
   const refinementList = document.createElement('div');
   leftPanel.appendChild(refinementList);
 
-  const brandList = panel({
+  const brandList = instantsearch.widgets.panel<
+    typeof instantsearch.widgets.refinementList
+  >({
     templates: {
       header: 'Genres',
     },
@@ -81,6 +79,6 @@ function demoQueryRulesPlayground({
       container: pagination,
     }),
   ]);
-}
+};
 
 export default demoQueryRulesPlayground;

@@ -172,7 +172,7 @@ function getRefinements(
         ? valueOrValues
         : [valueOrValues];
 
-      refinementNames.forEach(refinementName => {
+      refinementNames.forEach((refinementName: any) => {
         refinements.push({
           type: 'numeric',
           attribute,

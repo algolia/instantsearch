@@ -3,7 +3,7 @@ import findIndex from '../findIndex';
 describe('findIndex', () => {
   describe('with polyfill', () => {
     test('with empty array', () => {
-      const items = [];
+      const items: never[] = [];
       const actual = findIndex(items, item => item === 'hello');
 
       expect(actual).toEqual(-1);

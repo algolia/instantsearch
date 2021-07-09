@@ -2,7 +2,10 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RangeInput from '../../components/RangeInput/RangeInput';
+import RangeInput, {
+  RangeInputComponentCSSClasses,
+  RangeInputComponentTemplates,
+} from '../../components/RangeInput/RangeInput';
 import connectRange, {
   RangeConnectorParams,
   RangeRenderState,
@@ -15,11 +18,12 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { Renderer, Template, WidgetFactory } from '../../types';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
 const suit = component('RangeInput');
 
-const defaultTemplates: RangeInputTemplates = {
+const defaultTemplates: RangeInputComponentTemplates = {
   separatorText: 'to',
   submitText: 'Go',
 };
@@ -113,6 +117,13 @@ const renderer = ({
   cssClasses,
   renderState,
   templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: RangeInputComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<RangeInputComponentTemplates>;
+  };
+  templates: RangeInputTemplates;
 }): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> => (
   { refine, range, start, widgetParams, instantSearchInstance },
   isFirstRendering
@@ -144,7 +155,7 @@ const renderer = ({
       values={values}
       cssClasses={cssClasses}
       refine={refine}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
     />,
     containerNode
   );

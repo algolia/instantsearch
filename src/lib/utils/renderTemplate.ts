@@ -20,7 +20,7 @@ function transformHelpersToHogan(
       ...acc,
       [helperKey]() {
         return text => {
-          const render = value =>
+          const render = (value: string) =>
             (hogan.compile(value, compileOptions) as Template).render(this);
 
           return helpers[helperKey].call(data, text, render);

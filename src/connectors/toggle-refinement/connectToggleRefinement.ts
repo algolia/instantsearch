@@ -47,7 +47,7 @@ const createSendEvent = ({
   attribute: string;
   on: string[] | undefined;
 }) => {
-  const sendEventForToggle: SendEventForToggle = (...args) => {
+  const sendEventForToggle: SendEventForToggle = (...args: any[]) => {
     if (args.length === 1) {
       instantSearchInstance.sendEventToInsights(args[0]);
       return;
@@ -90,11 +90,11 @@ export type ToggleRefinementConnectorParams = {
    * Value to filter on when toggled.
    * @default "true"
    */
-  on?: string | string[] | boolean | boolean[];
+  on?: string | string[] | boolean | boolean[] | number | number[];
   /**
    * Value to filter on when not toggled.
    */
-  off?: string | string[] | boolean | boolean[];
+  off?: string | string[] | boolean | boolean[] | number | number[];
 };
 
 export type ToggleRefinementRenderState = {
@@ -113,7 +113,7 @@ export type ToggleRefinementRenderState = {
   /** Indicates if search state can be refined. */
   canRefine: boolean;
   /** Updates to the next state by applying the toggle refinement. */
-  refine: (value: { isRefined: boolean }) => void;
+  refine: (value?: { isRefined: boolean }) => void;
 };
 
 export type ToggleRefinementWidgetDescription = {

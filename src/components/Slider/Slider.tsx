@@ -1,11 +1,20 @@
 /** @jsx h */
 
 import { h, Component } from 'preact';
-import Rheostat from './Rheostat';
+import Rheostat, { HandleProps } from './Rheostat';
 import cx from 'classnames';
 import { range } from '../../lib/utils';
 import Pit from './Pit';
 import { RangeBoundaries } from '../../connectors/range/connectRange';
+import {
+  RangeSliderCssClasses,
+  RangeSliderWidgetParams,
+} from '../../widgets/range-slider/range-slider';
+import { ComponentCSSClasses } from '../../types';
+
+export type RangeSliderComponentCSSClasses = ComponentCSSClasses<
+  RangeSliderCssClasses
+>;
 
 export type SliderProps = {
   refine(values: RangeBoundaries): void;
@@ -13,16 +22,9 @@ export type SliderProps = {
   max?: number;
   values: RangeBoundaries;
   pips?: boolean;
-  step: number;
-  tooltips?:
-    | boolean
-    | {
-        format(value: number): string;
-      };
-  cssClasses: {
-    root: string;
-    disabledRoot: string;
-  };
+  step?: number;
+  tooltips?: RangeSliderWidgetParams['tooltips'];
+  cssClasses: RangeSliderComponentCSSClasses;
 };
 
 class Slider extends Component<SliderProps> {
@@ -30,14 +32,14 @@ class Slider extends Component<SliderProps> {
     return this.props.min! >= this.props.max!;
   }
 
-  private handleChange = ({ values }) => {
+  private handleChange = ({ values }: { values: RangeBoundaries }) => {
     if (!this.isDisabled) {
       this.props.refine(values);
     }
   };
 
   // creates an array number where to display a pit point on the slider
-  private computeDefaultPitPoints({ min, max }) {
+  private computeDefaultPitPoints({ min, max }: { min: number; max: number }) {
     const totalLength = max - min;
     const steps = 34;
     const stepsLength = totalLength / steps;
@@ -54,18 +56,31 @@ class Slider extends Component<SliderProps> {
   }
 
   // creates an array of values where the slider should snap to
-  private computeSnapPoints({ min, max, step }) {
+  private computeSnapPoints({
+    min,
+    max,
+    step,
+  }: {
+    min: number;
+    max: number;
+    step?: number;
+  }) {
     if (!step) return undefined;
     return [...range({ start: min, end: max, step }), max];
   }
 
-  private createHandleComponent = tooltips => props => {
+  private createHandleComponent = (
+    tooltips: RangeSliderWidgetParams['tooltips']
+  ) => (props: HandleProps) => {
     // display only two decimals after comma,
     // and apply `tooltips.format()` if any
     const roundedValue =
-      Math.round(parseFloat(props['aria-valuenow']) * 100) / 100;
+      Math.round(
+        // have to cast as a string, as the value given to the prop is a number, but becomes a string when read
+        parseFloat((props['aria-valuenow'] as unknown) as string) * 100
+      ) / 100;
     const value =
-      tooltips && tooltips.format
+      typeof tooltips === 'object' && tooltips.format
         ? tooltips.format(roundedValue)
         : roundedValue;
 
@@ -84,9 +99,10 @@ class Slider extends Component<SliderProps> {
   public render() {
     const { tooltips, step, pips, values, cssClasses } = this.props;
 
+    // @TODO: figure out why this.props needs to be non-null asserted
     const { min, max } = this.isDisabled
-      ? { min: this.props.min, max: this.props.max! + 0.001 }
-      : this.props;
+      ? { min: this.props.min!, max: this.props.max! + 0.001 }
+      : (this.props as Required<SliderProps>);
 
     const snapPoints = this.computeSnapPoints({ min, max, step });
     const pitPoints =

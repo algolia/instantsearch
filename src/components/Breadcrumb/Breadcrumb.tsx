@@ -8,11 +8,8 @@ import {
   BreadcrumbTemplates,
 } from '../../widgets/breadcrumb/breadcrumb';
 import { ComponentCSSClasses } from '../../types';
-
-type BreadcrumbItem = {
-  value: string;
-  label: string;
-};
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
 
 export type BreadcrumbComponentCSSClasses = ComponentCSSClasses<
   BreadcrumbCSSClasses
@@ -21,13 +18,11 @@ export type BreadcrumbComponentCSSClasses = ComponentCSSClasses<
 export type BreadcrumbComponentTemplates = Required<BreadcrumbTemplates>;
 
 export type BreadcrumbProps = {
-  items: BreadcrumbItem[];
+  items: BreadcrumbConnectorParamsItem[];
   cssClasses: BreadcrumbComponentCSSClasses;
-  templateProps: {
-    templates: BreadcrumbComponentTemplates;
-  };
-  createURL(value: string | undefined): string;
-  refine(value: string | undefined): void;
+  templateProps: PreparedTemplateProps<BreadcrumbComponentTemplates>;
+  createURL(value?: string | null): string;
+  refine(value?: string | null): void;
   canRefine?: boolean;
 };
 

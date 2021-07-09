@@ -5,6 +5,13 @@ import {
   createRenderOptions,
   createInitOptions,
 } from '../../../../test/mock/createWidget';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -16,8 +23,8 @@ jest.mock('preact', () => {
 });
 
 describe('breadcrumb()', () => {
-  let container;
-  let attributes;
+  let container: HTMLElement;
+  let attributes: string[];
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -42,49 +49,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   describe('render', () => {
-    let results;
-    let helper;
-    let state;
+    let results: SearchResults;
+    let helper: AlgoliaSearchHelper;
+    let state: SearchParameters;
 
     beforeEach(() => {
-      const data = [
-        {
-          name: 'Cameras & Camcorders',
-          path: 'Cameras & Camcorders',
-          count: 1369,
-          isRefined: true,
-          data: [
-            {
-              name: 'Digital Cameras',
-              path: 'Cameras & Camcorders > Digital Cameras',
-              count: 170,
-              isRefined: true,
-              data: null,
-            },
-          ],
-        },
-      ];
+      helper = algoliasearchHelper(createSearchClient(), '');
 
-      results = {
-        getFacetValues: jest.fn(() => ({ data })),
-        hierarchicalFacets: [
-          {
-            name: 'hierarchicalCategories.lvl0',
-            count: null,
-            isRefined: true,
-            path: null,
-            data,
-          },
-        ],
-      };
-
-      helper = {
-        search: jest.fn(),
-        toggleRefinement: jest.fn().mockReturnThis(),
-      };
-
-      state = {
-        toggleRefinement: jest.fn().mockReturnThis(),
+      state = new SearchParameters({
         hierarchicalFacets: [
           {
             attributes: [
@@ -96,7 +68,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             rootPath: null,
           },
         ],
-      };
+        hierarchicalFacetsRefinements: {
+          'hierarchicalCategories.lvl0': [
+            'Cameras & Camcorders > Digital Cameras',
+          ],
+        },
+      });
+
+      results = new SearchResults(state, [
+        createSingleSearchResponse({
+          facets: {
+            'hierarchicalCategories.lvl0': {
+              'Cameras & Camcorders': 1369,
+            },
+            'hierarchicalCategories.lvl1': {
+              'Cameras & Camcorders > Digital Cameras': 170,
+            },
+          },
+        }),
+      ]);
     });
 
     it('renders transformed items correctly', () => {

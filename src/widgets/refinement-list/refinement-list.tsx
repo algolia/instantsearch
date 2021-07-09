@@ -4,7 +4,6 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList, {
   RefinementListComponentCSSClasses,
-  RefinementListComponentTemplates,
 } from '../../components/RefinementList/RefinementList';
 import connectRefinementList, {
   RefinementListRenderState,
@@ -17,11 +16,12 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { Template, WidgetFactory, RendererOptions } from '../../types';
+import { Template, WidgetFactory, Renderer } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 import { SearchBoxTemplates } from '../search-box/search-box';
 import { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
+import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -162,6 +162,9 @@ type RefinementListSearchableTemplates = Partial<{
 
 export type RefinementListTemplates = RefinementListOwnTemplates &
   RefinementListSearchableTemplates;
+export type RefinementListComponentTemplates = Required<
+  RefinementListOwnTemplates
+>;
 
 export type RefinementListWidgetParams = {
   /**
@@ -199,26 +202,6 @@ export type RefinementListWidgetParams = {
   cssClasses?: RefinementListCSSClasses;
 };
 
-export const defaultTemplates: RefinementListComponentTemplates = {
-  item: `<label class="{{cssClasses.label}}">
-  <input type="checkbox"
-         class="{{cssClasses.checkbox}}"
-         value="{{value}}"
-         {{#isRefined}}checked{{/isRefined}} />
-  <span class="{{cssClasses.labelText}}">{{#isFromSearch}}{{{highlighted}}}{{/isFromSearch}}{{^isFromSearch}}{{highlighted}}{{/isFromSearch}}</span>
-  <span class="{{cssClasses.count}}">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>`,
-  showMoreText: `
-    {{#isShowingMore}}
-      Show less
-    {{/isShowingMore}}
-    {{^isShowingMore}}
-      Show more
-    {{/isShowingMore}}
-    `,
-  searchableNoResults: 'No results',
-};
-
 const renderer = ({
   containerNode,
   cssClasses,
@@ -242,7 +225,7 @@ const renderer = ({
   searchable?: boolean;
   searchablePlaceholder?: string;
   searchableIsAlwaysActive?: boolean;
-}) => (
+}): Renderer<RefinementListRenderState, RefinementListConnectorParams> => (
   {
     refine,
     items,
@@ -254,8 +237,8 @@ const renderer = ({
     isShowingMore,
     hasExhaustiveItems,
     canToggleShowMore,
-  }: RefinementListRenderState & RendererOptions<RefinementListConnectorParams>,
-  isFirstRendering: boolean
+  },
+  isFirstRendering
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({

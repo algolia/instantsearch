@@ -11,13 +11,13 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { EscapedHits, HitAttributeHighlightResult } from '../../../types';
+import { EscapedHits, Hit, HitAttributeHighlightResult } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
   // especially with the __escaped mark, we thus make sure the mock also has the
   // same behavior regarding the array.
-  addAbsolutePosition: hits => hits.map(x => x),
+  addAbsolutePosition: (hits: Hit[]) => hits.map(x => x),
 }));
 
 describe('connectHits', () => {

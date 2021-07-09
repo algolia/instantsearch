@@ -86,7 +86,7 @@ storiesOf('Basics/SearchBox', module)
   .add(
     'with debounced queryHook',
     withHits(({ search, container, instantsearch }) => {
-      let timerId;
+      let timerId: ReturnType<typeof setTimeout>;
       search.addWidgets([
         instantsearch.widgets.searchBox({
           container,

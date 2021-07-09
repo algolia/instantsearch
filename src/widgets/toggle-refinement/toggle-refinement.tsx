@@ -132,7 +132,9 @@ export type ToggleRefinementWidget = WidgetFactory<
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  */
-const toggleRefinement = function toggleRefinement(widgetParams) {
+const toggleRefinement: ToggleRefinementWidget = function toggleRefinement(
+  widgetParams
+) {
   const {
     container,
     attribute,

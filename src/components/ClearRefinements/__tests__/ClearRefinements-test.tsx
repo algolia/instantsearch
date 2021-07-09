@@ -3,6 +3,8 @@
 import { h } from 'preact';
 import ClearRefinements from '../ClearRefinements';
 import { mount } from '../../../../test/utils/enzyme';
+import { prepareTemplateProps } from '../../../lib/utils';
+import defaultTemplates from '../../../widgets/clear-refinements/defaultTemplates';
 
 describe('ClearRefinements', () => {
   const defaultProps = {
@@ -13,11 +15,13 @@ describe('ClearRefinements', () => {
       disabledButton: 'disabled',
     },
     hasRefinements: true,
-    templateProps: {
+    templateProps: prepareTemplateProps({
       templates: {
         resetLabel: '',
       },
-    },
+      defaultTemplates,
+      templatesConfig: {},
+    }),
     url: '#all-cleared!',
   };
 

@@ -6,11 +6,22 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import {
+  VoiceSearchHelperParams,
+  VoiceSearchHelper,
+} from '../../../lib/voiceSearchHelper/types';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
-  return ({ onStateChange, onQueryChange }) => {
+  const createVoiceHelper = ({
+    onStateChange,
+    onQueryChange,
+  }: VoiceSearchHelperParams): VoiceSearchHelper & {
+    changeState: () => void;
+    changeQuery: (query: string) => void;
+  } => {
     let isListening = false;
-    return {
+
+    const helper = ({
       getState: () => {},
       isBrowserSupported: () => true,
       isListening: () => isListening,
@@ -18,11 +29,16 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
         isListening = !isListening;
       },
       dispose: jest.fn(),
+    } as unknown) as VoiceSearchHelper;
+
+    return {
+      ...helper,
       // ⬇️ for test
       changeState: () => onStateChange(),
-      changeQuery: query => onQueryChange(query),
+      changeQuery: (query: string) => onQueryChange(query),
     };
   };
+  return createVoiceHelper;
 });
 
 function getInitializedWidget({ widgetParams = {} } = {}) {

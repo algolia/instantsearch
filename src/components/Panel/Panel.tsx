@@ -24,7 +24,7 @@ export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;
   collapsible: boolean;
   isCollapsed: boolean;
-  data: RenderOptions;
+  data: RenderOptions | Record<string, never>;
   cssClasses: PanelComponentCSSClasses;
   templates: PanelComponentTemplates<TWidget>;
   bodyElement: HTMLElement;

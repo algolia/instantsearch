@@ -3,7 +3,7 @@
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 
-import RelevantSort from '../RelevantSort';
+import RelevantSort, { RelevantSortComponentTemplates } from '../RelevantSort';
 
 const cssClasses = {
   root: 'root',
@@ -11,7 +11,7 @@ const cssClasses = {
   button: 'button',
 };
 
-const templates = {
+const templates: RelevantSortComponentTemplates = {
   text: '',
   button: ({ isRelevantSorted }) => {
     return isRelevantSorted ? 'See all results' : 'See relevant results';

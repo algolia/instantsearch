@@ -91,7 +91,6 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
   };
 
   const containerNode = getContainerNode(container);
-
   const templates = {
     ...defaultTemplates,
     ...userTemplates,

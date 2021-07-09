@@ -2,7 +2,10 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
+import Breadcrumb, {
+  BreadcrumbComponentCSSClasses,
+  BreadcrumbComponentTemplates,
+} from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb, {
   BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
@@ -16,6 +19,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { WidgetFactory, Template, Renderer } from '../../types';
+import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');
@@ -25,6 +29,13 @@ const renderer = ({
   cssClasses,
   renderState,
   templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: BreadcrumbComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<BreadcrumbComponentTemplates>;
+  };
+  templates: BreadcrumbTemplates;
 }): Renderer<BreadcrumbRenderState, Partial<BreadcrumbWidgetParams>> => (
   { canRefine, createURL, instantSearchInstance, items, refine },
   isFirstRendering
@@ -46,7 +57,7 @@ const renderer = ({
       createURL={createURL}
       items={items}
       refine={refine}
-      templateProps={renderState.templateProps}
+      templateProps={renderState.templateProps!}
     />,
     containerNode
   );

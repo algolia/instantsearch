@@ -56,7 +56,7 @@ const createInstantSearch = ({
 };
 
 describe('hits', () => {
-  let container;
+  let container: HTMLElement;
 
   beforeEach(() => {
     container = document.createElement('div');

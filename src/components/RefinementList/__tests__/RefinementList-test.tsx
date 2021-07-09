@@ -4,7 +4,10 @@ import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import RefinementList, { RefinementListProps } from '../RefinementList';
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
-import { RefinementListItemData } from '../../../widgets/refinement-list/refinement-list';
+import {
+  RefinementListItemData,
+  RefinementListTemplates,
+} from '../../../widgets/refinement-list/refinement-list';
 
 const defaultProps = {
   createURL: () => '#',
@@ -439,8 +442,8 @@ describe('RefinementList', () => {
     });
 
     it('without facets from search', () => {
-      const templates = {
-        item: (item: RefinementListItemData) => item.value,
+      const templates: Partial<RefinementListTemplates> = {
+        item: item => item.value,
         searchableNoResults: x => JSON.stringify(x),
         showMoreText: '',
       };

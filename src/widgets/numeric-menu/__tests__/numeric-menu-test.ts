@@ -15,6 +15,7 @@ import {
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { RefinementListProps } from '../../../components/RefinementList/RefinementList';
+import { NumericMenuConnectorParamsItem } from '../../../connectors/numeric-menu/connectNumericMenu';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -43,9 +44,9 @@ describe('numericMenu()', () => {
   let widget: ReturnType<typeof numericMenu>;
   let helper: AlgoliaSearchHelper;
 
-  let items;
-  let results;
-  let state;
+  let items: NumericMenuConnectorParamsItem[];
+  let results: SearchResults;
+  let state: SearchParameters;
 
   beforeEach(() => {
     render.mockClear();

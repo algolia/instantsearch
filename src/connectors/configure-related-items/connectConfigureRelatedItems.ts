@@ -53,6 +53,10 @@ function createOptionalFilter({
   attributeName,
   attributeValue,
   attributeScore,
+}: {
+  attributeName: string;
+  attributeValue: string;
+  attributeScore: number;
 }) {
   return `${attributeName}:${attributeValue}<score=${attributeScore || 1}>`;
 }

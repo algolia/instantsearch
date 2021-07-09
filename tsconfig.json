@@ -7,11 +7,7 @@
     "strict": true,
     "jsx": "react",
     "jsxFactory": "h",
-    // @TODO: It's mandatory to disable this strict check at the moment,
-    // otherwise we have to type every import we use. The migration is an
-    // incremental process so we import JavaScript modules from TypeScript ones.
-    // The compiler always translates those imports as implicit `any`.
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,

@@ -15,6 +15,7 @@ import {
   RenderOptions,
   ScopedResult,
   SearchClient,
+  IndexRenderState,
 } from '../../types';
 import {
   checkIndexUiState,
@@ -716,7 +717,15 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
 export default index;
 
-function storeRenderState({ renderState, instantSearchInstance, parent }) {
+function storeRenderState({
+  renderState,
+  instantSearchInstance,
+  parent,
+}: {
+  renderState: IndexRenderState;
+  instantSearchInstance: InstantSearch;
+  parent?: IndexWidget;
+}) {
   const parentIndexName = parent
     ? parent.getIndexId()
     : instantSearchInstance.mainIndex.getIndexId();

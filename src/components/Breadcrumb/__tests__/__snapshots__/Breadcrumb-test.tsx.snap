@@ -14,7 +14,7 @@ exports[`Breadcrumb Rendering renders with a single item 1`] = `
         <a
           class="link"
         >
-          home
+          Home
         </a>
       </li>
       <li
@@ -47,7 +47,7 @@ exports[`Breadcrumb Rendering renders with multiple items 1`] = `
         <a
           class="link"
         >
-          home
+          Home
         </a>
       </li>
       <li
@@ -96,7 +96,7 @@ exports[`Breadcrumb Rendering renders without items 1`] = `
         <a
           class="link"
         >
-          home
+          Home
         </a>
       </li>
     </ul>

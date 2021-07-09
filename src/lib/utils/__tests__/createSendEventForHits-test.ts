@@ -226,7 +226,7 @@ describe('createSendEventForHits', () => {
 });
 
 describe('createBindEventForHits', () => {
-  function parsePayload(payload) {
+  function parsePayload(payload: string): Record<string, unknown> {
     expect(payload.startsWith('data-insights-event=')).toBe(true);
     return deserializePayload(payload.substr('data-insights-event='.length));
   }
