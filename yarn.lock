@@ -11128,7 +11128,7 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
-qs@^6.6.0, "qs@^6.5.1 < 6.10":
+"qs@^6.5.1 < 6.10", qs@^6.6.0:
   version "6.9.6"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.6.tgz#26ed3c8243a431b2924aca84cc90471f35d5a0ee"
   integrity sha512-TIRk4aqYLNoJUbd+g2lEdz5kLWIuTMRagAXxl78Q0RiVjAOugHmeKNGdd3cwo/ktpf9aL9epCfFqWDEKysUlLQ==
@@ -12186,10 +12186,10 @@ scriptjs@2.5.9:
   resolved "https://registry.yarnpkg.com/scriptjs/-/scriptjs-2.5.9.tgz#343915cd2ec2ed9bfdde2b9875cd28f59394b35f"
   integrity sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==
 
-search-insights@1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/search-insights/-/search-insights-1.7.2.tgz#85b9dd944d3107ad5f3c3833184a85b759240ee6"
-  integrity sha512-gOu7UtMJTaX/MEgMy1+HqUR/y08HBetYldknOZ2lkZr0EgAVxzg9cioQN3rzY45DBh9pXqaV+qCsLofcloPaiw==
+search-insights@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/search-insights/-/search-insights-2.0.1.tgz#33f9ee7874184860d0469961e9e3c6495ce3ab1b"
+  integrity sha512-4Ays2lefKNS7qTVJpXd4G3jaVjbtSg7lXACz/hx7aiRhMbmEbydl9ljrOjXG1XvbRXrsxu/Tlm1rZd10iAIxnQ==
 
 select@^1.1.2:
   version "1.1.2"

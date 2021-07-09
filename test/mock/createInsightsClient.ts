@@ -1,6 +1,8 @@
 import AlgoliaAnalytics from 'search-insights/lib/insights';
 import { processQueue } from 'search-insights/lib/_processQueue';
 import { getFunctionalInterface } from 'search-insights/lib/_getFunctionalInterface';
+import { InsightsClient } from '../../src/types';
+
 
 export function createInsights() {
   const analytics = mockMethods(
@@ -17,11 +19,14 @@ export function createInsights() {
 }
 
 export function createInsightsUmdVersion() {
-  const globalObject: any = {};
+  const globalObject: {
+    aa?: InsightsClient,
+    AlgoliaAnalyticsObject?: 'aa'
+  } = {};
   globalObject.AlgoliaAnalyticsObject = 'aa';
-  globalObject.aa = (...args) => {
-    globalObject.aa.queue = globalObject.aa.queue || [];
-    globalObject.aa.queue.push(args);
+  globalObject.aa = (...args: any[]) => {
+    globalObject.aa!.queue = globalObject.aa!.queue || [];
+    globalObject.aa!.queue.push(args);
   };
   const analytics = mockMethods(
     new AlgoliaAnalytics({
@@ -31,7 +36,7 @@ export function createInsightsUmdVersion() {
 
   return {
     analytics,
-    insightsClient: globalObject.aa,
+    insightsClient: globalObject.aa!,
     libraryLoadedAndProcessQueue: () => {
       processQueue.call(analytics, globalObject);
     },
