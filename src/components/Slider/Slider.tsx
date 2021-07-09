@@ -99,7 +99,7 @@ class Slider extends Component<SliderProps> {
   public render() {
     const { tooltips, step, pips, values, cssClasses } = this.props;
 
-    // TODO: figure out why this.props needs to be non-null asserted
+    // @TODO: figure out why this.props needs to be non-null asserted
     const { min, max } = this.isDisabled
       ? { min: this.props.min!, max: this.props.max! + 0.001 }
       : (this.props as Required<SliderProps>);
