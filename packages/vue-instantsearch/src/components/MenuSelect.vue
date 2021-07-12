@@ -63,9 +63,7 @@ export default {
     },
     sortBy: {
       type: [Array, Function],
-      default() {
-        return ['name:asc'];
-      },
+      default: undefined,
     },
     transformItems: {
       type: Function,

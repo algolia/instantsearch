@@ -72,11 +72,11 @@ export default {
     // },
     limit: {
       type: Number,
-      default: 10,
+      default: undefined,
     },
     showMoreLimit: {
       type: Number,
-      default: 20,
+      default: undefined,
     },
     showMore: {
       type: Boolean,
@@ -84,15 +84,11 @@ export default {
     },
     sortBy: {
       type: [Array, Function],
-      default() {
-        return ['count:desc', 'name:asc'];
-      },
+      default: undefined,
     },
     transformItems: {
       type: Function,
-      default(items) {
-        return items;
-      },
+      default: undefined,
     },
   },
   computed: {

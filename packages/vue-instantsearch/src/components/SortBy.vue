@@ -48,9 +48,7 @@ export default {
     },
     transformItems: {
       type: Function,
-      default(items) {
-        return items;
-      },
+      default: undefined,
     },
   },
   computed: {

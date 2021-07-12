@@ -182,7 +182,7 @@ export default {
   props: {
     padding: {
       type: Number,
-      default: 3,
+      default: undefined,
       validator(value) {
         return value > 0;
       },

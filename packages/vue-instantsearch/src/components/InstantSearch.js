@@ -16,14 +16,14 @@ export default createInstantSearchComponent({
     },
     insightsClient: {
       type: Function,
-      required: false,
+      default: undefined,
     },
     indexName: {
       type: String,
       required: true,
     },
     routing: {
-      default: null,
+      default: undefined,
       validator(value) {
         if (
           typeof value === 'boolean' ||
@@ -39,19 +39,19 @@ export default createInstantSearchComponent({
     },
     stalledSearchDelay: {
       type: Number,
-      default: 200,
+      default: undefined,
     },
     searchFunction: {
       type: Function,
-      default: null,
+      default: undefined,
     },
     initialUiState: {
       type: Object,
-      required: false,
+      default: undefined,
     },
     apiKey: {
       type: String,
-      default: null,
+      default: undefined,
       validator(value) {
         if (value) {
           warn(oldApiWarning);
@@ -61,7 +61,7 @@ export default createInstantSearchComponent({
     },
     appId: {
       type: String,
-      default: null,
+      default: undefined,
       validator(value) {
         if (value) {
           warn(oldApiWarning);

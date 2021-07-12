@@ -99,7 +99,7 @@ export default {
     },
     max: {
       type: Number,
-      default: 5,
+      default: undefined,
     },
   },
   computed: {
