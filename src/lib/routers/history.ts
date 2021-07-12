@@ -84,6 +84,7 @@ class BrowserHistory implements Router {
   private readonly parseURL: Required<BrowserHistoryArgs>['parseURL'];
 
   private writeTimer?: number;
+  private _disposed: boolean = false;
   private _onPopState?(event: PopStateEvent): void;
 
   /**
@@ -120,6 +121,7 @@ class BrowserHistory implements Router {
    * Pushes a search state into the URL.
    */
   public write(routeState: RouteState, replace: boolean = false): void {
+    if (this._disposed) return;
     const url = this.createURL(routeState);
     const title = this.windowTitle && this.windowTitle(routeState);
 
@@ -194,6 +196,7 @@ class BrowserHistory implements Router {
     }
 
     this.write({}, true);
+    this._disposed = true;
   }
 }
 
