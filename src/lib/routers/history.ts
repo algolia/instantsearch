@@ -119,7 +119,7 @@ class BrowserHistory implements Router {
   /**
    * Pushes a search state into the URL.
    */
-  public write(routeState: RouteState): void {
+  public write(routeState: RouteState, replace: boolean = false): void {
     const url = this.createURL(routeState);
     const title = this.windowTitle && this.windowTitle(routeState);
 
@@ -129,7 +129,13 @@ class BrowserHistory implements Router {
 
     this.writeTimer = window.setTimeout(() => {
       setWindowTitle(title);
-      window.history.pushState(routeState, title || '', url);
+
+      if (replace) {
+        window.history.replaceState(routeState, title || '', url);
+      } else {
+        window.history.pushState(routeState, title || '', url);
+      }
+
       this.writeTimer = undefined;
     }, this.writeDelay);
   }
@@ -187,7 +193,7 @@ class BrowserHistory implements Router {
       window.clearTimeout(this.writeTimer);
     }
 
-    this.write({});
+    this.write({}, true);
   }
 }
 
