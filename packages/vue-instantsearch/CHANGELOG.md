@@ -1,3 +1,12 @@
+## [3.8.1](https://github.com/algolia/vue-instantsearch/compare/v3.8.0...v3.8.1) (2021-07-12)
+
+
+### Features
+
+* **props:** remove defaults ([#1016](https://github.com/algolia/vue-instantsearch/issues/1016)) ([1029500](https://github.com/algolia/vue-instantsearch/commit/102950021792b1dda4a5109717861e409a9060ec))
+
+
+
 # [3.8.0](https://github.com/algolia/vue-instantsearch/compare/v3.7.0...v3.8.0) (2021-07-12)
 
 ### Features
