@@ -1,3 +1,10 @@
+# [3.8.0](https://github.com/algolia/vue-instantsearch/compare/v3.7.0...v3.8.0) (2021-07-12)
+
+### Features
+
+* **dynamic-widgets**: add the `ais-experimental-dynamic-widgets` ([#922](https://github.com/algolia/vue-instantsearch/issues/922))
+* **facet ordering**: apply result from facet ordering in facet widgets ([#922](https://github.com/algolia/vue-instantsearch/issues/922))
+
 # [3.7.0](https://github.com/algolia/vue-instantsearch/compare/v3.6.0...v3.7.0) (2021-04-27)
 
 
