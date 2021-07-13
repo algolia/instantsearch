@@ -1,3 +1,12 @@
+## [4.25.1](https://github.com/algolia/instantsearch.js/compare/v4.25.0...v4.25.1) (2021-07-13)
+
+
+### Bug Fixes
+
+* **deps:** force a lower version of qs ([#4805](https://github.com/algolia/instantsearch.js/issues/4805)) ([07b7e08](https://github.com/algolia/instantsearch.js/commit/07b7e086282f8cc6a17aee822902d97204c1d2da))
+
+
+
 # [4.25.0](https://github.com/algolia/instantsearch.js/compare/v4.24.3...v4.25.0) (2021-07-06)
 
 
