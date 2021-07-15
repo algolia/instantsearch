@@ -36,11 +36,14 @@ jobs:
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
       - run:
-          name: Build & Test packages size
-          command: |
-            yarn run build
-            yarn run test:size
-
+          name: Build library
+          command: yarn run build
+      - run:
+          name: Test packages size
+          command: yarn run test:size
+      - run:
+          name: Type Export
+          command: yarn run build:types
   lint:
     <<: *defaults
     steps:
@@ -55,9 +58,6 @@ jobs:
       - run:
           name: Type Checking
           command: yarn run type-check
-      - run:
-          name: Type Export
-          command: yarn run build:types
 
   'type check algoliasearch v3':
     <<: *defaults
