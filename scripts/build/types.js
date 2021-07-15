@@ -61,5 +61,5 @@ if (!result.succeeded) {
       ` and ${result.warningCount} warnings`
   );
 
-  process.exitCode = 1;
+  process.exit(1);
 }
