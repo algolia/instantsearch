@@ -38,10 +38,22 @@ export default {
       type: String,
       default: 'mark',
     },
-    suit: { type: Function, required: true },
-    highlightProperty: { type: String, required: true },
-    preTag: { type: String, required: true },
-    postTag: { type: String, required: true },
+    suit: {
+      type: Function,
+      required: true,
+    },
+    highlightProperty: {
+      type: String,
+      required: true,
+    },
+    preTag: {
+      type: String,
+      required: true,
+    },
+    postTag: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return { TextNode };

@@ -68,11 +68,11 @@ export default {
     },
     limit: {
       type: Number,
-      default: 10,
+      default: undefined,
     },
     showMoreLimit: {
       type: Number,
-      default: 20,
+      default: undefined,
     },
     showMore: {
       type: Boolean,
@@ -80,27 +80,23 @@ export default {
     },
     sortBy: {
       type: [Array, Function],
-      default() {
-        return ['name:asc'];
-      },
+      default: undefined,
     },
     separator: {
       type: String,
-      default: ' > ',
+      default: undefined,
     },
     rootPath: {
       type: String,
-      default: null,
+      default: undefined,
     },
     showParentLevel: {
       type: Boolean,
-      default: true,
+      default: undefined,
     },
     transformItems: {
       type: Function,
-      default(items) {
-        return items;
-      },
+      default: undefined,
     },
   },
   computed: {

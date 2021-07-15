@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`custom default render renders correctly 1`] = `
-
 <div class="ais-Menu">
   <div class>
     <ol>
@@ -26,11 +25,9 @@ exports[`custom default render renders correctly 1`] = `
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with a disabled show more button 1`] = `
-
 <div class="ais-Menu">
   <div class>
     <ol>
@@ -55,11 +52,9 @@ exports[`custom default render renders correctly with a disabled show more butto
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with a show more button toggled 1`] = `
-
 <div class="ais-Menu">
   <div class>
     <ol>
@@ -84,11 +79,9 @@ exports[`custom default render renders correctly with a show more button toggled
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with an URL for the href 1`] = `
-
 <div class="ais-Menu">
   <div class>
     <ol>
@@ -113,11 +106,9 @@ exports[`custom default render renders correctly with an URL for the href 1`] = 
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly without refinement 1`] = `
-
 <div class="ais-Menu ais-Menu--noRefinement">
   <div class="no-refinement">
     <ol>
@@ -127,11 +118,9 @@ exports[`custom default render renders correctly without refinement 1`] = `
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom showMoreLabel render renders correctly with a custom show more label 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
@@ -165,19 +154,17 @@ exports[`custom showMoreLabel render renders correctly with a custom show more l
       </a>
     </li>
   </ul>
-  <button disabled="disabled"
-          class="ais-Menu-showMore ais-Menu-showMore--disabled"
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
   >
     <span>
       Voir plus
     </span>
   </button>
 </div>
-
 `;
 
 exports[`custom showMoreLabel render renders correctly with a custom show more label toggled 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
@@ -211,19 +198,17 @@ exports[`custom showMoreLabel render renders correctly with a custom show more l
       </a>
     </li>
   </ul>
-  <button disabled="disabled"
-          class="ais-Menu-showMore ais-Menu-showMore--disabled"
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
   >
     <span>
       Voir moins
     </span>
   </button>
 </div>
-
 `;
 
 exports[`default render renders correctly 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
@@ -258,16 +243,14 @@ exports[`default render renders correctly 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly with a URL for the href 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
-      <a href="/brand/Apple"
-         class="ais-Menu-link"
+      <a class="ais-Menu-link"
+         href="/brand/Apple"
       >
         <span class="ais-Menu-label">
           Apple
@@ -278,8 +261,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
       </a>
     </li>
     <li class="ais-Menu-item">
-      <a href="/brand/Samsung"
-         class="ais-Menu-link"
+      <a class="ais-Menu-link"
+         href="/brand/Samsung"
       >
         <span class="ais-Menu-label">
           Samsung
@@ -290,8 +273,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
       </a>
     </li>
     <li class="ais-Menu-item">
-      <a href="/brand/Microsoft"
-         class="ais-Menu-link"
+      <a class="ais-Menu-link"
+         href="/brand/Microsoft"
       >
         <span class="ais-Menu-label">
           Microsoft
@@ -303,11 +286,9 @@ exports[`default render renders correctly with a URL for the href 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly with a disabled show more button 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
@@ -341,17 +322,15 @@ exports[`default render renders correctly with a disabled show more button 1`] =
       </a>
     </li>
   </ul>
-  <button disabled="disabled"
-          class="ais-Menu-showMore ais-Menu-showMore--disabled"
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
   >
     Show more
   </button>
 </div>
-
 `;
 
 exports[`default render renders correctly with a selected item 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
@@ -386,11 +365,9 @@ exports[`default render renders correctly with a selected item 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly with show more button 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
@@ -424,17 +401,15 @@ exports[`default render renders correctly with show more button 1`] = `
       </a>
     </li>
   </ul>
-  <button disabled="disabled"
-          class="ais-Menu-showMore ais-Menu-showMore--disabled"
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
   >
     Show more
   </button>
 </div>
-
 `;
 
 exports[`default render renders correctly with show more button toggled 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
@@ -468,26 +443,22 @@ exports[`default render renders correctly with show more button toggled 1`] = `
       </a>
     </li>
   </ul>
-  <button disabled="disabled"
-          class="ais-Menu-showMore ais-Menu-showMore--disabled"
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
   >
     Show less
   </button>
 </div>
-
 `;
 
 exports[`default render renders correctly without a show more button (canRefine) 1`] = `
-
 <div class="ais-Menu ais-Menu--noRefinement">
   <ul class="ais-Menu-list">
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly without a show more button (showMore) 1`] = `
-
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">
@@ -522,14 +493,11 @@ exports[`default render renders correctly without a show more button (showMore) 
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly without refinement 1`] = `
-
 <div class="ais-Menu ais-Menu--noRefinement">
   <ul class="ais-Menu-list">
   </ul>
 </div>
-
 `;

@@ -190,39 +190,33 @@ test('overriding slots', () => {
   );
 
   expect(wrapper.find('.ais-SearchBox-submit').html()).toMatchInlineSnapshot(`
-
-<button type="submit"
-        title="Search"
+<button class="ais-SearchBox-submit"
         hidden="hidden"
-        class="ais-SearchBox-submit"
+        title="Search"
+        type="submit"
 >
   <span>
     SUBMIT
   </span>
 </button>
-
 `);
   expect(wrapper.find('.ais-SearchBox-reset').html()).toMatchInlineSnapshot(`
-
-<button type="reset"
-        title="Clear"
+<button class="ais-SearchBox-reset"
         hidden="hidden"
-        class="ais-SearchBox-reset"
+        title="Clear"
+        type="reset"
 >
   <span>
     RESET
   </span>
 </button>
-
 `);
   expect(wrapper.find('.ais-SearchBox-loadingIndicator').html())
     .toMatchInlineSnapshot(`
-
 <span class="ais-SearchBox-loadingIndicator">
   <span>
     LOADING...
   </span>
 </span>
-
 `);
 });

@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-
 <div class="ais-Hits">
   <ol class="ais-Hits-list">
     <li class="ais-Hits-item">
@@ -12,5 +11,4 @@ exports[`renders correctly 1`] = `
     </li>
   </ol>
 </div>
-
 `;

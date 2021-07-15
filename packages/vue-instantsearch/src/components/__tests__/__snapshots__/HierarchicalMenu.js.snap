@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`custom default render renders correctly 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -55,11 +54,9 @@ exports[`custom default render renders correctly 1`] = `
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with a disabled show more button 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -113,11 +110,9 @@ exports[`custom default render renders correctly with a disabled show more butto
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with a limit 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -171,11 +166,9 @@ exports[`custom default render renders correctly with a limit 1`] = `
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with a show more button toggled 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -229,11 +222,9 @@ exports[`custom default render renders correctly with a show more button toggled
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with a show more button toggled 2`] = `
-
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -287,11 +278,9 @@ exports[`custom default render renders correctly with a show more button toggled
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with an URL for the href 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -345,11 +334,9 @@ exports[`custom default render renders correctly with an URL for the href 1`] = 
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom default render renders correctly without refinement 1`] = `
-
 <div class="ais-HierarchicalMenu ais-HierarchicalMenu--noRefinement">
   <div class="no-refinement">
     <ol>
@@ -359,11 +346,9 @@ exports[`custom default render renders correctly without refinement 1`] = `
     </button>
   </div>
 </div>
-
 `;
 
 exports[`custom showMoreLabel render renders correctly with a custom show more label 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
@@ -489,11 +474,9 @@ exports[`custom showMoreLabel render renders correctly with a custom show more l
     </span>
   </button>
 </div>
-
 `;
 
 exports[`custom showMoreLabel render renders correctly with a custom show more label toggled 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
@@ -619,11 +602,9 @@ exports[`custom showMoreLabel render renders correctly with a custom show more l
     </span>
   </button>
 </div>
-
 `;
 
 exports[`default render renders correctly 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
@@ -744,11 +725,9 @@ exports[`default render renders correctly 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly a sub categories selected 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
@@ -869,16 +848,14 @@ exports[`default render renders correctly a sub categories selected 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly with a URL for the href 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-      <a href="/categories/Apple"
-         class="ais-HierarchicalMenu-link"
+      <a class="ais-HierarchicalMenu-link"
+         href="/categories/Apple"
       >
         <span class="ais-HierarchicalMenu-label">
           Apple
@@ -889,8 +866,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
       </a>
       <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
         <li class="ais-HierarchicalMenu-item">
-          <a href="/categories/Apple > iPhone"
-             class="ais-HierarchicalMenu-link"
+          <a class="ais-HierarchicalMenu-link"
+             href="/categories/Apple > iPhone"
           >
             <span class="ais-HierarchicalMenu-label">
               iPhone
@@ -901,8 +878,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
           </a>
         </li>
         <li class="ais-HierarchicalMenu-item">
-          <a href="/categories/Apple > iPad"
-             class="ais-HierarchicalMenu-link"
+          <a class="ais-HierarchicalMenu-link"
+             href="/categories/Apple > iPad"
           >
             <span class="ais-HierarchicalMenu-label">
               iPad
@@ -913,8 +890,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
           </a>
         </li>
         <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-          <a href="/categories/Apple > MacBook"
-             class="ais-HierarchicalMenu-link"
+          <a class="ais-HierarchicalMenu-link"
+             href="/categories/Apple > MacBook"
           >
             <span class="ais-HierarchicalMenu-label">
               MacBook
@@ -925,8 +902,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
           </a>
           <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl2">
             <li class="ais-HierarchicalMenu-item">
-              <a href="/categories/Apple > MacBook > MacBook 13&quot;"
-                 class="ais-HierarchicalMenu-link"
+              <a class="ais-HierarchicalMenu-link"
+                 href="/categories/Apple > MacBook > MacBook 13&quot;"
               >
                 <span class="ais-HierarchicalMenu-label">
                   MacBook 13"
@@ -937,8 +914,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
               </a>
             </li>
             <li class="ais-HierarchicalMenu-item">
-              <a href="/categories/Apple > MacBook > MacBook 15&quot;"
-                 class="ais-HierarchicalMenu-link"
+              <a class="ais-HierarchicalMenu-link"
+                 href="/categories/Apple > MacBook > MacBook 15&quot;"
               >
                 <span class="ais-HierarchicalMenu-label">
                   MacBook 15"
@@ -949,8 +926,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
               </a>
             </li>
             <li class="ais-HierarchicalMenu-item">
-              <a href="/categories/Apple > MacBook > MacBook"
-                 class="ais-HierarchicalMenu-link"
+              <a class="ais-HierarchicalMenu-link"
+                 href="/categories/Apple > MacBook > MacBook"
               >
                 <span class="ais-HierarchicalMenu-label">
                   MacBook 12
@@ -965,8 +942,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
       </ul>
     </li>
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-      <a href="/categories/Samsung"
-         class="ais-HierarchicalMenu-link"
+      <a class="ais-HierarchicalMenu-link"
+         href="/categories/Samsung"
       >
         <span class="ais-HierarchicalMenu-label">
           Samsung
@@ -977,8 +954,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
       </a>
       <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
         <li class="ais-HierarchicalMenu-item">
-          <a href="/categories/Samsung > Galaxy"
-             class="ais-HierarchicalMenu-link"
+          <a class="ais-HierarchicalMenu-link"
+             href="/categories/Samsung > Galaxy"
           >
             <span class="ais-HierarchicalMenu-label">
               Galaxy
@@ -989,8 +966,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
           </a>
         </li>
         <li class="ais-HierarchicalMenu-item">
-          <a href="/categories/Samsung > Note"
-             class="ais-HierarchicalMenu-link"
+          <a class="ais-HierarchicalMenu-link"
+             href="/categories/Samsung > Note"
           >
             <span class="ais-HierarchicalMenu-label">
               Note
@@ -1003,8 +980,8 @@ exports[`default render renders correctly with a URL for the href 1`] = `
       </ul>
     </li>
     <li class="ais-HierarchicalMenu-item">
-      <a href="/categories/Microsoft"
-         class="ais-HierarchicalMenu-link"
+      <a class="ais-HierarchicalMenu-link"
+         href="/categories/Microsoft"
       >
         <span class="ais-HierarchicalMenu-label">
           Microsoft
@@ -1016,11 +993,9 @@ exports[`default render renders correctly with a URL for the href 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly with show more disabled 1`] = `
-
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
@@ -1140,36 +1115,29 @@ exports[`default render renders correctly with show more disabled 1`] = `
       </a>
     </li>
   </ul>
-  <button disabled="disabled"
-          class="ais-HierarchicalMenu-showMore ais-HierarchicalMenu-showMore--disabled"
+  <button class="ais-HierarchicalMenu-showMore ais-HierarchicalMenu-showMore--disabled"
+          disabled="disabled"
   >
     Show more
   </button>
 </div>
-
 `;
 
 exports[`default render renders correctly with show more label 1`] = `
-
 <button class="ais-HierarchicalMenu-showMore">
   Show more
 </button>
-
 `;
 
 exports[`default render renders correctly with show more label toggled 1`] = `
-
 <button class="ais-HierarchicalMenu-showMore">
   Show less
 </button>
-
 `;
 
 exports[`default render renders correctly without refinement 1`] = `
-
 <div class="ais-HierarchicalMenu ais-HierarchicalMenu--noRefinement">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
   </ul>
 </div>
-
 `;

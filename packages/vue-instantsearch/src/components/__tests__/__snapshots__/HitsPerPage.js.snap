@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-
 <div class="ais-HitsPerPage">
   <select class="ais-HitsPerPage-select">
     <option class="ais-HitsPerPage-option"
@@ -16,5 +15,4 @@ exports[`renders correctly 1`] = `
     </option>
   </select>
 </div>
-
 `;

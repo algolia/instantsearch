@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`custom default render renders correctly 1`] = `
-
 <div class="ais-Breadcrumb">
   <ul class>
     <li>
@@ -16,11 +15,9 @@ exports[`custom default render renders correctly 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`custom default render renders correctly with an URL for the href 1`] = `
-
 <div class="ais-Breadcrumb">
   <ul class>
     <li>
@@ -35,20 +32,16 @@ exports[`custom default render renders correctly with an URL for the href 1`] = 
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`custom default render renders correctly without refinement 1`] = `
-
 <div class="ais-Breadcrumb ais-Breadcrumb--noRefinement">
   <ul class="noRefinement">
   </ul>
 </div>
-
 `;
 
 exports[`custom rootLabel render renders correctly 1`] = `
-
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item">
@@ -78,11 +71,9 @@ exports[`custom rootLabel render renders correctly 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`custom rootLabel render renders correctly without refinement 1`] = `
-
 <div class="ais-Breadcrumb ais-Breadcrumb--noRefinement">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
@@ -92,11 +83,9 @@ exports[`custom rootLabel render renders correctly without refinement 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`custom separator render renders correctly 1`] = `
-
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item">
@@ -126,11 +115,9 @@ exports[`custom separator render renders correctly 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly 1`] = `
-
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item">
@@ -160,11 +147,9 @@ exports[`default render renders correctly 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly with a selected item 1`] = `
-
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item">
@@ -194,16 +179,14 @@ exports[`default render renders correctly with a selected item 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly with an URL for the href 1`] = `
-
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item">
-      <a href="/undefined"
-         class="ais-Breadcrumb-link"
+      <a class="ais-Breadcrumb-link"
+         href="/undefined"
       >
         Home
       </a>
@@ -214,8 +197,8 @@ exports[`default render renders correctly with an URL for the href 1`] = `
       >
         &gt;
       </span>
-      <a href="/TV &amp; Home Theater"
-         class="ais-Breadcrumb-link"
+      <a class="ais-Breadcrumb-link"
+         href="/TV &amp; Home Theater"
       >
         TV &amp; Home Theater
       </a>
@@ -232,11 +215,9 @@ exports[`default render renders correctly with an URL for the href 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`default render renders correctly without refinement 1`] = `
-
 <div class="ais-Breadcrumb ais-Breadcrumb--noRefinement">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
@@ -246,5 +227,4 @@ exports[`default render renders correctly without refinement 1`] = `
     </li>
   </ul>
 </div>
-
 `;

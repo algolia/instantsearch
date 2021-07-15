@@ -69,17 +69,15 @@ export default {
     },
     separator: {
       type: String,
-      default: ' > ',
+      default: undefined,
     },
     rootPath: {
       type: String,
-      default: null,
+      default: undefined,
     },
     transformItems: {
       type: Function,
-      default(items) {
-        return items;
-      },
+      default: undefined,
     },
   },
   computed: {

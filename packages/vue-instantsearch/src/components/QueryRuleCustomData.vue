@@ -36,7 +36,7 @@ export default {
     transformItems: {
       type: Function,
       required: false,
-      default: items => items,
+      default: undefined,
     },
   },
   computed: {

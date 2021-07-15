@@ -12,7 +12,6 @@ it('renders in a list of <pre> by default', () => {
   const wrapper = mount(QueryRuleCustomData);
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-QueryRuleCustomData">
   <div>
     <pre>
@@ -29,7 +28,6 @@ it('renders in a list of <pre> by default', () => {
     </pre>
   </div>
 </div>
-
 `);
 });
 

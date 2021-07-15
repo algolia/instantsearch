@@ -18,7 +18,7 @@ export default {
     transformRuleContexts: {
       type: Function,
       required: false,
-      default: ruleContexts => ruleContexts,
+      default: undefined,
     },
   },
   computed: {

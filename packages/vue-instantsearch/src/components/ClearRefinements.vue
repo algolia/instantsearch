@@ -36,21 +36,17 @@ export default {
     createSuitMixin({ name: 'ClearRefinements' }),
   ],
   props: {
-    // explicitly no default, since included and excluded are incompatible
-    // eslint-disable-next-line vue/require-default-prop
     excludedAttributes: {
       type: Array,
+      default: undefined,
     },
-    // explicitly no default, since included and excluded are incompatible
-    // eslint-disable-next-line vue/require-default-prop
     includedAttributes: {
       type: Array,
+      default: undefined,
     },
     transformItems: {
       type: Function,
-      default(items) {
-        return items;
-      },
+      default: undefined,
     },
   },
   computed: {

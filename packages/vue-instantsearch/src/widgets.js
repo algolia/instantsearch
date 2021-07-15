@@ -43,3 +43,4 @@ export {
 } from './components/ToggleRefinement.vue';
 export { default as AisVoiceSearch } from './components/VoiceSearch.vue';
 export { default as AisRelevantSort } from './components/RelevantSort.vue';
+export { default as AisDynamicWidgets } from './components/DynamicWidgets';

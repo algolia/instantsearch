@@ -1,18 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`allows usage of dot delimited path to access nested attribute 1`] = `
-
 <span class="ais-Highlight">
   nested
   <mark class="ais-Highlight-highlighted">
     val
   </mark>
 </span>
-
 `;
 
 exports[`renders proper HTML 1`] = `
-
 <span class="ais-Highlight">
   con
   <mark class="ais-Highlight-highlighted">
@@ -20,11 +17,9 @@ exports[`renders proper HTML 1`] = `
   </mark>
   t
 </span>
-
 `;
 
 exports[`renders proper HTML with highlightTagName 1`] = `
-
 <span class="ais-Highlight">
   con
   <marquee class="ais-Highlight-highlighted">
@@ -32,12 +27,9 @@ exports[`renders proper HTML with highlightTagName 1`] = `
   </marquee>
   t
 </span>
-
 `;
 
 exports[`should render an empty string in production if attribute is not highlighted 1`] = `
-
 <span class="ais-Highlight">
 </span>
-
 `;
