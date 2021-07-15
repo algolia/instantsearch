@@ -123,7 +123,6 @@ describe('createServerRootMixin', () => {
       });
 
       expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div>
   <div class="ais-InstantSearch ais-InstantSearch--ssr">
     <p>
@@ -131,7 +130,6 @@ describe('createServerRootMixin', () => {
     </p>
   </div>
 </div>
-
 `);
     });
   });

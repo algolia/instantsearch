@@ -24,10 +24,8 @@ it('renders correctly (empty)', () => {
   });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-InstantSearch ais-InstantSearch--ssr">
 </div>
-
 `);
 });
 
@@ -45,13 +43,11 @@ it('renders correctly (with slot used)', () => {
   });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-InstantSearch ais-InstantSearch--ssr">
   <div>
     Hi there, this is the main slot
   </div>
 </div>
-
 `);
 });
 

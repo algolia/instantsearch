@@ -22,13 +22,11 @@ it('renders correctly', () => {
 
   const wrapper = mount(Stats);
   expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-Stats">
   <span class="ais-Stats-text">
     1,000 results found in 12ms
   </span>
 </div>
-
 `);
 });
 
@@ -51,12 +49,10 @@ it('renders correctly (relevant sort)', () => {
 
   const wrapper = mount(Stats);
   expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-Stats">
   <span class="ais-Stats-text">
     12 relevant results sorted out of 1,000 found in 12ms
   </span>
 </div>
-
 `);
 });

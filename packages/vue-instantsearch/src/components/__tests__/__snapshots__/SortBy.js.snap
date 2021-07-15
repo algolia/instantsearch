@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-
 <div class="ais-SortBy">
   <select class="ais-SortBy-select">
     <option class="ais-SortBy-option"
@@ -21,11 +20,9 @@ exports[`renders correctly 1`] = `
     </option>
   </select>
 </div>
-
 `;
 
 exports[`renders with scoped slots 1`] = `
-
 <div class="ais-SortBy">
   <select>
     <option value="some_index">
@@ -39,5 +36,4 @@ exports[`renders with scoped slots 1`] = `
     </option>
   </select>
 </div>
-
 `;

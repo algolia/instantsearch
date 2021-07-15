@@ -20,17 +20,15 @@ describe('renders correctly', () => {
     });
     const wrapper = mount(RelevantSort);
     expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-RelevantSort">
   <div class="ais-RelevantSort-text">
   </div>
-  <button type="button"
-          class="ais-RelevantSort-button"
+  <button class="ais-RelevantSort-button"
+          type="button"
   >
     See relevant results
   </button>
 </div>
-
 `);
   });
 
@@ -41,17 +39,15 @@ describe('renders correctly', () => {
     });
     const wrapper = mount(RelevantSort);
     expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-RelevantSort">
   <div class="ais-RelevantSort-text">
   </div>
-  <button type="button"
-          class="ais-RelevantSort-button"
+  <button class="ais-RelevantSort-button"
+          type="button"
   >
     See all results
   </button>
 </div>
-
 `);
   });
 });

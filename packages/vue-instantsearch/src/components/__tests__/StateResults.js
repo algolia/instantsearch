@@ -81,13 +81,11 @@ it('allows default slot to render whatever they want', () => {
   });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-StateResults">
   <p>
     Query is here, page is 1
   </p>
 </div>
-
 `);
 });
 
@@ -120,13 +118,11 @@ it('allows default slot to render whatever they want (truthy query)', () => {
   });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-StateResults">
   <p>
     Query is here
   </p>
 </div>
-
 `);
 });
 
@@ -159,13 +155,11 @@ it('allows default slot to render whatever they want (falsy query)', () => {
   });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-StateResults">
   <p>
     There's no query
   </p>
 </div>
-
 `);
 });
 
@@ -195,13 +189,11 @@ describe('legacy spread props', () => {
     });
 
     expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-StateResults">
   <p>
     Query is here
   </p>
 </div>
-
 `);
   });
 
@@ -230,13 +222,11 @@ describe('legacy spread props', () => {
     });
 
     expect(wrapper.html()).toMatchInlineSnapshot(`
-
 <div class="ais-StateResults">
   <p>
     There's no query
   </p>
 </div>
-
 `);
   });
 });

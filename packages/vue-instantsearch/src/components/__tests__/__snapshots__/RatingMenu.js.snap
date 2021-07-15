@@ -1,10 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-
 <div class="ais-RatingMenu">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       style="display: none;"
+  <svg style="display: none;"
+       xmlns="http://www.w3.org/2000/svg"
   >
     <symbol id="ais-RatingMenu-starSymbol"
             viewbox="0 0 24 24"
@@ -21,46 +20,46 @@ exports[`renders correctly 1`] = `
   </svg>
   <ul class="ais-RatingMenu-list">
     <li class="ais-RatingMenu-item">
-      <a href="#"
-         aria-label="1 &amp; Up"
+      <a aria-label="1 &amp; Up"
          class="ais-RatingMenu-link"
+         href="#"
       >
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
@@ -76,46 +75,46 @@ exports[`renders correctly 1`] = `
       </a>
     </li>
     <li class="ais-RatingMenu-item">
-      <a href="#"
-         aria-label="2 &amp; Up"
+      <a aria-label="2 &amp; Up"
          class="ais-RatingMenu-link"
+         href="#"
       >
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
@@ -131,46 +130,46 @@ exports[`renders correctly 1`] = `
       </a>
     </li>
     <li class="ais-RatingMenu-item">
-      <a href="#"
-         aria-label="3 &amp; Up"
+      <a aria-label="3 &amp; Up"
          class="ais-RatingMenu-link"
+         href="#"
       >
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
@@ -186,46 +185,46 @@ exports[`renders correctly 1`] = `
       </a>
     </li>
     <li class="ais-RatingMenu-item">
-      <a href="#"
-         aria-label="4 &amp; Up"
+      <a aria-label="4 &amp; Up"
          class="ais-RatingMenu-link"
+         href="#"
       >
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
@@ -242,14 +241,12 @@ exports[`renders correctly 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`renders correctly when refined 1`] = `
-
 <div class="ais-RatingMenu">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       style="display: none;"
+  <svg style="display: none;"
+       xmlns="http://www.w3.org/2000/svg"
   >
     <symbol id="ais-RatingMenu-starSymbol"
             viewbox="0 0 24 24"
@@ -266,46 +263,46 @@ exports[`renders correctly when refined 1`] = `
   </svg>
   <ul class="ais-RatingMenu-list">
     <li class="ais-RatingMenu-item">
-      <a href="#"
-         aria-label="1 &amp; Up"
+      <a aria-label="1 &amp; Up"
          class="ais-RatingMenu-link"
+         href="#"
       >
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
@@ -321,46 +318,46 @@ exports[`renders correctly when refined 1`] = `
       </a>
     </li>
     <li class="ais-RatingMenu-item">
-      <a href="#"
-         aria-label="2 &amp; Up"
+      <a aria-label="2 &amp; Up"
          class="ais-RatingMenu-link"
+         href="#"
       >
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
@@ -376,46 +373,46 @@ exports[`renders correctly when refined 1`] = `
       </a>
     </li>
     <li class="ais-RatingMenu-item">
-      <a href="#"
-         aria-label="3 &amp; Up"
+      <a aria-label="3 &amp; Up"
          class="ais-RatingMenu-link"
+         href="#"
       >
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
@@ -431,46 +428,46 @@ exports[`renders correctly when refined 1`] = `
       </a>
     </li>
     <li class="ais-RatingMenu-item ais-RatingMenu-item--selected">
-      <a href="#"
-         aria-label="4 &amp; Up"
+      <a aria-label="4 &amp; Up"
          class="ais-RatingMenu-link"
+         href="#"
       >
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starSymbol">
           </use>
         </svg>
         <svg aria-hidden="true"
-             width="24"
-             height="24"
              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+             height="24"
+             width="24"
         >
           <use xlink:href="#ais-RatingMenu-starEmptySymbol">
           </use>
@@ -487,5 +484,4 @@ exports[`renders correctly when refined 1`] = `
     </li>
   </ul>
 </div>
-
 `;

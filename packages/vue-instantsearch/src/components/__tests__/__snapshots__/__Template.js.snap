@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-
 <div class="ais-Template">
   <button class="ais-Template-button">
     example refine
@@ -111,8 +110,8 @@ exports[`renders correctly 1`] = `
                   <span class="json-tree-indent">
                     &nbsp;
                   </span>
-                  <span title="&quot;yo&quot;"
-                        class="json-tree-value json-tree-value-string"
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;yo&quot;"
                   >
                     "yo"
                   </span>
@@ -147,8 +146,8 @@ exports[`renders correctly 1`] = `
                   <span class="json-tree-indent">
                     &nbsp;
                   </span>
-                  <span title="&quot;how&quot;"
-                        class="json-tree-value json-tree-value-string"
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;how&quot;"
                   >
                     "how"
                   </span>
@@ -183,8 +182,8 @@ exports[`renders correctly 1`] = `
                   <span class="json-tree-indent">
                     &nbsp;
                   </span>
-                  <span title="&quot;are&quot;"
-                        class="json-tree-value json-tree-value-string"
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;are&quot;"
                   >
                     "are"
                   </span>
@@ -219,8 +218,8 @@ exports[`renders correctly 1`] = `
                   <span class="json-tree-indent">
                     &nbsp;
                   </span>
-                  <span title="&quot;you&quot;"
-                        class="json-tree-value json-tree-value-string"
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;you&quot;"
                   >
                     "you"
                   </span>
@@ -255,8 +254,8 @@ exports[`renders correctly 1`] = `
                   <span class="json-tree-indent">
                     &nbsp;
                   </span>
-                  <span title="&quot;doing&quot;"
-                        class="json-tree-value json-tree-value-string"
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;doing&quot;"
                   >
                     "doing"
                   </span>
@@ -291,8 +290,8 @@ exports[`renders correctly 1`] = `
                   <span class="json-tree-indent">
                     &nbsp;
                   </span>
-                  <span title="&quot;?&quot;"
-                        class="json-tree-value json-tree-value-string"
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;?&quot;"
                   >
                     "?"
                   </span>
@@ -352,5 +351,4 @@ exports[`renders correctly 1`] = `
     </span>
   </span>
 </div>
-
 `;

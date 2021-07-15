@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`custom render gives all relevant info to scoped slot 1`] = `
-
 <div class="ais-CurrentRefinements">
   <div>
     <ul>
@@ -20,11 +19,9 @@ exports[`custom render gives all relevant info to scoped slot 1`] = `
     </ul>
   </div>
 </div>
-
 `;
 
 exports[`custom render item slot gives all relevant info to scoped slot 1`] = `
-
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">
@@ -45,11 +42,9 @@ exports[`custom render item slot gives all relevant info to scoped slot 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`disjunctive facet renders correct html 1`] = `
-
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">
@@ -67,11 +62,9 @@ exports[`disjunctive facet renders correct html 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`facet exclude renders correct html 1`] = `
-
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">
@@ -89,11 +82,9 @@ exports[`facet exclude renders correct html 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`facet renders correct html 1`] = `
-
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">
@@ -111,11 +102,9 @@ exports[`facet renders correct html 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`hierarchical facet renders correct html 1`] = `
-
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">
@@ -133,11 +122,9 @@ exports[`hierarchical facet renders correct html 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`numeric filters renders correct html 1`] = `
-
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">
@@ -171,11 +158,9 @@ exports[`numeric filters renders correct html 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`query renders correct html 1`] = `
-
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">
@@ -195,20 +180,16 @@ exports[`query renders correct html 1`] = `
     </li>
   </ul>
 </div>
-
 `;
 
 exports[`renders correctly (empty) 1`] = `
-
 <div class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement">
   <ul class="ais-CurrentRefinements-list">
   </ul>
 </div>
-
 `;
 
 exports[`tag renders correct html 1`] = `
-
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">
@@ -226,5 +207,4 @@ exports[`tag renders correct html 1`] = `
     </li>
   </ul>
 </div>
-
 `;

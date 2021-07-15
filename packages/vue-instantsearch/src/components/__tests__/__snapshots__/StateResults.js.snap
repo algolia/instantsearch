@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders explanation if no slot is used 1`] = `
-
 <div class="ais-StateResults">
   <p>
     Use this component to have a different layout based on a certain state.
@@ -26,5 +25,4 @@ exports[`renders explanation if no slot is used 1`] = `
 ]
   </pre>
 </div>
-
 `;
