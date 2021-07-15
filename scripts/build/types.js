@@ -61,5 +61,6 @@ if (!result.succeeded) {
       ` and ${result.warningCount} warnings`
   );
 
+  // eslint-disable-next-line no-process-exit
   process.exit(1);
 }
