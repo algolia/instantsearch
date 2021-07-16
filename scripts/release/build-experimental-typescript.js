@@ -24,6 +24,6 @@ const results = [
   shell.exec('yarn build:types'),
 ];
 
-if (results.some(result.code !== 0)) {
+if (results.some(({ code }) => code !== 0)) {
   shell.exit(1);
 }
