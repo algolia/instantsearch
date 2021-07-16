@@ -19,5 +19,11 @@ fs.writeFileSync(
   `export default '${newVersion}';\n`
 );
 
-shell.exec(`NODE_ENV=production VERSION=${newVersion} yarn build`);
-shell.exec('yarn build:types');
+const results = [
+  shell.exec(`NODE_ENV=production VERSION=${newVersion} yarn build`),
+  shell.exec('yarn build:types'),
+];
+
+if (results.some(({ code }) => code !== 0)) {
+  shell.exit(1);
+}
