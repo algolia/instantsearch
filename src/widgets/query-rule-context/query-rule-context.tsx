@@ -7,12 +7,12 @@ import connectQueryRules, {
   QueryRulesWidgetDescription,
 } from '../../connectors/query-rules/connectQueryRules';
 
-type QueryRuleContextWidgetParams = {
+export type QueryRuleContextWidgetParams = {
   trackedFilters: ParamTrackedFilters;
   transformRuleContexts?: ParamTransformRuleContexts;
 };
 
-type QueryRuleContext = WidgetFactory<
+export type QueryRuleContextWidget = WidgetFactory<
   QueryRulesWidgetDescription & { $$widgetType: 'ais.queryRuleContext' },
   QueryRulesConnectorParams,
   QueryRuleContextWidgetParams
@@ -22,7 +22,7 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-context',
 });
 
-const queryRuleContext: QueryRuleContext = (
+const queryRuleContext: QueryRuleContextWidget = (
   widgetParams = {} as QueryRuleContextWidgetParams
 ) => {
   if (!widgetParams.trackedFilters) {

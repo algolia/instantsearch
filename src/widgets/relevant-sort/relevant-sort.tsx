@@ -37,7 +37,7 @@ export type RelevantSortWidgetParams = {
   templates?: RelevantSortTemplates;
 };
 
-type RelevantSortWidget = WidgetFactory<
+export type RelevantSortWidget = WidgetFactory<
   RelevantSortWidgetDescription & { $$widgetType: 'ais.relevantSort' },
   RelevantSortConnectorParams,
   RelevantSortWidgetParams
