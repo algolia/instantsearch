@@ -20,13 +20,15 @@ export type DynamicWidgetsWidgetParams = {
   widgets: Array<(container: HTMLElement) => Widget>;
 };
 
-export type DynamicWidgets = WidgetFactory<
+export type DynamicWidgetsWidget = WidgetFactory<
   DynamicWidgetsWidgetDescription & { $$widgetType: 'ais.dynamicWidgets' },
   Omit<DynamicWidgetsConnectorParams, 'widgets'>,
   DynamicWidgetsWidgetParams
 >;
 
-const dynamicWidgets: DynamicWidgets = function dynamicWidgets(widgetParams) {
+const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
+  widgetParams
+) {
   const { container: containerSelector, transformItems, widgets } =
     widgetParams || {};
 

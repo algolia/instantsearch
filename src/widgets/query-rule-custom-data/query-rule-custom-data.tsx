@@ -27,13 +27,13 @@ export type QueryRuleCustomDataTemplates = Partial<{
   default: Template<{ items: any[] }>;
 }>;
 
-type QueryRuleCustomDataWidgetParams = {
+export type QueryRuleCustomDataWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: QueryRuleCustomDataCSSClasses;
   templates?: QueryRuleCustomDataTemplates;
 };
 
-type QueryRuleCustomDataWidget = WidgetFactory<
+export type QueryRuleCustomDataWidget = WidgetFactory<
   QueryRulesWidgetDescription & { $$widgetType: 'ais.queryRuleCustomData' },
   QueryRulesConnectorParams,
   QueryRuleCustomDataWidgetParams

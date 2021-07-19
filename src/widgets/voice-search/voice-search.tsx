@@ -56,7 +56,7 @@ export type VoiceSearchWidgetParams = {
   createVoiceSearchHelper?: CreateVoiceSearchHelper;
 };
 
-type VoiceSearch = WidgetFactory<
+export type VoiceSearchWidget = WidgetFactory<
   VoiceSearchWidgetDescription & { $$type: 'ais.voiceSearch' },
   VoiceSearchConnectorParams,
   VoiceSearchWidgetParams
@@ -89,7 +89,7 @@ const renderer = ({
   );
 };
 
-const voiceSearch: VoiceSearch = widgetParams => {
+const voiceSearch: VoiceSearchWidget = widgetParams => {
   const {
     container,
     cssClasses: userCssClasses = {},
