@@ -26,7 +26,9 @@ export type DynamicWidgetsWidget = WidgetFactory<
   DynamicWidgetsWidgetParams
 >;
 
-const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(widgetParams) {
+const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
+  widgetParams
+) {
   const { container: containerSelector, transformItems, widgets } =
     widgetParams || {};
 
