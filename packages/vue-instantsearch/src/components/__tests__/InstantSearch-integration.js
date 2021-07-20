@@ -20,19 +20,28 @@ it('child widgets get added to its parent instantsearch', () => {
     },
   };
 
-  const wrapper = mount(InstantSearch, {
-    propsData: {
-      searchClient: createFakeClient(),
-      indexName: 'something',
+  const wrapper = mount({
+    components: { InstantSearch, ChildComponent },
+    data() {
+      return {
+        props: {
+          searchClient: createFakeClient(),
+          indexName: 'something',
+        },
+      };
     },
-    slots: {
-      default: ChildComponent,
-    },
+    template: `
+      <InstantSearch v-bind="props">
+        <ChildComponent />
+      </InstantSearch>
+    `,
   });
 
-  expect(wrapper.vm.instantSearchInstance.mainIndex.getWidgets()).toContain(
-    widgetInstance
-  );
+  expect(
+    wrapper
+      .findComponent(InstantSearch)
+      .vm.instantSearchInstance.mainIndex.getWidgets()
+  ).toContain(widgetInstance);
 });
 
 describe('middlewares', () => {
@@ -167,9 +176,7 @@ describe('middlewares', () => {
       uiState: { indexName: { query: 'a' } },
     });
 
-    await wrapper.setData({
-      middlewares: [middleware1],
-    });
+    wrapper.vm.middlewares = [middleware1];
     await nextTick();
 
     expect(middlewareSpy1.unsubscribe).toHaveBeenCalledTimes(0);

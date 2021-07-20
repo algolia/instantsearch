@@ -170,7 +170,17 @@ describe('default render', () => {
     });
 
     expect(wrapper.findAll('.ais-Menu-item--selected')).toHaveLength(1);
-    expect(wrapper.find('.ais-Menu-item--selected').text()).toBe('Samsung 25');
+    expect(wrapper.find('.ais-Menu-item--selected .ais-Menu-link').html())
+      .toMatchInlineSnapshot(`
+<a class="ais-Menu-link">
+  <span class="ais-Menu-label">
+    Samsung
+  </span>
+  <span class="ais-Menu-count">
+    25
+  </span>
+</a>
+`);
     expect(wrapper.html()).toMatchSnapshot();
   });
 
@@ -202,7 +212,7 @@ describe('default render', () => {
 
     expect(wrapper.findAll('.ais-Menu-showMore')).toHaveLength(1);
     expect(wrapper.find('.ais-Menu-showMore').text()).toBe('Show more');
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly with show more button toggled', () => {
@@ -219,7 +229,7 @@ describe('default render', () => {
     });
 
     expect(wrapper.find('.ais-Menu-showMore').text()).toBe('Show less');
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly with a disabled show more button', () => {
@@ -239,8 +249,8 @@ describe('default render', () => {
 
     expect(wrapper.findAll('.ais-Menu-showMore')).toHaveLength(1);
     expect(showMoreWrapper.classes()).toContain('ais-Menu-showMore--disabled');
-    expect(showMoreWrapper.attributes().disabled).toBe('disabled');
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(showMoreWrapper).toBeDisabled();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly without a show more button (canRefine)', () => {
@@ -406,7 +416,7 @@ describe('custom default render', () => {
       `,
     });
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly without refinement', () => {
@@ -428,7 +438,7 @@ describe('custom default render', () => {
       `,
     });
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly with an URL for the href', () => {
@@ -449,7 +459,7 @@ describe('custom default render', () => {
       `,
     });
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly with a show more button toggled', () => {
@@ -470,7 +480,7 @@ describe('custom default render', () => {
       `,
     });
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly with a disabled show more button', () => {
@@ -491,7 +501,7 @@ describe('custom default render', () => {
       `,
     });
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('calls refine on link click', async () => {
@@ -576,7 +586,7 @@ describe('custom showMoreLabel render', () => {
     });
 
     expect(wrapper.find('.ais-Menu-showMore').text()).toBe('Voir plus');
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly with a custom show more label toggled', () => {
@@ -602,6 +612,6 @@ describe('custom showMoreLabel render', () => {
     });
 
     expect(wrapper.find('.ais-Menu-showMore').text()).toBe('Voir moins');
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 });

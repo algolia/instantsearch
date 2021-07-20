@@ -83,7 +83,7 @@ it("renders correctly when it's searchable", () => {
       attribute: 'something',
     },
   });
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper.htmlCompat()).toMatchSnapshot();
 
   expect(wrapper.find('.ais-SearchBox-input').exists()).toBe(true);
 });
@@ -120,7 +120,7 @@ it("allows search bar classes override when it's searchable", () => {
       },
     },
   });
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper.htmlCompat()).toMatchSnapshot();
 
   expect(wrapper.find('.ais-SearchBox-form').classes('moar-classes')).toBe(
     true
@@ -141,11 +141,11 @@ it("disables show more if can't refine", async () => {
 
   const showMore = wrapper.find('.ais-RefinementList-showMore');
 
-  expect(showMore.attributes().disabled).toBe('disabled');
+  expect(showMore).toBeDisabled();
   expect(showMore.classes()).toContain('ais-RefinementList-showMore--disabled');
 
   await wrapper.setData({ state: { canToggleShowMore: true } });
-  expect(showMore.attributes().disabled).toBeUndefined();
+  expect(showMore).not.toBeDisabled();
   expect(showMore.classes()).not.toContain(
     'ais-RefinementList-showMore--disabled'
   );
@@ -161,8 +161,8 @@ it('behaves correctly', async () => {
       attribute: 'something',
     },
   });
-  const button = wrapper.find('input[type="checkbox"]');
-  await button.trigger('click');
+  const checkBox = wrapper.find('input[type="checkbox"]');
+  await checkBox.setChecked();
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('yo');
 });
 

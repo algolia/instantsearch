@@ -1,6 +1,6 @@
-import { mount } from '../../../test/utils';
+import { mount, nextTick } from '../../../test/utils';
 import mitt from 'mitt';
-import Vue from 'vue';
+import { isVue3 } from '../../util/vue-compat';
 import {
   createPanelProviderMixin,
   createPanelConsumerMixin,
@@ -112,13 +112,19 @@ describe('createPanelConsumerMixin', () => {
     expect(emitter.emit).toHaveBeenCalledTimes(1);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
-    // ↓ this should be replaceable with `wrapper.setData()` but it didn't
-    // trigger the watcher in `createPanelConsumerMixin`.
-    // It's probably a bug from vue-test-utils.
-    // https://github.com/vuejs/vue-test-utils/issues/1756
-    // https://github.com/vuejs/vue-test-utils/issues/149
-    wrapper.vm.$set(wrapper.vm, 'state', { attributeName: true });
-    await Vue.nextTick();
+    if (isVue3) {
+      await wrapper.setData({ state: { attributeName: true } });
+    } else {
+      // ↓ this should be replaceable with `wrapper.setData()` but it didn't
+      // trigger the watcher in `createPanelConsumerMixin`.
+      // It's probably a bug from vue-test-utils.
+      // https://github.com/vuejs/vue-test-utils/issues/1756
+      // https://github.com/vuejs/vue-test-utils/issues/149
+      wrapper.vm.$set(wrapper.vm, 'state', {
+        attributeName: true,
+      });
+      await nextTick();
+    }
 
     expect(emitter.emit).toHaveBeenCalledTimes(2);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
@@ -206,8 +212,12 @@ describe('createPanelConsumerMixin', () => {
     expect(emitter.emit).toHaveBeenCalledTimes(1);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
-    wrapper.vm.$set(wrapper.vm, 'state', null);
-    await Vue.nextTick();
+    if (isVue3) {
+      await wrapper.setData({ state: null });
+    } else {
+      wrapper.vm.$set(wrapper.vm, 'state', null);
+      await nextTick();
+    }
 
     expect(emitter.emit).toHaveBeenCalledTimes(1);
   });
@@ -236,14 +246,22 @@ describe('createPanelConsumerMixin', () => {
     expect(emitter.emit).toHaveBeenCalledTimes(1);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
-    wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
-    await Vue.nextTick();
+    if (isVue3) {
+      await wrapper.setData({ state: { attributeName: false } });
+    } else {
+      wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
+      await nextTick();
+    }
 
     expect(emitter.emit).toHaveBeenCalledTimes(2);
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
-    wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
-    await Vue.nextTick();
+    if (isVue3) {
+      await wrapper.setData({ state: { attributeName: false } });
+    } else {
+      wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
+      await nextTick();
+    }
 
     expect(emitter.emit).toHaveBeenCalledTimes(2);
   });

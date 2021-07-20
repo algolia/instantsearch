@@ -61,9 +61,9 @@ describe('default render', () => {
 
     const button = wrapper.find('button');
 
-    expect(button.attributes().disabled).toBe('disabled');
+    expect(button).toBeDisabled();
     expect(button.classes()).toContain('ais-ClearRefinements-button--disabled');
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('calls refine on button click', async () => {

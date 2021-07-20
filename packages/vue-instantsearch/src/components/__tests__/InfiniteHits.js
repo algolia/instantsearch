@@ -171,8 +171,8 @@ it('renders correctly on the first page', () => {
   expect(
     previousButton.classes('ais-InfiniteHits-loadPrevious--disabled')
   ).toEqual(true);
-  expect(previousButton.attributes('disabled')).toEqual('disabled');
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(previousButton).toBeDisabled();
+  expect(wrapper.htmlCompat()).toMatchSnapshot();
 });
 
 it('renders correctly on the last page', () => {
@@ -183,7 +183,7 @@ it('renders correctly on the last page', () => {
 
   const wrapper = mount(InfiniteHits);
 
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper.htmlCompat()).toMatchSnapshot();
 });
 
 it('renders correctly when not on the first page', () => {

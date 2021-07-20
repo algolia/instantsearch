@@ -1,4 +1,4 @@
-import { mount } from '../../../test/utils';
+import { mount, nextTick } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import RangeInput from '../RangeInput.vue';
 
@@ -390,9 +390,8 @@ describe('refinement', () => {
     expect(refine).toHaveBeenCalledWith(['10', '100']);
 
     // update the state
-    await wrapper.setData({
-      state: { start: [50, 200] }, // min: 10 -> 50, max: 100 -> 200
-    });
+    wrapper.vm.state.start = [50, 200]; // min: 10 -> 50, max: 100 -> 200
+    await nextTick();
 
     await form.trigger('submit');
     expect(refine).toHaveBeenCalledTimes(2);

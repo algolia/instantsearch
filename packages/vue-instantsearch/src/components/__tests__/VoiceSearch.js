@@ -45,7 +45,7 @@ describe('Rendering', () => {
       isBrowserSupported: false,
     });
     const wrapper = mount(VoiceSearch);
-    expect(wrapper.find('button').attributes().disabled).toBe('disabled');
+    expect(wrapper.find('button')).toBeDisabled();
   });
 
   it('with custom template for buttonText (1)', () => {

@@ -10,7 +10,7 @@ describe('renders correctly', () => {
       isRelevantSorted: false,
     });
     const wrapper = mount(RelevantSort);
-    expect(wrapper.html()).toMatchInlineSnapshot(`""`);
+    expect(wrapper).toHaveEmptyHTML();
   });
 
   test('not relevant sorted', () => {

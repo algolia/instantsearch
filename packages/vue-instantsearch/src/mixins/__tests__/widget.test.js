@@ -24,20 +24,22 @@ describe('on root index', () => {
     const widget = { render: () => {} };
     const factory = jest.fn(() => widget);
     const connector = jest.fn(() => factory);
-    const Test = createFakeComponent({
-      mixins: [createWidgetMixin({ connector })],
-    });
     const widgetParams = {
       attribute: 'brand',
     };
+    const Test = createFakeComponent({
+      mixins: [createWidgetMixin({ connector })],
+      computed: {
+        widgetParams() {
+          return widgetParams;
+        },
+      },
+    });
 
     mount(Test, {
       provide: {
         $_ais_instantSearchInstance: instance,
       },
-      data: () => ({
-        widgetParams,
-      }),
     });
 
     expect(connector).toHaveBeenCalled();
@@ -84,13 +86,16 @@ describe('on root index', () => {
     };
     const factory = jest.fn(() => widget);
     const connector = jest.fn(() => factory);
-    const Test = createFakeComponent({
-      mixins: [createWidgetMixin({ connector })],
-    });
-
     const widgetParams = {
       attribute: 'brand',
     };
+
+    const Test = createFakeComponent({
+      mixins: [createWidgetMixin({ connector })],
+      data: () => ({
+        widgetParams,
+      }),
+    });
 
     const nextWidgetParams = {
       attribute: 'price',
@@ -100,9 +105,6 @@ describe('on root index', () => {
       provide: {
         $_ais_instantSearchInstance: instance,
       },
-      data: () => ({
-        widgetParams,
-      }),
     });
 
     // Simulate render
@@ -166,7 +168,7 @@ describe('on root index', () => {
     // Simulate render
     connector.mock.calls[0][0](state, false);
 
-    expect(wrapper.vm.state).toBe(state);
+    expect(wrapper.vm.state).toEqual(state);
   });
 });
 
@@ -182,6 +184,11 @@ describe('on child index', () => {
     };
     const Test = createFakeComponent({
       mixins: [createWidgetMixin({ connector })],
+      computed: {
+        widgetParams() {
+          return widgetParams;
+        },
+      },
     });
 
     mount(Test, {
@@ -189,9 +196,6 @@ describe('on child index', () => {
         $_ais_instantSearchInstance: instance,
         $_ais_getParentIndex: () => indexWidget,
       },
-      data: () => ({
-        widgetParams,
-      }),
     });
 
     expect(connector).toHaveBeenCalled();
@@ -241,13 +245,16 @@ describe('on child index', () => {
     };
     const factory = jest.fn(() => widget);
     const connector = jest.fn(() => factory);
-    const Test = createFakeComponent({
-      mixins: [createWidgetMixin({ connector })],
-    });
-
     const widgetParams = {
       attribute: 'brand',
     };
+
+    const Test = createFakeComponent({
+      mixins: [createWidgetMixin({ connector })],
+      data: () => ({
+        widgetParams,
+      }),
+    });
 
     const nextWidgetParams = {
       attribute: 'price',
@@ -258,9 +265,6 @@ describe('on child index', () => {
         $_ais_instantSearchInstance: instance,
         $_ais_getParentIndex: () => indexWidget,
       },
-      data: () => ({
-        widgetParams,
-      }),
     });
 
     // Simulate render
@@ -294,13 +298,16 @@ describe('on child index', () => {
     const widget = { render: () => {} };
     const factory = jest.fn(() => widget);
     const connector = jest.fn(() => factory);
-    const Test = createFakeComponent({
-      mixins: [createWidgetMixin({ connector })],
-    });
     const widgetParams = {
       attribute: 'brand',
     };
 
+    const Test = createFakeComponent({
+      mixins: [createWidgetMixin({ connector })],
+      data: () => ({
+        widgetParams,
+      }),
+    });
     const state = {
       items: [],
     };
@@ -310,9 +317,6 @@ describe('on child index', () => {
         $_ais_instantSearchInstance: instance,
         $_ais_getParentIndex: () => indexWidget,
       },
-      data: () => ({
-        widgetParams,
-      }),
     });
 
     // Simulate init
@@ -326,6 +330,6 @@ describe('on child index', () => {
     // Simulate render
     connector.mock.calls[0][0](state, false);
 
-    expect(wrapper.vm.state).toBe(state);
+    expect(wrapper.vm.state).toEqual(state);
   });
 });

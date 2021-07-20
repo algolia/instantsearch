@@ -148,9 +148,9 @@ describe('default render', () => {
 
     expect(selected.element.selected).toBe(true);
 
-    options.wrappers.forEach(option => {
-      expect(option.element.selected).toBe(false);
-    });
+    for (let i = 0; i < options.length; i++) {
+      expect((options[i] || options.at(i)).element.selected).toBe(false);
+    }
   });
 
   it('renders correctly without refinements', () => {
@@ -266,7 +266,7 @@ describe('custom item slot', () => {
         <MenuSelect v-bind="props">
           <template v-slot:item="{ item }">
             <span>
-              {{ item.label }}
+              {{ item.label.toUpperCase() }}
             </span>
           </template>
         </MenuSelect>
@@ -275,12 +275,9 @@ describe('custom item slot', () => {
 
     expect(wrapper.html()).toMatchSnapshot();
 
-    expect(
-      wrapper
-        .findAll('option')
-        .at(1)
-        .html()
-    ).toMatch(/<span>\s+Apple\s+<\/span>/);
+    expect(wrapper.find('option:nth-child(2)').html()).toMatch(
+      /<span>\s*APPLE\s*<\/span>/
+    );
   });
 });
 
@@ -298,7 +295,7 @@ describe('custom default render', () => {
           :value="item.value"
           :selected="item.isRefined"
         >
-          {{item.label}}
+          {{item.label.toUpperCase()}}
         </option>
       </select>
     </template>
@@ -341,19 +338,45 @@ describe('custom default render', () => {
       },
       template: `
         <MenuSelect v-bind="props">
-          ${defaultSlot}
+          <template v-slot="{ items, canRefine, refine }">
+            <select
+              @change="refine($event.currentTarget.value)"
+              :disabled="!canRefine"
+            >
+              <option value="">All</option>
+              <option
+                v-for="item in items"
+                :key="item.value"
+                :value="item.value"
+                :selected="item.isRefined"
+                :data-test="item.value"
+              >
+                {{item.label}}
+              </option>
+            </select>
+          </template>
         </MenuSelect>
       `,
     });
 
-    const selected = wrapper.find('[value="Samsung"]');
-    const options = wrapper.findAll('option:not([value="Samsung"])');
+    // Unlike in vue 2, in vue 3 when value and textContent are the same,
+    // Vue doesn't render the value attribute at all.
+    // For example,
+
+    // In Vue 2,
+    // <option value="Apple">Apple</option>
+
+    // becomes, in Vue 3
+    // <option>Apple</option>
+
+    const selected = wrapper.find('[data-test="Samsung"]');
+    const options = wrapper.findAll('option:not([data-test="Samsung"])');
 
     expect(selected.element.selected).toBe(true);
 
-    options.wrappers.forEach(option => {
-      expect(option.element.selected).toBe(false);
-    });
+    for (let i = 0; i < options.length; i++) {
+      expect((options[i] || options.at(i)).element.selected).toBe(false);
+    }
   });
 
   it('renders correctly without refinements', () => {
@@ -375,7 +398,7 @@ describe('custom default render', () => {
       `,
     });
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('calls refine on select change', async () => {

@@ -7,6 +7,18 @@ import {
   Vue2,
 } from '../../src/util/vue-compat';
 
+export const htmlCompat = function(html) {
+  if (isVue3) {
+    return html
+      .replace(/disabled=""/g, 'disabled="disabled"')
+      .replace(/hidden=""/g, 'hidden="hidden"')
+      .replace(/novalidate=""/g, 'novalidate="novalidate"')
+      .replace(/required=""/g, 'required="required"');
+  } else {
+    return html;
+  }
+};
+
 export const mount = isVue3
   ? (component, options = {}) => {
       const {
@@ -15,6 +27,7 @@ export const mount = isVue3
         provide,
         slots,
         scopedSlots,
+        stubs,
         ...restOptions
       } = options;
       // If we `import` this, it will try to import Vue3-only APIs like `defineComponent`,
@@ -25,6 +38,7 @@ export const mount = isVue3
         global: {
           mixins,
           provide,
+          stubs,
         },
         slots: {
           ...slots,
@@ -32,9 +46,18 @@ export const mount = isVue3
         },
       });
       wrapper.destroy = wrapper.unmount;
+      wrapper.htmlCompat = function() {
+        return htmlCompat(this.html());
+      };
       return wrapper;
     }
-  : require('@vue/test-utils').mount;
+  : (component, options = {}) => {
+      const wrapper = require('@vue/test-utils').mount(component, options);
+      wrapper.htmlCompat = function() {
+        return htmlCompat(this.html());
+      };
+      return wrapper;
+    };
 
 export const createApp = props => {
   if (isVue3) {

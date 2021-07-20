@@ -1,4 +1,4 @@
-import { mount } from '../../../test/utils';
+import { mount, nextTick } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import HierarchicalMenu from '../HierarchicalMenu.vue';
 
@@ -370,12 +370,12 @@ describe('default render', () => {
     });
 
     const button = wrapper.find('button');
-    expect(button.attributes().disabled).toBe('disabled');
+    expect(button).toBeDisabled();
     expect(button.classes()).toContain(
       'ais-HierarchicalMenu-showMore--disabled'
     );
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('renders correctly with show more label', () => {
@@ -436,9 +436,9 @@ describe('default render', () => {
     });
 
     await wrapper
-      .find('.ais-HierarchicalMenu-list--lvl2')
-      .findAll('a')
-      .at(1)
+      .find(
+        '.ais-HierarchicalMenu-list--lvl2 .ais-HierarchicalMenu-item:nth-child(2) a'
+      )
       .trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
@@ -478,11 +478,10 @@ it('calls the Panel mixin with `items.length`', async () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  await wrapper.setData({
-    state: {
-      items: [],
-    },
-  });
+  // should've used wrapper.setData({ state: { items: [] }})
+  // but https://github.com/vuejs/vue-test-utils-next/issues/766
+  wrapper.vm.state.items = [];
+  await nextTick();
 
   expect(mapStateToCanRefine()).toBe(false);
 
@@ -644,11 +643,8 @@ describe('custom default render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        const component = wrapper.vm.$children[0];
-        component.$set(component, 'state', {
-          ...component.state,
-          isShowingMore: true,
-        });
+        const component = wrapper.findComponent(HierarchicalMenu);
+        component.setData({ state: { isShowingMore: true } });
       },
     });
 
@@ -696,8 +692,8 @@ describe('custom default render', () => {
       `,
     });
 
-    expect(wrapper.find('button').attributes().disabled).toBe('disabled');
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.find('button')).toBeDisabled();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
   it('calls refine on link click', async () => {
@@ -720,12 +716,7 @@ describe('custom default render', () => {
       `,
     });
 
-    await wrapper
-      .findAll('ol')
-      .at(1)
-      .findAll('a')
-      .at(2)
-      .trigger('click');
+    await wrapper.find('ol ol li:nth-child(3) a').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('Apple > MacBook');
@@ -735,11 +726,8 @@ describe('custom default render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        const component = wrapper.vm.$children[0];
-        component.$set(component, 'state', {
-          ...component.state,
-          isShowingMore: true,
-        });
+        const component = wrapper.findComponent(HierarchicalMenu);
+        component.setData({ state: { isShowingMore: true } });
       },
     });
 
@@ -809,11 +797,8 @@ describe('custom showMoreLabel render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        const component = wrapper.vm.$children[0];
-        component.$set(component, 'state', {
-          ...component.state,
-          isShowingMore: true,
-        });
+        const component = wrapper.findComponent(HierarchicalMenu);
+        component.setData({ state: { isShowingMore: true } });
       },
     });
 

@@ -21,15 +21,44 @@
         :class-names="classNames"
         v-model="currentRefinement"
       >
+        <template
+          v-slot:loading-indicator
+          v-if="isVue3"
+        >
+          <slot
+            name="loading-indicator"
+          />
+        </template>
         <slot
+          v-if="isVue2"
           name="loading-indicator"
           slot="loading-indicator"
         />
+
+        <template
+          v-slot:submit-icon
+          v-if="isVue3"
+        >
+          <slot
+            name="submit-icon"
+          />
+        </template>
         <slot
+          v-if="isVue2"
           name="submit-icon"
           slot="submit-icon"
         />
+
+        <template
+          v-slot:reset-icon
+          v-if="isVue3"
+        >
+          <slot
+            name="reset-icon"
+          />
+        </template>
         <slot
+          v-if="isVue2"
           name="reset-icon"
           slot="reset-icon"
         />
@@ -42,6 +71,7 @@
 import { connectSearchBox } from 'instantsearch.js/es/connectors';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { isVue3, isVue2 } from '../util/vue-compat';
 import SearchInput from './SearchInput.vue';
 
 export default {
@@ -86,6 +116,8 @@ export default {
   data() {
     return {
       localValue: '',
+      isVue2,
+      isVue3,
     };
   },
   computed: {

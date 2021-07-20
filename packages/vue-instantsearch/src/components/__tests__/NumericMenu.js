@@ -7,6 +7,7 @@ jest.mock('../../mixins/panel');
 
 const all = {
   label: 'All',
+  value: 'all',
 };
 
 const lessThan10 = {
@@ -177,7 +178,9 @@ describe('default render', () => {
       propsData: props,
     });
 
-    const input = wrapper.findAll('.ais-NumericMenu-radio').at(3);
+    const input = wrapper.find(
+      '.ais-NumericMenu-item:nth-child(4) .ais-NumericMenu-radio'
+    );
 
     await input.trigger('change');
 
@@ -364,7 +367,7 @@ describe('custom default render', () => {
       `,
     });
 
-    const link = wrapper.findAll('a').at(3);
+    const link = wrapper.find('li:nth-child(4) a');
 
     await link.trigger('click');
 

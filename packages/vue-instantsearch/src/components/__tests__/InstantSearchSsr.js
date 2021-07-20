@@ -98,16 +98,19 @@ it('does not dispose if not yet started', async () => {
 
   const disposeSpy = jest.spyOn(instance, 'dispose');
 
-  const wrapper = mount(InstantSearchSsr, {
+  const wrapper = mount({
     provide: {
       $_ais_ssrInstantSearchInstance: instance,
     },
     components: {
-      AisSearchBox: SearchBox,
+      InstantSearchSsr,
+      SearchBox,
     },
-    slots: {
-      default: SearchBox,
-    },
+    template: `
+      <InstantSearchSsr>
+        <SearchBox />
+      </InstantSearchSsr>
+    `,
   });
 
   wrapper.destroy();
@@ -115,16 +118,19 @@ it('does not dispose if not yet started', async () => {
   // does not yet call, since instance isn't started
   expect(disposeSpy).toHaveBeenCalledTimes(0);
 
-  const wrapperTwo = mount(InstantSearchSsr, {
+  const wrapperTwo = mount({
     provide: {
       $_ais_ssrInstantSearchInstance: instance,
     },
     components: {
-      AisSearchBox: SearchBox,
+      InstantSearchSsr,
+      SearchBox,
     },
-    slots: {
-      default: SearchBox,
-    },
+    template: `
+      <InstantSearchSsr>
+        <SearchBox />
+      </InstantSearchSsr>
+    `,
   });
   await nextTick();
 

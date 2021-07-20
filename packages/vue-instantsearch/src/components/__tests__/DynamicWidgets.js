@@ -1,4 +1,4 @@
-import { mount } from '../../../test/utils';
+import { mount, nextTick } from '../../../test/utils';
 import DynamicWidgets from '../DynamicWidgets';
 import { __setState } from '../../mixins/widget';
 import { AisPanel } from '../../widgets';
@@ -6,83 +6,102 @@ jest.mock('../../mixins/widget');
 
 const MockRefinementList = {
   props: { attribute: { type: String } },
-  render(h) {
-    return h('div', {
-      attrs: {
-        'widget-name': 'ais-refinement-list',
-        attribute: this.attribute,
-      },
-    });
-  },
+  template: `
+    <div>
+      {{
+        JSON.stringify({
+          widgetName: "ais-refinement-list",
+          attribute,
+        }, null, 2)
+      }}
+    </div>
+  `,
 };
 
 const MockMenu = {
   props: { attribute: { type: String } },
-  render(h) {
-    return h('div', {
-      attrs: { 'widget-name': 'ais-menu', attribute: this.attribute },
-    });
-  },
+  template: `
+    <div>
+      {{
+        JSON.stringify({
+          widgetName: "ais-menu",
+          attribute,
+        }, null, 2)
+      }}
+    </div>
+  `,
 };
 
 const MockHierarchicalMenu = {
   props: { attributes: { type: Array } },
-  render(h) {
-    return h('div', {
-      attrs: {
-        'widget-name': 'ais-hierarchical-menu',
-        attributes: this.attributes,
-      },
-    });
-  },
+  template: `
+    <div>
+      {{
+        JSON.stringify({
+          widgetName: "ais-hierarchical-menu",
+          attributes
+        }, null, 2)
+      }}
+    </div>
+  `,
 };
 
 it('renders all children without state', () => {
   __setState(null);
 
-  const wrapper = mount(DynamicWidgets, {
-    propsData: {
-      transformItems: items => items,
+  const wrapper = mount({
+    data() {
+      return { props: { transformItems: items => items } };
     },
-    slots: {
-      default: `
-      <ais-refinement-list attribute="test1"/>
-      <ais-menu attribute="test2"/>
-      <ais-panel>
-        <ais-hierarchical-menu :attributes="['test3', 'test4']" />
-      </ais-panel>
+    template: `
+      <DynamicWidgets v-bind="props">
+        <MockRefinementList attribute="test1"/>
+        <MockMenu attribute="test2"/>
+        <AisPanel>
+          <MockHierarchicalMenu :attributes="['test3', 'test4']" />
+        </AisPanel>
+      </DynamicWidgets>
       `,
-    },
     components: {
-      'ais-refinement-list': MockRefinementList,
-      'ais-menu': MockMenu,
-      'ais-hierarchical-menu': MockHierarchicalMenu,
+      DynamicWidgets,
+      MockRefinementList,
+      MockMenu,
+      MockHierarchicalMenu,
       AisPanel,
     },
   });
 
-  expect(wrapper.html()).toMatchInlineSnapshot(`
+  expect(wrapper.htmlCompat()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets"
      hidden="hidden"
 >
   <div class="ais-DynamicWidgets-widget">
-    <div attribute="test1"
-         widget-name="ais-refinement-list"
-    >
+    <div>
+      {
+      "widgetName": "ais-refinement-list",
+      "attribute": "test1"
+      }
     </div>
   </div>
   <div class="ais-DynamicWidgets-widget">
-    <div attribute="test2"
-         widget-name="ais-menu"
-    >
+    <div>
+      {
+      "widgetName": "ais-menu",
+      "attribute": "test2"
+      }
     </div>
   </div>
   <div class="ais-DynamicWidgets-widget">
     <div class="ais-Panel">
       <div class="ais-Panel-body">
-        <div attributes="test3,test4"
-             widget-name="ais-hierarchical-menu"
-        >
+        <div>
+          {
+          "widgetName": "ais-hierarchical-menu",
+          "attributes": [
+          "test3",
+          "test4"
+          ]
+          }
         </div>
       </div>
     </div>
@@ -113,14 +132,14 @@ it('renders nothing with empty attributesToRender', () => {
   });
 
   const wrapper = mount(DynamicWidgets, {
-    propsData: {
-      transformItems: items => items,
-    },
-    slots: {
-      default: `<ais-refinement-list attribute="test1"/>`,
-    },
+    template: `
+      <DynamicWidgets :transformItems="items => items">
+        <MockRefinementList attribute="test1" />
+      </DynamicWidgets>
+    `,
     components: {
-      'ais-refinement-list': MockRefinementList,
+      DynamicWidgets,
+      MockRefinementList,
     },
   });
 
@@ -135,28 +154,28 @@ it('renders attributesToRender (menu)', () => {
     attributesToRender: ['test1'],
   });
 
-  const wrapper = mount(DynamicWidgets, {
-    propsData: {
-      transformItems: items => items,
-    },
-    slots: {
-      default: `
-        <ais-menu attribute="test1" />
-        <ais-refinement-list attribute="test2" />
-      `,
-    },
+  const wrapper = mount({
+    template: `
+      <DynamicWidgets :transformItems="items => items">
+        <MockMenu attribute="test1" />
+        <MockRefinementList attribute="test2" />
+      </DynamicWidgets>
+    `,
     components: {
-      'ais-refinement-list': MockRefinementList,
-      'ais-menu': MockMenu,
+      DynamicWidgets,
+      MockRefinementList,
+      MockMenu,
     },
   });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
   <div class="ais-DynamicWidgets-widget">
-    <div attribute="test1"
-         widget-name="ais-menu"
-    >
+    <div>
+      {
+      "widgetName": "ais-menu",
+      "attribute": "test1"
+      }
     </div>
   </div>
 </div>
@@ -168,28 +187,28 @@ it('renders attributesToRender (refinement list)', () => {
     attributesToRender: ['test2'],
   });
 
-  const wrapper = mount(DynamicWidgets, {
-    propsData: {
-      transformItems: items => items,
-    },
-    slots: {
-      default: `
-        <ais-menu attribute="test1" />
-        <ais-refinement-list attribute="test2" />
-      `,
-    },
+  const wrapper = mount({
+    template: `
+      <DynamicWidgets :transformItems="items => items">
+        <MockMenu attribute="test1" />
+        <MockRefinementList attribute="test2" />
+      </DynamicWidgets>
+    `,
     components: {
-      'ais-refinement-list': MockRefinementList,
-      'ais-menu': MockMenu,
+      DynamicWidgets,
+      MockRefinementList,
+      MockMenu,
     },
   });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
   <div class="ais-DynamicWidgets-widget">
-    <div attribute="test2"
-         widget-name="ais-refinement-list"
-    >
+    <div>
+      {
+      "widgetName": "ais-refinement-list",
+      "attribute": "test2"
+      }
     </div>
   </div>
 </div>
@@ -201,21 +220,19 @@ it('renders attributesToRender (panel)', () => {
     attributesToRender: ['test2'],
   });
 
-  const wrapper = mount(DynamicWidgets, {
-    propsData: {
-      transformItems: items => items,
-    },
-    slots: {
-      default: `
-        <ais-menu attribute="test1" />
-        <ais-panel>
-          <ais-refinement-list attribute="test2" />
-        </ais-panel>
-      `,
-    },
+  const wrapper = mount({
+    template: `
+      <DynamicWidgets :transformItems="items => items">
+        <MockMenu attribute="test1" />
+        <AisPanel>
+          <MockRefinementList attribute="test2" />
+        </AisPanel>
+      </DynamicWidgets>
+    `,
     components: {
-      'ais-refinement-list': MockRefinementList,
-      'ais-menu': MockMenu,
+      DynamicWidgets,
+      MockRefinementList,
+      MockMenu,
       AisPanel,
     },
   });
@@ -225,9 +242,11 @@ it('renders attributesToRender (panel)', () => {
   <div class="ais-DynamicWidgets-widget">
     <div class="ais-Panel">
       <div class="ais-Panel-body">
-        <div attribute="test2"
-             widget-name="ais-refinement-list"
-        >
+        <div>
+          {
+          "widgetName": "ais-refinement-list",
+          "attribute": "test2"
+          }
         </div>
       </div>
     </div>
@@ -241,23 +260,21 @@ it('renders attributesToRender (hierarchical menu)', () => {
     attributesToRender: ['test1'],
   });
 
-  const wrapper = mount(DynamicWidgets, {
-    propsData: {
-      transformItems: items => items,
-    },
-    slots: {
-      default: `
-        <ais-hierarchical-menu :attributes="['test1','test2']" />
-        <ais-menu attribute="test3" />
-        <ais-panel>
-          <ais-refinement-list attribute="test4" />
-        </ais-panel>
-      `,
-    },
+  const wrapper = mount({
+    template: `
+      <DynamicWidgets :transformItems="items => items">
+        <MockHierarchicalMenu :attributes="['test1','test2']" />
+        <MockMenu attribute="test3" />
+        <AisPanel>
+          <MockRefinementList attribute="test4" />
+        </AisPanel>
+      </DynamicWidgets>
+    `,
     components: {
-      'ais-refinement-list': MockRefinementList,
-      'ais-menu': MockMenu,
-      'ais-hierarchical-menu': MockHierarchicalMenu,
+      DynamicWidgets,
+      MockRefinementList,
+      MockMenu,
+      MockHierarchicalMenu,
       AisPanel,
     },
   });
@@ -265,9 +282,14 @@ it('renders attributesToRender (hierarchical menu)', () => {
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
   <div class="ais-DynamicWidgets-widget">
-    <div attributes="test1,test2"
-         widget-name="ais-hierarchical-menu"
-    >
+    <div>
+      {
+      "widgetName": "ais-hierarchical-menu",
+      "attributes": [
+      "test1",
+      "test2"
+      ]
+      }
     </div>
   </div>
 </div>
@@ -275,29 +297,29 @@ it('renders attributesToRender (hierarchical menu)', () => {
 });
 
 it('updates DOM when attributesToRender changes', async () => {
-  const attributesToRender = ['test1'];
+  let attributesToRender = ['test1'];
 
   __setState({
-    attributesToRender,
+    get attributesToRender() {
+      return attributesToRender;
+    },
   });
 
-  const wrapper = mount(DynamicWidgets, {
-    propsData: {
-      transformItems: items => items,
-    },
-    slots: {
-      default: `
-        <ais-hierarchical-menu :attributes="['test1','test2']" />
-        <ais-menu attribute="test3" />
-        <ais-panel>
-          <ais-refinement-list attribute="test4" />
-        </ais-panel>
-      `,
-    },
+  const wrapper = mount({
+    template: `
+      <DynamicWidgets :transformItems="items => items">
+        <MockHierarchicalMenu :attributes="['test1','test2']" />
+        <MockMenu attribute="test3" />
+        <AisPanel>
+          <MockRefinementList attribute="test4" />
+        </AisPanel>
+      </DynamicWidgets>
+    `,
     components: {
-      'ais-refinement-list': MockRefinementList,
-      'ais-menu': MockMenu,
-      'ais-hierarchical-menu': MockHierarchicalMenu,
+      DynamicWidgets,
+      MockRefinementList,
+      MockMenu,
+      MockHierarchicalMenu,
       AisPanel,
     },
   });
@@ -305,43 +327,61 @@ it('updates DOM when attributesToRender changes', async () => {
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
   <div class="ais-DynamicWidgets-widget">
-    <div attributes="test1,test2"
-         widget-name="ais-hierarchical-menu"
-    >
+    <div>
+      {
+      "widgetName": "ais-hierarchical-menu",
+      "attributes": [
+      "test1",
+      "test2"
+      ]
+      }
     </div>
   </div>
 </div>
 `);
 
-  await wrapper.setData({ state: { attributesToRender: ['test3'] } });
+  attributesToRender = ['test3'];
+  wrapper.vm.$forceUpdate();
+  await nextTick();
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
   <div class="ais-DynamicWidgets-widget">
-    <div attribute="test3"
-         widget-name="ais-menu"
-    >
+    <div>
+      {
+      "widgetName": "ais-menu",
+      "attribute": "test3"
+      }
     </div>
   </div>
 </div>
 `);
 
-  await wrapper.setData({ state: { attributesToRender: ['test1', 'test4'] } });
+  attributesToRender = ['test1', 'test4'];
+  wrapper.vm.$forceUpdate();
+  await nextTick();
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
   <div class="ais-DynamicWidgets-widget">
-    <div attributes="test1,test2"
-         widget-name="ais-hierarchical-menu"
-    >
+    <div>
+      {
+      "widgetName": "ais-hierarchical-menu",
+      "attributes": [
+      "test1",
+      "test2"
+      ]
+      }
     </div>
   </div>
   <div class="ais-DynamicWidgets-widget">
     <div class="ais-Panel">
       <div class="ais-Panel-body">
-        <div attribute="test4"
-             widget-name="ais-refinement-list"
-        >
+        <div>
+          {
+          "widgetName": "ais-refinement-list",
+          "attribute": "test4"
+          }
         </div>
       </div>
     </div>
@@ -349,7 +389,9 @@ it('updates DOM when attributesToRender changes', async () => {
 </div>
 `);
 
-  await wrapper.setData({ state: { attributesToRender: [] } });
+  attributesToRender = [];
+  wrapper.vm.$forceUpdate();
+  await nextTick();
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">

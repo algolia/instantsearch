@@ -157,10 +157,7 @@ describe('default render', () => {
       propsData: defaultProps,
     });
 
-    await wrapper
-      .findAll('a')
-      .at(0)
-      .trigger('click');
+    await wrapper.find('a').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith();
@@ -178,10 +175,7 @@ describe('default render', () => {
       propsData: defaultProps,
     });
 
-    await wrapper
-      .findAll('a')
-      .at(1)
-      .trigger('click');
+    await wrapper.find('a:nth-child(2)').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('TV & Home Theater');
@@ -313,10 +307,7 @@ describe('custom default render', () => {
       `,
     });
 
-    await wrapper
-      .findAll('a')
-      .at(0)
-      .trigger('click');
+    await wrapper.find('a').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('TV & Home Theater');
@@ -324,18 +315,19 @@ describe('custom default render', () => {
 });
 
 describe('custom rootLabel render', () => {
-  const rootLabelSlot = `
-    <template>Home page</template>
-  `;
-
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      slots: {
-        rootLabel: rootLabelSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          <template v-slot:rootLabel>Home page</template>
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -348,11 +340,16 @@ describe('custom rootLabel render', () => {
       canRefine: false,
     });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      slots: {
-        rootLabel: rootLabelSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          <template v-slot:rootLabel>Home page</template>
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -360,18 +357,19 @@ describe('custom rootLabel render', () => {
 });
 
 describe('custom separator render', () => {
-  const separatorSlot = `
-    <template>~~</template>
-  `;
-
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      slots: {
-        separator: separatorSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          <template v-slot:separator>~~</template>
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
