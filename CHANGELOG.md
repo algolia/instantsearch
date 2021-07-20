@@ -1,3 +1,13 @@
+## [4.25.2](https://github.com/algolia/instantsearch.js/compare/v4.25.1...v4.25.2) (2021-07-20)
+
+
+### Bug Fixes
+
+* **build:** ensure build fails when types building fails ([#4812](https://github.com/algolia/instantsearch.js/issues/4812)) ([b37e23b](https://github.com/algolia/instantsearch.js/commit/b37e23b5819abbc03049124bc3a29120f91aeb8c))
+* **types:** export widget's types ([#4813](https://github.com/algolia/instantsearch.js/issues/4813)) ([e9764e9](https://github.com/algolia/instantsearch.js/commit/e9764e9273e5b7bacd86f8d1cb751e87bd75eb75))
+
+
+
 ## [4.25.1](https://github.com/algolia/instantsearch.js/compare/v4.25.0...v4.25.1) (2021-07-13)
 
 
