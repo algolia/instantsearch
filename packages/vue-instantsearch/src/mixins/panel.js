@@ -1,4 +1,4 @@
-import { isVue3 } from '../util/vue';
+import { isVue3 } from '../util/vue-compat';
 import mitt from 'mitt';
 
 export const PANEL_EMITTER_NAMESPACE = 'instantSearchPanelEmitter';

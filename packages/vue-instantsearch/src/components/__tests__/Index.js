@@ -1,7 +1,7 @@
-import Vue from 'vue';
 import { mount } from '../../../test/utils';
 import Index from '../Index';
 import { __setWidget } from '../../mixins/widget';
+import { Vue2, isVue3, isVue2 } from '../../util/vue-compat';
 jest.mock('../../mixins/widget');
 
 beforeEach(() => {
@@ -55,8 +55,6 @@ it('renders its children', () => {
 });
 
 it('provides the index widget', done => {
-  Vue.config.errorHandler = done;
-
   const indexWidget = { $$type: 'ais.index' };
   __setWidget(indexWidget);
 
@@ -65,7 +63,7 @@ it('provides the index widget', done => {
     mounted() {
       this.$nextTick(() => {
         expect(typeof this.$_ais_getParentIndex).toBe('function');
-        expect(this.$_ais_getParentIndex()).toBe(indexWidget);
+        expect(this.$_ais_getParentIndex()).toEqual(indexWidget);
         done();
       });
     },
@@ -74,13 +72,25 @@ it('provides the index widget', done => {
     },
   };
 
-  mount(Index, {
-    propsData: {
-      indexName: 'something',
-      widget: indexWidget,
+  if (isVue2) {
+    Vue2.config.errorHandler = done;
+  }
+
+  mount(
+    {
+      components: { Index, ChildComponent },
+      template: `
+      <Index index-name="something">
+        <ChildComponent />
+      </Index>
+    `,
     },
-    slots: {
-      default: ChildComponent,
-    },
-  });
+    isVue3 && {
+      global: {
+        config: {
+          errorHandler: done,
+        },
+      },
+    }
+  );
 });

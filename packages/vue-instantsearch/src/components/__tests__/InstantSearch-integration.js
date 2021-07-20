@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import { mount } from '../../../test/utils';
+import { mount, nextTick } from '../../../test/utils';
 import InstantSearch from '../InstantSearch';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../../util/testutils/client';
@@ -58,7 +57,7 @@ describe('middlewares', () => {
         middlewares: [middleware],
       },
     });
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(1);
   });
@@ -93,7 +92,7 @@ describe('middlewares', () => {
     expect(middlewareSpy1.subscribe).toHaveBeenCalledTimes(1);
 
     await wrapper.find('input').setValue('a');
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledWith({
@@ -104,13 +103,13 @@ describe('middlewares', () => {
     await wrapper.setData({
       middlewares: [middleware1, middleware2],
     });
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy2.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(0);
 
     await wrapper.find('input').setValue('b');
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledWith({
@@ -157,7 +156,7 @@ describe('middlewares', () => {
     expect(middlewareSpy2.subscribe).toHaveBeenCalledTimes(1);
 
     await wrapper.find('input').setValue('a');
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledWith({
@@ -171,13 +170,13 @@ describe('middlewares', () => {
     await wrapper.setData({
       middlewares: [middleware1],
     });
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.unsubscribe).toHaveBeenCalledTimes(0);
     expect(middlewareSpy2.unsubscribe).toHaveBeenCalledTimes(1);
 
     await wrapper.find('input').setValue('b');
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledWith({

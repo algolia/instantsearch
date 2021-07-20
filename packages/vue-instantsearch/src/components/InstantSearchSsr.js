@@ -1,5 +1,5 @@
 import { createInstantSearchComponent } from '../util/createInstantSearchComponent';
-import { isVue3, h } from '../util/vue';
+import { isVue3, h } from '../util/vue-compat';
 
 export default createInstantSearchComponent({
   name: 'AisInstantSearchSsr',
@@ -24,7 +24,9 @@ export default createInstantSearchComponent({
           [this.suit('', 'ssr')]: true,
         },
       },
-      isVue3 ? this.$slots.default() : this.$slots.default
+      isVue3
+        ? this.$slots.default && this.$slots.default()
+        : this.$slots.default
     );
   },
 });

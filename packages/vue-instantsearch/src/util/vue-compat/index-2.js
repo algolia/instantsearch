@@ -10,6 +10,7 @@ export { Vue, Vue2, isVue2, isVue3, version };
 // Vue3-only APIs
 export const computed = undefined;
 export const createApp = undefined;
+export const createSSRApp = undefined;
 export const createRef = undefined;
 export const customRef = undefined;
 export const defineAsyncComponent = undefined;

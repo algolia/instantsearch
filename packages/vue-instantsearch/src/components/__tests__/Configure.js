@@ -45,7 +45,7 @@ it('renders null without scoped slots', () => {
     propsData: defaultProps,
   });
 
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper).toHaveEmptyHTML();
 });
 
 it('renders null without state', () => {
@@ -63,7 +63,7 @@ it('renders null without state', () => {
     `,
   });
 
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper).toHaveEmptyHTML();
 });
 
 it('renders with scoped slots', () => {

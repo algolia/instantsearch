@@ -1,7 +1,7 @@
-import { createLocalVue, mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import DynamicWidgets from '../DynamicWidgets';
 import { __setState } from '../../mixins/widget';
-import { plugin } from '../../plugin';
+import { AisPanel } from '../../widgets';
 jest.mock('../../mixins/widget');
 
 const MockRefinementList = {
@@ -38,14 +38,9 @@ const MockHierarchicalMenu = {
 };
 
 it('renders all children without state', () => {
-  const localVue = createLocalVue();
-
-  localVue.use(plugin);
-
   __setState(null);
 
   const wrapper = mount(DynamicWidgets, {
-    localVue,
     propsData: {
       transformItems: items => items,
     },
@@ -58,10 +53,11 @@ it('renders all children without state', () => {
       </ais-panel>
       `,
     },
-    stubs: {
+    components: {
       'ais-refinement-list': MockRefinementList,
       'ais-menu': MockMenu,
       'ais-hierarchical-menu': MockHierarchicalMenu,
+      AisPanel,
     },
   });
 
@@ -112,23 +108,18 @@ it('renders nothing without children', () => {
 });
 
 it('renders nothing with empty attributesToRender', () => {
-  const localVue = createLocalVue();
-
-  localVue.use(plugin);
-
   __setState({
     attributesToRender: [],
   });
 
   const wrapper = mount(DynamicWidgets, {
-    localVue,
     propsData: {
       transformItems: items => items,
     },
     slots: {
       default: `<ais-refinement-list attribute="test1"/>`,
     },
-    stubs: {
+    components: {
       'ais-refinement-list': MockRefinementList,
     },
   });
@@ -140,16 +131,11 @@ it('renders nothing with empty attributesToRender', () => {
 });
 
 it('renders attributesToRender (menu)', () => {
-  const localVue = createLocalVue();
-
-  localVue.use(plugin);
-
   __setState({
     attributesToRender: ['test1'],
   });
 
   const wrapper = mount(DynamicWidgets, {
-    localVue,
     propsData: {
       transformItems: items => items,
     },
@@ -159,7 +145,7 @@ it('renders attributesToRender (menu)', () => {
         <ais-refinement-list attribute="test2" />
       `,
     },
-    stubs: {
+    components: {
       'ais-refinement-list': MockRefinementList,
       'ais-menu': MockMenu,
     },
@@ -178,16 +164,11 @@ it('renders attributesToRender (menu)', () => {
 });
 
 it('renders attributesToRender (refinement list)', () => {
-  const localVue = createLocalVue();
-
-  localVue.use(plugin);
-
   __setState({
     attributesToRender: ['test2'],
   });
 
   const wrapper = mount(DynamicWidgets, {
-    localVue,
     propsData: {
       transformItems: items => items,
     },
@@ -197,7 +178,7 @@ it('renders attributesToRender (refinement list)', () => {
         <ais-refinement-list attribute="test2" />
       `,
     },
-    stubs: {
+    components: {
       'ais-refinement-list': MockRefinementList,
       'ais-menu': MockMenu,
     },
@@ -216,16 +197,11 @@ it('renders attributesToRender (refinement list)', () => {
 });
 
 it('renders attributesToRender (panel)', () => {
-  const localVue = createLocalVue();
-
-  localVue.use(plugin);
-
   __setState({
     attributesToRender: ['test2'],
   });
 
   const wrapper = mount(DynamicWidgets, {
-    localVue,
     propsData: {
       transformItems: items => items,
     },
@@ -237,9 +213,10 @@ it('renders attributesToRender (panel)', () => {
         </ais-panel>
       `,
     },
-    stubs: {
+    components: {
       'ais-refinement-list': MockRefinementList,
       'ais-menu': MockMenu,
+      AisPanel,
     },
   });
 
@@ -260,16 +237,11 @@ it('renders attributesToRender (panel)', () => {
 });
 
 it('renders attributesToRender (hierarchical menu)', () => {
-  const localVue = createLocalVue();
-
-  localVue.use(plugin);
-
   __setState({
     attributesToRender: ['test1'],
   });
 
   const wrapper = mount(DynamicWidgets, {
-    localVue,
     propsData: {
       transformItems: items => items,
     },
@@ -282,10 +254,11 @@ it('renders attributesToRender (hierarchical menu)', () => {
         </ais-panel>
       `,
     },
-    stubs: {
+    components: {
       'ais-refinement-list': MockRefinementList,
       'ais-menu': MockMenu,
       'ais-hierarchical-menu': MockHierarchicalMenu,
+      AisPanel,
     },
   });
 
@@ -301,21 +274,14 @@ it('renders attributesToRender (hierarchical menu)', () => {
 `);
 });
 
-it('updates DOM when attributesToRender changes', () => {
-  const localVue = createLocalVue();
-
-  localVue.use(plugin);
-
-  let attributesToRender = ['test1'];
+it('updates DOM when attributesToRender changes', async () => {
+  const attributesToRender = ['test1'];
 
   __setState({
-    get attributesToRender() {
-      return attributesToRender;
-    },
+    attributesToRender,
   });
 
   const wrapper = mount(DynamicWidgets, {
-    localVue,
     propsData: {
       transformItems: items => items,
     },
@@ -328,10 +294,11 @@ it('updates DOM when attributesToRender changes', () => {
         </ais-panel>
       `,
     },
-    stubs: {
+    components: {
       'ais-refinement-list': MockRefinementList,
       'ais-menu': MockMenu,
       'ais-hierarchical-menu': MockHierarchicalMenu,
+      AisPanel,
     },
   });
 
@@ -346,9 +313,7 @@ it('updates DOM when attributesToRender changes', () => {
 </div>
 `);
 
-  attributesToRender = ['test3'];
-
-  wrapper.vm.$forceUpdate();
+  await wrapper.setData({ state: { attributesToRender: ['test3'] } });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
@@ -361,9 +326,7 @@ it('updates DOM when attributesToRender changes', () => {
 </div>
 `);
 
-  attributesToRender = ['test1', 'test4'];
-
-  wrapper.vm.$forceUpdate();
+  await wrapper.setData({ state: { attributesToRender: ['test1', 'test4'] } });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
@@ -386,9 +349,7 @@ it('updates DOM when attributesToRender changes', () => {
 </div>
 `);
 
-  attributesToRender = [];
-
-  wrapper.vm.$forceUpdate();
+  await wrapper.setData({ state: { attributesToRender: [] } });
 
   expect(wrapper.html()).toMatchInlineSnapshot(`
 <div class="ais-DynamicWidgets">
