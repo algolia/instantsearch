@@ -1,6 +1,7 @@
 import instantsearch from 'instantsearch.js/es';
 import algoliaHelper from 'algoliasearch-helper';
-import { isVue3, Vue2, defineComponent } from '../util/vue';
+import { isVue3, isVue2, Vue2, createSSRApp } from '../util/vue-compat';
+import { _objectSpread } from '../util/polyfills';
 const { SearchResults, SearchParameters } = algoliaHelper;
 import { warn } from './warn';
 
@@ -14,13 +15,33 @@ function walkIndex(indexWidget, visit) {
   });
 }
 
-function renderToString(app, _renderToString) {
-  return new Promise((resolve, reject) =>
-    _renderToString(app, (err, res) => {
-      if (err) reject(err);
-      resolve(res);
-    })
-  );
+export function renderToString(app) {
+  let _renderToString;
+  try {
+    _renderToString = isVue3
+      ? require('@vue/server-renderer').renderToString
+      : require('vue-server-renderer/basic');
+  } catch (e) {
+    // error is handled by regular if, in case it's `undefined`
+  }
+  if (!_renderToString) {
+    if (isVue3) {
+      throw new Error('you need to install @vue/server-renderer');
+    } else {
+      throw new Error('you need to install vue-server-renderer');
+    }
+  }
+
+  if (isVue3) {
+    return _renderToString(app);
+  } else {
+    return new Promise((resolve, reject) =>
+      _renderToString(app, (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      })
+    );
+  }
 }
 
 function searchOnlyWithDerivedHelpers(helper) {
@@ -40,31 +61,53 @@ function searchOnlyWithDerivedHelpers(helper) {
   });
 }
 
-function defaultCloneComponent(componentInstance) {
+function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
   const options = {
     serverPrefetch: undefined,
     fetch: undefined,
     _base: undefined,
     name: 'ais-ssr-root-component',
-    // copy over global Vue APIs
-    router: componentInstance.$router,
-    store: componentInstance.$store,
   };
 
-  const Extended = componentInstance.$vnode
-    ? componentInstance.$vnode.componentOptions.Ctor.extend(options)
-    : (isVue3 ? defineComponent : Vue2.component)(
-        Object.assign({}, componentInstance.$options, options)
-      );
+  let app;
 
-  const app = new Extended({
-    propsData: componentInstance.$options.propsData,
-  });
+  if (isVue3) {
+    const appOptions = Object.assign({}, componentInstance.$options, options);
+    appOptions.mixins = [...appOptions.mixins, ...mixins];
+    // Unlike Vue 2, there is no componentInstance.$options.propsData in Vue 3.
+    // The only way to pass the propsData is to spread componentInstance
+    // in the second argument, hoping the rest wouldn't make any side effect.
+    // At this point, we don't even have the definition of the props.
+    // So we cannot pass exactly the propsData only.
+    // FIXME: Maybe we need to get the list of props in `createServerRootMixin`.
+    app = createSSRApp(appOptions, _objectSpread({}, componentInstance));
+    if (componentInstance.$router) {
+      app.use(componentInstance.$router);
+    }
+    if (componentInstance.$store) {
+      app.use(componentInstance.$store);
+    }
+  } else {
+    // copy over global Vue APIs
+    options.router = componentInstance.$router;
+    options.store = componentInstance.$store;
+
+    const Extended = componentInstance.$vnode
+      ? componentInstance.$vnode.componentOptions.Ctor.extend(options)
+      : Vue2.component(Object.assign({}, componentInstance.$options, options));
+
+    app = new Extended({
+      propsData: componentInstance.$options.propsData,
+      mixins: [...mixins],
+    });
+  }
 
   // https://stackoverflow.com/a/48195006/3185307
   app.$slots = componentInstance.$slots;
   app.$root = componentInstance.$root;
-  app.$options.serverPrefetch = [];
+  if (isVue2) {
+    app.$options.serverPrefetch = [];
+  }
 
   return app;
 }
@@ -88,32 +131,28 @@ function augmentInstantSearch(
    * @returns {Promise} result of the search, to save for .hydrate
    */
   search.findResultsState = function(componentInstance) {
-    let _renderToString;
-    try {
-      _renderToString = require('vue-server-renderer/basic');
-    } catch (e) {
-      // error is handled by regular if, in case it's `undefined`
-    }
-    if (!_renderToString) {
-      throw new Error('you need to install vue-server-renderer');
-    }
-
     let app;
 
     return Promise.resolve()
       .then(() => {
-        app = cloneComponent(componentInstance);
+        app = cloneComponent(componentInstance, {
+          mixins: [
+            {
+              created() {
+                this.instantsearch.helper = helper;
+                this.instantsearch.mainHelper = helper;
 
-        app.instantsearch.helper = helper;
-        app.instantsearch.mainHelper = helper;
-
-        app.instantsearch.mainIndex.init({
-          instantSearchInstance: app.instantsearch,
-          parent: null,
-          uiState: app.instantsearch._initialUiState,
+                this.instantsearch.mainIndex.init({
+                  instantSearchInstance: this.instantsearch,
+                  parent: null,
+                  uiState: this.instantsearch._initialUiState,
+                });
+              },
+            },
+          ],
         });
       })
-      .then(() => renderToString(app, _renderToString))
+      .then(() => renderToString(app))
       .then(() => searchOnlyWithDerivedHelpers(helper))
       .then(() => {
         const results = {};
