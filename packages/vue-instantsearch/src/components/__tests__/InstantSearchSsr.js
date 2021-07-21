@@ -1,8 +1,9 @@
-import { renderCompat, mount, nextTick } from '../../../test/utils';
+import { mount, nextTick } from '../../../test/utils';
 import instantsearch from 'instantsearch.js/es';
 import InstantSearchSsr from '../InstantSearchSsr';
 import SearchBox from '../SearchBox.vue';
 import { createFakeClient } from '../../util/testutils/client';
+import { renderCompat } from '../../util/vue-compat';
 
 jest.unmock('instantsearch.js/es');
 

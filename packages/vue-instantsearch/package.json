@@ -131,7 +131,7 @@
     },
     {
       "path": "./dist/vue2/cjs/index.js",
-      "maxSize": "16.75 kB"
+      "maxSize": "17.00 kB"
     },
     {
       "path": "./dist/vue3/umd/index.js",
@@ -139,7 +139,7 @@
     },
     {
       "path": "./dist/vue3/cjs/index.js",
-      "maxSize": "18.25 kB"
+      "maxSize": "18.50 kB"
     }
   ],
   "resolutions": {

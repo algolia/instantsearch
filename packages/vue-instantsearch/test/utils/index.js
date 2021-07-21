@@ -1,6 +1,5 @@
 import {
   isVue3,
-  h,
   createApp as _createApp,
   createSSRApp as _createSSRApp,
   nextTick as _nextTick,
@@ -74,11 +73,5 @@ export const createSSRApp = props => {
     return new Vue2(props);
   }
 };
-
-export function renderCompat(fn) {
-  return function(createElementV2) {
-    return isVue3 ? fn.call(this, h) : fn.call(this, createElementV2);
-  };
-}
 
 export const nextTick = () => (isVue3 ? _nextTick() : Vue2.nextTick());

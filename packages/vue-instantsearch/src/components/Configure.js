@@ -1,7 +1,7 @@
 import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
 import { connectConfigure } from 'instantsearch.js/es/connectors';
-import { isVue3, h } from '../util/vue-compat';
+import { isVue3, renderCompat } from '../util/vue-compat';
 
 export default {
   inheritAttrs: false,
@@ -17,14 +17,14 @@ export default {
       };
     },
   },
-  render(createElement) {
+  render: renderCompat(function(h) {
     const slot = isVue3 ? this.$slots.default : this.$scopedSlots.default;
 
     if (!this.state || !slot) {
       return null;
     }
 
-    return (isVue3 ? h : createElement)(
+    return h(
       'div',
       {
         class: this.suit(),
@@ -36,5 +36,5 @@ export default {
         }),
       ]
     );
-  },
+  }),
 };

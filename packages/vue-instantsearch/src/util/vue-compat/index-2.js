@@ -7,6 +7,16 @@ const version = Vue.version;
 
 export { Vue, Vue2, isVue2, isVue3, version };
 
+export function renderCompat(fn) {
+  return function(createElement) {
+    return fn.call(this, createElement);
+  };
+}
+
+export function getDefaultSlot(component) {
+  return component.$slots.default;
+}
+
 // Vue3-only APIs
 export const computed = undefined;
 export const createApp = undefined;

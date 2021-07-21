@@ -38,7 +38,7 @@ it('accepts SearchParameters from attributes', () => {
   });
 });
 
-it('renders null without scoped slots', () => {
+it('renders null without default slot', () => {
   __setState(null);
 
   const wrapper = mount(Configure, {
