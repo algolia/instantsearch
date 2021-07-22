@@ -1,3 +1,18 @@
+# [4.9.0](https://github.com/algolia/create-instantsearch-app/compare/4.8.0...4.9.0) (2021-07-22)
+
+
+### Bug Fixes
+
+* **templates:** add `packageNamePrefix` to widget templates ([#458](https://github.com/algolia/create-instantsearch-app/issues/458)) ([25da57e](https://github.com/algolia/create-instantsearch-app/commit/25da57eeea01b9e77b34460ea8179e7411a71588))
+
+
+### Features
+
+* **cli:** make app path optional ([#457](https://github.com/algolia/create-instantsearch-app/issues/457)) ([d5a5655](https://github.com/algolia/create-instantsearch-app/commit/d5a5655c2c284eb43499aad6c490b95a2b7b4b0c))
+* **templates:** update README and LICENSE for widget templates ([#459](https://github.com/algolia/create-instantsearch-app/issues/459)) ([813c7bf](https://github.com/algolia/create-instantsearch-app/commit/813c7bfbaebdba5eb7277c59022455b51ea65b23))
+
+
+
 # [4.8.0](https://github.com/algolia/create-instantsearch-app/compare/4.7.0...4.8.0) (2021-06-10)
 
 ### Features
