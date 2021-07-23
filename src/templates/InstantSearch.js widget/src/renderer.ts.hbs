@@ -10,7 +10,6 @@ import type { {{ pascalCaseName }}RendererCreator } from './types';
 export const create{{ pascalCaseName }}Renderer: {{ pascalCaseName }}RendererCreator = ({
   container,
 }) => {
-
   const containerNode: Element =
     typeof container === 'string'
       ? document.querySelector(container)!
@@ -42,6 +41,7 @@ export const create{{ pascalCaseName }}Renderer: {{ pascalCaseName }}RendererCre
       /*
        * Rendering
        */
+      // TODO: use renderOptions to create this widget's DOM
     },
     /*
      * The dispose function passed to the connector

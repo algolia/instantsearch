@@ -2,11 +2,15 @@
 
 ## Test
 
+The tests are written in `/src/__tests__` and use Jest.
+
 ```bash
 npm test
 # or
 yarn test
 ```
+
+An example can be found in the `example` directory.
 
 ## Build
 
