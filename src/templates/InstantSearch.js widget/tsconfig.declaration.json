@@ -1,11 +1,12 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-    "outDir": "dist/esm",
+    "outDir": "dist/_types",
     "stripInternal": true,
     "noEmit": false,
     "declaration": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "declarationMap": true
   },
   "include": ["src"],
   "exclude": ["**/__tests__","**/index.cjs.ts"]

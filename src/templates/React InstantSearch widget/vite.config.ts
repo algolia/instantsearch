@@ -14,7 +14,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.tsx'),
-      name: 'SampleCustom',
+      name: '{{ pascalCaseName }}',
       fileName: 'index',
       formats: ['es', 'cjs', 'umd'],
     },
