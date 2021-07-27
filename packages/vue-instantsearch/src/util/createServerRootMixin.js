@@ -1,6 +1,12 @@
 import instantsearch from 'instantsearch.js/es';
 import algoliaHelper from 'algoliasearch-helper';
-import { isVue3, isVue2, Vue2, createSSRApp } from '../util/vue-compat';
+import {
+  isVue3,
+  isVue2,
+  Vue2,
+  createSSRApp,
+  renderToString,
+} from '../util/vue-compat';
 import { _objectSpread } from '../util/polyfills';
 const { SearchResults, SearchParameters } = algoliaHelper;
 import { warn } from './warn';
@@ -13,35 +19,6 @@ function walkIndex(indexWidget, visit) {
     visit(widget);
     walkIndex(widget, visit);
   });
-}
-
-export function renderToString(app) {
-  let _renderToString;
-  try {
-    _renderToString = isVue3
-      ? require('@vue/server-renderer').renderToString
-      : require('vue-server-renderer/basic');
-  } catch (e) {
-    // error is handled by regular if, in case it's `undefined`
-  }
-  if (!_renderToString) {
-    if (isVue3) {
-      throw new Error('you need to install @vue/server-renderer');
-    } else {
-      throw new Error('you need to install vue-server-renderer');
-    }
-  }
-
-  if (isVue3) {
-    return _renderToString(app);
-  } else {
-    return new Promise((resolve, reject) =>
-      _renderToString(app, (err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      })
-    );
-  }
 }
 
 function searchOnlyWithDerivedHelpers(helper) {
@@ -132,6 +109,7 @@ function augmentInstantSearch(
    */
   search.findResultsState = function(componentInstance) {
     let app;
+    let renderedComponentInstance;
 
     return Promise.resolve()
       .then(() => {
@@ -139,6 +117,8 @@ function augmentInstantSearch(
           mixins: [
             {
               created() {
+                // eslint-disable-next-line consistent-this
+                renderedComponentInstance = this;
                 this.instantsearch.helper = helper;
                 this.instantsearch.mainHelper = helper;
 
@@ -156,7 +136,7 @@ function augmentInstantSearch(
       .then(() => searchOnlyWithDerivedHelpers(helper))
       .then(() => {
         const results = {};
-        walkIndex(app.instantsearch.mainIndex, widget => {
+        walkIndex(renderedComponentInstance.instantsearch.mainIndex, widget => {
           results[widget.getIndexId()] = widget.getResults();
         });
 

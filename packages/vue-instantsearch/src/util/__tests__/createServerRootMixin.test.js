@@ -2,17 +2,20 @@ import { mount, createSSRApp } from '../../../test/utils';
 import Router from 'vue-router';
 import Vuex from 'vuex';
 import { createStore } from 'vuex4';
-import {
-  createServerRootMixin,
-  renderToString,
-} from '../createServerRootMixin';
+import { createServerRootMixin } from '../createServerRootMixin';
 import InstantSearchSsr from '../../components/InstantSearchSsr';
 import Configure from '../../components/Configure';
 import SearchBox from '../../components/SearchBox.vue';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
-import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
+import {
+  isVue3,
+  isVue2,
+  Vue2,
+  renderCompat,
+  renderToString,
+} from '../vue-compat';
 import {
   SearchResults,
   SearchParameters,
@@ -221,6 +224,66 @@ Array [
   },
 ]
 `);
+    });
+
+    it('returns correct results state', async done => {
+      const searchClient = createFakeClient();
+
+      const app = {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        render: renderCompat(h =>
+          h(InstantSearchSsr, {}, [
+            h(Configure, {
+              attrs: {
+                hitsPerPage: 100,
+              },
+            }),
+            h(SearchBox),
+          ])
+        ),
+        async serverPrefetch() {
+          const state = await this.instantsearch.findResultsState(this);
+          expect(state).toEqual({
+            __identifier: 'stringified',
+            hello: {
+              _rawResults: [
+                {
+                  query: '',
+                },
+              ],
+              _state: {
+                disjunctiveFacets: [],
+                disjunctiveFacetsRefinements: {},
+                facets: [],
+                facetsExcludes: {},
+                facetsRefinements: {},
+                hierarchicalFacets: [],
+                hierarchicalFacetsRefinements: {},
+                hitsPerPage: 100,
+                index: 'hello',
+                numericRefinements: {},
+                query: '',
+                tagRefinements: [],
+              },
+            },
+          });
+          done();
+          return state;
+        },
+      };
+
+      const wrapper = createSSRApp({
+        mixins: [forceIsServerMixin],
+        render: renderCompat(h => h(app)),
+      });
+
+      await renderToString(wrapper);
     });
 
     it('forwards router', async () => {
