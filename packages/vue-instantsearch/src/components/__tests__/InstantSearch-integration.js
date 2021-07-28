@@ -176,8 +176,7 @@ describe('middlewares', () => {
       uiState: { indexName: { query: 'a' } },
     });
 
-    wrapper.vm.middlewares = [middleware1];
-    await nextTick();
+    await wrapper.setData({ middlewares: [middleware1] });
 
     expect(middlewareSpy1.unsubscribe).toHaveBeenCalledTimes(0);
     expect(middlewareSpy2.unsubscribe).toHaveBeenCalledTimes(1);

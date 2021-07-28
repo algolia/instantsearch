@@ -1,4 +1,4 @@
-import { mount, nextTick } from '../../../test/utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import HierarchicalMenu from '../HierarchicalMenu.vue';
 
@@ -478,10 +478,7 @@ it('calls the Panel mixin with `items.length`', async () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  // should've used wrapper.setData({ state: { items: [] }})
-  // but https://github.com/vuejs/vue-test-utils-next/issues/766
-  wrapper.vm.state.items = [];
-  await nextTick();
+  await wrapper.setData({ state: { items: [] } });
 
   expect(mapStateToCanRefine()).toBe(false);
 

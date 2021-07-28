@@ -1,4 +1,4 @@
-import { mount, nextTick } from '../../../test/utils';
+import { mount } from '../../../test/utils';
 import CurrentRefinements from '../CurrentRefinements.vue';
 import { __setState } from '../../mixins/widget';
 
@@ -177,8 +177,7 @@ it('calls the Panel mixin with `canRefine`', async () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.vm.state.items = [];
-  await nextTick();
+  await wrapper.setData({ state: { items: [] } });
 
   expect(mapStateToCanRefine()).toBe(false);
 
