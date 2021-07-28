@@ -1,3 +1,4 @@
+import { UiState } from '../../../types';
 import singleIndexStateMapping from '../singleIndex';
 
 describe('singleIndexStateMapping', () => {
@@ -156,7 +157,9 @@ describe('singleIndexStateMapping', () => {
     });
 
     it('passes non-UiState through', () => {
-      const stateMapping = singleIndexStateMapping('indexName');
+      const stateMapping = singleIndexStateMapping<
+        UiState & { [indexName: string]: { spy: string[] } }
+      >('indexName');
       const actual = stateMapping.routeToState({
         query: 'zamboni',
         refinementList: {
@@ -179,6 +182,7 @@ describe('singleIndexStateMapping', () => {
     it('returns wrong data if used with nested state', () => {
       const stateMapping = singleIndexStateMapping('indexName');
       const actual = stateMapping.routeToState({
+        // @ts-expect-error
         indexName: {
           query: 'zamboni',
           refinementList: {

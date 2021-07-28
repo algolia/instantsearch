@@ -10,7 +10,7 @@ describe('life cycle', () => {
   it('writes after timeout is done', async () => {
     const pushState = jest.spyOn(window.history, 'pushState');
 
-    const router = historyRouter({
+    const router = historyRouter<{ some: string }>({
       writeDelay: 0,
     });
 
