@@ -9,7 +9,7 @@ import * as middlewares from '../middlewares/index';
 import * as routers from './routers/index';
 import * as stateMappings from './stateMappings/index';
 import { createInfiniteHitsSessionStorageCache } from './infiniteHitsCache/index';
-import { InstantSearchOptions } from '../types';
+import { InstantSearchOptions, UiState } from '../types';
 
 /**
  * InstantSearch is the main component of InstantSearch.js. This object
@@ -28,8 +28,12 @@ import { InstantSearchOptions } from '../types';
  * @function instantsearch
  * @param {InstantSearchOptions} options The options
  */
-const instantsearch = (options: InstantSearchOptions) =>
-  new InstantSearch(options);
+const instantsearch = <
+  TUiState extends UiState = UiState,
+  TRouteState = TUiState
+>(
+  options: InstantSearchOptions<TUiState, TRouteState>
+) => new InstantSearch(options);
 
 instantsearch.routers = routers;
 instantsearch.stateMappings = stateMappings;

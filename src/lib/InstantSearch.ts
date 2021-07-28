@@ -42,7 +42,10 @@ function defaultCreateURL() {
 /**
  * Global options for an InstantSearch instance.
  */
-export type InstantSearchOptions = {
+export type InstantSearchOptions<
+  TUiState extends UiState = UiState,
+  TRouteState = TUiState
+> = {
   /**
    * The name of the main index
    */
@@ -120,7 +123,7 @@ export type InstantSearchOptions = {
    * Router configuration used to save the UI State into the URL or any other
    * client side persistence. Passing `true` will use the default URL options.
    */
-  routing?: RouterProps | boolean;
+  routing?: RouterProps<TUiState, TRouteState> | boolean;
 
   /**
    * the instance of search-insights to use for sending insights events inside
@@ -136,7 +139,10 @@ export type InstantSearchOptions = {
  * created using the `instantsearch` factory function.
  * It emits the 'render' event every time a search is done
  */
-class InstantSearch extends EventEmitter {
+class InstantSearch<
+  TUiState extends UiState = UiState,
+  TRouteState = TUiState
+> extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
   public insightsClient: AlgoliaInsightsClient | null;
@@ -160,7 +166,7 @@ class InstantSearch extends EventEmitter {
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
 
-  public constructor(options: InstantSearchOptions) {
+  public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super();
 
     const {

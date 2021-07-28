@@ -1,4 +1,4 @@
-import { InstantSearchOptions } from './types';
+import { InstantSearchOptions, UiState } from './types';
 import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 import {
@@ -11,8 +11,12 @@ import {
 } from './helpers';
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache';
 
-const instantsearch = (options: InstantSearchOptions): InstantSearch =>
-  new InstantSearch(options);
+const instantsearch = <
+  TUiState extends UiState = UiState,
+  TRouteState = TUiState
+>(
+  options: InstantSearchOptions<TUiState, TRouteState>
+): InstantSearch => new InstantSearch(options);
 
 instantsearch.version = version;
 instantsearch.snippet = snippet;
