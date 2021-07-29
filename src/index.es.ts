@@ -16,7 +16,7 @@ const instantsearch = <
   TRouteState = TUiState
 >(
   options: InstantSearchOptions<TUiState, TRouteState>
-): InstantSearch => new InstantSearch(options);
+) => new InstantSearch(options);
 
 instantsearch.version = version;
 instantsearch.snippet = snippet;
