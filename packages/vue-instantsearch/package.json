@@ -16,7 +16,7 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "3.8.1",
+  "version": "4.0.0-beta.0",
   "files": [
     "dist",
     "src"
@@ -58,8 +58,12 @@
     "@vue/server-renderer": "^3.1.2"
   },
   "peerDependenciesMeta": {
-    "vue-server-renderer": { "optional": true },
-    "@vue/server-renderer": { "optional": true }
+    "vue-server-renderer": {
+      "optional": true
+    },
+    "@vue/server-renderer": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@storybook/addon-actions": "3.4.11",
