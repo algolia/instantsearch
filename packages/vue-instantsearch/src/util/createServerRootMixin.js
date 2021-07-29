@@ -7,7 +7,6 @@ import {
   createSSRApp,
   renderToString,
 } from '../util/vue-compat';
-import { _objectSpread } from '../util/polyfills';
 const { SearchResults, SearchParameters } = algoliaHelper;
 import { warn } from './warn';
 
@@ -51,13 +50,7 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
   if (isVue3) {
     const appOptions = Object.assign({}, componentInstance.$options, options);
     appOptions.mixins = [...appOptions.mixins, ...mixins];
-    // Unlike Vue 2, there is no componentInstance.$options.propsData in Vue 3.
-    // The only way to pass the propsData is to spread componentInstance
-    // in the second argument, hoping the rest wouldn't make any side effect.
-    // At this point, we don't even have the definition of the props.
-    // So we cannot pass exactly the propsData only.
-    // FIXME: Maybe we need to get the list of props in `createServerRootMixin`.
-    app = createSSRApp(appOptions, _objectSpread({}, componentInstance));
+    app = createSSRApp(appOptions);
     if (componentInstance.$router) {
       app.use(componentInstance.$router);
     }

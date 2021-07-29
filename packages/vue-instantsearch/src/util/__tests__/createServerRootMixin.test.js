@@ -396,57 +396,56 @@ Array [
       await renderToString(wrapper);
     });
 
-    it('forwards props', async () => {
-      const searchClient = createFakeClient();
+    if (isVue2) {
+      it('forwards props', async () => {
+        const searchClient = createFakeClient();
 
-      // there are two renders of App, each with an assertion
-      expect.assertions(2);
+        // there are two renders of App, each with an assertion
+        expect.assertions(2);
 
-      const someProp = { data: Math.random() };
+        const someProp = { data: Math.random() };
 
-      const App = {
-        mixins: [
-          forceIsServerMixin,
-          createServerRootMixin({
-            searchClient,
-            indexName: 'hello',
-          }),
-        ],
-        props: {
-          someProp: {
-            required: true,
-            type: Object,
-            validator(value) {
-              expect(value).toBe(someProp);
-              return value === someProp;
+        const App = {
+          mixins: [
+            forceIsServerMixin,
+            createServerRootMixin({
+              searchClient,
+              indexName: 'hello',
+            }),
+          ],
+          props: {
+            someProp: {
+              required: true,
+              type: Object,
+              validator(value) {
+                expect(value).toBe(someProp);
+                return value === someProp;
+              },
             },
           },
-        },
-        render: renderCompat(h =>
-          h(InstantSearchSsr, {}, [
-            h(Configure, {
-              attrs: {
-                hitsPerPage: 100,
-              },
-            }),
-            h(SearchBox),
-          ])
-        ),
-        serverPrefetch() {
-          return this.instantsearch.findResultsState(this);
-        },
-      };
+          render: renderCompat(h =>
+            h(InstantSearchSsr, {}, [
+              h(Configure, {
+                attrs: {
+                  hitsPerPage: 100,
+                },
+              }),
+              h(SearchBox),
+            ])
+          ),
+          serverPrefetch() {
+            return this.instantsearch.findResultsState(this);
+          },
+        };
 
-      const wrapper = createSSRApp({
-        mixins: [forceIsServerMixin],
-        render: renderCompat(h => h(App, { props: { someProp } })),
+        const wrapper = createSSRApp({
+          mixins: [forceIsServerMixin],
+          render: renderCompat(h => h(App, { props: { someProp } })),
+        });
+
+        await renderToString(wrapper);
       });
 
-      await renderToString(wrapper);
-    });
-
-    // FIXME: make these work with Vue 3
-    if (isVue2) {
       it('forwards slots', async done => {
         const searchClient = createFakeClient();
 
