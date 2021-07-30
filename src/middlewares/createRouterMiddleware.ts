@@ -14,6 +14,8 @@ export type RouterProps<
   TRouteState = TUiState
 > = {
   router?: Router<TRouteState>;
+  // ideally stateMapping should be required if TRouteState is given,
+  // but there's no way to check if a generic is provided or the default value.
   stateMapping?: StateMapping<TUiState, TRouteState>;
 };
 
@@ -25,8 +27,11 @@ export const createRouterMiddleware = <
 ): InternalMiddleware<TUiState> => {
   const {
     router = historyRouter<TRouteState>(),
-    // technically this is wrong, as without stateMapping parameter given, the routeState *must* be UiState
-    stateMapping = (simpleStateMapping() as unknown) as StateMapping<
+    // We have to cast simpleStateMapping as a StateMapping<TUiState, TRouteState>.
+    // this is needed because simpleStateMapping is StateMapping<TUiState, TUiState>.
+    // While it's only used when UiState and RouteState are the same, unfortunately
+    // TypeScript still considers them separate types.
+    stateMapping = (simpleStateMapping<TUiState>() as unknown) as StateMapping<
       TUiState,
       TRouteState
     >,
