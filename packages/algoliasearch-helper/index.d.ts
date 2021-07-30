@@ -1132,6 +1132,7 @@ declare namespace algoliasearchHelper {
       attributes: string[];
       separator?: string;
       rootPath?: string | null;
+      showParentLevel?: boolean;
     };
 
     type OperatorList = {
