@@ -1,3 +1,6 @@
+3.5.5 - 2021-07-30
+ * feat(ts): allow showParentLevel in hierarchicalFacet https://github.com/algolia/algoliasearch-helper-js/commit/cef547d8f48bf2cdb2d28476f8d3715c1b1a40d8
+
 3.5.4 - 2021-07-05
  * fix(facetOrdering): facetOrdering.facets, not facetOrdering.facet https://github.com/algolia/algoliasearch-helper-js/commit/97d769adf68458a04605ca7ac0e35ade5c4bc646
 
