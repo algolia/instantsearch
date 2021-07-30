@@ -618,17 +618,17 @@ function hydrateMetadata(resultsState) {
 
   // add a value noop, which gets replaced once the widgets are mounted
   return resultsState.metadata.map(datum => ({
-    value() {},
+    value: () => ({}),
     ...datum,
     items:
       datum.items &&
       datum.items.map(item => ({
-        value() {},
+        value: () => ({}),
         ...item,
         items:
           item.items &&
           item.items.map(nestedItem => ({
-            value() {},
+            value: () => ({}),
             ...nestedItem,
           })),
       })),
