@@ -12,7 +12,7 @@ describe('connectClearRefinements', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         connectClearRefinements()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).

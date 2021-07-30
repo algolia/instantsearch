@@ -41,7 +41,7 @@ describe('connectConfigureRelatedItems', () => {
       const configureRelatedItems = connectConfigureRelatedItems(noop);
 
       expect(() => {
-        // @ts-ignore missing options
+        // @ts-expect-error missing options
         configureRelatedItems();
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`hit\` option is required.
@@ -54,7 +54,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
       const configureRelatedItems = connectConfigureRelatedItems(noop);
 
       expect(() => {
-        // @ts-ignore missing options
+        // @ts-expect-error missing options
         configureRelatedItems({
           hit,
         });

@@ -112,7 +112,6 @@ describe('connectInfiniteHitsWithInsights', () => {
 
   it('does not throw without the unmount function', () => {
     const rendering = () => {};
-    // @ts-ignore:next-line
     const makeWidget = connectInfiniteHitsWithInsights(rendering);
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     const widget = makeWidget({});

@@ -27,7 +27,7 @@ describe('menuSelect', () => {
   describe('Usage', () => {
     it('throws without container', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         menuSelect({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.

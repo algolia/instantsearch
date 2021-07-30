@@ -58,7 +58,7 @@ describe('connectNumericMenu', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         connectNumericMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -69,7 +69,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
     it('throws without attribute', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         connectNumericMenu(() => {})({ attribute: undefined, items: [] });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`attribute\` option is required.
@@ -82,7 +82,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect(() => {
         connectNumericMenu(() => {})({
           attribute: 'attribute',
-          // @ts-ignore
+          // @ts-expect-error
           items: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`

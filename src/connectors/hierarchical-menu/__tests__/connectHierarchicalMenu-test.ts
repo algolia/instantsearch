@@ -99,7 +99,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             name: 'category',
             rootPath: null,
             separator: ' > ',
-            // @ts-ignore `showParentLevel` is missing in the SearchParameters.HierarchicalFacet declaration
             showParentLevel: true,
           },
         ],
@@ -918,7 +917,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             attributes: ['categoriesLvl0', 'categoriesLvl1'],
             separator: ' > ',
             rootPath: null,
-            // @ts-ignore `showParentLevel` is missing in the SearchParameters.HierarchicalFacet declaration
             showParentLevel: true,
           },
         ],
@@ -956,7 +954,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             attributes: ['categoriesLvl0', 'categoriesLvl1'],
             separator: ' > ',
             rootPath: null,
-            // @ts-ignore `showParentLevel` is missing in the SearchParameters.HierarchicalFacet declaration
             showParentLevel: true,
           },
         ],
@@ -1182,7 +1179,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         uiState: {},
       });
 
-      // @ts-ignore `showParentLevel` is missing in the SearchParameters.HierarchicalFacet declaration
       expect(actual.hierarchicalFacets[0].showParentLevel).toBe(true);
     });
 

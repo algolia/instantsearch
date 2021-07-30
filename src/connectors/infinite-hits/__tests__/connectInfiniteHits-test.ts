@@ -24,7 +24,7 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
 describe('connectInfiniteHits', () => {
   it('throws without render function', () => {
     expect(() => {
-      // @ts-ignore: test connectInfiniteHits with invalid parameters
+      // @ts-expect-error: test connectInfiniteHits with invalid parameters
       connectInfiniteHits()({});
     }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).

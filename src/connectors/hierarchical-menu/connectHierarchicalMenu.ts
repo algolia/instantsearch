@@ -415,7 +415,6 @@ const connectHierarchicalMenu: HierarchicalMenuConnector = function connectHiera
             attributes,
             separator,
             rootPath,
-            // @ts-ignore `showParentLevel` is missing in the SearchParameters.HierarchicalFacet declaration
             showParentLevel,
           });
 

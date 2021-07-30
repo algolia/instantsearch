@@ -97,7 +97,6 @@ describe('connectHitsWithInsights', () => {
 
   it('does not throw without the unmount function', () => {
     const rendering = () => {};
-    // @ts-ignore:next-line
     const makeWidget = connectHitsWithInsights(rendering);
     const widget = makeWidget({});
     const helper = algoliasearchHelper(createSearchClient(), '', {});

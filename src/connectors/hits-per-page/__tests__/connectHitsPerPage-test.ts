@@ -17,7 +17,7 @@ describe('connectHitsPerPage', () => {
     it('throws without items', () => {
       expect(() => {
         connectHitsPerPage(() => {})({
-          // @ts-ignore
+          // @ts-expect-error
           items: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
