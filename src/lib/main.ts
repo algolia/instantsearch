@@ -29,10 +29,10 @@ import { InstantSearchOptions, UiState } from '../types';
  * @param {InstantSearchOptions} options The options
  */
 const instantsearch = <
-  TUiState extends UiState = UiState,
+  TUiState = Record<string, unknown>,
   TRouteState = TUiState
 >(
-  options: InstantSearchOptions<TUiState, TRouteState>
+  options: InstantSearchOptions<UiState & TUiState, TRouteState>
 ) => new InstantSearch(options);
 
 instantsearch.routers = routers;

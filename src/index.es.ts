@@ -12,10 +12,10 @@ import {
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache';
 
 const instantsearch = <
-  TUiState extends UiState = UiState,
+  TUiState = Record<string, unknown>,
   TRouteState = TUiState
 >(
-  options: InstantSearchOptions<TUiState, TRouteState>
+  options: InstantSearchOptions<UiState & TUiState, TRouteState>
 ) => new InstantSearch(options);
 
 instantsearch.version = version;
