@@ -319,7 +319,7 @@ describe('createInstantSearchManager', () => {
     });
   });
 
-  describe('results hydratation', () => {
+  describe('results hydration', () => {
     it('initializes the manager with a single index hydrated results', () => {
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -384,6 +384,55 @@ describe('createInstantSearchManager', () => {
       expect(ism.store.getState().results.index1).toBeInstanceOf(SearchResults);
       expect(ism.store.getState().results.index2.query).toBe('query2');
       expect(ism.store.getState().results.index2).toBeInstanceOf(SearchResults);
+    });
+  });
+
+  describe('metadata hydration', () => {
+    test('replaces value with a function returning empty search state', () => {
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient: createSearchClient(),
+        resultsState: {
+          metadata: [
+            { stuff: 1, items: [{ stuff: 2, items: [{ stuff: 3 }] }] },
+          ],
+          rawResults: [
+            {
+              index: 'indexName',
+              query: 'query',
+            },
+          ],
+          state: {
+            index: 'indexName',
+            query: 'query',
+          },
+        },
+      });
+
+      const hydratedMetadata = ism.store.getState().metadata;
+
+      expect(hydratedMetadata).toEqual([
+        {
+          value: expect.any(Function),
+          stuff: 1,
+          items: [
+            {
+              value: expect.any(Function),
+              stuff: 2,
+              items: [
+                {
+                  value: expect.any(Function),
+                  stuff: 3,
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+
+      expect(hydratedMetadata[0].value()).toEqual({});
+      expect(hydratedMetadata[0].items[0].value()).toEqual({});
+      expect(hydratedMetadata[0].items[0].items[0].value()).toEqual({});
     });
   });
 
