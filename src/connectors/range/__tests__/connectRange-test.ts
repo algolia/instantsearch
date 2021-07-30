@@ -44,7 +44,7 @@ describe('connectRange', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         connectRange()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -55,7 +55,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
     it('throws without attribute', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         connectRange(() => {})({ attribute: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`attribute\` option is required.
@@ -753,7 +753,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      // @ts-ignore
+      // @ts-expect-error
       refine(['10', '490']);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
@@ -782,7 +782,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      // @ts-ignore
+      // @ts-expect-error
       refine(['10.50', '490.50']);
 
       // min is rounded down, max rounded up
@@ -945,7 +945,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      // @ts-ignore
+      // @ts-expect-error
       refine(['', 490]);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
@@ -979,7 +979,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      // @ts-ignore
+      // @ts-expect-error
       refine([10, '']);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
@@ -1254,7 +1254,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      // @ts-ignore
+      // @ts-expect-error
       refine(['ADASA', 'FFDSFQS']);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);

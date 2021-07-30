@@ -24,7 +24,7 @@ jest.mock('preact', () => {
 describe('menu', () => {
   it('throws without container', () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-expect-error
       menu({ attribute: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.

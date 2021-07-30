@@ -36,7 +36,7 @@ describe('connectPagination', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         connectPagination()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -70,7 +70,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     const renderFn = jest.fn();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget({
-      // @ts-ignore
+      // @ts-expect-error
       foo: 'bar',
     });
 
@@ -614,7 +614,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         widget.getRenderState(
           {
             hierarchicalMenu: {},
-            // @ts-ignore
+            // @ts-expect-error
             pagination: {},
           },
           createRenderOptions({

@@ -38,7 +38,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
 `);
 
-    // @ts-ignore
+    // @ts-expect-error
     expect(() => connectRefinementList(() => {})())
       .toThrowErrorMatchingInlineSnapshot(`
 "The \`attribute\` option is required.
@@ -47,7 +47,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 `);
 
     expect(() =>
-      // @ts-ignore
+      // @ts-expect-error
       connectRefinementList(() => {})({
         operator: 'and',
       })
@@ -60,7 +60,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     expect(() =>
       connectRefinementList(() => {})({
         attribute: 'company',
-        // @ts-ignore
+        // @ts-expect-error
         operator: 'YUP',
       })
     ).toThrowErrorMatchingInlineSnapshot(`

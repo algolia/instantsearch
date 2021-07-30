@@ -21,7 +21,7 @@ describe('connectConfigure', () => {
 
   describe('Usage', () => {
     it('throws without searchParameters', () => {
-      // @ts-ignore wrong options
+      // @ts-expect-error wrong options
       expect(() => connectConfigure()()).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchParameters\` option expects an object.
 
@@ -31,7 +31,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
     it('throws when you pass it a non-plain object', () => {
       expect(() => {
-        // @ts-ignore wrong options
+        // @ts-expect-error wrong options
         connectConfigure()(new Date());
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchParameters\` option expects an object.
@@ -40,7 +40,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 `);
 
       expect(() => {
-        // @ts-ignore wrong options
+        // @ts-expect-error wrong options
         connectConfigure()(() => {});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchParameters\` option expects an object.
@@ -54,12 +54,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('with a unmount function but no render function does not throw', () => {
-      // @ts-ignore wrong options
+      // @ts-expect-error wrong options
       expect(() => connectConfigure(undefined, jest.fn())).not.toThrow();
     });
 
     it('does not throw without render and unmount functions', () => {
-      // @ts-ignore wrong options
+      // @ts-expect-error wrong options
       expect(() => connectConfigure(undefined, undefined)).not.toThrow();
     });
   });

@@ -8,12 +8,13 @@ import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 import { wait } from '../../../../test/utils/wait';
 import answers from '../answers';
 import searchBox from '../../search-box/search-box';
+import { createInitOptions } from '../../../../test/mock/createWidget';
 
 describe('answers', () => {
   describe('Usage', () => {
     it('throws without `container`', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         answers({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -25,7 +26,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     it('throws without `queryLanguages`', () => {
       const container = document.createElement('div');
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         answers({ container });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`queryLanguages\` expects an array of strings.
@@ -47,18 +48,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         indexName: 'instant_search',
         searchClient,
       });
+      search.helper = helper;
       const widget = answers({
         container,
         queryLanguages: ['en'],
         attributesForPrediction: ['description'],
       });
       expect(() => {
-        // @ts-ignore-next-line
-        widget.init({
-          state: helper.state,
-          helper,
-          instantSearchInstance: search,
-        });
+        widget.init!(
+          createInitOptions({
+            state: helper.state,
+            helper,
+            instantSearchInstance: search,
+          })
+        );
       }).toThrowErrorMatchingInlineSnapshot(`
 "\`algoliasearch\` >= 4.8.0 required.
 

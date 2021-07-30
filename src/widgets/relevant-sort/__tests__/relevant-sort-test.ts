@@ -31,7 +31,7 @@ describe('relevantSort', () => {
   describe('Usage', () => {
     it('throws without container', () => {
       expect(() => {
-        // @ts-ignore wrong options
+        // @ts-expect-error wrong options
         relevantSort({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.

@@ -16,7 +16,7 @@ describe('connectBreadcrumb', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         connectBreadcrumb()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -28,7 +28,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     it('throws with undefined `attributes`', () => {
       expect(() => {
         connectBreadcrumb(() => {})({
-          // @ts-ignore
+          // @ts-expect-error
           attributes: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -368,8 +368,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             name: 'category',
             attributes: ['category', 'sub_category'],
             separator: ' > ',
-            // @TODO Add missing type to js helper
-            // @ts-ignore
             rootPath: null,
           },
         ],
@@ -402,7 +400,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             name: 'category',
             attributes: ['category', 'sub_category', 'sub_sub_category'],
             separator: ' > ',
-            // @ts-ignore
             rootPath: null,
           },
         ],
@@ -428,7 +425,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             name: 'category',
             attributes: ['category', 'sub_category'],
             separator: ' > ',
-            // @ts-ignore
             rootPath: null,
           },
         ],
@@ -455,7 +451,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             name: 'category',
             attributes: ['category', 'sub_category'],
             separator: ' > ',
-            // @ts-ignore
             rootPath: 'TopLevel > SubLevel',
           },
         ],
@@ -488,7 +483,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
           {
             attributes: ['category', 'sub_category'],
             name: 'category',
-            // @ts-ignore
             rootPath: null,
             separator: ' > ',
           },

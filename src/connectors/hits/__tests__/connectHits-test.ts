@@ -23,7 +23,7 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
 describe('connectHits', () => {
   it('throws without render function', () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-expect-error
       connectHits()({});
     }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).

@@ -36,7 +36,7 @@ describe('connectQueryRules', () => {
   describe('usage', () => {
     test('throws without render function', () => {
       expect(() => {
-        // @ts-ignore
+        // @ts-expect-error
         connectQueryRules()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -55,7 +55,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       expect(() => {
         const { makeWidget } = createWidget();
         makeWidget({
-          // @ts-ignore
+          // @ts-expect-error
           trackedFilters: { brand: ['Samsung'] },
         });
       }).toThrowErrorMatchingInlineSnapshot(`

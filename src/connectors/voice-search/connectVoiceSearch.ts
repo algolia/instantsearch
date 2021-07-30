@@ -112,7 +112,7 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
                   helper.state.setQueryParameters({
                     ignorePlurals: true,
                     removeStopWords: true,
-                    // @ts-ignore (optionalWords only allows array, while string is also valid)
+                    // @ts-ignore (optionalWords only allows array in v3, while string is also valid)
                     optionalWords: query,
                     ...additionalQueryParameters({ query }),
                   })
@@ -179,13 +179,13 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
             ? (Object.keys(additional) as Array<
                 keyof PlainSearchParameters
               >).reduce<PlainSearchParameters>((acc, current) => {
-                // @ts-ignore search parameters is typed as readonly
+                // @ts-ignore search parameters is typed as readonly in v4
                 acc[current] = undefined;
                 return acc;
               }, {})
             : {};
           newState = state.setQueryParameters({
-            // @ts-ignore (queryLanguages is not yet added to algoliasearch)
+            // @ts-ignore (queryLanguages is not added to algoliasearch v3)
             queryLanguages: undefined,
             ignorePlurals: undefined,
             removeStopWords: undefined,

@@ -13,7 +13,7 @@ import connectAutocomplete, {
   AutocompleteRenderState,
 } from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import { Hit, SearchClient } from '../../../types';
+import { EscapedHits, Hit, SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
@@ -41,7 +41,7 @@ describe('connectAutocomplete', () => {
 
   it('throws without render function', () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-expect-error
       connectAutocomplete();
     }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -56,7 +56,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     const trigger = () => {
       makeWidget({
-        // @ts-ignore outdated `indices` option
+        // @ts-expect-error outdated `indices` option
         indices: [
           { label: 'Products', value: 'products' },
           { label: 'Services', value: 'services' },
@@ -535,8 +535,7 @@ search.addWidgets([
       );
 
       const hits: Hit[] = [];
-      // @ts-ignore-next-line
-      hits.__escaped = true;
+      (hits as EscapedHits).__escaped = true;
 
       expect(renderState).toEqual({
         currentRefinement: 'query',

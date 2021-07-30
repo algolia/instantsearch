@@ -1,5 +1,9 @@
 import { withInsights, inferInsightsPayload } from '../insights';
-import { Widget } from '../../types';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import { InstantSearch, Widget } from '../../types';
+import { createInstantSearch } from '../../../test/mock/createInstantSearch';
+import { createSingleSearchResponse } from '../../../test/mock/createAPIResponse';
+import { castToJestMock } from '../../../test/utils/castToJestMock';
 
 const connectHits = (renderFn: any, unmountFn: any) => (
   widgetParams = {}
@@ -16,16 +20,17 @@ const connectHits = (renderFn: any, unmountFn: any) => (
 });
 
 const createWidgetWithInsights = ({
-  // @ts-ignore can not import types in this file?
   renderFn,
-  // @ts-ignore can not import types in this file?
   instantSearchInstance,
-  // @ts-ignore can not import types in this file?
   results,
+}: {
+  renderFn: any;
+  instantSearchInstance: InstantSearch;
+  results: SearchResults;
 }): Widget => {
   const connectHitsWithInsights = withInsights(connectHits as any);
   const widget = connectHitsWithInsights(renderFn, jest.fn())({});
-  (widget as any).render({ results, instantSearchInstance } as any);
+  widget.render({ results, instantSearchInstance } as any);
   return widget;
 };
 
@@ -33,16 +38,20 @@ describe('withInsights', () => {
   describe('when applied on connectHits', () => {
     it('should call the passed renderFn', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       expect(renderFn).toHaveBeenCalledTimes(1);
@@ -50,16 +59,20 @@ describe('withInsights', () => {
 
     it('should not remove any renderProps passed by connectHits', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -74,16 +87,20 @@ describe('withInsights', () => {
 
     it('should expose the insights client wrapper to renderOptions if passed to instantSearchInstance', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -92,18 +109,20 @@ describe('withInsights', () => {
     });
     it('should expose the insights client wrapper even when insightsClient was not provided', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = {
-        /* insightsClient was not passed */
-      };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: null,
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -112,18 +131,20 @@ describe('withInsights', () => {
     });
     it('should expose the insights client wrapper that throws when insightsClient was not provided', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = {
-        /* insightsClient was not passed */
-      };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: null,
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -143,16 +164,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
   describe('exposed insights client wrapper', () => {
     it('should call the insights client under the hood', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -165,16 +190,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
     it('should pass it the correct parameters', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -182,10 +211,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         objectIDs: ['3'],
         eventName: 'Add to basket',
       });
-      const [
-        method,
-        payload,
-      ] = instantSearchInstance.insightsClient.mock.calls[0];
+      const [method, payload] = castToJestMock(
+        instantSearchInstance.insightsClient!
+      ).mock.calls[0];
       expect(method).toEqual('clickedObjectIDsAfterSearch');
       expect(payload).toEqual({
         eventName: 'Add to basket',
@@ -198,16 +226,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
     it('should not infer or pass the positions if method is `convertedObjectIDsAfterSearch`', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -215,10 +247,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         objectIDs: ['1'],
         eventName: 'Add to basket',
       });
-      const [
-        method,
-        payload,
-      ] = instantSearchInstance.insightsClient.mock.calls[0];
+      const [method, payload] = castToJestMock(
+        instantSearchInstance.insightsClient!
+      ).mock.calls[0];
       expect(method).toEqual('convertedObjectIDsAfterSearch');
       expect(payload).toEqual({
         eventName: 'Add to basket',
@@ -230,16 +261,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
     it('should reject non-existing objectIDs', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -255,14 +290,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
     it('should reject if objectIDs provided have different queryIDs', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __position: 1, __queryID: 'theQueryID_1' },
-          { objectID: '2', __position: 2, __queryID: 'theQueryID_2' },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __position: 1, __queryID: 'theQueryID_1' },
+            { objectID: '2', __position: 2, __queryID: 'theQueryID_2' },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -278,14 +317,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
     it('should reject if no queryID found (clickAnalytics was not set to true)', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __position: 1 },
-          { objectID: '2', __position: 2 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __position: 1 },
+            { objectID: '2', __position: 2 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
@@ -303,42 +346,48 @@ See: https://alg.li/lNiZZ7"
 
     it('should reject unknown method name', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: jest.fn() };
-      const results = {
-        index: 'theIndex',
-        hits: [
-          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
-          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
-          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
-          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
-        ],
-      };
+      const instantSearchInstance = createInstantSearch({
+        insightsClient: jest.fn(),
+      });
+      const results = new SearchResults(new SearchParameters(), [
+        createSingleSearchResponse({
+          index: 'theIndex',
+          hits: [
+            { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+            { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+            { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+            { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+          ],
+        }),
+      ]);
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
       expect(() => {
-        renderProps.insights('unknow_method', {
+        renderProps.insights('unknown_method', {
           objectIDs: ['3'],
           eventName: 'Add to basket',
         });
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Unsupported method passed to insights: \\"unknow_method\\"."`
+        `"Unsupported method passed to insights: \\"unknown_method\\"."`
       );
     });
   });
 });
 
 describe('inferInsightsPayload', () => {
-  const hits: any = [
+  const hits = [
     { objectID: '1', __queryID: 'theQueryID', __position: 9 },
     { objectID: '2', __queryID: 'theQueryID', __position: 10 },
     { objectID: '3', __queryID: 'theQueryID', __position: 11 },
     { objectID: '4', __queryID: 'theQueryID', __position: 12 },
   ];
-  const results: any = {
-    index: 'theIndex',
-    hits,
-  };
+  const results = new SearchResults(new SearchParameters(), [
+    createSingleSearchResponse({
+      index: 'theIndex',
+      hits,
+    }),
+  ]);
 
   describe('payload inferring', () => {
     it('should infer queryID from results', () => {

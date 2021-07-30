@@ -16,7 +16,7 @@ describe('connectAnswers', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
-        // @ts-ignore: test connectAnswers with invalid parameters
+        // @ts-expect-error: test connectAnswers with invalid parameters
         connectAnswers()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -27,7 +27,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 
     it('throws without `queryLanguages`', () => {
       expect(() => {
-        // @ts-ignore: test connectAnswers with invalid parameters
+        // @ts-expect-error: test connectAnswers with invalid parameters
         connectAnswers(() => {})({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`queryLanguages\` expects an array of strings.
