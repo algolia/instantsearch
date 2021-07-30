@@ -41,32 +41,30 @@ const createFakeStateMapping = (
   ...args,
 });
 
-type Entry = Record<string, unknown>;
-
-type HistoryState = {
+type HistoryState<TEntry> = {
   index: number;
-  entries: Entry[];
-  listeners: Array<(value: Entry) => void>;
+  entries: TEntry[];
+  listeners: Array<(value: TEntry) => void>;
 };
 
-const createFakeHistory = (
+const createFakeHistory = <TEntry = Record<string, unknown>>(
   {
     index = -1,
     entries = [],
     listeners = [],
-  }: HistoryState = {} as HistoryState
+  }: HistoryState<TEntry> = {} as HistoryState<TEntry>
 ) => {
-  const state: HistoryState = {
+  const state: HistoryState<TEntry> = {
     index,
     entries,
     listeners,
   };
 
   return {
-    subscribe(listener: (entry: Entry) => void) {
+    subscribe(listener: (entry: TEntry) => void) {
       state.listeners.push(listener);
     },
-    push(value: Entry) {
+    push(value: TEntry) {
       state.entries.push(value);
       state.index++;
     },
@@ -385,11 +383,11 @@ describe('RoutingManager', () => {
     test('should keep the UI state up to date on router.update', async () => {
       const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
-      const history = createFakeHistory();
+      const history = createFakeHistory<UiState>();
       const router = createFakeRouter({
         onUpdate(fn) {
           history.subscribe(state => {
-            fn(state as UiState);
+            fn(state);
           });
         },
         write: jest.fn(state => {
@@ -477,11 +475,11 @@ describe('RoutingManager', () => {
           return uiState;
         },
       });
-      const history = createFakeHistory();
+      const history = createFakeHistory<UiState>();
       const router = createFakeRouter({
         onUpdate(fn) {
           history.subscribe(state => {
-            fn(state as UiState);
+            fn(state);
           });
         },
         write: jest.fn(state => {

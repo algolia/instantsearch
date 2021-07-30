@@ -161,7 +161,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   }
 }
 
-export default function<TRouteState = UiState>({
+export default function historyRouter<TRouteState = UiState>({
   createURL = ({ qsModule, routeState, location }) => {
     const { protocol, hostname, port = '', pathname, hash } = location;
     const queryString = qsModule.stringify(routeState);
