@@ -68,7 +68,7 @@ export type PaginationWidgetDescription = {
   };
 };
 
-type PaginationConnector = Connector<
+export type PaginationConnector = Connector<
   PaginationWidgetDescription,
   PaginationConnectorParams
 >;
