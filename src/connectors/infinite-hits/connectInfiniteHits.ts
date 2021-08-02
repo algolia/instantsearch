@@ -2,6 +2,7 @@ import {
   AlgoliaSearchHelper as Helper,
   PlainSearchParameters,
   SearchParameters,
+  SearchResults,
 } from 'algoliasearch-helper';
 import {
   Hits,
@@ -112,6 +113,16 @@ export type InfiniteHitsRenderState = {
    * Hits for the current page
    */
   currentPageHits: Hits;
+
+  /**
+   * Hits for current and cached pages
+   */
+  hits: Hits;
+
+  /**
+   * The response from the Algolia API.
+   */
+  results?: SearchResults<Hit>;
 };
 
 const withUsage = createDocumentationMessageGenerator({
