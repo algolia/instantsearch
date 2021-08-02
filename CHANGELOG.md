@@ -1,3 +1,12 @@
+## [6.12.1](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.12.1) (2021-08-02)
+
+
+### Bug Fixes
+
+* **server side rendering:** return a value from mock currentRefinement/metadata ([#3078](https://github.com/algolia/react-instantsearch/issues/3078)) ([09f802b](https://github.com/algolia/react-instantsearch/commit/09f802b))
+
+
+
 # [6.12.0](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.12.0) (2021-07-06)
 
 
