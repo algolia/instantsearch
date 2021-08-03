@@ -1,3 +1,12 @@
+## [4.25.3](https://github.com/algolia/instantsearch.js/compare/v4.25.2...v4.25.3) (2021-08-03)
+
+
+### Bug Fixes
+
+* **types:** fixing hits and results types in connectHits and connectInfiniteHits ([#4820](https://github.com/algolia/instantsearch.js/issues/4820)) ([2bf987e](https://github.com/algolia/instantsearch.js/commit/2bf987e8b2728a8e65a88a49d46eadf6c0172660)), closes [/github.com/algolia/instantsearch.js/blob/21b6c53d4b1a3f3dd3a2375a5cfe0a31bef6ded6/src/types/results.ts#L60-L63](https://github.com//github.com/algolia/instantsearch.js/blob/21b6c53d4b1a3f3dd3a2375a5cfe0a31bef6ded6/src/types/results.ts/issues/L60-L63) [/github.com/algolia/instantsearch.js/blob/21b6c53d4b1a3f3dd3a2375a5cfe0a31bef6ded6/src/connectors/hits/connectHits.ts#L158](https://github.com//github.com/algolia/instantsearch.js/blob/21b6c53d4b1a3f3dd3a2375a5cfe0a31bef6ded6/src/connectors/hits/connectHits.ts/issues/L158) [/github.com/algolia/instantsearch.js/blob/master/src/connectors/infinite-hits/connectInfiniteHits.ts#L331-L342](https://github.com//github.com/algolia/instantsearch.js/blob/master/src/connectors/infinite-hits/connectInfiniteHits.ts/issues/L331-L342)
+
+
+
 ## [4.25.2](https://github.com/algolia/instantsearch.js/compare/v4.25.1...v4.25.2) (2021-07-20)
 
 
