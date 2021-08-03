@@ -1,3 +1,12 @@
+## [4.25.3](https://github.com/algolia/instantsearch.js/compare/v4.25.2...v4.25.3) (2021-08-03)
+
+
+### Bug Fixes
+
+* **types:** fix hits and results types in connectHits and connectInfiniteHits ([#4820](https://github.com/algolia/instantsearch.js/issues/4820)) ([2bf987e](https://github.com/algolia/instantsearch.js/commit/2bf987e8b2728a8e65a88a49d46eadf6c0172660))
+
+
+
 ## [4.25.2](https://github.com/algolia/instantsearch.js/compare/v4.25.1...v4.25.2) (2021-07-20)
 
 
