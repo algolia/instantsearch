@@ -1,10 +1,5 @@
 import noop from './noop';
 
-type Deprecate<TCallback = (...args: any[]) => any> = (
-  fn: TCallback,
-  message: string
-) => TCallback;
-
 type Warn = (message: string) => void;
 
 type Warning = {
@@ -15,7 +10,12 @@ type Warning = {
 /**
  * Logs a warning when this function is called, in development environment only.
  */
-let deprecate: Deprecate = fn => fn;
+let deprecate = <TCallback extends (...args: any[]) => any>(
+  fn: TCallback,
+  // @ts-ignore this parameter is used in the __DEV__ branch
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  message: string
+) => fn;
 
 /**
  * Logs a warning
@@ -46,7 +46,7 @@ if (__DEV__) {
       }
 
       return fn(...args);
-    };
+    } as typeof fn;
   };
 
   warning = ((condition, message) => {
