@@ -2509,7 +2509,6 @@ describe('initialUiState', () => {
           // This is a UI parameter that is not supported by default but that
           // can be added when using custom widgets. Having it in `initialUiState`
           // makes sure that it doesn't throw if it happens.
-          // @ts-expect-error
           customWidget: {
             query: 'Custom query',
           },
