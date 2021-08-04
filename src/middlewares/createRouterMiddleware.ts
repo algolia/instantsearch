@@ -5,31 +5,48 @@ import {
   StateMapping,
   UiState,
   InternalMiddleware,
-  RouteState,
+  CreateURL,
 } from '../types';
 import { isEqual } from '../lib/utils';
 
-export type RouterProps = {
-  router?: Router;
-  stateMapping?: StateMapping;
+export type RouterProps<
+  TUiState extends UiState = UiState,
+  TRouteState = TUiState
+> = {
+  router?: Router<TRouteState>;
+  // ideally stateMapping should be required if TRouteState is given,
+  // but there's no way to check if a generic is provided or the default value.
+  stateMapping?: StateMapping<TUiState, TRouteState>;
 };
 
-export type RoutingManager = (props?: RouterProps) => InternalMiddleware;
-
-export const createRouterMiddleware: RoutingManager = (props = {}) => {
+export const createRouterMiddleware = <
+  TUiState extends UiState = UiState,
+  TRouteState = TUiState
+>(
+  props: RouterProps<TUiState, TRouteState> = {}
+): InternalMiddleware<TUiState> => {
   const {
-    router = historyRouter(),
-    stateMapping = simpleStateMapping(),
+    router = historyRouter<TRouteState>(),
+    // We have to cast simpleStateMapping as a StateMapping<TUiState, TRouteState>.
+    // this is needed because simpleStateMapping is StateMapping<TUiState, TUiState>.
+    // While it's only used when UiState and RouteState are the same, unfortunately
+    // TypeScript still considers them separate types.
+    stateMapping = (simpleStateMapping<TUiState>() as unknown) as StateMapping<
+      TUiState,
+      TRouteState
+    >,
   } = props;
 
   return ({ instantSearchInstance }) => {
-    function topLevelCreateURL(nextState: UiState) {
-      const uiState: UiState = Object.keys(nextState).reduce(
+    function topLevelCreateURL(nextState: TUiState) {
+      const uiState: TUiState = Object.keys(nextState).reduce(
         (acc, indexId) => ({
           ...acc,
           [indexId]: nextState[indexId],
         }),
-        instantSearchInstance.mainIndex.getWidgetUiState({})
+        instantSearchInstance.mainIndex.getWidgetUiState<TUiState>(
+          {} as TUiState
+        )
       );
 
       const route = stateMapping.stateToRoute(uiState);
@@ -37,13 +54,15 @@ export const createRouterMiddleware: RoutingManager = (props = {}) => {
       return router.createURL(route);
     }
 
-    instantSearchInstance._createURL = topLevelCreateURL;
+    // casting to UiState here to keep createURL unaware of custom UiState
+    // (as long as it's an object, it's ok)
+    instantSearchInstance._createURL = topLevelCreateURL as CreateURL<UiState>;
     instantSearchInstance._initialUiState = {
       ...instantSearchInstance._initialUiState,
       ...stateMapping.routeToState(router.read()),
     };
 
-    let lastRouteState: RouteState | undefined = undefined;
+    let lastRouteState: TRouteState | undefined = undefined;
 
     return {
       onStateChange({ uiState }) {

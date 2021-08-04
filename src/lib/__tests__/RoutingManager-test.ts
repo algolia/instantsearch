@@ -4,7 +4,13 @@ import qs from 'qs';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
-import { Router, Widget, UiState, StateMapping, RouteState } from '../../types';
+import {
+  Router,
+  Widget,
+  UiState,
+  StateMapping,
+  IndexUiState,
+} from '../../types';
 import historyRouter from '../routers/history';
 import instantsearch from '../main';
 
@@ -35,32 +41,30 @@ const createFakeStateMapping = (
   ...args,
 });
 
-type Entry = Record<string, unknown>;
-
-type HistoryState = {
+type HistoryState<TEntry> = {
   index: number;
-  entries: Entry[];
-  listeners: Array<(value: Entry) => void>;
+  entries: TEntry[];
+  listeners: Array<(value: TEntry) => void>;
 };
 
-const createFakeHistory = (
+const createFakeHistory = <TEntry = Record<string, unknown>>(
   {
     index = -1,
     entries = [],
     listeners = [],
-  }: HistoryState = {} as HistoryState
+  }: HistoryState<TEntry> = {} as HistoryState<TEntry>
 ) => {
-  const state: HistoryState = {
+  const state: HistoryState<TEntry> = {
     index,
     entries,
     listeners,
   };
 
   return {
-    subscribe(listener: (entry: Entry) => void) {
+    subscribe(listener: (entry: TEntry) => void) {
       state.listeners.push(listener);
     },
-    push(value: Entry) {
+    push(value: TEntry) {
       state.entries.push(value);
       state.index++;
     },
@@ -379,7 +383,7 @@ describe('RoutingManager', () => {
     test('should keep the UI state up to date on router.update', async () => {
       const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
-      const history = createFakeHistory();
+      const history = createFakeHistory<UiState>();
       const router = createFakeRouter({
         onUpdate(fn) {
           history.subscribe(state => {
@@ -471,7 +475,7 @@ describe('RoutingManager', () => {
           return uiState;
         },
       });
-      const history = createFakeHistory();
+      const history = createFakeHistory<UiState>();
       const router = createFakeRouter({
         onUpdate(fn) {
           history.subscribe(state => {
@@ -549,10 +553,10 @@ describe('RoutingManager', () => {
       const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = historyRouter({
-        windowTitle(routeState: RouteState) {
+        windowTitle(routeState) {
           return `Searching for "${routeState.query}"`;
         },
-      } as any);
+      });
 
       const search = instantsearch({
         indexName: 'instant_search',
@@ -596,7 +600,7 @@ describe('RoutingManager', () => {
         url: createFakeUrlWithRefinements({ length: 22 }),
       });
 
-      const router = historyRouter();
+      const router = historyRouter<IndexUiState>();
       // @ts-expect-error: This method is considered private but we still use it
       // in the test after the TypeScript migration.
       // In a next refactor, we can consider changing this test implementation.
@@ -605,7 +609,7 @@ describe('RoutingManager', () => {
         location: window.location,
       });
 
-      expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
+      expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
       expect(parsedUrl).toMatchInlineSnapshot(`
         Object {
           "refinementList": Object {
@@ -643,7 +647,7 @@ describe('RoutingManager', () => {
         url: createFakeUrlWithRefinements({ length: 100 }),
       });
 
-      const router = historyRouter();
+      const router = historyRouter<IndexUiState>();
       // @ts-expect-error: This method is considered private but we still use it
       // in the test after the TypeScript migration.
       // In a next refactor, we can consider changing this test implementation.
@@ -652,13 +656,13 @@ describe('RoutingManager', () => {
         location: window.location,
       });
 
-      expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
+      expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
     });
   });
 
   describe('createURL', () => {
     it('returns an URL for a `routeState` with refinements', () => {
-      const router = historyRouter();
+      const router = historyRouter<IndexUiState>();
       const actual = router.createURL({
         query: 'iPhone',
         page: 5,

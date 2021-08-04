@@ -1,3 +1,4 @@
+import { UiState } from '../../../types';
 import simpleStateMapping from '../simple';
 
 describe('simpleStateMapping', () => {
@@ -119,7 +120,9 @@ describe('simpleStateMapping', () => {
     });
 
     it('passes non-UiState through', () => {
-      const stateMapping = simpleStateMapping();
+      const stateMapping = simpleStateMapping<
+        UiState & { [indexId: string]: { spy: string[] } }
+      >();
       const actual = stateMapping.routeToState({
         indexName: {
           query: 'zamboni',
