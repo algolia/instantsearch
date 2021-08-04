@@ -4,18 +4,16 @@ import { withHits } from '../.storybook/decorators';
 storiesOf('Basics/DynamicWidgets', module).add(
   'default',
   withHits(({ search, container: rootContainer, instantsearch }) => {
+    const dynamicWidgetsContainer = document.createElement('div');
+    const disclaimer = document.createTextNode(
+      'try the queries: "dog" or "lego"'
+    );
+    rootContainer.appendChild(disclaimer);
+    rootContainer.appendChild(dynamicWidgetsContainer);
+
     search.addWidgets([
       instantsearch.widgets.EXPERIMENTAL_dynamicWidgets({
-        transformItems(_attributes, { results }) {
-          if (results._state.query === 'dog') {
-            return ['categories'];
-          }
-          if (results._state.query === 'lego') {
-            return ['categories', 'brand'];
-          }
-          return ['brand', 'hierarchicalCategories.lvl0', 'categories'];
-        },
-        container: rootContainer,
+        container: dynamicWidgetsContainer,
         widgets: [
           container =>
             instantsearch.widgets.menu({ container, attribute: 'categories' }),
