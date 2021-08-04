@@ -112,7 +112,7 @@ export type InstantSearchOptions<
    * for the first search. To unconditionally pass additional parameters to the
    * Algolia API, take a look at the `configure` widget.
    */
-  initialUiState?: UiState;
+  initialUiState?: TUiState;
 
   /**
    * Time before a search is considered stalled. The default is 200ms

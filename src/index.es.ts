@@ -1,4 +1,4 @@
-import { InstantSearchOptions, UiState } from './types';
+import { Expand, InstantSearchOptions, UiState } from './types';
 import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 import {
@@ -15,7 +15,7 @@ const instantsearch = <
   TUiState = Record<string, unknown>,
   TRouteState = TUiState
 >(
-  options: InstantSearchOptions<UiState & TUiState, TRouteState>
+  options: InstantSearchOptions<Expand<UiState & TUiState>, TRouteState>
 ) => new InstantSearch(options);
 
 instantsearch.version = version;
