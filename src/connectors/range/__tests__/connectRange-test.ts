@@ -12,7 +12,7 @@ import {
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import instantsearch from '../../../lib/main';
+import instantsearch from '../../..';
 
 function createFacetStatsResults({
   helper,

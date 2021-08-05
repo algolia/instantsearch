@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import algoliasearch from 'algoliasearch/lite';
-import instantsearch from '../../src/index';
+import instantsearch from '../../src';
 import defaultPlayground from '../playgrounds/default';
 import { configure } from '../../src/widgets';
 import { InstantSearch, InstantSearchOptions } from '../../src/types';

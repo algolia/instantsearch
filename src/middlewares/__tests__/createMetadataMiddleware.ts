@@ -4,7 +4,7 @@ import algoliasearchV3 from 'algoliasearch-v3';
 import { createMetadataMiddleware } from '..';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { wait } from '../../../test/utils/wait';
-import instantsearch from '../../lib/main';
+import instantsearch from '../..';
 import { configure, hits, index, pagination, searchBox } from '../../widgets';
 import { isMetadataEnabled } from '../createMetadataMiddleware';
 

@@ -1,5 +1,5 @@
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
-import instantsearch from '../../../lib/main';
+import instantsearch from '../../..';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { AlgoliaHit } from '../../../types';
 import { noop } from '../../../lib/utils';
