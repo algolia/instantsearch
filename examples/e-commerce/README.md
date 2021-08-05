@@ -11,7 +11,7 @@ npm install
 npm start
 ```
 
-Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+Alternatively, you may use [Yarn](https://yarnpkg.com/):
 
 ```sh
 yarn
