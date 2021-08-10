@@ -1,3 +1,18 @@
+# [4.26.0](https://github.com/algolia/instantsearch.js/compare/v4.25.3...v4.26.0) (2021-08-10)
+
+
+### Bug Fixes
+
+* **ts:** expand UiState mix ([fb0088a](https://github.com/algolia/instantsearch.js/commit/fb0088a864ed42b1efcc9f366fcd536a9dcdd257))
+
+
+### Features
+
+* **ts:** allow custom ui state and route state in routing ([#4816](https://github.com/algolia/instantsearch.js/issues/4816)) ([5f8ba5d](https://github.com/algolia/instantsearch.js/commit/5f8ba5ddcf5e32fd3cecf39ea667d8266dab35f8))
+* **types:** allow typed access to properties added to entry ([#4814](https://github.com/algolia/instantsearch.js/issues/4814)) ([9000f16](https://github.com/algolia/instantsearch.js/commit/9000f16c3e0ff53eda4ca21281a87d8ff9b9154d))
+
+
+
 ## [4.25.3](https://github.com/algolia/instantsearch.js/compare/v4.25.2...v4.25.3) (2021-08-03)
 
 
