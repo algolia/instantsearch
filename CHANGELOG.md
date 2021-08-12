@@ -1,11 +1,6 @@
 # [4.26.0](https://github.com/algolia/instantsearch.js/compare/v4.25.3...v4.26.0) (2021-08-10)
 
 
-### Bug Fixes
-
-* **ts:** expand UiState mix ([fb0088a](https://github.com/algolia/instantsearch.js/commit/fb0088a864ed42b1efcc9f366fcd536a9dcdd257))
-
-
 ### Features
 
 * **ts:** allow custom ui state and route state in routing ([#4816](https://github.com/algolia/instantsearch.js/issues/4816)) ([5f8ba5d](https://github.com/algolia/instantsearch.js/commit/5f8ba5ddcf5e32fd3cecf39ea667d8266dab35f8))
