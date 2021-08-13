@@ -1,6 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
 
+  "projectFolder": "../../",
+  "mainEntryPointFilePath": "<projectFolder>/es/index.d.ts",
+  "dtsRollup": {
+    "enabled": false
+  },
+
   "apiReport": {
     "enabled": false
   },
@@ -40,9 +46,5 @@
         "logLevel": "none"
       }
     }
-  },
-  "mainEntryPointFilePath": "es/index.d.ts",
-  "dtsRollup": {
-    "enabled": false
   }
 }
