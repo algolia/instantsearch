@@ -2,7 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
 
   "projectFolder": "../../",
+
   "mainEntryPointFilePath": "<projectFolder>/es/index.d.ts",
+
   "dtsRollup": {
     "enabled": false
   },
@@ -30,10 +32,6 @@
       "default": {
         "logLevel": "warning",
         "addToApiReportFile": true
-      },
-
-      "ae-internal-missing-underscore": {
-        "logLevel": "none"
       },
 
       "ae-missing-release-tag": {

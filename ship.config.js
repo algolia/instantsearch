@@ -22,14 +22,6 @@ module.exports = {
   pullRequestTeamReviewers: ['instantsearch-for-websites'],
   buildCommand: ({ version }) =>
     `NODE_ENV=production VERSION=${version} yarn build`,
-  afterPublish: ({ exec, version, releaseTag }) => {
-    if (releaseTag === 'latest' && version.startsWith('4.')) {
-      exec('./scripts/release/build-experimental-typescript.js');
-      exec(
-        `yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript`
-      );
-    }
-  },
   slack: {
     // disable slack notification for `prepared` lifecycle.
     // Ship.js will send slack message only for `releaseSuccess`.
