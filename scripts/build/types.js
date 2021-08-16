@@ -2,13 +2,14 @@
 
 /* eslint-disable import/no-commonjs, no-console */
 
-const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
 
 console.log(`Compiling definitions...`);
 
-shell.exec(`tsc -p tsconfig.declaration.json --outDir es/`);
+shell.exec(
+  `tsc -p ${path.join(__dirname, 'tsconfig.declaration.json')} --outDir es/`
+);
 
 // replace block ts-ignore comments with line ones to support TS < 3.9
 shell.sed(
@@ -18,36 +19,19 @@ shell.sed(
   path.join(__dirname, '../../es/**/*.d.ts')
 );
 
+// expose only the es entry point, not the umd entry point
+shell.mv(
+  path.join(__dirname, '../../es/index.es.d.ts'),
+  path.join(__dirname, '../../es/index.d.ts')
+);
+
 console.log();
 console.log(`Validating definitions...`);
 
 const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 
-const publicExports = [
-  // 'components' -> does not contains index.d.ts yet
-  'connectors',
-  // 'lib', -> Api extractor "import * as ___ from ___;" is not supported yet for local files
-  // 'middleware',
-  'helpers',
-  'types',
-  'widgets', //  -> It does not compile as WidgetFactory is not imported in all files
-  'lib/routers',
-];
-
-fs.writeFileSync(
-  path.join(__dirname, '../../', 'es/index.d.ts'),
-  [
-    `export { default } from './index.es';`,
-    ...publicExports
-      .map(publicExport => `./${publicExport}`)
-      .map(exportedFile => {
-        return `export * from '${exportedFile}';`;
-      }),
-  ].join('\r\n')
-);
-
 const extractorConfig = ExtractorConfig.loadFileAndPrepare(
-  path.resolve(path.join(__dirname, '../../', 'api-extractor.json'))
+  path.resolve(path.join(__dirname, 'api-extractor.json'))
 );
 
 const result = Extractor.invoke(extractorConfig, {
