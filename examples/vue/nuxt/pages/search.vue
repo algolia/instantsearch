@@ -64,6 +64,16 @@ import {
   createServerRootMixin,
 } from 'vue-instantsearch'; // eslint-disable-line import/no-unresolved
 import algoliasearch from 'algoliasearch/lite';
+import _renderToString from 'vue-server-renderer/basic';
+
+function renderToString(app) {
+  return new Promise((resolve, reject) => {
+    _renderToString(app, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+}
 
 const searchClient = algoliasearch(
   'latency',
@@ -73,6 +83,7 @@ const searchClient = algoliasearch(
 export default {
   mixins: [
     createServerRootMixin({
+      renderToString,
       searchClient,
       indexName: 'instant_search',
       initialUiState: {

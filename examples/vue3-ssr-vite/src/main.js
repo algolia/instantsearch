@@ -2,6 +2,7 @@ import { createServerRootMixin } from 'vue-instantsearch/dist/vue3/es';
 import algoliasearch from 'algoliasearch/lite';
 import { createSSRApp, h } from 'vue';
 import qs from 'qs';
+import { renderToString } from '@vue/server-renderer';
 
 import App from './App.vue';
 import { createRouter } from './router';
@@ -22,6 +23,7 @@ export function createApp({ context } = {}) {
   const app = createSSRApp({
     mixins: [
       createServerRootMixin({
+        renderToString,
         searchClient,
         indexName: 'instant_search',
         routing: {

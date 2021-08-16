@@ -9,13 +9,7 @@ import SearchBox from '../../components/SearchBox.vue';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
-import {
-  isVue3,
-  isVue2,
-  Vue2,
-  renderCompat,
-  renderToString,
-} from '../vue-compat';
+import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 import {
   SearchResults,
   SearchParameters,
@@ -23,6 +17,19 @@ import {
 } from 'algoliasearch-helper';
 
 jest.unmock('instantsearch.js/es');
+
+function renderToString(app) {
+  if (isVue3) {
+    return require('@vue/server-renderer').renderToString(app);
+  } else {
+    return new Promise((resolve, reject) => {
+      require('vue-server-renderer/basic')(app, (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    });
+  }
+}
 
 const forceIsServerMixin = {
   beforeCreate() {
@@ -45,6 +52,7 @@ describe('createServerRootMixin', () => {
         createSSRApp({
           mixins: [
             createServerRootMixin({
+              renderToString,
               searchClient: undefined,
               indexName: 'lol',
             }),
@@ -60,6 +68,7 @@ describe('createServerRootMixin', () => {
         createSSRApp({
           mixins: [
             createServerRootMixin({
+              renderToString,
               searchClient: createFakeClient(),
               indexName: undefined,
             }),
@@ -70,10 +79,26 @@ describe('createServerRootMixin', () => {
       );
     });
 
+    it('requires renderToString', () => {
+      expect(() =>
+        createSSRApp({
+          mixins: [
+            createServerRootMixin({
+              searchClient: createFakeClient(),
+              indexName: 'yup',
+            }),
+          ],
+        })
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"createServerRootMixin requires \`renderToString: (app) => Promise<string>\` in the first argument"`
+      );
+    });
+
     it('creates an instantsearch instance on "data"', () => {
       const App = {
         mixins: [
           createServerRootMixin({
+            renderToString,
             searchClient: createFakeClient(),
             indexName: 'lol',
           }),
@@ -93,6 +118,7 @@ describe('createServerRootMixin', () => {
       const App = {
         mixins: [
           createServerRootMixin({
+            renderToString,
             searchClient: createFakeClient(),
             indexName: 'myIndexName',
           }),
@@ -138,6 +164,7 @@ describe('createServerRootMixin', () => {
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
+            renderToString,
             searchClient: createFakeClient(),
             indexName: 'hello',
           }),
@@ -160,6 +187,7 @@ describe('createServerRootMixin', () => {
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
+            renderToString,
             searchClient,
             indexName: 'hello',
           }),
@@ -233,6 +261,7 @@ Array [
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
+            renderToString,
             searchClient,
             indexName: 'hello',
           }),
@@ -310,6 +339,7 @@ Array [
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
+            renderToString,
             searchClient,
             indexName: 'hello',
           }),
@@ -360,6 +390,7 @@ Array [
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
+            renderToString,
             searchClient,
             indexName: 'hello',
           }),
@@ -409,6 +440,7 @@ Array [
           mixins: [
             forceIsServerMixin,
             createServerRootMixin({
+              renderToString,
               searchClient,
               indexName: 'hello',
             }),
@@ -455,6 +487,7 @@ Array [
           mixins: [
             forceIsServerMixin,
             createServerRootMixin({
+              renderToString,
               searchClient,
               indexName: 'hello',
             }),
@@ -508,6 +541,7 @@ Array [
           mixins: [
             forceIsServerMixin,
             createServerRootMixin({
+              renderToString,
               searchClient,
               indexName: 'hello',
             }),
@@ -566,6 +600,7 @@ Array [
           mixins: [
             forceIsServerMixin,
             createServerRootMixin({
+              renderToString,
               searchClient,
               indexName: 'hello',
             }),
@@ -603,6 +638,7 @@ Array [
       const app = {
         mixins: [
           createServerRootMixin({
+            renderToString,
             searchClient: createFakeClient(),
             indexName: 'hello',
           }),
@@ -649,6 +685,7 @@ Array [
       const app = {
         mixins: [
           createServerRootMixin({
+            renderToString,
             searchClient: createFakeClient(),
             indexName: 'movies',
           }),
@@ -687,6 +724,7 @@ Array [
       const app = {
         mixins: [
           createServerRootMixin({
+            renderToString,
             searchClient: createFakeClient(),
             indexName: 'hello',
           }),
@@ -725,6 +763,7 @@ Array [
       const app = {
         mixins: [
           createServerRootMixin({
+            renderToString,
             searchClient: createFakeClient(),
             indexName: 'hello',
           }),
@@ -764,6 +803,7 @@ Array [
       mount({
         mixins: [
           createServerRootMixin({
+            renderToString,
             searchClient: createFakeClient(),
             indexName: 'lol',
           }),
@@ -835,6 +875,7 @@ Object {
         mount({
           mixins: [
             createServerRootMixin({
+              renderToString,
               searchClient: createFakeClient(),
               indexName: 'lol',
             }),
@@ -868,6 +909,7 @@ Object {
         mount({
           mixins: [
             createServerRootMixin({
+              renderToString,
               searchClient: createFakeClient(),
               indexName: 'lol',
             }),

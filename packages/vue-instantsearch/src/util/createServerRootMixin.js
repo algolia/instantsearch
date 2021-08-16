@@ -1,12 +1,6 @@
 import instantsearch from 'instantsearch.js/es';
 import algoliaHelper from 'algoliasearch-helper';
-import {
-  isVue3,
-  isVue2,
-  Vue2,
-  createSSRApp,
-  renderToString,
-} from '../util/vue-compat';
+import { isVue3, isVue2, Vue2, createSSRApp } from '../util/vue-compat';
 const { SearchResults, SearchParameters } = algoliaHelper;
 import { warn } from './warn';
 
@@ -86,7 +80,8 @@ function augmentInstantSearch(
   instantSearchOptions,
   searchClient,
   indexName,
-  cloneComponent
+  cloneComponent,
+  renderToString
 ) {
   /* eslint-disable no-param-reassign */
 
@@ -263,6 +258,7 @@ export function createServerRootMixin(instantSearchOptions = {}) {
   const {
     searchClient,
     indexName,
+    renderToString,
     $cloneComponent = defaultCloneComponent,
   } = instantSearchOptions;
 
@@ -272,11 +268,18 @@ export function createServerRootMixin(instantSearchOptions = {}) {
     );
   }
 
+  if (!renderToString) {
+    throw new Error(
+      'createServerRootMixin requires `renderToString: (app) => Promise<string>` in the first argument'
+    );
+  }
+
   const search = augmentInstantSearch(
     instantSearchOptions,
     searchClient,
     indexName,
-    $cloneComponent
+    $cloneComponent,
+    renderToString
   );
 
   // put this in the user's root Vue instance
