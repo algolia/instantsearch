@@ -2185,7 +2185,7 @@
     jest-diff "^26.0.0"
     pretty-format "^26.0.0"
 
-"@types/jsdom@16.2.13":
+"@types/jsdom@^16.2.13":
   version "16.2.13"
   resolved "https://registry.yarnpkg.com/@types/jsdom/-/jsdom-16.2.13.tgz#126c8b7441b159d6234610a48de77b6066f1823f"
   integrity sha512-8JQCjdeAidptSsOcRWk2iTm9wCcwn9l+kRG6k5bzUacrnm1ezV4forq0kWjUih/tumAeoG+OspOvQEbbRucBTw==
@@ -2286,7 +2286,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/scriptjs@0.0.2":
+"@types/scriptjs@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@types/scriptjs/-/scriptjs-0.0.2.tgz#09a2287221a7a341fc6b95b005e4bfb2a5403538"
   integrity sha1-CaIociGno0H8a5WwBeS/sqVANTg=
