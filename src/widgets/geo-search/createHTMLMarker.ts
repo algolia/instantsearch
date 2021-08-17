@@ -97,7 +97,7 @@ const createHTMLMarker = (
       if (this.element) {
         this.element.parentNode!.removeChild(this.element);
 
-        Object.keys(this.listeners).forEach(eventName => {
+        Object.keys(this.listeners).forEach((eventName) => {
           this.element.removeEventListener(
             eventName,
             this.listeners[eventName]

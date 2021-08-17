@@ -59,9 +59,8 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(renderFn)(
-          widgetParams
-        );
+        const dynamicWidgets =
+          EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
 
         const parent = index({ indexName: 'test' }).addWidgets([
           dynamicWidgets,
@@ -136,9 +135,8 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(renderFn)(
-          widgetParams
-        );
+        const dynamicWidgets =
+          EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
 
         dynamicWidgets.render!(createRenderOptions());
 
@@ -165,9 +163,8 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(renderFn)(
-          widgetParams
-        );
+        const dynamicWidgets =
+          EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
 
         dynamicWidgets.render!(createRenderOptions());
 
@@ -634,9 +631,8 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(renderFn)(
-        widgetParams
-      );
+      const dynamicWidgets =
+        EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
 
       const existingRenderState = {};
 
@@ -661,9 +657,8 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(renderFn)(
-        widgetParams
-      );
+      const dynamicWidgets =
+        EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
 
       const existingRenderState = {};
 

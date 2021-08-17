@@ -538,8 +538,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       const customCurrentRefinements = connectCurrentRefinements(rendering);
 
       const widget = customCurrentRefinements({
-        transformItems: items =>
-          items.map(item => ({
+        transformItems: (items) =>
+          items.map((item) => ({
             ...item,
             transformed: true,
           })),

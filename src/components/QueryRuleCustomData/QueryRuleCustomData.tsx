@@ -8,13 +8,11 @@ import {
 } from '../../widgets/query-rule-custom-data/query-rule-custom-data';
 import Template from '../Template/Template';
 
-export type QueryRuleCustomDataComponentCSSClasses = ComponentCSSClasses<
-  QueryRuleCustomDataCSSClasses
->;
+export type QueryRuleCustomDataComponentCSSClasses =
+  ComponentCSSClasses<QueryRuleCustomDataCSSClasses>;
 
-export type QueryRuleCustomDataComponentTemplates = Required<
-  QueryRuleCustomDataTemplates
->;
+export type QueryRuleCustomDataComponentTemplates =
+  Required<QueryRuleCustomDataTemplates>;
 
 export type QueryRuleCustomDataProps = {
   cssClasses: QueryRuleCustomDataComponentCSSClasses;

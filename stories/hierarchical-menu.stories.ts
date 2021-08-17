@@ -144,8 +144,8 @@ storiesOf('Refinements/HierarchicalMenu', module)
             'hierarchicalCategories.lvl1',
             'hierarchicalCategories.lvl2',
           ],
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               label: `${item.label} (transformed)`,
             })),
@@ -156,7 +156,7 @@ storiesOf('Refinements/HierarchicalMenu', module)
   .add(
     'with add/remove',
     withHits(({ search, container, instantsearch }) => {
-      withLifecycle(search, container, node =>
+      withLifecycle(search, container, (node) =>
         instantsearch.widgets.hierarchicalMenu({
           container: node,
           attributes: [

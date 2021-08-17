@@ -26,7 +26,7 @@ describe('Pagination', () => {
       disabledItem: 'disabledItem',
       link: 'link',
     },
-    createURL: args => JSON.stringify(args),
+    createURL: (args) => JSON.stringify(args),
     templates: { first: '', last: '', next: '', previous: '' },
     currentPage: 0,
     pages: pager.pages(),
@@ -83,7 +83,7 @@ describe('Pagination', () => {
     const preventDefault = jest.fn();
     const component = new Pagination({ ...defaultProps, ...props });
     const modifiers = ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'] as const;
-    modifiers.forEach(e => {
+    modifiers.forEach((e) => {
       const event: Partial<KeyboardEvent> = { preventDefault };
       (event as any)[e] = true;
       // @ts-expect-error

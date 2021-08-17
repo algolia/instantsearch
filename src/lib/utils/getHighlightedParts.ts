@@ -9,7 +9,7 @@ export default function getHighlightedParts(highlightedValue: string) {
     ? []
     : [{ value: firstValue, isHighlighted: false }];
 
-  splitByPreTag.forEach(split => {
+  splitByPreTag.forEach((split) => {
     const splitByPostTag = split.split(highlightPostTag);
 
     elements.push({

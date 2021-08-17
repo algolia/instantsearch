@@ -238,13 +238,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           expect(widget.init).toHaveBeenCalledTimes(0);
         });
 
         instance.addWidgets(widgets);
 
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           expect(widget.init).toHaveBeenCalledTimes(1);
           expect(widget.init).toHaveBeenCalledWith({
             instantSearchInstance,
@@ -288,13 +288,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           expect(widget.init).toHaveBeenCalledTimes(0);
         });
 
         instance.addWidgets(widgets);
 
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           expect(widget.init).toHaveBeenCalledTimes(1);
           expect(widget.init).toHaveBeenCalledWith({
             instantSearchInstance,
@@ -563,13 +563,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         instance.init(createInitOptions({ parent: null }));
 
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           expect(widget.dispose).toHaveBeenCalledTimes(0);
         });
 
         instance.removeWidgets(widgets);
 
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           expect(widget.dispose).toHaveBeenCalledTimes(1);
           expect(widget.dispose).toHaveBeenCalledWith({
             helper: instance.getHelper(),
@@ -1225,7 +1225,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       instance.addWidgets(widgets);
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.init).toHaveBeenCalledTimes(0);
       });
 
@@ -1236,7 +1236,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.init).toHaveBeenCalledTimes(1);
         expect(widget.init).toHaveBeenCalledWith({
           instantSearchInstance,
@@ -1344,10 +1344,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         );
 
         // Setting a query is considered as a change
-        level1
-          .getHelper()!
-          .setQuery('Hey')
-          .search();
+        level1.getHelper()!.setQuery('Hey').search();
 
         expect(searchClient.search).toHaveBeenCalledWith(
           expect.arrayContaining([
@@ -1452,10 +1449,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         });
 
         // Setting a query is considered as a change
-        level0
-          .getHelper()!
-          .setQuery('Hey')
-          .search();
+        level0.getHelper()!.setQuery('Hey').search();
 
         expect(level0.getWidgetUiState({})).toEqual({
           level0IndexName: {
@@ -1560,10 +1554,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        level1
-          .getHelper()!
-          .setPage(4)
-          .search();
+        level1.getHelper()!.setPage(4).search();
 
         expect(searchClient.search).toHaveBeenCalledWith(
           expect.arrayContaining([
@@ -1678,10 +1669,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        level1
-          .getHelper()!
-          .setQuery('Hey')
-          .search();
+        level1.getHelper()!.setQuery('Hey').search();
 
         expect(searchClient.search).toHaveBeenCalledWith(
           expect.arrayContaining([
@@ -1895,7 +1883,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           .setQueryParameter('query', 'Apple')
           .setQueryParameter('page', 5);
 
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           expect(widget.getWidgetUiState).toHaveBeenCalledTimes(2); // 2 changes
         });
 
@@ -2169,7 +2157,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         }),
       });
       const pagination = createPagination({
-        getRenderState: jest.fn(renderState => {
+        getRenderState: jest.fn((renderState) => {
           return {
             ...renderState,
             pagination: {
@@ -2285,7 +2273,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         }),
       });
       const pagination = createPagination({
-        getRenderState: jest.fn(renderState => {
+        getRenderState: jest.fn((renderState) => {
           return {
             ...renderState,
             pagination: {
@@ -2409,7 +2397,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       instance.addWidgets(widgets);
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
@@ -2427,7 +2415,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       await runAllMicroTasks();
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
@@ -2437,7 +2425,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(1);
         expect(widget.render).toHaveBeenCalledWith({
           instantSearchInstance,
@@ -2470,19 +2458,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       instance.addWidgets(widgets);
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
       instance.init(createInitOptions({ parent: null }));
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
       instance.render(createRenderOptions());
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
     });
@@ -2658,7 +2646,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.dispose).toHaveBeenCalledTimes(0);
       });
 
@@ -2672,7 +2660,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
 
-      widgets.forEach(widget => {
+      widgets.forEach((widget) => {
         expect(widget.dispose).toHaveBeenCalledTimes(1);
         expect(widget.dispose).toHaveBeenCalledWith({
           state: helper!.state,

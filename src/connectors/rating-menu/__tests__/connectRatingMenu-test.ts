@@ -100,9 +100,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const { items, widgetParams } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
+      const { items, widgetParams } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(items).toEqual([]);
       expect(widgetParams).toEqual({ attribute });
     }
@@ -131,9 +130,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const { items } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
+      const { items } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(items).toEqual([
         {
           count: 1000,

@@ -16,8 +16,8 @@ storiesOf('Results/Hits', module)
       search.addWidgets([
         instantsearch.widgets.hits({
           container,
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               name: `${item.name} (transformed)`,
             })),
@@ -50,8 +50,7 @@ storiesOf('Results/Hits', module)
         instantsearch.widgets.hits({
           container,
           templates: {
-            item:
-              '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+            item: '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
           },
         }),
       ]);
@@ -82,8 +81,7 @@ storiesOf('Results/Hits', module)
         instantsearch.widgets.hits({
           container,
           templates: {
-            item:
-              '{{#helpers.reverseHighlight}}{ "attribute": "name" }{{/helpers.reverseHighlight}}',
+            item: '{{#helpers.reverseHighlight}}{ "attribute": "name" }{{/helpers.reverseHighlight}}',
           },
         }),
       ]);
@@ -206,7 +204,7 @@ storiesOf('Results/Hits', module)
           instantsearch.widgets.hits({
             container,
             templates: {
-              item: item => `
+              item: (item) => `
           <h4>${item.name}</h4>
           <button
             ${insights('clickedObjectIDsAfterSearch', {

@@ -11,9 +11,8 @@ import {
 } from '../../widgets/pagination/pagination';
 import { ComponentCSSClasses } from '../../types';
 
-export type PaginationComponentCSSClasses = ComponentCSSClasses<
-  PaginationCSSClasses
->;
+export type PaginationComponentCSSClasses =
+  ComponentCSSClasses<PaginationCSSClasses>;
 
 export type PaginationComponentTemplates = Required<PaginationTemplates>;
 
@@ -143,7 +142,7 @@ class Pagination extends Component<PaginationProps> {
   };
 
   private pages = () => {
-    return this.props.pages!.map(pageNumber =>
+    return this.props.pages!.map((pageNumber) =>
       this.pageLink({
         ariaLabel: `${pageNumber + 1}`,
         additionalClassName: this.props.cssClasses.pageItem,

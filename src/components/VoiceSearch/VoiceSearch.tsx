@@ -10,9 +10,8 @@ import {
 import { VoiceListeningState } from '../../lib/voiceSearchHelper/types';
 import { ComponentCSSClasses } from '../../types';
 
-export type VoiceSearchComponentCSSClasses = ComponentCSSClasses<
-  VoiceSearchCSSClasses
->;
+export type VoiceSearchComponentCSSClasses =
+  ComponentCSSClasses<VoiceSearchCSSClasses>;
 
 export type VoiceSearchComponentTemplates = Required<VoiceSearchTemplates>;
 

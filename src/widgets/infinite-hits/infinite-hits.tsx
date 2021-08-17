@@ -137,65 +137,67 @@ export type InfiniteHitsWidget = WidgetFactory<
   InfiniteHitsWidgetParams
 >;
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-  showPrevious: hasShowPrevious,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: InfiniteHitsComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<InfiniteHitsComponentTemplates>;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    renderState,
+    templates,
+    showPrevious: hasShowPrevious,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: InfiniteHitsComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<InfiniteHitsComponentTemplates>;
+    };
+    templates: InfiniteHitsTemplates;
+    showPrevious?: boolean;
+  }): Renderer<InfiniteHitsRenderState, Partial<InfiniteHitsWidgetParams>> =>
+  (
+    {
+      hits,
+      results,
+      showMore,
+      showPrevious,
+      isFirstPage,
+      isLastPage,
+      instantSearchInstance,
+      insights,
+      bindEvent,
+    },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
+
+    render(
+      <InfiniteHitsWithInsightsListener
+        cssClasses={cssClasses}
+        hits={hits}
+        results={results}
+        hasShowPrevious={hasShowPrevious}
+        showPrevious={showPrevious}
+        showMore={showMore}
+        templateProps={renderState.templateProps!}
+        isFirstPage={isFirstPage}
+        isLastPage={isLastPage}
+        insights={insights as InsightsClientWrapper}
+        sendEvent={(event: InsightsEvent) => {
+          instantSearchInstance.sendEventToInsights(event);
+        }}
+        bindEvent={bindEvent}
+      />,
+      containerNode
+    );
   };
-  templates: InfiniteHitsTemplates;
-  showPrevious?: boolean;
-}): Renderer<InfiniteHitsRenderState, Partial<InfiniteHitsWidgetParams>> => (
-  {
-    hits,
-    results,
-    showMore,
-    showPrevious,
-    isFirstPage,
-    isLastPage,
-    instantSearchInstance,
-    insights,
-    bindEvent,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
 
-  render(
-    <InfiniteHitsWithInsightsListener
-      cssClasses={cssClasses}
-      hits={hits}
-      results={results}
-      hasShowPrevious={hasShowPrevious}
-      showPrevious={showPrevious}
-      showMore={showMore}
-      templateProps={renderState.templateProps!}
-      isFirstPage={isFirstPage}
-      isLastPage={isLastPage}
-      insights={insights as InsightsClientWrapper}
-      sendEvent={(event: InsightsEvent) => {
-        instantSearchInstance.sendEventToInsights(event);
-      }}
-      bindEvent={bindEvent}
-    />,
-    containerNode
-  );
-};
-
-const infiniteHits: InfiniteHitsWidget = widgetParams => {
+const infiniteHits: InfiniteHitsWidget = (widgetParams) => {
   const {
     container,
     escapeHTML,

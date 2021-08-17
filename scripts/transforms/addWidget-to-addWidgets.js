@@ -6,10 +6,10 @@ export default function transform(file, api, options) {
   const root = j(file.source);
 
   // replace xxx[from](arguments) to xxx[to]([arguments])
-  const replaceSingularToPlural = (from, to) => root =>
+  const replaceSingularToPlural = (from, to) => (root) =>
     root
       .find(j.CallExpression, { callee: { property: { name: from } } })
-      .replaceWith(path =>
+      .replaceWith((path) =>
         j.callExpression(
           j.memberExpression(path.value.callee.object, j.identifier(to), false),
           [j.arrayExpression(path.value.arguments)]

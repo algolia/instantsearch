@@ -167,7 +167,7 @@ export type GeoSearchWidget = WidgetFactory<
  *
  * Don't forget to explicitly set the `height` of the map container (default class `.ais-geo-search--map`), otherwise it won't be shown (it's a requirement of Google Maps).
  */
-const geoSearch: GeoSearchWidget = widgetParams => {
+const geoSearch: GeoSearchWidget = (widgetParams) => {
   const {
     initialZoom = 1,
     initialPosition = { lat: 0, lng: 0 },
@@ -188,12 +188,11 @@ const geoSearch: GeoSearchWidget = widgetParams => {
     events: {},
   };
 
-  const defaultCustomHTMLMarker: GeoSearchMarker<Partial<
-    HTMLMarkerArguments
-  >> = {
-    createOptions: () => ({}),
-    events: {},
-  };
+  const defaultCustomHTMLMarker: GeoSearchMarker<Partial<HTMLMarkerArguments>> =
+    {
+      createOptions: () => ({}),
+      events: {},
+    };
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

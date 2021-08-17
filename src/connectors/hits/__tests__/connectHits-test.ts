@@ -17,7 +17,7 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
   // especially with the __escaped mark, we thus make sure the mock also has the
   // same behavior regarding the array.
-  addAbsolutePosition: (hits: Hit[]) => hits.map(x => x),
+  addAbsolutePosition: (hits: Hit[]) => hits.map((x) => x),
 }));
 
 describe('connectHits', () => {
@@ -118,7 +118,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       { objectID: '2', sample: 'infos' },
     ];
 
-    ((hits as unknown) as EscapedHits).__escaped = true;
+    (hits as unknown as EscapedHits).__escaped = true;
 
     const results = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits }),
@@ -200,7 +200,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       },
     ];
 
-    ((expectedHits as unknown) as EscapedHits).__escaped = true;
+    (expectedHits as unknown as EscapedHits).__escaped = true;
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -215,8 +215,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const renderFn = jest.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({
-      transformItems: items =>
-        items.map(item => ({ ...item, name: 'transformed' })),
+      transformItems: (items) =>
+        items.map((item) => ({ ...item, name: 'transformed' })),
     });
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
@@ -255,7 +255,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       { objectID: '1', name: 'transformed' },
       { objectID: '2', name: 'transformed' },
     ];
-    ((expectedHits as unknown) as EscapedHits).__escaped = true;
+    (expectedHits as unknown as EscapedHits).__escaped = true;
 
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
@@ -303,7 +303,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
     ];
 
-    ((expectedHits as unknown) as EscapedHits).__escaped = true;
+    (expectedHits as unknown as EscapedHits).__escaped = true;
 
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
@@ -318,8 +318,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const renderFn = jest.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({
-      transformItems: items =>
-        items.map(item => {
+      transformItems: (items) =>
+        items.map((item) => {
           const highlightResult = item._highlightResult!
             .name as HitAttributeHighlightResult;
 
@@ -328,8 +328,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             _highlightResult: {
               name: {
                 ...highlightResult,
-                value: (item._highlightResult!
-                  .name as HitAttributeHighlightResult).value.toUpperCase(),
+                value: (
+                  item._highlightResult!.name as HitAttributeHighlightResult
+                ).value.toUpperCase(),
               },
             },
           };
@@ -409,7 +410,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       },
     ];
 
-    ((expectedHits as unknown) as EscapedHits).__escaped = true;
+    (expectedHits as unknown as EscapedHits).__escaped = true;
 
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
@@ -450,7 +451,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       })
     );
 
-    expect(((results.hits as unknown) as EscapedHits).__escaped).toBe(true);
+    expect((results.hits as unknown as EscapedHits).__escaped).toBe(true);
   });
 
   describe('getRenderState', () => {
@@ -499,7 +500,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
       ];
 
-      ((expectedHits as unknown) as EscapedHits).__escaped = true;
+      (expectedHits as unknown as EscapedHits).__escaped = true;
 
       expect(renderState2.hits).toEqual({
         hits: expectedHits,
@@ -555,7 +556,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
       ];
 
-      ((expectedHits as unknown) as EscapedHits).__escaped = true;
+      (expectedHits as unknown as EscapedHits).__escaped = true;
 
       expect(renderState2).toEqual({
         hits: expectedHits,
@@ -759,18 +760,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         });
 
         it('sends click event', () => {
-          const {
-            instantSearchInstance,
-            renderFn,
-            hits,
-          } = createRenderedWidget();
+          const { instantSearchInstance, renderFn, hits } =
+            createRenderedWidget();
           expect(
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledTimes(1); // view event by render
 
-          const { sendEvent } = renderFn.mock.calls[
-            renderFn.mock.calls.length - 1
-          ][0];
+          const { sendEvent } =
+            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
           sendEvent('click', hits[0], 'Product Added');
           expect(
             instantSearchInstance.sendEventToInsights
@@ -800,18 +797,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         });
 
         it('sends conversion event', () => {
-          const {
-            instantSearchInstance,
-            renderFn,
-            hits,
-          } = createRenderedWidget();
+          const { instantSearchInstance, renderFn, hits } =
+            createRenderedWidget();
           expect(
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledTimes(1); // view event by render
 
-          const { sendEvent } = renderFn.mock.calls[
-            renderFn.mock.calls.length - 1
-          ][0];
+          const { sendEvent } =
+            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
           sendEvent('conversion', hits[1], 'Product Ordered');
           expect(
             instantSearchInstance.sendEventToInsights
@@ -843,9 +836,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       describe('bindEvent', () => {
         it('returns a payload for click event', () => {
           const { renderFn, hits } = createRenderedWidget();
-          const { bindEvent } = renderFn.mock.calls[
-            renderFn.mock.calls.length - 1
-          ][0];
+          const { bindEvent } =
+            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
           const payload = bindEvent('click', hits[0], 'Product Added');
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(
@@ -874,9 +866,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
         it('returns a payload for conversion event', () => {
           const { renderFn, hits } = createRenderedWidget();
-          const { bindEvent } = renderFn.mock.calls[
-            renderFn.mock.calls.length - 1
-          ][0];
+          const { bindEvent } =
+            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
           const payload = bindEvent('conversion', hits[1], 'Product Ordered');
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(

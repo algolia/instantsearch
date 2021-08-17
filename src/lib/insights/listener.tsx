@@ -29,7 +29,7 @@ const findInsightsTarget = (
 
 type ParseInsightsEvent = (element: HTMLElement) => InsightsEvent;
 
-const parseInsightsEvent: ParseInsightsEvent = element => {
+const parseInsightsEvent: ParseInsightsEvent = (element) => {
   const serializedPayload = element.getAttribute('data-insights-event');
 
   if (typeof serializedPayload !== 'string') {
@@ -55,7 +55,7 @@ const insightsListener = (BaseComponent: any) => {
         const targetWithEvent = findInsightsTarget(
           event.target as HTMLElement | null,
           event.currentTarget as HTMLElement | null,
-          element => element.hasAttribute('data-insights-event')
+          (element) => element.hasAttribute('data-insights-event')
         );
         if (targetWithEvent) {
           const payload = parseInsightsEvent(targetWithEvent);
@@ -67,7 +67,7 @@ const insightsListener = (BaseComponent: any) => {
       const insightsTarget = findInsightsTarget(
         event.target as HTMLElement | null,
         event.currentTarget as HTMLElement | null,
-        element => hasDataAttributes(element)
+        (element) => hasDataAttributes(element)
       );
       if (insightsTarget) {
         const { method, payload } = readDataAttributes(insightsTarget);

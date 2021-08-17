@@ -450,8 +450,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attribute: 'category',
-      transformItems: items =>
-        items.map(item => ({
+      transformItems: (items) =>
+        items.map((item) => ({
           ...item,
           label: 'transformed',
           value: 'transformed',
@@ -1742,8 +1742,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       attribute: 'category',
       limit: 2,
       escapeFacetValues: false,
-      transformItems: items =>
-        items.map(item => ({
+      transformItems: (items) =>
+        items.map((item) => ({
           ...item,
           label: 'transformed',
           value: 'transformed',
@@ -2486,9 +2486,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      const renderState1 = refinementListWidget.getWidgetRenderState(
-        initOptions
-      );
+      const renderState1 =
+        refinementListWidget.getWidgetRenderState(initOptions);
 
       expect(renderState1).toEqual({
         canRefine: false,
@@ -2522,9 +2521,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
-      const renderState1 = refinementListWidget.getWidgetRenderState(
-        initOptions
-      );
+      const renderState1 =
+        refinementListWidget.getWidgetRenderState(initOptions);
 
       const results = new SearchResults(helper.state, [
         createSingleSearchResponse({
@@ -2545,9 +2543,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         results,
       });
 
-      const renderState2 = refinementListWidget.getWidgetRenderState(
-        renderOptions
-      );
+      const renderState2 =
+        refinementListWidget.getWidgetRenderState(renderOptions);
 
       expect(renderState2).toEqual(
         expect.objectContaining({

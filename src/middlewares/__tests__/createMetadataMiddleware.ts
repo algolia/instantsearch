@@ -25,7 +25,7 @@ const { window } = global;
 Object.defineProperty(
   window.navigator,
   'userAgent',
-  (value => ({
+  ((value) => ({
     get() {
       return value;
     },

@@ -103,7 +103,7 @@ describe('Answers', () => {
         templateProps: {
           templates: {
             ...defaultProps.templateProps.templates,
-            item: hit => {
+            item: (hit) => {
               return `answer: ${hit.title}`;
             },
           },

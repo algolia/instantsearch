@@ -73,8 +73,8 @@ storiesOf('Refinements/ClearRefinements', module)
           instantsearch.widgets.clearRefinements({
             container: clearRefinementsContainer,
             excludedAttributes: [],
-            transformItems: items =>
-              items.filter(attribute => attribute !== 'brand'),
+            transformItems: (items) =>
+              items.filter((attribute) => attribute !== 'brand'),
           }),
         ]);
       },

@@ -8,13 +8,13 @@ describe('instantsearch()', () => {
   });
 
   it('includes the widget functions', () => {
-    Object.values(instantsearch.widgets).forEach(widget => {
+    Object.values(instantsearch.widgets).forEach((widget) => {
       expect(widget).toBeInstanceOf(Function);
     });
   });
 
   it('includes the connectors functions', () => {
-    Object.values(instantsearch.connectors).forEach(connector => {
+    Object.values(instantsearch.connectors).forEach((connector) => {
       expect(connector).toBeInstanceOf(Function);
     });
   });

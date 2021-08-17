@@ -52,12 +52,10 @@ describe('clearRefinements()', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
 
-      const firstRender = render.mock.calls[0][0] as VNode<
-        ClearRefinementsProps
-      >;
-      const secondRender = render.mock.calls[1][0] as VNode<
-        ClearRefinementsProps
-      >;
+      const firstRender = render.mock
+        .calls[0][0] as VNode<ClearRefinementsProps>;
+      const secondRender = render.mock
+        .calls[1][0] as VNode<ClearRefinementsProps>;
       const firstContainer = render.mock.calls[0][1];
       const secondContainer = render.mock.calls[1][1];
 
@@ -87,12 +85,10 @@ describe('clearRefinements()', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
 
-      const firstRender = render.mock.calls[0][0] as VNode<
-        ClearRefinementsProps
-      >;
-      const secondRender = render.mock.calls[1][0] as VNode<
-        ClearRefinementsProps
-      >;
+      const firstRender = render.mock
+        .calls[0][0] as VNode<ClearRefinementsProps>;
+      const secondRender = render.mock
+        .calls[1][0] as VNode<ClearRefinementsProps>;
       const firstContainer = render.mock.calls[0][1];
       const secondContainer = render.mock.calls[1][1];
 
@@ -115,9 +111,8 @@ describe('clearRefinements()', () => {
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, state: helper.state }));
 
-      const firstRender = render.mock.calls[0][0] as VNode<
-        ClearRefinementsProps
-      >;
+      const firstRender = render.mock
+        .calls[0][0] as VNode<ClearRefinementsProps>;
       const { cssClasses } = firstRender.props as ClearRefinementsProps;
 
       expect(cssClasses).toMatchInlineSnapshot(`
@@ -144,9 +139,8 @@ describe('clearRefinements()', () => {
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, state: helper.state }));
 
-      const firstRender = render.mock.calls[0][0] as VNode<
-        ClearRefinementsProps
-      >;
+      const firstRender = render.mock
+        .calls[0][0] as VNode<ClearRefinementsProps>;
       const { cssClasses } = firstRender.props as ClearRefinementsProps;
 
       expect(cssClasses).toMatchInlineSnapshot(`

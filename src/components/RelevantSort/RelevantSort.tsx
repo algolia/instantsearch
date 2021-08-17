@@ -8,9 +8,8 @@ import {
 } from '../../widgets/relevant-sort/relevant-sort';
 import { ComponentCSSClasses } from '../../types';
 
-export type RelevantSortComponentCSSClasses = ComponentCSSClasses<
-  RelevantSortCSSClasses
->;
+export type RelevantSortComponentCSSClasses =
+  ComponentCSSClasses<RelevantSortCSSClasses>;
 
 export type RelevantSortComponentTemplates = Required<RelevantSortTemplates>;
 

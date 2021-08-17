@@ -47,7 +47,7 @@ function hasStateRefinements(state: SearchParameters): boolean {
     state.facetsRefinements,
     state.hierarchicalFacetsRefinements,
     state.numericRefinements,
-  ].some(refinement =>
+  ].some((refinement) =>
     Boolean(refinement && Object.keys(refinement).length > 0)
   );
 }
@@ -89,10 +89,10 @@ function getRuleContextsFromTrackedFilters({
       return [
         ...facets,
         ...facetRefinements
-          .filter(facetRefinement =>
+          .filter((facetRefinement) =>
             trackedFacetValues.includes(facetRefinement)
           )
-          .map(facetValue =>
+          .map((facetValue) =>
             escapeRuleContext(`ais-${facetName}-${facetValue}`)
           ),
       ];
@@ -112,12 +112,8 @@ function applyRuleContexts(
   },
   event: { state: SearchParameters }
 ): void {
-  const {
-    helper,
-    initialRuleContexts,
-    trackedFilters,
-    transformRuleContexts,
-  } = this;
+  const { helper, initialRuleContexts, trackedFilters, transformRuleContexts } =
+    this;
 
   const sharedHelperState = event.state;
   const previousRuleContexts: string[] = sharedHelperState.ruleContexts || [];
@@ -168,14 +164,14 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
 ) {
   checkRendering(render, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       trackedFilters = {} as ParamTrackedFilters,
-      transformRuleContexts = (rules => rules) as ParamTransformRuleContexts,
-      transformItems = (items => items) as ParamTransformItems,
+      transformRuleContexts = ((rules) => rules) as ParamTransformRuleContexts,
+      transformItems = ((items) => items) as ParamTransformItems,
     } = widgetParams || {};
 
-    Object.keys(trackedFilters).forEach(facetName => {
+    Object.keys(trackedFilters).forEach((facetName) => {
       if (typeof trackedFilters[facetName] !== 'function') {
         throw new Error(
           withUsage(

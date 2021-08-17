@@ -81,8 +81,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
         const widget = menuSelect({
           container: document.createElement('div'),
           attribute: 'test',
-          transformItems: items =>
-            items.map(item => ({ ...item, transformed: true })),
+          transformItems: (items) =>
+            items.map((item) => ({ ...item, transformed: true })),
         });
 
         widget.init!(

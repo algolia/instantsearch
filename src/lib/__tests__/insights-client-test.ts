@@ -5,19 +5,19 @@ import { createInstantSearch } from '../../../test/mock/createInstantSearch';
 import { createSingleSearchResponse } from '../../../test/mock/createAPIResponse';
 import { castToJestMock } from '../../../test/utils/castToJestMock';
 
-const connectHits = (renderFn: any, unmountFn: any) => (
-  widgetParams = {}
-): Widget => ({
-  $$type: 'ais.hits',
-  init() {},
-  render({ results, instantSearchInstance }) {
-    const hits = results.hits;
-    renderFn({ hits, results, instantSearchInstance, widgetParams }, false);
-  },
-  dispose() {
-    unmountFn();
-  },
-});
+const connectHits =
+  (renderFn: any, unmountFn: any) =>
+  (widgetParams = {}): Widget => ({
+    $$type: 'ais.hits',
+    init() {},
+    render({ results, instantSearchInstance }) {
+      const hits = results.hits;
+      renderFn({ hits, results, instantSearchInstance, widgetParams }, false);
+    },
+    dispose() {
+      unmountFn();
+    },
+  });
 
 const createWidgetWithInsights = ({
   renderFn,

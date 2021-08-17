@@ -15,8 +15,8 @@ import {
 } from '../../types';
 
 const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
-  return selectedObjectIDs.map(objectID => {
-    const hit = find(hits, h => h.objectID === objectID);
+  return selectedObjectIDs.map((objectID) => {
+    const hit = find(hits, (h) => h.objectID === objectID);
     if (typeof hit === 'undefined') {
       throw new Error(
         `Could not find objectID "${objectID}" passed to \`clickedObjectIDsAfterSearch\` in the returned hits. This is necessary to infer the absolute position and the query ID.`
@@ -27,7 +27,7 @@ const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
 };
 
 const getQueryID = (selectedHits: Hits): string => {
-  const queryIDs = uniq(selectedHits.map(hit => hit.__queryID));
+  const queryIDs = uniq(selectedHits.map((hit) => hit.__queryID));
   if (queryIDs.length > 1) {
     throw new Error(
       'Insights currently allows a single `queryID`. The `objectIDs` provided map to multiple `queryID`s.'
@@ -45,7 +45,7 @@ See: https://alg.li/lNiZZ7`
 };
 
 const getPositions = (selectedHits: Hits): number[] =>
-  selectedHits.map(hit => hit.__position);
+  selectedHits.map((hit) => hit.__position);
 
 export const inferPayload = ({
   method,
@@ -76,41 +76,40 @@ export const inferPayload = ({
   }
 };
 
-const wrapInsightsClient = (
-  aa: InsightsClient | null,
-  results: SearchResults,
-  hits: Hits
-): InsightsClientWrapper => (
-  method: InsightsClientMethod,
-  payload: Partial<InsightsClientPayload>
-) => {
-  warning(
-    false,
-    `\`insights\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
+const wrapInsightsClient =
+  (
+    aa: InsightsClient | null,
+    results: SearchResults,
+    hits: Hits
+  ): InsightsClientWrapper =>
+  (method: InsightsClientMethod, payload: Partial<InsightsClientPayload>) => {
+    warning(
+      false,
+      `\`insights\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
 
 For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
-  );
-  if (!aa) {
-    const withInstantSearchUsage = createDocumentationMessageGenerator({
-      name: 'instantsearch',
-    });
-    throw new Error(
-      withInstantSearchUsage(
-        'The `insightsClient` option has not been provided to `instantsearch`.'
-      )
     );
-  }
-  if (!Array.isArray(payload.objectIDs)) {
-    throw new TypeError('Expected `objectIDs` to be an array.');
-  }
-  const inferredPayload = inferPayload({
-    method,
-    results,
-    hits,
-    objectIDs: payload.objectIDs,
-  });
-  aa(method, { ...inferredPayload, ...payload } as any);
-};
+    if (!aa) {
+      const withInstantSearchUsage = createDocumentationMessageGenerator({
+        name: 'instantsearch',
+      });
+      throw new Error(
+        withInstantSearchUsage(
+          'The `insightsClient` option has not been provided to `instantsearch`.'
+        )
+      );
+    }
+    if (!Array.isArray(payload.objectIDs)) {
+      throw new TypeError('Expected `objectIDs` to be an array.');
+    }
+    const inferredPayload = inferPayload({
+      method,
+      results,
+      hits,
+      objectIDs: payload.objectIDs,
+    });
+    aa(method, { ...inferredPayload, ...payload } as any);
+  };
 
 /**
  * @deprecated This function will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/

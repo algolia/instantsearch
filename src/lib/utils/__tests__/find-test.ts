@@ -4,28 +4,28 @@ describe('find', () => {
   describe('with native array method', () => {
     test('with empty array', () => {
       const items: never[] = [];
-      const actual = find(items, item => item === 'hello');
+      const actual = find(items, (item) => item === 'hello');
 
       expect(actual).toEqual(undefined);
     });
 
     test('with unknown item in array', () => {
       const items = ['hey'];
-      const actual = find(items, item => item === 'hello');
+      const actual = find(items, (item) => item === 'hello');
 
       expect(actual).toEqual(undefined);
     });
 
     test('with an array of strings', () => {
       const items = ['hello', 'goodbye'];
-      const actual = find(items, item => item === 'hello');
+      const actual = find(items, (item) => item === 'hello');
 
       expect(actual).toEqual('hello');
     });
 
     test('with an array of objects', () => {
       const items = [{ name: 'John' }, { name: 'Jane' }];
-      const actual = find(items, item => item.name === 'John');
+      const actual = find(items, (item) => item.name === 'John');
 
       expect(actual).toEqual(items[0]);
     });
@@ -46,28 +46,28 @@ describe('find', () => {
 
     test('with empty array', () => {
       const items: never[] = [];
-      const actual = find(items, item => item === 'hello');
+      const actual = find(items, (item) => item === 'hello');
 
       expect(actual).toEqual(undefined);
     });
 
     test('with unknown item in array', () => {
       const items = ['hey'];
-      const actual = find(items, item => item === 'hello');
+      const actual = find(items, (item) => item === 'hello');
 
       expect(actual).toEqual(undefined);
     });
 
     test('with an array of strings', () => {
       const items = ['hello', 'goodbye'];
-      const actual = find(items, item => item === 'hello');
+      const actual = find(items, (item) => item === 'hello');
 
       expect(actual).toEqual('hello');
     });
 
     test('with an array of objects', () => {
       const items = [{ name: 'John' }, { name: 'Jane' }];
-      const actual = find(items, item => item.name === 'John');
+      const actual = find(items, (item) => item.name === 'John');
 
       expect(actual).toEqual(items[0]);
     });

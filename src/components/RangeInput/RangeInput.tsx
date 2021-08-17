@@ -10,9 +10,8 @@ import {
 import { Range, RangeBoundaries } from '../../connectors/range/connectRange';
 import { ComponentCSSClasses } from '../../types';
 
-export type RangeInputComponentCSSClasses = ComponentCSSClasses<
-  RangeInputCSSClasses
->;
+export type RangeInputComponentCSSClasses =
+  ComponentCSSClasses<RangeInputCSSClasses>;
 
 export type RangeInputComponentTemplates = Required<RangeInputTemplates>;
 

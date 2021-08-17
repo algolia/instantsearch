@@ -11,7 +11,7 @@ describe('withInsights', () => {
         eventName: 'Add to basket',
       });
     };
-    const connector = renderFn => () => ({
+    const connector = (renderFn) => () => ({
       init() {
         renderFn({
           results: {},

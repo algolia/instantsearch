@@ -112,54 +112,58 @@ export type RangeInputWidgetParams = {
   cssClasses?: RangeInputCSSClasses;
 };
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: RangeInputComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<RangeInputComponentTemplates>;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    renderState,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: RangeInputComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<RangeInputComponentTemplates>;
+    };
+    templates: RangeInputTemplates;
+  }): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> =>
+  (
+    { refine, range, start, widgetParams, instantSearchInstance },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
+
+    const { min: rangeMin, max: rangeMax } = range;
+    const [minValue, maxValue] = start;
+
+    const step = 1 / Math.pow(10, widgetParams.precision || 0);
+
+    const values = {
+      min:
+        minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
+      max:
+        maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined,
+    };
+
+    render(
+      <RangeInput
+        min={rangeMin}
+        max={rangeMax}
+        step={step}
+        values={values}
+        cssClasses={cssClasses}
+        refine={refine}
+        templateProps={renderState.templateProps!}
+      />,
+      containerNode
+    );
   };
-  templates: RangeInputTemplates;
-}): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> => (
-  { refine, range, start, widgetParams, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
-
-  const { min: rangeMin, max: rangeMax } = range;
-  const [minValue, maxValue] = start;
-
-  const step = 1 / Math.pow(10, widgetParams.precision || 0);
-
-  const values = {
-    min: minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
-    max: maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined,
-  };
-
-  render(
-    <RangeInput
-      min={rangeMin}
-      max={rangeMax}
-      step={step}
-      values={values}
-      cssClasses={cssClasses}
-      refine={refine}
-      templateProps={renderState.templateProps!}
-    />,
-    containerNode
-  );
-};
 
 export type RangeInputWidget = WidgetFactory<
   Omit<RangeWidgetDescription, '$$type'> & {

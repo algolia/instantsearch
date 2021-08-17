@@ -80,10 +80,10 @@ const connectHits: HitsConnector = function connectHits(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       escapeHTML = true,
-      transformItems = (items => items) as TransformItems<Hit>,
+      transformItems = ((items) => items) as TransformItems<Hit>,
     } = widgetParams || {};
     let sendEvent: SendEventForHits;
     let bindEvent: BindEventForHits;
@@ -167,9 +167,8 @@ const connectHits: HitsConnector = function connectHits(
         // Make sure the escaped tag stays, even after mapping over the hits.
         // This prevents the hits from being double-escaped if there are multiple
         // hits widgets mounted on the page.
-        (results.hits as ReturnType<
-          typeof escapeHits
-        >).__escaped = initialEscaped;
+        (results.hits as ReturnType<typeof escapeHits>).__escaped =
+          initialEscaped;
 
         return {
           hits: results.hits,

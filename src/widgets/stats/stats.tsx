@@ -87,58 +87,60 @@ export const defaultTemplates: StatsComponentTemplates = {
     found in {{processingTimeMS}}ms`,
 };
 
-const renderer = ({
-  renderState,
-  cssClasses,
-  containerNode,
-  templates,
-}: {
-  renderState: {
-    templateProps?: PreparedTemplateProps<StatsComponentTemplates>;
+const renderer =
+  ({
+    renderState,
+    cssClasses,
+    containerNode,
+    templates,
+  }: {
+    renderState: {
+      templateProps?: PreparedTemplateProps<StatsComponentTemplates>;
+    };
+    cssClasses: StatsComponentCSSClasses;
+    containerNode: HTMLElement;
+    templates: StatsTemplates;
+  }): Renderer<StatsRenderState, Partial<StatsWidgetParams>> =>
+  (
+    {
+      hitsPerPage,
+      nbHits,
+      nbSortedHits,
+      areHitsSorted,
+      nbPages,
+      page,
+      processingTimeMS,
+      query,
+      instantSearchInstance,
+    },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+
+      return;
+    }
+
+    render(
+      <Stats
+        cssClasses={cssClasses}
+        hitsPerPage={hitsPerPage}
+        nbHits={nbHits}
+        nbSortedHits={nbSortedHits}
+        areHitsSorted={areHitsSorted}
+        nbPages={nbPages}
+        page={page}
+        processingTimeMS={processingTimeMS}
+        query={query}
+        templateProps={renderState.templateProps!}
+      />,
+      containerNode
+    );
   };
-  cssClasses: StatsComponentCSSClasses;
-  containerNode: HTMLElement;
-  templates: StatsTemplates;
-}): Renderer<StatsRenderState, Partial<StatsWidgetParams>> => (
-  {
-    hitsPerPage,
-    nbHits,
-    nbSortedHits,
-    areHitsSorted,
-    nbPages,
-    page,
-    processingTimeMS,
-    query,
-    instantSearchInstance,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-
-    return;
-  }
-
-  render(
-    <Stats
-      cssClasses={cssClasses}
-      hitsPerPage={hitsPerPage}
-      nbHits={nbHits}
-      nbSortedHits={nbSortedHits}
-      areHitsSorted={areHitsSorted}
-      nbPages={nbPages}
-      page={page}
-      processingTimeMS={processingTimeMS}
-      query={query}
-      templateProps={renderState.templateProps!}
-    />,
-    containerNode
-  );
-};
 
 /**
  * The `stats` widget is used to display useful insights about the current results.
@@ -146,9 +148,12 @@ const renderer = ({
  * By default, it will display the **number of hits** and the time taken to compute the
  * results inside the engine.
  */
-const stats: StatsWidget = widgetParams => {
-  const { container, cssClasses: userCssClasses = {}, templates = {} } =
-    widgetParams || {};
+const stats: StatsWidget = (widgetParams) => {
+  const {
+    container,
+    cssClasses: userCssClasses = {},
+    templates = {},
+  } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

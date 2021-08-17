@@ -154,84 +154,83 @@ export type CurrentRefinementsConnector = Connector<
   CurrentRefinementsConnectorParams
 >;
 
-const connectCurrentRefinements: CurrentRefinementsConnector = function connectCurrentRefinements(
-  renderFn,
-  unmountFn = noop
-) {
-  checkRendering(renderFn, withUsage());
+const connectCurrentRefinements: CurrentRefinementsConnector =
+  function connectCurrentRefinements(renderFn, unmountFn = noop) {
+    checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
-    if (
-      (widgetParams || {}).includedAttributes &&
-      (widgetParams || {}).excludedAttributes
-    ) {
-      throw new Error(
-        withUsage(
-          'The options `includedAttributes` and `excludedAttributes` cannot be used together.'
-        )
-      );
-    }
-
-    const {
-      includedAttributes,
-      excludedAttributes = ['query'],
-      transformItems = (items: CurrentRefinementsConnectorParamsItem[]) =>
-        items,
-    } = widgetParams || {};
-
-    return {
-      $$type: 'ais.currentRefinements',
-
-      init(initOptions) {
-        const { instantSearchInstance } = initOptions;
-
-        renderFn(
-          {
-            ...this.getWidgetRenderState(initOptions),
-            instantSearchInstance,
-          },
-          true
+    return (widgetParams) => {
+      if (
+        (widgetParams || {}).includedAttributes &&
+        (widgetParams || {}).excludedAttributes
+      ) {
+        throw new Error(
+          withUsage(
+            'The options `includedAttributes` and `excludedAttributes` cannot be used together.'
+          )
         );
-      },
+      }
 
-      render(renderOptions) {
-        const { instantSearchInstance } = renderOptions;
+      const {
+        includedAttributes,
+        excludedAttributes = ['query'],
+        transformItems = (items: CurrentRefinementsConnectorParamsItem[]) =>
+          items,
+      } = widgetParams || {};
 
-        renderFn(
-          {
-            ...this.getWidgetRenderState(renderOptions),
-            instantSearchInstance,
-          },
-          false
-        );
-      },
+      return {
+        $$type: 'ais.currentRefinements',
 
-      dispose() {
-        unmountFn();
-      },
+        init(initOptions) {
+          const { instantSearchInstance } = initOptions;
 
-      getRenderState(renderState, renderOptions) {
-        return {
-          ...renderState,
-          currentRefinements: this.getWidgetRenderState(renderOptions),
-        };
-      },
+          renderFn(
+            {
+              ...this.getWidgetRenderState(initOptions),
+              instantSearchInstance,
+            },
+            true
+          );
+        },
 
-      getWidgetRenderState({ results, scopedResults, createURL, helper }) {
-        function getItems() {
-          if (!results) {
-            return transformItems(
-              getRefinementsItems({
-                results: {},
-                helper,
-                includedAttributes,
-                excludedAttributes,
-              })
-            );
-          }
+        render(renderOptions) {
+          const { instantSearchInstance } = renderOptions;
 
-          return scopedResults.reduce<CurrentRefinementsConnectorParamsItem[]>(
-            (accResults, scopedResult) => {
+          renderFn(
+            {
+              ...this.getWidgetRenderState(renderOptions),
+              instantSearchInstance,
+            },
+            false
+          );
+        },
+
+        dispose() {
+          unmountFn();
+        },
+
+        getRenderState(renderState, renderOptions) {
+          return {
+            ...renderState,
+            currentRefinements: this.getWidgetRenderState(renderOptions),
+          };
+        },
+
+        getWidgetRenderState({ results, scopedResults, createURL, helper }) {
+          function getItems() {
+            if (!results) {
+              return transformItems(
+                getRefinementsItems({
+                  results: {},
+                  helper,
+                  includedAttributes,
+                  excludedAttributes,
+                })
+              );
+            }
+
+            return scopedResults.reduce<
+              CurrentRefinementsConnectorParamsItem[]
+            >((accResults, scopedResult) => {
               return accResults.concat(
                 transformItems(
                   getRefinementsItems({
@@ -242,25 +241,23 @@ const connectCurrentRefinements: CurrentRefinementsConnector = function connectC
                   })
                 )
               );
-            },
-            []
-          );
-        }
+            }, []);
+          }
 
-        const items = getItems();
+          const items = getItems();
 
-        return {
-          items,
-          canRefine: items.length > 0,
-          refine: refinement => clearRefinement(helper, refinement),
-          createURL: refinement =>
-            createURL(clearRefinementFromState(helper.state, refinement)),
-          widgetParams,
-        };
-      },
+          return {
+            items,
+            canRefine: items.length > 0,
+            refine: (refinement) => clearRefinement(helper, refinement),
+            createURL: (refinement) =>
+              createURL(clearRefinementFromState(helper.state, refinement)),
+            widgetParams,
+          };
+        },
+      };
     };
   };
-};
 
 function getRefinementsItems({
   results,
@@ -289,18 +286,18 @@ function getRefinementsItems({
 
   return items.reduce<CurrentRefinementsConnectorParamsItem[]>(
     (allItems, currentItem) => [
-      ...allItems.filter(item => item.attribute !== currentItem.attribute),
+      ...allItems.filter((item) => item.attribute !== currentItem.attribute),
       {
         indexName: helper.state.index,
         attribute: currentItem.attribute,
         label: currentItem.attribute,
         refinements: items
-          .filter(result => result.attribute === currentItem.attribute)
+          .filter((result) => result.attribute === currentItem.attribute)
           // We want to keep the order of refinements except the numeric ones.
           .sort((a, b) =>
             a.type === 'numeric' ? (a.value as number) - (b.value as number) : 0
           ),
-        refine: refinement => clearRefinement(helper, refinement),
+        refine: (refinement) => clearRefinement(helper, refinement),
       },
     ],
     []
@@ -391,7 +388,9 @@ function normalizeRefinement(
     normalizedRefinement.count = (refinement as FacetRefinement).count;
   }
   if ((refinement as FacetRefinement).exhaustive !== undefined) {
-    normalizedRefinement.exhaustive = (refinement as FacetRefinement).exhaustive;
+    normalizedRefinement.exhaustive = (
+      refinement as FacetRefinement
+    ).exhaustive;
   }
 
   return normalizedRefinement;

@@ -20,12 +20,12 @@ describe('createHTMLMarker', () => {
   }
 
   const createFakeGoogleReference = () => ({
-    maps: ({
-      LatLng: jest.fn(x => x),
+    maps: {
+      LatLng: jest.fn((x) => x),
       // Required to be a constructor since
       // we extend from it in the Marker class
       OverlayView: FakeOverlayView,
-    } as unknown) as typeof google.maps,
+    } as unknown as typeof google.maps,
   });
 
   const createFakeParams = ({ ...rest } = {}) => ({
@@ -34,7 +34,7 @@ describe('createHTMLMarker', () => {
       lat: 10,
       lng: 12,
     },
-    map: ('map-instance-placeholder' as unknown) as google.maps.Map,
+    map: 'map-instance-placeholder' as unknown as google.maps.Map,
     template: '<div>Hello</div>',
     className: 'ais-geo-search-marker',
     ...rest,

@@ -31,7 +31,7 @@ function RefinementListItem({
   return (
     <li
       className={className}
-      onClick={originalEvent => {
+      onClick={(originalEvent) => {
         handleClick({
           facetValueToRefine,
           isRefined,

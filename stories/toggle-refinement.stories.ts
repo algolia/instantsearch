@@ -46,7 +46,7 @@ storiesOf('Refinements/ToggleRefinement', module)
   .add(
     'with add/remove',
     withHits(({ search, container, instantsearch }) => {
-      withLifecycle(search, container, node =>
+      withLifecycle(search, container, (node) =>
         instantsearch.widgets.toggleRefinement({
           container: node,
           attribute: 'free_shipping',

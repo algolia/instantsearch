@@ -108,8 +108,8 @@ describe('numericMenu()', () => {
       container,
       attribute: 'price',
       items,
-      transformItems: allItems =>
-        allItems.map(item => ({ ...item, transformed: true })),
+      transformItems: (allItems) =>
+        allItems.map((item) => ({ ...item, transformed: true })),
     });
 
     widget.init!(createInitOptions({ helper }));

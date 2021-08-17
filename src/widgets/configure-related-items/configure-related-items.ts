@@ -16,15 +16,14 @@ export type ConfigureRelatedItemsWidget = WidgetFactory<
 
 export type ConfigureRelatedItemsWidgetParams = PlainSearchParameters;
 
-const configureRelatedItems: ConfigureRelatedItemsWidget = function configureRelatedItems(
-  widgetParams
-) {
-  const makeWidget = connectConfigureRelatedItems(noop);
+const configureRelatedItems: ConfigureRelatedItemsWidget =
+  function configureRelatedItems(widgetParams) {
+    const makeWidget = connectConfigureRelatedItems(noop);
 
-  return {
-    ...makeWidget(widgetParams),
-    $$widgetType: 'ais.configureRelatedItems',
+    return {
+      ...makeWidget(widgetParams),
+      $$widgetType: 'ais.configureRelatedItems',
+    };
   };
-};
 
 export default configureRelatedItems;

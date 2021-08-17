@@ -66,7 +66,7 @@ describe('GeoSearch', () => {
     mapInstance = createFakeMapInstance(),
     markerInstance = createFakeMarkerInstance(),
   } = {}): typeof google => ({
-    maps: ({
+    maps: {
       LatLng: jest.fn(),
       LatLngBounds: jest.fn((southWest, northEast) => ({
         northEast,
@@ -86,7 +86,7 @@ describe('GeoSearch', () => {
         })),
       })),
       Map: jest.fn(() => mapInstance),
-      Marker: jest.fn(args => ({
+      Marker: jest.fn((args) => ({
         ...args,
         ...markerInstance,
       })),
@@ -110,7 +110,7 @@ describe('GeoSearch', () => {
           })),
         })),
       },
-    } as unknown) as typeof google.maps,
+    } as unknown as typeof google.maps,
   });
 
   const createContainer = () => document.createElement('div');
@@ -133,7 +133,9 @@ describe('GeoSearch', () => {
     eventName: string,
     event?: any
   ) => {
-    fn.addListener.mock.calls.find(call => call.includes(eventName))[1](event);
+    fn.addListener.mock.calls.find((call) => call.includes(eventName))[1](
+      event
+    );
   };
 
   beforeEach(() => {
@@ -568,7 +570,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     // Use the same tests for all events since all of them trigger the same function
-    ['center_changed', 'zoom_changed', 'dragstart'].forEach(eventName => {
+    ['center_changed', 'zoom_changed', 'dragstart'].forEach((eventName) => {
       it(`expect to listen for "${eventName}" and trigger setMapMoveSinceLastRefine`, () => {
         const container = createContainer();
         const instantSearchInstance = createFakeInstantSearch();
@@ -834,7 +836,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
       expect(
-        ((googleReference.maps.Marker as unknown) as jest.Mock).mock.calls
+        (googleReference.maps.Marker as unknown as jest.Mock).mock.calls
       ).toEqual([
         [expect.objectContaining({ __id: '123' })],
         [expect.objectContaining({ __id: '456' })],
@@ -852,7 +854,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         googleReference,
         container,
         builtInMarker: {
-          createOptions: item => ({
+          createOptions: (item) => ({
             title: `ID: ${item.objectID}`,
           }),
         },
@@ -884,7 +886,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
       expect(
-        ((googleReference.maps.Marker as unknown) as jest.Mock).mock.calls
+        (googleReference.maps.Marker as unknown as jest.Mock).mock.calls
       ).toEqual([
         [expect.objectContaining({ __id: '123', title: 'ID: 123' })],
         [expect.objectContaining({ __id: '456', title: 'ID: 456' })],
@@ -1042,7 +1044,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         googleReference,
         container,
         customHTMLMarker: {
-          createOptions: item => ({
+          createOptions: (item) => ({
             title: `ID: ${item.objectID}`,
           }),
         },
@@ -1182,7 +1184,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         googleReference,
         container,
         customHTMLMarker: {
-          createOptions: item => ({
+          createOptions: (item) => ({
             title: `ID: ${item.objectID}`,
           }),
         },
@@ -1440,7 +1442,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      ((googleReference.maps.Marker as unknown) as jest.Mock).mockClear();
+      (googleReference.maps.Marker as unknown as jest.Mock).mockClear();
 
       widget.render!(
         createRenderOptions({
@@ -1507,7 +1509,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      ((googleReference.maps.Marker as unknown) as jest.Mock).mockClear();
+      (googleReference.maps.Marker as unknown as jest.Mock).mockClear();
 
       widget.render!(
         createRenderOptions({

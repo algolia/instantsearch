@@ -76,9 +76,7 @@ export type Connector<
    * The called function when unmounting a widget.
    */
   unmountFn?: Unmounter
-) => (
-  widgetParams: TConnectorParams & TWidgetParams
-) => Widget<
+) => (widgetParams: TConnectorParams & TWidgetParams) => Widget<
   TWidgetDescription & {
     widgetParams: typeof widgetParams;
   }

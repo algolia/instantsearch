@@ -48,7 +48,7 @@ type InstantSearchModule = {
  * If you want to get up and running quickly with InstantSearch.js, have a
  * look at the [getting started](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
  */
-const instantsearch: InstantSearchModule = options =>
+const instantsearch: InstantSearchModule = (options) =>
   new InstantSearch(options);
 
 instantsearch.version = version;
@@ -60,7 +60,8 @@ instantsearch.middlewares = middlewares;
 instantsearch.routers = routers;
 instantsearch.stateMappings = stateMappings;
 
-instantsearch.createInfiniteHitsSessionStorageCache = createInfiniteHitsSessionStorageCache;
+instantsearch.createInfiniteHitsSessionStorageCache =
+  createInfiniteHitsSessionStorageCache;
 instantsearch.highlight = helpers.highlight;
 instantsearch.reverseHighlight = helpers.reverseHighlight;
 instantsearch.snippet = helpers.snippet;

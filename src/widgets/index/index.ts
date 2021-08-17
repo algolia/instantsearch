@@ -152,7 +152,7 @@ function getLocalWidgetsSearchParameters(
   const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
 
   return widgets
-    .filter(widget => !isIndexWidget(widget))
+    .filter((widget) => !isIndexWidget(widget))
     .reduce<SearchParameters>((state, widget) => {
       if (!widget.getWidgetSearchParameters) {
         return state;
@@ -169,7 +169,7 @@ function resetPageFromWidgets(widgets: Array<Widget | IndexWidget>): void {
     return;
   }
 
-  indexWidgets.forEach(widget => {
+  indexWidgets.forEach((widget) => {
     const widgetHelper = widget.getHelper()!;
 
     privateHelperSetState(widgetHelper, {
@@ -267,7 +267,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       if (
         widgets.some(
-          widget =>
+          (widget) =>
             typeof widget.init !== 'function' &&
             typeof widget.render !== 'function'
         )
@@ -293,7 +293,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // We compute the render state before calling `init` in a separate loop
         // to construct the whole render state object that is then passed to
         // `init`.
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           if (widget.getRenderState) {
             const renderState = widget.getRenderState(
               localInstantSearchInstance!.renderState[this.getIndexId()] || {},
@@ -321,7 +321,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }
         });
 
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           if (widget.init) {
             widget.init({
               helper: helper!,
@@ -353,14 +353,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
       }
 
-      if (widgets.some(widget => typeof widget.dispose !== 'function')) {
+      if (widgets.some((widget) => typeof widget.dispose !== 'function')) {
         throw new Error(
           withUsage('The widget definition expects a `dispose` method.')
         );
       }
 
       localWidgets = localWidgets.filter(
-        widget => widgets.indexOf(widget) === -1
+        (widget) => widgets.indexOf(widget) === -1
       );
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
@@ -509,7 +509,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // We compute the render state before calling `init` in a separate loop
       // to construct the whole render state object that is then passed to
       // `init`.
-      localWidgets.forEach(widget => {
+      localWidgets.forEach((widget) => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
@@ -537,7 +537,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
-      localWidgets.forEach(widget => {
+      localWidgets.forEach((widget) => {
         warning(
           // if it has NO getWidgetState or if it has getWidgetUiState, we don't warn
           // aka we warn if there's _only_ getWidgetState
@@ -569,7 +569,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // widgets. When the subscription happens before the `init` step, the (static)
       // configuration of the widget is pushed in the URL. That's what we want to avoid.
       // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
-      helper.on('change', event => {
+      helper.on('change', (event) => {
         const { state } = event;
 
         const _uiState = (event as any)._uiState;
@@ -596,7 +596,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         return;
       }
 
-      localWidgets.forEach(widget => {
+      localWidgets.forEach((widget) => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
@@ -624,7 +624,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
-      localWidgets.forEach(widget => {
+      localWidgets.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
         // `lastResults` might be `null` though. It's possible that a stalled render
@@ -652,7 +652,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     dispose() {
-      localWidgets.forEach(widget => {
+      localWidgets.forEach((widget) => {
         if (widget.dispose) {
           // The dispose function is always called once the instance is started
           // (it's an effect of `removeWidgets`). The index is initialized and

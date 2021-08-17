@@ -185,8 +185,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
-      transformItems: items =>
-        items.map(item => ({ ...item, label: 'transformed' })),
+      transformItems: (items) =>
+        items.map((item) => ({ ...item, label: 'transformed' })),
     });
 
     const searchClient = createSearchClient();
@@ -346,7 +346,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: state => JSON.stringify(state),
+        createURL: (state) => JSON.stringify(state),
       })
     );
 
@@ -361,7 +361,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
           createSingleSearchResponse(),
         ]),
         state: helper.state,
-        createURL: state => JSON.stringify(state),
+        createURL: (state) => JSON.stringify(state),
       })
     );
 

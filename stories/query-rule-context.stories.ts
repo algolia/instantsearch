@@ -42,12 +42,12 @@ storiesOf('Metadata/QueryRuleContext', module)
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
           transformItems(items: CustomDataItem[]) {
-            return items.filter(item => typeof item.banner !== 'undefined');
+            return items.filter((item) => typeof item.banner !== 'undefined');
           },
           templates: {
             default: ({ items }: { items: CustomDataItem[] }) =>
               items
-                .map(item => {
+                .map((item) => {
                   const { title, banner, link } = item;
 
                   return `
@@ -93,12 +93,12 @@ storiesOf('Metadata/QueryRuleContext', module)
           instantsearch.widgets.queryRuleCustomData({
             container: widgetContainer,
             transformItems(items: CustomDataItem[]) {
-              return items.filter(item => typeof item.banner !== 'undefined');
+              return items.filter((item) => typeof item.banner !== 'undefined');
             },
             templates: {
               default: ({ items }: { items: CustomDataItem[] }) =>
                 items
-                  .map(item => {
+                  .map((item) => {
                     const { title, banner, link } = item;
 
                     return `

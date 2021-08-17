@@ -63,7 +63,7 @@ storiesOf('Basics/VoiceSearch', module)
         `.ais-VoiceSearch-button.custom-button:hover {
         background: inherit;
       }`,
-      ].forEach(rule => (style.sheet as CSSStyleSheet).insertRule(rule));
+      ].forEach((rule) => (style.sheet as CSSStyleSheet).insertRule(rule));
 
       search.addWidgets([
         instantsearch.widgets.voiceSearch({
@@ -157,7 +157,7 @@ storiesOf('Basics/VoiceSearch', module)
           font-size: 2rem;
           color: #555;
         }`,
-      ].forEach(rule => (style.sheet as CSSStyleSheet).insertRule(rule));
+      ].forEach((rule) => (style.sheet as CSSStyleSheet).insertRule(rule));
 
       search.addWidgets([
         instantsearch.widgets.voiceSearch({

@@ -27,47 +27,49 @@ const withUsage = createDocumentationMessageGenerator({
 });
 const suit = component('ToggleRefinement');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: ToggleRefinementComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<ToggleRefinementComponentTemplates>;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    renderState,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: ToggleRefinementComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<ToggleRefinementComponentTemplates>;
+    };
+    templates: ToggleRefinementTemplates;
+  }) =>
+  (
+    {
+      value,
+      refine,
+      instantSearchInstance,
+    }: ToggleRefinementRenderState &
+      RendererOptions<ToggleRefinementConnectorParams>,
+    isFirstRendering: boolean
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+
+      return;
+    }
+
+    render(
+      <ToggleRefinement
+        cssClasses={cssClasses}
+        currentRefinement={value}
+        templateProps={renderState.templateProps!}
+        refine={refine}
+      />,
+      containerNode
+    );
   };
-  templates: ToggleRefinementTemplates;
-}) => (
-  {
-    value,
-    refine,
-    instantSearchInstance,
-  }: ToggleRefinementRenderState &
-    RendererOptions<ToggleRefinementConnectorParams>,
-  isFirstRendering: boolean
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-
-    return;
-  }
-
-  render(
-    <ToggleRefinement
-      cssClasses={cssClasses}
-      currentRefinement={value}
-      templateProps={renderState.templateProps!}
-      refine={refine}
-    />,
-    containerNode
-  );
-};
 
 export type ToggleRefinementCSSClasses = Partial<{
   /**

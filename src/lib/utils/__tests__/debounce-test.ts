@@ -31,7 +31,7 @@ describe('debounce', () => {
   });
 
   it('returns a promise', async () => {
-    const originalFunction = jest.fn(x => Promise.resolve(x));
+    const originalFunction = jest.fn((x) => Promise.resolve(x));
     const debouncedFunction = debounce(originalFunction, 100);
 
     debouncedFunction('a');
@@ -54,7 +54,7 @@ describe('debounce', () => {
   });
 
   it('accepts synchronous function as well', async () => {
-    const originalFunction = jest.fn(x => x);
+    const originalFunction = jest.fn((x) => x);
     const debouncedFunction = debounce(originalFunction, 100);
     const promise = debouncedFunction('a');
 

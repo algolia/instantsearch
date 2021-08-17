@@ -36,9 +36,8 @@ export default function hoganHelpers({
     },
     highlight(options, render) {
       try {
-        const highlightOptions: Omit<HighlightOptions, 'hit'> = JSON.parse(
-          options
-        );
+        const highlightOptions: Omit<HighlightOptions, 'hit'> =
+          JSON.parse(options);
 
         return render(
           highlight({
@@ -54,10 +53,8 @@ The highlight helper expects a JSON object of the format:
     },
     reverseHighlight(options, render) {
       try {
-        const reverseHighlightOptions: Omit<
-          ReverseHighlightOptions,
-          'hit'
-        > = JSON.parse(options);
+        const reverseHighlightOptions: Omit<ReverseHighlightOptions, 'hit'> =
+          JSON.parse(options);
 
         return render(
           reverseHighlight({
@@ -89,10 +86,8 @@ The snippet helper expects a JSON object of the format:
     },
     reverseSnippet(options, render) {
       try {
-        const reverseSnippetOptions: Omit<
-          ReverseSnippetOptions,
-          'hit'
-        > = JSON.parse(options);
+        const reverseSnippetOptions: Omit<ReverseSnippetOptions, 'hit'> =
+          JSON.parse(options);
 
         return render(
           reverseSnippet({

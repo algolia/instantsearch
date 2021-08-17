@@ -38,11 +38,11 @@ function onClick(event: MouseEvent) {
 }
 
 export function attachEventListeners() {
-  filtersButtons.forEach(button => {
+  filtersButtons.forEach((button) => {
     button.addEventListener('click', openFilters);
   });
 
-  closeOverlayButtons.forEach(button => {
+  closeOverlayButtons.forEach((button) => {
     button.addEventListener('click', closeFilters);
   });
 }

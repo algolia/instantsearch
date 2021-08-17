@@ -85,7 +85,7 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const { escapeHTML = true } = widgetParams || {};
 
     warning(
@@ -166,7 +166,7 @@ search.addWidgets([
           };
         }
 
-        const indices = scopedResults.map(scopedResult => {
+        const indices = scopedResults.map((scopedResult) => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
           scopedResult.results.hits = escapeHTML

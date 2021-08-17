@@ -57,7 +57,7 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       searchAsYouSpeak = false,
       language,
@@ -128,7 +128,7 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
           (this as any)._voiceSearchHelper = createVoiceSearchHelper({
             searchAsYouSpeak,
             language,
-            onQueryChange: query => (this as any)._refine(query),
+            onQueryChange: (query) => (this as any)._refine(query),
             onStateChange: () => {
               renderFn(
                 {
@@ -176,9 +176,9 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
         if (typeof additionalQueryParameters === 'function') {
           const additional = additionalQueryParameters({ query: '' });
           const toReset = additional
-            ? (Object.keys(additional) as Array<
-                keyof PlainSearchParameters
-              >).reduce<PlainSearchParameters>((acc, current) => {
+            ? (
+                Object.keys(additional) as Array<keyof PlainSearchParameters>
+              ).reduce<PlainSearchParameters>((acc, current) => {
                 // @ts-ignore search parameters is typed as readonly in v4
                 acc[current] = undefined;
                 return acc;

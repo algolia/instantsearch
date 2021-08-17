@@ -12,7 +12,7 @@ const withHitsAndConfigure = (
   options?: Parameters<typeof withHits>[1]
 ) =>
   withHits(
-    args => {
+    (args) => {
       const { search, instantsearch } = args;
 
       search.addWidgets([
@@ -263,7 +263,7 @@ stories
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
             builtInMarker: {
-              createOptions: item => ({
+              createOptions: (item) => ({
                 title: item.name,
                 label: item.price_formatted,
               }),
@@ -509,18 +509,18 @@ stories
         );
 
         const removeActiveHitClassNames = () => {
-          document.querySelectorAll('.hit').forEach(el => {
+          document.querySelectorAll('.hit').forEach((el) => {
             el.classList.remove('hit--active');
           });
         };
 
         const removeActiveMarkerClassNames = () => {
-          document.querySelectorAll('.my-custom-marker').forEach(el => {
+          document.querySelectorAll('.my-custom-marker').forEach((el) => {
             el.classList.remove('my-custom-marker--active');
           });
         };
 
-        containerElement!.addEventListener('mouseover', event => {
+        containerElement!.addEventListener('mouseover', (event) => {
           const hitElement = (event.target as HTMLElement).closest('.hit');
 
           if (hitElement) {
@@ -615,12 +615,12 @@ stories
             googleReference: window.google,
             container,
             builtInMarker: {
-              createOptions: item => ({
+              createOptions: (item) => ({
                 title: item.name,
               }),
             },
-            transformItems: items =>
-              items.map(item => ({
+            transformItems: (items) =>
+              items.map((item) => ({
                 ...item,
                 name: item.name.toUpperCase(),
               })),
@@ -633,7 +633,7 @@ stories
     'with add/remove',
     withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        withLifecycle(search, container, node =>
+        withLifecycle(search, container, (node) =>
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
             container: node,

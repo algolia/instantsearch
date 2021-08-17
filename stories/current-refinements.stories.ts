@@ -301,10 +301,10 @@ storiesOf('Refinements/CurrentRefinements', module)
         search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
-            transformItems: items =>
-              items.map(refinementItem => ({
+            transformItems: (items) =>
+              items.map((refinementItem) => ({
                 ...refinementItem,
-                refinements: refinementItem.refinements.map(item => ({
+                refinements: refinementItem.refinements.map((item) => ({
                   ...item,
                   label: item.label.toUpperCase(),
                 })),

@@ -162,8 +162,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     ];
     const widget = makeWidget({
       items,
-      transformItems: allItems =>
-        allItems.map(item => ({ ...item, label: 'transformed' })),
+      transformItems: (allItems) =>
+        allItems.map((item) => ({ ...item, label: 'transformed' })),
     });
 
     const helper = algoliasearchHelper(createSearchClient(), items[0].value);

@@ -71,7 +71,7 @@ const createFakeHistory = <TEntry = Record<string, unknown>>(
     },
     back() {
       state.index--;
-      listeners.forEach(listener => {
+      listeners.forEach((listener) => {
         listener(state.entries[state.index]);
       });
     },
@@ -115,7 +115,7 @@ const createFakeHitsPerPage = (): Widget =>
 describe('RoutingManager', () => {
   describe('within instantsearch', () => {
     // eslint-disable-next-line jest/no-done-callback
-    test('should write in the router on searchParameters change', done => {
+    test('should write in the router on searchParameters change', (done) => {
       const searchClient = createSearchClient();
       const router = createFakeRouter({
         write: jest.fn(),
@@ -136,7 +136,7 @@ describe('RoutingManager', () => {
           q: searchParameters.query,
         })),
         getWidgetSearchParameters: jest.fn(
-          searchParameters => searchParameters
+          (searchParameters) => searchParameters
         ),
       });
 
@@ -169,12 +169,12 @@ describe('RoutingManager', () => {
     });
 
     // eslint-disable-next-line jest/no-done-callback
-    test('should update the searchParameters on router state update', done => {
+    test('should update the searchParameters on router state update', (done) => {
       const searchClient = createSearchClient();
 
       let onRouterUpdateCallback: (args: UiState) => void;
       const router = createFakeRouter({
-        onUpdate: fn => {
+        onUpdate: (fn) => {
           onRouterUpdateCallback = fn;
         },
       });
@@ -220,7 +220,7 @@ describe('RoutingManager', () => {
     });
 
     // eslint-disable-next-line jest/no-done-callback
-    test('should apply state mapping on differences after searchFunction', done => {
+    test('should apply state mapping on differences after searchFunction', (done) => {
       const searchClient = createSearchClient();
 
       const router = createFakeRouter({
@@ -244,7 +244,7 @@ describe('RoutingManager', () => {
 
       const search = instantsearch({
         indexName: 'indexName',
-        searchFunction: helper => {
+        searchFunction: (helper) => {
           helper.setQuery('test').search();
         },
         searchClient,
@@ -263,7 +263,7 @@ describe('RoutingManager', () => {
             };
           },
           getWidgetSearchParameters: jest.fn(
-            searchParameters => searchParameters
+            (searchParameters) => searchParameters
           ),
         }),
       ]);
@@ -387,11 +387,11 @@ describe('RoutingManager', () => {
       const history = createFakeHistory<UiState>();
       const router = createFakeRouter({
         onUpdate(fn) {
-          history.subscribe(state => {
+          history.subscribe((state) => {
             fn(state);
           });
         },
-        write: jest.fn(state => {
+        write: jest.fn((state) => {
           history.push(state);
         }),
       });
@@ -479,11 +479,11 @@ describe('RoutingManager', () => {
       const history = createFakeHistory<UiState>();
       const router = createFakeRouter({
         onUpdate(fn) {
-          history.subscribe(state => {
+          history.subscribe((state) => {
             fn(state);
           });
         },
-        write: jest.fn(state => {
+        write: jest.fn((state) => {
           history.push(state);
         }),
       });

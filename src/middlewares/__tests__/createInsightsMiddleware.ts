@@ -34,11 +34,8 @@ describe('insights', () => {
   };
 
   const createUmdTestEnvironment = () => {
-    const {
-      analytics,
-      insightsClient,
-      libraryLoadedAndProcessQueue,
-    } = createInsightsUmdVersion();
+    const { analytics, insightsClient, libraryLoadedAndProcessQueue } =
+      createInsightsUmdVersion();
 
     const instantSearchInstance = createInstantSearch({
       client: algoliasearch('myAppId', 'myApiKey'),
@@ -222,11 +219,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('applies clickAnalytics', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        helper,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, helper } =
+        createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
@@ -235,11 +229,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it("doesn't reset page", () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        helper,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, helper } =
+        createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
@@ -249,11 +240,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('adds user agent', () => {
-      const {
-        analytics,
-        insightsClient,
-        instantSearchInstance,
-      } = createTestEnvironment();
+      const { analytics, insightsClient, instantSearchInstance } =
+        createTestEnvironment();
 
       const middleware = createInsightsMiddleware({
         insightsClient,
@@ -270,11 +258,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
   describe('userToken', () => {
     it('applies userToken which was set before subscribe()', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        getUserToken,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
@@ -284,12 +269,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('applies userToken before subscribe() without resetting the page', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        getUserToken,
-        helper,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, getUserToken, helper } =
+        createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
@@ -301,11 +282,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('applies userToken which was set after subscribe()', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        getUserToken,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
@@ -315,12 +293,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('applies userToken which was set after subscribe() without resetting the page', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        helper,
-        getUserToken,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, helper, getUserToken } =
+        createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
@@ -332,11 +306,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('applies userToken from cookie when nothing given', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        getUserToken,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
@@ -345,11 +316,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('applies userToken which was set before init', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        getUserToken,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
 
       insightsClient('setUserToken', 'token-from-queue-before-init');
 
@@ -432,11 +400,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
   describe('sendEventToInsights', () => {
     it('sends events', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        analytics,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, analytics } =
+        createTestEnvironment();
 
       const middleware = createInsightsMiddleware({
         insightsClient,
@@ -462,11 +427,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('calls onEvent when given', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        analytics,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, analytics } =
+        createTestEnvironment();
 
       const onEvent = jest.fn();
       const middleware = createInsightsMiddleware({

@@ -328,11 +328,8 @@ describe('RefinementList', () => {
       };
 
       const { container } = render(<RefinementList {...props} />);
-      const [
-        mainItem,
-        firstSubItem,
-        secondISubtem,
-      ] = container.querySelectorAll('.item');
+      const [mainItem, firstSubItem, secondISubtem] =
+        container.querySelectorAll('.item');
 
       fireEvent.click(mainItem);
       expect(toggleRefinement).toHaveBeenCalledWith('foo');
@@ -443,8 +440,8 @@ describe('RefinementList', () => {
 
     it('without facets from search', () => {
       const templates: Partial<RefinementListTemplates> = {
-        item: item => item.value,
-        searchableNoResults: x => JSON.stringify(x),
+        item: (item) => item.value,
+        searchableNoResults: (x) => JSON.stringify(x),
         showMoreText: '',
       };
       type TestTemplates = typeof templates;
@@ -457,7 +454,7 @@ describe('RefinementList', () => {
         className: 'customClassName',
         isFromSearch: true,
         searchPlaceholder: 'Search',
-        searchFacetValues: x => x,
+        searchFacetValues: (x) => x,
         templateProps: {
           templatesConfig: {},
           templates,
@@ -626,7 +623,7 @@ describe('RefinementList', () => {
         className: 'customClassName',
         isFromSearch: true,
         searchPlaceholder: 'Search',
-        searchFacetValues: x => x,
+        searchFacetValues: (x) => x,
         templateProps: {
           templatesConfig: {},
           templates,

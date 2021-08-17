@@ -128,46 +128,48 @@ export type NumericMenuConnector = Connector<
 
 const $$type = 'ais.numericMenu';
 
-const createSendEvent = ({
-  instantSearchInstance,
-  helper,
-  attribute,
-}: {
-  instantSearchInstance: InstantSearch;
-  helper: AlgoliaSearchHelper;
-  attribute: string;
-}) => (...args: [InsightsEvent] | [string, string, string?]) => {
-  if (args.length === 1) {
-    instantSearchInstance.sendEventToInsights(args[0]);
-    return;
-  }
+const createSendEvent =
+  ({
+    instantSearchInstance,
+    helper,
+    attribute,
+  }: {
+    instantSearchInstance: InstantSearch;
+    helper: AlgoliaSearchHelper;
+    attribute: string;
+  }) =>
+  (...args: [InsightsEvent] | [string, string, string?]) => {
+    if (args.length === 1) {
+      instantSearchInstance.sendEventToInsights(args[0]);
+      return;
+    }
 
-  const [eventType, facetValue, eventName = 'Filter Applied'] = args;
-  if (eventType !== 'click') {
-    return;
-  }
-  // facetValue === "%7B%22start%22:5,%22end%22:10%7D"
-  const filters = convertNumericRefinementsToFilters(
-    getRefinedState(helper.state, attribute, facetValue),
-    attribute
-  );
-  if (filters && filters.length > 0) {
-    /*
+    const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+    if (eventType !== 'click') {
+      return;
+    }
+    // facetValue === "%7B%22start%22:5,%22end%22:10%7D"
+    const filters = convertNumericRefinementsToFilters(
+      getRefinedState(helper.state, attribute, facetValue),
+      attribute
+    );
+    if (filters && filters.length > 0) {
+      /*
         filters === ["price<=10", "price>=5"]
       */
-    instantSearchInstance.sendEventToInsights({
-      insightsMethod: 'clickedFilters',
-      widgetType: $$type,
-      eventType,
-      payload: {
-        eventName,
-        index: helper.getIndex(),
-        filters,
-      },
-      attribute,
-    });
-  }
-};
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'clickedFilters',
+        widgetType: $$type,
+        eventType,
+        payload: {
+          eventName,
+          index: helper.getIndex(),
+          filters,
+        },
+        attribute,
+      });
+    }
+  };
 
 const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
   renderFn,
@@ -175,11 +177,11 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       attribute = '',
       items = [],
-      transformItems = (x => x) as TransformItems<NumericMenuRenderStateItem>,
+      transformItems = ((x) => x) as TransformItems<NumericMenuRenderStateItem>,
     } = widgetParams || {};
 
     if (attribute === '') {
@@ -324,7 +326,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         createURL,
       }) {
         if (!connectorState.refine) {
-          connectorState.refine = facetValue => {
+          connectorState.refine = (facetValue) => {
             const refinedState = getRefinedState(
               helper.state,
               attribute,
@@ -336,7 +338,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         }
 
         if (!connectorState.createURL) {
-          connectorState.createURL = newState => facetValue =>
+          connectorState.createURL = (newState) => (facetValue) =>
             createURL(getRefinedState(newState, attribute, facetValue));
         }
 
@@ -386,11 +388,9 @@ function isRefined(
   }
 
   if (option.start === undefined && option.end === undefined) {
-    return (Object.keys(
-      currentRefinements
-    ) as SearchParameters.Operator[]).every(
-      operator => (currentRefinements[operator] || []).length === 0
-    );
+    return (
+      Object.keys(currentRefinements) as SearchParameters.Operator[]
+    ).every((operator) => (currentRefinements[operator] || []).length === 0);
   }
 
   return false;

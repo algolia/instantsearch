@@ -109,7 +109,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * It enables the URL sync to keep track of the changes.
    */
   public onUpdate(callback: (routeState: TRouteState) => void): void {
-    this._onPopState = event => {
+    this._onPopState = (event) => {
       if (this.writeTimer) {
         window.clearTimeout(this.writeTimer);
         this.writeTimer = undefined;

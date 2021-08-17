@@ -21,33 +21,32 @@ const withUsage = createDocumentationMessageGenerator({
 });
 const suit = component('HitsPerPage');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: ComponentCSSClasses<HitsPerPageCSSClasses>;
-}) => (
-  { items, refine }: HitsPerPageRenderState,
-  isFirstRendering: boolean
-) => {
-  if (isFirstRendering) return;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: ComponentCSSClasses<HitsPerPageCSSClasses>;
+  }) =>
+  ({ items, refine }: HitsPerPageRenderState, isFirstRendering: boolean) => {
+    if (isFirstRendering) return;
 
-  const { value: currentValue } =
-    find(items, ({ isRefined }) => isRefined) || {};
+    const { value: currentValue } =
+      find(items, ({ isRefined }) => isRefined) || {};
 
-  render(
-    <div className={cssClasses.root}>
-      <Selector
-        cssClasses={cssClasses}
-        currentValue={currentValue}
-        options={items}
-        setValue={refine}
-      />
-    </div>,
-    containerNode
-  );
-};
+    render(
+      <div className={cssClasses.root}>
+        <Selector
+          cssClasses={cssClasses}
+          currentValue={currentValue}
+          options={items}
+          setValue={refine}
+        />
+      </div>,
+      containerNode
+    );
+  };
 
 export type HitsPerPageCSSClasses = Partial<{
   /**
@@ -85,8 +84,12 @@ export type HitsPerPageWidget = WidgetFactory<
 >;
 
 const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetParams) {
-  const { container, items, cssClasses: userCssClasses = {}, transformItems } =
-    widgetParams || {};
+  const {
+    container,
+    items,
+    cssClasses: userCssClasses = {},
+    transformItems,
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

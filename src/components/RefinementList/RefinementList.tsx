@@ -26,9 +26,8 @@ type RefinementListOptionalClasses =
   | 'searchBox'
   | 'count';
 
-type RefinementListWidgetCSSClasses = ComponentCSSClasses<
-  RefinementListOwnCSSClasses
->;
+type RefinementListWidgetCSSClasses =
+  ComponentCSSClasses<RefinementListOwnCSSClasses>;
 
 type RefinementListRequiredCSSClasses = Omit<
   RefinementListWidgetCSSClasses,
@@ -36,12 +35,13 @@ type RefinementListRequiredCSSClasses = Omit<
 > &
   Partial<Pick<RefinementListWidgetCSSClasses, RefinementListOptionalClasses>>;
 
-export type RefinementListComponentCSSClasses = RefinementListRequiredCSSClasses & {
-  searchable?: SearchBoxComponentCSSClasses;
-} & Partial<Pick<RatingMenuComponentCSSClasses, 'disabledItem'>> &
-  Partial<
-    Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
-  >;
+export type RefinementListComponentCSSClasses =
+  RefinementListRequiredCSSClasses & {
+    searchable?: SearchBoxComponentCSSClasses;
+  } & Partial<Pick<RatingMenuComponentCSSClasses, 'disabledItem'>> &
+    Partial<
+      Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
+    >;
 
 type FacetValue = {
   value: string;
@@ -81,18 +81,16 @@ const defaultProps = {
   depth: 0,
 };
 
-type RefinementListPropsWithDefaultProps<
-  TTemplates extends Templates
-> = RefinementListProps<TTemplates> & Readonly<typeof defaultProps>;
+type RefinementListPropsWithDefaultProps<TTemplates extends Templates> =
+  RefinementListProps<TTemplates> & Readonly<typeof defaultProps>;
 
-type RefinementListItemTemplateData<
-  TTemplates extends Templates
-> = FacetValue & {
-  url: string;
-} & Pick<
-    RefinementListProps<TTemplates>,
-    'attribute' | 'cssClasses' | 'isFromSearch'
-  >;
+type RefinementListItemTemplateData<TTemplates extends Templates> =
+  FacetValue & {
+    url: string;
+  } & Pick<
+      RefinementListProps<TTemplates>,
+      'attribute' | 'cssClasses' | 'isFromSearch'
+    >;
 
 function isHierarchicalMenuItem(
   facetValue: FacetValue

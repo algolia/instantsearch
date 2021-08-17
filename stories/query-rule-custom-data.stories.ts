@@ -32,7 +32,7 @@ storiesOf('Metadata/QueryRuleCustomData', module)
           templates: {
             default: ({ items }: { items: CustomDataItem[] }) =>
               items
-                .map(item => {
+                .map((item) => {
                   const { title, banner, link } = item;
 
                   if (!banner) {
@@ -102,7 +102,7 @@ storiesOf('Metadata/QueryRuleCustomData', module)
           container: widgetContainer,
           transformItems: (items: CustomDataItem[]) => {
             if (items.length > 0) {
-              return items.filter(item => typeof item.banner !== 'undefined');
+              return items.filter((item) => typeof item.banner !== 'undefined');
             }
 
             return [

@@ -31,7 +31,7 @@ export const createRouterMiddleware = <
     // this is needed because simpleStateMapping is StateMapping<TUiState, TUiState>.
     // While it's only used when UiState and RouteState are the same, unfortunately
     // TypeScript still considers them separate types.
-    stateMapping = (simpleStateMapping<TUiState>() as unknown) as StateMapping<
+    stateMapping = simpleStateMapping<TUiState>() as unknown as StateMapping<
       TUiState,
       TRouteState
     >,
@@ -78,7 +78,7 @@ export const createRouterMiddleware = <
       },
 
       subscribe() {
-        router.onUpdate(route => {
+        router.onUpdate((route) => {
           instantSearchInstance.setUiState(stateMapping.routeToState(route));
         });
       },

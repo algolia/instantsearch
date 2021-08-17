@@ -89,10 +89,8 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const [
-          changeEventName,
-          changeEventListener,
-        ] = (algoliaPlaces as any).__instance.on.mock.calls[0];
+        const [changeEventName, changeEventListener] = (algoliaPlaces as any)
+          .__instance.on.mock.calls[0];
 
         expect(changeEventName).toEqual('change');
 
@@ -128,10 +126,8 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const [
-          clearEventName,
-          clearEventListener,
-        ] = (algoliaPlaces as any).__instance.on.mock.calls[1];
+        const [clearEventName, clearEventListener] = (algoliaPlaces as any)
+          .__instance.on.mock.calls[1];
 
         expect(clearEventName).toEqual('clear');
 
@@ -163,10 +159,8 @@ describe('places', () => {
 
         expect(helper.state.aroundLatLngViaIP).toBe(true);
 
-        const [
-          changeEventName,
-          changeEventListener,
-        ] = (algoliaPlaces as any).__instance.on.mock.calls[0];
+        const [changeEventName, changeEventListener] = (algoliaPlaces as any)
+          .__instance.on.mock.calls[0];
 
         expect(changeEventName).toEqual('change');
 
@@ -182,10 +176,8 @@ describe('places', () => {
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(helper.state.aroundLatLngViaIP).toBe(false);
 
-        const [
-          clearEventName,
-          clearEventListener,
-        ] = (algoliaPlaces as any).__instance.on.mock.calls[1];
+        const [clearEventName, clearEventListener] = (algoliaPlaces as any)
+          .__instance.on.mock.calls[1];
 
         expect(clearEventName).toEqual('clear');
 
@@ -334,10 +326,8 @@ describe('places', () => {
 
         expect(helper.state.aroundLatLngViaIP).toBeUndefined();
 
-        const [
-          ,
-          clearEventListener,
-        ] = (algoliaPlaces as any).__instance.on.mock.calls[1];
+        const [, clearEventListener] = (algoliaPlaces as any).__instance.on.mock
+          .calls[1];
 
         clearEventListener();
 
@@ -416,10 +406,8 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const [
-          changeEventName,
-          changeEventListener,
-        ] = (algoliaPlaces as any).__instance.on.mock.calls[0];
+        const [changeEventName, changeEventListener] = (algoliaPlaces as any)
+          .__instance.on.mock.calls[0];
 
         expect(changeEventName).toEqual('change');
 
@@ -456,10 +444,8 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const [
-          clearEventName,
-          clearEventListener,
-        ] = (algoliaPlaces as any).__instance.on.mock.calls[1];
+        const [clearEventName, clearEventListener] = (algoliaPlaces as any)
+          .__instance.on.mock.calls[1];
 
         expect(clearEventName).toEqual('clear');
 
@@ -484,10 +470,8 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const [
-          clearEventName,
-          clearEventListener,
-        ] = (algoliaPlaces as any).__instance.on.mock.calls[1];
+        const [clearEventName, clearEventListener] = (algoliaPlaces as any)
+          .__instance.on.mock.calls[1];
 
         expect(clearEventName).toEqual('clear');
 

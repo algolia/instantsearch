@@ -11,9 +11,8 @@ import {
 import { MenuRenderState } from '../../connectors/menu/connectMenu';
 import { ComponentCSSClasses } from '../../types';
 
-export type MenuSelectComponentCSSClasses = ComponentCSSClasses<
-  MenuSelectCSSClasses
->;
+export type MenuSelectComponentCSSClasses =
+  ComponentCSSClasses<MenuSelectCSSClasses>;
 
 export type MenuSelectComponentTemplates = Required<MenuSelectTemplates>;
 
@@ -46,7 +45,7 @@ type Props = {
 };
 
 function MenuSelect({ cssClasses, templateProps, items, refine }: Props) {
-  const { value: selectedValue } = find(items, item => item.isRefined) || {
+  const { value: selectedValue } = find(items, (item) => item.isRefined) || {
     value: '',
   };
 
@@ -59,7 +58,7 @@ function MenuSelect({ cssClasses, templateProps, items, refine }: Props) {
       <select
         className={cssClasses.select}
         value={selectedValue}
-        onChange={event => {
+        onChange={(event) => {
           refine((event.target as HTMLSelectElement).value);
         }}
       >
@@ -73,7 +72,7 @@ function MenuSelect({ cssClasses, templateProps, items, refine }: Props) {
           }}
         />
 
-        {items.map(item => (
+        {items.map((item) => (
           <Template
             {...templateProps}
             templateKey="item"

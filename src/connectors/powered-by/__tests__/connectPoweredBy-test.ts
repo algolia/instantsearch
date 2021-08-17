@@ -61,8 +61,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 
     expect(rendering).toHaveBeenCalledWith(
       expect.objectContaining({
-        url:
-          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
+        url: 'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
       }),
       true
     );
@@ -77,8 +76,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 
     expect(rendering).toHaveBeenCalledWith(
       expect.objectContaining({
-        url:
-          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
+        url: 'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
       }),
       false
     );
@@ -131,8 +129,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
       const widget = makeWidget({});
 
       expect(widget.getWidgetRenderState(createInitOptions())).toEqual({
-        url:
-          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
+        url: 'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
         widgetParams: {},
       });
     });
@@ -160,8 +157,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
       });
 
       expect(widget.getWidgetRenderState(createInitOptions())).toEqual({
-        url:
-          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
+        url: 'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
         widgetParams: {
           theme: 'dark',
         },
@@ -177,8 +173,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 
       expect(widget.getRenderState({}, createInitOptions())).toEqual({
         poweredBy: {
-          url:
-            'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
+          url: 'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
           widgetParams: {},
         },
       });
@@ -210,8 +205,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 
       expect(widget.getRenderState({}, createInitOptions())).toEqual({
         poweredBy: {
-          url:
-            'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
+          url: 'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
           widgetParams: {
             theme: 'dark',
           },

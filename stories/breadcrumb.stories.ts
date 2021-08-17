@@ -226,8 +226,8 @@ storiesOf('Metadata/Breadcrumb', module)
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-            transformItems: items =>
-              items.map(item => ({
+            transformItems: (items) =>
+              items.map((item) => ({
                 ...item,
                 label: `${item.label} (transformed)`,
               })),
@@ -253,7 +253,7 @@ storiesOf('Metadata/Breadcrumb', module)
       ({ search, container, instantsearch }) => {
         search.addWidgets([virtualHierarchicalMenu()]);
 
-        withLifecycle(search, container, node =>
+        withLifecycle(search, container, (node) =>
           instantsearch.widgets.breadcrumb({
             container: node,
             attributes: [

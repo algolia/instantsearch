@@ -30,10 +30,10 @@ function Selector({
   return (
     <select
       className={cx(cssClasses.select)}
-      onChange={event => setValue((event.target as HTMLSelectElement).value)}
+      onChange={(event) => setValue((event.target as HTMLSelectElement).value)}
       value={`${currentValue}`}
     >
-      {options.map(option => (
+      {options.map((option) => (
         <option
           className={cx(cssClasses.option)}
           key={option.label + option.value}

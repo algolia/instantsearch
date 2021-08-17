@@ -48,9 +48,8 @@ jest.mock('algoliasearch-helper', () => {
   const mock = jest.fn((...args: Parameters<AlgoliaHelperModule>) => {
     const helper = module(...args);
 
-    const searchOnlyWithDerivedHelpers = helper.searchOnlyWithDerivedHelpers.bind(
-      helper
-    );
+    const searchOnlyWithDerivedHelpers =
+      helper.searchOnlyWithDerivedHelpers.bind(helper);
 
     helper.searchOnlyWithDerivedHelpers = jest.fn((...searchArgs) => {
       return searchOnlyWithDerivedHelpers(...searchArgs);
@@ -663,7 +662,9 @@ describe('start', () => {
   });
 
   it('calls the provided `searchFunction` with a single request', () => {
-    const searchFunction = jest.fn(helper => helper.setQuery('test').search());
+    const searchFunction = jest.fn((helper) =>
+      helper.setQuery('test').search()
+    );
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -807,7 +808,7 @@ describe('start', () => {
   });
 
   // eslint-disable-next-line jest/no-done-callback
-  it('triggers a search with errors', done => {
+  it('triggers a search with errors', (done) => {
     const searchClient = createSearchClient({
       // @ts-ignore (this fails in v4, not in v3, therefore not ts-expect-error)
       search: jest.fn(() => Promise.reject(new Error('SERVER_ERROR'))),
@@ -822,7 +823,7 @@ describe('start', () => {
 
     search.start();
 
-    search.on('error', event => {
+    search.on('error', (event) => {
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(event.error).toEqual(new Error('SERVER_ERROR'));
       done();
@@ -1177,7 +1178,7 @@ describe('scheduleRender', () => {
   });
 
   // eslint-disable-next-line jest/no-done-callback
-  it('emits a `render` event once the render is complete', done => {
+  it('emits a `render` event once the render is complete', (done) => {
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
@@ -1526,7 +1527,7 @@ describe('use', () => {
     });
     const searchBox = createSearchBox({});
     const searchBoxInit = searchBox.init!;
-    searchBox.init = jest.fn(args => searchBoxInit.bind(searchBox, args)());
+    searchBox.init = jest.fn((args) => searchBoxInit.bind(searchBox, args)());
     const middlewareSpy = {
       onStateChange: jest.fn(),
       subscribe: jest.fn(),
@@ -1974,7 +1975,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     ]);
     search.start();
 
-    search.setUiState(prevUiState => {
+    search.setUiState((prevUiState) => {
       expect(prevUiState).toEqual({
         indexName: {
           query: 'Initial query',
@@ -1996,7 +1997,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
     await runAllMicroTasks();
 
-    search.setUiState(prevUiState => {
+    search.setUiState((prevUiState) => {
       expect(prevUiState).toEqual({
         indexName: {
           page: 2,
@@ -2246,11 +2247,19 @@ describe('getUiState', () => {
       .getWidgetRenderState(createRenderOptions())
       .refine(3);
 
-    ((search.mainIndex.getWidgets()[2] as IndexWidget).getWidgets()[0] as SearchBoxWidgetInstance)
+    (
+      (
+        search.mainIndex.getWidgets()[2] as IndexWidget
+      ).getWidgets()[0] as SearchBoxWidgetInstance
+    )
       .getWidgetRenderState(createRenderOptions())
       .refine('test2');
 
-    ((search.mainIndex.getWidgets()[2] as IndexWidget).getWidgets()[1] as PaginationWidgetInstance)
+    (
+      (
+        search.mainIndex.getWidgets()[2] as IndexWidget
+      ).getWidgets()[1] as PaginationWidgetInstance
+    )
       .getWidgetRenderState(createRenderOptions())
       .refine(39);
 

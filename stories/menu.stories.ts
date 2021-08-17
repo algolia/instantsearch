@@ -20,8 +20,8 @@ storiesOf('Refinements/Menu', module)
         instantsearch.widgets.menu({
           container,
           attribute: 'categories',
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               label: `${item.label} (transformed)`,
             })),
@@ -82,7 +82,7 @@ storiesOf('Refinements/Menu', module)
   .add(
     'with add/remove',
     withHits(({ search, container, instantsearch }) => {
-      withLifecycle(search, container, node =>
+      withLifecycle(search, container, (node) =>
         instantsearch.widgets.menu({
           container: node,
           attribute: 'categories',

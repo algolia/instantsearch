@@ -330,8 +330,8 @@ describe('CurrentRefinements', () => {
       };
 
       const { container } = render(<CurrentRefinements {...props} />);
-      const categoryLabel = container.querySelector('.categoryLabel')!
-        .innerHTML;
+      const categoryLabel =
+        container.querySelector('.categoryLabel')!.innerHTML;
 
       expect(categoryLabel).toEqual('<q>search1</q>');
       expect(container).toMatchSnapshot();

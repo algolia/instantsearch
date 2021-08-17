@@ -169,7 +169,7 @@ class Rheostat extends Component<Props, State> {
   public state: State = {
     className: getClassName(this.props),
     // non-null thanks to defaultProps
-    handlePos: this.props.values!.map(value =>
+    handlePos: this.props.values!.map((value) =>
       getPosition(value, this.props.min!, this.props.max!)
     ),
     handleDimensions: 0,
@@ -350,12 +350,12 @@ class Rheostat extends Component<Props, State> {
     type StepMultiplier = { [key: number]: (value: number) => number };
 
     const stepMultiplier: StepMultiplier = {
-      [KEYS.LEFT]: v => v * -1,
-      [KEYS.RIGHT]: v => v,
-      [KEYS.UP]: v => v,
-      [KEYS.DOWN]: v => v * -1,
-      [KEYS.PAGE_DOWN]: v => (v > 1 ? -v : v * -10),
-      [KEYS.PAGE_UP]: v => (v > 1 ? v : v * 10),
+      [KEYS.LEFT]: (v) => v * -1,
+      [KEYS.RIGHT]: (v) => v,
+      [KEYS.UP]: (v) => v,
+      [KEYS.DOWN]: (v) => v * -1,
+      [KEYS.PAGE_DOWN]: (v) => (v > 1 ? -v : v * -10),
+      [KEYS.PAGE_UP]: (v) => (v > 1 ? v : v * 10),
     };
 
     if (Object.prototype.hasOwnProperty.call(stepMultiplier, keyCode)) {
@@ -407,7 +407,7 @@ class Rheostat extends Component<Props, State> {
 
     return {
       handlePos: nextHandlePos,
-      values: nextHandlePos.map(pos => getValue(pos, min, max)),
+      values: nextHandlePos.map((pos) => getValue(pos, min, max)),
     };
   }
 
@@ -646,7 +646,7 @@ class Rheostat extends Component<Props, State> {
 
     this.setState(
       {
-        handlePos: nextValues.map(value => getPosition(value, min, max)),
+        handlePos: nextValues.map((value) => getPosition(value, min, max)),
         values: nextValues,
       },
       () => this.fireChangeEvent()
@@ -716,7 +716,7 @@ class Rheostat extends Component<Props, State> {
         })}
 
         {PitComponent &&
-          pitPoints.map(n => {
+          pitPoints.map((n) => {
             const pos = getPosition(n, min, max);
             const pitStyle: Style =
               orientation === 'vertical'

@@ -87,8 +87,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/"
       const widget = menu({
         container: document.createElement('div'),
         attribute: 'test',
-        transformItems: items =>
-          items.map(item => ({ ...item, transformed: true })),
+        transformItems: (items) =>
+          items.map((item) => ({ ...item, transformed: true })),
       });
 
       const helper = jsHelper(createSearchClient(), '');

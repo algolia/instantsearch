@@ -147,9 +147,13 @@ const connectRange: RangeConnector = function connectRange(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
-    const { attribute = '', min: minBound, max: maxBound, precision = 0 } =
-      widgetParams || {};
+  return (widgetParams) => {
+    const {
+      attribute = '',
+      min: minBound,
+      max: maxBound,
+      precision = 0,
+    } = widgetParams || {};
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
@@ -281,34 +285,36 @@ const connectRange: RangeConnector = function connectRange(
       }
     };
 
-    const createSendEvent = (
-      instantSearchInstance: InstantSearch,
-      helper: AlgoliaSearchHelper,
-      currentRange: Range
-    ) => (...args: [InsightsEvent] | [string, string, string?]) => {
-      if (args.length === 1) {
-        instantSearchInstance.sendEventToInsights(args[0]);
-        return;
-      }
+    const createSendEvent =
+      (
+        instantSearchInstance: InstantSearch,
+        helper: AlgoliaSearchHelper,
+        currentRange: Range
+      ) =>
+      (...args: [InsightsEvent] | [string, string, string?]) => {
+        if (args.length === 1) {
+          instantSearchInstance.sendEventToInsights(args[0]);
+          return;
+        }
 
-      const [eventType, facetValue, eventName] = args;
-      if (eventType !== 'click') {
-        return;
-      }
-      const [nextMin, nextMax] = facetValue;
-      const refinedState = getRefinedState(
-        helper,
-        currentRange,
-        nextMin,
-        nextMax
-      );
-      sendEventWithRefinedState(
-        refinedState,
-        instantSearchInstance,
-        helper,
-        eventName
-      );
-    };
+        const [eventType, facetValue, eventName] = args;
+        if (eventType !== 'click') {
+          return;
+        }
+        const [nextMin, nextMax] = facetValue;
+        const refinedState = getRefinedState(
+          helper,
+          currentRange,
+          nextMin,
+          nextMax
+        );
+        sendEventWithRefinedState(
+          refinedState,
+          instantSearchInstance,
+          helper,
+          eventName
+        );
+      };
 
     function _getCurrentRange(
       stats: Partial<NonNullable<SearchResults.Facet['stats']>>
@@ -407,7 +413,7 @@ const connectRange: RangeConnector = function connectRange(
         const facetsFromResults = (results && results.disjunctiveFacets) || [];
         const facet = find(
           facetsFromResults,
-          facetResult => facetResult.name === attribute
+          (facetResult) => facetResult.name === attribute
         );
         const stats = (facet && facet.stats) || {
           min: undefined,
@@ -458,10 +464,8 @@ const connectRange: RangeConnector = function connectRange(
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
-        const {
-          '>=': min = [],
-          '<=': max = [],
-        } = searchParameters.getNumericRefinements(attribute);
+        const { '>=': min = [], '<=': max = [] } =
+          searchParameters.getNumericRefinements(attribute);
 
         if (min.length === 0 && max.length === 0) {
           return uiState;
@@ -514,10 +518,8 @@ const connectRange: RangeConnector = function connectRange(
           isFiniteNumber(lowerBound) &&
           (!isFiniteNumber(minBound) || minBound < lowerBound)
         ) {
-          widgetSearchParameters = widgetSearchParameters.removeNumericRefinement(
-            attribute,
-            '>='
-          );
+          widgetSearchParameters =
+            widgetSearchParameters.removeNumericRefinement(attribute, '>=');
           widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '>=',
@@ -529,10 +531,8 @@ const connectRange: RangeConnector = function connectRange(
           isFiniteNumber(upperBound) &&
           (!isFiniteNumber(maxBound) || upperBound < maxBound)
         ) {
-          widgetSearchParameters = widgetSearchParameters.removeNumericRefinement(
-            attribute,
-            '<='
-          );
+          widgetSearchParameters =
+            widgetSearchParameters.removeNumericRefinement(attribute, '<=');
           widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '<=',

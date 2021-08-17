@@ -162,9 +162,8 @@ type RefinementListSearchableTemplates = Partial<{
 
 export type RefinementListTemplates = RefinementListOwnTemplates &
   RefinementListSearchableTemplates;
-export type RefinementListComponentTemplates = Required<
-  RefinementListOwnTemplates
->;
+export type RefinementListComponentTemplates =
+  Required<RefinementListOwnTemplates>;
 
 export type RefinementListWidgetParams = {
   /**
@@ -202,79 +201,81 @@ export type RefinementListWidgetParams = {
   cssClasses?: RefinementListCSSClasses;
 };
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  templates,
-  searchBoxTemplates,
-  renderState,
-  showMore,
-  searchable,
-  searchablePlaceholder,
-  searchableIsAlwaysActive,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: RefinementListComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<RefinementListComponentTemplates>;
-    searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
-  };
-  templates: RefinementListOwnTemplates;
-  searchBoxTemplates: SearchBoxTemplates;
-  showMore?: boolean;
-  searchable?: boolean;
-  searchablePlaceholder?: string;
-  searchableIsAlwaysActive?: boolean;
-}): Renderer<RefinementListRenderState, RefinementListConnectorParams> => (
-  {
-    refine,
-    items,
-    createURL,
-    searchForItems,
-    isFromSearch,
-    instantSearchInstance,
-    toggleShowMore,
-    isShowingMore,
-    hasExhaustiveItems,
-    canToggleShowMore,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    renderState.searchBoxTemplateProps = prepareTemplateProps({
-      defaultTemplates: searchBoxDefaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: searchBoxTemplates,
-    });
-    return;
-  }
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    templates,
+    searchBoxTemplates,
+    renderState,
+    showMore,
+    searchable,
+    searchablePlaceholder,
+    searchableIsAlwaysActive,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: RefinementListComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<RefinementListComponentTemplates>;
+      searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
+    };
+    templates: RefinementListOwnTemplates;
+    searchBoxTemplates: SearchBoxTemplates;
+    showMore?: boolean;
+    searchable?: boolean;
+    searchablePlaceholder?: string;
+    searchableIsAlwaysActive?: boolean;
+  }): Renderer<RefinementListRenderState, RefinementListConnectorParams> =>
+  (
+    {
+      refine,
+      items,
+      createURL,
+      searchForItems,
+      isFromSearch,
+      instantSearchInstance,
+      toggleShowMore,
+      isShowingMore,
+      hasExhaustiveItems,
+      canToggleShowMore,
+    },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      renderState.searchBoxTemplateProps = prepareTemplateProps({
+        defaultTemplates: searchBoxDefaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: searchBoxTemplates,
+      });
+      return;
+    }
 
-  render(
-    <RefinementList
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={items}
-      templateProps={renderState.templateProps!}
-      searchBoxTemplateProps={renderState.searchBoxTemplateProps}
-      toggleRefinement={refine}
-      searchFacetValues={searchable ? searchForItems : undefined}
-      searchPlaceholder={searchablePlaceholder}
-      searchIsAlwaysActive={searchableIsAlwaysActive}
-      isFromSearch={isFromSearch}
-      showMore={showMore && !isFromSearch && items.length > 0}
-      toggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-      hasExhaustiveItems={hasExhaustiveItems}
-      canToggleShowMore={canToggleShowMore}
-    />,
-    containerNode
-  );
-};
+    render(
+      <RefinementList
+        createURL={createURL}
+        cssClasses={cssClasses}
+        facetValues={items}
+        templateProps={renderState.templateProps!}
+        searchBoxTemplateProps={renderState.searchBoxTemplateProps}
+        toggleRefinement={refine}
+        searchFacetValues={searchable ? searchForItems : undefined}
+        searchPlaceholder={searchablePlaceholder}
+        searchIsAlwaysActive={searchableIsAlwaysActive}
+        isFromSearch={isFromSearch}
+        showMore={showMore && !isFromSearch && items.length > 0}
+        toggleShowMore={toggleShowMore}
+        isShowingMore={isShowingMore}
+        hasExhaustiveItems={hasExhaustiveItems}
+        canToggleShowMore={canToggleShowMore}
+      />,
+      containerNode
+    );
+  };
 
 export type RefinementListWidget = WidgetFactory<
   RefinementListWidgetDescription & { $$widgetType: 'ais.refinementList' },

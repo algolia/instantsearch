@@ -185,10 +185,10 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       escapeHTML = true,
-      transformItems = (items => items) as TransformItems<Hit>,
+      transformItems = ((items) => items) as TransformItems<Hit>,
       cache = getInMemoryCache(),
     } = widgetParams || {};
     let showPrevious: () => void;
@@ -220,31 +220,35 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       }
     };
 
-    const getShowPrevious = (helper: Helper): (() => void) => () => {
-      // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
-      // avoid updating the browser URL when the user displays the previous page.
-      helper
-        .overrideStateWithoutTriggeringChangeEvent({
-          ...helper.state,
-          page:
-            getFirstReceivedPage(
+    const getShowPrevious =
+      (helper: Helper): (() => void) =>
+      () => {
+        // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
+        // avoid updating the browser URL when the user displays the previous page.
+        helper
+          .overrideStateWithoutTriggeringChangeEvent({
+            ...helper.state,
+            page:
+              getFirstReceivedPage(
+                helper.state,
+                cache.read({ state: helper.state }) || {}
+              ) - 1,
+          })
+          .searchWithoutTriggeringOnStateChange();
+      };
+
+    const getShowMore =
+      (helper: Helper): (() => void) =>
+      () => {
+        helper
+          .setPage(
+            getLastReceivedPage(
               helper.state,
               cache.read({ state: helper.state }) || {}
-            ) - 1,
-        })
-        .searchWithoutTriggeringOnStateChange();
-    };
-
-    const getShowMore = (helper: Helper): (() => void) => () => {
-      helper
-        .setPage(
-          getLastReceivedPage(
-            helper.state,
-            cache.read({ state: helper.state }) || {}
-          ) + 1
-        )
-        .search();
-    };
+            ) + 1
+          )
+          .search();
+      };
 
     return {
       $$type: 'ais.infiniteHits',
@@ -394,9 +398,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         let widgetSearchParameters = searchParameters;
 
         if (escapeHTML) {
-          widgetSearchParameters = searchParameters.setQueryParameters(
-            TAG_PLACEHOLDER
-          );
+          widgetSearchParameters =
+            searchParameters.setQueryParameters(TAG_PLACEHOLDER);
         }
 
         // The page in the search parameters is decremented by one

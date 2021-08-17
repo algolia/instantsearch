@@ -34,7 +34,7 @@ function extractPayload(
     },
   };
 
-  widgets.forEach(widget => {
+  widgets.forEach((widget) => {
     let widgetParams: { [key: string]: any } = {};
 
     if (widget.getWidgetRenderState) {
@@ -47,7 +47,7 @@ function extractPayload(
 
     // since we destructure in all widgets, the parameters with defaults are set to "undefined"
     const params = Object.keys(widgetParams).filter(
-      key => widgetParams[key] !== undefined
+      (key) => widgetParams[key] !== undefined
     );
 
     payload.widgets.push({

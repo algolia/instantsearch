@@ -28,8 +28,8 @@ storiesOf('Sorting/SortBy', module)
             { value: 'instant_search_price_asc', label: 'Lowest price' },
             { value: 'instant_search_price_desc', label: 'Highest price' },
           ],
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               label: item.label.toUpperCase(),
             })),
@@ -40,7 +40,7 @@ storiesOf('Sorting/SortBy', module)
   .add(
     'with add/remove',
     withHits(({ search, container, instantsearch }) => {
-      withLifecycle(search, container, node =>
+      withLifecycle(search, container, (node) =>
         instantsearch.widgets.sortBy({
           container: node,
           items: [

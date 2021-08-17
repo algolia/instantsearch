@@ -17,7 +17,7 @@ describe('infiniteHits', () => {
     const searchClient = createSearchClient({
       // have to cast here, because this function isn't generic
       search: jest.fn(
-        requests =>
+        (requests) =>
           Promise.resolve({
             results: requests.map(({ params: { page } = {} }) =>
               createSingleSearchResponse({

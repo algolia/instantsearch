@@ -69,8 +69,8 @@ const buildPayload: BuildPayload = ({
     return null;
   }
   const queryID = hitsArray[0].__queryID;
-  const objectIDs = hitsArray.map(hit => hit.objectID);
-  const positions = hitsArray.map(hit => hit.__position);
+  const objectIDs = hitsArray.map((hit) => hit.objectID);
+  const positions = hitsArray.map((hit) => hit.__position);
 
   if (eventType === 'view') {
     return {
@@ -123,7 +123,7 @@ const buildPayload: BuildPayload = ({
 function removeEscapedFromHits(hits: Hits | EscapedHits): Hits {
   // this returns without `hits.__escaped`
   // and this way it doesn't mutate the original `hits`
-  return hits.map(hit => hit);
+  return hits.map((hit) => hit);
 }
 
 export function createSendEventForHits({

@@ -102,12 +102,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
   });
 
   it('Renders during init and render', () => {
-    const {
-      renderFn,
-      widget,
-      instantSearchInstance,
-      helper,
-    } = setupTestEnvironment({ hits: [] });
+    const { renderFn, widget, instantSearchInstance, helper } =
+      setupTestEnvironment({ hits: [] });
 
     expect(renderFn).toHaveBeenCalledTimes(0);
 
@@ -164,12 +160,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
   });
 
   it('renders empty hits when query is not given', () => {
-    const {
-      renderFn,
-      widget,
-      helper,
-      instantSearchInstance,
-    } = setupTestEnvironment({ hits: [] });
+    const { renderFn, widget, helper, instantSearchInstance } =
+      setupTestEnvironment({ hits: [] });
 
     widget.init!(
       createInitOptions({
@@ -211,14 +203,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 
   it('renders loader and results when query is given', async () => {
     const hits = [{ title: '', objectID: 'a' }];
-    const {
-      renderFn,
-      instantSearchInstance,
-      widget,
-      helper,
-    } = setupTestEnvironment({
-      hits,
-    });
+    const { renderFn, instantSearchInstance, widget, helper } =
+      setupTestEnvironment({
+        hits,
+      });
 
     widget.init!(
       createInitOptions({
@@ -266,14 +254,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 
   it('debounces renders', async () => {
     const hits = [{ title: '', objectID: 'a' }];
-    const {
-      renderFn,
-      instantSearchInstance,
-      widget,
-      helper,
-    } = setupTestEnvironment({
-      hits,
-    });
+    const { renderFn, instantSearchInstance, widget, helper } =
+      setupTestEnvironment({
+        hits,
+      });
 
     widget.init!(
       createInitOptions({

@@ -49,36 +49,36 @@ const withUsage = createDocumentationMessageGenerator({
 
 const suit = component('QueryRuleCustomData');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: QueryRuleCustomDataComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<
-      QueryRuleCustomDataComponentTemplates
-    >;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: QueryRuleCustomDataComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<QueryRuleCustomDataComponentTemplates>;
+    };
+    templates: QueryRuleCustomDataComponentTemplates;
+  }) =>
+  ({ items }: QueryRulesRenderState) => {
+    render(
+      <CustomData
+        cssClasses={cssClasses as QueryRuleCustomDataComponentCSSClasses}
+        templates={templates}
+        items={items}
+      />,
+      containerNode
+    );
   };
-  templates: QueryRuleCustomDataComponentTemplates;
-}) => ({ items }: QueryRulesRenderState) => {
-  render(
-    <CustomData
-      cssClasses={cssClasses as QueryRuleCustomDataComponentCSSClasses}
-      templates={templates}
-      items={items}
-    />,
-    containerNode
-  );
-};
 
-const queryRuleCustomData: QueryRuleCustomDataWidget = widgetParams => {
+const queryRuleCustomData: QueryRuleCustomDataWidget = (widgetParams) => {
   const {
     container,
     cssClasses: userCssClasses = {},
     templates: userTemplates = {},
-    transformItems = (items =>
+    transformItems = ((items) =>
       items) as QueryRulesConnectorParams['transformItems'],
   } = widgetParams || {};
 

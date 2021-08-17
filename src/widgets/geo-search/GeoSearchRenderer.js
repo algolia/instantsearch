@@ -6,14 +6,8 @@ import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchContr
 
 const refineWithMap = ({ refine, mapInstance }) =>
   refine({
-    northEast: mapInstance
-      .getBounds()
-      .getNorthEast()
-      .toJSON(),
-    southWest: mapInstance
-      .getBounds()
-      .getSouthWest()
-      .toJSON(),
+    northEast: mapInstance.getBounds().getNorthEast().toJSON(),
+    southWest: mapInstance.getBounds().getSouthWest().toJSON(),
   });
 
 const collectMarkersForNextRender = (markers, nextIds) =>
@@ -149,31 +143,31 @@ const renderer = (
   }
 
   // Collect markers that need to be updated or removed
-  const nextItemsIds = items.map(_ => _.objectID);
+  const nextItemsIds = items.map((_) => _.objectID);
   const [updateMarkers, exitMarkers] = collectMarkersForNextRender(
     renderState.markers,
     nextItemsIds
   );
 
   // Collect items that will be added
-  const updateMarkerIds = updateMarkers.map(_ => _.__id);
+  const updateMarkerIds = updateMarkers.map((_) => _.__id);
   const nextPendingItems = items.filter(
-    item => !updateMarkerIds.includes(item.objectID)
+    (item) => !updateMarkerIds.includes(item.objectID)
   );
 
   // Remove all markers that need to be removed
-  exitMarkers.forEach(marker => marker.setMap(null));
+  exitMarkers.forEach((marker) => marker.setMap(null));
 
   // Create the markers from the items
   renderState.markers = updateMarkers.concat(
-    nextPendingItems.map(item => {
+    nextPendingItems.map((item) => {
       const marker = createMarker({
         map: renderState.mapInstance,
         item,
       });
 
-      Object.keys(markerOptions.events).forEach(eventName => {
-        marker.addListener(eventName, event => {
+      Object.keys(markerOptions.events).forEach((eventName) => {
+        marker.addListener(eventName, (event) => {
           markerOptions.events[eventName]({
             map: renderState.mapInstance,
             event,

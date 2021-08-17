@@ -37,35 +37,32 @@ type CreateSendEvent = (createSendEventArgs: {
   attribute: string;
 }) => SendEvent;
 
-const createSendEvent: CreateSendEvent = ({
-  instantSearchInstance,
-  helper,
-  getRefinedStar,
-  attribute,
-}) => (...args) => {
-  if (args.length === 1) {
-    instantSearchInstance.sendEventToInsights(args[0]);
-    return;
-  }
-  const [eventType, facetValue, eventName = 'Filter Applied'] = args;
-  if (eventType !== 'click') {
-    return;
-  }
-  const isRefined = getRefinedStar() === Number(facetValue);
-  if (!isRefined) {
-    instantSearchInstance.sendEventToInsights({
-      insightsMethod: 'clickedFilters',
-      widgetType: $$type,
-      eventType,
-      payload: {
-        eventName,
-        index: helper.getIndex(),
-        filters: [`${attribute}>=${facetValue}`],
-      },
-      attribute,
-    });
-  }
-};
+const createSendEvent: CreateSendEvent =
+  ({ instantSearchInstance, helper, getRefinedStar, attribute }) =>
+  (...args) => {
+    if (args.length === 1) {
+      instantSearchInstance.sendEventToInsights(args[0]);
+      return;
+    }
+    const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+    if (eventType !== 'click') {
+      return;
+    }
+    const isRefined = getRefinedStar() === Number(facetValue);
+    if (!isRefined) {
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'clickedFilters',
+        widgetType: $$type,
+        eventType,
+        payload: {
+          eventName,
+          index: helper.getIndex(),
+          filters: [`${attribute}>=${facetValue}`],
+        },
+        attribute,
+      });
+    }
+  };
 
 type StarRatingItems = {
   /**
@@ -175,7 +172,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const { attribute, max = 5 } = widgetParams || {};
     let sendEvent: SendEvent;
 
@@ -197,7 +194,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
       facetResults: SearchResults.FacetValue[]
     ) => {
       let maxDecimalPlaces = 0;
-      facetResults.forEach(facetResult => {
+      facetResults.forEach((facetResult) => {
         const [, decimal = ''] = facetResult.name.split('.');
         maxDecimalPlaces = Math.max(maxDecimalPlaces, decimal.length);
       });
@@ -282,9 +279,11 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
     };
 
     const connectorState: ConnectorState = {
-      toggleRefinementFactory: helper => toggleRefinement.bind(null, helper),
-      createURLFactory: ({ state, createURL }) => value =>
-        createURL(getRefinedState(state, value)),
+      toggleRefinementFactory: (helper) => toggleRefinement.bind(null, helper),
+      createURLFactory:
+        ({ state, createURL }) =>
+        (value) =>
+          createURL(getRefinedState(state, value)),
     };
 
     return {
@@ -367,8 +366,8 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
             const isRefined = refinedStar === star;
 
             const count = facetResults
-              .filter(f => Number(f.name) >= star && Number(f.name) <= max)
-              .map(f => f.count)
+              .filter((f) => Number(f.name) >= star && Number(f.name) <= max)
+              .map((f) => f.count)
               .reduce((sum, current) => sum + current, 0);
 
             if (refinedStar && !isRefined && count === 0) {
@@ -430,9 +429,8 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
         const value = uiState.ratingMenu && uiState.ratingMenu[attribute];
 
         const withoutRefinements = searchParameters.clearRefinements(attribute);
-        const withDisjunctiveFacet = withoutRefinements.addDisjunctiveFacet(
-          attribute
-        );
+        const withDisjunctiveFacet =
+          withoutRefinements.addDisjunctiveFacet(attribute);
 
         if (!value) {
           return withDisjunctiveFacet.setQueryParameters({

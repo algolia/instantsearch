@@ -92,8 +92,8 @@ const connectSortBy: SortByConnector = function connectSortBy(
     initialIndex?: string;
   };
 
-  return widgetParams => {
-    const { items, transformItems = (x => x) as TransformItems<SortByItem> } =
+  return (widgetParams) => {
+    const { items, transformItems = ((x) => x) as TransformItems<SortByItem> } =
       widgetParams || {};
 
     if (!Array.isArray(items)) {
@@ -112,7 +112,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
         const currentIndex = widgetRenderState.currentRefinement;
         const isCurrentIndexInItems = find(
           items,
-          item => item.value === currentIndex
+          (item) => item.value === currentIndex
         );
 
         warning(
@@ -160,7 +160,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
           connectorState.initialIndex = parent.getIndexName();
         }
         if (!connectorState.setIndex) {
-          connectorState.setIndex = indexName => {
+          connectorState.setIndex = (indexName) => {
             helper.setIndex(indexName).search();
           };
         }

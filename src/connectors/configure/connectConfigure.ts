@@ -77,7 +77,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
   renderFn = noop,
   unmountFn = noop
 ) {
-  return widgetParams => {
+  return (widgetParams) => {
     if (!widgetParams || !isPlainObject(widgetParams.searchParameters)) {
       throw new Error(
         withUsage('The `searchParameters` option expects an object.')

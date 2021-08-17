@@ -11,12 +11,8 @@ storiesOf('Basics/Autocomplete', module).add(
     const customAutocomplete = instantsearch.connectors.connectAutocomplete<{
       container: HTMLElement;
     }>((renderOptions, isFirstRender) => {
-      const {
-        indices,
-        currentRefinement,
-        refine,
-        widgetParams,
-      } = renderOptions;
+      const { indices, currentRefinement, refine, widgetParams } =
+        renderOptions;
 
       if (isFirstRender) {
         const input = document.createElement('input');
@@ -40,7 +36,8 @@ storiesOf('Basics/Autocomplete', module).add(
   <ol>
     ${hits
       .map(
-        hit => `<li>${instantsearch.highlight({ attribute: 'name', hit })}</li>`
+        (hit) =>
+          `<li>${instantsearch.highlight({ attribute: 'name', hit })}</li>`
       )
       .join('')}
   </ol>

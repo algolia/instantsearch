@@ -117,12 +117,11 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       items: userItems,
-      transformItems = (items => items) as TransformItems<
-        HitsPerPageRenderStateItem
-      >,
+      transformItems = ((items) =>
+        items) as TransformItems<HitsPerPageRenderStateItem>,
     } = widgetParams || {};
 
     if (!Array.isArray(userItems)) {
@@ -133,7 +132,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
 
     let items = userItems;
 
-    const defaultItems = items.filter(item => item.default === true);
+    const defaultItems = items.filter((item) => item.default === true);
 
     if (defaultItems.length === 0) {
       throw new Error(
@@ -150,7 +149,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
     const defaultItem = defaultItems[0];
 
     const normalizeItems = ({ hitsPerPage }: SearchParameters) => {
-      return items.map(item => ({
+      return items.map((item) => ({
         ...item,
         isRefined: Number(item.value) === Number(hitsPerPage),
       }));
@@ -167,20 +166,22 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
     };
 
     const connectorState: ConnectorState = {
-      getRefine: helper => value => {
+      getRefine: (helper) => (value) => {
         return !value && value !== 0
           ? helper.setQueryParameter('hitsPerPage', undefined).search()
           : helper.setQueryParameter('hitsPerPage', value).search();
       },
-      createURLFactory: ({ state, createURL }) => value =>
-        createURL(
-          state
-            .resetPage()
-            .setQueryParameter(
-              'hitsPerPage',
-              !value && value !== 0 ? undefined : value
-            )
-        ),
+      createURLFactory:
+        ({ state, createURL }) =>
+        (value) =>
+          createURL(
+            state
+              .resetPage()
+              .setQueryParameter(
+                'hitsPerPage',
+                !value && value !== 0 ? undefined : value
+              )
+          ),
     };
 
     return {
@@ -190,7 +191,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
         const { state, instantSearchInstance } = initOptions;
 
         const isCurrentInOptions = items.some(
-          item => Number(state.hitsPerPage) === Number(item.value)
+          (item) => Number(state.hitsPerPage) === Number(item.value)
         );
 
         if (!isCurrentInOptions) {
@@ -214,7 +215,7 @@ You may want to add another entry to the \`items\` option with this value.`
 
           items = [
             // The helper will convert the empty string to `undefined`.
-            { value: ('' as unknown) as number, label: '' },
+            { value: '' as unknown as number, label: '' },
             ...items,
           ];
         }

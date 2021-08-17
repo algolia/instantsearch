@@ -16,9 +16,8 @@ export type PanelComponentCSSClasses = ComponentCSSClasses<
   Omit<PanelCSSClasses, 'collapseIcon'>
 >;
 
-export type PanelComponentTemplates<
-  TWidget extends UnknownWidgetFactory
-> = Required<PanelTemplates<TWidget>>;
+export type PanelComponentTemplates<TWidget extends UnknownWidgetFactory> =
+  Required<PanelTemplates<TWidget>>;
 
 export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;
@@ -75,11 +74,11 @@ function Panel<TWidget extends UnknownWidgetFactory>(
             <button
               className={props.cssClasses.collapseButton}
               aria-expanded={!isCollapsed}
-              onClick={event => {
+              onClick={(event) => {
                 event.preventDefault();
 
                 setIsControlled(true);
-                setIsCollapsed(prevIsCollapsed => !prevIsCollapsed);
+                setIsCollapsed((prevIsCollapsed) => !prevIsCollapsed);
               }}
             >
               <Template

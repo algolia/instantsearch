@@ -50,7 +50,7 @@ const connectRelevantSort: RelevantSortConnector = function connectRelevantSort(
   renderFn = noop,
   unmountFn = noop
 ) {
-  return widgetParams => {
+  return (widgetParams) => {
     type ConnectorState = {
       refine?: Refine;
     };

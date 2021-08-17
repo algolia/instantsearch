@@ -21,7 +21,7 @@ export const createDocumentationMessageGenerator = (
   ...widgets: WidgetParam[]
 ): DocumentationMessageGenerator => {
   const links = widgets
-    .map(widget => createDocumentationLink(widget))
+    .map((widget) => createDocumentationLink(widget))
     .join(', ');
 
   return (message?: string) =>

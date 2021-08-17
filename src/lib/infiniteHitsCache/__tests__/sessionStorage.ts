@@ -8,11 +8,11 @@ describe('createInfiniteHitsSessionStorageCache', () => {
   delete window.sessionStorage;
 
   let store: Record<string, unknown> = {};
-  const getItem = jest.fn(key => store[key]);
+  const getItem = jest.fn((key) => store[key]);
   const setItem = jest.fn((key, value) => {
     store[key] = value;
   });
-  const removeItem = jest.fn(key => delete store[key]);
+  const removeItem = jest.fn((key) => delete store[key]);
   const defaultHits = [
     { objectID: 'a', __position: 0 },
     { objectID: 'b', __position: 1 },

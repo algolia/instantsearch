@@ -146,14 +146,14 @@ const connectMenu: MenuConnector = function connectMenu(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       attribute,
       limit = 10,
       showMore = false,
       showMoreLimit = 20,
       sortBy = DEFAULT_SORT,
-      transformItems = (items => items) as TransformItems<MenuItem>,
+      transformItems = ((items) => items) as TransformItems<MenuItem>,
     } = widgetParams || {};
 
     if (!attribute) {
@@ -241,12 +241,8 @@ const connectMenu: MenuConnector = function connectMenu(
       },
 
       getWidgetRenderState(renderOptions) {
-        const {
-          results,
-          createURL,
-          instantSearchInstance,
-          helper,
-        } = renderOptions;
+        const { results, createURL, instantSearchInstance, helper } =
+          renderOptions;
 
         let items: MenuRenderState['items'] = [];
         let canToggleShowMore = false;
@@ -270,10 +266,9 @@ const connectMenu: MenuConnector = function connectMenu(
         }
 
         if (!_refine) {
-          _refine = function(facetValue: string) {
-            const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
-              attribute
-            );
+          _refine = function (facetValue: string) {
+            const [refinedItem] =
+              helper.getHierarchicalFacetBreadcrumb(attribute);
             sendEvent!('click', facetValue ? facetValue : refinedItem);
             helper
               .toggleFacetRefinement(
@@ -326,9 +321,8 @@ const connectMenu: MenuConnector = function connectMenu(
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
-        const [value] = searchParameters.getHierarchicalFacetBreadcrumb(
-          attribute
-        );
+        const [value] =
+          searchParameters.getHierarchicalFacetBreadcrumb(attribute);
 
         if (!value) {
           return uiState;

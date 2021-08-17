@@ -17,9 +17,9 @@ export default function singleIndexStateMapping<
       return getIndexStateWithoutConfigure(uiState[indexName] || {});
     },
     routeToState(routeState = {} as TUiState[typeof indexName]) {
-      return ({
+      return {
         [indexName]: getIndexStateWithoutConfigure(routeState),
-      } as unknown) as TUiState;
+      } as unknown as TUiState;
     },
   };
 }
