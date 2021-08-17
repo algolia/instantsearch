@@ -37,15 +37,16 @@ jobs:
       - save_cache: *save_yarn_cache
       - run:
           name: Build library
-          command: yarn run build:umd
+          command: |
+            yarn run build:umd
+            yarn run build:cjs
+            yarn run build:es
       - run:
           name: Test packages size
           command: yarn run test:size
       - run:
           name: Type Export
-          command: |
-            yarn run build:es
-            yarn run build:types
+          command: yarn run build:types
   lint:
     <<: *defaults
     steps:
