@@ -1,3 +1,18 @@
+# [4.27.0](https://github.com/algolia/instantsearch.js/compare/v4.26.0...v4.27.0) (2021-08-17)
+
+
+### Bug Fixes
+
+* **ts:** correct entry point ([#4829](https://github.com/algolia/instantsearch.js/issues/4829)) ([24a45f9](https://github.com/algolia/instantsearch.js/commit/24a45f9a9fb3c8f62003d2aa37b3456c11af2985))
+* **ts:** export PaginationConnector ([d201322](https://github.com/algolia/instantsearch.js/commit/d201322de0d09a664b762422fdc0a51e2bd566bc))
+
+
+### Features
+
+* **typescript:** expose types at regular build ([#4832](https://github.com/algolia/instantsearch.js/issues/4832)) ([4bea07b](https://github.com/algolia/instantsearch.js/commit/4bea07b99f492441eb94e483378e0778f90c5b43))
+
+
+
 # [4.26.0](https://github.com/algolia/instantsearch.js/compare/v4.25.3...v4.26.0) (2021-08-10)
 
 
