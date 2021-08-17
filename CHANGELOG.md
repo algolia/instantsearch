@@ -11,7 +11,7 @@
 
 * **typescript:** expose types at regular build ([#4832](https://github.com/algolia/instantsearch.js/issues/4832)) ([4bea07b](https://github.com/algolia/instantsearch.js/commit/4bea07b99f492441eb94e483378e0778f90c5b43))
 
-
+If you were using typescript via the `experimental-typescript` tag, you can now use regular InstantSearch.js.
 
 # [4.26.0](https://github.com/algolia/instantsearch.js/compare/v4.25.3...v4.26.0) (2021-08-10)
 
