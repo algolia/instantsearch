@@ -103,3 +103,5 @@ import { connectSearchBox } from 'instantsearch.js/es/connectors'`
 });
 
 export default instantsearch;
+
+export * from './types';
