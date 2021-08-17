@@ -1,6 +1,5 @@
 /cjs
 /es
-/scripts/build/.temp
 /website
 dist
 .cache
