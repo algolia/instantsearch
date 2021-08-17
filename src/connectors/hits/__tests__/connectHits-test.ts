@@ -11,7 +11,11 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { EscapedHits, Hit, HitAttributeHighlightResult } from '../../../types';
+import type {
+  EscapedHits,
+  Hit,
+  HitAttributeHighlightResult,
+} from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,

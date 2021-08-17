@@ -1,11 +1,11 @@
-import { SearchResults } from 'algoliasearch-helper';
+import type { SearchResults } from 'algoliasearch-helper';
 import {
   uniq,
   find,
   createDocumentationMessageGenerator,
   warning,
 } from '../utils';
-import {
+import type {
   Hits,
   InsightsClient,
   InsightsClientMethod,

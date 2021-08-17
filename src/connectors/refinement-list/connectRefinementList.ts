@@ -1,4 +1,5 @@
-import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+import type { SendEventForFacet } from '../../lib/utils';
 import {
   escapeFacets,
   TAG_PLACEHOLDER,
@@ -7,9 +8,8 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
-  SendEventForFacet,
 } from '../../lib/utils';
-import {
+import type {
   Connector,
   TransformItems,
   SortBy,

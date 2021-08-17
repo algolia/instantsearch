@@ -1,13 +1,15 @@
-import { render as preactRender, VNode, ComponentChildren } from 'preact';
+import type { VNode, ComponentChildren } from 'preact';
+import { render as preactRender } from 'preact';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
-  AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import hitsPerPage, { HitsPerPageCSSClasses } from '../hits-per-page';
+import type { HitsPerPageCSSClasses } from '../hits-per-page';
+import hitsPerPage from '../hits-per-page';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { SelectorProps } from '../../../components/Selector/Selector';
-import { HitsPerPageConnectorParamsItem } from '../../../connectors/hits-per-page/connectHitsPerPage';
+import type { SelectorProps } from '../../../components/Selector/Selector';
+import type { HitsPerPageConnectorParamsItem } from '../../../connectors/hits-per-page/connectHitsPerPage';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import {

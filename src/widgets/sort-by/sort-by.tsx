@@ -2,21 +2,21 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Selector, {
-  SelectorComponentCSSClasses,
-} from '../../components/Selector/Selector';
-import connectSortBy, {
+import type { SelectorComponentCSSClasses } from '../../components/Selector/Selector';
+import Selector from '../../components/Selector/Selector';
+import type {
   SortByConnectorParams,
   SortByItem,
   SortByRenderState,
   SortByWidgetDescription,
 } from '../../connectors/sort-by/connectSortBy';
+import connectSortBy from '../../connectors/sort-by/connectSortBy';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { Renderer, TransformItems, WidgetFactory } from '../../types';
+import type { Renderer, TransformItems, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'sort-by' });
 const suit = component('SortBy');

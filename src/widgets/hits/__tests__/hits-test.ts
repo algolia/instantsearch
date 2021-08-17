@@ -1,14 +1,15 @@
-import { render as preactRender, VNode } from 'preact';
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
-  AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { SearchClient } from '../../../types';
+import type { SearchClient } from '../../../types';
 import hits from '../hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import { HitsProps } from '../../../components/Hits/Hits';
+import type { HitsProps } from '../../../components/Hits/Hits';
 import {
   createInitOptions,
   createRenderOptions,

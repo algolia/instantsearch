@@ -7,17 +7,19 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Template } from '../../types';
-import connectQueryRules, {
+import type { WidgetFactory, Template } from '../../types';
+import type {
   QueryRulesConnectorParams,
   QueryRulesRenderState,
   QueryRulesWidgetDescription,
 } from '../../connectors/query-rules/connectQueryRules';
-import CustomData, {
+import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
+import type {
   QueryRuleCustomDataComponentCSSClasses,
   QueryRuleCustomDataComponentTemplates,
 } from '../../components/QueryRuleCustomData/QueryRuleCustomData';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type QueryRuleCustomDataCSSClasses = Partial<{
   root: string | string[];

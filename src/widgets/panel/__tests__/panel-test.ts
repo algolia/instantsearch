@@ -1,14 +1,15 @@
-import { render as preactRender, VNode } from 'preact';
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import panel from '../panel';
-import { PanelProps } from '../../../components/Panel/Panel';
+import type { PanelProps } from '../../../components/Panel/Panel';
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { Widget } from '../../../types';
+import type { Widget } from '../../../types';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

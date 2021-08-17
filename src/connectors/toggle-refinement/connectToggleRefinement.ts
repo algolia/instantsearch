@@ -1,4 +1,4 @@
-import {
+import type {
   AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
@@ -12,7 +12,7 @@ import {
   noop,
   toArray,
 } from '../../lib/utils';
-import {
+import type {
   Connector,
   CreateURL,
   InstantSearch,

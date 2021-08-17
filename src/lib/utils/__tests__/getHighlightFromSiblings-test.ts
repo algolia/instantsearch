@@ -1,4 +1,4 @@
-import { HighlightedParts } from '../../../types';
+import type { HighlightedParts } from '../../../types';
 import getHighlightFromSiblings from '../getHighlightFromSiblings';
 
 const oneMatch: HighlightedParts[] = [

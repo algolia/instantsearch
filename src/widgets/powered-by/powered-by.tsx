@@ -2,20 +2,20 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import PoweredBy, {
-  PoweredByComponentCSSClasses,
-} from '../../components/PoweredBy/PoweredBy';
-import connectPoweredBy, {
+import type { PoweredByComponentCSSClasses } from '../../components/PoweredBy/PoweredBy';
+import PoweredBy from '../../components/PoweredBy/PoweredBy';
+import type {
   PoweredByConnectorParams,
   PoweredByRenderState,
   PoweredByWidgetDescription,
 } from '../../connectors/powered-by/connectPoweredBy';
+import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { Renderer, WidgetFactory } from '../../types';
+import type { Renderer, WidgetFactory } from '../../types';
 
 const suit = component('PoweredBy');
 const withUsage = createDocumentationMessageGenerator({ name: 'powered-by' });

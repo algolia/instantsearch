@@ -1,10 +1,11 @@
-import { PlainSearchParameters } from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import { noop } from '../../lib/utils';
-import connectConfigureRelatedItems, {
+import type {
   ConfigureRelatedItemsConnectorParams,
   ConfigureRelatedItemsWidgetDescription,
 } from '../../connectors/configure-related-items/connectConfigureRelatedItems';
-import { WidgetFactory } from '../../types';
+import connectConfigureRelatedItems from '../../connectors/configure-related-items/connectConfigureRelatedItems';
+import type { WidgetFactory } from '../../types';
 
 export type ConfigureRelatedItemsWidget = WidgetFactory<
   ConfigureRelatedItemsWidgetDescription & {

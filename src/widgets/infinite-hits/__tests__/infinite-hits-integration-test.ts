@@ -4,8 +4,8 @@ import instantsearch from '../../../index.es';
 import { infiniteHits, configure } from '../../';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
-import { PlainSearchParameters } from 'algoliasearch-helper';
-import {
+import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
 } from '../../../connectors/infinite-hits/connectInfiniteHits';

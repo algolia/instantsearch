@@ -1,4 +1,4 @@
-import { MenuSelectComponentTemplates } from '../../components/MenuSelect/MenuSelect';
+import type { MenuSelectComponentTemplates } from '../../components/MenuSelect/MenuSelect';
 
 const defaultTemplates: MenuSelectComponentTemplates = {
   item: '{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})',

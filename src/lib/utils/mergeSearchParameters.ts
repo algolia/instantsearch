@@ -1,4 +1,4 @@
-import { SearchParameters } from 'algoliasearch-helper';
+import type { SearchParameters } from 'algoliasearch-helper';
 import findIndex from './findIndex';
 import uniq from './uniq';
 

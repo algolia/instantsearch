@@ -2,7 +2,8 @@
 
 import { h } from 'preact';
 import { mount } from '../../../../test/utils/enzyme';
-import Pagination, { PaginationProps } from '../Pagination';
+import type { PaginationProps } from '../Pagination';
+import Pagination from '../Pagination';
 import Paginator from '../../../connectors/pagination/Paginator';
 
 describe('Pagination', () => {

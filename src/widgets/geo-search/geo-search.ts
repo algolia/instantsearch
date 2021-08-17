@@ -8,15 +8,17 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import connectGeoSearch, {
+import type {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
   GeoHit,
 } from '../../connectors/geo-search/connectGeoSearch';
+import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
 import renderer from './GeoSearchRenderer';
 import defaultTemplates from './defaultTemplates';
-import createHTMLMarker, { HTMLMarkerArguments } from './createHTMLMarker';
-import { GeoLoc, Template, WidgetFactory } from '../../types';
+import type { HTMLMarkerArguments } from './createHTMLMarker';
+import createHTMLMarker from './createHTMLMarker';
+import type { GeoLoc, Template, WidgetFactory } from '../../types';
 
 export type CreateMarker = (args: {
   item: GeoHit;

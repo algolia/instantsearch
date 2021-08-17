@@ -1,8 +1,9 @@
-import connectConfigure, {
+import type {
   ConfigureConnectorParams,
   ConfigureWidgetDescription,
 } from '../../connectors/configure/connectConfigure';
-import { Widget } from '../../types';
+import connectConfigure from '../../connectors/configure/connectConfigure';
+import type { Widget } from '../../types';
 import { noop } from '../../lib/utils';
 
 /**

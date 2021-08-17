@@ -7,16 +7,18 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Template, RendererOptions } from '../../types';
-import connectSearchBox, {
+import type { WidgetFactory, Template, RendererOptions } from '../../types';
+import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
 } from '../../connectors/search-box/connectSearchBox';
-import SearchBox, {
+import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../../components/SearchBox/SearchBox';
+import SearchBox from '../../components/SearchBox/SearchBox';
 import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });

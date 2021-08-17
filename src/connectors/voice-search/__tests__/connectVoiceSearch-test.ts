@@ -6,7 +6,7 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import {
+import type {
   VoiceSearchHelperParams,
   VoiceSearchHelper,
 } from '../../../lib/voiceSearchHelper/types';

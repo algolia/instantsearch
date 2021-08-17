@@ -7,7 +7,7 @@ import {
   createInsightsUmdVersion,
 } from '../../../test/mock/createInsightsClient';
 import { warning } from '../../lib/utils';
-import { SearchClient } from '../../types';
+import type { SearchClient } from '../../types';
 
 describe('insights', () => {
   const createTestEnvironment = () => {

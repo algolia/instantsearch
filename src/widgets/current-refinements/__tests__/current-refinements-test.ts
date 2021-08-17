@@ -1,7 +1,8 @@
-import { render as preactRender, VNode } from 'preact';
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import currentRefinements from '../current-refinements';
-import { CurrentRefinementsProps } from '../../../components/CurrentRefinements/CurrentRefinements';
+import type { CurrentRefinementsProps } from '../../../components/CurrentRefinements/CurrentRefinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createInitOptions,

@@ -9,11 +9,10 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import connectAutocomplete, {
-  AutocompleteRenderState,
-} from '../connectAutocomplete';
+import type { AutocompleteRenderState } from '../connectAutocomplete';
+import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import { EscapedHits, Hit, SearchClient } from '../../../types';
+import type { EscapedHits, Hit, SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {

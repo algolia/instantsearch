@@ -13,7 +13,7 @@ import {
   createSingleSearchResponse,
 } from '../../../../test/mock/createAPIResponse';
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
-import { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
+import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 

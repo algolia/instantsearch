@@ -2,21 +2,23 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Pagination, {
+import type {
   PaginationComponentCSSClasses,
   PaginationComponentTemplates,
 } from '../../components/Pagination/Pagination';
-import connectPagination, {
+import Pagination from '../../components/Pagination/Pagination';
+import type {
   PaginationConnectorParams,
   PaginationRenderState,
   PaginationWidgetDescription,
 } from '../../connectors/pagination/connectPagination';
+import connectPagination from '../../connectors/pagination/connectPagination';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { Renderer, WidgetFactory } from '../../types';
+import type { Renderer, WidgetFactory } from '../../types';
 
 const suit = component('Pagination');
 const withUsage = createDocumentationMessageGenerator({ name: 'pagination' });

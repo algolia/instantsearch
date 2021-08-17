@@ -1,7 +1,8 @@
-import { render as preactRender, VNode } from 'preact';
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
 import algoliasearch from 'algoliasearch';
+import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
-  AlgoliaSearchHelper as Helper,
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -11,10 +12,11 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { Widget } from '../../../types';
-import voiceSearch, { VoiceSearchWidgetParams } from '../voice-search';
-import { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types';
-import { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch';
+import type { Widget } from '../../../types';
+import type { VoiceSearchWidgetParams } from '../voice-search';
+import voiceSearch from '../voice-search';
+import type { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types';
+import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

@@ -3,13 +3,13 @@
 import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
-import { ClearRefinementsRenderState } from '../../connectors/clear-refinements/connectClearRefinements';
-import {
+import type { ClearRefinementsRenderState } from '../../connectors/clear-refinements/connectClearRefinements';
+import type {
   ClearRefinementsCSSClasses,
   ClearRefinementsTemplates,
 } from '../../widgets/clear-refinements/clear-refinements';
-import { ComponentCSSClasses } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { ComponentCSSClasses } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type ClearRefinementsComponentCSSClasses =
   ComponentCSSClasses<ClearRefinementsCSSClasses>;

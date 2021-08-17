@@ -1,5 +1,6 @@
-import { mount, shallow, ShallowWrapper, ReactWrapper } from 'enzyme';
-import { VNode } from 'preact';
+import type { ShallowWrapper, ReactWrapper } from 'enzyme';
+import { mount, shallow } from 'enzyme';
+import type { VNode } from 'preact';
 
 const preactMount = mount as unknown as <TProps>(
   node: VNode<TProps>

@@ -2,7 +2,8 @@
 
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import Breadcrumb, { BreadcrumbProps } from '../Breadcrumb';
+import type { BreadcrumbProps } from '../Breadcrumb';
+import Breadcrumb from '../Breadcrumb';
 import { prepareTemplateProps } from '../../../lib/utils';
 import defaultTemplates from '../../../widgets/breadcrumb/defaultTemplates';
 

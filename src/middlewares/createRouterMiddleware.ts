@@ -1,6 +1,6 @@
 import simpleStateMapping from '../lib/stateMappings/simple';
 import historyRouter from '../lib/routers/history';
-import {
+import type {
   Router,
   StateMapping,
   UiState,

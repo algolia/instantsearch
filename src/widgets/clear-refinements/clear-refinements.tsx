@@ -1,16 +1,18 @@
 /** @jsx h */
 
 import { h, render } from 'preact';
-import ClearRefinements, {
+import type {
   ClearRefinementsComponentCSSClasses,
   ClearRefinementsComponentTemplates,
 } from '../../components/ClearRefinements/ClearRefinements';
+import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
 import cx from 'classnames';
-import connectClearRefinements, {
+import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
 } from '../../connectors/clear-refinements/connectClearRefinements';
+import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
 import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,
@@ -18,8 +20,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Template, Renderer } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { WidgetFactory, Template, Renderer } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',

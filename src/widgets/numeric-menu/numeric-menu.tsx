@@ -3,11 +3,12 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectNumericMenu, {
+import type {
   NumericMenuConnectorParams,
   NumericMenuRenderState,
   NumericMenuWidgetDescription,
 } from '../../connectors/numeric-menu/connectNumericMenu';
+import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -15,13 +16,13 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import {
+import type {
   ComponentCSSClasses,
   Renderer,
   Template,
   WidgetFactory,
 } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');

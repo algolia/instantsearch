@@ -1,13 +1,16 @@
-import { render as preactRender, VNode } from 'preact';
-import algoliasearchHelper, {
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
+import type {
   AlgoliaSearchHelper,
-  SearchParameters,
   PlainSearchParameters,
+} from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { SearchClient } from '../../../types';
+import type { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
-import { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
+import type { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
@@ -15,7 +18,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { InfiniteHitsCache } from '../../../connectors/infinite-hits/connectInfiniteHits';
+import type { InfiniteHitsCache } from '../../../connectors/infinite-hits/connectInfiniteHits';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

@@ -1,21 +1,21 @@
-import { AutocompleteWidgetDescription } from '../connectors/autocomplete/connectAutocomplete';
-import { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
-import { GeoSearchWidgetDescription } from '../connectors/geo-search/connectGeoSearch';
-import { HierarchicalMenuWidgetDescription } from '../connectors/hierarchical-menu/connectHierarchicalMenu';
-import { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
-import { InfiniteHitsWidgetDescription } from '../connectors/infinite-hits/connectInfiniteHits';
-import { MenuWidgetDescription } from '../connectors/menu/connectMenu';
-import { NumericMenuWidgetDescription } from '../connectors/numeric-menu/connectNumericMenu';
-import { PaginationWidgetDescription } from '../connectors/pagination/connectPagination';
-import { RangeWidgetDescription } from '../connectors/range/connectRange';
-import { RatingMenuWidgetDescription } from '../connectors/rating-menu/connectRatingMenu';
-import { RefinementListWidgetDescription } from '../connectors/refinement-list/connectRefinementList';
-import { RelevantSortWidgetDescription } from '../connectors/relevant-sort/connectRelevantSort';
-import { SearchBoxWidgetDescription } from '../connectors/search-box/connectSearchBox';
-import { SortByWidgetDescription } from '../connectors/sort-by/connectSortBy';
-import { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/connectToggleRefinement';
-import { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
-import { PlacesWidgetDescription } from '../widgets/places/places';
+import type { AutocompleteWidgetDescription } from '../connectors/autocomplete/connectAutocomplete';
+import type { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
+import type { GeoSearchWidgetDescription } from '../connectors/geo-search/connectGeoSearch';
+import type { HierarchicalMenuWidgetDescription } from '../connectors/hierarchical-menu/connectHierarchicalMenu';
+import type { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
+import type { InfiniteHitsWidgetDescription } from '../connectors/infinite-hits/connectInfiniteHits';
+import type { MenuWidgetDescription } from '../connectors/menu/connectMenu';
+import type { NumericMenuWidgetDescription } from '../connectors/numeric-menu/connectNumericMenu';
+import type { PaginationWidgetDescription } from '../connectors/pagination/connectPagination';
+import type { RangeWidgetDescription } from '../connectors/range/connectRange';
+import type { RatingMenuWidgetDescription } from '../connectors/rating-menu/connectRatingMenu';
+import type { RefinementListWidgetDescription } from '../connectors/refinement-list/connectRefinementList';
+import type { RelevantSortWidgetDescription } from '../connectors/relevant-sort/connectRelevantSort';
+import type { SearchBoxWidgetDescription } from '../connectors/search-box/connectSearchBox';
+import type { SortByWidgetDescription } from '../connectors/sort-by/connectSortBy';
+import type { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/connectToggleRefinement';
+import type { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
+import type { PlacesWidgetDescription } from '../widgets/places/places';
 
 type ConnectorUiStates = AutocompleteWidgetDescription['indexUiState'] &
   ConfigureWidgetDescription['indexUiState'] &

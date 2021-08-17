@@ -3,12 +3,12 @@
 import { h } from 'preact';
 import Template from '../Template/Template';
 
-import {
+import type {
   VoiceSearchCSSClasses,
   VoiceSearchTemplates,
 } from '../../widgets/voice-search/voice-search';
-import { VoiceListeningState } from '../../lib/voiceSearchHelper/types';
-import { ComponentCSSClasses } from '../../types';
+import type { VoiceListeningState } from '../../lib/voiceSearchHelper/types';
+import type { ComponentCSSClasses } from '../../types';
 
 export type VoiceSearchComponentCSSClasses =
   ComponentCSSClasses<VoiceSearchCSSClasses>;

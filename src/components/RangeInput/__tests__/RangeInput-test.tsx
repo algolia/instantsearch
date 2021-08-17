@@ -3,7 +3,8 @@
 import { h } from 'preact';
 import { shallow } from '../../../../test/utils/enzyme';
 import { render, fireEvent } from '@testing-library/preact';
-import RangeInput, { RangeInputProps } from '../RangeInput';
+import type { RangeInputProps } from '../RangeInput';
+import RangeInput from '../RangeInput';
 
 describe('RangeInput', () => {
   const defaultProps: RangeInputProps = {

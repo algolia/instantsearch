@@ -3,7 +3,7 @@ import instantsearch from '../../index.es';
 import { configure, searchBox } from '../../widgets';
 import { connectConfigure } from '../../connectors';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
-import { MiddlewareDefinition } from '../../types';
+import type { MiddlewareDefinition } from '../../types';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 
 describe('configure', () => {

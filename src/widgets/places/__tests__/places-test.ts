@@ -3,7 +3,7 @@ import algoliaPlaces from 'places.js';
 import places from '../places';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInitOptions } from '../../../../test/mock/createWidget';
-import { SearchClient } from '../../../types';
+import type { SearchClient } from '../../../types';
 
 jest.mock('places.js', () => {
   const module = jest.fn(() => {

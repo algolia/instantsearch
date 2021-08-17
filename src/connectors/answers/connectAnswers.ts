@@ -8,8 +8,8 @@ import {
   noop,
   escapeHits,
 } from '../../lib/utils';
-import { DebouncedFunction } from '../../lib/utils/debounce';
-import {
+import type { DebouncedFunction } from '../../lib/utils/debounce';
+import type {
   Connector,
   Hits,
   Hit,

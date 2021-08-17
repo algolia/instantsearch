@@ -1,5 +1,5 @@
-import { InstantSearch, InternalMiddleware, Widget } from '../types';
-import { IndexWidget } from '../widgets/index/index';
+import type { InstantSearch, InternalMiddleware, Widget } from '../types';
+import type { IndexWidget } from '../widgets/index/index';
 
 type WidgetMetaData = {
   type: string | undefined;

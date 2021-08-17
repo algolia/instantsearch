@@ -1,4 +1,4 @@
-import {
+import type {
   AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
@@ -10,12 +10,12 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import {
+import type {
   Refinement,
   FacetRefinement,
   NumericRefinement,
 } from '../../lib/utils/getRefinements';
-import {
+import type {
   Connector,
   TransformItems,
   CreateURL,

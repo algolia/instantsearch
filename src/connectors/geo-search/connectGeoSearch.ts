@@ -1,14 +1,17 @@
-import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+} from 'algoliasearch-helper';
+import type { SendEventForHits } from '../../lib/utils';
 import {
   checkRendering,
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
   createDocumentationMessageGenerator,
   createSendEventForHits,
-  SendEventForHits,
   noop,
 } from '../../lib/utils';
-import {
+import type {
   Connector,
   GeoLoc,
   Hit,

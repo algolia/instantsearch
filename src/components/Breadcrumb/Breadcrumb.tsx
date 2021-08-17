@@ -3,13 +3,13 @@
 import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
-import {
+import type {
   BreadcrumbCSSClasses,
   BreadcrumbTemplates,
 } from '../../widgets/breadcrumb/breadcrumb';
-import { ComponentCSSClasses } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
-import { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
+import type { ComponentCSSClasses } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
 
 export type BreadcrumbComponentCSSClasses =
   ComponentCSSClasses<BreadcrumbCSSClasses>;

@@ -2,23 +2,25 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RangeInput, {
+import type {
   RangeInputComponentCSSClasses,
   RangeInputComponentTemplates,
 } from '../../components/RangeInput/RangeInput';
-import connectRange, {
+import RangeInput from '../../components/RangeInput/RangeInput';
+import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
 } from '../../connectors/range/connectRange';
+import connectRange from '../../connectors/range/connectRange';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { Renderer, Template, WidgetFactory } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { Renderer, Template, WidgetFactory } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
 const suit = component('RangeInput');

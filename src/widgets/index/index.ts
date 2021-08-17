@@ -1,4 +1,4 @@
-import algoliasearchHelper, {
+import type {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
   PlainSearchParameters,
@@ -6,7 +6,8 @@ import algoliasearchHelper, {
   SearchResults,
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
-import {
+import algoliasearchHelper from 'algoliasearch-helper';
+import type {
   InstantSearch,
   UiState,
   IndexUiState,

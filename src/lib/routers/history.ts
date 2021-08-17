@@ -1,5 +1,5 @@
 import qs from 'qs';
-import { Router, UiState } from '../../types';
+import type { Router, UiState } from '../../types';
 
 type CreateURL<TRouteState> = (args: {
   qsModule: typeof qs;

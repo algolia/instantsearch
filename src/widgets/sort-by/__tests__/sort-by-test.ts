@@ -1,9 +1,8 @@
 import { render as preactRender } from 'preact';
-import algoliasearchHelper, {
-  AlgoliaSearchHelper,
-  SearchResults,
-} from 'algoliasearch-helper';
-import sortBy, { SortByIndexDefinition } from '../sort-by';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import type { SortByIndexDefinition } from '../sort-by';
+import sortBy from '../sort-by';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {

@@ -1,5 +1,6 @@
 /** @jsx h */
 
+import type { JSX } from 'preact';
 import { h } from 'preact';
 import Template from '../Template/Template';
 
@@ -11,7 +12,7 @@ export type RefinementListItemProps = {
     originalEvent: MouseEvent;
   }) => void;
   isRefined: boolean;
-  subItems?: h.JSX.Element;
+  subItems?: JSX.Element;
   templateData: Record<string, any>;
   templateKey: string;
   templateProps?: Record<string, any>;

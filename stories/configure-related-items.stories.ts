@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { HitsWidgetParams } from '../src/widgets/hits/hits';
-import { AlgoliaHit } from '../src/types';
+import type { HitsWidgetParams } from '../src/widgets/hits/hits';
+import type { AlgoliaHit } from '../src/types';
 
 storiesOf('Basics/ConfigureRelatedItems', module).add(
   'default',

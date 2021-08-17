@@ -4,12 +4,12 @@ import { h } from 'preact';
 import cx from 'classnames';
 import { find } from '../../lib/utils';
 import Template from '../Template/Template';
-import {
+import type {
   MenuSelectCSSClasses,
   MenuSelectTemplates,
 } from '../../widgets/menu-select/menu-select';
-import { MenuRenderState } from '../../connectors/menu/connectMenu';
-import { ComponentCSSClasses } from '../../types';
+import type { MenuRenderState } from '../../connectors/menu/connectMenu';
+import type { ComponentCSSClasses } from '../../types';
 
 export type MenuSelectComponentCSSClasses =
   ComponentCSSClasses<MenuSelectCSSClasses>;

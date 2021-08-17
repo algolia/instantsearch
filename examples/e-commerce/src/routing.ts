@@ -1,9 +1,7 @@
 /* eslint complexity: off */
 
-import {
-  history as historyRouter,
-  UiState,
-} from 'instantsearch.js/es/lib/routers';
+import type { UiState } from 'instantsearch.js/es/lib/routers';
+import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
 import {
   getFallbackHitsPerPageRoutingValue,
   getFallbackSortByRoutingValue,

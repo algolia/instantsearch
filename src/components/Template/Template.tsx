@@ -1,9 +1,10 @@
 /** @jsx h */
 
+import type { JSX } from 'preact';
 import { h, Component } from 'preact';
 import { renderTemplate, isEqual } from '../../lib/utils';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
-import { Templates } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { Templates } from '../../types';
 
 const defaultProps = {
   data: {},
@@ -16,7 +17,7 @@ const defaultProps = {
 type TemplateProps = {
   data?: Record<string, any>;
   rootProps?: Record<string, any>;
-  rootTagName?: keyof h.JSX.IntrinsicElements;
+  rootTagName?: keyof JSX.IntrinsicElements;
   templateKey: string;
   bindEvent?: (...args: any[]) => string;
 } & PreparedTemplateProps<Templates> &

@@ -5,11 +5,11 @@ import cx from 'classnames';
 
 import PaginationLink from './PaginationLink';
 import { isSpecialClick } from '../../lib/utils';
-import {
+import type {
   PaginationCSSClasses,
   PaginationTemplates,
 } from '../../widgets/pagination/pagination';
-import { ComponentCSSClasses } from '../../types';
+import type { ComponentCSSClasses } from '../../types';
 
 export type PaginationComponentCSSClasses =
   ComponentCSSClasses<PaginationCSSClasses>;

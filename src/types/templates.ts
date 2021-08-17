@@ -1,4 +1,4 @@
-import { BindEventForHits } from '../lib/utils';
+import type { BindEventForHits } from '../lib/utils';
 
 export type Template<TTemplateData = void> =
   | string

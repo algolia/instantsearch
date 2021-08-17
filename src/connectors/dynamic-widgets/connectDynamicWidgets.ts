@@ -1,11 +1,11 @@
-import { SearchResults } from 'algoliasearch-helper';
+import type { SearchResults } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   getWidgetAttribute,
   noop,
 } from '../../lib/utils';
-import { Connector, Widget } from '../../types';
+import type { Connector, Widget } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'dynamic-widgets',

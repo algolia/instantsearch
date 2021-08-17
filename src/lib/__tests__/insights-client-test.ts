@@ -1,6 +1,6 @@
 import { withInsights, inferInsightsPayload } from '../insights';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { InstantSearch, Widget } from '../../types';
+import type { InstantSearch, Widget } from '../../types';
 import { createInstantSearch } from '../../../test/mock/createInstantSearch';
 import { createSingleSearchResponse } from '../../../test/mock/createAPIResponse';
 import { castToJestMock } from '../../../test/utils/castToJestMock';

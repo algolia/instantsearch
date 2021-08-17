@@ -1,17 +1,18 @@
 import { render as preactRender } from 'preact';
 import utilsGetContainerNode from '../../../lib/utils/getContainerNode';
-import pagination, {
+import type {
   PaginationCSSClasses,
   PaginationWidgetParams,
 } from '../pagination';
+import pagination from '../pagination';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
-  AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';

@@ -8,7 +8,8 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 
-import connectStats, { StatsRenderState } from '../connectStats';
+import type { StatsRenderState } from '../connectStats';
+import connectStats from '../connectStats';
 
 describe('connectStats', () => {
   const getInitializedWidget = (config = {}) => {

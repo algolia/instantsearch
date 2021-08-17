@@ -1,8 +1,8 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { ComponentCSSClasses } from '../../types';
-import { PoweredByCSSClasses } from '../../widgets/powered-by/powered-by';
+import type { ComponentCSSClasses } from '../../types';
+import type { PoweredByCSSClasses } from '../../widgets/powered-by/powered-by';
 
 export type PoweredByComponentCSSClasses =
   ComponentCSSClasses<PoweredByCSSClasses>;

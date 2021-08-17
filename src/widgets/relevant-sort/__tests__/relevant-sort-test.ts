@@ -1,5 +1,6 @@
 import { render } from 'preact';
-import relevantSort, { RelevantSortTemplates } from '../relevant-sort';
+import type { RelevantSortTemplates } from '../relevant-sort';
+import relevantSort from '../relevant-sort';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {

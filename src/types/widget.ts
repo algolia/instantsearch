@@ -1,13 +1,13 @@
-import { IndexWidget } from '../widgets/index/index';
-import {
+import type { IndexWidget } from '../widgets/index/index';
+import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { InstantSearch } from './instantsearch';
-import { IndexUiState, UiState } from './ui-state';
-import { IndexRenderState, WidgetRenderState } from './render-state';
-import { Expand, RequiredKeys } from './utils';
+import type { InstantSearch } from './instantsearch';
+import type { IndexUiState, UiState } from './ui-state';
+import type { IndexRenderState, WidgetRenderState } from './render-state';
+import type { Expand, RequiredKeys } from './utils';
 
 export type ScopedResult = {
   indexId: string;

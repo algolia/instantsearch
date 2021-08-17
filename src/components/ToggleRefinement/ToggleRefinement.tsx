@@ -1,13 +1,13 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import {
+import type {
   ToggleRefinementRenderState,
   ToggleRefinementValue,
 } from '../../connectors/toggle-refinement/connectToggleRefinement';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
-import { ComponentCSSClasses } from '../../types';
-import {
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { ComponentCSSClasses } from '../../types';
+import type {
   ToggleRefinementTemplates,
   ToggleRefinementCSSClasses,
 } from '../../widgets/toggle-refinement/toggle-refinement';

@@ -1,12 +1,13 @@
-import { render as preactRender, VNode } from 'preact';
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
 import breadcrumb from '../breadcrumb';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import {
   createRenderOptions,
   createInitOptions,
 } from '../../../../test/mock/createWidget';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
-  AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';

@@ -2,7 +2,8 @@ import jsHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { render as preactRender, VNode } from 'preact';
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {

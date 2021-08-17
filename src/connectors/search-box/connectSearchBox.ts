@@ -1,10 +1,10 @@
-import { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Connector, WidgetRenderState } from '../../types';
+import type { Connector, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'search-box',

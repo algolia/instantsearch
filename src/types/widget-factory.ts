@@ -1,4 +1,4 @@
-import { Widget, WidgetDescription } from './widget';
+import type { Widget, WidgetDescription } from './widget';
 
 /**
  * The function that creates a new widget.

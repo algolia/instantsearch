@@ -1,8 +1,8 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { ComponentCSSClasses } from '../../types';
-import {
+import type { ComponentCSSClasses } from '../../types';
+import type {
   QueryRuleCustomDataCSSClasses,
   QueryRuleCustomDataTemplates,
 } from '../../widgets/query-rule-custom-data/query-rule-custom-data';

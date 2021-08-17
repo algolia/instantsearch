@@ -9,8 +9,9 @@ import {
   warning,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import Panel, { PanelComponentCSSClasses } from '../../components/Panel/Panel';
-import { Template, RenderOptions, WidgetFactory } from '../../types';
+import type { PanelComponentCSSClasses } from '../../components/Panel/Panel';
+import Panel from '../../components/Panel/Panel';
+import type { Template, RenderOptions, WidgetFactory } from '../../types';
 
 export type PanelCSSClasses = Partial<{
   /**

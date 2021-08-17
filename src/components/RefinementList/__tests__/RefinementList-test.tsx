@@ -2,9 +2,10 @@
 
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import RefinementList, { RefinementListProps } from '../RefinementList';
+import type { RefinementListProps } from '../RefinementList';
+import RefinementList from '../RefinementList';
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
-import {
+import type {
   RefinementListItemData,
   RefinementListTemplates,
 } from '../../../widgets/refinement-list/refinement-list';

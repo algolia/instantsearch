@@ -5,8 +5,8 @@ import {
   isEqual,
   noop,
 } from '../../lib/utils';
-import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import {
+import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import type {
   Connector,
   TransformItems,
   CreateURL,

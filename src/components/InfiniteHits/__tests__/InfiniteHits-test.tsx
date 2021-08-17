@@ -4,7 +4,7 @@ import { h } from 'preact';
 import { render } from '@testing-library/preact';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../InfiniteHits';
-import { Hits, SearchResponse } from '../../../types';
+import type { Hits, SearchResponse } from '../../../types';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 function createResults(partialResults: Partial<SearchResponse<any>>) {

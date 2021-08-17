@@ -1,5 +1,9 @@
 /* global SpeechRecognition SpeechRecognitionEvent */
-import { CreateVoiceSearchHelper, Status, VoiceListeningState } from './types';
+import type {
+  CreateVoiceSearchHelper,
+  Status,
+  VoiceListeningState,
+} from './types';
 
 const createVoiceSearchHelper: CreateVoiceSearchHelper =
   function createVoiceSearchHelper({

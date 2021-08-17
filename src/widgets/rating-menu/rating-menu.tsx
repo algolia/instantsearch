@@ -3,11 +3,12 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectRatingMenu, {
+import type {
   RatingMenuWidgetDescription,
   RatingMenuConnectorParams,
   RatingMenuRenderState,
 } from '../../connectors/rating-menu/connectRatingMenu';
+import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -15,13 +16,13 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import {
+import type {
   ComponentCSSClasses,
   RendererOptions,
   Template,
   WidgetFactory,
 } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
 const suit = component('RatingMenu');

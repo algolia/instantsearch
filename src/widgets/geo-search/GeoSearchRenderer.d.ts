@@ -1,12 +1,12 @@
 /* global google */
-import {
+import type {
   GeoSearchConnectorParams,
   GeoSearchRenderState,
 } from '../../connectors/geo-search/connectGeoSearch';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
-import { ComponentCSSClasses, Renderer } from '../../types';
-import { HTMLMarkerArguments } from './createHTMLMarker';
-import {
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { ComponentCSSClasses, Renderer } from '../../types';
+import type { HTMLMarkerArguments } from './createHTMLMarker';
+import type {
   CreateMarker,
   GeoSearchMarker,
   GeoSearchTemplates,
