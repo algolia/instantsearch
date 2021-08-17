@@ -4139,7 +4139,7 @@ exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
     \\"dist\\"
   ],
   \\"peerDependencies\\": {
-    \\"instantsearch.js\\": \\"^4.0.0\\"
+    \\"instantsearch.js\\": \\"^4.27.1\\"
   },
   \\"browserslist\\": [
     \\"last 2 chrome versions\\",
@@ -4349,7 +4349,7 @@ exports[`Templates InstantSearch.js widget File content: src/types.ts 1`] = `
   Renderer,
   Connector,
   WidgetFactory,
-} from 'instantsearch.js/es/types';
+} from 'instantsearch.js/es';
 
 /*
  * Parameters send only to the widget creator function
