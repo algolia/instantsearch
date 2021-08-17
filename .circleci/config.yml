@@ -111,9 +111,9 @@ jobs:
       - build_app:
           template: 'JavaScript Helper'
           app: 'javascript-helper'
-      - build_app:
-          template: 'React InstantSearch'
-          app: 'react-instantsearch'
+      # - build_app:
+      #     template: 'React InstantSearch'
+      #     app: 'react-instantsearch'
       - build_app:
           template: 'Vue InstantSearch'
           app: 'vue-instantsearch'
