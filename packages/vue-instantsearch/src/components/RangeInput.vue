@@ -80,14 +80,12 @@ export default {
     min: {
       type: Number,
       required: false,
-      // @major: remove this default
-      default: -Infinity,
+      default: undefined,
     },
     max: {
       type: Number,
       required: false,
-      // @major: remove this default
-      default: Infinity,
+      default: undefined,
     },
     precision: {
       type: Number,
