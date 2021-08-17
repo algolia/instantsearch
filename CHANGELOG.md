@@ -1,3 +1,12 @@
+## [4.27.1](https://github.com/algolia/instantsearch.js/compare/v4.27.0...v4.27.1) (2021-08-17)
+
+
+### Bug Fixes
+
+* **ts:** export types from entry point ([#4834](https://github.com/algolia/instantsearch.js/issues/4834)) ([3014e84](https://github.com/algolia/instantsearch.js/commit/3014e8481e401db62fff41d6867580c04adeaf6b))
+
+
+
 # [4.27.0](https://github.com/algolia/instantsearch.js/compare/v4.26.0...v4.27.0) (2021-08-17)
 
 
