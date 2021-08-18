@@ -18,11 +18,11 @@ export function convertNumericRefinementsToFilters(
   const filters: string[] = [];
   (Object.keys(filtersObj) as SearchParameters.Operator[])
     .filter(
-      operator =>
+      (operator) =>
         Array.isArray(filtersObj[operator]) && filtersObj[operator]!.length > 0
     )
-    .forEach(operator => {
-      filtersObj[operator]!.forEach(value => {
+    .forEach((operator) => {
+      filtersObj[operator]!.forEach((value) => {
         filters.push(`${attribute}${operator}${value}`);
       });
     });

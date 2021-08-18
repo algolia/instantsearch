@@ -274,7 +274,7 @@ See ${createDocumentationLink({
    * Hooks a middleware into the InstantSearch lifecycle.
    */
   public use(...middleware: Middleware[]): this {
-    const newMiddlewareList = middleware.map(fn => {
+    const newMiddlewareList = middleware.map((fn) => {
       const newMiddleware = {
         subscribe: noop,
         unsubscribe: noop,
@@ -291,7 +291,7 @@ See ${createDocumentationLink({
     // If the instance has already started, we directly subscribe the
     // middleware so they're notified of changes.
     if (this.started) {
-      newMiddlewareList.forEach(m => {
+      newMiddlewareList.forEach((m) => {
         m.subscribe();
       });
     }
@@ -304,11 +304,11 @@ See ${createDocumentationLink({
    */
   public unuse(...middlewareToUnuse: Middleware[]): this {
     this.middleware
-      .filter(m => middlewareToUnuse.includes(m.creator))
-      .forEach(m => m.instance.unsubscribe());
+      .filter((m) => middlewareToUnuse.includes(m.creator))
+      .forEach((m) => m.instance.unsubscribe());
 
     this.middleware = this.middleware.filter(
-      m => !middlewareToUnuse.includes(m.creator)
+      (m) => !middlewareToUnuse.includes(m.creator)
     );
 
     return this;
@@ -356,7 +356,7 @@ See ${createDocumentationLink({
 
     if (
       widgets.some(
-        widget =>
+        (widget) =>
           typeof widget.init !== 'function' &&
           typeof widget.render !== 'function'
       )
@@ -404,7 +404,7 @@ See ${createDocumentationLink({
       );
     }
 
-    if (widgets.some(widget => typeof widget.dispose !== 'function')) {
+    if (widgets.some((widget) => typeof widget.dispose !== 'function')) {
       throw new Error(
         withUsage('The widget definition expects a `dispose` method.')
       );
@@ -447,9 +447,9 @@ See ${createDocumentationLink({
     if (this._searchFunction) {
       // this client isn't used to actually search, but required for the helper
       // to not throw errors
-      const fakeClient = ({
+      const fakeClient = {
         search: () => new Promise(noop),
-      } as any) as SearchClient;
+      } as any as SearchClient;
 
       this._mainHelperSearch = mainHelper.search.bind(mainHelper);
       mainHelper.search = () => {

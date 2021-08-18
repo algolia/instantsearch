@@ -124,48 +124,50 @@ export type SearchBoxWidgetParams = {
   queryHook?: (query: string, hook: (value: string) => void) => void;
 };
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  placeholder,
-  templates,
-  autofocus,
-  searchAsYouType,
-  showReset,
-  showSubmit,
-  showLoadingIndicator,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: SearchBoxComponentCSSClasses;
-  placeholder: string;
-  templates: SearchBoxComponentTemplates;
-  autofocus: boolean;
-  searchAsYouType: boolean;
-  showReset: boolean;
-  showSubmit: boolean;
-  showLoadingIndicator: boolean;
-}) => ({
-  refine,
-  query,
-  isSearchStalled,
-}: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
-  render(
-    <SearchBox
-      query={query}
-      placeholder={placeholder}
-      autofocus={autofocus}
-      refine={refine}
-      searchAsYouType={searchAsYouType}
-      templates={templates}
-      showSubmit={showSubmit}
-      showReset={showReset}
-      showLoadingIndicator={showLoadingIndicator}
-      isSearchStalled={isSearchStalled}
-      cssClasses={cssClasses}
-    />,
-    containerNode
-  );
-};
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    placeholder,
+    templates,
+    autofocus,
+    searchAsYouType,
+    showReset,
+    showSubmit,
+    showLoadingIndicator,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: SearchBoxComponentCSSClasses;
+    placeholder: string;
+    templates: SearchBoxComponentTemplates;
+    autofocus: boolean;
+    searchAsYouType: boolean;
+    showReset: boolean;
+    showSubmit: boolean;
+    showLoadingIndicator: boolean;
+  }) =>
+  ({
+    refine,
+    query,
+    isSearchStalled,
+  }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
+    render(
+      <SearchBox
+        query={query}
+        placeholder={placeholder}
+        autofocus={autofocus}
+        refine={refine}
+        searchAsYouType={searchAsYouType}
+        templates={templates}
+        showSubmit={showSubmit}
+        showReset={showReset}
+        showLoadingIndicator={showLoadingIndicator}
+        isSearchStalled={isSearchStalled}
+        cssClasses={cssClasses}
+      />,
+      containerNode
+    );
+  };
 
 /**
  * The searchbox widget is used to let the user set a text based query.

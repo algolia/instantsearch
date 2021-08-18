@@ -77,11 +77,11 @@ describe('pagination()', () => {
     };
     widget = pagination({ container, scrollTo: false, cssClasses });
 
-    helper = ({
+    helper = {
       setPage: jest.fn(),
       search: jest.fn(),
       state: new SearchParameters(),
-    } as unknown) as AlgoliaSearchHelper;
+    } as unknown as AlgoliaSearchHelper;
     results = new SearchResults(helper.state, [
       createSingleSearchResponse({
         hits: [{ first: 'hit', second: 'hit', objectID: '1' }],
@@ -150,7 +150,7 @@ describe('pagination()', () => {
       });
 
       // @ts-expect-error
-      getContainerNode.mockImplementation(input =>
+      getContainerNode.mockImplementation((input) =>
         input === 'body' ? { scrollIntoView } : input
       );
 

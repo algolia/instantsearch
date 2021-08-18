@@ -24,41 +24,40 @@ import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 const withUsage = createDocumentationMessageGenerator({ name: 'answers' });
 const suit = component('Answers');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: AnswersComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<AnswersComponentTemplates>;
-  };
-  templates: AnswersTemplates;
-}): Renderer<AnswersRenderState, Partial<AnswersWidgetParams>> => (
-  { hits, isLoading, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    renderState,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: AnswersComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<AnswersComponentTemplates>;
+    };
+    templates: AnswersTemplates;
+  }): Renderer<AnswersRenderState, Partial<AnswersWidgetParams>> =>
+  ({ hits, isLoading, instantSearchInstance }, isFirstRendering) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
 
-  render(
-    <Answers
-      cssClasses={cssClasses}
-      hits={hits}
-      isLoading={isLoading}
-      templateProps={renderState.templateProps!}
-    />,
-    containerNode
-  );
-};
+    render(
+      <Answers
+        cssClasses={cssClasses}
+        hits={hits}
+        isLoading={isLoading}
+        templateProps={renderState.templateProps!}
+      />,
+      containerNode
+    );
+  };
 
 export type AnswersTemplates = Partial<{
   /**
@@ -135,7 +134,7 @@ export type AnswersWidget = WidgetFactory<
   AnswersWidgetParams
 >;
 
-const answersWidget: AnswersWidget = widgetParams => {
+const answersWidget: AnswersWidget = (widgetParams) => {
   const {
     container,
     attributesForPrediction,

@@ -24,7 +24,7 @@ export default function unescape(value: string): string {
   return value && regexHasEscapedHtml.test(value)
     ? value.replace(
         regexEscapedHtml,
-        character => htmlEscapes[character as keyof typeof htmlEscapes]
+        (character) => htmlEscapes[character as keyof typeof htmlEscapes]
       )
     : value;
 }

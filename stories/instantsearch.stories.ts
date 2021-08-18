@@ -5,7 +5,7 @@ storiesOf('Basics/InstantSearch', module)
   .add(
     'with searchFunction to prevent search',
     withHits(() => {}, {
-      searchFunction: helper => {
+      searchFunction: (helper) => {
         const query = helper.state.query;
 
         if (query === '') {

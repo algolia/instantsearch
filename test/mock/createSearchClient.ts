@@ -9,7 +9,7 @@ import {
 export const createSearchClient = (
   args: Partial<SearchClient> = {}
 ): SearchClient => ({
-  search: jest.fn(requests =>
+  search: jest.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(
         ...requests.map(() => createSingleSearchResponse())
@@ -35,7 +35,7 @@ export const createControlledSearchClient = (
   const searchClient = createSearchClient({
     search: jest.fn(() => {
       let resolver: () => void;
-      const promise: Promise<MultiResponse> = new Promise(resolve => {
+      const promise: Promise<MultiResponse> = new Promise((resolve) => {
         resolver = () => resolve(createMultiSearchResponse());
       });
 

@@ -49,35 +49,33 @@ const withUsage = createDocumentationMessageGenerator({
 
 const suit = component('RelevantSort');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: RelevantSortComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<RelevantSortComponentTemplates>;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: RelevantSortComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<RelevantSortComponentTemplates>;
+    };
+    templates: RelevantSortComponentTemplates;
+  }) =>
+  ({ isRelevantSorted, isVirtualReplica, refine }: RelevantSortRenderState) => {
+    render(
+      <RelevantSort
+        cssClasses={cssClasses}
+        templates={templates}
+        isRelevantSorted={isRelevantSorted}
+        isVirtualReplica={isVirtualReplica}
+        refine={refine}
+      />,
+      containerNode
+    );
   };
-  templates: RelevantSortComponentTemplates;
-}) => ({
-  isRelevantSorted,
-  isVirtualReplica,
-  refine,
-}: RelevantSortRenderState) => {
-  render(
-    <RelevantSort
-      cssClasses={cssClasses}
-      templates={templates}
-      isRelevantSorted={isRelevantSorted}
-      isVirtualReplica={isVirtualReplica}
-      refine={refine}
-    />,
-    containerNode
-  );
-};
 
-const relevantSort: RelevantSortWidget = widgetParams => {
+const relevantSort: RelevantSortWidget = (widgetParams) => {
   const {
     container,
     templates: userTemplates = {},

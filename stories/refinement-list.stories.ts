@@ -120,8 +120,8 @@ storiesOf('Refinements/RefinementList', module)
         instantsearch.widgets.refinementList({
           container,
           attribute: 'brand',
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               label: `${item.label} (transformed)`,
               highlighted: `${item.highlighted} (transformed)`,
@@ -138,8 +138,8 @@ storiesOf('Refinements/RefinementList', module)
           container,
           attribute: 'brand',
           searchable: true,
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               label: `${item.label} (transformed)`,
               highlighted: `${item.highlighted} (transformed)`,

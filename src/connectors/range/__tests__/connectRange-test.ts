@@ -129,9 +129,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const { range, start, widgetParams } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
+      const { range, start, widgetParams } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(range).toEqual({ min: 0, max: 0 });
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
@@ -160,9 +159,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(isFirstRendering).toBe(false);
 
       // should provide good values for the first rendering
-      const { range, start, widgetParams } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
+      const { range, start, widgetParams } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(range).toEqual({ min: 10, max: 30 });
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({

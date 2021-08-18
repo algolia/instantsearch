@@ -7,7 +7,7 @@ export function addQueryID<THit extends AlgoliaHit>(
   if (!queryID) {
     return hits;
   }
-  return hits.map(hit => ({
+  return hits.map((hit) => ({
     ...hit,
     __queryID: queryID,
   }));

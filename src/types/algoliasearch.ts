@@ -12,8 +12,9 @@ type SearchResponseV3<TObject> = AlgoliaSearch.Response<TObject>;
 /** @ts-ignore */
 type SearchResponseV4<TObject> = ClientSearch.SearchResponse<TObject>;
 
-/** @ts-ignore */
-type SearchForFacetValuesResponseV3 = AlgoliaSearch.SearchForFacetValues.Response;
+type SearchForFacetValuesResponseV3 =
+  /** @ts-ignore */
+  AlgoliaSearch.SearchForFacetValues.Response;
 /** @ts-ignore */
 type SearchForFacetValuesResponseV4 = ClientSearch.SearchForFacetValuesResponse;
 
@@ -45,15 +46,15 @@ export type MultiResponse<THit = any> = {
   results: Array<SearchResponse<THit>>;
 };
 
-export type SearchResponse<
-  THit
-> = DefaultSearchClient extends DummySearchClientV4
-  ? SearchResponseV4<THit>
-  : SearchResponseV3<THit> & RelevantSortResponse;
+export type SearchResponse<THit> =
+  DefaultSearchClient extends DummySearchClientV4
+    ? SearchResponseV4<THit>
+    : SearchResponseV3<THit> & RelevantSortResponse;
 
-export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
-  ? SearchForFacetValuesResponseV4
-  : SearchForFacetValuesResponseV3;
+export type SearchForFacetValuesResponse =
+  DefaultSearchClient extends DummySearchClientV4
+    ? SearchForFacetValuesResponseV4
+    : SearchForFacetValuesResponseV3;
 
 export type FindAnswersParameters = SearchIndex extends {
   findAnswers: (...params: infer Params) => any;
@@ -65,8 +66,7 @@ export type FindAnswersOptions = DefaultSearchClient extends DummySearchClientV4
   ? ClientSearch.FindAnswersOptions
   : any;
 
-export type FindAnswersResponse<
-  TObject
-> = DefaultSearchClient extends DummySearchClientV4
-  ? ClientSearch.FindAnswersResponse<TObject>
-  : any;
+export type FindAnswersResponse<TObject> =
+  DefaultSearchClient extends DummySearchClientV4
+    ? ClientSearch.FindAnswersResponse<TObject>
+    : any;

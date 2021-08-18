@@ -111,16 +111,18 @@ describe('hitsPerPage()', () => {
         { value: 10, label: '10 results' },
         { value: 20, label: '20 results', default: true },
       ],
-      transformItems: widgetItems =>
-        widgetItems.map(item => ({ ...item, transformed: true })),
+      transformItems: (widgetItems) =>
+        widgetItems.map((item) => ({ ...item, transformed: true })),
     });
 
     widget.init!(createInitOptions({ helper, state: helper.state }));
     widget.render!(createRenderOptions({ results, state }));
 
-    const selectorRender = ((render.mock.calls[0][0] as VNode).props as {
-      children: ComponentChildren;
-    }).children as VNode<SelectorProps>;
+    const selectorRender = (
+      (render.mock.calls[0][0] as VNode).props as {
+        children: ComponentChildren;
+      }
+    ).children as VNode<SelectorProps>;
     const props = selectorRender.props as SelectorProps;
 
     expect(props.options).toEqual([

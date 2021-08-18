@@ -83,11 +83,11 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const { queryHook } = widgetParams || {};
 
     function clear(helper: AlgoliaSearchHelper) {
-      return function() {
+      return function () {
         helper.setQuery('').search();
       };
     }
@@ -146,7 +146,7 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
             }
           };
 
-          _refine = query => {
+          _refine = (query) => {
             if (queryHook) {
               queryHook(query, setQueryAndSearch);
               return;

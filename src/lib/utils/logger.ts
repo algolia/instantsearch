@@ -30,7 +30,7 @@ let warn: Warn = noop;
 let warning = noop as Warning;
 
 if (__DEV__) {
-  warn = message => {
+  warn = (message) => {
     // eslint-disable-next-line no-console
     console.warn(`[InstantSearch.js]: ${message.trim()}`);
   };
@@ -38,7 +38,7 @@ if (__DEV__) {
   deprecate = (fn, message) => {
     let hasAlreadyPrinted = false;
 
-    return function(...args) {
+    return function (...args) {
       if (!hasAlreadyPrinted) {
         hasAlreadyPrinted = true;
 

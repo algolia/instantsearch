@@ -38,7 +38,7 @@ const mergeDisjunctiveFacets: Merger = (left, right) =>
 const mergeHierarchicalFacets: Merger = (left, right) =>
   left.setQueryParameters({
     hierarchicalFacets: right.hierarchicalFacets.reduce((facets, facet) => {
-      const index = findIndex(facets, _ => _.name === facet.name);
+      const index = findIndex(facets, (_) => _.name === facet.name);
 
       if (index === -1) {
         return facets.concat(facet);
@@ -114,10 +114,8 @@ const mergeRuleContexts: Merger = (left, right) => {
 
 const merge = (...parameters: SearchParameters[]): SearchParameters =>
   parameters.reduce((left, right) => {
-    const hierarchicalFacetsRefinementsMerged = mergeHierarchicalFacetsRefinements(
-      left,
-      right
-    );
+    const hierarchicalFacetsRefinementsMerged =
+      mergeHierarchicalFacetsRefinements(left, right);
     const hierarchicalFacetsMerged = mergeHierarchicalFacets(
       hierarchicalFacetsRefinementsMerged,
       right
@@ -130,10 +128,8 @@ const merge = (...parameters: SearchParameters[]): SearchParameters =>
       tagRefinementsMerged,
       right
     );
-    const disjunctiveFacetsRefinementsMerged = mergeDisjunctiveFacetsRefinements(
-      numericRefinementsMerged,
-      right
-    );
+    const disjunctiveFacetsRefinementsMerged =
+      mergeDisjunctiveFacetsRefinements(numericRefinementsMerged, right);
     const facetsExcludesMerged = mergeFacetsExcludes(
       disjunctiveFacetsRefinementsMerged,
       right

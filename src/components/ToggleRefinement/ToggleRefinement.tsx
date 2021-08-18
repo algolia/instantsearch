@@ -14,13 +14,11 @@ import {
 
 import Template from '../Template/Template';
 
-export type ToggleRefinementComponentCSSClasses = ComponentCSSClasses<
-  ToggleRefinementCSSClasses
->;
+export type ToggleRefinementComponentCSSClasses =
+  ComponentCSSClasses<ToggleRefinementCSSClasses>;
 
-export type ToggleRefinementComponentTemplates = Required<
-  ToggleRefinementTemplates
->;
+export type ToggleRefinementComponentTemplates =
+  Required<ToggleRefinementTemplates>;
 
 export type ToggleRefinementProps = {
   currentRefinement: ToggleRefinementValue;
@@ -41,7 +39,7 @@ const ToggleRefinement = ({
         className={cssClasses.checkbox}
         type="checkbox"
         checked={currentRefinement.isRefined}
-        onChange={event =>
+        onChange={(event) =>
           refine({ isRefined: !(event.target as HTMLInputElement).checked })
         }
       />

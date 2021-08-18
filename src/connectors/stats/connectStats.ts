@@ -71,7 +71,7 @@ const connectStats: StatsConnector = function connectStats(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => ({
+  return (widgetParams) => ({
     $$type: 'ais.stats',
 
     init(initOptions) {

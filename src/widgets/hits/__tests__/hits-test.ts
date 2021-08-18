@@ -249,8 +249,8 @@ describe('hits()', () => {
   it('renders transformed items', () => {
     widget = hits({
       container,
-      transformItems: items =>
-        items.map(item => ({ ...item, transformed: true })),
+      transformItems: (items) =>
+        items.map((item) => ({ ...item, transformed: true })),
     });
 
     widget.init!(

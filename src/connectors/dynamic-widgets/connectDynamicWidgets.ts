@@ -37,129 +37,125 @@ export type DynamicWidgetsConnector = Connector<
   DynamicWidgetsConnectorParams
 >;
 
-const connectDynamicWidgets: DynamicWidgetsConnector = function connectDynamicWidgets(
-  renderFn,
-  unmountFn = noop
-) {
-  checkRendering(renderFn, withUsage());
+const connectDynamicWidgets: DynamicWidgetsConnector =
+  function connectDynamicWidgets(renderFn, unmountFn = noop) {
+    checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
-    const { widgets, transformItems = items => items } = widgetParams;
+    return (widgetParams) => {
+      const { widgets, transformItems = (items) => items } = widgetParams;
 
-    if (
-      !widgets ||
-      !Array.isArray(widgets) ||
-      widgets.some(widget => typeof widget !== 'object')
-    ) {
-      throw new Error(
-        withUsage('The `widgets` option expects an array of widgets.')
-      );
-    }
-
-    if (
-      !widgets ||
-      !Array.isArray(widgets) ||
-      widgets.some(widget => typeof widget !== 'object')
-    ) {
-      throw new Error(
-        withUsage('The `widgets` option expects an array of widgets.')
-      );
-    }
-
-    const localWidgets: Map<
-      string,
-      { widget: Widget; isMounted: boolean }
-    > = new Map();
-
-    return {
-      $$type: 'ais.dynamicWidgets',
-      init(initOptions) {
-        widgets.forEach(widget => {
-          const attribute = getWidgetAttribute(widget, initOptions);
-          localWidgets.set(attribute, { widget, isMounted: true });
-        });
-        initOptions.parent!.addWidgets(widgets);
-
-        renderFn(
-          {
-            ...this.getWidgetRenderState(initOptions),
-            instantSearchInstance: initOptions.instantSearchInstance,
-          },
-          true
+      if (
+        !widgets ||
+        !Array.isArray(widgets) ||
+        widgets.some((widget) => typeof widget !== 'object')
+      ) {
+        throw new Error(
+          withUsage('The `widgets` option expects an array of widgets.')
         );
-      },
-      render(renderOptions) {
-        const { parent } = renderOptions;
-        const renderState = this.getWidgetRenderState(renderOptions);
+      }
 
-        const widgetsToUnmount: Widget[] = [];
-        const widgetsToMount: Widget[] = [];
+      if (
+        !widgets ||
+        !Array.isArray(widgets) ||
+        widgets.some((widget) => typeof widget !== 'object')
+      ) {
+        throw new Error(
+          withUsage('The `widgets` option expects an array of widgets.')
+        );
+      }
 
-        localWidgets.forEach(({ widget, isMounted }, attribute) => {
-          const shouldMount =
-            renderState.attributesToRender.indexOf(attribute) > -1;
+      const localWidgets: Map<string, { widget: Widget; isMounted: boolean }> =
+        new Map();
 
-          if (!isMounted && shouldMount) {
-            widgetsToMount.push(widget);
-            localWidgets.set(attribute, {
-              widget,
-              isMounted: true,
-            });
-          } else if (isMounted && !shouldMount) {
-            widgetsToUnmount.push(widget);
-            localWidgets.set(attribute, {
-              widget,
-              isMounted: false,
-            });
-          }
-        });
+      return {
+        $$type: 'ais.dynamicWidgets',
+        init(initOptions) {
+          widgets.forEach((widget) => {
+            const attribute = getWidgetAttribute(widget, initOptions);
+            localWidgets.set(attribute, { widget, isMounted: true });
+          });
+          initOptions.parent!.addWidgets(widgets);
 
-        parent!.addWidgets(widgetsToMount);
-        // make sure this only happens after the regular render, otherwise it
-        // happens too quick, since render is "deferred" for the next microtask,
-        // so this needs to be a whole task later
-        setTimeout(() => parent!.removeWidgets(widgetsToUnmount), 0);
+          renderFn(
+            {
+              ...this.getWidgetRenderState(initOptions),
+              instantSearchInstance: initOptions.instantSearchInstance,
+            },
+            true
+          );
+        },
+        render(renderOptions) {
+          const { parent } = renderOptions;
+          const renderState = this.getWidgetRenderState(renderOptions);
 
-        renderFn(
-          {
+          const widgetsToUnmount: Widget[] = [];
+          const widgetsToMount: Widget[] = [];
+
+          localWidgets.forEach(({ widget, isMounted }, attribute) => {
+            const shouldMount =
+              renderState.attributesToRender.indexOf(attribute) > -1;
+
+            if (!isMounted && shouldMount) {
+              widgetsToMount.push(widget);
+              localWidgets.set(attribute, {
+                widget,
+                isMounted: true,
+              });
+            } else if (isMounted && !shouldMount) {
+              widgetsToUnmount.push(widget);
+              localWidgets.set(attribute, {
+                widget,
+                isMounted: false,
+              });
+            }
+          });
+
+          parent!.addWidgets(widgetsToMount);
+          // make sure this only happens after the regular render, otherwise it
+          // happens too quick, since render is "deferred" for the next microtask,
+          // so this needs to be a whole task later
+          setTimeout(() => parent!.removeWidgets(widgetsToUnmount), 0);
+
+          renderFn(
+            {
+              ...renderState,
+              instantSearchInstance: renderOptions.instantSearchInstance,
+            },
+            false
+          );
+        },
+        dispose({ parent }) {
+          const toRemove: Widget[] = [];
+          localWidgets.forEach(({ widget, isMounted }) => {
+            if (isMounted) {
+              toRemove.push(widget);
+            }
+          });
+          parent!.removeWidgets(toRemove);
+
+          unmountFn();
+        },
+        getRenderState(renderState, renderOptions) {
+          return {
             ...renderState,
-            instantSearchInstance: renderOptions.instantSearchInstance,
-          },
-          false
-        );
-      },
-      dispose({ parent }) {
-        const toRemove: Widget[] = [];
-        localWidgets.forEach(({ widget, isMounted }) => {
-          if (isMounted) {
-            toRemove.push(widget);
+            dynamicWidgets: this.getWidgetRenderState(renderOptions),
+          };
+        },
+        getWidgetRenderState({ results }) {
+          if (!results) {
+            return { attributesToRender: [], widgetParams };
           }
-        });
-        parent!.removeWidgets(toRemove);
 
-        unmountFn();
-      },
-      getRenderState(renderState, renderOptions) {
-        return {
-          ...renderState,
-          dynamicWidgets: this.getWidgetRenderState(renderOptions),
-        };
-      },
-      getWidgetRenderState({ results }) {
-        if (!results) {
-          return { attributesToRender: [], widgetParams };
-        }
+          const attributesToRender =
+            results.renderingContent?.facetOrdering?.facets?.order ?? [];
 
-        const attributesToRender =
-          results.renderingContent?.facetOrdering?.facets?.order ?? [];
-
-        return {
-          attributesToRender: transformItems(attributesToRender, { results }),
-          widgetParams,
-        };
-      },
+          return {
+            attributesToRender: transformItems(attributesToRender, { results }),
+            widgetParams,
+          };
+        },
+      };
     };
   };
-};
 
 export default connectDynamicWidgets;

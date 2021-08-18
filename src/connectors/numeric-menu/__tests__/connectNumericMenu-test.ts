@@ -192,8 +192,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     const widget = makeWidget({
       attribute: 'numerics',
       items: [{ label: 'below 10', end: 10 }],
-      transformItems: items =>
-        items.map(item => ({
+      transformItems: (items) =>
+        items.map((item) => ({
           ...item,
           label: 'transformed',
         })),
@@ -299,10 +299,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
-    const {
-      refine: renderToggleRefinement,
-      items: renderFacetValues,
-    } = secondRenderingOptions;
+    const { refine: renderToggleRefinement, items: renderFacetValues } =
+      secondRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '<=': [],
       '=': [],

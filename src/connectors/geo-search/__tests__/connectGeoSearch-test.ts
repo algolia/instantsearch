@@ -280,8 +280,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({
-      transformItems: items =>
-        items.map(item => ({
+      transformItems: (items) =>
+        items.map((item) => ({
           ...item,
           _geoloc: {
             lat: 20,

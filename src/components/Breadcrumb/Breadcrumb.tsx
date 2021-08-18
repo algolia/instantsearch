@@ -11,9 +11,8 @@ import { ComponentCSSClasses } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
 
-export type BreadcrumbComponentCSSClasses = ComponentCSSClasses<
-  BreadcrumbCSSClasses
->;
+export type BreadcrumbComponentCSSClasses =
+  ComponentCSSClasses<BreadcrumbCSSClasses>;
 
 export type BreadcrumbComponentTemplates = Required<BreadcrumbTemplates>;
 
@@ -84,7 +83,7 @@ const Breadcrumb = ({
               <a
                 className={cssClasses.link}
                 href={createURL(item.value)}
-                onClick={event => {
+                onClick={(event) => {
                   event.preventDefault();
                   refine(item.value);
                 }}

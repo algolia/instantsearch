@@ -107,14 +107,13 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
   const connectorState: ConnectorState = {};
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       attributes,
       separator = ' > ',
       rootPath = null,
-      transformItems = (items => items) as TransformItems<
-        BreadcrumbConnectorParamsItem
-      >,
+      transformItems = ((items) =>
+        items) as TransformItems<BreadcrumbConnectorParamsItem>,
     } = widgetParams || {};
 
     if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
@@ -202,13 +201,13 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         const items = getItems();
 
         if (!connectorState.createURL) {
-          connectorState.createURL = facetValue => {
+          connectorState.createURL = (facetValue) => {
             return createURL(getRefinedState(helper.state, facetValue));
           };
         }
 
         if (!connectorState.refine) {
-          connectorState.refine = facetValue => {
+          connectorState.refine = (facetValue) => {
             helper.setState(getRefinedState(helper.state, facetValue)).search();
           };
         }

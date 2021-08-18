@@ -16,7 +16,7 @@ const createSearchClient = ({
   const page = 0;
 
   return {
-    search: jest.fn(requests =>
+    search: jest.fn((requests) =>
       Promise.resolve({
         results: requests.map(() =>
           createSingleSearchResponse({
@@ -231,7 +231,7 @@ describe('hits', () => {
         hits({
           container,
           templates: {
-            item: item => `
+            item: (item) => `
               <button type='button' ${instantsearch.insights(
                 'clickedObjectIDsAfterSearch',
                 {

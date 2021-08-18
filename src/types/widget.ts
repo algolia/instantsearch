@@ -154,16 +154,15 @@ type RequiredWidgetType<TWidgetDescription extends WidgetDescription> = {
   $$widgetType: TWidgetDescription['$$widgetType'];
 };
 
-type WidgetType<
-  TWidgetDescription extends WidgetDescription
-> = TWidgetDescription extends RequiredKeys<WidgetDescription, '$$widgetType'>
-  ? RequiredWidgetType<TWidgetDescription>
-  : {
-      /**
-       * Identifier for widgets.
-       */
-      $$widgetType?: string;
-    };
+type WidgetType<TWidgetDescription extends WidgetDescription> =
+  TWidgetDescription extends RequiredKeys<WidgetDescription, '$$widgetType'>
+    ? RequiredWidgetType<TWidgetDescription>
+    : {
+        /**
+         * Identifier for widgets.
+         */
+        $$widgetType?: string;
+      };
 
 type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
@@ -191,9 +190,7 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
    * @param uiState - Current state.
    * @param widgetStateOptions - Extra information to calculate uiState.
    */
-  getWidgetState?: RequiredUiStateLifeCycle<
-    TWidgetDescription
-  >['getWidgetUiState'];
+  getWidgetState?: RequiredUiStateLifeCycle<TWidgetDescription>['getWidgetUiState'];
 
   /**
    * This function is required for a widget to behave correctly when a URL is
@@ -213,11 +210,10 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
   ) => SearchParameters;
 };
 
-type UiStateLifeCycle<
-  TWidgetDescription extends WidgetDescription
-> = TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>
-  ? RequiredUiStateLifeCycle<TWidgetDescription>
-  : Partial<RequiredUiStateLifeCycle<TWidgetDescription>>;
+type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =
+  TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>
+    ? RequiredUiStateLifeCycle<TWidgetDescription>
+    : Partial<RequiredUiStateLifeCycle<TWidgetDescription>>;
 
 type RequiredRenderStateLifeCycle<
   TWidgetDescription extends WidgetDescription & WidgetParams

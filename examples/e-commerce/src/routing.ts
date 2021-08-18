@@ -58,10 +58,7 @@ const decodedCategories = Object.keys(encodedCategories).reduce((acc, key) => {
 function getCategorySlug(name: string): string {
   const encodedName = decodedCategories[name] || name;
 
-  return encodedName
-    .split(' ')
-    .map(encodeURIComponent)
-    .join('+');
+  return encodedName.split(' ').map(encodeURIComponent).join('+');
 }
 
 // Returns a name from the category slug.
@@ -70,10 +67,7 @@ function getCategorySlug(name: string): string {
 function getCategoryName(slug: string): string {
   const decodedSlug = encodedCategories[slug] || slug;
 
-  return decodedSlug
-    .split('+')
-    .map(decodeURIComponent)
-    .join(' ');
+  return decodedSlug.split('+').map(decodeURIComponent).join(' ');
 }
 
 const originalWindowTitle = document.title;
@@ -216,9 +210,8 @@ const getStateMapping = ({ indexName }) => ({
   routeToState(routeState: RouteState): UiState {
     const hierarchicalMenu: { [key: string]: string[] } = {};
     if (routeState.category) {
-      hierarchicalMenu[
-        'hierarchicalCategories.lvl0'
-      ] = routeState.category.split('/');
+      hierarchicalMenu['hierarchicalCategories.lvl0'] =
+        routeState.category.split('/');
     }
 
     const refinementList: { [key: string]: string[] } = {};

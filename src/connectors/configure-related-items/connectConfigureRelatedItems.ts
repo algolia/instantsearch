@@ -70,91 +70,91 @@ export type ConfigureRelatedItemsConnector = Connector<
   ConfigureRelatedItemsConnectorParams
 >;
 
-const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = function connectConfigureRelatedItems(
-  renderFn,
-  unmountFn
-) {
-  return widgetParams => {
-    const {
-      hit,
-      matchingPatterns,
-      transformSearchParameters = (x => x) as TransformSearchParameters,
-    } = widgetParams || {};
+const connectConfigureRelatedItems: ConfigureRelatedItemsConnector =
+  function connectConfigureRelatedItems(renderFn, unmountFn) {
+    return (widgetParams) => {
+      const {
+        hit,
+        matchingPatterns,
+        transformSearchParameters = ((x) => x) as TransformSearchParameters,
+      } = widgetParams || {};
 
-    if (!hit) {
-      throw new Error(withUsage('The `hit` option is required.'));
-    }
+      if (!hit) {
+        throw new Error(withUsage('The `hit` option is required.'));
+      }
 
-    if (!matchingPatterns) {
-      throw new Error(withUsage('The `matchingPatterns` option is required.'));
-    }
+      if (!matchingPatterns) {
+        throw new Error(
+          withUsage('The `matchingPatterns` option is required.')
+        );
+      }
 
-    const optionalFilters = Object.keys(matchingPatterns).reduce<
-      Array<string | string[]>
-    >((acc, attributeName) => {
-      const attribute = matchingPatterns[attributeName];
-      const attributeValue = getPropertyByPath(hit, attributeName);
-      const attributeScore = attribute.score;
+      const optionalFilters = Object.keys(matchingPatterns).reduce<
+        Array<string | string[]>
+      >((acc, attributeName) => {
+        const attribute = matchingPatterns[attributeName];
+        const attributeValue = getPropertyByPath(hit, attributeName);
+        const attributeScore = attribute.score;
 
-      if (Array.isArray(attributeValue)) {
-        return [
-          ...acc,
-          attributeValue.map(attributeSubValue => {
-            return createOptionalFilter({
+        if (Array.isArray(attributeValue)) {
+          return [
+            ...acc,
+            attributeValue.map((attributeSubValue) => {
+              return createOptionalFilter({
+                attributeName,
+                attributeValue: attributeSubValue,
+                attributeScore,
+              });
+            }),
+          ];
+        }
+
+        if (typeof attributeValue === 'string') {
+          return [
+            ...acc,
+            createOptionalFilter({
               attributeName,
-              attributeValue: attributeSubValue,
+              attributeValue,
               attributeScore,
-            });
-          }),
-        ];
-      }
+            }),
+          ];
+        }
 
-      if (typeof attributeValue === 'string') {
-        return [
-          ...acc,
-          createOptionalFilter({
-            attributeName,
-            attributeValue,
-            attributeScore,
-          }),
-        ];
-      }
-
-      warning(
-        false,
-        `
+        warning(
+          false,
+          `
 The \`matchingPatterns\` option returned a value of type ${getObjectType(
-          attributeValue
-        )} for the "${attributeName}" key. This value was not sent to Algolia because \`optionalFilters\` only supports strings and array of strings.
+            attributeValue
+          )} for the "${attributeName}" key. This value was not sent to Algolia because \`optionalFilters\` only supports strings and array of strings.
 
 You can remove the "${attributeName}" key from the \`matchingPatterns\` option.
 
 See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
             `
-      );
+        );
 
-      return acc;
-    }, []);
+        return acc;
+      }, []);
 
-    const searchParameters: PlainSearchParameters = {
-      ...transformSearchParameters(
-        new algoliasearchHelper.SearchParameters({
-          sumOrFiltersScores: true,
-          facetFilters: [`objectID:-${hit.objectID}`],
-          optionalFilters,
-        })
-      ),
-    };
+      const searchParameters: PlainSearchParameters = {
+        ...transformSearchParameters(
+          new algoliasearchHelper.SearchParameters({
+            sumOrFiltersScores: true,
+            facetFilters: [`objectID:-${hit.objectID}`],
+            optionalFilters,
+          })
+        ),
+      };
 
-    const makeWidget = connectConfigure(renderFn, unmountFn);
+      const makeWidget = connectConfigure(renderFn, unmountFn);
 
-    return {
-      // required, since widget parameters differ between these connectors
-      // and we don't want to have the parameters of configure here
-      ...makeWidget({ searchParameters } as any),
-      $$type: 'ais.configureRelatedItems',
+      return {
+        // required, since widget parameters differ between these connectors
+        // and we don't want to have the parameters of configure here
+        ...makeWidget({ searchParameters } as any),
+        $$type: 'ais.configureRelatedItems',
+      };
     };
   };
-};
 
 export default connectConfigureRelatedItems;

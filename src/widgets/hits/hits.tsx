@@ -34,46 +34,48 @@ const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
 const HitsWithInsightsListener = withInsightsListener(Hits);
 
-const renderer = ({
-  renderState,
-  cssClasses,
-  containerNode,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: HitsComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<HitsComponentTemplates>;
-  };
-  templates: HitsTemplates;
-}): Renderer<HitsRenderState, Partial<HitsWidgetParams>> => (
-  { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+const renderer =
+  ({
+    renderState,
+    cssClasses,
+    containerNode,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: HitsComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<HitsComponentTemplates>;
+    };
+    templates: HitsTemplates;
+  }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
+  (
+    { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
 
-  render(
-    <HitsWithInsightsListener
-      cssClasses={cssClasses}
-      hits={receivedHits}
-      results={results}
-      templateProps={renderState.templateProps}
-      insights={insights as InsightsClientWrapper}
-      sendEvent={(event: InsightsEvent) => {
-        instantSearchInstance.sendEventToInsights(event);
-      }}
-      bindEvent={bindEvent}
-    />,
-    containerNode
-  );
-};
+    render(
+      <HitsWithInsightsListener
+        cssClasses={cssClasses}
+        hits={receivedHits}
+        results={results}
+        templateProps={renderState.templateProps}
+        insights={insights as InsightsClientWrapper}
+        sendEvent={(event: InsightsEvent) => {
+          instantSearchInstance.sendEventToInsights(event);
+        }}
+        bindEvent={bindEvent}
+      />,
+      containerNode
+    );
+  };
 
 export type HitsCSSClasses = Partial<{
   /**

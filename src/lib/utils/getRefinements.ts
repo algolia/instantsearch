@@ -49,7 +49,7 @@ function getRefinement(
   const res: Refinement = { type, attribute, name };
   let facet: any = find(
     resultsFacets as Array<{ name: string }>,
-    resultsFacet => resultsFacet.name === attribute
+    (resultsFacet) => resultsFacet.name === attribute
   );
   let count: number;
 
@@ -57,10 +57,10 @@ function getRefinement(
     const facetDeclaration = state.getHierarchicalFacetByName(attribute);
     const nameParts = name.split(facetDeclaration.separator);
 
-    const getFacetRefinement = (
-      facetData: any
-    ): ((refinementKey: string) => any) => (refinementKey: string): any =>
-      facetData[refinementKey];
+    const getFacetRefinement =
+      (facetData: any): ((refinementKey: string) => any) =>
+      (refinementKey: string): any =>
+        facetData[refinementKey];
 
     for (let i = 0; facet !== undefined && i < nameParts.length; ++i) {
       facet =
@@ -68,7 +68,7 @@ function getRefinement(
         facet.data &&
         find(
           Object.keys(facet.data).map(getFacetRefinement(facet.data)),
-          refinement => refinement.name === nameParts[i]
+          (refinement) => refinement.name === nameParts[i]
         );
     }
 
@@ -105,20 +105,20 @@ function getRefinements(
     tagRefinements = [],
   } = state;
 
-  Object.keys(facetsRefinements).forEach(attribute => {
+  Object.keys(facetsRefinements).forEach((attribute) => {
     const refinementNames = facetsRefinements[attribute];
 
-    refinementNames.forEach(refinementName => {
+    refinementNames.forEach((refinementName) => {
       refinements.push(
         getRefinement(state, 'facet', attribute, refinementName, results.facets)
       );
     });
   });
 
-  Object.keys(facetsExcludes).forEach(attribute => {
+  Object.keys(facetsExcludes).forEach((attribute) => {
     const refinementNames = facetsExcludes[attribute];
 
-    refinementNames.forEach(refinementName => {
+    refinementNames.forEach((refinementName) => {
       refinements.push({
         type: 'exclude',
         attribute,
@@ -128,10 +128,10 @@ function getRefinements(
     });
   });
 
-  Object.keys(disjunctiveFacetsRefinements).forEach(attribute => {
+  Object.keys(disjunctiveFacetsRefinements).forEach((attribute) => {
     const refinementNames = disjunctiveFacetsRefinements[attribute];
 
-    refinementNames.forEach(refinementName => {
+    refinementNames.forEach((refinementName) => {
       refinements.push(
         getRefinement(
           state,
@@ -146,10 +146,10 @@ function getRefinements(
     });
   });
 
-  Object.keys(hierarchicalFacetsRefinements).forEach(attribute => {
+  Object.keys(hierarchicalFacetsRefinements).forEach((attribute) => {
     const refinementNames = hierarchicalFacetsRefinements[attribute];
 
-    refinementNames.forEach(refinement => {
+    refinementNames.forEach((refinement) => {
       refinements.push(
         getRefinement(
           state,
@@ -162,10 +162,10 @@ function getRefinements(
     });
   });
 
-  Object.keys(numericRefinements).forEach(attribute => {
+  Object.keys(numericRefinements).forEach((attribute) => {
     const operators = numericRefinements[attribute];
 
-    Object.keys(operators).forEach(operatorOriginal => {
+    Object.keys(operators).forEach((operatorOriginal) => {
       const operator = operatorOriginal as SearchParameters.Operator;
       const valueOrValues = operators[operator];
       const refinementNames = Array.isArray(valueOrValues)
@@ -184,7 +184,7 @@ function getRefinements(
     });
   });
 
-  tagRefinements.forEach(refinementName => {
+  tagRefinements.forEach((refinementName) => {
     refinements.push({ type: 'tag', attribute: '_tags', name: refinementName });
   });
 

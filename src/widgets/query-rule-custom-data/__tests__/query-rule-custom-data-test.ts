@@ -85,9 +85,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          QueryRuleCustomDataProps
-        >;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<QueryRuleCustomDataProps>;
         const { cssClasses } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(cssClasses).toEqual({
@@ -111,9 +110,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          QueryRuleCustomDataProps
-        >;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<QueryRuleCustomDataProps>;
         const { cssClasses } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(cssClasses).toEqual({
@@ -136,9 +134,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          QueryRuleCustomDataProps
-        >;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<QueryRuleCustomDataProps>;
         const { templates } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(templates).toEqual({
@@ -176,9 +173,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          QueryRuleCustomDataProps
-        >;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<QueryRuleCustomDataProps>;
         const { templates } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(templates).toEqual({

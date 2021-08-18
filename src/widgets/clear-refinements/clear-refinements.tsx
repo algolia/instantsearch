@@ -26,41 +26,43 @@ const withUsage = createDocumentationMessageGenerator({
 });
 const suit = component('ClearRefinements');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: ClearRefinementsComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<ClearRefinementsComponentTemplates>;
-  };
-  templates: ClearRefinementsTemplates;
-}): Renderer<
-  ClearRefinementsRenderState,
-  Partial<ClearRefinementsWidgetParams>
-> => ({ refine, hasRefinements, instantSearchInstance }, isFirstRendering) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    renderState,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: ClearRefinementsComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<ClearRefinementsComponentTemplates>;
+    };
+    templates: ClearRefinementsTemplates;
+  }): Renderer<
+    ClearRefinementsRenderState,
+    Partial<ClearRefinementsWidgetParams>
+  > =>
+  ({ refine, hasRefinements, instantSearchInstance }, isFirstRendering) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
 
-  render(
-    <ClearRefinements
-      refine={refine}
-      cssClasses={cssClasses}
-      hasRefinements={hasRefinements}
-      templateProps={renderState.templateProps!}
-    />,
-    containerNode
-  );
-};
+    render(
+      <ClearRefinements
+        refine={refine}
+        cssClasses={cssClasses}
+        hasRefinements={hasRefinements}
+        templateProps={renderState.templateProps!}
+      />,
+      containerNode
+    );
+  };
 
 export type ClearRefinementsCSSClasses = Partial<{
   /**
@@ -109,7 +111,7 @@ export type ClearRefinementsWidget = WidgetFactory<
   ClearRefinementsWidgetParams
 >;
 
-const clearRefinements: ClearRefinementsWidget = widgetParams => {
+const clearRefinements: ClearRefinementsWidget = (widgetParams) => {
   const {
     container,
     templates = {},

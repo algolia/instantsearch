@@ -111,7 +111,7 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
     [key: string]: string[];
   };
 
-  const serializeRefinements = function(
+  const serializeRefinements = function (
     parameters: RefinementParameters
   ): string {
     const refinements: string[] = [];
@@ -131,7 +131,7 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
     return refinements.join('&');
   };
 
-  const serializeNumericRefinements = function(
+  const serializeNumericRefinements = function (
     numericRefinements: SearchParameters['numericRefinements']
   ): string {
     const refinements: string[] = [];
@@ -177,7 +177,7 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
 
   let lastSentData = '';
 
-  const sendAnalytics = function(analyticsState: AnalyticsState | null): void {
+  const sendAnalytics = function (analyticsState: AnalyticsState | null): void {
     if (analyticsState === null) {
       return;
     }
@@ -204,8 +204,9 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
 
     const stringifiedParams = serializedParams.join('&');
 
-    let dataToSend = `Query: ${analyticsState.state.query ||
-      ''}, ${stringifiedParams}`;
+    let dataToSend = `Query: ${
+      analyticsState.state.query || ''
+    }, ${stringifiedParams}`;
     if (pushPagination === true) {
       dataToSend += `, Page: ${analyticsState.state.page || 0}`;
     }

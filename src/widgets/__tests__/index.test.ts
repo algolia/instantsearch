@@ -42,7 +42,8 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         return index({ indexName: 'index' });
       }
       case 'EXPERIMENTAL_configureRelatedItems': {
-        const EXPERIMENTAL_configureRelatedItems = widget as Widgets['EXPERIMENTAL_configureRelatedItems'];
+        const EXPERIMENTAL_configureRelatedItems =
+          widget as Widgets['EXPERIMENTAL_configureRelatedItems'];
         return EXPERIMENTAL_configureRelatedItems({
           hit: { objectID: 'x' },
           matchingPatterns: {},
@@ -53,9 +54,9 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         return geoSearch({
           container,
           googleReference: {
-            maps: ({
+            maps: {
               OverlayView: class OverlayView {},
-            } as unknown) as typeof google.maps,
+            } as unknown as typeof google.maps,
           },
         });
       }
@@ -128,7 +129,8 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         });
       }
       case 'EXPERIMENTAL_dynamicWidgets': {
-        const EXPERIMENTAL_dynamicWidgets = widget as Widgets['EXPERIMENTAL_dynamicWidgets'];
+        const EXPERIMENTAL_dynamicWidgets =
+          widget as Widgets['EXPERIMENTAL_dynamicWidgets'];
         return EXPERIMENTAL_dynamicWidgets({
           transformItems(items) {
             return items;

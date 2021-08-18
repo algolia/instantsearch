@@ -108,61 +108,63 @@ export type MenuWidgetParams = {
   cssClasses?: MenuCSSClasses;
 };
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-  showMore,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: MenuComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<MenuComponentTemplates>;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    renderState,
+    templates,
+    showMore,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: MenuComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<MenuComponentTemplates>;
+    };
+    templates: MenuTemplates;
+    showMore?: boolean;
+  }) =>
+  (
+    {
+      refine,
+      items,
+      createURL,
+      instantSearchInstance,
+      isShowingMore,
+      toggleShowMore,
+      canToggleShowMore,
+    }: MenuRenderState & RendererOptions<MenuConnectorParams>,
+    isFirstRendering: boolean
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
+
+    const facetValues = items.map((facetValue) => ({
+      ...facetValue,
+      url: createURL(facetValue.value),
+    }));
+
+    render(
+      <RefinementList
+        createURL={createURL}
+        cssClasses={cssClasses}
+        facetValues={facetValues}
+        showMore={showMore}
+        templateProps={renderState.templateProps!}
+        toggleRefinement={refine}
+        toggleShowMore={toggleShowMore}
+        isShowingMore={isShowingMore}
+        canToggleShowMore={canToggleShowMore}
+      />,
+      containerNode
+    );
   };
-  templates: MenuTemplates;
-  showMore?: boolean;
-}) => (
-  {
-    refine,
-    items,
-    createURL,
-    instantSearchInstance,
-    isShowingMore,
-    toggleShowMore,
-    canToggleShowMore,
-  }: MenuRenderState & RendererOptions<MenuConnectorParams>,
-  isFirstRendering: boolean
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
-
-  const facetValues = items.map(facetValue => ({
-    ...facetValue,
-    url: createURL(facetValue.value),
-  }));
-
-  render(
-    <RefinementList
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={facetValues}
-      showMore={showMore}
-      templateProps={renderState.templateProps!}
-      toggleRefinement={refine}
-      toggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-      canToggleShowMore={canToggleShowMore}
-    />,
-    containerNode
-  );
-};
 
 export type MenuWidget = WidgetFactory<
   MenuWidgetDescription & { $$widgetType: 'ais.menu' },

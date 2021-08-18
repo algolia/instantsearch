@@ -18,7 +18,7 @@ describe('configureRelatedItems', () => {
     const widgetParams: ConfigureRelatedItemsConnectorParams = {
       hit: { objectID: '1' },
       matchingPatterns: {},
-      transformSearchParameters: x => x,
+      transformSearchParameters: (x) => x,
     };
 
     configureRelatedItems(widgetParams);

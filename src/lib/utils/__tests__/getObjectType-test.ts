@@ -27,7 +27,7 @@ describe('getObjectType', () => {
   });
 
   test('returns the type of a function', () => {
-    expect(getObjectType(function() {})).toEqual('Function');
+    expect(getObjectType(function () {})).toEqual('Function');
   });
 
   test('returns the type of undefined', () => {

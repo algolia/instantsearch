@@ -21,7 +21,7 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
   } => {
     let isListening = false;
 
-    const helper = ({
+    const helper = {
       getState: () => {},
       isBrowserSupported: () => true,
       isListening: () => isListening,
@@ -29,7 +29,7 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
         isListening = !isListening;
       },
       dispose: jest.fn(),
-    } as unknown) as VoiceSearchHelper;
+    } as unknown as VoiceSearchHelper;
 
     return {
       ...helper,

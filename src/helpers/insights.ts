@@ -1,9 +1,7 @@
 import { InsightsClientMethod, InsightsClientPayload } from '../types';
 import { warning, serializePayload, deserializePayload } from '../lib/utils';
 
-export function readDataAttributes(
-  domElement: HTMLElement
-): {
+export function readDataAttributes(domElement: HTMLElement): {
   method: InsightsClientMethod;
   payload: Partial<InsightsClientPayload>;
 } {
@@ -20,9 +18,8 @@ export function readDataAttributes(
   }
 
   try {
-    const payload: Partial<InsightsClientPayload> = deserializePayload(
-      serializedPayload
-    );
+    const payload: Partial<InsightsClientPayload> =
+      deserializePayload(serializedPayload);
     return { method, payload };
   } catch (error) {
     throw new Error(

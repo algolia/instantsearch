@@ -72,40 +72,43 @@ export type SortByWidget = WidgetFactory<
   SortByWidgetParams
 >;
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: SelectorComponentCSSClasses;
-}): Renderer<SortByRenderState, SortByWidgetParams> => (
-  { currentRefinement, options, refine },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    return;
-  }
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: SelectorComponentCSSClasses;
+  }): Renderer<SortByRenderState, SortByWidgetParams> =>
+  ({ currentRefinement, options, refine }, isFirstRendering) => {
+    if (isFirstRendering) {
+      return;
+    }
 
-  render(
-    <div className={cssClasses.root}>
-      <Selector
-        cssClasses={cssClasses}
-        currentValue={currentRefinement}
-        options={options}
-        setValue={refine}
-      />
-    </div>,
-    containerNode
-  );
-};
+    render(
+      <div className={cssClasses.root}>
+        <Selector
+          cssClasses={cssClasses}
+          currentValue={currentRefinement}
+          options={options}
+          setValue={refine}
+        />
+      </div>,
+      containerNode
+    );
+  };
 
 /**
  * Sort by selector is a widget used for letting the user choose between different
  * indices that contains the same data with a different order / ranking formula.
  */
-const sortBy: SortByWidget = widgetParams => {
-  const { container, items, cssClasses: userCssClasses = {}, transformItems } =
-    widgetParams || {};
+const sortBy: SortByWidget = (widgetParams) => {
+  const {
+    container,
+    items,
+    cssClasses: userCssClasses = {},
+    transformItems,
+  } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

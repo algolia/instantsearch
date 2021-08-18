@@ -163,290 +163,296 @@ export type HierarchicalMenuConnector = Connector<
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetParams)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
-const connectHierarchicalMenu: HierarchicalMenuConnector = function connectHierarchicalMenu(
-  renderFn,
-  unmountFn = noop
-) {
-  checkRendering(renderFn, withUsage());
+const connectHierarchicalMenu: HierarchicalMenuConnector =
+  function connectHierarchicalMenu(renderFn, unmountFn = noop) {
+    checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
-    const {
-      attributes,
-      separator = ' > ',
-      rootPath = null,
-      showParentLevel = true,
-      limit = 10,
-      showMore = false,
-      showMoreLimit = 20,
-      sortBy = DEFAULT_SORT,
-      transformItems = (items => items) as TransformItems<HierarchicalMenuItem>,
-    } = widgetParams || {};
+    return (widgetParams) => {
+      const {
+        attributes,
+        separator = ' > ',
+        rootPath = null,
+        showParentLevel = true,
+        limit = 10,
+        showMore = false,
+        showMoreLimit = 20,
+        sortBy = DEFAULT_SORT,
+        transformItems = ((items) =>
+          items) as TransformItems<HierarchicalMenuItem>,
+      } = widgetParams || {};
 
-    if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
-      throw new Error(
-        withUsage('The `attributes` option expects an array of strings.')
-      );
-    }
-
-    if (showMore === true && showMoreLimit <= limit) {
-      throw new Error(
-        withUsage('The `showMoreLimit` option must be greater than `limit`.')
-      );
-    }
-
-    type ThisWidget = Widget<
-      HierarchicalMenuWidgetDescription & { widgetParams: typeof widgetParams }
-    >;
-
-    // we need to provide a hierarchicalFacet name for the search state
-    // so that we can always map $hierarchicalFacetName => real attributes
-    // we use the first attribute name
-    const [hierarchicalFacetName] = attributes;
-    let sendEvent: HierarchicalMenuRenderState['sendEvent'];
-
-    // Provide the same function to the `renderFn` so that way the user
-    // has to only bind it once when `isFirstRendering` for instance
-    let toggleShowMore = () => {};
-    function cachedToggleShowMore() {
-      toggleShowMore();
-    }
-
-    let _refine: HierarchicalMenuRenderState['refine'] | undefined;
-
-    let isShowingMore = false;
-
-    function createToggleShowMore(
-      renderOptions: RenderOptions,
-      widget: ThisWidget
-    ) {
-      return () => {
-        isShowingMore = !isShowingMore;
-        widget.render!(renderOptions);
-      };
-    }
-
-    function getLimit() {
-      return isShowingMore ? showMoreLimit : limit;
-    }
-
-    function _prepareFacetValues(
-      facetValues: SearchResults.HierarchicalFacet[]
-    ): HierarchicalMenuItem[] {
-      return facetValues
-        .slice(0, getLimit())
-        .map(({ name: label, path: value, data, ...subValue }) => {
-          const item: HierarchicalMenuItem = {
-            ...subValue,
-            label,
-            value,
-            data: null,
-          };
-          if (Array.isArray(data)) {
-            item.data = _prepareFacetValues(data);
-          }
-          return item;
-        });
-    }
-
-    return {
-      $$type: 'ais.hierarchicalMenu',
-
-      init(initOptions) {
-        const { instantSearchInstance } = initOptions;
-
-        renderFn(
-          {
-            ...this.getWidgetRenderState(initOptions),
-            instantSearchInstance,
-          },
-          true
+      if (
+        !attributes ||
+        !Array.isArray(attributes) ||
+        attributes.length === 0
+      ) {
+        throw new Error(
+          withUsage('The `attributes` option expects an array of strings.')
         );
-      },
+      }
 
-      render(renderOptions) {
-        const { instantSearchInstance } = renderOptions;
-
-        toggleShowMore = createToggleShowMore(renderOptions, this);
-
-        renderFn(
-          {
-            ...this.getWidgetRenderState(renderOptions),
-            instantSearchInstance,
-          },
-          false
+      if (showMore === true && showMoreLimit <= limit) {
+        throw new Error(
+          withUsage('The `showMoreLimit` option must be greater than `limit`.')
         );
-      },
+      }
 
-      dispose({ state }) {
-        unmountFn();
+      type ThisWidget = Widget<
+        HierarchicalMenuWidgetDescription & {
+          widgetParams: typeof widgetParams;
+        }
+      >;
 
-        return state
-          .removeHierarchicalFacet(hierarchicalFacetName)
-          .setQueryParameter('maxValuesPerFacet', undefined);
-      },
+      // we need to provide a hierarchicalFacet name for the search state
+      // so that we can always map $hierarchicalFacetName => real attributes
+      // we use the first attribute name
+      const [hierarchicalFacetName] = attributes;
+      let sendEvent: HierarchicalMenuRenderState['sendEvent'];
 
-      getRenderState(renderState, renderOptions) {
-        return {
-          ...renderState,
-          hierarchicalMenu: {
-            ...renderState.hierarchicalMenu,
-            [hierarchicalFacetName]: this.getWidgetRenderState(renderOptions),
-          },
+      // Provide the same function to the `renderFn` so that way the user
+      // has to only bind it once when `isFirstRendering` for instance
+      let toggleShowMore = () => {};
+      function cachedToggleShowMore() {
+        toggleShowMore();
+      }
+
+      let _refine: HierarchicalMenuRenderState['refine'] | undefined;
+
+      let isShowingMore = false;
+
+      function createToggleShowMore(
+        renderOptions: RenderOptions,
+        widget: ThisWidget
+      ) {
+        return () => {
+          isShowingMore = !isShowingMore;
+          widget.render!(renderOptions);
         };
-      },
+      }
 
-      getWidgetRenderState({
-        results,
-        state,
-        createURL,
-        instantSearchInstance,
-        helper,
-      }) {
-        let items: HierarchicalMenuRenderState['items'] = [];
-        let canToggleShowMore = false;
+      function getLimit() {
+        return isShowingMore ? showMoreLimit : limit;
+      }
 
-        // Bind createURL to this specific attribute
-        function _createURL(facetValue: string) {
-          return createURL(
-            state
-              .resetPage()
-              .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+      function _prepareFacetValues(
+        facetValues: SearchResults.HierarchicalFacet[]
+      ): HierarchicalMenuItem[] {
+        return facetValues
+          .slice(0, getLimit())
+          .map(({ name: label, path: value, data, ...subValue }) => {
+            const item: HierarchicalMenuItem = {
+              ...subValue,
+              label,
+              value,
+              data: null,
+            };
+            if (Array.isArray(data)) {
+              item.data = _prepareFacetValues(data);
+            }
+            return item;
+          });
+      }
+
+      return {
+        $$type: 'ais.hierarchicalMenu',
+
+        init(initOptions) {
+          const { instantSearchInstance } = initOptions;
+
+          renderFn(
+            {
+              ...this.getWidgetRenderState(initOptions),
+              instantSearchInstance,
+            },
+            true
           );
-        }
+        },
 
-        if (!sendEvent) {
-          sendEvent = createSendEventForFacet({
-            instantSearchInstance,
-            helper,
-            attribute: hierarchicalFacetName,
-            widgetType: this.$$type!,
-          });
-        }
+        render(renderOptions) {
+          const { instantSearchInstance } = renderOptions;
 
-        if (!_refine) {
-          _refine = function(facetValue) {
-            sendEvent('click', facetValue);
-            helper
-              .toggleFacetRefinement(hierarchicalFacetName, facetValue)
-              .search();
+          toggleShowMore = createToggleShowMore(renderOptions, this);
+
+          renderFn(
+            {
+              ...this.getWidgetRenderState(renderOptions),
+              instantSearchInstance,
+            },
+            false
+          );
+        },
+
+        dispose({ state }) {
+          unmountFn();
+
+          return state
+            .removeHierarchicalFacet(hierarchicalFacetName)
+            .setQueryParameter('maxValuesPerFacet', undefined);
+        },
+
+        getRenderState(renderState, renderOptions) {
+          return {
+            ...renderState,
+            hierarchicalMenu: {
+              ...renderState.hierarchicalMenu,
+              [hierarchicalFacetName]: this.getWidgetRenderState(renderOptions),
+            },
           };
-        }
+        },
 
-        if (results) {
-          const facetValues = results.getFacetValues(hierarchicalFacetName, {
-            sortBy,
-            facetOrdering: sortBy === DEFAULT_SORT,
-          });
-          const facetItems =
-            facetValues && !Array.isArray(facetValues) && facetValues.data
-              ? facetValues.data
-              : [];
+        getWidgetRenderState({
+          results,
+          state,
+          createURL,
+          instantSearchInstance,
+          helper,
+        }) {
+          let items: HierarchicalMenuRenderState['items'] = [];
+          let canToggleShowMore = false;
 
-          // If the limit is the max number of facet retrieved it is impossible to know
-          // if the facets are exhaustive. The only moment we are sure it is exhaustive
-          // is when it is strictly under the number requested unless we know that another
-          // widget has requested more values (maxValuesPerFacet > getLimit()).
-          // Because this is used for making the search of facets unable or not, it is important
-          // to be conservative here.
-          const hasExhaustiveItems =
-            (state.maxValuesPerFacet || 0) > getLimit()
-              ? facetItems.length <= getLimit()
-              : facetItems.length < getLimit();
+          // Bind createURL to this specific attribute
+          function _createURL(facetValue: string) {
+            return createURL(
+              state
+                .resetPage()
+                .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+            );
+          }
 
-          canToggleShowMore =
-            showMore && (isShowingMore || !hasExhaustiveItems);
+          if (!sendEvent) {
+            sendEvent = createSendEventForFacet({
+              instantSearchInstance,
+              helper,
+              attribute: hierarchicalFacetName,
+              widgetType: this.$$type!,
+            });
+          }
 
-          items = transformItems(_prepareFacetValues(facetItems));
-        }
+          if (!_refine) {
+            _refine = function (facetValue) {
+              sendEvent('click', facetValue);
+              helper
+                .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+                .search();
+            };
+          }
 
-        return {
-          items,
-          refine: _refine,
-          canRefine: items.length > 0,
-          createURL: _createURL,
-          sendEvent,
-          widgetParams,
-          isShowingMore,
-          toggleShowMore: cachedToggleShowMore,
-          canToggleShowMore,
-        };
-      },
+          if (results) {
+            const facetValues = results.getFacetValues(hierarchicalFacetName, {
+              sortBy,
+              facetOrdering: sortBy === DEFAULT_SORT,
+            });
+            const facetItems =
+              facetValues && !Array.isArray(facetValues) && facetValues.data
+                ? facetValues.data
+                : [];
 
-      getWidgetUiState(uiState, { searchParameters }) {
-        const path = searchParameters.getHierarchicalFacetBreadcrumb(
-          hierarchicalFacetName
-        );
+            // If the limit is the max number of facet retrieved it is impossible to know
+            // if the facets are exhaustive. The only moment we are sure it is exhaustive
+            // is when it is strictly under the number requested unless we know that another
+            // widget has requested more values (maxValuesPerFacet > getLimit()).
+            // Because this is used for making the search of facets unable or not, it is important
+            // to be conservative here.
+            const hasExhaustiveItems =
+              (state.maxValuesPerFacet || 0) > getLimit()
+                ? facetItems.length <= getLimit()
+                : facetItems.length < getLimit();
 
-        if (!path.length) {
-          return uiState;
-        }
+            canToggleShowMore =
+              showMore && (isShowingMore || !hasExhaustiveItems);
 
-        return {
-          ...uiState,
-          hierarchicalMenu: {
-            ...uiState.hierarchicalMenu,
-            [hierarchicalFacetName]: path,
-          },
-        };
-      },
+            items = transformItems(_prepareFacetValues(facetItems));
+          }
 
-      getWidgetSearchParameters(searchParameters, { uiState }) {
-        const values =
-          uiState.hierarchicalMenu &&
-          uiState.hierarchicalMenu[hierarchicalFacetName];
+          return {
+            items,
+            refine: _refine,
+            canRefine: items.length > 0,
+            createURL: _createURL,
+            sendEvent,
+            widgetParams,
+            isShowingMore,
+            toggleShowMore: cachedToggleShowMore,
+            canToggleShowMore,
+          };
+        },
 
-        if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
-          const facet = searchParameters.getHierarchicalFacetByName(
+        getWidgetUiState(uiState, { searchParameters }) {
+          const path = searchParameters.getHierarchicalFacetBreadcrumb(
             hierarchicalFacetName
           );
 
-          warning(
-            isEqual(facet.attributes, attributes) &&
-              facet.separator === separator &&
-              facet.rootPath === rootPath,
-            'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
-          );
-        }
+          if (!path.length) {
+            return uiState;
+          }
 
-        const withFacetConfiguration = searchParameters
-          .removeHierarchicalFacet(hierarchicalFacetName)
-          .addHierarchicalFacet({
-            name: hierarchicalFacetName,
-            attributes,
-            separator,
-            rootPath,
-            showParentLevel,
-          });
-
-        const currentMaxValuesPerFacet =
-          withFacetConfiguration.maxValuesPerFacet || 0;
-
-        const nextMaxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
-          'maxValuesPerFacet',
-          nextMaxValuesPerFacet
-        );
-
-        if (!values) {
-          return withMaxValuesPerFacet.setQueryParameters({
-            hierarchicalFacetsRefinements: {
-              ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
-              [hierarchicalFacetName]: [],
+          return {
+            ...uiState,
+            hierarchicalMenu: {
+              ...uiState.hierarchicalMenu,
+              [hierarchicalFacetName]: path,
             },
-          });
-        }
+          };
+        },
 
-        return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
-          hierarchicalFacetName,
-          values.join(separator)
-        );
-      },
+        getWidgetSearchParameters(searchParameters, { uiState }) {
+          const values =
+            uiState.hierarchicalMenu &&
+            uiState.hierarchicalMenu[hierarchicalFacetName];
+
+          if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
+            const facet = searchParameters.getHierarchicalFacetByName(
+              hierarchicalFacetName
+            );
+
+            warning(
+              isEqual(facet.attributes, attributes) &&
+                facet.separator === separator &&
+                facet.rootPath === rootPath,
+              'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
+            );
+          }
+
+          const withFacetConfiguration = searchParameters
+            .removeHierarchicalFacet(hierarchicalFacetName)
+            .addHierarchicalFacet({
+              name: hierarchicalFacetName,
+              attributes,
+              separator,
+              rootPath,
+              showParentLevel,
+            });
+
+          const currentMaxValuesPerFacet =
+            withFacetConfiguration.maxValuesPerFacet || 0;
+
+          const nextMaxValuesPerFacet = Math.max(
+            currentMaxValuesPerFacet,
+            showMore ? showMoreLimit : limit
+          );
+
+          const withMaxValuesPerFacet =
+            withFacetConfiguration.setQueryParameter(
+              'maxValuesPerFacet',
+              nextMaxValuesPerFacet
+            );
+
+          if (!values) {
+            return withMaxValuesPerFacet.setQueryParameters({
+              hierarchicalFacetsRefinements: {
+                ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
+                [hierarchicalFacetName]: [],
+              },
+            });
+          }
+
+          return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
+            hierarchicalFacetName,
+            values.join(separator)
+          );
+        },
+      };
     };
   };
-};
 
 export default connectHierarchicalMenu;

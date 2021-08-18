@@ -273,7 +273,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
   });
 
   // eslint-disable-next-line jest/no-done-callback
-  it('provides the same `refine` and `clear` function references', done => {
+  it('provides the same `refine` and `clear` function references', (done) => {
     const initRenderState: Record<string, any> = {};
     const createSearchBox = connectSearchBox(
       ({ refine, clear }, isFirstRender) => {

@@ -104,7 +104,7 @@ storiesOf('Basics/Panel', module)
     'with collapsed',
     withHits(({ search, container, instantsearch }) => {
       const brandList = instantsearch.widgets.panel({
-        collapsed: options => {
+        collapsed: (options) => {
           return options && options.state && !options.state.query;
         },
         templates: {
@@ -125,7 +125,7 @@ storiesOf('Basics/Panel', module)
     'with collapsed and custom templates',
     withHits(({ search, container, instantsearch }) => {
       const brandList = instantsearch.widgets.panel({
-        collapsed: options => {
+        collapsed: (options) => {
           return options && options.state && !options.state.query;
         },
         templates: {

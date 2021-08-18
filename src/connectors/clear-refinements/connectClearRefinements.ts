@@ -82,142 +82,140 @@ type AttributesToClear = {
   items: string[];
 };
 
-const connectClearRefinements: ClearRefinementsConnector = function connectClearRefinements(
-  renderFn,
-  unmountFn = noop
-) {
-  checkRendering(renderFn, withUsage());
+const connectClearRefinements: ClearRefinementsConnector =
+  function connectClearRefinements(renderFn, unmountFn = noop) {
+    checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
-    const {
-      includedAttributes = [],
-      excludedAttributes = ['query'],
-      transformItems = (items => items) as TransformItems<string>,
-    } = widgetParams || {};
+    return (widgetParams) => {
+      const {
+        includedAttributes = [],
+        excludedAttributes = ['query'],
+        transformItems = ((items) => items) as TransformItems<string>,
+      } = widgetParams || {};
 
-    if (
-      widgetParams &&
-      widgetParams.includedAttributes &&
-      widgetParams.excludedAttributes
-    ) {
-      throw new Error(
-        withUsage(
-          'The options `includedAttributes` and `excludedAttributes` cannot be used together.'
-        )
-      );
-    }
-
-    type ConnectorState = {
-      refine(): void;
-      createURL(): string;
-      attributesToClear: AttributesToClear[];
-    };
-
-    const connectorState: ConnectorState = {
-      refine: noop,
-      createURL: () => '',
-      attributesToClear: [],
-    };
-
-    const cachedRefine = () => connectorState.refine();
-    const cachedCreateURL = () => connectorState.createURL();
-
-    return {
-      $$type: 'ais.clearRefinements',
-
-      init(initOptions) {
-        const { instantSearchInstance } = initOptions;
-
-        renderFn(
-          {
-            ...this.getWidgetRenderState(initOptions),
-            instantSearchInstance,
-          },
-          true
+      if (
+        widgetParams &&
+        widgetParams.includedAttributes &&
+        widgetParams.excludedAttributes
+      ) {
+        throw new Error(
+          withUsage(
+            'The options `includedAttributes` and `excludedAttributes` cannot be used together.'
+          )
         );
-      },
+      }
 
-      render(renderOptions) {
-        const { instantSearchInstance } = renderOptions;
+      type ConnectorState = {
+        refine(): void;
+        createURL(): string;
+        attributesToClear: AttributesToClear[];
+      };
 
-        renderFn(
-          {
-            ...this.getWidgetRenderState(renderOptions),
-            instantSearchInstance,
-          },
-          false
-        );
-      },
+      const connectorState: ConnectorState = {
+        refine: noop,
+        createURL: () => '',
+        attributesToClear: [],
+      };
 
-      dispose() {
-        unmountFn();
-      },
+      const cachedRefine = () => connectorState.refine();
+      const cachedCreateURL = () => connectorState.createURL();
 
-      getRenderState(renderState, renderOptions) {
-        return {
-          ...renderState,
-          clearRefinements: this.getWidgetRenderState(renderOptions),
-        };
-      },
+      return {
+        $$type: 'ais.clearRefinements',
 
-      getWidgetRenderState({ createURL, scopedResults }) {
-        connectorState.attributesToClear = scopedResults.reduce<
-          Array<ReturnType<typeof getAttributesToClear>>
-        >((results, scopedResult) => {
-          return results.concat(
-            getAttributesToClear({
-              scopedResult,
-              includedAttributes,
-              excludedAttributes,
-              transformItems,
-            })
+        init(initOptions) {
+          const { instantSearchInstance } = initOptions;
+
+          renderFn(
+            {
+              ...this.getWidgetRenderState(initOptions),
+              instantSearchInstance,
+            },
+            true
           );
-        }, []);
+        },
 
-        connectorState.refine = () => {
-          connectorState.attributesToClear.forEach(
-            ({ helper: indexHelper, items }) => {
-              indexHelper
-                .setState(
-                  clearRefinements({
-                    helper: indexHelper,
-                    attributesToClear: items,
-                  })
+        render(renderOptions) {
+          const { instantSearchInstance } = renderOptions;
+
+          renderFn(
+            {
+              ...this.getWidgetRenderState(renderOptions),
+              instantSearchInstance,
+            },
+            false
+          );
+        },
+
+        dispose() {
+          unmountFn();
+        },
+
+        getRenderState(renderState, renderOptions) {
+          return {
+            ...renderState,
+            clearRefinements: this.getWidgetRenderState(renderOptions),
+          };
+        },
+
+        getWidgetRenderState({ createURL, scopedResults }) {
+          connectorState.attributesToClear = scopedResults.reduce<
+            Array<ReturnType<typeof getAttributesToClear>>
+          >((results, scopedResult) => {
+            return results.concat(
+              getAttributesToClear({
+                scopedResult,
+                includedAttributes,
+                excludedAttributes,
+                transformItems,
+              })
+            );
+          }, []);
+
+          connectorState.refine = () => {
+            connectorState.attributesToClear.forEach(
+              ({ helper: indexHelper, items }) => {
+                indexHelper
+                  .setState(
+                    clearRefinements({
+                      helper: indexHelper,
+                      attributesToClear: items,
+                    })
+                  )
+                  .search();
+              }
+            );
+          };
+
+          connectorState.createURL = () =>
+            createURL(
+              mergeSearchParameters(
+                ...connectorState.attributesToClear.map(
+                  ({ helper: indexHelper, items }) => {
+                    return clearRefinements({
+                      helper: indexHelper,
+                      attributesToClear: items,
+                    });
+                  }
                 )
-                .search();
-            }
-          );
-        };
-
-        connectorState.createURL = () =>
-          createURL(
-            mergeSearchParameters(
-              ...connectorState.attributesToClear.map(
-                ({ helper: indexHelper, items }) => {
-                  return clearRefinements({
-                    helper: indexHelper,
-                    attributesToClear: items,
-                  });
-                }
               )
-            )
+            );
+
+          const canRefine = connectorState.attributesToClear.some(
+            (attributeToClear) => attributeToClear.items.length > 0
           );
 
-        const canRefine = connectorState.attributesToClear.some(
-          attributeToClear => attributeToClear.items.length > 0
-        );
-
-        return {
-          canRefine,
-          hasRefinements: canRefine,
-          refine: cachedRefine,
-          createURL: cachedCreateURL,
-          widgetParams,
-        };
-      },
+          return {
+            canRefine,
+            hasRefinements: canRefine,
+            refine: cachedRefine,
+            createURL: cachedCreateURL,
+            widgetParams,
+          };
+        },
+      };
     };
   };
-};
 
 function getAttributesToClear({
   scopedResult,
@@ -243,16 +241,16 @@ function getAttributesToClear({
           scopedResult.helper.state,
           includesQuery
         )
-          .map(refinement => refinement.attribute)
+          .map((refinement) => refinement.attribute)
           .filter(
-            attribute =>
+            (attribute) =>
               // If the array is empty (default case), we keep all the attributes
               includedAttributes.length === 0 ||
               // Otherwise, only add the specified attributes
               includedAttributes.indexOf(attribute) !== -1
           )
           .filter(
-            attribute =>
+            (attribute) =>
               // If the query is included, we ignore the default `excludedAttributes = ['query']`
               (attribute === 'query' && includesQuery) ||
               // Otherwise, ignore the excluded attributes

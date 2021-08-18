@@ -267,7 +267,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
     it('takes transformItems in account (empty)', () => {
       const { makeWidget } = createWidget();
-      const transformItems: TransformItems<any> = items => {
+      const transformItems: TransformItems<any> = (items) => {
         items.push({ lions: true });
         return items;
       };
@@ -289,7 +289,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
     it('takes transformItems in account', () => {
       const { makeWidget } = createWidget();
-      const transformItems: TransformItems<any> = items => {
+      const transformItems: TransformItems<any> = (items) => {
         items.push({ lions: true });
         return items;
       };
@@ -323,7 +323,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             hierarchicalMenu: {},
             queryRules: {
               items: ['lions', 'eggs'],
-              widgetParams: { transformItems: items => items },
+              widgetParams: { transformItems: (items) => items },
             },
           },
           createRenderOptions({
@@ -350,7 +350,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const helper = createFakeHelper();
         const { makeWidget, renderFn } = createWidget();
         const widget = makeWidget({
-          transformItems: customItems => customItems[0],
+          transformItems: (customItems) => customItems[0],
         });
 
         widget.init!(
@@ -394,8 +394,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             },
           },
         });
-        const brandFilterSpy = jest.fn(values => values);
-        const priceFilterSpy = jest.fn(values => values);
+        const brandFilterSpy = jest.fn((values) => values);
+        const priceFilterSpy = jest.fn((values) => values);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -430,7 +430,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
-        const brandFilterSpy = jest.fn(values => values);
+        const brandFilterSpy = jest.fn((values) => values);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -457,8 +457,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
-        const brandFilterSpy = jest.fn(values => values);
-        const priceFilterSpy = jest.fn(values => values);
+        const brandFilterSpy = jest.fn((values) => values);
+        const priceFilterSpy = jest.fn((values) => values);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -700,7 +700,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
       test('can track filters from query', () => {
         const helper = createFakeHelper();
-        const querySpy = jest.fn(filters => {
+        const querySpy = jest.fn((filters) => {
           const [query] = filters as string[];
           return query.includes('cat') ? [query] : [];
         });
@@ -787,7 +787,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
-            brand: values => values,
+            brand: (values) => values,
           },
         });
 
@@ -851,7 +851,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
-            brand: values => values,
+            brand: (values) => values,
           },
         });
 
@@ -924,7 +924,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
-            brand: values => values,
+            brand: (values) => values,
           },
         });
 
@@ -981,7 +981,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
             brand: ['Samsung'],
           },
         });
-        const brandFilterSpy = jest.fn(values => values);
+        const brandFilterSpy = jest.fn((values) => values);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -1031,12 +1031,12 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           ruleContexts: ['initial-rule'],
         });
         const transformRuleContextsSpy = jest.fn((rules: string[]) =>
-          rules.map(rule => rule.replace('ais-', 'transformed-'))
+          rules.map((rule) => rule.replace('ais-', 'transformed-'))
         );
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
-            brand: values => values,
+            brand: (values) => values,
           },
           transformRuleContexts: transformRuleContextsSpy,
         });

@@ -96,50 +96,52 @@ export type CurrentRefinementsWidget = WidgetFactory<
   CurrentRefinementsWidgetParams
 >;
 
-const currentRefinements: CurrentRefinementsWidget = function currentRefinements(
-  widgetParams
-) {
-  const {
-    container,
-    includedAttributes,
-    excludedAttributes,
-    cssClasses: userCssClasses = {},
-    transformItems,
-  } = widgetParams || {};
-
-  if (!container) {
-    throw new Error(withUsage('The `container` option is required.'));
-  }
-
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
-    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
-    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
-    category: cx(suit({ descendantName: 'category' }), userCssClasses.category),
-    categoryLabel: cx(
-      suit({ descendantName: 'categoryLabel' }),
-      userCssClasses.categoryLabel
-    ),
-    delete: cx(suit({ descendantName: 'delete' }), userCssClasses.delete),
-  };
-
-  const makeWidget = connectCurrentRefinements<CurrentRefinementsWidgetParams>(
-    renderer,
-    () => render(null, containerNode)
-  );
-
-  return {
-    ...makeWidget({
-      container: containerNode,
-      cssClasses,
+const currentRefinements: CurrentRefinementsWidget =
+  function currentRefinements(widgetParams) {
+    const {
+      container,
       includedAttributes,
       excludedAttributes,
+      cssClasses: userCssClasses = {},
       transformItems,
-    }),
-    $$widgetType: 'ais.currentRefinements',
+    } = widgetParams || {};
+
+    if (!container) {
+      throw new Error(withUsage('The `container` option is required.'));
+    }
+
+    const containerNode = getContainerNode(container);
+    const cssClasses = {
+      root: cx(suit(), userCssClasses.root),
+      list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+      item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+      label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
+      category: cx(
+        suit({ descendantName: 'category' }),
+        userCssClasses.category
+      ),
+      categoryLabel: cx(
+        suit({ descendantName: 'categoryLabel' }),
+        userCssClasses.categoryLabel
+      ),
+      delete: cx(suit({ descendantName: 'delete' }), userCssClasses.delete),
+    };
+
+    const makeWidget =
+      connectCurrentRefinements<CurrentRefinementsWidgetParams>(renderer, () =>
+        render(null, containerNode)
+      );
+
+    return {
+      ...makeWidget({
+        container: containerNode,
+        cssClasses,
+        includedAttributes,
+        excludedAttributes,
+        transformItems,
+      }),
+      $$widgetType: 'ais.currentRefinements',
+    };
   };
-};
 
 export default currentRefinements;

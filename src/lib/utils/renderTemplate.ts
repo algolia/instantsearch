@@ -19,7 +19,7 @@ function transformHelpersToHogan(
     (acc, helperKey) => ({
       ...acc,
       [helperKey]() {
-        return text => {
+        return (text) => {
           const render = (value: string) =>
             (hogan.compile(value, compileOptions) as Template).render(this);
 
@@ -69,7 +69,7 @@ function renderTemplate({
       ...data,
       helpers: transformedHelpers,
     })
-    .replace(/[ \n\r\t\f\xA0]+/g, spaces =>
+    .replace(/[ \n\r\t\f\xA0]+/g, (spaces) =>
       spaces.replace(/(^|\xA0+)[^\xA0]+/g, '$1 ')
     )
     .trim();

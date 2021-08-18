@@ -6,9 +6,9 @@ const isCJS = process.env.BABEL_ENV === 'cjs';
 const isES = process.env.BABEL_ENV === 'es';
 const isUMD = process.env.BABEL_ENV === 'umd';
 
-const clean = x => x.filter(Boolean);
+const clean = (x) => x.filter(Boolean);
 
-module.exports = api => {
+module.exports = (api) => {
   const isTest = api.env('test');
   const modules = isTest || isCJS ? 'commonjs' : false;
   const targets = {};

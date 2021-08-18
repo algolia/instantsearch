@@ -55,7 +55,7 @@ describe('infiniteHits()', () => {
     widget = infiniteHits({
       container,
       escapeHTML: true,
-      transformItems: items => items,
+      transformItems: (items) => items,
       cssClasses: { root: ['root', 'cx'] },
       showPrevious: false,
     });
@@ -95,8 +95,8 @@ describe('infiniteHits()', () => {
     widget = infiniteHits({
       container,
       escapeHTML: true,
-      transformItems: items =>
-        items.map(item => ({ ...item, transformed: true })),
+      transformItems: (items) =>
+        items.map((item) => ({ ...item, transformed: true })),
       showPrevious: false,
     });
 
@@ -278,7 +278,7 @@ describe('infiniteHits()', () => {
       widget = infiniteHits({
         container,
         escapeHTML: true,
-        transformItems: items => items,
+        transformItems: (items) => items,
         cssClasses: { root: ['root', 'cx'] },
         showPrevious: false,
         cache: customCache,
@@ -377,7 +377,7 @@ describe('infiniteHits()', () => {
       widget = infiniteHits({
         container,
         escapeHTML: true,
-        transformItems: items => items,
+        transformItems: (items) => items,
         cssClasses: { root: ['root', 'cx'] },
         showPrevious: false,
         cache: customCache,

@@ -21,55 +21,54 @@ import { Renderer, WidgetFactory } from '../../types';
 const withUsage = createDocumentationMessageGenerator({ name: 'range-slider' });
 const suit = component('RangeSlider');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  pips,
-  step,
-  tooltips,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: RangeSliderComponentCSSClasses;
-  pips: boolean;
-  step?: number;
-  tooltips: RangeSliderWidgetParams['tooltips'];
-}): Renderer<RangeRenderState, Partial<RangeSliderWidgetParams>> => (
-  { refine, range, start },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    // There's no information at this point, let's render nothing.
-    return;
-  }
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    pips,
+    step,
+    tooltips,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: RangeSliderComponentCSSClasses;
+    pips: boolean;
+    step?: number;
+    tooltips: RangeSliderWidgetParams['tooltips'];
+  }): Renderer<RangeRenderState, Partial<RangeSliderWidgetParams>> =>
+  ({ refine, range, start }, isFirstRendering) => {
+    if (isFirstRendering) {
+      // There's no information at this point, let's render nothing.
+      return;
+    }
 
-  const { min: minRange, max: maxRange } = range;
+    const { min: minRange, max: maxRange } = range;
 
-  const [minStart, maxStart] = start;
-  const minFinite = minStart === -Infinity ? minRange : minStart;
-  const maxFinite = maxStart === Infinity ? maxRange : maxStart;
+    const [minStart, maxStart] = start;
+    const minFinite = minStart === -Infinity ? minRange : minStart;
+    const maxFinite = maxStart === Infinity ? maxRange : maxStart;
 
-  // Clamp values to the range for avoid extra rendering & refinement
-  // Should probably be done on the connector side, but we need to stay
-  // backward compatible so we still need to pass [-Infinity, Infinity]
-  const values: RangeBoundaries = [
-    minFinite! > maxRange! ? maxRange : minFinite,
-    maxFinite! < minRange! ? minRange : maxFinite,
-  ];
+    // Clamp values to the range for avoid extra rendering & refinement
+    // Should probably be done on the connector side, but we need to stay
+    // backward compatible so we still need to pass [-Infinity, Infinity]
+    const values: RangeBoundaries = [
+      minFinite! > maxRange! ? maxRange : minFinite,
+      maxFinite! < minRange! ? minRange : maxFinite,
+    ];
 
-  render(
-    <Slider
-      cssClasses={cssClasses}
-      refine={refine}
-      min={minRange}
-      max={maxRange}
-      values={values}
-      tooltips={tooltips}
-      step={step}
-      pips={pips}
-    />,
-    containerNode
-  );
-};
+    render(
+      <Slider
+        cssClasses={cssClasses}
+        refine={refine}
+        min={minRange}
+        max={maxRange}
+        values={values}
+        tooltips={tooltips}
+        step={step}
+        pips={pips}
+      />,
+      containerNode
+    );
+  };
 
 export type RangeSliderCssClasses = Partial<{
   /**

@@ -111,7 +111,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const {
       queryLanguages,
       attributesForPrediction,
@@ -129,18 +129,17 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       );
     }
 
-    const runConcurrentSafePromise = createConcurrentSafePromise<
-      FindAnswersResponse<Hit>
-    >();
+    const runConcurrentSafePromise =
+      createConcurrentSafePromise<FindAnswersResponse<Hit>>();
 
     let lastResult: Partial<FindAnswersResponse<Hit>>;
     let isLoading = false;
     const debouncedRender = debounce(renderFn, renderDebounceTime);
 
     // this does not directly use DebouncedFunction<findAnswers>, since then the generic will disappear
-    let debouncedRefine: DebouncedFunction<(
-      ...params: FindAnswersParameters
-    ) => Promise<FindAnswersResponse<Hit>>>;
+    let debouncedRefine: DebouncedFunction<
+      (...params: FindAnswersParameters) => Promise<FindAnswersResponse<Hit>>
+    >;
 
     return {
       $$type: 'ais.answers',
@@ -201,7 +200,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
             nbHits,
             attributesForPrediction,
           })
-        ).then(results => {
+        ).then((results) => {
           if (!results) {
             // It's undefined when it's debounced.
             return;
@@ -220,9 +219,8 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           // Make sure the escaped tag stays, even after mapping over the hits.
           // This prevents the hits from being double-escaped if there are multiple
           // hits widgets mounted on the page.
-          (results.hits as ReturnType<
-            typeof escapeHits
-          >).__escaped = initialEscaped;
+          (results.hits as ReturnType<typeof escapeHits>).__escaped =
+            initialEscaped;
 
           lastResult = results;
           isLoading = false;

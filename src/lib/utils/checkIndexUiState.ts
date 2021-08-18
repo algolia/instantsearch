@@ -108,7 +108,7 @@ export function checkIndexUiState({
 }: CheckIndexUiStateParams) {
   const mountedWidgets = index
     .getWidgets()
-    .map(widget => widget.$$type)
+    .map((widget) => widget.$$type)
     .filter(Boolean);
 
   const missingWidgets = keys(indexUiState).reduce<MissingWidgets>(
@@ -123,7 +123,7 @@ export function checkIndexUiState({
 
       if (
         requiredWidgets &&
-        !requiredWidgets.some(requiredWidget =>
+        !requiredWidgets.some((requiredWidget) =>
           mountedWidgets.includes(requiredWidget)
         )
       ) {
@@ -132,7 +132,7 @@ export function checkIndexUiState({
           {
             connectors: widgetUiState.connectors,
             widgets: widgetUiState.widgets.map(
-              widgetIdentifier => widgetIdentifier.split('ais.')[1]
+              (widgetIdentifier) => widgetIdentifier.split('ais.')[1]
             ),
           },
         ]);
@@ -153,8 +153,10 @@ To fully reflect the state, some widgets need to be added to the index "${index.
 
 ${missingWidgets
   .map(([stateParameter, { widgets }]) => {
-    return `- \`${stateParameter}\` needs one of these widgets: ${([] as string[])
-      .concat(...widgets.map(name => getWidgetNames(name!)))
+    return `- \`${stateParameter}\` needs one of these widgets: ${(
+      [] as string[]
+    )
+      .concat(...widgets.map((name) => getWidgetNames(name!)))
       .map((name: string) => `"${name}"`)
       .join(', ')}`;
   })

@@ -26,45 +26,47 @@ import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');
 
-const renderer = ({
-  containerNode,
-  attribute,
-  cssClasses,
-  renderState,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  attribute: string;
-  cssClasses: NumericMenuComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<NumericMenuTemplates>;
-  };
-  templates: NumericMenuTemplates;
-}): Renderer<NumericMenuRenderState, Partial<NumericMenuWidgetParams>> => (
-  { createURL, instantSearchInstance, refine, items },
-  isFirstRendering: boolean
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+const renderer =
+  ({
+    containerNode,
+    attribute,
+    cssClasses,
+    renderState,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    attribute: string;
+    cssClasses: NumericMenuComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<NumericMenuTemplates>;
+    };
+    templates: NumericMenuTemplates;
+  }): Renderer<NumericMenuRenderState, Partial<NumericMenuWidgetParams>> =>
+  (
+    { createURL, instantSearchInstance, refine, items },
+    isFirstRendering: boolean
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
 
-  render(
-    <RefinementList
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={items}
-      templateProps={renderState.templateProps!}
-      toggleRefinement={refine}
-      attribute={attribute}
-    />,
-    containerNode
-  );
-};
+    render(
+      <RefinementList
+        createURL={createURL}
+        cssClasses={cssClasses}
+        facetValues={items}
+        templateProps={renderState.templateProps!}
+        toggleRefinement={refine}
+        attribute={attribute}
+      />,
+      containerNode
+    );
+  };
 
 export type NumericMenuCSSClasses = Partial<{
   /**
@@ -108,9 +110,8 @@ export type NumericMenuCSSClasses = Partial<{
   radio: string | string[];
 }>;
 
-export type NumericMenuComponentCSSClasses = ComponentCSSClasses<
-  NumericMenuCSSClasses
->;
+export type NumericMenuComponentCSSClasses =
+  ComponentCSSClasses<NumericMenuCSSClasses>;
 
 export type NumericMenuTemplates = Partial<{
   /**

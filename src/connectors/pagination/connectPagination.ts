@@ -86,7 +86,7 @@ const connectPagination: PaginationConnector = function connectPagination(
 ) {
   checkRendering(renderFn, withUsage());
 
-  return widgetParams => {
+  return (widgetParams) => {
     const { totalPages, padding = 3 } = widgetParams || {};
 
     const pager = new Paginator({
@@ -160,14 +160,14 @@ const connectPagination: PaginationConnector = function connectPagination(
 
       getWidgetRenderState({ results, helper, createURL }) {
         if (!connectorState.refine) {
-          connectorState.refine = page => {
+          connectorState.refine = (page) => {
             helper.setPage(page);
             helper.search();
           };
         }
 
         if (!connectorState.createURL) {
-          connectorState.createURL = state => page =>
+          connectorState.createURL = (state) => (page) =>
             createURL(state.setPage(page));
         }
 

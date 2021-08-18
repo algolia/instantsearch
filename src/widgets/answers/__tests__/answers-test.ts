@@ -129,7 +129,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           },
           templates: {
             loader: 'loading...',
-            item: hit => `title: ${hit.title}`,
+            item: (hit) => `title: ${hit.title}`,
           },
         }),
         searchBox({

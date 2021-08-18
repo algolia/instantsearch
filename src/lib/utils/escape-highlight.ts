@@ -66,11 +66,11 @@ export function escapeHits<THit extends Hit>(
     (hits as any).__escaped = true;
   }
 
-  return (hits as unknown) as EscapedHits<THit>;
+  return hits as unknown as EscapedHits<THit>;
 }
 
 export function escapeFacets(facetHits: FacetHit[]): FacetHit[] {
-  return facetHits.map(h => ({
+  return facetHits.map((h) => ({
     ...h,
     highlighted: replaceTagsAndEscape(h.highlighted),
   }));

@@ -54,9 +54,12 @@ export type PlacesWidget = WidgetFactory<
  * This widget sets the geolocation value for the search based on the selected
  * result in the Algolia Places autocomplete.
  */
-const placesWidget: PlacesWidget = widgetParams => {
-  const { placesReference, defaultPosition = [], ...placesOptions } =
-    widgetParams || {};
+const placesWidget: PlacesWidget = (widgetParams) => {
+  const {
+    placesReference,
+    defaultPosition = [],
+    ...placesOptions
+  } = widgetParams || {};
 
   if (typeof placesReference !== 'function') {
     throw new Error(

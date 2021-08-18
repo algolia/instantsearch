@@ -9,9 +9,8 @@ import {
 } from '../../widgets/search-box/search-box';
 import { ComponentCSSClasses } from '../../types';
 
-export type SearchBoxComponentCSSClasses = ComponentCSSClasses<
-  SearchBoxCSSClasses
->;
+export type SearchBoxComponentCSSClasses =
+  ComponentCSSClasses<SearchBoxCSSClasses>;
 
 export type SearchBoxComponentTemplates = Required<SearchBoxTemplates>;
 

@@ -24,7 +24,7 @@ storiesOf('Results/Answers', module)
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
           templates: {
-            item: hit => {
+            item: (hit) => {
               return `<p>${hit._answer.extract}</p>`;
             },
           },
@@ -50,7 +50,7 @@ storiesOf('Results/Answers', module)
             header: ({ hits }) => {
               return hits.length === 0 ? '' : `<p>Answers</p>`;
             },
-            item: hit => {
+            item: (hit) => {
               return `<p>${hit._answer.extract}</p>`;
             },
           },
@@ -77,7 +77,7 @@ storiesOf('Results/Answers', module)
               return hits.length === 0 ? '' : `<p>Answers</p>`;
             },
             loader: `loading...`,
-            item: hit => {
+            item: (hit) => {
               return `<p>${hit._answer.extract}</p>`;
             },
           },
@@ -114,7 +114,7 @@ storiesOf('Results/Answers', module)
               </div>
             </div>
             `,
-            item: hit => {
+            item: (hit) => {
               return `
                 <p class="title one-line">${hit.title}</p>
                 <div class="separator"></div>

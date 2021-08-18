@@ -29,8 +29,11 @@ export type DynamicWidgetsWidget = WidgetFactory<
 const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
   widgetParams
 ) {
-  const { container: containerSelector, transformItems, widgets } =
-    widgetParams || {};
+  const {
+    container: containerSelector,
+    transformItems,
+    widgets,
+  } = widgetParams || {};
 
   if (!containerSelector) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -39,7 +42,7 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
   if (
     !widgets ||
     !Array.isArray(widgets) ||
-    widgets.some(widget => typeof widget !== 'function')
+    widgets.some((widget) => typeof widget !== 'function')
   ) {
     throw new Error(
       withUsage('The `widgets` option expects an array of callbacks.')
@@ -59,7 +62,7 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
         userContainer.appendChild(rootContainer);
       }
 
-      attributesToRender.forEach(attribute => {
+      attributesToRender.forEach((attribute) => {
         if (!containers.has(attribute)) {
           return;
         }
@@ -80,7 +83,7 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
   return {
     ...widget,
     init(initOptions) {
-      widgets.forEach(cb => {
+      widgets.forEach((cb) => {
         const container = document.createElement('div');
         container.className = suit({ descendantName: 'widget' });
         rootContainer.appendChild(container);

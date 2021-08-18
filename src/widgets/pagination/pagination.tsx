@@ -28,65 +28,67 @@ const defaultTemplates: PaginationComponentTemplates = {
   last: '»',
 };
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  templates,
-  showFirst,
-  showLast,
-  showPrevious,
-  showNext,
-  scrollToNode,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: PaginationComponentCSSClasses;
-  templates: PaginationComponentTemplates;
-  showFirst: boolean;
-  showLast: boolean;
-  showPrevious: boolean;
-  showNext: boolean;
-  scrollToNode: HTMLElement | false;
-}): Renderer<PaginationRenderState, Partial<PaginationWidgetParams>> => (
-  {
-    createURL,
-    currentRefinement,
-    nbPages,
-    pages,
-    isFirstPage,
-    isLastPage,
-    refine,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) return;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    templates,
+    showFirst,
+    showLast,
+    showPrevious,
+    showNext,
+    scrollToNode,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: PaginationComponentCSSClasses;
+    templates: PaginationComponentTemplates;
+    showFirst: boolean;
+    showLast: boolean;
+    showPrevious: boolean;
+    showNext: boolean;
+    scrollToNode: HTMLElement | false;
+  }): Renderer<PaginationRenderState, Partial<PaginationWidgetParams>> =>
+  (
+    {
+      createURL,
+      currentRefinement,
+      nbPages,
+      pages,
+      isFirstPage,
+      isLastPage,
+      refine,
+    },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) return;
 
-  const setCurrentPage = (pageNumber: number) => {
-    refine(pageNumber);
+    const setCurrentPage = (pageNumber: number) => {
+      refine(pageNumber);
 
-    if (scrollToNode !== false) {
-      scrollToNode.scrollIntoView();
-    }
+      if (scrollToNode !== false) {
+        scrollToNode.scrollIntoView();
+      }
+    };
+
+    render(
+      <Pagination
+        createURL={createURL}
+        cssClasses={cssClasses}
+        currentPage={currentRefinement}
+        templates={templates}
+        nbPages={nbPages}
+        pages={pages}
+        isFirstPage={isFirstPage}
+        isLastPage={isLastPage}
+        setCurrentPage={setCurrentPage}
+        showFirst={showFirst}
+        showLast={showLast}
+        showPrevious={showPrevious}
+        showNext={showNext}
+      />,
+      containerNode
+    );
   };
-
-  render(
-    <Pagination
-      createURL={createURL}
-      cssClasses={cssClasses}
-      currentPage={currentRefinement}
-      templates={templates}
-      nbPages={nbPages}
-      pages={pages}
-      isFirstPage={isFirstPage}
-      isLastPage={isLastPage}
-      setCurrentPage={setCurrentPage}
-      showFirst={showFirst}
-      showLast={showLast}
-      showPrevious={showPrevious}
-      showNext={showNext}
-    />,
-    containerNode
-  );
-};
 
 export type PaginationCSSClasses = Partial<{
   /**

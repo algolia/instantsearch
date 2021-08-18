@@ -98,13 +98,11 @@ export type HierarchicalMenuCSSClasses = Partial<{
   disabledShowMore: string | string[];
 }>;
 
-export type HierarchicalMenuComponentCSSClasses = ComponentCSSClasses<
-  HierarchicalMenuCSSClasses
->;
+export type HierarchicalMenuComponentCSSClasses =
+  ComponentCSSClasses<HierarchicalMenuCSSClasses>;
 
-export type HierarchicalMenuComponentTemplates = Required<
-  HierarchicalMenuTemplates
->;
+export type HierarchicalMenuComponentTemplates =
+  Required<HierarchicalMenuTemplates>;
 
 export type HierarchicalMenuWidgetParams = {
   /**
@@ -177,57 +175,59 @@ export type HierarchicalMenuWidgetParams = {
   cssClasses?: HierarchicalMenuCSSClasses;
 };
 
-const renderer = ({
-  cssClasses,
-  containerNode,
-  showMore,
-  templates,
-  renderState,
-}: {
-  cssClasses: HierarchicalMenuComponentCSSClasses;
-  containerNode: HTMLElement;
-  showMore: boolean;
-  templates: HierarchicalMenuTemplates;
-  renderState: {
-    templateProps?: PreparedTemplateProps<HierarchicalMenuComponentTemplates>;
-  };
-}) => (
-  {
-    createURL,
-    items,
-    refine,
-    instantSearchInstance,
-    isShowingMore,
-    toggleShowMore,
-    canToggleShowMore,
-  }: HierarchicalMenuRenderState &
-    RendererOptions<HierarchicalMenuConnectorParams>,
-  isFirstRendering: boolean
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+const renderer =
+  ({
+    cssClasses,
+    containerNode,
+    showMore,
+    templates,
+    renderState,
+  }: {
+    cssClasses: HierarchicalMenuComponentCSSClasses;
+    containerNode: HTMLElement;
+    showMore: boolean;
+    templates: HierarchicalMenuTemplates;
+    renderState: {
+      templateProps?: PreparedTemplateProps<HierarchicalMenuComponentTemplates>;
+    };
+  }) =>
+  (
+    {
+      createURL,
+      items,
+      refine,
+      instantSearchInstance,
+      isShowingMore,
+      toggleShowMore,
+      canToggleShowMore,
+    }: HierarchicalMenuRenderState &
+      RendererOptions<HierarchicalMenuConnectorParams>,
+    isFirstRendering: boolean
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
 
-  render(
-    <RefinementList
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={items}
-      templateProps={renderState.templateProps!}
-      toggleRefinement={refine}
-      showMore={showMore}
-      toggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-      canToggleShowMore={canToggleShowMore}
-    />,
-    containerNode
-  );
-};
+    render(
+      <RefinementList
+        createURL={createURL}
+        cssClasses={cssClasses}
+        facetValues={items}
+        templateProps={renderState.templateProps!}
+        toggleRefinement={refine}
+        showMore={showMore}
+        toggleShowMore={toggleShowMore}
+        isShowingMore={isShowingMore}
+        canToggleShowMore={canToggleShowMore}
+      />,
+      containerNode
+    );
+  };
 
 /**
  * The hierarchical menu widget is used to create a navigation based on a hierarchy of facet attributes.

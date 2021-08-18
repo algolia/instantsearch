@@ -12,9 +12,8 @@ import {
 } from '../../widgets/range-slider/range-slider';
 import { ComponentCSSClasses } from '../../types';
 
-export type RangeSliderComponentCSSClasses = ComponentCSSClasses<
-  RangeSliderCssClasses
->;
+export type RangeSliderComponentCSSClasses =
+  ComponentCSSClasses<RangeSliderCssClasses>;
 
 export type SliderProps = {
   refine(values: RangeBoundaries): void;
@@ -48,7 +47,7 @@ class Slider extends Component<SliderProps> {
       min,
       ...range({
         end: steps - 1,
-      }).map(step => min + stepsLength * (step + 1)),
+      }).map((step) => min + stepsLength * (step + 1)),
       max,
     ];
 
@@ -69,32 +68,31 @@ class Slider extends Component<SliderProps> {
     return [...range({ start: min, end: max, step }), max];
   }
 
-  private createHandleComponent = (
-    tooltips: RangeSliderWidgetParams['tooltips']
-  ) => (props: HandleProps) => {
-    // display only two decimals after comma,
-    // and apply `tooltips.format()` if any
-    const roundedValue =
-      Math.round(
-        // have to cast as a string, as the value given to the prop is a number, but becomes a string when read
-        parseFloat((props['aria-valuenow'] as unknown) as string) * 100
-      ) / 100;
-    const value =
-      typeof tooltips === 'object' && tooltips.format
-        ? tooltips.format(roundedValue)
-        : roundedValue;
+  private createHandleComponent =
+    (tooltips: RangeSliderWidgetParams['tooltips']) => (props: HandleProps) => {
+      // display only two decimals after comma,
+      // and apply `tooltips.format()` if any
+      const roundedValue =
+        Math.round(
+          // have to cast as a string, as the value given to the prop is a number, but becomes a string when read
+          parseFloat(props['aria-valuenow'] as unknown as string) * 100
+        ) / 100;
+      const value =
+        typeof tooltips === 'object' && tooltips.format
+          ? tooltips.format(roundedValue)
+          : roundedValue;
 
-    const className = cx(props.className, {
-      'rheostat-handle-lower': props['data-handle-key'] === 0,
-      'rheostat-handle-upper': props['data-handle-key'] === 1,
-    });
+      const className = cx(props.className, {
+        'rheostat-handle-lower': props['data-handle-key'] === 0,
+        'rheostat-handle-upper': props['data-handle-key'] === 1,
+      });
 
-    return (
-      <div {...props} className={className}>
-        {tooltips && <div className="rheostat-tooltip">{value}</div>}
-      </div>
-    );
-  };
+      return (
+        <div {...props} className={className}>
+          {tooltips && <div className="rheostat-tooltip">{value}</div>}
+        </div>
+      );
+    };
 
   public render() {
     const { tooltips, step, pips, values, cssClasses } = this.props;

@@ -9,9 +9,8 @@ import {
 import { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
 import { ComponentCSSClasses } from '../../types';
 
-export type CurrentRefinementsComponentCSSClasses = ComponentCSSClasses<
-  CurrentRefinementsCSSClasses
->;
+export type CurrentRefinementsComponentCSSClasses =
+  ComponentCSSClasses<CurrentRefinementsCSSClasses>;
 
 export type CurrentRefinementsProps = {
   items: CurrentRefinementsConnectorParamsItem[];
@@ -25,7 +24,7 @@ const createItemKey = ({
   operator,
 }: CurrentRefinementsConnectorParamsRefinement): string =>
   [attribute, type, value, operator]
-    .map(key => key)
+    .map((key) => key)
     .filter(Boolean)
     .join(':');
 
@@ -48,7 +47,7 @@ const CurrentRefinements = ({ items, cssClasses }: CurrentRefinementsProps) => (
         >
           <span className={cssClasses.label}>{capitalize(item.label)}:</span>
 
-          {item.refinements.map(refinement => (
+          {item.refinements.map((refinement) => (
             <span
               key={createItemKey(refinement)}
               className={cssClasses.category}

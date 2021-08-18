@@ -71,11 +71,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         helper.removeDisjunctiveFacetRefinement = jest.fn();
         helper.addDisjunctiveFacetRefinement = jest.fn();
         helper.search = jest.fn();
-        state = ({
+        state = {
           removeDisjunctiveFacetRefinement: jest.fn(),
           addDisjunctiveFacetRefinement: jest.fn(),
           isDisjunctiveFacetRefined: jest.fn().mockReturnValue(false),
-        } as unknown) as SearchParameters;
+        } as unknown as SearchParameters;
         createURL = () => '#';
         widget.init!(
           createInitOptions({ state, helper, createURL, instantSearchInstance })
@@ -83,14 +83,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
 
       it('calls twice render', () => {
-        results = ({
+        results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
           getFacetValues: jest.fn().mockReturnValue([
             { name: 'true', count: 2 },
             { name: 'false', count: 1 },
           ]),
-        } as unknown) as SearchResults;
+        } as unknown as SearchResults;
         widget = toggleRefinement({
           container: containerNode,
           attribute,
@@ -113,14 +113,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
 
       it('understands cssClasses', () => {
-        results = ({
+        results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
           getFacetValues: jest.fn().mockReturnValue([
             { name: 'true', count: 2, isRefined: false },
             { name: 'false', count: 1, isRefined: false },
           ]),
-        } as unknown) as SearchResults;
+        } as unknown as SearchResults;
         widget = toggleRefinement({
           container: containerNode,
           attribute,
@@ -147,14 +147,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
 
       it('with facet values', () => {
-        results = ({
+        results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
           getFacetValues: jest.fn().mockReturnValue([
             { name: 'true', count: 2, isRefined: false },
             { name: 'false', count: 1, isRefined: false },
           ]),
-        } as unknown) as SearchResults;
+        } as unknown as SearchResults;
         widget = toggleRefinement({
           container: containerNode,
           attribute,
@@ -178,14 +178,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
 
       it('supports negative numeric off or on values', () => {
-        results = ({
+        results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
           getFacetValues: jest.fn().mockReturnValue([
             { name: '-2', count: 2, isRefined: true },
             { name: '5', count: 1, isRefined: false },
           ]),
-        } as unknown) as SearchResults;
+        } as unknown as SearchResults;
 
         widget = toggleRefinement({
           container: containerNode,
@@ -244,11 +244,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
 
       it('without facet values', () => {
-        results = ({
+        results = {
           hits: [],
           nbHits: 0,
           getFacetValues: jest.fn().mockReturnValue([]),
-        } as unknown) as SearchResults;
+        } as unknown as SearchResults;
         widget = toggleRefinement({
           container: containerNode,
           attribute,
@@ -272,19 +272,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
 
       it('when refined', () => {
-        helper = ({
-          state: ({
+        helper = {
+          state: {
             isDisjunctiveFacetRefined: jest.fn().mockReturnValue(true),
-          } as unknown) as SearchParameters,
-        } as unknown) as AlgoliaSearchHelper;
-        results = ({
+          } as unknown as SearchParameters,
+        } as unknown as AlgoliaSearchHelper;
+        results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
           getFacetValues: jest.fn().mockReturnValue([
             { name: 'true', count: 2, isRefined: true },
             { name: 'false', count: 1, isRefined: false },
           ]),
-        } as unknown) as SearchResults;
+        } as unknown as SearchResults;
         widget = toggleRefinement({
           container: containerNode,
           attribute,
@@ -308,14 +308,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
 
       it('using props.refine', () => {
-        results = ({
+        results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
           getFacetValues: jest.fn().mockReturnValue([
             { name: 'true', count: 2 },
             { name: 'false', count: 1 },
           ]),
-        } as unknown) as SearchResults;
+        } as unknown as SearchResults;
         widget = toggleRefinement({
           container: containerNode,
           attribute,
@@ -390,9 +390,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.getWidgetSearchParameters(new SearchParameters({}), {
             uiState: {},
           });
-          const state = ({
+          const state = {
             isDisjunctiveFacetRefined: jest.fn().mockReturnValue(false),
-          } as unknown) as SearchParameters;
+          } as unknown as SearchParameters;
           const createURL = () => '#';
           widget.init!(
             createInitOptions({
@@ -425,9 +425,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.getWidgetSearchParameters(new SearchParameters({}), {
             uiState: {},
           });
-          const state = ({
+          const state = {
             isDisjunctiveFacetRefined: jest.fn().mockReturnValue(true),
-          } as unknown) as SearchParameters;
+          } as unknown as SearchParameters;
           const createURL = () => '#';
           widget.init!(
             createInitOptions({
@@ -499,9 +499,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           widget.getWidgetSearchParameters(new SearchParameters({}), {
             uiState: {},
           });
-          const state = ({
+          const state = {
             isDisjunctiveFacetRefined: jest.fn().mockReturnValue(true),
-          } as unknown) as SearchParameters;
+          } as unknown as SearchParameters;
           const createURL = () => '#';
           widget.init!(
             createInitOptions({
@@ -571,12 +571,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         });
-        const state = ({
+        const state = {
           isDisjunctiveFacetRefined: jest.fn().mockReturnValue(true),
-        } as unknown) as SearchParameters;
-        const helper = ({
+        } as unknown as SearchParameters;
+        const helper = {
           addDisjunctiveFacetRefinement: jest.fn(),
-        } as unknown) as AlgoliaSearchHelper;
+        } as unknown as AlgoliaSearchHelper;
 
         // When
         widget.init!(
@@ -598,12 +598,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         });
-        const state = ({
+        const state = {
           isDisjunctiveFacetRefined: () => false,
-        } as unknown) as SearchParameters;
-        const helper = ({
+        } as unknown as SearchParameters;
+        const helper = {
           addDisjunctiveFacetRefinement: jest.fn(),
-        } as unknown) as AlgoliaSearchHelper;
+        } as unknown as AlgoliaSearchHelper;
 
         // When
         widget.init!(

@@ -310,8 +310,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
-      transformItems: items =>
-        items.map(item => ({
+      transformItems: (items) =>
+        items.map((item) => ({
           ...item,
           label: 'transformed',
         })),

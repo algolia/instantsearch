@@ -18,7 +18,7 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
   // especially with the __escaped mark, we thus make sure the mock also has the
   // same behavior regarding the array.
-  addAbsolutePosition: (hits: Hit[]) => hits.map(x => x),
+  addAbsolutePosition: (hits: Hit[]) => hits.map((x) => x),
 }));
 
 describe('connectInfiniteHits', () => {
@@ -505,8 +505,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
-      transformItems: items => {
-        return items.map(item => ({ ...item, name: 'transformed' }));
+      transformItems: (items) => {
+        return items.map((item) => ({ ...item, name: 'transformed' }));
       },
     });
 
@@ -567,8 +567,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
-      transformItems: items =>
-        items.map(item => {
+      transformItems: (items) =>
+        items.map((item) => {
           const name = item._highlightResult!
             .name as HitAttributeHighlightResult;
 
@@ -1169,9 +1169,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         results,
       });
 
-      const renderState2 = infiniteHitsWidget.getWidgetRenderState(
-        renderOptions
-      );
+      const renderState2 =
+        infiniteHitsWidget.getWidgetRenderState(renderOptions);
 
       const expectedHits = [
         { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
@@ -1385,18 +1384,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         });
 
         it('sends click event', () => {
-          const {
-            instantSearchInstance,
-            renderFn,
-            hits,
-          } = createRenderedWidget();
+          const { instantSearchInstance, renderFn, hits } =
+            createRenderedWidget();
           expect(
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledTimes(1); // view event by render
 
-          const { sendEvent } = renderFn.mock.calls[
-            renderFn.mock.calls.length - 1
-          ][0];
+          const { sendEvent } =
+            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
           sendEvent('click', hits[0], 'Product Added');
           expect(
             instantSearchInstance.sendEventToInsights
@@ -1426,18 +1421,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         });
 
         it('sends conversion event', () => {
-          const {
-            instantSearchInstance,
-            renderFn,
-            hits,
-          } = createRenderedWidget();
+          const { instantSearchInstance, renderFn, hits } =
+            createRenderedWidget();
           expect(
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledTimes(1); // view event by render
 
-          const { sendEvent } = renderFn.mock.calls[
-            renderFn.mock.calls.length - 1
-          ][0];
+          const { sendEvent } =
+            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
           sendEvent('conversion', hits[1], 'Product Ordered');
           expect(
             instantSearchInstance.sendEventToInsights
@@ -1469,9 +1460,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       describe('bindEvent', () => {
         it('returns a payload for click event', () => {
           const { renderFn, hits } = createRenderedWidget();
-          const { bindEvent } = renderFn.mock.calls[
-            renderFn.mock.calls.length - 1
-          ][0];
+          const { bindEvent } =
+            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
           const payload = bindEvent('click', hits[0], 'Product Added');
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(
@@ -1500,9 +1490,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
         it('returns a payload for conversion event', () => {
           const { renderFn, hits } = createRenderedWidget();
-          const { bindEvent } = renderFn.mock.calls[
-            renderFn.mock.calls.length - 1
-          ][0];
+          const { bindEvent } =
+            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
           const payload = bindEvent('conversion', hits[1], 'Product Ordered');
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(

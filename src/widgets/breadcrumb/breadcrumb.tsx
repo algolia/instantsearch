@@ -24,44 +24,46 @@ import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: BreadcrumbComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<BreadcrumbComponentTemplates>;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    renderState,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: BreadcrumbComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<BreadcrumbComponentTemplates>;
+    };
+    templates: BreadcrumbTemplates;
+  }): Renderer<BreadcrumbRenderState, Partial<BreadcrumbWidgetParams>> =>
+  (
+    { canRefine, createURL, instantSearchInstance, items, refine },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+
+      return;
+    }
+
+    render(
+      <Breadcrumb
+        canRefine={canRefine}
+        cssClasses={cssClasses}
+        createURL={createURL}
+        items={items}
+        refine={refine}
+        templateProps={renderState.templateProps!}
+      />,
+      containerNode
+    );
   };
-  templates: BreadcrumbTemplates;
-}): Renderer<BreadcrumbRenderState, Partial<BreadcrumbWidgetParams>> => (
-  { canRefine, createURL, instantSearchInstance, items, refine },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-
-    return;
-  }
-
-  render(
-    <Breadcrumb
-      canRefine={canRefine}
-      cssClasses={cssClasses}
-      createURL={createURL}
-      items={items}
-      refine={refine}
-      templateProps={renderState.templateProps!}
-    />,
-    containerNode
-  );
-};
 
 export type BreadcrumbCSSClasses = Partial<{
   /**

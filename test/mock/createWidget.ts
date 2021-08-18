@@ -80,10 +80,10 @@ export const createDisposeOptions = (
 export const createWidget = <TWidget extends Widget>(
   args: Partial<TWidget> = {}
 ): TWidget =>
-  (({
+  ({
     $$type: 'mock.widget',
     init: jest.fn(),
     render: jest.fn(),
     dispose: jest.fn(),
     ...args,
-  } as unknown) as TWidget);
+  } as unknown as TWidget);

@@ -63,9 +63,7 @@ export type RenderState = {
   [indexId: string]: IndexRenderState;
 };
 
-export type WidgetRenderState<
-  TWidgetRenderState,
-  TWidgetParams
-> = TWidgetRenderState & {
-  widgetParams: TWidgetParams;
-};
+export type WidgetRenderState<TWidgetRenderState, TWidgetParams> =
+  TWidgetRenderState & {
+    widgetParams: TWidgetParams;
+  };

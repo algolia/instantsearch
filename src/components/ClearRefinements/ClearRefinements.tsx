@@ -11,13 +11,11 @@ import {
 import { ComponentCSSClasses } from '../../types';
 import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
-export type ClearRefinementsComponentCSSClasses = ComponentCSSClasses<
-  ClearRefinementsCSSClasses
->;
+export type ClearRefinementsComponentCSSClasses =
+  ComponentCSSClasses<ClearRefinementsCSSClasses>;
 
-export type ClearRefinementsComponentTemplates = Required<
-  ClearRefinementsTemplates
->;
+export type ClearRefinementsComponentTemplates =
+  Required<ClearRefinementsTemplates>;
 
 export type ClearRefinementsProps = {
   refine: ClearRefinementsRenderState['refine'];

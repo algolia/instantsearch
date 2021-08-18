@@ -15,16 +15,16 @@ storiesOf('Basics/DynamicWidgets', module).add(
       instantsearch.widgets.EXPERIMENTAL_dynamicWidgets({
         container: dynamicWidgetsContainer,
         widgets: [
-          container =>
+          (container) =>
             instantsearch.widgets.menu({ container, attribute: 'categories' }),
-          container =>
+          (container) =>
             instantsearch.widgets.panel({ templates: { header: 'brand' } })(
               instantsearch.widgets.refinementList
             )({
               container,
               attribute: 'brand',
             }),
-          container =>
+          (container) =>
             instantsearch.widgets.panel({ templates: { header: 'hierarchy' } })(
               instantsearch.widgets.hierarchicalMenu
             )({

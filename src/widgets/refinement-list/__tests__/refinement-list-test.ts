@@ -63,11 +63,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     beforeEach(() => {
       options = { container, attribute: 'attribute' };
-      results = ({
+      results = {
         getFacetValues: jest
           .fn()
           .mockReturnValue([{ name: 'foo' }, { name: 'bar' }]),
-      } as unknown) as SearchResults;
+      } as unknown as SearchResults;
       state = SearchParameters.make({});
       createURL = () => '#';
     });
@@ -179,8 +179,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     it('renders transformed items correctly', () => {
       widget = refinementList({
         ...options,
-        transformItems: items =>
-          items.map(item => ({ ...item, transformed: true })),
+        transformItems: (items) =>
+          items.map((item) => ({ ...item, transformed: true })),
       });
 
       widget.init!(

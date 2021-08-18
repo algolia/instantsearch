@@ -755,7 +755,8 @@ search.addWidgets([
         createRenderOptions({ instantSearchInstance, helper, scopedResults })
       );
 
-      const sendEventToInsights = instantSearchInstance.sendEventToInsights as jest.Mock;
+      const sendEventToInsights =
+        instantSearchInstance.sendEventToInsights as jest.Mock;
 
       return {
         instantSearchInstance,
@@ -814,11 +815,8 @@ search.addWidgets([
     });
 
     it('sends click event', () => {
-      const {
-        sendEventToInsights,
-        render,
-        secondIndexHits,
-      } = createRenderedWidget();
+      const { sendEventToInsights, render, secondIndexHits } =
+        createRenderedWidget();
       expect(sendEventToInsights).toHaveBeenCalledTimes(2); // two view events for each index by render
 
       const { indices } = render.mock.calls[render.mock.calls.length - 1][0];
@@ -847,11 +845,8 @@ search.addWidgets([
     });
 
     it('sends conversion event', () => {
-      const {
-        sendEventToInsights,
-        render,
-        firstIndexHits,
-      } = createRenderedWidget();
+      const { sendEventToInsights, render, firstIndexHits } =
+        createRenderedWidget();
       expect(sendEventToInsights).toHaveBeenCalledTimes(2); // two view events for each index by render
 
       const { indices } = render.mock.calls[render.mock.calls.length - 1][0];

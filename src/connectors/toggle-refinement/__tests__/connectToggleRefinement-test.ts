@@ -128,9 +128,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const { value, widgetParams } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
+      const { value, widgetParams } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(value).toEqual({
         name: 'isShippingFree',
         count: null,
@@ -177,9 +176,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const { value } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
+      const { value } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(value).toEqual({
         name: 'isShippingFree',
         count: 45,
@@ -240,9 +238,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const { value, widgetParams } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
+      const { value, widgetParams } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(value).toEqual({
         name: 'whatever',
         count: null,
@@ -292,9 +289,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const { value } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
+      const { value } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(value).toEqual({
         name: 'whatever',
         count: 65,

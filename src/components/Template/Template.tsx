@@ -37,9 +37,8 @@ class Template extends Component<TemplateProps> {
   public render() {
     const RootTagName = this.props.rootTagName;
 
-    const useCustomCompileOptions = this.props.useCustomCompileOptions[
-      this.props.templateKey
-    ];
+    const useCustomCompileOptions =
+      this.props.useCustomCompileOptions[this.props.templateKey];
     const compileOptions = useCustomCompileOptions
       ? this.props.templatesConfig.compileOptions
       : {};

@@ -62,34 +62,36 @@ export type VoiceSearchWidget = WidgetFactory<
   VoiceSearchWidgetParams
 >;
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: VoiceSearchComponentCSSClasses;
-  templates: VoiceSearchComponentTemplates;
-}): Renderer<VoiceSearchRenderState, Partial<VoiceSearchWidgetParams>> => ({
-  isBrowserSupported,
-  isListening,
-  toggleListening,
-  voiceListeningState,
-}) => {
-  render(
-    <VoiceSearchComponent
-      cssClasses={cssClasses}
-      templates={templates}
-      isBrowserSupported={isBrowserSupported}
-      isListening={isListening}
-      toggleListening={toggleListening}
-      voiceListeningState={voiceListeningState}
-    />,
-    containerNode
-  );
-};
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: VoiceSearchComponentCSSClasses;
+    templates: VoiceSearchComponentTemplates;
+  }): Renderer<VoiceSearchRenderState, Partial<VoiceSearchWidgetParams>> =>
+  ({
+    isBrowserSupported,
+    isListening,
+    toggleListening,
+    voiceListeningState,
+  }) => {
+    render(
+      <VoiceSearchComponent
+        cssClasses={cssClasses}
+        templates={templates}
+        isBrowserSupported={isBrowserSupported}
+        isListening={isListening}
+        toggleListening={toggleListening}
+        voiceListeningState={voiceListeningState}
+      />,
+      containerNode
+    );
+  };
 
-const voiceSearch: VoiceSearchWidget = widgetParams => {
+const voiceSearch: VoiceSearchWidget = (widgetParams) => {
   const {
     container,
     cssClasses: userCssClasses = {},

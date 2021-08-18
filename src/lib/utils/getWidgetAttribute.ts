@@ -14,9 +14,9 @@ export function getWidgetAttribute(
       widgetParams: { attribute: string } | { attributes: string[] };
     }>;
 
-    const {
-      widgetParams,
-    } = (widget as WidgetWithAttribute).getWidgetRenderState(initOptions);
+    const { widgetParams } = (
+      widget as WidgetWithAttribute
+    ).getWidgetRenderState(initOptions);
 
     const attribute =
       'attribute' in widgetParams

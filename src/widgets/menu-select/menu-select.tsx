@@ -74,45 +74,47 @@ export type MenuSelectWidgetParams = {
   cssClasses?: MenuSelectCSSClasses;
 };
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: MenuSelectComponentCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<MenuSelectComponentTemplates>;
-  };
-  templates: MenuSelectTemplates;
-}) => (
-  {
-    refine,
-    items,
-    instantSearchInstance,
-  }: MenuRenderState & RendererOptions<MenuConnectorParams>,
-  isFirstRendering: boolean
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+    renderState,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: MenuSelectComponentCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<MenuSelectComponentTemplates>;
+    };
+    templates: MenuSelectTemplates;
+  }) =>
+  (
+    {
+      refine,
+      items,
+      instantSearchInstance,
+    }: MenuRenderState & RendererOptions<MenuConnectorParams>,
+    isFirstRendering: boolean
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
 
-  render(
-    <MenuSelect
-      cssClasses={cssClasses}
-      items={items}
-      refine={refine}
-      templateProps={renderState.templateProps!}
-    />,
-    containerNode
-  );
-};
+    render(
+      <MenuSelect
+        cssClasses={cssClasses}
+        items={items}
+        refine={refine}
+        templateProps={renderState.templateProps!}
+      />,
+      containerNode
+    );
+  };
 
 export type MenuSelectWidget = WidgetFactory<
   MenuWidgetDescription & { $$widgetType: 'ais.menuSelect' },

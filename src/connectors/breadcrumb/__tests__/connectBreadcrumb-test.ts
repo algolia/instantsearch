@@ -658,8 +658,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({
       attributes: ['category', 'sub_category'],
-      transformItems: items =>
-        items.map(item => ({ ...item, label: 'transformed' })),
+      transformItems: (items) =>
+        items.map((item) => ({ ...item, label: 'transformed' })),
     });
 
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
@@ -730,7 +730,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: state => JSON.stringify(state),
+        createURL: (state) => JSON.stringify(state),
       })
     );
 
@@ -763,7 +763,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         ]),
         state: helper.state,
         helper,
-        createURL: state => JSON.stringify(state),
+        createURL: (state) => JSON.stringify(state),
       })
     );
     const createURL = rendering.mock.calls[1][0].createURL;
@@ -797,7 +797,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: state => JSON.stringify(state),
+        createURL: (state) => JSON.stringify(state),
       })
     );
 
@@ -931,7 +931,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         ]),
         state: helper.state,
         helper,
-        createURL: state => JSON.stringify(state),
+        createURL: (state) => JSON.stringify(state),
       })
     );
     const { createURL, items } = rendering.mock.calls[1][0];

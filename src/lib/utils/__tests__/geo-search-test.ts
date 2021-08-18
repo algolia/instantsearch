@@ -16,7 +16,7 @@ describe('aroundLatLngToPosition', () => {
 
   it.each([['10a,12'], ['10.    12']])(
     'expect to throw an error with: %j',
-    input => {
+    (input) => {
       expect(() => aroundLatLngToPosition(input)).toThrow(
         `Invalid value for "aroundLatLng" parameter: "${input}"`
       );
@@ -78,14 +78,14 @@ describe('insideBoundingBoxToBoundingBox', () => {
 
   it.each([[''], ['10'], ['10,12'], ['10,12,12'], ['10.  15,12,12']])(
     'expect to throw an error with: %j',
-    input => {
+    (input) => {
       expect(() => insideBoundingBoxToBoundingBox(input)).toThrow(
         `Invalid value for "insideBoundingBox" parameter: "${input}"`
       );
     }
   );
 
-  it.each([[[]], [[[]]]])('expect to throw an error with: %j', input => {
+  it.each([[[]], [[[]]]])('expect to throw an error with: %j', (input) => {
     // @ts-expect-error
     expect(() => insideBoundingBoxToBoundingBox(input)).toThrow(
       `Invalid value for "insideBoundingBox" parameter: [${input}]`

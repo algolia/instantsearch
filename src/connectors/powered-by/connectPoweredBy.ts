@@ -57,7 +57,7 @@ const connectPoweredBy: PoweredByConnector = function connectPoweredBy(
     }&` +
     'utm_campaign=poweredby';
 
-  return widgetParams => {
+  return (widgetParams) => {
     const { url = defaultUrl } = widgetParams || {};
 
     return {

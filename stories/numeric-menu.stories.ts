@@ -42,8 +42,8 @@ storiesOf('Refinements/NumericMenu', module)
             item: 'facet-value',
             selectedItem: 'facet-active',
           },
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               label: `${item.label} (transformed)`,
             })),

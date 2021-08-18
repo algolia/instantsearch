@@ -398,8 +398,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
   it('provides the correct transformed facet values', () => {
     const widget = makeWidget({
       attribute: 'category',
-      transformItems: items =>
-        items.map(item => ({
+      transformItems: (items) =>
+        items.map((item) => ({
           ...item,
           label: 'transformed',
         })),

@@ -20,27 +20,26 @@ import { Renderer, WidgetFactory } from '../../types';
 const suit = component('PoweredBy');
 const withUsage = createDocumentationMessageGenerator({ name: 'powered-by' });
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-}: {
-  containerNode: HTMLElement;
-  cssClasses: PoweredByComponentCSSClasses;
-}): Renderer<PoweredByRenderState, Partial<PoweredByWidgetParams>> => (
-  { url, widgetParams },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    const { theme = 'light' } = widgetParams;
+const renderer =
+  ({
+    containerNode,
+    cssClasses,
+  }: {
+    containerNode: HTMLElement;
+    cssClasses: PoweredByComponentCSSClasses;
+  }): Renderer<PoweredByRenderState, Partial<PoweredByWidgetParams>> =>
+  ({ url, widgetParams }, isFirstRendering) => {
+    if (isFirstRendering) {
+      const { theme = 'light' } = widgetParams;
 
-    render(
-      <PoweredBy cssClasses={cssClasses} url={url} theme={theme} />,
-      containerNode
-    );
+      render(
+        <PoweredBy cssClasses={cssClasses} url={url} theme={theme} />,
+        containerNode
+      );
 
-    return;
-  }
-};
+      return;
+    }
+  };
 
 export type PoweredByCSSClasses = Partial<{
   /**
@@ -84,8 +83,11 @@ export type PoweredByWidget = WidgetFactory<
 >;
 
 const poweredBy: PoweredByWidget = function poweredBy(widgetParams) {
-  const { container, cssClasses: userCssClasses = {}, theme = 'light' } =
-    widgetParams || {};
+  const {
+    container,
+    cssClasses: userCssClasses = {},
+    theme = 'light',
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

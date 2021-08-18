@@ -93,8 +93,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       const widget = breadcrumb({
         container,
         attributes,
-        transformItems: items =>
-          items.map(item => ({ ...item, transformed: true })),
+        transformItems: (items) =>
+          items.map((item) => ({ ...item, transformed: true })),
       });
       widget.init!(
         createInitOptions({

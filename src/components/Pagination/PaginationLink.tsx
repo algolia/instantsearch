@@ -45,7 +45,7 @@ const PaginationLink = ({
         className={cssClasses.link}
         aria-label={ariaLabel}
         href={url}
-        onClick={event => handleClick(pageNumber, event)}
+        onClick={(event) => handleClick(pageNumber, event)}
         dangerouslySetInnerHTML={{
           __html: label,
         }}

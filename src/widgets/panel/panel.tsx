@@ -87,17 +87,17 @@ export type PanelTemplates<TWidget extends AnyWidgetFactory> = Partial<{
   collapseButtonText: Template<{ collapsed: boolean }>;
 }>;
 
-type GetWidgetRenderState<TWidgetFactory extends AnyWidgetFactory> = ReturnType<
-  TWidgetFactory
->['getWidgetRenderState'] extends (renderOptions: any) => infer TRenderState
-  ? TRenderState extends Record<string, unknown>
-    ? TRenderState
-    : never
-  : Record<string, unknown>;
+type GetWidgetRenderState<TWidgetFactory extends AnyWidgetFactory> =
+  ReturnType<TWidgetFactory>['getWidgetRenderState'] extends (
+    renderOptions: any
+  ) => infer TRenderState
+    ? TRenderState extends Record<string, unknown>
+      ? TRenderState
+      : never
+    : Record<string, unknown>;
 
-export type PanelRenderOptions<
-  TWidgetFactory extends AnyWidgetFactory
-> = RenderOptions & GetWidgetRenderState<TWidgetFactory>;
+export type PanelRenderOptions<TWidgetFactory extends AnyWidgetFactory> =
+  RenderOptions & GetWidgetRenderState<TWidgetFactory>;
 
 export type PanelWidgetParams<TWidgetFactory extends AnyWidgetFactory> = {
   /**
@@ -126,40 +126,42 @@ export type PanelWidgetParams<TWidgetFactory extends AnyWidgetFactory> = {
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
 
-const renderer = <TWidget extends AnyWidgetFactory>({
-  containerNode,
-  bodyContainerNode,
-  cssClasses,
-  templates,
-}: {
-  containerNode: HTMLElement;
-  bodyContainerNode: HTMLElement;
-  cssClasses: PanelComponentCSSClasses;
-  templates: Required<PanelTemplates<TWidget>>;
-}) => ({
-  options,
-  hidden,
-  collapsible,
-  collapsed,
-}: {
-  options: RenderOptions | Record<string, never>;
-  hidden: boolean;
-  collapsible: boolean;
-  collapsed: boolean;
-}) => {
-  render(
-    <Panel<TWidget>
-      cssClasses={cssClasses}
-      hidden={hidden}
-      collapsible={collapsible}
-      isCollapsed={collapsed}
-      templates={templates}
-      data={options}
-      bodyElement={bodyContainerNode}
-    />,
-    containerNode
-  );
-};
+const renderer =
+  <TWidget extends AnyWidgetFactory>({
+    containerNode,
+    bodyContainerNode,
+    cssClasses,
+    templates,
+  }: {
+    containerNode: HTMLElement;
+    bodyContainerNode: HTMLElement;
+    cssClasses: PanelComponentCSSClasses;
+    templates: Required<PanelTemplates<TWidget>>;
+  }) =>
+  ({
+    options,
+    hidden,
+    collapsible,
+    collapsed,
+  }: {
+    options: RenderOptions | Record<string, never>;
+    hidden: boolean;
+    collapsible: boolean;
+    collapsed: boolean;
+  }) => {
+    render(
+      <Panel<TWidget>
+        cssClasses={cssClasses}
+        hidden={hidden}
+        collapsible={collapsible}
+        isCollapsed={collapsed}
+        templates={templates}
+        data={options}
+        bodyElement={bodyContainerNode}
+      />,
+      containerNode
+    );
+  };
 
 export type PanelWidget = <TWidgetFactory extends AnyWidgetFactory>(
   panelWidgetParams?: PanelWidgetParams<TWidgetFactory>
@@ -173,7 +175,7 @@ export type PanelWidget = <TWidgetFactory extends AnyWidgetFactory>(
  * The panel widget wraps other widgets in a consistent panel design.
  * It also reacts, indicates and sets CSS classes when widgets are no longer relevant for refining.
  */
-const panel: PanelWidget = panelWidgetParams => {
+const panel: PanelWidget = (panelWidgetParams) => {
   const {
     templates = {},
     hidden = () => false,
@@ -225,7 +227,7 @@ const panel: PanelWidget = panelWidgetParams => {
     footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
   };
 
-  return widgetFactory => widgetParams => {
+  return (widgetFactory) => (widgetParams) => {
     if (!(widgetParams && widgetParams.container)) {
       throw new Error(
         withUsage(

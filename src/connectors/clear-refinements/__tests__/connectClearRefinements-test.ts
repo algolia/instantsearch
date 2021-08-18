@@ -87,10 +87,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       // test that rendering has been called during init with isFirstRendering = true
       expect(rendering).toHaveBeenCalledTimes(1);
 
-      const [
-        firstRenderingOptions,
-        isFirstRenderAtInit,
-      ] = rendering.mock.calls[0];
+      const [firstRenderingOptions, isFirstRenderAtInit] =
+        rendering.mock.calls[0];
 
       expect(isFirstRenderAtInit).toBe(true);
       expect(firstRenderingOptions.createURL).toBeInstanceOf(Function);
@@ -114,10 +112,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       // test that rendering has been called during init with isFirstRendering = false
       expect(rendering).toHaveBeenCalledTimes(2);
 
-      const [
-        secondRenderingOptions,
-        isFirstRenderAtRender,
-      ] = rendering.mock.calls[1];
+      const [secondRenderingOptions, isFirstRenderAtRender] =
+        rendering.mock.calls[1];
 
       expect(isFirstRenderAtRender).toBe(false);
       expect(secondRenderingOptions.createURL).toBeInstanceOf(Function);
@@ -774,9 +770,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({
         includedAttributes: ['facet2', 'facet3', 'query'],
-        transformItems: items =>
+        transformItems: (items) =>
           items.filter(
-            attribute => attribute === 'query' || attribute === 'facet3'
+            (attribute) => attribute === 'query' || attribute === 'facet3'
           ),
       });
 
@@ -862,7 +858,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
               ]),
               helper,
               state: helper.state,
-              createURL: state => JSON.stringify(state),
+              createURL: (state) => JSON.stringify(state),
             })
           );
 
@@ -885,7 +881,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
               ]),
               helper,
               state: helper.state,
-              createURL: state => JSON.stringify(state),
+              createURL: (state) => JSON.stringify(state),
             })
           );
 

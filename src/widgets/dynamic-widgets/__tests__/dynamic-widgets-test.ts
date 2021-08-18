@@ -55,7 +55,7 @@ describe('dynamicWidgets()', () => {
       expect(() =>
         EXPERIMENTAL_dynamicWidgets({
           container: document.createElement('div'),
-          transformItems: items => items,
+          transformItems: (items) => items,
           widgets: [],
         })
       ).not.toThrowError();
@@ -68,27 +68,27 @@ describe('dynamicWidgets()', () => {
 
       const widget = EXPERIMENTAL_dynamicWidgets({
         container: rootContainer,
-        transformItems: items => items,
+        transformItems: (items) => items,
         widgets: [
-          container =>
+          (container) =>
             menu({
               attribute: 'test1',
               container,
               cssClasses: { root: 'test1' },
             }),
-          container =>
+          (container) =>
             menu({
               attribute: 'test2',
               container,
               cssClasses: { root: 'test2' },
             }),
-          container =>
+          (container) =>
             menu({
               attribute: 'test3',
               container,
               cssClasses: { root: 'test3' },
             }),
-          container =>
+          (container) =>
             menu({
               attribute: 'test4',
               container,
@@ -133,25 +133,25 @@ describe('dynamicWidgets()', () => {
             return [];
           },
           widgets: [
-            container =>
+            (container) =>
               menu({
                 attribute: 'test1',
                 container,
                 cssClasses: { root: 'test1' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test2',
                 container,
                 cssClasses: { root: 'test2' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test3',
                 container,
                 cssClasses: { root: 'test3' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test4',
                 container,
@@ -164,12 +164,13 @@ describe('dynamicWidgets()', () => {
       indexWidget.init!(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults = new SearchResults(
-        indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        }),
-        createMultiSearchResponse({}).results
-      );
+      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+        new SearchResults(
+          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          }),
+          createMultiSearchResponse({}).results
+        );
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
@@ -208,25 +209,25 @@ describe('dynamicWidgets()', () => {
             return ['test1'];
           },
           widgets: [
-            container =>
+            (container) =>
               menu({
                 attribute: 'test1',
                 container,
                 cssClasses: { root: 'test1' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test2',
                 container,
                 cssClasses: { root: 'test2' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test3',
                 container,
                 cssClasses: { root: 'test3' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test4',
                 container,
@@ -239,12 +240,13 @@ describe('dynamicWidgets()', () => {
       indexWidget.init!(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults = new SearchResults(
-        indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        }),
-        createMultiSearchResponse({}).results
-      );
+      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+        new SearchResults(
+          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          }),
+          createMultiSearchResponse({}).results
+        );
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
@@ -287,25 +289,25 @@ describe('dynamicWidgets()', () => {
             return results.userData[0].MOCK_facetOrder;
           },
           widgets: [
-            container =>
+            (container) =>
               menu({
                 attribute: 'test1',
                 container,
                 cssClasses: { root: 'test1' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test2',
                 container,
                 cssClasses: { root: 'test2' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test3',
                 container,
                 cssClasses: { root: 'test3' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test4',
                 container,
@@ -318,14 +320,15 @@ describe('dynamicWidgets()', () => {
       indexWidget.init!(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults = new SearchResults(
-        indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        }),
-        createMultiSearchResponse({
-          userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
-        }).results
-      );
+      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+        new SearchResults(
+          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          }),
+          createMultiSearchResponse({
+            userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
+          }).results
+        );
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
@@ -361,14 +364,15 @@ describe('dynamicWidgets()', () => {
       `);
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults = new SearchResults(
-        indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        }),
-        createMultiSearchResponse({
-          userData: [{ MOCK_facetOrder: ['test4', 'test1'] }],
-        }).results
-      );
+      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+        new SearchResults(
+          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          }),
+          createMultiSearchResponse({
+            userData: [{ MOCK_facetOrder: ['test4', 'test1'] }],
+          }).results
+        );
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
@@ -413,25 +417,25 @@ describe('dynamicWidgets()', () => {
             return results.userData[0].MOCK_facetOrder;
           },
           widgets: [
-            container =>
+            (container) =>
               menu({
                 attribute: 'test1',
                 container,
                 cssClasses: { root: 'test1' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test2',
                 container,
                 cssClasses: { root: 'test2' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test3',
                 container,
                 cssClasses: { root: 'test3' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test4',
                 container,
@@ -444,14 +448,15 @@ describe('dynamicWidgets()', () => {
       indexWidget.init!(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults = new SearchResults(
-        indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        }),
-        createMultiSearchResponse({
-          userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
-        }).results
-      );
+      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+        new SearchResults(
+          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          }),
+          createMultiSearchResponse({
+            userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
+          }).results
+        );
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 
@@ -491,25 +496,25 @@ describe('dynamicWidgets()', () => {
             return results.userData[0].MOCK_facetOrder;
           },
           widgets: [
-            container =>
+            (container) =>
               menu({
                 attribute: 'test1',
                 container,
                 cssClasses: { root: 'test1' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test2',
                 container,
                 cssClasses: { root: 'test2' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test3',
                 container,
                 cssClasses: { root: 'test3' },
               }),
-            container =>
+            (container) =>
               menu({
                 attribute: 'test4',
                 container,
@@ -522,14 +527,15 @@ describe('dynamicWidgets()', () => {
       indexWidget.init!(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults = new SearchResults(
-        indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        }),
-        createMultiSearchResponse({
-          userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
-        }).results
-      );
+      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+        new SearchResults(
+          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          }),
+          createMultiSearchResponse({
+            userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
+          }).results
+        );
 
       indexWidget.render!(createRenderOptions({ instantSearchInstance }));
 

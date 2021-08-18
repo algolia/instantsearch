@@ -34,9 +34,12 @@ export type CreateInsightsMiddleware = (
   props: InsightsProps
 ) => InternalMiddleware;
 
-export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
-  const { insightsClient: _insightsClient, insightsInitParams, onEvent } =
-    props || {};
+export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
+  const {
+    insightsClient: _insightsClient,
+    insightsInitParams,
+    onEvent,
+  } = props || {};
   if (_insightsClient !== null && !_insightsClient) {
     if (__DEV__) {
       throw new Error(

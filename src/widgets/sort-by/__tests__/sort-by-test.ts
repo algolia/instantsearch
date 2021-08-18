@@ -116,8 +116,8 @@ describe('sortBy()', () => {
     widget = sortBy({
       container,
       items,
-      transformItems: allItems =>
-        allItems.map(item => ({ ...item, transformed: true })),
+      transformItems: (allItems) =>
+        allItems.map((item) => ({ ...item, transformed: true })),
     });
 
     widget.init!(createInitOptions({ helper }));

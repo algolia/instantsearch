@@ -28,8 +28,8 @@ storiesOf('Pagination/HitsPerPage', module)
             { value: 5, label: '5 per page' },
             { value: 10, label: '10 per page' },
           ],
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               label: `${item.label} (transformed)`,
             })),
@@ -40,7 +40,7 @@ storiesOf('Pagination/HitsPerPage', module)
   .add(
     'with add/remove',
     withHits(({ search, container, instantsearch }) => {
-      withLifecycle(search, container, node =>
+      withLifecycle(search, container, (node) =>
         instantsearch.widgets.hitsPerPage({
           container: node,
           items: [

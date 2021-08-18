@@ -405,14 +405,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {
-        hitsPerPage,
-        nbHits,
-        nbPages,
-        page,
-        processingTimeMS,
-        query,
-      } = rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { hitsPerPage, nbHits, nbPages, page, processingTimeMS, query } =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(hitsPerPage).toBe(20);
       expect(nbHits).toBe(1);
       expect(nbPages).toBe(1);

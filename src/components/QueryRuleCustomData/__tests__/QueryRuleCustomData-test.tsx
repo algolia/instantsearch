@@ -9,7 +9,7 @@ type QueryRuleItem = {
 };
 
 function defaultTemplate({ items }: { items: QueryRuleItem[] }) {
-  return items.map(item => item.banner).join(' ');
+  return items.map((item) => item.banner).join(' ');
 }
 
 describe('QueryRuleCustomData', () => {

@@ -41,8 +41,8 @@ storiesOf('Results/InfiniteHits', module)
           templates: {
             item: '{{name}}',
           },
-          transformItems: items =>
-            items.map(item => ({
+          transformItems: (items) =>
+            items.map((item) => ({
               ...item,
               name: `${item.name} (transformed)`,
             })),
@@ -65,7 +65,7 @@ storiesOf('Results/InfiniteHits', module)
           instantsearch.widgets.infiniteHits({
             container,
             templates: {
-              item: item => `
+              item: (item) => `
           <h4>${item.name}</h4>
           <button
             ${insights('clickedObjectIDsAfterSearch', {
@@ -116,7 +116,7 @@ storiesOf('Results/InfiniteHits', module)
         instantsearch.widgets.infiniteHits({
           container,
           templates: {
-            item: hit => `
+            item: (hit) => `
               <p>#${hit.__position} ${hit.name}</p>
               <a href="https://google.com">Details</a>
             `,

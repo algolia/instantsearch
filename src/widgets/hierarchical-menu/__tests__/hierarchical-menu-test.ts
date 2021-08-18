@@ -33,9 +33,11 @@ describe('hierarchicalMenu()', () => {
   let container: HTMLDivElement;
   let attributes: string[];
   let options: HierarchicalMenuConnectorParams & HierarchicalMenuWidgetParams;
-  let widget: Widget<HierarchicalMenuWidgetDescription & {
-    widgetParams: HierarchicalMenuConnectorParams;
-  }>;
+  let widget: Widget<
+    HierarchicalMenuWidgetDescription & {
+      widgetParams: HierarchicalMenuConnectorParams;
+    }
+  >;
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -170,8 +172,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     it('has a transformItems options', () => {
       widget = hierarchicalMenu({
         ...options,
-        transformItems: items =>
-          items.map(item => ({ ...item, transformed: true })),
+        transformItems: (items) =>
+          items.map((item) => ({ ...item, transformed: true })),
       });
 
       widget.init!(createInitOptions({ helper }));

@@ -143,12 +143,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       widget.render!(createRenderOptions(renderParameters));
       widget.render!(createRenderOptions(renderParameters));
 
-      const firstRender = render.mock.calls[0][0] as VNode<
-        CurrentRefinementsProps
-      >;
-      const secondRender = render.mock.calls[1][0] as VNode<
-        CurrentRefinementsProps
-      >;
+      const firstRender = render.mock
+        .calls[0][0] as VNode<CurrentRefinementsProps>;
+      const secondRender = render.mock
+        .calls[1][0] as VNode<CurrentRefinementsProps>;
       const firstContainer = render.mock.calls[0][1];
       const secondContainer = render.mock.calls[1][1];
 
@@ -179,9 +177,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          CurrentRefinementsProps
-        >;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<CurrentRefinementsProps>;
 
         expect(render).toHaveBeenCalledTimes(1);
         expect(firstRender.props).toMatchSnapshot();
@@ -246,12 +243,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          CurrentRefinementsProps
-        >;
-        const {
-          items: renderedItems,
-        } = firstRender.props as CurrentRefinementsProps;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<CurrentRefinementsProps>;
+        const { items: renderedItems } =
+          firstRender.props as CurrentRefinementsProps;
 
         expect(renderedItems).toHaveLength(1);
 
@@ -312,12 +307,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          CurrentRefinementsProps
-        >;
-        const {
-          items: renderedItems,
-        } = firstRender.props as CurrentRefinementsProps;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<CurrentRefinementsProps>;
+        const { items: renderedItems } =
+          firstRender.props as CurrentRefinementsProps;
 
         expect(renderedItems).toHaveLength(0);
       });
@@ -343,10 +336,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         });
         const widget = currentRefinements({
           container: document.createElement('div'),
-          transformItems: items =>
-            items.map(refinementItems => ({
+          transformItems: (items) =>
+            items.map((refinementItems) => ({
               ...refinementItems,
-              refinements: refinementItems.refinements.map(item => ({
+              refinements: refinementItems.refinements.map((item) => ({
                 ...item,
                 transformed: true,
               })),
@@ -389,9 +382,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          CurrentRefinementsProps
-        >;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<CurrentRefinementsProps>;
         // @TODO: expose a way to transform the item type using transformItems
         const renderedItems = (firstRender.props as CurrentRefinementsProps)
           .items as Array<
@@ -437,9 +429,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          CurrentRefinementsProps
-        >;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<CurrentRefinementsProps>;
         const props = firstRender.props as CurrentRefinementsProps;
 
         expect(props.cssClasses.root).toContain('customRoot');
@@ -466,9 +457,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const firstRender = render.mock.calls[0][0] as VNode<
-          CurrentRefinementsProps
-        >;
+        const firstRender = render.mock
+          .calls[0][0] as VNode<CurrentRefinementsProps>;
         const props = firstRender.props as CurrentRefinementsProps;
 
         expect(props.cssClasses.root).toContain('customRoot1');
