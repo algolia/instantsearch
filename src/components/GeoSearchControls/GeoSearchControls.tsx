@@ -5,12 +5,12 @@ import cx from 'classnames';
 import Template from '../Template/Template';
 import GeoSearchButton from './GeoSearchButton';
 import GeoSearchToggle from './GeoSearchToggle';
-import {
+import type {
   GeoSearchCSSClasses,
   GeoSearchTemplates,
 } from '../../widgets/geo-search/geo-search';
-import { ComponentCSSClasses } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { ComponentCSSClasses } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 type Props = {
   cssClasses: ComponentCSSClasses<GeoSearchCSSClasses>;

@@ -4,8 +4,11 @@ import { h } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks';
 import cx from 'classnames';
 import Template from '../Template/Template';
-import { PanelCSSClasses, PanelTemplates } from '../../widgets/panel/panel';
-import {
+import type {
+  PanelCSSClasses,
+  PanelTemplates,
+} from '../../widgets/panel/panel';
+import type {
   ComponentCSSClasses,
   RenderOptions,
   UnknownWidgetFactory,

@@ -1,3 +1,4 @@
+import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   warning,
@@ -5,10 +6,9 @@ import {
   createSendEventForFacet,
   isEqual,
   noop,
-  SendEventForFacet,
 } from '../../lib/utils';
-import { SearchResults } from 'algoliasearch-helper';
-import {
+import type { SearchResults } from 'algoliasearch-helper';
+import type {
   Connector,
   CreateURL,
   TransformItems,

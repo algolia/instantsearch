@@ -3,11 +3,11 @@
 import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
-import {
+import type {
   AnswersCSSClasses,
   AnswersTemplates,
 } from '../../widgets/answers/answers';
-import { ComponentCSSClasses, Hits } from '../../types';
+import type { ComponentCSSClasses, Hits } from '../../types';
 
 export type AnswersComponentCSSClasses = ComponentCSSClasses<AnswersCSSClasses>;
 

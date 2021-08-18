@@ -1,3 +1,4 @@
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -6,19 +7,17 @@ import {
   addAbsolutePosition,
   addQueryID,
   createSendEventForHits,
-  SendEventForHits,
   createBindEventForHits,
-  BindEventForHits,
   noop,
 } from '../../lib/utils';
-import {
+import type {
   TransformItems,
   Connector,
   Hits,
   Hit,
   WidgetRenderState,
 } from '../../types';
-import { SearchResults } from 'algoliasearch-helper';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits',

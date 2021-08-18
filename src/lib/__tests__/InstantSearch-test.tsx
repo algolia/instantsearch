@@ -1,6 +1,7 @@
 /** @jsx h */
 
-import preact, { h, render, createRef } from 'preact';
+import type preact from 'preact';
+import { h, render, createRef } from 'preact';
 import originalHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
 import version from '../version';
@@ -17,13 +18,13 @@ import {
 } from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 import { castToJestMock } from '../../../test/utils/castToJestMock';
-import { IndexWidget } from '../../widgets/index/index';
-import { Widget } from '../../types';
-import {
+import type { IndexWidget } from '../../widgets/index/index';
+import type { Widget } from '../../types';
+import type {
   PaginationConnectorParams,
   PaginationWidgetDescription,
 } from '../../connectors/pagination/connectPagination';
-import {
+import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
 } from '../../connectors/search-box/connectSearchBox';

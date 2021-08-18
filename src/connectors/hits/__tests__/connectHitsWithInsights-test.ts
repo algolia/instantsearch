@@ -8,7 +8,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectHitsWithInsights from '../connectHitsWithInsights';
-import { Hit } from '../../../types';
+import type { Hit } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: (hits: Hit[]) => hits,

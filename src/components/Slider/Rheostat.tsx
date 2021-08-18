@@ -6,13 +6,8 @@
 
 /** @jsx h */
 
-import {
-  h,
-  Component,
-  ComponentChildren,
-  ComponentType,
-  createRef,
-} from 'preact';
+import type { ComponentChildren, ComponentType, JSX } from 'preact';
+import { h, Component, createRef } from 'preact';
 
 type BoundingBox = {
   height: number;
@@ -73,11 +68,11 @@ function killEvent(ev: Event) {
   ev.preventDefault();
 }
 
-function Button(props: h.JSX.IntrinsicElements['button']) {
+function Button(props: JSX.IntrinsicElements['button']) {
   return <button {...props} type="button" />;
 }
 
-// Preact doesn't have builtin types for Style, h.JSX.HTMLAttributes['style'] is just object
+// Preact doesn't have builtin types for Style, JSX.HTMLAttributes['style'] is just object
 // maybe migrate to csstype later?
 type Style = {
   position?: 'absolute';
@@ -105,7 +100,7 @@ export type HandleProps = {
   onMouseDown?: (e: MouseEvent) => void;
   onTouchStart?: (e: TouchEvent) => void;
   role: 'slider';
-  style: h.JSX.HTMLAttributes['style'];
+  style: JSX.HTMLAttributes['style'];
   tabIndex: number;
 };
 
@@ -126,7 +121,7 @@ type Props = {
   orientation?: 'horizontal' | 'vertical';
   pitComponent?: ComponentType<PitProps>;
   pitPoints?: number[];
-  progressBar?: ComponentType<h.JSX.HTMLAttributes>;
+  progressBar?: ComponentType<JSX.HTMLAttributes>;
   snap?: boolean;
   snapPoints?: number[];
   values?: number[];

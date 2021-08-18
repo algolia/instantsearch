@@ -2,7 +2,8 @@
 
 import { h } from 'preact';
 import { render } from '@testing-library/preact';
-import Answers, { AnswersProps } from '../Answers';
+import type { AnswersProps } from '../Answers';
+import Answers from '../Answers';
 
 const defaultProps: AnswersProps = {
   hits: [],

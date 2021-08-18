@@ -1,4 +1,4 @@
-import { RefinementListComponentTemplates } from './refinement-list';
+import type { RefinementListComponentTemplates } from './refinement-list';
 
 const defaultTemplates: RefinementListComponentTemplates = {
   item: `<label class="{{cssClasses.label}}">

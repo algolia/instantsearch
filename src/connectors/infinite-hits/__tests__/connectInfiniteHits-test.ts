@@ -1,8 +1,10 @@
-import algoliasearchHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import { SearchClient, HitAttributeHighlightResult, Hit } from '../../../types';
+import type { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import type {
+  SearchClient,
+  HitAttributeHighlightResult,
+  Hit,
+} from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createDisposeOptions,

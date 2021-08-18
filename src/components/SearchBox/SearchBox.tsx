@@ -3,11 +3,11 @@
 import { h, createRef, Component } from 'preact';
 import { noop } from '../../lib/utils';
 import Template from '../Template/Template';
-import {
+import type {
   SearchBoxCSSClasses,
   SearchBoxTemplates,
 } from '../../widgets/search-box/search-box';
-import { ComponentCSSClasses } from '../../types';
+import type { ComponentCSSClasses } from '../../types';
 
 export type SearchBoxComponentCSSClasses =
   ComponentCSSClasses<SearchBoxCSSClasses>;

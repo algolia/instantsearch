@@ -1,11 +1,11 @@
+import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
-  SendEventForFacet,
 } from '../../lib/utils';
-import {
+import type {
   Connector,
   CreateURL,
   RenderOptions,

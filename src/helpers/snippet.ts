@@ -1,4 +1,4 @@
-import { Hit } from '../types';
+import type { Hit } from '../types';
 import { component } from '../lib/suit';
 import { TAG_REPLACEMENT, getPropertyByPath } from '../lib/utils';
 

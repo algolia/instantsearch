@@ -7,18 +7,20 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Template } from '../../types';
-import connectRelevantSort, {
+import type { WidgetFactory, Template } from '../../types';
+import type {
   RelevantSortConnectorParams,
   RelevantSortRenderState,
   RelevantSortWidgetDescription,
 } from '../../connectors/relevant-sort/connectRelevantSort';
-import RelevantSort, {
+import connectRelevantSort from '../../connectors/relevant-sort/connectRelevantSort';
+import type {
   RelevantSortComponentCSSClasses,
   RelevantSortComponentTemplates,
 } from '../../components/RelevantSort/RelevantSort';
+import RelevantSort from '../../components/RelevantSort/RelevantSort';
 import defaultTemplates from './defaultTemplates';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type RelevantSortCSSClasses = Partial<{
   root: string;

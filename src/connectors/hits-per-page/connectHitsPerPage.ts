@@ -5,8 +5,11 @@ import {
   noop,
 } from '../../lib/utils';
 
-import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
-import {
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+} from 'algoliasearch-helper';
+import type {
   Connector,
   TransformItems,
   CreateURL,

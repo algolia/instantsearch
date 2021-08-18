@@ -1,4 +1,4 @@
-import { BreadcrumbComponentTemplates } from '../../components/Breadcrumb/Breadcrumb';
+import type { BreadcrumbComponentTemplates } from '../../components/Breadcrumb/Breadcrumb';
 
 const defaultTemplates: BreadcrumbComponentTemplates = {
   home: 'Home',

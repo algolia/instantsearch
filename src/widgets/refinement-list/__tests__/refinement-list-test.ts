@@ -1,19 +1,19 @@
-import { render as originalRender, VNode } from 'preact';
-import algoliasearchHelper, {
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
-import refinementList, {
+import type { VNode } from 'preact';
+import { render as originalRender } from 'preact';
+import type { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import type {
   RefinementListTemplates,
   RefinementListWidgetParams,
 } from '../refinement-list';
-import { RefinementListProps } from '../../../components/RefinementList/RefinementList';
+import refinementList from '../refinement-list';
+import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { RefinementListConnectorParams } from '../../../connectors/refinement-list/connectRefinementList';
+import type { RefinementListConnectorParams } from '../../../connectors/refinement-list/connectRefinementList';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 const render = castToJestMock(originalRender);

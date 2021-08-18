@@ -1,4 +1,4 @@
-import { SearchClient, MultiResponse } from '../../src/types';
+import type { SearchClient, MultiResponse } from '../../src/types';
 
 import {
   createSingleSearchResponse,

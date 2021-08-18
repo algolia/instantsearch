@@ -1,7 +1,7 @@
+import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
-  AlgoliaSearchHelper as Helper,
 } from 'algoliasearch-helper';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
@@ -12,7 +12,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectQueryRules from '../connectQueryRules';
-import { TransformItems } from '../../../types';
+import type { TransformItems } from '../../../types';
 
 describe('connectQueryRules', () => {
   function createWidget() {

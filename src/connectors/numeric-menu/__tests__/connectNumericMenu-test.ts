@@ -2,11 +2,12 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectNumericMenu, {
+import type {
   NumericMenuConnectorParamsItem,
   NumericMenuRenderState,
   NumericMenuRenderStateItem,
 } from '../connectNumericMenu';
+import connectNumericMenu from '../connectNumericMenu';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createDisposeOptions,

@@ -3,8 +3,8 @@
 import { h } from 'preact';
 import { deserializePayload } from '../utils';
 import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
-import { InsightsClientWrapper } from '../../types';
-import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
+import type { InsightsClientWrapper } from '../../types';
+import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type WithInsightsListenerProps = {
   [key: string]: unknown;

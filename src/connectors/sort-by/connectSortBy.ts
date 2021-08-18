@@ -5,7 +5,7 @@ import {
   warning,
   noop,
 } from '../../lib/utils';
-import { Connector, TransformItems, WidgetRenderState } from '../../types';
+import type { Connector, TransformItems, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'sort-by',

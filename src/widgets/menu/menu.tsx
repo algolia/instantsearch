@@ -3,11 +3,12 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectMenu, {
+import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
 } from '../../connectors/menu/connectMenu';
+import connectMenu from '../../connectors/menu/connectMenu';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -15,13 +16,13 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import {
+import type {
   ComponentCSSClasses,
   RendererOptions,
   Template,
   WidgetFactory,
 } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');

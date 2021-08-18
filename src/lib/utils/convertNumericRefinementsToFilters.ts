@@ -1,4 +1,4 @@
-import { SearchParameters } from 'algoliasearch-helper';
+import type { SearchParameters } from 'algoliasearch-helper';
 
 export function convertNumericRefinementsToFilters(
   state: SearchParameters | null,

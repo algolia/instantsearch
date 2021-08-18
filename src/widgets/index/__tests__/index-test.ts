@@ -1,7 +1,5 @@
-import algoliasearchHelper, {
-  PlainSearchParameters,
-  SearchParameters,
-} from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -11,7 +9,8 @@ import {
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
-import { Widget, InstantSearch } from '../../../types';
+import type { Widget } from '../../../types';
+import InstantSearch from '../../../lib/InstantSearch';
 import index from '../index';
 import { warning } from '../../../lib/utils';
 import { refinementList } from '../..';

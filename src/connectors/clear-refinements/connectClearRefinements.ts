@@ -1,4 +1,4 @@
-import { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import {
   checkRendering,
   clearRefinements,
@@ -8,7 +8,7 @@ import {
   uniq,
   mergeSearchParameters,
 } from '../../lib/utils';
-import {
+import type {
   TransformItems,
   CreateURL,
   Connector,

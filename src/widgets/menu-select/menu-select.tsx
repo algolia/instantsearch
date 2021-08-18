@@ -2,15 +2,17 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import connectMenu, {
+import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
 } from '../../connectors/menu/connectMenu';
-import MenuSelect, {
+import connectMenu from '../../connectors/menu/connectMenu';
+import type {
   MenuSelectComponentCSSClasses,
   MenuSelectComponentTemplates,
 } from '../../components/MenuSelect/MenuSelect';
+import MenuSelect from '../../components/MenuSelect/MenuSelect';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -18,8 +20,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { RendererOptions, Template, WidgetFactory } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { RendererOptions, Template, WidgetFactory } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');

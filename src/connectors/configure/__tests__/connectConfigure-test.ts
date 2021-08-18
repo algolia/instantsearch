@@ -1,7 +1,5 @@
-import algoliasearchHelper, {
-  SearchParameters,
-  AlgoliaSearchHelper,
-} from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import connectConfigure from '../connectConfigure';

@@ -3,20 +3,21 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectHierarchicalMenu, {
+import type {
   HierarchicalMenuItem,
   HierarchicalMenuConnectorParams,
   HierarchicalMenuRenderState,
   HierarchicalMenuWidgetDescription,
 } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import defaultTemplates from './defaultTemplates';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import {
+import type {
   TransformItems,
   Template,
   WidgetFactory,

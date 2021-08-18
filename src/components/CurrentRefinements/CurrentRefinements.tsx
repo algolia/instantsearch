@@ -2,12 +2,12 @@
 
 import { h } from 'preact';
 import { isSpecialClick, capitalize } from '../../lib/utils';
-import {
+import type {
   CurrentRefinementsConnectorParamsItem,
   CurrentRefinementsConnectorParamsRefinement,
 } from '../../connectors/current-refinements/connectCurrentRefinements';
-import { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
-import { ComponentCSSClasses } from '../../types';
+import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
+import type { ComponentCSSClasses } from '../../types';
 
 export type CurrentRefinementsComponentCSSClasses =
   ComponentCSSClasses<CurrentRefinementsCSSClasses>;

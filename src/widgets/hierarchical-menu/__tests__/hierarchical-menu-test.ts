@@ -1,13 +1,12 @@
 import { render } from 'preact';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
-  AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import hierarchicalMenu, {
-  HierarchicalMenuWidgetParams,
-} from '../hierarchical-menu';
-import {
+import type { HierarchicalMenuWidgetParams } from '../hierarchical-menu';
+import hierarchicalMenu from '../hierarchical-menu';
+import type {
   HierarchicalMenuConnectorParams,
   HierarchicalMenuWidgetDescription,
 } from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
@@ -17,7 +16,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { Widget } from '../../../types';
+import type { Widget } from '../../../types';
 
 const mockedRender = render as jest.Mock;
 

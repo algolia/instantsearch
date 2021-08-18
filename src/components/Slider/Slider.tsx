@@ -1,16 +1,17 @@
 /** @jsx h */
 
 import { h, Component } from 'preact';
-import Rheostat, { HandleProps } from './Rheostat';
+import type { HandleProps } from './Rheostat';
+import Rheostat from './Rheostat';
 import cx from 'classnames';
 import { range } from '../../lib/utils';
 import Pit from './Pit';
-import { RangeBoundaries } from '../../connectors/range/connectRange';
-import {
+import type { RangeBoundaries } from '../../connectors/range/connectRange';
+import type {
   RangeSliderCssClasses,
   RangeSliderWidgetParams,
 } from '../../widgets/range-slider/range-slider';
-import { ComponentCSSClasses } from '../../types';
+import type { ComponentCSSClasses } from '../../types';
 
 export type RangeSliderComponentCSSClasses =
   ComponentCSSClasses<RangeSliderCssClasses>;

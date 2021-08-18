@@ -1,7 +1,7 @@
+import type { LatLng } from '../geo-search';
 import {
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
-  LatLng,
 } from '../geo-search';
 
 describe('aroundLatLngToPosition', () => {

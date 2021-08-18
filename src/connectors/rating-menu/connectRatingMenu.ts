@@ -1,4 +1,4 @@
-import {
+import type {
   AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
@@ -10,13 +10,13 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import {
+import type {
   Connector,
   InstantSearch,
   CreateURL,
   WidgetRenderState,
 } from '../../types';
-import { InsightsEvent } from '../../middlewares';
+import type { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'rating-menu',

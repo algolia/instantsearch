@@ -1,6 +1,8 @@
-import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper';
 import EventEmitter from 'events';
-import index, { IndexWidget, isIndexWidget } from '../widgets/index/index';
+import type { IndexWidget } from '../widgets/index/index';
+import index, { isIndexWidget } from '../widgets/index/index';
 import version from './version';
 import createHelpers from './createHelpers';
 import {
@@ -11,7 +13,7 @@ import {
   warning,
   checkIndexUiState,
 } from './utils';
-import {
+import type {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
@@ -21,11 +23,9 @@ import {
   MiddlewareDefinition,
   RenderState,
 } from '../types';
-import {
-  createRouterMiddleware,
-  RouterProps,
-} from '../middlewares/createRouterMiddleware';
-import { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import type { RouterProps } from '../middlewares/createRouterMiddleware';
+import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
+import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
 import {
   createMetadataMiddleware,
   isMetadataEnabled,

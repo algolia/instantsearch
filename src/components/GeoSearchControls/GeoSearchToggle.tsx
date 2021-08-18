@@ -1,6 +1,7 @@
 /** @jsx h */
 
-import { h, ComponentChildren } from 'preact';
+import type { ComponentChildren } from 'preact';
+import { h } from 'preact';
 
 type Props = {
   classNameLabel: string;

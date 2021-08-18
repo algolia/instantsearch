@@ -2,7 +2,7 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import { WidgetFactory, Template, Hit, Renderer } from '../../types';
+import type { WidgetFactory, Template, Hit, Renderer } from '../../types';
 import defaultTemplates from './defaultTemplates';
 import {
   createDocumentationMessageGenerator,
@@ -10,16 +10,18 @@ import {
   prepareTemplateProps,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import Answers, {
+import type {
   AnswersComponentCSSClasses,
   AnswersComponentTemplates,
 } from '../../components/Answers/Answers';
-import connectAnswers, {
+import Answers from '../../components/Answers/Answers';
+import type {
   AnswersRenderState,
   AnswersConnectorParams,
   AnswersWidgetDescription,
 } from '../../connectors/answers/connectAnswers';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import connectAnswers from '../../connectors/answers/connectAnswers';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'answers' });
 const suit = component('Answers');

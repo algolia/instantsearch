@@ -4,8 +4,8 @@ import {
   noop,
 } from '../../lib/utils';
 import Paginator from './Paginator';
-import { Connector, CreateURL, WidgetRenderState } from '../../types';
-import { SearchParameters } from 'algoliasearch-helper';
+import type { Connector, CreateURL, WidgetRenderState } from '../../types';
+import type { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'pagination',

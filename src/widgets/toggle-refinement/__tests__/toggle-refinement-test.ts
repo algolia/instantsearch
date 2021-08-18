@@ -1,9 +1,6 @@
 import { render as preactRender } from 'preact';
-import jsHelper, {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+import jsHelper, { SearchParameters } from 'algoliasearch-helper';
 import toggleRefinement from '../toggle-refinement';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
@@ -12,7 +9,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { InstantSearch } from '../../../types';
+import type { InstantSearch } from '../../../types';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

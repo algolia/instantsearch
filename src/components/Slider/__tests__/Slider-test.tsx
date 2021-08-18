@@ -2,7 +2,8 @@
 
 import { h } from 'preact';
 import { shallow } from '../../../../test/utils/enzyme';
-import Slider, { SliderProps } from '../Slider';
+import type { SliderProps } from '../Slider';
+import Slider from '../Slider';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {

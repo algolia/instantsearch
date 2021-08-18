@@ -1,5 +1,6 @@
-import InstantSearch, { InstantSearchOptions } from './lib/InstantSearch';
-import { Expand, UiState } from './types';
+import type { InstantSearchOptions } from './lib/InstantSearch';
+import InstantSearch from './lib/InstantSearch';
+import type { Expand, UiState } from './types';
 
 import version from './lib/version';
 

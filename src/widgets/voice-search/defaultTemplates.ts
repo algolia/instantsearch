@@ -1,4 +1,4 @@
-import { VoiceSearchComponentTemplates } from '../../components/VoiceSearch/VoiceSearch';
+import type { VoiceSearchComponentTemplates } from '../../components/VoiceSearch/VoiceSearch';
 
 const getButtonInnerElement = (
   status: string,

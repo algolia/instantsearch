@@ -3,18 +3,19 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
-import connectHitsPerPage, {
+import type {
   HitsPerPageConnectorParams,
   HitsPerPageRenderState,
   HitsPerPageWidgetDescription,
 } from '../../connectors/hits-per-page/connectHitsPerPage';
+import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
   find,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { ComponentCSSClasses, WidgetFactory } from '../../types';
+import type { ComponentCSSClasses, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',

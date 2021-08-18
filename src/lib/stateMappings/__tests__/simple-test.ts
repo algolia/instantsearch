@@ -1,4 +1,4 @@
-import { UiState } from '../../../types';
+import type { UiState } from '../../../types';
 import simpleStateMapping from '../simple';
 
 describe('simpleStateMapping', () => {

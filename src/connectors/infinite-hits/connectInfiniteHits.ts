@@ -1,16 +1,17 @@
-import {
+import type {
   AlgoliaSearchHelper as Helper,
   PlainSearchParameters,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import {
+import type {
   Hits,
   Connector,
   TransformItems,
   Hit,
   WidgetRenderState,
 } from '../../types';
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -21,9 +22,7 @@ import {
   addQueryID,
   noop,
   createSendEventForHits,
-  SendEventForHits,
   createBindEventForHits,
-  BindEventForHits,
 } from '../../lib/utils';
 
 export type InfiniteHitsCachedHits = {

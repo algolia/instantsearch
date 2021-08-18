@@ -2,7 +2,7 @@ import qs from 'qs';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
-import {
+import type {
   Router,
   Widget,
   UiState,
@@ -11,7 +11,7 @@ import {
 } from '../../types';
 import historyRouter from '../routers/history';
 import instantsearch from '../..';
-import { JSDOM } from 'jsdom';
+import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;
 

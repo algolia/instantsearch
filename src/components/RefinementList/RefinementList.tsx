@@ -1,20 +1,22 @@
 /** @jsx h */
 
+import type { JSX } from 'preact';
 import { h, createRef, Component } from 'preact';
 import cx from 'classnames';
 import { isSpecialClick, isEqual } from '../../lib/utils';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
-import SearchBox, {
+import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../SearchBox/SearchBox';
-import { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import { ComponentCSSClasses, CreateURL, Templates } from '../../types';
-import { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
-import { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
-import { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
+import SearchBox from '../SearchBox/SearchBox';
+import type { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import type { ComponentCSSClasses, CreateURL, Templates } from '../../types';
+import type { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
+import type { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
+import type { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 
 // CSS types
 type RefinementListOptionalClasses =
@@ -66,7 +68,7 @@ export type RefinementListProps<TTemplates extends Templates> = {
   hasExhaustiveItems?: boolean;
   canToggleShowMore?: boolean;
   className?: string;
-  children?: h.JSX.Element;
+  children?: JSX.Element;
 
   // searchable props are optional, but will definitely be present in a searchable context
   isFromSearch?: boolean;

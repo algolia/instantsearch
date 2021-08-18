@@ -1,4 +1,4 @@
-import { HoganHelpers } from '../../../types';
+import type { HoganHelpers } from '../../../types';
 import renderTemplate from '../renderTemplate';
 
 describe('renderTemplate', () => {

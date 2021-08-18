@@ -2,15 +2,17 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import connectHits, {
+import type {
   HitsConnectorParams,
   HitsRenderState,
   HitsWidgetDescription,
 } from '../../connectors/hits/connectHits';
-import Hits, {
+import connectHits from '../../connectors/hits/connectHits';
+import type {
   HitsComponentCSSClasses,
   HitsComponentTemplates,
 } from '../../components/Hits/Hits';
+import Hits from '../../components/Hits/Hits';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -19,7 +21,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
-import {
+import type {
   Template,
   TemplateWithBindEvent,
   Hit,
@@ -27,8 +29,8 @@ import {
   Renderer,
   InsightsClientWrapper,
 } from '../../types';
-import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');

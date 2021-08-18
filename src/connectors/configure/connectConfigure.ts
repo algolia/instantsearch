@@ -1,9 +1,10 @@
-import algoliasearchHelper, {
+import type {
   SearchParameters,
   PlainSearchParameters,
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
-import { Connector, WidgetRenderState } from '../../types';
+import algoliasearchHelper from 'algoliasearch-helper';
+import type { Connector, WidgetRenderState } from '../../types';
 import {
   createDocumentationMessageGenerator,
   isPlainObject,

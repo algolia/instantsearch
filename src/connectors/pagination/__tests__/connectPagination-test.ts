@@ -3,10 +3,11 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectPagination, {
+import type {
   PaginationConnectorParams,
   PaginationRenderState,
 } from '../connectPagination';
+import connectPagination from '../connectPagination';
 import {
   createDisposeOptions,
   createInitOptions,

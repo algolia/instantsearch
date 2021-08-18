@@ -1,7 +1,7 @@
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 import instantsearch from '../../..';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { AlgoliaHit } from '../../../types';
+import type { AlgoliaHit } from '../../../types';
 import { noop } from '../../../lib/utils';
 
 const hit: AlgoliaHit = {

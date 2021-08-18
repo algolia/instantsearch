@@ -1,4 +1,4 @@
-import { GeoSearchComponentTemplates } from './geo-search';
+import type { GeoSearchComponentTemplates } from './geo-search';
 
 const defaultTemplates: GeoSearchComponentTemplates = {
   HTMLMarker: '<p>Your custom HTML Marker</p>',

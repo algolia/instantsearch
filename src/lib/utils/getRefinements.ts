@@ -1,4 +1,4 @@
-import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import find from './find';
 import unescapeRefinement from './unescapeRefinement';
 

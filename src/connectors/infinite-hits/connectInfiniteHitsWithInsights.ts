@@ -1,9 +1,10 @@
 import { withInsights } from '../../lib/insights';
-import connectInfiniteHits, {
+import type {
   InfiniteHitsWidgetDescription,
   InfiniteHitsConnectorParams,
 } from './connectInfiniteHits';
-import { Connector } from '../../types';
+import connectInfiniteHits from './connectInfiniteHits';
+import type { Connector } from '../../types';
 
 /**
  * Due to https://github.com/microsoft/web-build-tools/issues/1050, we need

@@ -2,24 +2,26 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import { PlainSearchParameters } from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import connectVoiceSearch, {
+import type {
   VoiceSearchConnectorParams,
   VoiceSearchRenderState,
   VoiceSearchWidgetDescription,
 } from '../../connectors/voice-search/connectVoiceSearch';
-import VoiceSearchComponent, {
+import connectVoiceSearch from '../../connectors/voice-search/connectVoiceSearch';
+import type {
   VoiceSearchComponentCSSClasses,
   VoiceSearchComponentTemplates,
 } from '../../components/VoiceSearch/VoiceSearch';
+import VoiceSearchComponent from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
-import { WidgetFactory, Template, Renderer } from '../../types';
-import { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
+import type { WidgetFactory, Template, Renderer } from '../../types';
+import type { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');

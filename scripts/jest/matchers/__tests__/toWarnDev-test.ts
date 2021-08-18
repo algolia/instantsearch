@@ -1,5 +1,9 @@
 /* eslint-disable no-console */
 
+// export is needed for TS isolatedModules
+// eslint-disable-next-line jest/no-export
+export {};
+
 describe('toWarnDev', () => {
   describe('usage', () => {
     test('fails with incorrect type of message', () => {

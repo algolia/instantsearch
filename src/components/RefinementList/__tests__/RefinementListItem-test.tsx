@@ -2,9 +2,8 @@
 
 import { h } from 'preact';
 import { shallow } from '../../../../test/utils/enzyme';
-import RefinementListItem, {
-  RefinementListItemProps,
-} from '../RefinementListItem';
+import type { RefinementListItemProps } from '../RefinementListItem';
+import RefinementListItem from '../RefinementListItem';
 
 describe('RefinementListItem', () => {
   const props: RefinementListItemProps = {

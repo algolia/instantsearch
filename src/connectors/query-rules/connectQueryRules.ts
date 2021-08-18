@@ -1,8 +1,8 @@
-import {
+import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { Connector, TransformItems, WidgetRenderState } from '../../types';
+import type { Connector, TransformItems, WidgetRenderState } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -11,7 +11,7 @@ import {
   isEqual,
   noop,
 } from '../../lib/utils';
-import {
+import type {
   Refinement as InternalRefinement,
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils/getRefinements';

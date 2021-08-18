@@ -2,9 +2,8 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectToggleRefinement, {
-  ToggleRefinementRenderState,
-} from '../connectToggleRefinement';
+import type { ToggleRefinementRenderState } from '../connectToggleRefinement';
+import connectToggleRefinement from '../connectToggleRefinement';
 import {
   createDisposeOptions,
   createInitOptions,

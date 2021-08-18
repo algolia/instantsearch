@@ -2,15 +2,17 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Breadcrumb, {
+import type {
   BreadcrumbComponentCSSClasses,
   BreadcrumbComponentTemplates,
 } from '../../components/Breadcrumb/Breadcrumb';
-import connectBreadcrumb, {
+import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
+import type {
   BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
   BreadcrumbRenderState,
 } from '../../connectors/breadcrumb/connectBreadcrumb';
+import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,
@@ -18,8 +20,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory, Template, Renderer } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { WidgetFactory, Template, Renderer } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');

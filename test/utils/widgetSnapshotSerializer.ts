@@ -1,5 +1,5 @@
-import { Widget } from '../../src/types';
-import { IndexWidget } from '../../src/widgets/index/index';
+import type { Widget } from '../../src/types';
+import type { IndexWidget } from '../../src/widgets/index/index';
 import { getWidgetAttribute } from '../../src/lib/utils';
 import { createInitOptions } from '../mock/createWidget';
 

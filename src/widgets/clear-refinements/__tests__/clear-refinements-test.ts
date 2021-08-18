@@ -1,4 +1,5 @@
-import { render as preactRender, VNode } from 'preact';
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import {
   createInitOptions,
@@ -7,7 +8,7 @@ import {
 import clearRefinements from '../clear-refinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { ClearRefinementsProps } from '../../../components/ClearRefinements/ClearRefinements';
+import type { ClearRefinementsProps } from '../../../components/ClearRefinements/ClearRefinements';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

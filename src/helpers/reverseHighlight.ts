@@ -1,4 +1,4 @@
-import { Hit } from '../types';
+import type { Hit } from '../types';
 import {
   TAG_REPLACEMENT,
   getPropertyByPath,

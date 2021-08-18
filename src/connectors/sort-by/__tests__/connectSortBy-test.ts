@@ -3,7 +3,8 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectSortBy, { SortByRenderState } from '../connectSortBy';
+import type { SortByRenderState } from '../connectSortBy';
+import connectSortBy from '../connectSortBy';
 import index from '../../../widgets/index/index';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';

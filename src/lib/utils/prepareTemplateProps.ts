@@ -1,6 +1,6 @@
 import uniq from './uniq';
-import { HoganHelpers, Templates } from '../../types';
-import { HoganOptions } from 'hogan.js';
+import type { HoganHelpers, Templates } from '../../types';
+import type { HoganOptions } from 'hogan.js';
 
 type TemplatesConfig = {
   helpers?: HoganHelpers;

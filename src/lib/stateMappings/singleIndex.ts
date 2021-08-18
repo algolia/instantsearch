@@ -1,4 +1,4 @@
-import { StateMapping, IndexUiState, UiState } from '../../types';
+import type { StateMapping, IndexUiState, UiState } from '../../types';
 
 function getIndexStateWithoutConfigure<TIndexUiState extends IndexUiState>(
   uiState: TIndexUiState

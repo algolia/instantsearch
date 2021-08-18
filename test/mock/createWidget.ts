@@ -1,5 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import {
+import type {
   InitOptions,
   RenderOptions,
   DisposeOptions,

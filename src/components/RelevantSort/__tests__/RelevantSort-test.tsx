@@ -3,7 +3,8 @@
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 
-import RelevantSort, { RelevantSortComponentTemplates } from '../RelevantSort';
+import type { RelevantSortComponentTemplates } from '../RelevantSort';
+import RelevantSort from '../RelevantSort';
 
 const cssClasses = {
   root: 'root',

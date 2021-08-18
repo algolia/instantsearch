@@ -1,7 +1,7 @@
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import jsHelper, {
   SearchResults,
   SearchParameters,
-  AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
 import connectRange from '../connectRange';
 import {

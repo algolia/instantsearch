@@ -1,8 +1,9 @@
-import {
+import type {
   AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -10,10 +11,9 @@ import {
   isFiniteNumber,
   find,
   noop,
-  SendEventForFacet,
 } from '../../lib/utils';
-import { InsightsEvent } from '../../middlewares';
-import { Connector, InstantSearch, WidgetRenderState } from '../../types';
+import type { InsightsEvent } from '../../middlewares';
+import type { Connector, InstantSearch, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator(
   { name: 'range-input', connector: true },

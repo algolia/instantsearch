@@ -1,4 +1,5 @@
-import { render as preactRender, VNode } from 'preact';
+import type { VNode } from 'preact';
+import { render as preactRender } from 'preact';
 import jsHelper, {
   SearchResults,
   SearchParameters,

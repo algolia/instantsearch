@@ -1,11 +1,10 @@
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
-  AlgoliaSearchHelper,
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectCurrentRefinements, {
-  CurrentRefinementsConnectorParamsItem,
-} from '../connectCurrentRefinements';
+import type { CurrentRefinementsConnectorParamsItem } from '../connectCurrentRefinements';
+import connectCurrentRefinements from '../connectCurrentRefinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createDisposeOptions,

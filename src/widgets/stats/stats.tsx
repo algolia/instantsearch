@@ -2,23 +2,25 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Stats, {
+import type {
   StatsComponentCSSClasses,
   StatsComponentTemplates,
 } from '../../components/Stats/Stats';
-import connectStats, {
+import Stats from '../../components/Stats/Stats';
+import type {
   StatsConnectorParams,
   StatsRenderState,
   StatsWidgetDescription,
 } from '../../connectors/stats/connectStats';
+import connectStats from '../../connectors/stats/connectStats';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { Renderer, Template, WidgetFactory } from '../../types';
-import { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { Renderer, Template, WidgetFactory } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');

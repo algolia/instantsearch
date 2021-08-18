@@ -1,4 +1,4 @@
-import { Awaited } from '../../types';
+import type { Awaited } from '../../types';
 
 type Func = (...args: any[]) => any;
 

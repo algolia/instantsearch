@@ -1,4 +1,4 @@
-import { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 /**
  * Clears the refinements of a SearchParameters object based on rules provided.

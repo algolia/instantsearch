@@ -1,4 +1,4 @@
-import { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
+import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 
 const defaultTemplate: SearchBoxComponentTemplates = {
   reset: `

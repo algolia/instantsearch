@@ -1,15 +1,17 @@
+import type {
+  HighlightOptions,
+  ReverseHighlightOptions,
+  SnippetOptions,
+  ReverseSnippetOptions,
+} from '../helpers';
 import {
   highlight,
   reverseHighlight,
   snippet,
   reverseSnippet,
-  HighlightOptions,
-  ReverseHighlightOptions,
-  SnippetOptions,
-  ReverseSnippetOptions,
   insights,
 } from '../helpers';
-import {
+import type {
   Hit,
   HoganHelpers,
   InsightsClientMethod,
