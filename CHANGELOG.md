@@ -3,7 +3,7 @@
 
 ### Bug Fixes
 
-* **types:** export all types as "type" to avoid exporting in .js ([#4837](https://github.com/algolia/instantsearch.js/issues/4837)) ([dcbbd88](https://github.com/algolia/instantsearch.js/commit/dcbbd8804b4b6471d24820b42826b57388974c27)), closes [#4834](https://github.com/algolia/instantsearch.js/issues/4834)
+* **types:** export all types as "type" to avoid exporting in .js ([#4837](https://github.com/algolia/instantsearch.js/issues/4837)) ([dcbbd88](https://github.com/algolia/instantsearch.js/commit/dcbbd8804b4b6471d24820b42826b57388974c27))
 
 
 
