@@ -8,7 +8,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { InstantSearch } from '../../../types';
+import InstantSearch from '../../../lib/InstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 

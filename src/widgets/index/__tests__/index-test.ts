@@ -10,7 +10,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 import type { Widget } from '../../../types';
-import { InstantSearch } from '../../../types';
+import InstantSearch from '../../../lib/InstantSearch';
 import index from '../index';
 import { warning } from '../../../lib/utils';
 import { refinementList } from '../..';
