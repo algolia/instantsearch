@@ -1,3 +1,12 @@
+## [4.27.2](https://github.com/algolia/instantsearch.js/compare/v4.27.1...v4.27.2) (2021-08-18)
+
+
+### Bug Fixes
+
+* **types:** export all types as "type" to avoid exporting in .js ([#4837](https://github.com/algolia/instantsearch.js/issues/4837)) ([dcbbd88](https://github.com/algolia/instantsearch.js/commit/dcbbd8804b4b6471d24820b42826b57388974c27))
+
+
+
 ## [4.27.1](https://github.com/algolia/instantsearch.js/compare/v4.27.0...v4.27.1) (2021-08-17)
 
 
