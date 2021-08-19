@@ -1,6 +1,6 @@
 import { createSSRApp, h } from 'vue';
 import algoliasearch from 'algoliasearch/lite';
-import { createServerRootMixin } from 'vue-instantsearch/dist/vue3/es';
+import { createServerRootMixin } from 'vue-instantsearch/vue3/es';
 import qs from 'qs';
 import { renderToString } from '@vue/server-renderer';
 import App from './App.vue';

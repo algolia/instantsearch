@@ -20,8 +20,7 @@ const processEnv = conf => ({
 });
 
 const vuePlugin = process.env.VUE_VERSION === 'vue3' ? vueV3 : vueV2;
-const outputDir =
-  process.env.VUE_VERSION === 'vue3' ? 'dist/vue3' : 'dist/vue2';
+const outputDir = process.env.VUE_VERSION === 'vue3' ? 'vue3' : 'vue2';
 
 const plugins = [
   vuePlugin({ compileTemplate: true, css: false }),

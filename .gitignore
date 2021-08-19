@@ -1,13 +1,22 @@
-dist/
-es/
-yarn-error.log
+# package manager
 node_modules/
-coverage
+yarn-error.log
+
+# OS-specific files
 .DS_store
+
+# cache
 .nuxt
+
+# secret
 .env
 
 # Generated files
 /website/stories
 /website/examples/*
 !/website/examples/index.html
+coverage
+
+# published files
+vue2/
+vue3/

@@ -17,7 +17,7 @@ If you have different setup or use different bundler, you may check if it still 
 Vue InstantSearch includes two packages, one for vue 2 and another one for vue 3. So for vue 3, you need to import with this path:
 
 ```js
-import InstantSearch from 'vue-instantsearch/dist/vue3/es';
+import InstantSearch from 'vue-instantsearch/vue3/es';
 ```
 
 ## Regarding vue-router@v4

@@ -12,4 +12,4 @@ VUE_VERSION=vue3 rollup -c
 echo "$originalContent" > src/util/vue-compat/index.js
 
 # put an index file for es output
-cp ./scripts/es-index-template.js dist/vue3/es/index.js
+cp ./scripts/es-index-template.js vue3/es/index.js

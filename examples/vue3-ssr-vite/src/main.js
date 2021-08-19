@@ -1,4 +1,4 @@
-import { createServerRootMixin } from 'vue-instantsearch/dist/vue3/es';
+import { createServerRootMixin } from 'vue-instantsearch/vue3/es';
 import algoliasearch from 'algoliasearch/lite';
 import { createSSRApp, h } from 'vue';
 import qs from 'qs';

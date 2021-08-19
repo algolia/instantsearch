@@ -18,15 +18,16 @@
   "license": "MIT",
   "version": "4.0.0-beta.1",
   "files": [
-    "dist",
+    "vue2",
+    "vue3",
     "src"
   ],
-  "main": "dist/vue2/cjs",
-  "module": "dist/vue2/es",
+  "main": "vue2/cjs",
+  "module": "vue2/es",
   "sideEffects": false,
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
-    "prebuild": "rm -rf dist",
+    "prebuild": "rm -rf vue2 vue3",
     "build": "yarn build:vue2 && yarn build:vue3",
     "build:vue2": "./scripts/build-vue2.sh",
     "build:vue3": "./scripts/build-vue3.sh",
@@ -130,19 +131,19 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/vue2/umd/index.js",
+      "path": "./vue2/umd/index.js",
       "maxSize": "55.00 kB"
     },
     {
-      "path": "./dist/vue2/cjs/index.js",
+      "path": "./vue2/cjs/index.js",
       "maxSize": "17.00 kB"
     },
     {
-      "path": "./dist/vue3/umd/index.js",
+      "path": "./vue3/umd/index.js",
       "maxSize": "56.50 kB"
     },
     {
-      "path": "./dist/vue3/cjs/index.js",
+      "path": "./vue3/cjs/index.js",
       "maxSize": "18.50 kB"
     }
   ],

@@ -65,7 +65,7 @@ import {
   AisHits,
   AisHighlight,
   AisPagination,
-} from 'vue-instantsearch/dist/vue3/es';
+} from 'vue-instantsearch/vue3/es';
 
 export default {
   components: {
