@@ -4,7 +4,7 @@ import {
   createSendEventForHits,
 } from '../createSendEventForHits';
 import { deserializePayload } from '../../utils';
-import { EscapedHits } from '../../../types';
+import type { EscapedHits } from '../../../types';
 
 const createTestEnvironment = () => {
   const instantSearchInstance = createInstantSearch();
