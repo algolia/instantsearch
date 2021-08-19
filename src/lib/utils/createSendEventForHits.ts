@@ -18,21 +18,28 @@ type BuiltInBindEventForHits = (
 type CustomBindEventForHits = (customPayload: any) => string;
 export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
-type BuildPayload = (options: {
-  widgetType: string;
-  index: string;
-  methodName: 'sendEvent' | 'bindEvent';
-  args: any[];
-}) => InsightsEvent | null;
+function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
+  const chunks: TItem[][] = [];
+  for (let i = 0; i < Math.ceil(arr.length / chunkSize); i++) {
+    chunks.push(arr.slice(i * chunkSize, (i + 1) * chunkSize));
+  }
+  return chunks;
+}
 
-const buildPayload: BuildPayload = ({
+const buildPayloads = ({
   index,
   widgetType,
   methodName,
   args,
-}) => {
+}: {
+  widgetType: string;
+  index: string;
+  methodName: 'sendEvent' | 'bindEvent';
+  args: any[];
+}): InsightsEvent[] => {
+  // when there's only one argument, that means it's custom
   if (args.length === 1 && typeof args[0] === 'object') {
-    return args[0];
+    return [args[0]];
   }
   const eventType: string = args[0];
   const hits: Hit | Hits | EscapedHits = args[1];
@@ -45,7 +52,7 @@ const buildPayload: BuildPayload = ({
   `
       );
     } else {
-      return null;
+      return [];
     }
   }
   if ((eventType === 'click' || eventType === 'conversion') && !eventName) {
@@ -58,7 +65,7 @@ const buildPayload: BuildPayload = ({
   `
       );
     } else {
-      return null;
+      return [];
     }
   }
   const hitsArray: Hits = Array.isArray(hits)
@@ -66,57 +73,68 @@ const buildPayload: BuildPayload = ({
     : [hits];
 
   if (hitsArray.length === 0) {
-    return null;
+    return [];
   }
   const queryID = hitsArray[0].__queryID;
-  const objectIDs = hitsArray.map((hit) => hit.objectID);
-  const positions = hitsArray.map((hit) => hit.__position);
+  const hitsChunks = chunk(hitsArray);
+  const objectIDsByChunk = hitsChunks.map((batch) =>
+    batch.map((hit) => hit.objectID)
+  );
+  const positionsByChunk = hitsChunks.map((batch) =>
+    batch.map((hit) => hit.__position)
+  );
 
   if (eventType === 'view') {
-    return {
-      insightsMethod: 'viewedObjectIDs',
-      widgetType,
-      eventType,
-      payload: {
-        eventName: eventName || 'Hits Viewed',
-        index,
-        objectIDs,
-      },
-      hits: hitsArray,
-    };
+    return hitsChunks.map((batch, i) => {
+      return {
+        insightsMethod: 'viewedObjectIDs',
+        widgetType,
+        eventType,
+        payload: {
+          eventName: eventName || 'Hits Viewed',
+          index,
+          objectIDs: objectIDsByChunk[i],
+        },
+        hits: batch,
+      };
+    });
   } else if (eventType === 'click') {
-    return {
-      insightsMethod: 'clickedObjectIDsAfterSearch',
-      widgetType,
-      eventType,
-      payload: {
-        eventName,
-        index,
-        queryID,
-        objectIDs,
-        positions,
-      },
-      hits: hitsArray,
-    };
+    return hitsChunks.map((batch, i) => {
+      return {
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        widgetType,
+        eventType,
+        payload: {
+          eventName,
+          index,
+          queryID,
+          objectIDs: objectIDsByChunk[i],
+          positions: positionsByChunk[i],
+        },
+        hits: batch,
+      };
+    });
   } else if (eventType === 'conversion') {
-    return {
-      insightsMethod: 'convertedObjectIDsAfterSearch',
-      widgetType,
-      eventType,
-      payload: {
-        eventName,
-        index,
-        queryID,
-        objectIDs,
-      },
-      hits: hitsArray,
-    };
+    return hitsChunks.map((batch, i) => {
+      return {
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        widgetType,
+        eventType,
+        payload: {
+          eventName,
+          index,
+          queryID,
+          objectIDs: objectIDsByChunk[i],
+        },
+        hits: batch,
+      };
+    });
   } else if (__DEV__) {
     throw new Error(`eventType("${eventType}") is not supported.
     If you want to send a custom payload, you can pass one object: ${methodName}(customPayload);
     `);
   } else {
-    return null;
+    return [];
   }
 };
 
@@ -136,15 +154,16 @@ export function createSendEventForHits({
   widgetType: string;
 }): SendEventForHits {
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
-    const payload = buildPayload({
+    const payloads = buildPayloads({
       widgetType,
       index,
       methodName: 'sendEvent',
       args,
     });
-    if (payload) {
-      instantSearchInstance.sendEventToInsights(payload);
-    }
+
+    payloads.forEach((payload) =>
+      instantSearchInstance.sendEventToInsights(payload)
+    );
   };
   return sendEventForHits;
 }
@@ -157,13 +176,17 @@ export function createBindEventForHits({
   widgetType: string;
 }): BindEventForHits {
   const bindEventForHits: BindEventForHits = (...args: any[]) => {
-    const payload = buildPayload({
+    const payloads = buildPayloads({
       widgetType,
       index,
       methodName: 'bindEvent',
       args,
     });
-    return payload ? `data-insights-event=${serializePayload(payload)}` : '';
+
+    // TODO: deal with longer payloads in bind
+    return payloads.length
+      ? `data-insights-event=${serializePayload(payloads[0])}`
+      : '';
   };
   return bindEventForHits;
 }

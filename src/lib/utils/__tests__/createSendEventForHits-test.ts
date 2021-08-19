@@ -5,22 +5,15 @@ import {
 } from '../createSendEventForHits';
 import { deserializePayload } from '../../utils';
 
-const createTestEnvironment = () => {
+const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {
   const instantSearchInstance = createInstantSearch();
   const index = 'testIndex';
   const widgetType = 'ais.testWidget';
-  const hits = [
-    {
-      objectID: 'obj0',
-      __position: 0,
-      __queryID: 'test-query-id',
-    },
-    {
-      objectID: 'obj1',
-      __position: 1,
-      __queryID: 'test-query-id',
-    },
-  ];
+  const hits = Array.from({ length: nbHits }, (_, i) => ({
+    __position: i,
+    __queryID: 'test-query-id',
+    objectID: `obj${i}`,
+  }));
   const sendEvent = createSendEventForHits({
     instantSearchInstance,
     index,
@@ -157,6 +150,44 @@ describe('createSendEventForHits', () => {
         eventName: 'Hits Viewed',
         index: 'testIndex',
         objectIDs: ['obj0', 'obj1'],
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
+  it('sends view event with more than 20 hits', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment({
+      nbHits: 21,
+    });
+    sendEvent('view', hits);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'view',
+      hits: Array.from({ length: 20 }, (_, i) => ({
+        __position: i,
+        __queryID: 'test-query-id',
+        objectID: `obj${i}`,
+      })),
+      insightsMethod: 'viewedObjectIDs',
+      payload: {
+        eventName: 'Hits Viewed',
+        index: 'testIndex',
+        objectIDs: Array.from({ length: 20 }, (_, i) => `obj${i}`),
+      },
+      widgetType: 'ais.testWidget',
+    });
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'view',
+      hits: Array.from({ length: 1 }, (_, i) => ({
+        __position: 20 + i,
+        __queryID: 'test-query-id',
+        objectID: `obj${20 + i}`,
+      })),
+      insightsMethod: 'viewedObjectIDs',
+      payload: {
+        eventName: 'Hits Viewed',
+        index: 'testIndex',
+        objectIDs: Array.from({ length: 1 }, (_, i) => `obj${20 + i}`),
       },
       widgetType: 'ais.testWidget',
     });
