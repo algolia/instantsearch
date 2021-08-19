@@ -109,7 +109,7 @@ storiesOf('Metadata/QueryRuleCustomData', module)
               {
                 title: 'Kill Bill',
                 banner:
-                  'http://static.bobatv.net/IMovie/mv_2352/poster_2352.jpg',
+                  'https://static.bobatv.net/IMovie/mv_2352/poster_2352.jpg',
                 link: 'https://www.netflix.com/title/60031236',
               },
             ];
