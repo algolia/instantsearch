@@ -52,7 +52,6 @@ describe('createServerRootMixin', () => {
         createSSRApp({
           mixins: [
             createServerRootMixin({
-              renderToString,
               searchClient: undefined,
               indexName: 'lol',
             }),
@@ -68,7 +67,6 @@ describe('createServerRootMixin', () => {
         createSSRApp({
           mixins: [
             createServerRootMixin({
-              renderToString,
               searchClient: createFakeClient(),
               indexName: undefined,
             }),
@@ -79,26 +77,10 @@ describe('createServerRootMixin', () => {
       );
     });
 
-    it('requires renderToString', () => {
-      expect(() =>
-        createSSRApp({
-          mixins: [
-            createServerRootMixin({
-              searchClient: createFakeClient(),
-              indexName: 'yup',
-            }),
-          ],
-        })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"createServerRootMixin requires \`renderToString: (app) => Promise<string>\` in the first argument"`
-      );
-    });
-
     it('creates an instantsearch instance on "data"', () => {
       const App = {
         mixins: [
           createServerRootMixin({
-            renderToString,
             searchClient: createFakeClient(),
             indexName: 'lol',
           }),
@@ -118,7 +100,6 @@ describe('createServerRootMixin', () => {
       const App = {
         mixins: [
           createServerRootMixin({
-            renderToString,
             searchClient: createFakeClient(),
             indexName: 'myIndexName',
           }),
@@ -164,7 +145,6 @@ describe('createServerRootMixin', () => {
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
-            renderToString,
             searchClient: createFakeClient(),
             indexName: 'hello',
           }),
@@ -179,6 +159,44 @@ describe('createServerRootMixin', () => {
       await renderToString(app);
     });
 
+    it('requires renderToString', async () => {
+      const searchClient = createFakeClient();
+
+      const app = {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        render: renderCompat(h =>
+          h(InstantSearchSsr, {}, [
+            h(Configure, {
+              attrs: {
+                hitsPerPage: 100,
+              },
+            }),
+            h(SearchBox),
+          ])
+        ),
+        serverPrefetch() {
+          expect(() =>
+            this.instantsearch.findResultsState({ component: this })
+          ).toThrowErrorMatchingInlineSnapshot(
+            `"findResultsState requires \`renderToString: (component) => Promise<string>\` in the first argument."`
+          );
+        },
+      };
+
+      const wrapper = createSSRApp({
+        mixins: [forceIsServerMixin],
+        render: renderCompat(h => h(app)),
+      });
+
+      await renderToString(wrapper);
+    });
+
     it('detects child widgets', async () => {
       const searchClient = createFakeClient();
       let mainIndex;
@@ -187,7 +205,6 @@ describe('createServerRootMixin', () => {
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
-            renderToString,
             searchClient,
             indexName: 'hello',
           }),
@@ -214,7 +231,10 @@ describe('createServerRootMixin', () => {
           ])
         ),
         serverPrefetch() {
-          return this.instantsearch.findResultsState(this);
+          return this.instantsearch.findResultsState({
+            component: this,
+            renderToString,
+          });
         },
         created() {
           mainIndex = this.instantsearch.mainIndex;
@@ -261,7 +281,6 @@ Array [
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
-            renderToString,
             searchClient,
             indexName: 'hello',
           }),
@@ -277,7 +296,10 @@ Array [
           ])
         ),
         async serverPrefetch() {
-          const state = await this.instantsearch.findResultsState(this);
+          const state = await this.instantsearch.findResultsState({
+            component: this,
+            renderToString,
+          });
           expect(state).toEqual({
             __identifier: 'stringified',
             hello: {
@@ -339,7 +361,6 @@ Array [
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
-            renderToString,
             searchClient,
             indexName: 'hello',
           }),
@@ -359,7 +380,10 @@ Array [
           ])
         ),
         serverPrefetch() {
-          return this.instantsearch.findResultsState(this);
+          return this.instantsearch.findResultsState({
+            component: this,
+            renderToString,
+          });
         },
       };
 
@@ -390,7 +414,6 @@ Array [
         mixins: [
           forceIsServerMixin,
           createServerRootMixin({
-            renderToString,
             searchClient,
             indexName: 'hello',
           }),
@@ -410,7 +433,10 @@ Array [
           ])
         ),
         serverPrefetch() {
-          return this.instantsearch.findResultsState(this);
+          return this.instantsearch.findResultsState({
+            component: this,
+            renderToString,
+          });
         },
       };
 
@@ -440,7 +466,6 @@ Array [
           mixins: [
             forceIsServerMixin,
             createServerRootMixin({
-              renderToString,
               searchClient,
               indexName: 'hello',
             }),
@@ -466,7 +491,10 @@ Array [
             ])
           ),
           serverPrefetch() {
-            return this.instantsearch.findResultsState(this);
+            return this.instantsearch.findResultsState({
+              component: this,
+              renderToString,
+            });
           },
         };
 
@@ -487,7 +515,6 @@ Array [
           mixins: [
             forceIsServerMixin,
             createServerRootMixin({
-              renderToString,
               searchClient,
               indexName: 'hello',
             }),
@@ -501,7 +528,7 @@ Array [
           serverPrefetch() {
             return (
               this.instantsearch
-                .findResultsState(this)
+                .findResultsState({ component: this, renderToString })
                 .then(res => {
                   expect(
                     this.instantsearch.mainIndex.getWidgets().map(w => w.$$type)
@@ -541,7 +568,6 @@ Array [
           mixins: [
             forceIsServerMixin,
             createServerRootMixin({
-              renderToString,
               searchClient,
               indexName: 'hello',
             }),
@@ -552,7 +578,7 @@ Array [
           serverPrefetch() {
             return (
               this.instantsearch
-                .findResultsState(this)
+                .findResultsState({ component: this, renderToString })
                 .then(res => {
                   expect(
                     this.instantsearch.mainIndex.getWidgets().map(w => w.$$type)
@@ -600,7 +626,6 @@ Array [
           mixins: [
             forceIsServerMixin,
             createServerRootMixin({
-              renderToString,
               searchClient,
               indexName: 'hello',
             }),
@@ -617,7 +642,10 @@ Array [
             ]);
           }),
           serverPrefetch() {
-            return this.instantsearch.findResultsState(this);
+            return this.instantsearch.findResultsState({
+              component: this,
+              renderToString,
+            });
           },
         };
 
@@ -638,7 +666,6 @@ Array [
       const app = {
         mixins: [
           createServerRootMixin({
-            renderToString,
             searchClient: createFakeClient(),
             indexName: 'hello',
           }),
@@ -685,7 +712,6 @@ Array [
       const app = {
         mixins: [
           createServerRootMixin({
-            renderToString,
             searchClient: createFakeClient(),
             indexName: 'movies',
           }),
@@ -724,7 +750,6 @@ Array [
       const app = {
         mixins: [
           createServerRootMixin({
-            renderToString,
             searchClient: createFakeClient(),
             indexName: 'hello',
           }),
@@ -763,7 +788,6 @@ Array [
       const app = {
         mixins: [
           createServerRootMixin({
-            renderToString,
             searchClient: createFakeClient(),
             indexName: 'hello',
           }),
@@ -803,7 +827,6 @@ Array [
       mount({
         mixins: [
           createServerRootMixin({
-            renderToString,
             searchClient: createFakeClient(),
             indexName: 'lol',
           }),
@@ -875,7 +898,6 @@ Object {
         mount({
           mixins: [
             createServerRootMixin({
-              renderToString,
               searchClient: createFakeClient(),
               indexName: 'lol',
             }),
@@ -909,7 +931,6 @@ Object {
         mount({
           mixins: [
             createServerRootMixin({
-              renderToString,
               searchClient: createFakeClient(),
               indexName: 'lol',
             }),

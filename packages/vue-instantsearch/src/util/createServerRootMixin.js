@@ -80,8 +80,7 @@ function augmentInstantSearch(
   instantSearchOptions,
   searchClient,
   indexName,
-  cloneComponent,
-  renderToString
+  cloneComponent
 ) {
   /* eslint-disable no-param-reassign */
 
@@ -92,21 +91,29 @@ function augmentInstantSearch(
 
   /**
    * main API for SSR, called in serverPrefetch of a root component which contains instantsearch
-   * @param {object} componentInstance the calling component's `this`
+   * @param {Object} props the object including `component` and `renderToString`
+   * @param {Object} props.component the calling component's `this`
+   * @param {Function} props.renderToString the function to render componentInstance to string
    * @returns {Promise} result of the search, to save for .hydrate
    */
-  search.findResultsState = function(componentInstance) {
+  search.findResultsState = function({ component, renderToString }) {
+    if (!renderToString) {
+      throw new Error(
+        'findResultsState requires `renderToString: (component) => Promise<string>` in the first argument.'
+      );
+    }
+
     let app;
-    let renderedComponentInstance;
+    let renderedComponent;
 
     return Promise.resolve()
       .then(() => {
-        app = cloneComponent(componentInstance, {
+        app = cloneComponent(component, {
           mixins: [
             {
               created() {
                 // eslint-disable-next-line consistent-this
-                renderedComponentInstance = this;
+                renderedComponent = this;
                 this.instantsearch.helper = helper;
                 this.instantsearch.mainHelper = helper;
 
@@ -124,7 +131,7 @@ function augmentInstantSearch(
       .then(() => searchOnlyWithDerivedHelpers(helper))
       .then(() => {
         const results = {};
-        walkIndex(renderedComponentInstance.instantsearch.mainIndex, widget => {
+        walkIndex(renderedComponent.instantsearch.mainIndex, widget => {
           results[widget.getIndexId()] = widget.getResults();
         });
 
@@ -258,7 +265,6 @@ export function createServerRootMixin(instantSearchOptions = {}) {
   const {
     searchClient,
     indexName,
-    renderToString,
     $cloneComponent = defaultCloneComponent,
   } = instantSearchOptions;
 
@@ -268,18 +274,11 @@ export function createServerRootMixin(instantSearchOptions = {}) {
     );
   }
 
-  if (!renderToString) {
-    throw new Error(
-      'createServerRootMixin requires `renderToString: (app) => Promise<string>` in the first argument'
-    );
-  }
-
   const search = augmentInstantSearch(
     instantSearchOptions,
     searchClient,
     indexName,
-    $cloneComponent,
-    renderToString
+    $cloneComponent
   );
 
   // put this in the user's root Vue instance
