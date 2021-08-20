@@ -16,7 +16,7 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "4.0.0-beta.2",
+  "version": "4.0.0-beta.3",
   "files": [
     "vue2",
     "vue3",

@@ -1,3 +1,12 @@
+# [4.0.0-beta.3](https://github.com/algolia/vue-instantsearch/compare/v4.0.0-beta.2...v4.0.0-beta.3) (2021-08-20)
+
+
+### Bug Fixes
+
+* **vue 3:** pass renderToString to findResultsState instead of createServerRootMixin ([#1044](https://github.com/algolia/vue-instantsearch/issues/1044)) ([43aed4f](https://github.com/algolia/vue-instantsearch/commit/43aed4f50a0bdfda301e047e84badc6e41892e7c))
+
+
+
 # [4.0.0-beta.2](https://github.com/algolia/vue-instantsearch/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2021-08-19)
 
 
