@@ -146,7 +146,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
       init(initOptions) {
         const { state, instantSearchInstance } = initOptions;
-        const answersIndex = instantSearchInstance.client!.initIndex!(
+        const answersIndex = instantSearchInstance.client.initIndex!(
           state.index
         );
         if (!hasFindAnswersMethod(answersIndex)) {

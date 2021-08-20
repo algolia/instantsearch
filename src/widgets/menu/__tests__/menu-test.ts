@@ -48,7 +48,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/"
       const helper = jsHelper(createSearchClient(), '');
 
       helper.setState(
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       );
@@ -95,7 +95,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/"
       const helper = jsHelper(createSearchClient(), '');
 
       helper.setState(
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       );

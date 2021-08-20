@@ -106,7 +106,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       attribute,
     });
 
-    const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
+    const config = widget.getWidgetSearchParameters(new SearchParameters(), {
       uiState: {},
     });
     expect(config).toEqual(
@@ -179,7 +179,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       makeWidget({
         attribute,
         min: 0,
-      }).getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      }).getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: [attribute],
@@ -193,7 +193,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       makeWidget({
         attribute,
         max: 100,
-      }).getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      }).getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: [attribute],
@@ -208,7 +208,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute,
         min: 0,
         max: 100,
-      }).getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      }).getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: [attribute],
@@ -234,7 +234,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -295,7 +295,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -327,7 +327,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
     const attribute = 'price';
     const widget = makeWidget({ attribute, min: 0, max: 500 });
-    const configuration = widget.getWidgetSearchParameters!(
+    const configuration = widget.getWidgetSearchParameters(
       new SearchParameters({
         index: 'movie',
       }),
@@ -375,7 +375,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -434,7 +434,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(createSearchClient(), '');
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { range } = widget.getWidgetRenderState(
@@ -459,7 +459,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(createSearchClient(), '');
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { range } = widget.getWidgetRenderState(
@@ -484,7 +484,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(createSearchClient(), '');
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { range } = widget.getWidgetRenderState(
@@ -509,7 +509,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(createSearchClient(), '');
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { range } = widget.getWidgetRenderState(
@@ -534,7 +534,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(createSearchClient(), '');
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { range } = widget.getWidgetRenderState(
@@ -559,7 +559,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(createSearchClient(), '');
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { range } = widget.getWidgetRenderState(
@@ -587,7 +587,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { start } = widget.getWidgetRenderState(
@@ -609,7 +609,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 100);
@@ -634,7 +634,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
       helper.addNumericRefinement(attribute, '>=', 10.9);
       helper.addNumericRefinement(attribute, '<=', 99.1);
@@ -706,7 +706,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -736,7 +736,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -765,7 +765,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -795,7 +795,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute, min: 10 });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -826,7 +826,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -859,7 +859,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '>=', 10);
@@ -892,7 +892,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '>=', 10);
@@ -925,7 +925,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '>=', 10);
@@ -959,7 +959,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '>=', 10);
@@ -993,7 +993,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '>=', 10);
@@ -1025,7 +1025,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '<=', 490);
@@ -1060,7 +1060,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '>=', 20);
@@ -1093,7 +1093,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '>=', 240);
@@ -1123,7 +1123,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -1151,7 +1151,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -1179,7 +1179,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -1207,7 +1207,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const widget = connectRange(rendering)({ attribute });
 
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       helper.addNumericRefinement(attribute, '>=', 10);
@@ -1237,7 +1237,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
       helper.setState(
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} })
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
       const { refine } = widget.getWidgetRenderState(
@@ -1271,7 +1271,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1289,7 +1289,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1310,7 +1310,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1357,7 +1357,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           helper,
@@ -1384,7 +1384,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           helper,
@@ -1410,7 +1410,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           helper,
@@ -1440,7 +1440,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           helper,
@@ -1471,7 +1471,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           helper,
@@ -1502,7 +1502,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           helper,
@@ -1533,7 +1533,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           helper,
@@ -1564,7 +1564,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {
           range: {
             age: '16:',
@@ -1802,7 +1802,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1828,7 +1828,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1846,7 +1846,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {
             price: '100:1000',
@@ -1871,7 +1871,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {
             price: '100:',
@@ -1895,7 +1895,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {
             price: ':1000',
@@ -1919,7 +1919,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {},
         },
@@ -1939,7 +1939,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {
             price: 'min:max',
@@ -1961,7 +1961,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {
             price: 'wrong-format',
@@ -1989,7 +1989,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute: 'price',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {
             price: '100:1000',
@@ -2021,7 +2021,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         max: 500,
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {
             price: '0:400',
@@ -2045,7 +2045,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         max: 500,
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           range: {
             price: '-20:600',
@@ -2065,7 +2065,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute,
       });
 
-      const actual = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
 
@@ -2086,7 +2086,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         max: 500,
       });
 
-      const actual = widget.getWidgetSearchParameters!(
+      const actual = widget.getWidgetSearchParameters(
         new SearchParameters({
           numericRefinements: {
             price: {
@@ -2125,7 +2125,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         },
       });
 
-      const actual = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
 
@@ -2148,7 +2148,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         },
       });
 
-      const actual = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
 
@@ -2173,7 +2173,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         },
       });
 
-      const actual = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
 
@@ -2228,7 +2228,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );

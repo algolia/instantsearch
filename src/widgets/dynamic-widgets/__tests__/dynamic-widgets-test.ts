@@ -161,7 +161,7 @@ describe('dynamicWidgets()', () => {
         }),
       ]);
 
-      indexWidget.init!(createInitOptions({ instantSearchInstance }));
+      indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
       instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
@@ -172,7 +172,7 @@ describe('dynamicWidgets()', () => {
           createMultiSearchResponse({}).results
         );
 
-      indexWidget.render!(createRenderOptions({ instantSearchInstance }));
+      indexWidget.render(createRenderOptions({ instantSearchInstance }));
 
       await wait(0);
 
@@ -237,7 +237,7 @@ describe('dynamicWidgets()', () => {
         }),
       ]);
 
-      indexWidget.init!(createInitOptions({ instantSearchInstance }));
+      indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
       instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
@@ -248,7 +248,7 @@ describe('dynamicWidgets()', () => {
           createMultiSearchResponse({}).results
         );
 
-      indexWidget.render!(createRenderOptions({ instantSearchInstance }));
+      indexWidget.render(createRenderOptions({ instantSearchInstance }));
 
       await wait(0);
 
@@ -317,7 +317,7 @@ describe('dynamicWidgets()', () => {
         }),
       ]);
 
-      indexWidget.init!(createInitOptions({ instantSearchInstance }));
+      indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
       instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
@@ -330,7 +330,7 @@ describe('dynamicWidgets()', () => {
           }).results
         );
 
-      indexWidget.render!(createRenderOptions({ instantSearchInstance }));
+      indexWidget.render(createRenderOptions({ instantSearchInstance }));
 
       await wait(0);
 
@@ -374,7 +374,7 @@ describe('dynamicWidgets()', () => {
           }).results
         );
 
-      indexWidget.render!(createRenderOptions({ instantSearchInstance }));
+      indexWidget.render(createRenderOptions({ instantSearchInstance }));
 
       expect(rootContainer).toMatchInlineSnapshot(`
         <div>
@@ -445,7 +445,7 @@ describe('dynamicWidgets()', () => {
         }),
       ]);
 
-      indexWidget.init!(createInitOptions({ instantSearchInstance }));
+      indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
       instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
@@ -458,7 +458,7 @@ describe('dynamicWidgets()', () => {
           }).results
         );
 
-      indexWidget.render!(createRenderOptions({ instantSearchInstance }));
+      indexWidget.render(createRenderOptions({ instantSearchInstance }));
 
       await wait(0);
 
@@ -524,7 +524,7 @@ describe('dynamicWidgets()', () => {
         }),
       ]);
 
-      indexWidget.init!(createInitOptions({ instantSearchInstance }));
+      indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
       instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
@@ -537,7 +537,7 @@ describe('dynamicWidgets()', () => {
           }).results
         );
 
-      indexWidget.render!(createRenderOptions({ instantSearchInstance }));
+      indexWidget.render(createRenderOptions({ instantSearchInstance }));
 
       await wait(0);
 

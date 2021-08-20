@@ -247,7 +247,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     createURL(nextState: SearchParameters) {
-      return localInstantSearchInstance!._createURL!({
+      return localInstantSearchInstance!._createURL({
         [indexId]: getLocalWidgetsUiState(localWidgets, {
           searchParameters: nextState,
           helper: helper!,
@@ -432,7 +432,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // aware of the `searchClient`).
       helper.search = () => {
         if (instantSearchInstance.onStateChange) {
-          instantSearchInstance.onStateChange!({
+          instantSearchInstance.onStateChange({
             uiState: instantSearchInstance.mainIndex.getWidgetUiState({}),
             setUiState: instantSearchInstance.setUiState.bind(
               instantSearchInstance

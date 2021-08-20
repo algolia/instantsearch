@@ -296,11 +296,11 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           sendEvent = createSendEventForHits({
             instantSearchInstance,
             index: helper.getIndex(),
-            widgetType: this.$$type!,
+            widgetType: this.$$type,
           });
           bindEvent = createBindEventForHits({
             index: helper.getIndex(),
-            widgetType: this.$$type!,
+            widgetType: this.$$type,
           });
           isFirstPage =
             helper.state.page === undefined ||

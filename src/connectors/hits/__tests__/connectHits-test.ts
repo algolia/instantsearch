@@ -508,8 +508,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(renderState2.hits).toEqual({
         hits: expectedHits,
-        sendEvent: renderState1.hits!.sendEvent,
-        bindEvent: renderState1.hits!.bindEvent,
+        sendEvent: renderState1.hits.sendEvent,
+        bindEvent: renderState1.hits.bindEvent,
         results,
         widgetParams: {},
       });

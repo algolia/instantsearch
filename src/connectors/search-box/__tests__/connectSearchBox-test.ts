@@ -348,10 +348,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       const renderState2 = searchBox.getRenderState({}, createRenderOptions());
 
       expect(renderState2.searchBox).toEqual({
-        clear: renderState1.searchBox!.clear,
+        clear: renderState1.searchBox.clear,
         isSearchStalled: false,
         query: '',
-        refine: renderState1.searchBox!.refine,
+        refine: renderState1.searchBox.refine,
         widgetParams: {
           queryHook,
         },

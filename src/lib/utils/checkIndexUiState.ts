@@ -156,7 +156,7 @@ ${missingWidgets
     return `- \`${stateParameter}\` needs one of these widgets: ${(
       [] as string[]
     )
-      .concat(...widgets.map((name) => getWidgetNames(name!)))
+      .concat(...widgets.map((name) => getWidgetNames(name)))
       .map((name: string) => `"${name}"`)
       .join(', ')}`;
   })

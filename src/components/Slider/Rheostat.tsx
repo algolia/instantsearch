@@ -303,7 +303,7 @@ class Rheostat extends Component<Props, State> {
     if (!this.props.snapPoints!.length) return value;
 
     return this.props.snapPoints!.reduce((snapTo, snap) =>
-      Math.abs(snapTo! - value) < Math.abs(snap - value) ? snapTo : snap
+      Math.abs(snapTo - value) < Math.abs(snap - value) ? snapTo : snap
     );
   }
 

@@ -176,7 +176,7 @@ search.addWidgets([
           const sendEvent = createSendEventForHits({
             instantSearchInstance,
             index: scopedResult.results.index,
-            widgetType: this.$$type!,
+            widgetType: this.$$type,
           });
 
           return {
@@ -191,7 +191,7 @@ search.addWidgets([
         return {
           currentRefinement: helper.state.query || '',
           indices,
-          refine: connectorState.refine!,
+          refine: connectorState.refine,
           widgetParams,
         };
       },

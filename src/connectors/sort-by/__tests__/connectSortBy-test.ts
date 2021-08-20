@@ -706,7 +706,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         const uiState = {};
         const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters!(
+        const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
@@ -722,7 +722,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         };
 
         const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters!(
+        const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
@@ -741,7 +741,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         const uiState = {};
         const searchParametersBefore = new SearchParameters(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters!(
+        const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
@@ -764,7 +764,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           ],
         });
 
-        const actual = widget.getWidgetSearchParameters!(
+        const actual = widget.getWidgetSearchParameters(
           new SearchParameters({
             index: 'relevance',
           }),

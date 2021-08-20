@@ -371,7 +371,7 @@ const connectRefinementList: RefinementListConnector =
               instantSearchInstance,
               helper,
               attribute,
-              widgetType: this.$$type!,
+              widgetType: this.$$type,
             });
 
             triggerRefine = (facetValue) => {

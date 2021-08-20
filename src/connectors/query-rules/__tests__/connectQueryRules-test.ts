@@ -413,7 +413,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         // Query parameters are initially set in the helper.
         // Therefore, `ruleContexts` should be set.
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
+        expect(helper.state.ruleContexts).toEqual([
           'ais-brand-Samsung',
           'ais-brand-Apple',
           'ais-price-500',
@@ -446,9 +446,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
-          'overriden-rule',
-        ]);
+        expect(helper.state.ruleContexts).toEqual(['overriden-rule']);
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
         expect(brandFilterSpy).toHaveBeenCalledWith([]);
       });
@@ -475,9 +473,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         );
 
         // There's no results yet, so no `ruleContexts` should be set.
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
@@ -502,9 +498,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         // There are some results with the facets that we track in the
         // widget but the query parameters are not set in the helper.
         // Therefore, no `ruleContexts` should be set.
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
@@ -542,7 +536,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         // The search state contains the facets that we track,
         // therefore the `ruleContexts` should finally be set.
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
+        expect(helper.state.ruleContexts).toEqual([
           'ais-brand-Samsung',
           'ais-brand-Apple',
           'ais-price-500',
@@ -574,9 +568,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
 
         widget.render!(
@@ -597,9 +589,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
 
         helper.setState({
@@ -626,9 +616,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
-          'ais-brand-Samsung',
-        ]);
+        expect(helper.state.ruleContexts).toEqual(['ais-brand-Samsung']);
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
         expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung', 'Apple']);
       });
@@ -650,9 +638,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
         widget.render!(
@@ -666,9 +652,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
         helper.setState({
@@ -691,9 +675,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
-          'ais-price-500',
-        ]);
+        expect(helper.state.ruleContexts).toEqual(['ais-price-500']);
         expect(priceFilterSpy).toHaveBeenCalledTimes(1);
         expect(priceFilterSpy).toHaveBeenCalledWith([500, 400, 100]);
       });
@@ -718,9 +700,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(querySpy).toHaveBeenCalledTimes(0);
 
         widget.render!(
@@ -734,9 +714,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(querySpy).toHaveBeenCalledTimes(0);
 
         helper.setState({
@@ -754,9 +732,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
-          'ais-query-cats_are_cool',
-        ]);
+        expect(helper.state.ruleContexts).toEqual(['ais-query-cats_are_cool']);
         expect(querySpy).toHaveBeenCalledTimes(1);
         expect(querySpy).toHaveBeenCalledWith(['cats are cool']);
 
@@ -775,7 +751,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toBeUndefined();
+        expect(helper.state.ruleContexts).toBeUndefined();
         expect(querySpy).toHaveBeenCalledTimes(2);
         expect(querySpy).toHaveBeenCalledWith(['dogs are cool']);
       });
@@ -822,7 +798,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
+        expect(helper.state.ruleContexts).toEqual([
           'ais-brand-Insignia_',
           'ais-brand-_Apple',
         ]);
@@ -899,10 +875,8 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toHaveLength(
-          10
-        );
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
+        expect(helper.state.ruleContexts).toHaveLength(10);
+        expect(helper.state.ruleContexts).toEqual([
           'ais-brand-Insignia',
           'ais-brand-Canon',
           'ais-brand-Dynex',
@@ -959,7 +933,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
+        expect(helper.state.ruleContexts).toEqual([
           'initial-rule',
           'ais-brand-Samsung',
           'ais-brand-Apple',
@@ -989,9 +963,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           },
         });
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
 
         widget.init!(
           createInitOptions({
@@ -1000,9 +972,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           })
         );
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
-          'ais-brand-Samsung',
-        ]);
+        expect(helper.state.ruleContexts).toEqual(['ais-brand-Samsung']);
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
         expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung']);
 
@@ -1014,9 +984,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           },
         });
 
-        expect((helper.state as SearchParameters).ruleContexts).toEqual(
-          undefined
-        );
+        expect(helper.state.ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
       });
     });
@@ -1072,7 +1040,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           'ais-brand-Samsung',
           'ais-brand-Apple',
         ]);
-        expect((helper.state as SearchParameters).ruleContexts).toEqual([
+        expect(helper.state.ruleContexts).toEqual([
           'initial-rule',
           'transformed-brand-Samsung',
           'transformed-brand-Apple',

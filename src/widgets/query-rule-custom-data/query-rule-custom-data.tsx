@@ -67,7 +67,7 @@ const renderer =
   ({ items }: QueryRulesRenderState) => {
     render(
       <CustomData
-        cssClasses={cssClasses as QueryRuleCustomDataComponentCSSClasses}
+        cssClasses={cssClasses}
         templates={templates}
         items={items}
       />,

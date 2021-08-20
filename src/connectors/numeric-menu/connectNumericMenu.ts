@@ -354,11 +354,11 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         }
 
         return {
-          createURL: connectorState.createURL!(state),
+          createURL: connectorState.createURL(state),
           items: transformItems(prepareItems(state)),
           hasNoResults: results ? results.nbHits === 0 : true,
-          refine: connectorState.refine!,
-          sendEvent: connectorState.sendEvent!,
+          refine: connectorState.refine,
+          sendEvent: connectorState.sendEvent,
           widgetParams,
         };
       },
@@ -372,9 +372,7 @@ function isRefined(
   option: NumericMenuConnectorParamsItem
 ) {
   // @TODO: same as another spot, why is this mixing arrays & elements?
-  const currentRefinements = state.getNumericRefinements(
-    attribute
-  ) as SearchParameters.OperatorList;
+  const currentRefinements = state.getNumericRefinements(attribute);
 
   if (option.start !== undefined && option.end !== undefined) {
     if (option.start === option.end) {
@@ -409,9 +407,7 @@ function getRefinedState(
   const refinedOption = JSON.parse(decodeURI(facetValue));
 
   // @TODO: why is array / element mixed here & hasRefinements; seems wrong?
-  const currentRefinements = resolvedState.getNumericRefinements(
-    attribute
-  ) as SearchParameters.OperatorList;
+  const currentRefinements = resolvedState.getNumericRefinements(attribute);
 
   if (refinedOption.start === undefined && refinedOption.end === undefined) {
     return resolvedState.removeNumericRefinement(attribute);

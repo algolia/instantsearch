@@ -252,7 +252,7 @@ const connectMenu: MenuConnector = function connectMenu(
             instantSearchInstance,
             helper,
             attribute,
-            widgetType: this.$$type!,
+            widgetType: this.$$type,
           });
         }
 

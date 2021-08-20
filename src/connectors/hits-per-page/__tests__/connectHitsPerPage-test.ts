@@ -116,7 +116,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     expect(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     ).toEqual(
@@ -244,7 +244,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     expect(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     ).toEqual(
@@ -265,7 +265,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     expect(
-      widget.getWidgetSearchParameters!(
+      widget.getWidgetSearchParameters(
         new SearchParameters({ hitsPerPage: 20 }),
         { uiState: {} }
       )
@@ -952,7 +952,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -978,7 +978,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -1003,7 +1003,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -1030,7 +1030,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1049,7 +1049,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           hitsPerPage: 22,
         },
@@ -1072,7 +1072,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           hitsPerPage: 33,
         },

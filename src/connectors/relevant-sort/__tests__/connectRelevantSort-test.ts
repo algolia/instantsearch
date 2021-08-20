@@ -46,7 +46,7 @@ describe('connectRelevantSort', () => {
     );
     refine(10);
     expect(
-      widget.getWidgetSearchParameters!(helper.state, {
+      widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       }).relevancyStrictness
     ).toEqual(10);
@@ -245,7 +245,7 @@ describe('connectRelevantSort', () => {
       const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
-      const widgetUiState = widget.getWidgetUiState!(
+      const widgetUiState = widget.getWidgetUiState(
         {},
         { helper, searchParameters: helper.state }
       );
@@ -264,7 +264,7 @@ describe('connectRelevantSort', () => {
       refine(25);
 
       expect(
-        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState({}, { helper, searchParameters: helper.state })
       ).toEqual({
         relevantSort: 25,
       });
@@ -276,7 +276,7 @@ describe('connectRelevantSort', () => {
       const widget = makeWidget({});
 
       expect(
-        widget.getWidgetUiState!(
+        widget.getWidgetUiState(
           { relevantSort: 25 },
           { helper, searchParameters: helper.state }
         )
@@ -291,7 +291,7 @@ describe('connectRelevantSort', () => {
 
       // applies 30 from searchParameters
       expect(
-        widget.getWidgetUiState!(
+        widget.getWidgetUiState(
           { relevantSort: 25 },
           { helper, searchParameters: helper.state }
         )
@@ -306,7 +306,7 @@ describe('connectRelevantSort', () => {
       const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
-      const searchParameters = widget.getWidgetSearchParameters!(
+      const searchParameters = widget.getWidgetSearchParameters(
         new SearchParameters(),
         {
           uiState: {},
@@ -319,7 +319,7 @@ describe('connectRelevantSort', () => {
       const makeWidget = connectRelevantSort(noop);
       const widget = makeWidget({});
 
-      const searchParameters = widget.getWidgetSearchParameters!(
+      const searchParameters = widget.getWidgetSearchParameters(
         new SearchParameters(),
         {
           uiState: {
@@ -342,7 +342,7 @@ describe('connectRelevantSort', () => {
       );
       refine(25);
 
-      const searchParameters = widget.getWidgetSearchParameters!(helper.state, {
+      const searchParameters = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
       expect(searchParameters.relevancyStrictness).toEqual(25);
@@ -358,7 +358,7 @@ describe('connectRelevantSort', () => {
       );
       refine(25);
 
-      const searchParameters = widget.getWidgetSearchParameters!(
+      const searchParameters = widget.getWidgetSearchParameters(
         new SearchParameters(),
         {
           uiState: {
