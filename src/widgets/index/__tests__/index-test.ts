@@ -167,6 +167,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       }).toThrow();
 
       expect(() => {
+        // @ts-expect-error
         instance.addWidgets(createWidget());
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`addWidgets\` method expects an array of widgets.
@@ -434,6 +435,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       }).toThrow();
 
       expect(() => {
+        // @ts-expect-error
         instance.removeWidgets(createWidget());
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`removeWidgets\` method expects an array of widgets.
