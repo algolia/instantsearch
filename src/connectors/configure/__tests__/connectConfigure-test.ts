@@ -88,7 +88,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     expect(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     ).toEqual(
@@ -107,7 +107,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     expect(
-      widget.getWidgetSearchParameters!(
+      widget.getWidgetSearchParameters(
         new SearchParameters({
           analytics: false,
         }),
@@ -120,7 +120,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
 
     expect(
-      widget.getWidgetSearchParameters!(
+      widget.getWidgetSearchParameters(
         new SearchParameters({
           analytics: false,
           clickAnalytics: true,
@@ -145,7 +145,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     helper.setState(
-      widget.getWidgetSearchParameters!(
+      widget.getWidgetSearchParameters(
         new SearchParameters({
           // This facet is added outside of the widget params
           // so it shouldn't be overridden when calling `refine`.
@@ -157,7 +157,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     widget.init!(createInitOptions({ helper }));
 
     expect(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: { configure: { analytics: true } },
       })
     ).toEqual(
@@ -177,7 +177,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     refine({ hitsPerPage: 3, facets: ['rating'] });
 
     expect(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: { configure: { hitsPerPage: 3, facets: ['rating'] } },
       })
     ).toEqual(
@@ -203,7 +203,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     helper.setState(
-      widget.getWidgetSearchParameters!(
+      widget.getWidgetSearchParameters(
         new SearchParameters({
           clickAnalytics: true,
         }),
@@ -213,7 +213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     widget.init!(createInitOptions({ helper }));
 
     expect(
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: { configure: { analytics: true } },
       })
     ).toEqual(
@@ -374,7 +374,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { analytics: true },
       });
@@ -395,7 +395,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       refine({ analytics: false });
 
       expect(
-        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { analytics: false },
       });
@@ -416,7 +416,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       refine({ query: 'unsafe toys' });
 
       expect(
-        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { query: 'unsafe toys' },
       });
@@ -431,7 +431,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetUiState!(
+        widget.getWidgetUiState(
           { configure: { queryType: 'prefixAll' } },
           { helper, searchParameters: helper.state }
         )
@@ -449,7 +449,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetUiState!(
+        widget.getWidgetUiState(
           { configure: { analytics: false } },
           { helper, searchParameters: helper.state }
         )
@@ -468,7 +468,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         },
       });
 
-      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
 
@@ -479,7 +479,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       const makeWidget = connectConfigure(noop);
       const widget = makeWidget({ searchParameters: {} });
 
-      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {
           configure: {
             analytics: false,
@@ -498,7 +498,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         },
       });
 
-      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {
           configure: {
             analytics: false,
@@ -517,7 +517,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         },
       });
 
-      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {
           configure: {
             analytics: false,
@@ -544,7 +544,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         },
       });
 
-      const sp = widget.getWidgetSearchParameters!(
+      const sp = widget.getWidgetSearchParameters(
         new SearchParameters({
           disjunctiveFacets: ['categories'],
           disjunctiveFacetsRefinements: {
@@ -581,7 +581,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
       refine({ analyticsTags: ['worst-site-now'] });
 
-      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
 

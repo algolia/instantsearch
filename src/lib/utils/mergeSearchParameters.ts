@@ -30,7 +30,7 @@ const mergeFacets: Merger = (left, right) =>
   right.facets!.reduce((_, name) => _.addFacet(name), left);
 
 const mergeDisjunctiveFacets: Merger = (left, right) =>
-  right.disjunctiveFacets!.reduce(
+  right.disjunctiveFacets.reduce(
     (_, name) => _.addDisjunctiveFacet(name),
     left
   );
@@ -53,7 +53,7 @@ const mergeHierarchicalFacets: Merger = (left, right) =>
 
 // Merge facet refinements
 const mergeTagRefinements: Merger = (left, right) =>
-  right.tagRefinements!.reduce((_, value) => _.addTagRefinement(value), left);
+  right.tagRefinements.reduce((_, value) => _.addTagRefinement(value), left);
 
 const mergeFacetRefinements: Merger = (left, right) =>
   left.setQueryParameters({

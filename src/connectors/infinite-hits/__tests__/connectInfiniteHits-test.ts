@@ -942,7 +942,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       });
       const widget = makeWidget({});
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -965,7 +965,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -986,7 +986,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -1009,7 +1009,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -1103,13 +1103,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(renderState2.infiniteHits).toEqual({
         hits: expectedHits,
         currentPageHits: expectedCurrentPageHits,
-        sendEvent: renderState1.infiniteHits!.sendEvent,
-        bindEvent: renderState1.infiniteHits!.bindEvent,
+        sendEvent: renderState1.infiniteHits.sendEvent,
+        bindEvent: renderState1.infiniteHits.bindEvent,
         isFirstPage: true,
         isLastPage: true,
         results,
-        showMore: renderState1.infiniteHits!.showMore,
-        showPrevious: renderState1.infiniteHits!.showPrevious,
+        showMore: renderState1.infiniteHits.showMore,
+        showPrevious: renderState1.infiniteHits.showPrevious,
         widgetParams: {},
       });
     });
@@ -1215,7 +1215,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({});
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1231,7 +1231,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         escapeHTML: true,
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1247,7 +1247,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         escapeHTML: false,
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1263,7 +1263,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1278,7 +1278,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           page: 0,
         },
@@ -1295,7 +1295,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           page: 3,
         },

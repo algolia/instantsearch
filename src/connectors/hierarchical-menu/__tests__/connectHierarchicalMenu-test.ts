@@ -88,7 +88,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       attributes: ['category', 'sub_category'],
     });
 
-    const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
+    const config = widget.getWidgetSearchParameters(new SearchParameters(), {
       uiState: {},
     });
     expect(config).toEqual(
@@ -162,7 +162,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     const helper = algoliasearchHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -211,7 +211,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     const helper = algoliasearchHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -320,7 +320,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     const helper = algoliasearchHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -388,7 +388,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -407,7 +407,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -427,7 +427,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -468,7 +468,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         'indexName',
-        hierarchicalMenu.getWidgetSearchParameters!(new SearchParameters(), {
+        hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -525,7 +525,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         'indexName',
-        hierarchicalMenu.getWidgetSearchParameters!(new SearchParameters(), {
+        hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -560,7 +560,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
               }),
             ]),
           })
-        ).hierarchicalMenu!.category
+        ).hierarchicalMenu.category
       ).toEqual({
         items: [
           {
@@ -598,7 +598,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         'indexName',
-        hierarchicalMenu.getWidgetSearchParameters!(new SearchParameters(), {
+        hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -634,7 +634,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         'indexName',
-        hierarchicalMenu.getWidgetSearchParameters!(new SearchParameters(), {
+        hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -820,16 +820,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           const helper = algoliasearchHelper(
             createSearchClient(),
             'indexName',
-            hierarchicalMenu.getWidgetSearchParameters!(
-              new SearchParameters(),
-              {
-                uiState: {
-                  hierarchicalMenu: {
-                    category: ['Decoration'],
-                  },
+            hierarchicalMenu.getWidgetSearchParameters(new SearchParameters(), {
+              uiState: {
+                hierarchicalMenu: {
+                  category: ['Decoration'],
                 },
-              }
-            )
+              },
+            })
           );
 
           hierarchicalMenu.init!(createInitOptions({ helper }));
@@ -896,7 +893,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -929,7 +926,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -966,7 +963,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {
           hierarchicalMenu: {
             countryLvl0: ['TopLevelCountry', 'SubLevelCountry'],
@@ -1000,7 +997,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1040,7 +1037,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1067,7 +1064,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           hierarchicalMenu: {
             categoriesLvl0: ['TopLevel', 'SubLevel'],
@@ -1111,7 +1108,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           hierarchicalMenu: {
             categoriesLvl0: ['TopLevel', 'SubLevel'],
@@ -1143,7 +1140,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         separator: ' / ',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1159,7 +1156,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         rootPath: 'TopLevel > SubLevel',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1175,7 +1172,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         showParentLevel: true,
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1201,7 +1198,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
 
       expect(() =>
-        widget.getWidgetSearchParameters!(helper.state, {
+        widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         })
       ).toWarnDev();
@@ -1227,7 +1224,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
 
       expect(() =>
-        widget.getWidgetSearchParameters!(helper.state, {
+        widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         })
       ).toWarnDev();
@@ -1253,7 +1250,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
 
       expect(() =>
-        widget.getWidgetSearchParameters!(helper.state, {
+        widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         })
       ).toWarnDev();
@@ -1268,7 +1265,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           attributes: ['categoriesLvl0', 'categoriesLvl1'],
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1284,7 +1281,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           limit: 5,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1300,7 +1297,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           showMore: true,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1317,7 +1314,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           showMoreLimit: 15,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1335,7 +1332,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           attributes: ['categoriesLvl0', 'categoriesLvl1'],
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1354,7 +1351,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           limit: 110,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1376,7 +1373,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1501,7 +1498,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1618,7 +1615,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const helper = algoliasearchHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );

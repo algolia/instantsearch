@@ -355,7 +355,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     test('returns the `uiState` empty', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -371,7 +371,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
       helper.setQueryParameter('page', 4);
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -389,7 +389,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     test('returns the `SearchParameters` with the value from `uiState`', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           page: 5,
         },
@@ -406,7 +406,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     test('returns the `SearchParameters` with the default value', () => {
       const [widget, helper] = getInitializedWidget();
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -424,7 +424,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       helper.setPage(200);
       expect(helper.state.page).toBe(200);
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 

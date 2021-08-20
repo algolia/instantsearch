@@ -74,7 +74,7 @@ describe('connectGeoSearch', () => {
       })
     );
 
-    const results = new SearchResults(helper!.state, [
+    const results = new SearchResults(helper.state, [
       createSingleSearchResponse({
         hits,
       }),

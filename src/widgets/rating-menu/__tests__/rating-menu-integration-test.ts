@@ -21,7 +21,7 @@ function getInitializedWidget() {
   const helper = jsHelper(
     createSearchClient(),
     '',
-    widget.getWidgetSearchParameters!(new SearchParameters({}), {
+    widget.getWidgetSearchParameters(new SearchParameters({}), {
       uiState: {},
     })
   );

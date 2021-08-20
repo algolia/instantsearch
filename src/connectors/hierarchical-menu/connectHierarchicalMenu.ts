@@ -324,7 +324,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
               instantSearchInstance,
               helper,
               attribute: hierarchicalFacetName,
-              widgetType: this.$$type!,
+              widgetType: this.$$type,
             });
           }
 

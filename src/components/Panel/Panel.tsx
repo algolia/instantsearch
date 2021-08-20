@@ -40,14 +40,15 @@ function Panel<TWidget extends UnknownWidgetFactory>(
   const bodyRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!bodyRef.current) {
+    const node = bodyRef.current;
+    if (!node) {
       return undefined;
     }
 
-    bodyRef.current.appendChild(props.bodyElement);
+    node.appendChild(props.bodyElement);
 
     return () => {
-      bodyRef!.current!.removeChild(props.bodyElement);
+      node.removeChild(props.bodyElement);
     };
   }, [bodyRef, props.bodyElement]);
 

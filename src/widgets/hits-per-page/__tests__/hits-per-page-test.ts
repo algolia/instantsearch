@@ -83,7 +83,7 @@ describe('hitsPerPage()', () => {
     });
 
     expect(
-      widgetWithDefaults.getWidgetSearchParameters!(new SearchParameters({}), {
+      widgetWithDefaults.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     ).toEqual(

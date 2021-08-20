@@ -55,7 +55,7 @@ describe('ratingMenu()', () => {
     helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -80,7 +80,7 @@ describe('ratingMenu()', () => {
 
   it('configures the underlying disjunctive facet', () => {
     expect(
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['anAttrName'],
@@ -231,7 +231,7 @@ describe('ratingMenu()', () => {
     const _helper = jsHelper(
       createSearchClient(),
       '',
-      _widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      _widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );

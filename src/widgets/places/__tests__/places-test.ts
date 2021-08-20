@@ -155,7 +155,7 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
         // Trigger the initialization of `aroundLatLngViaIP`.
-        widget.getWidgetSearchParameters!(helper.state, { uiState: {} });
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} });
 
         expect(helper.state.aroundLatLngViaIP).toBe(true);
 
@@ -198,7 +198,7 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const nextSearchParameters = widget.getWidgetSearchParameters!(
+        const nextSearchParameters = widget.getWidgetSearchParameters(
           helper.state,
           {
             uiState: {},
@@ -222,7 +222,7 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const nextSearchParameters = widget.getWidgetSearchParameters!(
+        const nextSearchParameters = widget.getWidgetSearchParameters(
           helper.state,
           {
             uiState: {
@@ -253,7 +253,7 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const nextSearchParameters = widget.getWidgetSearchParameters!(
+        const nextSearchParameters = widget.getWidgetSearchParameters(
           helper.state,
           {
             uiState: {
@@ -284,7 +284,7 @@ describe('places', () => {
 
         widget.init!(createInitOptions({ helper }));
 
-        const nextSearchParameters = widget.getWidgetSearchParameters!(
+        const nextSearchParameters = widget.getWidgetSearchParameters(
           helper.state,
           {
             uiState: {},
@@ -318,7 +318,7 @@ describe('places', () => {
           },
         };
 
-        widget.getWidgetSearchParameters!(previousSearchParameters, {
+        widget.getWidgetSearchParameters(previousSearchParameters, {
           uiState,
         });
 
@@ -348,7 +348,7 @@ describe('places', () => {
           0
         );
 
-        widget.getWidgetSearchParameters!(helper.state, {
+        widget.getWidgetSearchParameters(helper.state, {
           uiState: {
             places: {
               query: 'Paris, Île-de-France, France',
@@ -372,7 +372,7 @@ describe('places', () => {
         });
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetUiState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState(previousUiState, {
           helper,
           searchParameters: helper.state,
         });
@@ -389,7 +389,7 @@ describe('places', () => {
         });
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetUiState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState(previousUiState, {
           helper,
           searchParameters: helper.state,
         });
@@ -422,7 +422,7 @@ describe('places', () => {
         });
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetUiState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState(previousUiState, {
           helper,
           searchParameters: helper.state,
         });
@@ -452,7 +452,7 @@ describe('places', () => {
         clearEventListener();
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetUiState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState(previousUiState, {
           helper,
           searchParameters: helper.state,
         });
@@ -478,7 +478,7 @@ describe('places', () => {
         clearEventListener();
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetUiState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState(previousUiState, {
           helper,
           searchParameters: helper.state,
         });

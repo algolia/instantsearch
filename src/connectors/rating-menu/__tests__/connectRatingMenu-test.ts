@@ -24,7 +24,7 @@ describe('connectRatingMenu', () => {
       ...config,
     });
 
-    const initialConfig = widget.getWidgetSearchParameters!(
+    const initialConfig = widget.getWidgetSearchParameters(
       new SearchParameters({}),
       { uiState: {} }
     );
@@ -383,7 +383,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -410,7 +410,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -441,7 +441,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {
           ratingMenu: {
             rating: 4,
@@ -573,7 +573,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           createURL: expect.any(Function),
           canRefine: true,
           refine: expect.any(Function),
-          sendEvent: renderState1.ratingMenu!.grade.sendEvent,
+          sendEvent: renderState1.ratingMenu.grade.sendEvent,
           hasNoResults: true,
           widgetParams: {
             attribute: 'grade',
@@ -709,7 +709,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -739,7 +739,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -762,7 +762,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           ratingMenu: {
             grade: 3,
@@ -800,7 +800,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           ratingMenu: {
             grade: 3,

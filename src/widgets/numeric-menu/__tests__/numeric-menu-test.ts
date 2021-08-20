@@ -71,7 +71,7 @@ describe('numericMenu()', () => {
     helper = algoliasearchHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
 
     jest.spyOn(helper, 'search');

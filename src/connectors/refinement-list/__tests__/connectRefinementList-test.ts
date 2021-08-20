@@ -124,7 +124,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -144,7 +144,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -156,7 +156,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       );
 
       expect(
-        widget.getWidgetSearchParameters!(
+        widget.getWidgetSearchParameters(
           new SearchParameters({ maxValuesPerFacet: 100 }),
           { uiState: {} }
         )
@@ -181,7 +181,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       );
@@ -230,7 +230,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       secondRenderingOptions.toggleShowMore();
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       ).toEqual(
@@ -242,7 +242,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       );
 
       expect(
-        widget.getWidgetSearchParameters!(
+        widget.getWidgetSearchParameters(
           new SearchParameters({ maxValuesPerFacet: 100 }),
           { uiState: {} }
         )
@@ -266,7 +266,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       );
@@ -315,7 +315,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       secondRenderingOptions.toggleShowMore();
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       ).toEqual(
@@ -335,7 +335,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       ).toEqual(
@@ -357,7 +357,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 9,
     });
 
-    const config = widget.getWidgetSearchParameters!(new SearchParameters({}), {
+    const config = widget.getWidgetSearchParameters(new SearchParameters({}), {
       uiState: {},
     });
     expect(config).toEqual(
@@ -462,7 +462,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -529,7 +529,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -584,7 +584,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -640,7 +640,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -695,7 +695,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -756,7 +756,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -817,7 +817,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -881,7 +881,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -986,7 +986,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -1195,7 +1195,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper(createSearchClient(), '', {
-      ...widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       }),
       maxValuesPerFacet: 10,
@@ -1293,7 +1293,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper(createSearchClient(), '', {
-      ...widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       }),
       maxValuesPerFacet: 10,
@@ -1389,7 +1389,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -1475,7 +1475,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper(createSearchClient(), '', {
-      ...widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       }),
       maxValuesPerFacet: 3,
@@ -1566,7 +1566,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -1678,7 +1678,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -1754,7 +1754,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -1856,7 +1856,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper(createSearchClient(), '', {
-      ...widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       }),
       // Here we simulate that another widget has set some highlight tags
@@ -1962,7 +1962,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper(createSearchClient(), '', {
-      ...widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       }),
       // Here we simulate that another widget has set some highlight tags
@@ -2065,7 +2065,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       })
     );
@@ -2090,7 +2090,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       );
@@ -2185,7 +2185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       );
@@ -2276,7 +2276,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -2301,7 +2301,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -2330,7 +2330,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {
           refinementList: {
             categories: ['Phone', 'Tablet'],
@@ -2459,10 +2459,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
               value: 'Samsung',
             },
           ],
-          refine: renderState1.refinementList!.brand.refine,
+          refine: renderState1.refinementList.brand.refine,
           searchForItems: expect.any(Function),
           sendEvent: expect.any(Function),
-          toggleShowMore: renderState1.refinementList!.brand.toggleShowMore,
+          toggleShowMore: renderState1.refinementList.brand.toggleShowMore,
           widgetParams: {
             attribute: 'brand',
           },
@@ -2680,7 +2680,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           const helper = jsHelper(
             createSearchClient(),
             'indexName',
-            refinementList.getWidgetSearchParameters!(new SearchParameters(), {
+            refinementList.getWidgetSearchParameters(new SearchParameters(), {
               uiState: {
                 refinementList: { brand: ['Apple', 'Samsung'] },
               },
@@ -2734,7 +2734,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2750,7 +2750,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           limit: 5,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2766,7 +2766,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           showMore: true,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2783,7 +2783,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           showMoreLimit: 15,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2801,7 +2801,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2820,7 +2820,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           limit: 110,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2838,7 +2838,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           operator: 'and',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2863,7 +2863,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           operator: 'and',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2882,7 +2882,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           operator: 'and',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {
             refinementList: {
               brand: ['Apple', 'Samsung'],
@@ -2911,7 +2911,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           operator: 'and',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {
             refinementList: {
               brand: ['Apple', 'Samsung'],
@@ -2935,7 +2935,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2959,7 +2959,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -2977,7 +2977,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {
             refinementList: {
               brand: ['Apple', 'Samsung'],
@@ -3005,7 +3005,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {
             refinementList: {
               brand: ['Apple', 'Samsung'],
@@ -3034,7 +3034,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       );

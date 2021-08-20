@@ -131,7 +131,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
               toRemove.push(widget);
             }
           });
-          parent!.removeWidgets(toRemove);
+          parent.removeWidgets(toRemove);
 
           unmountFn();
         },

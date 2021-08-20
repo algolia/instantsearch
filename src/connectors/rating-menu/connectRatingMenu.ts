@@ -247,12 +247,12 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
     function getRefinedState(state: SearchParameters, facetValue: string) {
       const isRefined = getRefinedStar(state) === Number(facetValue);
 
-      const emptyState = state.resetPage().removeNumericRefinement(attribute!);
+      const emptyState = state.resetPage().removeNumericRefinement(attribute);
 
       if (!isRefined) {
         return emptyState
-          .addNumericRefinement(attribute!, '<=', max)
-          .addNumericRefinement(attribute!, '>=', Number(facetValue));
+          .addNumericRefinement(attribute, '<=', max)
+          .addNumericRefinement(attribute, '>=', Number(facetValue));
       }
       return emptyState;
     }

@@ -111,7 +111,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
         });
 
         helper.setState(
-          widget.getWidgetSearchParameters!(new SearchParameters({}), {
+          widget.getWidgetSearchParameters(new SearchParameters({}), {
             uiState: {
               menu: {
                 amazingBrand: 'algolia',

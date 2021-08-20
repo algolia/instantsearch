@@ -101,7 +101,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -127,7 +127,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -155,7 +155,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       limit: 9,
     });
 
-    const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
+    const config = widget.getWidgetSearchParameters(new SearchParameters(), {
       uiState: {},
     });
     expect(config).toEqual(
@@ -233,7 +233,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -283,7 +283,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -409,7 +409,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -472,7 +472,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters!!(new SearchParameters(), {
+      widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       })
     );
@@ -492,7 +492,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         'indexName',
-        menu.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+        menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
       );
 
       const renderState1 = menu.getRenderState(
@@ -500,7 +500,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         createInitOptions({ helper })
       );
 
-      expect(renderState1.menu!.brand).toEqual({
+      expect(renderState1.menu.brand).toEqual({
         items: [],
         createURL: expect.any(Function),
         refine: expect.any(Function),
@@ -523,7 +523,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         'indexName',
-        menu.getWidgetSearchParameters!(new SearchParameters(), {
+        menu.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -571,7 +571,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         'indexName',
-        menu.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+        menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
       );
 
       const renderState1 = menu.getWidgetRenderState(
@@ -601,7 +601,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         'indexName',
-        menu.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
+        menu.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
       );
 
       const renderState1 = menu.getWidgetRenderState(
@@ -749,7 +749,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           const helper = jsHelper(
             createSearchClient(),
             'indexName',
-            menu.getWidgetSearchParameters!(new SearchParameters(), {
+            menu.getWidgetSearchParameters(new SearchParameters(), {
               uiState: {},
             })
           );
@@ -800,7 +800,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -828,7 +828,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       expect(
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       ).toEqual(
@@ -857,7 +857,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
       const helper = jsHelper(createSearchClient(), '', config);
@@ -889,7 +889,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
       const helper = jsHelper(createSearchClient(), '', config);
@@ -959,7 +959,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
         uiState: {},
       });
       const helper = jsHelper(createSearchClient(), '', config);
@@ -1014,7 +1014,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -1042,7 +1042,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -1074,7 +1074,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetUiState!(
+      const actual = widget.getWidgetUiState(
         {
           menu: {
             categories: 'Phone',
@@ -1102,7 +1102,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1135,7 +1135,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
       });
 
@@ -1157,7 +1157,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           menu: {
             brand: 'Apple',
@@ -1194,7 +1194,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetSearchParameters!(helper.state, {
+      const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {
           menu: {
             brand: 'Apple',
@@ -1221,7 +1221,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1235,7 +1235,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           limit: 5,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1249,7 +1249,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           showMore: true,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1264,7 +1264,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           showMoreLimit: 15,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1280,7 +1280,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           attribute: 'brand',
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1297,7 +1297,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           limit: 110,
         });
 
-        const actual = widget.getWidgetSearchParameters!(helper.state, {
+        const actual = widget.getWidgetSearchParameters(helper.state, {
           uiState: {},
         });
 
@@ -1318,7 +1318,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1417,7 +1417,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         indexName,
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1460,7 +1460,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         'test',
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
@@ -1480,7 +1480,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         createSearchClient(),
         '',
-        widget.getWidgetSearchParameters!(new SearchParameters(), {
+        widget.getWidgetSearchParameters(new SearchParameters(), {
           uiState: {},
         })
       );
