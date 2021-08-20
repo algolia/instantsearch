@@ -121,9 +121,8 @@ const buildPayload: BuildPayload = ({
 };
 
 function removeEscapedFromHits(hits: Hits | EscapedHits): Hits {
-  // this returns without `hits.__escaped`
-  // and this way it doesn't mutate the original `hits`
-  return hits.map((hit) => hit);
+  // remove `hits.__escaped` without mutating
+  return hits.slice();
 }
 
 export function createSendEventForHits({
