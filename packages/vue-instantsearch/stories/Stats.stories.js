@@ -11,7 +11,7 @@ storiesOf('ais-stats', module)
   .add('custom rendering', () => ({
     template: `
       <ais-stats>
-        <template slot-scope="{nbHits, processingTimeMS}">
+        <template v-slot="{nbHits, processingTimeMS}">
           {{nbHits}} hits computed, in {{processingTimeMS}}ms 😲 Woh!
         </template>
       </ais-stats>

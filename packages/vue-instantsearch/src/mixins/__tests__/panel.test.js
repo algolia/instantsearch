@@ -1,4 +1,6 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount, nextTick } from '../../../test/utils';
+import mitt from 'mitt';
+import { isVue3 } from '../../util/vue-compat';
 import {
   createPanelProviderMixin,
   createPanelConsumerMixin,
@@ -7,15 +9,16 @@ import {
 } from '../panel';
 
 const createFakeEmitter = () => ({
-  $on: jest.fn(),
-  $emit: jest.fn(),
-  $destroy: jest.fn(),
+  on: jest.fn(),
+  emit: jest.fn(),
+  all: {
+    clear: jest.fn(),
+  },
 });
 
-const createFakeComponent = localVue =>
-  localVue.component('Test', {
-    render: () => null,
-  });
+const createFakeComponent = () => ({
+  render: () => null,
+});
 
 describe('createPanelProviderMixin', () => {
   it('provides the emitter', () => {
@@ -29,9 +32,8 @@ describe('createPanelProviderMixin', () => {
   });
 
   it('registers to PANEL_CHANGE_EVENT on created', () => {
-    const localVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     mount(Test, {
       mixins: [createPanelProviderMixin()],
@@ -40,17 +42,16 @@ describe('createPanelProviderMixin', () => {
       },
     });
 
-    expect(emitter.$on).toHaveBeenCalledTimes(1);
-    expect(emitter.$on).toHaveBeenCalledWith(
+    expect(emitter.on).toHaveBeenCalledTimes(1);
+    expect(emitter.on).toHaveBeenCalledWith(
       PANEL_CHANGE_EVENT,
       expect.any(Function)
     );
   });
 
   it('clears the Vue instance on beforeDestroy', () => {
-    const LocalVue = createLocalVue();
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(LocalVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [createPanelProviderMixin()],
@@ -61,13 +62,12 @@ describe('createPanelProviderMixin', () => {
 
     wrapper.destroy();
 
-    expect(emitter.$destroy).toHaveBeenCalledTimes(1);
+    expect(emitter.all.clear).toHaveBeenCalledTimes(1);
   });
 
   it('updates canRefine on PANEL_CHANGE_EVENT', () => {
-    const LocalVue = createLocalVue();
-    const emitter = new LocalVue();
-    const Test = createFakeComponent(LocalVue);
+    const emitter = mitt();
+    const Test = createFakeComponent();
     const next = false;
 
     const wrapper = mount(Test, {
@@ -79,7 +79,7 @@ describe('createPanelProviderMixin', () => {
 
     expect(wrapper.vm.canRefine).toBe(true);
 
-    emitter.$emit(PANEL_CHANGE_EVENT, next);
+    emitter.emit(PANEL_CHANGE_EVENT, next);
 
     expect(wrapper.vm.canRefine).toBe(false);
   });
@@ -88,10 +88,9 @@ describe('createPanelProviderMixin', () => {
 describe('createPanelConsumerMixin', () => {
   const mapStateToCanRefine = state => state.attributeName;
 
-  it('emits PANEL_CHANGE_EVENT on `state.attributeName` change', () => {
-    const localVue = createLocalVue();
+  it('emits PANEL_CHANGE_EVENT on `state.attributeName` change', async () => {
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -104,25 +103,36 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: false,
+      },
+    });
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
-    wrapper.vm.state = {
-      attributeName: true,
-    };
+    if (isVue3) {
+      await wrapper.setData({ state: { attributeName: true } });
+    } else {
+      // ↓ this should be replaceable with `wrapper.setData()` but it didn't
+      // trigger the watcher in `createPanelConsumerMixin`.
+      // It's probably a bug from vue-test-utils.
+      // https://github.com/vuejs/vue-test-utils/issues/1756
+      // https://github.com/vuejs/vue-test-utils/issues/149
+      wrapper.vm.$set(wrapper.vm, 'state', {
+        attributeName: true,
+      });
+      await nextTick();
+    }
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(2);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
+    expect(emitter.emit).toHaveBeenCalledTimes(2);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
   });
 
-  it('emits once when both values are set', () => {
-    const localVue = createLocalVue();
+  it('emits once when both values are set', async () => {
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -135,24 +145,27 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: false,
+      },
+    });
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: false,
+      },
+    });
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('emits once on init of the component', () => {
-    const localVue = createLocalVue();
+  it('emits once on init of the component', async () => {
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -165,18 +178,19 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: true,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: true,
+      },
+    });
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
   });
 
-  it('do not emit when the next value is not set', () => {
-    const localVue = createLocalVue();
+  it('do not emit when the next value is not set', async () => {
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -189,22 +203,28 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: true,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: true,
+      },
+    });
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
-    wrapper.vm.state = null;
+    if (isVue3) {
+      await wrapper.setData({ state: null });
+    } else {
+      wrapper.vm.$set(wrapper.vm, 'state', null);
+      await nextTick();
+    }
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('do not emit when the previous and next value are equal', () => {
-    const localVue = createLocalVue();
+  it('do not emit when the previous and next value are equal', async () => {
     const emitter = createFakeEmitter();
-    const Test = createFakeComponent(localVue);
+    const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
       mixins: [
@@ -217,24 +237,32 @@ describe('createPanelConsumerMixin', () => {
       },
     });
 
-    wrapper.vm.state = {
-      attributeName: true,
-    };
+    await wrapper.setData({
+      state: {
+        attributeName: true,
+      },
+    });
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(1);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
+    expect(emitter.emit).toHaveBeenCalledTimes(1);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    if (isVue3) {
+      await wrapper.setData({ state: { attributeName: false } });
+    } else {
+      wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
+      await nextTick();
+    }
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(2);
-    expect(emitter.$emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
+    expect(emitter.emit).toHaveBeenCalledTimes(2);
+    expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
-    wrapper.vm.state = {
-      attributeName: false,
-    };
+    if (isVue3) {
+      await wrapper.setData({ state: { attributeName: false } });
+    } else {
+      wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
+      await nextTick();
+    }
 
-    expect(emitter.$emit).toHaveBeenCalledTimes(2);
+    expect(emitter.emit).toHaveBeenCalledTimes(2);
   });
 });

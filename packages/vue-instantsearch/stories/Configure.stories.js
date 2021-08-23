@@ -43,7 +43,7 @@ storiesOf('ais-configure', module)
   .add('inline toggler', () => ({
     template: `
       <ais-configure :hitsPerPage="1" :analytics="false">
-        <template slot-scope="{ searchParameters, refine }">
+        <template v-slot="{ searchParameters, refine }">
           <pre>{{JSON.stringify(searchParameters, null, 2)}}</pre>
           <button @click="refine({hitsPerPage: searchParameters.hitsPerPage === 1 ? 5 : 1})">
             hitsPerPage: {{searchParameters.hitsPerPage}}, change
@@ -55,14 +55,16 @@ storiesOf('ais-configure', module)
   .add('with display of the parameters', () => ({
     template: `
       <ais-configure :hitsPerPage="1">
-        <pre slot-scope="{ searchParameters }">{{ searchParameters }}</pre>
+        <template v-slot="{ searchParameters }">
+          <pre>{{ searchParameters }}</pre>
+        </template>
       </ais-configure>
     `,
   }))
   .add('merging parameters', () => ({
     template: `
     <ais-configure :enableRules="false" :hitsPerPage="5">
-      <template slot-scope="{ searchParameters, refine }">
+      <template v-slot="{ searchParameters, refine }">
         <button
           @click="refine(
             Object.assign(
@@ -72,7 +74,7 @@ storiesOf('ais-configure', module)
             )
           )"
         >
-          toggle only query rules 
+          toggle only query rules
         </button>
         currently applied filters: <pre>{{searchParameters}}</pre>
       </template>
@@ -82,7 +84,9 @@ storiesOf('ais-configure', module)
   .add('playground', () => ({
     template: `
       <ais-configure v-bind="knobs">
-        <pre slot-scope="{ searchParameters }">{{ searchParameters }}</pre>
+        <template v-slot="{ searchParameters }">
+          <pre>{{ searchParameters }}</pre>
+        </template>
       </ais-configure>
     `,
     data() {

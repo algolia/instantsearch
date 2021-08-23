@@ -7,23 +7,25 @@ storiesOf('ais-query-rule-context', module)
       indexName: 'instant_search_movies',
       filters: '<ais-refinement-list attribute="genre" />',
       hits: `
-      <ol slot-scope="{ items }" class="playground-hits">
-        <li
-          v-for="item in items"
-          :key="item.objectID"
-          class="playground-hits-item"
-        >
-          <div
-            class="playground-hits-image"
-            :style="{ backgroundImage: 'url(' + item.image + ')' }"
-          />
-          <article>
-            <header>
-              <strong><ais-highlight attribute="title" :hit="item"/></strong>
-            </header>
-          </article>
-        </li>
-      </ol>
+      <template v-slot="{ items }">
+        <ol class="playground-hits">
+          <li
+            v-for="item in items"
+            :key="item.objectID"
+            class="playground-hits-item"
+          >
+            <div
+              class="playground-hits-image"
+              :style="{ backgroundImage: 'url(' + item.image + ')' }"
+            />
+            <article>
+              <header>
+                <strong><ais-highlight attribute="title" :hit="item"/></strong>
+              </header>
+            </article>
+          </li>
+        </ol>
+      </template>
       `,
     })
   )
@@ -37,7 +39,7 @@ storiesOf('ais-query-rule-context', module)
       </ul>
       <ais-query-rule-context :tracked-filters="trackedFilters" />
       <ais-query-rule-custom-data>
-        <template slot="item" slot-scope="{ item }">
+        <template v-slot:item="{ item }">
           <h2>{{ item.title }}</h2>
           <a :href="item.link">
             <img
@@ -72,7 +74,7 @@ storiesOf('ais-query-rule-context', module)
       />
       <ais-query-rule-context :tracked-filters="trackedFilters" />
       <ais-query-rule-custom-data>
-        <template slot="item" slot-scope="{ item }">
+        <template v-slot:item="{ item }">
           <h2>{{ item.title }}</h2>
           <a :href="item.link">
             <img
@@ -106,7 +108,7 @@ storiesOf('ais-query-rule-context', module)
         :transform-rule-contexts="transformRuleContexts"
       />
       <ais-query-rule-custom-data>
-        <template slot="item" slot-scope="{ item }">
+        <template v-slot:item="{ item }">
           <h2>{{ item.title }}</h2>
           <a :href="item.link">
             <img

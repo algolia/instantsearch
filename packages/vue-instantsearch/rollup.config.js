@@ -1,4 +1,5 @@
-import vue from 'rollup-plugin-vue';
+import vueV2 from 'rollup-plugin-vue2';
+import vueV3 from 'rollup-plugin-vue3';
 import buble from 'rollup-plugin-buble';
 import filesize from 'rollup-plugin-filesize';
 import resolve from 'rollup-plugin-node-resolve';
@@ -7,14 +8,23 @@ import { terser } from 'rollup-plugin-terser';
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
 
+if (process.env.VUE_VERSION !== 'vue2' && process.env.VUE_VERSION !== 'vue3') {
+  throw new Error(
+    'The environment variable VUE_VERSION (`vue2` | `vue3`) is required.'
+  );
+}
+
 const processEnv = conf => ({
   // parenthesis to avoid syntax errors in places where {} is interpreted as a block
   'process.env': `(${JSON.stringify(conf)})`,
 });
 
+const vuePlugin = process.env.VUE_VERSION === 'vue3' ? vueV3 : vueV2;
+const outputDir = process.env.VUE_VERSION === 'vue3' ? 'vue3' : 'vue2';
+
 const plugins = [
+  vuePlugin({ compileTemplate: true, css: false }),
   commonjs(),
-  vue({ compileTemplate: true, css: false }),
   json(),
   buble({
     transforms: {
@@ -28,19 +38,19 @@ const plugins = [
   filesize(),
 ];
 
+const external = id =>
+  ['algoliasearch-helper', 'instantsearch.js', 'vue', 'mitt'].some(
+    dep => id === dep || id.startsWith(`${dep}/`)
+  );
+
 export default [
   {
     input: 'src/instantsearch.js',
-    external: [
-      'algoliasearch-helper',
-      'instantsearch.js/es',
-      'instantsearch.js/es/connectors',
-      'vue',
-    ],
+    external,
     output: [
       {
         sourcemap: true,
-        file: `dist/vue-instantsearch.common.js`,
+        file: `${outputDir}/cjs/index.js`,
         format: 'cjs',
         exports: 'named',
       },
@@ -49,16 +59,11 @@ export default [
   },
   {
     input: 'src/instantsearch.js',
-    external: [
-      'algoliasearch-helper',
-      'instantsearch.js/es',
-      'instantsearch.js/es/connectors',
-      'vue',
-    ],
+    external,
     output: [
       {
         sourcemap: true,
-        dir: `es`,
+        dir: `${outputDir}/es`,
         format: 'es',
       },
     ],
@@ -71,7 +76,7 @@ export default [
     output: [
       {
         sourcemap: true,
-        file: `dist/vue-instantsearch.js`,
+        file: `${outputDir}/umd/index.js`,
         format: 'umd',
         name: 'VueInstantSearch',
         exports: 'named',

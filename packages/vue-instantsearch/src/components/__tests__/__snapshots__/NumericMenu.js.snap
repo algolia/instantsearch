@@ -136,7 +136,7 @@ exports[`default render renders correctly 1`] = `
         <input class="ais-NumericMenu-radio"
                name="brand"
                type="radio"
-               value
+               value="all"
         >
         <span class="ais-NumericMenu-labelText">
           All
@@ -203,7 +203,7 @@ exports[`default render renders correctly with a selected value 1`] = `
         <input class="ais-NumericMenu-radio"
                name="brand"
                type="radio"
-               value
+               value="all"
         >
         <span class="ais-NumericMenu-labelText">
           All
@@ -270,7 +270,7 @@ exports[`default render renders correctly without refinement 1`] = `
         <input class="ais-NumericMenu-radio"
                name="brand"
                type="radio"
-               value
+               value="all"
         >
         <span class="ais-NumericMenu-labelText">
           All

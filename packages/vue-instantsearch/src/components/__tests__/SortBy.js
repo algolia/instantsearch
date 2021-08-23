@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import SortBy from '../SortBy.vue';
 
@@ -51,38 +51,40 @@ it('renders correctly', () => {
 
 it('renders with scoped slots', () => {
   const defaultSlot = `
-  <select
-    slot-scope="{ items, refine, currentRefinement }"
-    @change="refine($event.currentTarget.value)"
-  >
-    <option
-      v-for="item in items"
-      :key="item.value"
-      :value="item.value"
-      :selected="item.value === currentRefinement"
-    >
-      {{item.label}}
-    </option>
-  </select>
+  <template v-slot="{ items, refine, currentRefinement }">
+    <select @change="refine($event.currentTarget.value)">
+      <option
+        v-for="item in items"
+        :key="item.value"
+        :value="item.value"
+        :selected="item.value === currentRefinement"
+      >
+        {{item.label}}
+      </option>
+    </select>
+  </template>
 `;
 
   __setState({
     ...defaultState,
   });
 
-  const wrapper = mount(SortBy, {
-    propsData: {
-      ...defaultProps,
+  const wrapper = mount({
+    components: { SortBy },
+    data() {
+      return { props: defaultProps };
     },
-    scopedSlots: {
-      default: defaultSlot,
-    },
+    template: `
+      <SortBy v-bind="props">
+        ${defaultSlot}
+      </SortBy>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('calls `refine` when the selection changes with the `value`', () => {
+it('calls `refine` when the selection changes with the `value`', async () => {
   const refine = jest.fn();
   __setState({
     ...defaultState,
@@ -97,7 +99,7 @@ it('calls `refine` when the selection changes with the `value`', () => {
   // on a select: https://github.com/vuejs/vue-test-utils/issues/260
   const select = wrapper.find('select');
   select.element.value = 'some_index_quality';
-  select.trigger('change');
+  await select.trigger('change');
   const selectedOption = wrapper.find('option[value=some_index_quality]');
 
   expect(refine).toHaveBeenCalledTimes(1);
@@ -105,7 +107,7 @@ it('calls `refine` when the selection changes with the `value`', () => {
   expect(selectedOption.element.selected).toBe(true);
 });
 
-it('calls the Panel mixin with `hasNoResults`', () => {
+it('calls the Panel mixin with `hasNoResults`', async () => {
   __setState({ ...defaultState });
 
   const wrapper = mount(SortBy, {
@@ -117,7 +119,7 @@ it('calls the Panel mixin with `hasNoResults`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       hasNoResults: true,
     },

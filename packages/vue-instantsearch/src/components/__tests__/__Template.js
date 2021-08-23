@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Template from '../__Template.vue';
 import { __setState } from '../../mixins/widget';
 jest.mock('../../mixins/widget');
@@ -13,12 +13,12 @@ it('renders correctly', () => {
 
 // ☑️ add another rendering test if it's different given the propsData
 
-it('behaves correctly', () => {
+it('behaves correctly', async () => {
   __setState({
     refine: jest.fn(),
   });
   const wrapper = mount(Template);
   const button = wrapper.find('button');
-  button.trigger('click');
+  await button.trigger('click');
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('hi');
 });

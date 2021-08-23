@@ -330,7 +330,7 @@ exports[`default render renders correctly with a disabled show more button 1`] =
 </div>
 `;
 
-exports[`default render renders correctly with a selected item 1`] = `
+exports[`default render renders correctly with a selected item 2`] = `
 <div class="ais-Menu">
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item">

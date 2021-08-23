@@ -1,14 +1,12 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { createSuitMixin } from '../suit';
 
-const createFakeComponent = localVue =>
-  localVue.component('Test', {
-    render: () => null,
-  });
+const createFakeComponent = () => ({
+  render: () => null,
+});
 
 it('exposes the regular suit function for this widget', () => {
-  const localVue = createLocalVue();
-  const Test = createFakeComponent(localVue);
+  const Test = createFakeComponent();
 
   const wrapper = mount(Test, {
     mixins: [createSuitMixin({ name: 'Test' })],
@@ -22,13 +20,12 @@ it('exposes the regular suit function for this widget', () => {
 });
 
 it('allows overriding from the `class-names` prop', () => {
-  const localVue = createLocalVue();
-  const Test = localVue.component('Test', {
+  const Test = {
     props: {
       classNames: { type: Object },
     },
     render: () => null,
-  });
+  };
 
   const wrapper = mount(Test, {
     propsData: {

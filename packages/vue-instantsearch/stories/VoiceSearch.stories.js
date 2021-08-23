@@ -39,7 +39,7 @@ storiesOf('ais-voice-search', module)
       template: `
       <div class="custom-button-wrapper">
         <ais-voice-search>
-          <template slot="buttonText" slot-scope="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
+          <template v-slot:buttonText="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
             {{ isListening ? '⏹' : '🎙' }}
           </template>
         </ais-voice-search>
@@ -50,7 +50,7 @@ storiesOf('ais-voice-search', module)
   .add('with full status', () => ({
     template: `
       <ais-voice-search>
-        <template slot="status" slot-scope="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
+        <template v-slot:status="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
           <p>status: {{status}}</p>
           <p>errorCode: {{errorCode}}</p>
           <p>isListening: {{isListening}}</p>
@@ -64,7 +64,7 @@ storiesOf('ais-voice-search', module)
   .add('search as you speak', () => ({
     template: `
       <ais-voice-search :search-as-you-speak="true">
-        <template slot="status" slot-scope="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
+        <template v-slot:status="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
           <p>status: {{status}}</p>
           <p>errorCode: {{errorCode}}</p>
           <p>isListening: {{isListening}}</p>
@@ -110,7 +110,7 @@ storiesOf('ais-voice-search', module)
       template: `
         <div class="custom-ui">
           <ais-voice-search>
-            <template slot="status" slot-scope="{ isListening, transcript }">
+            <template v-slot:status="{ isListening, transcript }">
               <div :class="'layer listening-' + isListening">
                 <span>{{ transcript }}</span>
               </div>
@@ -127,7 +127,7 @@ storiesOf('ais-voice-search', module)
   .add('with custom template for default slot', () => ({
     template: `
       <ais-voice-search>
-        <template slot-scope="{ isBrowserSupported, isListening, toggleListening, voiceListeningState }">
+        <template v-slot="{ isBrowserSupported, isListening, toggleListening, voiceListeningState }">
           <button @click="toggleListening()">click</button>
           <p>isListening: {{isListening ? 'true' : 'false'}}</p>
           <p>isBrowserSupported: {{isBrowserSupported ? 'true' : 'false'}}</p>

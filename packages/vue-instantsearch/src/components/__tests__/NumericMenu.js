@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import NumericMenu from '../NumericMenu.vue';
 
@@ -7,6 +7,7 @@ jest.mock('../../mixins/panel');
 
 const all = {
   label: 'All',
+  value: 'all',
 };
 
 const lessThan10 = {
@@ -161,7 +162,7 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on radio change', () => {
+  it('calls refine on radio change', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -177,9 +178,11 @@ describe('default render', () => {
       propsData: props,
     });
 
-    const input = wrapper.findAll('.ais-NumericMenu-radio').at(3);
+    const input = wrapper.find(
+      '.ais-NumericMenu-item:nth-child(4) .ais-NumericMenu-radio'
+    );
 
-    input.trigger('change');
+    await input.trigger('change');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('100'));
@@ -187,7 +190,7 @@ describe('default render', () => {
   });
 });
 
-it('calls the Panel mixin with `hasNoResults`', () => {
+it('calls the Panel mixin with `hasNoResults`', async () => {
   __setState({ ...defaultState });
 
   const wrapper = mount(NumericMenu, {
@@ -199,7 +202,7 @@ it('calls the Panel mixin with `hasNoResults`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       hasNoResults: true,
     },
@@ -210,61 +213,66 @@ it('calls the Panel mixin with `hasNoResults`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
     sendEvent,
   });
 
-  const wrapper = mount(NumericMenu, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
+  const wrapper = mount({
+    components: { NumericMenu },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <NumericMenu v-bind="props">
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </NumericMenu>
+    `,
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlot = `
-    <ul
-      slot-scope="{ items, canRefine, refine, createURL }"
-      :class="[!canRefine && 'no-refinement']"
-    >
-      <li
-        v-for="item in items"
-        :key="item.label"
-        :class="[item.isRefined && 'selected']"
-      >
-        <a
-          :href="createURL(item.value)"
-          @click.prevent="refine(item.value)"
+  const defaultSlot = `
+    <template v-slot="{ items, canRefine, refine, createURL }">
+      <ul :class="[!canRefine && 'no-refinement']">
+        <li
+          v-for="item in items"
+          :key="item.label"
+          :class="[item.isRefined && 'selected']"
         >
-          {{ item.label }}
-        </a>
-      </li>
-    </ul>
+          <a
+            :href="createURL(item.value)"
+            @click.prevent="refine(item.value)"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </template>
   `;
 
   it('renders correctly', () => {
     __setState(defaultState);
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(NumericMenu, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { NumericMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <NumericMenu v-bind="props">
+          ${defaultSlot}
+        </NumericMenu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -276,15 +284,16 @@ describe('custom default render', () => {
       hasNoResults: true,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(NumericMenu, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { NumericMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <NumericMenu v-bind="props">
+          ${defaultSlot}
+        </NumericMenu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -302,15 +311,16 @@ describe('custom default render', () => {
       ],
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(NumericMenu, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { NumericMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <NumericMenu v-bind="props">
+          ${defaultSlot}
+        </NumericMenu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -322,21 +332,22 @@ describe('custom default render', () => {
       createURL: (value = 'all') => `/price/${value}`,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(NumericMenu, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { NumericMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <NumericMenu v-bind="props">
+          ${defaultSlot}
+        </NumericMenu>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -344,20 +355,21 @@ describe('custom default render', () => {
       refine,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(NumericMenu, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { NumericMenu },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <NumericMenu v-bind="props">
+          ${defaultSlot}
+        </NumericMenu>
+      `,
     });
 
-    const link = wrapper.findAll('a').at(3);
+    const link = wrapper.find('li:nth-child(4) a');
 
-    link.trigger('click');
+    await link.trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('100'));

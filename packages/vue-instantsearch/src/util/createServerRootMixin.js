@@ -1,6 +1,6 @@
-import Vue from 'vue';
 import instantsearch from 'instantsearch.js/es';
 import algoliaHelper from 'algoliasearch-helper';
+import { isVue3, isVue2, Vue2, createSSRApp } from '../util/vue-compat';
 const { SearchResults, SearchParameters } = algoliaHelper;
 import { warn } from './warn';
 
@@ -12,15 +12,6 @@ function walkIndex(indexWidget, visit) {
     visit(widget);
     walkIndex(widget, visit);
   });
-}
-
-function renderToString(app, _renderToString) {
-  return new Promise((resolve, reject) =>
-    _renderToString(app, (err, res) => {
-      if (err) reject(err);
-      resolve(res);
-    })
-  );
 }
 
 function searchOnlyWithDerivedHelpers(helper) {
@@ -40,29 +31,47 @@ function searchOnlyWithDerivedHelpers(helper) {
   });
 }
 
-function defaultCloneComponent(componentInstance) {
+function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
   const options = {
     serverPrefetch: undefined,
     fetch: undefined,
     _base: undefined,
     name: 'ais-ssr-root-component',
-    // copy over global Vue APIs
-    router: componentInstance.$router,
-    store: componentInstance.$store,
   };
 
-  const Extended = componentInstance.$vnode
-    ? componentInstance.$vnode.componentOptions.Ctor.extend(options)
-    : Vue.component(Object.assign({}, componentInstance.$options, options));
+  let app;
 
-  const app = new Extended({
-    propsData: componentInstance.$options.propsData,
-  });
+  if (isVue3) {
+    const appOptions = Object.assign({}, componentInstance.$options, options);
+    appOptions.mixins = [...appOptions.mixins, ...mixins];
+    app = createSSRApp(appOptions);
+    if (componentInstance.$router) {
+      app.use(componentInstance.$router);
+    }
+    if (componentInstance.$store) {
+      app.use(componentInstance.$store);
+    }
+  } else {
+    // copy over global Vue APIs
+    options.router = componentInstance.$router;
+    options.store = componentInstance.$store;
+
+    const Extended = componentInstance.$vnode
+      ? componentInstance.$vnode.componentOptions.Ctor.extend(options)
+      : Vue2.component(Object.assign({}, componentInstance.$options, options));
+
+    app = new Extended({
+      propsData: componentInstance.$options.propsData,
+      mixins: [...mixins],
+    });
+  }
 
   // https://stackoverflow.com/a/48195006/3185307
   app.$slots = componentInstance.$slots;
   app.$root = componentInstance.$root;
-  app.$options.serverPrefetch = [];
+  if (isVue2) {
+    app.$options.serverPrefetch = [];
+  }
 
   return app;
 }
@@ -82,40 +91,47 @@ function augmentInstantSearch(
 
   /**
    * main API for SSR, called in serverPrefetch of a root component which contains instantsearch
-   * @param {object} componentInstance the calling component's `this`
+   * @param {Object} props the object including `component` and `renderToString`
+   * @param {Object} props.component the calling component's `this`
+   * @param {Function} props.renderToString the function to render componentInstance to string
    * @returns {Promise} result of the search, to save for .hydrate
    */
-  search.findResultsState = function(componentInstance) {
-    let _renderToString;
-    try {
-      _renderToString = require('vue-server-renderer/basic');
-    } catch (e) {
-      // error is handled by regular if, in case it's `undefined`
-    }
-    if (!_renderToString) {
-      throw new Error('you need to install vue-server-renderer');
+  search.findResultsState = function({ component, renderToString }) {
+    if (!renderToString) {
+      throw new Error(
+        'findResultsState requires `renderToString: (component) => Promise<string>` in the first argument.'
+      );
     }
 
     let app;
+    let renderedComponent;
 
     return Promise.resolve()
       .then(() => {
-        app = cloneComponent(componentInstance);
+        app = cloneComponent(component, {
+          mixins: [
+            {
+              created() {
+                // eslint-disable-next-line consistent-this
+                renderedComponent = this;
+                this.instantsearch.helper = helper;
+                this.instantsearch.mainHelper = helper;
 
-        app.instantsearch.helper = helper;
-        app.instantsearch.mainHelper = helper;
-
-        app.instantsearch.mainIndex.init({
-          instantSearchInstance: app.instantsearch,
-          parent: null,
-          uiState: app.instantsearch._initialUiState,
+                this.instantsearch.mainIndex.init({
+                  instantSearchInstance: this.instantsearch,
+                  parent: null,
+                  uiState: this.instantsearch._initialUiState,
+                });
+              },
+            },
+          ],
         });
       })
-      .then(() => renderToString(app, _renderToString))
+      .then(() => renderToString(app))
       .then(() => searchOnlyWithDerivedHelpers(helper))
       .then(() => {
         const results = {};
-        walkIndex(app.instantsearch.mainIndex, widget => {
+        walkIndex(renderedComponent.instantsearch.mainIndex, widget => {
           results[widget.getIndexId()] = widget.getResults();
         });
 

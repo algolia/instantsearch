@@ -29,7 +29,7 @@ storiesOf('ais-menu', module)
   .add('with custom label', () => ({
     template: `
       <ais-menu attribute="categories" :limit="2" :showMoreLimit="5" :show-more="true">
-        <template slot="showMoreLabel" slot-scope="{ isShowingMore }">
+        <template v-slot:showMoreLabel="{ isShowingMore }">
           {{isShowingMore ? 'View less' : 'View more'}}
         </template>
       </ais-menu>
@@ -57,21 +57,23 @@ storiesOf('ais-menu', module)
   .add('with a custom render', () => ({
     template: `
     <ais-menu attribute="categories">
-      <ol slot-scope="{ items, createURL, refine }">
-        <li
-          v-for="item in items"
-          :key="item.value"
-        >
-          <component :is="item.isRefined ? 'strong' : 'span'">
-            <a
-              :href="createURL(item.value)"
-              @click.prevent="refine(item.value)"
-            >
-              {{item.label}} - {{item.count}}
-            </a>
-          </component>
-        </li>
-      </ol>
+      <template v-slot="{ items, createURL, refine }">
+        <ol>
+          <li
+            v-for="item in items"
+            :key="item.value"
+          >
+            <component :is="item.isRefined ? 'strong' : 'span'">
+              <a
+                :href="createURL(item.value)"
+                @click.prevent="refine(item.value)"
+              >
+                {{item.label}} - {{item.count}}
+              </a>
+            </component>
+          </li>
+        </ol>
+      </template>
     </ais-menu>
     `,
   }))

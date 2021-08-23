@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import Breadcrumb from '../Breadcrumb.vue';
 
@@ -145,7 +145,7 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on root click', () => {
+  it('calls refine on root click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -157,16 +157,13 @@ describe('default render', () => {
       propsData: defaultProps,
     });
 
-    wrapper
-      .findAll('a')
-      .at(0)
-      .trigger('click');
+    await wrapper.find('a').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith();
   });
 
-  it('calls refine on item click', () => {
+  it('calls refine on item click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -178,10 +175,7 @@ describe('default render', () => {
       propsData: defaultProps,
     });
 
-    wrapper
-      .findAll('a')
-      .at(1)
-      .trigger('click');
+    await wrapper.find('a:nth-child(2)').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('TV & Home Theater');
@@ -189,7 +183,7 @@ describe('default render', () => {
 });
 
 describe('panel', () => {
-  it('calls the Panel mixin with `canRefine`', () => {
+  it('calls the Panel mixin with `canRefine`', async () => {
     __setState({ ...defaultState });
 
     const wrapper = mount(Breadcrumb, {
@@ -201,7 +195,7 @@ describe('panel', () => {
 
     expect(mapStateToCanRefine()).toBe(true);
 
-    wrapper.setData({
+    await wrapper.setData({
       state: {
         canRefine: false,
       },
@@ -214,33 +208,37 @@ describe('panel', () => {
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlot = `
-    <ul
-      slot-scope="{ items, canRefine, refine, createURL }"
-      :class="[!canRefine && 'noRefinement']"
-    >
-      <li
-        v-for="(item, index) in items"
-        :key="item.label"
-      >
-        <a
-          :href="createURL(item.value)"
-          @click.prevent="refine(item.value)"
+  const defaultSlot = `
+    <template v-slot="{ items, canRefine, refine, createURL }">
+      <ul :class="[!canRefine && 'noRefinement']">
+        <li
+          v-for="(item, index) in items"
+          :key="item.label"
         >
-          {{ item.label }}
-        </a>
-      </li>
-    </ul>
+          <a
+            :href="createURL(item.value)"
+            @click.prevent="refine(item.value)"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </template>
   `;
 
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          ${defaultSlot}
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -253,11 +251,16 @@ describe('custom default render', () => {
       canRefine: false,
     });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          ${defaultSlot}
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -269,17 +272,22 @@ describe('custom default render', () => {
       createURL: value => `/${value}`,
     });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          ${defaultSlot}
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -287,17 +295,19 @@ describe('custom default render', () => {
       refine,
     });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        default: defaultScopedSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          ${defaultSlot}
+        </Breadcrumb>
+      `,
     });
 
-    wrapper
-      .findAll('a')
-      .at(0)
-      .trigger('click');
+    await wrapper.find('a').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('TV & Home Theater');
@@ -305,18 +315,19 @@ describe('custom default render', () => {
 });
 
 describe('custom rootLabel render', () => {
-  const rootLabelSlot = `
-    <template>Home page</template>
-  `;
-
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        rootLabel: rootLabelSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          <template v-slot:rootLabel>Home page</template>
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -329,11 +340,16 @@ describe('custom rootLabel render', () => {
       canRefine: false,
     });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        rootLabel: rootLabelSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          <template v-slot:rootLabel>Home page</template>
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -341,18 +357,19 @@ describe('custom rootLabel render', () => {
 });
 
 describe('custom separator render', () => {
-  const separatorSlot = `
-    <template>~~</template>
-  `;
-
   it('renders correctly', () => {
     __setState({ ...defaultState });
 
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-      scopedSlots: {
-        separator: separatorSlot,
+    const wrapper = mount({
+      components: { Breadcrumb },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <Breadcrumb v-bind="props">
+          <template v-slot:separator>~~</template>
+        </Breadcrumb>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();

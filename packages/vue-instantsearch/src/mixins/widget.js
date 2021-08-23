@@ -1,3 +1,4 @@
+import { isVue3 } from '../util/vue-compat';
 import { warn } from '../util/warn';
 
 export const createWidgetMixin = ({ connector } = {}) => ({
@@ -55,7 +56,7 @@ Read more on using connectors: https://alg.li/vue-custom`
       );
     }
   },
-  beforeDestroy() {
+  [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
     if (this.widget) {
       this.getParentIndex().removeWidgets([this.widget]);
     }

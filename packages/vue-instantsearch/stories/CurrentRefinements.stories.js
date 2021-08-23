@@ -74,7 +74,7 @@ storiesOf('ais-current-refinements', module)
   .add('with custom item rendering', () => ({
     template: `
       <ais-current-refinements :excluded-attributes="[]">
-        <template slot="item" slot-scope="{ item, refine }">
+        <template v-slot:item="{ item, refine }">
           <span style="color: white">
             {{item.label}}
             <ul>
@@ -92,7 +92,7 @@ storiesOf('ais-current-refinements', module)
   .add('with custom refinement rendering', () => ({
     template: `
       <ais-current-refinements :excluded-attributes="[]">
-        <template slot="refinement" slot-scope="{ refinement, refine }">
+        <template v-slot:refinement="{ refinement, refine }">
           <button
             @click="refine(refinement)"
             style="color: white"
@@ -106,13 +106,13 @@ storiesOf('ais-current-refinements', module)
   .add('with full custom rendering', () => ({
     template: `
       <ais-current-refinements :excluded-attributes="[]">
-        <template slot-scope="{ refine, items, createURL }">
+        <template v-slot="{ refine, items, createURL }">
           <ul>
             <li
               v-for="item in items"
               :key="item.attribute"
               >
-              {{item.attribute}}: 
+              {{item.attribute}}:
               <button
                 v-for="refinement in item.refinements"
                 @click="item.refine(refinement)"

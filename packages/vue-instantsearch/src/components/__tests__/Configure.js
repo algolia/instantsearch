@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import Configure from '../Configure';
 
@@ -16,10 +16,12 @@ const defaultProps = {
   hitsPerPage: 5,
 };
 
-const defaultScopedSlots = `
-  <span slot-scope="{ searchParameters }">
-    hitsPerPage: {{ searchParameters.hitsPerPage }}
-  </span>
+const defaultSlot = `
+  <template v-slot="{ searchParameters }">
+    <span>
+      hitsPerPage: {{ searchParameters.hitsPerPage }}
+    </span>
+  </template>
 `;
 
 it('accepts SearchParameters from attributes', () => {
@@ -36,37 +38,47 @@ it('accepts SearchParameters from attributes', () => {
   });
 });
 
-it('renders null without scoped slots', () => {
+it('renders null without default slot', () => {
   __setState(null);
 
   const wrapper = mount(Configure, {
     propsData: defaultProps,
   });
 
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper).toHaveEmptyHTML();
 });
 
 it('renders null without state', () => {
   __setState(null);
 
-  const wrapper = mount(Configure, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: defaultScopedSlots,
+  const wrapper = mount({
+    components: { Configure },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <Configure v-bind="props">
+        ${defaultSlot}
+      </Configure>
+    `,
   });
 
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper).toHaveEmptyHTML();
 });
 
 it('renders with scoped slots', () => {
   __setState({ ...defaultState });
 
-  const wrapper = mount(Configure, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: defaultScopedSlots,
+  const wrapper = mount({
+    components: { Configure },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <Configure v-bind="props">
+        ${defaultSlot}
+      </Configure>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();

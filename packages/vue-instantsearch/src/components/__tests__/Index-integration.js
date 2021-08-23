@@ -1,5 +1,5 @@
 jest.unmock('instantsearch.js/es');
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Index from '../Index';
 import instantsearch from 'instantsearch.js/es';
 import { createWidgetMixin } from '../../mixins/widget';
@@ -20,24 +20,24 @@ it('child widgets get added to their parent index', () => {
 
   const rootAddWidgets = jest.fn();
 
-  const wrapper = mount(Index, {
-    propsData: {
-      indexName: 'something',
+  const wrapper = mount({
+    components: { Index, ChildComponent },
+    data() {
+      return { props: { indexName: 'something' } };
     },
-    provide() {
-      return {
-        $_ais_instantSearchInstance: {
-          mainIndex: { addWidgets: rootAddWidgets },
-        },
-      };
+    provide: {
+      $_ais_instantSearchInstance: {
+        mainIndex: { addWidgets: rootAddWidgets },
+      },
     },
-    slots: {
-      default: ChildComponent,
-    },
+    template: `
+      <Index v-bind="props">
+        <ChildComponent />
+      </Index>
+    `,
   });
 
-  const indexWidget = wrapper.vm.widget;
-
+  const indexWidget = wrapper.findComponent(Index).vm.widget;
   expect(indexWidget.getWidgets()).toContain(widgetInstance);
 
   expect(rootAddWidgets).toHaveBeenCalledTimes(1);
@@ -65,23 +65,24 @@ it('child widgets render with right data', () => {
     searchClient: createFakeClient(),
   });
 
-  const wrapper = mount(Index, {
-    propsData: {
-      indexName: 'something',
+  const wrapper = mount({
+    components: { Index, ChildComponent },
+    data() {
+      return { props: { indexName: 'something' } };
     },
-    provide() {
-      return {
-        $_ais_instantSearchInstance: search,
-      };
+    provide: {
+      $_ais_instantSearchInstance: search,
     },
-    slots: {
-      default: ChildComponent,
-    },
+    template: `
+      <Index v-bind="props">
+        <ChildComponent />
+      </Index>
+    `,
   });
 
   search.start();
 
-  const indexWidget = wrapper.vm.widget;
+  const indexWidget = wrapper.findComponent(Index).vm.widget;
 
   expect(indexWidget.getWidgets()).toContain(widgetInstance);
 

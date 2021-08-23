@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import CurrentRefinements from '../CurrentRefinements.vue';
 import { __setState } from '../../mixins/widget';
 
@@ -159,15 +159,15 @@ describe.each([
 
     if (name === 'query') {
       expect(
-        wrapper.find('.ais-CurrentRefinements-categoryLabel').contains('q')
-      ).toBe(true);
+        wrapper.find('.ais-CurrentRefinements-categoryLabel q').text()
+      ).toEqual('search1');
     }
 
     expect(wrapper.html()).toMatchSnapshot();
   });
 });
 
-it('calls the Panel mixin with `canRefine`', () => {
+it('calls the Panel mixin with `canRefine`', async () => {
   __setState({ items: [{}] });
 
   const wrapper = mount(CurrentRefinements);
@@ -177,18 +177,14 @@ it('calls the Panel mixin with `canRefine`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
-    state: {
-      items: [],
-    },
-  });
+  await wrapper.setData({ state: { items: [] } });
 
   expect(mapStateToCanRefine()).toBe(false);
 
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('calls `refine` with a refinement', () => {
+it('calls `refine` with a refinement', async () => {
   const spies = [jest.fn(), jest.fn()];
 
   __setState({
@@ -223,7 +219,7 @@ it('calls `refine` with a refinement', () => {
   });
 
   const wrapper = mount(CurrentRefinements);
-  wrapper.find('.ais-CurrentRefinements-delete').trigger('click');
+  await wrapper.find('.ais-CurrentRefinements-delete').trigger('click');
 
   expect(spies[0]).toHaveBeenLastCalledWith({
     attribute: 'brands',
@@ -236,47 +232,53 @@ it('calls `refine` with a refinement', () => {
 });
 
 describe('custom render', () => {
-  const defaultScopedSlot = `
-    <div slot-scope="{ refine, items, createURL }">
-      <ul>
-        <li
-          v-for="item in items"
-          :key="item.attribute"
-          >
-          {{item.label}}:
-          <button
-            v-for="refinement in item.refinements"
-            @click="item.refine(refinement)"
-            :key="refinement.value"
-          >
-            {{refinement.label}} ╳
-          </button>
-        </li>
-      </ul>
-    </div>
+  const defaultSlot = `
+    <template v-slot="{ refine, items, createURL }">
+      <div>
+        <ul>
+          <li
+            v-for="item in items"
+            :key="item.attribute"
+            >
+            {{item.label}}:
+            <button
+              v-for="refinement in item.refinements"
+              @click="item.refine(refinement)"
+              :key="refinement.value"
+            >
+              {{refinement.label}} ╳
+            </button>
+          </li>
+        </ul>
+      </div>
+    </template>
   `;
 
-  const itemScopedSlot = `
-    <div slot-scope="{ item, refine }">
-      {{item.label}}:
-      <button
-        v-for="refinement in item.refinements"
-        @click="item.refine(refinement)"
-        :key="refinement.value"
-      >
-        {{refinement.label}}
-      </button>
-    </div>
+  const itemSlot = `
+    <template v-slot:item="{ item, refine }">
+      <div>
+        {{item.label}}:
+        <button
+          v-for="refinement in item.refinements"
+          @click="item.refine(refinement)"
+          :key="refinement.value"
+        >
+          {{refinement.label}}
+        </button>
+      </div>
+    </template>
   `;
 
-  const refinementScopedSlot = `
-    <div slot-scope="{ refinement, refine, createURL }">
-      <button
-        @click="refine(refinement)"
-      >
-        <pre>{{refinement}}</pre>
-      </button>
-    </div>
+  const refinementSlot = `
+    <template v-slot:refinement="{ refinement, refine, createURL }">
+      <div>
+        <button
+          @click="refine(refinement)"
+        >
+          <pre>{{refinement}}</pre>
+        </button>
+      </div>
+    </template>
   `;
 
   const items = [
@@ -315,10 +317,13 @@ describe('custom render', () => {
       ),
     });
 
-    const wrapper = mount(CurrentRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { CurrentRefinements },
+      template: `
+        <CurrentRefinements>
+          ${defaultSlot}
+        </CurrentRefinements>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -333,10 +338,13 @@ describe('custom render', () => {
       ),
     });
 
-    const wrapper = mount(CurrentRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { CurrentRefinements },
+      template: `
+        <CurrentRefinements>
+          ${defaultSlot}
+        </CurrentRefinements>
+      `,
     });
 
     expect(wrapper.findAll('button')).toHaveLength(items.length);
@@ -351,10 +359,13 @@ describe('custom render', () => {
       ),
     });
 
-    const wrapper = mount(CurrentRefinements, {
-      scopedSlots: {
-        item: itemScopedSlot,
-      },
+    const wrapper = mount({
+      components: { CurrentRefinements },
+      template: `
+        <CurrentRefinements>
+          ${itemSlot}
+        </CurrentRefinements>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -369,10 +380,13 @@ describe('custom render', () => {
       ),
     });
 
-    const wrapper = mount(CurrentRefinements, {
-      scopedSlots: {
-        item: itemScopedSlot,
-      },
+    const wrapper = mount({
+      components: { CurrentRefinements },
+      template: `
+        <CurrentRefinements>
+          ${itemSlot}
+        </CurrentRefinements>
+      `,
     });
 
     expect(wrapper.findAll('button')).toHaveLength(items.length);
@@ -387,10 +401,13 @@ describe('custom render', () => {
       ),
     });
 
-    const wrapper = mount(CurrentRefinements, {
-      scopedSlots: {
-        refinement: refinementScopedSlot,
-      },
+    const wrapper = mount({
+      components: { CurrentRefinements },
+      template: `
+        <CurrentRefinements>
+          ${refinementSlot}
+        </CurrentRefinements>
+      `,
     });
 
     expect(wrapper.findAll('button')).toHaveLength(items.length);

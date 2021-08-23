@@ -13,9 +13,11 @@ storiesOf('ais-infinite-hits', module)
   .add('with transform items', () => ({
     template: `
       <ais-infinite-hits :transform-items="transformItems">
-        <div slot="item" slot-scope="{ item, index }">
-          {{item.name}} - {{index}}
-        </div>
+        <template v-slot:item="{ item, index }">
+          <div>
+            {{item.name}} - {{index}}
+          </div>
+        </template>
       </ais-infinite-hits>
     `,
     methods: {
@@ -31,44 +33,50 @@ storiesOf('ais-infinite-hits', module)
   .add('with a custom render', () => ({
     template: `
       <ais-infinite-hits>
-        <div slot-scope="{ items, isLastPage, refine }">
-          <div
-            v-for="(item, index) in items"
-            :key="item.objectID"
-          >
-            {{item.name}}
-          </div>
+        <template v-slot="{ items, isLastPage, refine }">
+          <div>
+            <div
+              v-for="(item, index) in items"
+              :key="item.objectID"
+            >
+              {{item.name}}
+            </div>
 
-          <button
-            :disabled="isLastPage"
-            @click="refine"
-          >
-            Load more
-          </button>
-        </div>
+            <button
+              :disabled="isLastPage"
+              @click="refine"
+            >
+              Load more
+            </button>
+          </div>
+        </template>
       </ais-infinite-hits>
     `,
   }))
   .add('with a custom item render', () => ({
     template: `
       <ais-infinite-hits>
-        <div slot="item" slot-scope="{ item, index }">
-          {{item.name}} - {{index}}
-        </div>
+        <template v-slot:item="{ item, index }">
+          <div>
+            {{item.name}} - {{index}}
+          </div>
+        </template>
       </ais-infinite-hits>
     `,
   }))
   .add('with a custom show more render', () => ({
     template: `
       <ais-infinite-hits>
-        <div slot="loadMore" slot-scope="{ refine, page, isLastPage }">
-          <button
-            :disabled="isLastPage"
-            @click="refine"
-          >
-            Gimme {{ isLastPage ? "nothing anymore" : "page " + (page + 2) }}!
-          </button>
-        </div>
+        <template v-slot:loadMore="{ refine, page, isLastPage }">
+          <div>
+            <button
+              :disabled="isLastPage"
+              @click="refine"
+            >
+              Gimme {{ isLastPage ? "nothing anymore" : "page " + (page + 2) }}!
+            </button>
+          </div>
+        </template>
       </ais-infinite-hits>
     `,
   }))
@@ -116,14 +124,16 @@ storiesOf('ais-infinite-hits', module)
   .add('with a custom show previous render', () => ({
     template: `
       <ais-infinite-hits :show-previous="true">
-        <div slot="loadPrevious" slot-scope="{ refinePrevious, isFirstPage }">
-          <button
-            :disabled="isFirstPage"
-            @click="refinePrevious"
-          >
-            Gimme {{ isFirstPage ? "nothing anymore" : "previous page" }}!
-          </button>
-        </div>
+        <template v-slot:loadPrevious="{ refinePrevious, isFirstPage }">
+          <div>
+            <button
+              :disabled="isFirstPage"
+              @click="refinePrevious"
+            >
+              Gimme {{ isFirstPage ? "nothing anymore" : "previous page" }}!
+            </button>
+          </div>
+        </template>
       </ais-infinite-hits>`,
   }));
 
@@ -139,21 +149,23 @@ storiesOf('ais-infinite-hits', module)
       <div>
         <ais-configure :clickAnalytics="true" />
         <ais-infinite-hits>
-          <div slot-scope="{ items, refine, isLastPage, insights }">
-            <div
-              v-for="item in items"
-              :key="item.objectID"
-            >
-              custom objectID: {{item.objectID}}
-              <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+          <template v-slot="{ items, refine, isLastPage, insights }">
+            <div>
+              <div
+                v-for="item in items"
+                :key="item.objectID"
+              >
+                custom objectID: {{item.objectID}}
+                <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+              </div>
+              <button
+                :disabled="isLastPage"
+                @click="refine"
+              >
+                Load more
+              </button>
             </div>
-            <button
-              :disabled="isLastPage"
-              @click="refine"
-            >
-              Load more
-            </button>
-          </div>
+          </template>
         </ais-infinite-hits>
       </div>
     `,
@@ -163,10 +175,12 @@ storiesOf('ais-infinite-hits', module)
       <div>
         <ais-configure :clickAnalytics="true" />
         <ais-infinite-hits>
-          <div slot="item" slot-scope="{ item, insights }">
-            custom objectID: {{item.objectID}}
-            <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
-          </div>
+          <template v-slot:item="{ item, insights }">
+            <div>
+              custom objectID: {{item.objectID}}
+              <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+            </div>
+          </template>
         </ais-infinite-hits>
       </div>
     `,
@@ -174,10 +188,12 @@ storiesOf('ais-infinite-hits', module)
   .add('with sessionStorage cache enabled', () => ({
     template: `
       <ais-infinite-hits :cache="cache">
-        <div slot="item" slot-scope="{ item, insights }">
-          custom objectID: {{item.objectID}}
-          <a href="https://google.com">Go to the detail</a>
-        </div>
+        <template v-slot:item="{ item, insights }">
+          <div>
+            custom objectID: {{item.objectID}}
+            <a href="https://google.com">Go to the detail</a>
+          </div>
+        </template>
       </ais-infinite-hits>
     `,
     data: () => ({

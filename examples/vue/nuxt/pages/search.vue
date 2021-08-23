@@ -64,6 +64,16 @@ import {
   createServerRootMixin,
 } from 'vue-instantsearch'; // eslint-disable-line import/no-unresolved
 import algoliasearch from 'algoliasearch/lite';
+import _renderToString from 'vue-server-renderer/basic';
+
+function renderToString(app) {
+  return new Promise((resolve, reject) => {
+    _renderToString(app, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+}
 
 const searchClient = algoliasearch(
   'latency',
@@ -96,9 +106,11 @@ export default {
     }),
   ],
   serverPrefetch() {
-    return this.instantsearch.findResultsState(this).then(algoliaState => {
-      this.$ssrContext.nuxt.algoliaState = algoliaState;
-    });
+    return this.instantsearch
+      .findResultsState({ component: this, renderToString })
+      .then(algoliaState => {
+        this.$ssrContext.nuxt.algoliaState = algoliaState;
+      });
   },
   beforeMount() {
     const results = window.__NUXT__.algoliaState;

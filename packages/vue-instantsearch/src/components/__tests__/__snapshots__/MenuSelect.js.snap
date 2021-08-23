@@ -7,13 +7,13 @@ exports[`custom default render renders correctly 1`] = `
       All
     </option>
     <option value="Apple">
-      Apple
+      APPLE
     </option>
     <option value="Samsung">
-      Samsung
+      SAMSUNG
     </option>
     <option value="Sony">
-      Sony
+      SONY
     </option>
   </select>
 </div>
@@ -41,21 +41,21 @@ exports[`custom item slot renders correctly 1`] = `
             value="Apple"
     >
       <span>
-        Apple
+        APPLE
       </span>
     </option>
     <option class="ais-MenuSelect-option"
             value="Samsung"
     >
       <span>
-        Samsung
+        SAMSUNG
       </span>
     </option>
     <option class="ais-MenuSelect-option"
             value="Sony"
     >
       <span>
-        Sony
+        SONY
       </span>
     </option>
   </select>

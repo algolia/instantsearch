@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import MenuSelect from '../MenuSelect.vue';
 import { __setState } from '../../mixins/widget';
 
@@ -148,9 +148,9 @@ describe('default render', () => {
 
     expect(selected.element.selected).toBe(true);
 
-    options.wrappers.forEach(option => {
-      expect(option.element.selected).toBe(false);
-    });
+    for (let i = 0; i < options.length; i++) {
+      expect((options[i] || options.at(i)).element.selected).toBe(false);
+    }
   });
 
   it('renders correctly without refinements', () => {
@@ -171,7 +171,7 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on select change', () => {
+  it('calls refine on select change', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -194,14 +194,14 @@ describe('default render', () => {
     // Simulate the change
     select.element.value = 'Apple';
 
-    select.trigger('change');
+    await select.trigger('change');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('Apple');
   });
 });
 
-it('calls the Panel mixin with `canRefine`', () => {
+it('calls the Panel mixin with `canRefine`', async () => {
   __setState({ ...defaultState });
 
   const wrapper = mount(MenuSelect, {
@@ -213,7 +213,7 @@ it('calls the Panel mixin with `canRefine`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       canRefine: false,
     },
@@ -224,80 +224,81 @@ it('calls the Panel mixin with `canRefine`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
     sendEvent,
   });
 
-  const wrapper = mount(MenuSelect, {
-    propsData: defaultProps,
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
+  const wrapper = mount({
+    components: { MenuSelect },
+    data() {
+      return { props: defaultProps };
     },
+    template: `
+      <MenuSelect v-bind="props">
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </MenuSelect>
+    `,
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });
 
 describe('custom item slot', () => {
-  // can not be <template>
-  // https://github.com/vuejs/vue-test-utils/pull/507
-  const customItemSlot = `
-    <span slot="item" slot-scope="{ item }">
-      {{ item.label }}
-    </span>
-  `;
-
   it('renders correctly', () => {
     __setState({
       ...defaultState,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        item: customItemSlot,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          <template v-slot:item="{ item }">
+            <span>
+              {{ item.label.toUpperCase() }}
+            </span>
+          </template>
+        </MenuSelect>
+      `,
     });
+
     expect(wrapper.html()).toMatchSnapshot();
 
-    expect(
-      wrapper
-        .findAll('option')
-        .at(1)
-        .html()
-    ).toMatch(/<span>\s+Apple\s+<\/span>/);
+    expect(wrapper.find('option:nth-child(2)').html()).toMatch(
+      /<span>\s*APPLE\s*<\/span>/
+    );
   });
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlots = `
-    <select
-      slot-scope="{ items, canRefine, refine }"
-      @change="refine($event.currentTarget.value)"
-      :disabled="!canRefine"
-    >
-      <option value="">All</option>
-      <option
-        v-for="item in items"
-        :key="item.value"
-        :value="item.value"
-        :selected="item.isRefined"
+  const defaultSlot = `
+    <template v-slot="{ items, canRefine, refine }">
+      <select
+        @change="refine($event.currentTarget.value)"
+        :disabled="!canRefine"
       >
-        {{item.label}}
-      </option>
-    </select>
+        <option value="">All</option>
+        <option
+          v-for="item in items"
+          :key="item.value"
+          :value="item.value"
+          :selected="item.isRefined"
+        >
+          {{item.label.toUpperCase()}}
+        </option>
+      </select>
+    </template>
   `;
 
   it('renders correctly', () => {
@@ -305,15 +306,16 @@ describe('custom default render', () => {
       ...defaultState,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlots,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          ${defaultSlot}
+        </MenuSelect>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -329,25 +331,52 @@ describe('custom default render', () => {
       ],
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlots,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          <template v-slot="{ items, canRefine, refine }">
+            <select
+              @change="refine($event.currentTarget.value)"
+              :disabled="!canRefine"
+            >
+              <option value="">All</option>
+              <option
+                v-for="item in items"
+                :key="item.value"
+                :value="item.value"
+                :selected="item.isRefined"
+                :data-test="item.value"
+              >
+                {{item.label}}
+              </option>
+            </select>
+          </template>
+        </MenuSelect>
+      `,
     });
 
-    const selected = wrapper.find('[value="Samsung"]');
-    const options = wrapper.findAll('option:not([value="Samsung"])');
+    // Unlike in vue 2, in vue 3 when value and textContent are the same,
+    // Vue doesn't render the value attribute at all.
+    // For example,
+
+    // In Vue 2,
+    // <option value="Apple">Apple</option>
+
+    // becomes, in Vue 3
+    // <option>Apple</option>
+
+    const selected = wrapper.find('[data-test="Samsung"]');
+    const options = wrapper.findAll('option:not([data-test="Samsung"])');
 
     expect(selected.element.selected).toBe(true);
 
-    options.wrappers.forEach(option => {
-      expect(option.element.selected).toBe(false);
-    });
+    for (let i = 0; i < options.length; i++) {
+      expect((options[i] || options.at(i)).element.selected).toBe(false);
+    }
   });
 
   it('renders correctly without refinements', () => {
@@ -357,21 +386,22 @@ describe('custom default render', () => {
       items: [],
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlots,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          ${defaultSlot}
+        </MenuSelect>
+      `,
     });
 
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
-  it('calls refine on select change', () => {
+  it('calls refine on select change', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -379,15 +409,16 @@ describe('custom default render', () => {
       refine,
     });
 
-    const props = {
-      ...defaultProps,
-    };
-
-    const wrapper = mount(MenuSelect, {
-      propsData: props,
-      scopedSlots: {
-        default: defaultScopedSlots,
+    const wrapper = mount({
+      components: { MenuSelect },
+      data() {
+        return { props: defaultProps };
       },
+      template: `
+        <MenuSelect v-bind="props">
+          ${defaultSlot}
+        </MenuSelect>
+      `,
     });
 
     expect(refine).not.toHaveBeenCalled();
@@ -397,7 +428,7 @@ describe('custom default render', () => {
     // Simulate the change
     select.element.value = 'Apple';
 
-    select.trigger('change');
+    await select.trigger('change');
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('Apple');

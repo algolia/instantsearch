@@ -4,6 +4,16 @@ import { createRouter } from './router';
 import { createServerRootMixin } from 'vue-instantsearch';
 import algoliasearch from 'algoliasearch/lite';
 import qs from 'qs';
+import _renderToString from 'vue-server-renderer/basic';
+
+function renderToString(app) {
+  return new Promise((resolve, reject) => {
+    _renderToString(app, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+}
 
 const searchClient = algoliasearch(
   'latency',
@@ -96,7 +106,7 @@ export async function createApp({
       }),
     ],
     serverPrefetch() {
-      return this.instantsearch.findResultsState(this);
+      return this.instantsearch.findResultsState({ component: this, renderToString });
     },
     beforeMount() {
       if (typeof window === 'object' && window.__ALGOLIA_STATE__) {

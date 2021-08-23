@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import PoweredBy from '../PoweredBy.vue';
 jest.mock('../../mixins/widget');
 

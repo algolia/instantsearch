@@ -10,7 +10,7 @@ storiesOf('ais-configure-related-items', module).add('default', () => ({
         <ais-search-box />
 
         <ais-hits>
-          <template slot="item" slot-scope="{ item }">
+          <template v-slot:item="{ item }">
             <div :ref="setReferenceHit(item)">
               <div
                 class="playground-hits-image"
@@ -36,19 +36,21 @@ storiesOf('ais-configure-related-items', module).add('default', () => ({
 
         <div class="related-items">
           <ais-pagination>
-            <div slot-scope="{ currentRefinement, isFirstPage, refine }">
-              <button
-                class="ais-RelatedHits-button"
-                :disabled="isFirstPage"
-                @click="refine(currentRefinement - 1)"
-              >
-                ←
-              </button>
-            </div>
+            <template v-slot="{ currentRefinement, isFirstPage, refine }">
+              <div>
+                <button
+                  class="ais-RelatedHits-button"
+                  :disabled="isFirstPage"
+                  @click="refine(currentRefinement - 1)"
+                >
+                  ←
+                </button>
+              </div>
+            </template>
           </ais-pagination>
 
           <ais-hits>
-            <template slot="item" slot-scope="{ item }">
+            <template v-slot:item="{ item }">
               <div class="ais-RelatedHits-item-image">
                 <img :src="item.image" alt="item.name" />
               </div>
@@ -61,15 +63,17 @@ storiesOf('ais-configure-related-items', module).add('default', () => ({
           </ais-hits>
 
           <ais-pagination>
-            <div slot-scope="{ currentRefinement, isLastPage, refine }">
-              <button
-                class="ais-RelatedHits-button"
-                :disabled="isLastPage"
-                @click="refine(currentRefinement + 1)"
-              >
-                →
-              </button>
-            </div>
+            <template v-slot="{ currentRefinement, isLastPage, refine }">
+              <div>
+                <button
+                  class="ais-RelatedHits-button"
+                  :disabled="isLastPage"
+                  @click="refine(currentRefinement + 1)"
+                >
+                  →
+                </button>
+              </div>
+            </template>
           </ais-pagination>
         </div>
       </ais-index>

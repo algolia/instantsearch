@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import RefinementList from '../RefinementList.vue';
 import { __setState } from '../../mixins/widget';
 
@@ -83,7 +83,7 @@ it("renders correctly when it's searchable", () => {
       attribute: 'something',
     },
   });
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper.htmlCompat()).toMatchSnapshot();
 
   expect(wrapper.find('.ais-SearchBox-input').exists()).toBe(true);
 });
@@ -120,14 +120,14 @@ it("allows search bar classes override when it's searchable", () => {
       },
     },
   });
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper.htmlCompat()).toMatchSnapshot();
 
   expect(wrapper.find('.ais-SearchBox-form').classes('moar-classes')).toBe(
     true
   );
 });
 
-it("disables show more if can't refine", () => {
+it("disables show more if can't refine", async () => {
   __setState({
     ...defaultState,
     canToggleShowMore: false,
@@ -141,17 +141,17 @@ it("disables show more if can't refine", () => {
 
   const showMore = wrapper.find('.ais-RefinementList-showMore');
 
-  expect(showMore.attributes().disabled).toBe('disabled');
+  expect(showMore).toBeDisabled();
   expect(showMore.classes()).toContain('ais-RefinementList-showMore--disabled');
 
-  wrapper.setData({ state: { canToggleShowMore: true } });
-  expect(showMore.attributes().disabled).toBeUndefined();
+  await wrapper.setData({ state: { canToggleShowMore: true } });
+  expect(showMore).not.toBeDisabled();
   expect(showMore.classes()).not.toContain(
     'ais-RefinementList-showMore--disabled'
   );
 });
 
-it('behaves correctly', () => {
+it('behaves correctly', async () => {
   __setState({
     ...defaultState,
     refine: jest.fn(),
@@ -161,12 +161,12 @@ it('behaves correctly', () => {
       attribute: 'something',
     },
   });
-  const button = wrapper.find('input[type="checkbox"]');
-  button.trigger('click');
+  const checkBox = wrapper.find('input[type="checkbox"]');
+  await checkBox.setChecked();
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('yo');
 });
 
-it('calls the Panel mixin with `canRefine`', () => {
+it('calls the Panel mixin with `canRefine`', async () => {
   __setState({ ...defaultState });
 
   const wrapper = mount(RefinementList, {
@@ -178,7 +178,7 @@ it('calls the Panel mixin with `canRefine`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       canRefine: false,
     },
@@ -189,24 +189,29 @@ it('calls the Panel mixin with `canRefine`', () => {
   expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
     sendEvent,
   });
 
-  const wrapper = mount(RefinementList, {
-    propsData: { attribute: 'something' },
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
+  const wrapper = mount({
+    components: { RefinementList },
+    data() {
+      return { props: { attribute: 'something' } };
     },
+    template: `
+      <RefinementList v-bind="props">
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </RefinementList>
+    `,
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });

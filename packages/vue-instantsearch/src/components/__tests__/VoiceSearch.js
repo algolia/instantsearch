@@ -1,5 +1,5 @@
 import VoiceSearch from '../VoiceSearch.vue';
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 jest.mock('../../mixins/widget');
 
@@ -15,17 +15,19 @@ const defaultState = {
   toggleListening: jest.fn(),
 };
 
-const buttonTextScopedSlot = `
-  <span slot-scope="{ isListening }">
-    {{isListening ? "Stop": "Start"}}
-  </span>
+const buttonTextSlot = `
+  <template v-slot:buttonText="{ isListening }">
+    <span>
+      {{isListening ? "Stop": "Start"}}
+    </span>
+  </template>
 `;
 
 describe('button', () => {
-  it('calls toggleListening when the button is clicked', () => {
+  it('calls toggleListening when the button is clicked', async () => {
     __setState(defaultState);
     const wrapper = mount(VoiceSearch);
-    wrapper.find('button').trigger('click');
+    await wrapper.find('button').trigger('click');
     expect(wrapper.vm.state.toggleListening).toHaveBeenCalledTimes(1);
   });
 });
@@ -43,7 +45,7 @@ describe('Rendering', () => {
       isBrowserSupported: false,
     });
     const wrapper = mount(VoiceSearch);
-    expect(wrapper.find('button').attributes().disabled).toBe('disabled');
+    expect(wrapper.find('button')).toBeDisabled();
   });
 
   it('with custom template for buttonText (1)', () => {
@@ -51,10 +53,13 @@ describe('Rendering', () => {
       ...defaultState,
       isListening: true,
     });
-    const wrapper = mount(VoiceSearch, {
-      scopedSlots: {
-        buttonText: buttonTextScopedSlot,
-      },
+    const wrapper = mount({
+      components: { VoiceSearch },
+      template: `
+        <VoiceSearch>
+          ${buttonTextSlot}
+        </VoiceSearch>
+      `,
     });
     expect(wrapper.find('button').text()).toBe('Stop');
   });
@@ -64,10 +69,13 @@ describe('Rendering', () => {
       ...defaultState,
       isListening: false,
     });
-    const wrapper = mount(VoiceSearch, {
-      scopedSlots: {
-        buttonText: buttonTextScopedSlot,
-      },
+    const wrapper = mount({
+      components: { VoiceSearch },
+      template: `
+        <VoiceSearch>
+          ${buttonTextSlot}
+        </VoiceSearch>
+      `,
     });
     expect(wrapper.find('button').text()).toBe('Start');
   });
@@ -84,19 +92,22 @@ describe('Rendering', () => {
       isListening: true,
       toggleListening: jest.fn(),
     });
-    const wrapper = mount(VoiceSearch, {
-      scopedSlots: {
-        status: `
-          <div slot-scope="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
-            <p>status: {{status}}</p>
-            <p>errorCode: {{errorCode}}</p>
-            <p>isListening: {{isListening}}</p>
-            <p>transcript: {{transcript}}</p>
-            <p>isSpeechFinal: {{isSpeechFinal}}</p>
-            <p>isBrowserSupported: {{isBrowserSupported}}</p>
-          </div>
-        `,
-      },
+    const wrapper = mount({
+      components: { VoiceSearch },
+      template: `
+        <VoiceSearch>
+          <template v-slot:status="{ status, errorCode, isListening, transcript, isSpeechFinal, isBrowserSupported }">
+            <div>
+              <p>status: {{status}}</p>
+              <p>errorCode: {{errorCode}}</p>
+              <p>isListening: {{isListening}}</p>
+              <p>transcript: {{transcript}}</p>
+              <p>isSpeechFinal: {{isSpeechFinal}}</p>
+              <p>isBrowserSupported: {{isBrowserSupported}}</p>
+            </div>
+          </template>
+        </VoiceSearch>
+      `,
     });
     expect(wrapper.find('.ais-VoiceSearch-status').html()).toMatchSnapshot();
   });

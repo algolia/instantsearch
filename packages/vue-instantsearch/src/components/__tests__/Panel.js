@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Panel from '../Panel.vue';
 
 describe('default render', () => {
@@ -16,21 +16,21 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('renders correctly without refinement', () => {
+  it('renders correctly without refinement', async () => {
     const wrapper = mount(Panel, {
       slots: {
         default: defaultSlot,
       },
     });
 
-    wrapper.setData({
+    await wrapper.setData({
       canRefine: false,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('passes data without refinement', () => {
+  it('passes data without refinement', async () => {
     const defaultScopedSlot = jest.fn();
     const headerScopedSlot = jest.fn();
     const footerScopedSlot = jest.fn();
@@ -42,7 +42,7 @@ describe('default render', () => {
       },
     });
 
-    wrapper.setData({
+    await wrapper.setData({
       canRefine: false,
     });
 
@@ -51,7 +51,7 @@ describe('default render', () => {
     expect(footerScopedSlot).toHaveBeenCalledWith({ hasRefinements: false });
   });
 
-  it('passes data with refinement', () => {
+  it('passes data with refinement', async () => {
     const defaultScopedSlot = jest.fn();
     const headerScopedSlot = jest.fn();
     const footerScopedSlot = jest.fn();
@@ -63,7 +63,7 @@ describe('default render', () => {
       },
     });
 
-    wrapper.setData({
+    await wrapper.setData({
       canRefine: true,
     });
 

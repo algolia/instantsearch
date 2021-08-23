@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import { mount } from '@vue/test-utils';
+import { mount, nextTick } from '../../../test/utils';
 import InstantSearch from '../InstantSearch';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../../util/testutils/client';
@@ -21,19 +20,28 @@ it('child widgets get added to its parent instantsearch', () => {
     },
   };
 
-  const wrapper = mount(InstantSearch, {
-    propsData: {
-      searchClient: createFakeClient(),
-      indexName: 'something',
+  const wrapper = mount({
+    components: { InstantSearch, ChildComponent },
+    data() {
+      return {
+        props: {
+          searchClient: createFakeClient(),
+          indexName: 'something',
+        },
+      };
     },
-    slots: {
-      default: ChildComponent,
-    },
+    template: `
+      <InstantSearch v-bind="props">
+        <ChildComponent />
+      </InstantSearch>
+    `,
   });
 
-  expect(wrapper.vm.instantSearchInstance.mainIndex.getWidgets()).toContain(
-    widgetInstance
-  );
+  expect(
+    wrapper
+      .findComponent(InstantSearch)
+      .vm.instantSearchInstance.mainIndex.getWidgets()
+  ).toContain(widgetInstance);
 });
 
 describe('middlewares', () => {
@@ -58,7 +66,7 @@ describe('middlewares', () => {
         middlewares: [middleware],
       },
     });
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(1);
   });
@@ -93,7 +101,7 @@ describe('middlewares', () => {
     expect(middlewareSpy1.subscribe).toHaveBeenCalledTimes(1);
 
     await wrapper.find('input').setValue('a');
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledWith({
@@ -101,16 +109,16 @@ describe('middlewares', () => {
     });
 
     const [middleware2, middlewareSpy2] = createFakeMiddleware();
-    wrapper.setData({
+    await wrapper.setData({
       middlewares: [middleware1, middleware2],
     });
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy2.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(0);
 
     await wrapper.find('input').setValue('b');
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledWith({
@@ -157,7 +165,7 @@ describe('middlewares', () => {
     expect(middlewareSpy2.subscribe).toHaveBeenCalledTimes(1);
 
     await wrapper.find('input').setValue('a');
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledWith({
@@ -168,16 +176,13 @@ describe('middlewares', () => {
       uiState: { indexName: { query: 'a' } },
     });
 
-    wrapper.setData({
-      middlewares: [middleware1],
-    });
-    await Vue.nextTick();
+    await wrapper.setData({ middlewares: [middleware1] });
 
     expect(middlewareSpy1.unsubscribe).toHaveBeenCalledTimes(0);
     expect(middlewareSpy2.unsubscribe).toHaveBeenCalledTimes(1);
 
     await wrapper.find('input').setValue('b');
-    await Vue.nextTick();
+    await nextTick();
 
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledWith({

@@ -1,9 +1,13 @@
 import { createWidgetMixin } from '../mixins/widget';
 import { EXPERIMENTAL_connectDynamicWidgets } from 'instantsearch.js/es/connectors';
 import { createSuitMixin } from '../mixins/suit';
+import { _objectSpread } from '../util/polyfills';
+import { isVue3, renderCompat, getDefaultSlot } from '../util/vue-compat';
 
 function getWidgetAttribute(vnode) {
-  const props = vnode.componentOptions && vnode.componentOptions.propsData;
+  const props = isVue3
+    ? vnode.props
+    : vnode.componentOptions && vnode.componentOptions.propsData;
   if (props) {
     if (props.attribute) {
       return props.attribute;
@@ -13,10 +17,16 @@ function getWidgetAttribute(vnode) {
     }
   }
 
-  const children =
-    vnode.componentOptions && vnode.componentOptions.children
-      ? vnode.componentOptions.children
-      : vnode.children;
+  let children;
+  if (isVue3) {
+    children =
+      vnode.children && vnode.children.default && vnode.children.default();
+  } else {
+    children =
+      vnode.componentOptions && vnode.componentOptions.children
+        ? vnode.componentOptions.children
+        : vnode.children;
+  }
 
   if (Array.isArray(children)) {
     // return first child with a truthy attribute
@@ -41,18 +51,15 @@ export default {
       default: undefined,
     },
   },
-  render(createElement) {
+  render: renderCompat(function(h) {
     const components = new Map();
-    (this.$slots.default || []).forEach(vnode => {
+
+    (getDefaultSlot(this) || []).forEach(vnode => {
       const attribute = getWidgetAttribute(vnode);
       if (attribute) {
         components.set(
           attribute,
-          createElement(
-            'div',
-            { key: attribute, class: [this.suit('widget')] },
-            [vnode]
-          )
+          h('div', { key: attribute, class: [this.suit('widget')] }, [vnode])
         );
       }
     });
@@ -62,19 +69,24 @@ export default {
       const allComponents = [];
       components.forEach(component => allComponents.push(component));
 
-      return createElement(
+      return h(
         'div',
-        { attrs: { hidden: true }, class: [this.suit()] },
+        _objectSpread(
+          {
+            class: [this.suit()],
+          },
+          { attrs: { hidden: true } }
+        ),
         allComponents
       );
     }
 
-    return createElement(
+    return h(
       'div',
       { class: [this.suit()] },
       this.state.attributesToRender.map(attribute => components.get(attribute))
     );
-  },
+  }),
   computed: {
     widgetParams() {
       return {

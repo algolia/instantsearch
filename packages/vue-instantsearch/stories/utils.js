@@ -5,28 +5,27 @@ export const previewWrapper = ({
   insightsClient,
   indexName = 'instant_search',
   hits = `
-    <ol
-      slot-scope="{ items }"
-      class="playground-hits"
-    >
-      <li
-        v-for="item in items"
-        :key="item.objectID"
-        class="playground-hits-item"
-      >
-        <div
-          class="playground-hits-image"
-          :style="{ backgroundImage: 'url(' + item.image + ')' }"
-        />
-        <div class="playground-hits-desc">
-          <p>
-            <ais-highlight attribute="name" :hit="item" />
-          </p>
-          <p>Rating: {{ item.rating }}✭</p>
-          <p>Price: {{ item.price }}$</p>
-        </div>
-      </li>
-    </ol>
+    <template v-slot="{ items }">
+      <ol class="playground-hits">
+        <li
+          v-for="item in items"
+          :key="item.objectID"
+          class="playground-hits-item"
+        >
+          <div
+            class="playground-hits-image"
+            :style="{ backgroundImage: 'url(' + item.image + ')' }"
+          />
+          <div class="playground-hits-desc">
+            <p>
+              <ais-highlight attribute="name" :hit="item" />
+            </p>
+            <p>Rating: {{ item.rating }}✭</p>
+            <p>Price: {{ item.price }}$</p>
+          </div>
+        </li>
+      </ol>
+    </template>
   `,
   filters = `
     <ais-refinement-list attribute="brand" />

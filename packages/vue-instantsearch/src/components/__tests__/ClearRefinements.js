@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import ClearRefinements from '../ClearRefinements.vue';
 
@@ -61,12 +61,12 @@ describe('default render', () => {
 
     const button = wrapper.find('button');
 
-    expect(button.attributes().disabled).toBe('disabled');
+    expect(button).toBeDisabled();
     expect(button.classes()).toContain('ais-ClearRefinements-button--disabled');
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.htmlCompat()).toMatchSnapshot();
   });
 
-  it('calls refine on button click', () => {
+  it('calls refine on button click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -76,22 +76,21 @@ describe('default render', () => {
 
     const wrapper = mount(ClearRefinements);
 
-    wrapper.find('button').trigger('click');
+    await wrapper.find('button').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
   });
 });
 
 describe('custom default render', () => {
-  const defaultScopedSlot = `
-    <div
-      slot-scope="{ canRefine, refine, createURL }"
-      :class="[!canRefine && 'no-refinement']"
-    >
-      <a :href="createURL()" @click.prevent="refine">
-        Clear refinements
-      </a>
-    </div>
+  const defaultSlot = `
+    <template v-slot="{ canRefine, refine, createURL }">
+      <div :class="[!canRefine && 'no-refinement']">
+        <a :href="createURL()" @click.prevent="refine">
+          Clear refinements
+        </a>
+      </div>
+    </template>
   `;
 
   it('renders correctly', () => {
@@ -99,10 +98,13 @@ describe('custom default render', () => {
       ...defaultState,
     });
 
-    const wrapper = mount(ClearRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { ClearRefinements },
+      template: `
+        <ClearRefinements>
+          ${defaultSlot}
+        </ClearRefinements>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -114,10 +116,13 @@ describe('custom default render', () => {
       hasRefinements: false,
     });
 
-    const wrapper = mount(ClearRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { ClearRefinements },
+      template: `
+        <ClearRefinements>
+          ${defaultSlot}
+        </ClearRefinements>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
@@ -129,16 +134,19 @@ describe('custom default render', () => {
       createURL: () => `/clear/refinements`,
     });
 
-    const wrapper = mount(ClearRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { ClearRefinements },
+      template: `
+        <ClearRefinements>
+          ${defaultSlot}
+        </ClearRefinements>
+      `,
     });
 
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('calls refine on link click', () => {
+  it('calls refine on link click', async () => {
     const refine = jest.fn();
 
     __setState({
@@ -146,13 +154,16 @@ describe('custom default render', () => {
       refine,
     });
 
-    const wrapper = mount(ClearRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
+    const wrapper = mount({
+      components: { ClearRefinements },
+      template: `
+        <ClearRefinements>
+          ${defaultSlot}
+        </ClearRefinements>
+      `,
     });
 
-    wrapper.find('a').trigger('click');
+    await wrapper.find('a').trigger('click');
 
     expect(refine).toHaveBeenCalledTimes(1);
   });
@@ -177,7 +188,7 @@ describe('custom resetLabel render', () => {
   });
 });
 
-it('calls the Panel mixin with `hasRefinement`', () => {
+it('calls the Panel mixin with `hasRefinement`', async () => {
   __setState({
     hasRefinements: true,
   });
@@ -189,7 +200,7 @@ it('calls the Panel mixin with `hasRefinement`', () => {
 
   expect(mapStateToCanRefine()).toBe(true);
 
-  wrapper.setData({
+  await wrapper.setData({
     state: {
       hasRefinements: false,
     },

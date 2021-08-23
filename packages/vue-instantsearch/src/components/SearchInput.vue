@@ -7,7 +7,8 @@
     @submit.prevent="onFormSubmit"
     @reset.prevent="onFormReset"
   >
-    <!-- :value/@input allows us to pass v-model to the component -->
+    <!-- :value/@input allows us to pass v-model to the component in v2 -->
+    <!-- :modelValue/@update:modelValue allows us to pass v-model to the component in v3 -->
     <input
       type="search"
       autocorrect="off"
@@ -20,10 +21,10 @@
       :placeholder="placeholder"
       :autofocus="autofocus"
       :class="suit('input')"
-      :value="value"
+      :value="value || modelValue"
       @focus="$emit('focus', $event)"
       @blur="$emit('blur', $event)"
-      @input="$emit('input', $event.target.value)"
+      @input="$emit('input', $event.target.value); $emit('update:modelValue', $event.target.value)"
       ref="input"
     >
     <button
@@ -53,7 +54,7 @@
       type="reset"
       :title="resetTitle"
       :class="suit('reset')"
-      :hidden="!value || (showLoadingIndicator && shouldShowLoadingIndicator)"
+      :hidden="(!value && !modelValue) || (showLoadingIndicator && shouldShowLoadingIndicator)"
     >
       <slot name="reset-icon">
         <svg
@@ -153,9 +154,16 @@ export default {
     },
     value: {
       type: String,
-      required: true,
+      required: false,
+      default: undefined,
+    },
+    modelValue: {
+      type: String,
+      required: false,
+      default: undefined,
     },
   },
+  emits: ['input', 'update:modelValue', 'blur', 'focus', 'reset'],
   data() {
     return {
       query: '',
@@ -168,6 +176,7 @@ export default {
     },
     onFormReset() {
       this.$emit('input', '');
+      this.$emit('update:modelValue', '');
       this.$emit('reset');
     },
   },

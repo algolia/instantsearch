@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import ConfigureRelatedItems from '../ConfigureRelatedItems';
 
 jest.mock('../../mixins/widget');
@@ -27,5 +27,5 @@ it('renders nothing', () => {
     propsData: props,
   });
 
-  expect(wrapper.html()).toBeUndefined();
+  expect(wrapper).toHaveEmptyHTML();
 });

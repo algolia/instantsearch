@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import InfiniteHits from '../InfiniteHits.vue';
 
@@ -114,16 +114,19 @@ it('renders correctly with a custom rendering', () => {
     ...defaultState,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      default: `
-        <div slot-scope="{ items }">
-          <div v-for="item in items">
-            {{item.objectID}}
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot="{ items }">
+          <div>
+            <div v-for="item in items">
+              {{item.objectID}}
+            </div>
           </div>
-        </div>
-      `,
-    },
+        </template>
+      </InfiniteHits>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();
@@ -134,14 +137,17 @@ it('renders correctly with a custom item rendering', () => {
     ...defaultState,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      item: `
-        <div slot-scope="{ item }">
-          {{item.objectID}}
-        </div>
-      `,
-    },
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot:item="{ item }">
+          <div>
+            {{item.objectID}}
+          </div>
+        </template>
+      </InfiniteHits>
+    `,
   });
 
   expect(wrapper.html()).toMatchSnapshot();
@@ -165,8 +171,8 @@ it('renders correctly on the first page', () => {
   expect(
     previousButton.classes('ais-InfiniteHits-loadPrevious--disabled')
   ).toEqual(true);
-  expect(previousButton.attributes('disabled')).toEqual('disabled');
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(previousButton).toBeDisabled();
+  expect(wrapper.htmlCompat()).toMatchSnapshot();
 });
 
 it('renders correctly on the last page', () => {
@@ -177,7 +183,7 @@ it('renders correctly on the last page', () => {
 
   const wrapper = mount(InfiniteHits);
 
-  expect(wrapper.html()).toMatchSnapshot();
+  expect(wrapper.htmlCompat()).toMatchSnapshot();
 });
 
 it('renders correctly when not on the first page', () => {
@@ -203,7 +209,7 @@ it('renders correctly when not on the first page', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('expect to call showPrevious on click', () => {
+it('expect to call showPrevious on click', async () => {
   const showPrevious = jest.fn();
 
   __setState({
@@ -219,12 +225,12 @@ it('expect to call showPrevious on click', () => {
 
   expect(showPrevious).toHaveBeenCalledTimes(0);
 
-  wrapper.find('.ais-InfiniteHits-loadPrevious').trigger('click');
+  await wrapper.find('.ais-InfiniteHits-loadPrevious').trigger('click');
 
   expect(showPrevious).toHaveBeenCalledTimes(1);
 });
 
-it('expect to call showMore on click', () => {
+it('expect to call showMore on click', async () => {
   const showMore = jest.fn();
 
   __setState({
@@ -236,12 +242,12 @@ it('expect to call showMore on click', () => {
 
   expect(showMore).not.toHaveBeenCalled();
 
-  wrapper.find('.ais-InfiniteHits-loadMore').trigger('click');
+  await wrapper.find('.ais-InfiniteHits-loadMore').trigger('click');
 
   expect(showMore).toHaveBeenCalled();
 });
 
-it('exposes insights prop to the default slot', () => {
+it('exposes insights prop to the default slot', async () => {
   const insights = jest.fn();
 
   __setState({
@@ -249,27 +255,31 @@ it('exposes insights prop to the default slot', () => {
     insights,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      default: `
-        <ul slot-scope="{ items, insights }">
-          <li v-for="(item, itemIndex) in items" >
-            <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
-              Add to cart
-            </button>
-          </li>
-        </ul>
-      `,
-    },
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot="{ items, insights }">
+        <ul>
+        <li v-for="(item, itemIndex) in items" >
+          <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
+            Add to cart
+          </button>
+        </li>
+      </ul>
+        </template>
+      </InfiniteHits>
+    `,
   });
-  wrapper.find('#add-to-cart-00002').trigger('click');
+
+  await wrapper.find('#add-to-cart-00002').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
     eventName: 'Add to cart',
     objectIDs: ['00002'],
   });
 });
 
-it('exposes insights prop to the item slot', () => {
+it('exposes insights prop to the item slot', async () => {
   const insights = jest.fn();
 
   __setState({
@@ -277,41 +287,48 @@ it('exposes insights prop to the item slot', () => {
     insights,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      item: `
-          <div slot-scope="{ item, insights }">
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot:item="{ item, insights }">
+          <div>
             <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
               Add to cart
             </button>
           </div>
-      `,
-    },
+        </template>
+      </InfiniteHits>
+    `,
   });
-  wrapper.find('#add-to-cart-00002').trigger('click');
+
+  await wrapper.find('#add-to-cart-00002').trigger('click');
   expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
     eventName: 'Add to cart',
     objectIDs: ['00002'],
   });
 });
 
-it('exposes send-event method for insights middleware', () => {
+it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
     ...defaultState,
     sendEvent,
   });
 
-  const wrapper = mount(InfiniteHits, {
-    scopedSlots: {
-      default: `
-      <div slot-scope="{ sendEvent }">
-        <button @click="sendEvent()">Send Event</button>
-      </div>
-      `,
-    },
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot="{ sendEvent }">
+          <div>
+            <button @click="sendEvent()">Send Event</button>
+          </div>
+        </template>
+      </InfiniteHits>
+    `,
   });
 
-  wrapper.find('button').trigger('click');
+  await wrapper.find('button').trigger('click');
   expect(sendEvent).toHaveBeenCalledTimes(1);
 });

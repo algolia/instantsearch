@@ -1,13 +1,22 @@
-import Vue from 'vue';
+import { isVue3, Vue2, createApp } from '../util/vue-compat';
 import InstantSearch from '../instantsearch';
 
 const renderlessComponents = ['AisExperimentalConfigureRelatedItems'];
 
 it('should have `name` the same as the suit class name everywhere', () => {
-  Vue.component = jest.fn();
-  Vue.use(InstantSearch);
+  let calls;
+  if (isVue3) {
+    const app = createApp();
+    app.component = jest.fn();
+    app.use(InstantSearch);
+    calls = app.component.mock.calls;
+  } else {
+    Vue2.component = jest.fn();
+    Vue2.use(InstantSearch);
+    calls = Vue2.component.mock.calls;
+  }
 
-  const allInstalledComponents = Vue.component.mock.calls.filter(
+  const allInstalledComponents = calls.filter(
     ([installedName]) => !renderlessComponents.includes(installedName)
   );
   const components = allInstalledComponents.map(

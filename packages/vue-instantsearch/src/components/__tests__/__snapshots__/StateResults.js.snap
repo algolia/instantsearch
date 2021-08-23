@@ -6,11 +6,7 @@ exports[`renders explanation if no slot is used 1`] = `
     Use this component to have a different layout based on a certain state.
   </p>
   <p>
-    Fill in the slot, and get access to the following things on the
-    <code>
-      slot-scope
-    </code>
-    :
+    Fill in the slot, and get access to the following things:
   </p>
   <pre>
     results: [

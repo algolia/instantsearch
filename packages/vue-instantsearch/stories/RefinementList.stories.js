@@ -44,7 +44,7 @@ storiesOf('ais-refinement-list', module)
   .add('item custom rendering', () => ({
     template: `
     <ais-refinement-list attribute="brand">
-      <template slot="item" slot-scope="{item, refine}">
+      <template v-slot:item="{item, refine}">
         <button
           @click="refine(item.value)"
         >
@@ -56,7 +56,7 @@ storiesOf('ais-refinement-list', module)
   .add('full custom rendering', () => ({
     template: `
     <ais-refinement-list attribute="brand" searchable show-more>
-      <template slot-scope="{
+      <template v-slot="{
         items,
         refine,
         searchForItems,

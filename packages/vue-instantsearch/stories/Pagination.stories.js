@@ -25,7 +25,7 @@ storiesOf('ais-pagination', module)
         style="font-family: Fira Code, sans-serif"
       >
         <template
-          slot-scope="{
+          v-slot="{
             pages,
             refine,
             currentRefinement
@@ -46,7 +46,7 @@ storiesOf('ais-pagination', module)
   .add('with named slots', () => ({
     template: `
       <ais-pagination :padding="5">
-        <template slot="first" slot-scope="{ refine, isFirstPage }">
+        <template v-slot:first="{ refine, isFirstPage }">
           <button
             @click="refine"
             :disabled="isFirstPage"
@@ -54,7 +54,7 @@ storiesOf('ais-pagination', module)
             first
           </button>
         </template>
-        <template slot="previous" slot-scope="{ refine, isFirstPage }">
+        <template v-slot:previous="{ refine, isFirstPage }">
           <button
             @click="refine"
             :disabled="isFirstPage"
@@ -63,7 +63,7 @@ storiesOf('ais-pagination', module)
           </button>
         </template>
         </template>
-        <template slot="item" slot-scope="{ page, refine, createURL }">
+        <template v-slot:item="{ page, refine, createURL }">
           <a
             class="ais-Pagination-link"
             :href="createURL()"
@@ -72,7 +72,7 @@ storiesOf('ais-pagination', module)
             {{page}}
           </a>
         </template>
-        <template slot="next" slot-scope="{ refine, isFirstPage }">
+        <template v-slot:next="{ refine, isLastPage }">
           <button
             @click="refine"
             :disabled="isLastPage"
@@ -80,7 +80,7 @@ storiesOf('ais-pagination', module)
             next
           </button>
         </template>
-        <template slot="last" slot-scope="{ refine, isFirstPage }">
+        <template v-slot:last="{ refine, isLastPage }">
           <button
             @click="refine"
             :disabled="isLastPage"

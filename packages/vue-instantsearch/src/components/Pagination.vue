@@ -219,6 +219,7 @@ export default {
       };
     },
   },
+  emits: ['page-change'],
   methods: {
     refine(page) {
       const p = Math.min(Math.max(page, 0), this.state.nbPages - 1);

@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '../../../test/utils';
 import Snippet from '../Snippet.vue';
 
 jest.unmock('instantsearch.js/es');

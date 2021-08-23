@@ -16,18 +16,21 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "3.8.1",
+  "version": "4.0.0-beta.3",
   "files": [
-    "dist",
-    "src",
-    "es"
+    "vue2",
+    "vue3",
+    "src"
   ],
-  "main": "dist/vue-instantsearch.common.js",
-  "module": "es/src/instantsearch.js",
+  "main": "vue2/cjs",
+  "module": "vue2/es",
   "sideEffects": false,
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
-    "build": "rm -rf dist es && rollup -c",
+    "prebuild": "rm -rf vue2 vue3",
+    "build": "yarn build:vue2 && yarn build:vue3",
+    "build:vue2": "./scripts/build-vue2.sh",
+    "build:vue3": "./scripts/build-vue3.sh",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook:build": "build-storybook -c .storybook -o website/stories",
     "examples:build": "yarn build && ./examples/build.sh",
@@ -46,19 +49,31 @@
   },
   "dependencies": {
     "algoliasearch-helper": "^3.1.0",
-    "instantsearch.js": "^4.25.0"
+    "instantsearch.js": "^4.27.2",
+    "mitt": "^2.1.0"
   },
   "peerDependencies": {
+    "@vue/server-renderer": "^3.1.2",
     "algoliasearch": ">= 3.32.0 < 5",
-    "vue": "^2.6.0",
+    "vue": "^2.6.0 || >=3.0.0-rc.0",
     "vue-server-renderer": "^2.6.11"
+  },
+  "peerDependenciesMeta": {
+    "vue-server-renderer": {
+      "optional": true
+    },
+    "@vue/server-renderer": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@storybook/addon-actions": "3.4.11",
     "@storybook/addon-knobs": "3.4.11",
     "@storybook/addon-options": "3.4.11",
     "@storybook/vue": "3.4.11",
-    "@vue/test-utils": "1.0.0-beta.25",
+    "@vue/compiler-sfc": "3.0.11",
+    "@vue/test-utils": "1.2.1",
+    "@vue/test-utils2": "npm:@vue/test-utils@2.0.0-rc.11",
     "@wdio/cli": "^5.11.13",
     "@wdio/jasmine-framework": "^5.11.0",
     "@wdio/local-runner": "^5.11.13",
@@ -96,29 +111,40 @@
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.1.0",
     "rollup-plugin-terser": "4.0.4",
-    "rollup-plugin-vue": "3.0.0",
+    "rollup-plugin-vue2": "npm:rollup-plugin-vue@3.0.0",
+    "rollup-plugin-vue3": "npm:rollup-plugin-vue@6.0.0",
     "rollup-watch": "4.3.1",
     "shipjs": "0.20.0-beta.3",
-    "vue": "2.5.18",
+    "vue": "2.6.0",
     "vue-autosuggest": "1.8.1",
     "vue-jest": "2.6.0",
     "vue-json-tree": "0.3.3",
     "vue-loader": "14.2.2",
     "vue-router": "3.4.3",
+    "vue-router4": "npm:vue-router@4.0.0",
     "vue-server-renderer": "^2.6.11",
     "vue-slider-component": "3.0.15",
-    "vue-template-compiler": "2.5.18",
+    "vue-template-compiler": "2.6.0",
     "vuetify": "1.5.3",
-    "vuex": "3.5.1"
+    "vuex": "3.5.1",
+    "vuex4": "npm:vuex@4.0.0"
   },
   "bundlesize": [
     {
-      "path": "./dist/vue-instantsearch.js",
-      "maxSize": "54 kB"
+      "path": "./vue2/umd/index.js",
+      "maxSize": "55.00 kB"
     },
     {
-      "path": "./dist/vue-instantsearch.common.js",
-      "maxSize": "16.75 kB"
+      "path": "./vue2/cjs/index.js",
+      "maxSize": "17.00 kB"
+    },
+    {
+      "path": "./vue3/umd/index.js",
+      "maxSize": "56.50 kB"
+    },
+    {
+      "path": "./vue3/cjs/index.js",
+      "maxSize": "18.50 kB"
     }
   ],
   "resolutions": {
@@ -130,9 +156,6 @@
       "js",
       "vue"
     ],
-    "moduleNameMapper": {
-      "^instantsearch.js/es$": "<rootDir>/__mocks__/instantsearch-es.js"
-    },
     "transformIgnorePatterns": [
       "node_modules/(?!(instantsearch\\.js|vue-json-tree))"
     ],
