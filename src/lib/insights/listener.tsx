@@ -27,9 +27,7 @@ const findInsightsTarget = (
   return element;
 };
 
-type ParseInsightsEvent = (element: HTMLElement) => InsightsEvent;
-
-const parseInsightsEvent: ParseInsightsEvent = (element) => {
+const parseInsightsEvent = (element: HTMLElement): InsightsEvent[] => {
   const serializedPayload = element.getAttribute('data-insights-event');
 
   if (typeof serializedPayload !== 'string') {
@@ -39,7 +37,7 @@ const parseInsightsEvent: ParseInsightsEvent = (element) => {
   }
 
   try {
-    return deserializePayload(serializedPayload) as InsightsEvent;
+    return deserializePayload(serializedPayload);
   } catch (error) {
     throw new Error(
       'The insights middleware was unable to parse `data-insights-event`.'
@@ -59,7 +57,8 @@ const insightsListener = (BaseComponent: any) => {
         );
         if (targetWithEvent) {
           const payload = parseInsightsEvent(targetWithEvent);
-          props.sendEvent(payload);
+
+          payload.forEach((single) => props.sendEvent!(single));
         }
       }
 

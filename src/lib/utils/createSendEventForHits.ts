@@ -183,9 +183,8 @@ export function createBindEventForHits({
       args,
     });
 
-    // TODO: deal with longer payloads in bind
     return payloads.length
-      ? `data-insights-event=${serializePayload(payloads[0])}`
+      ? `data-insights-event=${serializePayload(payloads)}`
       : '';
   };
   return bindEventForHits;

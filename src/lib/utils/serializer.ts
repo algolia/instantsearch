@@ -1,7 +1,7 @@
-export function serializePayload(payload: Record<string, unknown>): string {
+export function serializePayload<TPayload>(payload: TPayload): string {
   return btoa(encodeURIComponent(JSON.stringify(payload)));
 }
 
-export function deserializePayload(payload: string): Record<string, unknown> {
-  return JSON.parse(decodeURIComponent(atob(payload)));
+export function deserializePayload<TPayload>(serialized: string): TPayload {
+  return JSON.parse(decodeURIComponent(atob(serialized)));
 }
