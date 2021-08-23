@@ -3,7 +3,7 @@ import { getByText, waitFor, fireEvent } from '@testing-library/dom';
 import instantsearch from '../../../index.es';
 import { infiniteHits, configure } from '../../';
 import { createInsightsMiddleware } from '../../../middlewares';
-import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   InfiniteHitsCache,
@@ -336,7 +336,7 @@ Object {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent).toHaveBeenCalledWith(
@@ -384,7 +384,7 @@ Object {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
       fireEvent.click(getByText(container, 'title 1'));
@@ -432,7 +432,7 @@ Object {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
       fireEvent.click(getByText(container, 'title 2'));

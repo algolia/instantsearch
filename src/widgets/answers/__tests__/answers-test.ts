@@ -4,7 +4,6 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import { fireEvent } from '@testing-library/preact';
 import instantsearch from '../../../index.es';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 import { wait } from '../../../../test/utils/wait';
 import answers from '../answers';
 import searchBox from '../../search-box/search-box';
@@ -92,7 +91,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
       expect(container.innerHTML).toMatchInlineSnapshot(
         `"<div class=\\"ais-Answers ais-Answers--empty\\"><div class=\\"ais-Answers-header\\"></div><ul class=\\"ais-Answers-list\\"></ul></div>"`
       );
@@ -137,13 +136,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       fireEvent.input(searchBoxContainer.querySelector('input')!, {
         target: { value: 'a' },
       });
 
-      await runAllMicroTasks();
+      await wait(0);
       expect(answersContainer.querySelector('.loader')!.innerHTML).toEqual(
         'loading...'
       );
