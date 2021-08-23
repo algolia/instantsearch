@@ -1,59 +1,12 @@
-# [4.0.0-beta.3](https://github.com/algolia/vue-instantsearch/compare/v4.0.0-beta.2...v4.0.0-beta.3) (2021-08-20)
+# [4.0.0](https://github.com/algolia/vue-instantsearch/compare/v3.8.1...v4.0.0) (2021-08-23)
 
 
-### Bug Fixes
+### Features
 
-* **vue 3:** pass renderToString to findResultsState instead of createServerRootMixin ([#1044](https://github.com/algolia/vue-instantsearch/issues/1044)) ([43aed4f](https://github.com/algolia/vue-instantsearch/commit/43aed4f50a0bdfda301e047e84badc6e41892e7c))
+* **vue 3:** support vue 3 ([#990](https://github.com/algolia/vue-instantsearch/issues/990))
 
+Since v4, Vue InstantSearch supports Vue 3. There's a couple of breaking changes that you can easily migrate to the new version. See more here: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/vue/#upgrade-from-v3-to-v4
 
-
-# [4.0.0-beta.2](https://github.com/algolia/vue-instantsearch/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2021-08-19)
-
-
-### Bug Fixes
-
-* **range-input:** remove default min and max values from `ais-range-input` (BREAKING CHANGE) ([#1036](https://github.com/algolia/vue-instantsearch/issues/1036)) ([38987ac](https://github.com/algolia/vue-instantsearch/commit/38987ac74548baf239a7ca25d34743b4027704cd))
-* **Server-side rendering:** let users pass renderToString to createServerRootMixin (BREAKING CHANGE) ([#1035](https://github.com/algolia/vue-instantsearch/issues/1035)) ([bc5f58a](https://github.com/algolia/vue-instantsearch/commit/bc5f58a81a205e856207e6cf1e45bc8d11605efd))
-
-
-
-# [4.0.0-beta.1](https://github.com/algolia/vue-instantsearch/compare/v3.8.1...v4.0.0-beta.1) (2021-07-29)
-
-
-Vue InstantSearch now supports Vue 3.
-
-## Breaking Change for Vue 2 users with SSR
-
-From now on, Vue InstantSearch [dynamically imports](https://github.com/algolia/vue-instantsearch/blob/b3ad4a3fc49e1e7470a0e6dd383c24b1dcb0b5bd/src/util/vue-compat/index-2.js#L23:L23) `vue-server-renderer/basic` instead of `require()`.
-
-* If you're using CJS output of Vue InstantSearch, it doesn't change anything for you because it gets transpiled to `require` for CJS output.
-* If you're using ESM output, it should probably be okay. We've tested "dynamic import" with Vue 2 (vue-cli) and Nuxt and it worked fine.
-
-If you have different setup or use different bundler, you may check if it still works for you. If not, please [create an issue](https://github.com/algolia/vue-instantsearch/issues/new/choose) with a reproducible example.
-
-## For Vue 3 users
-
-Vue InstantSearch includes two packages, one for vue 2 and another one for vue 3. So for vue 3, you need to import with this path:
-
-```js
-import InstantSearch from 'vue-instantsearch/vue3/es';
-```
-
-## Regarding vue-router@v4
-
-If you migrate your `vue-router` to v4 along with vue 3, you need to replace
-
-```js
-vueRouter.currentRoute.query
-```
-
-with
-
-```js
-vueRouter.currentRoute.value.query
-```
-
-due to [its change](https://next.router.vuejs.org/api/#currentroute).
 
 ## [3.8.1](https://github.com/algolia/vue-instantsearch/compare/v3.8.0...v3.8.1) (2021-07-12)
 
