@@ -83,7 +83,6 @@ const searchClient = algoliasearch(
 export default {
   mixins: [
     createServerRootMixin({
-      renderToString,
       searchClient,
       indexName: 'instant_search',
       initialUiState: {
@@ -107,9 +106,11 @@ export default {
     }),
   ],
   serverPrefetch() {
-    return this.instantsearch.findResultsState(this).then(algoliaState => {
-      this.$ssrContext.nuxt.algoliaState = algoliaState;
-    });
+    return this.instantsearch
+      .findResultsState({ component: this, renderToString })
+      .then(algoliaState => {
+        this.$ssrContext.nuxt.algoliaState = algoliaState;
+      });
   },
   beforeMount() {
     const results = window.__NUXT__.algoliaState;

@@ -36,7 +36,6 @@ export async function createApp({
   const app = new Vue({
     mixins: [
       createServerRootMixin({
-        renderToString,
         searchClient,
         indexName: 'instant_search',
         routing: {
@@ -107,7 +106,7 @@ export async function createApp({
       }),
     ],
     serverPrefetch() {
-      return this.instantsearch.findResultsState(this);
+      return this.instantsearch.findResultsState({ component: this, renderToString });
     },
     beforeMount() {
       if (typeof window === 'object' && window.__ALGOLIA_STATE__) {
