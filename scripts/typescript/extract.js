@@ -19,12 +19,6 @@ shell.sed(
   path.join(__dirname, '../../es/**/*.d.ts')
 );
 
-// expose only the es entry point, not the umd entry point
-shell.mv(
-  path.join(__dirname, '../../es/index.es.d.ts'),
-  path.join(__dirname, '../../es/index.d.ts')
-);
-
 console.log();
 console.log(`Validating definitions...`);
 
@@ -47,3 +41,24 @@ if (!result.succeeded) {
 
   process.exitCode = 1;
 }
+
+// move the right entry points
+// esm to override umd
+shell.mv(
+  path.join(__dirname, '../../es/index.es.d.ts'),
+  path.join(__dirname, '../../es/index.d.ts')
+);
+
+// production and development umd
+shell.cp(
+  path.join(__dirname, '../../dist/instantsearch.production.d.ts'),
+  path.join(__dirname, '../../dist/instantsearch.production.min.d.ts')
+);
+shell.cp(
+  path.join(__dirname, '../../dist/instantsearch.production.d.ts'),
+  path.join(__dirname, '../../dist/instantsearch.development.d.ts')
+);
+shell.cp(
+  path.join(__dirname, '../../dist/instantsearch.production.d.ts'),
+  path.join(__dirname, '../../dist/instantsearch.development.min.d.ts')
+);

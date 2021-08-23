@@ -6,7 +6,8 @@
   "mainEntryPointFilePath": "<projectFolder>/es/index.d.ts",
 
   "dtsRollup": {
-    "enabled": false
+    "enabled": true,
+    "untrimmedFilePath": "<projectFolder>/dist/instantsearch.production.d.ts"
   },
 
   "apiReport": {
