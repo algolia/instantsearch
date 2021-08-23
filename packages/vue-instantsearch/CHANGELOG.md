@@ -1,11 +1,15 @@
 # [4.0.0](https://github.com/algolia/vue-instantsearch/compare/v3.8.1...v4.0.0) (2021-08-23)
 
+Vue InstantSearch now supports Vue 3 ([#990](https://github.com/algolia/vue-instantsearch/issues/990)).
 
-### Features
+It has a few breaking changes that you can easily migrate. You can read [the upgrade guide](https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/vue/#upgrade-from-v3-to-v4).
 
-* **vue 3:** support vue 3 ([#990](https://github.com/algolia/vue-instantsearch/issues/990))
+You can try these examples:
 
-Since v4, Vue InstantSearch supports Vue 3. There's a couple of breaking changes that you can easily migrate to the new version. See more here: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/vue/#upgrade-from-v3-to-v4
+* Vue 3 + Vue CLI: [GitHub](https://github.com/algolia/doc-code-samples/tree/master/Vue%20InstantSearch/vue3-vue-cli) | [CodeSandbox](codesandbox.io/s/github/algolia/doc-code-samples/tree/master/Vue%20InstantSearch/vue3-vue-cli)
+* Vue 3 + Vite: [GitHub](https://github.com/algolia/doc-code-samples/tree/master/Vue%20InstantSearch/vue3-vite)
+* Vue 3 + SSR + Vue CLI: [GitHub](https://github.com/algolia/doc-code-samples/tree/master/Vue%20InstantSearch/vue3-ssr-vue-cli)
+* Vue 3 + SSR + Vite: [GitHub](https://github.com/algolia/doc-code-samples/tree/master/Vue%20InstantSearch/vue3-ssr-vite)
 
 
 ## [3.8.1](https://github.com/algolia/vue-instantsearch/compare/v3.8.0...v3.8.1) (2021-07-12)
