@@ -6,13 +6,10 @@ import cx from 'classnames';
 import Template from '../Template/Template';
 import type {
   PanelCSSClasses,
+  PanelSharedOptions,
   PanelTemplates,
 } from '../../widgets/panel/panel';
-import type {
-  ComponentCSSClasses,
-  RenderOptions,
-  UnknownWidgetFactory,
-} from '../../types';
+import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types';
 
 export type PanelComponentCSSClasses = ComponentCSSClasses<
   // `collapseIcon` is only used in the default templates of the widget
@@ -26,7 +23,7 @@ export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;
   collapsible: boolean;
   isCollapsed: boolean;
-  data: RenderOptions | Record<string, never>;
+  data: PanelSharedOptions<TWidget>;
   cssClasses: PanelComponentCSSClasses;
   templates: PanelComponentTemplates<TWidget>;
   bodyElement: HTMLElement;
