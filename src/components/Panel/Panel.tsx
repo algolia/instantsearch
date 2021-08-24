@@ -6,7 +6,7 @@ import cx from 'classnames';
 import Template from '../Template/Template';
 import type {
   PanelCSSClasses,
-  PanelRenderOptions,
+  PanelSharedOptions,
   PanelTemplates,
 } from '../../widgets/panel/panel';
 import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types';
@@ -23,7 +23,7 @@ export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;
   collapsible: boolean;
   isCollapsed: boolean;
-  data: PanelRenderOptions<TWidget>;
+  data: PanelSharedOptions<TWidget>;
   cssClasses: PanelComponentCSSClasses;
   templates: PanelComponentTemplates<TWidget>;
   bodyElement: HTMLElement;

@@ -103,7 +103,10 @@ type GetWidgetRenderState<TWidgetFactory extends AnyWidgetFactory> =
       : never
     : Record<string, unknown>;
 
-export type PanelRenderOptions<TWidgetFactory extends AnyWidgetFactory> = (
+export type PanelRenderOptions<TWidgetFactory extends AnyWidgetFactory> =
+  RenderOptions & GetWidgetRenderState<TWidgetFactory>;
+
+export type PanelSharedOptions<TWidgetFactory extends AnyWidgetFactory> = (
   | InitOptions
   | RenderOptions
 ) &
@@ -154,7 +157,7 @@ const renderer =
     collapsible,
     collapsed,
   }: {
-    options: PanelRenderOptions<TWidget>;
+    options: PanelSharedOptions<TWidget>;
     hidden: boolean;
     collapsible: boolean;
     collapsed: boolean;
@@ -316,9 +319,9 @@ const panel: PanelWidget = (panelWidgetParams) => {
         const [renderOptions] = args;
 
         const options = {
-          ...(widget.getWidgetRenderState
+          ...((widget.getWidgetRenderState
             ? widget.getWidgetRenderState(renderOptions)
-            : {}),
+            : {}) as GetWidgetRenderState<typeof widgetFactory>),
           ...renderOptions,
         };
 
