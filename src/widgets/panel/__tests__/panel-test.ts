@@ -114,9 +114,11 @@ describe('Templates', () => {
   test('with default templates', () => {
     const widgetWithPanel = panel()(widgetFactory);
 
-    widgetWithPanel({
+    const widget = widgetWithPanel({
       container: document.createElement('div'),
     });
+
+    widget.init(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -137,9 +139,11 @@ describe('Templates', () => {
       },
     })(widgetFactory);
 
-    widgetWithPanel({
+    const widget = widgetWithPanel({
       container: document.createElement('div'),
     });
+
+    widget.init(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -156,9 +160,11 @@ describe('Templates', () => {
       },
     })(widgetFactory);
 
-    widgetWithPanel({
+    const widget = widgetWithPanel({
       container: document.createElement('div'),
     });
+
+    widget.init(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -175,9 +181,11 @@ describe('Templates', () => {
       },
     })(widgetFactory);
 
-    widgetWithPanel({
+    const widget = widgetWithPanel({
       container: document.createElement('div'),
     });
+
+    widget.init(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -206,32 +214,235 @@ describe('Lifecycle', () => {
       container: document.createElement('div'),
     });
 
-    widgetWithPanel.init!(createInitOptions());
-    widgetWithPanel.render!(createRenderOptions());
-    widgetWithPanel.dispose!(createDisposeOptions());
+    widgetWithPanel.init(createInitOptions());
+    widgetWithPanel.render(createRenderOptions());
+    widgetWithPanel.dispose(createDisposeOptions());
 
     expect(widget.init).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.dispose).toHaveBeenCalledTimes(1);
   });
 
-  test('returns the `state` from the widget dispose function', () => {
-    const nextSearchParameters = new algoliasearchHelper.SearchParameters({
-      facets: ['brands'],
+  describe('init', () => {
+    test("calls the wrapped widget's init", () => {
+      const widget = {
+        $$type: 'mock.widget',
+        init: jest.fn(),
+      };
+      const widgetFactory = () => widget;
+
+      const widgetWithPanel = panel()(widgetFactory)({
+        container: document.createElement('div'),
+      });
+
+      const initOptions = createInitOptions();
+
+      widgetWithPanel.init(initOptions);
+
+      expect(widget.init).toHaveBeenCalledTimes(1);
+      expect(widget.init).toHaveBeenCalledWith(initOptions);
     });
-    const widget = {
-      $$type: 'mock.widget',
-      init: jest.fn(),
-      dispose: jest.fn(() => nextSearchParameters),
-    };
-    const widgetFactory = () => widget;
 
-    const widgetWithPanel = panel()(widgetFactory)({
-      container: document.createElement('div'),
+    test('does not call hidden and collapsed yet', () => {
+      const renderState = {
+        widgetParams: {},
+        swag: true,
+      };
+
+      const widget = {
+        $$type: 'mock.widget',
+        render: jest.fn(),
+        getWidgetRenderState() {
+          return renderState;
+        },
+      };
+
+      const widgetFactory = () => widget;
+
+      const hiddenFn = jest.fn();
+      const collapsedFn = jest.fn();
+
+      const widgetWithPanel = panel({
+        hidden: hiddenFn,
+        collapsed: collapsedFn,
+      })(widgetFactory)({
+        container: document.createElement('div'),
+      });
+
+      const initOptions = createInitOptions();
+
+      widgetWithPanel.init(initOptions);
+
+      expect(hiddenFn).toHaveBeenCalledTimes(0);
+      expect(collapsedFn).toHaveBeenCalledTimes(0);
     });
 
-    const nextState = widgetWithPanel.dispose!(createDisposeOptions({}));
+    test('renders with render state', () => {
+      const renderState = {
+        widgetParams: {},
+        swag: true,
+      };
 
-    expect(nextState).toEqual(nextSearchParameters);
+      const widget = {
+        $$type: 'mock.widget',
+        render: jest.fn(),
+        getWidgetRenderState() {
+          return renderState;
+        },
+      };
+
+      const widgetFactory = () => widget;
+
+      const widgetWithPanel = panel()(widgetFactory)({
+        container: document.createElement('div'),
+      });
+
+      const initOptions = createInitOptions();
+
+      widgetWithPanel.init(initOptions);
+
+      const firstRender = render.mock.calls[0][0] as VNode<
+        PanelProps<typeof widgetFactory>
+      >;
+
+      expect(firstRender.props).toEqual(
+        expect.objectContaining({
+          hidden: true,
+          collapsible: false,
+          isCollapsed: false,
+          data: {
+            ...renderState,
+            ...initOptions,
+          },
+        })
+      );
+    });
+  });
+
+  describe('render', () => {
+    test("calls the wrapped widget's render", () => {
+      const widget = {
+        $$type: 'mock.widget',
+        render: jest.fn(),
+      };
+      const widgetFactory = () => widget;
+
+      const widgetWithPanel = panel()(widgetFactory)({
+        container: document.createElement('div'),
+      });
+
+      const renderOptions = createRenderOptions();
+
+      widgetWithPanel.render(renderOptions);
+
+      expect(widget.render).toHaveBeenCalledTimes(1);
+      expect(widget.render).toHaveBeenCalledWith(renderOptions);
+    });
+
+    test("calls hidden and collapsed with the wrapped widget's render state", () => {
+      const renderState = {
+        widgetParams: {},
+        swag: true,
+      };
+
+      const widget = {
+        $$type: 'mock.widget',
+        render: jest.fn(),
+        getWidgetRenderState() {
+          return renderState;
+        },
+      };
+
+      const widgetFactory = () => widget;
+
+      const hiddenFn = jest.fn();
+      const collapsedFn = jest.fn();
+
+      const widgetWithPanel = panel({
+        hidden: hiddenFn,
+        collapsed: collapsedFn,
+      })(widgetFactory)({
+        container: document.createElement('div'),
+      });
+
+      const renderOptions = createRenderOptions();
+
+      widgetWithPanel.render(renderOptions);
+
+      expect(hiddenFn).toHaveBeenCalledTimes(1);
+      expect(hiddenFn).toHaveBeenCalledWith({
+        ...renderState,
+        ...renderOptions,
+      });
+
+      expect(collapsedFn).toHaveBeenCalledTimes(1);
+      expect(collapsedFn).toHaveBeenCalledWith({
+        ...renderState,
+        ...renderOptions,
+      });
+    });
+
+    test('renders with render state', () => {
+      const renderState = {
+        widgetParams: {},
+        swag: true,
+      };
+
+      const widget = {
+        $$type: 'mock.widget',
+        render: jest.fn(),
+        getWidgetRenderState() {
+          return renderState;
+        },
+      };
+
+      const widgetFactory = () => widget;
+
+      const widgetWithPanel = panel()(widgetFactory)({
+        container: document.createElement('div'),
+      });
+
+      const renderOptions = createRenderOptions();
+
+      widgetWithPanel.render(renderOptions);
+
+      const firstRender = render.mock.calls[0][0] as VNode<
+        PanelProps<typeof widgetFactory>
+      >;
+
+      expect(firstRender.props).toEqual(
+        expect.objectContaining({
+          hidden: false,
+          collapsible: false,
+          isCollapsed: false,
+          data: {
+            ...renderState,
+            ...renderOptions,
+          },
+        })
+      );
+    });
+  });
+
+  describe('dispose', () => {
+    test("returns the state from the widget's dispose function", () => {
+      const nextSearchParameters = new algoliasearchHelper.SearchParameters({
+        facets: ['brands'],
+      });
+      const widget = {
+        $$type: 'mock.widget',
+        init: jest.fn(),
+        dispose: jest.fn(() => nextSearchParameters),
+      };
+      const widgetFactory = () => widget;
+
+      const widgetWithPanel = panel()(widgetFactory)({
+        container: document.createElement('div'),
+      });
+
+      const nextState = widgetWithPanel.dispose(createDisposeOptions());
+
+      expect(nextState).toEqual(nextSearchParameters);
+    });
   });
 });

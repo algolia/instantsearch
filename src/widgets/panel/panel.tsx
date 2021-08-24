@@ -11,7 +11,13 @@ import {
 import { component } from '../../lib/suit';
 import type { PanelComponentCSSClasses } from '../../components/Panel/Panel';
 import Panel from '../../components/Panel/Panel';
-import type { Template, RenderOptions, WidgetFactory } from '../../types';
+import type {
+  Template,
+  RenderOptions,
+  WidgetFactory,
+  InitOptions,
+  Widget,
+} from '../../types';
 
 export type PanelCSSClasses = Partial<{
   /**
@@ -97,8 +103,11 @@ type GetWidgetRenderState<TWidgetFactory extends AnyWidgetFactory> =
       : never
     : Record<string, unknown>;
 
-export type PanelRenderOptions<TWidgetFactory extends AnyWidgetFactory> =
-  RenderOptions & GetWidgetRenderState<TWidgetFactory>;
+export type PanelRenderOptions<TWidgetFactory extends AnyWidgetFactory> = (
+  | InitOptions
+  | RenderOptions
+) &
+  GetWidgetRenderState<TWidgetFactory>;
 
 export type PanelWidgetParams<TWidgetFactory extends AnyWidgetFactory> = {
   /**
@@ -145,7 +154,7 @@ const renderer =
     collapsible,
     collapsed,
   }: {
-    options: RenderOptions | Record<string, never>;
+    options: PanelRenderOptions<TWidget>;
     hidden: boolean;
     collapsible: boolean;
     collapsed: boolean;
@@ -164,13 +173,19 @@ const renderer =
     );
   };
 
+type AugmentedWidget<
+  TWidgetFactory extends AnyWidgetFactory,
+  TOverriddenKeys extends keyof Widget = 'init' | 'render' | 'dispose'
+> = Omit<ReturnType<TWidgetFactory>, TOverriddenKeys> &
+  Pick<Required<Widget>, TOverriddenKeys>;
+
 export type PanelWidget = <TWidgetFactory extends AnyWidgetFactory>(
   panelWidgetParams?: PanelWidgetParams<TWidgetFactory>
 ) => (
   widgetFactory: TWidgetFactory
 ) => (
   widgetParams: Parameters<TWidgetFactory>[0]
-) => ReturnType<TWidgetFactory>;
+) => AugmentedWidget<TWidgetFactory>;
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
@@ -265,40 +280,45 @@ const panel: PanelWidget = (panelWidgetParams) => {
       },
     });
 
-    renderPanel({
-      options: {},
-      hidden: true,
-      collapsible,
-      collapsed: false,
-    });
-
     const widget = widgetFactory({
       ...widgetParams,
       container: bodyContainerNode,
     });
 
     // TypeScript somehow loses track of the ...widget type, since it's
-    // not directly returned. Eventually the "as ReturnType<typeof widgetFactory>"
+    // not directly returned. Eventually the "as AugmentedWidget<typeof widgetFactory>"
     // will not be needed anymore.
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {
       ...widget,
-      dispose(...args) {
-        render(null, containerNode);
+      init(...args) {
+        const [renderOptions] = args;
 
-        if (typeof widget.dispose === 'function') {
-          return widget.dispose.call(this, ...args);
+        const options = {
+          ...(widget.getWidgetRenderState
+            ? widget.getWidgetRenderState(renderOptions)
+            : {}),
+          ...renderOptions,
+        };
+
+        renderPanel({
+          options,
+          hidden: true,
+          collapsible,
+          collapsed: false,
+        });
+
+        if (typeof widget.init === 'function') {
+          widget.init.call(this, ...args);
         }
-
-        return undefined;
       },
       render(...args) {
         const [renderOptions] = args;
 
         const options = {
-          ...((widget.getWidgetRenderState
+          ...(widget.getWidgetRenderState
             ? widget.getWidgetRenderState(renderOptions)
-            : {}) as GetWidgetRenderState<typeof widgetFactory>),
+            : {}),
           ...renderOptions,
         };
 
@@ -313,7 +333,16 @@ const panel: PanelWidget = (panelWidgetParams) => {
           widget.render.call(this, ...args);
         }
       },
-    } as ReturnType<typeof widgetFactory>;
+      dispose(...args) {
+        render(null, containerNode);
+
+        if (typeof widget.dispose === 'function') {
+          return widget.dispose.call(this, ...args);
+        }
+
+        return undefined;
+      },
+    } as AugmentedWidget<typeof widgetFactory>;
   };
 };
 
