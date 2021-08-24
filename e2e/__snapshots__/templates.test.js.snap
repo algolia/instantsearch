@@ -3130,7 +3130,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
     <div id=\\"pagination\\"></div>
   </div>
 
-  <script src=\\"https://cdn.jsdelivr.net/algoliasearch/3.32.0/algoliasearchLite.min.js\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/algoliasearch/4.10.4/algoliasearchLite.min.js\\"></script>
   <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
@@ -3168,7 +3168,9 @@ exports[`Templates InstantSearch.js File content: package.json 1`] = `
     \\"lint\\": \\"eslint .\\",
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
-  \\"partialDependencies\\": {}
+  \\"partialDependencies\\": {
+    \\"instantsearch.js\\": \\"3.0.0\\"
+  }
 }"
 `;
 
@@ -3277,6 +3279,18 @@ search.addWidgets([
 search.start();"
 `;
 
+exports[`Templates InstantSearch.js File content: src/global.d.ts 1`] = `
+"import algoliasearch from 'algoliasearch/lite';
+import instantsearch from 'instantsearch.js/dist/instantsearch.production.min';
+
+declare global {
+  interface Window {
+    algoliasearch: typeof algoliasearch;
+    instantsearch: typeof instantsearch;
+  }
+}"
+`;
+
 exports[`Templates InstantSearch.js File content: src/index.css 1`] = `
 "body,
 h1 {
@@ -3287,6 +3301,27 @@ h1 {
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}"
+`;
+
+exports[`Templates InstantSearch.js File content: tsconfig.json 1`] = `
+"{
+  \\"compilerOptions\\": {
+    \\"module\\": \\"commonjs\\",
+    \\"esModuleInterop\\": true,
+    \\"sourceMap\\": true,
+    \\"allowJs\\": true,
+    \\"lib\\": [
+      \\"es6\\",
+      \\"dom\\"
+    ],
+    \\"rootDir\\": \\"src\\",
+    \\"moduleResolution\\": \\"node\\"
+  },
+  \\"include\\": [
+    \\"src\\",
+    \\"src/global.d.ts\\"
+  ]
 }"
 `;
 
@@ -3304,7 +3339,9 @@ Array [
   "package.json",
   "src/app.css",
   "src/app.js",
+  "src/global.d.ts",
   "src/index.css",
+  "tsconfig.json",
 ]
 `;
 
