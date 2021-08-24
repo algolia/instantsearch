@@ -8,6 +8,9 @@ import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { wait } from '../../../../test/utils/wait';
 import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer';
+import refinementList from '../../refinement-list/refinement-list';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import instantsearch from '../../..';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -35,6 +38,15 @@ describe('dynamicWidgets()', () => {
 
         See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/"
       `);
+    });
+
+    test('widgets can be empty', () => {
+      expect(() =>
+        EXPERIMENTAL_dynamicWidgets({
+          container: document.createElement('div'),
+          widgets: [],
+        })
+      ).not.toThrowError();
     });
 
     test('widgets is required to be callbacks', () => {
@@ -199,10 +211,13 @@ describe('dynamicWidgets()', () => {
     });
 
     it('renders the widgets returned by transformItems', async () => {
-      const instantSearchInstance = createInstantSearch();
+      const instantSearchInstance = instantsearch({
+        indexName: '',
+        searchClient: createSearchClient(),
+      });
       const rootContainer = document.createElement('div');
 
-      const indexWidget = index({ indexName: 'test' }).addWidgets([
+      instantSearchInstance.addWidgets([
         EXPERIMENTAL_dynamicWidgets({
           container: rootContainer,
           transformItems() {
@@ -237,18 +252,7 @@ describe('dynamicWidgets()', () => {
         }),
       ]);
 
-      indexWidget.init(createInitOptions({ instantSearchInstance }));
-
-      // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
-        new SearchResults(
-          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-            uiState: {},
-          }),
-          createMultiSearchResponse({}).results
-        );
-
-      indexWidget.render(createRenderOptions({ instantSearchInstance }));
+      instantSearchInstance.start();
 
       await wait(0);
 
@@ -279,14 +283,20 @@ describe('dynamicWidgets()', () => {
     });
 
     it('updates the position of widgets returned by transformItems', async () => {
-      const instantSearchInstance = createInstantSearch();
+      const instantSearchInstance = instantsearch({
+        indexName: '',
+        searchClient: createSearchClient(),
+      });
+      instantSearchInstance.start();
       const rootContainer = document.createElement('div');
 
-      const indexWidget = index({ indexName: 'test' }).addWidgets([
+      let ordering = ['test1', 'test4'];
+
+      instantSearchInstance.addWidgets([
         EXPERIMENTAL_dynamicWidgets({
           container: rootContainer,
-          transformItems(_items, { results }) {
-            return results.userData[0].MOCK_facetOrder;
+          transformItems() {
+            return ordering;
           },
           widgets: [
             (container) =>
@@ -316,21 +326,6 @@ describe('dynamicWidgets()', () => {
           ],
         }),
       ]);
-
-      indexWidget.init(createInitOptions({ instantSearchInstance }));
-
-      // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
-        new SearchResults(
-          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-            uiState: {},
-          }),
-          createMultiSearchResponse({
-            userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
-          }).results
-        );
-
-      indexWidget.render(createRenderOptions({ instantSearchInstance }));
 
       await wait(0);
 
@@ -363,18 +358,10 @@ describe('dynamicWidgets()', () => {
         </div>
       `);
 
-      // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
-        new SearchResults(
-          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-            uiState: {},
-          }),
-          createMultiSearchResponse({
-            userData: [{ MOCK_facetOrder: ['test4', 'test1'] }],
-          }).results
-        );
+      ordering = ['test4', 'test1'];
 
-      indexWidget.render(createRenderOptions({ instantSearchInstance }));
+      instantSearchInstance.scheduleRender();
+      await wait(0);
 
       expect(rootContainer).toMatchInlineSnapshot(`
         <div>
@@ -416,6 +403,12 @@ describe('dynamicWidgets()', () => {
           transformItems(_items, { results }) {
             return results.userData[0].MOCK_facetOrder;
           },
+          fallbackWidget: ({ container, attribute }) =>
+            refinementList({
+              attribute,
+              container,
+              cssClasses: { root: attribute },
+            }),
           widgets: [
             (container) =>
               menu({
@@ -454,7 +447,7 @@ describe('dynamicWidgets()', () => {
             uiState: {},
           }),
           createMultiSearchResponse({
-            userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
+            userData: [{ MOCK_facetOrder: ['test1', 'test4', 'test5'] }],
           }).results
         );
 
@@ -475,6 +468,10 @@ describe('dynamicWidgets()', () => {
             $$widgetType: ais.menu
             attribute: test4
           },
+          Widget(ais.refinementList) {
+            $$widgetType: ais.refinementList
+            attribute: test5
+          },
         ]
       `);
 
@@ -486,58 +483,53 @@ describe('dynamicWidgets()', () => {
     });
 
     it('removes dom on dispose', async () => {
-      const instantSearchInstance = createInstantSearch();
+      const instantSearchInstance = instantsearch({
+        indexName: '',
+        searchClient: createSearchClient(),
+      });
+      instantSearchInstance.start();
       const rootContainer = document.createElement('div');
 
-      const indexWidget = index({ indexName: 'test' }).addWidgets([
-        EXPERIMENTAL_dynamicWidgets({
-          container: rootContainer,
-          transformItems(_items, { results }) {
-            return results.userData[0].MOCK_facetOrder;
-          },
-          widgets: [
-            (container) =>
-              menu({
-                attribute: 'test1',
-                container,
-                cssClasses: { root: 'test1' },
-              }),
-            (container) =>
-              menu({
-                attribute: 'test2',
-                container,
-                cssClasses: { root: 'test2' },
-              }),
-            (container) =>
-              menu({
-                attribute: 'test3',
-                container,
-                cssClasses: { root: 'test3' },
-              }),
-            (container) =>
-              menu({
-                attribute: 'test4',
-                container,
-                cssClasses: { root: 'test4' },
-              }),
-          ],
-        }),
-      ]);
-
-      indexWidget.init(createInitOptions({ instantSearchInstance }));
-
-      // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
-        new SearchResults(
-          indexWidget.getWidgetSearchParameters(new SearchParameters(), {
-            uiState: {},
+      const dynamicWidget = EXPERIMENTAL_dynamicWidgets({
+        container: rootContainer,
+        transformItems() {
+          return ['test1', 'test5', 'test4'];
+        },
+        fallbackWidget: ({ container, attribute }) =>
+          refinementList({
+            attribute,
+            container,
+            cssClasses: { root: attribute },
           }),
-          createMultiSearchResponse({
-            userData: [{ MOCK_facetOrder: ['test1', 'test4'] }],
-          }).results
-        );
+        widgets: [
+          (container) =>
+            menu({
+              attribute: 'test1',
+              container,
+              cssClasses: { root: 'test1' },
+            }),
+          (container) =>
+            menu({
+              attribute: 'test2',
+              container,
+              cssClasses: { root: 'test2' },
+            }),
+          (container) =>
+            menu({
+              attribute: 'test3',
+              container,
+              cssClasses: { root: 'test3' },
+            }),
+          (container) =>
+            menu({
+              attribute: 'test4',
+              container,
+              cssClasses: { root: 'test4' },
+            }),
+        ],
+      });
 
-      indexWidget.render(createRenderOptions({ instantSearchInstance }));
+      instantSearchInstance.addWidgets([dynamicWidget]);
 
       await wait(0);
 
@@ -563,6 +555,13 @@ describe('dynamicWidgets()', () => {
               class="ais-DynamicWidgets-widget"
             >
               <div
+                class="ais-RefinementList test5 ais-RefinementList--noRefinement"
+              />
+            </div>
+            <div
+              class="ais-DynamicWidgets-widget"
+            >
+              <div
                 class="ais-Menu test4 ais-Menu--noRefinement"
               />
             </div>
@@ -570,9 +569,7 @@ describe('dynamicWidgets()', () => {
         </div>
       `);
 
-      const dynamicWidget = indexWidget.getWidgets()[0];
-
-      indexWidget.removeWidgets([dynamicWidget]);
+      instantSearchInstance.removeWidgets([dynamicWidget]);
 
       expect(rootContainer).toMatchInlineSnapshot(`<div />`);
     });

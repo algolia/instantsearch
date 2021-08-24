@@ -19,13 +19,23 @@ const suit = component('DynamicWidgets');
 export type DynamicWidgetsWidgetParams = {
   container: HTMLElement | string;
   widgets: Array<(container: HTMLElement) => Widget>;
+  fallbackWidget?(args: { attribute: string; container: HTMLElement }): Widget;
 };
 
 export type DynamicWidgetsWidget = WidgetFactory<
   DynamicWidgetsWidgetDescription & { $$widgetType: 'ais.dynamicWidgets' },
-  Omit<DynamicWidgetsConnectorParams, 'widgets'>,
+  Omit<DynamicWidgetsConnectorParams, 'widgets' | 'fallbackWidget'>,
   DynamicWidgetsWidgetParams
 >;
+
+function createContainer(rootContainer: HTMLElement) {
+  const container = document.createElement('div');
+  container.className = suit({ descendantName: 'widget' });
+
+  rootContainer.appendChild(container);
+
+  return container;
+}
 
 const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
   widgetParams
@@ -34,6 +44,7 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
     container: containerSelector,
     transformItems,
     widgets,
+    fallbackWidget,
   } = widgetParams || {};
 
   if (!containerSelector) {
@@ -41,9 +52,11 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
   }
 
   if (
-    !widgets ||
-    !Array.isArray(widgets) ||
-    widgets.some((widget) => typeof widget !== 'function')
+    !(
+      widgets &&
+      Array.isArray(widgets) &&
+      widgets.every((widget) => typeof widget === 'function')
+    )
   ) {
     throw new Error(
       withUsage('The `widgets` option expects an array of callbacks.')
@@ -79,15 +92,21 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
   const widget = makeWidget({
     transformItems,
     widgets: connectorWidgets,
+    fallbackWidget:
+      typeof fallbackWidget === 'function'
+        ? ({ attribute }) => {
+            const container = createContainer(rootContainer);
+            containers.set(attribute, container);
+            return fallbackWidget({ attribute, container });
+          }
+        : undefined,
   });
 
   return {
     ...widget,
     init(initOptions) {
       widgets.forEach((cb) => {
-        const container = document.createElement('div');
-        container.className = suit({ descendantName: 'widget' });
-        rootContainer.appendChild(container);
+        const container = createContainer(rootContainer);
 
         const childWidget = cb(container);
         const attribute = getWidgetAttribute(childWidget, initOptions);

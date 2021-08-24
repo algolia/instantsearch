@@ -14,20 +14,26 @@ storiesOf('Basics/DynamicWidgets', module).add(
     search.addWidgets([
       instantsearch.widgets.EXPERIMENTAL_dynamicWidgets({
         container: dynamicWidgetsContainer,
+        fallbackWidget: ({ attribute, container }) =>
+          instantsearch.widgets.panel<
+            typeof instantsearch.widgets.refinementList
+          >({
+            templates: {
+              header(stuff) {
+                return stuff.widgetParams.attribute;
+              },
+            },
+          })(instantsearch.widgets.refinementList)({ attribute, container }),
         widgets: [
           (container) =>
-            instantsearch.widgets.menu({ container, attribute: 'categories' }),
-          (container) =>
-            instantsearch.widgets.panel({ templates: { header: 'brand' } })(
-              instantsearch.widgets.refinementList
-            )({
+            instantsearch.widgets.menu({
               container,
-              attribute: 'brand',
+              attribute: 'categories',
             }),
           (container) =>
-            instantsearch.widgets.panel({ templates: { header: 'hierarchy' } })(
-              instantsearch.widgets.hierarchicalMenu
-            )({
+            instantsearch.widgets.panel({
+              templates: { header: 'hierarchy' },
+            })(instantsearch.widgets.hierarchicalMenu)({
               container,
               attributes: [
                 'hierarchicalCategories.lvl0',
