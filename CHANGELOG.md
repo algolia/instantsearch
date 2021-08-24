@@ -1,3 +1,18 @@
+# [4.28.0](https://github.com/algolia/instantsearch.js/compare/v4.27.2...v4.28.0) (2021-08-24)
+
+
+### Bug Fixes
+
+* **sendEvent:** split > 20 objects in multiple calls ([#4841](https://github.com/algolia/instantsearch.js/issues/4841)) ([44574bc](https://github.com/algolia/instantsearch.js/commit/44574bcf03ac05e22274099622e6a1839599ca7e))
+* **svg:** remove xmlns ([#4839](https://github.com/algolia/instantsearch.js/issues/4839)) ([932ae3a](https://github.com/algolia/instantsearch.js/commit/932ae3a868340a32ccaacb276c862921fee41a93))
+
+
+### Features
+
+* **ts:** expose built files in umd ([#4844](https://github.com/algolia/instantsearch.js/issues/4844)) ([8578ae3](https://github.com/algolia/instantsearch.js/commit/8578ae30a915db49acaa0292faba2ec6ccd52b73))
+
+
+
 ## [4.27.2](https://github.com/algolia/instantsearch.js/compare/v4.27.1...v4.27.2) (2021-08-18)
 
 
