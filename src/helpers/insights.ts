@@ -18,8 +18,8 @@ export function readDataAttributes(domElement: HTMLElement): {
   }
 
   try {
-    const payload: Partial<InsightsClientPayload> =
-      deserializePayload(serializedPayload);
+    const payload =
+      deserializePayload<Partial<InsightsClientPayload>>(serializedPayload);
     return { method, payload };
   } catch (error) {
     throw new Error(

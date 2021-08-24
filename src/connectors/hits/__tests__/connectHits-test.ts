@@ -846,26 +846,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(
             deserializePayload(payload.substr('data-insights-event='.length))
-          ).toEqual({
-            eventType: 'click',
-            hits: [
-              {
-                __position: 0,
-                __queryID: 'test-query-id',
-                fake: 'data',
-                objectID: '1',
+          ).toEqual([
+            {
+              eventType: 'click',
+              hits: [
+                {
+                  __position: 0,
+                  __queryID: 'test-query-id',
+                  fake: 'data',
+                  objectID: '1',
+                },
+              ],
+              insightsMethod: 'clickedObjectIDsAfterSearch',
+              payload: {
+                eventName: 'Product Added',
+                index: '',
+                objectIDs: ['1'],
+                positions: [0],
+                queryID: 'test-query-id',
               },
-            ],
-            insightsMethod: 'clickedObjectIDsAfterSearch',
-            payload: {
-              eventName: 'Product Added',
-              index: '',
-              objectIDs: ['1'],
-              positions: [0],
-              queryID: 'test-query-id',
+              widgetType: 'ais.hits',
             },
-            widgetType: 'ais.hits',
-          });
+          ]);
         });
 
         it('returns a payload for conversion event', () => {
@@ -876,25 +878,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           expect(payload.startsWith('data-insights-event=')).toBe(true);
           expect(
             deserializePayload(payload.substr('data-insights-event='.length))
-          ).toEqual({
-            eventType: 'conversion',
-            hits: [
-              {
-                __position: 1,
-                __queryID: 'test-query-id',
-                objectID: '2',
-                sample: 'infos',
+          ).toEqual([
+            {
+              eventType: 'conversion',
+              hits: [
+                {
+                  __position: 1,
+                  __queryID: 'test-query-id',
+                  objectID: '2',
+                  sample: 'infos',
+                },
+              ],
+              insightsMethod: 'convertedObjectIDsAfterSearch',
+              payload: {
+                eventName: 'Product Ordered',
+                index: '',
+                objectIDs: ['2'],
+                queryID: 'test-query-id',
               },
-            ],
-            insightsMethod: 'convertedObjectIDsAfterSearch',
-            payload: {
-              eventName: 'Product Ordered',
-              index: '',
-              objectIDs: ['2'],
-              queryID: 'test-query-id',
+              widgetType: 'ais.hits',
             },
-            widgetType: 'ais.hits',
-          });
+          ]);
         });
       });
     });
