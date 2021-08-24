@@ -1,3 +1,15 @@
+# [4.10.0](https://github.com/algolia/create-instantsearch-app/compare/4.9.0...4.10.0) (2021-08-24)
+
+
+### Features
+
+* **is widget:** upgrade to standard types ([#463](https://github.com/algolia/create-instantsearch-app/issues/463)) ([174c0ab](https://github.com/algolia/create-instantsearch-app/commit/174c0ab7901d09da24b3aeebba17b7dd62073810))
+* **js:** add typescript to the js template ([#464](https://github.com/algolia/create-instantsearch-app/issues/464)) ([9b16b13](https://github.com/algolia/create-instantsearch-app/commit/9b16b1365659053821ad2fdac4ce73037c347819))
+* **js-widget:** add example ([#461](https://github.com/algolia/create-instantsearch-app/issues/461)) ([017325d](https://github.com/algolia/create-instantsearch-app/commit/017325dd79d5d8ae849e5c17b7a20527bd142ed8))
+* **vue:** support Vue InstantSearch 4 ([#465](https://github.com/algolia/create-instantsearch-app/issues/465)) ([f0ebec5](https://github.com/algolia/create-instantsearch-app/commit/f0ebec52f8013450a86b5b5fda191822a8b94a1e))
+
+
+
 # [4.9.0](https://github.com/algolia/create-instantsearch-app/compare/4.8.0...4.9.0) (2021-07-22)
 
 
