@@ -14,7 +14,10 @@ type HitProps = {
 type Props = {
   hits: Hit[];
   className?: string;
-  hitComponent?: React.FunctionComponent<HitProps>;
+  hitComponent?:
+    | string
+    | React.ReactType<HitProps>
+    | React.ExoticComponent<HitProps>;
 };
 
 const cx = createClassNames('Hits');
@@ -57,7 +60,9 @@ const HitPropTypes = PropTypes.shape({
 Hits.propTypes = {
   hits: PropTypes.arrayOf(HitPropTypes.isRequired).isRequired,
   className: PropTypes.string,
-  hitComponent: PropTypes.func,
+
+  // this is actually PropTypes.elementType, but our prop-types version is outdated
+  hitComponent: PropTypes.any,
 };
 
 export default Hits;
