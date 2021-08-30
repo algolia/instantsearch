@@ -117,7 +117,7 @@ describe('clearRefinements()', () => {
       const { cssClasses } = firstRender.props as ClearRefinementsProps;
 
       expect(cssClasses).toMatchInlineSnapshot(`
-        Object {
+        {
           "button": "ais-ClearRefinements-button",
           "disabledButton": "ais-ClearRefinements-button--disabled",
           "root": "ais-ClearRefinements",
@@ -145,7 +145,7 @@ describe('clearRefinements()', () => {
       const { cssClasses } = firstRender.props as ClearRefinementsProps;
 
       expect(cssClasses).toMatchInlineSnapshot(`
-        Object {
+        {
           "button": "ais-ClearRefinements-button myButton myPrimaryButton",
           "disabledButton": "ais-ClearRefinements-button--disabled disabled",
           "root": "ais-ClearRefinements myRoot",

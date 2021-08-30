@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Pagination should add the noRefinement CSS class with a single page 1`] = `
-Array [
+[
   <div
     className="root noRefinementRoot"
   >
     <ul
       className="list"
     >
-      Array [
+      [
         <li
           className="item pageItem selectedItem"
         >
@@ -16,7 +16,7 @@ Array [
             aria-label="1"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "1",
               }
             }
@@ -25,7 +25,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -33,7 +33,7 @@ Array [
             aria-label="2"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "2",
               }
             }
@@ -42,7 +42,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -50,7 +50,7 @@ Array [
             aria-label="3"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "3",
               }
             }
@@ -59,7 +59,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -67,7 +67,7 @@ Array [
             aria-label="4"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "4",
               }
             }
@@ -76,7 +76,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -84,7 +84,7 @@ Array [
             aria-label="5"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "5",
               }
             }
@@ -93,7 +93,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -101,7 +101,7 @@ Array [
             aria-label="6"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "6",
               }
             }
@@ -110,7 +110,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -118,7 +118,7 @@ Array [
             aria-label="7"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "7",
               }
             }
@@ -133,14 +133,14 @@ Array [
 `;
 
 exports[`Pagination should disable last page if already on it 1`] = `
-Array [
+[
   <div
     className="root"
   >
     <ul
       className="list"
     >
-      Array [
+      [
         <li
           className="item firstPageItem"
         >
@@ -148,7 +148,7 @@ Array [
             aria-label="First"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
@@ -157,7 +157,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item previousPageItem"
         >
@@ -165,7 +165,7 @@ Array [
             aria-label="Previous"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
@@ -174,7 +174,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -182,7 +182,7 @@ Array [
             aria-label="14"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "14",
               }
             }
@@ -191,7 +191,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -199,7 +199,7 @@ Array [
             aria-label="15"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "15",
               }
             }
@@ -208,7 +208,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -216,7 +216,7 @@ Array [
             aria-label="16"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "16",
               }
             }
@@ -225,7 +225,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -233,7 +233,7 @@ Array [
             aria-label="17"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "17",
               }
             }
@@ -242,7 +242,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -250,7 +250,7 @@ Array [
             aria-label="18"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "18",
               }
             }
@@ -259,7 +259,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -267,7 +267,7 @@ Array [
             aria-label="19"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "19",
               }
             }
@@ -276,7 +276,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem selectedItem"
         >
@@ -284,7 +284,7 @@ Array [
             aria-label="20"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "20",
               }
             }
@@ -293,28 +293,28 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item nextPageItem disabledItem"
         >
           <span
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item lastPageItem disabledItem"
         >
           <span
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
@@ -327,28 +327,28 @@ Array [
 `;
 
 exports[`Pagination should display the first/last link 1`] = `
-Array [
+[
   <div
     className="root"
   >
     <ul
       className="list"
     >
-      Array [
+      [
         <li
           className="item firstPageItem disabledItem"
         >
           <span
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem selectedItem"
         >
@@ -356,7 +356,7 @@ Array [
             aria-label="1"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "1",
               }
             }
@@ -365,7 +365,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -373,7 +373,7 @@ Array [
             aria-label="2"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "2",
               }
             }
@@ -382,7 +382,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -390,7 +390,7 @@ Array [
             aria-label="3"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "3",
               }
             }
@@ -399,7 +399,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -407,7 +407,7 @@ Array [
             aria-label="4"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "4",
               }
             }
@@ -416,7 +416,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -424,7 +424,7 @@ Array [
             aria-label="5"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "5",
               }
             }
@@ -433,7 +433,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -441,7 +441,7 @@ Array [
             aria-label="6"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "6",
               }
             }
@@ -450,7 +450,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -458,7 +458,7 @@ Array [
             aria-label="7"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "7",
               }
             }
@@ -467,7 +467,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item lastPageItem"
         >
@@ -475,7 +475,7 @@ Array [
             aria-label="Last"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
@@ -490,42 +490,42 @@ Array [
 `;
 
 exports[`Pagination should have all buttons disabled if there are no results 1`] = `
-Array [
+[
   <div
     className="root noRefinementRoot"
   >
     <ul
       className="list"
     >
-      Array [
+      [
         <li
           className="item firstPageItem disabledItem"
         >
           <span
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item previousPageItem disabledItem"
         >
           <span
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem selectedItem"
         >
@@ -533,7 +533,7 @@ Array [
             aria-label="1"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "1",
               }
             }
@@ -542,28 +542,28 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item nextPageItem disabledItem"
         >
           <span
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item lastPageItem disabledItem"
         >
           <span
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "",
               }
             }
@@ -576,14 +576,14 @@ Array [
 `;
 
 exports[`Pagination should render five elements 1`] = `
-Array [
+[
   <div
     className="root"
   >
     <ul
       className="list"
     >
-      Array [
+      [
         <li
           className="item pageItem selectedItem"
         >
@@ -591,7 +591,7 @@ Array [
             aria-label="1"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "1",
               }
             }
@@ -600,7 +600,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -608,7 +608,7 @@ Array [
             aria-label="2"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "2",
               }
             }
@@ -617,7 +617,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -625,7 +625,7 @@ Array [
             aria-label="3"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "3",
               }
             }
@@ -634,7 +634,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -642,7 +642,7 @@ Array [
             aria-label="4"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "4",
               }
             }
@@ -651,7 +651,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -659,7 +659,7 @@ Array [
             aria-label="5"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "5",
               }
             }
@@ -668,7 +668,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -676,7 +676,7 @@ Array [
             aria-label="6"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "6",
               }
             }
@@ -685,7 +685,7 @@ Array [
           />
         </li>,
       ]
-      Array [
+      [
         <li
           className="item pageItem"
         >
@@ -693,7 +693,7 @@ Array [
             aria-label="7"
             className="link"
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "7",
               }
             }

@@ -396,25 +396,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
     expect(firstRenderOptions.items).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "isRefined": false,
           "label": "3 items per page",
           "value": 3,
         },
-        Object {
+        {
           "isRefined": false,
           "label": "10 items per page",
           "value": 10,
         },
-        Object {
+        {
           "default": true,
           "isRefined": true,
           "label": "7 items per page",
           "value": 7,
         },
       ]
-    `);
+`);
     firstRenderOptions.refine(3);
 
     widget.render!(
@@ -429,18 +429,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
     expect(secondRenderOptions.items).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "isRefined": true,
           "label": "3 items per page",
           "value": 3,
         },
-        Object {
+        {
           "isRefined": false,
           "label": "10 items per page",
           "value": 10,
         },
-        Object {
+        {
           "default": true,
           "isRefined": false,
           "label": "7 items per page",

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MenuSelect should render <MenuSelect /> with custom templates 1`] = `
-Array [
+[
   <div
     className="root"
   >
@@ -10,33 +10,33 @@ Array [
       onChange={[Function]}
       value=""
     >
-      Array [
+      [
         <option
           className="option"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "defaultOption",
             }
           }
           value=""
         />,
       ]
-      Array [
+      [
         <option
           className="option"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "foo",
             }
           }
           value="foo"
         />,
       ]
-      Array [
+      [
         <option
           className="option"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "bar",
             }
           }
@@ -49,7 +49,7 @@ Array [
 `;
 
 exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
-Array [
+[
   <div
     className="root"
   >
@@ -58,33 +58,33 @@ Array [
       onChange={[Function]}
       value=""
     >
-      Array [
+      [
         <option
           className="option"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "See all",
             }
           }
           value=""
         />,
       ]
-      Array [
+      [
         <option
           className="option"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "foo ()",
             }
           }
           value="foo"
         />,
       ]
-      Array [
+      [
         <option
           className="option"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "bar ()",
             }
           }
@@ -97,7 +97,7 @@ Array [
 `;
 
 exports[`MenuSelect should render <MenuSelect /> with no items 1`] = `
-Array [
+[
   <div
     className="root noRefinementRoot"
   >
@@ -106,11 +106,11 @@ Array [
       onChange={[Function]}
       value=""
     >
-      Array [
+      [
         <option
           className="option"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "See all",
             }
           }

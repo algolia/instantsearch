@@ -113,37 +113,37 @@ describe('createMetadataMiddleware', () => {
 
       expect(JSON.parse(document.head.querySelector('meta')!.content))
         .toMatchInlineSnapshot(`
-        Object {
-          "widgets": Array [
-            Object {
-              "params": Array [],
+        {
+          "widgets": [
+            {
+              "params": [],
               "type": "ais.searchBox",
               "widgetType": "ais.searchBox",
             },
-            Object {
-              "params": Array [],
+            {
+              "params": [],
               "type": "ais.searchBox",
               "widgetType": "ais.searchBox",
             },
-            Object {
-              "params": Array [
+            {
+              "params": [
                 "escapeHTML",
               ],
               "type": "ais.hits",
               "widgetType": "ais.hits",
             },
-            Object {
-              "params": Array [],
+            {
+              "params": [],
               "type": "ais.index",
               "widgetType": "ais.index",
             },
-            Object {
-              "params": Array [],
+            {
+              "params": [],
               "type": "ais.pagination",
               "widgetType": "ais.pagination",
             },
-            Object {
-              "params": Array [
+            {
+              "params": [
                 "searchParameters",
               ],
               "type": "ais.configure",

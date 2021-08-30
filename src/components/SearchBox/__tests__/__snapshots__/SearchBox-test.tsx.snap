@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SearchBox Rendering with custom templates 1`] = `
-Array [
+[
   <div
     className="root"
   >
@@ -29,11 +29,11 @@ Array [
         type="search"
         value=""
       />
-      Array [
+      [
         <button
           className="submit"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "submit template",
             }
           }
@@ -42,11 +42,11 @@ Array [
           type="submit"
         />,
       ]
-      Array [
+      [
         <button
           className="reset"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "reset template",
             }
           }
@@ -55,11 +55,11 @@ Array [
           type="reset"
         />,
       ]
-      Array [
+      [
         <span
           className="loadingIndicator"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "loadingIndicator template",
             }
           }
@@ -72,7 +72,7 @@ Array [
 `;
 
 exports[`SearchBox Rendering with default props 1`] = `
-Array [
+[
   <div
     className="root"
   >
@@ -100,11 +100,11 @@ Array [
         type="search"
         value=""
       />
-      Array [
+      [
         <button
           className="submit"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "submit",
             }
           }
@@ -113,11 +113,11 @@ Array [
           type="submit"
         />,
       ]
-      Array [
+      [
         <button
           className="reset"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "reset",
             }
           }
@@ -126,11 +126,11 @@ Array [
           type="reset"
         />,
       ]
-      Array [
+      [
         <span
           className="loadingIndicator"
           dangerouslySetInnerHTML={
-            Object {
+            {
               "__html": "loadingIndicator",
             }
           }

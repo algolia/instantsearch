@@ -612,9 +612,9 @@ describe('RoutingManager', () => {
 
       expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
       expect(parsedUrl).toMatchInlineSnapshot(`
-        Object {
-          "refinementList": Object {
-            "brand": Array [
+        {
+          "refinementList": {
+            "brand": [
               "brand-0",
               "brand-1",
               "brand-2",

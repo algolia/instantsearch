@@ -82,24 +82,24 @@ describe('sortBy()', () => {
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(rootProps).toMatchInlineSnapshot(`
-      Object {
+      {
         "className": "ais-SortBy custom-root cx",
       }
     `);
     expect(children.props).toMatchInlineSnapshot(`
-      Object {
-        "cssClasses": Object {
+      {
+        "cssClasses": {
           "option": "ais-SortBy-option custom-option",
           "root": "ais-SortBy custom-root cx",
           "select": "ais-SortBy-select custom-select",
         },
         "currentValue": "index-a",
-        "options": Array [
-          Object {
+        "options": [
+          {
             "label": "Index A",
             "value": "index-a",
           },
-          Object {
+          {
             "label": "Index B",
             "value": "index-b",
           },

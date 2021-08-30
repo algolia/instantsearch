@@ -78,16 +78,16 @@ describe('hits()', () => {
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(firstRender.props).toMatchInlineSnapshot(`
-      Object {
+      {
         "bindEvent": [Function],
-        "cssClasses": Object {
+        "cssClasses": {
           "emptyRoot": "ais-Hits--empty",
           "item": "ais-Hits-item",
           "list": "ais-Hits-list",
           "root": "ais-Hits root cx",
         },
-        "hits": Array [
-          Object {
+        "hits": [
+          {
             "__position": 9,
             "hit": "first",
             "objectID": "1",
@@ -95,12 +95,12 @@ describe('hits()', () => {
         ],
         "insights": [Function],
         "results": SearchResults {
-          "_rawResults": Array [
-            Object {
+          "_rawResults": [
+            {
               "exhaustiveFacetsCount": true,
               "exhaustiveNbHits": true,
-              "hits": Array [
-                Object {
+              "hits": [
+                {
                   "hit": "first",
                   "objectID": "1",
                 },
@@ -115,24 +115,24 @@ describe('hits()', () => {
             },
           ],
           "_state": SearchParameters {
-            "disjunctiveFacets": Array [],
-            "disjunctiveFacetsRefinements": Object {},
-            "facets": Array [],
-            "facetsExcludes": Object {},
-            "facetsRefinements": Object {},
-            "hierarchicalFacets": Array [],
-            "hierarchicalFacetsRefinements": Object {},
+            "disjunctiveFacets": [],
+            "disjunctiveFacetsRefinements": {},
+            "facets": [],
+            "facetsExcludes": {},
+            "facetsRefinements": {},
+            "hierarchicalFacets": [],
+            "hierarchicalFacetsRefinements": {},
             "index": "",
-            "numericRefinements": Object {},
-            "tagRefinements": Array [],
+            "numericRefinements": {},
+            "tagRefinements": [],
           },
-          "disjunctiveFacets": Array [],
+          "disjunctiveFacets": [],
           "exhaustiveFacetsCount": true,
           "exhaustiveNbHits": true,
-          "facets": Array [],
-          "hierarchicalFacets": Array [],
-          "hits": Array [
-            Object {
+          "facets": [],
+          "hierarchicalFacets": [],
+          "hits": [
+            {
               "__position": 9,
               "hit": "first",
               "objectID": "1",
@@ -147,13 +147,13 @@ describe('hits()', () => {
           "query": "",
         },
         "sendEvent": [Function],
-        "templateProps": Object {
-          "templates": Object {
+        "templateProps": {
+          "templates": {
             "empty": "No results",
             "item": [Function],
           },
           "templatesConfig": undefined,
-          "useCustomCompileOptions": Object {
+          "useCustomCompileOptions": {
             "empty": false,
             "item": false,
           },
@@ -162,16 +162,16 @@ describe('hits()', () => {
     `);
     expect(firstContainer).toEqual(container);
     expect(secondRender.props).toMatchInlineSnapshot(`
-      Object {
+      {
         "bindEvent": [Function],
-        "cssClasses": Object {
+        "cssClasses": {
           "emptyRoot": "ais-Hits--empty",
           "item": "ais-Hits-item",
           "list": "ais-Hits-list",
           "root": "ais-Hits root cx",
         },
-        "hits": Array [
-          Object {
+        "hits": [
+          {
             "__position": 9,
             "hit": "first",
             "objectID": "1",
@@ -179,12 +179,12 @@ describe('hits()', () => {
         ],
         "insights": [Function],
         "results": SearchResults {
-          "_rawResults": Array [
-            Object {
+          "_rawResults": [
+            {
               "exhaustiveFacetsCount": true,
               "exhaustiveNbHits": true,
-              "hits": Array [
-                Object {
+              "hits": [
+                {
                   "hit": "first",
                   "objectID": "1",
                 },
@@ -199,24 +199,24 @@ describe('hits()', () => {
             },
           ],
           "_state": SearchParameters {
-            "disjunctiveFacets": Array [],
-            "disjunctiveFacetsRefinements": Object {},
-            "facets": Array [],
-            "facetsExcludes": Object {},
-            "facetsRefinements": Object {},
-            "hierarchicalFacets": Array [],
-            "hierarchicalFacetsRefinements": Object {},
+            "disjunctiveFacets": [],
+            "disjunctiveFacetsRefinements": {},
+            "facets": [],
+            "facetsExcludes": {},
+            "facetsRefinements": {},
+            "hierarchicalFacets": [],
+            "hierarchicalFacetsRefinements": {},
             "index": "",
-            "numericRefinements": Object {},
-            "tagRefinements": Array [],
+            "numericRefinements": {},
+            "tagRefinements": [],
           },
-          "disjunctiveFacets": Array [],
+          "disjunctiveFacets": [],
           "exhaustiveFacetsCount": true,
           "exhaustiveNbHits": true,
-          "facets": Array [],
-          "hierarchicalFacets": Array [],
-          "hits": Array [
-            Object {
+          "facets": [],
+          "hierarchicalFacets": [],
+          "hits": [
+            {
               "__position": 9,
               "hit": "first",
               "objectID": "1",
@@ -231,13 +231,13 @@ describe('hits()', () => {
           "query": "",
         },
         "sendEvent": [Function],
-        "templateProps": Object {
-          "templates": Object {
+        "templateProps": {
+          "templates": {
             "empty": "No results",
             "item": [Function],
           },
           "templatesConfig": undefined,
-          "useCustomCompileOptions": Object {
+          "useCustomCompileOptions": {
             "empty": false,
             "item": false,
           },
@@ -267,16 +267,16 @@ describe('hits()', () => {
     const firstRender = render.mock.calls[0][0] as VNode<HitsProps>;
 
     expect(firstRender.props).toMatchInlineSnapshot(`
-      Object {
+      {
         "bindEvent": [Function],
-        "cssClasses": Object {
+        "cssClasses": {
           "emptyRoot": "ais-Hits--empty",
           "item": "ais-Hits-item",
           "list": "ais-Hits-list",
           "root": "ais-Hits",
         },
-        "hits": Array [
-          Object {
+        "hits": [
+          {
             "__position": 9,
             "hit": "first",
             "objectID": "1",
@@ -285,12 +285,12 @@ describe('hits()', () => {
         ],
         "insights": [Function],
         "results": SearchResults {
-          "_rawResults": Array [
-            Object {
+          "_rawResults": [
+            {
               "exhaustiveFacetsCount": true,
               "exhaustiveNbHits": true,
-              "hits": Array [
-                Object {
+              "hits": [
+                {
                   "hit": "first",
                   "objectID": "1",
                 },
@@ -305,24 +305,24 @@ describe('hits()', () => {
             },
           ],
           "_state": SearchParameters {
-            "disjunctiveFacets": Array [],
-            "disjunctiveFacetsRefinements": Object {},
-            "facets": Array [],
-            "facetsExcludes": Object {},
-            "facetsRefinements": Object {},
-            "hierarchicalFacets": Array [],
-            "hierarchicalFacetsRefinements": Object {},
+            "disjunctiveFacets": [],
+            "disjunctiveFacetsRefinements": {},
+            "facets": [],
+            "facetsExcludes": {},
+            "facetsRefinements": {},
+            "hierarchicalFacets": [],
+            "hierarchicalFacetsRefinements": {},
             "index": "",
-            "numericRefinements": Object {},
-            "tagRefinements": Array [],
+            "numericRefinements": {},
+            "tagRefinements": [],
           },
-          "disjunctiveFacets": Array [],
+          "disjunctiveFacets": [],
           "exhaustiveFacetsCount": true,
           "exhaustiveNbHits": true,
-          "facets": Array [],
-          "hierarchicalFacets": Array [],
-          "hits": Array [
-            Object {
+          "facets": [],
+          "hierarchicalFacets": [],
+          "hits": [
+            {
               "__position": 9,
               "hit": "first",
               "objectID": "1",
@@ -338,13 +338,13 @@ describe('hits()', () => {
           "query": "",
         },
         "sendEvent": [Function],
-        "templateProps": Object {
-          "templates": Object {
+        "templateProps": {
+          "templates": {
             "empty": "No results",
             "item": [Function],
           },
           "templatesConfig": undefined,
-          "useCustomCompileOptions": Object {
+          "useCustomCompileOptions": {
             "empty": false,
             "item": false,
           },

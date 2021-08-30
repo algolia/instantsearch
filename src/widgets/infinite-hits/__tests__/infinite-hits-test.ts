@@ -311,28 +311,28 @@ describe('infiniteHits()', () => {
       }
 
       expect(cachedState).toMatchInlineSnapshot(`
-        Object {
-          "disjunctiveFacets": Array [],
-          "disjunctiveFacetsRefinements": Object {},
-          "facets": Array [],
-          "facetsExcludes": Object {},
-          "facetsRefinements": Object {},
-          "hierarchicalFacets": Array [],
-          "hierarchicalFacetsRefinements": Object {},
-          "numericRefinements": Object {},
+        {
+          "disjunctiveFacets": [],
+          "disjunctiveFacetsRefinements": {},
+          "facets": [],
+          "facetsExcludes": {},
+          "facetsRefinements": {},
+          "hierarchicalFacets": [],
+          "hierarchicalFacetsRefinements": {},
+          "numericRefinements": {},
           "query": "hello",
-          "tagRefinements": Array [],
+          "tagRefinements": [],
         }
       `);
       expect(cachedHits).toMatchInlineSnapshot(`
-        Object {
-          "0": Array [
-            Object {
+        {
+          "0": [
+            {
               "__position": 1,
               "objectID": "1",
               "title": "first",
             },
-            Object {
+            {
               "__position": 2,
               "objectID": "2",
               "title": "second",
@@ -343,13 +343,13 @@ describe('infiniteHits()', () => {
       const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
       const { hits } = firstRender.props as InfiniteHitsProps;
       expect(hits).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "__position": 1,
             "objectID": "1",
             "title": "first",
           },
-          Object {
+          {
             "__position": 2,
             "objectID": "2",
             "title": "second",
@@ -403,12 +403,12 @@ describe('infiniteHits()', () => {
       const { hits } = firstRender.props as InfiniteHitsProps;
 
       expect(hits).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "__position": 1,
             "title": "first",
           },
-          Object {
+          {
             "__position": 2,
             "title": "second",
           },

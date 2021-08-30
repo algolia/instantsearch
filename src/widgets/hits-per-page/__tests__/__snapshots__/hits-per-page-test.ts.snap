@@ -1,27 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`hitsPerPage() calls twice render(<Selector props />, container) 1`] = `
-Object {
+{
   "className": "ais-HitsPerPage custom-root cx",
 }
 `;
 
 exports[`hitsPerPage() calls twice render(<Selector props />, container) 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "option": "ais-HitsPerPage-option custom-option",
     "root": "ais-HitsPerPage custom-root cx",
     "select": "ais-HitsPerPage-select custom-select",
   },
   "currentValue": 10,
-  "options": Array [
-    Object {
+  "options": [
+    {
       "default": true,
       "isRefined": true,
       "label": "10 results",
       "value": 10,
     },
-    Object {
+    {
       "isRefined": false,
       "label": "20 results",
       "value": 20,

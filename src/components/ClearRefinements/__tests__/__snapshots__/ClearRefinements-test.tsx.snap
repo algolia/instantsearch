@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ClearRefinements should render <ClearRefinements /> 1`] = `
-Array [
+[
   <div
     className="root"
   >
-    Array [
+    [
       <button
         className="button"
         dangerouslySetInnerHTML={
-          Object {
+          {
             "__html": "",
           }
         }
@@ -22,15 +22,15 @@ Array [
 `;
 
 exports[`ClearRefinements should render <ClearRefinements /> with a specific class when no refinements 1`] = `
-Array [
+[
   <div
     className="root"
   >
-    Array [
+    [
       <button
         className="button disabled"
         dangerouslySetInnerHTML={
-          Object {
+          {
             "__html": "",
           }
         }
