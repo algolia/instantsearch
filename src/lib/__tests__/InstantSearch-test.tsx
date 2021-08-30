@@ -37,7 +37,6 @@ type PaginationWidgetInstance = Widget<
 >;
 
 jest.useFakeTimers();
-jest.setTimeout(10);
 
 type AlgoliaHelperModule = typeof algoliasearchHelper;
 
