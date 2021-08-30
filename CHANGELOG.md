@@ -1,3 +1,12 @@
+## [4.10.1](https://github.com/algolia/create-instantsearch-app/compare/4.10.0...4.10.1) (2021-08-30)
+
+
+### Bug Fixes
+
+* **js:** correct umd url for algoliasearch ([a5d005d](https://github.com/algolia/create-instantsearch-app/commit/a5d005d4acba1f8833b8b2d50fb63e7b199c735e))
+
+
+
 # [4.10.0](https://github.com/algolia/create-instantsearch-app/compare/4.9.0...4.10.0) (2021-08-24)
 
 
