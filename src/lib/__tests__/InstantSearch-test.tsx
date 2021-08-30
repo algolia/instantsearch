@@ -27,6 +27,7 @@ import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
 } from '../../connectors/search-box/connectSearchBox';
+import { wait } from '../../../test/utils/wait';
 
 type SearchBoxWidgetInstance = Widget<
   SearchBoxWidgetDescription & { widgetParams: SearchBoxConnectorParams }
@@ -35,8 +36,6 @@ type SearchBoxWidgetInstance = Widget<
 type PaginationWidgetInstance = Widget<
   PaginationWidgetDescription & { widgetParams: PaginationConnectorParams }
 >;
-
-jest.useFakeTimers();
 
 type AlgoliaHelperModule = typeof algoliasearchHelper;
 
@@ -416,7 +415,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     search.start();
 
-    await Promise.resolve();
+    await wait(0);
 
     // could be null if we don't pretend the main helper is the one who searched
     expect(search.helper!.lastResults).not.toBe(null);
@@ -788,7 +787,7 @@ describe('start', () => {
 
     search.start();
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
@@ -892,7 +891,7 @@ describe('dispose', () => {
 
     search.start();
 
-    await Promise.resolve();
+    await wait(0);
 
     // The call to `addWidgets` schedules a new search
     search.addWidgets([createWidget()]);
@@ -902,7 +901,7 @@ describe('dispose', () => {
     // Without the cancel operation, the function call throws an error which
     // prevents the test to complete. We can't assert that the function throws
     // because we don't have access to the promise that throws in the first place.
-    await Promise.resolve();
+    await wait(0);
   });
 
   // eslint-disable-next-line jest/expect-expect
@@ -918,14 +917,14 @@ describe('dispose', () => {
 
     // We only wait for the search to schedule the render. We have now a render
     // that is scheduled, it will be processed in the next microtask if not canceled.
-    await Promise.resolve();
+    await wait(0);
 
     search.dispose();
 
     // Without the cancel operation, the function call throws an error which
     // prevents the test to complete. We can't assert that the function throws
     // because we don't have access to the promise that throws in the first place.
-    await Promise.resolve();
+    await wait(0);
   });
 
   // eslint-disable-next-line jest/expect-expect
@@ -944,7 +943,7 @@ describe('dispose', () => {
     searches[0].resolver();
 
     // Wait for the `render`
-    await Promise.resolve();
+    await wait(0);
 
     // Simulate a search
     search.mainHelper!.search();
@@ -957,7 +956,7 @@ describe('dispose', () => {
     // Without the cancel operation, the function call throws an error which
     // prevents the test to complete. We can't assert that the function throws
     // because we don't have access to the promise that throws in the first place.
-    await Promise.resolve();
+    await wait(0);
   });
 
   it('removes the widgets from the main index', () => {
@@ -1046,8 +1045,7 @@ describe('dispose', () => {
 
     search.start();
 
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(0);
 
     expect(onRender).toHaveBeenCalledTimes(1);
 
@@ -1059,8 +1057,7 @@ describe('dispose', () => {
 
     search.start();
 
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(0);
 
     expect(onRender).toHaveBeenCalledTimes(1);
   });
@@ -1105,7 +1102,7 @@ describe('scheduleSearch', () => {
 
     expect(mainHelperSearch).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(mainHelperSearch).toHaveBeenCalledTimes(1);
   });
@@ -1129,7 +1126,7 @@ describe('scheduleSearch', () => {
 
     expect(mainHelperSearch).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(mainHelperSearch).toHaveBeenCalledTimes(1);
   });
@@ -1150,8 +1147,7 @@ describe('scheduleRender', () => {
 
     expect(widget.render).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(0);
 
     expect(widget.render).toHaveBeenCalledTimes(1);
   });
@@ -1175,7 +1171,7 @@ describe('scheduleRender', () => {
     search.scheduleRender();
     search.scheduleRender();
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(widget.render).toHaveBeenCalledTimes(1);
   });
@@ -1220,8 +1216,7 @@ describe('scheduleStalledRender', () => {
     searches[0].resolver();
 
     // Wait for the `render`
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(0);
 
     expect(widget.render).toHaveBeenCalledTimes(1);
 
@@ -1229,11 +1224,7 @@ describe('scheduleStalledRender', () => {
     search.mainHelper!.search();
 
     // Reaches the delay
-    jest.runOnlyPendingTimers();
-
-    // Wait for the `render`
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(search._stalledSearchDelay);
 
     expect(widget.render).toHaveBeenCalledTimes(2);
   });
@@ -1255,8 +1246,7 @@ describe('scheduleStalledRender', () => {
     searches[0].resolver();
 
     // Wait for the `render`
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(0);
 
     expect(widget.render).toHaveBeenCalledTimes(1);
 
@@ -1267,11 +1257,7 @@ describe('scheduleStalledRender', () => {
     search.mainHelper!.search();
 
     // Reaches the delay
-    jest.runOnlyPendingTimers();
-
-    // Wait for the `render`
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(search._stalledSearchDelay);
 
     expect(widget.render).toHaveBeenCalledTimes(2);
   });
@@ -1297,8 +1283,7 @@ describe('scheduleStalledRender', () => {
     searches[0].resolver();
 
     // Wait for the `render`
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(0);
 
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
@@ -1315,10 +1300,7 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
 
     // The delay is reached
-    jest.runOnlyPendingTimers();
-
-    // Wait for the `render`
-    await Promise.resolve();
+    await wait(search._stalledSearchDelay);
 
     // Widgets render because of the stalled search
     expect(widget.render).toHaveBeenCalledTimes(2);
@@ -1334,8 +1316,7 @@ describe('scheduleStalledRender', () => {
     searches[1].resolver();
 
     // Wait for the `render`
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(0);
 
     // Widgets render because of the results
     expect(widget.render).toHaveBeenCalledTimes(3);
@@ -1462,8 +1443,7 @@ describe('createURL', () => {
 
     // We need to run all micro tasks for the `render` method of the last
     // widget to be called and its `createURL` to be triggered.
-    await Promise.resolve();
-    await Promise.resolve();
+    await wait(0);
 
     expect(router.createURL).toHaveBeenCalledWith({
       indexName: {
@@ -1563,14 +1543,14 @@ describe('use', () => {
     // Checks that `mainIndex.init` was called before subscribing the middleware.
     expect(widgetsInitCallOrder).toBeLessThan(middlewareSubscribeCallOrder);
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(0);
 
     button.click();
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
@@ -1583,7 +1563,7 @@ describe('use', () => {
 
     search.dispose();
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
@@ -1639,7 +1619,7 @@ describe('use', () => {
       instantSearchInstance: search,
     });
 
-    await Promise.resolve();
+    await wait(0);
 
     // The first middleware subscribe function should have been only called once
     expect(middlewareBeforeStartSpy.subscribe).toHaveBeenCalledTimes(1);
@@ -1649,7 +1629,7 @@ describe('use', () => {
 
     button.click();
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(1);
@@ -1670,7 +1650,7 @@ describe('use', () => {
 
     search.dispose();
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(2);
@@ -1714,7 +1694,7 @@ describe('unuse', () => {
     search.use(middleware1, middleware2);
     search.start();
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(middlewareSpy1.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(0);
@@ -1722,12 +1702,12 @@ describe('unuse', () => {
     expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(0);
 
     search.renderState[indexName].searchBox!.refine('cat');
-    await Promise.resolve();
+    await wait(0);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(1);
 
     search.renderState[indexName].searchBox!.refine('is');
-    await Promise.resolve();
+    await wait(0);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(2);
 
@@ -1737,7 +1717,7 @@ describe('unuse', () => {
     expect(middlewareSpy2.unsubscribe).toHaveBeenCalledTimes(0);
 
     search.renderState[indexName].searchBox!.refine('good');
-    await Promise.resolve();
+    await wait(0);
     expect(middlewareSpy1.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy2.onStateChange).toHaveBeenCalledTimes(3);
   });
@@ -1772,13 +1752,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
 
     search.start();
-    await Promise.resolve();
+    await wait(0);
     expect(searchClient.search).toHaveBeenCalledTimes(1);
 
     search.setUiState({
       indexName: {},
     });
-    await Promise.resolve();
+    await wait(0);
     expect(searchClient.search).toHaveBeenCalledTimes(2);
   });
 
@@ -1805,7 +1785,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       indexName: {},
     });
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
@@ -1845,7 +1825,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       test: {},
     });
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
@@ -1860,7 +1840,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       test: {},
     });
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(onMiddlewareStateChange).toHaveBeenCalledTimes(2);
     expect(onMiddlewareStateChange).toHaveBeenCalledWith({
@@ -1916,7 +1896,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       },
     });
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(searchClient.search).toHaveBeenCalledWith([
       {
@@ -2005,7 +1985,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       };
     });
 
-    await Promise.resolve();
+    await wait(0);
 
     search.setUiState((prevUiState) => {
       expect(prevUiState).toEqual({
@@ -2037,7 +2017,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       };
     });
 
-    await Promise.resolve();
+    await wait(0);
 
     expect(searchClient.search).toHaveBeenCalledWith([
       {
