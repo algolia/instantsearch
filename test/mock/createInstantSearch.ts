@@ -17,7 +17,7 @@ export const createInstantSearch = (
     mainHelper,
     client,
     started: false,
-    state: 'none',
+    state: 'initial',
     start() {
       this.started = true;
     },
