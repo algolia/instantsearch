@@ -482,9 +482,10 @@ See ${createDocumentationLink({
       });
     });
 
-    // if the instance is being re-started,
     if (this.disposed) {
       this.disposed = false;
+      // if the instance gets re-started,
+      // we re-create the middleware instances.
       this.middleware = this.middleware.map(({ creator }) => ({
         creator,
         instance: {
