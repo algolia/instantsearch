@@ -151,6 +151,7 @@ class InstantSearch<
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
   public started: boolean;
+  public disposed: boolean;
   public templatesConfig: Record<string, unknown>;
   public renderState: RenderState = {};
   public _stalledSearchDelay: number;
@@ -242,6 +243,7 @@ See ${createDocumentationLink({
     this.onStateChange = onStateChange;
 
     this.started = false;
+    this.disposed = false;
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
       compileOptions: {},
@@ -480,6 +482,20 @@ See ${createDocumentationLink({
       });
     });
 
+    // if the instance is being re-started,
+    if (this.disposed) {
+      this.disposed = false;
+      this.middleware = this.middleware.map(({ creator }) => ({
+        creator,
+        instance: {
+          subscribe: noop,
+          unsubscribe: noop,
+          onStateChange: noop,
+          ...creator({ instantSearchInstance: this }),
+        },
+      }));
+    }
+
     this.mainHelper = mainHelper;
 
     this.mainIndex.init({
@@ -521,6 +537,8 @@ See ${createDocumentationLink({
     // needs to set started as false otherwise this can not be restarted at a
     // later point.
     this.started = false;
+
+    this.disposed = true;
 
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
