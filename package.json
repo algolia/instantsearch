@@ -139,7 +139,7 @@
     "scriptjs": "2.5.9",
     "search-insights": "1.7.2",
     "semver": "6.3.0",
-    "shelljs": "0.8.3",
+    "shelljs": "0.8.4",
     "shipjs": "0.21.0",
     "typescript": "4.3.5",
     "webpack": "4.41.5"
