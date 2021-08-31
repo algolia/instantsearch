@@ -17,14 +17,13 @@ export type RouterProps<
   // ideally stateMapping should be required if TRouteState is given,
   // but there's no way to check if a generic is provided or the default value.
   stateMapping?: StateMapping<TUiState, TRouteState>;
-  initialUiState: UiState;
 };
 
 export const createRouterMiddleware = <
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 >(
-  props: RouterProps<TUiState, TRouteState>
+  props: RouterProps<TUiState, TRouteState> & { initialUiState: UiState }
 ): InternalMiddleware<TUiState> => {
   const {
     router = historyRouter<TRouteState>(),
