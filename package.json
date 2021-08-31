@@ -127,7 +127,7 @@
     "jest-watch-typeahead": "0.6.4",
     "jscodeshift": "0.7.0",
     "jsdom-global": "3.0.2",
-    "places.js": "1.17.1",
+    "places.js": "1.19.0",
     "prettier": "2.3.2",
     "rollup": "1.29.1",
     "rollup-plugin-babel": "4.3.3",
