@@ -1551,8 +1551,8 @@ describe('use', () => {
       .invocationCallOrder[0];
     const middlewareSubscribeCallOrder =
       middlewareSpy.subscribe.mock.invocationCallOrder[0];
-    // Checks that `mainIndex.init` was called before subscribing the middleware.
-    expect(widgetsInitCallOrder).toBeLessThan(middlewareSubscribeCallOrder);
+    // Checks that `mainIndex.init` was called after subscribing the middleware.
+    expect(widgetsInitCallOrder).toBeGreaterThan(middlewareSubscribeCallOrder);
 
     await runAllMicroTasks();
 

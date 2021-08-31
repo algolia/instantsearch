@@ -150,9 +150,7 @@ class InstantSearch<
   public helper: AlgoliaSearchHelper | null;
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
-  /** @deprecated in favour of `state` */
   public started: boolean;
-  public state: 'initial' | 'started' | 'disposed';
   public templatesConfig: Record<string, unknown>;
   public renderState: RenderState = {};
   public _stalledSearchDelay: number;
@@ -244,7 +242,6 @@ See ${createDocumentationLink({
     this.onStateChange = onStateChange;
 
     this.started = false;
-    this.state = 'initial';
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
       compileOptions: {},
@@ -264,8 +261,12 @@ See ${createDocumentationLink({
     this.sendEventToInsights = noop;
 
     if (routing) {
-      const routerOptions = typeof routing === 'boolean' ? undefined : routing;
-      this.use(createRouterMiddleware(routerOptions));
+      this.use(
+        createRouterMiddleware({
+          initialUiState,
+          ...(typeof routing === 'boolean' ? undefined : routing),
+        })
+      );
     }
 
     if (isMetadataEnabled()) {
@@ -483,30 +484,16 @@ See ${createDocumentationLink({
       });
     });
 
-    if (this.state === 'disposed') {
-      // if the instance gets re-started,
-      // we re-create the middleware instances.
-      this.middleware = this.middleware.map(({ creator }) => ({
-        creator,
-        instance: {
-          subscribe: noop,
-          unsubscribe: noop,
-          onStateChange: noop,
-          ...creator({ instantSearchInstance: this }),
-        },
-      }));
-    }
-
     this.mainHelper = mainHelper;
+
+    this.middleware.forEach(({ instance }) => {
+      instance.subscribe();
+    });
 
     this.mainIndex.init({
       instantSearchInstance: this,
       parent: null,
       uiState: this._initialUiState,
-    });
-
-    this.middleware.forEach(({ instance }) => {
-      instance.subscribe();
     });
 
     mainHelper.search();
@@ -518,7 +505,6 @@ See ${createDocumentationLink({
     // track we started the search if we add more widgets,
     // to init them directly after add
     this.started = true;
-    this.state = 'started';
   }
 
   /**
@@ -539,8 +525,6 @@ See ${createDocumentationLink({
     // needs to set started as false otherwise this can not be restarted at a
     // later point.
     this.started = false;
-
-    this.state = 'disposed';
 
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.

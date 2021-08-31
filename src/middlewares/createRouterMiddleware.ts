@@ -17,13 +17,14 @@ export type RouterProps<
   // ideally stateMapping should be required if TRouteState is given,
   // but there's no way to check if a generic is provided or the default value.
   stateMapping?: StateMapping<TUiState, TRouteState>;
+  initialUiState: UiState;
 };
 
 export const createRouterMiddleware = <
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 >(
-  props: RouterProps<TUiState, TRouteState> = {}
+  props: RouterProps<TUiState, TRouteState>
 ): InternalMiddleware<TUiState> => {
   const {
     router = historyRouter<TRouteState>(),
@@ -35,6 +36,7 @@ export const createRouterMiddleware = <
       TUiState,
       TRouteState
     >,
+    initialUiState,
   } = props;
 
   return ({ instantSearchInstance }) => {
@@ -57,10 +59,6 @@ export const createRouterMiddleware = <
     // casting to UiState here to keep createURL unaware of custom UiState
     // (as long as it's an object, it's ok)
     instantSearchInstance._createURL = topLevelCreateURL as CreateURL<UiState>;
-    instantSearchInstance._initialUiState = {
-      ...instantSearchInstance._initialUiState,
-      ...stateMapping.routeToState(router.read()),
-    };
 
     let lastRouteState: TRouteState | undefined = undefined;
 
@@ -78,6 +76,11 @@ export const createRouterMiddleware = <
       },
 
       subscribe() {
+        instantSearchInstance._initialUiState = {
+          ...initialUiState,
+          ...stateMapping.routeToState(router.read()),
+        };
+
         router.onUpdate((route) => {
           instantSearchInstance.setUiState(stateMapping.routeToState(route));
         });

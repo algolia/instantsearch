@@ -1,28 +1,37 @@
-import algoliasearch from 'algoliasearch';
-import algoliasearchHelper from 'algoliasearch-helper';
+import instantsearch from '../../index.es';
 import { createInsightsMiddleware } from '../';
-import { createInstantSearch } from '../../../test/mock/createInstantSearch';
 import {
   createInsights,
   createInsightsUmdVersion,
 } from '../../../test/mock/createInsightsClient';
+import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { warning } from '../../lib/utils';
-import type { SearchClient } from '../../types';
 
 describe('insights', () => {
   const createTestEnvironment = () => {
     const { analytics, insightsClient } = createInsights();
-    const instantSearchInstance = createInstantSearch({
-      client: algoliasearch('myAppId', 'myApiKey'),
+    const indexName = 'my-index';
+    const instantSearchInstance = instantsearch({
+      searchClient: createSearchClient({
+        // @ts-expect-error only available in search client v4
+        transporter: {
+          headers: {
+            'x-algolia-application-id': 'myAppId',
+            'x-algolia-api-key': 'myApiKey',
+          },
+        },
+      }),
+      indexName,
     });
-    const helper = algoliasearchHelper({} as SearchClient, '');
-    const getUserToken = () => {
-      return (helper.state as any).userToken;
-    };
-    // @ts-expect-error
-    instantSearchInstance.mainIndex = {
-      getHelper: () => helper,
-    };
+    instantSearchInstance.start();
+
+    const getAppliedSearchParameters = () =>
+      instantSearchInstance.renderState[indexName].configure!.widgetParams
+        .searchParameters;
+
+    const getUserToken = () => getAppliedSearchParameters().userToken;
+
+    const helper = instantSearchInstance.mainIndex.getHelper();
 
     return {
       analytics,
@@ -30,6 +39,7 @@ describe('insights', () => {
       instantSearchInstance,
       helper,
       getUserToken,
+      getAppliedSearchParameters,
     };
   };
 
@@ -37,17 +47,29 @@ describe('insights', () => {
     const { analytics, insightsClient, libraryLoadedAndProcessQueue } =
       createInsightsUmdVersion();
 
-    const instantSearchInstance = createInstantSearch({
-      client: algoliasearch('myAppId', 'myApiKey'),
+    const indexName = 'my-index';
+    const instantSearchInstance = instantsearch({
+      searchClient: createSearchClient({
+        // @ts-expect-error only available in search client v4
+        transporter: {
+          headers: {
+            'x-algolia-application-id': 'my-app-id',
+            'x-algolia-api-key': 'my-api-key',
+          },
+        },
+      }),
+      indexName,
     });
-    const helper = algoliasearchHelper({} as SearchClient, '');
-    const getUserToken = () => {
-      return (helper.state as any).userToken;
-    };
-    // @ts-expect-error
-    instantSearchInstance.mainIndex = {
-      getHelper: () => helper,
-    };
+    instantSearchInstance.start();
+
+    const getAppliedSearchParameters = () =>
+      instantSearchInstance.renderState[indexName].configure!.widgetParams
+        .searchParameters;
+
+    const getUserToken = () => getAppliedSearchParameters().userToken;
+
+    const helper = instantSearchInstance.mainIndex.getHelper();
+
     return {
       analytics,
       insightsClient,
@@ -55,6 +77,7 @@ describe('insights', () => {
       instantSearchInstance,
       helper,
       getUserToken,
+      getAppliedSearchParameters,
     };
   };
 
@@ -219,13 +242,16 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('applies clickAnalytics', () => {
-      const { insightsClient, instantSearchInstance, helper } =
-        createTestEnvironment();
+      const {
+        insightsClient,
+        instantSearchInstance,
+        getAppliedSearchParameters,
+      } = createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
       middleware.subscribe();
-      expect(helper.state.clickAnalytics).toBe(true);
+      expect(getAppliedSearchParameters().clickAnalytics).toBe(true);
     });
 
     it("doesn't reset page", () => {

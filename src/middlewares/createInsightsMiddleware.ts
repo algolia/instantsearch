@@ -1,3 +1,4 @@
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   InsightsClient,
   InsightsClientMethod,
@@ -6,6 +7,7 @@ import type {
 } from '../types';
 import { getInsightsAnonymousUserTokenInternal } from '../helpers';
 import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils';
+import connectConfigure from '../connectors/configure/connectConfigure';
 
 export type InsightsEvent = {
   insightsMethod?: InsightsClientMethod;
@@ -88,25 +90,29 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
     });
     insightsClient('init', { appId, apiKey, ...insightsInitParams });
 
+    const createWidget = connectConfigure(noop);
+    let widget: ReturnType<typeof createWidget>;
+
     return {
       onStateChange() {},
       subscribe() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
-        // At the time this middleware is subscribed, `mainIndex.init()` is already called.
-        // It means `mainIndex.getHelper()` exists.
-        const helper = instantSearchInstance.mainIndex.getHelper()!;
+        let searchParameters: Partial<PlainSearchParameters> = {
+          clickAnalytics: true,
+        };
+        widget = createWidget({ searchParameters });
+        instantSearchInstance.addWidgets([widget]);
 
         const setUserTokenToSearch = (userToken?: string) => {
-          if (userToken) {
-            helper.setState(
-              helper.state.setQueryParameter('userToken', userToken)
-            );
-          }
+          instantSearchInstance.removeWidgets([widget]);
+          searchParameters = {
+            ...searchParameters,
+            userToken,
+          };
+          widget = createWidget({ searchParameters });
+          instantSearchInstance.addWidgets([widget]);
         };
-        const hasUserToken = () => Boolean((helper.state as any).userToken);
-
-        helper.setState(helper.state.setQueryParameter('clickAnalytics', true));
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
         if (hasInsightsClient && anonymousUserToken) {
@@ -132,7 +138,13 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
           if (onEvent) {
             onEvent(event, _insightsClient);
           } else if (event.insightsMethod) {
-            if (hasUserToken()) {
+            // At this point, instantSearchInstance must be started and
+            // it means there is a configure widget (added above).
+            const hasUserToken = Boolean(
+              instantSearchInstance.renderState[instantSearchInstance.indexName]
+                .configure!.widgetParams.searchParameters.userToken
+            );
+            if (hasUserToken) {
               insightsClient(event.insightsMethod, event.payload);
             } else {
               warning(
