@@ -77,7 +77,7 @@
     "@storybook/theming": "5.3.9",
     "@testing-library/dom": "7.9.0",
     "@testing-library/jest-dom": "4.1.0",
-    "@testing-library/preact": "1.0.2",
+    "@testing-library/preact": "2.0.1",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.1.15",
     "@types/jest": "^27.0.1",
