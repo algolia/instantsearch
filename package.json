@@ -104,7 +104,7 @@
     "babel-plugin-transform-react-pure-class-to-function": "1.0.1",
     "bundlesize": "0.18.0",
     "conventional-changelog-cli": "2.0.31",
-    "doctoc": "1.4.0",
+    "doctoc": "2.0.1",
     "enzyme": "3.11.0",
     "enzyme-adapter-preact-pure": "2.2.0",
     "enzyme-to-json": "3.4.4",
