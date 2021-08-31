@@ -1,5 +1,5 @@
 import { createSearchClient } from '../../../test/mock/createSearchClient';
-import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../test/utils/wait';
 import instantsearch from '../../index.es';
 import { searchBox } from '../../widgets';
 
@@ -30,7 +30,7 @@ describe('router', () => {
     ]);
     search.start();
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(search.getUiState()).toMatchInlineSnapshot(`
       Object {
@@ -69,7 +69,7 @@ describe('router', () => {
       searchBox({ container: document.createElement('div') }),
     ]);
     search.start();
-    await runAllMicroTasks();
+    await wait(0);
     expect(search.getUiState()).toMatchInlineSnapshot(`
       Object {
         "my-index": Object {
@@ -88,7 +88,7 @@ describe('router', () => {
       searchBox({ container: document.createElement('div') }),
     ]);
     search.start();
-    await runAllMicroTasks();
+    await wait(0);
     expect(search.getUiState()).toMatchInlineSnapshot(`
       Object {
         "my-index": Object {
