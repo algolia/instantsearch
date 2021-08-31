@@ -5197,7 +5197,7 @@ conventional-changelog-writer@^4.0.11:
     split "^1.0.0"
     through2 "^3.0.0"
 
-conventional-changelog@^3.1.15, conventional-changelog@^3.1.18:
+conventional-changelog@^3.1.18:
   version "3.1.18"
   resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-3.1.18.tgz#7da0a5ab34a604b920b8bf71c6cf5d952f0e805e"
   integrity sha512-aN6a3rjgV8qwAJj3sC/Lme2kvswWO7fFSGQc32gREcwIOsaiqBaO6f2p0NomFaPDnTqZ+mMZFLL3hlzvEnZ0mQ==
@@ -12798,10 +12798,10 @@ shelljs@0.8.4, shelljs@^0.8.3:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shipjs-lib@0.21.0:
-  version "0.21.0"
-  resolved "https://registry.npmjs.org/shipjs-lib/-/shipjs-lib-0.21.0.tgz#a4570c44903d28fb80e548c1907f8282264de190"
-  integrity sha512-TKMtbl9rDYs7kxK9QBM0cGXQYCRCmNF1ACLocsqwll7OwOKnWm/GeubeWi/tSEcj5E2jFUGS2ZLXKZ1jRW+SZw==
+shipjs-lib@0.23.3:
+  version "0.23.3"
+  resolved "https://registry.yarnpkg.com/shipjs-lib/-/shipjs-lib-0.23.3.tgz#25cc73544f99480fb66f10428d252b8292d355c7"
+  integrity sha512-ZyKAKI/d6fBw25XTK1zxRcJyPlQECvzNZar/N9iS7CZF6qs9yyUnxeHlB4FuF4rIvdPSdz0ePjQGhkvYnwFeEQ==
   dependencies:
     deepmerge "^4.2.2"
     dotenv "^8.1.0"
@@ -12809,10 +12809,10 @@ shipjs-lib@0.21.0:
     semver "6.3.0"
     shelljs "0.8.4"
 
-shipjs@0.21.0:
-  version "0.21.0"
-  resolved "https://registry.npmjs.org/shipjs/-/shipjs-0.21.0.tgz#28c76dec11502d1031b31921fa538cd66aeeee1b"
-  integrity sha512-ovrn6JhrMA9MV/xWGs69U7wv36cw/bWGL0pio9OodglC97HpZaRiO54vR9DPU6o/biqAvGMDglqFzhCA9On63Q==
+shipjs@0.23.3:
+  version "0.23.3"
+  resolved "https://registry.yarnpkg.com/shipjs/-/shipjs-0.23.3.tgz#f302852ee8deebd21b497eb6da52fed19df12f3d"
+  integrity sha512-3DZMQ5VVVj2d3bkeF5Tk0U2j/IpZUm/Evk/coRvvRA4cu8bcm9eXh6zcSpJVwMUWloL7SmxK/Y/GbCMb60+qDw==
   dependencies:
     "@babel/runtime" "^7.6.3"
     "@octokit/rest" "^17.0.0"
@@ -12821,7 +12821,10 @@ shipjs@0.21.0:
     arg "4.1.3"
     chalk "4.0.0"
     change-case "4.1.1"
-    conventional-changelog "^3.1.15"
+    conventional-changelog-angular "^5.0.6"
+    conventional-changelog-core "^4.1.4"
+    conventional-changelog-preset-loader "^2.3.0"
+    deepmerge "^4.2.2"
     dotenv "^8.2.0"
     ejs "^3.0.0"
     esm "3.2.25"
@@ -12833,7 +12836,7 @@ shipjs@0.21.0:
     prettier "^2.0.0"
     serialize-javascript "^3.0.0"
     shell-quote "^1.7.2"
-    shipjs-lib "0.21.0"
+    shipjs-lib "0.23.3"
     temp-write "4.0.0"
     tempfile "^3.0.0"
 
