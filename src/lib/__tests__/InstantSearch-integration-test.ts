@@ -4,7 +4,7 @@ import { configure, searchBox } from '../../widgets';
 import { connectConfigure } from '../../connectors';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import type { MiddlewareDefinition } from '../../types';
-import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../test/utils/wait';
 
 describe('configure', () => {
   it('provides up-to-date uiState to onStateChange', () => {
@@ -76,7 +76,7 @@ describe('middleware', () => {
       target: { value: 'q' },
     });
 
-    await runAllMicroTasks();
+    await wait(0);
     expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
   });
 
@@ -111,7 +111,7 @@ describe('middleware', () => {
       target: { value: 'q' },
     });
 
-    await runAllMicroTasks();
+    await wait(0);
     expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
   });
 });

@@ -31,7 +31,7 @@ describe('instantsearch()', () => {
 
   it('includes the helper functions', () => {
     expect(Object.keys(instantsearch)).toMatchInlineSnapshot(`
-      Array [
+      [
         "version",
         "createInfiniteHitsSessionStorageCache",
         "highlight",

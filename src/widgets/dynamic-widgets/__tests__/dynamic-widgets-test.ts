@@ -463,7 +463,7 @@ describe('dynamicWidgets()', () => {
       await wait(0);
 
       expect(indexWidget.getWidgets()).toMatchInlineSnapshot(`
-        Array [
+        [
           Widget(ais.dynamicWidgets) {
             $$widgetType: ais.dynamicWidgets
           },
@@ -482,7 +482,7 @@ describe('dynamicWidgets()', () => {
 
       indexWidget.removeWidgets([dynamicWidget]);
 
-      expect(indexWidget.getWidgets()).toMatchInlineSnapshot(`Array []`);
+      expect(indexWidget.getWidgets()).toMatchInlineSnapshot(`[]`);
     });
 
     it('removes dom on dispose', async () => {

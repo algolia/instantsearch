@@ -1508,29 +1508,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         widget.getWidgetRenderState(createRenderOptions({ helper, results }))
           .items
       ).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "__position": 0,
             "__queryID": "test-query-id",
-            "_geoloc": Object {
+            "_geoloc": {
               "lat": 10,
               "lng": 12,
             },
             "objectID": "123",
           },
-          Object {
+          {
             "__position": 1,
             "__queryID": "test-query-id",
-            "_geoloc": Object {
+            "_geoloc": {
               "lat": 12,
               "lng": 14,
             },
             "objectID": "456",
           },
-          Object {
+          {
             "__position": 2,
             "__queryID": "test-query-id",
-            "_geoloc": Object {
+            "_geoloc": {
               "lat": 14,
               "lng": 16,
             },

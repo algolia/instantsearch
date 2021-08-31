@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`hierarchicalMenu() render calls render 1`] = `
-Object {
+{
   "canToggleShowMore": false,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "childList": "ais-HierarchicalMenu-list--child",
     "count": "ais-HierarchicalMenu-count",
     "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
@@ -19,17 +19,17 @@ Object {
     "showMore": "ais-HierarchicalMenu-showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
+  "facetValues": [
+    {
       "count": 1,
-      "data": Array [],
+      "data": [],
       "isRefined": false,
       "label": "foo",
       "value": "",
     },
-    Object {
+    {
       "count": 2,
-      "data": Array [],
+      "data": [],
       "isRefined": false,
       "label": "bar",
       "value": "",
@@ -37,8 +37,8 @@ Object {
   ],
   "isShowingMore": false,
   "showMore": false,
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       "showMoreText": "
     {{#isShowingMore}}
@@ -49,8 +49,8 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "item": false,
       "showMoreText": false,
     },
@@ -61,10 +61,10 @@ Object {
 `;
 
 exports[`hierarchicalMenu() render has a templates option 1`] = `
-Object {
+{
   "canToggleShowMore": false,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "childList": "ais-HierarchicalMenu-list--child",
     "count": "ais-HierarchicalMenu-count",
     "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
@@ -79,17 +79,17 @@ Object {
     "showMore": "ais-HierarchicalMenu-showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
+  "facetValues": [
+    {
       "count": 1,
-      "data": Array [],
+      "data": [],
       "isRefined": false,
       "label": "foo",
       "value": "",
     },
-    Object {
+    {
       "count": 2,
-      "data": Array [],
+      "data": [],
       "isRefined": false,
       "label": "bar",
       "value": "",
@@ -97,8 +97,8 @@ Object {
   ],
   "isShowingMore": false,
   "showMore": false,
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "item": "item2",
       "showMoreText": "
     {{#isShowingMore}}
@@ -109,8 +109,8 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "item": true,
       "showMoreText": false,
     },
@@ -121,10 +121,10 @@ Object {
 `;
 
 exports[`hierarchicalMenu() render has a transformItems options 1`] = `
-Object {
+{
   "canToggleShowMore": false,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "childList": "ais-HierarchicalMenu-list--child",
     "count": "ais-HierarchicalMenu-count",
     "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
@@ -139,18 +139,18 @@ Object {
     "showMore": "ais-HierarchicalMenu-showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
+  "facetValues": [
+    {
       "count": 1,
-      "data": Array [],
+      "data": [],
       "isRefined": false,
       "label": "foo",
       "transformed": true,
       "value": "",
     },
-    Object {
+    {
       "count": 2,
-      "data": Array [],
+      "data": [],
       "isRefined": false,
       "label": "bar",
       "transformed": true,
@@ -159,8 +159,8 @@ Object {
   ],
   "isShowingMore": false,
   "showMore": false,
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       "showMoreText": "
     {{#isShowingMore}}
@@ -171,8 +171,8 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "item": false,
       "showMoreText": false,
     },
@@ -183,10 +183,10 @@ Object {
 `;
 
 exports[`hierarchicalMenu() render sets facetValues to empty array when no results 1`] = `
-Object {
+{
   "canToggleShowMore": false,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "childList": "ais-HierarchicalMenu-list--child",
     "count": "ais-HierarchicalMenu-count",
     "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
@@ -201,11 +201,11 @@ Object {
     "showMore": "ais-HierarchicalMenu-showMore",
   },
   "depth": 0,
-  "facetValues": Array [],
+  "facetValues": [],
   "isShowingMore": false,
   "showMore": false,
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       "showMoreText": "
     {{#isShowingMore}}
@@ -216,8 +216,8 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "item": false,
       "showMoreText": false,
     },
@@ -228,10 +228,10 @@ Object {
 `;
 
 exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
-Object {
+{
   "canToggleShowMore": false,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "childList": "ais-HierarchicalMenu-list--child childList",
     "count": "ais-HierarchicalMenu-count count",
     "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled disabledShowMore",
@@ -246,17 +246,17 @@ Object {
     "showMore": "ais-HierarchicalMenu-showMore showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
+  "facetValues": [
+    {
       "count": 1,
-      "data": Array [],
+      "data": [],
       "isRefined": false,
       "label": "foo",
       "value": "",
     },
-    Object {
+    {
       "count": 2,
-      "data": Array [],
+      "data": [],
       "isRefined": false,
       "label": "bar",
       "value": "",
@@ -264,8 +264,8 @@ Object {
   ],
   "isShowingMore": false,
   "showMore": false,
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       "showMoreText": "
     {{#isShowingMore}}
@@ -276,8 +276,8 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "item": false,
       "showMoreText": false,
     },

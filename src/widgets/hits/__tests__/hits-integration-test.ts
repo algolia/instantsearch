@@ -4,7 +4,7 @@ import instantsearch from '../../../index.es';
 import { hits, configure } from '../../';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 
 const createSearchClient = ({
   hitsPerPage,
@@ -86,7 +86,7 @@ describe('hits', () => {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent).toHaveBeenCalledWith(
@@ -134,7 +134,7 @@ describe('hits', () => {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
       fireEvent.click(getByText(container, 'title 1'));
@@ -182,7 +182,7 @@ describe('hits', () => {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
       fireEvent.click(getByText(container, 'title 2'));
@@ -246,7 +246,7 @@ describe('hits', () => {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       fireEvent.click(getByText(container, 'title 1'));
       expect(aa).toHaveBeenCalledTimes(1);

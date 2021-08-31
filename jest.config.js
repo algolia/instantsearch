@@ -25,7 +25,9 @@ module.exports = {
   globals: {
     __DEV__: true,
   },
-
+  snapshotFormat: {
+    printBasicPrototype: false,
+  },
   // reporter for circleci
   reporters: [
     'default',

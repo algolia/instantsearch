@@ -1,33 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`toggleRefinement() Lifecycle render supports negative numeric off or on values 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
     "labelText": "ais-ToggleRefinement-labelText",
     "root": "ais-ToggleRefinement",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": 1,
     "isRefined": false,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 2,
       "isRefined": true,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": 1,
       "isRefined": false,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },
@@ -35,33 +35,33 @@ Object {
 `;
 
 exports[`toggleRefinement() Lifecycle render supports negative numeric off or on values 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
     "labelText": "ais-ToggleRefinement-labelText",
     "root": "ais-ToggleRefinement",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": 1,
     "isRefined": false,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 2,
       "isRefined": true,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": 1,
       "isRefined": false,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },
@@ -69,33 +69,33 @@ Object {
 `;
 
 exports[`toggleRefinement() Lifecycle render understands cssClasses 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox test-checkbox",
     "label": "ais-ToggleRefinement-label test-label",
     "labelText": "ais-ToggleRefinement-labelText test-labelText",
     "root": "ais-ToggleRefinement test",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": 2,
     "isRefined": false,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 3,
       "isRefined": false,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": 2,
       "isRefined": false,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },
@@ -103,33 +103,33 @@ Object {
 `;
 
 exports[`toggleRefinement() Lifecycle render when refined 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
     "labelText": "ais-ToggleRefinement-labelText",
     "root": "ais-ToggleRefinement",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": 3,
     "isRefined": true,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 3,
       "isRefined": false,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": 2,
       "isRefined": true,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },
@@ -137,33 +137,33 @@ Object {
 `;
 
 exports[`toggleRefinement() Lifecycle render when refined 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
     "labelText": "ais-ToggleRefinement-labelText",
     "root": "ais-ToggleRefinement",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": 3,
     "isRefined": true,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 3,
       "isRefined": false,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": 2,
       "isRefined": true,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },
@@ -171,33 +171,33 @@ Object {
 `;
 
 exports[`toggleRefinement() Lifecycle render with facet values 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
     "labelText": "ais-ToggleRefinement-labelText",
     "root": "ais-ToggleRefinement",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": 2,
     "isRefined": false,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 3,
       "isRefined": false,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": 2,
       "isRefined": false,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },
@@ -205,33 +205,33 @@ Object {
 `;
 
 exports[`toggleRefinement() Lifecycle render with facet values 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
     "labelText": "ais-ToggleRefinement-labelText",
     "root": "ais-ToggleRefinement",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": 2,
     "isRefined": false,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 3,
       "isRefined": false,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": 2,
       "isRefined": false,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },
@@ -239,33 +239,33 @@ Object {
 `;
 
 exports[`toggleRefinement() Lifecycle render without facet values 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
     "labelText": "ais-ToggleRefinement-labelText",
     "root": "ais-ToggleRefinement",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": null,
     "isRefined": false,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 0,
       "isRefined": false,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": null,
       "isRefined": false,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },
@@ -273,33 +273,33 @@ Object {
 `;
 
 exports[`toggleRefinement() Lifecycle render without facet values 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "checkbox": "ais-ToggleRefinement-checkbox",
     "label": "ais-ToggleRefinement-label",
     "labelText": "ais-ToggleRefinement-labelText",
     "root": "ais-ToggleRefinement",
   },
-  "currentRefinement": Object {
+  "currentRefinement": {
     "count": null,
     "isRefined": false,
     "name": "world!",
-    "offFacetValue": Object {
+    "offFacetValue": {
       "count": 0,
       "isRefined": false,
     },
-    "onFacetValue": Object {
+    "onFacetValue": {
       "count": null,
       "isRefined": false,
     },
   },
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "labelText": "{{name}}",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "labelText": false,
     },
   },

@@ -27,15 +27,15 @@ describe('Stats', () => {
 
     expect(wrapper.find('Template').props().data).toMatchObject(defaultProps);
     expect(wrapper).toMatchInlineSnapshot(`
-      Array [
+      [
         <div
           className="root"
         >
-          Array [
+          [
             <span
               className="text"
               dangerouslySetInnerHTML={
-                Object {
+                {
                   "__html": "results found in 42ms",
                 }
               }

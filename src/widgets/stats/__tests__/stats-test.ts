@@ -60,9 +60,9 @@ describe('stats()', () => {
     expect(render).toHaveBeenCalledTimes(2);
     // @ts-expect-error
     expect(firstRender[0].props).toMatchInlineSnapshot(`
-      Object {
+      {
         "areHitsSorted": false,
-        "cssClasses": Object {
+        "cssClasses": {
           "root": "ais-Stats",
           "text": "ais-Stats-text text cx",
         },
@@ -73,8 +73,8 @@ describe('stats()', () => {
         "page": 0,
         "processingTimeMS": 42,
         "query": "a query",
-        "templateProps": Object {
-          "templates": Object {
+        "templateProps": {
+          "templates": {
             "text": "
           {{#areHitsSorted}}
             {{#hasNoSortedResults}}No relevant results{{/hasNoSortedResults}}
@@ -89,8 +89,8 @@ describe('stats()', () => {
           {{/areHitsSorted}}
           found in {{processingTimeMS}}ms",
           },
-          "templatesConfig": Object {},
-          "useCustomCompileOptions": Object {
+          "templatesConfig": {},
+          "useCustomCompileOptions": {
             "text": false,
           },
         },
@@ -99,9 +99,9 @@ describe('stats()', () => {
     expect(firstRender[1]).toEqual(container);
     // @ts-expect-error
     expect(secondRender[0].props).toMatchInlineSnapshot(`
-      Object {
+      {
         "areHitsSorted": false,
-        "cssClasses": Object {
+        "cssClasses": {
           "root": "ais-Stats",
           "text": "ais-Stats-text text cx",
         },
@@ -112,8 +112,8 @@ describe('stats()', () => {
         "page": 0,
         "processingTimeMS": 42,
         "query": "a query",
-        "templateProps": Object {
-          "templates": Object {
+        "templateProps": {
+          "templates": {
             "text": "
           {{#areHitsSorted}}
             {{#hasNoSortedResults}}No relevant results{{/hasNoSortedResults}}
@@ -128,8 +128,8 @@ describe('stats()', () => {
           {{/areHitsSorted}}
           found in {{processingTimeMS}}ms",
           },
-          "templatesConfig": Object {},
-          "useCustomCompileOptions": Object {
+          "templatesConfig": {},
+          "useCustomCompileOptions": {
             "text": false,
           },
         },

@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`pagination() calls twice render(<Pagination props />, container) 1`] = `
-Object {
+{
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "disabledItem": "ais-Pagination-item--disabled disabledItem",
     "firstPageItem": "ais-Pagination-item--firstPage firstPageItem",
     "item": "ais-Pagination-item item",
@@ -21,7 +21,7 @@ Object {
   "isFirstPage": true,
   "isLastPage": false,
   "nbPages": 20,
-  "pages": Array [
+  "pages": [
     0,
     1,
     2,
@@ -35,7 +35,7 @@ Object {
   "showLast": true,
   "showNext": true,
   "showPrevious": true,
-  "templates": Object {
+  "templates": {
     "first": "«",
     "last": "»",
     "next": "›",
@@ -45,9 +45,9 @@ Object {
 `;
 
 exports[`pagination() calls twice render(<Pagination props />, container) 2`] = `
-Object {
+{
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "disabledItem": "ais-Pagination-item--disabled disabledItem",
     "firstPageItem": "ais-Pagination-item--firstPage firstPageItem",
     "item": "ais-Pagination-item item",
@@ -65,7 +65,7 @@ Object {
   "isFirstPage": true,
   "isLastPage": false,
   "nbPages": 20,
-  "pages": Array [
+  "pages": [
     0,
     1,
     2,
@@ -79,7 +79,7 @@ Object {
   "showLast": true,
   "showNext": true,
   "showPrevious": true,
-  "templates": Object {
+  "templates": {
     "first": "«",
     "last": "»",
     "next": "›",

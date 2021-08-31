@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
-Object {
+{
   "bindEvent": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
     "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
     "emptyRoot": "ais-InfiniteHits--empty",
@@ -14,12 +14,12 @@ Object {
     "root": "ais-InfiniteHits root cx",
   },
   "hasShowPrevious": false,
-  "hits": Array [
-    Object {
+  "hits": [
+    {
       "__position": 3,
       "objectID": "1",
     },
-    Object {
+    {
       "__position": 4,
       "objectID": "2",
     },
@@ -28,15 +28,15 @@ Object {
   "isFirstPage": true,
   "isLastPage": true,
   "results": SearchResults {
-    "_rawResults": Array [
-      Object {
+    "_rawResults": [
+      {
         "exhaustiveFacetsCount": true,
         "exhaustiveNbHits": true,
-        "hits": Array [
-          Object {
+        "hits": [
+          {
             "objectID": "1",
           },
-          Object {
+          {
             "objectID": "2",
           },
         ],
@@ -50,28 +50,28 @@ Object {
       },
     ],
     "_state": SearchParameters {
-      "disjunctiveFacets": Array [],
-      "disjunctiveFacetsRefinements": Object {},
-      "facets": Array [],
-      "facetsExcludes": Object {},
-      "facetsRefinements": Object {},
-      "hierarchicalFacets": Array [],
-      "hierarchicalFacetsRefinements": Object {},
+      "disjunctiveFacets": [],
+      "disjunctiveFacetsRefinements": {},
+      "facets": [],
+      "facetsExcludes": {},
+      "facetsRefinements": {},
+      "hierarchicalFacets": [],
+      "hierarchicalFacetsRefinements": {},
       "index": "",
-      "numericRefinements": Object {},
-      "tagRefinements": Array [],
+      "numericRefinements": {},
+      "tagRefinements": [],
     },
-    "disjunctiveFacets": Array [],
+    "disjunctiveFacets": [],
     "exhaustiveFacetsCount": true,
     "exhaustiveNbHits": true,
-    "facets": Array [],
-    "hierarchicalFacets": Array [],
-    "hits": Array [
-      Object {
+    "facets": [],
+    "hierarchicalFacets": [],
+    "hits": [
+      {
         "__position": 3,
         "objectID": "1",
       },
-      Object {
+      {
         "__position": 4,
         "objectID": "2",
       },
@@ -87,15 +87,15 @@ Object {
   "sendEvent": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "empty": "No results",
       "item": [Function],
       "showMoreText": "Show more results",
       "showPreviousText": "Show previous results",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "empty": false,
       "item": false,
       "showMoreText": false,
@@ -106,9 +106,9 @@ Object {
 `;
 
 exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
-Object {
+{
   "bindEvent": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
     "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
     "emptyRoot": "ais-InfiniteHits--empty",
@@ -119,12 +119,12 @@ Object {
     "root": "ais-InfiniteHits root cx",
   },
   "hasShowPrevious": false,
-  "hits": Array [
-    Object {
+  "hits": [
+    {
       "__position": 3,
       "objectID": "1",
     },
-    Object {
+    {
       "__position": 4,
       "objectID": "2",
     },
@@ -133,15 +133,15 @@ Object {
   "isFirstPage": true,
   "isLastPage": true,
   "results": SearchResults {
-    "_rawResults": Array [
-      Object {
+    "_rawResults": [
+      {
         "exhaustiveFacetsCount": true,
         "exhaustiveNbHits": true,
-        "hits": Array [
-          Object {
+        "hits": [
+          {
             "objectID": "1",
           },
-          Object {
+          {
             "objectID": "2",
           },
         ],
@@ -155,28 +155,28 @@ Object {
       },
     ],
     "_state": SearchParameters {
-      "disjunctiveFacets": Array [],
-      "disjunctiveFacetsRefinements": Object {},
-      "facets": Array [],
-      "facetsExcludes": Object {},
-      "facetsRefinements": Object {},
-      "hierarchicalFacets": Array [],
-      "hierarchicalFacetsRefinements": Object {},
+      "disjunctiveFacets": [],
+      "disjunctiveFacetsRefinements": {},
+      "facets": [],
+      "facetsExcludes": {},
+      "facetsRefinements": {},
+      "hierarchicalFacets": [],
+      "hierarchicalFacetsRefinements": {},
       "index": "",
-      "numericRefinements": Object {},
-      "tagRefinements": Array [],
+      "numericRefinements": {},
+      "tagRefinements": [],
     },
-    "disjunctiveFacets": Array [],
+    "disjunctiveFacets": [],
     "exhaustiveFacetsCount": true,
     "exhaustiveNbHits": true,
-    "facets": Array [],
-    "hierarchicalFacets": Array [],
-    "hits": Array [
-      Object {
+    "facets": [],
+    "hierarchicalFacets": [],
+    "hits": [
+      {
         "__position": 3,
         "objectID": "1",
       },
-      Object {
+      {
         "__position": 4,
         "objectID": "2",
       },
@@ -192,15 +192,15 @@ Object {
   "sendEvent": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "empty": "No results",
       "item": [Function],
       "showMoreText": "Show more results",
       "showPreviousText": "Show previous results",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "empty": false,
       "item": false,
       "showMoreText": false,
@@ -211,9 +211,9 @@ Object {
 `;
 
 exports[`infiniteHits() renders transformed items 1`] = `
-Object {
+{
   "bindEvent": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
     "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
     "emptyRoot": "ais-InfiniteHits--empty",
@@ -224,13 +224,13 @@ Object {
     "root": "ais-InfiniteHits",
   },
   "hasShowPrevious": false,
-  "hits": Array [
-    Object {
+  "hits": [
+    {
       "__position": 3,
       "objectID": "1",
       "transformed": true,
     },
-    Object {
+    {
       "__position": 4,
       "objectID": "2",
       "transformed": true,
@@ -240,15 +240,15 @@ Object {
   "isFirstPage": true,
   "isLastPage": true,
   "results": SearchResults {
-    "_rawResults": Array [
-      Object {
+    "_rawResults": [
+      {
         "exhaustiveFacetsCount": true,
         "exhaustiveNbHits": true,
-        "hits": Array [
-          Object {
+        "hits": [
+          {
             "objectID": "1",
           },
-          Object {
+          {
             "objectID": "2",
           },
         ],
@@ -262,29 +262,29 @@ Object {
       },
     ],
     "_state": SearchParameters {
-      "disjunctiveFacets": Array [],
-      "disjunctiveFacetsRefinements": Object {},
-      "facets": Array [],
-      "facetsExcludes": Object {},
-      "facetsRefinements": Object {},
-      "hierarchicalFacets": Array [],
-      "hierarchicalFacetsRefinements": Object {},
+      "disjunctiveFacets": [],
+      "disjunctiveFacetsRefinements": {},
+      "facets": [],
+      "facetsExcludes": {},
+      "facetsRefinements": {},
+      "hierarchicalFacets": [],
+      "hierarchicalFacetsRefinements": {},
       "index": "",
-      "numericRefinements": Object {},
-      "tagRefinements": Array [],
+      "numericRefinements": {},
+      "tagRefinements": [],
     },
-    "disjunctiveFacets": Array [],
+    "disjunctiveFacets": [],
     "exhaustiveFacetsCount": true,
     "exhaustiveNbHits": true,
-    "facets": Array [],
-    "hierarchicalFacets": Array [],
-    "hits": Array [
-      Object {
+    "facets": [],
+    "hierarchicalFacets": [],
+    "hits": [
+      {
         "__position": 3,
         "objectID": "1",
         "transformed": true,
       },
-      Object {
+      {
         "__position": 4,
         "objectID": "2",
         "transformed": true,
@@ -301,15 +301,15 @@ Object {
   "sendEvent": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "empty": "No results",
       "item": [Function],
       "showMoreText": "Show more results",
       "showPreviousText": "Show previous results",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "empty": false,
       "item": false,
       "showMoreText": false,

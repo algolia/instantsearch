@@ -21,9 +21,9 @@ describe('life cycle', () => {
 
     expect(pushState).toHaveBeenCalledTimes(1);
     expect(pushState.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {
+      [
+        [
+          {
             "some": "third",
           },
           "",

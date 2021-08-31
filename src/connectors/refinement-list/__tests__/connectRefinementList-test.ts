@@ -13,6 +13,7 @@ import {
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { wait } from '../../../../test/utils/wait';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {
@@ -1068,7 +1069,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     // `searchForItems` triggers a new render
     renderingOptions2.searchForItems('query triggering no results');
-    await Promise.resolve();
+    await wait(0);
 
     expect(helper.searchForFacetValues).toHaveBeenCalledWith(
       expect.anything(),
@@ -1102,7 +1103,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     // `searchForItems` triggers a new render
     renderingOptions3.searchForItems('');
-    await Promise.resolve();
+    await wait(0);
 
     expect(rendering).toHaveBeenCalledTimes(4);
     const renderingOptions4 = rendering.mock.calls[3][0];
