@@ -94,7 +94,7 @@
     "@wdio/selenium-standalone-service": "5.16.5",
     "@wdio/spec-reporter": "5.16.5",
     "@wdio/static-server-service": "5.16.5",
-    "algoliasearch": "4.10.3",
+    "algoliasearch": "4.10.5",
     "algoliasearch-v3": "npm:algoliasearch@3.35.1",
     "babel-eslint": "10.0.3",
     "babel-jest": "27.1.0",
@@ -145,7 +145,7 @@
     "webpack": "4.41.5"
   },
   "resolutions": {
-    "places.js/algoliasearch": "3.35.0"
+    "places.js/algoliasearch": "4.10.5"
   },
   "bundlesize": [
     {
