@@ -60,7 +60,7 @@
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
     "preact": "^10.0.0",
-    "qs": "^6.5.1 < 6.10"
+    "qs": "< 6.11"
   },
   "devDependencies": {
     "@algolia/client-search": "4.10.3",
