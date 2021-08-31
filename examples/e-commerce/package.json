@@ -18,7 +18,7 @@
     "eslint-plugin-eslint-comments": "3.2.0",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-prettier": "3.3.1",
-    "parcel-bundler": "1.12.4",
+    "parcel-bundler": "1.12.5",
     "prettier": "1.19.1"
   },
   "alias": {
