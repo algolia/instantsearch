@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`refinementList() render renders transformed items correctly 1`] = `
-Object {
+{
   "canToggleShowMore": false,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "checkbox": "ais-RefinementList-checkbox",
     "count": "ais-RefinementList-count",
     "disabledShowMore": "ais-RefinementList-showMore--disabled",
@@ -16,7 +16,7 @@ Object {
     "noResults": "ais-RefinementList-noResults",
     "root": "ais-RefinementList",
     "searchBox": "ais-RefinementList-searchBox",
-    "searchable": Object {
+    "searchable": {
       "form": "ais-SearchBox-form",
       "input": "ais-SearchBox-input",
       "loadingIcon": "ais-SearchBox-loadingIcon",
@@ -31,14 +31,14 @@ Object {
     "showMore": "ais-RefinementList-showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
+  "facetValues": [
+    {
       "highlighted": "foo",
       "label": "foo",
       "transformed": true,
       "value": "foo",
     },
-    Object {
+    {
       "highlighted": "bar",
       "label": "bar",
       "transformed": true,
@@ -48,8 +48,8 @@ Object {
   "hasExhaustiveItems": true,
   "isFromSearch": false,
   "isShowingMore": false,
-  "searchBoxTemplateProps": Object {
-    "templates": Object {
+  "searchBoxTemplateProps": {
+    "templates": {
       "loadingIndicator": "
 <svg class=\\"{{cssClasses.loadingIcon}}\\" width=\\"16\\" height=\\"16\\" viewBox=\\"0 0 38 38\\" stroke=\\"#444\\">
   <g fill=\\"none\\" fillRule=\\"evenodd\\">
@@ -80,8 +80,8 @@ Object {
 </svg>
   ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "loadingIndicator": false,
       "reset": false,
       "submit": false,
@@ -91,8 +91,8 @@ Object {
   "searchIsAlwaysActive": true,
   "searchPlaceholder": "Search...",
   "showMore": undefined,
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "item": "<label class=\\"{{cssClasses.label}}\\">
   <input type=\\"checkbox\\"
          class=\\"{{cssClasses.checkbox}}\\"
@@ -111,8 +111,8 @@ Object {
     {{/isShowingMore}}
     ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "item": false,
       "searchableNoResults": false,
       "showMoreText": false,

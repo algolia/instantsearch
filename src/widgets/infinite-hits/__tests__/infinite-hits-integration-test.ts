@@ -3,7 +3,7 @@ import { getByText, waitFor, fireEvent } from '@testing-library/dom';
 import instantsearch from '../../../index.es';
 import { infiniteHits, configure } from '../../';
 import { createInsightsMiddleware } from '../../../middlewares';
-import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   InfiniteHitsCache,
@@ -112,14 +112,14 @@ describe('infiniteHits', () => {
       });
       expect(customCache.write).toHaveBeenCalledTimes(1);
       expect(customCache.write.mock.calls[0][0].hits).toMatchInlineSnapshot(`
-        Object {
-          "0": Array [
-            Object {
+        {
+          "0": [
+            {
               "__position": 1,
               "objectID": "object-id0",
               "title": "title 1",
             },
-            Object {
+            {
               "__position": 2,
               "objectID": "object-id1",
               "title": "title 2",
@@ -137,26 +137,26 @@ describe('infiniteHits', () => {
       });
       expect(customCache.write).toHaveBeenCalledTimes(2);
       expect(customCache.write.mock.calls[1][0].hits).toMatchInlineSnapshot(`
-Object {
-  "0": Array [
-    Object {
+{
+  "0": [
+    {
       "__position": 1,
       "objectID": "object-id0",
       "title": "title 1",
     },
-    Object {
+    {
       "__position": 2,
       "objectID": "object-id1",
       "title": "title 2",
     },
   ],
-  "1": Array [
-    Object {
+  "1": [
+    {
       "__position": 3,
       "objectID": "object-id0",
       "title": "title 3",
     },
-    Object {
+    {
       "__position": 4,
       "objectID": "object-id1",
       "title": "title 4",
@@ -336,7 +336,7 @@ Object {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent).toHaveBeenCalledWith(
@@ -384,7 +384,7 @@ Object {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
       fireEvent.click(getByText(container, 'title 1'));
@@ -432,7 +432,7 @@ Object {
         }),
       ]);
       search.start();
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
       fireEvent.click(getByText(container, 'title 2'));

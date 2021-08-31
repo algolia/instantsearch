@@ -98,7 +98,7 @@ describe('connectDynamicWidgets', () => {
         ]);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
           ]
         `);
@@ -106,7 +106,7 @@ describe('connectDynamicWidgets', () => {
         dynamicWidgets.init!(createInitOptions({ parent }));
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.menu) {
               attribute: test1
@@ -198,7 +198,7 @@ describe('connectDynamicWidgets', () => {
         ]);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
           ]
         `);
@@ -206,7 +206,7 @@ describe('connectDynamicWidgets', () => {
         dynamicWidgets.init!(createInitOptions({ parent }));
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.menu) {
               attribute: test1
@@ -222,7 +222,7 @@ describe('connectDynamicWidgets', () => {
         await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
           ]
         `);
@@ -246,7 +246,7 @@ describe('connectDynamicWidgets', () => {
         ]);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
           ]
         `);
@@ -254,7 +254,7 @@ describe('connectDynamicWidgets', () => {
         dynamicWidgets.init!(createInitOptions({ parent }));
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.menu) {
               attribute: test1
@@ -270,7 +270,7 @@ describe('connectDynamicWidgets', () => {
         await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.menu) {
               attribute: test1
@@ -297,7 +297,7 @@ describe('connectDynamicWidgets', () => {
         ]);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
           ]
         `);
@@ -305,7 +305,7 @@ describe('connectDynamicWidgets', () => {
         dynamicWidgets.init!(createInitOptions({ parent }));
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.menu) {
               attribute: test1
@@ -331,7 +331,7 @@ describe('connectDynamicWidgets', () => {
         await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.menu) {
               attribute: test1
@@ -354,7 +354,7 @@ describe('connectDynamicWidgets', () => {
         await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.menu) {
               attribute: test1
@@ -380,7 +380,7 @@ describe('connectDynamicWidgets', () => {
         await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.hierarchicalMenu) {
               attribute: test2
@@ -425,7 +425,7 @@ describe('connectDynamicWidgets', () => {
       const parent = index({ indexName: 'test' }).addWidgets([dynamicWidgets]);
 
       expect(parent.getWidgets()).toMatchInlineSnapshot(`
-        Array [
+        [
           Widget(ais.dynamicWidgets),
         ]
       `);
@@ -433,7 +433,7 @@ describe('connectDynamicWidgets', () => {
       parent.init(createInitOptions());
 
       expect(parent.getWidgets()).toMatchInlineSnapshot(`
-        Array [
+        [
           Widget(ais.dynamicWidgets),
           Widget(ais.menu) {
             attribute: test1
@@ -447,7 +447,7 @@ describe('connectDynamicWidgets', () => {
       dynamicWidgets.render!(createRenderOptions({ parent }));
 
       expect(parent.getWidgets()).toMatchInlineSnapshot(`
-        Array [
+        [
           Widget(ais.dynamicWidgets),
           Widget(ais.menu) {
             attribute: test1
@@ -462,7 +462,7 @@ describe('connectDynamicWidgets', () => {
 
       await wait(0);
 
-      expect(parent.getWidgets()).toMatchInlineSnapshot(`Array []`);
+      expect(parent.getWidgets()).toMatchInlineSnapshot(`[]`);
     });
   });
 

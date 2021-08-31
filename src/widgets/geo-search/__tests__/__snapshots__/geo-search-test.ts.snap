@@ -3,8 +3,8 @@
 exports[`GeoSearch expect to render 1`] = `"<div class=\\"ais-GeoSearch\\"><div class=\\"ais-GeoSearch-map\\"></div><div class=\\"ais-GeoSearch-tree\\"></div></div>"`;
 
 exports[`GeoSearch expect to render 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "control": "ais-GeoSearch-control",
     "disabledRedo": "ais-GeoSearch-redo--disabled",
     "input": "ais-GeoSearch-input",
@@ -25,15 +25,15 @@ Object {
   "onClearClick": [Function],
   "onRefineClick": [Function],
   "onRefineToggle": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "HTMLMarker": "<p>Your custom HTML Marker</p>",
       "redo": "Redo search here",
       "reset": "Clear the map refinement",
       "toggle": "Search as I move the map",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "HTMLMarker": true,
       "redo": true,
       "reset": true,
@@ -46,8 +46,8 @@ Object {
 exports[`GeoSearch expect to render with custom classNames 1`] = `"<div class=\\"ais-GeoSearch custom-root\\"><div class=\\"ais-GeoSearch-map custom-map\\"></div><div class=\\"ais-GeoSearch-tree\\"></div></div>"`;
 
 exports[`GeoSearch expect to render with custom classNames 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "control": "ais-GeoSearch-control custom-control",
     "disabledRedo": "ais-GeoSearch-redo--disabled custom-redo-disabled",
     "input": "ais-GeoSearch-input custom-input",
@@ -68,15 +68,15 @@ Object {
   "onClearClick": [Function],
   "onRefineClick": [Function],
   "onRefineToggle": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "HTMLMarker": "<p>Your custom HTML Marker</p>",
       "redo": "Redo search here",
       "reset": "Clear the map refinement",
       "toggle": "Search as I move the map",
     },
     "templatesConfig": undefined,
-    "useCustomCompileOptions": Object {
+    "useCustomCompileOptions": {
       "HTMLMarker": true,
       "redo": true,
       "reset": true,

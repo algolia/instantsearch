@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`currentRefinements() render() DOM output renders correctly 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "category": "ais-CurrentRefinements-category category",
     "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
     "delete": "ais-CurrentRefinements-delete delete",
@@ -11,14 +11,14 @@ Object {
     "list": "ais-CurrentRefinements-list list",
     "root": "ais-CurrentRefinements root",
   },
-  "items": Array [
-    Object {
+  "items": [
+    {
       "attribute": "facet",
       "indexName": "indexName",
       "label": "facet",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "facet",
           "label": "facetAttribute",
           "type": "facet",
@@ -26,13 +26,13 @@ Object {
         },
       ],
     },
-    Object {
+    {
       "attribute": "facetExclude",
       "indexName": "indexName",
       "label": "facetExclude",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "facetExclude",
           "label": "facetExcludeAttribute",
           "type": "exclude",
@@ -40,19 +40,19 @@ Object {
         },
       ],
     },
-    Object {
+    {
       "attribute": "rating",
       "indexName": "indexName",
       "label": "rating",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "rating",
           "label": "4",
           "type": "disjunctive",
           "value": "4",
         },
-        Object {
+        {
           "attribute": "rating",
           "label": "5",
           "type": "disjunctive",
@@ -60,19 +60,19 @@ Object {
         },
       ],
     },
-    Object {
+    {
       "attribute": "brand",
       "indexName": "indexName",
       "label": "brand",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "brand",
           "label": "Samsung",
           "type": "disjunctive",
           "value": "Samsung",
         },
-        Object {
+        {
           "attribute": "brand",
           "label": "Apple",
           "type": "disjunctive",
@@ -80,13 +80,13 @@ Object {
         },
       ],
     },
-    Object {
+    {
       "attribute": "hierarchicalCategories.lvl0",
       "indexName": "indexName",
       "label": "hierarchicalCategories.lvl0",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "hierarchicalCategories.lvl0",
           "count": 3291,
           "exhaustive": true,
@@ -96,20 +96,20 @@ Object {
         },
       ],
     },
-    Object {
+    {
       "attribute": "price",
       "indexName": "indexName",
       "label": "price",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "price",
           "label": "≥ 100",
           "operator": ">=",
           "type": "numeric",
           "value": 100,
         },
-        Object {
+        {
           "attribute": "price",
           "label": "≤ 500",
           "operator": "<=",
@@ -118,19 +118,19 @@ Object {
         },
       ],
     },
-    Object {
+    {
       "attribute": "_tags",
       "indexName": "indexName",
       "label": "_tags",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "_tags",
           "label": "tag1",
           "type": "tag",
           "value": "tag1",
         },
-        Object {
+        {
           "attribute": "_tags",
           "label": "tag2",
           "type": "tag",
@@ -143,8 +143,8 @@ Object {
 `;
 
 exports[`currentRefinements() render() options.container should render with a HTMLElement container 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "category": "ais-CurrentRefinements-category",
     "categoryLabel": "ais-CurrentRefinements-categoryLabel",
     "delete": "ais-CurrentRefinements-delete",
@@ -153,13 +153,13 @@ Object {
     "list": "ais-CurrentRefinements-list",
     "root": "ais-CurrentRefinements",
   },
-  "items": Array [],
+  "items": [],
 }
 `;
 
 exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "category": "ais-CurrentRefinements-category",
     "categoryLabel": "ais-CurrentRefinements-categoryLabel",
     "delete": "ais-CurrentRefinements-delete",
@@ -168,14 +168,14 @@ Object {
     "list": "ais-CurrentRefinements-list",
     "root": "ais-CurrentRefinements",
   },
-  "items": Array [
-    Object {
+  "items": [
+    {
       "attribute": "facet",
       "indexName": "index_name",
       "label": "facet",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "facet",
           "count": 1,
           "exhaustive": true,
@@ -190,8 +190,8 @@ Object {
 `;
 
 exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "category": "ais-CurrentRefinements-category",
     "categoryLabel": "ais-CurrentRefinements-categoryLabel",
     "delete": "ais-CurrentRefinements-delete",
@@ -200,14 +200,14 @@ Object {
     "list": "ais-CurrentRefinements-list",
     "root": "ais-CurrentRefinements",
   },
-  "items": Array [
-    Object {
+  "items": [
+    {
       "attribute": "facet",
       "indexName": "index_name",
       "label": "facet",
       "refine": [Function],
-      "refinements": Array [
-        Object {
+      "refinements": [
+        {
           "attribute": "facet",
           "count": 1,
           "exhaustive": true,

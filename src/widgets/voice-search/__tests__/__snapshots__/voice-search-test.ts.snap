@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`voiceSearch() Rendering renders during init() 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "button": "ais-VoiceSearch-button",
     "root": "ais-VoiceSearch",
     "status": "ais-VoiceSearch-status",
   },
   "isBrowserSupported": false,
   "isListening": false,
-  "templates": Object {
+  "templates": {
     "buttonText": [Function],
     "status": "<p>{{transcript}}</p>",
   },
   "toggleListening": [Function],
-  "voiceListeningState": Object {
+  "voiceListeningState": {
     "errorCode": undefined,
     "isSpeechFinal": false,
     "status": "initial",
@@ -24,20 +24,20 @@ Object {
 `;
 
 exports[`voiceSearch() Rendering renders during render() 1`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "button": "ais-VoiceSearch-button",
     "root": "ais-VoiceSearch",
     "status": "ais-VoiceSearch-status",
   },
   "isBrowserSupported": false,
   "isListening": false,
-  "templates": Object {
+  "templates": {
     "buttonText": [Function],
     "status": "<p>{{transcript}}</p>",
   },
   "toggleListening": [Function],
-  "voiceListeningState": Object {
+  "voiceListeningState": {
     "errorCode": undefined,
     "isSpeechFinal": false,
     "status": "initial",
@@ -47,20 +47,20 @@ Object {
 `;
 
 exports[`voiceSearch() Rendering renders during render() 2`] = `
-Object {
-  "cssClasses": Object {
+{
+  "cssClasses": {
     "button": "ais-VoiceSearch-button",
     "root": "ais-VoiceSearch",
     "status": "ais-VoiceSearch-status",
   },
   "isBrowserSupported": false,
   "isListening": false,
-  "templates": Object {
+  "templates": {
     "buttonText": [Function],
     "status": "<p>{{transcript}}</p>",
   },
   "toggleListening": [Function],
-  "voiceListeningState": Object {
+  "voiceListeningState": {
     "errorCode": undefined,
     "isSpeechFinal": false,
     "status": "initial",
@@ -70,7 +70,7 @@ Object {
 `;
 
 exports[`voiceSearch() Rendering sets the correct CSS classes 1`] = `
-Object {
+{
   "button": "ais-VoiceSearch-button",
   "root": "ais-VoiceSearch",
   "status": "ais-VoiceSearch-status",

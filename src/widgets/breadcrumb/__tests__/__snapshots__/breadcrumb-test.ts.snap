@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`breadcrumb() render renders transformed items correctly 1`] = `
-Object {
+{
   "canRefine": true,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "item": "ais-Breadcrumb-item",
     "link": "ais-Breadcrumb-link",
     "list": "ais-Breadcrumb-list",
@@ -13,26 +13,26 @@ Object {
     "selectedItem": "ais-Breadcrumb-item--selected",
     "separator": "ais-Breadcrumb-separator",
   },
-  "items": Array [
-    Object {
+  "items": [
+    {
       "label": "Cameras & Camcorders",
       "transformed": true,
       "value": "Cameras & Camcorders > Digital Cameras",
     },
-    Object {
+    {
       "label": "Digital Cameras",
       "transformed": true,
       "value": null,
     },
   ],
   "refine": [Function],
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "home": "Home",
       "separator": ">",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "home": false,
       "separator": false,
     },

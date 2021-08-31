@@ -1,3 +1,12 @@
+# [4.29.0](https://github.com/algolia/instantsearch.js/compare/v4.28.0...v4.29.0) (2021-08-31)
+
+
+### Features
+
+* **panel:** render templates on init with render state ([#4845](https://github.com/algolia/instantsearch.js/issues/4845)) ([0e151a9](https://github.com/algolia/instantsearch.js/commit/0e151a9552092807ecbc6993f3f6193fef621f44))
+
+
+
 # [4.28.0](https://github.com/algolia/instantsearch.js/compare/v4.27.2...v4.28.0) (2021-08-24)
 
 

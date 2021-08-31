@@ -21,7 +21,7 @@ describe('instantsearch()', () => {
 
   it('includes the API and the helper functions', () => {
     expect(Object.keys(instantsearch)).toMatchInlineSnapshot(`
-      Array [
+      [
         "version",
         "connectors",
         "widgets",

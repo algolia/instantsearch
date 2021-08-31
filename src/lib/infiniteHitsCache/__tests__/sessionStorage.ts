@@ -21,6 +21,7 @@ describe('createInfiniteHitsSessionStorageCache', () => {
 
   beforeAll(() => {
     Object.defineProperty(window, 'sessionStorage', {
+      writable: true,
       value: {
         getItem,
         setItem,

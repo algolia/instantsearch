@@ -20,7 +20,7 @@ exports[`Slider expect to render correctly 1`] = `
     orientation="horizontal"
     pitComponent={[Function]}
     pitPoints={
-      Array [
+      [
         0,
         14.705882352941176,
         29.41176470588235,
@@ -61,7 +61,7 @@ exports[`Slider expect to render correctly 1`] = `
     progressBar="div"
     snap={true}
     snapPoints={
-      Array [
+      [
         0,
         2,
         4,
@@ -316,7 +316,7 @@ exports[`Slider expect to render correctly 1`] = `
       ]
     }
     values={
-      Array [
+      [
         0,
         0,
       ]
@@ -344,11 +344,11 @@ exports[`Slider expect to render with CSS classes 1`] = `
     onValuesUpdated={null}
     orientation="horizontal"
     pitComponent={[Function]}
-    pitPoints={Array []}
+    pitPoints={[]}
     progressBar="div"
     snap={true}
     snapPoints={
-      Array [
+      [
         0,
         2,
         4,
@@ -603,7 +603,7 @@ exports[`Slider expect to render with CSS classes 1`] = `
       ]
     }
     values={
-      Array [
+      [
         0,
         0,
       ]
@@ -631,11 +631,11 @@ exports[`Slider expect to render without pips 1`] = `
     onValuesUpdated={null}
     orientation="horizontal"
     pitComponent={[Function]}
-    pitPoints={Array []}
+    pitPoints={[]}
     progressBar="div"
     snap={true}
     snapPoints={
-      Array [
+      [
         0,
         2,
         4,
@@ -890,7 +890,7 @@ exports[`Slider expect to render without pips 1`] = `
       ]
     }
     values={
-      Array [
+      [
         0,
         0,
       ]

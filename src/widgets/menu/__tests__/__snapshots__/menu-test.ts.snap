@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`menu render renders transformed items 1`] = `
-Object {
+{
   "canToggleShowMore": false,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "count": "ais-Menu-count",
     "disabledShowMore": "ais-Menu-showMore--disabled",
     "item": "ais-Menu-item",
@@ -17,8 +17,8 @@ Object {
     "showMore": "ais-Menu-showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
+  "facetValues": [
+    {
       "count": 456,
       "data": null,
       "exhaustive": true,
@@ -28,7 +28,7 @@ Object {
       "url": "#",
       "value": "bar",
     },
-    Object {
+    {
       "count": 123,
       "data": null,
       "exhaustive": true,
@@ -41,8 +41,8 @@ Object {
   ],
   "isShowingMore": false,
   "showMore": undefined,
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       "showMoreText": "
     {{#isShowingMore}}
@@ -53,8 +53,8 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "item": false,
       "showMoreText": false,
     },
@@ -65,10 +65,10 @@ Object {
 `;
 
 exports[`menu render snapshot 1`] = `
-Object {
+{
   "canToggleShowMore": false,
   "createURL": [Function],
-  "cssClasses": Object {
+  "cssClasses": {
     "count": "ais-Menu-count",
     "disabledShowMore": "ais-Menu-showMore--disabled",
     "item": "ais-Menu-item",
@@ -81,8 +81,8 @@ Object {
     "showMore": "ais-Menu-showMore",
   },
   "depth": 0,
-  "facetValues": Array [
-    Object {
+  "facetValues": [
+    {
       "count": 456,
       "data": null,
       "exhaustive": true,
@@ -91,7 +91,7 @@ Object {
       "url": "#",
       "value": "bar",
     },
-    Object {
+    {
       "count": 123,
       "data": null,
       "exhaustive": true,
@@ -103,8 +103,8 @@ Object {
   ],
   "isShowingMore": false,
   "showMore": undefined,
-  "templateProps": Object {
-    "templates": Object {
+  "templateProps": {
+    "templates": {
       "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       "showMoreText": "
     {{#isShowingMore}}
@@ -115,8 +115,8 @@ Object {
     {{/isShowingMore}}
   ",
     },
-    "templatesConfig": Object {},
-    "useCustomCompileOptions": Object {
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
       "item": false,
       "showMoreText": false,
     },

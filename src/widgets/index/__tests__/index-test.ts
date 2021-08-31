@@ -8,7 +8,7 @@ import {
   createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
-import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { wait } from '../../../../test/utils/wait';
 import type { Widget } from '../../../types';
 import InstantSearch from '../../../lib/InstantSearch';
 import index from '../index';
@@ -785,7 +785,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       // is set once the `result` event is emitted.
       level0.getHelper()!.search();
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(level1.getScopedResults()).toEqual([
         // Root index
@@ -1189,7 +1189,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(0);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(1);
     });
@@ -1988,7 +1988,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           // is set once the `result` event is emitted.
           .search();
 
-        await runAllMicroTasks();
+        await wait(0);
 
         topLevelInstance.render(
           createRenderOptions({
@@ -2414,7 +2414,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       // is set once the `result` event is emitted.
       instance.getHelper()!.search();
 
-      await runAllMicroTasks();
+      await wait(0);
 
       widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(0);
@@ -2509,7 +2509,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       // is set once the `result` event is emitted.
       level0.getHelper()!.search();
 
-      await runAllMicroTasks();
+      await wait(0);
 
       level0.render(createRenderOptions());
 
@@ -2767,7 +2767,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(0);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(0);
     });

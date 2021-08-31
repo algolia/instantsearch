@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import jestDiff from 'jest-diff';
+import { diff } from 'jest-diff';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -56,7 +56,7 @@ const matcher: jest.ExpectExtendMap = {
 
 Difference:
 
-${jestDiff(expectedMessage, actualWarning)}`,
+${diff(expectedMessage, actualWarning)}`,
       };
     }
 
