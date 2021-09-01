@@ -1,3 +1,7 @@
+## [4.10.2](https://github.com/algolia/create-instantsearch-app/compare/4.10.1...4.10.2) (2021-09-01)
+
+
+
 ## [4.10.1](https://github.com/algolia/create-instantsearch-app/compare/4.10.0...4.10.1) (2021-08-30)
 
 
