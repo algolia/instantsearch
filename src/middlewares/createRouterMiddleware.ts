@@ -23,7 +23,7 @@ export const createRouterMiddleware = <
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 >(
-  props: RouterProps<TUiState, TRouteState> & { initialUiState: UiState }
+  props: RouterProps<TUiState, TRouteState> = {}
 ): InternalMiddleware<TUiState> => {
   const {
     router = historyRouter<TRouteState>(),
@@ -35,7 +35,6 @@ export const createRouterMiddleware = <
       TUiState,
       TRouteState
     >,
-    initialUiState,
   } = props;
 
   return ({ instantSearchInstance }) => {
@@ -60,6 +59,8 @@ export const createRouterMiddleware = <
     instantSearchInstance._createURL = topLevelCreateURL as CreateURL<UiState>;
 
     let lastRouteState: TRouteState | undefined = undefined;
+
+    const initialUiState = instantSearchInstance._initialUiState;
 
     return {
       onStateChange({ uiState }) {

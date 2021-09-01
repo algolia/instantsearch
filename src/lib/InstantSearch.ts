@@ -261,12 +261,8 @@ See ${createDocumentationLink({
     this.sendEventToInsights = noop;
 
     if (routing) {
-      this.use(
-        createRouterMiddleware({
-          initialUiState,
-          ...(typeof routing === 'boolean' ? undefined : routing),
-        })
-      );
+      const routerOptions = typeof routing === 'boolean' ? undefined : routing;
+      this.use(createRouterMiddleware(routerOptions));
     }
 
     if (isMetadataEnabled()) {
