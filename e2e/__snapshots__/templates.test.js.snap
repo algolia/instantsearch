@@ -1,5 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Templates Angular InstantSearch File content: .browserslistrc 1`] = `
+"# This file is used by the build system to adjust CSS and JS output to support the specified browsers below.
+# For additional information regarding the format and rule options, please see:
+# https://github.com/browserslist/browserslist#queries
+
+# For the full list of supported browsers by the Angular framework, please see:
+# https://angular.io/guide/browser-support
+
+# You can see what browsers were selected by your queries by running:
+#   npx browserslist
+
+last 1 Chrome version
+last 1 Firefox version
+last 2 Edge major versions
+last 2 Safari major versions
+last 2 iOS major versions
+Firefox ESR
+not IE 11 # Angular supports IE 11 only as an opt-in. To opt-in, remove the 'not' prefix on this line."
+`;
+
+exports[`Templates Angular InstantSearch File content: .editorconfig 1`] = `
+"# Editor configuration, see https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.ts]
+quote_type = single
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false"
+`;
+
 exports[`Templates Angular InstantSearch File content: .gitignore 1`] = `
 "node_modules/
 npm-debug.log
@@ -39,11 +78,15 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
   \\"newProjectRoot\\": \\"projects\\",
   \\"projects\\": {
     \\"angular-instantsearch-app\\": {
+      \\"projectType\\": \\"application\\",
+      \\"schematics\\": {
+        \\"@schematics/angular:application\\": {
+          \\"strict\\": true
+        }
+      },
       \\"root\\": \\"\\",
       \\"sourceRoot\\": \\"src\\",
-      \\"projectType\\": \\"application\\",
       \\"prefix\\": \\"app\\",
-      \\"schematics\\": {},
       \\"architect\\": {
         \\"build\\": {
           \\"builder\\": \\"@angular-devkit/build-angular:browser\\",
@@ -52,49 +95,60 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
             \\"index\\": \\"src/index.html\\",
             \\"main\\": \\"src/main.ts\\",
             \\"polyfills\\": \\"src/polyfills.ts\\",
-            \\"tsConfig\\": \\"src/tsconfig.app.json\\",
+            \\"tsConfig\\": \\"tsconfig.app.json\\",
             \\"assets\\": [
-              \\"src/favicon.png\\",
-              \\"src/manifest.json\\",
+              \\"src/favicon.ico\\",
               \\"src/assets\\"
             ],
             \\"styles\\": [
-              \\"node_modules/instantsearch.css/themes/reset.css\\",
-              \\"node_modules/instantsearch.css/themes/algolia.css\\",
               \\"src/styles.css\\"
             ],
             \\"scripts\\": []
           },
           \\"configurations\\": {
             \\"production\\": {
+              \\"budgets\\": [
+                {
+                  \\"type\\": \\"initial\\",
+                  \\"maximumWarning\\": \\"500kb\\",
+                  \\"maximumError\\": \\"1mb\\"
+                },
+                {
+                  \\"type\\": \\"anyComponentStyle\\",
+                  \\"maximumWarning\\": \\"2kb\\",
+                  \\"maximumError\\": \\"4kb\\"
+                }
+              ],
               \\"fileReplacements\\": [
                 {
                   \\"replace\\": \\"src/environments/environment.ts\\",
                   \\"with\\": \\"src/environments/environment.prod.ts\\"
                 }
               ],
-              \\"optimization\\": true,
-              \\"outputHashing\\": \\"all\\",
-              \\"sourceMap\\": false,
-              \\"extractCss\\": true,
-              \\"namedChunks\\": false,
-              \\"aot\\": true,
-              \\"extractLicenses\\": true,
-              \\"vendorChunk\\": false,
-              \\"buildOptimizer\\": true
+              \\"outputHashing\\": \\"all\\"
+            },
+            \\"development\\": {
+              \\"buildOptimizer\\": false,
+              \\"optimization\\": false,
+              \\"vendorChunk\\": true,
+              \\"extractLicenses\\": false,
+              \\"sourceMap\\": true,
+              \\"namedChunks\\": true
             }
-          }
+          },
+          \\"defaultConfiguration\\": \\"production\\"
         },
         \\"serve\\": {
           \\"builder\\": \\"@angular-devkit/build-angular:dev-server\\",
-          \\"options\\": {
-            \\"browserTarget\\": \\"angular-instantsearch-app:build\\"
-          },
           \\"configurations\\": {
             \\"production\\": {
               \\"browserTarget\\": \\"angular-instantsearch-app:build:production\\"
+            },
+            \\"development\\": {
+              \\"browserTarget\\": \\"angular-instantsearch-app:build:development\\"
             }
-          }
+          },
+          \\"defaultConfiguration\\": \\"development\\"
         },
         \\"extract-i18n\\": {
           \\"builder\\": \\"@angular-devkit/build-angular:extract-i18n\\",
@@ -107,55 +161,16 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
           \\"options\\": {
             \\"main\\": \\"src/test.ts\\",
             \\"polyfills\\": \\"src/polyfills.ts\\",
-            \\"tsConfig\\": \\"src/tsconfig.spec.json\\",
-            \\"karmaConfig\\": \\"src/karma.conf.js\\",
+            \\"tsConfig\\": \\"tsconfig.spec.json\\",
+            \\"karmaConfig\\": \\"karma.conf.js\\",
+            \\"assets\\": [
+              \\"src/favicon.ico\\",
+              \\"src/assets\\"
+            ],
             \\"styles\\": [
               \\"src/styles.css\\"
             ],
-            \\"scripts\\": [],
-            \\"assets\\": [
-              \\"src/favicon.png\\",
-              \\"src/assets\\"
-            ]
-          }
-        },
-        \\"lint\\": {
-          \\"builder\\": \\"@angular-devkit/build-angular:tslint\\",
-          \\"options\\": {
-            \\"tsConfig\\": [
-              \\"src/tsconfig.app.json\\",
-              \\"src/tsconfig.spec.json\\"
-            ],
-            \\"exclude\\": [
-              \\"**/node_modules/**\\"
-            ]
-          }
-        }
-      }
-    },
-    \\"angular-instantsearch-app-e2e\\": {
-      \\"root\\": \\"e2e/\\",
-      \\"projectType\\": \\"application\\",
-      \\"architect\\": {
-        \\"e2e\\": {
-          \\"builder\\": \\"@angular-devkit/build-angular:protractor\\",
-          \\"options\\": {
-            \\"protractorConfig\\": \\"e2e/protractor.conf.js\\",
-            \\"devServerTarget\\": \\"angular-instantsearch-app:serve\\"
-          },
-          \\"configurations\\": {
-            \\"production\\": {
-              \\"devServerTarget\\": \\"angular-instantsearch-app:serve:production\\"
-            }
-          }
-        },
-        \\"lint\\": {
-          \\"builder\\": \\"@angular-devkit/build-angular:tslint\\",
-          \\"options\\": {
-            \\"tsConfig\\": \\"e2e/tsconfig.e2e.json\\",
-            \\"exclude\\": [
-              \\"**/node_modules/**\\"
-            ]
+            \\"scripts\\": []
           }
         }
       }
@@ -165,99 +180,67 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
 }"
 `;
 
-exports[`Templates Angular InstantSearch File content: e2e/protractor.conf.js 1`] = `
-"// Protractor configuration file, see link for more information
-// https://github.com/angular/protractor/blob/master/lib/config.ts
+exports[`Templates Angular InstantSearch File content: karma.conf.js 1`] = `
+"// Karma configuration file, see link for more information
+// https://karma-runner.github.io/1.0/config/configuration-file.html
 
-const { SpecReporter } = require('jasmine-spec-reporter');
-
-exports.config = {
-  allScriptsTimeout: 11000,
-  specs: [
-    './src/**/*.e2e-spec.ts'
-  ],
-  capabilities: {
-    'browserName': 'chrome'
-  },
-  directConnect: true,
-  baseUrl: 'http://localhost:4200/',
-  framework: 'jasmine',
-  jasmineNodeOpts: {
-    showColors: true,
-    defaultTimeoutInterval: 30000,
-    print: function() {}
-  },
-  onPrepare() {
-    require('ts-node').register({
-      project: require('path').join(__dirname, './tsconfig.e2e.json')
-    });
-    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
-  }
+module.exports = function (config) {
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-coverage'),
+      require('@angular-devkit/build-angular/plugins/karma')
+    ],
+    client: {
+      jasmine: {
+        // you can add configuration options for Jasmine here
+        // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
+        // for example, you can disable the random execution with \`random: false\`
+        // or set a specific seed with \`seed: 4321\`
+      },
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    },
+    jasmineHtmlReporter: {
+      suppressAll: true // removes the duplicated traces
+    },
+    coverageReporter: {
+      dir: require('path').join(__dirname, './coverage/angular-instantsearch-app'),
+      subdir: '.',
+      reporters: [
+        { type: 'html' },
+        { type: 'text-summary' }
+      ]
+    },
+    reporters: ['progress', 'kjhtml'],
+    port: 9876,
+    colors: true,
+    logLevel: config.LOG_INFO,
+    autoWatch: true,
+    browsers: ['Chrome'],
+    singleRun: false,
+    restartOnFileChange: true
+  });
 };"
-`;
-
-exports[`Templates Angular InstantSearch File content: e2e/src/app.e2e-spec.ts 1`] = `
-"import { AppPage } from './app.po';
-
-describe('workspace-project App', () => {
-  let page: AppPage;
-
-  beforeEach(() => {
-    page = new AppPage();
-  });
-
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to angular-instantsearch!');
-  });
-});"
-`;
-
-exports[`Templates Angular InstantSearch File content: e2e/src/app.po.ts 1`] = `
-"import { browser, by, element } from 'protractor';
-
-export class AppPage {
-  navigateTo() {
-    return browser.get('/');
-  }
-
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
-  }
-}"
-`;
-
-exports[`Templates Angular InstantSearch File content: e2e/tsconfig.e2e.json 1`] = `
-"{
-  \\"extends\\": \\"../tsconfig.json\\",
-  \\"compilerOptions\\": {
-    \\"outDir\\": \\"../out-tsc/app\\",
-    \\"module\\": \\"commonjs\\",
-    \\"target\\": \\"es5\\",
-    \\"types\\": [
-      \\"jasmine\\",
-      \\"jasminewd2\\",
-      \\"node\\"
-    ]
-  }
-}"
 `;
 
 exports[`Templates Angular InstantSearch File content: package.json 1`] = `
 "{
   \\"name\\": \\"angular-instantsearch-app\\",
   \\"version\\": \\"1.0.0\\",
-  \\"private\\": true,
   \\"scripts\\": {
     \\"ng\\": \\"ng\\",
     \\"start\\": \\"ng serve --port 3000\\",
-    \\"build\\": \\"ng build --prod\\",
-    \\"test\\": \\"ng test\\",
-    \\"lint\\": \\"ng lint\\",
-    \\"e2e\\": \\"ng e2e\\"
+    \\"build\\": \\"ng build\\",
+    \\"watch\\": \\"ng build --watch --configuration development\\",
+    \\"test\\": \\"ng test\\"
   },
+  \\"private\\": true,
   \\"partialDependencies\\": {
-    \\"angular-instantsearch\\": \\"1.0.0\\"
+    \\"angular-instantsearch\\": \\"4.0.0\\"
   }
 }"
 `;
@@ -378,34 +361,9 @@ exports[`Templates Angular InstantSearch File content: src/app/app.component.htm
 </div>"
 `;
 
-exports[`Templates Angular InstantSearch File content: src/app/app.component.spec.ts 1`] = `
-"import { TestBed, async } from '@angular/core/testing';
-import { NgAisModule } from 'angular-instantsearch';
-import { AppComponent } from './app.component';
-
-describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-      imports: [
-        NgAisModule.forRoot(),
-      ],
-    }).compileComponents();
-  }));
-
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-});"
-`;
-
 exports[`Templates Angular InstantSearch File content: src/app/app.component.ts 1`] = `
 "import { Component } from '@angular/core';
-import * as algoliasearch from 'algoliasearch';
+import algoliasearch from 'algoliasearch/lite';
 
 const searchClient = algoliasearch(
   'appId',
@@ -448,18 +406,6 @@ export class AppModule { }"
 
 exports[`Templates Angular InstantSearch File content: src/assets/.gitkeep 1`] = `""`;
 
-exports[`Templates Angular InstantSearch File content: src/browserslist 1`] = `
-"# This file is currently used by autoprefixer to adjust CSS to support the below specified browsers
-# For additional information regarding the format and rule options, please see:
-# https://github.com/browserslist/browserslist#queries
-# For IE 9-11 support, please uncomment the last line of the file and adjust as needed
-> 0.5%
-last 2 versions
-Firefox ESR
-not dead
-# IE 9-11"
-`;
-
 exports[`Templates Angular InstantSearch File content: src/environments/environment.prod.ts 1`] = `
 "export const environment = {
   production: true
@@ -468,7 +414,7 @@ exports[`Templates Angular InstantSearch File content: src/environments/environm
 
 exports[`Templates Angular InstantSearch File content: src/environments/environment.ts 1`] = `
 "// This file can be replaced during build by using the \`fileReplacements\` array.
-// \`ng build ---prod\` replaces \`environment.ts\` with \`environment.prod.ts\`.
+// \`ng build\` replaces \`environment.ts\` with \`environment.prod.ts\`.
 // The list of file replacements can be found in \`angular.json\`.
 
 export const environment = {
@@ -476,68 +422,29 @@ export const environment = {
 };
 
 /*
- * In development mode, to ignore zone related error stack frames such as
- * \`zone.run\`, \`zoneDelegate.invokeTask\` for easier debugging, you can
- * import the following file, but please comment it out in production mode
- * because it will have performance impact when throw error
+ * For easier debugging in development mode, you can import the following file
+ * to ignore zone related error stack frames such as \`zone.run\`, \`zoneDelegate.invokeTask\`.
+ *
+ * This import should be commented out in production mode because it will have a negative impact
+ * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI."
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI."
 `;
 
 exports[`Templates Angular InstantSearch File content: src/index.html 1`] = `
-"<!DOCTYPE html>
+"<!doctype html>
 <html lang=\\"en\\">
-
 <head>
   <meta charset=\\"utf-8\\">
-  <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1, shrink-to-fit=no\\">
-  <meta name=\\"theme-color\\" content=\\"#000000\\">
-
-  <link rel=\\"manifest\\" href=\\"manifest.json\\">
-  <link rel=\\"shortcut icon\\" href=\\"favicon.png\\">
-
   <title>angular-instantsearch-app</title>
+  <base href=\\"/\\">
+  <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
+  <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 </head>
-
 <body>
   <app-root></app-root>
 </body>
-
 </html>"
-`;
-
-exports[`Templates Angular InstantSearch File content: src/karma.conf.js 1`] = `
-"// Karma configuration file, see link for more information
-// https://karma-runner.github.io/1.0/config/configuration-file.html
-
-module.exports = function (config) {
-  config.set({
-    basePath: '',
-    frameworks: ['jasmine', '@angular-devkit/build-angular'],
-    plugins: [
-      require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
-      require('@angular-devkit/build-angular/plugins/karma')
-    ],
-    client: {
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
-    },
-    coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, '../coverage'),
-      reports: ['html', 'lcovonly'],
-      fixWebpackSourcePaths: true
-    },
-    reporters: ['progress', 'kjhtml'],
-    port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false
-  });
-};"
 `;
 
 exports[`Templates Angular InstantSearch File content: src/main.ts 1`] = `
@@ -552,25 +459,7 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));"
-`;
-
-exports[`Templates Angular InstantSearch File content: src/manifest.json 1`] = `
-"{
-  \\"short_name\\": \\"angular-instantsearch-app\\",
-  \\"name\\": \\"Create InstantSearch App Sample\\",
-  \\"icons\\": [
-    {
-      \\"src\\": \\"favicon.png\\",
-      \\"sizes\\": \\"64x64 32x32 24x24 16x16\\",
-      \\"type\\": \\"image/x-icon\\"
-    }
-  ],
-  \\"start_url\\": \\"index.html\\",
-  \\"display\\": \\"standalone\\",
-  \\"theme_color\\": \\"#000000\\",
-  \\"background_color\\": \\"#ffffff\\"
-}"
+  .catch(err => console.error(err));"
 `;
 
 exports[`Templates Angular InstantSearch File content: src/polyfills.ts 1`] = `
@@ -587,75 +476,59 @@ exports[`Templates Angular InstantSearch File content: src/polyfills.ts 1`] = `
  * automatically update themselves. This includes Safari >= 10, Chrome >= 55 (including Opera),
  * Edge >= 13 on the desktop, and iOS 10 and Chrome on mobile.
  *
- * Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
+ * Learn more in https://angular.io/guide/browser-support
  */
 
 /***************************************************************************************************
  * BROWSER POLYFILLS
  */
 
-/** IE9, IE10 and IE11 requires all of the following polyfills. **/
-// import 'core-js/es6/symbol';
-// import 'core-js/es6/object';
-// import 'core-js/es6/function';
-// import 'core-js/es6/parse-int';
-// import 'core-js/es6/parse-float';
-// import 'core-js/es6/number';
-// import 'core-js/es6/math';
-// import 'core-js/es6/string';
-// import 'core-js/es6/date';
-// import 'core-js/es6/array';
-// import 'core-js/es6/regexp';
-// import 'core-js/es6/map';
-// import 'core-js/es6/weak-map';
-// import 'core-js/es6/set';
-
-/** IE10 and IE11 requires the following for NgClass support on SVG elements */
+/**
+ * IE11 requires the following for NgClass support on SVG elements
+ */
 // import 'classlist.js';  // Run \`npm install --save classlist.js\`.
-
-/** IE10 and IE11 requires the following for the Reflect API. */
-// import 'core-js/es6/reflect';
-
-
-/** Evergreen browsers require these. **/
-// Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-import 'core-js/es7/reflect';
-
 
 /**
  * Web Animations \`@angular/platform-browser/animations\`
  * Only required if AnimationBuilder is used within the application and using IE/Edge or Safari.
  * Standard animation support in Angular DOES NOT require any polyfills (as of Angular 6.0).
- **/
+ */
 // import 'web-animations-js';  // Run \`npm install --save web-animations-js\`.
 
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
  * user can disable parts of macroTask/DomEvents patch by setting following flags
+ * because those flags need to be set before \`zone.js\` being loaded, and webpack
+ * will put import in the top of bundle, so user need to create a separate file
+ * in this directory (for example: zone-flags.ts), and put the following flags
+ * into that file, and then add the following code before importing zone.js.
+ * import './zone-flags';
+ *
+ * The flags allowed in zone-flags.ts are listed here.
+ *
+ * The following flags will work for all browsers.
+ *
+ * (window as any).__Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
+ * (window as any).__Zone_disable_on_property = true; // disable patch onProperty such as onclick
+ * (window as any).__zone_symbol__UNPATCHED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
+ *
+ *  in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
+ *  with the following flag, it will bypass \`zone.js\` patch for IE/Edge
+ *
+ *  (window as any).__Zone_enable_cross_context_check = true;
+ *
  */
-
- // (window as any).__Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
- // (window as any).__Zone_disable_on_property = true; // disable patch onProperty such as onclick
- // (window as any).__zone_symbol__BLACK_LISTED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
-
- /*
- * in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
- * with the following flag, it will bypass \`zone.js\` patch for IE/Edge
- */
-// (window as any).__Zone_enable_cross_context_check = true;
 
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-import 'zone.js/dist/zone';  // Included with Angular CLI.
-
+import 'zone.js';  // Included with Angular CLI.
 
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
 
-// See: https://github.com/algolia/angular-instantsearch/issues/90
 (window as any).process = {
   env: { DEBUG: undefined },
 };"
@@ -663,286 +536,138 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 exports[`Templates Angular InstantSearch File content: src/styles.css 1`] = `
 "/* You can add global styles to this file, and also import other style files */
-body,
-h1 {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}"
+@import \\"instantsearch.css/themes/reset.css\\";
+@import \\"instantsearch.css/themes/satellite.css\\";"
 `;
 
 exports[`Templates Angular InstantSearch File content: src/test.ts 1`] = `
 "// This file is required by karma.conf.js and loads recursively all the .spec and framework files
 
-import 'zone.js/dist/zone-testing';
+import 'zone.js/testing';
 import { getTestBed } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
-declare const require: any;
+declare const require: {
+  context(path: string, deep?: boolean, filter?: RegExp): {
+    keys(): string[];
+    <T>(id: string): T;
+  };
+};
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting()
+  platformBrowserDynamicTesting(),
+  { teardown: { destroyAfterEach: true }},
 );
+
 // Then we find all the tests.
 const context = require.context('./', true, /\\\\.spec\\\\.ts$/);
 // And load the modules.
 context.keys().map(context);"
 `;
 
-exports[`Templates Angular InstantSearch File content: src/tsconfig.app.json 1`] = `
-"{
-  \\"extends\\": \\"../tsconfig.json\\",
+exports[`Templates Angular InstantSearch File content: tsconfig.app.json 1`] = `
+"/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  \\"extends\\": \\"./tsconfig.json\\",
   \\"compilerOptions\\": {
-    \\"outDir\\": \\"../out-tsc/app\\",
-    \\"module\\": \\"es2015\\",
+    \\"outDir\\": \\"./out-tsc/app\\",
     \\"types\\": []
   },
-  \\"exclude\\": [
-    \\"src/test.ts\\",
-    \\"**/*.spec.ts\\"
-  ]
-}"
-`;
-
-exports[`Templates Angular InstantSearch File content: src/tsconfig.spec.json 1`] = `
-"{
-  \\"extends\\": \\"../tsconfig.json\\",
-  \\"compilerOptions\\": {
-    \\"outDir\\": \\"../out-tsc/spec\\",
-    \\"module\\": \\"commonjs\\",
-    \\"types\\": [
-      \\"jasmine\\",
-      \\"node\\"
-    ]
-  },
   \\"files\\": [
-    \\"test.ts\\",
-    \\"polyfills.ts\\"
+    \\"src/main.ts\\",
+    \\"src/polyfills.ts\\"
   ],
   \\"include\\": [
-    \\"**/*.spec.ts\\",
-    \\"**/*.d.ts\\"
+    \\"src/**/*.d.ts\\"
   ]
-}"
-`;
-
-exports[`Templates Angular InstantSearch File content: src/tslint.json 1`] = `
-"{
-    \\"extends\\": \\"../tslint.json\\",
-    \\"rules\\": {
-        \\"directive-selector\\": [
-            true,
-            \\"attribute\\",
-            \\"app\\",
-            \\"camelCase\\"
-        ],
-        \\"component-selector\\": [
-            true,
-            \\"element\\",
-            \\"app\\",
-            \\"kebab-case\\"
-        ]
-    }
 }"
 `;
 
 exports[`Templates Angular InstantSearch File content: tsconfig.json 1`] = `
-"{
+"/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
   \\"compileOnSave\\": false,
   \\"compilerOptions\\": {
     \\"baseUrl\\": \\"./\\",
     \\"outDir\\": \\"./dist/out-tsc\\",
+    \\"forceConsistentCasingInFileNames\\": true,
+    \\"strict\\": true,
+    \\"noImplicitReturns\\": true,
+    \\"noFallthroughCasesInSwitch\\": true,
     \\"sourceMap\\": true,
     \\"declaration\\": false,
-    \\"moduleResolution\\": \\"node\\",
-    \\"emitDecoratorMetadata\\": true,
+    \\"downlevelIteration\\": true,
     \\"experimentalDecorators\\": true,
-    \\"target\\": \\"es5\\",
-    \\"typeRoots\\": [
-      \\"node_modules/@types\\"
-    ],
+    \\"moduleResolution\\": \\"node\\",
+    \\"importHelpers\\": true,
+    \\"target\\": \\"es2017\\",
+    \\"module\\": \\"es2020\\",
     \\"lib\\": [
-      \\"es2017\\",
+      \\"es2018\\",
       \\"dom\\"
-    ]
+    ],
+    \\"allowSyntheticDefaultImports\\": true
+  },
+  \\"angularCompilerOptions\\": {
+    \\"enableI18nLegacyMessageIdFormat\\": false,
+    \\"strictInjectionParameters\\": true,
+    \\"strictInputAccessModifiers\\": true,
+    \\"strictTemplates\\": true
   }
 }"
 `;
 
-exports[`Templates Angular InstantSearch File content: tslint.json 1`] = `
-"{
-  \\"rulesDirectory\\": [
-    \\"node_modules/codelyzer\\"
+exports[`Templates Angular InstantSearch File content: tsconfig.spec.json 1`] = `
+"/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  \\"extends\\": \\"./tsconfig.json\\",
+  \\"compilerOptions\\": {
+    \\"outDir\\": \\"./out-tsc/spec\\",
+    \\"types\\": [
+      \\"jasmine\\"
+    ]
+  },
+  \\"files\\": [
+    \\"src/test.ts\\",
+    \\"src/polyfills.ts\\"
   ],
-  \\"rules\\": {
-    \\"arrow-return-shorthand\\": true,
-    \\"callable-types\\": true,
-    \\"class-name\\": true,
-    \\"comment-format\\": [
-      true,
-      \\"check-space\\"
-    ],
-    \\"curly\\": true,
-    \\"deprecation\\": {
-      \\"severity\\": \\"warn\\"
-    },
-    \\"eofline\\": true,
-    \\"forin\\": true,
-    \\"import-blacklist\\": [
-      true,
-      \\"rxjs/Rx\\"
-    ],
-    \\"import-spacing\\": true,
-    \\"indent\\": [
-      true,
-      \\"spaces\\"
-    ],
-    \\"interface-over-type-literal\\": true,
-    \\"label-position\\": true,
-    \\"max-line-length\\": [
-      true,
-      140
-    ],
-    \\"member-access\\": false,
-    \\"member-ordering\\": [
-      true,
-      {
-        \\"order\\": [
-          \\"static-field\\",
-          \\"instance-field\\",
-          \\"static-method\\",
-          \\"instance-method\\"
-        ]
-      }
-    ],
-    \\"no-arg\\": true,
-    \\"no-bitwise\\": true,
-    \\"no-console\\": [
-      true,
-      \\"debug\\",
-      \\"info\\",
-      \\"time\\",
-      \\"timeEnd\\",
-      \\"trace\\"
-    ],
-    \\"no-construct\\": true,
-    \\"no-debugger\\": true,
-    \\"no-duplicate-super\\": true,
-    \\"no-empty\\": false,
-    \\"no-empty-interface\\": true,
-    \\"no-eval\\": true,
-    \\"no-inferrable-types\\": [
-      true,
-      \\"ignore-params\\"
-    ],
-    \\"no-misused-new\\": true,
-    \\"no-non-null-assertion\\": true,
-    \\"no-shadowed-variable\\": true,
-    \\"no-string-literal\\": false,
-    \\"no-string-throw\\": true,
-    \\"no-switch-case-fall-through\\": true,
-    \\"no-trailing-whitespace\\": true,
-    \\"no-unnecessary-initializer\\": true,
-    \\"no-unused-expression\\": true,
-    \\"no-use-before-declare\\": true,
-    \\"no-var-keyword\\": true,
-    \\"object-literal-sort-keys\\": false,
-    \\"one-line\\": [
-      true,
-      \\"check-open-brace\\",
-      \\"check-catch\\",
-      \\"check-else\\",
-      \\"check-whitespace\\"
-    ],
-    \\"prefer-const\\": true,
-    \\"quotemark\\": [
-      true,
-      \\"single\\"
-    ],
-    \\"radix\\": true,
-    \\"semicolon\\": [
-      true,
-      \\"always\\"
-    ],
-    \\"triple-equals\\": [
-      true,
-      \\"allow-null-check\\"
-    ],
-    \\"typedef-whitespace\\": [
-      true,
-      {
-        \\"call-signature\\": \\"nospace\\",
-        \\"index-signature\\": \\"nospace\\",
-        \\"parameter\\": \\"nospace\\",
-        \\"property-declaration\\": \\"nospace\\",
-        \\"variable-declaration\\": \\"nospace\\"
-      }
-    ],
-    \\"unified-signatures\\": true,
-    \\"variable-name\\": false,
-    \\"whitespace\\": [
-      true,
-      \\"check-branch\\",
-      \\"check-decl\\",
-      \\"check-operator\\",
-      \\"check-separator\\",
-      \\"check-type\\"
-    ],
-    \\"no-output-on-prefix\\": true,
-    \\"use-input-property-decorator\\": true,
-    \\"use-output-property-decorator\\": true,
-    \\"use-host-property-decorator\\": true,
-    \\"no-input-rename\\": true,
-    \\"no-output-rename\\": true,
-    \\"use-life-cycle-interface\\": true,
-    \\"use-pipe-transform-interface\\": true,
-    \\"component-class-suffix\\": true,
-    \\"directive-class-suffix\\": true
-  }
+  \\"include\\": [
+    \\"src/**/*.spec.ts\\",
+    \\"src/**/*.d.ts\\"
+  ]
 }"
 `;
 
 exports[`Templates Angular InstantSearch Folder structure: contains the right files 1`] = `
 Array [
+  ".browserslistrc",
+  ".editorconfig",
   ".gitignore",
   "README.md",
   "angular.json",
-  "e2e/protractor.conf.js",
-  "e2e/src/app.e2e-spec.ts",
-  "e2e/src/app.po.ts",
-  "e2e/tsconfig.e2e.json",
+  "karma.conf.js",
   "package.json",
   "src/app/app.component.css",
   "src/app/app.component.html",
-  "src/app/app.component.spec.ts",
   "src/app/app.component.ts",
   "src/app/app.module.ts",
   "src/assets/.gitkeep",
-  "src/browserslist",
   "src/environments/environment.prod.ts",
   "src/environments/environment.ts",
-  "src/favicon.png",
+  "src/favicon.ico",
   "src/index.html",
-  "src/karma.conf.js",
   "src/main.ts",
-  "src/manifest.json",
   "src/polyfills.ts",
   "src/styles.css",
   "src/test.ts",
-  "src/tsconfig.app.json",
-  "src/tsconfig.spec.json",
-  "src/tslint.json",
+  "tsconfig.app.json",
   "tsconfig.json",
-  "tslint.json",
+  "tsconfig.spec.json",
 ]
 `;
 

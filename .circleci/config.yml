@@ -97,9 +97,6 @@ jobs:
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
       - build_app:
-          template: 'Angular InstantSearch'
-          app: 'angular-instantsearch'
-      - build_app:
           template: 'Autocomplete.js'
           app: 'autocomplete.js'
       - build_app:
