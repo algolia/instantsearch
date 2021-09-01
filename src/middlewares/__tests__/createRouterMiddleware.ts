@@ -33,8 +33,8 @@ describe('router', () => {
     await wait(0);
 
     expect(search.getUiState()).toMatchInlineSnapshot(`
-      Object {
-        "my-index": Object {
+      {
+        "my-index": {
           "query": "iPhone",
         },
       }
@@ -71,8 +71,8 @@ describe('router', () => {
     search.start();
     await wait(0);
     expect(search.getUiState()).toMatchInlineSnapshot(`
-      Object {
-        "my-index": Object {
+      {
+        "my-index": {
           "query": "iPhone",
         },
       }
@@ -90,8 +90,8 @@ describe('router', () => {
     search.start();
     await wait(0);
     expect(search.getUiState()).toMatchInlineSnapshot(`
-      Object {
-        "my-index": Object {
+      {
+        "my-index": {
           "query": "MacBook",
         },
       }
