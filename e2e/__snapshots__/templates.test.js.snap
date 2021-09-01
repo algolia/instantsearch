@@ -2963,7 +2963,7 @@ exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
 `;
 
 exports[`Templates InstantSearch.js File content: src/app.js 1`] = `
-"/* global algoliasearch instantsearch */
+"const { algoliasearch, instantsearch } = window;
 
 const searchClient = algoliasearch('appId', 'apiKey');
 
