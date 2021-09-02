@@ -482,14 +482,14 @@ See ${createDocumentationLink({
 
     this.mainHelper = mainHelper;
 
+    this.middleware.forEach(({ instance }) => {
+      instance.subscribe();
+    });
+
     this.mainIndex.init({
       instantSearchInstance: this,
       parent: null,
       uiState: this._initialUiState,
-    });
-
-    this.middleware.forEach(({ instance }) => {
-      instance.subscribe();
     });
 
     mainHelper.search();

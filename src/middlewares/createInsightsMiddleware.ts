@@ -6,6 +6,7 @@ import type {
 } from '../types';
 import { getInsightsAnonymousUserTokenInternal } from '../helpers';
 import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils';
+import connectConfigure from '../connectors/configure/connectConfigure';
 
 export type InsightsEvent = {
   insightsMethod?: InsightsClientMethod;
@@ -88,25 +89,32 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
     });
     insightsClient('init', { appId, apiKey, ...insightsInitParams });
 
+    const createWidget = connectConfigure(noop);
+    let configureClickAnalytics: ReturnType<typeof createWidget> | undefined;
+    let configureUserToken: ReturnType<typeof createWidget> | undefined;
+
     return {
       onStateChange() {},
       subscribe() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
-        // At the time this middleware is subscribed, `mainIndex.init()` is already called.
-        // It means `mainIndex.getHelper()` exists.
-        const helper = instantSearchInstance.mainIndex.getHelper()!;
+        configureClickAnalytics = createWidget({
+          searchParameters: { clickAnalytics: true },
+        });
+        instantSearchInstance.addWidgets([configureClickAnalytics]);
 
         const setUserTokenToSearch = (userToken?: string) => {
-          if (userToken) {
-            helper.setState(
-              helper.state.setQueryParameter('userToken', userToken)
-            );
+          if (configureUserToken) {
+            instantSearchInstance.renderState[
+              instantSearchInstance.indexName
+            ].configure!.refine({ userToken });
+          } else {
+            configureUserToken = createWidget({
+              searchParameters: { userToken },
+            });
+            instantSearchInstance.addWidgets([configureUserToken]);
           }
         };
-        const hasUserToken = () => Boolean((helper.state as any).userToken);
-
-        helper.setState(helper.state.setQueryParameter('clickAnalytics', true));
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
         if (hasInsightsClient && anonymousUserToken) {
@@ -132,7 +140,13 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
           if (onEvent) {
             onEvent(event, _insightsClient);
           } else if (event.insightsMethod) {
-            if (hasUserToken()) {
+            // At this point, instantSearchInstance must be started and
+            // it means there is a configure widget (added above).
+            const hasUserToken = Boolean(
+              instantSearchInstance.renderState[instantSearchInstance.indexName]
+                .configure!.widgetParams.searchParameters.userToken
+            );
+            if (hasUserToken) {
               insightsClient(event.insightsMethod, event.payload);
             } else {
               warning(
@@ -154,6 +168,12 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       },
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);
+        instantSearchInstance.removeWidgets([
+          configureClickAnalytics!,
+          configureUserToken!,
+        ]);
+        configureClickAnalytics = undefined;
+        configureUserToken = undefined;
         instantSearchInstance.sendEventToInsights = noop;
       },
     };

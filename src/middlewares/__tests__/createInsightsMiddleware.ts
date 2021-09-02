@@ -1,28 +1,34 @@
-import algoliasearch from 'algoliasearch';
-import algoliasearchHelper from 'algoliasearch-helper';
+import instantsearch from '../../index.es';
 import { createInsightsMiddleware } from '../';
-import { createInstantSearch } from '../../../test/mock/createInstantSearch';
 import {
   createInsights,
   createInsightsUmdVersion,
 } from '../../../test/mock/createInsightsClient';
+import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { warning } from '../../lib/utils';
-import type { SearchClient } from '../../types';
 
 describe('insights', () => {
   const createTestEnvironment = () => {
     const { analytics, insightsClient } = createInsights();
-    const instantSearchInstance = createInstantSearch({
-      client: algoliasearch('myAppId', 'myApiKey'),
+    const indexName = 'my-index';
+    const instantSearchInstance = instantsearch({
+      searchClient: createSearchClient({
+        // @ts-expect-error only available in search client v4
+        transporter: {
+          headers: {
+            'x-algolia-application-id': 'myAppId',
+            'x-algolia-api-key': 'myApiKey',
+          },
+        },
+      }),
+      indexName,
     });
-    const helper = algoliasearchHelper({} as SearchClient, '');
-    const getUserToken = () => {
-      return (helper.state as any).userToken;
-    };
-    // @ts-expect-error
-    instantSearchInstance.mainIndex = {
-      getHelper: () => helper,
-    };
+    instantSearchInstance.start();
+
+    const helper = instantSearchInstance.mainIndex.getHelper();
+
+    // @ts-expect-error `userToken` exists in only search client v4
+    const getUserToken = () => helper.state.userToken;
 
     return {
       analytics,
@@ -37,17 +43,25 @@ describe('insights', () => {
     const { analytics, insightsClient, libraryLoadedAndProcessQueue } =
       createInsightsUmdVersion();
 
-    const instantSearchInstance = createInstantSearch({
-      client: algoliasearch('myAppId', 'myApiKey'),
+    const indexName = 'my-index';
+    const instantSearchInstance = instantsearch({
+      searchClient: createSearchClient({
+        // @ts-expect-error only available in search client v4
+        transporter: {
+          headers: {
+            'x-algolia-application-id': 'my-app-id',
+            'x-algolia-api-key': 'my-api-key',
+          },
+        },
+      }),
+      indexName,
     });
-    const helper = algoliasearchHelper({} as SearchClient, '');
-    const getUserToken = () => {
-      return (helper.state as any).userToken;
-    };
-    // @ts-expect-error
-    instantSearchInstance.mainIndex = {
-      getHelper: () => helper,
-    };
+    instantSearchInstance.start();
+
+    const helper = instantSearchInstance.mainIndex.getHelper();
+
+    const getUserToken = () => (helper.state as any).userToken;
+
     return {
       analytics,
       insightsClient,

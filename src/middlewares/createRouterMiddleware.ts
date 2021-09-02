@@ -57,12 +57,10 @@ export const createRouterMiddleware = <
     // casting to UiState here to keep createURL unaware of custom UiState
     // (as long as it's an object, it's ok)
     instantSearchInstance._createURL = topLevelCreateURL as CreateURL<UiState>;
-    instantSearchInstance._initialUiState = {
-      ...instantSearchInstance._initialUiState,
-      ...stateMapping.routeToState(router.read()),
-    };
 
     let lastRouteState: TRouteState | undefined = undefined;
+
+    const initialUiState = instantSearchInstance._initialUiState;
 
     return {
       onStateChange({ uiState }) {
@@ -78,6 +76,11 @@ export const createRouterMiddleware = <
       },
 
       subscribe() {
+        instantSearchInstance._initialUiState = {
+          ...initialUiState,
+          ...stateMapping.routeToState(router.read()),
+        };
+
         router.onUpdate((route) => {
           instantSearchInstance.setUiState(stateMapping.routeToState(route));
         });
