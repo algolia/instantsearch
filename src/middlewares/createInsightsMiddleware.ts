@@ -1,4 +1,3 @@
-import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   InsightsClient,
   InsightsClientMethod,
