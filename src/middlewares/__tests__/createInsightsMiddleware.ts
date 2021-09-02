@@ -25,13 +25,9 @@ describe('insights', () => {
     });
     instantSearchInstance.start();
 
-    const getAppliedSearchParameters = () =>
-      instantSearchInstance.renderState[indexName].configure!.widgetParams
-        .searchParameters;
-
-    const getUserToken = () => getAppliedSearchParameters().userToken;
-
     const helper = instantSearchInstance.mainIndex.getHelper();
+
+    const getUserToken = () => (helper.state as any).userToken;
 
     return {
       analytics,
@@ -39,7 +35,6 @@ describe('insights', () => {
       instantSearchInstance,
       helper,
       getUserToken,
-      getAppliedSearchParameters,
     };
   };
 
@@ -62,13 +57,9 @@ describe('insights', () => {
     });
     instantSearchInstance.start();
 
-    const getAppliedSearchParameters = () =>
-      instantSearchInstance.renderState[indexName].configure!.widgetParams
-        .searchParameters;
-
-    const getUserToken = () => getAppliedSearchParameters().userToken;
-
     const helper = instantSearchInstance.mainIndex.getHelper();
+
+    const getUserToken = () => (helper.state as any).userToken;
 
     return {
       analytics,
@@ -77,7 +68,6 @@ describe('insights', () => {
       instantSearchInstance,
       helper,
       getUserToken,
-      getAppliedSearchParameters,
     };
   };
 
@@ -242,16 +232,13 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('applies clickAnalytics', () => {
-      const {
-        insightsClient,
-        instantSearchInstance,
-        getAppliedSearchParameters,
-      } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, helper } =
+        createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
       middleware.subscribe();
-      expect(getAppliedSearchParameters().clickAnalytics).toBe(true);
+      expect(helper.state.clickAnalytics).toBe(true);
     });
 
     it("doesn't reset page", () => {

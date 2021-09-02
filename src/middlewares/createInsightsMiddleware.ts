@@ -91,27 +91,30 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
     insightsClient('init', { appId, apiKey, ...insightsInitParams });
 
     const createWidget = connectConfigure(noop);
-    let widget: ReturnType<typeof createWidget>;
+    let configureClickAnalytics: ReturnType<typeof createWidget> | undefined;
+    let configureUserToken: ReturnType<typeof createWidget> | undefined;
 
     return {
       onStateChange() {},
       subscribe() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
-        let searchParameters: Partial<PlainSearchParameters> = {
-          clickAnalytics: true,
-        };
-        widget = createWidget({ searchParameters });
-        instantSearchInstance.addWidgets([widget]);
+        configureClickAnalytics = createWidget({
+          searchParameters: { clickAnalytics: true },
+        });
+        instantSearchInstance.addWidgets([configureClickAnalytics]);
 
         const setUserTokenToSearch = (userToken?: string) => {
-          instantSearchInstance.removeWidgets([widget]);
-          searchParameters = {
-            ...searchParameters,
-            userToken,
-          };
-          widget = createWidget({ searchParameters });
-          instantSearchInstance.addWidgets([widget]);
+          if (configureUserToken) {
+            instantSearchInstance.renderState[
+              instantSearchInstance.indexName
+            ].configure!.refine({ userToken });
+          } else {
+            configureUserToken = createWidget({
+              searchParameters: { userToken },
+            });
+            instantSearchInstance.addWidgets([configureUserToken]);
+          }
         };
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
@@ -166,6 +169,12 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       },
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);
+        instantSearchInstance.removeWidgets([
+          configureClickAnalytics!,
+          configureUserToken!,
+        ]);
+        configureClickAnalytics = undefined;
+        configureUserToken = undefined;
         instantSearchInstance.sendEventToInsights = noop;
       },
     };
