@@ -1,3 +1,12 @@
+## [4.29.1](https://github.com/algolia/instantsearch.js/compare/v4.29.0...v4.29.1) (2021-09-02)
+
+
+### Bug Fixes
+
+* **middleware:** subscribe middleware before initializing main index ([#4849](https://github.com/algolia/instantsearch.js/issues/4849)) ([0fc8f73](https://github.com/algolia/instantsearch.js/commit/0fc8f7322f8521f934ed871e8125707ba2ec0bfd))
+
+
+
 # [4.29.0](https://github.com/algolia/instantsearch.js/compare/v4.28.0...v4.29.0) (2021-08-31)
 
 
