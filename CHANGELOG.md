@@ -1,3 +1,12 @@
+## [4.10.3](https://github.com/algolia/create-instantsearch-app/compare/4.10.2...4.10.3) (2021-09-01)
+
+
+### Bug Fixes
+
+* **js:** enable typescript completion using window ([1fd684b](https://github.com/algolia/create-instantsearch-app/commit/1fd684bf4c5c15b0f7c5d20a6bcf25037ddf9684))
+
+
+
 ## [4.10.2](https://github.com/algolia/create-instantsearch-app/compare/4.10.1...4.10.2) (2021-09-01)
 
 
