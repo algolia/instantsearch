@@ -348,7 +348,7 @@ describe('connectDynamicWidgets', () => {
         await wait(0);
 
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          Array [
+          [
             Widget(ais.dynamicWidgets),
             Widget(ais.menu) {
               attribute: test1
