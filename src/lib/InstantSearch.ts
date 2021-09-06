@@ -152,7 +152,7 @@ class InstantSearch<
   public mainIndex: IndexWidget;
   public started: boolean;
   public templatesConfig: Record<string, unknown>;
-  public renderState: RenderState = {};
+  public renderState?: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
