@@ -103,17 +103,32 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
         });
         instantSearchInstance.addWidgets([configureClickAnalytics]);
 
+        // const setUserTokenToSearch = (userToken?: string) => {
+        //   const refineFromRenderState =
+        //     instantSearchInstance.renderState?.[instantSearchInstance.indexName]
+        //       ?.configure?.refine;
+
+        //   if (configureUserToken && refineFromRenderState) {
+        //     refineFromRenderState({ userToken });
+        //   } else {
+        //     if (configureUserToken) {
+        //       instantSearchInstance.removeWidgets([configureUserToken]);
+        //     }
+        //     configureUserToken = createWidget({
+        //       searchParameters: { userToken },
+        //     });
+        //     instantSearchInstance.addWidgets([configureUserToken]);
+        //   }
+        // };
+
         const setUserTokenToSearch = (userToken?: string) => {
           if (configureUserToken) {
-            instantSearchInstance.renderState[
-              instantSearchInstance.indexName
-            ].configure!.refine({ userToken });
-          } else {
-            configureUserToken = createWidget({
-              searchParameters: { userToken },
-            });
-            instantSearchInstance.addWidgets([configureUserToken]);
+            instantSearchInstance.removeWidgets([configureUserToken]);
           }
+          configureUserToken = createWidget({
+            searchParameters: { userToken },
+          });
+          instantSearchInstance.addWidgets([configureUserToken]);
         };
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();

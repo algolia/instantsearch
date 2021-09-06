@@ -342,7 +342,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(getUserToken()).toEqual('token-from-queue-before-init');
     });
 
-    it('applies the last userToken before search.start()', () => {
+    it('handles multiple setUserToken calls before search.start()', () => {
       const { insightsClient } = createInsights();
       const indexName = 'my-index';
       const instantSearchInstance = instantsearch({
