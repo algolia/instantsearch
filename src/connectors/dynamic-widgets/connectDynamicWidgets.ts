@@ -18,6 +18,7 @@ export type DynamicWidgetsRenderState = {
 
 export type DynamicWidgetsConnectorParams = {
   widgets: Widget[];
+  fallbackWidget?(args: { attribute: string }): Widget;
   transformItems?(
     items: string[],
     metadata: { results: SearchResults }
@@ -42,22 +43,18 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
-      const { widgets, transformItems = (items) => items } = widgetParams;
+      const {
+        widgets,
+        transformItems = (items) => items,
+        fallbackWidget,
+      } = widgetParams;
 
       if (
-        !widgets ||
-        !Array.isArray(widgets) ||
-        widgets.some((widget) => typeof widget !== 'object')
-      ) {
-        throw new Error(
-          withUsage('The `widgets` option expects an array of widgets.')
-        );
-      }
-
-      if (
-        !widgets ||
-        !Array.isArray(widgets) ||
-        widgets.some((widget) => typeof widget !== 'object')
+        !(
+          widgets &&
+          Array.isArray(widgets) &&
+          widgets.every((widget) => typeof widget === 'object')
+        )
       ) {
         throw new Error(
           withUsage('The `widgets` option expects an array of widgets.')
@@ -72,9 +69,8 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
         init(initOptions) {
           widgets.forEach((widget) => {
             const attribute = getWidgetAttribute(widget, initOptions);
-            localWidgets.set(attribute, { widget, isMounted: true });
+            localWidgets.set(attribute, { widget, isMounted: false });
           });
-          initOptions.parent!.addWidgets(widgets);
 
           renderFn(
             {
@@ -90,6 +86,15 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
 
           const widgetsToUnmount: Widget[] = [];
           const widgetsToMount: Widget[] = [];
+
+          if (fallbackWidget) {
+            renderState.attributesToRender.forEach((attribute) => {
+              if (!localWidgets.has(attribute)) {
+                const widget = fallbackWidget({ attribute });
+                localWidgets.set(attribute, { widget, isMounted: false });
+              }
+            });
+          }
 
           localWidgets.forEach(({ widget, isMounted }, attribute) => {
             const shouldMount =

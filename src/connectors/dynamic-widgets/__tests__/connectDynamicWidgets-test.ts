@@ -14,6 +14,7 @@ import {
 } from '../../../../test/mock/createAPIResponse';
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
+import connectRefinementList from '../../refinement-list/connectRefinementList';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -41,6 +42,14 @@ describe('connectDynamicWidgets', () => {
 
         See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
       `);
+    });
+
+    it('does not fail when empty widgets are given', () => {
+      expect(() =>
+        EXPERIMENTAL_connectDynamicWidgets(() => {})({
+          widgets: [],
+        })
+      ).not.toThrow();
     });
   });
 
@@ -80,7 +89,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     describe('widgets', () => {
-      it('adds all widgets to the parent', () => {
+      it('does not add widgets on init', () => {
         const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
           transformItems() {
             return [];
@@ -108,12 +117,6 @@ describe('connectDynamicWidgets', () => {
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
           [
             Widget(ais.dynamicWidgets),
-            Widget(ais.menu) {
-              attribute: test1
-            },
-            Widget(ais.hierarchicalMenu) {
-              attribute: test2
-            },
           ]
         `);
       });
@@ -180,54 +183,6 @@ describe('connectDynamicWidgets', () => {
     });
 
     describe('widgets', () => {
-      it('removes all widgets if transformItems says so', async () => {
-        const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
-          transformItems() {
-            return [];
-          },
-          widgets: [
-            connectMenu(() => {})({ attribute: 'test1' }),
-            connectHierarchicalMenu(() => {})({
-              attributes: ['test2', 'test3'],
-            }),
-          ],
-        });
-
-        const parent = index({ indexName: 'test' }).addWidgets([
-          dynamicWidgets,
-        ]);
-
-        expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          [
-            Widget(ais.dynamicWidgets),
-          ]
-        `);
-
-        dynamicWidgets.init!(createInitOptions({ parent }));
-
-        expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          [
-            Widget(ais.dynamicWidgets),
-            Widget(ais.menu) {
-              attribute: test1
-            },
-            Widget(ais.hierarchicalMenu) {
-              attribute: test2
-            },
-          ]
-        `);
-
-        dynamicWidgets.render!(createRenderOptions({ parent }));
-
-        await wait(0);
-
-        expect(parent.getWidgets()).toMatchInlineSnapshot(`
-          [
-            Widget(ais.dynamicWidgets),
-          ]
-        `);
-      });
-
       it('keeps static widgets returned in transformItems', async () => {
         const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
           transformItems() {
@@ -256,12 +211,6 @@ describe('connectDynamicWidgets', () => {
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
           [
             Widget(ais.dynamicWidgets),
-            Widget(ais.menu) {
-              attribute: test1
-            },
-            Widget(ais.hierarchicalMenu) {
-              attribute: test2
-            },
           ]
         `);
 
@@ -284,6 +233,8 @@ describe('connectDynamicWidgets', () => {
           transformItems(_items, { results }) {
             return results.userData[0].MOCK_facetOrder;
           },
+          fallbackWidget: ({ attribute }) =>
+            connectRefinementList(() => {})({ attribute }),
           widgets: [
             connectMenu(() => {})({ attribute: 'test1' }),
             connectHierarchicalMenu(() => {})({
@@ -307,12 +258,6 @@ describe('connectDynamicWidgets', () => {
         expect(parent.getWidgets()).toMatchInlineSnapshot(`
           [
             Widget(ais.dynamicWidgets),
-            Widget(ais.menu) {
-              attribute: test1
-            },
-            Widget(ais.hierarchicalMenu) {
-              attribute: test2
-            },
           ]
         `);
 
@@ -387,6 +332,35 @@ describe('connectDynamicWidgets', () => {
             },
           ]
         `);
+
+        dynamicWidgets.render!(
+          createRenderOptions({
+            parent,
+            results: new SearchResults(
+              new SearchParameters(),
+              createMultiSearchResponse({
+                userData: [{ MOCK_facetOrder: ['test1', 'test4', 'test5'] }],
+              }).results
+            ),
+          })
+        );
+
+        await wait(0);
+
+        expect(parent.getWidgets()).toMatchInlineSnapshot(`
+          [
+            Widget(ais.dynamicWidgets),
+            Widget(ais.menu) {
+              attribute: test1
+            },
+            Widget(ais.refinementList) {
+              attribute: test4
+            },
+            Widget(ais.refinementList) {
+              attribute: test5
+            },
+          ]
+        `);
       });
     });
   });
@@ -435,12 +409,6 @@ describe('connectDynamicWidgets', () => {
       expect(parent.getWidgets()).toMatchInlineSnapshot(`
         [
           Widget(ais.dynamicWidgets),
-          Widget(ais.menu) {
-            attribute: test1
-          },
-          Widget(ais.hierarchicalMenu) {
-            attribute: test2
-          },
         ]
       `);
 
