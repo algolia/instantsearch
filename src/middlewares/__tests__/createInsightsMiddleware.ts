@@ -342,6 +342,37 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(getUserToken()).toEqual('token-from-queue-before-init');
     });
 
+    it('handles multiple setUserToken calls before search.start()', () => {
+      const { insightsClient } = createInsights();
+      const indexName = 'my-index';
+      const instantSearchInstance = instantsearch({
+        searchClient: createSearchClient({
+          // @ts-expect-error only available in search client v4
+          transporter: {
+            headers: {
+              'x-algolia-application-id': 'myAppId',
+              'x-algolia-api-key': 'myApiKey',
+            },
+          },
+        }),
+        indexName,
+      });
+
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      });
+      instantSearchInstance.use(middleware);
+
+      insightsClient('setUserToken', 'abc');
+      insightsClient('setUserToken', 'def');
+
+      instantSearchInstance.start();
+
+      const helper = instantSearchInstance.mainIndex.getHelper();
+      // @ts-expect-error `userToken` exists in only search client v4
+      expect(helper.state.userToken).toEqual('def');
+    });
+
     describe('umd', () => {
       it('applies userToken from queue if exists', () => {
         const {

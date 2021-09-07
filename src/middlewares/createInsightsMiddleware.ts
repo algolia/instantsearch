@@ -105,15 +105,12 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
 
         const setUserTokenToSearch = (userToken?: string) => {
           if (configureUserToken) {
-            instantSearchInstance.renderState[
-              instantSearchInstance.indexName
-            ].configure!.refine({ userToken });
-          } else {
-            configureUserToken = createWidget({
-              searchParameters: { userToken },
-            });
-            instantSearchInstance.addWidgets([configureUserToken]);
+            instantSearchInstance.removeWidgets([configureUserToken]);
           }
+          configureUserToken = createWidget({
+            searchParameters: { userToken },
+          });
+          instantSearchInstance.addWidgets([configureUserToken]);
         };
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
