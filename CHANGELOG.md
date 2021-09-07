@@ -1,3 +1,18 @@
+# [4.30.0](https://github.com/algolia/instantsearch.js/compare/v4.29.1...v4.30.0) (2021-09-07)
+
+
+### Bug Fixes
+
+* **insights:** handle multiple setUserToken call before search.start() ([#4897](https://github.com/algolia/instantsearch.js/issues/4897)) ([51a6f2b](https://github.com/algolia/instantsearch.js/commit/51a6f2bcd2ea312e7038e6f3208a2e9b3fed494a))
+
+
+### Features
+
+* **dynamicWidgets:** add fallbackWidget ([#4847](https://github.com/algolia/instantsearch.js/issues/4847)) ([7d99ab9](https://github.com/algolia/instantsearch.js/commit/7d99ab95972d5886cdc82abb5794a41d38381a50))
+* **dynamicWidgets:** mark as stable ([#4899](https://github.com/algolia/instantsearch.js/issues/4899)) ([f97468f](https://github.com/algolia/instantsearch.js/commit/f97468f134d92c198433a7dad16a3b19b3779a94))
+
+
+
 ## [4.29.1](https://github.com/algolia/instantsearch.js/compare/v4.29.0...v4.29.1) (2021-09-02)
 
 
