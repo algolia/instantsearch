@@ -128,9 +128,9 @@ storiesOf('ais-range-input', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Range Input</template>
+        <template v-slot:header>Range Input</template>
         <ais-range-input attribute="price" />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

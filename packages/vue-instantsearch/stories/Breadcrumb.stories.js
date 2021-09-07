@@ -32,7 +32,7 @@ storiesOf('ais-breadcrumb', module)
   .add('with a custom root label', () => ({
     template: `
       <ais-breadcrumb :attributes="attributes">
-        <template slot="rootLabel">Home Page</template>
+        <template v-slot:rootLabel>Home Page</template>
       </ais-breadcrumb>
     `,
     data: () => ({
@@ -55,7 +55,7 @@ storiesOf('ais-breadcrumb', module)
         :attributes="attributes"
         :transformItems="transformItems"
       >
-        <template slot="rootLabel">HOME</template>
+        <template v-slot:rootLabel>HOME</template>
       </ais-breadcrumb>
     `,
     data: () => ({
@@ -112,9 +112,9 @@ storiesOf('ais-breadcrumb', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Breadcrumb</template>
+        <template v-slot:header>Breadcrumb</template>
         <ais-breadcrumb :attributes="attributes" />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
     data: () => ({

@@ -14,7 +14,7 @@ storiesOf('ais-voice-search', module)
   .add('without status', () => ({
     template: `
       <ais-voice-search>
-        <template slot="status"><span></span></template>
+        <template v-slot:status><span></span></template>
       </ais-voice-search>
     `,
   }))

@@ -43,9 +43,9 @@ storiesOf('ais-search-box', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">SearchBox</template>
+        <template v-slot:header>SearchBox</template>
         <ais-search-box />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

@@ -70,14 +70,14 @@ storiesOf('ais-hits-per-page', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Hits per page</template>
+        <template v-slot:header>Hits per page</template>
         <ais-hits-per-page
           :items="[
             { label: '3 results', value: 3, default: true },
             { label: '6 results', value: 6 }
           ]"
         />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

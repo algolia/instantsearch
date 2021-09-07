@@ -86,9 +86,9 @@ storiesOf('ais-menu-select', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Menu Select</template>
+        <template v-slot:header>Menu Select</template>
         <ais-menu-select attribute="categories" />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

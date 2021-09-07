@@ -93,9 +93,9 @@ storiesOf('ais-pagination', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Pagination</template>
+        <template v-slot:header>Pagination</template>
         <ais-pagination />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

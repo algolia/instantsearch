@@ -56,12 +56,12 @@ storiesOf('ais-toggle-refinement', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Toggle Refinement</template>
+        <template v-slot:header>Toggle Refinement</template>
         <ais-toggle-refinement
           attribute="free_shipping"
           label="Free Shipping"
         />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

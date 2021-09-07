@@ -59,9 +59,9 @@ storiesOf('ais-hits', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Hits</template>
+        <template v-slot:header>Hits</template>
         <ais-hits />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

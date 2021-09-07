@@ -9,7 +9,7 @@ storiesOf('ais-dynamic-widgets', module)
       <ais-refinement-list attribute="brand"></ais-refinement-list>
       <ais-menu attribute="categories"></ais-menu>
       <ais-panel>
-        <template slot="header">hierarchy</template>
+        <template v-slot:header>hierarchy</template>
         <ais-hierarchical-menu :attributes="hierarchicalCategories"></ais-hierarchical-menu>
       </ais-panel>
     </ais-experimental-dynamic-widgets>`,

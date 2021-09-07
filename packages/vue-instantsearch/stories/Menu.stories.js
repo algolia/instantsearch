@@ -80,9 +80,9 @@ storiesOf('ais-menu', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Menu</template>
+        <template v-slot:header>Menu</template>
         <ais-menu attribute="categories" />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }))

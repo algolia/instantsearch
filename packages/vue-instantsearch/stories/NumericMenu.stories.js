@@ -73,7 +73,7 @@ storiesOf('ais-numeric-menu', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Numeric Menu</template>
+        <template v-slot:header>Numeric Menu</template>
         <ais-numeric-menu
           attribute="price"
           :items="[
@@ -84,7 +84,7 @@ storiesOf('ais-numeric-menu', module)
             { label: '>= 500$', start: 500 },
           ]"
         />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

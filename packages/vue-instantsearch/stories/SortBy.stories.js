@@ -59,7 +59,7 @@ storiesOf('ais-sort-by', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Sort By</template>
+        <template v-slot:header>Sort By</template>
         <ais-sort-by
           :items="[
             { value: 'instant_search', label: 'Featured' },
@@ -67,7 +67,7 @@ storiesOf('ais-sort-by', module)
             { value: 'instant_search_price_desc', label: 'Price desc.' },
           ]"
         />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));

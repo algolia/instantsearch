@@ -20,9 +20,9 @@ storiesOf('ais-stats', module)
   .add('with a Panel', () => ({
     template: `
       <ais-panel>
-        <template slot="header">Stats</template>
+        <template v-slot:header>Stats</template>
         <ais-stats />
-        <template slot="footer">Footer</template>
+        <template v-slot:footer>Footer</template>
       </ais-panel>
     `,
   }));
