@@ -5,7 +5,16 @@ export { default as configure } from './configure/configure';
 export { default as currentRefinements } from './current-refinements/current-refinements';
 export { default as EXPERIMENTAL_answers } from './answers/answers';
 export { default as EXPERIMENTAL_configureRelatedItems } from './configure-related-items/configure-related-items';
-export { default as EXPERIMENTAL_dynamicWidgets } from './dynamic-widgets/dynamic-widgets';
+
+import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
+export { dynamicWidgets };
+import { deprecate } from '../lib/utils';
+/** @deprecated use dynamicWidgets */
+export const EXPERIMENTAL_dynamicWidgets = deprecate(
+  dynamicWidgets,
+  'use dynamicWidgets'
+);
+
 export { default as geoSearch } from './geo-search/geo-search';
 export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
 export { default as hits } from './hits/hits';
