@@ -140,6 +140,7 @@ Here are the main files and folders of the project.
   ▸ connectors/       << The source of all the connectors driving the widgets' logic
   ▸ helpers/          << The source of the method helpers
   ▸ lib/              << The core of the library (InstantSearch, routers, etc.)
+  ▸ middleware/       << The source of the middleware
   ▸ types/            << The TypeScript declarations
   ▸ widgets/          << The source of the widgets
 ```
