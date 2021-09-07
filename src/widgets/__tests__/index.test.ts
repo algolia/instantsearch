@@ -128,9 +128,9 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr1', 'attr2'],
         });
       }
+      case 'dynamicWidgets':
       case 'EXPERIMENTAL_dynamicWidgets': {
-        const EXPERIMENTAL_dynamicWidgets =
-          widget as Widgets['EXPERIMENTAL_dynamicWidgets'];
+        const EXPERIMENTAL_dynamicWidgets = widget as Widgets['dynamicWidgets'];
         return EXPERIMENTAL_dynamicWidgets({
           transformItems(items) {
             return items;
