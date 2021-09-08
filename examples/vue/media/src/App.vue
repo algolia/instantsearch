@@ -5,7 +5,10 @@
     :routing="routing"
   >
     <header class="navbar">
-      <img src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png" width="40">
+      <img
+        src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png"
+        width="40"
+      >
       <h1 class="navbar__title">
         You <i class="fa fa-youtube-play"></i>
       </h1>
@@ -15,11 +18,15 @@
     <main>
       <aside>
         <ais-panel>
-          <h5 slot="header"><i class="fa fa-chevron-right"></i> Genres</h5>
+          <template v-slot:header>
+            <h5><i class="fa fa-chevron-right"></i> Genres</h5>
+          </template>
           <ais-refinement-list attribute="genre" />
         </ais-panel>
         <ais-panel>
-          <h5 slot="header"><i class="fa fa-chevron-right"></i> Ratings</h5>
+          <template v-slot:header>
+            <h5><i class="fa fa-chevron-right"></i> Ratings</h5>
+          </template>
           <ais-rating-menu attribute="rating" />
         </ais-panel>
         <div class="thank-you">
@@ -33,59 +40,68 @@
             <ais-stats />
           </div>
           <ais-hits>
-            <div class="movies" slot-scope="{ items }">
-              <ais-state-results>
-                <template slot-scope="{ query, hits }">
-                  <p class="movies-no-results" v-if="hits.length === 0">
-                    No results found matching <strong>{{query}}</strong>.
-                  </p>
-                </template>
-              </ais-state-results>
+            <template v-slot="{ items }">
+              <div class="movies">
+                <ais-state-results>
+                  <template v-slot="{ query, hits }">
+                    <p
+                      class="movies-no-results"
+                      v-if="hits.length === 0"
+                    >
+                      No results found matching <strong>{{query}}</strong>.
+                    </p>
+                  </template>
+                </ais-state-results>
 
-              <article
-                v-for="item in items"
-                :key="item.objectID"
-                class="movie"
-              >
-                <div class="media">
-                  <div class="media-left">
-                    <div
-                      class="media-object"
-                      :style="`background-image: url('${item.image}');`"></div>
-                  </div>
-                  <div class="media-body">
-                    <h4 class="media-heading">
-                      <ais-highlight attribute="title" :hit="item" />
-                      <span class="media-rating">
-                        <svg
-                          v-for="(_, i) in 5"
-                          :key="i"
-                          :class="[
+                <article
+                  v-for="item in items"
+                  :key="item.objectID"
+                  class="movie"
+                >
+                  <div class="media">
+                    <div class="media-left">
+                      <div
+                        class="media-object"
+                        :style="`background-image: url('${item.image}');`"
+                      ></div>
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">
+                        <ais-highlight
+                          attribute="title"
+                          :hit="item"
+                        />
+                        <span class="media-rating">
+                          <svg
+                            v-for="(_, i) in 5"
+                            :key="i"
+                            :class="[
                             'ais-RatingMenu-starIcon',
                             i >= item.rating && 'ais-RatingMenu-starIcon--empty'
                           ]"
-                          aria-hidden="true"
-                          width="24"
-                          height="24"
+                            aria-hidden="true"
+                            width="24"
+                            height="24"
+                          >
+                            <use :xlink:href="`#ais-RatingMenu-star${i >= item.rating ? 'Empty' : ''}Symbol`" />
+                          </svg>
+                        </span>
+                      </h4>
+                      <p class="year">{{ item.year }}</p>
+                      <p class="genre">
+                        <span
+                          v-for="genre in item.genre"
+                          :key="genre"
+                          class="badge"
                         >
-                          <use :xlink:href="`#ais-RatingMenu-star${i >= item.rating ? 'Empty' : ''}Symbol`" />
-                        </svg>
-                      </span>
-                    </h4>
-                    <p class="year">{{ item.year }}</p>
-                    <p class="genre">
-                      <span
-                       v-for="genre in item.genre"
-                       :key="genre"
-                       class="badge"
-                      >
-                        {{ genre }}
-                      </span>
-                    </p>
+                          {{ genre }}
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </article>
-            </div>
+                </article>
+              </div>
+            </template>
           </ais-hits>
           <ais-pagination />
         </div>

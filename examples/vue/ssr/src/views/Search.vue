@@ -4,10 +4,7 @@
     <ais-stats />
     <ais-refinement-list attribute="brand" />
     <ais-hits>
-      <template
-        slot="item"
-        slot-scope="{ item }"
-      >
+      <template v-slot:item="{ item }">
         <p>
           <ais-highlight
             attribute="name"

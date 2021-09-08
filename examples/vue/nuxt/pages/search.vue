@@ -7,10 +7,7 @@
       <ais-search-box />
       <ais-configure :hits-per-page.camel="5" />
       <ais-hits>
-        <template
-          slot="item"
-          slot-scope="{ item }"
-        >
+        <template v-slot:item="{ item }">
           <ais-highlight
             attribute="query"
             :hit="item"
@@ -28,10 +25,7 @@
       <ais-refinement-list attribute="brand" />
     </ais-index>
     <ais-hits>
-      <template
-        slot="item"
-        slot-scope="{ item }"
-      >
+      <template v-slot:item="{ item }">
         <p>
           <ais-highlight
             attribute="name"

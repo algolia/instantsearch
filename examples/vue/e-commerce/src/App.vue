@@ -11,10 +11,19 @@
         removeWordsIfNoResults="allOptional"
       />
 
-      <header class="header" id="header">
+      <header
+        class="header"
+        id="header"
+      >
         <p class="header-logo">
-          <a href="https://algolia.com" aria-label="Go to the Algolia website">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 93 24">
+          <a
+            href="https://algolia.com"
+            aria-label="Go to the Algolia website"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 93 24"
+            >
               <path
                 fill="#fff"
                 fill-rule="nonzero"
@@ -26,10 +35,8 @@
 
         <p class="header-title">Stop looking for an item — find it.</p>
 
-        <ais-search-box
-          placeholder="Product, brand, color, …"
-        >
-          <template slot="submit-icon">
+        <ais-search-box placeholder="Product, brand, color, …">
+          <template v-slot:submit-icon>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 18 18"
@@ -45,7 +52,11 @@
                 stroke-width="1.67"
                 transform="translate(1 1)"
               >
-                <circle cx="7.11" cy="7.11" r="7.11"></circle>
+                <circle
+                  cx="7.11"
+                  cy="7.11"
+                  r="7.11"
+                ></circle>
                 <path d="M16 16l-3.87-3.87"></path>
               </g>
             </svg>
@@ -60,7 +71,7 @@
               <h2>Filters</h2>
 
               <ais-clear-refinements data-layout="desktop">
-                <template slot="resetLabel">
+                <template v-slot:resetLabel>
                   <div class="clear-filters">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +79,11 @@
                       height="10"
                       viewBox="0 0 11 11"
                     >
-                      <g fill="none" fill-rule="evenodd" opacity=".4">
+                      <g
+                        fill="none"
+                        fill-rule="evenodd"
+                        opacity=".4"
+                      >
                         <path d="M0 0h11v11H0z"></path>
                         <path
                           fill="#000"
@@ -83,7 +98,7 @@
               </ais-clear-refinements>
 
               <ais-stats data-layout="mobile">
-                <template slot="default" slot-scope="{ nbHits }">
+                <template v-slot="{ nbHits }">
                   <span class="ais-Stats-text">
                     <strong>{{ formatNumber(nbHits) }}</strong> results
                   </span>
@@ -93,22 +108,20 @@
 
             <div class="container-body">
               <ais-panel>
-                <template slot="header">Category</template>
+                <template v-slot:header>Category</template>
 
-                <template slot="default">
-                  <ais-hierarchical-menu
-                    :attributes="[
+                <template v-slot:default>
+                  <ais-hierarchical-menu :attributes="[
                       'hierarchicalCategories.lvl0',
                       'hierarchicalCategories.lvl1'
-                    ]"
-                  />
+                    ]" />
                 </template>
               </ais-panel>
 
               <ais-panel>
-                <template slot="header">Brands</template>
+                <template v-slot:header>Brands</template>
 
-                <template slot="default">
+                <template v-slot:default>
                   <ais-refinement-list
                     attribute="brand"
                     searchable
@@ -118,11 +131,11 @@
               </ais-panel>
 
               <ais-panel>
-                <template slot="header">Price</template>
+                <template v-slot:header>Price</template>
 
-                <template slot="default">
+                <template v-slot:default>
                   <ais-range-input attribute="price">
-                    <div slot-scope="{ currentRefinement, range, refine, canRefine }">
+                    <template v-slot="{ currentRefinement, range, refine, canRefine }">
                       <vue-slider
                         :min="range.min"
                         :max="range.max"
@@ -135,22 +148,30 @@
                         :duration="0"
                         @change="refine({ min: $event[0], max: $event[1] })"
                       >
-                        <template slot="dot" slot-scope="{ index, value }">
-                          <div :aria-valuemin="range.min" :aria-valuemax="range.max" :aria-valuenow="value" :data-handle-key="index" class="vue-slider-dot-handle" role="slider" tabindex="0" />
+                        <template v-slot:dot="{ index, value }">
+                          <div
+                            :aria-valuemin="range.min"
+                            :aria-valuemax="range.max"
+                            :aria-valuenow="value"
+                            :data-handle-key="index"
+                            class="vue-slider-dot-handle"
+                            role="slider"
+                            tabindex="0"
+                          />
                         </template>
-                        <template slot="tooltip" slot-scope="{ value }">
+                        <template v-slot:tooltip="{ value }">
                           {{ formatNumber(value) }}
                         </template>
                       </vue-slider>
-                    </div>
+                    </template>
                   </ais-range-input>
                 </template>
               </ais-panel>
 
               <ais-panel>
-                <template slot="header">Free shipping</template>
+                <template v-slot:header>Free shipping</template>
 
-                <template slot="default">
+                <template v-slot:default>
                   <ais-toggle-refinement
                     attribute="free_shipping"
                     label="Display only items with free shipping"
@@ -159,61 +180,70 @@
               </ais-panel>
 
               <ais-panel>
-                <template slot="header">Ratings</template>
+                <template v-slot:header>Ratings</template>
 
-                <template slot="default">
+                <template v-slot:default>
                   <ais-rating-menu attribute="rating">
-                    <ul class="ais-RatingMenu-list" slot-scope="{ items, refine, createURL }">
-                      <li
-                        :class="cx('ais-RatingMenu-item', {
+                    <template v-slot="{ items, refine, createURL }">
+                      <ul class="ais-RatingMenu-list">
+                        <li
+                          :class="cx('ais-RatingMenu-item', {
                           'ais-RatingMenu-item--selected': items.every(item => !item.isRefined) || item.isRefined
                         })"
-                        v-for="item in items"
-                        :key="item.value"
-                      >
-                        <a
-                          class="ais-RatingMenu-link"
-                          :aria-label="item.value + ' & up'"
-                          :href="createURL(item.value)"
-                          @click.prevent="refine(item.value)"
+                          v-for="item in items"
+                          :key="item.value"
                         >
-                          <span v-for="(full, index) in item.stars" :key="index">
-                            <svg
-                              :class="cx('ais-RatingMenu-starIcon', {
+                          <a
+                            class="ais-RatingMenu-link"
+                            :aria-label="item.value + ' & up'"
+                            :href="createURL(item.value)"
+                            @click.prevent="refine(item.value)"
+                          >
+                            <span
+                              v-for="(full, index) in item.stars"
+                              :key="index"
+                            >
+                              <svg
+                                :class="cx('ais-RatingMenu-starIcon', {
                                 'ais-RatingMenu-starIcon--full': full,
                                 'ais-RatingMenu-starIcon--empty': !full,
                               })"
-                              aria-hidden="true"
-                              viewBox="0 0 16 16"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"
-                              ></path>
-                            </svg>
-                          </span>
+                                aria-hidden="true"
+                                viewBox="0 0 16 16"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"
+                                ></path>
+                              </svg>
+                            </span>
 
-                          <span class="ais-RatingMenu-count">{{ item.count }}</span>
-                        </a>
-                      </li>
-                    </ul>
+                            <span class="ais-RatingMenu-count">{{ item.count }}</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </template>
                   </ais-rating-menu>
                 </template>
               </ais-panel>
             </div>
           </section>
 
-          <footer class="container-filters-footer" data-layout="mobile">
+          <footer
+            class="container-filters-footer"
+            data-layout="mobile"
+          >
             <clear-refinements
               class="container-filters-footer-button-wrapper"
               @click="closeFilters"
             />
 
-            <ais-stats
-              class="container-filters-footer-button-wrapper"
-            >
-              <template slot="default" slot-scope="{ nbHits }">
-                <button class="button button-primary" @click="closeFilters">
+            <ais-stats class="container-filters-footer-button-wrapper">
+              <template v-slot="{ nbHits }">
+                <button
+                  class="button button-primary"
+                  @click="closeFilters"
+                >
                   See {{ formatNumber(nbHits) }} results
                 </button>
               </template>
@@ -255,19 +285,29 @@
           </header>
 
           <ais-hits>
-            <div slot="item" slot-scope="{ item }">
+            <template v-slot:item="{ item }">
               <article class="hit">
                 <header class="hit-image-container">
-                  <img :src="item.image" :alt="item.name" class="hit-image">
+                  <img
+                    :src="item.image"
+                    :alt="item.name"
+                    class="hit-image"
+                  >
                 </header>
 
                 <div class="hit-info-container">
                   <p class="hit-category">{{ item.categories[0] }}</p>
                   <h1>
-                    <ais-highlight attribute="name" :hit="item"/>
+                    <ais-highlight
+                      attribute="name"
+                      :hit="item"
+                    />
                   </h1>
                   <p class="hit-description">
-                    <ais-snippet attribute="description" :hit="item"/>
+                    <ais-snippet
+                      attribute="description"
+                      :hit="item"
+                    />
                   </p>
                   <footer>
                     <p>
@@ -292,24 +332,21 @@
                   </footer>
                 </div>
               </article>
-            </div>
+            </template>
           </ais-hits>
 
           <no-results />
 
           <footer class="container-footer">
             <ais-pagination :padding="2">
-              <div
-                slot-scope="{
+              <template v-slot="{
                   currentRefinement,
                   pages,
                   isFirstPage,
                   isLastPage,
                   refine,
                   createURL
-                }"
-                class="ais-Pagination"
-              >
+                }">
                 <ul class="ais-Pagination-list">
                   <li
                     class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled"
@@ -381,7 +418,10 @@
                     >{{ page + 1 }}</a>
                   </li>
 
-                  <li class="ais-Pagination-item ais-Pagination-item--nextPage" v-if="!isLastPage">
+                  <li
+                    class="ais-Pagination-item ais-Pagination-item--nextPage"
+                    v-if="!isLastPage"
+                  >
                     <a
                       class="ais-Pagination-link"
                       :href="createURL(currentRefinement + 1)"
@@ -433,15 +473,21 @@
                     </span>
                   </li>
                 </ul>
-              </div>
+              </template>
             </ais-pagination>
           </footer>
         </section>
       </main>
 
       <aside data-layout="mobile">
-        <button class="filters-button" @click="openFilters">
-          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 14">
+        <button
+          class="filters-button"
+          @click="openFilters"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 16 14"
+          >
             <path
               d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z"
               stroke="#fff"
@@ -478,23 +524,23 @@ export default {
   components: {
     VueSlider,
     ClearRefinements,
-    NoResults
+    NoResults,
   },
   created() {
-    this.onKeyUp = event => {
+    this.onKeyUp = (event) => {
       if (event.key !== 'Escape') {
         return;
       }
       this.closeFilters();
-    }
+    };
 
-    this.onClick = event => {
+    this.onClick = (event) => {
       if (event.target !== this.header) {
         return;
       }
 
       this.closeFilters();
-    }
+    };
   },
   mounted() {
     this.resultsContainer = document.querySelector('.container-results');
@@ -507,7 +553,7 @@ export default {
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
-      routing: getRouting({ indexName: 'instant_search' })
+      routing: getRouting({ indexName: 'instant_search' }),
     };
   },
   methods: {
@@ -519,7 +565,8 @@ export default {
       ];
     },
     getSelectedHitsPerPageValue() {
-      const [, hitsPerPage] = document.location.search.match(/hitsPerPage=([0-9]+)/) || [];
+      const [, hitsPerPage] =
+        document.location.search.match(/hitsPerPage=([0-9]+)/) || [];
       return Number(hitsPerPage);
     },
     openFilters() {

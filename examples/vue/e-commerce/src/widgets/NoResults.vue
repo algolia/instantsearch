@@ -91,7 +91,7 @@
       </p>
 
       <ais-clear-refinements>
-        <template slot="resetLabel">
+        <template v-slot:resetLabel>
           <div class="clear-filters">
             <svg
               xmlns="http://www.w3.org/2000/svg"
