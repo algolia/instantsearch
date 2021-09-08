@@ -33,6 +33,8 @@ describe('infiniteHits', () => {
             ),
           }) as any
       ),
+      // credentials are stored like this in client v3, but not part of the SearchClient type
+      ...({ applicationID: 'latency', apiKey: '123' } as any),
     });
     const search = instantsearch({
       indexName: 'instant_search',
