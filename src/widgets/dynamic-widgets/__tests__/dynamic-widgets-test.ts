@@ -2,7 +2,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { index, searchBox, menu, EXPERIMENTAL_dynamicWidgets } from '../..';
+import { index, searchBox, menu, dynamicWidgets } from '../..';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse';
@@ -19,7 +19,7 @@ describe('dynamicWidgets()', () => {
     test('container is required', () => {
       expect(() =>
         // @ts-expect-error testing invalid input
-        EXPERIMENTAL_dynamicWidgets({})
+        dynamicWidgets({})
       ).toThrowErrorMatchingInlineSnapshot(`
         "The \`container\` option is required.
 
@@ -30,7 +30,7 @@ describe('dynamicWidgets()', () => {
     test('widgets is required', () => {
       expect(() =>
         // @ts-expect-error testing invalid input
-        EXPERIMENTAL_dynamicWidgets({
+        dynamicWidgets({
           container: document.createElement('div'),
         })
       ).toThrowErrorMatchingInlineSnapshot(`
@@ -42,7 +42,7 @@ describe('dynamicWidgets()', () => {
 
     test('widgets can be empty', () => {
       expect(() =>
-        EXPERIMENTAL_dynamicWidgets({
+        dynamicWidgets({
           container: document.createElement('div'),
           widgets: [],
         })
@@ -51,7 +51,7 @@ describe('dynamicWidgets()', () => {
 
     test('widgets is required to be callbacks', () => {
       expect(() =>
-        EXPERIMENTAL_dynamicWidgets({
+        dynamicWidgets({
           container: document.createElement('div'),
           // @ts-expect-error testing invalid input
           widgets: [searchBox({ container: document.createElement('div') })],
@@ -65,7 +65,7 @@ describe('dynamicWidgets()', () => {
 
     test('all options', () => {
       expect(() =>
-        EXPERIMENTAL_dynamicWidgets({
+        dynamicWidgets({
           container: document.createElement('div'),
           transformItems: (items) => items,
           widgets: [],
@@ -78,7 +78,7 @@ describe('dynamicWidgets()', () => {
     it('creates all containers on init', () => {
       const rootContainer = document.createElement('div');
 
-      const widget = EXPERIMENTAL_dynamicWidgets({
+      const widget = dynamicWidgets({
         container: rootContainer,
         transformItems: (items) => items,
         widgets: [
@@ -139,7 +139,7 @@ describe('dynamicWidgets()', () => {
       const rootContainer = document.createElement('div');
 
       const indexWidget = index({ indexName: 'test' }).addWidgets([
-        EXPERIMENTAL_dynamicWidgets({
+        dynamicWidgets({
           container: rootContainer,
           transformItems() {
             return [];
@@ -218,7 +218,7 @@ describe('dynamicWidgets()', () => {
       const rootContainer = document.createElement('div');
 
       instantSearchInstance.addWidgets([
-        EXPERIMENTAL_dynamicWidgets({
+        dynamicWidgets({
           container: rootContainer,
           transformItems() {
             return ['test1'];
@@ -293,7 +293,7 @@ describe('dynamicWidgets()', () => {
       let ordering = ['test1', 'test4'];
 
       instantSearchInstance.addWidgets([
-        EXPERIMENTAL_dynamicWidgets({
+        dynamicWidgets({
           container: rootContainer,
           transformItems() {
             return ordering;
@@ -398,7 +398,7 @@ describe('dynamicWidgets()', () => {
       const rootContainer = document.createElement('div');
 
       const indexWidget = index({ indexName: 'test' }).addWidgets([
-        EXPERIMENTAL_dynamicWidgets({
+        dynamicWidgets({
           container: rootContainer,
           transformItems(_items, { results }) {
             return results.userData[0].MOCK_facetOrder;
@@ -490,7 +490,7 @@ describe('dynamicWidgets()', () => {
       instantSearchInstance.start();
       const rootContainer = document.createElement('div');
 
-      const dynamicWidget = EXPERIMENTAL_dynamicWidgets({
+      const dynamicWidget = dynamicWidgets({
         container: rootContainer,
         transformItems() {
           return ['test1', 'test5', 'test4'];

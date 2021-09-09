@@ -1,4 +1,4 @@
-import { connectMenu, EXPERIMENTAL_connectDynamicWidgets } from '../..';
+import { connectMenu, connectDynamicWidgets } from '../..';
 import { index } from '../../../widgets';
 import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer';
 import {
@@ -23,7 +23,7 @@ describe('connectDynamicWidgets', () => {
     it('fails when no renderer is given', () => {
       expect(() =>
         // @ts-expect-error
-        EXPERIMENTAL_connectDynamicWidgets({})
+        connectDynamicWidgets({})
       ).toThrowErrorMatchingInlineSnapshot(`
         "The render function is not valid (received type Object).
 
@@ -33,7 +33,7 @@ describe('connectDynamicWidgets', () => {
 
     it('fails when no widgets are given', () => {
       expect(() =>
-        EXPERIMENTAL_connectDynamicWidgets(() => {})(
+        connectDynamicWidgets(() => {})(
           // @ts-expect-error
           {}
         )
@@ -46,7 +46,7 @@ describe('connectDynamicWidgets', () => {
 
     it('does not fail when empty widgets are given', () => {
       expect(() =>
-        EXPERIMENTAL_connectDynamicWidgets(() => {})({
+        connectDynamicWidgets(() => {})({
           widgets: [],
         })
       ).not.toThrow();
@@ -68,8 +68,7 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets =
-          EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
+        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
         const parent = index({ indexName: 'test' }).addWidgets([
           dynamicWidgets,
@@ -90,7 +89,7 @@ describe('connectDynamicWidgets', () => {
 
     describe('widgets', () => {
       it('does not add widgets on init', () => {
-        const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
+        const dynamicWidgets = connectDynamicWidgets(() => {})({
           transformItems() {
             return [];
           },
@@ -138,8 +137,7 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets =
-          EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
+        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
         dynamicWidgets.render!(createRenderOptions());
 
@@ -166,8 +164,7 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets =
-          EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
+        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
         dynamicWidgets.render!(createRenderOptions());
 
@@ -184,7 +181,7 @@ describe('connectDynamicWidgets', () => {
 
     describe('widgets', () => {
       it('keeps static widgets returned in transformItems', async () => {
-        const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
+        const dynamicWidgets = connectDynamicWidgets(() => {})({
           transformItems() {
             return ['test1'];
           },
@@ -229,7 +226,7 @@ describe('connectDynamicWidgets', () => {
       });
 
       it('renders widgets returned by transformItems', async () => {
-        const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
+        const dynamicWidgets = connectDynamicWidgets(() => {})({
           transformItems(_items, { results }) {
             return results.userData[0].MOCK_facetOrder;
           },
@@ -368,8 +365,7 @@ describe('connectDynamicWidgets', () => {
   describe('dispose', () => {
     it('calls unmount function', () => {
       const unmountFn = jest.fn();
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {},
-      unmountFn)({
+      const dynamicWidgets = connectDynamicWidgets(() => {}, unmountFn)({
         transformItems() {
           return ['test1', 'test2'];
         },
@@ -386,7 +382,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     it('removes all widgets', async () => {
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})({
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
         transformItems() {
           return ['test1', 'test2'];
         },
@@ -445,9 +441,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})(
-        widgetParams
-      );
+      const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
       expect(dynamicWidgets.getWidgetRenderState(createInitOptions())).toEqual({
         attributesToRender: [],
@@ -465,9 +459,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})(
-        widgetParams
-      );
+      const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
       expect(dynamicWidgets.getWidgetRenderState(createInitOptions())).toEqual({
         attributesToRender: [],
@@ -485,9 +477,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})(
-        widgetParams
-      );
+      const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
       expect(
         dynamicWidgets.getWidgetRenderState(createRenderOptions())
@@ -504,9 +494,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})(
-        widgetParams
-      );
+      const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
       expect(
         dynamicWidgets.getWidgetRenderState(
@@ -538,9 +526,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})(
-        widgetParams
-      );
+      const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
       expect(
         dynamicWidgets.getWidgetRenderState(createRenderOptions())
@@ -560,9 +546,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = EXPERIMENTAL_connectDynamicWidgets(() => {})(
-        widgetParams
-      );
+      const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
       expect(
         dynamicWidgets.getWidgetRenderState(
@@ -599,8 +583,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets =
-        EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
+      const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
       const existingRenderState = {};
 
@@ -625,8 +608,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets =
-        EXPERIMENTAL_connectDynamicWidgets(renderFn)(widgetParams);
+      const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
       const existingRenderState = {};
 

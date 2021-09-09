@@ -12,7 +12,7 @@ storiesOf('Basics/DynamicWidgets', module).add(
     rootContainer.appendChild(dynamicWidgetsContainer);
 
     search.addWidgets([
-      instantsearch.widgets.EXPERIMENTAL_dynamicWidgets({
+      instantsearch.widgets.dynamicWidgets({
         container: dynamicWidgetsContainer,
         fallbackWidget: ({ attribute, container }) =>
           instantsearch.widgets.panel<
