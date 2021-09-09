@@ -1,7 +1,5 @@
 // typed as any, since it accepts the _real_ js clients, not the interface we otherwise expect
-export function getAppIdAndApiKey(
-  searchClient: any
-): [string | undefined, string | undefined] {
+export function getAppIdAndApiKey(searchClient: any) {
   if (searchClient.transporter) {
     // searchClient v4
     const { headers, queryParameters } = searchClient.transporter;
