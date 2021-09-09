@@ -60,7 +60,8 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
   return ({ instantSearchInstance }) => {
     const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
 
-    if (!appId || !apiKey) {
+    // search-insights.js also throws an error so dev-only clarification is sufficient
+    if (__DEV__ && !(appId && apiKey)) {
       throw new Error(
         '[insights middleware]: could not extract Algolia credentials from searchClient'
       );
