@@ -31,6 +31,8 @@ const createSearchClient = ({
         ),
       })
     ),
+    applicationID: 'latency',
+    apiKey: '123',
   };
 };
 

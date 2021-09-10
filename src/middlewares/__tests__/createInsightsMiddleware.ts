@@ -8,19 +8,22 @@ import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { warning } from '../../lib/utils';
 
 describe('insights', () => {
-  const createTestEnvironment = () => {
+  const searchClientWithCredentials = createSearchClient({
+    // @ts-expect-error only available in search client v4
+    transporter: {
+      headers: {
+        'x-algolia-application-id': 'myAppId',
+        'x-algolia-api-key': 'myApiKey',
+      },
+    },
+  });
+  const createTestEnvironment = ({
+    searchClient = searchClientWithCredentials,
+  } = {}) => {
     const { analytics, insightsClient } = createInsights();
     const indexName = 'my-index';
     const instantSearchInstance = instantsearch({
-      searchClient: createSearchClient({
-        // @ts-expect-error only available in search client v4
-        transporter: {
-          headers: {
-            'x-algolia-application-id': 'myAppId',
-            'x-algolia-api-key': 'myApiKey',
-          },
-        },
-      }),
+      searchClient,
       indexName,
     });
     instantSearchInstance.start();
@@ -112,6 +115,19 @@ describe('insights', () => {
         region: 'de',
         useCookie: false,
       });
+    });
+
+    it('throws when search client does not have credentials', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        searchClient: createSearchClient(),
+      });
+      expect(() =>
+        createInsightsMiddleware({
+          insightsClient,
+        })({ instantSearchInstance })
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"[insights middleware]: could not extract Algolia credentials from searchClient"`
+      );
     });
 
     it('does not throw without userToken in UMD with the library loaded after the event', () => {
