@@ -122,8 +122,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       { objectID: '2', sample: 'infos' },
     ];
 
-    (hits as unknown as EscapedHits).__escaped = true;
-
     const results = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits }),
     ]);
@@ -204,8 +202,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       },
     ];
 
-    (expectedHits as unknown as EscapedHits).__escaped = true;
-
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: expectedHits,
@@ -259,7 +255,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       { objectID: '1', name: 'transformed' },
       { objectID: '2', name: 'transformed' },
     ];
-    (expectedHits as unknown as EscapedHits).__escaped = true;
 
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
@@ -306,8 +301,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
       { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
     ];
-
-    (expectedHits as unknown as EscapedHits).__escaped = true;
 
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
@@ -414,8 +407,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       },
     ];
 
-    (expectedHits as unknown as EscapedHits).__escaped = true;
-
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
@@ -504,8 +495,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
       ];
 
-      (expectedHits as unknown as EscapedHits).__escaped = true;
-
       expect(renderState2.hits).toEqual({
         hits: expectedHits,
         sendEvent: renderState1.hits.sendEvent,
@@ -559,8 +548,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
         { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
       ];
-
-      (expectedHits as unknown as EscapedHits).__escaped = true;
 
       expect(renderState2).toEqual({
         hits: expectedHits,

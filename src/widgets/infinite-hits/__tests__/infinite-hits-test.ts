@@ -182,7 +182,11 @@ describe('infiniteHits()', () => {
     widget.init!(createInitOptions({ helper }));
     widget.render!(createRenderOptions({ results, state }));
 
-    expect(results.hits[0].__position).toEqual(41);
+    expect(render).toHaveBeenCalledTimes(1);
+    const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
+    const { hits } = firstRender.props as InfiniteHitsProps;
+
+    expect(hits[0].__position).toEqual(41);
   });
 
   it('if it is the first page, then the props should contain isFirstPage true', () => {

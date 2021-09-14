@@ -150,27 +150,23 @@ const connectHits: HitsConnector = function connectHits(
           results.hits = escapeHits(results.hits);
         }
 
-        const initialEscaped = (results.hits as ReturnType<typeof escapeHits>)
-          .__escaped;
-
-        results.hits = addAbsolutePosition(
+        const hitsWithAbsolutePosition = addAbsolutePosition(
           results.hits,
           results.page,
           results.hitsPerPage
         );
 
-        results.hits = addQueryID(results.hits, results.queryID);
+        const hitsWithAbsolutePositionAndQueryID = addQueryID(
+          hitsWithAbsolutePosition,
+          results.queryID
+        );
 
-        results.hits = transformItems(results.hits);
-
-        // Make sure the escaped tag stays, even after mapping over the hits.
-        // This prevents the hits from being double-escaped if there are multiple
-        // hits widgets mounted on the page.
-        (results.hits as ReturnType<typeof escapeHits>).__escaped =
-          initialEscaped;
+        const transformedHits = transformItems(
+          hitsWithAbsolutePositionAndQueryID
+        );
 
         return {
-          hits: results.hits,
+          hits: transformedHits,
           results,
           sendEvent,
           bindEvent,

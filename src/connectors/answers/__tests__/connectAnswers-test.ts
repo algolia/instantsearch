@@ -240,7 +240,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 
     // render with hits
     const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
-    (expectedHits as any).__escaped = true;
     expect(renderFn).toHaveBeenCalledTimes(3);
     expect(renderFn).toHaveBeenNthCalledWith(
       3,
@@ -303,7 +302,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     // wait for debounce
     await wait(30);
     const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
-    (expectedHits as any).__escaped = true;
     expect(renderFn).toHaveBeenCalledTimes(4);
     expect(renderFn).toHaveBeenNthCalledWith(
       4,
@@ -425,7 +423,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
 
       await wait(30);
       const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
-      (expectedHits as any).__escaped = true;
       expect(
         widget.getWidgetRenderState(
           createRenderOptions({

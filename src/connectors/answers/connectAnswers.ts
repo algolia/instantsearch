@@ -132,7 +132,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
     const runConcurrentSafePromise =
       createConcurrentSafePromise<FindAnswersResponse<Hit>>();
 
-    let lastResult: Partial<FindAnswersResponse<Hit>>;
+    let lastHits: FindAnswersResponse<Hit>['hits'] = [];
     let isLoading = false;
     const debouncedRender = debounce(renderFn, renderDebounceTime);
 
@@ -170,7 +170,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         const query = renderOptions.state.query;
         if (!query) {
           // renders nothing with empty query
-          lastResult = {};
+          lastHits = [];
           isLoading = false;
           renderFn(
             {
@@ -183,7 +183,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
         }
 
         // render the loader
-        lastResult = {};
+        lastHits = [];
         isLoading = true;
         renderFn(
           {
@@ -200,29 +200,28 @@ const connectAnswers: AnswersConnector = function connectAnswers(
             nbHits,
             attributesForPrediction,
           })
-        ).then((results) => {
-          if (!results) {
+        ).then((result) => {
+          if (!result) {
             // It's undefined when it's debounced.
             return;
           }
 
-          if (escapeHTML && results.hits.length > 0) {
-            results.hits = escapeHits(results.hits);
+          if (escapeHTML && result.hits.length > 0) {
+            result.hits = escapeHits(result.hits);
           }
-          const initialEscaped = (results.hits as ReturnType<typeof escapeHits>)
-            .__escaped;
 
-          results.hits = addAbsolutePosition(results.hits, 0, nbHits);
+          const hitsWithAbsolutePosition = addAbsolutePosition(
+            result.hits,
+            0,
+            nbHits
+          );
 
-          results.hits = addQueryID(results.hits, results.queryID);
+          const hitsWithAbsolutePositionAndQueryID = addQueryID(
+            hitsWithAbsolutePosition,
+            result.queryID
+          );
 
-          // Make sure the escaped tag stays, even after mapping over the hits.
-          // This prevents the hits from being double-escaped if there are multiple
-          // hits widgets mounted on the page.
-          (results.hits as ReturnType<typeof escapeHits>).__escaped =
-            initialEscaped;
-
-          lastResult = results;
+          lastHits = hitsWithAbsolutePositionAndQueryID;
           isLoading = false;
           debouncedRender(
             {
@@ -243,7 +242,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
       getWidgetRenderState() {
         return {
-          hits: lastResult?.hits || [],
+          hits: lastHits,
           isLoading,
           widgetParams,
         };

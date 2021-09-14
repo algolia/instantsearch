@@ -133,7 +133,6 @@ describe('hits()', () => {
           "hierarchicalFacets": [],
           "hits": [
             {
-              "__position": 9,
               "hit": "first",
               "objectID": "1",
             },
@@ -217,7 +216,6 @@ describe('hits()', () => {
           "hierarchicalFacets": [],
           "hits": [
             {
-              "__position": 9,
               "hit": "first",
               "objectID": "1",
             },
@@ -323,10 +321,8 @@ describe('hits()', () => {
           "hierarchicalFacets": [],
           "hits": [
             {
-              "__position": 9,
               "hit": "first",
               "objectID": "1",
-              "transformed": true,
             },
           ],
           "hitsPerPage": 4,
@@ -365,6 +361,10 @@ describe('hits()', () => {
 
     widget.render!(createRenderOptions({ results, state }));
 
-    expect(results.hits[0].__position).toEqual(41);
+    expect(render).toHaveBeenCalledTimes(1);
+    const firstRender = render.mock.calls[0][0] as VNode<HitsProps>;
+    const props = firstRender.props as HitsProps;
+
+    expect(props.hits[0].__position).toEqual(41);
   });
 });

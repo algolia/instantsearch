@@ -1098,7 +1098,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           objectID: '2',
         },
       ];
-      (expectedCurrentPageHits as any).__escaped = true;
 
       expect(renderState2.infiniteHits).toEqual({
         hits: expectedHits,
@@ -1191,7 +1190,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           objectID: '2',
         },
       ];
-      (expectedCurrentPageHits as any).__escaped = true;
 
       expect(renderState2).toEqual({
         hits: expectedHits,
