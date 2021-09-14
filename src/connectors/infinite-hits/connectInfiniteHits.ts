@@ -311,28 +311,27 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           if (escapeHTML && results.hits.length > 0) {
             results.hits = escapeHits(results.hits);
           }
-          const initialEscaped = (results.hits as any).__escaped;
 
-          results.hits = addAbsolutePosition(
+          const hitsWithAbsolutePosition = addAbsolutePosition(
             results.hits,
             results.page,
             results.hitsPerPage
           );
 
-          results.hits = addQueryID(results.hits, results.queryID);
+          const hitsWithAbsolutePositionAndQueryID = addQueryID(
+            hitsWithAbsolutePosition,
+            results.queryID
+          );
 
-          results.hits = transformItems(results.hits);
-
-          // Make sure the escaped tag stays after mapping over the hits.
-          // This prevents the hits from being double-escaped if there are multiple
-          // hits widgets mounted on the page.
-          (results.hits as any).__escaped = initialEscaped;
+          const transformedHits = transformItems(
+            hitsWithAbsolutePositionAndQueryID
+          );
 
           if (cachedHits[page] === undefined) {
-            cachedHits[page] = results.hits;
+            cachedHits[page] = transformedHits;
             cache.write({ state, hits: cachedHits });
           }
-          currentPageHits = results.hits;
+          currentPageHits = transformedHits;
 
           isFirstPage = getFirstReceivedPage(state, cachedHits) === 0;
         }

@@ -68,11 +68,9 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
     "hierarchicalFacets": [],
     "hits": [
       {
-        "__position": 3,
         "objectID": "1",
       },
       {
-        "__position": 4,
         "objectID": "2",
       },
     ],
@@ -173,11 +171,9 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
     "hierarchicalFacets": [],
     "hits": [
       {
-        "__position": 3,
         "objectID": "1",
       },
       {
-        "__position": 4,
         "objectID": "2",
       },
     ],
@@ -280,14 +276,10 @@ exports[`infiniteHits() renders transformed items 1`] = `
     "hierarchicalFacets": [],
     "hits": [
       {
-        "__position": 3,
         "objectID": "1",
-        "transformed": true,
       },
       {
-        "__position": 4,
         "objectID": "2",
-        "transformed": true,
       },
     ],
     "hitsPerPage": 2,
