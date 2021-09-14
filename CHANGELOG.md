@@ -1,3 +1,12 @@
+## [4.30.1](https://github.com/algolia/instantsearch.js/compare/v4.30.0...v4.30.1) (2021-09-14)
+
+
+### Bug Fixes
+
+* **insightsMiddleware:** throw an error when credentials can't be extracted ([#4901](https://github.com/algolia/instantsearch.js/issues/4901)) ([55313e4](https://github.com/algolia/instantsearch.js/commit/55313e4ea4105b777f3f102e9f48a7e440496d25))
+
+
+
 # [4.30.0](https://github.com/algolia/instantsearch.js/compare/v4.29.1...v4.30.0) (2021-09-07)
 
 
