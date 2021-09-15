@@ -1,3 +1,13 @@
+## [4.0.1](https://github.com/algolia/vue-instantsearch/compare/v4.0.0...v4.0.1) (2021-09-15)
+
+
+### Bug Fixes
+
+* **dynamic-widgets:** use non-experimental connector ([5629957](https://github.com/algolia/vue-instantsearch/commit/56299575f1fdd1d8cd777358f77543d5b0211b18))
+* **ssr:** pass parent index to render in __forceRender ([25284aa](https://github.com/algolia/vue-instantsearch/commit/25284aafdb95f4684387744953c2a38241da7ad1))
+
+
+
 # [4.0.0](https://github.com/algolia/vue-instantsearch/compare/v3.8.1...v4.0.0) (2021-08-23)
 
 Vue InstantSearch now supports Vue 3 ([#990](https://github.com/algolia/vue-instantsearch/issues/990)).
