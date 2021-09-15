@@ -1,5 +1,5 @@
 import { createWidgetMixin } from '../mixins/widget';
-import { EXPERIMENTAL_connectDynamicWidgets } from 'instantsearch.js/es/connectors';
+import { connectDynamicWidgets } from 'instantsearch.js/es/connectors';
 import { createSuitMixin } from '../mixins/suit';
 import { _objectSpread } from '../util/polyfills';
 import { isVue3, renderCompat, getDefaultSlot } from '../util/vue-compat';
@@ -42,7 +42,7 @@ function getWidgetAttribute(vnode) {
 export default {
   name: 'AisExperimentalDynamicWidgets',
   mixins: [
-    createWidgetMixin({ connector: EXPERIMENTAL_connectDynamicWidgets }),
+    createWidgetMixin({ connector: connectDynamicWidgets }),
     createSuitMixin({ name: 'DynamicWidgets' }),
   ],
   props: {

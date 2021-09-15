@@ -48,8 +48,8 @@
     "release": "shipjs prepare"
   },
   "dependencies": {
-    "algoliasearch-helper": "^3.1.0",
-    "instantsearch.js": "^4.27.2",
+    "algoliasearch-helper": "^3.5.5",
+    "instantsearch.js": "^4.30.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {
