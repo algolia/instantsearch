@@ -866,6 +866,7 @@ Array [
               results: expect.anything(),
             }),
           ]),
+          parent: expect.anything(),
           state: expect.anything(),
           instantSearchInstance: expect.anything(),
         },
@@ -874,6 +875,7 @@ Object {
   "createURL": [Function],
   "helper": Anything,
   "instantSearchInstance": Anything,
+  "parent": Anything,
   "results": Anything,
   "scopedResults": ArrayContaining [
     ObjectContaining {
