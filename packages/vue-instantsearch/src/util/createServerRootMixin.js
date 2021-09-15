@@ -208,6 +208,7 @@ function augmentInstantSearch(
           results: search.__initialSearchResults[result.indexId],
         })
       ),
+      parent,
       state,
       templatesConfig: {},
       createURL: parent.createURL,
