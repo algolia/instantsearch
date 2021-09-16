@@ -20,19 +20,25 @@ type InstantSearchModule = {
   version: string;
 
   // @major remove these in favour of the exports
-  /** @deprecated */
+  /** @deprecated import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/helpers' */
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
-  /** @deprecated */
+  /** @deprecated import { highlight } from 'instantsearch.js/es/helpers' */
   highlight: typeof highlight;
-  /** @deprecated */
+  /** @deprecated import { reverseHighlight } from 'instantsearch.js/es/helpers' */
   reverseHighlight: typeof reverseHighlight;
-  /** @deprecated */
+  /** @deprecated import { snippet } from 'instantsearch.js/es/helpers' */
   snippet: typeof snippet;
-  /** @deprecated */
+  /** @deprecated import { reverseSnippet } from 'instantsearch.js/es/helpers' */
   reverseSnippet: typeof reverseSnippet;
-  /** @deprecated */
+  /**
+   * @deprecated use createInsightsMiddleware
+   * @link https://www.algolia.com/doc/api-reference/widgets/insights/js/
+   */
   insights: typeof insights;
-  /** @deprecated */
+  /**
+   * @deprecated use createInsightsMiddleware
+   * @link https://www.algolia.com/doc/api-reference/widgets/insights/js/
+   */
   getInsightsAnonymousUserToken: typeof getInsightsAnonymousUserToken;
 };
 
