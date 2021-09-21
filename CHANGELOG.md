@@ -1,3 +1,13 @@
+## [4.30.2](https://github.com/algolia/instantsearch.js/compare/v4.30.1...v4.30.2) (2021-09-21)
+
+
+### Bug Fixes
+
+* **es:** add warning to typescript declaration of keys to be imported from helpers ([#4908](https://github.com/algolia/instantsearch.js/issues/4908)) ([8cbd5fb](https://github.com/algolia/instantsearch.js/commit/8cbd5fb3f02427f2c7de6e818f1ff4c81485b3e1))
+* **infinite/hits:** stop saving the transformed results in cache ([#4907](https://github.com/algolia/instantsearch.js/issues/4907)) ([82dc0ae](https://github.com/algolia/instantsearch.js/commit/82dc0ae966fda37582d5324ea6ca3e0f33ef56d5)), closes [#4819](https://github.com/algolia/instantsearch.js/issues/4819)
+
+
+
 ## [4.30.1](https://github.com/algolia/instantsearch.js/compare/v4.30.0...v4.30.1) (2021-09-14)
 
 
