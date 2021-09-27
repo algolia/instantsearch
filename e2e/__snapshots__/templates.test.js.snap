@@ -672,7 +672,7 @@ Array [
 ]
 `;
 
-exports[`Templates Autocomplete.js File content: .editorconfig 1`] = `
+exports[`Templates Autocomplete File content: .editorconfig 1`] = `
 "root = true
 
 [*]
@@ -684,19 +684,36 @@ insert_final_newline = true
 trim_trailing_whitespace = true"
 `;
 
-exports[`Templates Autocomplete.js File content: .eslintignore 1`] = `
+exports[`Templates Autocomplete File content: .eslintignore 1`] = `
 "/node_modules
 /dist
 /.cache"
 `;
 
-exports[`Templates Autocomplete.js File content: .eslintrc.js 1`] = `
-"module.exports = {
-  extends: 'algolia',
+exports[`Templates Autocomplete File content: .eslintrc.js 1`] = `
+"/* eslint-disable import/no-commonjs */
+
+module.exports = {
+  extends: ['algolia', 'algolia/react'],
+  settings: {
+    react: {
+      pragma: 'React',
+      version: 'preact',
+    },
+  },
+  rules: {
+    'jsdoc/check-tag-names': [
+      'error',
+      {
+        jsxTags: true,
+      },
+    ],
+    'react/jsx-filename-extension': 'off',
+  },
 };"
 `;
 
-exports[`Templates Autocomplete.js File content: .gitignore 1`] = `
+exports[`Templates Autocomplete File content: .gitignore 1`] = `
 "# See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
@@ -721,7 +738,7 @@ yarn-debug.log*
 yarn-error.log*"
 `;
 
-exports[`Templates Autocomplete.js File content: .prettierrc 1`] = `
+exports[`Templates Autocomplete File content: .prettierrc 1`] = `
 "{
   \\"singleQuote\\": true,
   \\"proseWrap\\": \\"never\\",
@@ -729,7 +746,245 @@ exports[`Templates Autocomplete.js File content: .prettierrc 1`] = `
 }"
 `;
 
-exports[`Templates Autocomplete.js File content: README.md 1`] = `
+exports[`Templates Autocomplete File content: README.md 1`] = `
+"# autocomplete-app
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
+
+## Get started
+
+To run this project locally, install the dependencies and run the local server:
+
+\`\`\`sh
+npm install
+npm start
+\`\`\`
+
+Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+
+\`\`\`sh
+yarn
+yarn start
+\`\`\`
+
+Open http://localhost:3000 to see your app."
+`;
+
+exports[`Templates Autocomplete File content: app.js 1`] = `
+"/** @jsx h */
+import { autocomplete, getAlgoliaResults } from '@algolia/autocomplete-js';
+import algoliasearch from 'algoliasearch';
+import { h } from 'preact';
+
+import '@algolia/autocomplete-theme-classic';
+
+const searchClient = algoliasearch('appId', 'apiKey');
+
+autocomplete({
+  container: '#autocomplete',
+  placeholder: '',
+  debug: true,
+  getSources({ query }) {
+    return [
+      {
+        sourceId: 'items',
+        getItems() {
+          return getAlgoliaResults({
+            searchClient,
+            queries: [
+              {
+                indexName: 'indexName',
+                query,
+              },
+            ],
+          });
+        },
+        templates: {
+          item({ item, components }) {
+            return (
+              <div className=\\"aa-ItemWrapper\\">
+                <div className=\\"aa-ItemContent\\">
+                  <div className=\\"aa-ItemContentBody\\">
+                    <div className=\\"aa-ItemContentTitle\\">
+                      <components.Highlight
+                        hit={item}
+                        attribute=\\"attribute1\\"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          },
+          noResults() {
+            return 'No matching items.';
+          },
+        },
+      },
+    ];
+  },
+});"
+`;
+
+exports[`Templates Autocomplete File content: index.html 1`] = `
+"<html lang=\\"en\\">
+  <head>
+    <meta charset=\\"UTF-8\\" />
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\" />
+
+    <link rel=\\"shortcut icon\\" href=\\"favicon.png\\" type=\\"image/x-icon\\" />
+    <link rel=\\"stylesheet\\" href=\\"style.css\\" />
+
+    <title>autocomplete-app</title>
+  </head>
+
+  <body>
+    <div class=\\"container\\">
+      <div id=\\"autocomplete\\"></div>
+    </div>
+
+    <script src=\\"app.js\\"></script>
+  </body>
+</html>"
+`;
+
+exports[`Templates Autocomplete File content: manifest.webmanifest 1`] = `
+"{
+  \\"short_name\\": \\"autocomplete-app\\",
+  \\"name\\": \\"autocomplete-app Sample\\",
+  \\"icons\\": [
+    {
+      \\"src\\": \\"favicon.png\\",
+      \\"sizes\\": \\"64x64 32x32 24x24 16x16\\",
+      \\"type\\": \\"image/x-icon\\"
+    }
+  ],
+  \\"start_url\\": \\"./index.html\\",
+  \\"display\\": \\"standalone\\",
+  \\"theme_color\\": \\"#000000\\",
+  \\"background_color\\": \\"#ffffff\\"
+}"
+`;
+
+exports[`Templates Autocomplete File content: package.json 1`] = `
+"{
+  \\"name\\": \\"autocomplete-app\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"build\\": \\"parcel build index.html\\",
+    \\"start\\": \\"parcel index.html --port 3000\\",
+    \\"lint\\": \\"eslint .\\"
+  },
+  \\"keywords\\": [
+    \\"algolia\\",
+    \\"autocomplete\\",
+    \\"javascript\\"
+  ],
+  \\"partialDependencies\\": {
+    \\"@algolia/autocomplete-js\\": \\"1.0.0\\"
+  }
+}"
+`;
+
+exports[`Templates Autocomplete File content: style.css 1`] = `
+"* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(244, 244, 249);
+  color: rgb(65, 65, 65);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 1rem;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 640px;
+  width: 100%;
+}"
+`;
+
+exports[`Templates Autocomplete Folder structure: contains the right files 1`] = `
+Array [
+  ".editorconfig",
+  ".eslintignore",
+  ".eslintrc.js",
+  ".gitignore",
+  ".prettierrc",
+  "README.md",
+  "app.js",
+  "favicon.png",
+  "index.html",
+  "manifest.webmanifest",
+  "package.json",
+  "style.css",
+]
+`;
+
+exports[`Templates Autocomplete.js 0 File content: .editorconfig 1`] = `
+"root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true"
+`;
+
+exports[`Templates Autocomplete.js 0 File content: .eslintignore 1`] = `
+"/node_modules
+/dist
+/.cache"
+`;
+
+exports[`Templates Autocomplete.js 0 File content: .eslintrc.js 1`] = `
+"module.exports = {
+  extends: 'algolia',
+};"
+`;
+
+exports[`Templates Autocomplete.js 0 File content: .gitignore 1`] = `
+"# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/dist
+/.cache
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*"
+`;
+
+exports[`Templates Autocomplete.js 0 File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
+`;
+
+exports[`Templates Autocomplete.js 0 File content: README.md 1`] = `
 "# autocomplete.js-app
 
 _This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
@@ -753,7 +1008,7 @@ yarn start
 Open http://localhost:3000 to see your app."
 `;
 
-exports[`Templates Autocomplete.js File content: index.html 1`] = `
+exports[`Templates Autocomplete.js 0 File content: index.html 1`] = `
 "<!DOCTYPE html>
 <html lang=\\"en\\">
 
@@ -802,7 +1057,7 @@ exports[`Templates Autocomplete.js File content: index.html 1`] = `
 </html>"
 `;
 
-exports[`Templates Autocomplete.js File content: manifest.webmanifest 1`] = `
+exports[`Templates Autocomplete.js 0 File content: manifest.webmanifest 1`] = `
 "{
   \\"short_name\\": \\"autocomplete.js-app\\",
   \\"name\\": \\"autocomplete.js-app Sample\\",
@@ -820,7 +1075,7 @@ exports[`Templates Autocomplete.js File content: manifest.webmanifest 1`] = `
 }"
 `;
 
-exports[`Templates Autocomplete.js File content: package.json 1`] = `
+exports[`Templates Autocomplete.js 0 File content: package.json 1`] = `
 "{
   \\"name\\": \\"autocomplete.js-app\\",
   \\"version\\": \\"1.0.0\\",
@@ -837,7 +1092,7 @@ exports[`Templates Autocomplete.js File content: package.json 1`] = `
 }"
 `;
 
-exports[`Templates Autocomplete.js File content: src/app.css 1`] = `
+exports[`Templates Autocomplete.js 0 File content: src/app.css 1`] = `
 ".header {
   align-items: center;
   background-image: linear-gradient(73deg, #3369e7, #1cc7d0);
@@ -925,7 +1180,7 @@ exports[`Templates Autocomplete.js File content: src/app.css 1`] = `
 }"
 `;
 
-exports[`Templates Autocomplete.js File content: src/app.js 1`] = `
+exports[`Templates Autocomplete.js 0 File content: src/app.js 1`] = `
 "import algoliasearch from 'algoliasearch';
 import autocomplete from 'autocomplete.js';
 
@@ -955,7 +1210,7 @@ autocomplete(
 });"
 `;
 
-exports[`Templates Autocomplete.js File content: src/index.css 1`] = `
+exports[`Templates Autocomplete.js 0 File content: src/index.css 1`] = `
 "body {
   background-color: #fcfcfd;
   color: #333;
@@ -965,7 +1220,7 @@ exports[`Templates Autocomplete.js File content: src/index.css 1`] = `
 }"
 `;
 
-exports[`Templates Autocomplete.js Folder structure: contains the right files 1`] = `
+exports[`Templates Autocomplete.js 0 Folder structure: contains the right files 1`] = `
 Array [
   ".editorconfig",
   ".eslintignore",
