@@ -5,34 +5,28 @@ export function getWidgetAttribute(
   widget: Widget | IndexWidget,
   initOptions: InitOptions
 ): string {
-  try {
-    // assume the type to be the correct one, but throw a nice error if it isn't the case
-    type WidgetWithAttribute = Widget<{
-      $$type: string;
-      renderState: Record<string, unknown>;
-      indexRenderState: Record<string, unknown>;
-      widgetParams: { attribute: string } | { attributes: string[] };
-    }>;
+  const renderState = widget.getWidgetRenderState?.(initOptions);
 
-    const { widgetParams } = (
-      widget as WidgetWithAttribute
-    ).getWidgetRenderState(initOptions);
+  let attribute = null;
 
-    const attribute =
-      'attribute' in widgetParams
-        ? widgetParams.attribute
-        : widgetParams.attributes[0];
+  if (renderState && renderState.widgetParams) {
+    // casting as widgetParams is checked just before
+    const widgetParams = renderState.widgetParams as Record<string, unknown>;
 
-    if (typeof attribute !== 'string') throw new Error();
+    if (widgetParams.attribute) {
+      attribute = widgetParams.attribute;
+    } else if (Array.isArray(widgetParams.attributes)) {
+      attribute = widgetParams.attributes[0];
+    }
+  }
 
-    return attribute;
-  } catch (e) {
-    throw new Error(
-      `Could not find the attribute of the widget:
+  if (typeof attribute !== 'string') {
+    throw new Error(`Could not find the attribute of the widget:
 
 ${JSON.stringify(widget)}
 
-Please check whether the widget's getWidgetRenderState returns widgetParams.attribute correctly.`
-    );
+Please check whether the widget's getWidgetRenderState returns widgetParams.attribute correctly.`);
   }
+
+  return attribute;
 }

@@ -115,7 +115,7 @@ export type BuiltinWidgetTypes =
   | 'ais.voiceSearch';
 
 export type WidgetParams = {
-  widgetParams: NonNullable<unknown>;
+  widgetParams?: Record<string, unknown>;
 };
 
 export type WidgetDescription = {
@@ -254,7 +254,6 @@ type RenderStateLifeCycle<
 export type Widget<
   TWidgetDescription extends WidgetDescription & WidgetParams = {
     $$type: string;
-    widgetParams: unknown;
   }
 > = Expand<
   RequiredWidgetLifeCycle<TWidgetDescription> &
