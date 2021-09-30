@@ -340,14 +340,6 @@ const connectToggleRefinement: ToggleRefinementConnector =
                 offData.reduce((acc, v) => acc + v.count, 0) ||
                 allFacetValues.reduce((total, { count }) => total + count, 0),
             };
-          } else if (hasAnOffValue && !isRefined) {
-            if (off) {
-              off.forEach((v) =>
-                helper.addDisjunctiveFacetRefinement(attribute, v)
-              );
-            }
-
-            helper.setPage(helper.state.page!);
           }
 
           if (!sendEvent) {

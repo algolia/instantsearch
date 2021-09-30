@@ -6,6 +6,7 @@ import {
   hits,
   panel,
   refinementList,
+  toggleRefinement,
 } from '../../../widgets';
 
 describe('getWidgetAttribute', () => {
@@ -40,6 +41,20 @@ describe('getWidgetAttribute', () => {
         createInitOptions()
       )
     ).toBe('test1');
+  });
+
+  it('reads the attribute from a toggleRefinement', () => {
+    expect(
+      getWidgetAttribute(
+        toggleRefinement({
+          container: document.createElement('div'),
+          attribute: 'test',
+          on: 'yes',
+          off: 'no',
+        }),
+        createInitOptions()
+      )
+    ).toBe('test');
   });
 
   it('reads the attribute from a panel', () => {
