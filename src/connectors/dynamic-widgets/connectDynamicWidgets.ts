@@ -23,6 +23,7 @@ export type DynamicWidgetsConnectorParams = {
     items: string[],
     metadata: { results: SearchResults }
   ): string[];
+  wildcardFacets: boolean;
 };
 
 export type DynamicWidgetsWidgetDescription = {
@@ -47,6 +48,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
         widgets,
         transformItems = (items) => items,
         fallbackWidget,
+        wildcardFacets = true,
       } = widgetParams;
 
       if (
@@ -139,6 +141,15 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           parent.removeWidgets(toRemove);
 
           unmountFn();
+        },
+        getWidgetSearchParameters(searchParameters) {
+          if (!wildcardFacets) {
+            return searchParameters;
+          }
+          return searchParameters.setQueryParameters({
+            facets: ['*'],
+            expandWildcardFacets: true,
+          });
         },
         getRenderState(renderState, renderOptions) {
           return {
