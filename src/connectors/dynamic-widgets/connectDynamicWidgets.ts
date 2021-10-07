@@ -148,7 +148,6 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           }
           return searchParameters.setQueryParameters({
             facets: ['*'],
-            expandWildcardFacets: true,
           });
         },
         getRenderState(renderState, renderOptions) {
