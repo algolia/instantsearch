@@ -66,3 +66,64 @@ test('does only a single query if refinements are empty', function() {
   var queries = getQueries(searchParams.index, searchParams);
   expect(queries).toHaveLength(1);
 });
+
+describe('wildcard facets', function() {
+  test('keeps as-is if no * present', function() {
+    var searchParams = new SearchParameters({
+      facets: ['test'],
+      disjunctiveFacets: ['test_disjunctive', 'test_numeric'],
+      hierarchicalFacets: [{name: 'test_hierarchical', attributes: ['whatever']}]
+    });
+
+    var queries = getQueries(searchParams.index, searchParams);
+
+    expect(queries.length).toBe(1);
+    expect(queries[0].params.facets).toEqual([
+      'test',
+      'test_disjunctive',
+      'test_numeric',
+      'whatever'
+    ]);
+  });
+
+  test('keeps only *', function() {
+    var searchParams = new SearchParameters({
+      facets: ['test', '*'],
+      disjunctiveFacets: ['test_disjunctive', 'test_numeric'],
+      hierarchicalFacets: [{name: 'test_hierarchical', attributes: ['whatever']}]
+    });
+
+    var queries = getQueries(searchParams.index, searchParams);
+
+    expect(queries.length).toBe(1);
+    expect(queries[0].params.facets).toEqual(['*']);
+  });
+
+  test('keeps only * when first value', function() {
+    var searchParams = new SearchParameters({
+      facets: ['*', 'test'],
+      disjunctiveFacets: ['test_disjunctive', 'test_numeric'],
+      hierarchicalFacets: [{name: 'test_hierarchical', attributes: ['whatever']}]
+    });
+
+    var queries = getQueries(searchParams.index, searchParams);
+
+    expect(queries.length).toBe(1);
+    expect(queries[0].params.facets).toEqual(['*']);
+  });
+
+  test('only applies to first query', function() {
+    var searchParams = new SearchParameters({
+      facets: ['test', '*'],
+      disjunctiveFacets: ['test_disjunctive', 'test_numeric'],
+      hierarchicalFacets: [{name: 'test_hierarchical', attributes: ['whatever']}],
+      disjunctiveFacetsRefinements: {test_disjunctive: ['one', 'two']}
+    });
+
+    var queries = getQueries(searchParams.index, searchParams);
+
+    expect(queries.length).toBe(2);
+    expect(queries[0].params.facets).toEqual(['*']);
+    expect(queries[1].params.facets).toEqual('test_disjunctive');
+  });
+});

@@ -523,14 +523,16 @@ declare namespace algoliasearchHelper {
   export class SearchParameters implements PlainSearchParameters {
     managedParameters: [
       'index',
+
       'facets',
       'disjunctiveFacets',
       'facetsRefinements',
+      'hierarchicalFacets',
       'facetsExcludes',
+  
       'disjunctiveFacetsRefinements',
       'numericRefinements',
       'tagRefinements',
-      'hierarchicalFacets',
       'hierarchicalFacetsRefinements'
     ];
 
