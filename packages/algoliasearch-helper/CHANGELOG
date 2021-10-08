@@ -1,3 +1,7 @@
+3.6.0 - 2021-10-08
+ * ci(circle): update node image (#875) https://github.com/algolia/algoliasearch-helper-js/commit/36484631c25e9d286b1d2d73cf3a388d4dba2587
+ * feat(facets): when * is present, only send that parameter (#874) https://github.com/algolia/algoliasearch-helper-js/commit/fc183ec2910d4ba33067b3487f3a70e940fd24d3
+
 3.5.5 - 2021-07-30
  * feat(ts): allow showParentLevel in hierarchicalFacet https://github.com/algolia/algoliasearch-helper-js/commit/cef547d8f48bf2cdb2d28476f8d3715c1b1a40d8
 
