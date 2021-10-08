@@ -17,9 +17,26 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('DynamicWidgets');
 
 export type DynamicWidgetsWidgetParams = {
-  container: HTMLElement | string;
+  /**
+   * CSS Selector or HTMLElement to insert the widget.
+   */
+  container: string | HTMLElement;
+
+  /**
+   * An array of widget creator functions. Will be used to display in the
+   * order defined by the facetOrdering.
+   */
   widgets: Array<(container: HTMLElement) => Widget>;
-  fallbackWidget?(args: { attribute: string; container: HTMLElement }): Widget;
+
+  /**
+   * Function that gets called when an attribute is not found in the widgets array
+   */
+  fallbackWidget?(args: {
+    /** the attribute name to create a widget for */
+    attribute: string;
+    /** the element in which this widget should be rendered */
+    container: HTMLElement;
+  }): Widget;
 };
 
 export type DynamicWidgetsWidget = WidgetFactory<
