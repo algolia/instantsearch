@@ -23,7 +23,13 @@ export type DynamicWidgetsConnectorParams = {
     items: string[],
     metadata: { results: SearchResults }
   ): string[];
-  wildcardFacets: boolean;
+  /**
+   * Request all facet values instead of only those of the mounted widgets. This
+   * option will lower the number of network requests needed for dynamic widgets,
+   * but will have slightly larger payloads.
+   * @default true
+   */
+  wildcardFacets?: boolean;
 };
 
 export type DynamicWidgetsWidgetDescription = {
