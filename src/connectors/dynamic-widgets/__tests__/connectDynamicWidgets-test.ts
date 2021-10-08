@@ -625,4 +625,114 @@ describe('connectDynamicWidgets', () => {
       });
     });
   });
+
+  describe('getWidgetSearchParameters', () => {
+    describe('wildcardFacets: true', () => {
+      test('adds facets *', () => {
+        const widget = connectDynamicWidgets(() => {})({
+          widgets: [],
+        });
+
+        const searchParameters = widget.getWidgetSearchParameters!(
+          new SearchParameters(),
+          { uiState: {} }
+        );
+
+        expect(searchParameters).toEqual(
+          new SearchParameters({
+            facets: ['*'],
+          })
+        );
+      });
+
+      test('replaces facets to *', () => {
+        const widget = connectDynamicWidgets(() => {})({
+          widgets: [],
+        });
+
+        const searchParameters = widget.getWidgetSearchParameters!(
+          new SearchParameters({ facets: ['something'] }),
+          { uiState: {} }
+        );
+
+        expect(searchParameters).toEqual(
+          new SearchParameters({
+            facets: ['*'],
+          })
+        );
+      });
+
+      test('does not add double *', () => {
+        const widget = connectDynamicWidgets(() => {})({
+          widgets: [],
+        });
+
+        const searchParameters = widget.getWidgetSearchParameters!(
+          new SearchParameters({ facets: ['*'] }),
+          { uiState: {} }
+        );
+
+        expect(searchParameters).toEqual(
+          new SearchParameters({
+            facets: ['*'],
+          })
+        );
+      });
+    });
+
+    describe('wildcardFacts: false', () => {
+      test('does not add *', () => {
+        const widget = connectDynamicWidgets(() => {})({
+          widgets: [],
+        });
+
+        const searchParameters = widget.getWidgetSearchParameters!(
+          new SearchParameters(),
+          { uiState: {} }
+        );
+
+        expect(searchParameters).toEqual(
+          new SearchParameters({
+            facets: ['*'],
+          })
+        );
+      });
+
+      test('does not replace facets to *', () => {
+        const widget = connectDynamicWidgets(() => {})({
+          widgets: [],
+          wildcardFacets: false,
+        });
+
+        const searchParameters = widget.getWidgetSearchParameters!(
+          new SearchParameters({ facets: ['something'] }),
+          { uiState: {} }
+        );
+
+        expect(searchParameters).toEqual(
+          new SearchParameters({
+            facets: ['something'],
+          })
+        );
+      });
+
+      test('does not remove *', () => {
+        const widget = connectDynamicWidgets(() => {})({
+          widgets: [],
+          wildcardFacets: false,
+        });
+
+        const searchParameters = widget.getWidgetSearchParameters!(
+          new SearchParameters({ facets: ['*'] }),
+          { uiState: {} }
+        );
+
+        expect(searchParameters).toEqual(
+          new SearchParameters({
+            facets: ['*'],
+          })
+        );
+      });
+    });
+  });
 });
