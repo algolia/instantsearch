@@ -1,4 +1,5 @@
-import createConnector, { ConnectedProps } from '../core/createConnector';
+import type { ConnectedProps } from '../core/createConnector';
+import createConnector from '../core/createConnector';
 import { getResults, getIndexId, hasMultipleIndices } from '../core/indexUtils';
 
 type SearchState = any;
@@ -37,7 +38,7 @@ function getWidgetRefinements(
   switch (widgetKey) {
     case 'range':
       return Object.keys(widgetState[attribute]).map(
-        rangeKey => widgetState[attribute][rangeKey]
+        (rangeKey) => widgetState[attribute][rangeKey]
       );
 
     case 'refinementList':
@@ -66,11 +67,11 @@ function getRefinements(
 ): TrackedFilterRefinement[] {
   const refinements = Object.keys(searchState)
     .filter(
-      widgetKey =>
+      (widgetKey) =>
         searchState[widgetKey] !== undefined &&
         searchState[widgetKey][attribute] !== undefined
     )
-    .map(widgetKey => getWidgetRefinements(attribute, widgetKey, searchState))
+    .map((widgetKey) => getWidgetRefinements(attribute, widgetKey, searchState))
     .reduce((acc, current) => acc.concat(current), []); // flatten the refinements
 
   return refinements;
@@ -96,10 +97,10 @@ function getRuleContextsFromTrackedFilters({
       return [
         ...facets,
         ...facetRefinements
-          .filter(facetRefinement =>
+          .filter((facetRefinement) =>
             trackedFacetValues.includes(facetRefinement)
           )
-          .map(facetValue =>
+          .map((facetValue) =>
             escapeRuleContext(`ais-${facetName}-${facetValue}`)
           ),
       ];
@@ -111,8 +112,8 @@ function getRuleContextsFromTrackedFilters({
 }
 
 const defaultProps: QueryRulesProps = {
-  transformItems: items => items,
-  transformRuleContexts: ruleContexts => ruleContexts,
+  transformItems: (items) => items,
+  transformRuleContexts: (ruleContexts) => ruleContexts,
   trackedFilters: {},
 };
 

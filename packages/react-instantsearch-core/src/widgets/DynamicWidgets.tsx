@@ -1,4 +1,5 @@
-import React, { Fragment, ReactChild, ComponentType, ReactNode } from 'react';
+import type { ReactChild, ComponentType, ReactNode } from 'react';
+import React, { Fragment } from 'react';
 import { getDisplayName } from '../core/utils';
 import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
 
@@ -33,7 +34,7 @@ function DynamicWidgets({
 }: DynamicWidgetsProps) {
   const widgets: Map<string, ReactChild> = new Map();
 
-  React.Children.forEach(children, child => {
+  React.Children.forEach(children, (child) => {
     const attribute = getAttribute(child);
     if (!attribute) {
       throw new Error(
@@ -47,7 +48,7 @@ function DynamicWidgets({
   // search state for unmounted components in place, so routing works.
   return (
     <>
-      {attributesToRender.map(attribute => (
+      {attributesToRender.map((attribute) => (
         <Fragment key={attribute}>
           {widgets.get(attribute) || <Fallback attribute={attribute} />}
         </Fragment>

@@ -104,13 +104,13 @@ class Range extends React.Component {
     }
   }
 
-  sliderOneValuesChange = sliderState => {
+  sliderOneValuesChange = (sliderState) => {
     this.setState({
       currentValues: { min: sliderState[0], max: sliderState[1] },
     });
   };
 
-  sliderOneValuesChangeFinish = sliderState => {
+  sliderOneValuesChangeFinish = (sliderState) => {
     if (
       this.props.currentRefinement.min !== sliderState[0] ||
       this.props.currentRefinement.max !== sliderState[1]

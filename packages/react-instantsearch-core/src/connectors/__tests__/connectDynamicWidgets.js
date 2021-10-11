@@ -1,7 +1,7 @@
 import { SearchResults, SearchParameters } from 'algoliasearch-helper';
 import connector from '../connectDynamicWidgets';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 const EMPTY_RESPONSE = {
   results: [
@@ -74,7 +74,7 @@ describe('connectDynamicWidgets', () => {
       });
 
       it('default items is []', () => {
-        const props = { contextValue, transformItems: items => items };
+        const props = { contextValue, transformItems: (items) => items };
         const searchState = {};
         const searchResults = createSingleIndexSearchResults();
 
@@ -111,7 +111,7 @@ describe('connectDynamicWidgets', () => {
       it('transformItems gets called with results', () => {
         const props = {
           contextValue,
-          transformItems: jest.fn(items => items),
+          transformItems: jest.fn((items) => items),
         };
         const searchState = {};
         const searchResults = createSingleIndexSearchResults({
@@ -218,7 +218,7 @@ describe('connectDynamicWidgets', () => {
         const props = {
           contextValue,
           indexContextValue,
-          transformItems: items => items,
+          transformItems: (items) => items,
         };
         const searchState = createMultiIndexSearchState();
         const searchResults = createMultiIndexSearchResults();
@@ -236,7 +236,7 @@ describe('connectDynamicWidgets', () => {
         const props = {
           contextValue,
           indexContextValue,
-          transformItems: items => items,
+          transformItems: (items) => items,
         };
         const searchState = createMultiIndexSearchState();
         const searchResults = createMultiIndexSearchResults({
@@ -258,7 +258,7 @@ describe('connectDynamicWidgets', () => {
         const props = {
           contextValue,
           indexContextValue,
-          transformItems: jest.fn(items => items),
+          transformItems: jest.fn((items) => items),
         };
         const searchState = createMultiIndexSearchState();
         const searchResults = createMultiIndexSearchResults();

@@ -1,11 +1,7 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
-import {
-  InstantSearchConsumer,
-  InstantSearchContext,
-  IndexProvider,
-  IndexContext,
-} from '../core/context';
+import type { InstantSearchContext, IndexContext } from '../core/context';
+import { InstantSearchConsumer, IndexProvider } from '../core/context';
 
 function getIndexContext(props: Props): IndexContext {
   return {
@@ -88,9 +84,8 @@ class Index extends Component<InnerProps, State> {
   }
 
   componentDidMount() {
-    this.unregisterWidget = this.props.contextValue.widgetsManager.registerWidget(
-      this
-    );
+    this.unregisterWidget =
+      this.props.contextValue.widgetsManager.registerWidget(this);
   }
 
   componentDidUpdate(prevProps: InnerProps) {
@@ -129,11 +124,11 @@ type IndexWrapperProps = {
   indexId?: string;
 };
 
-const IndexWrapper: React.FC<IndexWrapperProps> = props => {
+const IndexWrapper: React.FC<IndexWrapperProps> = (props) => {
   const inferredIndexId = props.indexName;
   return (
     <InstantSearchConsumer>
-      {contextValue => (
+      {(contextValue) => (
         <Index
           contextValue={contextValue}
           indexId={inferredIndexId}

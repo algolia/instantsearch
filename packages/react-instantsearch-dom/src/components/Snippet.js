@@ -4,7 +4,7 @@ import Highlighter from './Highlighter';
 
 const cx = createClassNames('Snippet');
 
-const Snippet = props => (
+const Snippet = (props) => (
   <Highlighter {...props} highlightProperty="_snippetResult" cx={cx} />
 );
 

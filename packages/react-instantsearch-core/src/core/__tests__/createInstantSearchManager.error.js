@@ -1,5 +1,5 @@
 import createInstantSearchManager from '../createInstantSearchManager';
-import { runAllMicroTasks } from '../../../../../test/utils';
+import { wait } from '../../../../../test/utils';
 
 const createSearchClient = () => ({
   search: jest.fn(),
@@ -21,14 +21,14 @@ describe('createInstantSearchManager with errors', () => {
       });
 
       ism.widgetsManager.registerWidget({
-        getSearchParameters: params => params.setQuery('search'),
+        getSearchParameters: (params) => params.setQuery('search'),
         context: {},
         props: {},
       });
 
       expect(ism.store.getState().error).toBe(null);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(ism.store.getState().error).toEqual(new Error('API_ERROR_1'));
@@ -40,7 +40,7 @@ describe('createInstantSearchManager with errors', () => {
 
       ism.widgetsManager.update();
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(ism.store.getState().error).toEqual(new Error('API_ERROR_2'));
@@ -63,7 +63,7 @@ describe('createInstantSearchManager with errors', () => {
 
       expect(ism.store.getState().error).toBe(null);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(ism.store.getState().error).toEqual(new Error('API_ERROR_1'));
@@ -75,7 +75,7 @@ describe('createInstantSearchManager with errors', () => {
 
       ism.onExternalStateUpdate({});
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(ism.store.getState().error).toEqual(new Error('API_ERROR_2'));
@@ -95,14 +95,14 @@ describe('createInstantSearchManager with errors', () => {
       });
 
       ism.widgetsManager.registerWidget({
-        getSearchParameters: params => params.setQuery('search'),
+        getSearchParameters: (params) => params.setQuery('search'),
         context: {},
         props: {},
       });
 
       expect(ism.store.getState().error).toBe(null);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(ism.store.getState().error).toEqual(new Error('API_ERROR'));
       expect(ism.store.getState().results).toEqual(null);
@@ -119,7 +119,7 @@ describe('createInstantSearchManager with errors', () => {
 
       ism.widgetsManager.update();
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(ism.store.getState().error).toEqual(null);
       expect(ism.store.getState().results).toEqual(
@@ -151,7 +151,7 @@ describe('createInstantSearchManager with errors', () => {
       expect(ism.store.getState().searchingForFacetValues).toBe(true);
       expect(ism.store.getState().error).toBe(null);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(ism.store.getState().searchingForFacetValues).toBe(false);
       expect(ism.store.getState().error).toEqual(new Error('API_ERROR'));
@@ -176,7 +176,7 @@ describe('createInstantSearchManager with errors', () => {
 
       expect(ism.store.getState().error).toBe(null);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(ism.store.getState().error).toEqual(new Error('API_ERROR'));
       expect(ism.store.getState().resultsFacetValues).toBeUndefined();
@@ -194,7 +194,7 @@ describe('createInstantSearchManager with errors', () => {
         query: 'query',
       });
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(ism.store.getState().error).toBe(null);
       expect(ism.store.getState().resultsFacetValues).toEqual(

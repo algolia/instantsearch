@@ -72,7 +72,7 @@ export const createFakeGoogleReference = ({
   markerInstance = createFakeMarkerInstance(),
 } = {}) => ({
   maps: {
-    LatLng: jest.fn(x => x),
+    LatLng: jest.fn((x) => x),
     LatLngBounds: MockLatLngBounds,
     Map: jest.fn(() => mapInstance),
     Marker: jest.fn(() => markerInstance),

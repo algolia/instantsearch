@@ -6,12 +6,12 @@ import replace from 'rollup-plugin-replace';
 import { uglify } from 'rollup-plugin-uglify';
 import filesize from 'rollup-plugin-filesize';
 
-const clear = x => x.filter(Boolean);
+const clear = (x) => x.filter(Boolean);
 
 const version = process.env.VERSION || 'UNRELEASED';
 const algolia = '© Algolia, inc.';
 const link = 'https://github.com/algolia/react-instantsearch';
-const createLicence = name =>
+const createBanner = (name) =>
   `/*! React InstantSearch${name} ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
@@ -47,7 +47,7 @@ const createConfiguration = ({ name, minify = false } = {}) => ({
     globals: {
       react: 'React',
     },
-    banner: createLicence(name),
+    banner: createBanner(name),
     sourcemap: true,
   },
   plugins: plugins.concat(
@@ -55,7 +55,7 @@ const createConfiguration = ({ name, minify = false } = {}) => ({
       minify &&
         uglify({
           output: {
-            preamble: createLicence(name),
+            preamble: createBanner(name),
           },
         }),
     ])

@@ -22,11 +22,11 @@ export const shallowEqual = (objA, objB) => {
   return true;
 };
 
-export const getDisplayName = Component =>
+export const getDisplayName = (Component) =>
   Component.displayName || Component.name || 'UnknownComponent';
 
 const resolved = Promise.resolve();
-export const defer = f => {
+export const defer = (f) => {
   resolved.then(f);
 };
 
@@ -34,7 +34,7 @@ const isPlainObject = (value: unknown): value is object =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
 export const removeEmptyKey = (obj: object) => {
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     const value = obj[key];
 
     if (!isPlainObject(value)) {
@@ -52,7 +52,7 @@ export const removeEmptyKey = (obj: object) => {
 };
 
 export const removeEmptyArraysFromObject = (obj: object) => {
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     const value = obj[key];
 
     if (Array.isArray(value) && value.length === 0) {
@@ -74,7 +74,7 @@ export function addQueryID(hits, queryID) {
   if (!queryID) {
     return hits;
   }
-  return hits.map(hit => ({
+  return hits.map((hit) => ({
     ...hit,
     __queryID: queryID,
   }));

@@ -45,7 +45,7 @@ class List extends Component {
   }
 
   onShowMoreClick = () => {
-    this.setState(state => ({
+    this.setState((state) => ({
       extended: !state.extended,
     }));
   };
@@ -78,7 +78,7 @@ class List extends Component {
           <ul className={this.props.cx('list', 'list--child')}>
             {item.items
               .slice(0, this.getLimit())
-              .map(child => this.renderItem(child, item))}
+              .map((child) => this.renderItem(child, item))}
           </ul>
         )}
       </li>
@@ -105,14 +105,8 @@ class List extends Component {
   }
 
   renderSearchBox() {
-    const {
-      cx,
-      searchForItems,
-      isFromSearch,
-      translate,
-      items,
-      selectItem,
-    } = this.props;
+    const { cx, searchForItems, isFromSearch, translate, items, selectItem } =
+      this.props;
 
     const noResults =
       items.length === 0 && this.state.query !== '' ? (
@@ -122,13 +116,13 @@ class List extends Component {
       <div className={cx('searchBox')}>
         <SearchBox
           currentRefinement={this.state.query}
-          refine={value => {
+          refine={(value) => {
             this.setState({ query: value });
             searchForItems(value);
           }}
           focusShortcuts={[]}
           translate={translate}
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
             if (isFromSearch && items.length > 0) {
@@ -162,7 +156,7 @@ class List extends Component {
         <ul className={cx('list', !canRefine && 'list--noRefinement')}>
           {items
             .slice(0, this.getLimit())
-            .map(item => this.renderItem(item, this.resetQuery))}
+            .map((item) => this.renderItem(item, this.resetQuery))}
         </ul>
         {this.renderShowMore()}
       </div>

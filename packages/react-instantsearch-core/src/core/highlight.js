@@ -22,12 +22,12 @@ function parseHighlightedAttribute({ preTag, postTag, highlightedValue = '' }) {
 
   if (postTag === preTag) {
     let isHighlighted = true;
-    splitByPreTag.forEach(split => {
+    splitByPreTag.forEach((split) => {
       elements.push({ value: split, isHighlighted });
       isHighlighted = !isHighlighted;
     });
   } else {
-    splitByPreTag.forEach(split => {
+    splitByPreTag.forEach((split) => {
       const splitByPostTag = split.split(postTag);
 
       elements.push({
@@ -76,7 +76,7 @@ export function parseAlgoliaHit({
     getPropertyByPath(hit[highlightProperty], attribute) || {};
 
   if (Array.isArray(highlightObject)) {
-    return highlightObject.map(item =>
+    return highlightObject.map((item) =>
       parseHighlightedAttribute({
         preTag,
         postTag,

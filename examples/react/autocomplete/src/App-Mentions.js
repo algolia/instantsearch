@@ -11,8 +11,8 @@ const AsyncMention = ({ hits, refine }) => (
     prefix="@"
     notFoundContent={'No suggestion'}
     placeholder="give someone an @-mention here"
-    suggestions={hits.map(hit => hit.name)}
-    onSearchChange={query => refine(query)}
+    suggestions={hits.map((hit) => hit.name)}
+    onSearchChange={(query) => refine(query)}
   />
 );
 

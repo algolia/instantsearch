@@ -33,7 +33,7 @@ Redo.propTypes = {
   refineWithInstance: PropTypes.func.isRequired,
 };
 
-const RedoWrapper = props => (
+const RedoWrapper = (props) => (
   <GeoSearchContext.Consumer>
     {({ hasMapMoveSinceLastRefine, refineWithInstance }) => (
       <Redo

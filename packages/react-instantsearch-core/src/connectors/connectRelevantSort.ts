@@ -1,4 +1,5 @@
-import createConnector, { ConnectedProps } from '../core/createConnector';
+import type { ConnectedProps } from '../core/createConnector';
+import createConnector from '../core/createConnector';
 import {
   refineValue,
   getCurrentRefinementValue,

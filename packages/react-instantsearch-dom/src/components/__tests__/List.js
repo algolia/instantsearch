@@ -9,7 +9,7 @@ describe('List', () => {
   const defaultProps = {
     items: [],
     canRefine: true,
-    renderItem: item => <span>{item.value}</span>,
+    renderItem: (item) => <span>{item.value}</span>,
     cx: (...args) => args.filter(Boolean).join(' '),
   };
 

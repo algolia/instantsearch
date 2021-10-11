@@ -89,7 +89,7 @@ class GoogleMaps extends Component {
   }
 
   componentWillUnmount() {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener) => {
       listener.remove();
     });
 

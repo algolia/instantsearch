@@ -1,7 +1,7 @@
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import connect from '../connectRange';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 let props;
 let params;
@@ -49,7 +49,10 @@ describe('connectRange', () => {
         min: 5,
         max: 10,
         currentRefinement: { min: 5, max: 10 },
-        count: [{ value: '5', count: 10 }, { value: '2', count: 20 }],
+        count: [
+          { value: '5', count: 10 },
+          { value: '2', count: 20 },
+        ],
         canRefine: true,
         precision: 2,
       });
@@ -77,7 +80,10 @@ describe('connectRange', () => {
         min: 0,
         max: 10,
         currentRefinement: { min: 0, max: 10 },
-        count: [{ value: '5', count: 10 }, { value: '2', count: 20 }],
+        count: [
+          { value: '5', count: 10 },
+          { value: '2', count: 20 },
+        ],
         canRefine: true,
         precision: 0,
       });
@@ -107,7 +113,10 @@ describe('connectRange', () => {
         min: 0.1,
         max: 9.9,
         currentRefinement: { min: 0.1, max: 9.9 },
-        count: [{ value: '5', count: 10 }, { value: '2', count: 20 }],
+        count: [
+          { value: '5', count: 10 },
+          { value: '2', count: 20 },
+        ],
         canRefine: true,
         precision: 2,
       });
@@ -135,7 +144,10 @@ describe('connectRange', () => {
         min: 0,
         max: 10,
         currentRefinement: { min: 0, max: 10 },
-        count: [{ value: '5', count: 10 }, { value: '2', count: 20 }],
+        count: [
+          { value: '5', count: 10 },
+          { value: '2', count: 20 },
+        ],
         canRefine: true,
         precision: 0,
       });
@@ -163,7 +175,10 @@ describe('connectRange', () => {
         min: 0.1,
         max: 9.6,
         currentRefinement: { min: 0.1, max: 9.6 },
-        count: [{ value: '5', count: 10 }, { value: '2', count: 20 }],
+        count: [
+          { value: '5', count: 10 },
+          { value: '2', count: 20 },
+        ],
         canRefine: true,
         precision: 1,
       });
@@ -191,7 +206,10 @@ describe('connectRange', () => {
         min: 0.12,
         max: 9.57,
         currentRefinement: { min: 0.12, max: 9.57 },
-        count: [{ value: '5', count: 10 }, { value: '2', count: 20 }],
+        count: [
+          { value: '5', count: 10 },
+          { value: '2', count: 20 },
+        ],
         canRefine: true,
         precision: 2,
       });
@@ -219,7 +237,10 @@ describe('connectRange', () => {
         min: 0.123,
         max: 9.568,
         currentRefinement: { min: 0.123, max: 9.568 },
-        count: [{ value: '5', count: 10 }, { value: '2', count: 20 }],
+        count: [
+          { value: '5', count: 10 },
+          { value: '2', count: 20 },
+        ],
         canRefine: true,
         precision: 3,
       });
@@ -1467,7 +1488,10 @@ describe('connectRange', () => {
         min: 5,
         max: 10,
         currentRefinement: { min: 5, max: 10 },
-        count: [{ value: '5', count: 10 }, { value: '2', count: 20 }],
+        count: [
+          { value: '5', count: 10 },
+          { value: '2', count: 20 },
+        ],
         canRefine: true,
         precision: 2,
       });

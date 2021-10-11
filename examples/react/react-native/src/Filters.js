@@ -96,23 +96,23 @@ class Refinements extends React.Component {
     this.mapping = {
       Categories: {
         attribute: 'category',
-        value: item => item.currentRefinement,
+        value: (item) => item.currentRefinement,
       },
       Type: {
         attribute: 'type',
-        value: item => {
-          const values = item.items.map(i => i.label).join(' - ');
+        value: (item) => {
+          const values = item.items.map((i) => i.label).join(' - ');
           return values;
         },
       },
       Price: {
         attribute: 'price',
-        value: item =>
+        value: (item) =>
           `From ${item.currentRefinement.min}$ to ${item.currentRefinement.max}$`,
       },
       Rating: {
         attribute: 'rating',
-        value: item =>
+        value: (item) =>
           `From ${item.currentRefinement.min} stars to ${item.currentRefinement.max} stars`,
       },
       ClearRefinements: {
@@ -123,7 +123,7 @@ class Refinements extends React.Component {
 
   _renderRow = ({ item: refinement }) => {
     const item = this.props.items.find(
-      i => i.attribute === this.mapping[refinement].attribute
+      (i) => i.attribute === this.mapping[refinement].attribute
     );
     const refinementValue = item ? this.mapping[refinement].value(item) : '-';
     const filtersRow =

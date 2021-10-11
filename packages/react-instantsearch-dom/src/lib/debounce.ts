@@ -12,7 +12,7 @@ export function debounce<TFunction extends Func>(
   wait: number
 ): DebouncedFunction<TFunction> {
   let lastTimeout: ReturnType<typeof setTimeout> | null = null;
-  return function(...args) {
+  return function (...args) {
     // @ts-ignore-next-line
     const that = this;
     return new Promise((resolve, reject) => {
@@ -21,9 +21,7 @@ export function debounce<TFunction extends Func>(
       }
       lastTimeout = setTimeout(() => {
         lastTimeout = null;
-        Promise.resolve(func.apply(that, args))
-          .then(resolve)
-          .catch(reject);
+        Promise.resolve(func.apply(that, args)).then(resolve).catch(reject);
       }, wait);
     });
   };

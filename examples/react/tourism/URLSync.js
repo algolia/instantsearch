@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import qs from 'qs';
 
 const updateAfter = 700;
-const searchStateToURL = searchState =>
+const searchStateToURL = (searchState) =>
   searchState ? `${window.location.pathname}?${qs.stringify(searchState)}` : '';
 
-const withURLSync = App =>
+const withURLSync = (App) =>
   class WithURLSync extends Component {
     state = {
       searchState: qs.parse(window.location.search.slice(1)),
@@ -25,7 +25,7 @@ const withURLSync = App =>
         searchState: state || {},
       });
 
-    onSearchStateChange = searchState => {
+    onSearchStateChange = (searchState) => {
       clearTimeout(this.debouncedSetState);
 
       this.debouncedSetState = setTimeout(() => {

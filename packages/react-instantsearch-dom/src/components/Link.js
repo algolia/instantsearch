@@ -7,7 +7,7 @@ export default class Link extends Component {
     onClick: PropTypes.func.isRequired,
   };
 
-  onClick = e => {
+  onClick = (e) => {
     if (isSpecialClick(e)) {
       return;
     }

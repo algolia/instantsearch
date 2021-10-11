@@ -7,11 +7,11 @@ describe('createInfiniteHitsSessionStorageCache', () => {
   delete window.sessionStorage;
 
   let store = {};
-  const getItem = jest.fn(key => store[key]);
+  const getItem = jest.fn((key) => store[key]);
   const setItem = jest.fn((key, value) => {
     store[key] = value;
   });
-  const removeItem = jest.fn(key => delete store[key]);
+  const removeItem = jest.fn((key) => delete store[key]);
   const defaultHits = [
     { objectID: 'a', __position: 0 },
     { objectID: 'b', __position: 1 },
@@ -20,6 +20,7 @@ describe('createInfiniteHitsSessionStorageCache', () => {
 
   beforeAll(() => {
     Object.defineProperty(window, 'sessionStorage', {
+      writable: true,
       value: {
         getItem,
         setItem,
@@ -39,7 +40,9 @@ describe('createInfiniteHitsSessionStorageCache', () => {
   });
 
   afterAll(() => {
-    window.sessionStorage = originalSessionStorage;
+    Object.defineProperty(window, 'sessionStorage', {
+      value: originalSessionStorage,
+    });
   });
 
   it('returns null initially', () => {

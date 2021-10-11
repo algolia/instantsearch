@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { translatable, Translate } from 'react-instantsearch-core';
+import type { Translate } from 'react-instantsearch-core';
+import { translatable } from 'react-instantsearch-core';
 import { createClassNames } from '../core/utils';
-import createVoiceSearchHelper, {
+import type {
   VoiceSearchHelper,
   VoiceListeningState,
   Status,
   SpeechRecognitionErrorCode,
 } from '../lib/voiceSearchHelper';
+import createVoiceSearchHelper from '../lib/voiceSearchHelper';
 const cx = createClassNames('VoiceSearch');
 
 type ButtonSvgProps = {
@@ -92,7 +94,7 @@ class VoiceSearch extends Component<VoiceSearchProps, VoiceListeningState> {
     this.voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak,
       language,
-      onQueryChange: query => refine(query),
+      onQueryChange: (query) => refine(query),
       onStateChange: () => {
         this.setState(this.voiceSearchHelper!.getState());
       },

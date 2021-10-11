@@ -63,12 +63,7 @@ describe('SortBy', () => {
 
     const selectedValue = wrapper.find('select');
     expect(selectedValue.find('option')).toHaveLength(4);
-    expect(
-      selectedValue
-        .find('option')
-        .first()
-        .text()
-    ).toBe('index name 1');
+    expect(selectedValue.find('option').first().text()).toBe('index name 1');
 
     selectedValue
       .find('select')
@@ -96,11 +91,6 @@ describe('SortBy', () => {
 
     const selectedValue = wrapper.find('select');
     expect(selectedValue.find('option')).toHaveLength(4);
-    expect(
-      selectedValue
-        .find('option')
-        .first()
-        .text()
-    ).toBe('index1');
+    expect(selectedValue.find('option').first().text()).toBe('index1');
   });
 });

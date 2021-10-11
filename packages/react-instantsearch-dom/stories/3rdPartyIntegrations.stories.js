@@ -44,13 +44,13 @@ class Range extends Component {
     }
   }
 
-  onValuesUpdated = sliderState => {
+  onValuesUpdated = (sliderState) => {
     this.setState({
       currentValues: { min: sliderState.values[0], max: sliderState.values[1] },
     });
   };
 
-  onChange = sliderState => {
+  onChange = (sliderState) => {
     if (
       this.props.currentRefinement.min !== sliderState.values[0] ||
       this.props.currentRefinement.max !== sliderState.values[1]

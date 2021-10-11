@@ -221,12 +221,12 @@ describe('Pagination', () => {
             next: 'NEXT',
             first: 'FIRST',
             last: 'LAST',
-            page: page => `PAGE_${(page + 1).toString()}`,
+            page: (page) => `PAGE_${(page + 1).toString()}`,
             ariaPrevious: 'ARIA_PREVIOUS',
             ariaNext: 'ARIA_NEXT',
             ariaFirst: 'ARIA_FIRST',
             ariaLast: 'ARIA_LAST',
-            ariaPage: page => `ARIA_PAGE_${(page + 1).toString()}`,
+            ariaPage: (page) => `ARIA_PAGE_${(page + 1).toString()}`,
           }}
           showLast
           padding={4}
@@ -264,14 +264,14 @@ describe('Pagination', () => {
 
     wrapper
       .find(Link)
-      .filterWhere(e => e.text() === '8')
+      .filterWhere((e) => e.text() === '8')
       .simulate('click');
 
     expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual(8);
     wrapper
       .find(Link)
-      .filterWhere(e => e.text() === '9')
+      .filterWhere((e) => e.text() === '9')
       .simulate('click');
     expect(refine.mock.calls).toHaveLength(2);
     const parameters = refine.mock.calls[1][0];
@@ -282,10 +282,7 @@ describe('Pagination', () => {
       .simulate('click');
     expect(refine.mock.calls).toHaveLength(3);
     expect(refine.mock.calls[2][0]).toEqual(8);
-    wrapper
-      .find('.ais-Pagination-item--nextPage')
-      .find(Link)
-      .simulate('click');
+    wrapper.find('.ais-Pagination-item--nextPage').find(Link).simulate('click');
     expect(refine.mock.calls).toHaveLength(4);
     expect(refine.mock.calls[3][0]).toEqual(10);
     wrapper
@@ -294,10 +291,7 @@ describe('Pagination', () => {
       .simulate('click');
     expect(refine.mock.calls).toHaveLength(5);
     expect(refine.mock.calls[4][0]).toEqual(1);
-    wrapper
-      .find('.ais-Pagination-item--lastPage')
-      .find(Link)
-      .simulate('click');
+    wrapper.find('.ais-Pagination-item--lastPage').find(Link).simulate('click');
     expect(refine.mock.calls).toHaveLength(6);
     expect(refine.mock.calls[5][0]).toEqual(20);
   });
@@ -305,7 +299,7 @@ describe('Pagination', () => {
   it('ignores special clicks', () => {
     const refine = jest.fn();
     const wrapper = mount(<Pagination {...DEFAULT_PROPS} refine={refine} />);
-    const el = wrapper.find(Link).filterWhere(e => e.text() === '8');
+    const el = wrapper.find(Link).filterWhere((e) => e.text() === '8');
     el.simulate('click', { button: 1 });
     el.simulate('click', { altKey: true });
     el.simulate('click', { ctrlKey: true });

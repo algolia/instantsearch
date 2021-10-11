@@ -1,6 +1,6 @@
 import connect from '../connectScrollTo';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 let props;
 describe('connectScrollTo', () => {

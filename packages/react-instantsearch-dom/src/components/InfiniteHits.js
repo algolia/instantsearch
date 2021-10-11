@@ -35,7 +35,7 @@ class InfiniteHits extends Component {
           </button>
         )}
         <ul className={cx('list')}>
-          {hits.map(hit => (
+          {hits.map((hit) => (
             <li key={hit.objectID} className={cx('item')}>
               <HitComponent hit={hit} />
             </li>
@@ -70,7 +70,7 @@ InfiniteHits.propTypes = {
 InfiniteHits.defaultProps = {
   className: '',
   showPrevious: false,
-  hitComponent: hit => (
+  hitComponent: (hit) => (
     <div
       style={{
         borderBottom: '1px solid #bbb',

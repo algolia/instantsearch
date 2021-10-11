@@ -3,7 +3,7 @@ import React from 'react';
 import algoliasearch from 'algoliasearch';
 import { InstantSearch, SearchBox, Index } from 'react-instantsearch-dom';
 import { render, cleanup } from '@testing-library/react';
-import { runAllMicroTasks } from '../../../../../test/utils';
+import { wait } from '../../../../../test/utils';
 
 // @ts-ignore: `version` is not present on Algoliasearch v3 type declaration
 const CLIENT_VERSION_LOWER_THAN_V4 = /^[0-3]\./.test(algoliasearch.version);
@@ -85,7 +85,7 @@ describe('InstantSearch', () => {
         </InstantSearch>
       );
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(requests).toHaveBeenCalledTimes(0);
     });
@@ -146,7 +146,7 @@ describe('InstantSearch', () => {
         </InstantSearch>
       );
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(requests).toHaveBeenCalledTimes(0);
     });
@@ -175,7 +175,7 @@ describe('InstantSearch', () => {
         </InstantSearch>
       );
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(requests).toHaveBeenCalledTimes(1);
     });
@@ -210,7 +210,7 @@ describe('InstantSearch', () => {
         </InstantSearch>
       );
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
     });
@@ -246,7 +246,7 @@ describe('InstantSearch', () => {
         </InstantSearch>
       );
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(requests).toHaveBeenCalledTimes(1);
     });

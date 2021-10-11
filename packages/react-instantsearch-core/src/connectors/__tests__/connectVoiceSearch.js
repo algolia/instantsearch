@@ -1,7 +1,7 @@
 import connect from '../connectVoiceSearch';
 import { SearchParameters } from 'algoliasearch-helper';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 describe('connectVoiceSearch', () => {
   describe('single index', () => {

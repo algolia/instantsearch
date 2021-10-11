@@ -27,7 +27,7 @@ const searchClient = algoliasearch(
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
-const App = props => (
+const App = (props) => (
   <InstantSearch
     searchClient={searchClient}
     indexName="airbnb"
@@ -86,17 +86,17 @@ function Filters() {
             apiKey="AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ"
             endpoint="https://maps.googleapis.com/maps/api/js?v=weekly"
           >
-            {google => (
+            {(google) => (
               <GeoSearch google={google} minZoom={2}>
                 {({ hits }) => (
                   <Fragment>
-                    {hits.map(hit => (
+                    {hits.map((hit) => (
                       <Marker key={hit.objectID} hit={hit} />
                     ))}
                     <ClearRefinements
                       className="ClearGeoRefinement"
-                      transformItems={items =>
-                        items.filter(item => item.id === 'boundingBox')
+                      transformItems={(items) =>
+                        items.filter((item) => item.id === 'boundingBox')
                       }
                       translations={{
                         reset: 'Clear the map refinement',
@@ -145,8 +145,8 @@ OptionCapacity.propTypes = {
 
 const CapacitySelector = connectNumericMenu(
   ({ items, currentRefinement, refine }) => {
-    const selectValue = e => refine(e.target.value);
-    const options = items.map(item => (
+    const selectValue = (e) => refine(e.target.value);
+    const options = items.map((item) => (
       <OptionCapacity
         label={item.label}
         value={item.value}
@@ -182,7 +182,7 @@ function DatesAndGuest() {
 
 const RoomType = connectRefinementList(({ items, refine }) => {
   const sortedItems = items.sort((i1, i2) => i1.label.localeCompare(i2.label));
-  const hitComponents = sortedItems.map(item => {
+  const hitComponents = sortedItems.map((item) => {
     const selectedClassName = item.isRefined
       ? ' ais-refinement-list--item__active'
       : '';
@@ -192,7 +192,7 @@ const RoomType = connectRefinementList(({ items, refine }) => {
         <div>
           <label
             className="ais-refinement-list--label"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               refine(item.value);
             }}
@@ -230,7 +230,7 @@ function Price() {
 }
 
 const MyHits = connectHits(({ hits }) => {
-  const hs = hits.map(hit => <HitComponent key={hit.objectID} hit={hit} />);
+  const hs = hits.map((hit) => <HitComponent key={hit.objectID} hit={hit} />);
   return <div id="hits">{hs}</div>;
 });
 
@@ -311,13 +311,13 @@ class Range extends Component {
     }
   }
 
-  onValuesUpdated = sliderState => {
+  onValuesUpdated = (sliderState) => {
     this.setState({
       currentValues: { min: sliderState.values[0], max: sliderState.values[1] },
     });
   };
 
-  onChange = sliderState => {
+  onChange = (sliderState) => {
     if (
       this.props.currentRefinement.min !== sliderState.values[0] ||
       this.props.currentRefinement.max !== sliderState.values[1]

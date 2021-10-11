@@ -1,10 +1,10 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import withGoogleMaps, { WithGoogleMapsProps } from '../withGoogleMaps';
-import GoogleMapsContext, {
-  GoogleMapsContextState,
-} from '../GoogleMapsContext';
+import type { WithGoogleMapsProps } from '../withGoogleMaps';
+import withGoogleMaps from '../withGoogleMaps';
+import type { GoogleMapsContextState } from '../GoogleMapsContext';
+import GoogleMapsContext from '../GoogleMapsContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -36,7 +36,10 @@ describe('withGoogleMaps', () => {
 
     const Fake = withGoogleMaps(({ google }: Props) => {
       const heatmap = new google.maps.visualization.HeatmapLayer({
-        data: [10, 20, 30],
+        // Google Maps expects `LatLng | WeightedLocation` but we don't have access to the whole `google`
+        // instance in the test.
+        // We use `data` just to make sure that `Fake` correctly calls `HeatmapLayer` so the type issue is fine.
+        data: [10, 20, 30] as any,
         radius: 50,
       });
 

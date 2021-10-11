@@ -1,9 +1,10 @@
 import { SearchParameters } from 'algoliasearch-helper';
-import {
+import type {
   ConnectorDescription,
   ConnectedProps,
 } from '../../core/createConnector';
-import connectReal, { QueryRulesProps } from '../connectQueryRules';
+import type { QueryRulesProps } from '../connectQueryRules';
+import connectReal from '../connectQueryRules';
 
 jest.mock(
   '../../core/createConnector',
@@ -16,9 +17,9 @@ const connect: any = connectReal;
 
 describe('connectQueryRules', () => {
   const defaultProps: QueryRulesProps = {
-    transformItems: items => items,
+    transformItems: (items) => items,
     trackedFilters: {},
-    transformRuleContexts: ruleContexts => ruleContexts,
+    transformRuleContexts: (ruleContexts) => ruleContexts,
   };
 
   describe('single index', () => {
@@ -128,7 +129,7 @@ describe('connectQueryRules', () => {
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
-            price: values => values,
+            price: (values) => values,
           },
         };
         const searchState = {};
@@ -147,7 +148,7 @@ describe('connectQueryRules', () => {
         const props: QueryRulesProps = {
           ...defaultProps,
           trackedFilters: {
-            price: values => values,
+            price: (values) => values,
           },
         };
 
@@ -165,7 +166,7 @@ describe('connectQueryRules', () => {
       });
 
       it('sets ruleContexts based on range', () => {
-        const priceSpy = jest.fn(values => values);
+        const priceSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
@@ -195,7 +196,7 @@ describe('connectQueryRules', () => {
       });
 
       it('sets ruleContexts based on refinementList', () => {
-        const fruitSpy = jest.fn(values => values);
+        const fruitSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
@@ -222,7 +223,7 @@ describe('connectQueryRules', () => {
       });
 
       it('sets ruleContexts based on hierarchicalMenu', () => {
-        const productsSpy = jest.fn(values => values);
+        const productsSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
@@ -248,7 +249,7 @@ describe('connectQueryRules', () => {
       });
 
       it('sets ruleContexts based on menu', () => {
-        const brandsSpy = jest.fn(values => values);
+        const brandsSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
@@ -272,7 +273,7 @@ describe('connectQueryRules', () => {
       });
 
       it('sets ruleContexts based on multiRange', () => {
-        const rankSpy = jest.fn(values => values);
+        const rankSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
@@ -299,8 +300,8 @@ describe('connectQueryRules', () => {
       });
 
       it('sets ruleContexts based on toggle', () => {
-        const freeShippingSpy = jest.fn(values => values);
-        const availableInStockSpy = jest.fn(values => values);
+        const freeShippingSpy = jest.fn((values) => values);
+        const availableInStockSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
@@ -331,7 +332,7 @@ describe('connectQueryRules', () => {
       });
 
       it('escapes all rule contexts before passing them to search parameters', () => {
-        const brandSpy = jest.fn(values => values);
+        const brandSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
@@ -382,7 +383,7 @@ describe('connectQueryRules', () => {
 
         expect(brandFacetRefinements).toHaveLength(11);
 
-        const brandSpy = jest.fn(values => values);
+        const brandSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
@@ -439,14 +440,14 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
 
     describe('transformRuleContexts', () => {
       it('transform rule contexts before adding them to search parameters', () => {
-        const priceSpy = jest.fn(values => values);
+        const priceSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsSingleIndex,
           trackedFilters: {
             price: priceSpy,
           },
-          transformRuleContexts: rules =>
-            rules.map(rule => rule.replace('ais-', 'transformed-')),
+          transformRuleContexts: (rules) =>
+            rules.map((rule) => rule.replace('ais-', 'transformed-')),
         };
         const searchState = {
           range: {
@@ -590,7 +591,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
       });
 
       it('sets ruleContexts based on range', () => {
-        const priceSpy = jest.fn(values => values);
+        const priceSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsMultiIndex,
           trackedFilters: {
@@ -627,7 +628,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsMultiIndex,
           trackedFilters: {
-            price: values => values,
+            price: (values) => values,
           },
         };
         const searchState = {};
@@ -644,14 +645,14 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
 
     describe('transformRuleContexts', () => {
       it('transform rule contexts before adding them to search parameters', () => {
-        const priceSpy = jest.fn(values => values);
+        const priceSpy = jest.fn((values) => values);
         const props: ConnectedProps<QueryRulesProps> = {
           ...defaultPropsMultiIndex,
           trackedFilters: {
             price: priceSpy,
           },
-          transformRuleContexts: rules =>
-            rules.map(rule => rule.replace('ais-', 'transformed-')),
+          transformRuleContexts: (rules) =>
+            rules.map((rule) => rule.replace('ais-', 'transformed-')),
         };
         const searchState = {
           indices: {

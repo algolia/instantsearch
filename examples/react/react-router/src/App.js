@@ -22,12 +22,12 @@ const searchClient = algoliasearch(
 
 const DEBOUNCE_TIME = 700;
 
-const createURL = state => `?${qs.stringify(state)}`;
+const createURL = (state) => `?${qs.stringify(state)}`;
 
 const searchStateToUrl = (location, searchState) =>
   searchState ? `${location.pathname}${createURL(searchState)}` : '';
 
-const urlToSearchState = location => qs.parse(location.search.slice(1));
+const urlToSearchState = (location) => qs.parse(location.search.slice(1));
 
 function App() {
   const location = useLocation();
@@ -43,8 +43,7 @@ function App() {
     if (JSON.stringify(searchState) !== JSON.stringify(nextSearchState)) {
       setSearchState(nextSearchState);
     }
-
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   function onSearchStateChange(nextSearchState) {

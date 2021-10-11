@@ -1,6 +1,6 @@
 import connectReal from '../connectHitInsights';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 // our mock implementation is diverging from the regular createConnector,
 // so we redefine it as `any` here, since we have no more information
 // @TODO: refactor these tests to work better with TS

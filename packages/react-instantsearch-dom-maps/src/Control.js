@@ -48,7 +48,7 @@ Control.propTypes = {
   refineWithInstance: PropTypes.func.isRequired,
 };
 
-const ControlWrapper = props => (
+const ControlWrapper = (props) => (
   <GeoSearchContext.Consumer>
     {({
       isRefineOnMapMove,

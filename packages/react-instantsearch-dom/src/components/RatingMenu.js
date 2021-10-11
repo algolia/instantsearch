@@ -123,15 +123,8 @@ class RatingMenu extends Component {
   }
 
   render() {
-    const {
-      min,
-      max,
-      translate,
-      count,
-      createURL,
-      canRefine,
-      className,
-    } = this.props;
+    const { min, max, translate, count, createURL, canRefine, className } =
+      this.props;
 
     // min & max are always set when there is a results, otherwise it means
     // that we don't want to render anything since we don't have any values.
@@ -140,12 +133,12 @@ class RatingMenu extends Component {
     const inclusiveLength = limitMax - limitMin + 1;
 
     const values = count
-      .map(item => ({ ...item, value: parseFloat(item.value) }))
-      .filter(item => item.value >= limitMin && item.value <= limitMax);
+      .map((item) => ({ ...item, value: parseFloat(item.value) }))
+      .filter((item) => item.value >= limitMin && item.value <= limitMax);
 
     const items = range({ start: 0, end: Math.max(inclusiveLength, 0) })
-      .map(index => {
-        const element = find(values, item => item.value === limitMax - index);
+      .map((index) => {
+        const element = find(values, (item) => item.value === limitMax - index);
         const placeholder = { value: limitMax - index, count: 0, total: 0 };
 
         return element || placeholder;

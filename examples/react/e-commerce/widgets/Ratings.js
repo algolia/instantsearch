@@ -7,8 +7,8 @@ const Ratings = ({ currentRefinement, refine, createURL, count }) => {
     const value = 4 - ratingIndex;
 
     const itemsCount = count
-      .filter(countObj => value <= parseInt(countObj.value, 10))
-      .map(countObj => countObj.count)
+      .filter((countObj) => value <= parseInt(countObj.value, 10))
+      .map((countObj) => countObj.count)
       .reduce((sum, currentCount) => sum + currentCount, 0);
 
     return {
@@ -24,7 +24,7 @@ const Ratings = ({ currentRefinement, refine, createURL, count }) => {
         {ratings.map((rating, ratingIndex) => {
           const isRatingSelected =
             ratings.every(
-              currentRating => currentRating.value !== currentRefinement.min
+              (currentRating) => currentRating.value !== currentRefinement.min
             ) || rating.value === currentRefinement.min;
 
           return (
@@ -39,7 +39,7 @@ const Ratings = ({ currentRefinement, refine, createURL, count }) => {
                 className="ais-RatingMenu-link"
                 aria-label={`${rating.value} & up`}
                 href={createURL(rating.value)}
-                onClick={event => {
+                onClick={(event) => {
                   event.preventDefault();
 
                   if (currentRefinement.min === rating.value) {

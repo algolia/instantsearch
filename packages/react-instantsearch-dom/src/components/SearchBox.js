@@ -134,7 +134,7 @@ class SearchBox extends Component {
       ? this.props.currentRefinement
       : this.state.query;
 
-  onInputMount = input => {
+  onInputMount = (input) => {
     this.input = input;
     if (!this.props.inputRef) return;
     if (typeof this.props.inputRef === 'function') {
@@ -145,12 +145,12 @@ class SearchBox extends Component {
   };
 
   // From https://github.com/algolia/autocomplete.js/pull/86
-  onKeyDown = e => {
+  onKeyDown = (e) => {
     if (!this.props.focusShortcuts) {
       return;
     }
 
-    const shortcuts = this.props.focusShortcuts.map(key =>
+    const shortcuts = this.props.focusShortcuts.map((key) =>
       typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key
     );
 
@@ -177,7 +177,7 @@ class SearchBox extends Component {
     e.preventDefault();
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
     e.stopPropagation();
     this.input.blur();
@@ -189,7 +189,7 @@ class SearchBox extends Component {
     return false;
   };
 
-  onChange = event => {
+  onChange = (event) => {
     const { searchAsYouType, refine, onChange } = this.props;
     const value = event.target.value;
 
@@ -204,7 +204,7 @@ class SearchBox extends Component {
     }
   };
 
-  onReset = event => {
+  onReset = (event) => {
     const { searchAsYouType, refine, onReset } = this.props;
 
     refine('');
@@ -246,7 +246,6 @@ class SearchBox extends Component {
     const isSearchStalled =
       this.props.showLoadingIndicator && this.props.isSearchStalled;
 
-    /* eslint-disable max-len */
     return (
       <div className={classNames(cx(''), className)}>
         <form
@@ -297,7 +296,6 @@ class SearchBox extends Component {
         </form>
       </div>
     );
-    /* eslint-enable */
   }
 }
 

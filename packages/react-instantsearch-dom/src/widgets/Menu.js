@@ -52,7 +52,7 @@ import Menu from '../components/Menu';
  * );
  */
 
-const MenuWidget = props => (
+const MenuWidget = (props) => (
   <PanelCallbackHandler {...props}>
     <Menu {...props} />
   </PanelCallbackHandler>

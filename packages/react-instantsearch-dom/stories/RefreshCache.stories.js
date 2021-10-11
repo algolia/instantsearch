@@ -127,7 +127,7 @@ class App extends Component {
     this.interval = setInterval(
       () =>
         this.setState(
-          prevState => ({
+          (prevState) => ({
             refresh: prevState.count === 5,
             count: prevState.count === 5 ? 0 : prevState.count + 1,
           }),

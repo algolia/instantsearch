@@ -42,7 +42,7 @@ function getCurrentRefinement(props, searchState, context) {
     context,
     `${namespace}.${getId(props)}`,
     '',
-    currentRefinement => {
+    (currentRefinement) => {
       if (currentRefinement === '') {
         return '';
       }
@@ -138,7 +138,7 @@ export default createConnector({
       multiIndexContext: props.indexContextValue,
     });
 
-    const items = props.items.map(item => {
+    const items = props.items.map((item) => {
       const value = stringifyItem(item);
       return {
         label: item.label,
@@ -154,8 +154,8 @@ export default createConnector({
       results && results.getFacetByName(attribute)
         ? results.getFacetStats(attribute)
         : null;
-    const refinedItem = find(items, item => item.isRefined === true);
-    if (!items.some(item => item.value === '')) {
+    const refinedItem = find(items, (item) => item.isRefined === true);
+    if (!items.some((item) => item.value === '')) {
       items.push({
         value: '',
         isRefined: refinedItem === undefined,
@@ -173,7 +173,7 @@ export default createConnector({
       currentRefinement,
       canRefine:
         transformedItems.length > 0 &&
-        transformedItems.some(item => item.noRefinement === false),
+        transformedItems.some((item) => item.noRefinement === false),
     };
   },
 
@@ -232,13 +232,13 @@ export default createConnector({
     if (value !== '') {
       const { label } = find(
         props.items,
-        item => stringifyItem(item) === value
+        (item) => stringifyItem(item) === value
       );
       items.push({
         label: `${props.attribute}: ${label}`,
         attribute: props.attribute,
         currentRefinement: label,
-        value: nextState =>
+        value: (nextState) =>
           refine(props, nextState, '', {
             ais: props.contextValue,
             multiIndexContext: props.indexContextValue,

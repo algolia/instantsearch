@@ -37,7 +37,7 @@ import ClearRefinements from '../components/ClearRefinements';
  * );
  */
 
-const ClearRefinementsWidget = props => (
+const ClearRefinementsWidget = (props) => (
   <PanelCallbackHandler {...props}>
     <ClearRefinements {...props} />
   </PanelCallbackHandler>

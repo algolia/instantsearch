@@ -77,7 +77,7 @@ const Hit = ({ hit }) => (
   </article>
 );
 
-const App = props => {
+const App = (props) => {
   const containerRef = useRef(null);
   const headerRef = useRef(null);
 

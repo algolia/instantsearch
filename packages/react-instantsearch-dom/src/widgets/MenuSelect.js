@@ -40,7 +40,7 @@ import MenuSelect from '../components/MenuSelect';
  * );
  */
 
-const MenuSelectWidget = props => (
+const MenuSelectWidget = (props) => (
   <PanelCallbackHandler {...props}>
     <MenuSelect {...props} />
   </PanelCallbackHandler>

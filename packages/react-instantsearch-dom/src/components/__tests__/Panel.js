@@ -75,7 +75,7 @@ describe('Panel', () => {
     const wrapper = mount(
       <Panel>
         <PanelConsumer>
-          {setCanRefine => {
+          {(setCanRefine) => {
             provided = setCanRefine;
             return null;
           }}
@@ -90,7 +90,7 @@ describe('Panel', () => {
     const wrapper = mount(
       <Panel>
         <PanelConsumer>
-          {setCanRefine => (
+          {(setCanRefine) => (
             <button onClick={() => setCanRefine(false)}>
               call setCanRefine
             </button>

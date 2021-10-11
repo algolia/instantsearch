@@ -10,7 +10,7 @@ describe('translatable', () => {
     const Dummy = () => null;
     const defaultTranslations = {
       sup: 'hey',
-      thing: n => `${n} things`,
+      thing: (n) => `${n} things`,
     };
     const Translated = translatable(defaultTranslations)(Dummy);
     const { translate } = shallow(<Translated />)
@@ -24,7 +24,7 @@ describe('translatable', () => {
     const Dummy = () => null;
     const defaultTranslations = {
       sup: 'hey',
-      thing: n => `${n} things`,
+      thing: (n) => `${n} things`,
       fallbackThing: 'hi',
     };
     const translations = {

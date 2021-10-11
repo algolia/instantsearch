@@ -51,7 +51,7 @@ import RatingMenu from '../components/RatingMenu';
  * );
  */
 
-const RatingMenuWidget = props => (
+const RatingMenuWidget = (props) => (
   <PanelCallbackHandler {...props}>
     <RatingMenu {...props} />
   </PanelCallbackHandler>

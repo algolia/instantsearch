@@ -97,7 +97,7 @@ describe('createInstantSearchManager', () => {
       });
 
       expect(Object.keys(searchClient.cache)).toHaveLength(1);
-      Object.keys(searchClient.cache).forEach(key => {
+      Object.keys(searchClient.cache).forEach((key) => {
         expect(typeof searchClient.cache[key]).toBe('string');
         expect(JSON.parse(searchClient.cache[key])).toEqual({
           results: [
@@ -162,7 +162,7 @@ describe('createInstantSearchManager', () => {
       });
 
       expect(Object.keys(searchClient.cache)).toHaveLength(1);
-      Object.keys(searchClient.cache).forEach(key => {
+      Object.keys(searchClient.cache).forEach((key) => {
         expect(typeof searchClient.cache[key]).toBe('string');
         expect(JSON.parse(searchClient.cache[key])).toEqual({
           results: [
@@ -766,10 +766,9 @@ describe('createInstantSearchManager', () => {
         </InstantSearch>
       );
 
-      const {
-        mainParameters,
-        derivedParameters,
-      } = wrapper.instance().state.instantSearchManager.getSearchParameters();
+      const { mainParameters, derivedParameters } = wrapper
+        .instance()
+        .state.instantSearchManager.getSearchParameters();
 
       expect(mainParameters).toEqual(
         expect.objectContaining({
@@ -839,10 +838,9 @@ describe('createInstantSearchManager', () => {
         </InstantSearch>
       );
 
-      const {
-        mainParameters,
-        derivedParameters,
-      } = wrapper.instance().state.instantSearchManager.getSearchParameters();
+      const { mainParameters, derivedParameters } = wrapper
+        .instance()
+        .state.instantSearchManager.getSearchParameters();
 
       expect(mainParameters).toEqual(
         expect.objectContaining({

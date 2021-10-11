@@ -1,12 +1,9 @@
-import React, { Component, ReactType } from 'react';
+import type { ReactType } from 'react';
+import React, { Component } from 'react';
 import isEqual from 'react-fast-compare';
 import { shallowEqual, getDisplayName, removeEmptyKey } from './utils';
-import {
-  InstantSearchConsumer,
-  InstantSearchContext,
-  IndexConsumer,
-  IndexContext,
-} from './context';
+import type { InstantSearchContext, IndexContext } from './context';
+import { InstantSearchConsumer, IndexConsumer } from './context';
 
 export type ConnectorDescription = {
   displayName: string;
@@ -126,9 +123,8 @@ export function createConnectorWithoutContext(
         });
 
         if (isWidget) {
-          this.unregisterWidget = this.props.contextValue.widgetsManager.registerWidget(
-            this
-          );
+          this.unregisterWidget =
+            this.props.contextValue.widgetsManager.registerWidget(this);
         }
       }
 
@@ -352,28 +348,27 @@ export function createConnectorWithoutContext(
   };
 }
 
-const createConnectorWithContext = (connectorDesc: ConnectorDescription) => (
-  Composed: ReactType
-) => {
-  const Connector = createConnectorWithoutContext(connectorDesc)(Composed);
+const createConnectorWithContext =
+  (connectorDesc: ConnectorDescription) => (Composed: ReactType) => {
+    const Connector = createConnectorWithoutContext(connectorDesc)(Composed);
 
-  const ConnectorWrapper: React.FC<any> = props => (
-    <InstantSearchConsumer>
-      {contextValue => (
-        <IndexConsumer>
-          {indexContextValue => (
-            <Connector
-              contextValue={contextValue}
-              indexContextValue={indexContextValue}
-              {...props}
-            />
-          )}
-        </IndexConsumer>
-      )}
-    </InstantSearchConsumer>
-  );
+    const ConnectorWrapper: React.FC<any> = (props) => (
+      <InstantSearchConsumer>
+        {(contextValue) => (
+          <IndexConsumer>
+            {(indexContextValue) => (
+              <Connector
+                contextValue={contextValue}
+                indexContextValue={indexContextValue}
+                {...props}
+              />
+            )}
+          </IndexConsumer>
+        )}
+      </InstantSearchConsumer>
+    );
 
-  return ConnectorWrapper;
-};
+    return ConnectorWrapper;
+  };
 
 export default createConnectorWithContext;

@@ -15,10 +15,10 @@ describe('Connector', () => {
     refine: () => {},
   };
 
-  const lastRenderArgs = fn => fn.mock.calls[fn.mock.calls.length - 1][0];
+  const lastRenderArgs = (fn) => fn.mock.calls[fn.mock.calls.length - 1][0];
 
   it('expect to call children with props', () => {
-    const children = jest.fn(x => x);
+    const children = jest.fn((x) => x);
 
     const props = {
       ...defaultProps,
@@ -41,7 +41,7 @@ describe('Connector', () => {
   });
 
   it('expect to call children with refine on map move disabled', () => {
-    const children = jest.fn(x => x);
+    const children = jest.fn((x) => x);
 
     const props = {
       ...defaultProps,
@@ -151,7 +151,7 @@ describe('Connector', () => {
 
   describe('setMapMoveSinceLastRefine', () => {
     it('expect to update the state with the given value', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -165,7 +165,7 @@ describe('Connector', () => {
     });
 
     it('expect to only update the state when the given is different', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -202,7 +202,7 @@ describe('Connector', () => {
 
   describe('toggleRefineOnMapMove', () => {
     it('expect to update the state with the invert of previous value (true)', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,

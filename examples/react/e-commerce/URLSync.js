@@ -1,4 +1,4 @@
-/* eslint @typescript-eslint/camelcase: ["error", { allow: ["free_shipping"] }], complexity: off */
+/* eslint-disable complexity */
 
 import React, { Component } from 'react';
 import qs from 'qs';
@@ -61,7 +61,7 @@ function getCategoryName(slug) {
     .replace(/\//g, ' > ');
 }
 
-const searchStateToURL = searchState => {
+const searchStateToURL = (searchState) => {
   const routeState = {
     query: searchState.query,
     page: String(searchState.page),
@@ -76,8 +76,9 @@ const searchStateToURL = searchState => {
     price:
       searchState.range &&
       searchState.range.price &&
-      `${searchState.range.price.min || ''}:${searchState.range.price.max ||
-        ''}`,
+      `${searchState.range.price.min || ''}:${
+        searchState.range.price.max || ''
+      }`,
     free_shipping:
       (searchState.toggle && String(searchState.toggle.free_shipping)) ||
       undefined,
@@ -146,7 +147,7 @@ const searchStateToURL = searchState => {
   return `${baseUrl}/${categoryPath}${queryString}${hash}`;
 };
 
-const urlToSearchState = location => {
+const urlToSearchState = (location) => {
   const pathnameMatches = location.pathname.match(/search\/(.*?)\/?$/);
   const category = getCategoryName(
     (pathnameMatches && pathnameMatches[1]) || ''
@@ -211,7 +212,7 @@ const urlToSearchState = location => {
   return searchState;
 };
 
-const withURLSync = App =>
+const withURLSync = (App) =>
   class WithURLSync extends Component {
     state = {
       searchState: urlToSearchState(window.location),
@@ -231,7 +232,7 @@ const withURLSync = App =>
         searchState: state || {},
       });
 
-    onSearchStateChange = searchState => {
+    onSearchStateChange = (searchState) => {
       clearTimeout(this.debouncedSetState);
 
       this.debouncedSetState = setTimeout(() => {

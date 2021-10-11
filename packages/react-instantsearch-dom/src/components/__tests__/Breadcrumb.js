@@ -117,34 +117,19 @@ describe('Breadcrumb', () => {
 
     expect(breadcrumb.children()).toHaveLength(4);
 
-    breadcrumb
-      .children()
-      .first()
-      .find(Link)
-      .simulate('click');
+    breadcrumb.children().first().find(Link).simulate('click');
     expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual();
 
-    breadcrumb
-      .children()
-      .at(1)
-      .find(Link)
-      .simulate('click');
+    breadcrumb.children().at(1).find(Link).simulate('click');
     expect(refine.mock.calls).toHaveLength(2);
     expect(refine.mock.calls[1][0]).toEqual('white');
 
-    breadcrumb
-      .children()
-      .at(2)
-      .find(Link)
-      .simulate('click');
+    breadcrumb.children().at(2).find(Link).simulate('click');
     expect(refine.mock.calls).toHaveLength(3);
     expect(refine.mock.calls[2][0]).toEqual('white > white1');
 
-    const lastItem = breadcrumb
-      .children()
-      .at(3)
-      .find(Link);
+    const lastItem = breadcrumb.children().at(3).find(Link);
 
     expect(lastItem).toHaveLength(0);
 
@@ -182,18 +167,9 @@ describe('Breadcrumb', () => {
 
     expect(breadcrumb.children()).toHaveLength(4);
 
-    breadcrumb
-      .children()
-      .first()
-      .find(Link)
-      .simulate('click');
+    breadcrumb.children().first().find(Link).simulate('click');
     expect(refine.mock.calls).toHaveLength(0);
-    expect(
-      wrapper
-        .find('a')
-        .first()
-        .prop('href')
-    ).toEqual('www.algolia.com');
+    expect(wrapper.find('a').first().prop('href')).toEqual('www.algolia.com');
 
     wrapper.unmount();
   });

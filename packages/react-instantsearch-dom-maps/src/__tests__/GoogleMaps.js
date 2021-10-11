@@ -26,12 +26,14 @@ describe('GoogleMaps', () => {
     boundingBox: null,
   };
 
-  const simulateMapReadyEvent = google => {
+  const simulateMapReadyEvent = (google) => {
     google.maps.event.addListenerOnce.mock.calls[0][2]();
   };
 
   const simulateEvent = (fn, eventName, event) => {
-    fn.addListener.mock.calls.find(call => call.includes(eventName))[1](event);
+    fn.addListener.mock.calls.find((call) => call.includes(eventName))[1](
+      event
+    );
   };
 
   it('expect render correctly without the map rendered', () => {
@@ -237,7 +239,7 @@ describe('GoogleMaps', () => {
       expect(props.onIdle).toHaveBeenCalledTimes(0);
     });
 
-    ['center_changed', 'zoom_changed', 'dragstart'].forEach(eventName => {
+    ['center_changed', 'zoom_changed', 'dragstart'].forEach((eventName) => {
       it(`expect to call change callback on "${eventName}"`, () => {
         const mapInstance = createFakeMapInstance();
         const google = createFakeGoogleReference({
@@ -620,7 +622,7 @@ describe('GoogleMaps', () => {
 
       wrapper.unmount();
 
-      internalListeners.forEach(listener => {
+      internalListeners.forEach((listener) => {
         expect(listener.remove).toHaveBeenCalledTimes(1);
       });
     });

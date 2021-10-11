@@ -189,8 +189,8 @@ const AutoComplete = connectAutoComplete(
       multiSection={true}
       onSuggestionsFetchRequested={({ value }) => refine(value)}
       onSuggestionsClearRequested={() => refine('')}
-      getSuggestionValue={hit => hit.name}
-      renderSuggestion={hit =>
+      getSuggestionValue={(hit) => hit.name}
+      renderSuggestion={(hit) =>
         hit.brand ? <Product hit={hit} /> : <CategoryOrBrand hit={hit} />
       }
       inputProps={{
@@ -198,14 +198,14 @@ const AutoComplete = connectAutoComplete(
         value: currentRefinement,
         onChange: () => {},
       }}
-      renderSectionTitle={section => section.index}
-      getSectionSuggestions={section => section.hits}
+      renderSectionTitle={(section) => section.index}
+      getSectionSuggestions={(section) => section.hits}
     />
   )
 );
 
 const CustomCategoriesOrBrands = connectHits(({ hits }) => {
-  const categoryOrBrand = hits.map(hit => (
+  const categoryOrBrand = hits.map((hit) => (
     <CategoryOrBrand hit={hit} key={hit.objectID} />
   ));
   return <div className="multi-index_hits">{categoryOrBrand}</div>;
@@ -222,7 +222,7 @@ CategoryOrBrand.propTypes = {
 };
 
 const CustomProducts = connectHits(({ hits }) => {
-  const products = hits.map(hit => <Product hit={hit} key={hit.objectID} />);
+  const products = hits.map((hit) => <Product hit={hit} key={hit.objectID} />);
   return <div className="multi-index_hits">{products}</div>;
 });
 

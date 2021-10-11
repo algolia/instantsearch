@@ -1,18 +1,18 @@
 import cx from 'classnames';
 
-export const createClassNames = (block: string, prefix = 'ais') => (
-  ...elements: string[]
-) => {
-  const suitElements = elements
-    .filter(element => element || element === '')
-    .map(element => {
-      const baseClassName = `${prefix}-${block}`;
+export const createClassNames =
+  (block: string, prefix = 'ais') =>
+  (...elements: string[]) => {
+    const suitElements = elements
+      .filter((element) => element || element === '')
+      .map((element) => {
+        const baseClassName = `${prefix}-${block}`;
 
-      return element ? `${baseClassName}-${element}` : baseClassName;
-    });
+        return element ? `${baseClassName}-${element}` : baseClassName;
+      });
 
-  return cx(suitElements);
-};
+    return cx(suitElements);
+  };
 
 export const isSpecialClick = (event: MouseEvent) => {
   const isMiddleClick = event.button === 1;

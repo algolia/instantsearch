@@ -200,14 +200,13 @@ class SearchBox extends Component {
       <View style={styles.searchBoxContainer}>
         <Image
           source={{
-            uri:
-              'https://www.algolia.com/static_assets/images/press/downloads/algolia-mark-blue.png',
+            uri: 'https://www.algolia.com/static_assets/images/press/downloads/algolia-mark-blue.png',
           }}
           style={styles.algoliaLogo}
         />
         <TextInput
           style={styles.searchBox}
-          onChangeText={text => {
+          onChangeText={(text) => {
             if (text === '') {
               this.props.clearFilter();
             }
@@ -327,7 +326,7 @@ const SuggestionsHits = connectHits(({ hits, onPressItem }) => (
   />
 ));
 
-const buildItemCategoryText = categoryText => (
+const buildItemCategoryText = (categoryText) => (
   <View style={styles.categoryTextContainer}>
     <Text style={styles.categoryTextIn}> in</Text>
     <Text style={styles.categoryText}> {categoryText}</Text>

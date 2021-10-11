@@ -1,6 +1,6 @@
 import connect from '../connectStateResults';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 describe('connectStateResults', () => {
   describe('single index', () => {

@@ -18,7 +18,7 @@ const ToggleRefinement = ({
         className={cx('checkbox')}
         type="checkbox"
         checked={currentRefinement}
-        onChange={event => refine(event.target.checked)}
+        onChange={(event) => refine(event.target.checked)}
       />
       <span className={cx('labelText')}>{label}</span>
     </label>

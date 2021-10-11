@@ -9,7 +9,7 @@ import {
   getResults,
 } from '../core/indexUtils';
 
-export const getId = props => props.attributes[0];
+export const getId = (props) => props.attributes[0];
 
 const namespace = 'hierarchicalMenu';
 
@@ -59,7 +59,7 @@ function getValue(path, props, searchState, context) {
 }
 
 function transformValue(value, props, searchState, context) {
-  return value.map(v => ({
+  return value.map((v) => ({
     label: v.name,
     value: getValue(v.path, props, searchState, context),
     count: v.count,
@@ -141,7 +141,7 @@ export default createConnector({
 
   propTypes: {
     attributes: (props, propName, componentName) => {
-      const isNotString = val => typeof val !== 'string';
+      const isNotString = (val) => typeof val !== 'string';
       if (
         !Array.isArray(props[propName]) ||
         props[propName].some(isNotString) ||
@@ -288,7 +288,7 @@ export default createConnector({
           {
             label: `${rootAttribute}: ${currentRefinement}`,
             attribute: rootAttribute,
-            value: nextState =>
+            value: (nextState) =>
               refine(props, nextState, '', {
                 ais: props.contextValue,
                 multiIndexContext: props.indexContextValue,

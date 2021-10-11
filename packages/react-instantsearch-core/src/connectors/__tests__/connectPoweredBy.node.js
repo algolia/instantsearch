@@ -4,7 +4,7 @@
 
 import connect from '../connectPoweredBy';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 describe('connectPoweredBy', () => {
   const { getProvidedProps } = connect;
@@ -13,8 +13,7 @@ describe('connectPoweredBy', () => {
     const props = getProvidedProps();
 
     expect(props).toEqual({
-      url:
-        'https://www.algolia.com/?utm_source=react-instantsearch&utm_medium=website&utm_content=&utm_campaign=poweredby',
+      url: 'https://www.algolia.com/?utm_source=react-instantsearch&utm_medium=website&utm_content=&utm_campaign=poweredby',
     });
   });
 });

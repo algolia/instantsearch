@@ -20,7 +20,7 @@ addDecorator(withA11y);
 const req = require.context('../stories', true, /\.stories\.(js|ts|tsx)$/);
 
 function loadStories() {
-  req.keys().forEach(filename => req(filename));
+  req.keys().forEach((filename) => req(filename));
 }
 
 configure(loadStories, module);

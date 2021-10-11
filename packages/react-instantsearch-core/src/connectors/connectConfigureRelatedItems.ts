@@ -1,8 +1,10 @@
-import algoliasearchHelper, {
+import type {
   PlainSearchParameters,
   SearchParameters,
 } from 'algoliasearch-helper';
-import createConnector, { ConnectedProps } from '../core/createConnector';
+import algoliasearchHelper from 'algoliasearch-helper';
+import type { ConnectedProps } from '../core/createConnector';
+import createConnector from '../core/createConnector';
 import {
   omit,
   getObjectType,
@@ -56,7 +58,7 @@ function createOptionalFilter({
 }
 
 const defaultProps: Partial<ConfigureRelatedItemsProps> = {
-  transformSearchParameters: x => ({ ...x }),
+  transformSearchParameters: (x) => ({ ...x }),
 };
 
 function getId(): string {
@@ -80,7 +82,7 @@ function getSearchParametersFromProps(
     if (Array.isArray(attributeValue)) {
       return [
         ...acc,
-        attributeValue.map(attributeSubValue => {
+        attributeValue.map((attributeSubValue) => {
           return createOptionalFilter({
             attributeName,
             attributeValue: attributeSubValue,
@@ -168,7 +170,7 @@ export default createConnector({
     const searchParametersKeys = Object.keys(searchParameters);
     const nonPresentKeys = this._searchParameters
       ? Object.keys(this._searchParameters).filter(
-          prop => searchParametersKeys.indexOf(prop) === -1
+          (prop) => searchParametersKeys.indexOf(prop) === -1
         )
       : [];
     this._searchParameters = searchParameters;

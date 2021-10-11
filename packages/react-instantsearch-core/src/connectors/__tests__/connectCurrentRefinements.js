@@ -1,6 +1,6 @@
 import connect from '../connectCurrentRefinements';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 const { refine } = connect;
 
@@ -72,21 +72,21 @@ describe('connectCurrentRefinements', () => {
   it('refine applies the selected filters clear method on searchState', () => {
     let searchState = refine({}, { wow: 'sweet' }, [
       {
-        value: nextState => ({ ...nextState, cool: 'neat' }),
+        value: (nextState) => ({ ...nextState, cool: 'neat' }),
       },
     ]);
     expect(searchState).toEqual({ wow: 'sweet', cool: 'neat' });
 
     searchState = refine({ clearsQuery: true }, { wow: 'sweet' }, [
       {
-        value: nextState => ({ ...nextState, cool: 'neat' }),
+        value: (nextState) => ({ ...nextState, cool: 'neat' }),
       },
     ]);
     expect(searchState).toEqual({ wow: 'sweet', cool: 'neat' });
   });
 
   it('deduplicates entries with transformItems', () => {
-    const transformItems = items =>
+    const transformItems = (items) =>
       items
         .map(({ id, index, ...rest }) => ({
           __dedupe: `${index}.${id}`,
@@ -99,7 +99,6 @@ describe('connectCurrentRefinements', () => {
           (current, index, array) =>
             index === 0 || current.__dedupe !== array[index - 1].__dedupe
         )
-        // eslint-disable-next-line no-unused-vars
         .map(({ __dedupe, ...item }) => item);
 
     const props = connect.getProvidedProps({ transformItems }, null, null, [

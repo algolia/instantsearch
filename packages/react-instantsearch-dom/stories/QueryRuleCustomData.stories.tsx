@@ -24,7 +24,7 @@ const stories = storiesOf('QueryRuleCustomData', module);
 
 const StoryHits = connectHits(({ hits }: { hits: MovieHit[] }) => (
   <div className="hits">
-    {hits.map(hit => (
+    {hits.map((hit) => (
       <div key={hit.objectID} className="hit">
         <div className="hit-picture">
           <img src={hit.image} />

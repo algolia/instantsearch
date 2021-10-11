@@ -39,11 +39,11 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google}>
               {({ hits }) => (
                 <Fragment>
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>
@@ -60,7 +60,7 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch
               google={google}
               defaultRefinement={{
@@ -76,7 +76,7 @@ stories
             >
               {({ hits }) => (
                 <Fragment>
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>
@@ -93,7 +93,7 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch
               google={google}
               enableRefine={false}
@@ -102,7 +102,7 @@ stories
             >
               {({ hits }) => (
                 <Fragment>
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>
@@ -122,7 +122,7 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch
               google={google}
               initialZoom={initialZoom}
@@ -130,7 +130,7 @@ stories
             >
               {({ hits }) => (
                 <Fragment>
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>
@@ -147,11 +147,11 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google} streetViewControl>
               {({ hits }) => (
                 <Fragment>
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>
@@ -168,11 +168,11 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google}>
               {({ hits }) => (
                 <Fragment>
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker
                       key={hit.objectID}
                       hit={hit}
@@ -194,11 +194,11 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google}>
               {({ hits }) => (
                 <Fragment>
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker
                       key={hit.objectID}
                       hit={hit}
@@ -219,13 +219,13 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google} enableRefineOnMapMove={false}>
               {({ hits }) => (
                 <Fragment>
                   <Redo />
 
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>
@@ -242,13 +242,13 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google}>
               {({ hits }) => (
                 <Fragment>
                   <Control />
 
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>
@@ -265,13 +265,13 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google} enableRefineOnMapMove={false}>
               {({ hits }) => (
                 <Fragment>
                   <Control />
 
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>
@@ -288,13 +288,13 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google}>
               {({ hits }) => (
                 <Fragment>
                   <Control />
 
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Fragment key={hit.objectID}>
                       <CustomMarker
                         hit={hit}
@@ -319,13 +319,13 @@ stories
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-          {google => (
+          {(google) => (
             <GeoSearch google={google}>
               {({ hits }) => (
                 <Fragment>
                   <Control />
 
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Fragment key={hit.objectID}>
                       <CustomMarker
                         hit={hit}
@@ -360,13 +360,13 @@ stories.add('with Places', () => (
 
     <Container>
       <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-        {google => (
+        {(google) => (
           <GeoSearch google={google} initialZoom={12}>
             {({ hits }) => (
               <Fragment>
                 <Control />
 
-                {hits.map(hit => (
+                {hits.map((hit) => (
                   <Marker key={hit.objectID} hit={hit} />
                 ))}
               </Fragment>
@@ -396,7 +396,7 @@ stories.add('with InfoWindow', () => {
       this.InfoWindow.open(marker.getMap(), marker);
     };
 
-    renderGeoHit = hit => (
+    renderGeoHit = (hit) => (
       <Marker
         key={hit.objectID}
         hit={hit}
@@ -432,7 +432,7 @@ stories.add('with InfoWindow', () => {
 
   return (
     <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-      {google => <Example google={google} />}
+      {(google) => <Example google={google} />}
     </GoogleMapsLoader>
   );
 });
@@ -440,7 +440,7 @@ stories.add('with InfoWindow', () => {
 stories.add('with hits communication (custom)', () => {
   const CustomHits = connectHits(({ hits, selectedHit, onHitOver }) => (
     <div className="hits">
-      {hits.map(hit => {
+      {hits.map((hit) => {
         const classNames = [
           'hit',
           'hit--airbnb',
@@ -473,12 +473,12 @@ stories.add('with hits communication (custom)', () => {
       selectedHit: null,
     };
 
-    onHitOver = hit =>
+    onHitOver = (hit) =>
       this.setState(() => ({
         selectedHit: hit,
       }));
 
-    renderGeoHit = hit => {
+    renderGeoHit = (hit) => {
       const { selectedHit } = this.state;
 
       const classNames = [
@@ -518,7 +518,7 @@ stories.add('with hits communication (custom)', () => {
 
           <Container>
             <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-              {google => (
+              {(google) => (
                 <GeoSearch google={google}>
                   {({ hits }) => (
                     <Fragment>{hits.map(this.renderGeoHit)}</Fragment>
@@ -563,11 +563,11 @@ stories.add('with unmount', () => {
           {visible && (
             <Container>
               <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-                {google => (
+                {(google) => (
                   <GeoSearch google={google}>
                     {({ hits }) => (
                       <Fragment>
-                        {hits.map(hit => (
+                        {hits.map((hit) => (
                           <Marker key={hit.objectID} hit={hit} />
                         ))}
                       </Fragment>

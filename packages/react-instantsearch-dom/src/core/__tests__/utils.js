@@ -65,16 +65,7 @@ describe('utils', () => {
       // (5000 - 1) / 500 = 9.998 so we want the array length to be rounded to 10.
       expect(utils.range({ start: 1, end: 5000, step: 500 })).toHaveLength(10);
       expect(utils.range({ start: 1, end: 5000, step: 500 })).toEqual([
-        500,
-        1000,
-        1500,
-        2000,
-        2500,
-        3000,
-        3500,
-        4000,
-        4500,
-        5000,
+        500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000,
       ]);
     });
   });
@@ -82,18 +73,18 @@ describe('utils', () => {
   describe('find', () => {
     test('returns the first match based on the comparator', () => {
       expect(
-        utils.find([1], function() {
+        utils.find([1], () => {
           return true;
         })
       ).toBe(1);
       expect(
-        utils.find([1, 2], function() {
+        utils.find([1, 2], () => {
           return true;
         })
       ).toBe(1);
 
       expect(
-        utils.find([{ nice: false }, { nice: true }], function(el) {
+        utils.find([{ nice: false }, { nice: true }], function (el) {
           return el.nice;
         })
       ).toEqual({ nice: true });
@@ -101,17 +92,17 @@ describe('utils', () => {
 
     test('returns undefined in non-found cases', () => {
       expect(
-        utils.find([], function() {
+        utils.find([], () => {
           return false;
         })
       ).toBeUndefined();
       expect(
-        utils.find(undefined, function() {
+        utils.find(undefined, () => {
           return false;
         })
       ).toBeUndefined();
 
-      expect(function() {
+      expect(() => {
         utils.find([1, 2, 3], undefined);
       }).toThrow();
     });

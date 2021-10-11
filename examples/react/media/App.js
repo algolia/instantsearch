@@ -19,7 +19,7 @@ const searchClient = algoliasearch(
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
-const App = props => (
+const App = (props) => (
   <InstantSearch
     searchClient={searchClient}
     indexName="movies"
@@ -62,7 +62,7 @@ const SearchBox = connectSearchBox(({ currentRefinement, refine }) => (
       <input
         type="text"
         value={currentRefinement}
-        onChange={e => refine(e.target.value)}
+        onChange={(e) => refine(e.target.value)}
         autoComplete="off"
         className="form-control"
       />
@@ -132,7 +132,7 @@ const Genres = ({ genres }) => (
   </p>
 );
 
-const Hit = hit => {
+const Hit = (hit) => {
   const { image, rating, year, genre } = hit.hit;
   return (
     <div className="hit media">
@@ -171,12 +171,12 @@ const Results = connectSearchBox(() => (
 
 const RefinementListLinks = connectRefinementList(
   ({ items, refine, createURL }) => {
-    const hitComponents = items.map(item => (
+    const hitComponents = items.map((item) => (
       <div className={item.isRefined ? ' active' : ''} key={item.label}>
         <a
           className="item"
           href={createURL(item.value)}
-          onClick={e => {
+          onClick={(e) => {
             e.preventDefault();
             refine(item.value);
           }}

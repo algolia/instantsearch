@@ -28,7 +28,7 @@ class App extends Component {
     searchState: this.props.searchState,
   };
 
-  onSearchStateChange = nextSearchState =>
+  onSearchStateChange = (nextSearchState) =>
     this.setState({ searchState: nextSearchState });
 
   render() {

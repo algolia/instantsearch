@@ -151,7 +151,7 @@ class Rating extends Component {
     const items = [];
     for (let i = max; i >= min; i--) {
       const hasCount =
-        count.filter(item => Number(item.value) === i).length > 0;
+        count.filter((item) => Number(item.value) === i).length > 0;
       const lastSelectableItem = count.reduce(
         (acc, item) =>
           item.value < acc.value || (!acc.value && hasCount) ? item : acc,
