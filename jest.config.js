@@ -10,4 +10,5 @@ module.exports = {
     '^react-instantsearch-(.*)$':
       '<rootDir>/packages/react-instantsearch-$1/src/',
   },
+  transformIgnorePatterns: ['node_modules/(?!(instantsearch.js)/)'],
 };
