@@ -71,6 +71,16 @@ const config = {
     'import/extensions': 'off',
     'eslint-comments/disable-enable-pair': 'off',
     'react/jsx-no-bind': 'off',
+    // We can't display an error message with the ESLint version we're using
+    // See https://github.com/eslint/eslint/pull/14580
+    'no-restricted-imports': [
+      'error',
+      {
+        // We disallow InstantSearch.js CJS imports to only use ESM and not
+        // end up having duplicated source code in our bundle.
+        patterns: ['instantsearch.js/cjs/*'],
+      },
+    ],
   },
   overrides: [
     {
