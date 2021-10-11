@@ -1,5 +1,5 @@
 import { connectMenu, connectDynamicWidgets } from '../..';
-import { index } from '../../../widgets';
+import { index, refinementList } from '../../../widgets';
 import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer';
 import {
   createDisposeOptions,
@@ -15,6 +15,9 @@ import {
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import instantsearch from '../../../index.es';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -627,7 +630,7 @@ describe('connectDynamicWidgets', () => {
   });
 
   describe('getWidgetSearchParameters', () => {
-    describe('wildcardFacets: true', () => {
+    describe('requestAllFacets: true', () => {
       test('adds facets *', () => {
         const widget = connectDynamicWidgets(() => {})({
           widgets: [],
@@ -678,6 +681,38 @@ describe('connectDynamicWidgets', () => {
           })
         );
       });
+
+      test('[integration] creates same client network request before and after a widget mounts', async () => {
+        const searchClient = createSearchClient();
+        const instantsearchInstance = instantsearch({
+          indexName: '123',
+          searchClient,
+        });
+        const widget = connectDynamicWidgets(() => {})({
+          // requestAllFacets: false,
+          transformItems() {
+            return ['fake-attribute'];
+          },
+          fallbackWidget({ attribute }) {
+            return refinementList({
+              attribute,
+              container: document.createElement('div'),
+            });
+          },
+          widgets: [],
+        });
+
+        instantsearchInstance.addWidgets([widget]);
+
+        instantsearchInstance.start();
+
+        await wait(0);
+
+        const search = castToJestMock(searchClient.search);
+
+        expect(search).toHaveBeenCalledTimes(2);
+        expect(search.mock.calls[0]).toEqual(search.mock.calls[1]);
+      });
     });
 
     describe('wildcardFacts: false', () => {
@@ -701,7 +736,7 @@ describe('connectDynamicWidgets', () => {
       test('does not replace facets to *', () => {
         const widget = connectDynamicWidgets(() => {})({
           widgets: [],
-          wildcardFacets: false,
+          requestAllFacets: false,
         });
 
         const searchParameters = widget.getWidgetSearchParameters!(
@@ -719,7 +754,7 @@ describe('connectDynamicWidgets', () => {
       test('does not remove *', () => {
         const widget = connectDynamicWidgets(() => {})({
           widgets: [],
-          wildcardFacets: false,
+          requestAllFacets: false,
         });
 
         const searchParameters = widget.getWidgetSearchParameters!(
