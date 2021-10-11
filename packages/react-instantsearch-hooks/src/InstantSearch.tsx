@@ -6,12 +6,16 @@ import { useInstantSearch } from './useInstantSearch';
 
 import type { UseInstantSearchProps } from './useInstantSearch';
 
-type InstantSearchProps = UseInstantSearchProps & {
+export type InstantSearchProps = UseInstantSearchProps & {
   children?: React.ReactNode;
 };
 
 export function InstantSearch({ children, ...props }: InstantSearchProps) {
   const search = useInstantSearch(props);
+
+  if (!search.started) {
+    return null;
+  }
 
   return (
     <InstantSearchContext.Provider value={search}>
