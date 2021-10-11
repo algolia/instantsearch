@@ -1,11 +1,9 @@
-/* eslint-disable import/no-commonjs */
-
 const isES = process.env.BABEL_ENV === 'es';
 const isRollup = process.env.BABEL_ENV === 'rollup';
 
-const clean = x => x.filter(Boolean);
+const clean = (x) => x.filter(Boolean);
 
-module.exports = api => {
+module.exports = (api) => {
   const isTest = api.env('test');
   const targets = {};
 
@@ -17,6 +15,7 @@ module.exports = api => {
 
   return {
     presets: [
+      '@babel/preset-typescript',
       [
         '@babel/preset-env',
         {
@@ -33,7 +32,6 @@ module.exports = api => {
     overrides: [
       {
         test: 'packages/*',
-        presets: ['@babel/preset-typescript'],
         plugins: [
           [
             '@babel/plugin-transform-runtime',

@@ -15,7 +15,7 @@ export function createConcurrentSafePromise() {
     basePromiseId++;
     const currentPromiseId = basePromiseId;
 
-    return Promise.resolve(promise).then(x => {
+    return Promise.resolve(promise).then((x) => {
       // The promise might take too long to resolve and get outdated. This would
       // result in resolving stale values.
       // When this happens, we ignore the promise value and return the one

@@ -22,7 +22,7 @@ class Provider extends Component {
   boundingBox = null;
   previousBoundingBox = null;
 
-  refineWithInstance = instance => {
+  refineWithInstance = (instance) => {
     const { refine } = this.props;
 
     const bounds = instance.getBounds();
@@ -73,11 +73,8 @@ class Provider extends Component {
   }
 
   onChange = () => {
-    const {
-      isRefineOnMapMove,
-      isRefineEnable,
-      setMapMoveSinceLastRefine,
-    } = this.props;
+    const { isRefineOnMapMove, isRefineEnable, setMapMoveSinceLastRefine } =
+      this.props;
 
     if (isRefineEnable) {
       setMapMoveSinceLastRefine(true);

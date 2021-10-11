@@ -52,7 +52,7 @@ stories
           Show previous
         </button>
         <ol>
-          {hits.map(hit => (
+          {hits.map((hit) => (
             <li key={hit.objectID}>{hit.name}</li>
           ))}
         </ol>

@@ -23,7 +23,7 @@ const searchClient = algoliasearch(
 );
 
 const THRESHOLD = 700;
-const createURL = state => `?${qs.stringify(state)}`;
+const createURL = (state) => `?${qs.stringify(state)}`;
 
 class App extends Component {
   state = {
@@ -42,7 +42,7 @@ class App extends Component {
     return null;
   }
 
-  onSearchStateChange = nextSearchState => {
+  onSearchStateChange = (nextSearchState) => {
     const newPush = Date.now();
 
     this.setState({ lastPush: newPush, searchState: nextSearchState }, () => {

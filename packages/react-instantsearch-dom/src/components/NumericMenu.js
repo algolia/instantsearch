@@ -26,7 +26,7 @@ class NumericMenu extends Component {
     className: '',
   };
 
-  renderItem = item => {
+  renderItem = (item) => {
     const { refine, translate } = this.props;
 
     return (
@@ -54,7 +54,7 @@ class NumericMenu extends Component {
         showMore={false}
         canRefine={canRefine}
         cx={cx}
-        items={items.map(item => ({ ...item, key: item.value }))}
+        items={items.map((item) => ({ ...item, key: item.value }))}
         className={className}
       />
     );

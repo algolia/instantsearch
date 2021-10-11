@@ -28,7 +28,7 @@ stories
       <Menu
         attribute="brand"
         searchable
-        transformItems={items =>
+        transformItems={(items) =>
           orderBy(
             items,
             ['isRefined', 'count', 'label'],
@@ -42,7 +42,7 @@ stories
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu.stories.js">
       <Menu
         attribute="brand"
-        transformItems={items =>
+        transformItems={(items) =>
           orderBy(items, ['label', 'count'], ['asc', 'desc'])
         }
       />

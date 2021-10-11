@@ -1,6 +1,6 @@
 import connect from '../connectBreadcrumb';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 let props;
 

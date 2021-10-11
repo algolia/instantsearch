@@ -20,7 +20,7 @@ export default class Select extends Component {
       .isRequired,
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.props.onSelect(e.target.value);
   };
 
@@ -34,7 +34,7 @@ export default class Select extends Component {
         value={selectedItem}
         onChange={this.onChange}
       >
-        {items.map(item => (
+        {items.map((item) => (
           <option
             className={cx('option')}
             key={item.key === undefined ? item.value : item.key}

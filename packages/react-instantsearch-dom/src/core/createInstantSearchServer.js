@@ -3,9 +3,9 @@ import { renderToString } from 'react-dom/server';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { version, HIGHLIGHT_TAGS } from 'react-instantsearch-core';
 
-const hasMultipleIndices = context => context && context.multiIndexContext;
+const hasMultipleIndices = (context) => context && context.multiIndexContext;
 
-const getIndexId = context =>
+const getIndexId = (context) =>
   hasMultipleIndices(context)
     ? context.multiIndexContext.targetedIndex
     : context.ais.mainTargetedIndex;
@@ -31,15 +31,15 @@ function createWidgetsCollector(accumulator) {
 
 function getMetadata(widgets) {
   return widgets
-    .filter(widget => widget.getMetadata)
-    .map(widget => {
+    .filter((widget) => widget.getMetadata)
+    .map((widget) => {
       return widget.getMetadata(widget.props, widget.searchState);
     });
 }
 
 const getSearchParameters = (indexName, widgets) => {
   const sharedParameters = widgets
-    .filter(widget => !hasMultipleIndices(widget.context))
+    .filter((widget) => !hasMultipleIndices(widget.context))
     .reduce(
       (acc, widget) =>
         widget.getSearchParameters(acc, widget.props, widget.searchState),
@@ -50,7 +50,7 @@ const getSearchParameters = (indexName, widgets) => {
     );
 
   const derivedParameters = widgets
-    .filter(widget => hasMultipleIndices(widget.context))
+    .filter((widget) => hasMultipleIndices(widget.context))
     .reduce((acc, widget) => {
       const indexId = getIndexId(widget.context);
 
@@ -91,7 +91,7 @@ function removeDuplicateQuery(params) {
 }
 
 function cleanRawResults(rawResults) {
-  return rawResults.map(res => {
+  return rawResults.map((res) => {
     return {
       ...res,
       params: removeDuplicateQuery(res.params),
@@ -100,7 +100,7 @@ function cleanRawResults(rawResults) {
 }
 
 const singleIndexSearch = (helper, parameters) =>
-  helper.searchOnce(parameters).then(res => ({
+  helper.searchOnce(parameters).then((res) => ({
     rawResults: cleanRawResults(res.content._rawResults),
     state: res.content._state,
   }));
@@ -119,7 +119,7 @@ const multiIndexSearch = (
       ...sharedParameters,
       ...mainParameters,
     }),
-    ...indexIds.map(indexId => {
+    ...indexIds.map((indexId) => {
       const parameters = derivedParameters[indexId];
 
       return algoliasearchHelper(client, parameters.index).searchOnce(
@@ -131,7 +131,7 @@ const multiIndexSearch = (
   // We attach `indexId` on the results to be able to reconstruct the object
   // on the client side. We cannot rely on `state.index` anymore because we
   // may have multiple times the same index.
-  return Promise.all(searches).then(results =>
+  return Promise.all(searches).then((results) =>
     [indexName, ...indexIds].map((indexId, i) => ({
       rawResults: cleanRawResults(results[i].content._rawResults),
       state: results[i].content._state,
@@ -140,7 +140,7 @@ const multiIndexSearch = (
   );
 };
 
-export const findResultsState = function(App, props) {
+export const findResultsState = function (App, props) {
   if (!props) {
     throw new Error(
       'The function `findResultsState` must be called with props: `findResultsState(App, props)`'
@@ -187,7 +187,7 @@ export const findResultsState = function(App, props) {
   }
 
   if (Object.keys(derivedParameters).length === 0) {
-    return singleIndexSearch(helper, sharedParameters).then(res => {
+    return singleIndexSearch(helper, sharedParameters).then((res) => {
       return {
         metadata,
         ...res,
@@ -201,7 +201,7 @@ export const findResultsState = function(App, props) {
     helper,
     sharedParameters,
     derivedParameters
-  ).then(results => {
+  ).then((results) => {
     return { metadata, results };
   });
 };

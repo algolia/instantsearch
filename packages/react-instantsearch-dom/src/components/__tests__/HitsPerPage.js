@@ -91,12 +91,7 @@ describe('HitsPerPage', () => {
 
     const selectedValue = wrapper.find('select');
     expect(selectedValue.find('option')).toHaveLength(4);
-    expect(
-      selectedValue
-        .find('option')
-        .first()
-        .text()
-    ).toBe('2 hits per page');
+    expect(selectedValue.find('option').first().text()).toBe('2 hits per page');
 
     selectedValue.find('select').simulate('change', { target: { value: '6' } });
 
@@ -117,11 +112,6 @@ describe('HitsPerPage', () => {
 
     const selectedValue = wrapper.find('select');
     expect(selectedValue.find('option')).toHaveLength(4);
-    expect(
-      selectedValue
-        .find('option')
-        .first()
-        .text()
-    ).toBe('2');
+    expect(selectedValue.find('option').first().text()).toBe('2');
   });
 });

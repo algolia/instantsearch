@@ -22,7 +22,7 @@ type Props = {
 
 const cx = createClassNames('Hits');
 
-const DefaultHitComponent: React.FC<HitProps> = props => (
+const DefaultHitComponent: React.FC<HitProps> = (props) => (
   <div
     style={{
       borderBottom: '1px solid #bbb',
@@ -43,7 +43,7 @@ const Hits: React.FC<Props> = ({
 }) => (
   <div className={classNames(cx(''), className)}>
     <ul className={cx('list')}>
-      {hits.map(hit => (
+      {hits.map((hit) => (
         <li className={cx('item')} key={hit.objectID}>
           <HitComponent hit={hit} />
         </li>

@@ -9,7 +9,7 @@ import { InstantSearchProvider } from '../context';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('createConnector', () => {
-  const createFakeState = props => ({
+  const createFakeState = (props) => ({
     widgets: {},
     results: {},
     resultsFacetValues: {},
@@ -21,21 +21,21 @@ describe('createConnector', () => {
     ...props,
   });
 
-  const createFakeStore = props => ({
+  const createFakeStore = (props) => ({
     getState: () => createFakeState(),
     setState() {},
     subscribe() {},
     ...props,
   });
 
-  const createFakeWidgetManager = props => ({
+  const createFakeWidgetManager = (props) => ({
     registerWidget() {},
     getWidgets() {},
     update() {},
     ...props,
   });
 
-  const createFakeContext = props => ({
+  const createFakeContext = (props) => ({
     onInternalStateUpdate() {},
     createHrefForState() {},
     onSearchForFacetValues() {},
@@ -48,7 +48,7 @@ describe('createConnector', () => {
 
   describe('state', () => {
     it('computes provided props', () => {
-      const getProvidedProps = jest.fn(props => ({
+      const getProvidedProps = jest.fn((props) => ({
         providedProps: props,
       }));
 
@@ -97,7 +97,7 @@ describe('createConnector', () => {
     });
 
     it('computes provided props on props change', () => {
-      const getProvidedProps = jest.fn(props => ({
+      const getProvidedProps = jest.fn((props) => ({
         providedProps: props,
       }));
 
@@ -132,7 +132,7 @@ describe('createConnector', () => {
     });
 
     it('computes provided props with the correct value for `canRender` on props change', () => {
-      const getProvidedProps = jest.fn(props => ({
+      const getProvidedProps = jest.fn((props) => ({
         providedProps: props,
       }));
 
@@ -288,7 +288,7 @@ describe('createConnector', () => {
     });
 
     it('does not compute provided props when props do not change', () => {
-      const getProvidedProps = jest.fn(props => ({
+      const getProvidedProps = jest.fn((props) => ({
         providedProps: props,
       }));
 
@@ -328,7 +328,7 @@ describe('createConnector', () => {
       const shouldComponentUpdate = jest.fn(() => true);
       const Connected = createConnectorWithoutContext({
         displayName: 'Connector',
-        getProvidedProps: props => props,
+        getProvidedProps: (props) => props,
         getMetadata: () => null,
         shouldComponentUpdate,
       })(() => null);
@@ -628,7 +628,7 @@ describe('createConnector', () => {
     });
 
     it('binds getSearchParameters to the connector instance with onSearchParameters', () => {
-      const getSearchParameters = jest.fn(function() {
+      const getSearchParameters = jest.fn(function () {
         return this;
       });
 
@@ -710,7 +710,7 @@ describe('createConnector', () => {
     });
 
     it('triggers an onSearchStateChange on props change with transitionState', () => {
-      const transitionState = jest.fn(function() {
+      const transitionState = jest.fn(function () {
         return this.props;
       });
 
@@ -811,7 +811,7 @@ describe('createConnector', () => {
     });
 
     it('calls onSearchStateChange with cleanUp on unmount', () => {
-      const cleanUp = jest.fn(function(props, searchState) {
+      const cleanUp = jest.fn(function (props, searchState) {
         return {
           instanceProps: this.props,
           providedProps: props,
@@ -941,7 +941,7 @@ describe('createConnector', () => {
 
   describe('getSearchParameters', () => {
     it('returns the widget search parameters when getSearchParameters is provided', () => {
-      const getSearchParameters = function(
+      const getSearchParameters = function (
         searchParameters,
         props,
         searchState
@@ -1031,7 +1031,7 @@ describe('createConnector', () => {
 
   describe('getMetadata', () => {
     it('returns the widget metadata when getMetadata is provided', () => {
-      const getMetadata = function(props, searchState) {
+      const getMetadata = function (props, searchState) {
         return {
           instanceProps: this.props,
           providedProps: props,
@@ -1096,7 +1096,7 @@ describe('createConnector', () => {
 
   describe('transitionState', () => {
     it('returns the widget transitionState when transitionState is provided', () => {
-      const transitionState = function(
+      const transitionState = function (
         props,
         previousSearchState,
         nextSearchState
@@ -1223,10 +1223,7 @@ describe('createConnector', () => {
 
       expect(onInternalStateUpdate).toHaveBeenCalledTimes(0);
 
-      wrapper
-        .find(Dummy)
-        .props()
-        .refine({ query: 'hello world' });
+      wrapper.find(Dummy).props().refine({ query: 'hello world' });
 
       expect(onInternalStateUpdate).toHaveBeenCalledTimes(1);
       expect(onInternalStateUpdate).toHaveBeenCalledWith({
@@ -1282,10 +1279,7 @@ describe('createConnector', () => {
 
       expect(createHrefForState).toHaveBeenCalledTimes(0);
 
-      wrapper
-        .find(Dummy)
-        .props()
-        .createURL({ query: 'hello world' });
+      wrapper.find(Dummy).props().createURL({ query: 'hello world' });
 
       expect(createHrefForState).toHaveBeenCalledTimes(1);
       expect(createHrefForState).toHaveBeenCalledWith({
@@ -1341,14 +1335,11 @@ describe('createConnector', () => {
 
       expect(onSearchForFacetValues).toHaveBeenCalledTimes(0);
 
-      wrapper
-        .find(Dummy)
-        .props()
-        .searchForItems({
-          facetName: 'brand',
-          query: 'apple',
-          maxFacetHits: 10,
-        });
+      wrapper.find(Dummy).props().searchForItems({
+        facetName: 'brand',
+        query: 'apple',
+        maxFacetHits: 10,
+      });
 
       expect(onSearchForFacetValues).toHaveBeenCalledTimes(1);
       expect(onSearchForFacetValues).toHaveBeenCalledWith({
@@ -1382,11 +1373,11 @@ describe('createConnector', () => {
         }),
       });
 
-      const Dummy = props => JSON.stringify(props, null, 2).replace(/"/g, '');
+      const Dummy = (props) => JSON.stringify(props, null, 2).replace(/"/g, '');
 
       const Connected = createConnector({
         displayName: 'Connector',
-        getProvidedProps: props => ({ providedProps: props }),
+        getProvidedProps: (props) => ({ providedProps: props }),
       })(Dummy);
 
       const props = {

@@ -288,10 +288,7 @@ describe('RatingMenu', () => {
 
   it('should display the right number of stars', () => {
     const wrapper = mount(ratingMenu);
-    wrapper
-      .find('.ais-RatingMenu-link')
-      .last()
-      .simulate('click');
+    wrapper.find('.ais-RatingMenu-link').last().simulate('click');
 
     const selectedItem = wrapper.find('.ais-RatingMenu-item--selected');
 

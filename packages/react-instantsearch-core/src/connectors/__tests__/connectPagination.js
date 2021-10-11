@@ -1,7 +1,7 @@
 import { SearchParameters } from 'algoliasearch-helper';
 import connect from '../connectPagination';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 let props;
 let params;

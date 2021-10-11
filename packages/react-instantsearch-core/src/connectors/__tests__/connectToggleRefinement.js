@@ -1,7 +1,7 @@
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import connect from '../connectToggleRefinement';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 const createSearchResults = ({ disjunctiveFacets, facets }) =>
   new SearchResults(
@@ -329,7 +329,7 @@ describe('connectToggleRefinement', () => {
         new SearchParameters(),
         {
           attribute: 'facet',
-          filter: sp => sp.setQuery('yep'),
+          filter: (sp) => sp.setQuery('yep'),
           contextValue,
         },
         {
@@ -347,7 +347,7 @@ describe('connectToggleRefinement', () => {
         new SearchParameters(),
         {
           attribute: 'facet',
-          filter: sp => sp.setQuery('yep'),
+          filter: (sp) => sp.setQuery('yep'),
           contextValue,
         },
         {
@@ -828,7 +828,7 @@ describe('connectToggleRefinement', () => {
         new SearchParameters(),
         {
           attribute: 'facet',
-          filter: sp => sp.setQuery('yep'),
+          filter: (sp) => sp.setQuery('yep'),
           contextValue,
           indexContextValue,
         },
@@ -851,7 +851,7 @@ describe('connectToggleRefinement', () => {
         new SearchParameters(),
         {
           attribute: 'facet',
-          filter: sp => sp.setQuery('yep'),
+          filter: (sp) => sp.setQuery('yep'),
           contextValue,
           indexContextValue,
         },

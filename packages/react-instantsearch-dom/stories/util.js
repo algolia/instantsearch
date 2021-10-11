@@ -15,7 +15,7 @@ import 'instantsearch.css/themes/algolia.css';
 
 const Hits = ({ hits }) => (
   <div className="hits">
-    {hits.map(hit => (
+    {hits.map((hit) => (
       <div key={hit.objectID} className="hit">
         {hit.image && (
           <div className="hit-picture">
@@ -130,7 +130,7 @@ export function WrapWithHits({
 
   const [searchState, setSearchState] = useState(initialSearchState);
 
-  const setNextSearchState = nextSearchState => {
+  const setNextSearchState = (nextSearchState) => {
     setSearchState(nextSearchState);
     onSearchStateChange(nextSearchState);
   };
@@ -192,5 +192,5 @@ WrapWithHits.defaultProps = {
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
   initialSearchState: {},
-  onSearchStateChange: searchState => searchState,
+  onSearchStateChange: (searchState) => searchState,
 };

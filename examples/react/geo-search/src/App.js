@@ -18,7 +18,7 @@ const searchClient = algoliasearch(
 );
 
 const updateAfter = 700;
-const searchStateToUrl = searchState =>
+const searchStateToUrl = (searchState) =>
   searchState ? `${window.location.pathname}?${qs.stringify(searchState)}` : '';
 
 class App extends Component {
@@ -34,7 +34,7 @@ class App extends Component {
     });
   }
 
-  onSearchStateChange = searchState => {
+  onSearchStateChange = (searchState) => {
     // update the URL when there is a new search state.
     clearTimeout(this.debouncedSetState);
     this.debouncedSetState = setTimeout(() => {
@@ -45,7 +45,7 @@ class App extends Component {
       );
     }, updateAfter);
 
-    this.setState(previousState => {
+    this.setState((previousState) => {
       const hasQueryChanged =
         previousState.searchState.query !== searchState.query;
 
@@ -79,12 +79,12 @@ class App extends Component {
         Type a destination or move the map to see the closest apartment.
         <SearchBox />
         <GoogleMapsLoader apiKey="AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ">
-          {google => (
+          {(google) => (
             <GeoSearch google={google}>
               {({ hits }) => (
                 <Fragment>
                   <Control />
-                  {hits.map(hit => (
+                  {hits.map((hit) => (
                     <Marker key={hit.objectID} hit={hit} />
                   ))}
                 </Fragment>

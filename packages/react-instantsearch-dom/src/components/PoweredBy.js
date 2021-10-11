@@ -6,7 +6,6 @@ import { createClassNames } from '../core/utils';
 
 const cx = createClassNames('PoweredBy');
 
-/* eslint-disable max-len */
 const AlgoliaLogo = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +41,6 @@ const AlgoliaLogo = () => (
     />
   </svg>
 );
-/* eslint-enable max-len */
 
 class PoweredBy extends Component {
   static propTypes = {

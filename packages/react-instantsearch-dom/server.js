@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable import/no-commonjs, no-var */
 
 // This file only exist to allow the import from 'react-instantsearch-dom/server'
 // We can't have this import working easily with the current project architecture.

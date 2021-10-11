@@ -1,7 +1,7 @@
 import { SearchResults, SearchParameters } from 'algoliasearch-helper';
 import connect from '../connectHierarchicalMenu';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 describe('connectHierarchicalMenu', () => {
   describe('single index', () => {
@@ -501,7 +501,7 @@ describe('connectHierarchicalMenu', () => {
         if (a.label > b.label) return 1;
         return 0;
       }
-      const transformItems = jest.fn(items => items.sort(compareItem));
+      const transformItems = jest.fn((items) => items.sort(compareItem));
       props = connect.getProvidedProps(
         { attributes: ['ok'], transformItems, contextValue },
         {},

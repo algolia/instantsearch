@@ -1,9 +1,8 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import QueryRuleCustomData, {
-  QueryRuleCustomDataProps,
-} from '../QueryRuleCustomData';
+import type { QueryRuleCustomDataProps } from '../QueryRuleCustomData';
+import QueryRuleCustomData from '../QueryRuleCustomData';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -19,7 +18,7 @@ describe('QueryRuleCustomData', () => {
     const props: CustomDataProps = {
       items: [],
       children: jest.fn(({ items }) =>
-        items.map(item => (
+        items.map((item) => (
           <section key={item.title}>
             <img src={item.banner} alt={item.title} />
           </section>
@@ -41,7 +40,7 @@ describe('QueryRuleCustomData', () => {
         { title: 'Image 2', banner: 'image-2.png' },
       ],
       children: jest.fn(({ items }) =>
-        items.map(item => (
+        items.map((item) => (
           <section key={item.title}>
             <img src={item.banner} alt={item.title} />
           </section>

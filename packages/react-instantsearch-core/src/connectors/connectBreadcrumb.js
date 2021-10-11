@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import { refineValue, getResults } from '../core/indexUtils';
 
-export const getId = props => props.attributes[0];
+export const getId = (props) => props.attributes[0];
 
 const namespace = 'hierarchicalMenu';
 
@@ -73,7 +73,7 @@ export default createConnector({
 
   propTypes: {
     attributes: (props, propName, componentName) => {
-      const isNotString = val => typeof val !== 'string';
+      const isNotString = (val) => typeof val !== 'string';
       if (
         !Array.isArray(props[propName]) ||
         props[propName].some(isNotString) ||

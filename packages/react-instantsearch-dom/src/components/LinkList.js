@@ -32,7 +32,7 @@ export default class LinkList extends Component {
     const { cx, createURL, items, onSelect, canRefine } = this.props;
     return (
       <ul className={cx('list', !canRefine && 'list--noRefinement')}>
-        {items.map(item => (
+        {items.map((item) => (
           <li
             key={item.key === undefined ? item.value : item.key}
             className={cx(

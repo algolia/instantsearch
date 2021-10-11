@@ -11,7 +11,7 @@ const examples = glob.sync(
   )
 );
 
-examples.forEach(example => {
+examples.forEach((example) => {
   execSync(`cd ${example} && yarn && yarn build && yarn test`, {
     stdio: 'inherit',
   });

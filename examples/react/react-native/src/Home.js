@@ -127,7 +127,7 @@ class Home extends Component {
     };
   }
 
-  onSearchStateChange = nextState => {
+  onSearchStateChange = (nextState) => {
     this.setState({ searchState: { ...this.state.searchState, ...nextState } });
   };
 
@@ -182,7 +182,7 @@ class SearchBox extends Component {
         <Spinner left={60} />
         <TextInput
           style={styles.searchBox}
-          onChangeText={text => this.props.refine(text)}
+          onChangeText={(text) => this.props.refine(text)}
           value={this.props.currentRefinement}
           placeholder={'Search a product...'}
           clearButtonMode={'always'}
@@ -297,14 +297,14 @@ const ConnectedSortBy = connectSortBy(
         <ModalDropdown
           animated={false}
           defaultValue={
-            items.find(item => item.value === currentRefinement).label
+            items.find((item) => item.value === currentRefinement).label
           }
           onSelect={(index, value) =>
-            refine(items.find(item => item.label === value).value)
+            refine(items.find((item) => item.label === value).value)
           }
-          options={items.map(item => item.label)}
-          renderRow={item => {
-            const itemValue = items.find(i => i.label === item).value;
+          options={items.map((item) => item.label)}
+          renderRow={(item) => {
+            const itemValue = items.find((i) => i.label === item).value;
             return (
               <Text
                 style={{

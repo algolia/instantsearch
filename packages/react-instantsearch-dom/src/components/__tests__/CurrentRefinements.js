@@ -10,7 +10,7 @@ describe('CurrentRefinements', () => {
     items: [],
     canRefine: true,
     refine: () => {},
-    translate: x => x,
+    translate: (x) => x,
   };
 
   it('expect to render a list of current refinements', () => {
@@ -78,11 +78,7 @@ describe('CurrentRefinements', () => {
 
     expect(props.refine).not.toHaveBeenCalled();
 
-    wrapper
-      .find('li')
-      .first()
-      .find('button')
-      .simulate('click');
+    wrapper.find('li').first().find('button').simulate('click');
 
     expect(props.refine).toHaveBeenCalledWith(value);
   });
@@ -109,12 +105,7 @@ describe('CurrentRefinements', () => {
 
     expect(props.refine).not.toHaveBeenCalled();
 
-    wrapper
-      .find('li')
-      .last()
-      .find('button')
-      .last()
-      .simulate('click');
+    wrapper.find('li').last().find('button').last().simulate('click');
 
     expect(props.refine).toHaveBeenCalledWith(value);
   });

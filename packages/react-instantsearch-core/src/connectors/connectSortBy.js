@@ -60,7 +60,7 @@ export default createConnector({
       ais: props.contextValue,
       multiIndexContext: props.indexContextValue,
     });
-    const items = props.items.map(item =>
+    const items = props.items.map((item) =>
       item.value === currentRefinement
         ? { ...item, isRefined: true }
         : { ...item, isRefined: false }

@@ -1,4 +1,5 @@
 {
+  "node": "12",
   "packages": ["packages/*"],
   "buildCommand": "lerna run build --scope react-* --ignore *-maps --ignore *-native",
   "sandboxes": [

@@ -182,7 +182,7 @@ describe('SearchBox', () => {
       <SearchBox
         refine={() => null}
         focusShortcuts={['s', 84]}
-        inputRef={node => {
+        inputRef={(node) => {
           input = node;
         }}
       />
@@ -240,7 +240,7 @@ describe('SearchBox', () => {
     expect(onReset).toHaveBeenCalled();
 
     // simulate input search events
-    inputEventsList.forEach(eventName => {
+    inputEventsList.forEach((eventName) => {
       wrapper
         .find('input')
         .simulate(eventName.replace(/^on/, '').toLowerCase());
@@ -324,7 +324,7 @@ describe('SearchBox', () => {
     const wrapper = mount(
       <SearchBox
         refine={() => null}
-        inputRef={ref => {
+        inputRef={(ref) => {
           inputRef = ref;
         }}
       />

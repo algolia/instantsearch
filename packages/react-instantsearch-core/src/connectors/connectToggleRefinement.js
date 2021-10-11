@@ -94,7 +94,7 @@ export default createConnector({
       // Use null to always be consistent with type of the value
       // count: number | null
       allFacetValues && allFacetValues.length
-        ? find(allFacetValues, item => item.name === value.toString())
+        ? find(allFacetValues, (item) => item.name === value.toString())
         : null;
 
     const facetValueCount = facetValue && facetValue.count;
@@ -175,7 +175,7 @@ export default createConnector({
         label: props.label,
         currentRefinement: checked,
         attribute: props.attribute,
-        value: nextState =>
+        value: (nextState) =>
           refine(props, nextState, false, {
             ais: props.contextValue,
             multiIndexContext: props.indexContextValue,

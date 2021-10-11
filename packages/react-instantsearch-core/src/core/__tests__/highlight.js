@@ -1,7 +1,7 @@
 import { parseAlgoliaHit } from '../highlight';
 
 describe('parseAlgoliaHit()', () => {
-  it('it does not break when there is a missing attribute', () => {
+  it('does not break when there is a missing attribute', () => {
     const attribute = 'attr';
     const out = parseAlgoliaHit({
       attribute,

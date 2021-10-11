@@ -6,7 +6,7 @@ export default createConnector({
   displayName: 'AlgoliaDynamicWidgets',
 
   defaultProps: {
-    transformItems: items => items,
+    transformItems: (items) => items,
   },
 
   propTypes: {

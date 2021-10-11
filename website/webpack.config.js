@@ -79,7 +79,7 @@ module.exports = {
   },
   plugins: [
     ...examples.map(
-      example =>
+      (example) =>
         new HTMLWebpackPlugin({
           template: path.join(__dirname, '..', example, 'index.html'),
           filename: path.join(outputPath, example, 'index.html'),
@@ -87,7 +87,7 @@ module.exports = {
         })
     ),
     new CopyWebpackPlugin([
-      ...examples.map(example => ({
+      ...examples.map((example) => ({
         from: path.join(__dirname, '..', example, 'assets'),
         to: path.join(outputPath, example, 'assets'),
       })),

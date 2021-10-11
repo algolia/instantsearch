@@ -1,7 +1,7 @@
 import { SearchResults, SearchParameters } from 'algoliasearch-helper';
 import connector from '../connectGeoSearch';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 describe('connectGeoSearch', () => {
   const empty = {};

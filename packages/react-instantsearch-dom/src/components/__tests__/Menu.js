@@ -283,10 +283,7 @@ describe('Menu', () => {
     it('should refine the selected value and display selected refinement back', () => {
       const wrapper = mount(menu);
 
-      const firstItem = wrapper
-        .find('li')
-        .first()
-        .find(Link);
+      const firstItem = wrapper.find('li').first().find(Link);
       firstItem.simulate('click');
 
       expect(refine.mock.calls).toHaveLength(1);

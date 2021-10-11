@@ -89,7 +89,7 @@ describe('DynamicWidgets', () => {
           // @ts-ignore resultsState in InstantSearch is typed wrongly to deal with multi-index
           resultsState={resultsState}
         >
-          <DynamicWidgets transformItems={items => items}>
+          <DynamicWidgets transformItems={(items) => items}>
             <RefinementList attribute="test1" />
           </DynamicWidgets>
         </InstantSearch>

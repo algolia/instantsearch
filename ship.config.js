@@ -1,4 +1,3 @@
-/* eslint-disable import/no-commonjs */
 const fs = require('fs');
 const path = require('path');
 const getLatestVersion = require('latest-version');
@@ -100,7 +99,7 @@ module.exports = {
 };
 
 function waitUntil(checkFn) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const intervalId = setInterval(async () => {
       if (await checkFn()) {
         clearInterval(intervalId);

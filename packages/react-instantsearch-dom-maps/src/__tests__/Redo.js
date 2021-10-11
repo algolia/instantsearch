@@ -9,7 +9,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Redo', () => {
   const defaultProps = {
     googleMapsInstance: createFakeMapInstance(),
-    translate: x => x,
+    translate: (x) => x,
 
     hasMapMoveSinceLastRefine: false,
     refineWithInstance: () => {},

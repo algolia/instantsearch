@@ -22,7 +22,7 @@ stories
     <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect.stories.js">
       <MenuSelect
         attribute="brand"
-        transformItems={items =>
+        transformItems={(items) =>
           orderBy(items, ['label', 'count'], ['asc', 'desc'])
         }
       />
@@ -41,7 +41,7 @@ stories
       <MenuSelect
         attribute="brand"
         defaultRefinement={text('defaultSelectedItem', 'Apple')}
-        transformItems={items =>
+        transformItems={(items) =>
           items.map(({ count, ...item }) => ({
             ...item,
             count: (count + 1000).toLocaleString(),

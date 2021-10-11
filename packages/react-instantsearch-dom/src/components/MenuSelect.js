@@ -33,7 +33,7 @@ class MenuSelect extends Component {
   get selectedValue() {
     const { value } = find(
       this.props.items,
-      item => item.isRefined === true
+      (item) => item.isRefined === true
     ) || {
       value: 'ais__see__all__option',
     };
@@ -61,7 +61,7 @@ class MenuSelect extends Component {
             {translate('seeAllOption')}
           </option>
 
-          {items.map(item => (
+          {items.map((item) => (
             <option
               key={item.value}
               value={item.value}

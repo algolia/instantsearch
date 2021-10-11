@@ -9,7 +9,7 @@ class Places extends Component {
     defaultRefinement: PropTypes.object.isRequired,
   };
 
-  createRef = c => (this.element = c);
+  createRef = (c) => (this.element = c);
 
   componentDidMount() {
     const { refine, defaultRefinement } = this.props;
@@ -18,7 +18,7 @@ class Places extends Component {
       container: this.element,
     });
 
-    autocomplete.on('change', event => {
+    autocomplete.on('change', (event) => {
       refine(event.suggestion.latlng);
     });
 

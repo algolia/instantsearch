@@ -15,14 +15,14 @@ const req = require.context(
 );
 
 const loadStories = () => {
-  req.keys().forEach(filename => req(filename));
+  req.keys().forEach((filename) => req(filename));
 };
 
 configure(loadStories, module);
 
 // Use this funciton rather than `snakeCase` because we keep the lower / upper
 // case to have the same filename format in Argos that we have now.
-const normalize = input => input.replace(/[ -/]/g, '_');
+const normalize = (input) => input.replace(/[ -/]/g, '_');
 
 const createStoryURL = ({ host, port, query }) =>
   `http://${host}:${port}/iframe.html${query}`;

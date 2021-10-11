@@ -1,7 +1,7 @@
 import { SearchParameters } from 'algoliasearch-helper';
 import connect from '../connectAutoComplete';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 describe('connectAutoComplete', () => {
   describe('single index', () => {

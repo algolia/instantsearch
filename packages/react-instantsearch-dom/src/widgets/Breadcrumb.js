@@ -91,7 +91,7 @@ import Breadcrumb from '../components/Breadcrumb';
  * );
  */
 
-const BreadcrumbWidget = props => (
+const BreadcrumbWidget = (props) => (
   <PanelCallbackHandler {...props}>
     <Breadcrumb {...props} />
   </PanelCallbackHandler>

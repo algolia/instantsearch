@@ -93,7 +93,7 @@ import HierarchicalMenu from '../components/HierarchicalMenu';
  * );
  */
 
-const HierarchicalMenuWidget = props => (
+const HierarchicalMenuWidget = (props) => (
   <PanelCallbackHandler {...props}>
     <HierarchicalMenu {...props} />
   </PanelCallbackHandler>

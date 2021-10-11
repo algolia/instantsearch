@@ -123,10 +123,7 @@ describe('HierarchicalMenu', () => {
 
     expect(itemParent).toHaveLength(1);
 
-    itemParent
-      .find('Link')
-      .first()
-      .simulate('click');
+    itemParent.find('Link').first().simulate('click');
     expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual('white');
 

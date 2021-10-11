@@ -5,10 +5,8 @@ import { createClassNames } from '../core/utils';
 
 const cx = createClassNames('Panel');
 
-export const {
-  Consumer: PanelConsumer,
-  Provider: PanelProvider,
-} = createContext(function setCanRefine() {});
+export const { Consumer: PanelConsumer, Provider: PanelProvider } =
+  createContext(function setCanRefine() {});
 
 class Panel extends Component {
   static propTypes = {
@@ -28,7 +26,7 @@ class Panel extends Component {
     canRefine: true,
   };
 
-  setCanRefine = nextCanRefine => {
+  setCanRefine = (nextCanRefine) => {
     this.setState({ canRefine: nextCanRefine });
   };
 

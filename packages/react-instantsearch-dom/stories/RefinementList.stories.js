@@ -52,7 +52,7 @@ stories
     >
       <RefinementList
         attribute="brand"
-        transformItems={items =>
+        transformItems={(items) =>
           orderBy(items, ['label', 'count'], ['asc', 'desc'])
         }
       />

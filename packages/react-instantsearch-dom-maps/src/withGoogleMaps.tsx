@@ -7,16 +7,16 @@ type Subtract<TProps, TSubstractedProps> = Omit<
 >;
 
 export interface WithGoogleMapsProps {
-  google: typeof google; // eslint-disable-line no-undef
+  google: typeof google;
   googleMapsInstance: google.maps.Map;
 }
 
 const withGoogleMaps = <TProps extends WithGoogleMapsProps>(
   Wrapped: React.ComponentType<TProps>
 ) => {
-  const WithGoogleMaps: React.FC<
-    Subtract<TProps, WithGoogleMapsProps>
-  > = props => (
+  const WithGoogleMaps: React.FC<Subtract<TProps, WithGoogleMapsProps>> = (
+    props
+  ) => (
     <GoogleMapsContext.Consumer>
       {({ google, instance }) => (
         <Wrapped

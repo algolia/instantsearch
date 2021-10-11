@@ -34,7 +34,7 @@ class HierarchicalMenu extends Component {
     className: '',
   };
 
-  renderItem = item => {
+  renderItem = (item) => {
     const { createURL, refine } = this.props;
 
     return (
@@ -76,5 +76,5 @@ class HierarchicalMenu extends Component {
 }
 
 export default translatable({
-  showMore: extended => (extended ? 'Show less' : 'Show more'),
+  showMore: (extended) => (extended ? 'Show less' : 'Show more'),
 })(HierarchicalMenu);

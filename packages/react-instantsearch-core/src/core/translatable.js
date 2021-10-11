@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const withKeysPropType = keys => (props, propName, componentName) => {
+const withKeysPropType = (keys) => (props, propName, componentName) => {
   const prop = props[propName];
   if (prop) {
     for (const key of Object.keys(prop)) {
@@ -16,7 +16,7 @@ const withKeysPropType = keys => (props, propName, componentName) => {
 };
 
 export default function translatable(defaultTranslations) {
-  return Composed => {
+  return (Composed) => {
     class Translatable extends Component {
       translate = (key, ...params) => {
         const { translations } = this.props;

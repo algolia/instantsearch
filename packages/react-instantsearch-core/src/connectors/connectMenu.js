@@ -137,7 +137,7 @@ export default createConnector({
 
     let items;
     if (isFromSearch) {
-      items = searchForFacetValuesResults[attribute].map(v => ({
+      items = searchForFacetValuesResults[attribute].map((v) => ({
         label: v.value,
         value: getValue(v.value, props, searchState, {
           ais: props.contextValue,
@@ -153,7 +153,7 @@ export default createConnector({
           sortBy: searchable ? undefined : defaultSortBy,
           facetOrdering,
         })
-        .map(v => ({
+        .map((v) => ({
           label: v.name,
           value: getValue(v.name, props, searchState, {
             ais: props.contextValue,
@@ -247,7 +247,7 @@ export default createConnector({
               {
                 label: `${props.attribute}: ${currentRefinement}`,
                 attribute: props.attribute,
-                value: nextState =>
+                value: (nextState) =>
                   refine(props, nextState, '', {
                     ais: props.contextValue,
                     multiIndexContext: props.indexContextValue,

@@ -26,7 +26,7 @@ class PanelCallbackHandler extends Component {
 
 const PanelWrapper = ({ canRefine, children }) => (
   <PanelConsumer>
-    {setCanRefine => (
+    {(setCanRefine) => (
       <PanelCallbackHandler setCanRefine={setCanRefine} canRefine={canRefine}>
         {children}
       </PanelCallbackHandler>

@@ -1,8 +1,8 @@
 import createInstantSearchManager from '../createInstantSearchManager';
-import { runAllMicroTasks } from '../../../../../test/utils';
+import { wait } from '../../../../../test/utils';
 
 const createSearchClient = () => ({
-  search: jest.fn(requests =>
+  search: jest.fn((requests) =>
     Promise.resolve({
       results: requests.map(
         ({ indexName, params: { page, query, hitsPerPage } }) => ({
@@ -47,13 +47,13 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <SearchBox defaultRefinement="first query 1" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('first query 1'),
+      getSearchParameters: (params) => params.setQuery('first query 1'),
       props: {},
     });
 
     // <Index indexName="first" indexId="first" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('first'),
+      getSearchParameters: (params) => params.setIndex('first'),
       props: {
         indexName: 'first',
         indexId: 'first',
@@ -64,7 +64,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <Pagination defaultRefinement={3} />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setPage(3),
+      getSearchParameters: (params) => params.setPage(3),
       props: {
         indexContextValue: {
           targetedIndex: 'first',
@@ -74,7 +74,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="second" indexId="second" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('second'),
+      getSearchParameters: (params) => params.setIndex('second'),
       props: {
         indexName: 'second',
         indexId: 'second',
@@ -85,7 +85,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <SearchBox defaultRefinement="second query 1" />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('second query 1'),
+      getSearchParameters: (params) => params.setQuery('second query 1'),
       props: {
         indexContextValue: {
           targetedIndex: 'second',
@@ -95,7 +95,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     expect(ism.store.getState().results).toBe(null);
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
@@ -112,21 +112,21 @@ describe('createInstantSearchManager with multi index', () => {
       })
     );
 
-    await runAllMicroTasks();
+    await wait(0);
 
     // <SearchBox defaultRefinement="first query 2" />
-    ism.widgetsManager.getWidgets()[0].getSearchParameters = params =>
+    ism.widgetsManager.getWidgets()[0].getSearchParameters = (params) =>
       params.setQuery('first query 2');
 
     // <Index indexName="second" indexId="second">
     //   <SearchBox defaultRefinement="second query 2" />
     // </Index>
-    ism.widgetsManager.getWidgets()[4].getSearchParameters = params =>
+    ism.widgetsManager.getWidgets()[4].getSearchParameters = (params) =>
       params.setQuery('second query 2');
 
     ism.widgetsManager.update();
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
@@ -155,13 +155,13 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <SearchBox defaultRefinement="first query 1" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('first query 1'),
+      getSearchParameters: (params) => params.setQuery('first query 1'),
       props: {},
     });
 
     // <Index indexName="first" indexId="first" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('first'),
+      getSearchParameters: (params) => params.setIndex('first'),
       props: {
         indexName: 'first',
         indexId: 'first',
@@ -172,7 +172,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <Pagination defaultRefinement={3} />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setPage(3),
+      getSearchParameters: (params) => params.setPage(3),
       props: {
         indexContextValue: {
           targetedIndex: 'first',
@@ -182,7 +182,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="second" indexId="second" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('second'),
+      getSearchParameters: (params) => params.setIndex('second'),
       props: {
         indexName: 'second',
         indexId: 'second',
@@ -193,7 +193,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <SearchBox defaultRefinement="second query 1" />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('second query 1'),
+      getSearchParameters: (params) => params.setQuery('second query 1'),
       props: {
         indexContextValue: {
           targetedIndex: 'second',
@@ -203,13 +203,13 @@ describe('createInstantSearchManager with multi index', () => {
 
     expect(ism.store.getState().results).toBe(null);
 
-    await runAllMicroTasks();
+    await wait(0);
 
     const resultsWithFirstAndSecond = ism.store.getState().results;
 
     // <Index indexName="thrid" indexId="thrid" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('thrid'),
+      getSearchParameters: (params) => params.setIndex('thrid'),
       props: {
         indexName: 'thrid',
         indexId: 'thrid',
@@ -220,7 +220,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <SearchBox defaultRefinement="thrid query 1" />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('thrid query 1'),
+      getSearchParameters: (params) => params.setQuery('thrid query 1'),
       props: {
         indexContextValue: {
           targetedIndex: 'thrid',
@@ -228,7 +228,7 @@ describe('createInstantSearchManager with multi index', () => {
       },
     });
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(
       Object.is(resultsWithFirstAndSecond, ism.store.getState().results)
@@ -255,13 +255,13 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <SearchBox defaultRefinement="query" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('query'),
+      getSearchParameters: (params) => params.setQuery('query'),
       props: {},
     });
 
     // <Index indexName="first" indexId="first" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: x => x.setIndex('first'),
+      getSearchParameters: (x) => x.setIndex('first'),
       props: {
         indexName: 'first',
         indexId: 'first',
@@ -272,7 +272,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <SortBy defaultRefinement="third" />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: x => x.setIndex('third'),
+      getSearchParameters: (x) => x.setIndex('third'),
       props: {
         indexContextValue: {
           targetedIndex: 'first',
@@ -282,7 +282,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="second" indexId="second" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: x => x.setIndex('second'),
+      getSearchParameters: (x) => x.setIndex('second'),
       props: {
         indexName: 'second',
         indexId: 'second',
@@ -291,7 +291,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     expect(ism.store.getState().results).toBe(null);
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
@@ -327,7 +327,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="first" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: x => x.setIndex('first'),
+      getSearchParameters: (x) => x.setIndex('first'),
       props: {
         indexName: 'first',
         indexId: 'first',
@@ -336,7 +336,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="second" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: x => x.setIndex('second'),
+      getSearchParameters: (x) => x.setIndex('second'),
       props: {
         indexName: 'second',
         indexId: 'second',
@@ -345,7 +345,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="third" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: x => x.setIndex('third'),
+      getSearchParameters: (x) => x.setIndex('third'),
       props: {
         indexName: 'third',
         indexId: 'third',
@@ -354,20 +354,20 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="four" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: x => x.setIndex('four'),
+      getSearchParameters: (x) => x.setIndex('four'),
       props: {
         indexName: 'four',
         indexId: 'four',
       },
     });
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(searchClient.search.mock.calls[0][0]).toHaveLength(4);
 
     ism.widgetsManager.update();
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(searchClient.search.mock.calls[1][0]).toHaveLength(4);
   });
@@ -394,14 +394,14 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <SearchBox defaultRefinement="first query" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('first query'),
+      getSearchParameters: (params) => params.setQuery('first query'),
       context: {},
       props: {},
     });
 
     // <Index indexName="first" indexId="first_5_hits" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('first'),
+      getSearchParameters: (params) => params.setIndex('first'),
       props: {
         indexName: 'first',
         indexId: 'first_5_hits',
@@ -412,7 +412,8 @@ describe('createInstantSearchManager with multi index', () => {
     //   <Configure hitsPerPage={5} />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQueryParameter('hitsPerPage', 5),
+      getSearchParameters: (params) =>
+        params.setQueryParameter('hitsPerPage', 5),
       props: {
         indexContextValue: {
           targetedIndex: 'first_5_hits',
@@ -422,7 +423,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="first" indexId="first_10_hits" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('first'),
+      getSearchParameters: (params) => params.setIndex('first'),
       props: {
         indexName: 'first',
         indexId: 'first_10_hits',
@@ -433,7 +434,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <Configure hitsPerPage={10} />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params =>
+      getSearchParameters: (params) =>
         params.setQueryParameter('hitsPerPage', 10),
       props: {
         indexContextValue: {
@@ -444,7 +445,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     expect(ism.store.getState().results).toBe(null);
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(ism.store.getState().results.first_5_hits).toEqual(
       expect.objectContaining({
@@ -485,13 +486,13 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <SearchBox defaultRefinement="first query 1" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('first query 1'),
+      getSearchParameters: (params) => params.setQuery('first query 1'),
       props: {},
     });
 
     // <Index indexName="first" indexId="first" />
     const unregisterFirstIndexWidget = ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('first'),
+      getSearchParameters: (params) => params.setIndex('first'),
       props: {
         indexName: 'first',
         indexId: 'first',
@@ -502,7 +503,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <Pagination defaultRefinement={3} />
     // </Index>
     const unregisterPaginationWidget = ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setPage(3),
+      getSearchParameters: (params) => params.setPage(3),
       props: {
         indexContextValue: {
           targetedIndex: 'first',
@@ -512,7 +513,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="second" indexId="second" />
     const unregisterSecondIndexWidget = ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('second'),
+      getSearchParameters: (params) => params.setIndex('second'),
       props: {
         indexName: 'second',
         indexId: 'second',
@@ -523,7 +524,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <SearchBox defaultRefinement="second query 1" />
     // </Index>
     const unregisterSecondSearchBoxWidget = ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('second query 1'),
+      getSearchParameters: (params) => params.setQuery('second query 1'),
       props: {
         indexContextValue: {
           targetedIndex: 'second',
@@ -533,7 +534,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     expect(ism.store.getState().results).toBe(null);
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
@@ -550,7 +551,7 @@ describe('createInstantSearchManager with multi index', () => {
       })
     );
 
-    ism.widgetsManager.getWidgets()[0].getSearchParameters = params =>
+    ism.widgetsManager.getWidgets()[0].getSearchParameters = (params) =>
       params.setQuery('first query 2');
 
     unregisterFirstIndexWidget();
@@ -558,7 +559,7 @@ describe('createInstantSearchManager with multi index', () => {
     unregisterSecondIndexWidget();
     unregisterSecondSearchBoxWidget();
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(ism.store.getState().results).toEqual(
       expect.objectContaining({
@@ -569,7 +570,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="first" indexId="first" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('first'),
+      getSearchParameters: (params) => params.setIndex('first'),
       props: {
         indexName: 'first',
         indexId: 'first',
@@ -580,7 +581,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <Pagination defaultRefinement={3} />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setPage(3),
+      getSearchParameters: (params) => params.setPage(3),
       props: {
         indexContextValue: {
           targetedIndex: 'first',
@@ -590,7 +591,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     // <Index indexName="second" indexId="second" />
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setIndex('second'),
+      getSearchParameters: (params) => params.setIndex('second'),
       props: {
         indexName: 'second',
         indexId: 'second',
@@ -601,7 +602,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <SearchBox defaultRefinement="second query 1" />
     // </Index>
     ism.widgetsManager.registerWidget({
-      getSearchParameters: params => params.setQuery('second query 2'),
+      getSearchParameters: (params) => params.setQuery('second query 2'),
       props: {
         indexContextValue: {
           targetedIndex: 'second',
@@ -609,7 +610,7 @@ describe('createInstantSearchManager with multi index', () => {
       },
     });
 
-    await runAllMicroTasks();
+    await wait(0);
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({

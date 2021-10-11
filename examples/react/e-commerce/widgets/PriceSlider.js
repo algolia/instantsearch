@@ -52,7 +52,7 @@ const PriceSlider = ({ min, max, refine, currentRefinement, canRefine }) => {
     setTicksValues([currentRefinement.min, currentRefinement.max]);
   }, [currentRefinement]);
 
-  const onChange = values => {
+  const onChange = (values) => {
     refine({ min: values[0], max: values[1] });
   };
 
@@ -103,7 +103,7 @@ const PriceSlider = ({ min, max, refine, currentRefinement, canRefine }) => {
       <Handles>
         {({ handles, getHandleProps }) => (
           <div>
-            {handles.map(handle => (
+            {handles.map((handle) => (
               <Handle
                 key={handle.id}
                 handle={handle}

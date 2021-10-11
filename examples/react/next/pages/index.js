@@ -14,12 +14,12 @@ const searchClient = algoliasearch(
 
 const updateAfter = 700;
 
-const createURL = state => `?${qs.stringify(state)}`;
+const createURL = (state) => `?${qs.stringify(state)}`;
 
-const pathToSearchState = path =>
+const pathToSearchState = (path) =>
   path.includes('?') ? qs.parse(path.substring(path.indexOf('?') + 1)) : {};
 
-const searchStateToURL = searchState =>
+const searchStateToURL = (searchState) =>
   searchState ? `${window.location.pathname}?${qs.stringify(searchState)}` : '';
 
 const DEFAULT_PROPS = {
@@ -63,7 +63,7 @@ class Page extends React.Component {
     return null;
   }
 
-  onSearchStateChange = searchState => {
+  onSearchStateChange = (searchState) => {
     clearTimeout(this.debouncedSetState);
 
     this.debouncedSetState = setTimeout(() => {

@@ -13,7 +13,7 @@ import Connected, { Marker } from '../Marker';
 Enzyme.configure({ adapter: new Adapter() });
 
 jest.mock('../utils', () => {
-  const module = require.requireActual('../utils');
+  const module = jest.requireActual('../utils');
 
   return {
     registerEvents: jest.fn(),

@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import RelevantSort, { RelevantSortComponentProps } from '../RelevantSort';
+import type { RelevantSortComponentProps } from '../RelevantSort';
+import RelevantSort from '../RelevantSort';
 
 describe('RelevantSort', () => {
   it("returns null if it's not a virtual replica", () => {

@@ -25,7 +25,7 @@ const searchClient = algoliasearch(
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
-const App = props => (
+const App = (props) => (
   <InstantSearch
     searchClient={searchClient}
     indexName="instant_search"

@@ -1,5 +1,5 @@
 import createInstantSearchManager from '../createInstantSearchManager';
-import { runAllMicroTasks } from '../../../../../test/utils';
+import { wait } from '../../../../../test/utils';
 
 const createSearchClient = () => ({
   search: jest.fn(() =>
@@ -31,14 +31,14 @@ describe('createInstantSearchManager with results', () => {
       });
 
       ism.widgetsManager.registerWidget({
-        getSearchParameters: params => params.setQuery('search'),
+        getSearchParameters: (params) => params.setQuery('search'),
         props: {},
         context: {},
       });
 
       expect(ism.store.getState().results).toBe(null);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
@@ -46,7 +46,7 @@ describe('createInstantSearchManager with results', () => {
 
       ism.widgetsManager.update();
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
@@ -63,7 +63,7 @@ describe('createInstantSearchManager with results', () => {
 
       ism.onExternalStateUpdate({});
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
@@ -71,7 +71,7 @@ describe('createInstantSearchManager with results', () => {
 
       ism.onExternalStateUpdate({});
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
@@ -96,12 +96,12 @@ describe('createInstantSearchManager with results', () => {
 
       // We have to register the facet to be able to search on it
       ism.widgetsManager.registerWidget({
-        getSearchParameters: params => params.addFacet('facetName'),
+        getSearchParameters: (params) => params.addFacet('facetName'),
         props: {},
         context: {},
       });
 
-      await runAllMicroTasks();
+      await wait(0);
 
       ism.onSearchForFacetValues({
         facetName: 'facetName',
@@ -110,7 +110,7 @@ describe('createInstantSearchManager with results', () => {
 
       expect(ism.store.getState().searchingForFacetValues).toBe(true);
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(ism.store.getState().searchingForFacetValues).toBe(false);
 
@@ -142,12 +142,12 @@ describe('createInstantSearchManager with results', () => {
 
       // We have to register the facet to be able to search on it
       ism.widgetsManager.registerWidget({
-        getSearchParameters: params => params.addFacet('facetName'),
+        getSearchParameters: (params) => params.addFacet('facetName'),
         props: {},
         context: {},
       });
 
-      await runAllMicroTasks();
+      await wait(0);
 
       ism.onSearchForFacetValues({
         facetName: 'facetName',
@@ -155,7 +155,7 @@ describe('createInstantSearchManager with results', () => {
         maxFacetHits: 25,
       });
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
         expect.arrayContaining([
@@ -178,12 +178,12 @@ describe('createInstantSearchManager with results', () => {
 
       // We have to register the facet to be able to search on it
       ism.widgetsManager.registerWidget({
-        getSearchParameters: params => params.addFacet('facetName'),
+        getSearchParameters: (params) => params.addFacet('facetName'),
         props: {},
         context: {},
       });
 
-      await runAllMicroTasks();
+      await wait(0);
 
       ism.onSearchForFacetValues({
         facetName: 'facetName',
@@ -191,7 +191,7 @@ describe('createInstantSearchManager with results', () => {
         maxFacetHits: 125,
       });
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
         expect.arrayContaining([
@@ -214,12 +214,12 @@ describe('createInstantSearchManager with results', () => {
 
       // We have to register the facet to be able to search on it
       ism.widgetsManager.registerWidget({
-        getSearchParameters: params => params.addFacet('facetName'),
+        getSearchParameters: (params) => params.addFacet('facetName'),
         props: {},
         context: {},
       });
 
-      await runAllMicroTasks();
+      await wait(0);
 
       ism.onSearchForFacetValues({
         facetName: 'facetName',
@@ -227,7 +227,7 @@ describe('createInstantSearchManager with results', () => {
         maxFacetHits: 0,
       });
 
-      await runAllMicroTasks();
+      await wait(0);
 
       expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
         expect.arrayContaining([

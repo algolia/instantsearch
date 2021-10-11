@@ -131,7 +131,7 @@ class Pagination extends Component {
     }
 
     items = items.concat(
-      getPages(currentRefinement, maxPages, padding).map(value => ({
+      getPages(currentRefinement, maxPages, padding).map((value) => ({
         key: value,
         modifier: 'item--page',
         label: translate('page', value),
@@ -183,10 +183,10 @@ export default translatable({
   next: '›',
   first: '«',
   last: '»',
-  page: currentRefinement => currentRefinement.toString(),
+  page: (currentRefinement) => currentRefinement.toString(),
   ariaPrevious: 'Previous page',
   ariaNext: 'Next page',
   ariaFirst: 'First page',
   ariaLast: 'Last page',
-  ariaPage: currentRefinement => `Page ${currentRefinement.toString()}`,
+  ariaPage: (currentRefinement) => `Page ${currentRefinement.toString()}`,
 })(Pagination);

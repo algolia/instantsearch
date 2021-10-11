@@ -1,4 +1,4 @@
-const createHTMLMarker = google => {
+const createHTMLMarker = (google) => {
   class HTMLMarker extends google.maps.OverlayView {
     constructor({
       position,
@@ -51,7 +51,7 @@ const createHTMLMarker = google => {
       if (this.element && this.element.parentNode) {
         this.element.parentNode.removeChild(this.element);
 
-        this.subscriptions.forEach(subscription => subscription.remove());
+        this.subscriptions.forEach((subscription) => subscription.remove());
 
         delete this.element;
 
@@ -65,7 +65,7 @@ const createHTMLMarker = google => {
           this.element.removeEventListener(eventName, listener);
 
           this.subscriptions = this.subscriptions.filter(
-            _ => _ !== subscription
+            (_) => _ !== subscription
           );
         },
       };

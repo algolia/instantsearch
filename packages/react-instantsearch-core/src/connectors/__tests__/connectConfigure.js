@@ -1,7 +1,7 @@
 import { SearchParameters } from 'algoliasearch-helper';
 import connect from '../connectConfigure';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 describe('connectConfigure', () => {
   describe('single index', () => {
@@ -92,7 +92,7 @@ describe('connectConfigure', () => {
     const contextValue = { mainTargetedIndex: 'first' };
     const indexContextValue = { targetedIndex: 'second' };
 
-    it('it propagates the props to the SearchParameters without children', () => {
+    it('propagates the props to the SearchParameters without children', () => {
       const searchParameters = connect.getSearchParameters.call(
         {},
         new SearchParameters(),

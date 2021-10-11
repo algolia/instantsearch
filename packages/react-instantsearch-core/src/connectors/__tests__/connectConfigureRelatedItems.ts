@@ -1,7 +1,7 @@
 import { SearchParameters } from 'algoliasearch-helper';
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 const connect = connectConfigureRelatedItems as any;
 
@@ -40,7 +40,7 @@ describe('connectConfigure', () => {
   describe('single index', () => {
     const contextValue = { mainTargetedIndex: 'index' };
     const defaultProps = {
-      transformSearchParameters: x => x,
+      transformSearchParameters: (x) => x,
       contextValue,
     };
 
@@ -327,7 +327,7 @@ describe('connectConfigure', () => {
     const contextValue = { mainTargetedIndex: 'first' };
     const indexContextValue = { targetedIndex: 'second' };
     const defaultProps = {
-      transformSearchParameters: x => x,
+      transformSearchParameters: (x) => x,
       contextValue,
       indexContextValue,
     };

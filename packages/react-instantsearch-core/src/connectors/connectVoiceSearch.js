@@ -146,7 +146,7 @@ export default createConnector({
           : [
               {
                 label: `${id}: ${currentRefinement}`,
-                value: nextState =>
+                value: (nextState) =>
                   refine(props, nextState, '', {
                     ais: props.contextValue,
                     multiIndexContext: props.indexContextValue,

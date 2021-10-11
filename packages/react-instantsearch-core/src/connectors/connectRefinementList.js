@@ -39,7 +39,7 @@ function getValue(name, props, searchState, context) {
   const isAnewValue = currentRefinement.indexOf(name) === -1;
   const nextRefinement = isAnewValue
     ? currentRefinement.concat([name]) // cannot use .push(), it mutates
-    : currentRefinement.filter(selectedValue => selectedValue !== name); // cannot use .splice(), it mutates
+    : currentRefinement.filter((selectedValue) => selectedValue !== name); // cannot use .splice(), it mutates
   return nextRefinement;
 }
 
@@ -159,7 +159,7 @@ export default createConnector({
     }
 
     const items = isFromSearch
-      ? searchForFacetValuesResults[attribute].map(v => ({
+      ? searchForFacetValuesResults[attribute].map((v) => ({
           label: v.value,
           value: getValue(v.value, props, searchState, {
             ais: props.contextValue,
@@ -169,15 +169,17 @@ export default createConnector({
           count: v.count,
           isRefined: v.isRefined,
         }))
-      : results.getFacetValues(attribute, { sortBy, facetOrdering }).map(v => ({
-          label: v.name,
-          value: getValue(v.name, props, searchState, {
-            ais: props.contextValue,
-            multiIndexContext: props.indexContextValue,
-          }),
-          count: v.count,
-          isRefined: v.isRefined,
-        }));
+      : results
+          .getFacetValues(attribute, { sortBy, facetOrdering })
+          .map((v) => ({
+            label: v.name,
+            value: getValue(v.name, props, searchState, {
+              ais: props.contextValue,
+              multiIndexContext: props.indexContextValue,
+            }),
+            count: v.count,
+            isRefined: v.isRefined,
+          }));
 
     const transformedItems = props.transformItems
       ? props.transformItems(items)
@@ -261,16 +263,16 @@ export default createConnector({
                   searchState,
                   context
                 ),
-                value: nextState => refine(props, nextState, [], context),
+                value: (nextState) => refine(props, nextState, [], context),
                 items: getCurrentRefinement(props, searchState, context).map(
-                  item => ({
+                  (item) => ({
                     label: `${item}`,
-                    value: nextState => {
+                    value: (nextState) => {
                       const nextSelectedItems = getCurrentRefinement(
                         props,
                         nextState,
                         context
-                      ).filter(other => other !== item);
+                      ).filter((other) => other !== item);
                       return refine(
                         props,
                         searchState,

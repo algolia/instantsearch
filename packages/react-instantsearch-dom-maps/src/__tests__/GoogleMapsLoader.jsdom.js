@@ -3,7 +3,7 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import injectScript from 'scriptjs';
 import GoogleMapsLoader from '../GoogleMapsLoader';
-import { runAllMicroTasks } from '../../../../test/utils';
+import { wait } from '../../../../test/utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -14,8 +14,8 @@ describe('GoogleMapsLoader', () => {
     apiKey: 'API_KEY',
   };
 
-  it('expect to call Google Maps API', () => {
-    const children = jest.fn(x => x);
+  it('expect to call Google Maps API', async () => {
+    const children = jest.fn((x) => x);
 
     const props = {
       ...defaultProps,
@@ -23,16 +23,16 @@ describe('GoogleMapsLoader', () => {
 
     shallow(<GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>);
 
-    return runAllMicroTasks().then(() => {
-      expect(injectScript).toHaveBeenLastCalledWith(
-        'https://maps.googleapis.com/maps/api/js?v=quarterly&key=API_KEY',
-        expect.any(Function)
-      );
-    });
+    await wait(0);
+
+    expect(injectScript).toHaveBeenLastCalledWith(
+      'https://maps.googleapis.com/maps/api/js?v=quarterly&key=API_KEY',
+      expect.any(Function)
+    );
   });
 
-  it('expect to call Google Maps API with a custom API Key', () => {
-    const children = jest.fn(x => x);
+  it('expect to call Google Maps API with a custom API Key', async () => {
+    const children = jest.fn((x) => x);
 
     const props = {
       ...defaultProps,
@@ -41,16 +41,16 @@ describe('GoogleMapsLoader', () => {
 
     shallow(<GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>);
 
-    return runAllMicroTasks().then(() => {
-      expect(injectScript).toHaveBeenLastCalledWith(
-        'https://maps.googleapis.com/maps/api/js?v=quarterly&key=CUSTOM_API_KEY',
-        expect.any(Function)
-      );
-    });
+    await wait(0);
+
+    expect(injectScript).toHaveBeenLastCalledWith(
+      'https://maps.googleapis.com/maps/api/js?v=quarterly&key=CUSTOM_API_KEY',
+      expect.any(Function)
+    );
   });
 
-  it('expect to call Google Maps API with a custom endpoint', () => {
-    const children = jest.fn(x => x);
+  it('expect to call Google Maps API with a custom endpoint', async () => {
+    const children = jest.fn((x) => x);
 
     const props = {
       ...defaultProps,
@@ -60,16 +60,16 @@ describe('GoogleMapsLoader', () => {
 
     shallow(<GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>);
 
-    return runAllMicroTasks().then(() => {
-      expect(injectScript).toHaveBeenLastCalledWith(
-        'https://maps.googleapis.com/maps/api/js?v=3.32&places,geometry&key=API_KEY',
-        expect.any(Function)
-      );
-    });
+    await wait(0);
+
+    expect(injectScript).toHaveBeenLastCalledWith(
+      'https://maps.googleapis.com/maps/api/js?v=3.32&places,geometry&key=API_KEY',
+      expect.any(Function)
+    );
   });
 
   it("expect to render nothing when it's loading", () => {
-    const children = jest.fn(x => x);
+    const children = jest.fn((x) => x);
 
     const props = {
       ...defaultProps,
@@ -83,8 +83,8 @@ describe('GoogleMapsLoader', () => {
     expect(children).not.toHaveBeenCalled();
   });
 
-  it("expect to call children with the Google object when it's loaded", () => {
-    const children = jest.fn(x => x);
+  it("expect to call children with the Google object when it's loaded", async () => {
+    const children = jest.fn((x) => x);
 
     const google = {
       version: '3.1.1',
@@ -103,17 +103,17 @@ describe('GoogleMapsLoader', () => {
       <GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>
     );
 
-    return runAllMicroTasks().then(() => {
-      expect(wrapper.type).not.toBe(null);
-      expect(children).toHaveBeenCalledTimes(1);
-      expect(children).toHaveBeenCalledWith(google);
+    await wait(0);
 
-      delete global.google;
-    });
+    expect(wrapper.type).not.toBe(null);
+    expect(children).toHaveBeenCalledTimes(1);
+    expect(children).toHaveBeenCalledWith(google);
+
+    delete global.google;
   });
 
-  it('expect to not call setState when we unmount before loading is complete', () => {
-    const children = jest.fn(x => x);
+  it('expect to not call setState when we unmount before loading is complete', async () => {
+    const children = jest.fn((x) => x);
 
     const props = {
       ...defaultProps,
@@ -128,15 +128,15 @@ describe('GoogleMapsLoader', () => {
       <GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>
     );
 
-    return runAllMicroTasks().then(() => {
-      expect(wrapper.type).not.toBe(null);
-      expect(children).not.toHaveBeenCalled();
+    await wait(0);
 
-      wrapper.unmount();
+    expect(wrapper.type).not.toBe(null);
+    expect(children).not.toHaveBeenCalled();
 
-      triggerLoadingComplete();
+    wrapper.unmount();
 
-      expect(children).not.toHaveBeenCalled();
-    });
+    triggerLoadingComplete();
+
+    expect(children).not.toHaveBeenCalled();
   });
 });

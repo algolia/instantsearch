@@ -2,15 +2,15 @@ import React, { Component, Children } from 'react';
 import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
 import createInstantSearchManager from '../core/createInstantSearchManager';
-import {
-  InstantSearchProvider,
-  InstantSearchContext,
-  IndexContext,
-} from '../core/context';
-import { Store } from '../core/createStore';
-import { PlainSearchParameters, SearchParameters } from 'algoliasearch-helper';
-import { MultiResponse } from '../types/algoliasearch';
-import { ConnectorDescription } from '../core/createConnector';
+import type { InstantSearchContext, IndexContext } from '../core/context';
+import { InstantSearchProvider } from '../core/context';
+import type { Store } from '../core/createStore';
+import type {
+  PlainSearchParameters,
+  SearchParameters,
+} from 'algoliasearch-helper';
+import type { MultiResponse } from '../types/algoliasearch';
+import type { ConnectorDescription } from '../core/createConnector';
 
 type ResultsState = {
   metadata: never[];
@@ -23,9 +23,10 @@ type InstantSearchManager = {
   store: Store;
   widgetsManager: any;
   getWidgetsIds(): any;
-  getSearchParameters(
-    ...args: any[]
-  ): { mainParameters: SearchParameters; derivedParameters: SearchParameters };
+  getSearchParameters(...args: any[]): {
+    mainParameters: SearchParameters;
+    derivedParameters: SearchParameters;
+  };
   onSearchForFacetValues(...args: any[]): any;
   onExternalStateUpdate(...args: any[]): any;
   transitionState: any;
@@ -151,8 +152,8 @@ class InstantSearch extends Component<Props, State> {
     prevState: State
   ): Partial<State> {
     const nextIsControlled = isControlled(nextProps);
-    const previousSearchState = prevState.instantSearchManager.store.getState()
-      .widgets;
+    const previousSearchState =
+      prevState.instantSearchManager.store.getState().widgets;
     const nextSearchState = nextProps.searchState;
 
     if (nextIsControlled && !isEqual(previousSearchState, nextSearchState)) {

@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import { Store } from '../core/createStore';
-import InstantSearch from '../widgets/InstantSearch';
+import type { Store } from '../core/createStore';
+import type InstantSearch from '../widgets/InstantSearch';
 
 export type InstantSearchContext = {
   onInternalStateUpdate: InstantSearch['onWidgetsInternalStateUpdate'];
@@ -35,7 +35,5 @@ export type IndexContext =
     }
   | undefined;
 
-export const {
-  Consumer: IndexConsumer,
-  Provider: IndexProvider,
-} = createContext<IndexContext>(undefined);
+export const { Consumer: IndexConsumer, Provider: IndexProvider } =
+  createContext<IndexContext>(undefined);

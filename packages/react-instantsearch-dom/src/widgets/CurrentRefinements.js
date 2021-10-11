@@ -45,7 +45,7 @@ import CurrentRefinements from '../components/CurrentRefinements';
  * );
  */
 
-const CurrentRefinementsWidget = props => (
+const CurrentRefinementsWidget = (props) => (
   <PanelCallbackHandler {...props}>
     <CurrentRefinements {...props} />
   </PanelCallbackHandler>

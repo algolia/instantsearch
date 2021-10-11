@@ -9,7 +9,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Control', () => {
   const defaultProps = {
     googleMapsInstance: createFakeMapInstance(),
-    translate: x => x,
+    translate: (x) => x,
     isRefineOnMapMove: true,
     hasMapMoveSinceLastRefine: false,
     toggleRefineOnMapMove: () => {},

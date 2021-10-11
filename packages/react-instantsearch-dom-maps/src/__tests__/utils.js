@@ -56,7 +56,7 @@ describe('utils', () => {
 
       utils.registerEvents(events, props, instance);
 
-      listeners.forEach(listener => listener({ type: 'event' }));
+      listeners.forEach((listener) => listener({ type: 'event' }));
 
       expect(onClick).toHaveBeenCalledWith({
         event: { type: 'event' },

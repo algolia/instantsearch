@@ -23,10 +23,10 @@ describe('Provider', () => {
     children: () => {},
   };
 
-  const lastRenderArgs = fn => fn.mock.calls[fn.mock.calls.length - 1][0];
+  const lastRenderArgs = (fn) => fn.mock.calls[fn.mock.calls.length - 1][0];
 
   it('expect to render with default props', () => {
-    const children = jest.fn(x => x);
+    const children = jest.fn((x) => x);
 
     const props = {
       ...defaultProps,
@@ -46,7 +46,7 @@ describe('Provider', () => {
 
   describe('boundingBox', () => {
     it('expect to use hits when currentRefinement is not defined and hits are not empty', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
       const google = createFakeGoogleReference();
 
       google.maps.LatLngBounds.mockImplementation(() => ({
@@ -89,7 +89,7 @@ describe('Provider', () => {
     });
 
     it("expect to use currentRefinement when it's defined and hits are empty", () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -120,7 +120,7 @@ describe('Provider', () => {
     });
 
     it("expect to use currentRefinement when it's defined and hits are not empty", () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -155,7 +155,7 @@ describe('Provider', () => {
     });
 
     it("expect to use currentRefinement when it's not defined and hits are empty", () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -169,7 +169,7 @@ describe('Provider', () => {
 
   describe('onChange', () => {
     it('expect to call setMapMoveSinceLast refine', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -187,7 +187,7 @@ describe('Provider', () => {
     });
 
     it('expect to schedule a refine call when refine on map move is enabled', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -203,7 +203,7 @@ describe('Provider', () => {
     });
 
     it('expect to not schedule a refine call when refine on map move is disabled', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -220,7 +220,7 @@ describe('Provider', () => {
     });
 
     it('expect to do nothing when refine is disabled', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -242,7 +242,7 @@ describe('Provider', () => {
   describe('onIdle', () => {
     it('expect to call refine when there is a pending refinement', () => {
       const mapInstance = createFakeMapInstance();
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       mapInstance.getBounds.mockImplementation(() => ({
         getNorthEast: () => ({
@@ -284,7 +284,7 @@ describe('Provider', () => {
 
     it('expect to reset the pending refinement when there is a pending refinement', () => {
       const mapInstance = createFakeMapInstance();
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       mapInstance.getBounds.mockImplementation(() => ({
         getNorthEast: () => ({
@@ -313,7 +313,7 @@ describe('Provider', () => {
 
     it('expect to do nothing when there is no pending refinement', () => {
       const mapInstance = createFakeMapInstance();
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -335,7 +335,7 @@ describe('Provider', () => {
 
   describe('shouldUpdate', () => {
     it("expect to return true when no refinement is pending and the map didn't moved", () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -349,7 +349,7 @@ describe('Provider', () => {
     });
 
     it('expect to return false when there is a pending refinement', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -365,7 +365,7 @@ describe('Provider', () => {
     });
 
     it('expect to return false when the map has moved', () => {
-      const children = jest.fn(x => x);
+      const children = jest.fn((x) => x);
 
       const props = {
         ...defaultProps,
@@ -386,7 +386,7 @@ describe('Provider', () => {
         ...defaultProps,
       };
 
-      const wrapper = shallow(<Provider {...props}>{x => x}</Provider>);
+      const wrapper = shallow(<Provider {...props}>{(x) => x}</Provider>);
 
       expect(wrapper.props().value.isRefineOnMapMove).toBe(true);
     });
@@ -396,7 +396,7 @@ describe('Provider', () => {
         ...defaultProps,
       };
 
-      const wrapper = shallow(<Provider {...props}>{x => x}</Provider>);
+      const wrapper = shallow(<Provider {...props}>{(x) => x}</Provider>);
 
       expect(wrapper.props().value.hasMapMoveSinceLastRefine).toBe(false);
     });
@@ -406,7 +406,7 @@ describe('Provider', () => {
         ...defaultProps,
       };
 
-      const wrapper = shallow(<Provider {...props}>{x => x}</Provider>);
+      const wrapper = shallow(<Provider {...props}>{(x) => x}</Provider>);
 
       expect(wrapper.props().value.toggleRefineOnMapMove).toBe(
         props.toggleRefineOnMapMove
@@ -418,7 +418,7 @@ describe('Provider', () => {
         ...defaultProps,
       };
 
-      const wrapper = shallow(<Provider {...props}>{x => x}</Provider>);
+      const wrapper = shallow(<Provider {...props}>{(x) => x}</Provider>);
 
       expect(wrapper.props().value.setMapMoveSinceLastRefine).toBe(
         props.setMapMoveSinceLastRefine
@@ -430,7 +430,7 @@ describe('Provider', () => {
         ...defaultProps,
       };
 
-      const wrapper = shallow(<Provider {...props}>{x => x}</Provider>);
+      const wrapper = shallow(<Provider {...props}>{(x) => x}</Provider>);
 
       expect(wrapper.props().value.refineWithInstance).toBe(
         wrapper.instance().refineWithInstance

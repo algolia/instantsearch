@@ -127,7 +127,7 @@ class RefinementList extends Component {
       <View style={styles.searchBoxContainer}>
         <TextInput
           style={styles.searchBox}
-          onChangeText={text => {
+          onChangeText={(text) => {
             this.saveQuery(text);
             searchForItems(text);
           }}

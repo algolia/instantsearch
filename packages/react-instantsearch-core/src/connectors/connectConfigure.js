@@ -24,7 +24,7 @@ export default createConnector({
     const { children, contextValue, indexContextValue, ...items } = props;
     const propKeys = Object.keys(props);
     const nonPresentKeys = this._props
-      ? Object.keys(this._props).filter(prop => propKeys.indexOf(prop) === -1)
+      ? Object.keys(this._props).filter((prop) => propKeys.indexOf(prop) === -1)
       : [];
     this._props = props;
     const nextValue = {

@@ -49,7 +49,7 @@ import NumericMenu from '../components/NumericMenu';
  * );
  */
 
-const NumericMenuWidget = props => (
+const NumericMenuWidget = (props) => (
   <PanelCallbackHandler {...props}>
     <NumericMenu {...props} />
   </PanelCallbackHandler>

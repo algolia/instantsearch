@@ -1,6 +1,6 @@
 import connect from '../connectHits';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 const { getSearchParameters } = connect;
 
@@ -14,7 +14,7 @@ describe('connectHits', () => {
         results: { hits, hitsPerPage: 2, page: 2 },
       });
       expect(props).toEqual({
-        hits: hits.map(hit => expect.objectContaining(hit)),
+        hits: hits.map((hit) => expect.objectContaining(hit)),
       });
     });
 
@@ -65,7 +65,7 @@ describe('connectHits', () => {
         }
       );
       expect(props).toEqual({
-        hits: hits.map(hit => expect.objectContaining(hit)),
+        hits: hits.map((hit) => expect.objectContaining(hit)),
       });
     });
 

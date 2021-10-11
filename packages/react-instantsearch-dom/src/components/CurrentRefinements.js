@@ -15,11 +15,11 @@ export const CurrentRefinements = ({
 }) => (
   <div className={classNames(cx('', !canRefine && '-noRefinement'), className)}>
     <ul className={cx('list', !canRefine && 'list--noRefinement')}>
-      {items.map(item => (
+      {items.map((item) => (
         <li key={item.label} className={cx('item')}>
           <span className={cx('label')}>{item.label}</span>
           {item.items ? (
-            item.items.map(nest => (
+            item.items.map((nest) => (
               <span key={nest.label} className={cx('category')}>
                 <span className={cx('categoryLabel')}>{nest.label}</span>
                 <button

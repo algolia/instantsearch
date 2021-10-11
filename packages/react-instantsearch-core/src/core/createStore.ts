@@ -21,7 +21,7 @@ export default function createStore(initialState: State) {
     },
     setState(nextState: State) {
       state = nextState;
-      listeners.forEach(listener => listener());
+      listeners.forEach((listener) => listener());
     },
     subscribe(listener: Listener) {
       listeners.push(listener);

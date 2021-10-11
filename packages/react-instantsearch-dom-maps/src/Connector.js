@@ -77,7 +77,7 @@ export class Connector extends Component {
       isRefineOnMapMove: !isRefineOnMapMove,
     }));
 
-  setMapMoveSinceLastRefine = next => {
+  setMapMoveSinceLastRefine = (next) => {
     const { hasMapMoveSinceLastRefine } = this.state;
 
     if (hasMapMoveSinceLastRefine === next) {

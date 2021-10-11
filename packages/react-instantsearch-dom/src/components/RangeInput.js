@@ -42,7 +42,7 @@ export class RawRangeInput extends Component {
     }
   }
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
 
     this.props.refine({
@@ -97,7 +97,7 @@ export class RawRangeInput extends Component {
             step={step}
             placeholder={min}
             disabled={!canRefine}
-            onChange={e => this.setState({ from: e.currentTarget.value })}
+            onChange={(e) => this.setState({ from: e.currentTarget.value })}
           />
           <span className={cx('separator')}>{translate('separator')}</span>
           <input
@@ -109,7 +109,7 @@ export class RawRangeInput extends Component {
             step={step}
             placeholder={max}
             disabled={!canRefine}
-            onChange={e => this.setState({ to: e.currentTarget.value })}
+            onChange={(e) => this.setState({ to: e.currentTarget.value })}
           />
           <button className={cx('submit')} type="submit">
             {translate('submit')}

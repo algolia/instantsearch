@@ -32,10 +32,10 @@ export default function useAnswers({
     () => createConcurrentSafePromise(),
     []
   );
-  const searchIndex = useMemo(() => searchClient.initIndex(index), [
-    searchClient,
-    index,
-  ]);
+  const searchIndex = useMemo(
+    () => searchClient.initIndex(index),
+    [searchClient, index]
+  );
   if (!searchIndex.findAnswers) {
     throw new Error(
       '`Answers` component and `useAnswers` hook require `algoliasearch` to be 4.8.0 or higher.'
@@ -44,6 +44,7 @@ export default function useAnswers({
 
   const debouncedSearch = useMemo(() => {
     return debounce(searchIndex.findAnswers, searchDebounceTime);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchIndex]);
 
   useEffect(() => {
@@ -57,10 +58,11 @@ export default function useAnswers({
 
   const setDebouncedResult = useMemo(
     () =>
-      debounce(result => {
+      debounce((result) => {
         setIsLoading(false);
         setHits(result.hits);
       }, renderDebounceTime),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setIsLoading, setHits]
   );
 
@@ -77,7 +79,7 @@ export default function useAnswers({
         nbHits,
         attributesForPrediction,
       })
-    ).then(result => {
+    ).then((result) => {
       if (!result) {
         // It's undefined when it's debounced.
         return;
@@ -88,6 +90,7 @@ export default function useAnswers({
 
   useEffect(() => {
     fetchAnswers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return { hits, isLoading };

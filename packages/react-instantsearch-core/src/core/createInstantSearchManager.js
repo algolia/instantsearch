@@ -13,7 +13,7 @@ function addAlgoliaAgents(searchClient) {
   }
 }
 
-const isMultiIndexContext = widget =>
+const isMultiIndexContext = (widget) =>
   hasMultipleIndices({
     ais: widget.props.contextValue,
     multiIndexContext: widget.props.indexContextValue,
@@ -24,7 +24,7 @@ const isTargetedIndexEqualIndex = (widget, indexId) =>
 // Relying on the `indexId` is a bit brittle to detect the `Index` widget.
 // Since it's a class we could rely on `instanceof` or similar. We never
 // had an issue though. Works for now.
-const isIndexWidget = widget => Boolean(widget.props.indexId);
+const isIndexWidget = (widget) => Boolean(widget.props.indexId);
 const isIndexWidgetEqualIndex = (widget, indexId) =>
   widget.props.indexId === indexId;
 
@@ -44,7 +44,7 @@ const sortIndexWidgetsFirst = (firstWidget, secondWidget) => {
 // This function is copied from the algoliasearch v4 API Client. If modified,
 // consider updating it also in `serializeQueryParameters` from `@algolia/transporter`.
 function serializeQueryParameters(parameters) {
-  const isObjectOrArray = value =>
+  const isObjectOrArray = (value) =>
     Object.prototype.toString.call(value) === '[object Object]' ||
     Object.prototype.toString.call(value) === '[object Array]';
 
@@ -54,7 +54,7 @@ function serializeQueryParameters(parameters) {
   };
 
   return Object.keys(parameters)
-    .map(key =>
+    .map((key) =>
       encode(
         '%s=%s',
         key,
@@ -129,15 +129,17 @@ export default function createInstantSearchManager({
   function getMetadata(state) {
     return widgetsManager
       .getWidgets()
-      .filter(widget => Boolean(widget.getMetadata))
-      .map(widget => widget.getMetadata(state));
+      .filter((widget) => Boolean(widget.getMetadata))
+      .map((widget) => widget.getMetadata(state));
   }
 
   function getSearchParameters() {
     const sharedParameters = widgetsManager
       .getWidgets()
-      .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(widget => !isMultiIndexContext(widget) && !isIndexWidget(widget))
+      .filter((widget) => Boolean(widget.getSearchParameters))
+      .filter(
+        (widget) => !isMultiIndexContext(widget) && !isIndexWidget(widget)
+      )
       .reduce(
         (res, widget) => widget.getSearchParameters(res),
         initialSearchParameters
@@ -145,8 +147,8 @@ export default function createInstantSearchManager({
 
     const mainParameters = widgetsManager
       .getWidgets()
-      .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(widget => {
+      .filter((widget) => Boolean(widget.getSearchParameters))
+      .filter((widget) => {
         const targetedIndexEqualMainIndex =
           isMultiIndexContext(widget) &&
           isTargetedIndexEqualIndex(widget, indexName);
@@ -166,8 +168,8 @@ export default function createInstantSearchManager({
 
     const derivedIndices = widgetsManager
       .getWidgets()
-      .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(widget => {
+      .filter((widget) => Boolean(widget.getSearchParameters))
+      .filter((widget) => {
         const targetedIndexNotEqualMainIndex =
           isMultiIndexContext(widget) &&
           !isTargetedIndexEqualIndex(widget, indexName);
@@ -193,7 +195,7 @@ export default function createInstantSearchManager({
         };
       }, {});
 
-    const derivedParameters = Object.keys(derivedIndices).map(indexId => ({
+    const derivedParameters = Object.keys(derivedIndices).map((indexId) => ({
       parameters: derivedIndices[indexId].reduce(
         (res, widget) => widget.getSearchParameters(res),
         sharedParameters
@@ -217,7 +219,7 @@ export default function createInstantSearchManager({
       // helpers mutates the value `derivedHelpers`. The `forEach` loop does
       // not iterate on each value and we're not able to correctly clear the
       // previous derived helpers (memory leak + useless requests).
-      helper.derivedHelpers.slice().forEach(derivedHelper => {
+      helper.derivedHelpers.slice().forEach((derivedHelper) => {
         // Since we detach the derived helpers on **every** new search they
         // won't receive intermediate results in case of a stalled search.
         // Only the last result is dispatched by the derived helper because
@@ -250,7 +252,7 @@ export default function createInstantSearchManager({
   }
 
   function handleSearchSuccess({ indexId }) {
-    return event => {
+    return (event) => {
       const state = store.getState();
       const isDerivedHelpersEmpty = !helper.derivedHelpers.length;
 
@@ -347,7 +349,7 @@ export default function createInstantSearchManager({
 
       const baseMethod = client.search;
       client.search = (requests, ...methodArgs) => {
-        const requestsWithSerializedParams = requests.map(request => ({
+        const requestsWithSerializedParams = requests.map((request) => ({
           ...request,
           params: serializeQueryParameters(request.params),
         }));
@@ -383,7 +385,7 @@ export default function createInstantSearchManager({
             results.reduce(
               (acc, result) =>
                 acc.concat(
-                  result.rawResults.map(request => ({
+                  result.rawResults.map((request) => ({
                     indexName: request.index,
                     params: request.params,
                   }))
@@ -412,7 +414,7 @@ export default function createInstantSearchManager({
       requests: results.reduce(
         (acc, result) =>
           acc.concat(
-            result.rawResults.map(request => ({
+            result.rawResults.map((request) => ({
               indexName: request.index,
               params: request.params,
             }))
@@ -440,7 +442,7 @@ export default function createInstantSearchManager({
         {
           method: 'search',
           args: [
-            results.rawResults.map(request => ({
+            results.rawResults.map((request) => ({
               indexName: request.index,
               params: request.params,
             })),
@@ -459,7 +461,7 @@ export default function createInstantSearchManager({
     // computation of the key inside the client (see link below).
     // https://github.com/algolia/algoliasearch-client-javascript/blob/c27e89ff92b2a854ae6f40dc524bffe0f0cbc169/src/AlgoliaSearchCore.js#L232-L240
     const key = `/1/indexes/*/queries_body_${JSON.stringify({
-      requests: results.rawResults.map(request => ({
+      requests: results.rawResults.map((request) => ({
         indexName: request.index,
         params: request.params,
       })),
@@ -517,7 +519,7 @@ export default function createInstantSearchManager({
 
     return widgetsManager
       .getWidgets()
-      .filter(widget => Boolean(widget.transitionState))
+      .filter((widget) => Boolean(widget.transitionState))
       .reduce(
         (res, widget) => widget.transitionState(searchState, res),
         nextSearchState
@@ -550,7 +552,7 @@ export default function createInstantSearchManager({
     helper
       .searchForFacetValues(facetName, query, maxFacetHitsWithinRange)
       .then(
-        content => {
+        (content) => {
           store.setState({
             ...store.getState(),
             error: null,
@@ -562,7 +564,7 @@ export default function createInstantSearchManager({
             },
           });
         },
-        error => {
+        (error) => {
           store.setState({
             ...store.getState(),
             searchingForFacetValues: false,
@@ -570,7 +572,7 @@ export default function createInstantSearchManager({
           });
         }
       )
-      .catch(error => {
+      .catch((error) => {
         // Since setState is synchronous, any error that occurs in the render of a
         // component will be swallowed by this promise.
         // This is a trick to make the error show up correctly in the console.
@@ -617,17 +619,17 @@ function hydrateMetadata(resultsState) {
   }
 
   // add a value noop, which gets replaced once the widgets are mounted
-  return resultsState.metadata.map(datum => ({
+  return resultsState.metadata.map((datum) => ({
     value: () => ({}),
     ...datum,
     items:
       datum.items &&
-      datum.items.map(item => ({
+      datum.items.map((item) => ({
         value: () => ({}),
         ...item,
         items:
           item.items &&
-          item.items.map(nestedItem => ({
+          item.items.map((nestedItem) => ({
             value: () => ({}),
             ...nestedItem,
           })),

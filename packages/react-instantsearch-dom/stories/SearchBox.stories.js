@@ -99,14 +99,16 @@ class SearchBoxContainer extends Component {
     ];
   }
 
-  handleSelectedEvent = eventName => ({ target: { checked } }) => {
-    const { selectedEvents } = this.state;
-    this.setState({
-      selectedEvents: { ...selectedEvents, [eventName]: checked },
-    });
-  };
+  handleSelectedEvent =
+    (eventName) =>
+    ({ target: { checked } }) => {
+      const { selectedEvents } = this.state;
+      this.setState({
+        selectedEvents: { ...selectedEvents, [eventName]: checked },
+      });
+    };
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     // we dont want the page to reload after the submit event
     event.preventDefault();
     event.stopPropagation();
@@ -114,7 +116,7 @@ class SearchBoxContainer extends Component {
     this.logAction('onSubmit')(event);
   };
 
-  logAction = eventName => event => {
+  logAction = (eventName) => (event) => {
     // we dont want to log unselected event
     if (this.state.selectedEvents[eventName]) {
       action(eventName)(event);
@@ -136,7 +138,7 @@ class SearchBoxContainer extends Component {
           }}
         >
           {/* events checkboxes */}
-          {this.supportedEvents.map(eventName => (
+          {this.supportedEvents.map((eventName) => (
             <label key={eventName} style={{ marginRight: 10 }}>
               <input
                 name={`selectEvent-${eventName}`}

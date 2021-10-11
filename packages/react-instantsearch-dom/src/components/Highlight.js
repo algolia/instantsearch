@@ -4,7 +4,7 @@ import Highlighter from './Highlighter';
 
 const cx = createClassNames('Highlight');
 
-const Highlight = props => (
+const Highlight = (props) => (
   <Highlighter {...props} highlightProperty="_highlightResult" cx={cx} />
 );
 

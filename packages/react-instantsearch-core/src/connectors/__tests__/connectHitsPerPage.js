@@ -1,7 +1,7 @@
 import { SearchParameters } from 'algoliasearch-helper';
 import connect from '../connectHitsPerPage';
 
-jest.mock('../../core/createConnector', () => x => x);
+jest.mock('../../core/createConnector', () => (x) => x);
 
 let props;
 let params;
@@ -10,7 +10,10 @@ describe('connectHitsPerPage', () => {
   describe('single index', () => {
     const contextValue = { mainTargetedIndex: 'index' };
 
-    const items = [{ label: '10', value: 10 }, { label: '20', value: 20 }];
+    const items = [
+      { label: '10', value: 10 },
+      { label: '20', value: 20 },
+    ];
     it('provides the correct props to the component', () => {
       props = connect.getProvidedProps(
         { items, contextValue },
@@ -115,7 +118,10 @@ describe('connectHitsPerPage', () => {
     const contextValue = { mainTargetedIndex: 'first' };
     const indexContextValue = { targetedIndex: 'second' };
 
-    const items = [{ label: '10', value: 10 }, { label: '20', value: 20 }];
+    const items = [
+      { label: '10', value: 10 },
+      { label: '20', value: 20 },
+    ];
 
     it('provides the correct props to the component', () => {
       props = connect.getProvidedProps(
