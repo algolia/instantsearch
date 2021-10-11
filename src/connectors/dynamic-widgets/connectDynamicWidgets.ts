@@ -29,7 +29,7 @@ export type DynamicWidgetsConnectorParams = {
    * but will have slightly larger payloads.
    * @default true
    */
-  wildcardFacets?: boolean;
+  requestAllFacets?: boolean;
 };
 
 export type DynamicWidgetsWidgetDescription = {
@@ -54,7 +54,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
         widgets,
         transformItems = (items) => items,
         fallbackWidget,
-        wildcardFacets = true,
+        requestAllFacets = true,
       } = widgetParams;
 
       if (
@@ -149,7 +149,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           unmountFn();
         },
         getWidgetSearchParameters(searchParameters) {
-          if (!wildcardFacets) {
+          if (!requestAllFacets) {
             return searchParameters;
           }
           return searchParameters.setQueryParameters({
