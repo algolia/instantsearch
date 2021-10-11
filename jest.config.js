@@ -1,4 +1,5 @@
 module.exports = {
+  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/examples/'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testEnvironment: 'jsdom',

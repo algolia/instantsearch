@@ -9,6 +9,7 @@ build/
 *.iml
 preview.zip
 .happypack/
+/coverage
 
 # Generated files
 /website/examples

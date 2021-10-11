@@ -48,6 +48,7 @@
     "@storybook/addons": "5.0.11",
     "@storybook/react": "5.0.11",
     "@storybook/theming": "5.0.11",
+    "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "11.2.3",
     "@testing-library/react-hooks": "7.0.2",
     "@types/classnames": "^2.2.7",
@@ -156,7 +157,7 @@
     },
     {
       "path": "packages/react-instantsearch-hooks/dist/umd/ReactInstantSearchHooks.min.js",
-      "maxSize": "28.25 kB"
+      "maxSize": "28 kB"
     },
     {
       "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
