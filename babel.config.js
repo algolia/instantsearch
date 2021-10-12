@@ -1,3 +1,5 @@
+const wrapWarningWithDevCheck = require('./scripts/babel/wrap-warning-with-dev-check');
+
 const isES = process.env.BABEL_ENV === 'es';
 const isRollup = process.env.BABEL_ENV === 'rollup';
 
@@ -28,6 +30,16 @@ module.exports = (api) => {
     plugins: clean([
       '@babel/plugin-proposal-class-properties',
       isRollup && 'babel-plugin-transform-react-remove-prop-types',
+      wrapWarningWithDevCheck,
+      [
+        'inline-replace-variables',
+        {
+          __DEV__: {
+            type: 'node',
+            replacement: "process.env.NODE_ENV !== 'production'",
+          },
+        },
+      ],
     ]),
     overrides: [
       {
