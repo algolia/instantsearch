@@ -6,6 +6,7 @@ const packages = [
   'packages/react-instantsearch-core',
   'packages/react-instantsearch-dom-maps',
   'packages/react-instantsearch-dom',
+  'packages/react-instantsearch-hooks',
   'packages/react-instantsearch-native',
   'packages/react-instantsearch',
 ];
@@ -17,7 +18,7 @@ module.exports = {
     packagesToPublish: packages,
   },
   versionUpdated: ({ version, exec, dir }) => {
-    // write to `packages/react-instantsearch-core/src/core/version.js`
+    // Update version in `react-instantsearch-core`
     fs.writeFileSync(
       path.resolve(
         dir,
@@ -26,6 +27,17 @@ module.exports = {
         'src',
         'core',
         'version.js'
+      ),
+      `export default '${version}';\n`
+    );
+    // Update version in `react-instantsearch-hooks`
+    fs.writeFileSync(
+      path.resolve(
+        dir,
+        'packages',
+        'react-instantsearch-hooks',
+        'src',
+        'version.ts'
       ),
       `export default '${version}';\n`
     );
