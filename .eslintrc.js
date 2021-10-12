@@ -9,6 +9,9 @@ const config = {
     'algolia/typescript',
     'plugin:react-hooks/recommended',
   ],
+  globals: {
+    __DEV__: false,
+  },
   settings: {
     react: {
       version: 'detect',

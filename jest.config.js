@@ -1,5 +1,8 @@
 module.exports = {
-  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
+  setupFilesAfterEnv: [
+    '@testing-library/jest-dom/extend-expect',
+    './scripts/jest/setupTests.ts',
+  ],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/examples/'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testEnvironment: 'jsdom',
@@ -12,4 +15,7 @@ module.exports = {
       '<rootDir>/packages/react-instantsearch-$1/src/',
   },
   transformIgnorePatterns: ['node_modules/(?!(instantsearch.js)/)'],
+  globals: {
+    __DEV__: true,
+  },
 };
