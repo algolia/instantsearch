@@ -1,4 +1,8 @@
-import type { SearchResults } from 'algoliasearch-helper';
+import type {
+  PlainSearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import { SearchParameters } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -148,11 +152,37 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
 
           unmountFn();
         },
-        getWidgetSearchParameters(searchParameters) {
+        getWidgetSearchParameters(searchParameters, options) {
           if (!requestAllFacets) {
             return searchParameters;
           }
-          return searchParameters.setQueryParameters({
+
+          // get all parameters that will be set by the mounted widgets
+          const newParams = widgets.reduce(
+            (params, widget) =>
+              widget.getWidgetSearchParameters
+                ? widget.getWidgetSearchParameters(params, options)
+                : params,
+            new SearchParameters()
+          );
+
+          const newKeys = Object.keys(newParams) as unknown as Array<
+            keyof PlainSearchParameters
+          >;
+
+          const newParameters = newKeys.reduce((params, param) => {
+            // do not apply managed parameters (they can't be applied twice)
+            if ((newParams.managedParameters as string[]).includes(param)) {
+              return params;
+            }
+            return params.setQueryParameter(
+              param,
+              (newParams as unknown as PlainSearchParameters)[param]
+            );
+          }, searchParameters);
+
+          return newParameters.setQueryParameters({
+            // force *, as this is larger than the other parameters
             facets: ['*'],
           });
         },
