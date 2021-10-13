@@ -17,9 +17,18 @@ type BrowserHistoryArgs<TRouteState> = {
   writeDelay: number;
   createURL: CreateURL<TRouteState>;
   parseURL: ParseURL<TRouteState>;
+  navigate(params: { state: TRouteState; title: string; url: string }): void;
+  // @MAJOR: The `Location` type is hard to simulate in non-browser environments
+  // so we should accept a subset of it that is easier to work with in any
+  // environments.
+  getLocation(): Location;
 };
 
 const setWindowTitle = (title?: string): void => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   if (title) {
     window.document.title = title;
   }
@@ -54,8 +63,22 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private readonly parseURL: Required<
     BrowserHistoryArgs<TRouteState>
   >['parseURL'];
+  /**
+   * Adds an entry to the history stack.
+   * @default ({ state, title, url }) => window.history.pushState(state, title, url)
+   */
+  private readonly navigate: Required<
+    BrowserHistoryArgs<TRouteState>
+  >['navigate'];
+  /**
+   * Returns the location to store in the history.
+   * @default () => window.location
+   */
+  private readonly getLocation: Required<
+    BrowserHistoryArgs<TRouteState>
+  >['getLocation'];
 
-  private writeTimer?: number;
+  private writeTimer?: ReturnType<typeof setTimeout>;
   private _onPopState?(event: PopStateEvent): void;
 
   /**
@@ -67,12 +90,16 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     writeDelay = 400,
     createURL,
     parseURL,
+    navigate,
+    getLocation,
   }: BrowserHistoryArgs<TRouteState>) {
     this.windowTitle = windowTitle;
     this.writeTimer = undefined;
     this.writeDelay = writeDelay;
     this._createURL = createURL;
     this.parseURL = parseURL;
+    this.navigate = navigate;
+    this.getLocation = getLocation;
 
     const title = this.windowTitle && this.windowTitle(this.read());
 
@@ -83,7 +110,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Reads the URL and returns a syncable UI search state.
    */
   public read(): TRouteState {
-    return this.parseURL({ qsModule: qs, location: window.location });
+    return this.parseURL({ qsModule: qs, location: this.getLocation() });
   }
 
   /**
@@ -94,12 +121,12 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     const title = this.windowTitle && this.windowTitle(routeState);
 
     if (this.writeTimer) {
-      window.clearTimeout(this.writeTimer);
+      clearTimeout(this.writeTimer);
     }
 
-    this.writeTimer = window.setTimeout(() => {
+    this.writeTimer = setTimeout(() => {
       setWindowTitle(title);
-      window.history.pushState(routeState, title || '', url);
+      this.navigate({ state: routeState, title: title || '', url });
       this.writeTimer = undefined;
     }, this.writeDelay);
   }
@@ -111,7 +138,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   public onUpdate(callback: (routeState: TRouteState) => void): void {
     this._onPopState = (event) => {
       if (this.writeTimer) {
-        window.clearTimeout(this.writeTimer);
+        clearTimeout(this.writeTimer);
         this.writeTimer = undefined;
       }
 
@@ -127,7 +154,9 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       }
     };
 
-    window.addEventListener('popstate', this._onPopState);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('popstate', this._onPopState);
+    }
   }
 
   /**
@@ -141,7 +170,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     return this._createURL({
       qsModule: qs,
       routeState,
-      location: window.location,
+      location: this.getLocation(),
     });
   }
 
@@ -150,11 +179,13 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   public dispose(): void {
     if (this._onPopState) {
-      window.removeEventListener('popstate', this._onPopState);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('popstate', this._onPopState);
+      }
     }
 
     if (this.writeTimer) {
-      window.clearTimeout(this.writeTimer);
+      clearTimeout(this.writeTimer);
     }
 
     this.write({} as TRouteState);
@@ -189,11 +220,17 @@ export default function historyRouter<TRouteState = UiState>({
   },
   writeDelay = 400,
   windowTitle,
+  navigate = ({ state, title, url }) => {
+    window.history.pushState(state, title, url);
+  },
+  getLocation = () => window.location,
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({
     createURL,
     parseURL,
     writeDelay,
     windowTitle,
+    navigate,
+    getLocation,
   });
 }
