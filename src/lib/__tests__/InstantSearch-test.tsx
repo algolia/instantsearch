@@ -646,7 +646,7 @@ describe('start', () => {
     expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient, indexName);
   });
 
-  it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', () => {
+  it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -655,12 +655,14 @@ describe('start', () => {
 
     search.start();
 
+    await wait(0);
+
     expect(
       search.mainHelper!.searchOnlyWithDerivedHelpers
     ).toHaveBeenCalledTimes(1);
   });
 
-  it('calls the provided `searchFunction` with a single request', () => {
+  it('calls the provided `searchFunction` with a single request', async () => {
     const searchFunction = jest.fn((helper) =>
       helper.setQuery('test').search()
     );
@@ -675,6 +677,8 @@ describe('start', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(0);
 
     search.start();
+
+    await wait(0);
 
     expect(searchFunction).toHaveBeenCalledTimes(1);
     expect(searchClient.search).toHaveBeenCalledTimes(1);
@@ -792,7 +796,7 @@ describe('start', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
-  it('triggers a search without errors', () => {
+  it('triggers a search without errors', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -802,6 +806,8 @@ describe('start', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(0);
 
     search.start();
+
+    await wait(0);
 
     expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
@@ -938,6 +944,8 @@ describe('dispose', () => {
     search.addWidgets([createWidget(), createWidget()]);
 
     search.start();
+
+    await wait(0);
 
     // Resolve the `search`
     searches[0].resolver();
@@ -1212,6 +1220,8 @@ describe('scheduleStalledRender', () => {
 
     search.start();
 
+    await wait(0);
+
     // Resolve the `search`
     searches[0].resolver();
 
@@ -1241,6 +1251,8 @@ describe('scheduleStalledRender', () => {
     search.addWidgets([widget]);
 
     search.start();
+
+    await wait(0);
 
     // Resolve the `search`
     searches[0].resolver();
@@ -1278,6 +1290,8 @@ describe('scheduleStalledRender', () => {
     search.start();
 
     expect(widget.render).toHaveBeenCalledTimes(0);
+
+    await wait(0);
 
     // Resolve the `search`
     searches[0].resolver();
@@ -1482,7 +1496,7 @@ describe('refresh', () => {
     expect(clearCache).toHaveBeenCalledTimes(1);
   });
 
-  it('triggers a `search` with the cache emptied', () => {
+  it('triggers a `search` with the cache emptied', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1490,6 +1504,8 @@ describe('refresh', () => {
     });
 
     search.start();
+
+    await wait(0);
 
     // it is called once with start
     expect(searchClient.search).toHaveBeenCalledTimes(1);
@@ -2302,7 +2318,7 @@ describe('onStateChange', () => {
     expect(middlewareOnStateChange).toHaveBeenCalledTimes(0);
   });
 
-  test('does not trigger a search', () => {
+  test('does not trigger a search', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -2320,6 +2336,8 @@ describe('onStateChange', () => {
 
     search.addWidgets([searchBox({})]);
     search.start();
+
+    await wait(0);
 
     expect(searchClient.search).toHaveBeenCalledTimes(1);
 
@@ -2480,7 +2498,7 @@ describe('onStateChange', () => {
 });
 
 describe('initialUiState', () => {
-  it('warns if UI state contains unmounted widgets in development mode', () => {
+  it('warns if UI state contains unmounted widgets in development mode', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -2520,8 +2538,9 @@ describe('initialUiState', () => {
 
     search.addWidgets([searchBox, customWidget]);
 
-    expect(() => {
+    await expect(async () => {
       search.start();
+      await wait(0);
     })
       .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
 

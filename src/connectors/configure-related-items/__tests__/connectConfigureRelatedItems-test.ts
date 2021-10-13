@@ -3,6 +3,7 @@ import instantsearch from '../../..';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import type { AlgoliaHit } from '../../../types';
 import { noop } from '../../../lib/utils';
+import { wait } from '../../../../test/utils/wait';
 
 const hit: AlgoliaHit = {
   objectID: '1',
@@ -97,7 +98,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
   });
 
   describe('options', () => {
-    test('sets the optionalFilters search parameter based on matchingPatterns', () => {
+    test('sets the optionalFilters search parameter based on matchingPatterns', async () => {
       const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: 'indexName',
@@ -115,6 +116,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         }),
       ]);
       search.start();
+
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenCalledWith([
@@ -137,7 +140,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
       ]);
     });
 
-    test('sets the optionalFilters search parameter based on matchingPatterns with nested attributes', () => {
+    test('sets the optionalFilters search parameter based on matchingPatterns with nested attributes', async () => {
       const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: 'indexName',
@@ -155,6 +158,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         }),
       ]);
       search.start();
+
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenCalledWith([
@@ -174,7 +179,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
       ]);
     });
 
-    test('sets transformed search parameters based on transformSearchParameters', () => {
+    test('sets transformed search parameters based on transformSearchParameters', async () => {
       const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: 'indexName',
@@ -198,6 +203,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         }),
       ]);
       search.start();
+
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenCalledWith([
@@ -233,7 +240,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
       ]);
     });
 
-    test('filter out and warns for incorrect optionalFilters value type', () => {
+    test('filter out and warns for incorrect optionalFilters value type', async () => {
       const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: 'indexName',
@@ -259,6 +266,8 @@ You can remove the "rating" key from the \`matchingPatterns\` option.
 
 See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/`);
       search.start();
+
+      await wait(0);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenCalledWith([
