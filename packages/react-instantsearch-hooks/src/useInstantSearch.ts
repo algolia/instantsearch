@@ -31,7 +31,7 @@ export function useInstantSearch({
     warn(
       suppressExperimentalWarning,
       'This version is experimental and not production-ready.\n\n' +
-        'Please report any bugs at https://github.com/algolia/react-instantsearch/issues/new\n\n' +
+        'Please report any bugs at https://github.com/algolia/react-instantsearch/issues/new?template=Bug_report_Hooks.md&labels=Scope%3A%20Hooks\n\n' +
         '(To disable this warning, pass `suppressExperimentalWarning` to <InstantSearch />.)'
     );
   }, [suppressExperimentalWarning]);
