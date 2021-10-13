@@ -1,8 +1,7 @@
 import instantsearch from 'instantsearch.js';
 import { useEffect, useMemo, version as ReactVersion } from 'react';
 
-import { useForceUpdate } from '../useForceUpdate';
-
+import { useForceUpdate } from './useForceUpdate';
 import { useStableValue } from './useStableValue';
 import { warn } from './utils';
 import version from './version';
