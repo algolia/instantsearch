@@ -23,18 +23,19 @@ export type DynamicWidgetsWidgetParams = {
   container: string | HTMLElement;
 
   /**
-   * An array of widget creator functions. Will be used to display in the
-   * order defined by the facetOrdering.
+   * An array of widget creator functions, displayed in the order defined by
+   * `facetOrdering`.
    */
   widgets: Array<(container: HTMLElement) => Widget>;
 
   /**
-   * Function that gets called when an attribute is not found in the widgets array
+   * Function to return a fallback widget when an attribute isn't found in
+   * `widgets`.
    */
   fallbackWidget?(args: {
-    /** the attribute name to create a widget for */
+    /** The attribute name to create a widget for. */
     attribute: string;
-    /** the element in which this widget should be rendered */
+    /** CSS Selector or HTMLElement to insert the widget */
     container: HTMLElement;
   }): Widget;
 };

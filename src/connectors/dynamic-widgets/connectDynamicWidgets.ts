@@ -18,22 +18,22 @@ export type DynamicWidgetsRenderState = {
 
 export type DynamicWidgetsConnectorParams = {
   /**
-   * An array of widgets. Will be used to display in the
-   * order defined by the facetOrdering.
+   * An array of widgets, displayed in the order defined by `facetOrdering`.
    */
   widgets: Widget[];
 
   /**
-   * Function that gets called when an attribute is not found in the widgets array
+   * Function to return a fallback widget when an attribute isn't found in
+   * `widgets`.
    */
   fallbackWidget?(args: {
-    /** the attribute name to create a widget for */
+    /** The attribute name to create a widget for. */
     attribute: string;
   }): Widget;
 
   /**
-   * Function to transform the attributes to render. Receives the default order,
-   * as well as search results.
+   * Function to transform the items to render.
+   * The function also exposes the full search response.
    */
   transformItems?(
     items: string[],
