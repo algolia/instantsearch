@@ -629,8 +629,8 @@ describe('connectDynamicWidgets', () => {
     });
   });
 
-  describe('getWidgetSearchParameters', () => {
-    describe('requestAllFacets: true', () => {
+  describe.only('getWidgetSearchParameters', () => {
+    describe.only('default requestAllFacets', () => {
       test('adds facets *', () => {
         const widget = connectDynamicWidgets(() => {})({
           widgets: [],
@@ -644,6 +644,7 @@ describe('connectDynamicWidgets', () => {
         expect(searchParameters).toEqual(
           new SearchParameters({
             facets: ['*'],
+            maxValuesPerFacet: 20,
           })
         );
       });
@@ -715,10 +716,11 @@ describe('connectDynamicWidgets', () => {
       });
     });
 
-    describe('wildcardFacts: false', () => {
+    describe('overridden requestAllFacets', () => {
       test('does not add *', () => {
         const widget = connectDynamicWidgets(() => {})({
           widgets: [],
+          requestAllFacets: {},
         });
 
         const searchParameters = widget.getWidgetSearchParameters!(
@@ -726,17 +728,13 @@ describe('connectDynamicWidgets', () => {
           { uiState: {} }
         );
 
-        expect(searchParameters).toEqual(
-          new SearchParameters({
-            facets: ['*'],
-          })
-        );
+        expect(searchParameters).toEqual(new SearchParameters());
       });
 
       test('does not replace facets to *', () => {
         const widget = connectDynamicWidgets(() => {})({
           widgets: [],
-          requestAllFacets: false,
+          requestAllFacets: {},
         });
 
         const searchParameters = widget.getWidgetSearchParameters!(
@@ -754,7 +752,7 @@ describe('connectDynamicWidgets', () => {
       test('does not remove *', () => {
         const widget = connectDynamicWidgets(() => {})({
           widgets: [],
-          requestAllFacets: false,
+          requestAllFacets: {},
         });
 
         const searchParameters = widget.getWidgetSearchParameters!(

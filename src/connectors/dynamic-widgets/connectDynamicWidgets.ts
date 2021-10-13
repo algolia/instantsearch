@@ -1,4 +1,4 @@
-import type { SearchResults } from 'algoliasearch-helper';
+import type { PlainSearchParameters, SearchResults } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -27,9 +27,9 @@ export type DynamicWidgetsConnectorParams = {
    * Request all facet values instead of only those of the mounted widgets. This
    * option will lower the number of network requests needed for dynamic widgets,
    * but will have slightly larger payloads.
-   * @default true
+   * @default { facets: ['*'], maxValuesPerFacet: 20 }
    */
-  requestAllFacets?: boolean;
+  requestAllFacets?: PlainSearchParameters;
 };
 
 export type DynamicWidgetsWidgetDescription = {
@@ -54,7 +54,10 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
         widgets,
         transformItems = (items) => items,
         fallbackWidget,
-        requestAllFacets = true,
+        requestAllFacets = {
+          facets: ['*'],
+          maxValuesPerFacet: 20,
+        },
       } = widgetParams;
 
       if (
@@ -152,9 +155,8 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           if (!requestAllFacets) {
             return searchParameters;
           }
-          return searchParameters.setQueryParameters({
-            facets: ['*'],
-          });
+          // TODO: maxValuesPerFacet should use Math.max with the existing value, in case it's already higher
+          return searchParameters.setQueryParameters(requestAllFacets);
         },
         getRenderState(renderState, renderOptions) {
           return {
