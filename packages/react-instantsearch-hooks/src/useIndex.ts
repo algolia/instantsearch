@@ -1,8 +1,7 @@
 import index from 'instantsearch.js/es/widgets/index/index';
 import { useEffect, useMemo } from 'react';
 
-import { useForceUpdate } from '../useForceUpdate';
-
+import { useForceUpdate } from './useForceUpdate';
 import { useIndexContext } from './useIndexContext';
 import { useStableValue } from './useStableValue';
 
