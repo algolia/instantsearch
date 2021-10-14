@@ -104,7 +104,7 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
 
   return {
     ...widget,
-    init(initOptions) {
+    preInit(initOptions) {
       widgets.forEach((cb) => {
         const container = createContainer(rootContainer);
 
@@ -114,8 +114,6 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
         containers.set(attribute, container);
         connectorWidgets.push(childWidget);
       });
-
-      widget.init!(initOptions);
     },
     $$widgetType: 'ais.dynamicWidgets',
   };

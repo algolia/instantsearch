@@ -283,6 +283,25 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localWidgets = localWidgets.concat(widgets);
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
+        widgets.forEach((widget) => {
+          if (widget.preInit) {
+            widget.preInit({
+              helper: helper!,
+              parent: this,
+              uiState: localInstantSearchInstance!._initialUiState,
+              instantSearchInstance: localInstantSearchInstance!,
+              state: helper!.state,
+              renderState: localInstantSearchInstance!.renderState,
+              templatesConfig: localInstantSearchInstance!.templatesConfig,
+              createURL: this.createURL,
+              scopedResults: [],
+              searchMetadata: {
+                isSearchStalled: localInstantSearchInstance!._isSearchStalled,
+              },
+            });
+          }
+        });
+
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
             uiState: localUiState,
@@ -411,6 +430,31 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
       const mainHelper = instantSearchInstance.mainHelper!;
+
+      // This Helper is only used for state management we do not care about the
+      // `searchClient`. Only the "main" Helper created at the `InstantSearch`
+      // level is aware of the client.
+      helper = algoliasearchHelper({} as SearchClient, indexName);
+
+      localWidgets.forEach((widget) => {
+        if (widget.preInit) {
+          widget.preInit({
+            helper: helper!,
+            parent: this,
+            uiState: localInstantSearchInstance!._initialUiState,
+            instantSearchInstance: localInstantSearchInstance!,
+            state: helper!.state,
+            renderState: localInstantSearchInstance!.renderState,
+            templatesConfig: localInstantSearchInstance!.templatesConfig,
+            createURL: this.createURL,
+            scopedResults: [],
+            searchMetadata: {
+              isSearchStalled: localInstantSearchInstance!._isSearchStalled,
+            },
+          });
+        }
+      });
+
       const parameters = getLocalWidgetsSearchParameters(localWidgets, {
         uiState: localUiState,
         initialSearchParameters: new algoliasearchHelper.SearchParameters({
@@ -418,14 +462,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }),
       });
 
-      // This Helper is only used for state management we do not care about the
-      // `searchClient`. Only the "main" Helper created at the `InstantSearch`
-      // level is aware of the client.
-      helper = algoliasearchHelper(
-        {} as SearchClient,
-        parameters.index,
-        parameters
-      );
+      helper.setState(parameters);
 
       // We forward the call to `search` to the "main" instance of the Helper
       // which is responsible for managing the queries (it's the only one that is
