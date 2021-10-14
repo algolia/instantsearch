@@ -492,7 +492,7 @@ See ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
-    mainHelper.search();
+    this.scheduleSearch();
 
     // Keep the previous reference for legacy purpose, some pattern use
     // the direct Helper access `search.helper` (e.g multi-index).
