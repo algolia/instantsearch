@@ -1,3 +1,12 @@
+## [4.30.3](https://github.com/algolia/instantsearch.js/compare/v4.30.2...v4.30.3) (2021-10-12)
+
+
+### Bug Fixes
+
+* **toggleRefinement:** don't set off value in getWidgetRenderState ([#4912](https://github.com/algolia/instantsearch.js/issues/4912)) ([69525bf](https://github.com/algolia/instantsearch.js/commit/69525bf2a3087aeb75c4f1e5ab8452012436f61f))
+
+
+
 ## [4.30.2](https://github.com/algolia/instantsearch.js/compare/v4.30.1...v4.30.2) (2021-09-21)
 
 
