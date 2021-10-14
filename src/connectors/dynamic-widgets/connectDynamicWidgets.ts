@@ -157,13 +157,21 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
             return searchParameters;
           }
 
+          const startParameters = new SearchParameters();
+
+          const fallbackParameters =
+            fallbackWidget?.({
+              attribute: '',
+            })?.getWidgetSearchParameters?.(startParameters, options) ??
+            startParameters;
+
           // get all parameters that will be set by the mounted widgets
           const newParams = widgets.reduce(
             (params, widget) =>
               widget.getWidgetSearchParameters
                 ? widget.getWidgetSearchParameters(params, options)
                 : params,
-            new SearchParameters()
+            fallbackParameters
           );
 
           const newKeys = Object.keys(newParams) as unknown as Array<
