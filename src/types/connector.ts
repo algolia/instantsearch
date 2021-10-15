@@ -2,7 +2,7 @@ import type { SearchResults } from 'algoliasearch-helper';
 import type { InstantSearch } from './instantsearch';
 import type { InsightsClient } from './insights';
 import type { Hits } from './results';
-import type { Widget, WidgetDescription } from './widget';
+import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget';
 
 /**
  * The base renderer options. All render functions receive
@@ -63,8 +63,8 @@ export type Unmounter = () => void;
  */
 export type Connector<
   TWidgetDescription extends WidgetDescription,
-  TConnectorParams
-> = <TWidgetParams>(
+  TConnectorParams extends UnknownWidgetParams
+> = <TWidgetParams extends UnknownWidgetParams>(
   /**
    * The render function.
    */

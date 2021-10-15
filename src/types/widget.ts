@@ -114,8 +114,13 @@ export type BuiltinWidgetTypes =
   | 'ais.toggleRefinement'
   | 'ais.voiceSearch';
 
+// In this case we don't want to allow any record, as it would no longer warn
+// for unexpected parameters
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type UnknownWidgetParams = NonNullable<object>;
+
 export type WidgetParams = {
-  widgetParams: NonNullable<unknown>;
+  widgetParams?: UnknownWidgetParams;
 };
 
 export type WidgetDescription = {
@@ -254,7 +259,6 @@ type RenderStateLifeCycle<
 export type Widget<
   TWidgetDescription extends WidgetDescription & WidgetParams = {
     $$type: string;
-    widgetParams: unknown;
   }
 > = Expand<
   RequiredWidgetLifeCycle<TWidgetDescription> &

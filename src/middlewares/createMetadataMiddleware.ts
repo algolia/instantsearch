@@ -35,13 +35,14 @@ function extractPayload(
   };
 
   widgets.forEach((widget) => {
-    let widgetParams: { [key: string]: any } = {};
+    let widgetParams: Record<string, unknown> = {};
 
     if (widget.getWidgetRenderState) {
       const renderState = widget.getWidgetRenderState(initOptions);
 
-      if (renderState && typeof renderState.widgetParams === 'object') {
-        widgetParams = renderState.widgetParams!;
+      if (renderState && renderState.widgetParams) {
+        // casting, as we just earlier checked widgetParams exists, and thus an object
+        widgetParams = renderState.widgetParams as Record<string, unknown>;
       }
     }
 
