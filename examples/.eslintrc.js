@@ -6,6 +6,7 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/named': 'off',
     'react/prop-types': 'off',
+    '@typescript-eslint/consistent-type-imports': ['off'],
     '@typescript-eslint/no-use-before-define': ['off'],
   },
 };
