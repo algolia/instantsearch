@@ -1,3 +1,12 @@
+# [4.31.0](https://github.com/algolia/instantsearch.js/compare/v4.30.3...v4.31.0) (2021-10-14)
+
+
+### Features
+
+* **InstantSearch:** defer initial search ([#4925](https://github.com/algolia/instantsearch.js/issues/4925)) ([9a88115](https://github.com/algolia/instantsearch.js/commit/9a8811534af1288e316cdfb6f6fc49df1597290e))
+
+
+
 ## [4.30.3](https://github.com/algolia/instantsearch.js/compare/v4.30.2...v4.30.3) (2021-10-12)
 
 
