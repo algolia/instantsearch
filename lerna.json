@@ -2,7 +2,7 @@
   "lerna": "2.10.1",
   "packages": [
     "packages/*",
-    "examples/@(default-theme|e-commerce|media|tourism)"
+    "examples/@(default-theme|e-commerce|media|tourism|hooks)"
   ],
   "version": "6.12.1",
   "npmClient": "yarn",

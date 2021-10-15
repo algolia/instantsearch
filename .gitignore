@@ -10,6 +10,7 @@ build/
 preview.zip
 .happypack/
 /coverage
+/.parcel-cache
 
 # Generated files
 /website/examples
