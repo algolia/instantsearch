@@ -779,3 +779,22 @@ describe('hierarchical facet', function() {
     expect(facetValues).toEqual(expected);
   });
 });
+
+test('does not return empty items', function() {
+  var rawResults = require('./getFacetValues/sparse.json');
+  var results = new SearchResults(new SearchParameters({
+    disjunctiveFacets: ['brands']
+  }), rawResults.results);
+
+  expect(results.getFacetValues('brands', {facetOrdering: true})).toEqual([
+    {name: 'Addo', count: 321, isRefined: false},
+    {name: 'Paw Patrol', count: 130, isRefined: false},
+    {name: 'Mattel', count: 586, isRefined: false},
+    {name: 'Nick Jr.', count: 147, isRefined: false},
+    {name: 'Early Learning Centre', count: 292, isRefined: false},
+    {name: 'Hot Wheels', count: 94, isRefined: false},
+    {name: 'Fisher-Price', count: 104, isRefined: false},
+    {name: 'Funko', count: 187, isRefined: false},
+    {name: 'Nickelodeon', count: 230, isRefined: false}
+  ]);
+});

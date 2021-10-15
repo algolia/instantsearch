@@ -728,6 +728,10 @@ function sortViaFacetOrdering(facetValues, facetOrdering) {
     }
   });
 
+  orderedFacets = orderedFacets.filter(function(facet) {
+    return facet;
+  });
+
   var sortRemainingBy = facetOrdering.sortRemainingBy;
   var ordering;
   if (sortRemainingBy === 'hidden') {
