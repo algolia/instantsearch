@@ -1,8 +1,15 @@
-export type InsightsClientMethod =
-  | 'viewedObjectIDs'
-  | 'clickedFilters'
-  | 'clickedObjectIDsAfterSearch'
-  | 'convertedObjectIDsAfterSearch';
+import type { InsightsMethodMap } from 'search-insights';
+
+export type {
+  InsightsClient,
+  Init as InsightsInit,
+  AddAlgoliaAgent as InsightsAddAlgoliaAgent,
+  SetUserToken as InsightsSetUserToken,
+  GetUserToken as InsightsGetUserToken,
+  OnUserTokenChange as InsightsOnUserTokenChange,
+} from 'search-insights';
+
+export type InsightsClientMethod = keyof InsightsMethodMap;
 
 export type InsightsClientPayload = {
   eventName: string;
@@ -12,51 +19,15 @@ export type InsightsClientPayload = {
   positions?: number[];
 };
 
-export type InsightsSetUserToken = (
-  method: 'setUserToken',
-  userToken: string
-) => void;
-
+/**
+ * @deprecated
+ * this is not used anywhere
+ */
 export type InsightsSendEvent = (
-  method: InsightsClientMethod,
+  method:
+    | 'viewedObjectIDs'
+    | 'clickedFilters'
+    | 'clickedObjectIDsAfterSearch'
+    | 'convertedObjectIDsAfterSearch',
   payload: InsightsClientPayload
-) => void;
-
-export type InsightsOnUserTokenChange = (
-  method: 'onUserTokenChange',
-  callback?: (userToken: string) => void,
-  options?: { immediate?: boolean }
-) => void;
-
-export type InsightsGetUserToken = (
-  method: 'getUserToken',
-  options?: any,
-  callback?: (error: any, userToken: string) => void
-) => void;
-
-export type InsightsInit = (
-  method: 'init',
-  options: {
-    appId: string;
-    apiKey: string;
-  }
-) => void;
-
-export type InsightsAddAlgoliaAgent = (
-  method: 'addAlgoliaAgent',
-  algoliaAgent: string
-) => void;
-
-export type InsightsClient = InsightsAddAlgoliaAgent &
-  InsightsSendEvent &
-  InsightsOnUserTokenChange &
-  InsightsInit &
-  InsightsSetUserToken &
-  InsightsGetUserToken & {
-    queue?: Array<[string, any]>;
-  };
-
-export type InsightsClientWrapper = (
-  method: InsightsClientMethod,
-  payload: Partial<InsightsClientPayload>
 ) => void;

@@ -27,7 +27,7 @@ import type {
   Hit,
   WidgetFactory,
   Renderer,
-  InsightsClientWrapper,
+  InsightsClient,
 } from '../../types';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
@@ -69,7 +69,7 @@ const renderer =
         hits={receivedHits}
         results={results}
         templateProps={renderState.templateProps}
-        insights={insights as InsightsClientWrapper}
+        insights={insights as InsightsClient}
         sendEvent={(event: InsightsEvent) => {
           instantSearchInstance.sendEventToInsights(event);
         }}
