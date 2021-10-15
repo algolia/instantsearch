@@ -108,7 +108,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       hits,
       objectIDs: payload.objectIDs,
     });
-    aa(method, { ...inferredPayload, ...payload } as any);
+    aa(method, { ...inferredPayload, ...payload });
   };
 
 /**

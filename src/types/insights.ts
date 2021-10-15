@@ -1,7 +1,9 @@
-import type { InsightsMethodMap } from 'search-insights';
+import type {
+  InsightsMethodMap,
+  InsightsClient as _InsightsClient,
+} from 'search-insights';
 
 export type {
-  InsightsClient,
   Init as InsightsInit,
   AddAlgoliaAgent as InsightsAddAlgoliaAgent,
   SetUserToken as InsightsSetUserToken,
@@ -17,6 +19,10 @@ export type InsightsClientPayload = {
   index: string;
   objectIDs: string[];
   positions?: number[];
+};
+
+export type InsightsClient = _InsightsClient & {
+  queue?: Array<Array<any>>;
 };
 
 /**

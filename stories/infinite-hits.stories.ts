@@ -4,6 +4,13 @@ import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
 import { createInfiniteHitsSessionStorageCache } from '../src/lib/infiniteHitsCache';
 
+import type { InsightsClient } from '../src/types/insights';
+
+const fakeInsightsClient: InsightsClient = (method, ...payloads) => {
+  const [payload] = payloads;
+  action(`[InsightsClient] sent ${method} with payload`)(payload);
+};
+
 storiesOf('Results/InfiniteHits', module)
   .add(
     'default',
@@ -78,8 +85,7 @@ storiesOf('Results/InfiniteHits', module)
         ]);
       },
       {
-        insightsClient: (method: string, payload: any) =>
-          action(`[InsightsClient] sent "${method}" with payload`)(payload),
+        insightsClient: fakeInsightsClient,
       }
     )
   )

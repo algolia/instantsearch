@@ -3,7 +3,6 @@ import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import type { InstantSearch, Widget } from '../../types';
 import { createInstantSearch } from '../../../test/mock/createInstantSearch';
 import { createSingleSearchResponse } from '../../../test/mock/createAPIResponse';
-import { castToJestMock } from '../../../test/utils/castToJestMock';
 
 const connectHits =
   (renderFn: any, unmountFn: any) =>
@@ -211,17 +210,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         objectIDs: ['3'],
         eventName: 'Add to basket',
       });
-      const [method, payload] = castToJestMock(
-        instantSearchInstance.insightsClient!
-      ).mock.calls[0];
-      expect(method).toEqual('clickedObjectIDsAfterSearch');
-      expect(payload).toEqual({
-        eventName: 'Add to basket',
-        index: 'theIndex',
-        queryID: 'theQueryID',
-        objectIDs: ['3'],
-        positions: [11],
-      });
+      expect(instantSearchInstance.insightsClient).toHaveBeenCalledTimes(1);
+      expect(instantSearchInstance.insightsClient).toHaveBeenCalledWith(
+        'clickedObjectIDsAfterSearch',
+        {
+          eventName: 'Add to basket',
+          index: 'theIndex',
+          queryID: 'theQueryID',
+          objectIDs: ['3'],
+          positions: [11],
+        }
+      );
     });
 
     it('should not infer or pass the positions if method is `convertedObjectIDsAfterSearch`', () => {
@@ -247,16 +246,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         objectIDs: ['1'],
         eventName: 'Add to basket',
       });
-      const [method, payload] = castToJestMock(
-        instantSearchInstance.insightsClient!
-      ).mock.calls[0];
-      expect(method).toEqual('convertedObjectIDsAfterSearch');
-      expect(payload).toEqual({
-        eventName: 'Add to basket',
-        index: 'theIndex',
-        queryID: 'theQueryID',
-        objectIDs: ['1'],
-      });
+      expect(instantSearchInstance.insightsClient).toHaveBeenCalledTimes(1);
+      expect(instantSearchInstance.insightsClient).toHaveBeenCalledWith(
+        'convertedObjectIDsAfterSearch',
+        {
+          eventName: 'Add to basket',
+          index: 'theIndex',
+          queryID: 'theQueryID',
+          objectIDs: ['1'],
+        }
+      );
     });
 
     it('should reject non-existing objectIDs', () => {

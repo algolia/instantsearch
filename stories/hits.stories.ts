@@ -2,6 +2,12 @@ import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
+import type { InsightsClient } from '../src/types/insights';
+
+const fakeInsightsClient: InsightsClient = (method, ...payloads) => {
+  const [payload] = payloads;
+  action(`[InsightsClient] sent ${method} with payload`)(payload);
+};
 
 storiesOf('Results/Hits', module)
   .add(
@@ -217,8 +223,7 @@ storiesOf('Results/Hits', module)
         ]);
       },
       {
-        insightsClient: (method: string, payload: any) =>
-          action(`[InsightsClient] sent ${method} with payload`)(payload),
+        insightsClient: fakeInsightsClient,
       }
     )
   )
@@ -250,8 +255,7 @@ storiesOf('Results/Hits', module)
         ]);
       },
       {
-        insightsClient: (method: string, payload: any) =>
-          action(`[InsightsClient] sent ${method} with payload`)(payload),
+        insightsClient: fakeInsightsClient,
       }
     )
   );
