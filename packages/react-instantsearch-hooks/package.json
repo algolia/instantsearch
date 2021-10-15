@@ -3,6 +3,7 @@
   "version": "6.12.1",
   "description": "⚡ Lightning-fast search for React, by Algolia",
   "source": "src/index.ts",
+  "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "sideEffects": false,
@@ -31,10 +32,11 @@
   "scripts": {
     "clean": "rm -rf dist",
     "watch": "yarn build:cjs --watch",
-    "build": "yarn build:cjs && yarn build:es && yarn build:umd",
+    "build": "yarn build:cjs && yarn build:es && yarn build:umd && yarn build:types",
     "build:cjs": "babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
-    "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js"
+    "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
+    "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
