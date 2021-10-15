@@ -1,3 +1,6 @@
+3.6.1 - 2021-10-15
+ * fix(facetOrdering): make sure ordered facets is a dense array (#879) https://github.com/algolia/algoliasearch-helper-js/commit/990f8bc133dd379c457c52f750a87944e2f2924c
+
 3.6.0 - 2021-10-08
  * ci(circle): update node image (#875) https://github.com/algolia/algoliasearch-helper-js/commit/36484631c25e9d286b1d2d73cf3a388d4dba2587
  * feat(facets): when * is present, only send that parameter (#874) https://github.com/algolia/algoliasearch-helper-js/commit/fc183ec2910d4ba33067b3487f3a70e940fd24d3
