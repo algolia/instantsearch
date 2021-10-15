@@ -22,7 +22,7 @@ export type InsightsClientPayload = {
 };
 
 export type InsightsClient = _InsightsClient & {
-  queue?: Array<Array<any>>;
+  queue?: any[][];
 };
 
 /**
