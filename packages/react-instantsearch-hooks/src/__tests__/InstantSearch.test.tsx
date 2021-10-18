@@ -2,11 +2,16 @@ import { render } from '@testing-library/react';
 import React, { version as ReactVersion } from 'react';
 
 import { createSearchClient } from '../../../../test/mock';
+import { wait } from '../../../../test/utils';
 import { IndexContext } from '../IndexContext';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchContext } from '../InstantSearchContext';
+import { Index } from '../SearchIndex';
+import { useRefinementList } from '../useRefinementList';
+import { useSearchBox } from '../useSearchBox';
 import version from '../version';
 
+import type { UseRefinementListProps } from '../useRefinementList';
 import type { InstantSearch as InstantSearchType } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 
@@ -128,6 +133,35 @@ describe('InstantSearch', () => {
     unmount();
 
     expect(searchContext!.started).toEqual(false);
+  });
+
+  test('triggers a single network request on mount with widgets', async () => {
+    const searchClient = createSearchClient();
+
+    function SearchBox() {
+      useSearchBox();
+
+      return null;
+    }
+
+    function RefinementList(props: UseRefinementListProps) {
+      useRefinementList(props);
+
+      return null;
+    }
+
+    render(
+      <InstantSearch indexName="indexName" searchClient={searchClient}>
+        <SearchBox />
+        <Index indexName="subIndexName">
+          <RefinementList attribute="brand" />
+        </Index>
+      </InstantSearch>
+    );
+
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
   describe('experimental warning', () => {
