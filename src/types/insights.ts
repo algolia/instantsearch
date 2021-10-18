@@ -22,9 +22,9 @@ export type InsightsClientPayload = {
 };
 
 type QueueItemMap = {
-  [methodName in keyof InsightsMethodMap]: [
-    methodName,
-    ...InsightsMethodMap[methodName]
+  [MethodName in keyof InsightsMethodMap]: [
+    methodName: MethodName,
+    ...args: InsightsMethodMap[MethodName]
   ];
 };
 
