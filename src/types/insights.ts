@@ -21,19 +21,15 @@ export type InsightsClientPayload = {
   positions?: number[];
 };
 
-export type InsightsClient = _InsightsClient & {
-  queue?: any[][];
+type QueueItemMap = {
+  [methodName in keyof InsightsMethodMap]: [
+    methodName,
+    ...InsightsMethodMap[methodName]
+  ];
 };
 
-/**
- * @deprecated
- * this is not used anywhere
- */
-export type InsightsSendEvent = (
-  method:
-    | 'viewedObjectIDs'
-    | 'clickedFilters'
-    | 'clickedObjectIDsAfterSearch'
-    | 'convertedObjectIDsAfterSearch',
-  payload: InsightsClientPayload
-) => void;
+type QueueItem = QueueItemMap[keyof QueueItemMap];
+
+export type InsightsClient = _InsightsClient & {
+  queue?: QueueItem[];
+};
