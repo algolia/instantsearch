@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 
 import { useIndexContext } from './useIndexContext';
 import { useInstantSearchContext } from './useInstantSearchContext';
@@ -80,7 +80,9 @@ export function useConnector<
     return {};
   });
 
-  useEffect(() => {
+  // We use a layout effect to add the widget to the index before the index
+  // renders, otherwise it triggers 2 network requests.
+  useLayoutEffect(() => {
     parentIndex.addWidgets([widget]);
 
     return () => {
