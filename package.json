@@ -52,6 +52,7 @@
     "scripts/transforms"
   ],
   "dependencies": {
+    "@algolia/client-search": "file:algolia-client-search-4.10.5.tgz",
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
