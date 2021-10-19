@@ -1,3 +1,6 @@
+3.6.2 - 2021-10-19
+ * fix(SearchParameters): ignore invalid parameters (#880) https://github.com/algolia/algoliasearch-helper-js/commit/4ff542b70b92a6b81cce8b9255700b0bc0817edd
+
 3.6.1 - 2021-10-15
  * fix(facetOrdering): make sure ordered facets is a dense array (#879) https://github.com/algolia/algoliasearch-helper-js/commit/990f8bc133dd379c457c52f750a87944e2f2924c
 
