@@ -1,3 +1,12 @@
+## [4.31.1](https://github.com/algolia/instantsearch.js/compare/v4.31.0...v4.31.1) (2021-10-19)
+
+
+### Bug Fixes
+
+* **types:** export correct types from search-insights ([#4930](https://github.com/algolia/instantsearch.js/issues/4930)) ([5ae7a5b](https://github.com/algolia/instantsearch.js/commit/5ae7a5b86ad9c042bfbdc60e505c159eebdb404f))
+
+
+
 # [4.31.0](https://github.com/algolia/instantsearch.js/compare/v4.30.3...v4.31.0) (2021-10-14)
 
 
