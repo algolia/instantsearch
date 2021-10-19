@@ -10,7 +10,6 @@ import type {
   InsightsClient,
   InsightsClientMethod,
   InsightsClientPayload,
-  InsightsClientWrapper,
   Connector,
 } from '../../types';
 
@@ -81,8 +80,9 @@ const wrapInsightsClient =
     aa: InsightsClient | null,
     results: SearchResults,
     hits: Hits
-  ): InsightsClientWrapper =>
-  (method: InsightsClientMethod, payload: Partial<InsightsClientPayload>) => {
+  ): InsightsClient =>
+  (method, ...payloads) => {
+    const [payload] = payloads;
     warning(
       false,
       `\`insights\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
@@ -108,7 +108,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       hits,
       objectIDs: payload.objectIDs,
     });
-    aa(method, { ...inferredPayload, ...payload } as any);
+    aa(method, { ...inferredPayload, ...payload });
   };
 
 /**

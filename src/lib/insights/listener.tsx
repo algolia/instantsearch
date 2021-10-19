@@ -3,12 +3,12 @@
 import { h } from 'preact';
 import { deserializePayload } from '../utils';
 import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
-import type { InsightsClientWrapper } from '../../types';
+import type { InsightsClient } from '../../types';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type WithInsightsListenerProps = {
   [key: string]: unknown;
-  insights: InsightsClientWrapper;
+  insights: InsightsClient;
   sendEvent?: (event: InsightsEvent) => void;
 };
 

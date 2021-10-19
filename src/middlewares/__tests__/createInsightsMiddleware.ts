@@ -340,6 +340,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         createTestEnvironment();
       const middleware = createInsightsMiddleware({
         insightsClient,
+        insightsInitParams: { useCookie: true },
       })({ instantSearchInstance });
       middleware.subscribe();
       expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));

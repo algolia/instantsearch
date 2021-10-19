@@ -27,7 +27,7 @@ import type {
   Template,
   TemplateWithBindEvent,
   Hit,
-  InsightsClientWrapper,
+  InsightsClient,
   Renderer,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
@@ -189,7 +189,7 @@ const renderer =
         templateProps={renderState.templateProps!}
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
-        insights={insights as InsightsClientWrapper}
+        insights={insights as InsightsClient}
         sendEvent={(event: InsightsEvent) => {
           instantSearchInstance.sendEventToInsights(event);
         }}

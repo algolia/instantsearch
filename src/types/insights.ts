@@ -1,8 +1,17 @@
-export type InsightsClientMethod =
-  | 'viewedObjectIDs'
-  | 'clickedFilters'
-  | 'clickedObjectIDsAfterSearch'
-  | 'convertedObjectIDsAfterSearch';
+import type {
+  InsightsMethodMap,
+  InsightsClient as _InsightsClient,
+} from 'search-insights';
+
+export type {
+  Init as InsightsInit,
+  AddAlgoliaAgent as InsightsAddAlgoliaAgent,
+  SetUserToken as InsightsSetUserToken,
+  GetUserToken as InsightsGetUserToken,
+  OnUserTokenChange as InsightsOnUserTokenChange,
+} from 'search-insights';
+
+export type InsightsClientMethod = keyof InsightsMethodMap;
 
 export type InsightsClientPayload = {
   eventName: string;
@@ -12,51 +21,15 @@ export type InsightsClientPayload = {
   positions?: number[];
 };
 
-export type InsightsSetUserToken = (
-  method: 'setUserToken',
-  userToken: string
-) => void;
+type QueueItemMap = {
+  [MethodName in keyof InsightsMethodMap]: [
+    methodName: MethodName,
+    ...args: InsightsMethodMap[MethodName]
+  ];
+};
 
-export type InsightsSendEvent = (
-  method: InsightsClientMethod,
-  payload: InsightsClientPayload
-) => void;
+type QueueItem = QueueItemMap[keyof QueueItemMap];
 
-export type InsightsOnUserTokenChange = (
-  method: 'onUserTokenChange',
-  callback?: (userToken: string) => void,
-  options?: { immediate?: boolean }
-) => void;
-
-export type InsightsGetUserToken = (
-  method: 'getUserToken',
-  options?: any,
-  callback?: (error: any, userToken: string) => void
-) => void;
-
-export type InsightsInit = (
-  method: 'init',
-  options: {
-    appId: string;
-    apiKey: string;
-  }
-) => void;
-
-export type InsightsAddAlgoliaAgent = (
-  method: 'addAlgoliaAgent',
-  algoliaAgent: string
-) => void;
-
-export type InsightsClient = InsightsAddAlgoliaAgent &
-  InsightsSendEvent &
-  InsightsOnUserTokenChange &
-  InsightsInit &
-  InsightsSetUserToken &
-  InsightsGetUserToken & {
-    queue?: Array<[string, any]>;
-  };
-
-export type InsightsClientWrapper = (
-  method: InsightsClientMethod,
-  payload: Partial<InsightsClientPayload>
-) => void;
+export type InsightsClient = _InsightsClient & {
+  queue?: QueueItem[];
+};
