@@ -1,6 +1,6 @@
 {
   "name": "hooks-example",
-  "version": "6.12.1",
+  "version": "6.13.0",
   "private": true,
   "scripts": {
     "build": "parcel build index.html",
@@ -10,7 +10,7 @@
     "algoliasearch": "4.10.5",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "react-instantsearch-hooks": "6.12.1"
+    "react-instantsearch-hooks": "6.13.0"
   },
   "devDependencies": {
     "parcel": "2.0.0-beta.1"
