@@ -52,6 +52,7 @@
     "scripts/transforms"
   ],
   "dependencies": {
+    "@algolia/client-search": "file:algolia-client-search-4.10.5.tgz",
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
@@ -63,7 +64,6 @@
     "qs": "^6.5.1 < 6.10"
   },
   "devDependencies": {
-    "@algolia/client-search": "4.10.3",
     "@babel/cli": "7.8.4",
     "@babel/core": "7.9.6",
     "@babel/plugin-proposal-class-properties": "7.8.3",
