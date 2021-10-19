@@ -32,4 +32,21 @@ describe('life cycle', () => {
       ]
     `);
   });
+
+  it('browser back/forward behavior', async () => {
+    const pushState = jest.spyOn(window.history, 'pushState');
+
+    const router = historyRouter<{ some: string }>({
+      writeDelay: 0,
+    });
+    // router.write always calling after onUpdate method
+    router.onUpdate((routeState) => {
+      router.write(routeState);
+    });
+
+    const popStateEvent = new PopStateEvent('popstate', { state: { step: 2 } });
+    dispatchEvent(popStateEvent);
+    await wait(0);
+    expect(pushState).toHaveBeenCalledTimes(0);
+  });
 });

@@ -59,6 +59,12 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private _onPopState?(event: PopStateEvent): void;
 
   /**
+   * Indicates if history.pushState should be executed.
+   * It needs to avoid pushing state to history in case of back/forward in browser
+   */
+  private shouldPushState: boolean = true;
+
+  /**
    * Initializes a new storage provider that syncs the search state to the URL
    * using web APIs (`window.location.pushState` and `onpopstate` event).
    */
@@ -99,7 +105,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
 
     this.writeTimer = window.setTimeout(() => {
       setWindowTitle(title);
-      window.history.pushState(routeState, title || '', url);
+      if (this.shouldPushState) {
+        window.history.pushState(routeState, title || '', url);
+      }
+      this.shouldPushState = true;
       this.writeTimer = undefined;
     }, this.writeDelay);
   }
@@ -115,6 +124,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
         this.writeTimer = undefined;
       }
 
+      this.shouldPushState = false;
       const routeState = event.state;
 
       // At initial load, the state is read from the URL without update.
