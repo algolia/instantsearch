@@ -21,7 +21,10 @@ function _merge(target, source) {
   }
 
   for (var key in source) {
-    if (!Object.prototype.hasOwnProperty.call(source, key)) {
+    if (
+      !Object.prototype.hasOwnProperty.call(source, key) ||
+      key === '__proto__'
+    ) {
       continue;
     }
 
@@ -32,7 +35,10 @@ function _merge(target, source) {
       continue;
     }
 
-    if (isObjectOrArrayOrFunction(targetVal) && isObjectOrArrayOrFunction(sourceVal)) {
+    if (
+      isObjectOrArrayOrFunction(targetVal) &&
+      isObjectOrArrayOrFunction(sourceVal)
+    ) {
       target[key] = _merge(targetVal, sourceVal);
     } else {
       target[key] = clone(sourceVal);

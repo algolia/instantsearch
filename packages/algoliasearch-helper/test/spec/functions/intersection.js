@@ -18,4 +18,3 @@ test('it should not produce duplicate primitive values', function() {
     '2'
   ]);
 });
-

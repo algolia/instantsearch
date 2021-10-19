@@ -92,3 +92,16 @@ it('should keep the keys order when adding facet refinements', function() {
   );
   expect(Object.keys(actual)).toEqual(['facet1', 'facet2']);
 });
+
+it('does not pollute the prototype', () => {
+  var payload = JSON.parse('{"__proto__": {"polluted": "vulnerable to PP"}}');
+  var subject = {};
+
+  expect(subject.polluted).toBe(undefined);
+
+  const out = defaults({}, payload);
+
+  expect(out).toEqual({});
+
+  expect({}.polluted).toBe(undefined);
+});

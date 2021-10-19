@@ -170,3 +170,16 @@ it('should not convert strings to arrays when merging arrays of `source`', funct
 
   expect(actual).toStrictEqual({a: ['x', 'y', 'z']});
 });
+
+it('does not pollute the prototype', () => {
+  var payload = JSON.parse('{"__proto__": {"polluted": "vulnerable to PP"}}');
+  var subject = {};
+
+  expect(subject.polluted).toBe(undefined);
+
+  const out = merge({}, payload);
+
+  expect(out).toEqual({});
+
+  expect({}.polluted).toBe(undefined);
+});
