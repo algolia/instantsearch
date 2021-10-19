@@ -47,6 +47,13 @@ module.exports = {
 
     // update version in packages & dependencies
     exec(`lerna version ${version} --no-git-tag-version --no-push --yes`);
+
+    // @TODO: We can remove after initial npm release of `react-instantsearch-hooks`
+    // We update the Hooks package dependency in the example because Lerna doesn't
+    // and releasing fails because the Hooks package has not yet been released on npm.
+    exec(
+      `yarn workspace hooks-example upgrade react-instantsearch-hooks@${version}`
+    );
   },
   shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
     const { fix = 0 } = commitNumbersPerType;
