@@ -4,7 +4,7 @@ import {
   getFunctionalInterface,
 } from 'search-insights';
 
-import { InsightsClient } from '../../src/types/insights';
+import type { InsightsClient } from '../../src/types/insights';
 
 export function createInsights() {
   const analytics = mockMethods(
