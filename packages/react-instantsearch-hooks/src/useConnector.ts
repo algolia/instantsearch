@@ -10,7 +10,10 @@ import type { Connector, WidgetDescription } from 'instantsearch.js';
 export function useConnector<
   TProps extends Record<string, unknown>,
   TDescription extends WidgetDescription
->(connector: Connector<TDescription, TProps>, props: TProps = {} as TProps) {
+>(
+  connector: Connector<TDescription, TProps>,
+  props: TProps = {} as TProps
+): TDescription['renderState'] {
   const search = useInstantSearchContext();
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
@@ -35,7 +38,7 @@ export function useConnector<
     return createWidget(stableProps);
   }, [stableProps, connector]);
 
-  const [state, setState] = useState(() => {
+  const [state, setState] = useState<TDescription['renderState']>(() => {
     if (widget.getWidgetRenderState) {
       // The helper exists because we've started InstantSearch.
       const helper = parentIndex.getHelper()!;
