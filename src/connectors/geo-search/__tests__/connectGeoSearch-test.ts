@@ -581,7 +581,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       }),
     ]);
 
-    // @ts-expect-error connector uses strings
     helper.setQueryParameter('insideBoundingBox', '10,12,14,16');
 
     widget.init!(
@@ -660,7 +659,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       }),
     ]);
 
-    // @ts-expect-error connector uses strings
     helper.setQueryParameter('insideBoundingBox', '10,12,14,16');
 
     widget.init!(
@@ -696,7 +694,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
-    // @ts-expect-error connector uses strings
     helper.setQueryParameter('insideBoundingBox', '12,14,16,18');
 
     widget.render!(
@@ -721,7 +718,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const helper = createFakeHelper();
 
       // Simulate the configuration or external setter (like URLSync)
-      // @ts-expect-error connector uses strings
       helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
 
       widget.init!(
@@ -1342,7 +1338,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const widget = customGeoSearch({});
       const helper = createFakeHelper();
 
-      // @ts-expect-error connector uses strings
       helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
 
       const expectation = new SearchParameters({ index: '' });
@@ -1562,7 +1557,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     it('gives all render functions with refinement', () => {
       const [widget, helper] = getInitializedWidget();
       helper.setQueryParameter('aroundLatLng', '10, 12');
-      // @ts-expect-error connector uses strings
       helper.setQueryParameter('insideBoundingBox', '10,12,11,2');
 
       expect(
