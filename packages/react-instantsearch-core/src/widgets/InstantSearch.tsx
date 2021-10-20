@@ -11,6 +11,8 @@ import type {
 } from 'algoliasearch-helper';
 import type { MultiResponse } from '../types/algoliasearch';
 import type { ConnectorDescription } from '../core/createConnector';
+import type { WidgetsManager } from '../core/createWidgetsManager';
+import { isMetadataEnabled, injectMetadata } from '../core/metadata';
 
 type ResultsState = {
   metadata: never[];
@@ -21,7 +23,7 @@ type ResultsState = {
 // @TODO: move to createInstantSearchManager when it's TS
 type InstantSearchManager = {
   store: Store;
-  widgetsManager: any;
+  widgetsManager: WidgetsManager;
   getWidgetsIds(): any;
   getSearchParameters(...args: any[]): {
     mainParameters: SearchParameters;
@@ -36,7 +38,7 @@ type InstantSearchManager = {
   skipSearch(...args: any[]): any;
 };
 
-type SearchClient = {
+export type SearchClient = {
   search: (requests: Array<{}>) => Promise<{}>;
   searchForFacetValues: (requests: Array<{}>) => Promise<{}>;
 };
@@ -227,6 +229,15 @@ class InstantSearch extends Component<Props, State> {
 
     if (prevProps.searchClient !== this.props.searchClient) {
       this.state.instantSearchManager.updateClient(this.props.searchClient);
+    }
+  }
+
+  componentDidMount() {
+    if (isMetadataEnabled()) {
+      injectMetadata(
+        this.state.instantSearchManager.widgetsManager.getWidgets(),
+        this.props.searchClient
+      );
     }
   }
 
