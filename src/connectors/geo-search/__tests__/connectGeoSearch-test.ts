@@ -718,7 +718,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const helper = createFakeHelper();
 
       // Simulate the configuration or external setter (like URLSync)
-
       helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
 
       widget.init!(
@@ -1558,7 +1557,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     it('gives all render functions with refinement', () => {
       const [widget, helper] = getInitializedWidget();
       helper.setQueryParameter('aroundLatLng', '10, 12');
-
       helper.setQueryParameter('insideBoundingBox', '10,12,11,2');
 
       expect(
