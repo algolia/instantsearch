@@ -1,3 +1,12 @@
+# [4.32.0](https://github.com/algolia/instantsearch.js/compare/v4.31.1...v4.32.0) (2021-10-20)
+
+
+### Features
+
+* **dependencies:** update algoliasearch-helper ([#4936](https://github.com/algolia/instantsearch.js/issues/4936)) ([014a413](https://github.com/algolia/instantsearch.js/commit/014a413f14dded3861a9c288ea618f1602bcd66d))
+
+
+
 ## [4.31.1](https://github.com/algolia/instantsearch.js/compare/v4.31.0...v4.31.1) (2021-10-19)
 
 
