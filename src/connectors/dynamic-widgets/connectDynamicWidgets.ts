@@ -80,7 +80,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
         $$type: 'ais.dynamicWidgets',
         init(initOptions) {
           widgets.forEach((widget) => {
-            const attribute = getWidgetAttribute(widget, initOptions);
+            const attribute = getWidgetAttribute(widget);
             localWidgets.set(attribute, { widget, isMounted: false });
           });
 
@@ -161,7 +161,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
 
           const fallbackParameters =
             fallbackWidget?.({
-              attribute: '',
+              attribute: '__fallback__',
             })?.getWidgetSearchParameters?.(startParameters, options) ??
             startParameters;
 

@@ -413,10 +413,17 @@ const connectRefinementList: RefinementListConnector =
             }
           }
 
+          function isNotEmpty<TType>(
+            value: TType | Record<string, never>
+          ): value is TType {
+            return Object.keys(value).length === 0;
+          }
+
           // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
           // function
-          const searchFacetValues =
-            searchForFacetValues && searchForFacetValues(renderOptions);
+          const searchFacetValues = isNotEmpty(renderOptions)
+            ? searchForFacetValues && searchForFacetValues(renderOptions)
+            : () => {};
 
           const canShowLess =
             isShowingMore && lastItemsFromMainSearch.length > limit;

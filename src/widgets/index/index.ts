@@ -283,25 +283,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localWidgets = localWidgets.concat(widgets);
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        widgets.forEach((widget) => {
-          if (widget.preInit) {
-            widget.preInit({
-              helper: helper!,
-              parent: this,
-              uiState: localInstantSearchInstance!._initialUiState,
-              instantSearchInstance: localInstantSearchInstance!,
-              state: helper!.state,
-              renderState: localInstantSearchInstance!.renderState,
-              templatesConfig: localInstantSearchInstance!.templatesConfig,
-              createURL: this.createURL,
-              scopedResults: [],
-              searchMetadata: {
-                isSearchStalled: localInstantSearchInstance!._isSearchStalled,
-              },
-            });
-          }
-        });
-
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
             uiState: localUiState,
@@ -435,25 +416,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
       helper = algoliasearchHelper({} as SearchClient, indexName);
-
-      localWidgets.forEach((widget) => {
-        if (widget.preInit) {
-          widget.preInit({
-            helper: helper!,
-            parent: this,
-            uiState: localInstantSearchInstance!._initialUiState,
-            instantSearchInstance: localInstantSearchInstance!,
-            state: helper!.state,
-            renderState: localInstantSearchInstance!.renderState,
-            templatesConfig: localInstantSearchInstance!.templatesConfig,
-            createURL: this.createURL,
-            scopedResults: [],
-            searchMetadata: {
-              isSearchStalled: localInstantSearchInstance!._isSearchStalled,
-            },
-          });
-        }
-      });
 
       const parameters = getLocalWidgetsSearchParameters(localWidgets, {
         uiState: localUiState,

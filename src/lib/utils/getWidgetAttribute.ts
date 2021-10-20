@@ -1,10 +1,7 @@
-import type { InitOptions, Widget } from '../../types';
+import type { Widget } from '../../types';
 import type { IndexWidget } from '../../widgets/index/index';
 
-export function getWidgetAttribute(
-  widget: Widget | IndexWidget,
-  initOptions: InitOptions
-): string {
+export function getWidgetAttribute(widget: Widget | IndexWidget): string {
   try {
     // assume the type to be the correct one, but throw a nice error if it isn't the case
     type WidgetWithAttribute = Widget<{
@@ -16,7 +13,7 @@ export function getWidgetAttribute(
 
     const { widgetParams } = (
       widget as WidgetWithAttribute
-    ).getWidgetRenderState(initOptions);
+    ).getWidgetRenderState({});
 
     const attribute =
       'attribute' in widgetParams
@@ -27,6 +24,7 @@ export function getWidgetAttribute(
 
     return attribute;
   } catch (e) {
+    console.log(widget.getWidgetRenderState!({}));
     throw new Error(
       `Could not find the attribute of the widget:
 

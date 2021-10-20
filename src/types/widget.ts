@@ -222,7 +222,7 @@ type RequiredRenderStateLifeCycle<
    * Returns the render state of the current widget to pass to the render function.
    */
   getWidgetRenderState: (
-    renderOptions: InitOptions | RenderOptions
+    renderOptions: InitOptions | RenderOptions | Record<string, never>
   ) => Expand<
     WidgetRenderState<
       TWidgetDescription['renderState'],

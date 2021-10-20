@@ -1,5 +1,4 @@
 import { getWidgetAttribute } from '../';
-import { createInitOptions } from '../../../../test/mock/createWidget';
 import { connectRefinementList } from '../../../connectors';
 import {
   hierarchicalMenu,
@@ -16,18 +15,14 @@ describe('getWidgetAttribute', () => {
         refinementList({
           container: document.createElement('div'),
           attribute: 'test',
-        }),
-        createInitOptions()
+        })
       )
     ).toBe('test');
   });
 
   it('reads the attribute from a connectRefinementList', () => {
     expect(
-      getWidgetAttribute(
-        connectRefinementList(() => {})({ attribute: 'test' }),
-        createInitOptions()
-      )
+      getWidgetAttribute(connectRefinementList(() => {})({ attribute: 'test' }))
     ).toBe('test');
   });
 
@@ -37,8 +32,7 @@ describe('getWidgetAttribute', () => {
         hierarchicalMenu({
           container: document.createElement('div'),
           attributes: ['test1', 'test2'],
-        }),
-        createInitOptions()
+        })
       )
     ).toBe('test1');
   });
@@ -51,8 +45,7 @@ describe('getWidgetAttribute', () => {
           attribute: 'test',
           on: 'yes',
           off: 'no',
-        }),
-        createInitOptions()
+        })
       )
     ).toBe('test');
   });
@@ -63,32 +56,25 @@ describe('getWidgetAttribute', () => {
         panel()(refinementList)({
           container: document.createElement('div'),
           attribute: 'test',
-        }),
-        createInitOptions()
+        })
       )
     ).toBe('test');
   });
 
   it('reads the attribute from a custom widget', () => {
     expect(
-      getWidgetAttribute(
-        {
-          $$type: 'mock.widget',
-          getWidgetRenderState() {
-            return { widgetParams: { attribute: 'test' } };
-          },
+      getWidgetAttribute({
+        $$type: 'mock.widget',
+        getWidgetRenderState() {
+          return { widgetParams: { attribute: 'test' } };
         },
-        createInitOptions()
-      )
+      })
     ).toBe('test');
   });
 
   it('does not read the attribute from hits', () => {
     expect(() =>
-      getWidgetAttribute(
-        hits({ container: document.createElement('div') }),
-        createInitOptions()
-      )
+      getWidgetAttribute(hits({ container: document.createElement('div') }))
     ).toThrowError(`Could not find the attribute of the widget:
 
 {"$$type":"ais.hits","$$widgetType":"ais.hits"}
@@ -100,8 +86,7 @@ Please check whether the widget's getWidgetRenderState returns widgetParams.attr
     expect(() =>
       getWidgetAttribute(
         // @ts-expect-error testing invalid input
-        {},
-        createInitOptions()
+        {}
       )
     ).toThrowError(`Could not find the attribute of the widget:
 
@@ -112,15 +97,12 @@ Please check whether the widget's getWidgetRenderState returns widgetParams.attr
 
   it('does not read the attribute from a custom widget without widgetParams in getWidgetRenderState', () => {
     expect(() =>
-      getWidgetAttribute(
-        {
-          // @ts-expect-error testing invalid input
-          getWidgetRenderState() {
-            return { yo: true };
-          },
+      getWidgetAttribute({
+        // @ts-expect-error testing invalid input
+        getWidgetRenderState() {
+          return { yo: true };
         },
-        createInitOptions()
-      )
+      })
     ).toThrowError(`Could not find the attribute of the widget:
 
 {}
@@ -130,13 +112,10 @@ Please check whether the widget's getWidgetRenderState returns widgetParams.attr
 
   it('does not read the attribute from a custom widget with nothing in getWidgetRenderState', () => {
     expect(() =>
-      getWidgetAttribute(
-        {
-          // @ts-expect-error testing invalid input
-          getWidgetRenderState() {},
-        },
-        createInitOptions()
-      )
+      getWidgetAttribute({
+        // @ts-expect-error testing invalid input
+        getWidgetRenderState() {},
+      })
     ).toThrowError(`Could not find the attribute of the widget:
 
 {}

@@ -1,11 +1,10 @@
 import type { Widget } from '../../src/types';
 import type { IndexWidget } from '../../src/widgets/index/index';
 import { getWidgetAttribute } from '../../src/lib/utils';
-import { createInitOptions } from '../mock/createWidget';
 
 function getAttribute(widget: Widget | IndexWidget) {
   try {
-    return getWidgetAttribute(widget, createInitOptions());
+    return getWidgetAttribute(widget);
   } catch {
     return undefined;
   }

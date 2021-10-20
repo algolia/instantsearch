@@ -102,19 +102,18 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
         : undefined,
   });
 
+  widgets.forEach((cb) => {
+    const container = createContainer(rootContainer);
+
+    const childWidget = cb(container);
+    const attribute = getWidgetAttribute(childWidget);
+
+    containers.set(attribute, container);
+    connectorWidgets.push(childWidget);
+  });
+
   return {
     ...widget,
-    preInit(initOptions) {
-      widgets.forEach((cb) => {
-        const container = createContainer(rootContainer);
-
-        const childWidget = cb(container);
-        const attribute = getWidgetAttribute(childWidget, initOptions);
-
-        containers.set(attribute, container);
-        connectorWidgets.push(childWidget);
-      });
-    },
     $$widgetType: 'ais.dynamicWidgets',
   };
 };
