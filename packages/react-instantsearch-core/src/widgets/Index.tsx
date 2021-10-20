@@ -57,6 +57,8 @@ class Index extends Component<InnerProps, State> {
     children: PropTypes.node,
   };
 
+  static displayName = 'AlgoliaIndex';
+
   static getDerivedStateFromProps(props: InnerProps) {
     return {
       indexContext: getIndexContext(props),

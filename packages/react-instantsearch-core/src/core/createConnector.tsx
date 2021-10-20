@@ -87,6 +87,7 @@ export function createConnectorWithoutContext(
       )})`;
       static propTypes = connectorDesc.propTypes;
       static defaultProps = connectorDesc.defaultProps;
+      static _connectorDesc = connectorDesc;
 
       unsubscribe?: () => void;
       unregisterWidget?: () => void;

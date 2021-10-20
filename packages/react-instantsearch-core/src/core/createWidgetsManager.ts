@@ -1,7 +1,18 @@
+import type { Component } from 'react';
+import type { ConnectorDescription } from './createConnector';
 import { defer } from './utils';
 
-export default function createWidgetsManager(onWidgetsUpdate) {
-  const widgets = [];
+export type Widget = Component & {
+  constructor: {
+    displayName?: string;
+    _connectorDesc?: ConnectorDescription;
+  };
+};
+
+export type WidgetsManager = ReturnType<typeof createWidgetsManager>;
+
+export default function createWidgetsManager(onWidgetsUpdate: () => void) {
+  const widgets: Widget[] = [];
   // Is an update scheduled?
   let scheduled = false;
 
@@ -19,7 +30,7 @@ export default function createWidgetsManager(onWidgetsUpdate) {
   }
 
   return {
-    registerWidget(widget) {
+    registerWidget(widget: Widget) {
       widgets.push(widget);
       scheduleUpdate();
       return function unregisterWidget() {
