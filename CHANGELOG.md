@@ -1,4 +1,4 @@
-# [6.13.0](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.13.0) (2021-10-19)
+# [6.13.0](https://github.com/algolia/react-instantsearch/compare/v6.12.1...v6.13.0) (2021-10-19)
 
 This is the initial release of the experimental **React InstantSearch Hooks** package. Check out the [**Getting Started**](https://github.com/algolia/react-instantsearch/blob/e8d72cb1c7c45300ef7c273f1f163beb6dc57622/packages/react-instantsearch-hooks/README.md#getting-started) guide.
 
@@ -24,7 +24,7 @@ This is the initial release of the experimental **React InstantSearch Hooks** pa
 
 
 
-## [6.12.1](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.12.1) (2021-08-02)
+## [6.12.1](https://github.com/algolia/react-instantsearch/compare/v6.12.0...v6.12.1) (2021-08-02)
 
 
 ### Bug Fixes
@@ -33,7 +33,7 @@ This is the initial release of the experimental **React InstantSearch Hooks** pa
 
 
 
-# [6.12.0](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.12.0) (2021-07-06)
+# [6.12.0](https://github.com/algolia/react-instantsearch/compare/v6.11.2...v6.12.0) (2021-07-06)
 
 
 ### Bug Fixes
@@ -51,7 +51,7 @@ This is the initial release of the experimental **React InstantSearch Hooks** pa
 
 
 
-## [6.11.2](https://github.com/algolia/react-instantsearch/compare/v6.11.0...v6.11.2) (2021-06-28)
+## [6.11.2](https://github.com/algolia/react-instantsearch/compare/v6.11.1...v6.11.2) (2021-06-28)
 
 
 ### Bug Fixes
