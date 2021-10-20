@@ -25,15 +25,15 @@ aliases:
 defaults: &defaults
   working_directory: ~/create-instantsearch-app
   docker:
-    - image: circleci/node:12
+    - image: cimg/node:12.22
 
 executors:
   node10:
     docker:
-      - image: circleci/node:10
+      - image: cimg/node:10.24
   node12:
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:12.22
 
 commands:
   build_app:
