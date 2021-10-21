@@ -27,6 +27,7 @@ export function createInsightsUmdVersion() {
     };
   globalObject.aa = (methodName, ...args) => {
     globalObject.aa!.queue = globalObject.aa!.queue || [];
+    // @ts-ignore not sure why this is failing
     globalObject.aa!.queue.push([methodName, ...args]);
   };
   const analytics = mockMethods(
