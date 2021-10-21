@@ -101,6 +101,7 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
               \\"src/assets\\"
             ],
             \\"styles\\": [
+              \\"node_modules/instantsearch.css/themes/satellite.css\\",
               \\"src/styles.css\\"
             ],
             \\"scripts\\": []
@@ -168,6 +169,7 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
               \\"src/assets\\"
             ],
             \\"styles\\": [
+              \\"node_modules/instantsearch.css/themes/satellite.css\\",
               \\"src/styles.css\\"
             ],
             \\"scripts\\": []
@@ -536,8 +538,16 @@ import 'zone.js';  // Included with Angular CLI.
 
 exports[`Templates Angular InstantSearch File content: src/styles.css 1`] = `
 "/* You can add global styles to this file, and also import other style files */
-@import \\"instantsearch.css/themes/reset.css\\";
-@import \\"instantsearch.css/themes/satellite.css\\";"
+body,
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}"
 `;
 
 exports[`Templates Angular InstantSearch File content: src/test.ts 1`] = `
