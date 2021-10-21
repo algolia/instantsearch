@@ -26,17 +26,13 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-// in this connector, we assume insideBoundingBox is only a string,
-// even though in the helper it's defined as number[][] alone.
-// This can be done, since the connector assumes "control" of the parameter
-function getBoundingBoxAsString(state: SearchParameters) {
-  return (state.insideBoundingBox as unknown as string) || '';
-}
-function setBoundingBoxAsString(state: SearchParameters, value: string) {
-  return state.setQueryParameter(
-    'insideBoundingBox',
-    value as unknown as number[][]
-  );
+// in this connector, we ensure that boundIngBox is parsed into a string
+function getBoundingBoxAsString(state: SearchParameters): string {
+  if (typeof state.insideBoundingBox === 'string')
+    return state.insideBoundingBox;
+  else {
+    return state.insideBoundingBox?.join() || '';
+  }
 }
 
 export type GeoHit = Hit & Required<Pick<Hit, '_geoLoc'>>;
@@ -188,7 +184,9 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
 
         helper
           .setState(
-            setBoundingBoxAsString(helper.state, boundingBox).resetPage()
+            helper.state
+              .setQueryParameter('insideBoundingBox', boundingBox)
+              .resetPage()
           )
           .search();
 
@@ -392,9 +390,8 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
             undefined
           );
         }
-
-        return setBoundingBoxAsString(
-          searchParameters,
+        return searchParameters.setQueryParameter(
+          'insideBoundingBox',
           uiState.geoSearch.boundingBox
         );
       },
