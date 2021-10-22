@@ -175,7 +175,7 @@ yarn type-check
 Since we still support `instantsearch.js@v3`, types checking should also be done against `v3`.
 
 ```sh
-yarn type-check:v3
+sh scripts/tests/algoliasearch-v3-tests.sh
 ```
 
 
