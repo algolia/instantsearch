@@ -11,19 +11,19 @@ describe('life cycle', () => {
     jest.restoreAllMocks();
   });
 
-  describe('navigate', () => {
-    test('calls navigate on write', async () => {
-      const navigate = jest.fn();
+  describe('push', () => {
+    test('calls push on write', async () => {
+      const push = jest.fn();
       const router = historyRouter<UiState>({
         writeDelay: 0,
-        navigate,
+        push,
       });
 
       router.write({ indexName: { query: 'query' } });
       await wait(0);
 
-      expect(navigate).toHaveBeenCalledTimes(1);
-      expect(navigate).toHaveBeenLastCalledWith({
+      expect(push).toHaveBeenCalledTimes(1);
+      expect(push).toHaveBeenLastCalledWith({
         state: { indexName: { query: 'query' } },
         title: '',
         url: 'http://localhost/?indexName%5Bquery%5D=query',
@@ -47,11 +47,11 @@ describe('life cycle', () => {
       );
     });
 
-    test('debounces navigate calls', async () => {
-      const navigate = jest.fn();
+    test('debounces push calls', async () => {
+      const push = jest.fn();
       const router = historyRouter<UiState>({
         writeDelay: 0,
-        navigate,
+        push,
       });
 
       router.write({ indexName: { query: 'query1' } });
@@ -59,8 +59,8 @@ describe('life cycle', () => {
       router.write({ indexName: { query: 'query3' } });
       await wait(0);
 
-      expect(navigate).toHaveBeenCalledTimes(1);
-      expect(navigate).toHaveBeenLastCalledWith({
+      expect(push).toHaveBeenCalledTimes(1);
+      expect(push).toHaveBeenLastCalledWith({
         state: { indexName: { query: 'query3' } },
         title: '',
         url: 'http://localhost/?indexName%5Bquery%5D=query3',
@@ -125,7 +125,7 @@ describe('life cycle', () => {
 
       const router = historyRouter<UiState>({
         writeDelay: 0,
-        navigate: noop,
+        push: noop,
         getLocation() {
           return {
             protocol: '',

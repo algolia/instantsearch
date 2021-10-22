@@ -17,7 +17,7 @@ type BrowserHistoryArgs<TRouteState> = {
   writeDelay: number;
   createURL: CreateURL<TRouteState>;
   parseURL: ParseURL<TRouteState>;
-  navigate(params: { state: TRouteState; title: string; url: string }): void;
+  push(params: { state: TRouteState; title: string; url: string }): void;
   // @MAJOR: The `Location` type is hard to simulate in non-browser environments
   // so we should accept a subset of it that is easier to work with in any
   // environments.
@@ -67,9 +67,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Adds an entry to the history stack.
    * @default ({ state, title, url }) => window.history.pushState(state, title, url)
    */
-  private readonly navigate: Required<
-    BrowserHistoryArgs<TRouteState>
-  >['navigate'];
+  private readonly push: Required<BrowserHistoryArgs<TRouteState>>['push'];
   /**
    * Returns the location to store in the history.
    * @default () => window.location
@@ -90,7 +88,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     writeDelay = 400,
     createURL,
     parseURL,
-    navigate,
+    push,
     getLocation,
   }: BrowserHistoryArgs<TRouteState>) {
     this.windowTitle = windowTitle;
@@ -98,7 +96,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.writeDelay = writeDelay;
     this._createURL = createURL;
     this.parseURL = parseURL;
-    this.navigate = navigate;
+    this.push = push;
     this.getLocation = getLocation;
 
     const title = this.windowTitle && this.windowTitle(this.read());
@@ -126,7 +124,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
 
     this.writeTimer = setTimeout(() => {
       setWindowTitle(title);
-      this.navigate({ state: routeState, title: title || '', url });
+      this.push({ state: routeState, title: title || '', url });
       this.writeTimer = undefined;
     }, this.writeDelay);
   }
@@ -220,7 +218,7 @@ export default function historyRouter<TRouteState = UiState>({
   },
   writeDelay = 400,
   windowTitle,
-  navigate = ({ state, title, url }) => {
+  push = ({ state, title, url }) => {
     window.history.pushState(state, title, url);
   },
   getLocation = () => window.location,
@@ -230,7 +228,7 @@ export default function historyRouter<TRouteState = UiState>({
     parseURL,
     writeDelay,
     windowTitle,
-    navigate,
+    push,
     getLocation,
   });
 }
