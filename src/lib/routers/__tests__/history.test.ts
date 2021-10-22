@@ -11,26 +11,8 @@ describe('life cycle', () => {
     jest.restoreAllMocks();
   });
 
-  describe('push', () => {
-    test('calls push on write', async () => {
-      const push = jest.fn();
-      const router = historyRouter<UiState>({
-        writeDelay: 0,
-        push,
-      });
-
-      router.write({ indexName: { query: 'query' } });
-      await wait(0);
-
-      expect(push).toHaveBeenCalledTimes(1);
-      expect(push).toHaveBeenLastCalledWith({
-        state: { indexName: { query: 'query' } },
-        title: '',
-        url: 'http://localhost/?indexName%5Bquery%5D=query',
-      });
-    });
-
-    test('defaults to window.history.pushState', async () => {
+  describe('pushState', () => {
+    test('calls pushState on write', async () => {
       const windowPushState = jest.spyOn(window.history, 'pushState');
       const router = historyRouter<UiState>({
         writeDelay: 0,
@@ -48,10 +30,9 @@ describe('life cycle', () => {
     });
 
     test('debounces push calls', async () => {
-      const push = jest.fn();
+      const windowPushState = jest.spyOn(window.history, 'pushState');
       const router = historyRouter<UiState>({
         writeDelay: 0,
-        push,
       });
 
       router.write({ indexName: { query: 'query1' } });
@@ -59,12 +40,12 @@ describe('life cycle', () => {
       router.write({ indexName: { query: 'query3' } });
       await wait(0);
 
-      expect(push).toHaveBeenCalledTimes(1);
-      expect(push).toHaveBeenLastCalledWith({
-        state: { indexName: { query: 'query3' } },
-        title: '',
-        url: 'http://localhost/?indexName%5Bquery%5D=query3',
-      });
+      expect(windowPushState).toHaveBeenCalledTimes(1);
+      expect(windowPushState).toHaveBeenLastCalledWith(
+        { indexName: { query: 'query3' } },
+        '',
+        'http://localhost/?indexName%5Bquery%5D=query3'
+      );
     });
   });
 
@@ -122,7 +103,6 @@ describe('life cycle', () => {
 
       const router = historyRouter<UiState>({
         writeDelay: 0,
-        push: noop,
         getLocation() {
           return {
             protocol: '',
