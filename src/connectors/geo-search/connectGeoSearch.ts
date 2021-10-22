@@ -185,6 +185,7 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
         helper
           .setState(
             helper.state
+              // @ts-ignore
               .setQueryParameter('insideBoundingBox', boundingBox)
               .resetPage()
           )
@@ -392,6 +393,7 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
         }
         return searchParameters.setQueryParameter(
           'insideBoundingBox',
+          // @ts-ignore
           uiState.geoSearch.boundingBox
         );
       },
