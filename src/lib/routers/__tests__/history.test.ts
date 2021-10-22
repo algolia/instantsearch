@@ -80,7 +80,6 @@ describe('life cycle', () => {
       });
 
       expect(getLocation).toHaveBeenCalledTimes(1);
-      expect(getLocation).toHaveBeenLastCalledWith();
     });
 
     test('calls getLocation on read', async () => {
@@ -99,7 +98,6 @@ describe('life cycle', () => {
       router.read();
 
       expect(getLocation).toHaveBeenCalledTimes(2);
-      expect(getLocation).toHaveBeenLastCalledWith();
     });
 
     test('calls getLocation on createURL', () => {
@@ -111,7 +109,6 @@ describe('life cycle', () => {
       router.createURL({ indexName: { query: 'query1' } });
 
       expect(getLocation).toHaveBeenCalledTimes(1);
-      expect(getLocation).toHaveBeenCalledWith();
     });
   });
 
