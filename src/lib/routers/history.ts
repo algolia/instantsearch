@@ -214,7 +214,15 @@ export default function historyRouter<TRouteState = UiState>({
   },
   writeDelay = 400,
   windowTitle,
-  getLocation = () => window.location,
+  getLocation = () => {
+    if (typeof window === 'undefined') {
+      throw new Error(
+        'You need to provide `getLocation` to the `history` router in environments where `window` does not exist.'
+      );
+    }
+
+    return window.location;
+  },
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({
     createURL,

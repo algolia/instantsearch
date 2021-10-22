@@ -94,6 +94,24 @@ describe('life cycle', () => {
   });
 
   describe('environment', () => {
+    test('throws on environments without window by default', () => {
+      // @ts-expect-error
+      delete global.window;
+
+      expect(() => {
+        historyRouter<UiState>({
+          writeDelay: 0,
+          windowTitle() {
+            return 'Search';
+          },
+        });
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"You need to provide \`getLocation\` to the \`history\` router in environments where \`window\` does not exist."`
+      );
+
+      (global as any).window = originalWindow;
+    });
+
     // We don't need to `expect` in this test because it fails as expected when
     // `window` is accessed.
     // eslint-disable-next-line jest/expect-expect
