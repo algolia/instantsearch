@@ -2066,6 +2066,50 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     ]);
   });
 
+  it('resets the UI state with an empty object', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})({}),
+      connectPagination(() => {})({}),
+      index({
+        indexName: 'nestedIndexName',
+      }).addWidgets([connectSearchBox(() => {})({})]),
+    ]);
+    search.start();
+
+    search.setUiState({
+      indexName: {
+        query: 'Query',
+      },
+      nestedIndexName: {
+        query: 'Query 2',
+      },
+    });
+    await wait(0);
+
+    expect(search.getUiState()).toEqual({
+      indexName: {
+        query: 'Query',
+      },
+      nestedIndexName: {
+        query: 'Query 2',
+      },
+    });
+
+    search.setUiState({});
+    await wait(0);
+
+    expect(search.getUiState()).toEqual({
+      indexName: {},
+      nestedIndexName: {},
+    });
+  });
+
   it('warns if UI state contains unmounted widgets in development mode', () => {
     const warn = jest.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
