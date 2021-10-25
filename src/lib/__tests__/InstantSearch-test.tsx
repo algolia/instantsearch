@@ -2092,6 +2092,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
     await wait(0);
 
+    expect(search.getUiState()).toEqual({
+      indexName: {
+        query: 'Query',
+      },
+      nestedIndexName: {
+        query: 'Query 2',
+      },
+    });
+
     search.setUiState({});
     await wait(0);
 
