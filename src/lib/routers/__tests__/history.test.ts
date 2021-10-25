@@ -1,7 +1,11 @@
 import historyRouter from '../history';
-import { wait } from '../../../../test/utils/wait';
 import type { UiState } from '../../../types';
 import { noop } from '../../utils';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import instantsearch from '../../..';
+import { simple } from '../../stateMappings';
+
+jest.useFakeTimers();
 
 describe('life cycle', () => {
   const originalWindow = (global as any).window;
@@ -11,15 +15,17 @@ describe('life cycle', () => {
     jest.restoreAllMocks();
   });
 
+  afterEach(() => {
+    (global as any).window = originalWindow;
+  });
+
   describe('pushState', () => {
-    test('calls pushState on write', async () => {
+    test('calls pushState on write', () => {
       const windowPushState = jest.spyOn(window.history, 'pushState');
-      const router = historyRouter<UiState>({
-        writeDelay: 0,
-      });
+      const router = historyRouter<UiState>();
 
       router.write({ indexName: { query: 'query' } });
-      await wait(0);
+      jest.runAllTimers();
 
       expect(windowPushState).toHaveBeenCalledTimes(1);
       expect(windowPushState).toHaveBeenLastCalledWith(
@@ -29,16 +35,14 @@ describe('life cycle', () => {
       );
     });
 
-    test('debounces push calls', async () => {
+    test('debounces history push calls', async () => {
       const windowPushState = jest.spyOn(window.history, 'pushState');
-      const router = historyRouter<UiState>({
-        writeDelay: 0,
-      });
+      const router = historyRouter<UiState>();
 
       router.write({ indexName: { query: 'query1' } });
       router.write({ indexName: { query: 'query2' } });
       router.write({ indexName: { query: 'query3' } });
-      await wait(0);
+      jest.runAllTimers();
 
       expect(windowPushState).toHaveBeenCalledTimes(1);
       expect(windowPushState).toHaveBeenLastCalledWith(
@@ -63,16 +67,14 @@ describe('life cycle', () => {
       expect(getLocation).toHaveBeenCalledTimes(1);
     });
 
-    test('calls getLocation on read', async () => {
+    test('calls getLocation on read', () => {
       const getLocation = jest.fn(() => window.location);
-      const router = historyRouter<UiState>({
-        getLocation,
-      });
+      const router = historyRouter<UiState>({ getLocation });
 
       expect(getLocation).toHaveBeenCalledTimes(0);
 
       router.write({ indexName: { query: 'query1' } });
-      await wait(0);
+      jest.runAllTimers();
 
       expect(getLocation).toHaveBeenCalledTimes(1);
 
@@ -83,9 +85,7 @@ describe('life cycle', () => {
 
     test('calls getLocation on createURL', () => {
       const getLocation = jest.fn(() => window.location);
-      const router = historyRouter<UiState>({
-        getLocation,
-      });
+      const router = historyRouter<UiState>({ getLocation });
 
       router.createURL({ indexName: { query: 'query1' } });
 
@@ -99,52 +99,76 @@ describe('life cycle', () => {
       delete global.window;
 
       expect(() => {
-        historyRouter<UiState>({
-          writeDelay: 0,
-          windowTitle() {
-            return 'Search';
-          },
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+          routing: true,
         });
+        search.start();
+        jest.runAllTimers();
       }).toThrowErrorMatchingInlineSnapshot(
         `"You need to provide \`getLocation\` to the \`history\` router in environments where \`window\` does not exist."`
       );
-
-      (global as any).window = originalWindow;
     });
 
-    // We don't need to `expect` in this test because it fails as expected when
-    // `window` is accessed.
-    // eslint-disable-next-line jest/expect-expect
-    test('does not fail on environments without window', async () => {
+    test('does not fail on environments without window with provided getLocation', () => {
       // @ts-expect-error
       delete global.window;
 
-      const router = historyRouter<UiState>({
-        writeDelay: 0,
-        getLocation() {
-          return {
-            protocol: '',
-            hostname: '',
-            port: '',
-            pathname: '',
-            hash: '',
-            search: '',
-          } as unknown as Location;
-        },
-        windowTitle() {
-          return 'Search';
-        },
-      });
+      expect(() => {
+        const router = historyRouter<UiState>({
+          getLocation() {
+            return {
+              protocol: '',
+              hostname: '',
+              port: '',
+              pathname: '',
+              hash: '',
+              search: '',
+            } as unknown as Location;
+          },
+        });
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+          routing: {
+            stateMapping: simple(),
+            router,
+          },
+        });
 
-      // We run the whole lifecycle to make sure none of the steps access `window`.
-      router.write({ indexName: { query: 'query1' } });
-      await wait(0);
-      router.read();
-      router.onUpdate(noop);
-      router.dispose();
-      router.createURL({ indexName: { query: 'query1' } });
+        search.start();
+        jest.runAllTimers();
+      }).not.toThrow();
+    });
 
-      (global as any).window = originalWindow;
+    test('does not fail when running the whole router lifecycle with getLocation', () => {
+      // @ts-expect-error
+      delete global.window;
+
+      expect(() => {
+        const router = historyRouter<UiState>({
+          getLocation() {
+            return {
+              protocol: '',
+              hostname: '',
+              port: '',
+              pathname: '',
+              hash: '',
+              search: '',
+            } as unknown as Location;
+          },
+        });
+
+        // We run the whole lifecycle to make sure none of the steps access `window`.
+        router.read();
+        router.write({ indexName: { query: 'query1' } });
+        jest.runAllTimers();
+        router.read();
+        router.onUpdate(noop);
+        router.dispose();
+        router.createURL({ indexName: { query: 'query1' } });
+      }).not.toThrow();
     });
   });
 });
