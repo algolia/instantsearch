@@ -1,5 +1,6 @@
 import qs from 'qs';
 import type { Router, UiState } from '../../types';
+import { safelyRunOnBrowser } from '../utils/safelyRunOnBrowser';
 
 type CreateURL<TRouteState> = (args: {
   qsModule: typeof qs;
@@ -25,6 +26,8 @@ type BrowserHistoryArgs<TRouteState> = {
 
 const setWindowTitle = (title?: string): void => {
   if (title) {
+    // This function is only executed on browsers so we can disable this check.
+    // eslint-disable-next-line no-restricted-globals
     window.document.title = title;
   }
 };
@@ -87,11 +90,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.parseURL = parseURL;
     this.getLocation = getLocation;
 
-    if (typeof window !== 'undefined') {
+    safelyRunOnBrowser(() => {
       const title = this.windowTitle && this.windowTitle(this.read());
-
       setWindowTitle(title);
-    }
+    });
   }
 
   /**
@@ -105,22 +107,20 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Pushes a search state into the URL.
    */
   public write(routeState: TRouteState): void {
-    if (typeof window === 'undefined') {
-      return;
-    }
+    safelyRunOnBrowser(({ window }) => {
+      const url = this.createURL(routeState);
+      const title = this.windowTitle && this.windowTitle(routeState);
 
-    const url = this.createURL(routeState);
-    const title = this.windowTitle && this.windowTitle(routeState);
+      if (this.writeTimer) {
+        clearTimeout(this.writeTimer);
+      }
 
-    if (this.writeTimer) {
-      clearTimeout(this.writeTimer);
-    }
-
-    this.writeTimer = setTimeout(() => {
-      setWindowTitle(title);
-      window.history.pushState(routeState, title || '', url);
-      this.writeTimer = undefined;
-    }, this.writeDelay);
+      this.writeTimer = setTimeout(() => {
+        setWindowTitle(title);
+        window.history.pushState(routeState, title || '', url);
+        this.writeTimer = undefined;
+      }, this.writeDelay);
+    });
   }
 
   /**
@@ -146,9 +146,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       }
     };
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('popstate', this._onPopState);
-    }
+    const onPopState = this._onPopState;
+    safelyRunOnBrowser(({ window }) => {
+      window.addEventListener('popstate', onPopState);
+    });
   }
 
   /**
@@ -170,10 +171,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Removes the event listener and cleans up the URL.
    */
   public dispose(): void {
-    if (this._onPopState) {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('popstate', this._onPopState);
-      }
+    const onPopState = this._onPopState;
+    if (onPopState) {
+      safelyRunOnBrowser(({ window }) => {
+        window.removeEventListener('popstate', onPopState);
+      });
     }
 
     if (this.writeTimer) {
@@ -213,13 +215,13 @@ export default function historyRouter<TRouteState = UiState>({
   writeDelay = 400,
   windowTitle,
   getLocation = () => {
-    if (typeof window === 'undefined') {
-      throw new Error(
-        'You need to provide `getLocation` to the `history` router in environments where `window` does not exist.'
-      );
-    }
-
-    return window.location;
+    return safelyRunOnBrowser<Location>(({ window }) => window.location, {
+      fallback: () => {
+        throw new Error(
+          'You need to provide `getLocation` to the `history` router in environments where `window` does not exist.'
+        );
+      },
+    });
   },
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({

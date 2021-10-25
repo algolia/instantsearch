@@ -1,6 +1,7 @@
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import { isEqual } from '../utils';
 import type { InfiniteHitsCache } from '../../connectors/infinite-hits/connectInfiniteHits';
+import { safelyRunOnBrowser } from '../utils/safelyRunOnBrowser';
 
 function getStateWithoutPage(state: PlainSearchParameters) {
   const { page, ...rest } = state || {};
@@ -10,10 +11,9 @@ function getStateWithoutPage(state: PlainSearchParameters) {
 const KEY = 'ais.infiniteHits';
 
 function hasSessionStorage() {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.sessionStorage !== 'undefined'
-  );
+  return safelyRunOnBrowser(({ window }) => Boolean(window.sessionStorage), {
+    fallback: () => false,
+  });
 }
 
 export default function createInfiniteHitsSessionStorageCache(): InfiniteHitsCache {
@@ -22,9 +22,12 @@ export default function createInfiniteHitsSessionStorageCache(): InfiniteHitsCac
       if (!hasSessionStorage()) {
         return null;
       }
+
       try {
         const cache = JSON.parse(
           // @ts-expect-error JSON.parse() requires a string, but it actually accepts null, too.
+          // We're in a browser environment at this point.
+          // eslint-disable-next-line no-restricted-globals
           window.sessionStorage.getItem(KEY)
         );
 
@@ -34,6 +37,8 @@ export default function createInfiniteHitsSessionStorageCache(): InfiniteHitsCac
       } catch (error) {
         if (error instanceof SyntaxError) {
           try {
+            // We're in a browser environment at this point.
+            // eslint-disable-next-line no-restricted-globals
             window.sessionStorage.removeItem(KEY);
           } catch (err) {
             // do nothing
@@ -46,7 +51,10 @@ export default function createInfiniteHitsSessionStorageCache(): InfiniteHitsCac
       if (!hasSessionStorage()) {
         return;
       }
+
       try {
+        // We're in a browser environment at this point.
+        // eslint-disable-next-line no-restricted-globals
         window.sessionStorage.setItem(
           KEY,
           JSON.stringify({

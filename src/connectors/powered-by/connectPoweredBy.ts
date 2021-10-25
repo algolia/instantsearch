@@ -1,3 +1,4 @@
+import { safelyRunOnBrowser } from '../../lib/utils/safelyRunOnBrowser';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -50,11 +51,10 @@ const connectPoweredBy: PoweredByConnector = function connectPoweredBy(
     'https://www.algolia.com/?' +
     'utm_source=instantsearch.js&' +
     'utm_medium=website&' +
-    `utm_content=${
-      typeof window !== 'undefined' && window.location
-        ? window.location.hostname
-        : ''
-    }&` +
+    `utm_content=${safelyRunOnBrowser<string>(
+      ({ window }) => window.location?.hostname || '',
+      { fallback: () => '' }
+    )}&` +
     'utm_campaign=poweredby';
 
   return (widgetParams) => {
