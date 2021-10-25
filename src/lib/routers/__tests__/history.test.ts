@@ -35,7 +35,7 @@ describe('life cycle', () => {
       );
     });
 
-    test('debounces history push calls', async () => {
+    test('debounces history push calls', () => {
       const windowPushState = jest.spyOn(window.history, 'pushState');
       const router = historyRouter<UiState>();
 
