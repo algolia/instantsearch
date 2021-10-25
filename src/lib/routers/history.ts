@@ -24,10 +24,6 @@ type BrowserHistoryArgs<TRouteState> = {
 };
 
 const setWindowTitle = (title?: string): void => {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
   if (title) {
     window.document.title = title;
   }
@@ -91,9 +87,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.parseURL = parseURL;
     this.getLocation = getLocation;
 
-    const title = this.windowTitle && this.windowTitle(this.read());
+    if (typeof window !== 'undefined') {
+      const title = this.windowTitle && this.windowTitle(this.read());
 
-    setWindowTitle(title);
+      setWindowTitle(title);
+    }
   }
 
   /**
