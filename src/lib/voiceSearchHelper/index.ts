@@ -1,3 +1,6 @@
+// `SpeechRecognition` is an API used on the browser so we can safely disable
+// the `window` check.
+/* eslint-disable no-restricted-globals */
 /* global SpeechRecognition SpeechRecognitionEvent */
 import type {
   CreateVoiceSearchHelper,
