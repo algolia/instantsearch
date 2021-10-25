@@ -102,6 +102,30 @@ npm install instantsearch.js algoliasearch
 yarn add instantsearch.js algoliasearch
 ```
 
+### TypeScript users
+
+To use `instantsearch.js` in a TypeScript environment, depending on your `algoliasearch` versions, different types must be imported:
+
+**`algoliasearch` version 3**
+
+```bash
+npm install @types/algoliasearch@3
+# or
+yarn add @types/algoliasearch@3
+```
+
+The Algoliasearch client version 3 support is close to an end and thus **deprecated**.
+
+**`algoliasearch` version 4**
+
+V4 uses the types provided by both `algoliasearch` and `@algolia/client-search`.
+
+```bash
+yarn add algoliasearch@4 @algolia/client-search
+```
+
+In case you are not using `algoliasearch` as the search client, it must still be installed in TypeScript environments.
+
 ## Documentation
 
 The documentation is available on the [Algolia website](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/).
