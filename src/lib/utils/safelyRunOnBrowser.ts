@@ -12,7 +12,6 @@ type SafelyRunOnBrowserOptions<TReturn> = {
  */
 export function safelyRunOnBrowser<TReturn>(
   callback: BrowserCallback<TReturn>,
-
   { fallback }: SafelyRunOnBrowserOptions<TReturn> = {
     fallback: () => undefined as any,
   }
