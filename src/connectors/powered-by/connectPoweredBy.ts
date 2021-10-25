@@ -1,9 +1,10 @@
-import { safelyRunOnBrowser } from '../../lib/utils/safelyRunOnBrowser';
 import {
+  safelyRunOnBrowser,
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
+
 import type { Connector, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({

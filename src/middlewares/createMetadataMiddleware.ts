@@ -1,4 +1,4 @@
-import { safelyRunOnBrowser } from '../lib/utils/safelyRunOnBrowser';
+import { safelyRunOnBrowser } from '../lib/utils';
 import type { InstantSearch, InternalMiddleware, Widget } from '../types';
 import type { IndexWidget } from '../widgets/index/index';
 
