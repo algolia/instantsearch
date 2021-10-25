@@ -581,16 +581,18 @@ See ${createDocumentationLink({
         : uiState;
 
     const setIndexHelperState = (indexWidget: IndexWidget) => {
+      const nextIndexUiState = nextUiState[indexWidget.getIndexId()] || {};
+
       if (__DEV__) {
         checkIndexUiState({
           index: indexWidget,
-          indexUiState: nextUiState[indexWidget.getIndexId()],
+          indexUiState: nextIndexUiState,
         });
       }
 
       indexWidget.getHelper()!.setState(
         indexWidget.getWidgetSearchParameters(indexWidget.getHelper()!.state, {
-          uiState: nextUiState[indexWidget.getIndexId()],
+          uiState: nextIndexUiState,
         })
       );
 
