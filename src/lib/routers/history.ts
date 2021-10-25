@@ -146,9 +146,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       }
     };
 
-    const onPopState = this._onPopState;
     safelyRunOnBrowser(({ window }) => {
-      window.addEventListener('popstate', onPopState);
+      window.addEventListener('popstate', this._onPopState!);
     });
   }
 
@@ -171,12 +170,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Removes the event listener and cleans up the URL.
    */
   public dispose(): void {
-    const onPopState = this._onPopState;
-    if (onPopState) {
-      safelyRunOnBrowser(({ window }) => {
-        window.removeEventListener('popstate', onPopState);
-      });
-    }
+    safelyRunOnBrowser(({ window }) => {
+      if (this._onPopState) {
+        window.removeEventListener('popstate', this._onPopState);
+      }
+    });
 
     if (this.writeTimer) {
       clearTimeout(this.writeTimer);
