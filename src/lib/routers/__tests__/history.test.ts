@@ -93,6 +93,37 @@ describe('life cycle', () => {
     });
   });
 
+  describe('pop state', () => {
+    test('skips history push on browser back/forward actions', () => {
+      const pushState = jest.spyOn(window.history, 'pushState');
+      const router = historyRouter<UiState>();
+      router.onUpdate((routeState) => {
+        router.write(routeState);
+      });
+
+      router.write({ indexName: { page: 1 } });
+      jest.runAllTimers();
+
+      // The regular write pushes in the history
+      expect(pushState).toHaveBeenCalledTimes(1);
+
+      const popStateEvent = new PopStateEvent('popstate', {
+        state: { indexName: { page: 2 } },
+      });
+      window.dispatchEvent(popStateEvent);
+      jest.runAllTimers();
+
+      // The pop state event skips the push in the history
+      expect(pushState).toHaveBeenCalledTimes(1);
+
+      // The regular write pushes in the history
+      router.write({ indexName: { page: 3 } });
+      jest.runAllTimers();
+
+      expect(pushState).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('environment', () => {
     test('throws on environments without window by default', () => {
       // @ts-expect-error
@@ -170,22 +201,5 @@ describe('life cycle', () => {
         router.createURL({ indexName: { query: 'query1' } });
       }).not.toThrow();
     });
-  });
-
-  it('browser back/forward behavior', async () => {
-    const pushState = jest.spyOn(window.history, 'pushState');
-
-    const router = historyRouter<{ some: string }>({
-      writeDelay: 0,
-    });
-    // router.write always calling after onUpdate method
-    router.onUpdate((routeState) => {
-      router.write(routeState);
-    });
-
-    const popStateEvent = new PopStateEvent('popstate', { state: { step: 2 } });
-    dispatchEvent(popStateEvent);
-    await wait(0);
-    expect(pushState).toHaveBeenCalledTimes(0);
   });
 });
