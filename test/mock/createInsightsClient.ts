@@ -27,7 +27,7 @@ export function createInsightsUmdVersion() {
     };
   globalObject.aa = (methodName, ...args) => {
     globalObject.aa!.queue = globalObject.aa!.queue || [];
-    // @ts-ignore not sure why this is failing
+    // @ts-expect-error TypeScript loses track of the exact tuple type when the array gets recreated
     globalObject.aa!.queue.push([methodName, ...args]);
   };
   const analytics = mockMethods(
