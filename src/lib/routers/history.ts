@@ -126,6 +126,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
         if (this.shouldPushState) {
           window.history.pushState(routeState, title || '', url);
         }
+        this.shouldPushState = true;
         this.writeTimer = undefined;
       }, this.writeDelay);
     });
