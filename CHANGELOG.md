@@ -1,3 +1,18 @@
+# [4.33.0](https://github.com/algolia/instantsearch.js/compare/v4.32.0...v4.33.0) (2021-10-26)
+
+
+### Bug Fixes
+
+* **router:** skip history push on browser back and forward actions ([#4933](https://github.com/algolia/instantsearch.js/issues/4933)) ([7909da4](https://github.com/algolia/instantsearch.js/commit/7909da4903eb1aee885811e280b909a3bda488be))
+* **setUiState:** reset UI state with empty object ([#4944](https://github.com/algolia/instantsearch.js/issues/4944)) ([5faae4a](https://github.com/algolia/instantsearch.js/commit/5faae4ac44ac5ad2f8086ad2a306bcfaa14bc754))
+
+
+### Features
+
+* **router:** support server environments ([#4940](https://github.com/algolia/instantsearch.js/issues/4940)) ([a002962](https://github.com/algolia/instantsearch.js/commit/a002962df0e7683b29bef8bfaaddb494fa551a14))
+
+
+
 # [4.32.0](https://github.com/algolia/instantsearch.js/compare/v4.31.1...v4.32.0) (2021-10-20)
 
 
