@@ -1,3 +1,13 @@
+# [6.14.0](https://github.com/algolia/react-instantsearch/compare/v6.13.0...v6.14.0) (2021-10-26)
+
+
+### Features
+
+* **dependencies:** update algoliasearch-helper ([#3176](https://github.com/algolia/react-instantsearch/issues/3176)) ([a8708a3](https://github.com/algolia/react-instantsearch/commit/a8708a33f31632000bc827b076539b1cca7adf6f))
+* **metadata:** expose widget information ([#3145](https://github.com/algolia/react-instantsearch/issues/3145)) ([46cddf8](https://github.com/algolia/react-instantsearch/commit/46cddf8fcc0291beaa34b04da7aaaa7f2566e52e))
+
+
+
 # [6.13.0](https://github.com/algolia/react-instantsearch/compare/v6.12.1...v6.13.0) (2021-10-19)
 
 This is the initial release of the experimental **React InstantSearch Hooks** package. Check out the [**Getting Started**](https://github.com/algolia/react-instantsearch/blob/e8d72cb1c7c45300ef7c273f1f163beb6dc57622/packages/react-instantsearch-hooks/README.md#getting-started) guide.
