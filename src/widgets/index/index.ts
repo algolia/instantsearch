@@ -708,10 +708,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     refreshUiState() {
-      localUiState = getLocalWidgetsUiState(localWidgets, {
-        searchParameters: this.getHelper()!.state,
-        helper: this.getHelper()!,
-      });
+      localUiState = getLocalWidgetsUiState(
+        localWidgets,
+        {
+          searchParameters: this.getHelper()!.state,
+          helper: this.getHelper()!,
+        },
+        localUiState
+      );
     },
   };
 };
