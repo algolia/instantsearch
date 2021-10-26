@@ -66,13 +66,13 @@ module.exports = {
       files: ['*.ts', '*.tsx'],
       // this is the same files as ignored in tsconfig.json
       excludedFiles: [
-        "examples/**/*",
-        "es",
+        'examples/**/*',
+        'es',
         // these two files are temporarily excluded because
         // they import files from node_modules/search-insights directly
         // and it causes the type-checking to fail.
-        "src/middlewares/__tests__/createInsightsMiddleware.ts",
-        "test/mock/createInsightsClient.ts"
+        'src/middlewares/__tests__/createInsightsMiddleware.ts',
+        'test/mock/createInsightsClient.ts',
       ],
       parserOptions: {
         project: './tsconfig.json',
@@ -85,6 +85,19 @@ module.exports = {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/explicit-member-accessibility': 'off',
+      },
+    },
+    {
+      files: ['src/**/*'],
+      excludedFiles: ['**/__tests__/**/*', 'src/widgets/**/*'],
+      rules: {
+        'no-restricted-globals': [
+          'error',
+          {
+            name: 'window',
+            message: 'Use `safelyRunOnBrowser()` to access `window`.',
+          },
+        ],
       },
     },
   ],
