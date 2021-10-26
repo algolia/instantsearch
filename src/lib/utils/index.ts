@@ -56,3 +56,4 @@ export { createConcurrentSafePromise } from './createConcurrentSafePromise';
 export { debounce } from './debounce';
 export { serializePayload, deserializePayload } from './serializer';
 export { getWidgetAttribute } from './getWidgetAttribute';
+export { safelyRunOnBrowser } from './safelyRunOnBrowser';

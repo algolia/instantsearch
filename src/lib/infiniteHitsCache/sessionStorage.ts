@@ -1,5 +1,5 @@
 import type { PlainSearchParameters } from 'algoliasearch-helper';
-import { isEqual } from '../utils';
+import { isEqual, safelyRunOnBrowser } from '../utils';
 import type { InfiniteHitsCache } from '../../connectors/infinite-hits/connectInfiniteHits';
 
 function getStateWithoutPage(state: PlainSearchParameters) {
@@ -9,23 +9,21 @@ function getStateWithoutPage(state: PlainSearchParameters) {
 
 const KEY = 'ais.infiniteHits';
 
-function hasSessionStorage() {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.sessionStorage !== 'undefined'
-  );
-}
-
 export default function createInfiniteHitsSessionStorageCache(): InfiniteHitsCache {
   return {
     read({ state }) {
-      if (!hasSessionStorage()) {
+      const sessionStorage = safelyRunOnBrowser<Storage | undefined>(
+        ({ window }) => window.sessionStorage
+      );
+
+      if (!sessionStorage) {
         return null;
       }
+
       try {
         const cache = JSON.parse(
           // @ts-expect-error JSON.parse() requires a string, but it actually accepts null, too.
-          window.sessionStorage.getItem(KEY)
+          sessionStorage.getItem(KEY)
         );
 
         return cache && isEqual(cache.state, getStateWithoutPage(state))
@@ -34,7 +32,7 @@ export default function createInfiniteHitsSessionStorageCache(): InfiniteHitsCac
       } catch (error) {
         if (error instanceof SyntaxError) {
           try {
-            window.sessionStorage.removeItem(KEY);
+            sessionStorage.removeItem(KEY);
           } catch (err) {
             // do nothing
           }
@@ -43,11 +41,16 @@ export default function createInfiniteHitsSessionStorageCache(): InfiniteHitsCac
       }
     },
     write({ state, hits }) {
-      if (!hasSessionStorage()) {
+      const sessionStorage = safelyRunOnBrowser<Storage | undefined>(
+        ({ window }) => window.sessionStorage
+      );
+
+      if (!sessionStorage) {
         return;
       }
+
       try {
-        window.sessionStorage.setItem(
+        sessionStorage.setItem(
           KEY,
           JSON.stringify({
             state: getStateWithoutPage(state),

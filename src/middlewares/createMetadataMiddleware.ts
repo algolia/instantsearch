@@ -1,3 +1,4 @@
+import { safelyRunOnBrowser } from '../lib/utils';
 import type { InstantSearch, InternalMiddleware, Widget } from '../types';
 import type { IndexWidget } from '../widgets/index/index';
 
@@ -68,9 +69,9 @@ function extractPayload(
 }
 
 export function isMetadataEnabled() {
-  return (
-    typeof window !== 'undefined' &&
-    window.navigator.userAgent.indexOf('Algolia Crawler') > -1
+  return safelyRunOnBrowser(
+    ({ window }) => window.navigator.userAgent.indexOf('Algolia Crawler') > -1,
+    { fallback: () => false }
   );
 }
 

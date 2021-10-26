@@ -1,6 +1,8 @@
+import { safelyRunOnBrowser } from './safelyRunOnBrowser';
+
 export default function hasDetectedInsightsClient(): boolean {
-  return (
-    typeof window !== 'undefined' &&
-    Boolean((window as any).AlgoliaAnalyticsObject)
+  return safelyRunOnBrowser<boolean>(
+    ({ window }) => Boolean((window as any).AlgoliaAnalyticsObject),
+    { fallback: () => false }
   );
 }
