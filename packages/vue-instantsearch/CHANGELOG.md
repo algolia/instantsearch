@@ -1,3 +1,12 @@
+# [4.1.0](https://github.com/algolia/vue-instantsearch/compare/v4.0.1...v4.1.0) (2021-10-26)
+
+
+### Features
+
+* **dependencies:** update downstream ([#1075](https://github.com/algolia/vue-instantsearch/issues/1075)) ([ede11a5](https://github.com/algolia/vue-instantsearch/commit/ede11a5aa907f33123df7f19013680633228d0cf))
+
+
+
 ## [4.0.1](https://github.com/algolia/vue-instantsearch/compare/v4.0.0...v4.0.1) (2021-09-15)
 
 
