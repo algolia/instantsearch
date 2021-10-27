@@ -3,7 +3,13 @@ import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
 import { InstantSearch } from 'react-instantsearch-hooks';
 
-import { Hits, SearchBox, RefinementList, Configure } from './components';
+import {
+  Configure,
+  Hits,
+  Pagination,
+  RefinementList,
+  SearchBox,
+} from './components';
 
 import './App.css';
 
@@ -52,6 +58,7 @@ export function App() {
         <div style={{ display: 'grid', gap: '.5rem' }}>
           <SearchBox placeholder="Search" />
           <Hits hitComponent={Hit} />
+          <Pagination className="Pagination" />
         </div>
       </div>
     </InstantSearch>
