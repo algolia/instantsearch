@@ -1,3 +1,17 @@
+# [6.15.0](https://github.com/algolia/react-instantsearch/compare/v6.13.0...v6.15.0) (2021-10-27)
+
+
+### Bug Fixes
+
+* **metadata:** stricter detection of user agent ([#3184](https://github.com/algolia/react-instantsearch/issues/3184)) ([994c8ae](https://github.com/algolia/react-instantsearch/commit/994c8ae055fc23a1a067d111d2f4727b1c7bf8ca))
+
+
+### Features
+
+* **hooks:** introduce `useConfigure` ([#3181](https://github.com/algolia/react-instantsearch/issues/3181)) ([aa2eb9b](https://github.com/algolia/react-instantsearch/commit/aa2eb9baec6335f8a3523ee8b9b761a217cfc734))
+
+
+
 # [6.14.0](https://github.com/algolia/react-instantsearch/compare/v6.13.0...v6.14.0) (2021-10-26)
 
 
