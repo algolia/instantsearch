@@ -3,7 +3,7 @@ import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
 import { InstantSearch } from 'react-instantsearch-hooks';
 
-import { Hits, SearchBox, RefinementList } from './components';
+import { Hits, SearchBox, RefinementList, Configure } from './components';
 
 import './App.css';
 
@@ -31,6 +31,8 @@ function Hit({ hit }: HitProps) {
 export function App() {
   return (
     <InstantSearch searchClient={searchClient} indexName="instant_search">
+      <Configure hitsPerPage={15} />
+
       <div
         style={{
           display: 'grid',
