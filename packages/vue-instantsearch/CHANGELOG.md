@@ -1,3 +1,12 @@
+## [4.1.1](https://github.com/algolia/vue-instantsearch/compare/v4.1.0...v4.1.1) (2021-10-27)
+
+
+### Bug Fixes
+
+* **vue3:** disable automatic plugin registration ([#1081](https://github.com/algolia/vue-instantsearch/issues/1081)) ([6077413](https://github.com/algolia/vue-instantsearch/commit/607741312db620242b62a1fa2181563d87e69705))
+
+
+
 # [4.1.0](https://github.com/algolia/vue-instantsearch/compare/v4.0.1...v4.1.0) (2021-10-26)
 
 
