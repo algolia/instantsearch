@@ -48,6 +48,17 @@ describe('isMetadataEnabled', () => {
     expect(isMetadataEnabled()).toBe(false);
   });
 
+  it("does not enable when there's no navigator (react native)", () => {
+    setUserAgent(algoliaUserAgent);
+
+    // @ts-expect-error
+    delete global.window;
+    // @ts-expect-error
+    global.window = {};
+
+    expect(isMetadataEnabled()).toBe(false);
+  });
+
   it('metadata enabled returns true', () => {
     setUserAgent(algoliaUserAgent);
 
