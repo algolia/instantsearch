@@ -2189,6 +2189,26 @@ describe('getUiState', () => {
     });
   });
 
+  test('retrieves the ui state from initialUiState on a started instance', () => {
+    const indexName = 'indexName';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+      initialUiState: {
+        [indexName]: {
+          query: 'iphone',
+        },
+      },
+    });
+
+    search.start();
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: { query: 'iphone' },
+    });
+  });
+
   test('retrieves the ui state without refinements (multi-index)', () => {
     const indexName = 'indexName';
     const secondIndexName = 'indexName2';
@@ -2209,6 +2229,32 @@ describe('getUiState', () => {
     expect(search.getUiState()).toEqual({
       [indexName]: {},
       [secondIndexName]: {},
+    });
+  });
+
+  test('retrieves the ui state from initialUiState on a started instance (multi-index)', () => {
+    const indexName = 'indexName';
+    const secondIndexName = 'indexName2';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+      initialUiState: {
+        [indexName]: {
+          query: 'iphone 10',
+        },
+        [secondIndexName]: {
+          query: 'iphone 11',
+        },
+      },
+    });
+
+    search.start();
+    search.addWidgets([index({ indexName: secondIndexName })]);
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: { query: 'iphone 10' },
+      [secondIndexName]: { query: 'iphone 11' },
     });
   });
 
