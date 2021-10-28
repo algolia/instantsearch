@@ -56,12 +56,12 @@ const statsWidget = connectHits(({ results, widgetParams }) => {
   const containerNode = document.querySelector(widgetParams.container);
   const { nbHits } = results;
 
-  const resultsStats = `${formatNumber(nbHits)} results`;
+  const resultsStats = `${formatNumber(nbHits)} articles`;
 
   const stringRefinements = results
     .getRefinements()
     .filter(refinement => refinement.type !== 'numeric')
-    .filter(refinement => refinement.attributeName !== 'topics')
+    .filter(refinement => refinement.attributeName !== 'categories')
     .map(refinement => refinement.name);
   const dateRefinement = getDateRangeFromTimestamp(
     results
@@ -80,7 +80,7 @@ const statsWidget = connectHits(({ results, widgetParams }) => {
     ${[
       [resultsStats, refinements.slice(0, 5).join(', ')]
         .filter(Boolean)
-        .join(' in '),
+        .join(' from '),
       refinements.length > 5 && '...',
     ]
       .filter(Boolean)

@@ -18,13 +18,13 @@ import {
 } from './widgets';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  '1QDAWL72TQ',
+  '47700f55d95d23f5a57744b9a027ea83'
 );
 
 const search = instantsearch({
   searchClient,
-  indexName: 'instant_search_media',
+  indexName: 'PROD_algolia_blog',
   routing: true,
 });
 
@@ -68,15 +68,15 @@ search.addWidgets([
   clearFiltersMobile,
   clearFiltersDesktop,
   configuration,
-  datesDesktop,
-  datesMobile,
-  locationsDesktop,
-  locationsMobile,
+  // datesDesktop,
+  // datesMobile,
+  // locationsDesktop,
+  // locationsMobile,
   searchBox,
   selectedTopicsMobile,
   selectedTopicsDesktop,
-  sortByMobile,
-  sortByDesktop,
+  // sortByMobile,
+  // sortByDesktop,
   stats,
   topics,
   seeResults,

@@ -4,19 +4,19 @@ import { isWindowMediumSize } from '../utils';
 const createCategoriesList = () =>
   panel({
     templates: {
-      header: 'Categories',
+      header: 'Authors',
     },
   })(refinementList);
 
 export const createCategories = ({ container }) =>
   createCategoriesList()({
     container,
-    attribute: 'categories.lvl0',
+    attribute: 'coauthors.nickname',
     limit: 7,
     searchable: true,
     searchablePlaceholder: isWindowMediumSize
-      ? 'Categories or topics'
-      : 'Search for categories or topics',
+      ? 'Authors'
+      : 'Search for authors',
     templates: {
       searchableSubmit: `
 <svg

@@ -9,7 +9,6 @@ const menu = connectMenu(({ items, refine, widgetParams }) => {
     <ul class="ais-RefinementList-list">
       ${items
         .filter(item => !item.isRefined)
-        .slice(0, 5)
         .map(
           item => `
       <li class="ais-RefinementList-item">
@@ -42,6 +41,6 @@ const menu = connectMenu(({ items, refine, widgetParams }) => {
 
 export const topics = menu({
   container: '[data-widget="topics"]',
-  attribute: 'topics',
-  limit: 6,
+  attribute: 'categories',
+  limit: 10,
 });

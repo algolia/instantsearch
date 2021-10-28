@@ -258,7 +258,26 @@ strong {
 }
 
 .card-author {
+  display: flex;
+  align-items: center;
+}
+
+.card-author-avatar {
+  display: inline-block;
+  margin-right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+}
+
+.card-author-name {
   font-weight: bold;
+}
+
+.card-author-job {
+  display: block;
+  font-weight: normal;
+  color: #6e7070;
 }
 
 .card--placeholder {

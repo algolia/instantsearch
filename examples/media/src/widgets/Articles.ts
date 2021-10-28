@@ -6,19 +6,22 @@ import { getCurrentDate } from '../utils';
 const currentDate = getCurrentDate();
 
 function createHit(hit, { isHighlighted }) {
+  const author = hit.coauthors && hit.coauthors[0];
   return `
 <li class="ais-InfiniteHits-item${
     isHighlighted ? ' infinite-hits-item--highlighted' : ''
   }">
   <article class="card">
     <div class="card-image">
-      <img src="${hit.image}" alt="${hit.title}">
+      <img src="${hit.cloudinary_url}" alt="${hit.title}">
     </div>
 
     <div class="card-content" data-layout="desktop">
       <header>
         ${
-          hit.topics ? `<span class="card-subject">${hit.topics[0]}</span>` : ''
+          hit.categories
+            ? `<span class="card-subject">${hit.categories.join(' • ')}</span>`
+            : ''
         }
 
         <h1 class="card-title">${instantsearch.highlight({
@@ -28,16 +31,22 @@ function createHit(hit, { isHighlighted }) {
       </header>
 
       <p class="card-description">${instantsearch.snippet({
-        attribute: 'description',
+        attribute: 'content',
         hit,
       })}</p>
 
       <footer>
-        <span class="card-author">${hit.author}</span> – ${distanceInWords(
-    currentDate,
-    hit.date,
-    { addSuffix: true }
-  ).replace('about ', '')}
+        ${
+          author
+            ? `<div class="card-author"><img class="card-author-avatar" src="${
+                author.avatar_url
+              }" alt="${author.nickname}" /><span class="card-author-name">${
+                author.nickname
+              }<span class="card-author-job">${
+                author.job_title
+              }</span></span></div>`
+            : ''
+        }
       </footer>
     </div>
 
@@ -51,13 +60,10 @@ function createHit(hit, { isHighlighted }) {
 
       <p class="card-mobile-footer">
         ${
-          hit.topics ? `<span class="card-subject">${hit.topics[0]}</span>` : ''
+          hit.categories
+            ? `<span class="card-subject">${hit.categories.join(' • ')}</span>`
+            : ''
         }
-        <span class="card-timestamp">
-          ${distanceInWords(currentDate, hit.date, {
-            addSuffix: true,
-          }).replace('about ', '')}
-        </span>
       </p>
     </div>
   </article>
@@ -182,7 +188,7 @@ ${
   results.nbHits > 0 && isLastPage
     ? `
 <div class="infinite-hits-end">
-  <p>${results.nbHits} results shown</p>
+  <p>${results.nbHits} articles shown</p>
 </div>
 `
     : ''
