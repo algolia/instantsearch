@@ -404,7 +404,7 @@ strong {
 }
 
 .topics-container {
-  margin-left: 1.2rem;
+  padding-left: 1.2rem;
   display: flex;
   overflow: scroll;
   -ms-overflow-style: none; /* IE 10+ */
@@ -530,14 +530,6 @@ body.filtering {
 .selected-topics-mobile .ais-CurrentRefinements-category {
   background: #6634d1;
   color: #f3f3f3;
-}
-
-/* SortBy */
-
-.ais-SortBy-select,
-.ais-HitsPerPage-select {
-  font-size: 0.875rem;
-  min-width: 132px;
 }
 
 /* ClearRefinements */

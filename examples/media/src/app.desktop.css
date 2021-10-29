@@ -158,7 +158,7 @@
 
   .infinite-hits-item--highlighted .card-image,
   .infinite-hits-item--highlighted .card-image img {
-    max-height: 300px;
+    max-height: unset;
   }
 
   .infinite-hits-item--highlighted .card-content {

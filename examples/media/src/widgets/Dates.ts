@@ -10,9 +10,8 @@ import {
   startOfYear,
   endOfYear,
 } from 'date-fns';
-import { getCurrentDate } from '../utils';
 
-const currentDate = getCurrentDate();
+const currentDate = new Date();
 
 const createDatesList = header =>
   panel({

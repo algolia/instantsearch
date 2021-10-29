@@ -1,9 +1,5 @@
 import instantsearch from 'instantsearch.js';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
-import { distanceInWords } from 'date-fns';
-import { getCurrentDate } from '../utils';
-
-const currentDate = getCurrentDate();
 
 function createHit(hit, { isHighlighted }) {
   const author = hit.coauthors && hit.coauthors[0];

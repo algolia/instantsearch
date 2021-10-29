@@ -10,9 +10,9 @@ import {
   startOfYear,
   endOfYear,
 } from 'date-fns';
-import { getCurrentDate, formatNumber } from '../utils';
+import { formatNumber } from '../utils';
 
-const currentDate = getCurrentDate();
+const currentDate = new Date();
 
 function getDateRangeFromTimestamp(timestamps: number[]) {
   const [start, end] = timestamps;

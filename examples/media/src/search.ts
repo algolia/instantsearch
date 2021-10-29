@@ -6,13 +6,9 @@ import {
   createCategories,
   createClearFilters,
   configuration,
-  createDates,
-  createLocations,
   searchBox,
   createSelectedTopics,
   stats,
-  sortByMobile,
-  sortByDesktop,
   topics,
   seeResults,
 } from './widgets';
@@ -28,14 +24,6 @@ const search = instantsearch({
   routing: true,
 });
 
-const datesDesktop = createDates({
-  container: '[data-widget="dates-desktop"]',
-  header: 'Date',
-});
-const datesMobile = createDates({
-  container: '[data-widget="dates-mobile"]',
-  header: 'Upload Time',
-});
 const selectedTopicsDesktop = createSelectedTopics({
   container: '[data-widget="selected-topics-desktop"]',
 });
@@ -54,12 +42,6 @@ const categoriesDesktop = createCategories({
 const categoriesMobile = createCategories({
   container: '[data-widget="categories-mobile"]',
 });
-const locationsDesktop = createLocations({
-  container: '[data-widget="locations-desktop"]',
-});
-const locationsMobile = createLocations({
-  container: '[data-widget="locations-mobile"]',
-});
 
 search.addWidgets([
   articles,
@@ -68,15 +50,9 @@ search.addWidgets([
   clearFiltersMobile,
   clearFiltersDesktop,
   configuration,
-  // datesDesktop,
-  // datesMobile,
-  // locationsDesktop,
-  // locationsMobile,
   searchBox,
   selectedTopicsMobile,
   selectedTopicsDesktop,
-  // sortByMobile,
-  // sortByDesktop,
   stats,
   topics,
   seeResults,
