@@ -1,5 +1,5 @@
 export * from './Articles';
-export * from './Categories';
+export * from './Authors';
 export * from './ClearFilters';
 export * from './Configuration';
 export * from './Dates';

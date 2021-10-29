@@ -3,7 +3,7 @@ import instantsearch from 'instantsearch.js';
 
 import {
   articles,
-  createCategories,
+  createAuthors,
   createClearFilters,
   configuration,
   searchBox,
@@ -36,17 +36,17 @@ const clearFiltersDesktop = createClearFilters({
 const clearFiltersMobile = createClearFilters({
   container: '[data-widget="clear-filters-mobile"]',
 });
-const categoriesDesktop = createCategories({
+const authorsDesktop = createAuthors({
   container: '[data-widget="categories-desktop"]',
 });
-const categoriesMobile = createCategories({
+const authorsMobile = createAuthors({
   container: '[data-widget="categories-mobile"]',
 });
 
 search.addWidgets([
   articles,
-  categoriesDesktop,
-  categoriesMobile,
+  authorsDesktop,
+  authorsMobile,
   clearFiltersMobile,
   clearFiltersDesktop,
   configuration,

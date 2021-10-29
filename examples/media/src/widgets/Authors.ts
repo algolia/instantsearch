@@ -1,15 +1,15 @@
 import { refinementList, panel } from 'instantsearch.js/es/widgets';
 import { isWindowMediumSize } from '../utils';
 
-const createCategoriesList = () =>
+const createAuthorsList = () =>
   panel({
     templates: {
       header: 'Authors',
     },
   })(refinementList);
 
-export const createCategories = ({ container }) =>
-  createCategoriesList()({
+export const createAuthors = ({ container }) =>
+  createAuthorsList()({
     container,
     attribute: 'coauthors.nickname',
     limit: 7,
