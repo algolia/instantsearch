@@ -645,6 +645,81 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     expect(secondRenderingOptions.items[0].isRefined).toBe(true);
   });
 
+  it('should set `isRefined: true` after calling `refine(item)` - same start and end values', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectNumericMenu(rendering);
+    const listOptions = [
+      { label: 'All' },
+      { start: 1, end: 8, label: '1-8' },
+      { start: 1, end: 10, label: '1-10' },
+      { start: 5, end: 10, label: '5-10' },
+      { start: 5, end: 8, label: '5-8' },
+    ];
+    const widget = makeWidget({
+      attribute: 'numerics',
+      items: listOptions,
+    });
+
+    const helper = jsHelper(createSearchClient(), '');
+    helper.search = jest.fn();
+
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items[0].isRefined).toBe(true);
+    expect(firstRenderingOptions.items[1].isRefined).toBe(false);
+    expect(firstRenderingOptions.items[2].isRefined).toBe(false);
+
+    // a user selects a value in the refinement list
+    firstRenderingOptions.refine(
+      encodeValue(listOptions[1].start, listOptions[1].end)
+    );
+
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items[0].isRefined).toBe(false);
+    expect(secondRenderingOptions.items[1].isRefined).toBe(true);
+    expect(secondRenderingOptions.items[2].isRefined).toBe(false);
+    expect(secondRenderingOptions.items[3].isRefined).toBe(false);
+    expect(secondRenderingOptions.items[4].isRefined).toBe(false);
+
+    // a user selects the third value in the refinement list
+    secondRenderingOptions.refine(
+      encodeValue(listOptions[2].start, listOptions[2].end)
+    );
+
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
+
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
+    expect(thirdRenderingOptions.items[0].isRefined).toBe(false);
+    expect(thirdRenderingOptions.items[1].isRefined).toBe(false);
+    expect(thirdRenderingOptions.items[2].isRefined).toBe(true);
+    expect(thirdRenderingOptions.items[3].isRefined).toBe(false);
+    expect(thirdRenderingOptions.items[4].isRefined).toBe(false);
+  });
+
   it('should reset page to 0 on refine() when the page is defined', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericMenu(rendering);
