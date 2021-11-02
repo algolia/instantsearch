@@ -1,5 +1,5 @@
-import instantsearch from 'instantsearch.js';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
+import { highlight, snippet } from 'instantsearch.js/es/helpers';
 
 const getBlogPostUrl = hit =>
   `https://algolia.com/blog/${hit.primary_category.slug}/${hit.slug}`;
@@ -24,13 +24,13 @@ function createHit(hit, { isHighlighted }) {
             : ''
         }
 
-        <h1 class="card-title">${instantsearch.highlight({
+        <h1 class="card-title">${highlight({
           attribute: 'title',
           hit,
         })}</h1>
       </header>
 
-      <p class="card-description">${instantsearch.snippet({
+      <p class="card-description">${snippet({
         attribute: 'content',
         hit,
       })}</p>
@@ -52,7 +52,7 @@ function createHit(hit, { isHighlighted }) {
 
     <div class="card-content" data-layout="mobile">
       <header>
-      <h1 class="card-title">${instantsearch.highlight({
+      <h1 class="card-title">${highlight({
         attribute: 'title',
         hit,
       })}</h1>
@@ -91,7 +91,7 @@ function createPlaceholderHit({ isHighlighted }) {
 
 let globalIsLastPage = false;
 
-const infiniteHits = connectInfiniteHits(
+const infiniteHits = connectInfiniteHits<{ container: string }>(
   ({ results, hits, showMore, isLastPage, widgetParams }, isFirstRender) => {
     const { container } = widgetParams;
     const containerNode = document.querySelector(container);

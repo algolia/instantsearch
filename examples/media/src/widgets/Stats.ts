@@ -48,33 +48,34 @@ function getDateRangeFromTimestamp(timestamps: number[]) {
   return '';
 }
 
-const statsWidget = connectHits(({ results, widgetParams }) => {
-  if (!results) {
-    return;
-  }
+const statsWidget = connectHits<{ container: string }>(
+  ({ results, widgetParams }) => {
+    if (!results) {
+      return;
+    }
 
-  const containerNode = document.querySelector(widgetParams.container);
-  const { nbHits } = results;
+    const containerNode = document.querySelector(widgetParams.container);
+    const { nbHits } = results;
 
-  const resultsStats = `${formatNumber(nbHits)} articles`;
+    const resultsStats = `${formatNumber(nbHits)} articles`;
 
-  const stringRefinements = results
-    .getRefinements()
-    .filter(refinement => refinement.type !== 'numeric')
-    .filter(refinement => refinement.attributeName !== 'categories')
-    .map(refinement => refinement.name);
-  const dateRefinement = getDateRangeFromTimestamp(
-    results
+    const stringRefinements = results
       .getRefinements()
-      .filter(refinement => refinement.attributeName === 'date')
-      .map(refinement => refinement.numericValue)
-  );
+      .filter(refinement => refinement.type !== 'numeric')
+      .filter(refinement => refinement.attributeName !== 'categories')
+      .map(refinement => refinement.name);
+    const dateRefinement = getDateRangeFromTimestamp(
+      results
+        .getRefinements()
+        .filter(refinement => refinement.attributeName === 'date')
+        .map(refinement => refinement.numericValue)
+    );
 
-  const refinements = [...stringRefinements, dateRefinement]
-    .filter(Boolean)
-    .map(refinement => `<strong>${refinement}</strong>`);
+    const refinements = [...stringRefinements, dateRefinement]
+      .filter(Boolean)
+      .map(refinement => `<strong>${refinement}</strong>`);
 
-  containerNode.innerHTML = `
+    containerNode.innerHTML = `
 <div class="ais-Stats">
   <div class="ais-Stats-text">
     ${[
@@ -88,7 +89,8 @@ const statsWidget = connectHits(({ results, widgetParams }) => {
   </div>
 </div>
 `;
-});
+  }
+);
 
 export const stats = statsWidget({
   container: '[data-widget="stats"]',

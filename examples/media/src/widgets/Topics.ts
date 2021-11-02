@@ -1,10 +1,11 @@
 import { connectMenu } from 'instantsearch.js/es/connectors';
 
-const menu = connectMenu(({ items, refine, widgetParams }) => {
-  const { container } = widgetParams;
-  const containerNode = document.querySelector(container);
+const menu = connectMenu<{ container: string }>(
+  ({ items, refine, widgetParams }) => {
+    const { container } = widgetParams;
+    const containerNode = document.querySelector(container);
 
-  containerNode.innerHTML = `
+    containerNode.innerHTML = `
   <div class="ais-RefinementList">
     <ul class="ais-RefinementList-list">
       ${items
@@ -30,14 +31,15 @@ const menu = connectMenu(({ items, refine, widgetParams }) => {
   </div>
   `;
 
-  [...containerNode.querySelectorAll('label')].forEach(element => {
-    element.addEventListener('click', event => {
-      event.preventDefault();
+    [...containerNode.querySelectorAll('label')].forEach(element => {
+      element.addEventListener('click', event => {
+        event.preventDefault();
 
-      refine(event.currentTarget.dataset.value);
+        refine((event.currentTarget as HTMLElement).dataset.value);
+      });
     });
-  });
-});
+  }
+);
 
 export const topics = menu({
   container: '[data-widget="topics"]',
