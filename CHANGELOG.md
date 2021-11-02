@@ -1,3 +1,12 @@
+## [4.33.1](https://github.com/algolia/instantsearch.js/compare/v4.33.0...v4.33.1) (2021-11-02)
+
+
+### Bug Fixes
+
+* **getUiState:** support `initialUiState` ([#4948](https://github.com/algolia/instantsearch.js/issues/4948)) ([532474d](https://github.com/algolia/instantsearch.js/commit/532474dfaf49446ab59a2a27424ca220947dd5bd))
+
+
+
 # [4.33.0](https://github.com/algolia/instantsearch.js/compare/v4.32.0...v4.33.0) (2021-10-26)
 
 
