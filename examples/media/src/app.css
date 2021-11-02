@@ -192,11 +192,21 @@ strong {
 
 /* Hits */
 
+.card-link {
+  color: unset;
+  text-decoration: unset;
+}
+
+.card-link:hover .card {
+  transform: scale(1.03);
+}
+
 .card {
   background-color: #fff;
   display: flex;
   flex-direction: column;
   height: 100%;
+  transition: transform 0.2s ease-out;
 }
 
 .card-image,

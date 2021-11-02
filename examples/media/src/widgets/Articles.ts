@@ -1,12 +1,16 @@
 import instantsearch from 'instantsearch.js';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 
+const getBlogPostUrl = hit =>
+  `https://algolia.com/blog/${hit.primary_category.slug}/${hit.slug}`;
+
 function createHit(hit, { isHighlighted }) {
   const author = hit.coauthors && hit.coauthors[0];
   return `
 <li class="ais-InfiniteHits-item${
     isHighlighted ? ' infinite-hits-item--highlighted' : ''
   }">
+  <a class="card-link" href="${getBlogPostUrl(hit)}">
   <article class="card">
     <div class="card-image">
       <img src="${hit.cloudinary_url}" alt="${hit.title}">
@@ -63,6 +67,7 @@ function createHit(hit, { isHighlighted }) {
       </p>
     </div>
   </article>
+  </a>
 </li>
 `;
 }
