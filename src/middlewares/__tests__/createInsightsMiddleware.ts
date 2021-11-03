@@ -28,7 +28,7 @@ describe('insights', () => {
     });
     instantSearchInstance.start();
 
-    const helper = instantSearchInstance.mainIndex.getHelper();
+    const helper = instantSearchInstance.mainIndex.getHelper()!;
 
     // @ts-expect-error `userToken` exists in only search client v4
     const getUserToken = () => helper.state.userToken;
@@ -61,7 +61,7 @@ describe('insights', () => {
     });
     instantSearchInstance.start();
 
-    const helper = instantSearchInstance.mainIndex.getHelper();
+    const helper = instantSearchInstance.mainIndex.getHelper()!;
 
     const getUserToken = () => (helper.state as any).userToken;
 

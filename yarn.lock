@@ -12581,10 +12581,10 @@ scriptjs@2.5.9:
   resolved "https://registry.yarnpkg.com/scriptjs/-/scriptjs-2.5.9.tgz#343915cd2ec2ed9bfdde2b9875cd28f59394b35f"
   integrity sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==
 
-search-insights@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/search-insights/-/search-insights-2.0.5.tgz#42fbe4d42d9f68f58bfc7c6e4519e8961b07dd2b"
-  integrity sha512-Mx3PmspHRhiW8eMFrT0coYCtoK6QqUjyNGqtlCpZcKTYflQEzYngx4obIRahc0arXBDzOR2tE/t8k8VgzfJe/g==
+search-insights@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/search-insights/-/search-insights-2.1.0.tgz#42822fa325062ec5bf050c5f8cad58f0c5b21310"
+  integrity sha512-mWIVsZ5igQnlM2tC0HJCtGWKQcBhLhkasZoZZS2exUfZPpRowVWEvyyYTWU3M0rUKWlWLWFCYvJ3HGTSSCsOcw==
 
 select@^1.1.2:
   version "1.1.2"

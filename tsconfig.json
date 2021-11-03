@@ -19,10 +19,5 @@
   "exclude": [
     "examples",
     "es",
-    // these two files are temporarily excluded because
-    // they import files from node_modules/search-insights directly
-    // and it causes the type-checking to fail.
-    "src/middlewares/__tests__/createInsightsMiddleware.ts",
-    "test/mock/createInsightsClient.ts"
   ]
 }
