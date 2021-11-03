@@ -1,9 +1,5 @@
 {
   "version": "6.15.0",
   "npmClient": "yarn",
-  "useWorkspaces": true,
-  "packages": [
-    "packages/*",
-    "examples/@(default-theme|e-commerce|media|tourism|hooks)"
-  ]
+  "useWorkspaces": true
 }
