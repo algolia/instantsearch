@@ -4,7 +4,7 @@ import { highlight, snippet } from 'instantsearch.js/es/helpers';
 const getBlogPostUrl = hit =>
   `https://algolia.com/blog/${hit.primary_category.slug}/${hit.slug}`;
 
-function createHit(hit, { isHighlighted }) {
+function createHit(hit, { isHighlighted, refinedCategory }) {
   const author = hit.coauthors && hit.coauthors[0];
   return `
 <li class="ais-InfiniteHits-item${
@@ -19,8 +19,9 @@ function createHit(hit, { isHighlighted }) {
     <div class="card-content" data-layout="desktop">
       <header>
         ${
-          hit.categories
-            ? `<span class="card-subject">${hit.categories.join(' • ')}</span>`
+          hit.primary_category
+            ? `<span class="card-subject">${refinedCategory ||
+                hit.primary_category.title}</span>`
             : ''
         }
 
@@ -173,6 +174,11 @@ const infiniteHits = connectInfiniteHits<{ container: string }>(
       return;
     }
 
+    const refinedCategory = (facet => {
+      const category = facet && facet.data.find(({ isRefined }) => isRefined);
+      return category ? category.name : undefined;
+    })(results.hierarchicalFacets.find(({ name }) => name === 'categories'));
+
     containerNode.querySelector('div').innerHTML = `
 <ol class="ais-InfiniteHits-list">
   ${hits
@@ -180,6 +186,7 @@ const infiniteHits = connectInfiniteHits<{ container: string }>(
       createHit(hit, {
         isHighlighted:
           results.nbHits !== 3 && (index === 0 || results.nbHits === 2),
+        refinedCategory,
       })
     )
     .join('')}
