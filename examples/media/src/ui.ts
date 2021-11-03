@@ -26,4 +26,10 @@ export function enhanceUi() {
   });
   const seeResultsButton = document.querySelector('.see-results-button');
   seeResultsButton.addEventListener('click', toggleFilters);
+
+  // Prevent route removal when using "back to top" link
+  document.querySelector('.back-to-top a').addEventListener('click', event => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  });
 }
