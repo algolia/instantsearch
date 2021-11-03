@@ -7,3 +7,4 @@ export * from './useHits';
 export * from './usePagination';
 export * from './useRefinementList';
 export * from './useSearchBox';
+export * from './useSortBy';
