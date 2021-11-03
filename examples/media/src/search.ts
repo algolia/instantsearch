@@ -21,7 +21,7 @@ const searchClient = algoliasearch(
 const search = instantsearch({
   searchClient,
   indexName: 'PROD_algolia_blog',
-  routing: true,
+  routing: { stateMapping: singleIndex('PROD_algolia_blog') },
 });
 
 const selectedTopicsDesktop = createSelectedTopics({
