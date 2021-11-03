@@ -1,5 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
+import { singleIndex } from 'instantsearch.js/es/lib/stateMappings';
 
 import {
   articles,
@@ -21,7 +22,9 @@ const searchClient = algoliasearch(
 const search = instantsearch({
   searchClient,
   indexName: 'PROD_algolia_blog',
-  routing: { stateMapping: singleIndex('PROD_algolia_blog') },
+  routing: {
+    stateMapping: singleIndex('PROD_algolia_blog'),
+  },
 });
 
 const selectedTopicsDesktop = createSelectedTopics({
