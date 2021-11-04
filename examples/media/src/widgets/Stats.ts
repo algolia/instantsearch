@@ -1,52 +1,5 @@
 import { connectHits } from 'instantsearch.js/es/connectors';
-import {
-  startOfDay,
-  endOfDay,
-  startOfWeek,
-  endOfWeek,
-  startOfMonth,
-  endOfMonth,
-  startOfYear,
-  endOfYear,
-  getUnixTime,
-} from 'date-fns';
-import { formatNumber } from '../utils';
-
-const currentDate = new Date();
-
-function getDateRangeFromTimestamp(timestamps: number[]) {
-  const [start, end] = timestamps;
-
-  if (
-    start === getUnixTime(startOfDay(currentDate)) &&
-    end === getUnixTime(endOfDay(currentDate))
-  ) {
-    return 'Today';
-  }
-
-  if (
-    start === getUnixTime(startOfWeek(currentDate)) &&
-    end === getUnixTime(endOfWeek(currentDate))
-  ) {
-    return 'This week';
-  }
-
-  if (
-    start === getUnixTime(startOfMonth(currentDate)) &&
-    end === getUnixTime(endOfMonth(currentDate))
-  ) {
-    return 'This month';
-  }
-
-  if (
-    start === getUnixTime(startOfYear(currentDate)) &&
-    end === getUnixTime(endOfYear(currentDate))
-  ) {
-    return 'This year';
-  }
-
-  return '';
-}
+import { formatNumber, getDateRangeFromTimestamp } from '../utils';
 
 const statsWidget = connectHits<{ container: string }>(
   ({ results, widgetParams }) => {
