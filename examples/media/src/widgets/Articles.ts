@@ -93,13 +93,30 @@ function createPlaceholderHit({ isHighlighted }) {
 let globalIsLastPage = false;
 
 const infiniteHits = connectInfiniteHits<{ container: string }>(
-  ({ results, hits, showMore, isLastPage, widgetParams }, isFirstRender) => {
+  (
+    {
+      results,
+      hits,
+      showPrevious,
+      showMore,
+      isFirstPage,
+      isLastPage,
+      widgetParams,
+    },
+    isFirstRender
+  ) => {
     const { container } = widgetParams;
     const containerNode = document.querySelector(container);
 
     globalIsLastPage = isLastPage;
 
     if (isFirstRender) {
+      const previousButton = document.createElement('button');
+      previousButton.classList.add('previous-button');
+      previousButton.textContent = 'Show previous articles';
+      previousButton.addEventListener('click', () => showPrevious());
+      containerNode.appendChild(previousButton);
+
       const hitsWrapper = document.createElement('div');
       hitsWrapper.classList.add('ais-InfiniteHits');
       const loadMoreTrigger = document.createElement('div');
@@ -127,6 +144,10 @@ const infiniteHits = connectInfiniteHits<{ container: string }>(
 
       return;
     }
+
+    containerNode
+      .querySelector('.previous-button')
+      .classList.toggle('previous-button--visible', !isFirstPage);
 
     if (results.nbHits === 0) {
       containerNode.querySelector('div').innerHTML = `
@@ -207,4 +228,5 @@ ${
 
 export const articles = infiniteHits({
   container: '[data-widget="hits"]',
+  showPrevious: true,
 });

@@ -192,6 +192,23 @@ strong {
 
 /* Hits */
 
+.previous-button {
+  display: none;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0 auto 2rem;
+  padding: .5rem 1rem;
+  color: #fff;
+  background: linear-gradient(to left, #764ba2, #667eea);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.previous-button.previous-button--visible {
+  display: block;
+}
+
 .card-link {
   color: unset;
   text-decoration: unset;
