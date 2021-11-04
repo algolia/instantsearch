@@ -7,70 +7,82 @@ const getBlogPostUrl = hit =>
 function createHit(hit, { isHighlighted, refinedCategory }) {
   const author = hit.coauthors && hit.coauthors[0];
   return `
-<li class="ais-InfiniteHits-item${
-    isHighlighted ? ' infinite-hits-item--highlighted' : ''
-  }">
-  <a class="card-link" href="${getBlogPostUrl(hit)}">
-  <article class="card">
-    <div class="card-image">
-      <img src="${hit.cloudinary_url}" alt="${hit.title}">
-    </div>
+    <li
+      class="ais-InfiniteHits-item${
+        isHighlighted ? ' infinite-hits-item--highlighted' : ''
+      }"
+    >
+      <a class="card-link" href="${getBlogPostUrl(hit)}">
+        <article class="card">
+          <div class="card-image">
+            <img src="${hit.cloudinary_url}" alt="${hit.title}" />
+          </div>
 
-    <div class="card-content" data-layout="desktop">
-      <header>
-        ${
-          hit.primary_category
-            ? `<span class="card-subject">${refinedCategory ||
-                hit.primary_category.title}</span>`
-            : ''
-        }
+          <div class="card-content" data-layout="desktop">
+            <header>
+              ${
+                hit.primary_category
+                  ? `<span class="card-subject">${refinedCategory ||
+                      hit.primary_category.title}</span>`
+                  : ''
+              }
 
-        <h1 class="card-title">${highlight({
-          attribute: 'title',
-          hit,
-        })}</h1>
-      </header>
+              <h1 class="card-title">
+                ${highlight({
+                  attribute: 'title',
+                  hit,
+                })}
+              </h1>
+            </header>
 
-      <p class="card-description">${snippet({
-        attribute: 'content',
-        hit,
-      })}</p>
+            <p class="card-description">
+              ${snippet({
+                attribute: 'content',
+                hit,
+              })}
+            </p>
 
-      <footer>
-        ${
-          author
-            ? `<div class="card-author"><img class="card-author-avatar" src="${
-                author.avatar_url
-              }" alt="${author.nickname}" /><span class="card-author-name">${
-                author.nickname
-              }<span class="card-author-job">${
-                author.job_title
-              }</span></span></div>`
-            : ''
-        }
-      </footer>
-    </div>
+            <footer>
+              ${
+                author
+                  ? `<div class="card-author"><img class="card-author-avatar" src="${
+                      author.avatar_url
+                    }" alt="${
+                      author.nickname
+                    }" /><span class="card-author-name">${
+                      author.nickname
+                    }<span class="card-author-job">${
+                      author.job_title
+                    }</span></span></div>`
+                  : ''
+              }
+            </footer>
+          </div>
 
-    <div class="card-content" data-layout="mobile">
-      <header>
-      <h1 class="card-title">${highlight({
-        attribute: 'title',
-        hit,
-      })}</h1>
-      </header>
+          <div class="card-content" data-layout="mobile">
+            <header>
+              <h1 class="card-title">
+                ${highlight({
+                  attribute: 'title',
+                  hit,
+                })}
+              </h1>
+            </header>
 
-      <p class="card-mobile-footer">
-        ${
-          hit.categories
-            ? `<span class="card-subject">${hit.categories.join(' • ')}</span>`
-            : ''
-        }
-      </p>
-    </div>
-  </article>
-  </a>
-</li>
-`;
+            <p class="card-mobile-footer">
+              ${
+                hit.categories
+                  ? `<span class="card-subject">${hit.categories.join(
+                      ' • '
+                    )}</span>`
+                  : ''
+              }
+            </p>
+          </div>
+        </article>
+      </a>
+    </li>
+  `;
 }
 
 function createPlaceholderHit({ isHighlighted }) {
