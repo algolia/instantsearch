@@ -1,13 +1,10 @@
 import {
-  startOfDay,
-  endOfDay,
-  startOfWeek,
-  endOfWeek,
-  endOfMonth,
-  endOfYear,
   getUnixTime,
-  startOfMonth,
-  startOfYear,
+  addDays,
+  addMonths,
+  addWeeks,
+  addYears,
+  startOfDay,
 } from 'date-fns';
 
 const currentDate = new Date();
@@ -15,24 +12,20 @@ const currentDate = new Date();
 export const DATE_RANGES = [
   { label: 'All time' },
   {
-    label: 'Today',
-    start: getUnixTime(startOfDay(currentDate)),
-    end: getUnixTime(endOfDay(currentDate)),
+    label: 'Last 24h',
+    start: getUnixTime(startOfDay(addDays(currentDate, -1))),
   },
   {
-    label: 'This week',
-    start: getUnixTime(startOfWeek(currentDate)),
-    end: getUnixTime(endOfWeek(currentDate)),
+    label: 'Past week',
+    start: getUnixTime(startOfDay(addWeeks(currentDate, -1))),
   },
   {
-    label: 'This month',
-    start: getUnixTime(startOfMonth(currentDate)),
-    end: getUnixTime(endOfMonth(currentDate)),
+    label: 'Past month',
+    start: getUnixTime(startOfDay(addMonths(currentDate, -1))),
   },
   {
-    label: 'This year',
-    start: getUnixTime(startOfYear(currentDate)),
-    end: getUnixTime(endOfYear(currentDate)),
+    label: 'Past year',
+    start: getUnixTime(startOfDay(addYears(currentDate, -1))),
   },
 ];
 
