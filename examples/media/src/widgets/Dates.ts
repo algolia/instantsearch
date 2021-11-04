@@ -1,6 +1,5 @@
 import { numericMenu, panel } from 'instantsearch.js/es/widgets';
 import {
-  getTime,
   startOfDay,
   endOfDay,
   startOfWeek,
@@ -9,6 +8,7 @@ import {
   endOfMonth,
   startOfYear,
   endOfYear,
+  getUnixTime,
 } from 'date-fns';
 
 const currentDate = new Date();
@@ -23,28 +23,28 @@ const createDatesList = header =>
 export const createDates = ({ container, header }) =>
   createDatesList(header)({
     container,
-    attribute: 'date',
+    attribute: 'created_at_timestamp',
     items: [
       { label: 'All time' },
       {
         label: 'Today',
-        start: getTime(startOfDay(currentDate)),
-        end: getTime(endOfDay(currentDate)),
+        start: getUnixTime(startOfDay(currentDate)),
+        end: getUnixTime(endOfDay(currentDate)),
       },
       {
         label: 'This week',
-        start: getTime(startOfWeek(currentDate)),
-        end: getTime(endOfWeek(currentDate)),
+        start: getUnixTime(startOfWeek(currentDate)),
+        end: getUnixTime(endOfWeek(currentDate)),
       },
       {
         label: 'This month',
-        start: getTime(startOfMonth(currentDate)),
-        end: getTime(endOfMonth(currentDate)),
+        start: getUnixTime(startOfMonth(currentDate)),
+        end: getUnixTime(endOfMonth(currentDate)),
       },
       {
         label: 'This year',
-        start: getTime(startOfYear(currentDate)),
-        end: getTime(endOfYear(currentDate)),
+        start: getUnixTime(startOfYear(currentDate)),
+        end: getUnixTime(endOfYear(currentDate)),
       },
     ],
   });

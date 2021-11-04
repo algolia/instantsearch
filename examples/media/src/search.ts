@@ -6,6 +6,7 @@ import {
   articles,
   createAuthors,
   createClearFilters,
+  createDates,
   configuration,
   searchBox,
   createSelectedTopics,
@@ -27,6 +28,14 @@ const search = instantsearch({
   },
 });
 
+const datesDesktop = createDates({
+  container: '[data-widget="dates-desktop"]',
+  header: 'Date',
+});
+const datesMobile = createDates({
+  container: '[data-widget="dates-mobile"]',
+  header: ' Upload Time',
+});
 const selectedTopicsDesktop = createSelectedTopics({
   container: '[data-widget="selected-topics-desktop"]',
 });
@@ -53,6 +62,8 @@ search.addWidgets([
   clearFiltersMobile,
   clearFiltersDesktop,
   configuration,
+  datesDesktop,
+  datesMobile,
   searchBox,
   selectedTopicsMobile,
   selectedTopicsDesktop,

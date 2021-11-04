@@ -264,12 +264,6 @@ strong {
 .card-timestamp {
   font-size: 0.75rem;
   color: #6e7070;
-  padding-left: 4px;
-}
-
-.card-timestamp::before {
-  content: '–';
-  padding: 0 4px;
 }
 
 .card-title mark {
@@ -300,7 +294,6 @@ strong {
 .card-author-name {
   font-weight: bold;
 }
-
 .card-author-job {
   display: block;
   font-weight: normal;

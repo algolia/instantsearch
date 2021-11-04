@@ -1,6 +1,5 @@
 import { connectHits } from 'instantsearch.js/es/connectors';
 import {
-  getTime,
   startOfDay,
   endOfDay,
   startOfWeek,
@@ -9,6 +8,7 @@ import {
   endOfMonth,
   startOfYear,
   endOfYear,
+  getUnixTime,
 } from 'date-fns';
 import { formatNumber } from '../utils';
 
@@ -18,29 +18,29 @@ function getDateRangeFromTimestamp(timestamps: number[]) {
   const [start, end] = timestamps;
 
   if (
-    start === getTime(startOfDay(currentDate)) &&
-    end === getTime(endOfDay(currentDate))
+    start === getUnixTime(startOfDay(currentDate)) &&
+    end === getUnixTime(endOfDay(currentDate))
   ) {
     return 'Today';
   }
 
   if (
-    start === getTime(startOfWeek(currentDate)) &&
-    end === getTime(endOfWeek(currentDate))
+    start === getUnixTime(startOfWeek(currentDate)) &&
+    end === getUnixTime(endOfWeek(currentDate))
   ) {
     return 'This week';
   }
 
   if (
-    start === getTime(startOfMonth(currentDate)) &&
-    end === getTime(endOfMonth(currentDate))
+    start === getUnixTime(startOfMonth(currentDate)) &&
+    end === getUnixTime(endOfMonth(currentDate))
   ) {
     return 'This month';
   }
 
   if (
-    start === getTime(startOfYear(currentDate)) &&
-    end === getTime(endOfYear(currentDate))
+    start === getUnixTime(startOfYear(currentDate)) &&
+    end === getUnixTime(endOfYear(currentDate))
   ) {
     return 'This year';
   }
@@ -67,7 +67,9 @@ const statsWidget = connectHits<{ container: string }>(
     const dateRefinement = getDateRangeFromTimestamp(
       results
         .getRefinements()
-        .filter(refinement => refinement.attributeName === 'date')
+        .filter(
+          refinement => refinement.attributeName === 'created_at_timestamp'
+        )
         .map(refinement => refinement.numericValue)
     );
 

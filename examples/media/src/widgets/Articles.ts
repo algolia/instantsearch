@@ -1,11 +1,15 @@
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { highlight, snippet } from 'instantsearch.js/es/helpers';
+import { formatDistanceToNow } from 'date-fns';
 
 const getBlogPostUrl = hit =>
   `https://algolia.com/blog/${hit.primary_category.slug}/${hit.slug}`;
 
 function createHit(hit, { isHighlighted, refinedCategory }) {
   const author = hit.coauthors && hit.coauthors[0];
+  const date = formatDistanceToNow(hit.created_at_timestamp * 1000, {
+    addSuffix: true,
+  }).replace('about ', '');
   return `
     <li
       class="ais-InfiniteHits-item${
@@ -23,9 +27,10 @@ function createHit(hit, { isHighlighted, refinedCategory }) {
               ${
                 hit.primary_category
                   ? `<span class="card-subject">${refinedCategory ||
-                      hit.primary_category.title}</span>`
+                      hit.primary_category.title}</span> • `
                   : ''
               }
+              <span class="card-timestamp">${date}</span>
 
               <h1 class="card-title">
                 ${highlight({
@@ -71,12 +76,12 @@ function createHit(hit, { isHighlighted, refinedCategory }) {
 
             <p class="card-mobile-footer">
               ${
-                hit.categories
-                  ? `<span class="card-subject">${hit.categories.join(
-                      ' • '
-                    )}</span>`
+                hit.primary_category
+                  ? `<span class="card-subject">${refinedCategory ||
+                      hit.primary_category.title}</span> • `
                   : ''
               }
+              <span class="card-timestamp">${date}</span>
             </p>
           </div>
         </article>
