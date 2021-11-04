@@ -618,6 +618,92 @@ function RefinementList(props) {
 }
 ```
 
+### `useSortBy`
+
+> `(props: UseSortByProps) => SortByRenderState`
+
+Hook to [sort by](https://www.algolia.com/doc/api-reference/widgets/sort-by/js/) specified indices.
+
+**Types**
+
+<details>
+<summary><code>SortByItem</code></summary>
+
+```ts
+type SortByItem = {
+  /**
+   * The name of the index to target.
+   */
+  value: string;
+  /**
+   * The label of the index to display.
+   */
+  label: string;
+}
+```
+
+</details>
+
+<details>
+<summary><code>UseSortByProps</code></summary>
+
+```ts
+type UseSortByProps = {
+  /**
+   * Array of objects defining the different indices to choose from.
+   */
+  items: SortByItem[];
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: TransformItems<SortByItem>;
+}
+```
+
+</details>
+
+<details>
+<summary><code>SortByRenderState</code></summary>
+
+```ts
+type SortByRenderState = {
+  /**
+   * The initially selected index.
+   */
+  initialIndex?: string;
+  /**
+   * The currently selected index.
+   */
+  currentRefinement: string;
+  /**
+   * All the available indices
+   */
+  options: SortByItem[];
+  /**
+   * Switches indices and triggers a new search.
+   */
+  refine: (value: string) => void;
+  /**
+   * `true` if the last search contains no result.
+   */
+  hasNoResults: boolean;
+}
+```
+
+</details>
+
+**Example**
+
+```jsx
+function SortBy(props) {
+  const { currentRefinement, options, refine } = useSortBy(props);
+
+  return {
+    /* Markup */
+  };
+}
+```
+
 ### `useConnector`
 
 > `<TProps, TWidgetDescription>(connector: Connector<TWidgetDescription, TProps>, props: TProps) => TWidgetDescription['renderState']`
