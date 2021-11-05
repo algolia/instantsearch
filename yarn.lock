@@ -18269,15 +18269,6 @@ react-inspector@^2.3.0, react-inspector@^2.3.1:
     is-dom "^1.0.9"
     prop-types "^15.6.1"
 
-react-instantsearch-dom-maps@6.12.0:
-  version "6.12.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom-maps/-/react-instantsearch-dom-maps-6.12.0.tgz#a66789cfd500d117d9dd048a8df97b943b97c604"
-  integrity sha512-1yxe8hy9KuRVYKxBIP10lpkZd/I716JgpvXzs3fIngmZb0Ya+gDAjJJtcKCNostfkL3M3bXJp8ToRE+Red5vqA==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    prop-types "^15.6.2"
-    scriptjs "^2.5.8"
-
 react-instantsearch-dom@6.12.0:
   version "6.12.0"
   resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-6.12.0.tgz#fb2a95643cfa896b4199131e70d0de308baaf932"

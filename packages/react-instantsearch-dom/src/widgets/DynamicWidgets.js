@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { ExperimentalDynamicWidgets as CoreDynamicWidgets } from 'react-instantsearch-core';
+import { DynamicWidgets as CoreDynamicWidgets } from 'react-instantsearch-core';
 import classNames from 'classnames';
 import { createClassNames } from '../core/utils';
 
