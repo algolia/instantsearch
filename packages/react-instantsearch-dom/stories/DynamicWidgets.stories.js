@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import {
-  ExperimentalDynamicWidgets,
+  DynamicWidgets,
   HierarchicalMenu,
   Menu,
   Panel,
@@ -17,7 +17,7 @@ stories.add('default', () => (
     hasPlayground={true}
     linkedStoryGroup="DynamicWidgets.stories.js"
   >
-    <ExperimentalDynamicWidgets
+    <DynamicWidgets
       transformItems={(_attributes, { results }) => {
         if (results._state.query === 'dog') {
           return ['categories'];
@@ -40,6 +40,6 @@ stories.add('default', () => (
         <RefinementList attribute="brand" />
       </Panel>
       <Menu attribute="categories" />
-    </ExperimentalDynamicWidgets>
+    </DynamicWidgets>
   </WrapWithHits>
 ));

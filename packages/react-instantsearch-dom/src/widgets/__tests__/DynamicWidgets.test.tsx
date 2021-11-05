@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import {
-  ExperimentalDynamicWidgets as CoreDynamicWidgets,
+  DynamicWidgets as CoreDynamicWidgets,
   InstantSearch,
 } from 'react-instantsearch-core';
 import DynamicWidgets from '../DynamicWidgets';
@@ -10,7 +10,7 @@ jest.mock('react-instantsearch-core', () => {
   const original = jest.requireActual('react-instantsearch-core');
   return {
     ...original,
-    ExperimentalDynamicWidgets: jest.fn(() => null),
+    DynamicWidgets: jest.fn(() => null),
   };
 });
 
