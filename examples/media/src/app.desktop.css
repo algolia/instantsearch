@@ -170,3 +170,8 @@
     line-height: 1.36;
   }
 }
+
+/* Filter */
+.container-filters-panel-column--dates .ais-Panel-header {
+  padding-bottom: 1.5rem;
+}
