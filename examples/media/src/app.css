@@ -54,6 +54,7 @@ strong {
 .container-filters {
   display: flex;
   justify-content: space-between;
+  height: 2rem;
   margin-bottom: 2rem;
 }
 
@@ -109,13 +110,12 @@ strong {
   max-height: 0;
 }
 
-.container-filters-panel-column:not(:last-child) {
-  flex: 2;
-  margin-right: 4rem;
+.container-filters-panel-column {
+  flex: 1;
 }
 
-.container-filters-panel-column:last-child {
-  flex: 1;
+.container-filters-panel-column:not(:last-child) {
+  margin-right: 4rem;
 }
 
 /* Back to top */

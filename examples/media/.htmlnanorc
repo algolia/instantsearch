@@ -1,7 +1,7 @@
 {
-	"minifySvg": {
-		"plugins": [
-			{ "cleanupIDs": false }
-		]
-	} 
+  "minifySvg": {
+    "plugins": [
+      { "cleanupIDs": false }
+    ]
+  }
 }

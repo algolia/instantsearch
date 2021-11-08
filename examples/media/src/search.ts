@@ -34,7 +34,7 @@ const datesDesktop = createDates({
 });
 const datesMobile = createDates({
   container: '[data-widget="dates-mobile"]',
-  header: ' Upload Time',
+  header: 'Date',
 });
 const selectedTopicsDesktop = createSelectedTopics({
   container: '[data-widget="selected-topics-desktop"]',
