@@ -159,7 +159,12 @@ search.addWidgets([
         };
       },
 
-      getWidgetRenderState({ helper, scopedResults, instantSearchInstance }) {
+      getWidgetRenderState({
+        helper,
+        state,
+        scopedResults,
+        instantSearchInstance,
+      }) {
         if (!connectorState.refine) {
           connectorState.refine = (query: string) => {
             helper.setQuery(query).search();
@@ -189,7 +194,7 @@ search.addWidgets([
         });
 
         return {
-          currentRefinement: helper.state.query || '',
+          currentRefinement: state.query || '',
           indices,
           refine: connectorState.refine,
           widgetParams,

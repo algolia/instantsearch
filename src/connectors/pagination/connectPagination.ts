@@ -158,7 +158,7 @@ const connectPagination: PaginationConnector = function connectPagination(
         return searchParameters.setQueryParameter('page', page);
       },
 
-      getWidgetRenderState({ results, helper, createURL }) {
+      getWidgetRenderState({ results, helper, state, createURL }) {
         if (!connectorState.refine) {
           connectorState.refine = (page) => {
             helper.setPage(page);
@@ -167,11 +167,10 @@ const connectPagination: PaginationConnector = function connectPagination(
         }
 
         if (!connectorState.createURL) {
-          connectorState.createURL = (state) => (page) =>
-            createURL(state.setPage(page));
+          connectorState.createURL = (helperState) => (page) =>
+            createURL(helperState.setPage(page));
         }
 
-        const state = helper.state;
         const page = state.page || 0;
         const nbPages = getMaxPage(results || { nbPages: 0 });
         pager.currentPage = page;

@@ -155,7 +155,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
         };
       },
 
-      getWidgetRenderState({ results, helper, parent }) {
+      getWidgetRenderState({ results, helper, state, parent }) {
         if (!connectorState.initialIndex && parent) {
           connectorState.initialIndex = parent.getIndexName();
         }
@@ -166,7 +166,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
         }
 
         return {
-          currentRefinement: helper.state.index,
+          currentRefinement: state.index,
           options: transformItems(items),
           refine: connectorState.setIndex,
           hasNoResults: results ? results.nbHits === 0 : true,

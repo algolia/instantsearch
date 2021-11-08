@@ -84,7 +84,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         })
       );
 
-      helper.toggleRefinement('category', 'Decoration');
+      helper.toggleFacetRefinement('category', 'Decoration');
 
       const renderState1 = breadcrumb.getRenderState(
         {
@@ -195,7 +195,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         })
       );
 
-      helper.toggleRefinement('category', 'Decoration');
+      helper.toggleFacetRefinement('category', 'Decoration');
 
       const renderState1 = breadcrumb.getWidgetRenderState(
         createInitOptions({ helper })
@@ -559,7 +559,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init!(
       createInitOptions({
@@ -620,7 +620,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init!(
       createInitOptions({
@@ -668,7 +668,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init!(
       createInitOptions({
@@ -969,7 +969,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.items).toEqual([]);
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.render!(
       createRenderOptions({
