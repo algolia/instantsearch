@@ -128,12 +128,6 @@ const infiniteHits = connectInfiniteHits<{ container: string }>(
     globalIsLastPage = isLastPage;
 
     if (isFirstRender) {
-      const previousButton = document.createElement('button');
-      previousButton.classList.add('previous-button');
-      previousButton.textContent = 'Show previous articles';
-      previousButton.addEventListener('click', () => showPrevious());
-      containerNode.appendChild(previousButton);
-
       const hitsWrapper = document.createElement('div');
       hitsWrapper.classList.add('ais-InfiniteHits');
       const loadMoreTrigger = document.createElement('div');
@@ -161,10 +155,6 @@ const infiniteHits = connectInfiniteHits<{ container: string }>(
 
       return;
     }
-
-    containerNode
-      .querySelector('.previous-button')
-      .classList.toggle('previous-button--visible', !isFirstPage);
 
     if (results.nbHits === 0) {
       containerNode.querySelector('div').innerHTML = `
@@ -212,34 +202,57 @@ const infiniteHits = connectInfiniteHits<{ container: string }>(
       return;
     }
 
+    const hitsOffset = hits.findIndex(
+      ({ objectID }) => results.hits[0].objectID === objectID
+    );
+    const hitsWindow = {
+      start: results.hitsPerPage * results.page - hitsOffset + 1,
+      end: results.hitsPerPage * results.page + hits.length - hitsOffset,
+    };
+
     const refinedCategory = (facet => {
       const category = facet && facet.data.find(({ isRefined }) => isRefined);
       return category ? category.name : undefined;
     })(results.hierarchicalFacets.find(({ name }) => name === 'categories'));
 
     containerNode.querySelector('div').innerHTML = `
-<ol class="ais-InfiniteHits-list">
-  ${hits
-    .map((hit, index: number) =>
-      createHit(hit, {
-        isHighlighted:
-          results.nbHits !== 3 && (index === 0 || results.nbHits === 2),
-        refinedCategory,
-      })
-    )
-    .join('')}
-</ol>
+      <div class="previous-hits">
+        <p class="previous-hits-message">
+          Showing ${hitsWindow.start} - ${hitsWindow.end} out of
+          ${results.nbHits} articles
+        </p>
+        <button class="previous-hits-button">Show previous articles</button>
+      </div>
+      <ol class="ais-InfiniteHits-list">
+        ${hits
+          .map((hit, index: number) =>
+            createHit(hit, {
+              isHighlighted:
+                results.nbHits !== 3 && (index === 0 || results.nbHits === 2),
+              refinedCategory,
+            })
+          )
+          .join('')}
+      </ol>
 
-${
-  results.nbHits > 0 && isLastPage
-    ? `
+      ${
+        results.nbHits > 0 && isLastPage
+          ? `
 <div class="infinite-hits-end">
   <p>${results.nbHits} articles shown</p>
 </div>
 `
-    : ''
-}
-`;
+          : ''
+      }
+    `;
+
+    containerNode
+      .querySelector('.previous-hits')
+      .classList.toggle('previous-hits--visible', !isFirstPage);
+
+    containerNode
+      .querySelector('.previous-hits-button')
+      .addEventListener('click', () => showPrevious());
   }
 );
 

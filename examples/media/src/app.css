@@ -192,21 +192,39 @@ strong {
 
 /* Hits */
 
-.previous-button {
+.previous-hits {
   display: none;
-  font-size: 1rem;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.previous-hits.previous-hits--visible {
+  display: flex;
+}
+
+.previous-hits-message {
+  margin: 0;
+  font-size: .9rem;
+  color: #6e7070;
+}
+
+.previous-hits-button {
+  font-family: inherit;
+  font-size: .75rem;
   font-weight: bold;
-  margin: 0 auto 2rem;
+  margin-left: 1rem;
   padding: .5rem 1rem;
-  color: #fff;
-  background: linear-gradient(to left, #764ba2, #667eea);
+  color: #6634d1;
+  background-color: #e6ebf7;
+  text-transform: uppercase;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.previous-button.previous-button--visible {
-  display: block;
+.previous-hits-button:hover {
+  background-color: #d3daf6;
 }
 
 .card-link {
