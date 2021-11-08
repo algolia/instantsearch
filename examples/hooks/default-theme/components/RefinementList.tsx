@@ -21,12 +21,15 @@ export function RefinementList(props: RefinementListProps) {
     toggleShowMore,
   } = useRefinementList(props);
   const [query, setQuery] = useState('');
+  const previousQueryRef = useRef(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    searchForItems(query);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
+    if (previousQueryRef.current !== query) {
+      previousQueryRef.current = query;
+      searchForItems(query);
+    }
+  }, [query, searchForItems]);
 
   return (
     <div className={cx('ais-RefinementList', props.className)}>
