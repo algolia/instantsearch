@@ -22,15 +22,4 @@ storiesOf('ais-dynamic-widgets', module)
         ],
       };
     },
-    methods: {
-      transformItems(_attributes, { results }) {
-        if (results._state.query === 'dog') {
-          return ['categories'];
-        }
-        if (results._state.query === 'lego') {
-          return ['categories', 'brand'];
-        }
-        return ['brand', 'hierarchicalCategories.lvl0', 'categories'];
-      },
-    },
   }));
