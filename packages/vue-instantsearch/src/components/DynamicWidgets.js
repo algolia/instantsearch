@@ -40,7 +40,7 @@ function getWidgetAttribute(vnode) {
 }
 
 export default {
-  name: 'AisExperimentalDynamicWidgets',
+  name: 'AisDynamicWidgets',
   mixins: [
     createWidgetMixin({ connector: connectDynamicWidgets }),
     createSuitMixin({ name: 'DynamicWidgets' }),

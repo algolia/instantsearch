@@ -5,14 +5,14 @@ storiesOf('ais-dynamic-widgets', module)
   .addDecorator(previewWrapper())
   .add('simple usage', () => ({
     template: `
-    <ais-experimental-dynamic-widgets :transform-items="transformItems">
+    <ais-dynamic-widgets :transform-items="transformItems">
       <ais-refinement-list attribute="brand"></ais-refinement-list>
       <ais-menu attribute="categories"></ais-menu>
       <ais-panel>
         <template v-slot:header>hierarchy</template>
         <ais-hierarchical-menu :attributes="hierarchicalCategories"></ais-hierarchical-menu>
       </ais-panel>
-    </ais-experimental-dynamic-widgets>`,
+    </ais-dynamic-widgets>`,
     data() {
       return {
         hierarchicalCategories: [
