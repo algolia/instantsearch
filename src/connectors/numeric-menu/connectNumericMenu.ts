@@ -377,6 +377,11 @@ function isRefined(
   if (option.start !== undefined && option.end !== undefined) {
     if (option.start === option.end) {
       return hasNumericRefinement(currentRefinements, '=', option.start);
+    } else {
+      return (
+        hasNumericRefinement(currentRefinements, '>=', option.start) &&
+        hasNumericRefinement(currentRefinements, '<=', option.end)
+      );
     }
   }
 
@@ -447,13 +452,12 @@ function getRefinedState(
         '>=',
         refinedOption.start
       );
-    } else {
-      resolvedState = resolvedState.addNumericRefinement(
-        attribute,
-        '>=',
-        refinedOption.start
-      );
     }
+    resolvedState = resolvedState.addNumericRefinement(
+      attribute,
+      '>=',
+      refinedOption.start
+    );
   }
 
   if (refinedOption.end !== undefined) {
@@ -463,13 +467,12 @@ function getRefinedState(
         '<=',
         refinedOption.end
       );
-    } else {
-      resolvedState = resolvedState.addNumericRefinement(
-        attribute,
-        '<=',
-        refinedOption.end
-      );
     }
+    resolvedState = resolvedState.addNumericRefinement(
+      attribute,
+      '<=',
+      refinedOption.end
+    );
   }
 
   if (typeof resolvedState.page === 'number') {
