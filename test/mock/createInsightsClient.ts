@@ -1,6 +1,10 @@
-import AlgoliaAnalytics from 'search-insights/lib/insights';
-import { processQueue } from 'search-insights/lib/_processQueue';
-import { getFunctionalInterface } from 'search-insights/lib/_getFunctionalInterface';
+import {
+  AlgoliaAnalytics,
+  processQueue,
+  getFunctionalInterface,
+} from 'search-insights';
+
+import type { InsightsClient } from '../../src/types/insights';
 
 export function createInsights() {
   const analytics = mockMethods(
@@ -17,11 +21,14 @@ export function createInsights() {
 }
 
 export function createInsightsUmdVersion() {
-  const globalObject: any = {};
-  globalObject.AlgoliaAnalyticsObject = 'aa';
-  globalObject.aa = (...args) => {
-    globalObject.aa.queue = globalObject.aa.queue || [];
-    globalObject.aa.queue.push(args);
+  const globalObject: { AlgoliaAnalyticsObject: string; aa?: InsightsClient } =
+    {
+      AlgoliaAnalyticsObject: 'aa',
+    };
+  globalObject.aa = (methodName, ...args) => {
+    globalObject.aa!.queue = globalObject.aa!.queue || [];
+    // @ts-expect-error TypeScript loses track of the exact tuple type when the array gets recreated
+    globalObject.aa!.queue.push([methodName, ...args]);
   };
   const analytics = mockMethods(
     new AlgoliaAnalytics({
