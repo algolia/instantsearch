@@ -172,24 +172,12 @@ To ensure typing is correct in the latest version of `instantsearch.js`:
 yarn type-check
 ```
 
-Since we still support `instantsearch.js@v3`, types checking should also be done against `v3`.
+Since we still support `algoliasearch@3`, type checking should also be done against `v3`.
 
 ```sh
-sh scripts/tests/algoliasearch-v3-tests.sh
-```
-
-
-### Type check for `algoliasearch` updates
-
-Users might update `instantsearch.js` to its latest version but keep older versions of `algoliasearch`. TypeScript users using previous versions of `algoliasearch` import different type definitions. Nonetheless, `instantsearch.js` should support both old and new `instantsearch` types.
-
-
-Currently, we ensure compatibility of `algoliasearch` **v3** and **v4** in `instantsearch.js`.
-In type checks of the previous section, we confirmed type compatibility with algoliasearch **v4**. With the following type-check we also ensure compatibility with `algoliasearch` **v3**.
-
-
-```sh
-sh scripts/tests/algoliasearch-v3.sh
+yarn remove @algolia/client-search
+yarn add @types/algoliasearch@3.34.10 algoliasearch@3.35.1
+yarn type-check:v3
 ```
 
 ## Linting
