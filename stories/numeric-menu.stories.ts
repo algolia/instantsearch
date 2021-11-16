@@ -50,4 +50,22 @@ storiesOf('Refinements/NumericMenu', module)
         }),
       ]);
     })
+  )
+  .add(
+    'same start or end value',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.numericMenu({
+          container,
+          attribute: 'price',
+          items: [
+            { label: 'All' },
+            { start: 1, end: 8, label: '1-8' },
+            { start: 1, end: 10, label: '1-10' },
+            { start: 5, end: 10, label: '5-10' },
+            { start: 5, end: 8, label: '5-8' },
+          ],
+        }),
+      ]);
+    })
   );
