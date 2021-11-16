@@ -1,3 +1,12 @@
+## [4.33.2](https://github.com/algolia/instantsearch.js/compare/v4.33.1...v4.33.2) (2021-11-16)
+
+
+### Bug Fixes
+
+* **connectNumericMenu:** allow option for same start/end values ([#4951](https://github.com/algolia/instantsearch.js/issues/4951)) ([18da714](https://github.com/algolia/instantsearch.js/commit/18da714574fa98957d29014add3123e9c377551f))
+
+
+
 ## [4.33.1](https://github.com/algolia/instantsearch.js/compare/v4.33.0...v4.33.1) (2021-11-02)
 
 
