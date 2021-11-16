@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 const path = require('path');
 const process = require('process');
+const os = require('os');
 const program = require('commander');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const latestSemver = require('latest-semver');
-const os = require('os');
+const semver = require('semver');
 
 const createInstantSearchApp = require('../api');
 const {
@@ -18,6 +19,7 @@ const {
 } = require('../utils');
 const getOptionsFromArguments = require('./getOptionsFromArguments');
 const getAttributesFromIndex = require('./getAttributesFromIndex');
+const getFacetsFromIndex = require('./getFacetsFromIndex');
 const getAnswersDefaultValues = require('./getAnswersDefaultValues');
 const isQuestionAsked = require('./isQuestionAsked');
 const {
@@ -58,6 +60,10 @@ program
 
 const optionsFromArguments = getOptionsFromArguments(options.rawArgs || []);
 const attributesToDisplay = (optionsFromArguments.attributesToDisplay || '')
+  .split(',')
+  .filter(Boolean)
+  .map(x => x.trim());
+const attributesForFaceting = (optionsFromArguments.attributesForFaceting || '')
   .split(',')
   .filter(Boolean)
   .map(x => x.trim());
@@ -155,6 +161,48 @@ const getQuestions = ({ appName }) => ({
       filter: attributes => attributes.filter(Boolean),
       when: ({ appId, apiKey, indexName }) =>
         !attributesToDisplay.length > 0 && appId && apiKey && indexName,
+    },
+    {
+      type: 'checkbox',
+      name: 'attributesForFaceting',
+      message: 'Attributes to display',
+      suffix: `\n  ${chalk.gray('Used to filter the search interface')}`,
+      pageSize: 10,
+      choices: async answers => {
+        const templatePath = getTemplatePath(answers.template);
+        const templateConfig = getAppTemplateConfig(templatePath);
+
+        const selectedLibraryVersion = answers.libraryVersion;
+        const requiredLibraryVersion =
+          templateConfig.flags && templateConfig.flags.dynamicWidgets;
+        const supportsDynamicWidgets =
+          selectedLibraryVersion &&
+          requiredLibraryVersion &&
+          semver.satisfies(selectedLibraryVersion, requiredLibraryVersion, {
+            includePrerelease: true,
+          });
+
+        const dynamicWidgets = supportsDynamicWidgets
+          ? [
+              {
+                name: 'Dynamic widgets',
+                value: 'ais.dynamicWidgets',
+                checked: true,
+              },
+              new inquirer.Separator(),
+            ]
+          : [];
+
+        return [
+          ...dynamicWidgets,
+          new inquirer.Separator('From your index'),
+          ...(await getFacetsFromIndex(answers)),
+          new inquirer.Separator(),
+        ];
+      },
+      filter: attributes => attributes.filter(Boolean),
+      when: ({ appId, apiKey, indexName }) =>
+        !attributesForFaceting.length > 0 && appId && apiKey && indexName,
     },
   ],
   widget: [
@@ -301,6 +349,11 @@ async function run() {
       ...configuration,
       ...answers,
       ...alternativeNames,
+      flags: {
+        dynamicWidgets:
+          Array.isArray(answers.attributesForFaceting) &&
+          answers.attributesForFaceting.includes('ais.dynamicWidgets'),
+      },
       libraryVersion,
       template: templatePath,
       installation: program.installation,

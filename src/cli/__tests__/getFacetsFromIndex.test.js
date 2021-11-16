@@ -1,4 +1,4 @@
-const getAttributesFromIndex = require('../getAttributesFromIndex');
+const getFacetsFromIndex = require('../getFacetsFromIndex');
 const getInformationFromIndex = require('../getInformationFromIndex');
 
 jest.mock('../getInformationFromIndex');
@@ -6,26 +6,22 @@ jest.mock('../getInformationFromIndex');
 test('with search success should fetch attributes', async () => {
   getInformationFromIndex.mockImplementationOnce(() =>
     Promise.resolve({
-      hits: [
-        {
-          _highlightResult: {
-            brand: 'brand',
-            description: 'description',
-            name: 'name',
-            title: 'title',
-          },
-        },
-      ],
+      facets: {
+        abc: {},
+        def: {},
+        something: {},
+        'something.nested': {},
+      },
     })
   );
 
-  const attributes = await getAttributesFromIndex({
+  const attributes = await getFacetsFromIndex({
     appId: 'appId',
     apiKey: 'apiKey',
     indexName: 'indexName',
   });
 
-  expect(attributes).toEqual(['title', 'name', 'description', 'brand']);
+  expect(attributes).toEqual(['abc', 'def', 'something', 'something.nested']);
 });
 
 test('with search failure should return default attributes', async () => {
@@ -33,11 +29,11 @@ test('with search failure should return default attributes', async () => {
     Promise.reject(new Error())
   );
 
-  const attributes = await getAttributesFromIndex({
+  const attributes = await getFacetsFromIndex({
     appId: 'appId',
     apiKey: 'apiKey',
     indexName: 'indexName',
   });
 
-  expect(attributes).toEqual(['title', 'name', 'description']);
+  expect(attributes).toEqual([]);
 });

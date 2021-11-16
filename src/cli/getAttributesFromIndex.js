@@ -1,17 +1,19 @@
-const algoliasearch = require('algoliasearch');
+const getInformationFromIndex = require('./getInformationFromIndex');
 
 module.exports = async function getAttributesFromIndex({
   appId,
   apiKey,
   indexName,
 } = {}) {
-  const client = algoliasearch(appId, apiKey);
-  const index = client.initIndex(indexName);
   const defaultAttributes = ['title', 'name', 'description'];
   let attributes = [];
 
   try {
-    const { hits } = await index.search({ hitsPerPage: 1 });
+    const { hits } = await getInformationFromIndex({
+      appId,
+      apiKey,
+      indexName,
+    });
     const [firstHit] = hits;
     const highlightedAttributes = Object.keys(firstHit._highlightResult);
     attributes = [

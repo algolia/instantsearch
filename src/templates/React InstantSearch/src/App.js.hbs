@@ -4,6 +4,9 @@ import {
   InstantSearch,
   Hits,
   SearchBox,
+  {{#if flags.dynamicWidgets}}
+  ExperimentalDynamicWidgets,
+  {{/if}}
   {{#if attributesForFaceting}}
   RefinementList,
   {{/if}}
@@ -37,9 +40,18 @@ function App() {
           <div className="search-panel">
             {{#if attributesForFaceting}}
             <div className="search-panel__filters">
+              {{#if flags.dynamicWidgets}}
+              <Configure facets={['*']} maxValuesPerFacet={20} />
+              <ExperimentalDynamicWidgets fallbackWidget={RefinementList}>
+                {{#each attributesForFaceting}}
+                <RefinementList attribute="{{this}}" />
+                {{/each}}
+              </ExperimentalDynamicWidgets>
+              {{else}}
               {{#each attributesForFaceting}}
               <RefinementList attribute="{{this}}" />
               {{/each}}
+              {{/if}}
             </div>
 
             {{/if}}

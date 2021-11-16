@@ -5,6 +5,9 @@ module.exports = {
   category: 'Web',
   libraryName: 'instantsearch.js',
   supportedVersion: '>= 3.0.0 < 5.0.0',
+  flags: {
+    dynamicWidgets: '>= 4.30',
+  },
   templateName: 'instantsearch.js',
   appName: 'instantsearch.js-app',
   keywords: ['algolia', 'InstantSearch', 'Vanilla', 'instantsearch.js'],
