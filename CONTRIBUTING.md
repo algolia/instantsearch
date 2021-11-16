@@ -163,6 +163,24 @@ To run the test continuously based on what you changed (useful when developing o
 yarn test --watch
 ```
 
+### Type checks
+
+Type checks ensure code is correctly typed both for code quality and TypeScript compatibility.
+
+To ensure typing is correct in the latest version of InstantSearch.js, you can run the following command:
+
+```sh
+yarn type-check
+```
+
+Since we still support `algoliasearch@3`, you should also type check against v3.x.
+
+```sh
+yarn remove @algolia/client-search
+yarn add @types/algoliasearch@3.34.10 algoliasearch@3.35.1
+yarn type-check:v3
+```
+
 ## Linting
 
 Linters are static checkers for code. They help us maintain a consistent code base. They are used for JavaScript and TypeScript files.

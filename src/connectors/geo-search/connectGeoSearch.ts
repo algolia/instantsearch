@@ -392,7 +392,6 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
             undefined
           );
         }
-
         return setBoundingBoxAsString(
           searchParameters,
           uiState.geoSearch.boundingBox

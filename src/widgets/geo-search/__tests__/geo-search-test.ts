@@ -1716,7 +1716,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       // Simulate the current refinement
       helper.setQueryParameter(
         'insideBoundingBox',
-        // @ts-expect-error class uses strings
+        // @ts-ignore
         '48.84174222399724, 2.367719162523599, 48.81614630305218, 2.284205902635904'
       );
 
