@@ -1,3 +1,22 @@
+# [4.11.0](https://github.com/algolia/create-instantsearch-app/compare/4.10.3...4.11.0) (2021-11-16)
+
+
+### Bug Fixes
+
+* **angular:** move styles import to angular.json ([#532](https://github.com/algolia/create-instantsearch-app/issues/532)) ([d2f73b8](https://github.com/algolia/create-instantsearch-app/commit/d2f73b895c0ed7a2530920f770f67879cca0a9a5))
+* **angular:** replace css imports with CDN <link>s ([#537](https://github.com/algolia/create-instantsearch-app/issues/537)) ([fb4c2a8](https://github.com/algolia/create-instantsearch-app/commit/fb4c2a87852fe2f4b3d2289a21234fdf04bddc98))
+* **Angular IS:** enable esModuleInterop ([#527](https://github.com/algolia/create-instantsearch-app/issues/527)) ([502e776](https://github.com/algolia/create-instantsearch-app/commit/502e776cf9ca9eca489d6acbde5f8c603de56bd0))
+* **ci:** replace legacy circleci node images ([#533](https://github.com/algolia/create-instantsearch-app/issues/533)) ([9ffb469](https://github.com/algolia/create-instantsearch-app/commit/9ffb46925db6e2a6e015be98b589f1b7cf22a9f3))
+* **cli:** configure inquirer with correct initial values for attributesToDisplay ([#530](https://github.com/algolia/create-instantsearch-app/issues/530)) ([5cd6142](https://github.com/algolia/create-instantsearch-app/commit/5cd6142d12658dde616690ab1b045c613adf711a))
+
+
+### Features
+
+* **autocomplete:** add Autocomplete v1 template ([#528](https://github.com/algolia/create-instantsearch-app/issues/528)) ([5c72d05](https://github.com/algolia/create-instantsearch-app/commit/5c72d05100d90900afbc848eaa7417c175c126cc))
+* **facets:** use dynamicWidgets ([#534](https://github.com/algolia/create-instantsearch-app/issues/534)) ([7df3225](https://github.com/algolia/create-instantsearch-app/commit/7df32252a0558f0e09288735cfddd8062af5dc09))
+
+
+
 ## [4.10.3](https://github.com/algolia/create-instantsearch-app/compare/4.10.2...4.10.3) (2021-09-01)
 
 
