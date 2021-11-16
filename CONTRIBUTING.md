@@ -165,14 +165,15 @@ yarn test --watch
 
 ### Type checks
 
-Type checks ensure code is correctly typed both for code quality and compatibility for our TypeScript users.
+Type checks ensure code is correctly typed both for code quality and TypeScript compatibility.
 
-To ensure typing is correct in the latest version of `instantsearch.js`:
+To ensure typing is correct in the latest version of InstantSearch.js, you can run the following command:
+
 ```sh
 yarn type-check
 ```
 
-Since we still support `algoliasearch@3`, type checking should also be done against `v3`.
+Since we still support `algoliasearch@3`, you should also type check against v3.x.
 
 ```sh
 yarn remove @algolia/client-search
