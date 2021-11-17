@@ -118,23 +118,6 @@ strong {
   margin-right: 4rem;
 }
 
-/* Back to top */
-
-.back-to-top {
-  bottom: 2.5rem;
-  position: fixed;
-  right: 2.5rem;
-}
-
-.back-to-top {
-  height: 2.5rem;
-  width: 2.5rem;
-}
-
-.filtering .back-to-top {
-  display: none;
-}
-
 /* SearchBox */
 
 .header .searchbox-container {
@@ -468,6 +451,7 @@ strong {
   padding: 1rem 1.8rem;
   overflow-y: scroll;
   padding-bottom: 157px;
+  z-index: 1;
 }
 
 .container-filters-panel-mobile .ais-NumericMenu-labelText,
@@ -589,6 +573,49 @@ body.filtering {
 
 .ais-ClearRefinements-button--disabled {
   display: none;
+}
+
+/* Footer */
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.back-to-top {
+  margin: 0 2.5rem 1rem auto;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.filtering .back-to-top {
+  display: none;
+}
+
+.mentions {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  color: #dadada;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.mentions p {
+  margin: 0;
+}
+
+.mentions a {
+  color: #aa93dd;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.mentions a:hover {
+  opacity: 0.75;
 }
 
 /* Hide all desktop-specific design on mobile */
