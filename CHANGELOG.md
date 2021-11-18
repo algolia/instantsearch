@@ -1,3 +1,12 @@
+## [4.11.1](https://github.com/algolia/create-instantsearch-app/compare/4.11.0...4.11.1) (2021-11-18)
+
+
+### Bug Fixes
+
+* **react:** add missing configure widget import ([#540](https://github.com/algolia/create-instantsearch-app/issues/540)) ([626a568](https://github.com/algolia/create-instantsearch-app/commit/626a56859c48e756429da66195d7da1a6c79e39e))
+
+
+
 # [4.11.0](https://github.com/algolia/create-instantsearch-app/compare/4.10.3...4.11.0) (2021-11-16)
 
 
