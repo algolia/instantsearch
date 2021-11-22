@@ -62,7 +62,7 @@ module.exports = {
     }
     return true;
   },
-  pullRequestTeamReviewers: ['instantsearch-for-websites'],
+  pullRequestTeamReviewers: ['frontend-experiences-web'],
   buildCommand: ({ version }) =>
     `NODE_ENV=production VERSION=${version} yarn build`,
   afterPublish: async ({ exec, version }) => {
