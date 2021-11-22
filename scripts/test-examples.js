@@ -12,7 +12,10 @@ const examples = glob.sync(
 );
 
 examples.forEach((example) => {
-  execSync(`cd ${example} && yarn && yarn build && yarn test`, {
-    stdio: 'inherit',
-  });
+  execSync(
+    `cd ${example} && echo testing $(basename $(pwd)) && yarn && yarn build && yarn test`,
+    {
+      stdio: 'inherit',
+    }
+  );
 });
