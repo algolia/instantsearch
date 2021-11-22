@@ -57,6 +57,21 @@ const examplesPath = path.join(__dirname, '..', 'examples');
   });
 }
 
+{
+  // Update React InstantSearch Hooks
+  const examples = glob.sync(path.join(examplesPath, 'hooks'));
+
+  examples.forEach((example) => {
+    console.log('updating in', example);
+    execSync(
+      `cd ${example} && yarn upgrade react-instantsearch-hooks@${version}`,
+      {
+        stdio: 'inherit',
+      }
+    );
+  });
+}
+
 const commitMessage = `chore(deps): update examples to react-instantsearch v${version}`;
 execSync('git add examples package.json yarn.lock');
 execSync(`printf "${commitMessage}" | git commit --file -`);
