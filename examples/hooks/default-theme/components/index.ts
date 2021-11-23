@@ -4,3 +4,4 @@ export * from './Pagination';
 export * from './RefinementList';
 export * from './SearchBox';
 export * from './SortBy';
+export * from './Panel';
