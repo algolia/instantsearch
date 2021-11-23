@@ -4,14 +4,15 @@ import { useHits, UseHitsProps } from 'react-instantsearch-hooks';
 
 import { cx } from '../cx';
 
-export type HitsProps = React.ComponentProps<'div'> &
+export type HitsProps<THit> = React.ComponentProps<'div'> &
   UseHitsProps & {
-    hitComponent: <THit extends AlgoliaHit<Record<string, unknown>>>(props: {
-      hit: THit;
-    }) => JSX.Element;
+    hitComponent: (props: { hit: THit }) => JSX.Element;
   };
 
-export function Hits({ hitComponent: Hit, ...props }: HitsProps) {
+export function Hits<THit extends AlgoliaHit<Record<string, unknown>>>({
+  hitComponent: Hit,
+  ...props
+}: HitsProps<THit>) {
   const { hits } = useHits(props);
 
   return (
@@ -19,7 +20,7 @@ export function Hits({ hitComponent: Hit, ...props }: HitsProps) {
       <ol className="ais-Hits-list">
         {hits.map((hit) => (
           <li key={hit.objectID} className="ais-Hits-item">
-            <Hit hit={hit} />
+            <Hit hit={hit as unknown as THit} />
           </li>
         ))}
       </ol>

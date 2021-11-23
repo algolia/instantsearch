@@ -34,7 +34,10 @@ function Hit({ hit }: HitProps) {
       <span
         className="Hit-label"
         dangerouslySetInnerHTML={{
-          __html: (hit._highlightResult as any).name.value,
+          __html:
+            hit._highlightResult && hit._highlightResult.name
+              ? hit._highlightResult.name.value
+              : '',
         }}
       />
       <span className="Hit-price">${hit.price}</span>

@@ -5,7 +5,7 @@ import { ControlledSearchBox } from './ControlledSearchBox';
 
 export type SearchBoxProps = React.ComponentProps<'div'> & UseSearchBoxProps;
 
-export function SearchBox(props?: SearchBoxProps) {
+export function SearchBox(props: SearchBoxProps) {
   const { query, refine, isSearchStalled } = useSearchBox(props);
   const [value, setValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);

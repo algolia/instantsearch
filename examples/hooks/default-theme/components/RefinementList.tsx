@@ -3,12 +3,14 @@ import {
   useRefinementList,
   UseRefinementListProps,
 } from 'react-instantsearch-hooks';
+import { RefinementListWidgetParams } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
 
 import { ControlledSearchBox } from './ControlledSearchBox';
 import { cx } from '../cx';
 
 export type RefinementListProps = React.ComponentProps<'div'> &
-  UseRefinementListProps;
+  UseRefinementListProps &
+  Pick<RefinementListWidgetParams, 'searchable' | 'searchablePlaceholder'>;
 
 export function RefinementList(props: RefinementListProps) {
   const {
@@ -81,7 +83,7 @@ export function RefinementList(props: RefinementListProps) {
               />
               <span
                 className="ais-RefinementList-labelText"
-                dangerouslySetInnerHTML={{ __html: item.highlighted }}
+                dangerouslySetInnerHTML={{ __html: item.highlighted! }}
               />
               <span className="ais-RefinementList-count">{item.count}</span>
             </label>
