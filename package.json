@@ -168,5 +168,9 @@
       "path": "packages/react-instantsearch-dom-maps/dist/umd/ReactInstantSearchDOMMaps.min.js",
       "maxSize": "7.25 kB"
     }
-  ]
+  ],
+  "dependencies": {
+    "react-instantsearch-dom": "6.16.0",
+    "react-instantsearch-dom-maps": "6.16.0"
+  }
 }
