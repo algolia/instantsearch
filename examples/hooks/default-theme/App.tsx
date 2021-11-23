@@ -5,6 +5,7 @@ import { InstantSearch } from 'react-instantsearch-hooks';
 
 import {
   Configure,
+  HierarchicalMenu,
   Hits,
   Pagination,
   Panel,
@@ -53,6 +54,16 @@ export function App() {
               attribute="brand"
               searchable={true}
               searchablePlaceholder="Search brands"
+              showMore={true}
+            />
+          </Panel>
+          <Panel header="Hierarchy">
+            <HierarchicalMenu
+              attributes={[
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
+              ]}
               showMore={true}
             />
           </Panel>
