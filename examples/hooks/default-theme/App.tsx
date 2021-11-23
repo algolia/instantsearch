@@ -7,6 +7,7 @@ import {
   Configure,
   Hits,
   Pagination,
+  Panel,
   RefinementList,
   SearchBox,
   SortBy,
@@ -47,12 +48,14 @@ export function App() {
 
       <div className="Container">
         <div>
-          <RefinementList
-            attribute="brand"
-            searchable={true}
-            searchablePlaceholder="Search brands"
-            showMore={true}
-          />
+          <Panel header="Brands">
+            <RefinementList
+              attribute="brand"
+              searchable={true}
+              searchablePlaceholder="Search brands"
+              showMore={true}
+            />
+          </Panel>
         </div>
         <div className="Search">
           <div className="Search-header">
