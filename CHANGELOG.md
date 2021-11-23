@@ -1,3 +1,20 @@
+# [6.16.0](https://github.com/algolia/react-instantsearch/compare/v6.15.0...v6.16.0) (2021-11-22)
+
+
+### Bug Fixes
+
+* **PoweredBy:** support environments with `window` but no `location` ([#3186](https://github.com/algolia/react-instantsearch/issues/3186)) ([22ff23b](https://github.com/algolia/react-instantsearch/commit/22ff23b67554683567393114c2f53cacec44f4a6))
+
+
+### Features
+
+* **DynamicWidgets:** release as stable ([#3090](https://github.com/algolia/react-instantsearch/issues/3090)) ([a4a1d9e](https://github.com/algolia/react-instantsearch/commit/a4a1d9e032b31c611d5d73fdda3a03ad705f5c68))
+* **hooks:** introduce `usePagination` ([#3182](https://github.com/algolia/react-instantsearch/issues/3182)) ([d8b1b86](https://github.com/algolia/react-instantsearch/commit/d8b1b867bb598e801f1350e81b4a4220a8e528d7))
+* **hooks:** introduce `useSortBy` ([#3190](https://github.com/algolia/react-instantsearch/issues/3190)) ([5cce33b](https://github.com/algolia/react-instantsearch/commit/5cce33b48032548fed76b592ee0201e3c42fc3c4))
+* **hooks:** introduce `useHierarchicalMenu` ([#3199](https://github.com/algolia/react-instantsearch/issues/3199)) ([b347061](https://github.com/algolia/react-instantsearch/commit/b3470611b962ef55c55576c65a6307abc54e5efd))
+
+
+
 # [6.15.0](https://github.com/algolia/react-instantsearch/compare/v6.13.0...v6.15.0) (2021-10-27)
 
 
