@@ -1,6 +1,6 @@
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import EventEmitter from 'events';
+import EventEmitter from '@algolia/events';
 import type { IndexWidget } from '../widgets/index/index';
 import index, { isIndexWidget } from '../widgets/index/index';
 import version from './version';
