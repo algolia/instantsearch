@@ -6,6 +6,7 @@ import { InstantSearch } from 'react-instantsearch-hooks';
 import {
   Configure,
   HierarchicalMenu,
+  Highlight,
   Hits,
   Pagination,
   Panel,
@@ -33,15 +34,7 @@ type HitProps = {
 function Hit({ hit }: HitProps) {
   return (
     <>
-      <span
-        className="Hit-label"
-        dangerouslySetInnerHTML={{
-          __html:
-            hit._highlightResult && hit._highlightResult.name
-              ? hit._highlightResult.name.value
-              : '',
-        }}
-      />
+      <Highlight hit={hit} attribute="name" className="Hit-label" />
       <span className="Hit-price">${hit.price}</span>
     </>
   );
