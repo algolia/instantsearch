@@ -1,6 +1,7 @@
 export * from './Configure';
 export * from './Hits';
 export * from './HierarchicalMenu';
+export * from './Menu';
 export * from './Pagination';
 export * from './RefinementList';
 export * from './SearchBox';

@@ -225,7 +225,7 @@ const searchClient = algoliasearch(
 </InstantSearch>;
 ```
 
-### `initialUiState`
+#### `initialUiState`
 
 > `object`
 
@@ -245,7 +245,7 @@ Provides an initial state to your React InstantSearch widgets using InstantSearc
 </InstantSearch>
 ```
 
-### `onStateChange`
+#### `onStateChange`
 
 > `function`
 
@@ -268,7 +268,7 @@ This is useful to perform custom logic whenever the state changes.
 </InstantSearch>
 ```
 
-### `stalledSearchDelay`
+#### `stalledSearchDelay`
 
 > `number` | defaults to `200`
 
@@ -283,7 +283,7 @@ Defines a time period after which a search is considered stalled. You can find m
 </InstantSearch>
 ```
 
-### `routing`
+#### `routing`
 
 > `boolean | object`
 
@@ -298,7 +298,7 @@ The router configuration used to save the UI state into the URL, or any client-s
 </InstantSearch>
 ```
 
-### `suppressExperimentalWarning`
+#### `suppressExperimentalWarning`
 
 > `boolean`
 
@@ -461,6 +461,132 @@ type HitsRenderState = {
 ```jsx
 function Hits(props) {
   const { hits } = useHits(props);
+
+  return {
+    /* Markup */
+  };
+}
+```
+
+### `useMenu`
+
+> `(props: UseMenuProps) => MenuRenderState`
+
+Hook to use a [menu](https://www.algolia.com/doc/api-reference/widgets/menu/js/).
+
+**Types**
+
+<details>
+<summary><code>UseMenuProps</code></summary>
+
+```ts
+type UseMenuProps = {
+  /**
+   * The name of the attribute in the records.
+   */
+  attribute: string;
+  /**
+   * The max number of items to display when
+   * `showMoreLimit` is not set or if the widget is showing less value.
+   */
+  limit?: number;
+  /**
+   * Whether to display a button that expands the number of items.
+   */
+  showMore?: boolean;
+  /**
+   * The max number of items to display if the widget
+   * is showing more items.
+   */
+  showMoreLimit?: number;
+  /**
+   * How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+   *
+   * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+   *
+   * If a facetOrdering is set in the index settings, it is used when sortBy isn't passed
+   */
+  sortBy?: SortBy<MenuItem>;
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: TransformItems<MenuItem>;
+};
+```
+
+</details>
+
+<details>
+<summary><code>MenuRenderState</code></summary>
+
+```ts
+export type MenuItem = {
+  /**
+   * The value of the refinement list item.
+   */
+  value: string;
+  /**
+   * Human-readable value of the refinement list item.
+   */
+  label: string;
+  /**
+   * Number of matched results after refinement is applied.
+   */
+  count: number;
+  /**
+   * Indicates if the list item is refined.
+   */
+  isRefined: boolean;
+};
+
+type MenuRenderState = {
+  /**
+   * The list of filtering values returned from Algolia API.
+   */
+  items: MenuItem[];
+  /**
+   * Creates the next state url for a selected refinement.
+   */
+  createURL: (value: string) => string;
+  /**
+   * Action to apply selected refinements.
+   */
+  refine(value: string): void;
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: (
+    eventType: string,
+    facetValue: string,
+    eventName?: string
+  ) => void;
+  /**
+   * `true` if a refinement can be applied.
+   */
+  canRefine: boolean;
+  /**
+   * `true` if the toggleShowMore button can be activated (enough items to display more or
+   * already displaying more than `limit` items)
+   */
+  canToggleShowMore: boolean;
+  /**
+   * True if the menu is displaying all the menu items.
+   */
+  isShowingMore: boolean;
+  /**
+   * Toggles the number of values displayed between `limit` and `showMoreLimit`.
+   */
+  toggleShowMore: () => void;
+};
+```
+
+</details>
+
+**Example**
+
+```jsx
+function Menu(props) {
+  const { items } = useMenu(props);
 
   return {
     /* Markup */

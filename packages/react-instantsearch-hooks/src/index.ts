@@ -5,6 +5,7 @@ export * from './useConfigure';
 export * from './useConnector';
 export * from './useHits';
 export * from './useHierarchicalMenu';
+export * from './useMenu';
 export * from './usePagination';
 export * from './useRefinementList';
 export * from './useSearchBox';
