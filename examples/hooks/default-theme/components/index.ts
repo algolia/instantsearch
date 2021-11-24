@@ -3,6 +3,7 @@ export * from './Hits';
 export * from './HierarchicalMenu';
 export * from './Menu';
 export * from './Pagination';
+export * from './RangeInput';
 export * from './RefinementList';
 export * from './SearchBox';
 export * from './SortBy';

@@ -741,6 +741,96 @@ function HierarchicalMenu(props) {
 }
 ```
 
+### `useRange`
+
+> `(props: UseRangeProps) => RangeRenderState`
+
+Hook to use a [range](https://www.algolia.com/doc/api-reference/widgets/range-input/js/).
+
+**Types**
+
+ <details>
+ <summary><code>UseRangeProps</code></summary>
+
+```ts
+type UseRangeProps = {
+  /**
+   * The name of the attribute in the records.
+   */
+  attribute: string;
+  /**
+   * Minimal range value, default to automatically computed from the result set.
+   */
+  min?: number;
+  /**
+   * Maximal range value, default to automatically computed from the result set.
+   */
+  max?: number;
+  /**
+   * Number of digits after decimal point to use.
+   */
+  precision?: number;
+};
+```
+
+ </details>
+
+ <details>
+ <summary><code>RangeRenderState</code></summary>
+
+```ts
+type RangeRenderState = {
+  /**
+   * Sets a range to filter the results on. Both values
+   * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a
+   * previously set bound or to set an infinite bound.
+   * @param rangeValue tuple of [min, max] bounds
+   */
+  refine(rangeValue: RangeBoundaries): void;
+  /**
+   * Indicates whether this widget can be refined
+   */
+  canRefine: boolean;
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent(eventType: string, facetValue: string, eventName?: string): void;
+  /**
+   * Maximum range possible for this search
+   */
+  range: Range;
+  /**
+   * Current refinement of the search
+   */
+  start: RangeBoundaries;
+  /**
+   * Transform for the rendering `from` and/or `to` values.
+   * Both functions take a `number` as input and should output a `string`.
+   */
+  format: {
+    from(fromValue: number): string;
+    to(toValue: number): string;
+  };
+};
+```
+
+ </details>
+
+**Example**
+
+```jsx
+function Range(props) {
+  const {
+    range: { min, max },
+    start: [minValue, maxValue],
+  } = useRange(props);
+
+  return {
+    /* Markup */
+  };
+}
+```
+
 ### `useRefinementList`
 
 > `(props: UseRefinementListProps) => RefinementListRenderState`

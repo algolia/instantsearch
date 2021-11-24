@@ -7,6 +7,7 @@ export * from './useHits';
 export * from './useHierarchicalMenu';
 export * from './useMenu';
 export * from './usePagination';
+export * from './useRange';
 export * from './useRefinementList';
 export * from './useSearchBox';
 export * from './useSortBy';

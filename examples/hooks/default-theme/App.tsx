@@ -9,6 +9,7 @@ import {
   Hits,
   Pagination,
   Panel,
+  RangeInput,
   RefinementList,
   Menu,
   SearchBox,
@@ -73,6 +74,9 @@ export function App() {
               ]}
               showMore={true}
             />
+          </Panel>
+          <Panel header="Price">
+            <RangeInput attribute="price" />
           </Panel>
         </div>
         <div className="Search">
