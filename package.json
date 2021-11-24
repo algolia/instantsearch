@@ -57,7 +57,7 @@
     "@types/qs": "^6.5.3",
     "algoliasearch-helper": "^3.6.2",
     "classnames": "^2.2.5",
-    "@algolia/events": "^4.0.0",
+    "@algolia/events": "^4.0.1",
     "hogan.js": "^3.0.2",
     "preact": "^10.0.0",
     "qs": "^6.5.1 < 6.10",

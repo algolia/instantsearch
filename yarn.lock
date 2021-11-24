@@ -66,10 +66,10 @@
     "@algolia/requester-common" "4.11.0"
     "@algolia/transporter" "4.11.0"
 
-"@algolia/events@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@algolia/events/-/events-4.0.0.tgz#c3beb656d6c4695280bbbcae0b9dc899a9532543"
-  integrity sha512-BHBnk71fSKa3dLrcW/4/D1pEvp+hAn5hJtP8aZiWg8kAht7UTSCnm/FQu04pqyKI89kAxLxgg2788jwY5i1QhQ==
+"@algolia/events@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@algolia/events/-/events-4.0.1.tgz#fd39e7477e7bc703d7f893b556f676c032af3950"
+  integrity sha512-FQzvOCgoFXAbf5Y6mYozw2aj5KCJoA3m4heImceldzPSMbdyS4atVjJzXKMsfX3wnZTFYwkkt8/z8UesLHlSBQ==
 
 "@algolia/logger-common@4.11.0":
   version "4.11.0"
