@@ -1067,6 +1067,109 @@ function SortBy(props) {
 }
 ```
 
+### `useHitsPerPage`
+
+> `(props: UseHitsPerPageProps) => HitsPerPageRenderState`
+
+Hook to [hits per page](https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/).
+
+**Types**
+
+
+<details>
+<summary><code>UseHitsPerPageProps</code></summary>
+
+```ts
+type UseHitsPerPageProps = {
+  /**
+   * Array of objects defining the different indices to choose from.
+   */
+  items: HitsPerPageConnectorParamsItem[];
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: (items: HitsPerPageRenderStateItem[]) => HitsPerPageRenderStateItem[];
+}
+```
+</details>
+
+<details>
+<summary><code>HitsPerPageConnectorParamsItem</code></summary>
+
+```ts
+type HitsPerPageConnectorParamsItem = {
+  /**
+   * Label to display in the option.
+   */
+  label: string;
+  /**
+   * Number of hits to display per page.
+   */
+  value: number;
+  /**
+   * The default hits per page on first search.
+   *
+   * @default false
+   */
+  default?: boolean;
+};
+```
+</details>
+<details>
+<summary><code>HitsPerPageRenderState</code></summary>
+
+```ts
+type HitsPerPageRenderState = {
+  /**
+   * Array of objects defining the different values and labels.
+   */
+  items: HitsPerPageRenderStateItem[];
+  /**
+   * Sets the number of hits per page and triggers a search.
+   */
+  refine: (value: number) => void;
+  /**
+   * Indicates whether or not the search has results.
+   */
+  hasNoResults: boolean;
+};
+```
+</details>
+
+<details>
+<summary><code>HitsPerPageRenderStateItem</code></summary>
+
+```ts
+type HitsPerPageRenderStateItem = {
+  /**
+   * Label to display in the option.
+   */
+  label: string;
+  /**
+   * Number of hits to display per page.
+   */
+  value: number;
+  /**
+   * Indicates if it's the current refined value.
+   */
+  isRefined: boolean;
+};
+```
+</details>
+
+
+**Example**
+
+```jsx
+function HitsPerPage(props) {
+  const { items, refine, hasNoResults } = useSortBy(props);
+
+  return {
+    /* Markup */
+  };
+}
+```
+
 ### `useConnector`
 
 > `<TProps, TWidgetDescription>(connector: Connector<TWidgetDescription, TProps>, props: TProps) => TWidgetDescription['renderState']`

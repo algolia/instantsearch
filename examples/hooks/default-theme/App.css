@@ -31,7 +31,7 @@ body {
 .Search-header {
   display: grid;
   align-items: flex-start;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto auto;
   gap: .5rem;
 }
 

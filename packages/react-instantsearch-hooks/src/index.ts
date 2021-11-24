@@ -4,6 +4,7 @@ export * from './SearchIndex';
 export * from './useConfigure';
 export * from './useConnector';
 export * from './useHits';
+export * from './useHitsPerPage';
 export * from './useHierarchicalMenu';
 export * from './useMenu';
 export * from './usePagination';
