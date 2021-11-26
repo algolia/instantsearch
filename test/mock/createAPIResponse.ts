@@ -17,6 +17,24 @@ export function createSingleSearchResponse<THit = any>(
     exhaustiveNbHits = true,
     exhaustiveFacetsCount = true,
     processingTimeMS = 0,
+    renderingContent = {
+      facetOrdering: {
+        facets: {
+          order: ['brand', 'hierarchicalCategories.lvl0', 'categories'],
+        },
+        values: {
+          brand: {
+            sortRemainingBy: 'count',
+          },
+          categories: {
+            sortRemainingBy: 'count',
+          },
+          'hierarchicalCategories.lvl0': {
+            sortRemainingBy: 'count',
+          },
+        },
+      },
+    },
     ...rest
   } = options;
 
@@ -31,6 +49,7 @@ export function createSingleSearchResponse<THit = any>(
     params,
     exhaustiveNbHits,
     exhaustiveFacetsCount,
+    renderingContent,
     ...rest,
   };
 }
