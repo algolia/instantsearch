@@ -109,17 +109,17 @@ const connectStats: StatsConnector = function connectStats(
       };
     },
 
-    getWidgetRenderState({ results, helper }) {
+    getWidgetRenderState({ results, state }) {
       if (!results) {
         return {
-          hitsPerPage: helper.state.hitsPerPage,
+          hitsPerPage: state.hitsPerPage,
           nbHits: 0,
           nbSortedHits: undefined,
           areHitsSorted: false,
           nbPages: 0,
-          page: helper.state.page || 0,
+          page: state.page || 0,
           processingTimeMS: -1,
-          query: helper.state.query || '',
+          query: state.query || '',
           widgetParams,
         };
       }

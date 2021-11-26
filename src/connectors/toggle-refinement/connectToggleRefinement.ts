@@ -285,9 +285,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
           instantSearchInstance,
         }) {
           const isRefined = results
-            ? on.every((v) =>
-                helper.state.isDisjunctiveFacetRefined(attribute, v)
-              )
+            ? on.every((v) => state.isDisjunctiveFacetRefined(attribute, v))
             : on.every((v) => state.isDisjunctiveFacetRefined(attribute, v));
 
           let onFacetValue: ToggleRefinementValue = {

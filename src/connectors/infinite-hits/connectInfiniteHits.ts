@@ -303,8 +303,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             widgetType: this.$$type,
           });
           isFirstPage =
-            helper.state.page === undefined ||
-            getFirstReceivedPage(helper.state, cachedHits) === 0;
+            state.page === undefined ||
+            getFirstReceivedPage(state, cachedHits) === 0;
         } else {
           const { page = 0 } = state;
 
