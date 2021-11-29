@@ -1,6 +1,5 @@
 import { connectMenu, connectDynamicWidgets } from '../..';
 import { index } from '../../../widgets';
-import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer';
 import {
   createDisposeOptions,
   createInitOptions,
@@ -15,8 +14,6 @@ import {
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
-
-expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
 describe('connectDynamicWidgets', () => {
   describe('Usage', () => {

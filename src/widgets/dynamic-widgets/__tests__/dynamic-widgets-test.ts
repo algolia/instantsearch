@@ -7,12 +7,9 @@ import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { wait } from '../../../../test/utils/wait';
-import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer';
 import refinementList from '../../refinement-list/refinement-list';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import instantsearch from '../../..';
-
-expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
 describe('dynamicWidgets()', () => {
   describe('usage', () => {

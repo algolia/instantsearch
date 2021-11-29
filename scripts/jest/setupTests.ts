@@ -3,9 +3,11 @@ import Adapter from 'enzyme-adapter-preact-pure';
 import { createSerializer } from 'enzyme-to-json';
 import '@testing-library/jest-dom/extend-expect';
 import { toWarnDev } from './matchers';
+import { widgetSnapshotSerializer } from './serializers/widgetSnapshotSerializer';
 
 Enzyme.configure({ adapter: new Adapter() });
 expect.addSnapshotSerializer(createSerializer({ mode: 'deep' }) as any);
+expect.addSnapshotSerializer(widgetSnapshotSerializer);
 expect.extend(toWarnDev);
 
 // We hide console infos and warnings to not pollute the test logs.

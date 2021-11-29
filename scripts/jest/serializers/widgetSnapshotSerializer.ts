@@ -1,7 +1,7 @@
-import type { Widget } from '../../src/types';
-import type { IndexWidget } from '../../src/widgets/index/index';
-import { getWidgetAttribute } from '../../src/lib/utils';
-import { createInitOptions } from '../mock/createWidget';
+import type { Widget } from '../../../src/types';
+import type { IndexWidget } from '../../../src/widgets/index/index';
+import { getWidgetAttribute } from '../../../src/lib/utils';
+import { createInitOptions } from '../../../test/mock/createWidget';
 
 function getAttribute(widget: Widget | IndexWidget) {
   try {
