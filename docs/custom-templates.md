@@ -109,7 +109,7 @@ Can be leveraged to display instructions to run the app.
 
 ## Injecting values to the template
 
-By default, the `build` task supports the [Handlebars](https://handlebarsjs.com) syntax to inject values passed to Create InstantSearch App. You can explicitely suffix the template files with `.hbs` or leave them as is (`.js` in this case).
+By default, the `build` task supports the [Handlebars](https://handlebarsjs.com) syntax to inject values passed to Create InstantSearch App. You can explicitly suffix the template files with `.hbs` or leave them as is (`.js` in this case).
 
 <h6 align="center">App.js.hbs</h6>
 
@@ -138,7 +138,7 @@ const searchClient = algoliasearch(
 
 ## Using the template
 
-Create InstantSearch App reads your `.template.js` file and gets the specificed tasks in the provided template.
+Create InstantSearch App reads your `.template.js` file and gets the specified tasks in the provided template.
 
 Using the API:
 
