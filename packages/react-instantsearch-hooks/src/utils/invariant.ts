@@ -7,11 +7,15 @@ export function invariant(
   condition: boolean,
   message: string | (() => string)
 ) {
-  if (!__DEV__) {
+  if (condition) {
     return;
   }
 
-  if (!condition) {
+  if (!__DEV__) {
+    throw new Error('Invariant failed');
+  }
+
+  if (__DEV__) {
     throw new Error(
       `[InstantSearch] ${typeof message === 'function' ? message() : message}`
     );

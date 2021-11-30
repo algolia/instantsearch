@@ -1,6 +1,20 @@
 import { invariant } from '../invariant';
 
 describe('invariant', () => {
+  if (!__DEV__) {
+    test('throws a generic invariant violation in production', () => {
+      expect(() => {
+        invariant(false, 'invariant');
+      }).toThrow('Invariant failed');
+    });
+
+    test('does not throw when the condition is met in production', () => {
+      expect(() => {
+        invariant(true, 'invariant');
+      }).not.toThrow();
+    });
+  }
+
   if (__DEV__) {
     test('throws when the condition is unmet', () => {
       expect(() => {
