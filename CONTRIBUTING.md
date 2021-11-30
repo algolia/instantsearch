@@ -22,6 +22,7 @@ If this guide does not contain what you are looking for and thus prevents you fr
   - [The source folder](#the-source-folder)
 - [Tests](#tests)
   - [Unit tests](#unit-tests)
+  - [Type checks](#type-checks)
 - [Linting](#linting)
 - [Release](#release)
   - [Main version](#main-version)
