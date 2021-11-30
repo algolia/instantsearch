@@ -9,6 +9,7 @@ export * from './useHits';
 export * from './useHitsPerPage';
 export * from './useMenu';
 export * from './usePagination';
+export * from './useQueryRules';
 export * from './useRange';
 export * from './useRefinementList';
 export * from './useSearchBox';

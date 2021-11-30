@@ -6,6 +6,8 @@ export * from './Menu';
 export * from './Pagination';
 export * from './HitsPerPage';
 export * from './Panel';
+export * from './QueryRuleContext';
+export * from './QueryRuleCustomData';
 export * from './RangeInput';
 export * from './RefinementList';
 export * from './SearchBox';

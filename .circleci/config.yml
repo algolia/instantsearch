@@ -51,6 +51,9 @@ jobs:
           name: Lint & Code styles
           command: yarn lint
       - run:
+          name: Build
+          command: yarn build
+      - run:
           name: Type checking
           command: yarn type-check
       - run:

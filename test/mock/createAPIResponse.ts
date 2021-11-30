@@ -35,6 +35,13 @@ export function createSingleSearchResponse<THit = any>(
         },
       },
     },
+    userData = [
+      {
+        title: 'Banner title',
+        banner: 'https://banner.jpg',
+        link: 'https://banner.com/link/',
+      },
+    ],
     ...rest
   } = options;
 
@@ -50,6 +57,7 @@ export function createSingleSearchResponse<THit = any>(
     exhaustiveNbHits,
     exhaustiveFacetsCount,
     renderingContent,
+    userData,
     ...rest,
   };
 }

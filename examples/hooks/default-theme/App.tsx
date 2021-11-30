@@ -16,6 +16,8 @@ import {
   SearchBox,
   SortBy,
   HitsPerPage,
+  QueryRuleContext,
+  QueryRuleCustomData,
 } from './components';
 
 import './App.css';
@@ -90,6 +92,25 @@ export function App() {
               ]}
             />
           </div>
+
+          <QueryRuleContext
+            trackedFilters={{
+              brand: () => ['Apple'],
+            }}
+          />
+
+          <QueryRuleCustomData>
+            {({ items }) => (
+              <>
+                {items.map((item) => (
+                  <a href={item.link} key={item.banner}>
+                    <img src={item.banner} alt={item.title} />
+                  </a>
+                ))}
+              </>
+            )}
+          </QueryRuleCustomData>
+
           <Hits hitComponent={Hit} />
           <Pagination className="Pagination" />
         </div>
