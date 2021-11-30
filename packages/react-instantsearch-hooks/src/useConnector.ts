@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { useIndexContext } from './useIndexContext';
 import { useInstantSearchContext } from './useInstantSearchContext';
@@ -17,23 +17,44 @@ export function useConnector<
   const search = useInstantSearchContext();
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
+  const shouldSetStateRef = useRef(true);
 
   const widget = useMemo(() => {
-    const createWidget = connector((connectorState, isFirstRender) => {
-      // We skip the `init` widget render because:
-      // - We rely on `getWidgetRenderState` to compute the initial state before
-      //   the InstantSearch.js lifecycle starts.
-      // - It prevents UI flashes when updating the widget props.
-      if (isFirstRender) {
-        return;
+    const createWidget = connector(
+      (connectorState, isFirstRender) => {
+        // We skip the `init` widget render because:
+        // - We rely on `getWidgetRenderState` to compute the initial state before
+        //   the InstantSearch.js lifecycle starts.
+        // - It prevents UI flashes when updating the widget props.
+        if (isFirstRender) {
+          shouldSetStateRef.current = true;
+          return;
+        }
+
+        // There are situations where InstantSearch.js may render widgets slightly
+        // after they're removed by React, and thus try to update the React state
+        // on unmounted components. React 16 and 17 consider them as memory leaks
+        // and display a warning.
+        // This happens in <DynamicWidgets> when `attributesToRender` contains a
+        // value without an attribute previously mounted. React will unmount the
+        // component controlled by that attribute, but InstantSearch.js will stay
+        // unaware of this change until the render pass finishes, and therefore
+        // notifies of a state change.
+        // This ref lets us track this situation and ignore these state updates.
+        if (shouldSetStateRef.current) {
+          const { instantSearchInstance, widgetParams, ...renderState } =
+            connectorState;
+
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          setState(renderState);
+        }
+      },
+      () => {
+        // We'll ignore the next state update until we know for sure that
+        // InstantSearch.js re-inits the component.
+        shouldSetStateRef.current = false;
       }
-
-      const { instantSearchInstance, widgetParams, ...renderState } =
-        connectorState;
-
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      setState(renderState);
-    });
+    );
 
     return createWidget(stableProps);
   }, [stableProps, connector]);

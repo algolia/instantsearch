@@ -1,6 +1,6 @@
 import algoliasearch from 'algoliasearch';
 import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { connectHits, connectRefinementList, Index } from '../../index';
 import InstantSearch from '../InstantSearch';

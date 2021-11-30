@@ -1,5 +1,5 @@
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount } from 'enzyme';
 import algoliasearch from 'algoliasearch/lite';
 import { SearchResults } from 'algoliasearch-helper';

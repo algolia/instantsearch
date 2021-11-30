@@ -75,6 +75,7 @@
     "@wdio/selenium-standalone-service": "5.16.10",
     "@wdio/spec-reporter": "5.16.11",
     "@wdio/static-server-service": "5.16.10",
+    "@wojtekmaj/enzyme-adapter-react-17": "0.6.5",
     "algoliasearch": "4.10.5",
     "argos-cli": "0.1.3",
     "babel-eslint": "10.1.0",
@@ -87,9 +88,8 @@
     "conventional-changelog-cli": "2.0.23",
     "copy-webpack-plugin": "5.0.4",
     "css-loader": "3.2.0",
-    "enzyme": "3.10.0",
-    "enzyme-adapter-react-16": "1.14.0",
-    "enzyme-to-json": "3.4.0",
+    "enzyme": "3.11.0",
+    "enzyme-to-json": "3.6.2",
     "eslint": "6.8.0",
     "eslint-config-algolia": "16.0.0",
     "eslint-config-prettier": "6.15.0",
@@ -118,12 +118,12 @@
     "prettier": "2.4.1",
     "prop-types": "15.6.2",
     "puppeteer": "1.20.0",
-    "react": "16.14.0",
+    "react": "17.0.2",
     "react-autosuggest": "9.4.3",
-    "react-dom": "16.14.0",
+    "react-dom": "17.0.2",
     "react-error-boundary": "3.1.3",
     "react-native": "0.58.4",
-    "react-test-renderer": "16.14.0",
+    "react-test-renderer": "17.0.2",
     "rheostat": "2.2.0",
     "rollup": "1.20.3",
     "rollup-plugin-babel": "4.3.3",
@@ -150,7 +150,7 @@
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "41.50 kB"
+      "maxSize": "42 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
@@ -158,11 +158,11 @@
     },
     {
       "path": "packages/react-instantsearch-hooks/dist/umd/ReactInstantSearchHooks.min.js",
-      "maxSize": "33.50 kB"
+      "maxSize": "34 kB"
     },
     {
       "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
-      "maxSize": "43.75 kB"
+      "maxSize": "44.50 kB"
     },
     {
       "path": "packages/react-instantsearch-dom-maps/dist/umd/ReactInstantSearchDOMMaps.min.js",

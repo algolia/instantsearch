@@ -1,7 +1,7 @@
 import { Hit as AlgoliaHit } from '@algolia/client-search';
 import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
-import { InstantSearch } from 'react-instantsearch-hooks';
+import { InstantSearch, DynamicWidgets } from 'react-instantsearch-hooks';
 
 import {
   Configure,
@@ -45,35 +45,41 @@ function Hit({ hit }: HitProps) {
 
 export function App() {
   return (
-    <InstantSearch searchClient={searchClient} indexName="instant_search">
+    <InstantSearch
+      searchClient={searchClient}
+      indexName="instant_search"
+      routing={true}
+    >
       <Configure hitsPerPage={15} />
 
       <div className="Container">
         <div>
-          <Panel header="Brands">
-            <RefinementList
-              attribute="brand"
-              searchable={true}
-              searchablePlaceholder="Search brands"
-              showMore={true}
-            />
-          </Panel>
-          <Panel header="Categories">
-            <Menu attribute="categories" showMore={true} />
-          </Panel>
-          <Panel header="Hierarchy">
-            <HierarchicalMenu
-              attributes={[
-                'hierarchicalCategories.lvl0',
-                'hierarchicalCategories.lvl1',
-                'hierarchicalCategories.lvl2',
-              ]}
-              showMore={true}
-            />
-          </Panel>
-          <Panel header="Price">
-            <RangeInput attribute="price" />
-          </Panel>
+          <DynamicWidgets>
+            <Panel header="Brands">
+              <RefinementList
+                attribute="brand"
+                searchable={true}
+                searchablePlaceholder="Search brands"
+                showMore={true}
+              />
+            </Panel>
+            <Panel header="Categories">
+              <Menu attribute="categories" showMore={true} />
+            </Panel>
+            <Panel header="Hierarchy">
+              <HierarchicalMenu
+                attributes={[
+                  'hierarchicalCategories.lvl0',
+                  'hierarchicalCategories.lvl1',
+                  'hierarchicalCategories.lvl2',
+                ]}
+                showMore={true}
+              />
+            </Panel>
+            <Panel header="Price">
+              <RangeInput attribute="price" />
+            </Panel>
+          </DynamicWidgets>
         </div>
         <div className="Search">
           <div className="Search-header">

@@ -6,7 +6,7 @@
 export function invariant(
   condition: boolean,
   message: string | (() => string)
-) {
+): asserts condition {
   if (condition) {
     return;
   }
