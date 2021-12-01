@@ -1252,7 +1252,7 @@ type HitsPerPageRenderStateItem = {
 
 ```jsx
 function HitsPerPage(props) {
-  const { items, refine, hasNoResults } = useSortBy(props);
+  const { items, refine, hasNoResults } = useHitsPerPage(props);
 
   return {
     /* Markup */
