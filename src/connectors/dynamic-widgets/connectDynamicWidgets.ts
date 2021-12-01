@@ -1,9 +1,13 @@
-import type { SearchResults } from 'algoliasearch-helper';
+import type {
+  PlainSearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   getWidgetAttribute,
   noop,
+  warning,
 } from '../../lib/utils';
 import type { Connector, Widget } from '../../types';
 
@@ -39,6 +43,16 @@ export type DynamicWidgetsConnectorParams = {
     items: string[],
     metadata: { results: SearchResults }
   ): string[];
+
+  /**
+   * To prevent unneeded extra network requests when widgets mount or unmount,
+   * we request all facet values at all times.
+   * If you have more than 20 facet values pinned, you need to increase the
+   * maxValuesPerFacet to at least that value.
+   *
+   * @default { facets: ['*'], maxValuesPerFacet: 20 }
+   */
+  additionalParameters?: PlainSearchParameters;
 };
 
 export type DynamicWidgetsWidgetDescription = {
@@ -61,6 +75,10 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
     return (widgetParams) => {
       const {
         widgets,
+        additionalParameters = {
+          facets: ['*'],
+          maxValuesPerFacet: 20,
+        },
         transformItems = (items) => items,
         fallbackWidget,
       } = widgetParams;
@@ -156,7 +174,19 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
 
           unmountFn();
         },
+        getWidgetSearchParameters(state) {
+          return state.setQueryParameters(additionalParameters);
+        },
         getRenderState(renderState, renderOptions) {
+          // todo: should this warn when additionalParameters.maxValuesPerFacet is undefined?
+          warning(
+            additionalParameters.maxValuesPerFacet
+              ? additionalParameters.maxValuesPerFacet >=
+                  renderOptions.state.maxValuesPerFacet!
+              : true,
+            `The maxValuesPerFacet set by dynamic widgets (${additionalParameters.maxValuesPerFacet}) is smaller than one of the limits set by a widget (${renderOptions.state.maxValuesPerFacet}). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.`
+          );
+
           return {
             ...renderState,
             dynamicWidgets: this.getWidgetRenderState(renderOptions),

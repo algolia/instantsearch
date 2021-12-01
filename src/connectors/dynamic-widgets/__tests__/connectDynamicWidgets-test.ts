@@ -625,4 +625,14 @@ describe('connectDynamicWidgets', () => {
       });
     });
   });
+
+  describe('getWidgetSearchParameters', () => {
+    test.todo('it adds default facets and maxValuesPerFacet');
+
+    test.todo('it allows override of all parameters at once');
+
+    test.todo('it allows override with unrelated parameters');
+
+    test.todo('warns when a widget sets a higher limit');
+  });
 });
