@@ -472,6 +472,21 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         mergeSearchParameters(...resolveSearchParameters(this))
       );
 
+      const indexInitialResults =
+        instantSearchInstance._initialResults?.[this.getIndexId()];
+
+      if (indexInitialResults) {
+        // We restore the shape of the results provided to the instance to respect
+        // the helper's structure.
+        const results = new algoliasearchHelper.SearchResults(
+          new algoliasearchHelper.SearchParameters(indexInitialResults._state),
+          indexInitialResults._rawResults
+        );
+
+        derivedHelper.lastResults = results;
+        helper.lastResults = results;
+      }
+
       // Subscribe to the Helper state changes for the page before widgets
       // are initialized. This behavior mimics the original one of the Helper.
       // It makes sense to replicate it at the `init` step. We have another
@@ -590,6 +605,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           instantSearchInstance.onInternalStateChange();
         }
       });
+
+      if (indexInitialResults) {
+        // If there are initial results, we're not notified of the next results
+        // because we don't trigger an initial search. We therefore need to directly
+        // schedule a render that will render the results injected on the helper.
+        instantSearchInstance.scheduleRender();
+      }
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
