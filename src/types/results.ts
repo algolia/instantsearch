@@ -91,9 +91,9 @@ export type NumericRefinement = {
 
 export type Refinement = FacetRefinement | NumericRefinement;
 
-type InitialResult<THit> = {
+type InitialResult = {
   state: PlainSearchParameters;
-  results: SearchResults<THit>['_rawResults'];
+  results: SearchResults['_rawResults'];
 };
 
-export type InitialResults<THit> = Record<string, InitialResult<THit>>;
+export type InitialResults = Record<string, InitialResult>;
