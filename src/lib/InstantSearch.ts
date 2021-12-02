@@ -1,4 +1,4 @@
-import type { SearchResults, AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import EventEmitter from 'events';
