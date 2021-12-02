@@ -17,7 +17,6 @@
     <div class="container">
       <ais-instant-search :search-client="searchClient" index-name="{{indexName}}">
         <div class="search-panel">
-          {{#if attributesForFaceting.length}}
           <div class="search-panel__filters">
             {{#if flags.dynamicWidgets}}
             <ais-configure :facets="['*']" :max-values-per-facet.camel="20" />
@@ -33,7 +32,6 @@
             {{/if}}
           </div>
 
-          {{/if}}
           <div class="search-panel__results">
             <div class="searchbox">
               <ais-search-box placeholder="{{searchPlaceholder}}" />

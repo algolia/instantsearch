@@ -39,7 +39,6 @@ function App() {
       <div className="container">
         <InstantSearch searchClient={searchClient} indexName="{{indexName}}">
           <div className="search-panel">
-            {{#if attributesForFaceting}}
             <div className="search-panel__filters">
               {{#if flags.dynamicWidgets}}
               <Configure facets={['*']} maxValuesPerFacet={20} />
@@ -55,7 +54,6 @@ function App() {
               {{/if}}
             </div>
 
-            {{/if}}
             <div className="search-panel__results">
               <SearchBox
                 className="searchbox"
