@@ -1,3 +1,12 @@
+## [5.0.1](https://github.com/algolia/create-instantsearch-app/compare/5.0.0...5.0.1) (2021-12-02)
+
+
+### Bug Fixes
+
+* **dynamicWidgets:** allow only dynamicWidgets as attribute ([3717de6](https://github.com/algolia/create-instantsearch-app/commit/3717de6fc5811c191629d366988dcc2e05773a9c))
+
+
+
 # [5.0.0](https://github.com/algolia/create-instantsearch-app/compare/4.11.1...5.0.0) (2021-12-02)
 
 
