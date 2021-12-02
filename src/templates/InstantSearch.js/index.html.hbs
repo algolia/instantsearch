@@ -33,9 +33,13 @@
     <div class="search-panel">
       {{#if attributesForFaceting}}
       <div class="search-panel__filters">
+        {{#if flags.dynamicWidgets}}
+        <div id="dynamic-widgets"></div>
+        {{else}}
         {{#each attributesForFaceting}}
         <div id="{{this}}-list"></div>
         {{/each}}
+        {{/if}}
       </div>
 
       {{/if}}

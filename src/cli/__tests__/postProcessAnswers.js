@@ -79,3 +79,33 @@ test('creates alternative names', async () => {
     })
   );
 });
+
+test('detects dynamic widgets', async () => {
+  expect(
+    await postProcessAnswers({
+      configuration: {},
+      templateConfig: {},
+      optionsFromArguments: {},
+      answers: { attributesForFaceting: ['ais.dynamicWidgets', 'test'] },
+    })
+  ).toEqual(
+    expect.objectContaining({
+      attributesForFaceting: ['test'],
+      flags: { dynamicWidgets: true },
+    })
+  );
+
+  expect(
+    await postProcessAnswers({
+      configuration: {},
+      templateConfig: {},
+      optionsFromArguments: {},
+      answers: { attributesForFaceting: ['test'] },
+    })
+  ).toEqual(
+    expect.objectContaining({
+      attributesForFaceting: ['test'],
+      flags: { dynamicWidgets: false },
+    })
+  );
+});

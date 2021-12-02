@@ -3108,8 +3108,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   <div class=\\"container\\">
     <div class=\\"search-panel\\">
       <div class=\\"search-panel__filters\\">
-        <div id=\\"facet1-list\\"></div>
-        <div id=\\"facet2-list\\"></div>
+        <div id=\\"dynamic-widgets\\"></div>
       </div>
 
       <div class=\\"search-panel__results\\">
@@ -3254,13 +3253,30 @@ search.addWidgets([
 \`,
     },
   }),
-  instantsearch.widgets.refinementList({
-    container: '#facet1-list',
-    attribute: 'facet1',
+  instantsearch.widgets.configure({
+    facets: ['*'],
+    maxValuesPerFacet: 20,
   }),
-  instantsearch.widgets.refinementList({
-    container: '#facet2-list',
-    attribute: 'facet2',
+  instantsearch.widgets.dynamicWidgets({
+    container: '#dynamic-widgets',
+    fallbackWidget({ container, attribute }) {
+      return instantsearch.widgets.refinementList({
+        container,
+        attribute,
+      });
+    },
+    widgets: [
+      container =>
+        instantsearch.widgets.refinementList({
+          container,
+          attribute: 'facet1',
+        }),
+      container =>
+        instantsearch.widgets.refinementList({
+          container,
+          attribute: 'facet2',
+        }),
+    ],
   }),
   instantsearch.widgets.pagination({
     container: '#pagination',
@@ -5720,6 +5736,8 @@ import {
   InstantSearch,
   Hits,
   SearchBox,
+  Configure,
+  ExperimentalDynamicWidgets,
   RefinementList,
   Pagination,
   Highlight,
@@ -5748,8 +5766,11 @@ function App() {
         <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
           <div className=\\"search-panel\\">
             <div className=\\"search-panel__filters\\">
-              <RefinementList attribute=\\"facet1\\" />
-              <RefinementList attribute=\\"facet2\\" />
+              <Configure facets={['*']} maxValuesPerFacet={20} />
+              <ExperimentalDynamicWidgets fallbackWidget={RefinementList}>
+                <RefinementList attribute=\\"facet1\\" />
+                <RefinementList attribute=\\"facet2\\" />
+              </ExperimentalDynamicWidgets>
             </div>
 
             <div className=\\"search-panel__results\\">
@@ -7434,8 +7455,11 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
       <ais-instant-search :search-client=\\"searchClient\\" index-name=\\"indexName\\">
         <div class=\\"search-panel\\">
           <div class=\\"search-panel__filters\\">
-            <ais-refinement-list attribute=\\"facet1\\" />
-            <ais-refinement-list attribute=\\"facet2\\" />
+            <ais-configure :facets=\\"['*']\\" :max-values-per-facet.camel=\\"20\\" />
+            <ais-experimental-dynamic-widgets>
+              <ais-refinement-list attribute=\\"facet1\\" />
+              <ais-refinement-list attribute=\\"facet2\\" />
+            </ais-experimental-dynamic-widgets>
           </div>
 
           <div class=\\"search-panel__results\\">

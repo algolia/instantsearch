@@ -61,6 +61,11 @@ async function postProcessAnswers({
     template: templatePath,
     installation: optionsFromArguments.installation,
     currentYear: new Date().getFullYear(),
+    attributesForFaceting:
+      Array.isArray(combinedAnswers.attributesForFaceting) &&
+      combinedAnswers.attributesForFaceting.filter(
+        attribute => attribute !== 'ais.dynamicWidgets'
+      ),
     flags: {
       dynamicWidgets:
         Array.isArray(combinedAnswers.attributesForFaceting) &&
