@@ -23,6 +23,7 @@ import type {
   Middleware,
   MiddlewareDefinition,
   RenderState,
+  InitialResults,
 } from '../types';
 import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
@@ -158,7 +159,7 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
-  public _initialResults: Record<string, SearchResults> | null;
+  public _initialResults: InitialResults | null;
   public _createURL: CreateURL<UiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
