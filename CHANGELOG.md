@@ -13,46 +13,7 @@
 
 ### BREAKING CHANGES
 
-* **index:** the program now asks questions if some of the parameters are sent via arguments. Before this, giving an argument would cause it not to ask any questions anymore, even if they still would be useful. You can avoid this behaviour by passing --config or --no-interactive
-
-* postprocess answers
-
-* e2e installs should not have any asked questions
-
-* make e2e build test pass
-
-* more info
-
-* update to newer commander to fix the "name" issue
-
-* refactor: validate appPath like appName
-
-* error for empty string path
-
-* clean lockfile
-
-* refactor initial questions
-
-* silently check for existing answers on appName
-
-* don't ask initial questions if config is set
-
-* introduce --no-interactive, mostly for test
-
-* write tests
-
-* fix argument
-
-* undo change
-
-* make .default apply always
-
-* refactor templates to be part of initialQuestions
-
-* cover initialQuestions in tests
-
-* fix error
-
+the program now asks questions if some of the parameters are sent via arguments. Before this, giving an argument would cause it not to ask any questions anymore, even if they still would be useful. You can avoid this behaviour by passing --config or --no-interactive
 
 
 ## [4.11.1](https://github.com/algolia/create-instantsearch-app/compare/4.11.0...4.11.1) (2021-11-18)
