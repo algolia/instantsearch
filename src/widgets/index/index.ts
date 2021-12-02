@@ -479,8 +479,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // We restore the shape of the results provided to the instance to respect
         // the helper's structure.
         const results = new algoliasearchHelper.SearchResults(
-          new algoliasearchHelper.SearchParameters(indexInitialResults._state),
-          indexInitialResults._rawResults
+          new algoliasearchHelper.SearchParameters(indexInitialResults.state),
+          indexInitialResults.results
         );
 
         derivedHelper.lastResults = results;

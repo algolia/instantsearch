@@ -2896,12 +2896,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         searchClient: createSearchClient(),
       });
       search._initialResults = {
-        indexName: new SearchResults(new SearchParameters(), [
-          createSingleSearchResponse({
-            query: 'iphone',
-            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
-          }),
-        ]),
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
       };
 
       search.start();
@@ -2962,21 +2965,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         searchClient: createSearchClient(),
       });
       search._initialResults = {
-        indexName: new SearchResults(new SearchParameters(), [
-          createSingleSearchResponse({
-            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
-          }),
-        ]),
-        indexName2: new SearchResults(new SearchParameters(), [
-          createSingleSearchResponse({
-            hits: [{ objectID: '4' }, { objectID: '5' }, { objectID: '6' }],
-          }),
-        ]),
-        indexName3: new SearchResults(new SearchParameters(), [
-          createSingleSearchResponse({
-            hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
-          }),
-        ]),
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
+        indexName2: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '4' }, { objectID: '5' }, { objectID: '6' }],
+            }),
+          ],
+        },
+        indexName3: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
+            }),
+          ],
+        },
       };
 
       const nestedIndex1 = index({ indexName: 'indexName2' });
@@ -3031,17 +3046,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         searchClient: createSearchClient(),
       });
       search._initialResults = {
-        indexName: new SearchResults(new SearchParameters(), [
-          createSingleSearchResponse({
-            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
-          }),
-        ]),
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
         // Notice that `indexName2` is not provided
-        indexName3: new SearchResults(new SearchParameters(), [
-          createSingleSearchResponse({
-            hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
-          }),
-        ]),
+        indexName3: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
+            }),
+          ],
+        },
       };
 
       const nestedIndex1 = index({ indexName: 'indexName2' });
@@ -3089,11 +3112,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         scheduleRender: jest.fn() as any,
       });
       instantSearchInstance._initialResults = {
-        indexName: new SearchResults(new SearchParameters(), [
-          createSingleSearchResponse({
-            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
-          }),
-        ]),
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
       };
 
       instance.init(createInitOptions({ instantSearchInstance, parent: null }));
@@ -3107,11 +3134,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         searchClient: createSearchClient(),
       });
       search._initialResults = {
-        indexName: new SearchResults(new SearchParameters(), [
-          createSingleSearchResponse({
-            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
-          }),
-        ]),
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
       };
       const renderFn = jest.fn();
 
