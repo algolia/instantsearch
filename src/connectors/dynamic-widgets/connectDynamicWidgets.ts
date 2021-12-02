@@ -77,7 +77,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
         widgets,
         additionalParameters = {
           facets: ['*'],
-          maxValuesPerFacet: 20,
+          // maxValuesPerFacet: 20,
         },
         transformItems = (items) => items,
         fallbackWidget,
@@ -175,7 +175,16 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           unmountFn();
         },
         getWidgetSearchParameters(state) {
-          return state.setQueryParameters(additionalParameters);
+          const { maxValuesPerFacet, ...otherParameters } =
+            additionalParameters;
+
+          return state.setQueryParameters({
+            maxValuesPerFacet: Math.max(
+              maxValuesPerFacet || 0,
+              state.maxValuesPerFacet || 0
+            ),
+            ...otherParameters,
+          });
         },
         getRenderState(renderState, renderOptions) {
           // todo: should this warn when additionalParameters.maxValuesPerFacet is undefined?
