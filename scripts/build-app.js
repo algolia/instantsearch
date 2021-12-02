@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const { execSync } = require('child_process');
 
 const usage = `
@@ -20,10 +21,25 @@ if (!templateName) {
 
 const appName = path.basename(appPath);
 
+const config = {
+  template: templateName,
+  appId: 'appId',
+  apiKey: 'apiKey',
+  indexName: 'indexName',
+  searchPlaceholder: 'Search placeholder',
+  attributesToDisplay: ['attribute1', 'attribute2'],
+  attributesForFaceting: ['facet1', 'facet2'],
+  organization: 'algolia',
+};
+
+const configFilePath = `cisa.config.json`;
+
+fs.writeFileSync(configFilePath, JSON.stringify(config));
+
 execSync(
   `yarn start ${appPath} \
     --name "${appName}" \
-    --template "${templateName}"`,
+    --config "${configFilePath}"`,
   { stdio: 'inherit' }
 );
 

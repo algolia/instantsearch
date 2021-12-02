@@ -1,13 +1,7 @@
 const loadJsonFile = require('load-json-file');
-const utils = require('../../utils');
-const { getConfiguration, getLibraryVersion } = require('../getConfiguration');
+const getConfiguration = require('../getConfiguration');
 
 jest.mock('load-json-file');
-
-jest.mock('../../utils', () => ({
-  ...require.requireActual('../../utils'),
-  fetchLibraryVersions: jest.fn(() => Promise.resolve(['1.0.0'])),
-}));
 
 test('without template throws', async () => {
   expect.assertions(1);
@@ -34,21 +28,6 @@ test('with options from arguments and prompt merge', async () => {
       libraryVersion: '1.0.0',
     })
   );
-});
-
-test('without stable version available', async () => {
-  utils.fetchLibraryVersions.mockImplementationOnce(() =>
-    Promise.resolve(['1.0.0-beta.0'])
-  );
-
-  const libraryVersion = await getLibraryVersion(
-    {
-      template: 'InstantSearch.js',
-    },
-    utils.getAppTemplateConfig(utils.getTemplatePath('InstantSearch.js'))
-  );
-
-  expect(libraryVersion).toBe('1.0.0-beta.0');
 });
 
 test('with config file overrides all options', async () => {

@@ -71,6 +71,7 @@ $ create-instantsearch-app --help
     --library-version <libraryVersion>                 The version of the library
     --config <config>                                  The configuration file to get the options from
     --no-installation                                  Ignore dependency installation
+    --no-interactive                                   Do not ask any interactive questions
     -h, --help                                         output usage information
 ```
 

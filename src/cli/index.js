@@ -16,24 +16,22 @@ const {
   fetchLibraryVersions,
   getTemplatesByCategory,
   getTemplatePath,
+  splitArray,
 } = require('../utils');
-const getOptionsFromArguments = require('./getOptionsFromArguments');
 const getAttributesFromIndex = require('./getAttributesFromIndex');
 const getFacetsFromIndex = require('./getFacetsFromIndex');
 const getAnswersDefaultValues = require('./getAnswersDefaultValues');
 const isQuestionAsked = require('./isQuestionAsked');
-const {
-  getConfiguration,
-  getLibraryVersion,
-  createNameAlternatives,
-} = require('./getConfiguration');
+const getConfiguration = require('./getConfiguration');
+const postProcessAnswers = require('./postProcessAnswers');
 const { version } = require('../../package.json');
 
 let appPathFromArgument;
-let options = {};
 
 program
+  .storeOptionsAsProperties(false)
   .version(version, '-v, --version')
+  .name('create-instantsearch-app')
   .arguments('<project-directory>')
   .usage(`${chalk.green('<project-directory>')} [options]`)
   .option('--name <name>', 'The name of the application or widget')
@@ -42,31 +40,29 @@ program
   .option('--index-name <indexName>', 'The main index of your search')
   .option(
     '--attributes-to-display <attributesToDisplay>',
-    'The attributes of your index to display'
+    'The attributes of your index to display in hits',
+    splitArray
   )
   .option(
     '--attributes-for-faceting <attributesForFaceting>',
-    'The attributes for faceting'
+    'The attributes to display as filters',
+    splitArray
   )
   .option('--template <template>', 'The InstantSearch template to use')
   .option('--library-version <version>', 'The version of the library')
   .option('--config <config>', 'The configuration file to get the options from')
   .option('--no-installation', 'Ignore dependency installation')
-  .action((dest, opts) => {
+  .option('--no-interactive', 'Ask no interactive questions')
+  .action(dest => {
     appPathFromArgument = dest;
-    options = opts;
   })
   .parse(process.argv);
 
-const optionsFromArguments = getOptionsFromArguments(options.rawArgs || []);
-const attributesToDisplay = (optionsFromArguments.attributesToDisplay || '')
-  .split(',')
-  .filter(Boolean)
-  .map(x => x.trim());
-const attributesForFaceting = (optionsFromArguments.attributesForFaceting || '')
-  .split(',')
-  .filter(Boolean)
-  .map(x => x.trim());
+const optionsFromArguments = program.opts();
+const {
+  attributesToDisplay = [],
+  attributesForFaceting = [],
+} = optionsFromArguments;
 
 const getQuestions = ({ appName }) => ({
   application: [
@@ -160,7 +156,7 @@ const getQuestions = ({ appName }) => ({
       ],
       filter: attributes => attributes.filter(Boolean),
       when: ({ appId, apiKey, indexName }) =>
-        !attributesToDisplay.length > 0 && appId && apiKey && indexName,
+        attributesToDisplay.length === 0 && appId && apiKey && indexName,
     },
     {
       type: 'checkbox',
@@ -202,7 +198,7 @@ const getQuestions = ({ appName }) => ({
       },
       filter: attributes => attributes.filter(Boolean),
       when: ({ appId, apiKey, indexName }) =>
-        !attributesForFaceting.length > 0 && appId && apiKey && indexName,
+        attributesForFaceting.length === 0 && appId && apiKey && indexName,
     },
   ],
   widget: [
@@ -228,95 +224,141 @@ const getQuestions = ({ appName }) => ({
       },
     },
   ],
+  initial: [
+    {
+      type: 'input',
+      name: 'appPath',
+      message: 'Project directory',
+      askAnswered: true,
+      validate(input) {
+        try {
+          return checkAppPath(input);
+        } catch (err) {
+          console.log();
+          console.error(err.message);
+          return false;
+        }
+      },
+      when(answers) {
+        try {
+          return (
+            answers.interactive &&
+            !answers.config &&
+            !checkAppPath(answers.appPath)
+          );
+        } catch (err) {
+          return true;
+        }
+      },
+    },
+    {
+      type: 'input',
+      name: 'appName',
+      message: 'The name of the application or widget',
+      askAnswered: true,
+      default(answers) {
+        return path.basename(answers.appPath);
+      },
+      validate(input) {
+        try {
+          return checkAppName(input);
+        } catch (err) {
+          console.log();
+          console.error(err.message);
+          return false;
+        }
+      },
+      when(answers) {
+        try {
+          return (
+            answers.interactive &&
+            !answers.config &&
+            !checkAppName(answers.appName)
+          );
+        } catch (err) {
+          return true;
+        }
+      },
+    },
+    {
+      type: 'list',
+      pageSize: 10,
+      name: 'template',
+      message: 'InstantSearch template',
+      askAnswered: true,
+      choices: () => {
+        const templatesByCategory = getTemplatesByCategory();
+
+        return Object.entries(templatesByCategory).reduce(
+          (templates, [category, values]) => [
+            ...templates,
+            new inquirer.Separator(category),
+            ...values,
+          ],
+          []
+        );
+      },
+      validate(input) {
+        // if a config is given, path is optional
+        if (optionsFromArguments.config) {
+          return true;
+        }
+
+        const isValid = Boolean(input);
+        if (!isValid) {
+          console.log('template is required');
+        }
+        return isValid;
+      },
+      when(answers) {
+        return answers.interactive && !answers.config && !answers.template;
+      },
+    },
+  ],
 });
 
 async function run() {
-  let appPath = appPathFromArgument;
-  if (!appPath) {
-    const answers = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'appPath',
-        message: 'Project directory',
-      },
-    ]);
-    appPath = answers.appPath;
-  }
-  if (appPath.startsWith('~/')) {
-    appPath = path.join(os.homedir(), appPath.slice(2));
-  }
-  try {
-    checkAppPath(appPath);
-  } catch (err) {
-    console.error(err.message);
-    console.log();
+  const args = {
+    ...optionsFromArguments,
+    appPath: appPathFromArgument,
+    appName: optionsFromArguments.name,
+  };
+  const initialQuestions = getQuestions({}).initial;
+  const initialAnswers = {
+    ...args,
+    ...(await inquirer.prompt(initialQuestions, args)),
+  };
 
-    process.exit(1);
-  }
+  initialQuestions.forEach(question => {
+    // .default doesn't get executed when "when" returns false
+    if (!initialAnswers[question.name] && question.default) {
+      const defaultValue = question.default(initialAnswers);
+      initialAnswers[question.name] = defaultValue;
+    }
+    if (!question.validate(initialAnswers[question.name])) {
+      process.exit(1);
+    }
+  });
 
-  let appName = optionsFromArguments.name;
-  if (!appName) {
-    appName = (
-      await inquirer.prompt([
-        {
-          type: 'input',
-          name: 'appName',
-          message: 'The name of the application or widget',
-          default: path.basename(appPath),
-        },
-      ])
-    ).appName;
+  if (initialAnswers.appPath.startsWith('~/')) {
+    initialAnswers.appPath = path.join(
+      os.homedir(),
+      initialAnswers.appPath.slice(2)
+    );
   }
 
-  try {
-    checkAppName(appName);
-  } catch (err) {
-    console.error(err.message);
-    console.log();
-
-    process.exit(1);
-  }
+  const { appPath, appName, template } = initialAnswers;
 
   console.log();
   console.log(`Creating a new InstantSearch app in ${chalk.green(appPath)}.`);
   console.log();
 
-  const { template = optionsFromArguments.template } = await inquirer.prompt(
-    [
-      {
-        type: 'list',
-        pageSize: 10,
-        name: 'template',
-        message: 'InstantSearch template',
-        choices: () => {
-          const templatesByCategory = getTemplatesByCategory();
-
-          return Object.entries(templatesByCategory).reduce(
-            (templates, [category, values]) => [
-              ...templates,
-              new inquirer.Separator(category),
-              ...values,
-            ],
-            []
-          );
-        },
-        validate(input) {
-          return Boolean(input);
-        },
-      },
-    ].filter(question =>
-      isQuestionAsked({ question, args: optionsFromArguments })
-    ),
-    optionsFromArguments
-  );
-
   const configuration = await getConfiguration({
     options: {
       ...optionsFromArguments,
       name: appName,
-      attributesToDisplay,
     },
-    answers: { template },
+    answers: initialAnswers,
   });
 
   const templatePath = getTemplatePath(configuration.template);
@@ -326,39 +368,21 @@ async function run() {
     templateConfig.category === 'Widget' ? 'widget' : 'application';
 
   const answers = await inquirer.prompt(
-    getQuestions({ appName })[implementationType].filter(question =>
-      isQuestionAsked({ question, args: optionsFromArguments })
+    getQuestions({ appName })[implementationType].filter(
+      question => !isQuestionAsked({ question, args: optionsFromArguments })
     ),
     getAnswersDefaultValues(optionsFromArguments, configuration, template)
   );
 
-  const alternativeNames = createNameAlternatives({
-    ...configuration,
-    ...answers,
-    templateConfig,
-  });
-
-  const libraryVersion = await getLibraryVersion(
-    { ...configuration, ...answers },
-    templateConfig
-  );
-
   const app = createInstantSearchApp(
     appPath,
-    {
-      ...configuration,
-      ...answers,
-      ...alternativeNames,
-      flags: {
-        dynamicWidgets:
-          Array.isArray(answers.attributesForFaceting) &&
-          answers.attributesForFaceting.includes('ais.dynamicWidgets'),
-      },
-      libraryVersion,
-      template: templatePath,
-      installation: program.installation,
-      currentYear: new Date().getFullYear(),
-    },
+    await postProcessAnswers({
+      configuration,
+      answers,
+      optionsFromArguments,
+      templatePath,
+      templateConfig,
+    }),
     templateConfig.tasks
   );
 

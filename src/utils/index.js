@@ -56,6 +56,10 @@ function checkAppPath(appPath) {
     }
   }
 
+  if (!appPath) {
+    throw new Error('Could not create project without directory');
+  }
+
   return true;
 }
 
@@ -126,7 +130,9 @@ function getTemplatePath(templateName) {
 }
 
 async function fetchLibraryVersions(libraryName) {
-  const library = await index.getObject(libraryName);
+  const library = await index.getObject(libraryName, {
+    attributesToRetrieve: ['versions'],
+  });
 
   return Object.keys(library.versions).reverse();
 }
@@ -147,6 +153,12 @@ async function getEarliestLibraryVersion(...args) {
   return await getLibraryVersion(...args)(semver.minSatisfying);
 }
 
+const splitArray = string =>
+  string
+    .split(',')
+    .filter(Boolean)
+    .map(x => x.trim());
+
 module.exports = {
   checkAppName,
   checkAppPath,
@@ -158,4 +170,5 @@ module.exports = {
   getAllTemplates,
   getTemplatePath,
   getTemplatesByCategory,
+  splitArray,
 };

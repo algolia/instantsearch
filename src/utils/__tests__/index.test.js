@@ -23,7 +23,7 @@ describe('checkAppName', () => {
 });
 
 describe('checkAppPath', () => {
-  describe('with non existant directory as path', () => {
+  describe('with non existing directory as path', () => {
     beforeAll(() => {
       mockExistsSync.mockImplementation(() => false);
     });
@@ -45,7 +45,11 @@ describe('checkAppPath', () => {
     });
 
     test('should throw with correct error', () => {
-      expect(() => utils.checkAppPath('path')).toThrowErrorMatchingSnapshot();
+      expect(() =>
+        utils.checkAppPath('path')
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Could not create project in destination folder \\"[31mpath[39m\\" because it is not empty."`
+      );
     });
 
     afterAll(() => {
@@ -64,7 +68,31 @@ describe('checkAppPath', () => {
     });
 
     test('should throw with correct error', () => {
-      expect(() => utils.checkAppPath('path')).toThrowErrorMatchingSnapshot();
+      expect(() =>
+        utils.checkAppPath('path')
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Could not create project at path [31mpath[39m because a file of the same name already exists."`
+      );
+    });
+
+    afterAll(() => {
+      mockExistsSync.mockReset();
+      mockLstatSync.mockReset();
+    });
+  });
+
+  describe('with empty string as path', () => {
+    beforeAll(() => {
+      mockExistsSync.mockImplementation(() => false);
+      mockLstatSync.mockImplementation(() => ({
+        isDirectory: () => false,
+      }));
+    });
+
+    test('should throw with correct error', () => {
+      expect(() => utils.checkAppPath('')).toThrowErrorMatchingInlineSnapshot(
+        `"Could not create project without directory"`
+      );
     });
 
     afterAll(() => {

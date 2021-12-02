@@ -5,7 +5,3 @@ exports[`checkAppName throws with correct error message 1`] = `
   - name cannot start with a period
   - name can only contain URL-friendly characters"
 `;
-
-exports[`checkAppPath with existing file as path should throw with correct error 1`] = `"Could not create project at path [31mpath[39m because a file of the same name already exists."`;
-
-exports[`checkAppPath with non empty directory as path should throw with correct error 1`] = `"Could not create project in destination folder \\"[31mpath[39m\\" because it is not empty."`;

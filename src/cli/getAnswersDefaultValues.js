@@ -4,12 +4,10 @@ module.exports = function getAnswersDefaultValues(
   template
 ) {
   return {
+    ...configuration,
     ...optionsFromArguments,
     template,
-    attributesToDisplay:
-      configuration.attributesToDisplay &&
-      configuration.attributesToDisplay.length > 0
-        ? configuration.attributesToDisplay
-        : undefined,
+    // name has a default of '', as it's a special case in Commander
+    name: optionsFromArguments.name || configuration.name,
   };
 };
