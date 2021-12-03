@@ -1,3 +1,8 @@
+import type {
+  PlainSearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+
 export type HitAttributeHighlightResult = {
   value: string;
   matchLevel: 'none' | 'partial' | 'full';
@@ -85,3 +90,10 @@ export type NumericRefinement = {
 };
 
 export type Refinement = FacetRefinement | NumericRefinement;
+
+type InitialResult = {
+  state: PlainSearchParameters;
+  results: SearchResults['_rawResults'];
+};
+
+export type InitialResults = Record<string, InitialResult>;

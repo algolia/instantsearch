@@ -540,6 +540,31 @@ describe('addWidget(s)', () => {
 
     expect(search.addWidgets([createWidget()])).toBe(search);
   });
+
+  it('does not trigger a search with initial results', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    // An empty object is a valid value for initial results
+    search._initialResults = {};
+
+    search.start();
+    search.addWidgets([createWidget()]);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
+
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
+
+    search.addWidgets([createWidget()]);
+
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('removeWidget(s)', () => {
@@ -833,6 +858,24 @@ describe('start', () => {
       expect(event.error).toEqual(new Error('SERVER_ERROR'));
       done();
     });
+  });
+
+  it('does not trigger a search with initial results', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    // An empty object is a valid value for initial results
+    search._initialResults = {};
+
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
+
+    search.start();
+
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
   });
 
   it('does start without widgets', () => {
