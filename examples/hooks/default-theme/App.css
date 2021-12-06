@@ -20,19 +20,19 @@ body {
   display: grid;
   align-items: flex-start;
   grid-template-columns: minmax(min-content, 200px) 1fr;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .Search {
   display: grid;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .Search-header {
   display: grid;
   align-items: flex-start;
   grid-template-columns: 1fr auto auto;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .Hit-label {
@@ -47,4 +47,8 @@ body {
 .Pagination {
   padding: 1rem 0;
   margin: 0 auto;
+}
+
+.ais-CurrentRefinements-label {
+  text-transform: capitalize;
 }

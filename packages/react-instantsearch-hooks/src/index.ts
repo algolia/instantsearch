@@ -4,6 +4,7 @@ export * from './InstantSearch';
 export * from './SearchIndex';
 export * from './useConfigure';
 export * from './useConnector';
+export * from './useCurrentRefinements';
 export * from './useDynamicWidgets';
 export * from './useHierarchicalMenu';
 export * from './useHits';

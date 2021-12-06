@@ -18,6 +18,7 @@ import {
   HitsPerPage,
   QueryRuleContext,
   QueryRuleCustomData,
+  CurrentRefinements,
 } from './components';
 
 import './App.css';
@@ -98,6 +99,27 @@ export function App() {
               ]}
             />
           </div>
+
+          <CurrentRefinements
+            transformItems={(items) =>
+              items.map((item) => {
+                const attribute = item.attribute.startsWith(
+                  'hierarchicalCategories'
+                )
+                  ? 'Hierarchy'
+                  : item.attribute;
+
+                return {
+                  ...item,
+                  attribute,
+                  refinements: item.refinements.map((refinement) => ({
+                    ...refinement,
+                    attribute,
+                  })),
+                };
+              })
+            }
+          />
 
           <QueryRuleContext
             trackedFilters={{
