@@ -4,7 +4,7 @@
 ### Features
 
 * rely on `state` in `getWidgetRenderState` ([#4960](https://github.com/algolia/instantsearch.js/issues/4960)) ([5006841](https://github.com/algolia/instantsearch.js/commit/50068417e5e7211802bc717b582946f6e630d7ac))
-* support initial results ([#4967](https://github.com/algolia/instantsearch.js/issues/4967)) ([db11c13](https://github.com/algolia/instantsearch.js/commit/db11c13ea55433491f5e924633bff12a303c1bc6))
+* support initial results (experimental) ([#4967](https://github.com/algolia/instantsearch.js/issues/4967)) ([db11c13](https://github.com/algolia/instantsearch.js/commit/db11c13ea55433491f5e924633bff12a303c1bc6))
 
 
 
