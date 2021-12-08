@@ -3,8 +3,6 @@
  */
 
 import React, { version as ReactVersion } from 'react';
-
-import { createSearchClient } from '../../../../test/mock';
 import {
   InstantSearch,
   InstantSearchSSRProvider,
@@ -14,13 +12,15 @@ import {
   useSearchBox,
   version,
 } from 'react-instantsearch-hooks';
+
+import { createSearchClient } from '../../../../test/mock';
 import { getServerState } from '../getServerState';
 
+import type algoliasearch from 'algoliasearch/lite';
 import type {
   InstantSearchServerState,
   UseRefinementListProps,
 } from 'react-instantsearch-hooks';
-import type algoliasearch from 'algoliasearch/lite';
 
 type SearchClient = ReturnType<typeof algoliasearch>;
 

@@ -110,7 +110,10 @@ const config = {
       },
     },
     {
-      files: ['packages/react-instantsearch-hooks/**/*'],
+      files: [
+        'packages/react-instantsearch-hooks/**/*',
+        'packages/react-instantsearch-hooks-server/**/*',
+      ],
       rules: {
         // We don't ship PropTypes in the next version of the library.
         'react/prop-types': 'off',

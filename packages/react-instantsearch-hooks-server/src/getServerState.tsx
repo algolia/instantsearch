@@ -1,16 +1,15 @@
 import { isIndexWidget } from 'instantsearch.js/es/widgets/index/index';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-
 import { InstantSearchServerContext } from 'react-instantsearch-hooks';
 
+import type { InitialResults, InstantSearch } from 'instantsearch.js';
+import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { ReactNode } from 'react';
 import type {
   InstantSearchServerContextApi,
   InstantSearchServerState,
 } from 'react-instantsearch-hooks';
-import type { InitialResults, InstantSearch } from 'instantsearch.js';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
-import type { ReactNode } from 'react';
 
 /**
  * Returns the InstantSearch server state from a component.
