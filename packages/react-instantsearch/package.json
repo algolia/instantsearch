@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch",
-  "version": "6.16.0",
+  "version": "6.17.0",
   "description": "⚡ Lightning-fast search for React and React Native apps, by Algolia",
   "main": "index.js",
   "module": "dist/es/index.js",
@@ -44,8 +44,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "react-instantsearch-core": "^6.16.0",
-    "react-instantsearch-dom": "^6.16.0",
-    "react-instantsearch-native": "^6.16.0"
+    "react-instantsearch-core": "^6.17.0",
+    "react-instantsearch-dom": "^6.17.0",
+    "react-instantsearch-native": "^6.17.0"
   }
 }

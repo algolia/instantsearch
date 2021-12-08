@@ -1,3 +1,23 @@
+# [6.17.0](https://github.com/algolia/react-instantsearch/compare/v6.16.0...v6.17.0) (2021-12-08)
+
+
+### Bug Fixes
+
+* **hooks:** throw invariant violations in production ([#3217](https://github.com/algolia/react-instantsearch/issues/3217)) ([6d3f99c](https://github.com/algolia/react-instantsearch/commit/6d3f99ca91f470ee742ddc55e95f57b1f1801d7b))
+
+
+### Features
+
+* **hooks:** introduce `useMenu` ([#3197](https://github.com/algolia/react-instantsearch/issues/3197)) ([15d1cc9](https://github.com/algolia/react-instantsearch/commit/15d1cc993437b111cd5a32f43ee1d2065c639ed4))
+* **hooks:** introduce `useRange` ([#3198](https://github.com/algolia/react-instantsearch/issues/3198)) ([df1f1c8](https://github.com/algolia/react-instantsearch/commit/df1f1c8109dc684e74d3aee1bf0359f2a0e1b9f4))
+* **hooks:** introduce `<DynamicWidgets>` ([#3216](https://github.com/algolia/react-instantsearch/issues/3216)) ([d99aea6](https://github.com/algolia/react-instantsearch/commit/d99aea6cfe9dea86ae6b98ee3762373f4b3843f1))
+* **hooks:** introduce `useDynamicWidgets` ([#3210](https://github.com/algolia/react-instantsearch/issues/3210)) ([29c2ea2](https://github.com/algolia/react-instantsearch/commit/29c2ea22b91a39d9eb40a044ae9aab85f2612db8))
+* **hooks:** introduce `useQueryRules` ([#3212](https://github.com/algolia/react-instantsearch/issues/3212)) ([3ef1e1e](https://github.com/algolia/react-instantsearch/commit/3ef1e1e4116b3e58b2c2134d0c60fbb9f40c1501))
+* **hooks:** introduce SSR support ([#3221](https://github.com/algolia/react-instantsearch/issues/3221)) ([0a6b3ec](https://github.com/algolia/react-instantsearch/commit/0a6b3ec61942ad3849c6f078e21b3328679bffff))
+* **hooks:** introduce useCurrentRefinements ([#3222](https://github.com/algolia/react-instantsearch/issues/3222)) ([7ebd8c3](https://github.com/algolia/react-instantsearch/commit/7ebd8c3da8c17b0bd7e0f8deab633b98fa052e7f))
+
+
+
 # [6.16.0](https://github.com/algolia/react-instantsearch/compare/v6.15.0...v6.16.0) (2021-11-22)
 
 
