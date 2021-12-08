@@ -53,7 +53,8 @@ const config = {
         format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
         leadingUnderscore: 'allow',
         filter: {
-          regex: '^EXPERIMENTAL_|__DEV__|__APP_INITIAL_STATE__|free_shipping',
+          regex:
+            '^EXPERIMENTAL_|__DEV__|__APP_INITIAL_STATE__|__SERVER_STATE__|free_shipping',
           match: false,
         },
       },

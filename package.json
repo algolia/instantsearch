@@ -4,7 +4,7 @@
   "license": "MIT",
   "workspaces": [
     "packages/*",
-    "examples/@(default-theme|e-commerce|media|tourism|hooks)"
+    "examples/@(default-theme|e-commerce|media|tourism|hooks|hooks-ssr)"
   ],
   "scripts": {
     "postinstall": "lerna run build:cjs --scope react-instantsearch-*",

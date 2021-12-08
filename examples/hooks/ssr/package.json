@@ -1,0 +1,33 @@
+{
+  "name": "example-hooks-ssr",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack && nodemon dist/server.js",
+    "watch": "webpack --watch",
+    "build": "webpack --mode=production",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "7.4.5",
+    "@babel/polyfill": "7.4.4",
+    "@babel/preset-env": "7.4.5",
+    "@babel/preset-react": "7.0.0",
+    "babel-core": "6.26.3",
+    "babel-jest": "24.9.0",
+    "babel-loader": "8.0.6",
+    "nodemon": "1.19.3",
+    "webpack": "4.40.2",
+    "webpack-cli": "3.3.7",
+    "webpack-node-externals": "1.7.2"
+  },
+  "dependencies": {
+    "algoliasearch": "4.9.3",
+    "express": "4.17.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-instantsearch-hooks": "6.16.0",
+    "react-instantsearch-hooks-server": "6.16.0"
+  }
+}
