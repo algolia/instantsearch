@@ -1,4 +1,6 @@
 const webpack = require('webpack');
+const ResolveTypeScriptPlugin = require("resolve-typescript-plugin").default;
+
 
 module.exports = ({ config, mode }) => {
   // `mode` can either be 'DEVELOPMENT' or 'PRODUCTION'
@@ -21,6 +23,8 @@ module.exports = ({ config, mode }) => {
   );
 
   config.resolve.extensions.push('.ts', '.tsx');
+
+  config.resolve.plugins.push(new ResolveTypeScriptPlugin())
 
   return config;
 };
