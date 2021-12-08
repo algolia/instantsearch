@@ -22,6 +22,11 @@ module.exports = {
     'jest-watch-typeahead/testname',
   ],
   transformIgnorePatterns: ['node_modules/(?!(search-insights)/)'],
+  moduleNameMapper: {
+    // for es modules we import .js of TS files, which jest-resolve doesn't deal with by default
+    // to solve this, we strip the extension, and it can be resolved
+    '^(\\..*)\\.js$': '$1',
+  },
   globals: {
     __DEV__: true,
   },
