@@ -26,9 +26,9 @@ describe('Compat', () => {
         </InstantSearchCore>
       );
     }).toThrowErrorMatchingInlineSnapshot(`
-      "Hooks must be used inside the <InstantSearch /> component.
+      "Hooks must be used inside the <InstantSearch> component.
 
-      They are not compatible with the \`react-instantsearch-core\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch /> component from \`react-instantsearch-hooks\`."
+      They are not compatible with the \`react-instantsearch-core\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-hooks\`."
     `);
 
     jest.spyOn(console, 'error').mockRestore();

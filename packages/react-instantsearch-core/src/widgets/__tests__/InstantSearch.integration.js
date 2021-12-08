@@ -75,6 +75,7 @@ describe('metadata', () => {
 
     expect(JSON.parse(meta.content)).toMatchInlineSnapshot(`
       Object {
+        "ua": "Algolia for JavaScript (test)",
         "widgets": Array [
           Object {
             "displayName": "AlgoliaRefinementList",
@@ -105,7 +106,7 @@ describe('metadata', () => {
 
       mount(
         <InstantSearch
-          searchClient={createSearchClient({ _ua: 'user agent v3' })}
+          searchClient={{ _ua: 'user agent v3' }}
           indexName="root"
         />
       );
@@ -158,7 +159,7 @@ describe('metadata', () => {
       expect(document.head).toMatchInlineSnapshot(`
         <head>
           <meta
-            content="{\\"widgets\\":[]}"
+            content="{\\"ua\\":\\"Algolia for JavaScript (test)\\",\\"widgets\\":[]}"
             name="algolia:metadata"
           />
         </head>

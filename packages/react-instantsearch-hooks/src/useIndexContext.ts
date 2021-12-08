@@ -7,7 +7,7 @@ export function useIndexContext() {
 
   if (context === null) {
     throw new Error(
-      '`useIndexContext` must be used within `IndexContext.Provider`.'
+      'The <Index> component must be used within <InstantSearch>.'
     );
   }
 

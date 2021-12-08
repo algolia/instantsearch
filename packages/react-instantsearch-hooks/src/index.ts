@@ -1,6 +1,8 @@
 export { default as version } from './version';
 export * from './DynamicWidgets';
 export * from './InstantSearch';
+export * from './InstantSearchServerContext';
+export * from './InstantSearchSSRProvider';
 export * from './SearchIndex';
 export * from './useConfigure';
 export * from './useConnector';

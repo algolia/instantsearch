@@ -1,0 +1,446 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getServerState returns initialResults 1`] = `
+Object {
+  "instant_search": Object {
+    "results": Array [
+      Object {
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "hits": Array [],
+        "hitsPerPage": 20,
+        "index": "instant_search",
+        "nbHits": 0,
+        "nbPages": 0,
+        "page": 0,
+        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "processingTimeMS": 0,
+        "query": "",
+        "renderingContent": Object {
+          "facetOrdering": Object {
+            "facets": Object {
+              "order": Array [
+                "brand",
+                "hierarchicalCategories.lvl0",
+                "categories",
+              ],
+            },
+            "values": Object {
+              "brand": Object {
+                "sortRemainingBy": "count",
+              },
+              "categories": Object {
+                "sortRemainingBy": "count",
+              },
+              "hierarchicalCategories.lvl0": Object {
+                "sortRemainingBy": "count",
+              },
+            },
+          },
+        },
+        "userData": Array [
+          Object {
+            "banner": "https://banner.jpg",
+            "link": "https://banner.com/link/",
+            "title": "Banner title",
+          },
+        ],
+      },
+      Object {
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "hits": Array [],
+        "hitsPerPage": 20,
+        "index": "instant_search",
+        "nbHits": 0,
+        "nbPages": 0,
+        "page": 0,
+        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=brand",
+        "processingTimeMS": 0,
+        "query": "",
+        "renderingContent": Object {
+          "facetOrdering": Object {
+            "facets": Object {
+              "order": Array [
+                "brand",
+                "hierarchicalCategories.lvl0",
+                "categories",
+              ],
+            },
+            "values": Object {
+              "brand": Object {
+                "sortRemainingBy": "count",
+              },
+              "categories": Object {
+                "sortRemainingBy": "count",
+              },
+              "hierarchicalCategories.lvl0": Object {
+                "sortRemainingBy": "count",
+              },
+            },
+          },
+        },
+        "userData": Array [
+          Object {
+            "banner": "https://banner.jpg",
+            "link": "https://banner.com/link/",
+            "title": "Banner title",
+          },
+        ],
+      },
+    ],
+    "state": Object {
+      "disjunctiveFacets": Array [
+        "brand",
+      ],
+      "disjunctiveFacetsRefinements": Object {
+        "brand": Array [
+          "Apple",
+        ],
+      },
+      "facets": Array [],
+      "facetsExcludes": Object {},
+      "facetsRefinements": Object {},
+      "hierarchicalFacets": Array [],
+      "hierarchicalFacetsRefinements": Object {},
+      "highlightPostTag": "__/ais-highlight__",
+      "highlightPreTag": "__ais-highlight__",
+      "index": "instant_search",
+      "maxValuesPerFacet": 10,
+      "numericRefinements": Object {},
+      "query": "iphone",
+      "tagRefinements": Array [],
+    },
+  },
+  "instant_search_price_asc": Object {
+    "results": Array [
+      Object {
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "hits": Array [],
+        "hitsPerPage": 20,
+        "index": "instant_search_price_asc",
+        "nbHits": 0,
+        "nbPages": 0,
+        "page": 0,
+        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "processingTimeMS": 0,
+        "query": "",
+        "renderingContent": Object {
+          "facetOrdering": Object {
+            "facets": Object {
+              "order": Array [
+                "brand",
+                "hierarchicalCategories.lvl0",
+                "categories",
+              ],
+            },
+            "values": Object {
+              "brand": Object {
+                "sortRemainingBy": "count",
+              },
+              "categories": Object {
+                "sortRemainingBy": "count",
+              },
+              "hierarchicalCategories.lvl0": Object {
+                "sortRemainingBy": "count",
+              },
+            },
+          },
+        },
+        "userData": Array [
+          Object {
+            "banner": "https://banner.jpg",
+            "link": "https://banner.com/link/",
+            "title": "Banner title",
+          },
+        ],
+      },
+      Object {
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "hits": Array [],
+        "hitsPerPage": 20,
+        "index": "instant_search_price_asc",
+        "nbHits": 0,
+        "nbPages": 0,
+        "page": 0,
+        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=brand",
+        "processingTimeMS": 0,
+        "query": "",
+        "renderingContent": Object {
+          "facetOrdering": Object {
+            "facets": Object {
+              "order": Array [
+                "brand",
+                "hierarchicalCategories.lvl0",
+                "categories",
+              ],
+            },
+            "values": Object {
+              "brand": Object {
+                "sortRemainingBy": "count",
+              },
+              "categories": Object {
+                "sortRemainingBy": "count",
+              },
+              "hierarchicalCategories.lvl0": Object {
+                "sortRemainingBy": "count",
+              },
+            },
+          },
+        },
+        "userData": Array [
+          Object {
+            "banner": "https://banner.jpg",
+            "link": "https://banner.com/link/",
+            "title": "Banner title",
+          },
+        ],
+      },
+    ],
+    "state": Object {
+      "disjunctiveFacets": Array [
+        "brand",
+      ],
+      "disjunctiveFacetsRefinements": Object {
+        "brand": Array [
+          "Apple",
+        ],
+      },
+      "facets": Array [],
+      "facetsExcludes": Object {},
+      "facetsRefinements": Object {},
+      "hierarchicalFacets": Array [],
+      "hierarchicalFacetsRefinements": Object {},
+      "highlightPostTag": "__/ais-highlight__",
+      "highlightPreTag": "__ais-highlight__",
+      "index": "instant_search_price_asc",
+      "maxValuesPerFacet": 10,
+      "numericRefinements": Object {},
+      "query": "iphone",
+      "tagRefinements": Array [],
+    },
+  },
+  "instant_search_price_desc": Object {
+    "results": Array [
+      Object {
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "hits": Array [],
+        "hitsPerPage": 20,
+        "index": "instant_search_price_desc",
+        "nbHits": 0,
+        "nbPages": 0,
+        "page": 0,
+        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "processingTimeMS": 0,
+        "query": "",
+        "renderingContent": Object {
+          "facetOrdering": Object {
+            "facets": Object {
+              "order": Array [
+                "brand",
+                "hierarchicalCategories.lvl0",
+                "categories",
+              ],
+            },
+            "values": Object {
+              "brand": Object {
+                "sortRemainingBy": "count",
+              },
+              "categories": Object {
+                "sortRemainingBy": "count",
+              },
+              "hierarchicalCategories.lvl0": Object {
+                "sortRemainingBy": "count",
+              },
+            },
+          },
+        },
+        "userData": Array [
+          Object {
+            "banner": "https://banner.jpg",
+            "link": "https://banner.com/link/",
+            "title": "Banner title",
+          },
+        ],
+      },
+      Object {
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "hits": Array [],
+        "hitsPerPage": 20,
+        "index": "instant_search_price_desc",
+        "nbHits": 0,
+        "nbPages": 0,
+        "page": 0,
+        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=brand",
+        "processingTimeMS": 0,
+        "query": "",
+        "renderingContent": Object {
+          "facetOrdering": Object {
+            "facets": Object {
+              "order": Array [
+                "brand",
+                "hierarchicalCategories.lvl0",
+                "categories",
+              ],
+            },
+            "values": Object {
+              "brand": Object {
+                "sortRemainingBy": "count",
+              },
+              "categories": Object {
+                "sortRemainingBy": "count",
+              },
+              "hierarchicalCategories.lvl0": Object {
+                "sortRemainingBy": "count",
+              },
+            },
+          },
+        },
+        "userData": Array [
+          Object {
+            "banner": "https://banner.jpg",
+            "link": "https://banner.com/link/",
+            "title": "Banner title",
+          },
+        ],
+      },
+    ],
+    "state": Object {
+      "disjunctiveFacets": Array [
+        "brand",
+      ],
+      "disjunctiveFacetsRefinements": Object {
+        "brand": Array [
+          "Apple",
+        ],
+      },
+      "facets": Array [],
+      "facetsExcludes": Object {},
+      "facetsRefinements": Object {},
+      "hierarchicalFacets": Array [],
+      "hierarchicalFacetsRefinements": Object {},
+      "highlightPostTag": "__/ais-highlight__",
+      "highlightPreTag": "__ais-highlight__",
+      "index": "instant_search_price_desc",
+      "maxValuesPerFacet": 10,
+      "numericRefinements": Object {},
+      "query": "iphone",
+      "tagRefinements": Array [],
+    },
+  },
+  "instant_search_rating_desc": Object {
+    "results": Array [
+      Object {
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "hits": Array [],
+        "hitsPerPage": 20,
+        "index": "instant_search_rating_desc",
+        "nbHits": 0,
+        "nbPages": 0,
+        "page": 0,
+        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "processingTimeMS": 0,
+        "query": "",
+        "renderingContent": Object {
+          "facetOrdering": Object {
+            "facets": Object {
+              "order": Array [
+                "brand",
+                "hierarchicalCategories.lvl0",
+                "categories",
+              ],
+            },
+            "values": Object {
+              "brand": Object {
+                "sortRemainingBy": "count",
+              },
+              "categories": Object {
+                "sortRemainingBy": "count",
+              },
+              "hierarchicalCategories.lvl0": Object {
+                "sortRemainingBy": "count",
+              },
+            },
+          },
+        },
+        "userData": Array [
+          Object {
+            "banner": "https://banner.jpg",
+            "link": "https://banner.com/link/",
+            "title": "Banner title",
+          },
+        ],
+      },
+      Object {
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "hits": Array [],
+        "hitsPerPage": 20,
+        "index": "instant_search_rating_desc",
+        "nbHits": 0,
+        "nbPages": 0,
+        "page": 0,
+        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=brand",
+        "processingTimeMS": 0,
+        "query": "",
+        "renderingContent": Object {
+          "facetOrdering": Object {
+            "facets": Object {
+              "order": Array [
+                "brand",
+                "hierarchicalCategories.lvl0",
+                "categories",
+              ],
+            },
+            "values": Object {
+              "brand": Object {
+                "sortRemainingBy": "count",
+              },
+              "categories": Object {
+                "sortRemainingBy": "count",
+              },
+              "hierarchicalCategories.lvl0": Object {
+                "sortRemainingBy": "count",
+              },
+            },
+          },
+        },
+        "userData": Array [
+          Object {
+            "banner": "https://banner.jpg",
+            "link": "https://banner.com/link/",
+            "title": "Banner title",
+          },
+        ],
+      },
+    ],
+    "state": Object {
+      "disjunctiveFacets": Array [
+        "brand",
+      ],
+      "disjunctiveFacetsRefinements": Object {
+        "brand": Array [
+          "Apple",
+        ],
+      },
+      "facets": Array [],
+      "facetsExcludes": Object {},
+      "facetsRefinements": Object {},
+      "hierarchicalFacets": Array [],
+      "hierarchicalFacetsRefinements": Object {},
+      "highlightPostTag": "__/ais-highlight__",
+      "highlightPreTag": "__ais-highlight__",
+      "index": "instant_search_rating_desc",
+      "maxValuesPerFacet": 10,
+      "numericRefinements": Object {},
+      "query": "iphone",
+      "tagRefinements": Array [],
+    },
+  },
+}
+`;

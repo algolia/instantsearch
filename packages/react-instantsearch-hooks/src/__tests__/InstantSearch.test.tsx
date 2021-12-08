@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import React, { version as ReactVersion } from 'react';
 
 import { createSearchClient } from '../../../../test/mock';
@@ -14,6 +14,16 @@ import version from '../version';
 import type { UseRefinementListProps } from '../useRefinementList';
 import type { InstantSearch as InstantSearchType } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+
+function SearchBox() {
+  useSearchBox();
+  return null;
+}
+
+function RefinementList(props: UseRefinementListProps) {
+  useRefinementList(props);
+  return null;
+}
 
 describe('InstantSearch', () => {
   test('renders children', () => {
@@ -138,18 +148,6 @@ describe('InstantSearch', () => {
   test('triggers a single network request on mount with widgets', async () => {
     const searchClient = createSearchClient();
 
-    function SearchBox() {
-      useSearchBox();
-
-      return null;
-    }
-
-    function RefinementList(props: UseRefinementListProps) {
-      useRefinementList(props);
-
-      return null;
-    }
-
     render(
       <InstantSearch indexName="indexName" searchClient={searchClient}>
         <SearchBox />
@@ -164,6 +162,27 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
+  test('renders components and their lifecycles in StrictMode', async () => {
+    const searchClient = createSearchClient();
+
+    act(() => {
+      render(
+        <React.StrictMode>
+          <InstantSearch indexName="indexName" searchClient={searchClient}>
+            <SearchBox />
+            <Index indexName="subIndexName">
+              <RefinementList attribute="brand" />
+            </Index>
+          </InstantSearch>
+        </React.StrictMode>
+      );
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('experimental warning', () => {
     test('displays an experimental warning', () => {
       const searchClient = createSearchClient();
@@ -175,7 +194,7 @@ describe('InstantSearch', () => {
       }).toWarnDev(
         '[InstantSearch] This version is experimental and not production-ready.\n\n' +
           'Please report any bugs at https://github.com/algolia/react-instantsearch/issues/new?template=Bug_report_Hooks.md&labels=Scope%3A%20Hooks\n\n' +
-          '(To disable this warning, pass `suppressExperimentalWarning` to <InstantSearch />.)'
+          '(To disable this warning, pass `suppressExperimentalWarning` to <InstantSearch>.)'
       );
     });
 

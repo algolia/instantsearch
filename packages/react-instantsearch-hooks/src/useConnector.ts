@@ -1,8 +1,10 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { useIndexContext } from './useIndexContext';
 import { useInstantSearchContext } from './useInstantSearchContext';
+import { useInstantSearchServerContext } from './useInstantSearchServerContext';
 import { useStableValue } from './useStableValue';
+import { useIsomorphicLayoutEffect } from './utils';
 import { createSearchResults } from './utils/createSearchResults';
 
 import type { Connector, WidgetDescription } from 'instantsearch.js';
@@ -14,6 +16,7 @@ export function useConnector<
   connector: Connector<TDescription, TProps>,
   props: TProps = {} as TProps
 ): TDescription['renderState'] {
+  const serverContext = useInstantSearchServerContext();
   const search = useInstantSearchContext();
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
@@ -56,8 +59,16 @@ export function useConnector<
       }
     );
 
-    return createWidget(stableProps);
-  }, [stableProps, connector]);
+    const instance = createWidget(stableProps);
+
+    // On the server, we add the widget early in the memo to retrieve its search
+    // parameters in the render pass.
+    if (serverContext) {
+      parentIndex.addWidgets([instance]);
+    }
+
+    return instance;
+  }, [connector, parentIndex, serverContext, stableProps]);
 
   const [state, setState] = useState<TDescription['renderState']>(() => {
     if (widget.getWidgetRenderState) {
@@ -75,7 +86,7 @@ export function useConnector<
 
           return {
             ...scopedResult,
-            // We avoid all `results` being `null`.
+            // We keep `results` from being `null`.
             results: scopedResult.results || fallbackResults,
           };
         });
@@ -104,9 +115,9 @@ export function useConnector<
     return {};
   });
 
-  // We use a layout effect to add the widget to the index before the index
-  // renders, otherwise it triggers 2 network requests.
-  useLayoutEffect(() => {
+  // Using a layout effect adds the widget at the same time as rendering, which
+  // triggers a single network request, instead of two with a regular effect.
+  useIsomorphicLayoutEffect(() => {
     parentIndex.addWidgets([widget]);
 
     return () => {

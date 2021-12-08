@@ -47,7 +47,8 @@ function createInstantSearchMock() {
       <InstantSearch {...props}>
         <IndexContext.Consumer>
           {(value) => {
-            (indexContextRef as any).current = value!;
+            // @ts-ignore `React.RefObject` is typed as immutable
+            indexContextRef.current = value!;
 
             return (
               <IndexContext.Provider value={value}>

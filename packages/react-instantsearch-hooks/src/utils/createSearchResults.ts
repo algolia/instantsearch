@@ -2,8 +2,8 @@ import algoliasearchHelper from 'algoliasearch-helper';
 
 import type { SearchParameters } from 'algoliasearch-helper';
 
-export function createSearchResults(state: SearchParameters) {
-  return new algoliasearchHelper.SearchResults(state, [
+export function createSearchResults<THit>(state: SearchParameters) {
+  return new algoliasearchHelper.SearchResults<THit>(state, [
     {
       query: state.query ?? '',
       page: state.page ?? 0,
