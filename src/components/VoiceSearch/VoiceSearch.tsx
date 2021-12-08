@@ -7,7 +7,7 @@ import type {
   VoiceSearchCSSClasses,
   VoiceSearchTemplates,
 } from '../../widgets/voice-search/voice-search.js';
-import type { VoiceListeningState } from '../../lib/voiceSearchHelper/types/index.js';
+import type { VoiceListeningState } from '../../lib/voiceSearchHelper/types.js';
 import type { ComponentCSSClasses } from '../../types/index.js';
 
 export type VoiceSearchComponentCSSClasses =

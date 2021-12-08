@@ -3,7 +3,7 @@ import type { UiState } from '../../../types/index.js';
 import { noop } from '../../utils/index.js';
 import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 import instantsearch from '../../../index.js';
-import { simple } from '../../stateMappings.js';
+import { simple } from '../../stateMappings/index.js';
 
 jest.useFakeTimers();
 

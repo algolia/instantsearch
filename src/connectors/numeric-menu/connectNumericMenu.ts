@@ -17,7 +17,7 @@ import type {
   AlgoliaSearchHelper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type { InsightsEvent } from '../../middlewares.js';
+import type { InsightsEvent } from '../../middlewares/index.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'numeric-menu',

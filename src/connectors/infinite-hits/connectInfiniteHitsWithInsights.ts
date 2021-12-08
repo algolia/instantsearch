@@ -1,4 +1,4 @@
-import { withInsights } from '../../lib/insights.js';
+import { withInsights } from '../../lib/insights/index.js';
 import type {
   InfiniteHitsWidgetDescription,
   InfiniteHitsConnectorParams,

@@ -9,7 +9,10 @@ import type {
   PanelSharedOptions,
   PanelTemplates,
 } from '../../widgets/panel/panel.js';
-import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types/index.js';
+import type {
+  ComponentCSSClasses,
+  UnknownWidgetFactory,
+} from '../../types/index.js';
 
 export type PanelComponentCSSClasses = ComponentCSSClasses<
   // `collapseIcon` is only used in the default templates of the widget

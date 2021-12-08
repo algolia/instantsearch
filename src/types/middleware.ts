@@ -1,6 +1,6 @@
 import type InstantSearch from '../lib/InstantSearch.js';
 import type { UiState } from './ui-state.js';
-import type { AtLeastOne } from './utils/index.js';
+import type { AtLeastOne } from './utils.js';
 
 export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
   onStateChange(options: { uiState: TUiState }): void;

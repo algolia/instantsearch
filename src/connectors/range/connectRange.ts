@@ -12,8 +12,12 @@ import {
   find,
   noop,
 } from '../../lib/utils/index.js';
-import type { InsightsEvent } from '../../middlewares.js';
-import type { Connector, InstantSearch, WidgetRenderState } from '../../types/index.js';
+import type { InsightsEvent } from '../../middlewares/index.js';
+import type {
+  Connector,
+  InstantSearch,
+  WidgetRenderState,
+} from '../../types/index.js';
 
 const withUsage = createDocumentationMessageGenerator(
   { name: 'range-input', connector: true },

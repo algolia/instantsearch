@@ -16,7 +16,11 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils/index.js';
 import { component } from '../../lib/suit.js';
-import type { Renderer, TransformItems, WidgetFactory } from '../../types/index.js';
+import type {
+  Renderer,
+  TransformItems,
+  WidgetFactory,
+} from '../../types/index.js';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'sort-by' });
 const suit = component('SortBy');

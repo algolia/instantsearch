@@ -5,11 +5,11 @@ import {
   noop,
 } from '../../lib/utils/index.js';
 import type { Connector, WidgetRenderState } from '../../types/index.js';
-import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper.js';
+import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper/index.js';
 import type {
   CreateVoiceSearchHelper,
   VoiceListeningState,
-} from '../../lib/voiceSearchHelper/types/index.js';
+} from '../../lib/voiceSearchHelper/types.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',

@@ -1,5 +1,8 @@
 import type { WidgetFactory } from '../../types/index.js';
-import { createDocumentationMessageGenerator, noop } from '../../lib/utils/index.js';
+import {
+  createDocumentationMessageGenerator,
+  noop,
+} from '../../lib/utils/index.js';
 import type {
   ParamTrackedFilters,
   ParamTransformRuleContexts,

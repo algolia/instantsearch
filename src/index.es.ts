@@ -9,8 +9,8 @@ import {
   reverseHighlight,
   insights,
   getInsightsAnonymousUserToken,
-} from './helpers.js';
-import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache.js';
+} from './helpers/index.js';
+import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index.js';
 import { deprecate } from './lib/utils/index.js';
 
 type InstantSearchModule = {

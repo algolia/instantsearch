@@ -13,7 +13,11 @@ import type {
 } from '../SearchBox/SearchBox.js';
 import SearchBox from '../SearchBox/SearchBox.js';
 import type { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu.js';
-import type { ComponentCSSClasses, CreateURL, Templates } from '../../types/index.js';
+import type {
+  ComponentCSSClasses,
+  CreateURL,
+  Templates,
+} from '../../types/index.js';
 import type { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list.js';
 import type { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu.js';
 import type { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu.js';

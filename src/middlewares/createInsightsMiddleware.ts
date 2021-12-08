@@ -4,7 +4,7 @@ import type {
   InternalMiddleware,
   Hit,
 } from '../types/index.js';
-import { getInsightsAnonymousUserTokenInternal } from '../helpers.js';
+import { getInsightsAnonymousUserTokenInternal } from '../helpers/index.js';
 import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils/index.js';
 import connectConfigure from '../connectors/configure/connectConfigure.js';
 

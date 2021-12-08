@@ -1,5 +1,5 @@
 import instantsearch from '../../index.es.js';
-import { createInsightsMiddleware } from '../.js';
+import { createInsightsMiddleware } from '../index.js';
 import {
   createInsights,
   createInsightsUmdVersion,

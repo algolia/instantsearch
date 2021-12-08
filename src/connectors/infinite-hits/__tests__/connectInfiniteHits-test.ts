@@ -12,7 +12,10 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget.js';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils/index.js';
+import {
+  TAG_PLACEHOLDER,
+  deserializePayload,
+} from '../../../lib/utils/index.js';
 import connectInfiniteHits from '../connectInfiniteHits.js';
 import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 

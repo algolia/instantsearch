@@ -14,7 +14,11 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils/index.js';
 import { component } from '../../lib/suit.js';
-import type { ComponentCSSClasses, Renderer, WidgetFactory } from '../../types/index.js';
+import type {
+  ComponentCSSClasses,
+  Renderer,
+  WidgetFactory,
+} from '../../types/index.js';
 
 export type CurrentRefinementsCSSClasses = Partial<{
   /**

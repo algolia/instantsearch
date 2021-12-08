@@ -1,4 +1,9 @@
-import type { InstantSearch, Hit, Hits, EscapedHits } from '../../types/index.js';
+import type {
+  InstantSearch,
+  Hit,
+  Hits,
+  EscapedHits,
+} from '../../types/index.js';
 import { serializePayload } from '../../lib/utils/serializer.js';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware.js';
 

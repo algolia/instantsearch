@@ -19,7 +19,7 @@ import index from '../index.js';
 import { warning } from '../../../lib/utils/index.js';
 import { refinementList } from '../../index.js';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import { connectHits } from '../../../connectors.js';
+import { connectHits } from '../../../connectors/index.js';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>

@@ -82,7 +82,7 @@ module.exports = {
       },
     },
     {
-      files: ['src/**/*.ts', 'src/**/*.tsx'],
+      files: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js'],
       rules: {
         'import/extensions': ['error', 'ignorePackages'],
         // conflicts with import/extensions

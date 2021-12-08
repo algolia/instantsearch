@@ -1,5 +1,8 @@
-import { withInsights } from '../../lib/insights.js';
-import type { HitsConnectorParams, HitsWidgetDescription } from './connectHits.js';
+import { withInsights } from '../../lib/insights/index.js';
+import type {
+  HitsConnectorParams,
+  HitsWidgetDescription,
+} from './connectHits.js';
 import connectHits from './connectHits.js';
 import type { Connector } from '../../types/index.js';
 

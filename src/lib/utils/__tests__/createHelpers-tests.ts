@@ -1,6 +1,6 @@
 import renderTemplate from '../renderTemplate.js';
 import createHelpers from '../../createHelpers.js';
-import { insights } from '../../../helpers.js';
+import { insights } from '../../../helpers/index.js';
 
 describe('insights hogan helper', () => {
   const helpers = createHelpers({ numberLocale: 'en-US' });

@@ -2,8 +2,11 @@
 
 import { h } from 'preact';
 import { shallow, mount } from '../../../../test/utils/enzyme.js';
-import { highlight } from '../../../helpers.js';
-import { prepareTemplateProps, TAG_REPLACEMENT } from '../../../lib/utils/index.js';
+import { highlight } from '../../../helpers/index.js';
+import {
+  prepareTemplateProps,
+  TAG_REPLACEMENT,
+} from '../../../lib/utils/index.js';
 import Template from '../../Template/Template.js';
 import type { HitsProps } from '../Hits.js';
 import Hits from '../Hits.js';

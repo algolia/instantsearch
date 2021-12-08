@@ -6,7 +6,7 @@ import type {
   CreateVoiceSearchHelper,
   Status,
   VoiceListeningState,
-} from './types/index.js';
+} from './types.js';
 
 const createVoiceSearchHelper: CreateVoiceSearchHelper =
   function createVoiceSearchHelper({

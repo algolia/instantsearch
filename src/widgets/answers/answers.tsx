@@ -2,7 +2,12 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import type { WidgetFactory, Template, Hit, Renderer } from '../../types/index.js';
+import type {
+  WidgetFactory,
+  Template,
+  Hit,
+  Renderer,
+} from '../../types/index.js';
 import defaultTemplates from './defaultTemplates.js';
 import {
   createDocumentationMessageGenerator,

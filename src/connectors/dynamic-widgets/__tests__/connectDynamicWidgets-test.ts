@@ -1,5 +1,5 @@
 import { connectMenu, connectDynamicWidgets } from '../../index.js';
-import { index } from '../../../widgets.js';
+import { index } from '../../../widgets/index.js';
 import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer.js';
 import {
   createDisposeOptions,

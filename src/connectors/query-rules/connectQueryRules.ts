@@ -2,7 +2,11 @@ import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type { Connector, TransformItems, WidgetRenderState } from '../../types/index.js';
+import type {
+  Connector,
+  TransformItems,
+  WidgetRenderState,
+} from '../../types/index.js';
 import {
   checkRendering,
   createDocumentationMessageGenerator,

@@ -21,7 +21,7 @@ import type {
 import VoiceSearchComponent from '../../components/VoiceSearch/VoiceSearch.js';
 import defaultTemplates from './defaultTemplates.js';
 import type { WidgetFactory, Template, Renderer } from '../../types/index.js';
-import type { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types/index.js';
+import type { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types.js';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');

@@ -15,7 +15,7 @@ import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
 import type { Widget } from '../../../types/index.js';
 import type { VoiceSearchWidgetParams } from '../voice-search.js';
 import voiceSearch from '../voice-search.js';
-import type { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types/index.js';
+import type { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types.js';
 import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch.js';
 
 const render = castToJestMock(preactRender);

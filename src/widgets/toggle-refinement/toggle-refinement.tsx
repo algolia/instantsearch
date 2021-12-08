@@ -20,7 +20,11 @@ import {
   prepareTemplateProps,
   createDocumentationMessageGenerator,
 } from '../../lib/utils/index.js';
-import type { RendererOptions, Template, WidgetFactory } from '../../types/index.js';
+import type {
+  RendererOptions,
+  Template,
+  WidgetFactory,
+} from '../../types/index.js';
 import { component } from '../../lib/suit.js';
 import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 

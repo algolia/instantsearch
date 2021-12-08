@@ -3,14 +3,14 @@ import type {
   ReverseHighlightOptions,
   SnippetOptions,
   ReverseSnippetOptions,
-} from '../helpers.js';
+} from '../helpers/index.js';
 import {
   highlight,
   reverseHighlight,
   snippet,
   reverseSnippet,
   insights,
-} from '../helpers.js';
+} from '../helpers/index.js';
 import type {
   Hit,
   HoganHelpers,

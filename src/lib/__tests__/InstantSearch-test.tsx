@@ -5,8 +5,8 @@ import { h, render, createRef } from 'preact';
 import originalHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch.js';
 import version from '../version.js';
-import { connectSearchBox, connectPagination } from '../../connectors.js';
-import { index } from '../../widgets.js';
+import { connectSearchBox, connectPagination } from '../../connectors/index.js';
+import { index } from '../../widgets/index.js';
 import { noop, warning } from '../utils/index.js';
 import {
   createSearchClient,

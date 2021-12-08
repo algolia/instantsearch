@@ -2,7 +2,10 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils/index.js';
+import {
+  TAG_PLACEHOLDER,
+  deserializePayload,
+} from '../../../lib/utils/index.js';
 import connectHits from '../connectHits.js';
 import {
   createDisposeOptions,

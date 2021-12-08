@@ -4,8 +4,14 @@ import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template.js';
 import type { SearchResults } from 'algoliasearch-helper';
-import type { BindEventForHits, SendEventForHits } from '../../lib/utils/index.js';
-import type { ComponentCSSClasses, Hits as HitsArray } from '../../types/index.js';
+import type {
+  BindEventForHits,
+  SendEventForHits,
+} from '../../lib/utils/index.js';
+import type {
+  ComponentCSSClasses,
+  Hits as HitsArray,
+} from '../../types/index.js';
 import type { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits.js';
 import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 

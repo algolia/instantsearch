@@ -1,8 +1,8 @@
 import { getByText, fireEvent } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es.js';
-import { hits, configure } from '../../.js';
-import { createInsightsMiddleware } from '../../../middlewares.js';
+import { hits, configure } from '../../index.js';
+import { createInsightsMiddleware } from '../../../middlewares/index.js';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 import { wait } from '../../../../test/utils/wait.js';
 

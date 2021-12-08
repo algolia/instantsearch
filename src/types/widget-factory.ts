@@ -1,4 +1,8 @@
-import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget.js';
+import type {
+  UnknownWidgetParams,
+  Widget,
+  WidgetDescription,
+} from './widget.js';
 
 /**
  * The function that creates a new widget.

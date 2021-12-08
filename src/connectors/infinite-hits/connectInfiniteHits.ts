@@ -11,7 +11,10 @@ import type {
   Hit,
   WidgetRenderState,
 } from '../../types/index.js';
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils/index.js';
+import type {
+  SendEventForHits,
+  BindEventForHits,
+} from '../../lib/utils/index.js';
 import {
   escapeHits,
   TAG_PLACEHOLDER,

@@ -20,7 +20,10 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils/index.js';
 import { component } from '../../lib/suit.js';
-import { withInsights, withInsightsListener } from '../../lib/insights.js';
+import {
+  withInsights,
+  withInsightsListener,
+} from '../../lib/insights/index.js';
 import type {
   Template,
   TemplateWithBindEvent,

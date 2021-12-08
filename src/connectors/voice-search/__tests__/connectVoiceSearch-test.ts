@@ -9,7 +9,7 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient.js'
 import type {
   VoiceSearchHelperParams,
   VoiceSearchHelper,
-} from '../../../lib/voiceSearchHelper/types/index.js';
+} from '../../../lib/voiceSearchHelper/types.js';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
   const createVoiceHelper = ({

@@ -5,7 +5,13 @@ import { createMetadataMiddleware } from '../index.js';
 import { createSearchClient } from '../../../test/mock/createSearchClient.js';
 import { wait } from '../../../test/utils/wait.js';
 import instantsearch from '../../index.js';
-import { configure, hits, index, pagination, searchBox } from '../../widgets.js';
+import {
+  configure,
+  hits,
+  index,
+  pagination,
+  searchBox,
+} from '../../widgets/index.js';
 import { isMetadataEnabled } from '../createMetadataMiddleware.js';
 
 declare global {

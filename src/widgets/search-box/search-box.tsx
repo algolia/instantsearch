@@ -7,7 +7,11 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils/index.js';
 import { component } from '../../lib/suit.js';
-import type { WidgetFactory, Template, RendererOptions } from '../../types/index.js';
+import type {
+  WidgetFactory,
+  Template,
+  RendererOptions,
+} from '../../types/index.js';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,

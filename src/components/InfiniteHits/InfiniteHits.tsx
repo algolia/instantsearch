@@ -9,7 +9,10 @@ import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
 } from '../../widgets/infinite-hits/infinite-hits.js';
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils/index.js';
+import type {
+  SendEventForHits,
+  BindEventForHits,
+} from '../../lib/utils/index.js';
 
 export type InfiniteHitsComponentCSSClasses =
   ComponentCSSClasses<InfiniteHitsCSSClasses>;

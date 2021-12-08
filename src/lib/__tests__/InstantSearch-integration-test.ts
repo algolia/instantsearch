@@ -1,7 +1,7 @@
 import { getByText, fireEvent } from '@testing-library/dom';
 import instantsearch from '../../index.es.js';
-import { configure, searchBox } from '../../widgets.js';
-import { connectConfigure } from '../../connectors.js';
+import { configure, searchBox } from '../../widgets/index.js';
+import { connectConfigure } from '../../connectors/index.js';
 import { createSearchClient } from '../../../test/mock/createSearchClient.js';
 import type { MiddlewareDefinition } from '../../types/index.js';
 import { wait } from '../../../test/utils/wait.js';

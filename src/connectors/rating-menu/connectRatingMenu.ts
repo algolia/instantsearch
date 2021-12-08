@@ -16,7 +16,7 @@ import type {
   CreateURL,
   WidgetRenderState,
 } from '../../types/index.js';
-import type { InsightsEvent } from '../../middlewares.js';
+import type { InsightsEvent } from '../../middlewares/index.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'rating-menu',
