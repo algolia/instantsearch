@@ -15,7 +15,7 @@
 
 
 
-# [6.15.0](https://github.com/algolia/react-instantsearch/compare/v6.13.0...v6.15.0) (2021-10-27)
+# [6.15.0](https://github.com/algolia/react-instantsearch/compare/v6.14.0...v6.15.0) (2021-10-27)
 
 
 ### Bug Fixes
