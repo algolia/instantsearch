@@ -12,7 +12,7 @@ const examplesPath = path.join(__dirname, '..', 'examples');
 {
   // Update React InstantSearch DOM
   const examples = glob.sync(
-    path.join(examplesPath, '!((react-native|hooks)*)')
+    path.join(examplesPath, '!((react-native|hooks|hooks-server)*)')
   );
 
   examples.forEach((example) => {

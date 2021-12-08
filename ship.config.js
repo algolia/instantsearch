@@ -53,9 +53,6 @@ module.exports = {
     // We update the Hooks and Hooks Server package dependency in the example because Lerna doesn't
     // and releasing fails because the Hooks Server package has not yet been released on npm.
     exec(
-      `yarn workspace hooks-ssr-example upgrade react-instantsearch-hooks@${version}`
-    );
-    exec(
       `yarn workspace hooks-ssr-example upgrade react-instantsearch-hooks-server@${version}`
     );
   },
