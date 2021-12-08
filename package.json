@@ -25,7 +25,7 @@
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd && yarn run build:types",
     "build:umd": "rm -rf dist && BABEL_ENV=umd rollup --config scripts/rollup/config.js",
     "build:cjs": "rm -rf cjs && BABEL_ENV=cjs babel src --extensions '.js,.ts,.tsx' --out-dir cjs/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet",
-    "build:es": "rm -rf es && BABEL_ENV=es babel src --extensions '.js,.ts,.tsx' --out-dir es/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet && BABEL_ENV=es babel src/index.es.ts --out-file es/index.js --quiet",
+    "build:es": "rm -rf es && BABEL_ENV=es babel src --extensions '.js,.ts,.tsx' --out-dir es/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet && BABEL_ENV=es babel src/index.es.ts --out-file es/index.js --quiet && echo '{\"type\":\"module\"}' > es/package.json",
     "build:types": "./scripts/typescript/extract.js",
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "storybook": "start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
