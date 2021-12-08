@@ -1,6 +1,6 @@
 {
-  "name": "example-hooks-ssr",
-  "version": "1.0.0",
+  "name": "hooks-ssr-example",
+  "version": "6.16.0",
   "private": true,
   "license": "MIT",
   "scripts": {
