@@ -1,4 +1,4 @@
-import instantsearch from '..';
+import instantsearch from '../index.js';
 
 describe('instantsearch()', () => {
   it('includes a version', () => {

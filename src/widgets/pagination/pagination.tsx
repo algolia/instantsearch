@@ -5,20 +5,20 @@ import cx from 'classnames';
 import type {
   PaginationComponentCSSClasses,
   PaginationComponentTemplates,
-} from '../../components/Pagination/Pagination';
-import Pagination from '../../components/Pagination/Pagination';
+} from '../../components/Pagination/Pagination.js';
+import Pagination from '../../components/Pagination/Pagination.js';
 import type {
   PaginationConnectorParams,
   PaginationRenderState,
   PaginationWidgetDescription,
-} from '../../connectors/pagination/connectPagination';
-import connectPagination from '../../connectors/pagination/connectPagination';
+} from '../../connectors/pagination/connectPagination.js';
+import connectPagination from '../../connectors/pagination/connectPagination.js';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { Renderer, WidgetFactory } from '../../types';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
+import type { Renderer, WidgetFactory } from '../../types/index.js';
 
 const suit = component('Pagination');
 const withUsage = createDocumentationMessageGenerator({ name: 'pagination' });

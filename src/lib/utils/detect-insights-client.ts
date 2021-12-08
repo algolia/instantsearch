@@ -1,4 +1,4 @@
-import { safelyRunOnBrowser } from './safelyRunOnBrowser';
+import { safelyRunOnBrowser } from './safelyRunOnBrowser.js';
 
 export default function hasDetectedInsightsClient(): boolean {
   return safelyRunOnBrowser<boolean>(

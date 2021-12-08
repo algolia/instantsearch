@@ -6,15 +6,15 @@ import type {
   NumericMenuConnectorParamsItem,
   NumericMenuRenderState,
   NumericMenuRenderStateItem,
-} from '../connectNumericMenu';
-import connectNumericMenu from '../connectNumericMenu';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+} from '../connectNumericMenu.js';
+import connectNumericMenu from '../connectNumericMenu.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+} from '../../../../test/mock/createWidget.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 
 const encodeValue = (
   start: NumericMenuConnectorParamsItem['start'],

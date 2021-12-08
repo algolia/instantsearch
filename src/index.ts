@@ -1,17 +1,17 @@
-import type { InstantSearchOptions } from './lib/InstantSearch';
-import InstantSearch from './lib/InstantSearch';
-import type { Expand, UiState } from './types';
+import type { InstantSearchOptions } from './lib/InstantSearch.js';
+import InstantSearch from './lib/InstantSearch.js';
+import type { Expand, UiState } from './types/index.js';
 
-import version from './lib/version';
+import version from './lib/version.js';
 
-import * as connectors from './connectors/index';
-import * as widgets from './widgets/index';
-import * as helpers from './helpers/index';
-import * as middlewares from './middlewares/index';
+import * as connectors from './connectors/index.js';
+import * as widgets from './widgets/index.js';
+import * as helpers from './helpers/index.js';
+import * as middlewares from './middlewares/index.js';
 
-import * as routers from './lib/routers/index';
-import * as stateMappings from './lib/stateMappings/index';
-import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
+import * as routers from './lib/routers/index.js';
+import * as stateMappings from './lib/stateMappings/index.js';
+import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index.js';
 
 type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(

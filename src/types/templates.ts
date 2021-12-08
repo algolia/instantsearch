@@ -1,4 +1,4 @@
-import type { BindEventForHits } from '../lib/utils';
+import type { BindEventForHits } from '../lib/utils/index.js';
 
 export type Template<TTemplateData = void> =
   | string

@@ -3,17 +3,17 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import type { SortByRenderState } from '../connectSortBy';
-import connectSortBy from '../connectSortBy';
-import index from '../../../widgets/index/index';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import type { SortByRenderState } from '../connectSortBy.js';
+import connectSortBy from '../connectSortBy.js';
+import index from '../../../widgets/index/index.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+} from '../../../../test/mock/createWidget.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 
 describe('connectSortBy', () => {
   describe('Usage', () => {

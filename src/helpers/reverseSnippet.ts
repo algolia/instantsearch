@@ -1,12 +1,12 @@
-import type { Hit } from '../types';
+import type { Hit } from '../types/index.js';
 import {
   TAG_REPLACEMENT,
   getPropertyByPath,
   getHighlightedParts,
   reverseHighlightedParts,
   concatHighlightedParts,
-} from '../lib/utils';
-import { component } from '../lib/suit';
+} from '../lib/utils/index.js';
+import { component } from '../lib/suit.js';
 
 export type ReverseSnippetOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path

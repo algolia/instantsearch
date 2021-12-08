@@ -1,11 +1,11 @@
 import jsHelper from 'algoliasearch-helper';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import connectPoweredBy from '../connectPoweredBy';
+} from '../../../../test/mock/createWidget.js';
+import connectPoweredBy from '../connectPoweredBy.js';
 
 describe('connectPoweredBy', () => {
   it('throws without rendering function', () => {

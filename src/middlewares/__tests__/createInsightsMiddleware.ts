@@ -1,11 +1,11 @@
-import instantsearch from '../../index.es';
-import { createInsightsMiddleware } from '../';
+import instantsearch from '../../index.es.js';
+import { createInsightsMiddleware } from '../.js';
 import {
   createInsights,
   createInsightsUmdVersion,
-} from '../../../test/mock/createInsightsClient';
-import { createSearchClient } from '../../../test/mock/createSearchClient';
-import { warning } from '../../lib/utils';
+} from '../../../test/mock/createInsightsClient.js';
+import { createSearchClient } from '../../../test/mock/createSearchClient.js';
+import { warning } from '../../lib/utils/index.js';
 
 describe('insights', () => {
   const searchClientWithCredentials = createSearchClient({

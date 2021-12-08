@@ -1,14 +1,14 @@
 import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
-import searchBox from '../search-box';
+import searchBox from '../search-box.js';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliaSearchHelper from 'algoliasearch-helper';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
+} from '../../../../test/mock/createWidget.js';
 
 const render = castToJestMock(preactRender);
 

@@ -1,14 +1,14 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import Template from '../Template/Template';
+import Template from '../Template/Template.js';
 
 import type {
   VoiceSearchCSSClasses,
   VoiceSearchTemplates,
-} from '../../widgets/voice-search/voice-search';
-import type { VoiceListeningState } from '../../lib/voiceSearchHelper/types';
-import type { ComponentCSSClasses } from '../../types';
+} from '../../widgets/voice-search/voice-search.js';
+import type { VoiceListeningState } from '../../lib/voiceSearchHelper/types/index.js';
+import type { ComponentCSSClasses } from '../../types/index.js';
 
 export type VoiceSearchComponentCSSClasses =
   ComponentCSSClasses<VoiceSearchCSSClasses>;

@@ -1,4 +1,4 @@
-import reverseHighlightedParts from '../reverseHighlightedParts';
+import reverseHighlightedParts from '../reverseHighlightedParts.js';
 
 describe('reverseHighlightedParts', () => {
   test('returns reversed HighlightedParts with a single match', () => {

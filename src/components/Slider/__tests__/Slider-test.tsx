@@ -1,9 +1,9 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from '../../../../test/utils/enzyme';
-import type { SliderProps } from '../Slider';
-import Slider from '../Slider';
+import { shallow } from '../../../../test/utils/enzyme.js';
+import type { SliderProps } from '../Slider.js';
+import Slider from '../Slider.js';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {

@@ -1,4 +1,4 @@
-import createInfiniteHitsSessionStorageCache from '../sessionStorage';
+import createInfiniteHitsSessionStorageCache from '../sessionStorage.js';
 
 const KEY = 'ais.infiniteHits';
 

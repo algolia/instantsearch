@@ -1,9 +1,9 @@
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import algoliaPlaces from 'places.js';
-import places from '../places';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createInitOptions } from '../../../../test/mock/createWidget';
-import type { SearchClient } from '../../../types';
+import places from '../places.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createInitOptions } from '../../../../test/mock/createWidget.js';
+import type { SearchClient } from '../../../types/index.js';
 
 jest.mock('places.js', () => {
   const module = jest.fn(() => {

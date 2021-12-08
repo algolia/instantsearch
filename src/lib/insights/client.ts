@@ -4,14 +4,14 @@ import {
   find,
   createDocumentationMessageGenerator,
   warning,
-} from '../utils';
+} from '../utils/index.js';
 import type {
   Hits,
   InsightsClient,
   InsightsClientMethod,
   InsightsClientPayload,
   Connector,
-} from '../../types';
+} from '../../types/index.js';
 
 const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
   return selectedObjectIDs.map((objectID) => {

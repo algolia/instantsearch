@@ -4,22 +4,22 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
 import {
   createWidget,
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../test/mock/createWidget';
-import { wait } from '../../../../test/utils/wait';
-import type { Widget } from '../../../types';
-import InstantSearch from '../../../lib/InstantSearch';
-import index from '../index';
-import { warning } from '../../../lib/utils';
-import { refinementList } from '../..';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { connectHits } from '../../../connectors';
+} from '../../../../test/mock/createWidget.js';
+import { wait } from '../../../../test/utils/wait.js';
+import type { Widget } from '../../../types/index.js';
+import InstantSearch from '../../../lib/InstantSearch.js';
+import index from '../index.js';
+import { warning } from '../../../lib/utils/index.js';
+import { refinementList } from '../../index.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { connectHits } from '../../../connectors.js';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>

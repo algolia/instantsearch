@@ -2,7 +2,7 @@ import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type { Connector, TransformItems, WidgetRenderState } from '../../types';
+import type { Connector, TransformItems, WidgetRenderState } from '../../types/index.js';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -10,11 +10,11 @@ import {
   getRefinements,
   isEqual,
   noop,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 import type {
   Refinement as InternalRefinement,
   NumericRefinement as InternalNumericRefinement,
-} from '../../lib/utils/getRefinements';
+} from '../../lib/utils/getRefinements.js';
 
 type TrackedFilterRefinement = string | number | boolean;
 

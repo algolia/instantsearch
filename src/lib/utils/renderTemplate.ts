@@ -1,7 +1,7 @@
 import type { HoganOptions, Template } from 'hogan.js';
 import hogan from 'hogan.js';
-import type { Templates, HoganHelpers } from '../../types';
-import type { BindEventForHits } from './createSendEventForHits';
+import type { Templates, HoganHelpers } from '../../types/index.js';
+import type { BindEventForHits } from './createSendEventForHits.js';
 
 type TransformedHoganHelpers = {
   [helper: string]: () => (text: string) => string;

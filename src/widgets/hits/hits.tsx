@@ -6,21 +6,21 @@ import type {
   HitsConnectorParams,
   HitsRenderState,
   HitsWidgetDescription,
-} from '../../connectors/hits/connectHits';
-import connectHits from '../../connectors/hits/connectHits';
+} from '../../connectors/hits/connectHits.js';
+import connectHits from '../../connectors/hits/connectHits.js';
 import type {
   HitsComponentCSSClasses,
   HitsComponentTemplates,
-} from '../../components/Hits/Hits';
-import Hits from '../../components/Hits/Hits';
-import defaultTemplates from './defaultTemplates';
+} from '../../components/Hits/Hits.js';
+import Hits from '../../components/Hits/Hits.js';
+import defaultTemplates from './defaultTemplates.js';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import { withInsights, withInsightsListener } from '../../lib/insights';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
+import { withInsights, withInsightsListener } from '../../lib/insights.js';
 import type {
   Template,
   TemplateWithBindEvent,
@@ -28,9 +28,9 @@ import type {
   WidgetFactory,
   Renderer,
   InsightsClient,
-} from '../../types';
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+} from '../../types/index.js';
+import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware.js';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');

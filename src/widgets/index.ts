@@ -1,42 +1,42 @@
-export { default as analytics } from './analytics/analytics';
-export { default as breadcrumb } from './breadcrumb/breadcrumb';
-export { default as clearRefinements } from './clear-refinements/clear-refinements';
-export { default as configure } from './configure/configure';
-export { default as currentRefinements } from './current-refinements/current-refinements';
-export { default as EXPERIMENTAL_answers } from './answers/answers';
-export { default as EXPERIMENTAL_configureRelatedItems } from './configure-related-items/configure-related-items';
+export { default as analytics } from './analytics/analytics.js';
+export { default as breadcrumb } from './breadcrumb/breadcrumb.js';
+export { default as clearRefinements } from './clear-refinements/clear-refinements.js';
+export { default as configure } from './configure/configure.js';
+export { default as currentRefinements } from './current-refinements/current-refinements.js';
+export { default as EXPERIMENTAL_answers } from './answers/answers.js';
+export { default as EXPERIMENTAL_configureRelatedItems } from './configure-related-items/configure-related-items.js';
 
-import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
+import dynamicWidgets from './dynamic-widgets/dynamic-widgets.js';
 export { dynamicWidgets };
-import { deprecate } from '../lib/utils';
+import { deprecate } from '../lib/utils/index.js';
 /** @deprecated use dynamicWidgets */
 export const EXPERIMENTAL_dynamicWidgets = deprecate(
   dynamicWidgets,
   'use dynamicWidgets'
 );
 
-export { default as geoSearch } from './geo-search/geo-search';
-export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
-export { default as hits } from './hits/hits';
-export { default as hitsPerPage } from './hits-per-page/hits-per-page';
-export { default as index } from './index/index';
-export { default as infiniteHits } from './infinite-hits/infinite-hits';
-export { default as menu } from './menu/menu';
-export { default as menuSelect } from './menu-select/menu-select';
-export { default as numericMenu } from './numeric-menu/numeric-menu';
-export { default as pagination } from './pagination/pagination';
-export { default as panel } from './panel/panel';
-export { default as places } from './places/places';
-export { default as poweredBy } from './powered-by/powered-by';
-export { default as queryRuleContext } from './query-rule-context/query-rule-context';
-export { default as queryRuleCustomData } from './query-rule-custom-data/query-rule-custom-data';
-export { default as rangeInput } from './range-input/range-input';
-export { default as rangeSlider } from './range-slider/range-slider';
-export { default as ratingMenu } from './rating-menu/rating-menu';
-export { default as refinementList } from './refinement-list/refinement-list';
-export { default as relevantSort } from './relevant-sort/relevant-sort';
-export { default as searchBox } from './search-box/search-box';
-export { default as sortBy } from './sort-by/sort-by';
-export { default as stats } from './stats/stats';
-export { default as toggleRefinement } from './toggle-refinement/toggle-refinement';
-export { default as voiceSearch } from './voice-search/voice-search';
+export { default as geoSearch } from './geo-search/geo-search.js';
+export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu.js';
+export { default as hits } from './hits/hits.js';
+export { default as hitsPerPage } from './hits-per-page/hits-per-page.js';
+export { default as index } from './index/index.js';
+export { default as infiniteHits } from './infinite-hits/infinite-hits.js';
+export { default as menu } from './menu/menu.js';
+export { default as menuSelect } from './menu-select/menu-select.js';
+export { default as numericMenu } from './numeric-menu/numeric-menu.js';
+export { default as pagination } from './pagination/pagination.js';
+export { default as panel } from './panel/panel.js';
+export { default as places } from './places/places.js';
+export { default as poweredBy } from './powered-by/powered-by.js';
+export { default as queryRuleContext } from './query-rule-context/query-rule-context.js';
+export { default as queryRuleCustomData } from './query-rule-custom-data/query-rule-custom-data.js';
+export { default as rangeInput } from './range-input/range-input.js';
+export { default as rangeSlider } from './range-slider/range-slider.js';
+export { default as ratingMenu } from './rating-menu/rating-menu.js';
+export { default as refinementList } from './refinement-list/refinement-list.js';
+export { default as relevantSort } from './relevant-sort/relevant-sort.js';
+export { default as searchBox } from './search-box/search-box.js';
+export { default as sortBy } from './sort-by/sort-by.js';
+export { default as stats } from './stats/stats.js';
+export { default as toggleRefinement } from './toggle-refinement/toggle-refinement.js';
+export { default as voiceSearch } from './voice-search/voice-search.js';

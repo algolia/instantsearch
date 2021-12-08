@@ -1,9 +1,9 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from '../../../../test/utils/enzyme';
+import { mount } from '../../../../test/utils/enzyme.js';
 import { render, fireEvent } from '@testing-library/preact';
-import SearchBox from '../SearchBox';
+import SearchBox from '../SearchBox.js';
 
 const defaultProps = {
   placeholder: '',

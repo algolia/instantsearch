@@ -1,4 +1,4 @@
-import snippet from '../snippet';
+import snippet from '../snippet.js';
 
 const NONE = 'none' as const;
 const FULL = 'full' as const;

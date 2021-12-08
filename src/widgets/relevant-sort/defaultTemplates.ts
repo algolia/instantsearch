@@ -1,4 +1,4 @@
-import type { RelevantSortComponentTemplates } from '../../components/RelevantSort/RelevantSort';
+import type { RelevantSortComponentTemplates } from '../../components/RelevantSort/RelevantSort.js';
 
 const defaultTemplates: RelevantSortComponentTemplates = {
   text: '',

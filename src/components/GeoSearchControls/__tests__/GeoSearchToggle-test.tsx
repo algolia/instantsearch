@@ -1,8 +1,8 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from '../../../../test/utils/enzyme';
-import GeoSearchToggle from '../GeoSearchToggle';
+import { shallow } from '../../../../test/utils/enzyme.js';
+import GeoSearchToggle from '../GeoSearchToggle.js';
 
 describe('GeoSearchToggle', () => {
   const defaultProps = {

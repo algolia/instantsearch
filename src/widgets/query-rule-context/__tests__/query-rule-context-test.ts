@@ -1,4 +1,4 @@
-import queryRuleContext from '../query-rule-context';
+import queryRuleContext from '../query-rule-context.js';
 
 describe('queryRuleContext', () => {
   describe('Usage', () => {

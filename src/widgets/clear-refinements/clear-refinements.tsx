@@ -4,24 +4,24 @@ import { h, render } from 'preact';
 import type {
   ClearRefinementsComponentCSSClasses,
   ClearRefinementsComponentTemplates,
-} from '../../components/ClearRefinements/ClearRefinements';
-import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
+} from '../../components/ClearRefinements/ClearRefinements.js';
+import ClearRefinements from '../../components/ClearRefinements/ClearRefinements.js';
 import cx from 'classnames';
 import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
-} from '../../connectors/clear-refinements/connectClearRefinements';
-import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
-import defaultTemplates from './defaultTemplates';
+} from '../../connectors/clear-refinements/connectClearRefinements.js';
+import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements.js';
+import defaultTemplates from './defaultTemplates.js';
 import {
   getContainerNode,
   prepareTemplateProps,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { WidgetFactory, Template, Renderer } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
+import type { WidgetFactory, Template, Renderer } from '../../types/index.js';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',

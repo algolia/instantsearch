@@ -2,7 +2,7 @@ import type {
   AlgoliaSearchHelper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type { SendEventForHits } from '../../lib/utils';
+import type { SendEventForHits } from '../../lib/utils/index.js';
 import {
   checkRendering,
   aroundLatLngToPosition,
@@ -10,7 +10,7 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForHits,
   noop,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 import type {
   Connector,
   GeoLoc,
@@ -19,7 +19,7 @@ import type {
   RenderOptions,
   TransformItems,
   WidgetRenderState,
-} from '../../types';
+} from '../../types/index.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'geo-search',

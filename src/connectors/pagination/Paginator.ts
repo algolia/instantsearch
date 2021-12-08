@@ -1,4 +1,4 @@
-import { range } from '../../lib/utils';
+import { range } from '../../lib/utils/index.js';
 
 class Paginator {
   public currentPage: number;

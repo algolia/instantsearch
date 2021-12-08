@@ -1,4 +1,4 @@
-import unescape from '../unescape';
+import unescape from '../unescape.js';
 
 describe('unescape', () => {
   test('should unescape values', () => {

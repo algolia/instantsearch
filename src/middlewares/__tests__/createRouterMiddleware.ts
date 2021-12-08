@@ -1,7 +1,7 @@
-import { createSearchClient } from '../../../test/mock/createSearchClient';
-import { wait } from '../../../test/utils/wait';
-import instantsearch from '../../index.es';
-import { searchBox } from '../../widgets';
+import { createSearchClient } from '../../../test/mock/createSearchClient.js';
+import { wait } from '../../../test/utils/wait.js';
+import instantsearch from '../../index.es.js';
+import { searchBox } from '../../widgets.js';
 
 describe('router', () => {
   it('sets initial ui state after reading URL', async () => {

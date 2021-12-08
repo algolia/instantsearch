@@ -1,4 +1,4 @@
-import find from '../find';
+import find from '../find.js';
 
 describe('find', () => {
   describe('with native array method', () => {

@@ -2,13 +2,13 @@
 
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import type { RefinementListProps } from '../RefinementList';
-import RefinementList from '../RefinementList';
-import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
+import type { RefinementListProps } from '../RefinementList.js';
+import RefinementList from '../RefinementList.js';
+import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates.js';
 import type {
   RefinementListItemData,
   RefinementListTemplates,
-} from '../../../widgets/refinement-list/refinement-list';
+} from '../../../widgets/refinement-list/refinement-list.js';
 
 const defaultProps = {
   createURL: () => '#',

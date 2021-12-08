@@ -1,4 +1,4 @@
 export type {
   default as InstantSearch,
   InstantSearchOptions,
-} from '../lib/InstantSearch';
+} from '../lib/InstantSearch.js';

@@ -5,16 +5,16 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import rangeSlider from '../range-slider';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import rangeSlider from '../range-slider.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import type { InstantSearch } from '../../../types';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
+} from '../../../../test/mock/createWidget.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import type { InstantSearch } from '../../../types/index.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

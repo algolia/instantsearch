@@ -1,4 +1,4 @@
-import type { HierarchicalMenuComponentTemplates } from './hierarchical-menu';
+import type { HierarchicalMenuComponentTemplates } from './hierarchical-menu.js';
 const defaultTemplates: HierarchicalMenuComponentTemplates = {
   item:
     '<a class="{{cssClasses.link}}" href="{{url}}">' +

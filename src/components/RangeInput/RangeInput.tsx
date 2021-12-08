@@ -2,16 +2,16 @@
 
 import { h, Component } from 'preact';
 import cx from 'classnames';
-import Template from '../Template/Template';
+import Template from '../Template/Template.js';
 import type {
   RangeInputCSSClasses,
   RangeInputTemplates,
-} from '../../widgets/range-input/range-input';
+} from '../../widgets/range-input/range-input.js';
 import type {
   Range,
   RangeBoundaries,
-} from '../../connectors/range/connectRange';
-import type { ComponentCSSClasses } from '../../types';
+} from '../../connectors/range/connectRange.js';
+import type { ComponentCSSClasses } from '../../types/index.js';
 
 export type RangeInputComponentCSSClasses =
   ComponentCSSClasses<RangeInputCSSClasses>;

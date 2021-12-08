@@ -1,4 +1,4 @@
-import type { MenuComponentTemplates } from './menu';
+import type { MenuComponentTemplates } from './menu.js';
 
 const defaultTemplates: MenuComponentTemplates = {
   item:

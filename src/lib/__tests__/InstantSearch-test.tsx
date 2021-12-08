@@ -3,31 +3,31 @@
 import type preact from 'preact';
 import { h, render, createRef } from 'preact';
 import originalHelper from 'algoliasearch-helper';
-import InstantSearch from '../InstantSearch';
-import version from '../version';
-import { connectSearchBox, connectPagination } from '../../connectors';
-import { index } from '../../widgets';
-import { noop, warning } from '../utils';
+import InstantSearch from '../InstantSearch.js';
+import version from '../version.js';
+import { connectSearchBox, connectPagination } from '../../connectors.js';
+import { index } from '../../widgets.js';
+import { noop, warning } from '../utils/index.js';
 import {
   createSearchClient,
   createControlledSearchClient,
-} from '../../../test/mock/createSearchClient';
+} from '../../../test/mock/createSearchClient.js';
 import {
   createRenderOptions,
   createWidget,
-} from '../../../test/mock/createWidget';
-import { castToJestMock } from '../../../test/utils/castToJestMock';
-import type { IndexWidget } from '../../widgets/index/index';
-import type { Widget } from '../../types';
+} from '../../../test/mock/createWidget.js';
+import { castToJestMock } from '../../../test/utils/castToJestMock.js';
+import type { IndexWidget } from '../../widgets/index/index.js';
+import type { Widget } from '../../types/index.js';
 import type {
   PaginationConnectorParams,
   PaginationWidgetDescription,
-} from '../../connectors/pagination/connectPagination';
+} from '../../connectors/pagination/connectPagination.js';
 import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
-} from '../../connectors/search-box/connectSearchBox';
-import { wait } from '../../../test/utils/wait';
+} from '../../connectors/search-box/connectSearchBox.js';
+import { wait } from '../../../test/utils/wait.js';
 
 type SearchBoxWidgetInstance = Widget<
   SearchBoxWidgetDescription & { widgetParams: SearchBoxConnectorParams }

@@ -1,5 +1,5 @@
-import type { HighlightedParts } from '../../../types';
-import getHighlightFromSiblings from '../getHighlightFromSiblings';
+import type { HighlightedParts } from '../../../types/index.js';
+import getHighlightFromSiblings from '../getHighlightFromSiblings.js';
 
 const oneMatch: HighlightedParts[] = [
   { isHighlighted: true, value: 'Amazon' },

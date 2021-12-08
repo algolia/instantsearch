@@ -2,19 +2,19 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
+import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements.js';
 import type {
   CurrentRefinementsConnectorParams,
   CurrentRefinementsRenderState,
   CurrentRefinementsWidgetDescription,
-} from '../../connectors/current-refinements/connectCurrentRefinements';
-import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements';
+} from '../../connectors/current-refinements/connectCurrentRefinements.js';
+import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements.js';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { ComponentCSSClasses, Renderer, WidgetFactory } from '../../types';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
+import type { ComponentCSSClasses, Renderer, WidgetFactory } from '../../types/index.js';
 
 export type CurrentRefinementsCSSClasses = Partial<{
   /**

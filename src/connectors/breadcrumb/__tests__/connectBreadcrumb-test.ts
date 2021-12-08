@@ -2,15 +2,15 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { warning } from '../../../lib/utils';
-import connectBreadcrumb from '../connectBreadcrumb';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { warning } from '../../../lib/utils/index.js';
+import connectBreadcrumb from '../connectBreadcrumb.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
+} from '../../../../test/mock/createWidget.js';
 
 describe('connectBreadcrumb', () => {
   describe('Usage', () => {

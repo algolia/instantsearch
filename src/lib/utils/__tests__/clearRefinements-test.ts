@@ -1,6 +1,6 @@
-import clearRefinements from '../clearRefinements';
+import clearRefinements from '../clearRefinements.js';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-import type { SearchClient } from '../../../types';
+import type { SearchClient } from '../../../types/index.js';
 
 const initHelperWithRefinements = () => {
   const helper = algoliasearchHelper({} as SearchClient, 'index', {

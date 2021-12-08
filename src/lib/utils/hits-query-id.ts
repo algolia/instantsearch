@@ -1,4 +1,4 @@
-import type { AlgoliaHit } from '../../types';
+import type { AlgoliaHit } from '../../types/index.js';
 
 export function addQueryID<THit extends AlgoliaHit>(
   hits: THit[],

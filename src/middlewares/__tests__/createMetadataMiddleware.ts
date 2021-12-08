@@ -1,12 +1,12 @@
 import algoliasearch from 'algoliasearch';
 // @ts-ignore (can't type a module that is imported with an alias?)
 import algoliasearchV3 from 'algoliasearch-v3';
-import { createMetadataMiddleware } from '..';
-import { createSearchClient } from '../../../test/mock/createSearchClient';
-import { wait } from '../../../test/utils/wait';
-import instantsearch from '../..';
-import { configure, hits, index, pagination, searchBox } from '../../widgets';
-import { isMetadataEnabled } from '../createMetadataMiddleware';
+import { createMetadataMiddleware } from '../index.js';
+import { createSearchClient } from '../../../test/mock/createSearchClient.js';
+import { wait } from '../../../test/utils/wait.js';
+import instantsearch from '../../index.js';
+import { configure, hits, index, pagination, searchBox } from '../../widgets.js';
+import { isMetadataEnabled } from '../createMetadataMiddleware.js';
 
 declare global {
   // using namespace so it's only in this file

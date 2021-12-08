@@ -1,4 +1,4 @@
-import reverseSnippet from '../reverseSnippet';
+import reverseSnippet from '../reverseSnippet.js';
 
 const NONE = 'none' as const;
 const FULL = 'full' as const;

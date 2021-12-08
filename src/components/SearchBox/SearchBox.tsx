@@ -1,13 +1,13 @@
 /** @jsx h */
 
 import { h, createRef, Component } from 'preact';
-import { noop } from '../../lib/utils';
-import Template from '../Template/Template';
+import { noop } from '../../lib/utils/index.js';
+import Template from '../Template/Template.js';
 import type {
   SearchBoxCSSClasses,
   SearchBoxTemplates,
-} from '../../widgets/search-box/search-box';
-import type { ComponentCSSClasses } from '../../types';
+} from '../../widgets/search-box/search-box.js';
+import type { ComponentCSSClasses } from '../../types/index.js';
 
 export type SearchBoxComponentCSSClasses =
   ComponentCSSClasses<SearchBoxCSSClasses>;

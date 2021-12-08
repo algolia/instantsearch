@@ -2,15 +2,15 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectRatingMenu from '../connectRatingMenu';
+import connectRatingMenu from '../connectRatingMenu.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+} from '../../../../test/mock/createWidget.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
 
 describe('connectRatingMenu', () => {
   const getInitializedWidget = (config = {}, unmount = () => {}) => {

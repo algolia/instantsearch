@@ -1,8 +1,8 @@
 /* global google */
 import type { PlacesInstance } from 'places.js';
-import * as widgets from '..';
-import type { UnknownWidgetFactory, Widget } from '../../types';
-import type { IndexWidget } from '../index/index';
+import * as widgets from '../index.js';
+import type { UnknownWidgetFactory, Widget } from '../../types/index.js';
+import type { IndexWidget } from '../index/index.js';
 
 /**
  * Checklist when adding a new widget

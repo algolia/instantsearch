@@ -3,9 +3,9 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import getRefinements from '../getRefinements';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import getRefinements from '../getRefinements.js';
 
 describe('getRefinements', () => {
   let helper: AlgoliaSearchHelper;

@@ -1,15 +1,15 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
+} from '../../../../test/mock/createWidget.js';
 
-import type { StatsRenderState } from '../connectStats';
-import connectStats from '../connectStats';
+import type { StatsRenderState } from '../connectStats.js';
+import connectStats from '../connectStats.js';
 
 describe('connectStats', () => {
   const getInitializedWidget = (config = {}) => {

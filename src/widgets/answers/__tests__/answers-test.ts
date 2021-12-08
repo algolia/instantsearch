@@ -2,12 +2,12 @@
 
 import algoliasearchHelper from 'algoliasearch-helper';
 import { fireEvent } from '@testing-library/preact';
-import instantsearch from '../../../index.es';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { wait } from '../../../../test/utils/wait';
-import answers from '../answers';
-import searchBox from '../../search-box/search-box';
-import { createInitOptions } from '../../../../test/mock/createWidget';
+import instantsearch from '../../../index.es.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { wait } from '../../../../test/utils/wait.js';
+import answers from '../answers.js';
+import searchBox from '../../search-box/search-box.js';
+import { createInitOptions } from '../../../../test/mock/createWidget.js';
 
 describe('answers', () => {
   describe('Usage', () => {

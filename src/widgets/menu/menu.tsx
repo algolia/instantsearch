@@ -2,27 +2,27 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
 import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
-} from '../../connectors/menu/connectMenu';
-import connectMenu from '../../connectors/menu/connectMenu';
-import defaultTemplates from './defaultTemplates';
+} from '../../connectors/menu/connectMenu.js';
+import connectMenu from '../../connectors/menu/connectMenu.js';
+import defaultTemplates from './defaultTemplates.js';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
 import type {
   ComponentCSSClasses,
   RendererOptions,
   Template,
   WidgetFactory,
-} from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+} from '../../types/index.js';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');

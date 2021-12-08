@@ -1,16 +1,16 @@
 import { getByText, waitFor, fireEvent } from '@testing-library/dom';
 
-import instantsearch from '../../../index.es';
-import { infiniteHits, configure } from '../../';
-import { createInsightsMiddleware } from '../../../middlewares';
-import { wait } from '../../../../test/utils/wait';
+import instantsearch from '../../../index.es.js';
+import { infiniteHits, configure } from '../../.js';
+import { createInsightsMiddleware } from '../../../middlewares.js';
+import { wait } from '../../../../test/utils/wait.js';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
-} from '../../../connectors/infinite-hits/connectInfiniteHits';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+} from '../../../connectors/infinite-hits/connectInfiniteHits.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 
 describe('infiniteHits', () => {
   const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {

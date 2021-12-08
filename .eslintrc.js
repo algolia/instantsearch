@@ -82,6 +82,14 @@ module.exports = {
       },
     },
     {
+      files: ['src/**/*.ts', 'src/**/*.tsx'],
+      rules: {
+        'import/extensions': ['error', 'ignorePackages'],
+        // conflicts with import/extensions
+        'import/no-unresolved': ['off'],
+      },
+    },
+    {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/explicit-member-accessibility': 'off',

@@ -2,21 +2,21 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import type { RangeSliderComponentCSSClasses } from '../../components/Slider/Slider';
-import Slider from '../../components/Slider/Slider';
+import type { RangeSliderComponentCSSClasses } from '../../components/Slider/Slider.js';
+import Slider from '../../components/Slider/Slider.js';
 import type {
   RangeBoundaries,
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors/range/connectRange';
-import connectRange from '../../connectors/range/connectRange';
+} from '../../connectors/range/connectRange.js';
+import connectRange from '../../connectors/range/connectRange.js';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { Renderer, WidgetFactory } from '../../types';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
+import type { Renderer, WidgetFactory } from '../../types/index.js';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-slider' });
 const suit = component('RangeSlider');

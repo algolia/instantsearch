@@ -1,8 +1,8 @@
 import type { SearchResults } from 'algoliasearch-helper';
-import type { InstantSearch } from './instantsearch';
-import type { InsightsClient } from './insights';
-import type { Hits } from './results';
-import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget';
+import type { InstantSearch } from './instantsearch.js';
+import type { InsightsClient } from './insights.js';
+import type { Hits } from './results.js';
+import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget.js';
 
 /**
  * The base renderer options. All render functions receive

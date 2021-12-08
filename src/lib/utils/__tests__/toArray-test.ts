@@ -1,4 +1,4 @@
-import toArray from '../toArray';
+import toArray from '../toArray.js';
 
 describe('toArray', () => {
   test('cast to array if necessary', () => {

@@ -1,5 +1,5 @@
-import type { UiState } from '../../../types';
-import singleIndexStateMapping from '../singleIndex';
+import type { UiState } from '../../../types/index.js';
+import singleIndexStateMapping from '../singleIndex.js';
 
 describe('singleIndexStateMapping', () => {
   describe('stateToRoute', () => {

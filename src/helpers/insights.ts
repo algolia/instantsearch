@@ -1,5 +1,5 @@
-import type { InsightsClientMethod, InsightsClientPayload } from '../types';
-import { warning, serializePayload, deserializePayload } from '../lib/utils';
+import type { InsightsClientMethod, InsightsClientPayload } from '../types/index.js';
+import { warning, serializePayload, deserializePayload } from '../lib/utils/index.js';
 
 export function readDataAttributes(domElement: HTMLElement): {
   method: InsightsClientMethod;

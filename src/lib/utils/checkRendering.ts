@@ -1,5 +1,5 @@
-import type { Renderer } from '../../types/connector';
-import getObjectType from './getObjectType';
+import type { Renderer } from '../../types/connector.js';
+import getObjectType from './getObjectType.js';
 
 function checkRendering<TRenderOptions, TWidgetParams>(
   rendering: Renderer<TRenderOptions, TWidgetParams>,

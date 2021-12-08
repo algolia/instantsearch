@@ -1,15 +1,15 @@
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-import connectVoiceSearch from '../connectVoiceSearch';
+import connectVoiceSearch from '../connectVoiceSearch.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+} from '../../../../test/mock/createWidget.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 import type {
   VoiceSearchHelperParams,
   VoiceSearchHelper,
-} from '../../../lib/voiceSearchHelper/types';
+} from '../../../lib/voiceSearchHelper/types/index.js';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
   const createVoiceHelper = ({

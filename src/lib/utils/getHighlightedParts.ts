@@ -1,4 +1,4 @@
-import { TAG_REPLACEMENT } from './escape-highlight';
+import { TAG_REPLACEMENT } from './escape-highlight.js';
 
 export default function getHighlightedParts(highlightedValue: string) {
   const { highlightPostTag, highlightPreTag } = TAG_REPLACEMENT;

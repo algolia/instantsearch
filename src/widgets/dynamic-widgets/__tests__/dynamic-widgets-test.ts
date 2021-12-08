@@ -1,16 +1,16 @@
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { index, searchBox, menu, dynamicWidgets } from '../..';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+} from '../../../../test/mock/createWidget.js';
+import { index, searchBox, menu, dynamicWidgets } from '../../index.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { wait } from '../../../../test/utils/wait';
-import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer';
-import refinementList from '../../refinement-list/refinement-list';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import instantsearch from '../../..';
+import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { wait } from '../../../../test/utils/wait.js';
+import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer.js';
+import refinementList from '../../refinement-list/refinement-list.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import instantsearch from '../../../index.js';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 

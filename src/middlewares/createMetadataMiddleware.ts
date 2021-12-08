@@ -1,6 +1,6 @@
-import { safelyRunOnBrowser } from '../lib/utils';
-import type { InstantSearch, InternalMiddleware, Widget } from '../types';
-import type { IndexWidget } from '../widgets/index/index';
+import { safelyRunOnBrowser } from '../lib/utils/index.js';
+import type { InstantSearch, InternalMiddleware, Widget } from '../types/index.js';
+import type { IndexWidget } from '../widgets/index/index.js';
 
 type WidgetMetaData = {
   type: string | undefined;

@@ -1,16 +1,16 @@
 import { render as preactRender } from 'preact';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import type { SortByIndexDefinition } from '../sort-by';
-import sortBy from '../sort-by';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import type { SortByIndexDefinition } from '../sort-by.js';
+import sortBy from '../sort-by.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+} from '../../../../test/mock/createWidget.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

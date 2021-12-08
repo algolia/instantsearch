@@ -17,14 +17,14 @@ import type {
   ScopedResult,
   SearchClient,
   IndexRenderState,
-} from '../../types';
+} from '../../types/index.js';
 import {
   checkIndexUiState,
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   mergeSearchParameters,
   warning,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',

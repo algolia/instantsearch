@@ -6,22 +6,22 @@ import type { SearchResults } from 'algoliasearch-helper';
 import type {
   InfiniteHitsComponentCSSClasses,
   InfiniteHitsComponentTemplates,
-} from '../../components/InfiniteHits/InfiniteHits';
-import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
+} from '../../components/InfiniteHits/InfiniteHits.js';
+import InfiniteHits from '../../components/InfiniteHits/InfiniteHits.js';
 import type {
   InfiniteHitsConnectorParams,
   InfiniteHitsRenderState,
   InfiniteHitsCache,
   InfiniteHitsWidgetDescription,
-} from '../../connectors/infinite-hits/connectInfiniteHits';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
+} from '../../connectors/infinite-hits/connectInfiniteHits.js';
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import { withInsights, withInsightsListener } from '../../lib/insights';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
+import { withInsights, withInsightsListener } from '../../lib/insights.js';
 import type {
   WidgetFactory,
   Template,
@@ -29,10 +29,10 @@ import type {
   Hit,
   InsightsClient,
   Renderer,
-} from '../../types';
-import defaultTemplates from './defaultTemplates';
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+} from '../../types/index.js';
+import defaultTemplates from './defaultTemplates.js';
+import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware.js';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',

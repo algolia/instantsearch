@@ -1,2 +1,2 @@
-export { default as simple } from './simple';
-export { default as singleIndex } from './singleIndex';
+export { default as simple } from './simple.js';
+export { default as singleIndex } from './singleIndex.js';

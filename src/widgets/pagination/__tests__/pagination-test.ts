@@ -1,22 +1,22 @@
 import { render as preactRender } from 'preact';
-import utilsGetContainerNode from '../../../lib/utils/getContainerNode';
+import utilsGetContainerNode from '../../../lib/utils/getContainerNode.js';
 import type {
   PaginationCSSClasses,
   PaginationWidgetParams,
-} from '../pagination';
-import pagination from '../pagination';
+} from '../pagination.js';
+import pagination from '../pagination.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
+} from '../../../../test/mock/createWidget.js';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

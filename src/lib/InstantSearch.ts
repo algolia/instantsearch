@@ -2,10 +2,10 @@ import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import EventEmitter from 'events';
-import type { IndexWidget } from '../widgets/index/index';
-import index, { isIndexWidget } from '../widgets/index/index';
-import version from './version';
-import createHelpers from './createHelpers';
+import type { IndexWidget } from '../widgets/index/index.js';
+import index, { isIndexWidget } from '../widgets/index/index.js';
+import version from './version.js';
+import createHelpers from './createHelpers.js';
 import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
@@ -13,7 +13,7 @@ import {
   noop,
   warning,
   checkIndexUiState,
-} from './utils';
+} from './utils/index.js';
 import type {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
@@ -24,14 +24,14 @@ import type {
   MiddlewareDefinition,
   RenderState,
   InitialResults,
-} from '../types';
-import type { RouterProps } from '../middlewares/createRouterMiddleware';
-import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
-import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+} from '../types/index.js';
+import type { RouterProps } from '../middlewares/createRouterMiddleware.js';
+import { createRouterMiddleware } from '../middlewares/createRouterMiddleware.js';
+import type { InsightsEvent } from '../middlewares/createInsightsMiddleware.js';
 import {
   createMetadataMiddleware,
   isMetadataEnabled,
-} from '../middlewares/createMetadataMiddleware';
+} from '../middlewares/createMetadataMiddleware.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',

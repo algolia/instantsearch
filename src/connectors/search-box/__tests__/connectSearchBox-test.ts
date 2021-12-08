@@ -2,15 +2,15 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectSearchBox from '../connectSearchBox';
+import connectSearchBox from '../connectSearchBox.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import InstantSearch from '../../../lib/InstantSearch';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+} from '../../../../test/mock/createWidget.js';
+import InstantSearch from '../../../lib/InstantSearch.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 
 describe('connectSearchBox', () => {
   const getInitializedWidget = (config = {}) => {

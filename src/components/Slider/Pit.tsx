@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import cx from 'classnames';
-import type { PitProps } from './Rheostat';
+import type { PitProps } from './Rheostat.js';
 
 const Pit = ({ style, children }: PitProps) => {
   // first, end & middle

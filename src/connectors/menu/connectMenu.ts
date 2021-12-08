@@ -1,10 +1,10 @@
-import type { SendEventForFacet } from '../../lib/utils';
+import type { SendEventForFacet } from '../../lib/utils/index.js';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 import type {
   Connector,
   CreateURL,
@@ -13,7 +13,7 @@ import type {
   TransformItems,
   Widget,
   WidgetRenderState,
-} from '../../types';
+} from '../../types/index.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'menu',

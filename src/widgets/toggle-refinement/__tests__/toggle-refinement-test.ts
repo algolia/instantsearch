@@ -1,13 +1,13 @@
 import { render as preactRender } from 'preact';
 import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import jsHelper, { SearchParameters } from 'algoliasearch-helper';
-import toggleRefinement from '../toggle-refinement';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import toggleRefinement from '../toggle-refinement.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
+} from '../../../../test/mock/createWidget.js';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

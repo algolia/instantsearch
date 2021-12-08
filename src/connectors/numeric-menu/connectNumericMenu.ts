@@ -1,23 +1,23 @@
-import type { SendEventForFacet } from '../../lib/utils';
+import type { SendEventForFacet } from '../../lib/utils/index.js';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   isFiniteNumber,
   convertNumericRefinementsToFilters,
   noop,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 import type {
   Connector,
   CreateURL,
   InstantSearch,
   TransformItems,
   WidgetRenderState,
-} from '../../types';
+} from '../../types/index.js';
 import type {
   AlgoliaSearchHelper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type { InsightsEvent } from '../../middlewares';
+import type { InsightsEvent } from '../../middlewares.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'numeric-menu',

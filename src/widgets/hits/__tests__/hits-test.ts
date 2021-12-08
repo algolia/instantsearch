@@ -5,16 +5,16 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import type { SearchClient } from '../../../types';
-import hits from '../hits';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import type { HitsProps } from '../../../components/Hits/Hits';
+import type { SearchClient } from '../../../types/index.js';
+import hits from '../hits.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
+import type { HitsProps } from '../../../components/Hits/Hits.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+} from '../../../../test/mock/createWidget.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

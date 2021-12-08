@@ -1,7 +1,7 @@
-import { withInsights } from '../../lib/insights';
-import type { HitsConnectorParams, HitsWidgetDescription } from './connectHits';
-import connectHits from './connectHits';
-import type { Connector } from '../../types';
+import { withInsights } from '../../lib/insights.js';
+import type { HitsConnectorParams, HitsWidgetDescription } from './connectHits.js';
+import connectHits from './connectHits.js';
+import type { Connector } from '../../types/index.js';
 
 /**
  * Due to https://github.com/microsoft/web-build-tools/issues/1050, we need

@@ -1,4 +1,4 @@
-import type { InfiniteHitsComponentTemplates } from '../../components/InfiniteHits/InfiniteHits';
+import type { InfiniteHitsComponentTemplates } from '../../components/InfiniteHits/InfiniteHits.js';
 
 const defaultTemplates: InfiniteHitsComponentTemplates = {
   empty: 'No results',

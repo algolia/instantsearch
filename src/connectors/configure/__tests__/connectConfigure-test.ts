@@ -1,14 +1,14 @@
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import connectConfigure from '../connectConfigure';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import connectConfigure from '../connectConfigure.js';
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../test/mock/createWidget';
-import { noop } from '../../../lib/utils';
+} from '../../../../test/mock/createWidget.js';
+import { noop } from '../../../lib/utils/index.js';
 
 describe('connectConfigure', () => {
   let helper: AlgoliaSearchHelper;

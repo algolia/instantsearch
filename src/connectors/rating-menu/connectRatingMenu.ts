@@ -9,14 +9,14 @@ import {
   createDocumentationMessageGenerator,
   noop,
   warning,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 import type {
   Connector,
   InstantSearch,
   CreateURL,
   WidgetRenderState,
-} from '../../types';
-import type { InsightsEvent } from '../../middlewares';
+} from '../../types/index.js';
+import type { InsightsEvent } from '../../middlewares.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'rating-menu',

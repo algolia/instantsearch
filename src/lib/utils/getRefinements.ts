@@ -1,6 +1,6 @@
 import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import find from './find';
-import unescapeRefinement from './unescapeRefinement';
+import find from './find.js';
+import unescapeRefinement from './unescapeRefinement.js';
 
 export type FacetRefinement = {
   type:

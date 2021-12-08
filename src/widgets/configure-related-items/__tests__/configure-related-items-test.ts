@@ -1,7 +1,7 @@
-import configureRelatedItems from '../configure-related-items';
-import type { ConfigureRelatedItemsConnectorParams } from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
-import connectConfigureRelatedItems from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import configureRelatedItems from '../configure-related-items.js';
+import type { ConfigureRelatedItemsConnectorParams } from '../../../connectors/configure-related-items/connectConfigureRelatedItems.js';
+import connectConfigureRelatedItems from '../../../connectors/configure-related-items/connectConfigureRelatedItems.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
 
 jest.mock(
   '../../../connectors/configure-related-items/connectConfigureRelatedItems'

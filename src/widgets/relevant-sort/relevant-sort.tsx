@@ -5,22 +5,22 @@ import cx from 'classnames';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { WidgetFactory, Template } from '../../types';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
+import type { WidgetFactory, Template } from '../../types/index.js';
 import type {
   RelevantSortConnectorParams,
   RelevantSortRenderState,
   RelevantSortWidgetDescription,
-} from '../../connectors/relevant-sort/connectRelevantSort';
-import connectRelevantSort from '../../connectors/relevant-sort/connectRelevantSort';
+} from '../../connectors/relevant-sort/connectRelevantSort.js';
+import connectRelevantSort from '../../connectors/relevant-sort/connectRelevantSort.js';
 import type {
   RelevantSortComponentCSSClasses,
   RelevantSortComponentTemplates,
-} from '../../components/RelevantSort/RelevantSort';
-import RelevantSort from '../../components/RelevantSort/RelevantSort';
-import defaultTemplates from './defaultTemplates';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+} from '../../components/RelevantSort/RelevantSort.js';
+import RelevantSort from '../../components/RelevantSort/RelevantSort.js';
+import defaultTemplates from './defaultTemplates.js';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 
 export type RelevantSortCSSClasses = Partial<{
   root: string;

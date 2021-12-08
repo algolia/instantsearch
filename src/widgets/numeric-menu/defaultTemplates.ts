@@ -1,4 +1,4 @@
-import type { NumericMenuComponentTemplates } from './numeric-menu';
+import type { NumericMenuComponentTemplates } from './numeric-menu.js';
 
 const defaultTemplates: NumericMenuComponentTemplates = {
   item: `<label class="{{cssClasses.label}}">

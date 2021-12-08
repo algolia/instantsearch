@@ -1,9 +1,9 @@
-import historyRouter from '../history';
-import type { UiState } from '../../../types';
-import { noop } from '../../utils';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import instantsearch from '../../..';
-import { simple } from '../../stateMappings';
+import historyRouter from '../history.js';
+import type { UiState } from '../../../types/index.js';
+import { noop } from '../../utils/index.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import instantsearch from '../../../index.js';
+import { simple } from '../../stateMappings.js';
 
 jest.useFakeTimers();
 

@@ -1,8 +1,8 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import Template from '../Template';
-import { mount, shallow } from '../../../../test/utils/enzyme';
+import Template from '../Template.js';
+import { mount, shallow } from '../../../../test/utils/enzyme.js';
 
 function getProps({
   templates = { test: '' },

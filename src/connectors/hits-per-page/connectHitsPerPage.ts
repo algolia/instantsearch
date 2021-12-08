@@ -3,7 +3,7 @@ import {
   warning,
   createDocumentationMessageGenerator,
   noop,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 
 import type {
   AlgoliaSearchHelper,
@@ -16,7 +16,7 @@ import type {
   InitOptions,
   RenderOptions,
   WidgetRenderState,
-} from '../../types';
+} from '../../types/index.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',

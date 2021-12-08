@@ -2,12 +2,12 @@
 
 import { h } from 'preact';
 import cx from 'classnames';
-import Template from '../Template/Template';
+import Template from '../Template/Template.js';
 import type {
   AnswersCSSClasses,
   AnswersTemplates,
-} from '../../widgets/answers/answers';
-import type { ComponentCSSClasses, Hits } from '../../types';
+} from '../../widgets/answers/answers.js';
+import type { ComponentCSSClasses, Hits } from '../../types/index.js';
 
 export type AnswersComponentCSSClasses = ComponentCSSClasses<AnswersCSSClasses>;
 

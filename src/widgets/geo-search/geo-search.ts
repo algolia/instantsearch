@@ -6,19 +6,19 @@ import {
   getContainerNode,
   renderTemplate,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
 import type {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
   GeoHit,
-} from '../../connectors/geo-search/connectGeoSearch';
-import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
-import renderer from './GeoSearchRenderer';
-import defaultTemplates from './defaultTemplates';
-import type { HTMLMarkerArguments } from './createHTMLMarker';
-import createHTMLMarker from './createHTMLMarker';
-import type { GeoLoc, Template, WidgetFactory } from '../../types';
+} from '../../connectors/geo-search/connectGeoSearch.js';
+import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch.js';
+import renderer from './GeoSearchRenderer.js';
+import defaultTemplates from './defaultTemplates.js';
+import type { HTMLMarkerArguments } from './createHTMLMarker.js';
+import createHTMLMarker from './createHTMLMarker.js';
+import type { GeoLoc, Template, WidgetFactory } from '../../types/index.js';
 
 export type CreateMarker = (args: {
   item: GeoHit;

@@ -1,13 +1,13 @@
-import simpleStateMapping from '../lib/stateMappings/simple';
-import historyRouter from '../lib/routers/history';
+import simpleStateMapping from '../lib/stateMappings/simple.js';
+import historyRouter from '../lib/routers/history.js';
 import type {
   Router,
   StateMapping,
   UiState,
   InternalMiddleware,
   CreateURL,
-} from '../types';
-import { isEqual } from '../lib/utils';
+} from '../types/index.js';
+import { isEqual } from '../lib/utils/index.js';
 
 export type RouterProps<
   TUiState extends UiState = UiState,

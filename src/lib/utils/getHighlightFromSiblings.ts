@@ -1,5 +1,5 @@
-import unescape from './unescape';
-import type { HighlightedParts } from '../../types';
+import unescape from './unescape.js';
+import type { HighlightedParts } from '../../types/index.js';
 
 const hasAlphanumeric = new RegExp(/\w/i);
 

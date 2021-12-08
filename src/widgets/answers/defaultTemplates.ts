@@ -1,4 +1,4 @@
-import type { AnswersComponentTemplates } from '../../components/Answers/Answers';
+import type { AnswersComponentTemplates } from '../../components/Answers/Answers.js';
 
 const defaultTemplates: AnswersComponentTemplates = {
   header: '',

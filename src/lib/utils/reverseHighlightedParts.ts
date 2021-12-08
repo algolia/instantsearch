@@ -1,5 +1,5 @@
-import type { HighlightedParts } from '../../types';
-import getHighlightFromSiblings from './getHighlightFromSiblings';
+import type { HighlightedParts } from '../../types/index.js';
+import getHighlightFromSiblings from './getHighlightFromSiblings.js';
 
 export default function reverseHighlightedParts(parts: HighlightedParts[]) {
   if (!parts.some((part) => part.isHighlighted)) {

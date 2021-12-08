@@ -1,5 +1,5 @@
-import withInsights from '../client';
-import { warning } from '../../utils';
+import withInsights from '../client.js';
+import { warning } from '../../utils/index.js';
 
 describe('withInsights', () => {
   it('shows a deprecation warning', () => {

@@ -2,14 +2,14 @@
 
 import { h } from 'preact';
 import cx from 'classnames';
-import Template from '../Template/Template';
+import Template from '../Template/Template.js';
 import type {
   BreadcrumbCSSClasses,
   BreadcrumbTemplates,
-} from '../../widgets/breadcrumb/breadcrumb';
-import type { ComponentCSSClasses } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
-import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
+} from '../../widgets/breadcrumb/breadcrumb.js';
+import type { ComponentCSSClasses } from '../../types/index.js';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb.js';
 
 export type BreadcrumbComponentCSSClasses =
   ComponentCSSClasses<BreadcrumbCSSClasses>;

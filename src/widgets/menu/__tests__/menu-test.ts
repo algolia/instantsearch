@@ -4,14 +4,14 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import menu from '../menu';
+} from '../../../../test/mock/createWidget.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import menu from '../menu.js';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

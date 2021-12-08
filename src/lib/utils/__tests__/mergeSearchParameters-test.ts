@@ -1,5 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import merge from '../mergeSearchParameters';
+import merge from '../mergeSearchParameters.js';
 
 describe('mergeSearchParameters', () => {
   it('overrides non-managed parameters', () => {

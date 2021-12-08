@@ -9,18 +9,18 @@ import {
   createDocumentationMessageGenerator,
   noop,
   warning,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 import type {
   Refinement,
   FacetRefinement,
   NumericRefinement,
-} from '../../lib/utils/getRefinements';
+} from '../../lib/utils/getRefinements.js';
 import type {
   Connector,
   TransformItems,
   CreateURL,
   WidgetRenderState,
-} from '../../types';
+} from '../../types/index.js';
 
 export type CurrentRefinementsConnectorParamsRefinement = {
   /**

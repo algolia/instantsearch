@@ -1,23 +1,23 @@
 // internal
-export * from './utils';
+export * from './utils.js';
 
 // Algolia-related
-export * from './algoliasearch';
-export * from './results';
+export * from './algoliasearch.js';
+export * from './results.js';
 
 // component-related
-export * from './component';
+export * from './component.js';
 
 // instantsearch-related
-export * from './instantsearch';
-export * from './middleware';
-export * from './router';
-export * from './insights';
+export * from './instantsearch.js';
+export * from './middleware.js';
+export * from './router.js';
+export * from './insights.js';
 
 // widget-related
-export * from './connector';
-export * from './widget-factory';
-export * from './widget';
-export * from './ui-state';
-export * from './render-state';
-export * from './templates';
+export * from './connector.js';
+export * from './widget-factory.js';
+export * from './widget.js';
+export * from './ui-state.js';
+export * from './render-state.js';
+export * from './templates.js';

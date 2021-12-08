@@ -2,8 +2,8 @@ import insights, {
   writeDataAttributes,
   readDataAttributes,
   hasDataAttributes,
-} from '../insights';
-import { warning, serializePayload } from '../../lib/utils';
+} from '../insights.js';
+import { warning, serializePayload } from '../../lib/utils/index.js';
 
 const makeDomElement = (html: string): HTMLElement => {
   const div = document.createElement('div');

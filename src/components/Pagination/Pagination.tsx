@@ -3,13 +3,13 @@
 import { Component, h } from 'preact';
 import cx from 'classnames';
 
-import PaginationLink from './PaginationLink';
-import { isSpecialClick } from '../../lib/utils';
+import PaginationLink from './PaginationLink.js';
+import { isSpecialClick } from '../../lib/utils/index.js';
 import type {
   PaginationCSSClasses,
   PaginationTemplates,
-} from '../../widgets/pagination/pagination';
-import type { ComponentCSSClasses } from '../../types';
+} from '../../widgets/pagination/pagination.js';
+import type { ComponentCSSClasses } from '../../types/index.js';
 
 export type PaginationComponentCSSClasses =
   ComponentCSSClasses<PaginationCSSClasses>;

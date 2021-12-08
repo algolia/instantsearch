@@ -1,13 +1,13 @@
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { wait } from '../../../../test/utils/wait';
-import connectAnswers from '../connectAnswers';
+} from '../../../../test/mock/createWidget.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { wait } from '../../../../test/utils/wait.js';
+import connectAnswers from '../connectAnswers.js';
 
 const defaultRenderDebounceTime = 10;
 const defaultSearchDebounceTime = 10;

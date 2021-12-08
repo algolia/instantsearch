@@ -3,10 +3,10 @@ import type {
   InsightsClientMethod,
   InternalMiddleware,
   Hit,
-} from '../types';
-import { getInsightsAnonymousUserTokenInternal } from '../helpers';
-import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils';
-import connectConfigure from '../connectors/configure/connectConfigure';
+} from '../types/index.js';
+import { getInsightsAnonymousUserTokenInternal } from '../helpers.js';
+import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils/index.js';
+import connectConfigure from '../connectors/configure/connectConfigure.js';
 
 export type InsightsEvent = {
   insightsMethod?: InsightsClientMethod;

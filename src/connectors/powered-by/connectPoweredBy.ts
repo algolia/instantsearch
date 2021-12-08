@@ -3,9 +3,9 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 
-import type { Connector, WidgetRenderState } from '../../types';
+import type { Connector, WidgetRenderState } from '../../types/index.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'powered-by',

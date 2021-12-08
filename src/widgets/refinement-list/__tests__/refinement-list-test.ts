@@ -5,16 +5,16 @@ import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import type {
   RefinementListTemplates,
   RefinementListWidgetParams,
-} from '../refinement-list';
-import refinementList from '../refinement-list';
-import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
-import { castToJestMock } from '../../../../test/utils/castToJestMock';
+} from '../refinement-list.js';
+import refinementList from '../refinement-list.js';
+import type { RefinementListProps } from '../../../components/RefinementList/RefinementList.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import type { RefinementListConnectorParams } from '../../../connectors/refinement-list/connectRefinementList';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+} from '../../../../test/mock/createWidget.js';
+import type { RefinementListConnectorParams } from '../../../connectors/refinement-list/connectRefinementList.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 
 const render = castToJestMock(originalRender);
 jest.mock('preact', () => {

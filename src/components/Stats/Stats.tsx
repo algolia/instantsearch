@@ -5,9 +5,9 @@ import cx from 'classnames';
 import type {
   StatsCSSClasses,
   StatsTemplates,
-} from '../../widgets/stats/stats';
-import Template from '../Template/Template';
-import type { ComponentCSSClasses } from '../../types';
+} from '../../widgets/stats/stats.js';
+import Template from '../Template/Template.js';
+import type { ComponentCSSClasses } from '../../types/index.js';
 
 export type StatsComponentCSSClasses = ComponentCSSClasses<StatsCSSClasses>;
 

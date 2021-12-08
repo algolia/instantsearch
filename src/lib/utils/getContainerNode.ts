@@ -1,4 +1,4 @@
-import isDomElement from './isDomElement';
+import isDomElement from './isDomElement.js';
 
 /**
  * Return the container. If it's a string, it is considered a

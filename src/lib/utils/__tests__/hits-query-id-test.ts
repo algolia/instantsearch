@@ -1,4 +1,4 @@
-import { addQueryID } from '../hits-query-id';
+import { addQueryID } from '../hits-query-id.js';
 
 describe('addQueryID', () => {
   it('should add __queryID to every hit when given', () => {

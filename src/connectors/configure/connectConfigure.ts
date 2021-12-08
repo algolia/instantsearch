@@ -4,13 +4,13 @@ import type {
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type { Connector, WidgetRenderState } from '../../types';
+import type { Connector, WidgetRenderState } from '../../types/index.js';
 import {
   createDocumentationMessageGenerator,
   isPlainObject,
   mergeSearchParameters,
   noop,
-} from '../../lib/utils';
+} from '../../lib/utils/index.js';
 
 /**
  * Refine the given search parameters.

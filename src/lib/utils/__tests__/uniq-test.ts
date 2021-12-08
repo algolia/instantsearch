@@ -1,4 +1,4 @@
-import uniq from '../uniq';
+import uniq from '../uniq.js';
 
 describe('uniq', () => {
   test('with empty array', () => {

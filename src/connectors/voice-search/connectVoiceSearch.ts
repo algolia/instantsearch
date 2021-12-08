@@ -3,13 +3,13 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
-} from '../../lib/utils';
-import type { Connector, WidgetRenderState } from '../../types';
-import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper';
+} from '../../lib/utils/index.js';
+import type { Connector, WidgetRenderState } from '../../types/index.js';
+import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper.js';
 import type {
   CreateVoiceSearchHelper,
   VoiceListeningState,
-} from '../../lib/voiceSearchHelper/types';
+} from '../../lib/voiceSearchHelper/types/index.js';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',

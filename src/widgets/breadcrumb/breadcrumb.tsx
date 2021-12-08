@@ -5,23 +5,23 @@ import cx from 'classnames';
 import type {
   BreadcrumbComponentCSSClasses,
   BreadcrumbComponentTemplates,
-} from '../../components/Breadcrumb/Breadcrumb';
-import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
+} from '../../components/Breadcrumb/Breadcrumb.js';
+import Breadcrumb from '../../components/Breadcrumb/Breadcrumb.js';
 import type {
   BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
   BreadcrumbRenderState,
-} from '../../connectors/breadcrumb/connectBreadcrumb';
-import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
-import defaultTemplates from './defaultTemplates';
+} from '../../connectors/breadcrumb/connectBreadcrumb.js';
+import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb.js';
+import defaultTemplates from './defaultTemplates.js';
 import {
   getContainerNode,
   prepareTemplateProps,
   createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { WidgetFactory, Template, Renderer } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+} from '../../lib/utils/index.js';
+import { component } from '../../lib/suit.js';
+import type { WidgetFactory, Template, Renderer } from '../../types/index.js';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');

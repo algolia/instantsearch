@@ -3,15 +3,15 @@ import type {
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type { AlgoliaHit, Connector } from '../../types';
+import type { AlgoliaHit, Connector } from '../../types/index.js';
 import {
   createDocumentationMessageGenerator,
   getObjectType,
   warning,
   getPropertyByPath,
-} from '../../lib/utils';
-import type { ConfigureWidgetDescription } from '../configure/connectConfigure';
-import connectConfigure from '../configure/connectConfigure';
+} from '../../lib/utils/index.js';
+import type { ConfigureWidgetDescription } from '../configure/connectConfigure.js';
+import connectConfigure from '../configure/connectConfigure.js';
 
 export type MatchingPatterns = {
   [attribute: string]: {

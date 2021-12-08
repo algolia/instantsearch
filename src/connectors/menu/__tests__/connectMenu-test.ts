@@ -2,21 +2,21 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
+} from '../../../../test/mock/createWidget.js';
 import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
-} from '../connectMenu';
-import connectMenu from '../connectMenu';
-import type { WidgetFactory } from '../../../types';
+} from '../connectMenu.js';
+import connectMenu from '../connectMenu.js';
+import type { WidgetFactory } from '../../../types/index.js';
 
 describe('connectMenu', () => {
   let rendering: jest.Mock<any, [MenuRenderState, boolean]>;

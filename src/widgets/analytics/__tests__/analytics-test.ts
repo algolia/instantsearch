@@ -1,4 +1,4 @@
-import analytics from '../analytics';
+import analytics from '../analytics.js';
 
 describe('Usage', () => {
   it('throws without `pushFunction`', () => {

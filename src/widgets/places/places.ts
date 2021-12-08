@@ -1,6 +1,6 @@
 /** @ts-ignore */
 import type * as Places from 'places.js';
-import type { WidgetFactory, WidgetRenderState } from '../../types';
+import type { WidgetFactory, WidgetRenderState } from '../../types/index.js';
 
 // using the type like this requires only one ts-ignore
 type StaticOptions = Places.StaticOptions;

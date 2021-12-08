@@ -3,20 +3,20 @@ import type {
   ReverseHighlightOptions,
   SnippetOptions,
   ReverseSnippetOptions,
-} from '../helpers';
+} from '../helpers.js';
 import {
   highlight,
   reverseHighlight,
   snippet,
   reverseSnippet,
   insights,
-} from '../helpers';
+} from '../helpers.js';
 import type {
   Hit,
   HoganHelpers,
   InsightsClientMethod,
   InsightsClientPayload,
-} from '../types';
+} from '../types/index.js';
 
 type DefaultHoganHelpers = HoganHelpers<
   | 'formatNumber'

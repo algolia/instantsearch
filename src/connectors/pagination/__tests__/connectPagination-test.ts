@@ -6,15 +6,15 @@ import algoliasearchHelper, {
 import type {
   PaginationConnectorParams,
   PaginationRenderState,
-} from '../connectPagination';
-import connectPagination from '../connectPagination';
+} from '../connectPagination.js';
+import connectPagination from '../connectPagination.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+} from '../../../../test/mock/createWidget.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
 
 describe('connectPagination', () => {
   const getInitializedWidget = (

@@ -2,15 +2,15 @@
 
 import { h, Fragment } from 'preact';
 import cx from 'classnames';
-import Template from '../Template/Template';
-import GeoSearchButton from './GeoSearchButton';
-import GeoSearchToggle from './GeoSearchToggle';
+import Template from '../Template/Template.js';
+import GeoSearchButton from './GeoSearchButton.js';
+import GeoSearchToggle from './GeoSearchToggle.js';
 import type {
   GeoSearchCSSClasses,
   GeoSearchTemplates,
-} from '../../widgets/geo-search/geo-search';
-import type { ComponentCSSClasses } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+} from '../../widgets/geo-search/geo-search.js';
+import type { ComponentCSSClasses } from '../../types/index.js';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
 
 type Props = {
   cssClasses: ComponentCSSClasses<GeoSearchCSSClasses>;

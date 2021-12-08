@@ -2,13 +2,13 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse';
-import ratingMenu from '../rating-menu';
+} from '../../../../test/mock/createWidget.js';
+import { createMultiSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import ratingMenu from '../rating-menu.js';
 
 function getInitializedWidget() {
   const container = document.createElement('div');

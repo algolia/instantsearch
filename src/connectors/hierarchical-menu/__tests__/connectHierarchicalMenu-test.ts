@@ -2,16 +2,16 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { warning } from '../../../lib/utils';
-import connectHierarchicalMenu from '../connectHierarchicalMenu';
+import { warning } from '../../../lib/utils/index.js';
+import connectHierarchicalMenu from '../connectHierarchicalMenu.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+} from '../../../../test/mock/createWidget.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
 
 describe('connectHierarchicalMenu', () => {
   describe('Usage', () => {

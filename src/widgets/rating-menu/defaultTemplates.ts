@@ -1,4 +1,4 @@
-import type { RatingMenuComponentTemplates } from './rating-menu';
+import type { RatingMenuComponentTemplates } from './rating-menu.js';
 
 const defaultTemplates: RatingMenuComponentTemplates = {
   item: `{{#count}}<a class="{{cssClasses.link}}" aria-label="{{value}} & up" href="{{url}}">{{/count}}{{^count}}<div class="{{cssClasses.link}}" aria-label="{{value}} & up" disabled>{{/count}}

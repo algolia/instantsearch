@@ -3,16 +3,16 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectRange from '../connectRange';
+import connectRange from '../connectRange.js';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import instantsearch from '../../..';
+} from '../../../../test/mock/createWidget.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
+import instantsearch from '../../../index.js';
 
 function createFacetStatsResults({
   helper,

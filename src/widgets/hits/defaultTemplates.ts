@@ -1,4 +1,4 @@
-import type { HitsComponentTemplates } from '../../components/Hits/Hits';
+import type { HitsComponentTemplates } from '../../components/Hits/Hits.js';
 
 const defaultTemplates: HitsComponentTemplates = {
   empty: 'No results',

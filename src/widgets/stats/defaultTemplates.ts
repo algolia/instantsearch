@@ -1,1 +1,1 @@
-export { defaultTemplates as default } from './stats';
+export { defaultTemplates as default } from './stats.js';

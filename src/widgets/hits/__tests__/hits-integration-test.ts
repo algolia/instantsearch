@@ -1,10 +1,10 @@
 import { getByText, fireEvent } from '@testing-library/dom';
 
-import instantsearch from '../../../index.es';
-import { hits, configure } from '../../';
-import { createInsightsMiddleware } from '../../../middlewares';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { wait } from '../../../../test/utils/wait';
+import instantsearch from '../../../index.es.js';
+import { hits, configure } from '../../.js';
+import { createInsightsMiddleware } from '../../../middlewares.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { wait } from '../../../../test/utils/wait.js';
 
 const createSearchClient = ({
   hitsPerPage,
