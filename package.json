@@ -138,6 +138,7 @@
     "rollup-plugin-filesize": "6.2.1",
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.2.0",
+    "rollup-plugin-typescript-resolve": "1.0.1",
     "rollup-plugin-uglify": "6.0.4",
     "scriptjs": "2.5.9",
     "semver": "6.3.0",
