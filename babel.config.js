@@ -6,7 +6,6 @@ const extensionResolver = require('./scripts/babel/extension-resolver');
 const isCJS = process.env.BABEL_ENV === 'cjs';
 const isES = process.env.BABEL_ENV === 'es';
 const isUMD = process.env.BABEL_ENV === 'umd';
-const isStorybook = process.env.BABEL_ENV === 'storybook';
 
 const clean = (x) => x.filter(Boolean);
 
