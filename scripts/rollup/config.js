@@ -1,5 +1,4 @@
 import resolve from 'rollup-plugin-node-resolve';
-import typescriptResolve from 'rollup-plugin-typescript-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
@@ -25,7 +24,6 @@ const link = 'https://github.com/algolia/instantsearch.js';
 const license = `/*! InstantSearch.js ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
-  typescriptResolve(),
   resolve({
     browser: true,
     preferBuiltins: false,
