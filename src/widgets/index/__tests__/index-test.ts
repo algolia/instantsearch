@@ -15,7 +15,7 @@ import {
 import { wait } from '../../../../test/utils/wait';
 import type { Widget } from '../../../types';
 import InstantSearch from '../../../lib/InstantSearch';
-import index from '..';
+import index from '../index';
 import { warning } from '../../../lib/utils';
 import { refinementList } from '../..';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
@@ -2670,7 +2670,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       widgets.forEach((widget) => {
         expect(widget.dispose).toHaveBeenCalledTimes(1);
         expect(widget.dispose).toHaveBeenCalledWith({
-          state: helper.state,
+          state: helper!.state,
           helper,
           parent: instance,
         });
@@ -2769,7 +2769,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.dispose(createDisposeOptions());
 
       // Simulate a call to search from a widget
-      helper.search();
+      helper!.search();
 
       expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(0);
 
