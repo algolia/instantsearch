@@ -29,7 +29,7 @@
     "build:types": "./scripts/typescript/extract.js",
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "storybook": "start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
-    "storybook:build": "build-storybook --quiet --output-dir website/stories --static-dir .storybook/static",
+    "storybook:build": "BABEL_ENV=storybook build-storybook --quiet --output-dir website/stories --static-dir .storybook/static",
     "website:build": "yarn build && ./scripts/website/build-examples.sh",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",

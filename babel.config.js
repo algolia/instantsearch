@@ -5,6 +5,7 @@ const wrapWarningWithDevCheck = require('./scripts/babel/wrap-warning-with-dev-c
 const isCJS = process.env.BABEL_ENV === 'cjs';
 const isES = process.env.BABEL_ENV === 'es';
 const isUMD = process.env.BABEL_ENV === 'umd';
+const isStorybook = process.env.BABEL_ENV === 'storybook';
 
 const clean = (x) => x.filter(Boolean);
 
@@ -25,9 +26,19 @@ module.exports = (api) => {
   ];
 
   const buildPlugins = clean([
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+    ...(isStorybook
+      ? [
+          // https://github.com/storybookjs/storybook/issues/14805
+          // storybook passes "loose" for class properties, so we need to
+          // do the same for all similar properties
+          ['@babel/plugin-proposal-class-properties', { loose: true }],
+          ['@babel/plugin-proposal-private-methods', { loose: true }],
+          [
+            '@babel/plugin-proposal-private-property-in-object',
+            { loose: true },
+          ],
+        ]
+      : ['@babel/plugin-proposal-class-properties']),
     '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
     wrapWarningWithDevCheck,
