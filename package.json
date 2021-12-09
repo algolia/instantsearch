@@ -130,7 +130,6 @@
     "jsdom-global": "3.0.2",
     "places.js": "1.17.1",
     "prettier": "2.3.2",
-    "resolve-typescript-plugin": "1.1.1",
     "rollup": "1.29.1",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-commonjs": "10.1.0",
