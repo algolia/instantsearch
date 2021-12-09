@@ -27,19 +27,7 @@ module.exports = (api) => {
   ];
 
   const buildPlugins = clean([
-    ...(isStorybook
-      ? [
-          // https://github.com/storybookjs/storybook/issues/14805
-          // storybook passes "loose" for class properties, so we need to
-          // do the same for all similar properties
-          ['@babel/plugin-proposal-class-properties', { loose: true }],
-          ['@babel/plugin-proposal-private-methods', { loose: true }],
-          [
-            '@babel/plugin-proposal-private-property-in-object',
-            { loose: true },
-          ],
-        ]
-      : ['@babel/plugin-proposal-class-properties']),
+    '@babel/plugin-proposal-class-properties',
     '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
     wrapWarningWithDevCheck,
