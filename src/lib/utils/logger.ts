@@ -1,4 +1,4 @@
-import noop from './noop.js';
+import noop from './noop';
 
 type Warn = (message: string) => void;
 

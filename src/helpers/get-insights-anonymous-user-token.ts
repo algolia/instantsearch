@@ -1,4 +1,4 @@
-import { warning } from '../lib/utils/index.js';
+import { warning } from '../lib/utils';
 
 export const ANONYMOUS_TOKEN_COOKIE_KEY = '_ALGOLIA';
 

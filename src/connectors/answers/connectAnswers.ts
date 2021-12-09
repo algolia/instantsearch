@@ -7,8 +7,8 @@ import {
   addAbsolutePosition,
   noop,
   escapeHits,
-} from '../../lib/utils/index.js';
-import type { DebouncedFunction } from '../../lib/utils/debounce.js';
+} from '../../lib/utils';
+import type { DebouncedFunction } from '../../lib/utils/debounce';
 import type {
   Connector,
   Hits,
@@ -17,7 +17,7 @@ import type {
   FindAnswersParameters,
   FindAnswersResponse,
   WidgetRenderState,
-} from '../../types/index.js';
+} from '../../types';
 
 type IndexWithAnswers = {
   readonly findAnswers: any;

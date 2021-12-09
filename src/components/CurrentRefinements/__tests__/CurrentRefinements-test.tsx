@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { render } from '@testing-library/preact';
-import CurrentRefinements from '../CurrentRefinements.js';
+import CurrentRefinements from '../CurrentRefinements';
 
 describe('CurrentRefinements', () => {
   const cssClasses = {

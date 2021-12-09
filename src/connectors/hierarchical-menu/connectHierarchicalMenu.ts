@@ -1,4 +1,4 @@
-import type { SendEventForFacet } from '../../lib/utils/index.js';
+import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   warning,
@@ -6,7 +6,7 @@ import {
   createSendEventForFacet,
   isEqual,
   noop,
-} from '../../lib/utils/index.js';
+} from '../../lib/utils';
 import type { SearchResults } from 'algoliasearch-helper';
 import type {
   Connector,
@@ -16,7 +16,7 @@ import type {
   Widget,
   SortBy,
   WidgetRenderState,
-} from '../../types/index.js';
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hierarchical-menu',

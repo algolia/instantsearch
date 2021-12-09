@@ -1,10 +1,10 @@
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createBindEventForHits,
   createSendEventForHits,
-} from '../createSendEventForHits.js';
-import { deserializePayload } from '../../utils/index.js';
-import type { EscapedHits } from '../../../types/index.js';
+} from '../createSendEventForHits';
+import { deserializePayload } from '../../utils';
+import type { EscapedHits } from '../../../types';
 
 const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {
   const instantSearchInstance = createInstantSearch();

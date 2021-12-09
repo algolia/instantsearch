@@ -2,17 +2,14 @@
 
 import { h } from 'preact';
 import cx from 'classnames';
-import Template from '../Template/Template.js';
+import Template from '../Template/Template';
 import type { SearchResults } from 'algoliasearch-helper';
-import type { ComponentCSSClasses, Hits } from '../../types/index.js';
+import type { ComponentCSSClasses, Hits } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
-} from '../../widgets/infinite-hits/infinite-hits.js';
-import type {
-  SendEventForHits,
-  BindEventForHits,
-} from '../../lib/utils/index.js';
+} from '../../widgets/infinite-hits/infinite-hits';
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 
 export type InfiniteHitsComponentCSSClasses =
   ComponentCSSClasses<InfiniteHitsCSSClasses>;

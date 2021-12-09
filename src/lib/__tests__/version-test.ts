@@ -1,4 +1,4 @@
-import version from '../version.js';
+import version from '../version';
 
 describe('version', () => {
   it('includes the latest version', () => {

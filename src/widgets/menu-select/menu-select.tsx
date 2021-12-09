@@ -6,26 +6,22 @@ import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
-} from '../../connectors/menu/connectMenu.js';
-import connectMenu from '../../connectors/menu/connectMenu.js';
+} from '../../connectors/menu/connectMenu';
+import connectMenu from '../../connectors/menu/connectMenu';
 import type {
   MenuSelectComponentCSSClasses,
   MenuSelectComponentTemplates,
-} from '../../components/MenuSelect/MenuSelect.js';
-import MenuSelect from '../../components/MenuSelect/MenuSelect.js';
-import defaultTemplates from './defaultTemplates.js';
+} from '../../components/MenuSelect/MenuSelect';
+import MenuSelect from '../../components/MenuSelect/MenuSelect';
+import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import type {
-  RendererOptions,
-  Template,
-  WidgetFactory,
-} from '../../types/index.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import type { RendererOptions, Template, WidgetFactory } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');

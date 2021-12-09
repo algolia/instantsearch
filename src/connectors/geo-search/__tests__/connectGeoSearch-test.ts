@@ -2,15 +2,15 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import connectGeoSearch from '../connectGeoSearch.js';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import connectGeoSearch from '../connectGeoSearch';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectGeoSearch', () => {
   const createFakeHelper = () => {

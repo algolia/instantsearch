@@ -1,10 +1,10 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from '../../../../test/utils/enzyme.js';
-import type { PaginationProps } from '../Pagination.js';
-import Pagination from '../Pagination.js';
-import Paginator from '../../../connectors/pagination/Paginator.js';
+import { mount } from '../../../../test/utils/enzyme';
+import type { PaginationProps } from '../Pagination';
+import Pagination from '../Pagination';
+import Paginator from '../../../connectors/pagination/Paginator';
 
 describe('Pagination', () => {
   const pager = new Paginator({

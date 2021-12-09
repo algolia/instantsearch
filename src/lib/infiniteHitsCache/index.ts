@@ -1,1 +1,1 @@
-export { default as createInfiniteHitsSessionStorageCache } from './sessionStorage.js';
+export { default as createInfiniteHitsSessionStorageCache } from './sessionStorage';

@@ -1,16 +1,16 @@
 import qs from 'qs';
-import { createSearchClient } from '../../../test/mock/createSearchClient.js';
-import { createWidget } from '../../../test/mock/createWidget.js';
-import { wait } from '../../../test/utils/wait.js';
+import { createSearchClient } from '../../../test/mock/createSearchClient';
+import { createWidget } from '../../../test/mock/createWidget';
+import { wait } from '../../../test/utils/wait';
 import type {
   Router,
   Widget,
   UiState,
   StateMapping,
   IndexUiState,
-} from '../../types/index.js';
-import historyRouter from '../routers/history.js';
-import instantsearch from '../../index.js';
+} from '../../types';
+import historyRouter from '../routers/history';
+import instantsearch from '../..';
 import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;

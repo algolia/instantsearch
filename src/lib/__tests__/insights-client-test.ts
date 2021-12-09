@@ -1,8 +1,8 @@
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { withInsights, inferInsightsPayload } from '../insights/index.js';
-import type { InstantSearch, Widget } from '../../types/index.js';
-import { createInstantSearch } from '../../../test/mock/createInstantSearch.js';
-import { createSingleSearchResponse } from '../../../test/mock/createAPIResponse.js';
+import { withInsights, inferInsightsPayload } from '../insights';
+import type { InstantSearch, Widget } from '../../types';
+import { createInstantSearch } from '../../../test/mock/createInstantSearch';
+import { createSingleSearchResponse } from '../../../test/mock/createAPIResponse';
 
 const connectHits =
   (renderFn: any, unmountFn: any) =>

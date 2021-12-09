@@ -11,13 +11,13 @@ import {
   find,
   noop,
   toArray,
-} from '../../lib/utils/index.js';
+} from '../../lib/utils';
 import type {
   Connector,
   CreateURL,
   InstantSearch,
   WidgetRenderState,
-} from '../../types/index.js';
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',

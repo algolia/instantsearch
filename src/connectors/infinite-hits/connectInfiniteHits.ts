@@ -10,11 +10,8 @@ import type {
   TransformItems,
   Hit,
   WidgetRenderState,
-} from '../../types/index.js';
-import type {
-  SendEventForHits,
-  BindEventForHits,
-} from '../../lib/utils/index.js';
+} from '../../types';
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -26,7 +23,7 @@ import {
   noop,
   createSendEventForHits,
   createBindEventForHits,
-} from '../../lib/utils/index.js';
+} from '../../lib/utils';
 
 export type InfiniteHitsCachedHits = {
   [page: number]: Hits;

@@ -1,12 +1,12 @@
 import { render as preactRender } from 'preact';
-import stats from '../stats.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import stats from '../stats';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
+} from '../../../../test/mock/createWidget';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

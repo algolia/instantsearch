@@ -3,17 +3,17 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+} from '../../../../test/mock/createWidget';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import type {
   InstantSearch,
   InitOptions,
   RenderOptions,
   Hit,
-} from '../../../types/index.js';
-import connectInfiniteHitsWithInsights from '../connectInfiniteHitsWithInsights.js';
+} from '../../../types';
+import connectInfiniteHitsWithInsights from '../connectInfiniteHitsWithInsights';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: (hits: Hit[]) => hits,

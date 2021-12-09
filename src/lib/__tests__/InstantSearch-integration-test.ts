@@ -1,10 +1,10 @@
 import { getByText, fireEvent } from '@testing-library/dom';
-import instantsearch from '../../index.es.js';
-import { configure, searchBox } from '../../widgets/index.js';
-import { connectConfigure } from '../../connectors/index.js';
-import { createSearchClient } from '../../../test/mock/createSearchClient.js';
-import type { MiddlewareDefinition } from '../../types/index.js';
-import { wait } from '../../../test/utils/wait.js';
+import instantsearch from '../../index.es';
+import { configure, searchBox } from '../../widgets';
+import { connectConfigure } from '../../connectors';
+import { createSearchClient } from '../../../test/mock/createSearchClient';
+import type { MiddlewareDefinition } from '../../types';
+import { wait } from '../../../test/utils/wait';
 
 describe('configure', () => {
   it('provides up-to-date uiState to onStateChange', () => {

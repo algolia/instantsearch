@@ -2,9 +2,9 @@
 
 import type { JSX } from 'preact';
 import { h, Component } from 'preact';
-import { renderTemplate, isEqual } from '../../lib/utils/index.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
-import type { Templates } from '../../types/index.js';
+import { renderTemplate, isEqual } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { Templates } from '../../types';
 
 const defaultProps = {
   data: {},

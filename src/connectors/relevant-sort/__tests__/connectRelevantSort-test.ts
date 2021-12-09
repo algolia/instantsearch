@@ -2,15 +2,15 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import connectRelevantSort from '../connectRelevantSort.js';
+import connectRelevantSort from '../connectRelevantSort';
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../test/mock/createWidget.js';
-import { noop } from '../../../lib/utils/index.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+} from '../../../../test/mock/createWidget';
+import { noop } from '../../../lib/utils';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const createHelper = () => {
   return algoliasearchHelper(createSearchClient(), '', {});

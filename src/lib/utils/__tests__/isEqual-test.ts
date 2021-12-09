@@ -1,4 +1,4 @@
-import isEqual from '../isEqual.js';
+import isEqual from '../isEqual';
 
 describe('isEqual', () => {
   describe('with primitives', () => {

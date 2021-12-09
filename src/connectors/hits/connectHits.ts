@@ -1,7 +1,4 @@
-import type {
-  SendEventForHits,
-  BindEventForHits,
-} from '../../lib/utils/index.js';
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -12,14 +9,14 @@ import {
   createSendEventForHits,
   createBindEventForHits,
   noop,
-} from '../../lib/utils/index.js';
+} from '../../lib/utils';
 import type {
   TransformItems,
   Connector,
   Hits,
   Hit,
   WidgetRenderState,
-} from '../../types/index.js';
+} from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({

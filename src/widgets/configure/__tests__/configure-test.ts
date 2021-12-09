@@ -1,4 +1,4 @@
-import configure from '../configure.js';
+import configure from '../configure';
 
 describe('configure', () => {
   test('throws without options', () => {

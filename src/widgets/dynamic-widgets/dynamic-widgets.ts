@@ -1,15 +1,15 @@
 import type {
   DynamicWidgetsConnectorParams,
   DynamicWidgetsWidgetDescription,
-} from '../../connectors/dynamic-widgets/connectDynamicWidgets.js';
-import connectDynamicWidgets from '../../connectors/dynamic-widgets/connectDynamicWidgets.js';
-import { component } from '../../lib/suit.js';
+} from '../../connectors/dynamic-widgets/connectDynamicWidgets';
+import connectDynamicWidgets from '../../connectors/dynamic-widgets/connectDynamicWidgets';
+import { component } from '../../lib/suit';
 import {
   createDocumentationMessageGenerator,
   getContainerNode,
   getWidgetAttribute,
-} from '../../lib/utils/index.js';
-import type { Widget, WidgetFactory } from '../../types/index.js';
+} from '../../lib/utils';
+import type { Widget, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'dynamic-widgets',

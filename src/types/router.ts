@@ -1,4 +1,4 @@
-import type { UiState } from './ui-state.js';
+import type { UiState } from './ui-state';
 
 /**
  * The router is the part that saves and reads the object from the storage.

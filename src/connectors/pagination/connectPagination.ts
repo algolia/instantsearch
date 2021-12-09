@@ -2,13 +2,9 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
-} from '../../lib/utils/index.js';
-import Paginator from './Paginator.js';
-import type {
-  Connector,
-  CreateURL,
-  WidgetRenderState,
-} from '../../types/index.js';
+} from '../../lib/utils';
+import Paginator from './Paginator';
+import type { Connector, CreateURL, WidgetRenderState } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({

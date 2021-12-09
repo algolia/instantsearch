@@ -4,15 +4,15 @@ import { h } from 'preact';
 import type {
   ToggleRefinementRenderState,
   ToggleRefinementValue,
-} from '../../connectors/toggle-refinement/connectToggleRefinement.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
-import type { ComponentCSSClasses } from '../../types/index.js';
+} from '../../connectors/toggle-refinement/connectToggleRefinement';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   ToggleRefinementTemplates,
   ToggleRefinementCSSClasses,
-} from '../../widgets/toggle-refinement/toggle-refinement.js';
+} from '../../widgets/toggle-refinement/toggle-refinement';
 
-import Template from '../Template/Template.js';
+import Template from '../Template/Template';
 
 export type ToggleRefinementComponentCSSClasses =
   ComponentCSSClasses<ToggleRefinementCSSClasses>;

@@ -1,9 +1,9 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import MenuSelect from '../MenuSelect.js';
-import { mount } from '../../../../test/utils/enzyme.js';
-import defaultTemplates from '../../../widgets/menu-select/defaultTemplates.js';
+import MenuSelect from '../MenuSelect';
+import { mount } from '../../../../test/utils/enzyme';
+import defaultTemplates from '../../../widgets/menu-select/defaultTemplates';
 
 describe('MenuSelect', () => {
   const cssClasses = {

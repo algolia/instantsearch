@@ -6,25 +6,22 @@ import type { SearchResults } from 'algoliasearch-helper';
 import type {
   InfiniteHitsComponentCSSClasses,
   InfiniteHitsComponentTemplates,
-} from '../../components/InfiniteHits/InfiniteHits.js';
-import InfiniteHits from '../../components/InfiniteHits/InfiniteHits.js';
+} from '../../components/InfiniteHits/InfiniteHits';
+import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import type {
   InfiniteHitsConnectorParams,
   InfiniteHitsRenderState,
   InfiniteHitsCache,
   InfiniteHitsWidgetDescription,
-} from '../../connectors/infinite-hits/connectInfiniteHits.js';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
+} from '../../connectors/infinite-hits/connectInfiniteHits';
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import {
-  withInsights,
-  withInsightsListener,
-} from '../../lib/insights/index.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import { withInsights, withInsightsListener } from '../../lib/insights';
 import type {
   WidgetFactory,
   Template,
@@ -32,10 +29,10 @@ import type {
   Hit,
   InsightsClient,
   Renderer,
-} from '../../types/index.js';
-import defaultTemplates from './defaultTemplates.js';
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../types';
+import defaultTemplates from './defaultTemplates';
+import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',

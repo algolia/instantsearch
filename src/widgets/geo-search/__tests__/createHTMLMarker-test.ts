@@ -1,5 +1,5 @@
 /* global google */
-import createHTMLMarker from '../createHTMLMarker.js';
+import createHTMLMarker from '../createHTMLMarker';
 
 describe('createHTMLMarker', () => {
   class FakeOverlayView {

@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { render } from '@testing-library/preact';
-import QueryRuleCustomData from '../QueryRuleCustomData.js';
+import QueryRuleCustomData from '../QueryRuleCustomData';
 
 type QueryRuleItem = {
   banner: string;

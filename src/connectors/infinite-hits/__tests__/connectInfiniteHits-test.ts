@@ -4,20 +4,17 @@ import type {
   SearchClient,
   HitAttributeHighlightResult,
   Hit,
-} from '../../../types/index.js';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
+} from '../../../types';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import {
-  TAG_PLACEHOLDER,
-  deserializePayload,
-} from '../../../lib/utils/index.js';
-import connectInfiniteHits from '../connectInfiniteHits.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
+import connectInfiniteHits from '../connectInfiniteHits';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,

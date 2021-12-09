@@ -1,3 +1,3 @@
-export * from './createInsightsMiddleware.js';
-export * from './createRouterMiddleware.js';
-export * from './createMetadataMiddleware.js';
+export * from './createInsightsMiddleware';
+export * from './createRouterMiddleware';
+export * from './createMetadataMiddleware';

@@ -9,14 +9,14 @@ import algoliasearchHelper, {
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
-import type { Widget } from '../../../types/index.js';
-import type { VoiceSearchWidgetParams } from '../voice-search.js';
-import voiceSearch from '../voice-search.js';
-import type { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types.js';
-import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch.js';
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import type { Widget } from '../../../types';
+import type { VoiceSearchWidgetParams } from '../voice-search';
+import voiceSearch from '../voice-search';
+import type { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types';
+import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

@@ -1,10 +1,10 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import ClearRefinements from '../ClearRefinements.js';
-import { mount } from '../../../../test/utils/enzyme.js';
-import { prepareTemplateProps } from '../../../lib/utils/index.js';
-import defaultTemplates from '../../../widgets/clear-refinements/defaultTemplates.js';
+import ClearRefinements from '../ClearRefinements';
+import { mount } from '../../../../test/utils/enzyme';
+import { prepareTemplateProps } from '../../../lib/utils';
+import defaultTemplates from '../../../widgets/clear-refinements/defaultTemplates';
 
 describe('ClearRefinements', () => {
   const defaultProps = {

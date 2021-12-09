@@ -1,5 +1,5 @@
-import type { HoganHelpers } from '../../../types/index.js';
-import renderTemplate from '../renderTemplate.js';
+import type { HoganHelpers } from '../../../types';
+import renderTemplate from '../renderTemplate';
 
 describe('renderTemplate', () => {
   it('expect to process templates as string', () => {

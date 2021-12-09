@@ -6,13 +6,13 @@ import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import type { AutocompleteRenderState } from '../connectAutocomplete.js';
-import connectAutocomplete from '../connectAutocomplete.js';
-import { TAG_PLACEHOLDER } from '../../../lib/utils/index.js';
-import type { EscapedHits, Hit, SearchClient } from '../../../types/index.js';
+} from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import type { AutocompleteRenderState } from '../connectAutocomplete';
+import connectAutocomplete from '../connectAutocomplete';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
+import type { EscapedHits, Hit, SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {

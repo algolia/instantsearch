@@ -1,5 +1,5 @@
-import { wait } from '../../../../test/utils/wait.js';
-import { debounce } from '../debounce.js';
+import { wait } from '../../../../test/utils/wait';
+import { debounce } from '../debounce';
 
 describe('debounce', () => {
   it('debounces the function', async () => {

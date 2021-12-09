@@ -2,20 +2,20 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import Selector from '../../components/Selector/Selector.js';
+import Selector from '../../components/Selector/Selector';
 import type {
   HitsPerPageConnectorParams,
   HitsPerPageRenderState,
   HitsPerPageWidgetDescription,
-} from '../../connectors/hits-per-page/connectHitsPerPage.js';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
+} from '../../connectors/hits-per-page/connectHitsPerPage';
+import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
   find,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import type { ComponentCSSClasses, WidgetFactory } from '../../types/index.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import type { ComponentCSSClasses, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',

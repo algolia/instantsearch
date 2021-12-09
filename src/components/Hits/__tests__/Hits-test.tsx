@@ -1,18 +1,15 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow, mount } from '../../../../test/utils/enzyme.js';
-import { highlight } from '../../../helpers/index.js';
-import {
-  prepareTemplateProps,
-  TAG_REPLACEMENT,
-} from '../../../lib/utils/index.js';
-import Template from '../../Template/Template.js';
-import type { HitsProps } from '../Hits.js';
-import Hits from '../Hits.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { shallow, mount } from '../../../../test/utils/enzyme';
+import { highlight } from '../../../helpers';
+import { prepareTemplateProps, TAG_REPLACEMENT } from '../../../lib/utils';
+import Template from '../../Template/Template';
+import type { HitsProps } from '../Hits';
+import Hits from '../Hits';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import defaultTemplates from '../../../widgets/hits/defaultTemplates.js';
+import defaultTemplates from '../../../widgets/hits/defaultTemplates';
 
 describe('Hits', () => {
   const cssClasses = {

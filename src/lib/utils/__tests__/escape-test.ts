@@ -1,4 +1,4 @@
-import escape from '../escape.js';
+import escape from '../escape';
 
 describe('escape', () => {
   test('should escape values', () => {

@@ -2,26 +2,26 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import type { RefinementListComponentCSSClasses } from '../../components/RefinementList/RefinementList.js';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+import type { RefinementListComponentCSSClasses } from '../../components/RefinementList/RefinementList';
+import RefinementList from '../../components/RefinementList/RefinementList';
 import type {
   RefinementListRenderState,
   RefinementListConnectorParams,
   RefinementListWidgetDescription,
-} from '../../connectors/refinement-list/connectRefinementList.js';
-import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
+} from '../../connectors/refinement-list/connectRefinementList';
+import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import type { Template, WidgetFactory, Renderer } from '../../types/index.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
-import searchBoxDefaultTemplates from '../search-box/defaultTemplates.js';
-import type { SearchBoxTemplates } from '../search-box/search-box.js';
-import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox.js';
-import defaultTemplates from './defaultTemplates.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import type { Template, WidgetFactory, Renderer } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
+import type { SearchBoxTemplates } from '../search-box/search-box';
+import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
+import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',

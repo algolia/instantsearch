@@ -1,6 +1,6 @@
-import connectConfigureRelatedItems from '../connectConfigureRelatedItems.js';
-import connectConfigure from '../../configure/connectConfigure.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
+import connectConfigure from '../../configure/connectConfigure';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
 jest.mock('../../configure/connectConfigure');
 

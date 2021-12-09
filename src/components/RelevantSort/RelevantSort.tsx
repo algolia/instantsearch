@@ -1,12 +1,12 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import Template from '../Template/Template.js';
+import Template from '../Template/Template';
 import type {
   RelevantSortCSSClasses,
   RelevantSortTemplates,
-} from '../../widgets/relevant-sort/relevant-sort.js';
-import type { ComponentCSSClasses } from '../../types/index.js';
+} from '../../widgets/relevant-sort/relevant-sort';
+import type { ComponentCSSClasses } from '../../types';
 
 export type RelevantSortComponentCSSClasses =
   ComponentCSSClasses<RelevantSortCSSClasses>;

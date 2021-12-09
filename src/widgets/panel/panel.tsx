@@ -7,17 +7,17 @@ import {
   getContainerNode,
   getObjectType,
   warning,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import type { PanelComponentCSSClasses } from '../../components/Panel/Panel.js';
-import Panel from '../../components/Panel/Panel.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import type { PanelComponentCSSClasses } from '../../components/Panel/Panel';
+import Panel from '../../components/Panel/Panel';
 import type {
   Template,
   RenderOptions,
   WidgetFactory,
   InitOptions,
   Widget,
-} from '../../types/index.js';
+} from '../../types';
 
 export type PanelCSSClasses = Partial<{
   /**

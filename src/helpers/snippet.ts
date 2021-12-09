@@ -1,6 +1,6 @@
-import type { Hit } from '../types/index.js';
-import { component } from '../lib/suit.js';
-import { TAG_REPLACEMENT, getPropertyByPath } from '../lib/utils/index.js';
+import type { Hit } from '../types';
+import { component } from '../lib/suit';
+import { TAG_REPLACEMENT, getPropertyByPath } from '../lib/utils';
 
 export type SnippetOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path

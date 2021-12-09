@@ -1,4 +1,4 @@
-import isDomElement from '../isDomElement.js';
+import isDomElement from '../isDomElement';
 
 describe('isDomElement', () => {
   it('should return true for dom element', () => {

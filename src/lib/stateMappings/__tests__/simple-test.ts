@@ -1,5 +1,5 @@
-import type { UiState } from '../../../types/index.js';
-import simpleStateMapping from '../simple.js';
+import type { UiState } from '../../../types';
+import simpleStateMapping from '../simple';
 
 describe('simpleStateMapping', () => {
   describe('stateToRoute', () => {

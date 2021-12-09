@@ -1,4 +1,4 @@
-import { deprecate, warning } from '../logger.js';
+import { deprecate, warning } from '../logger';
 
 describe('deprecate', () => {
   const sum = (...args: number[]) => args.reduce((acc, _) => acc + _, 0);

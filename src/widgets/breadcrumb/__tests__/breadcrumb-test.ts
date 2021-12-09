@@ -1,18 +1,18 @@
 import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
-import breadcrumb from '../breadcrumb.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import breadcrumb from '../breadcrumb';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import {
   createRenderOptions,
   createInitOptions,
-} from '../../../../test/mock/createWidget.js';
+} from '../../../../test/mock/createWidget';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

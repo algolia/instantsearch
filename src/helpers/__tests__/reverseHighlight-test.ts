@@ -1,4 +1,4 @@
-import reverseHighlight from '../reverseHighlight.js';
+import reverseHighlight from '../reverseHighlight';
 
 const NONE = 'none' as const;
 const FULL = 'full' as const;

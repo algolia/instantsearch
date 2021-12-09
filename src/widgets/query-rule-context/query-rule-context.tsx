@@ -1,15 +1,12 @@
-import type { WidgetFactory } from '../../types/index.js';
-import {
-  createDocumentationMessageGenerator,
-  noop,
-} from '../../lib/utils/index.js';
+import type { WidgetFactory } from '../../types';
+import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 import type {
   ParamTrackedFilters,
   ParamTransformRuleContexts,
   QueryRulesConnectorParams,
   QueryRulesWidgetDescription,
-} from '../../connectors/query-rules/connectQueryRules.js';
-import connectQueryRules from '../../connectors/query-rules/connectQueryRules.js';
+} from '../../connectors/query-rules/connectQueryRules';
+import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
 
 export type QueryRuleContextWidgetParams = {
   trackedFilters: ParamTrackedFilters;

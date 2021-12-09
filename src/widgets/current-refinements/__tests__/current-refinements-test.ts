@@ -1,15 +1,15 @@
 import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import currentRefinements from '../current-refinements.js';
-import type { CurrentRefinementsProps } from '../../../components/CurrentRefinements/CurrentRefinements.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import currentRefinements from '../current-refinements';
+import type { CurrentRefinementsProps } from '../../../components/CurrentRefinements/CurrentRefinements';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

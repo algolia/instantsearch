@@ -6,22 +6,22 @@ import type { PlainSearchParameters } from 'algoliasearch-helper';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
 import type {
   VoiceSearchConnectorParams,
   VoiceSearchRenderState,
   VoiceSearchWidgetDescription,
-} from '../../connectors/voice-search/connectVoiceSearch.js';
-import connectVoiceSearch from '../../connectors/voice-search/connectVoiceSearch.js';
+} from '../../connectors/voice-search/connectVoiceSearch';
+import connectVoiceSearch from '../../connectors/voice-search/connectVoiceSearch';
 import type {
   VoiceSearchComponentCSSClasses,
   VoiceSearchComponentTemplates,
-} from '../../components/VoiceSearch/VoiceSearch.js';
-import VoiceSearchComponent from '../../components/VoiceSearch/VoiceSearch.js';
-import defaultTemplates from './defaultTemplates.js';
-import type { WidgetFactory, Template, Renderer } from '../../types/index.js';
-import type { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types.js';
+} from '../../components/VoiceSearch/VoiceSearch';
+import VoiceSearchComponent from '../../components/VoiceSearch/VoiceSearch';
+import defaultTemplates from './defaultTemplates';
+import type { WidgetFactory, Template, Renderer } from '../../types';
+import type { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');

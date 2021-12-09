@@ -1,5 +1,5 @@
 /* global SpeechRecognition */
-import createVoiceSearchHelper from '../index.js';
+import createVoiceSearchHelper from '..';
 
 type DummySpeechRecognition = () => void;
 declare global {

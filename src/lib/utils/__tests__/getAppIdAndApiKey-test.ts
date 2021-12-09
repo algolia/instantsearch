@@ -1,4 +1,4 @@
-import { getAppIdAndApiKey } from '../getAppIdAndApiKey.js';
+import { getAppIdAndApiKey } from '../getAppIdAndApiKey';
 import algoliasearchV4 from 'algoliasearch';
 // @ts-ignore (can't type a module that is imported with an alias?)
 import algoliasearchV3 from 'algoliasearch-v3';

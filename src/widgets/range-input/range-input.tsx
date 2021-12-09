@@ -5,22 +5,22 @@ import cx from 'classnames';
 import type {
   RangeInputComponentCSSClasses,
   RangeInputComponentTemplates,
-} from '../../components/RangeInput/RangeInput.js';
-import RangeInput from '../../components/RangeInput/RangeInput.js';
+} from '../../components/RangeInput/RangeInput';
+import RangeInput from '../../components/RangeInput/RangeInput';
 import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors/range/connectRange.js';
-import connectRange from '../../connectors/range/connectRange.js';
+} from '../../connectors/range/connectRange';
+import connectRange from '../../connectors/range/connectRange';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import type { Renderer, Template, WidgetFactory } from '../../types/index.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import type { Renderer, Template, WidgetFactory } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
 const suit = component('RangeInput');

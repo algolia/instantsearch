@@ -1,4 +1,4 @@
-import isPlainObject from '../isPlainObject.js';
+import isPlainObject from '../isPlainObject';
 
 describe('isPlainObject', () => {
   test('with primitive should be false', () => {

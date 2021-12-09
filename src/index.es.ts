@@ -1,7 +1,7 @@
-import type { Expand, UiState } from './types/index.js';
-import type { InstantSearchOptions } from './lib/InstantSearch.js';
-import InstantSearch from './lib/InstantSearch.js';
-import version from './lib/version.js';
+import type { Expand, UiState } from './types';
+import type { InstantSearchOptions } from './lib/InstantSearch';
+import InstantSearch from './lib/InstantSearch';
+import version from './lib/version';
 import {
   snippet,
   reverseSnippet,
@@ -9,9 +9,9 @@ import {
   reverseHighlight,
   insights,
   getInsightsAnonymousUserToken,
-} from './helpers/index.js';
-import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index.js';
-import { deprecate } from './lib/utils/index.js';
+} from './helpers';
+import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache';
+import { deprecate } from './lib/utils';
 
 type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(
@@ -111,4 +111,4 @@ import { connectSearchBox } from 'instantsearch.js/es/connectors'`
 
 export default instantsearch;
 
-export * from './types/index.js';
+export * from './types';

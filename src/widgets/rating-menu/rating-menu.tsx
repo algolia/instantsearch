@@ -2,27 +2,27 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+import RefinementList from '../../components/RefinementList/RefinementList';
 import type {
   RatingMenuWidgetDescription,
   RatingMenuConnectorParams,
   RatingMenuRenderState,
-} from '../../connectors/rating-menu/connectRatingMenu.js';
-import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu.js';
-import defaultTemplates from './defaultTemplates.js';
+} from '../../connectors/rating-menu/connectRatingMenu';
+import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
+import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
 import type {
   ComponentCSSClasses,
   RendererOptions,
   Template,
   WidgetFactory,
-} from '../../types/index.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
 const suit = component('RatingMenu');

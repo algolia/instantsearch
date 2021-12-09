@@ -3,16 +3,16 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import connectQueryRules from '../connectQueryRules.js';
-import type { TransformItems } from '../../../types/index.js';
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import connectQueryRules from '../connectQueryRules';
+import type { TransformItems } from '../../../types';
 
 describe('connectQueryRules', () => {
   function createWidget() {

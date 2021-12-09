@@ -1,13 +1,10 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { deserializePayload } from '../utils/index.js';
-import {
-  readDataAttributes,
-  hasDataAttributes,
-} from '../../helpers/insights.js';
-import type { InsightsClient } from '../../types/index.js';
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware.js';
+import { deserializePayload } from '../utils';
+import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
+import type { InsightsClient } from '../../types';
+import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type WithInsightsListenerProps = {
   [key: string]: unknown;

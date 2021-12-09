@@ -2,18 +2,12 @@
 
 import { h } from 'preact';
 import cx from 'classnames';
-import Template from '../Template/Template.js';
+import Template from '../Template/Template';
 import type { SearchResults } from 'algoliasearch-helper';
-import type {
-  BindEventForHits,
-  SendEventForHits,
-} from '../../lib/utils/index.js';
-import type {
-  ComponentCSSClasses,
-  Hits as HitsArray,
-} from '../../types/index.js';
-import type { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
+import type { ComponentCSSClasses, Hits as HitsArray } from '../../types';
+import type { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type HitsComponentCSSClasses = ComponentCSSClasses<HitsCSSClasses>;
 export type HitsComponentTemplates = Required<HitsTemplates>;

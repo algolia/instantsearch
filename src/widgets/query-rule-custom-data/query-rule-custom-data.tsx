@@ -5,21 +5,21 @@ import cx from 'classnames';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import type { WidgetFactory, Template } from '../../types/index.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import type { WidgetFactory, Template } from '../../types';
 import type {
   QueryRulesConnectorParams,
   QueryRulesRenderState,
   QueryRulesWidgetDescription,
-} from '../../connectors/query-rules/connectQueryRules.js';
-import connectQueryRules from '../../connectors/query-rules/connectQueryRules.js';
+} from '../../connectors/query-rules/connectQueryRules';
+import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
 import type {
   QueryRuleCustomDataComponentCSSClasses,
   QueryRuleCustomDataComponentTemplates,
-} from '../../components/QueryRuleCustomData/QueryRuleCustomData.js';
-import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../components/QueryRuleCustomData/QueryRuleCustomData';
+import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 export type QueryRuleCustomDataCSSClasses = Partial<{
   root: string | string[];

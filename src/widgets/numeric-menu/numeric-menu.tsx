@@ -2,27 +2,27 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+import RefinementList from '../../components/RefinementList/RefinementList';
 import type {
   NumericMenuConnectorParams,
   NumericMenuRenderState,
   NumericMenuWidgetDescription,
-} from '../../connectors/numeric-menu/connectNumericMenu.js';
-import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu.js';
-import defaultTemplates from './defaultTemplates.js';
+} from '../../connectors/numeric-menu/connectNumericMenu';
+import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
+import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
 import type {
   ComponentCSSClasses,
   Renderer,
   Template,
   WidgetFactory,
-} from '../../types/index.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');

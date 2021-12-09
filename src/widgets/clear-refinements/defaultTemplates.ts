@@ -1,4 +1,4 @@
-import type { ClearRefinementsComponentTemplates } from '../../components/ClearRefinements/ClearRefinements.js';
+import type { ClearRefinementsComponentTemplates } from '../../components/ClearRefinements/ClearRefinements';
 
 const defaultTemplates: ClearRefinementsComponentTemplates = {
   resetLabel: 'Clear refinements',

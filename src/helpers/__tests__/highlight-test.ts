@@ -1,4 +1,4 @@
-import highlight from '../highlight.js';
+import highlight from '../highlight';
 
 const NONE = 'none' as const;
 const FULL = 'full' as const;

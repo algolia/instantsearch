@@ -1,9 +1,9 @@
-import connectConfigureRelatedItems from '../connectConfigureRelatedItems.js';
-import instantsearch from '../../../index.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import type { AlgoliaHit } from '../../../types/index.js';
-import { noop } from '../../../lib/utils/index.js';
-import { wait } from '../../../../test/utils/wait.js';
+import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
+import instantsearch from '../../..';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import type { AlgoliaHit } from '../../../types';
+import { noop } from '../../../lib/utils';
+import { wait } from '../../../../test/utils/wait';
 
 const hit: AlgoliaHit = {
   objectID: '1',

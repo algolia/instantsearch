@@ -3,7 +3,7 @@ import type {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import type { SendEventForFacet } from '../../lib/utils/index.js';
+import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -11,13 +11,9 @@ import {
   isFiniteNumber,
   find,
   noop,
-} from '../../lib/utils/index.js';
-import type { InsightsEvent } from '../../middlewares/index.js';
-import type {
-  Connector,
-  InstantSearch,
-  WidgetRenderState,
-} from '../../types/index.js';
+} from '../../lib/utils';
+import type { InsightsEvent } from '../../middlewares';
+import type { Connector, InstantSearch, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator(
   { name: 'range-input', connector: true },

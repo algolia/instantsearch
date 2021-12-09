@@ -5,25 +5,21 @@ import cx from 'classnames';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import type {
-  WidgetFactory,
-  Template,
-  RendererOptions,
-} from '../../types/index.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import type { WidgetFactory, Template, RendererOptions } from '../../types';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
-} from '../../connectors/search-box/connectSearchBox.js';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox.js';
+} from '../../connectors/search-box/connectSearchBox';
+import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
-} from '../../components/SearchBox/SearchBox.js';
-import SearchBox from '../../components/SearchBox/SearchBox.js';
-import defaultTemplates from './defaultTemplates.js';
+} from '../../components/SearchBox/SearchBox';
+import SearchBox from '../../components/SearchBox/SearchBox';
+import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');

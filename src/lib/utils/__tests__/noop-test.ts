@@ -1,4 +1,4 @@
-import noop from '../noop.js';
+import noop from '../noop';
 
 describe('noop', () => {
   test('does nothing', () => {

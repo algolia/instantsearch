@@ -1,8 +1,8 @@
-import capitalize from './capitalize.js';
-import { warning } from './logger.js';
-import type { IndexWidget } from '../../widgets/index/index.js';
-import type { Widget, IndexUiState } from '../../types/index.js';
-import { keys } from './typedObject.js';
+import capitalize from './capitalize';
+import { warning } from './logger';
+import type { IndexWidget } from '../../widgets/index/index';
+import type { Widget, IndexUiState } from '../../types';
+import { keys } from './typedObject';
 
 // Some connectors are responsible for multiple widgets so we need
 // to map them.

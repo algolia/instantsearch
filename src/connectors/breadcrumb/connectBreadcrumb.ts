@@ -4,14 +4,14 @@ import {
   createDocumentationMessageGenerator,
   isEqual,
   noop,
-} from '../../lib/utils/index.js';
+} from '../../lib/utils';
 import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import type {
   Connector,
   TransformItems,
   CreateURL,
   WidgetRenderState,
-} from '../../types/index.js';
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'breadcrumb',

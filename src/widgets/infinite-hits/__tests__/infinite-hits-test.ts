@@ -8,17 +8,17 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import type { SearchClient } from '../../../types/index.js';
-import infiniteHits from '../infinite-hits.js';
-import type { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import type { SearchClient } from '../../../types';
+import infiniteHits from '../infinite-hits';
+import type { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import type { InfiniteHitsCache } from '../../../connectors/infinite-hits/connectInfiniteHits.js';
+} from '../../../../test/mock/createWidget';
+import type { InfiniteHitsCache } from '../../../connectors/infinite-hits/connectInfiniteHits';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

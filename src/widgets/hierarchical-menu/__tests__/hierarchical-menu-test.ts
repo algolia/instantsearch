@@ -4,19 +4,19 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import type { HierarchicalMenuWidgetParams } from '../hierarchical-menu.js';
-import hierarchicalMenu from '../hierarchical-menu.js';
+import type { HierarchicalMenuWidgetParams } from '../hierarchical-menu';
+import hierarchicalMenu from '../hierarchical-menu';
 import type {
   HierarchicalMenuConnectorParams,
   HierarchicalMenuWidgetDescription,
-} from '../../../connectors/hierarchical-menu/connectHierarchicalMenu.js';
+} from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import type { Widget } from '../../../types/index.js';
+} from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import type { Widget } from '../../../types';
 
 const mockedRender = render as jest.Mock;
 

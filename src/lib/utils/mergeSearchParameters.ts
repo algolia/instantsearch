@@ -1,6 +1,6 @@
 import type { SearchParameters } from 'algoliasearch-helper';
-import findIndex from './findIndex.js';
-import uniq from './uniq.js';
+import findIndex from './findIndex';
+import uniq from './uniq';
 
 type Merger = (
   left: SearchParameters,

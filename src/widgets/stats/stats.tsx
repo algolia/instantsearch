@@ -5,22 +5,22 @@ import cx from 'classnames';
 import type {
   StatsComponentCSSClasses,
   StatsComponentTemplates,
-} from '../../components/Stats/Stats.js';
-import Stats from '../../components/Stats/Stats.js';
+} from '../../components/Stats/Stats';
+import Stats from '../../components/Stats/Stats';
 import type {
   StatsConnectorParams,
   StatsRenderState,
   StatsWidgetDescription,
-} from '../../connectors/stats/connectStats.js';
-import connectStats from '../../connectors/stats/connectStats.js';
+} from '../../connectors/stats/connectStats';
+import connectStats from '../../connectors/stats/connectStats';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import { component } from '../../lib/suit.js';
-import type { Renderer, Template, WidgetFactory } from '../../types/index.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../lib/utils';
+import { component } from '../../lib/suit';
+import type { Renderer, Template, WidgetFactory } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');

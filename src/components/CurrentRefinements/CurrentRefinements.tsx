@@ -1,13 +1,13 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { isSpecialClick, capitalize } from '../../lib/utils/index.js';
+import { isSpecialClick, capitalize } from '../../lib/utils';
 import type {
   CurrentRefinementsConnectorParamsItem,
   CurrentRefinementsConnectorParamsRefinement,
-} from '../../connectors/current-refinements/connectCurrentRefinements.js';
-import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements.js';
-import type { ComponentCSSClasses } from '../../types/index.js';
+} from '../../connectors/current-refinements/connectCurrentRefinements';
+import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
+import type { ComponentCSSClasses } from '../../types';
 
 export type CurrentRefinementsComponentCSSClasses =
   ComponentCSSClasses<CurrentRefinementsCSSClasses>;

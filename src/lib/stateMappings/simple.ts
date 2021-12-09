@@ -1,4 +1,4 @@
-import type { UiState, IndexUiState, StateMapping } from '../../types/index.js';
+import type { UiState, IndexUiState, StateMapping } from '../../types';
 
 function getIndexStateWithoutConfigure<TIndexUiState extends IndexUiState>(
   uiState: TIndexUiState

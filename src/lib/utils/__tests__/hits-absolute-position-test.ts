@@ -1,4 +1,4 @@
-import { addAbsolutePosition } from '../hits-absolute-position.js';
+import { addAbsolutePosition } from '../hits-absolute-position';
 
 describe('addAbsolutePosition', () => {
   it('should equal index + 1 on first page (page 0)', () => {

@@ -1,4 +1,4 @@
-import capitalize from '../capitalize.js';
+import capitalize from '../capitalize';
 
 describe('capitalize', () => {
   it('should capitalize the first character only', () => {

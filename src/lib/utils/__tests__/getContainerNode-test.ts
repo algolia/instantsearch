@@ -1,4 +1,4 @@
-import getContainerNode from '../getContainerNode.js';
+import getContainerNode from '../getContainerNode';
 
 describe('getContainerNode', () => {
   it('should be able to get a node from a node', () => {

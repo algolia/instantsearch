@@ -1,10 +1,10 @@
 import type {
   ConfigureConnectorParams,
   ConfigureWidgetDescription,
-} from '../../connectors/configure/connectConfigure.js';
-import connectConfigure from '../../connectors/configure/connectConfigure.js';
-import type { Widget } from '../../types/index.js';
-import { noop } from '../../lib/utils/index.js';
+} from '../../connectors/configure/connectConfigure';
+import connectConfigure from '../../connectors/configure/connectConfigure';
+import type { Widget } from '../../types';
+import { noop } from '../../lib/utils';
 
 /**
  * A list of [search parameters](https://www.algolia.com/doc/api-reference/search-api-parameters/)

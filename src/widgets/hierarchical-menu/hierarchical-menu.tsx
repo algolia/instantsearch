@@ -2,21 +2,21 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+import RefinementList from '../../components/RefinementList/RefinementList';
 import type {
   HierarchicalMenuItem,
   HierarchicalMenuConnectorParams,
   HierarchicalMenuRenderState,
   HierarchicalMenuWidgetDescription,
-} from '../../connectors/hierarchical-menu/connectHierarchicalMenu.js';
-import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu.js';
-import defaultTemplates from './defaultTemplates.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import defaultTemplates from './defaultTemplates';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import {
   prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
+} from '../../lib/utils';
 import type {
   TransformItems,
   Template,
@@ -24,8 +24,8 @@ import type {
   RendererOptions,
   SortBy,
   ComponentCSSClasses,
-} from '../../types/index.js';
-import { component } from '../../lib/suit.js';
+} from '../../types';
+import { component } from '../../lib/suit';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hierarchical-menu',

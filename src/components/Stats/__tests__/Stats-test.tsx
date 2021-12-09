@@ -1,11 +1,11 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from '../../../../test/utils/enzyme.js';
+import { mount } from '../../../../test/utils/enzyme';
 import { render } from '@testing-library/preact';
-import Stats from '../Stats.js';
-import defaultTemplates from '../../../widgets/stats/defaultTemplates.js';
-import createHelpers from '../../../lib/createHelpers.js';
+import Stats from '../Stats';
+import defaultTemplates from '../../../widgets/stats/defaultTemplates';
+import createHelpers from '../../../lib/createHelpers';
 
 describe('Stats', () => {
   const cssClasses = {

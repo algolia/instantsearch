@@ -1,5 +1,5 @@
-import uniq from './uniq.js';
-import type { HoganHelpers, Templates } from '../../types/index.js';
+import uniq from './uniq';
+import type { HoganHelpers, Templates } from '../../types';
 import type { HoganOptions } from 'hogan.js';
 
 type TemplatesConfig = {

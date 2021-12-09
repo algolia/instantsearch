@@ -1,22 +1,22 @@
 import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
-import type defaultTemplates from '../defaultTemplates.js';
-import numericMenu from '../numeric-menu.js';
+import type defaultTemplates from '../defaultTemplates';
+import numericMenu from '../numeric-menu';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
 
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import {
   createRenderOptions,
   createInitOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import type { RefinementListProps } from '../../../components/RefinementList/RefinementList.js';
-import type { NumericMenuConnectorParamsItem } from '../../../connectors/numeric-menu/connectNumericMenu.js';
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
+import type { NumericMenuConnectorParamsItem } from '../../../connectors/numeric-menu/connectNumericMenu';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

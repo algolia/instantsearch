@@ -2,23 +2,20 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import {
-  TAG_PLACEHOLDER,
-  deserializePayload,
-} from '../../../lib/utils/index.js';
-import connectHits from '../connectHits.js';
+import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
+import connectHits from '../connectHits';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+} from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import type {
   EscapedHits,
   Hit,
   HitAttributeHighlightResult,
-} from '../../../types/index.js';
+} from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,

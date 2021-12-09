@@ -4,11 +4,11 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import clearRefinements from '../clear-refinements.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
-import type { ClearRefinementsProps } from '../../../components/ClearRefinements/ClearRefinements.js';
+} from '../../../../test/mock/createWidget';
+import clearRefinements from '../clear-refinements';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import type { ClearRefinementsProps } from '../../../components/ClearRefinements/ClearRefinements';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

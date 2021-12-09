@@ -1,8 +1,8 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from '../../../../test/utils/enzyme.js';
-import GeoSearchButton from '../GeoSearchButton.js';
+import { shallow } from '../../../../test/utils/enzyme';
+import GeoSearchButton from '../GeoSearchButton';
 
 describe('GeoSearchButton', () => {
   const defaultProps = {

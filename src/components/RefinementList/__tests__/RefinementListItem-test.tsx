@@ -1,9 +1,9 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from '../../../../test/utils/enzyme.js';
-import type { RefinementListItemProps } from '../RefinementListItem.js';
-import RefinementListItem from '../RefinementListItem.js';
+import { shallow } from '../../../../test/utils/enzyme';
+import type { RefinementListItemProps } from '../RefinementListItem';
+import RefinementListItem from '../RefinementListItem';
 
 describe('RefinementListItem', () => {
   const props: RefinementListItemProps = {

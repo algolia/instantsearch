@@ -4,16 +4,16 @@ import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import rangeInput from '../range-input.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
+import rangeInput from '../range-input';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
-import type { InstantSearch } from '../../../types/index.js';
+} from '../../../../test/mock/createWidget';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import type { InstantSearch } from '../../../types';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

@@ -4,12 +4,8 @@ import {
   find,
   warning,
   noop,
-} from '../../lib/utils/index.js';
-import type {
-  Connector,
-  TransformItems,
-  WidgetRenderState,
-} from '../../types/index.js';
+} from '../../lib/utils';
+import type { Connector, TransformItems, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'sort-by',

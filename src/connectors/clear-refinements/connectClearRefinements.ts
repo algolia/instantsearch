@@ -7,14 +7,14 @@ import {
   noop,
   uniq,
   mergeSearchParameters,
-} from '../../lib/utils/index.js';
+} from '../../lib/utils';
 import type {
   TransformItems,
   CreateURL,
   Connector,
   WidgetRenderState,
   ScopedResult,
-} from '../../types/index.js';
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',

@@ -5,28 +5,24 @@ import cx from 'classnames';
 import type {
   ToggleRefinementComponentCSSClasses,
   ToggleRefinementComponentTemplates,
-} from '../../components/ToggleRefinement/ToggleRefinement.js';
-import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement.js';
+} from '../../components/ToggleRefinement/ToggleRefinement';
+import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
 import type {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
   ToggleRefinementValue,
   ToggleRefinementRenderState,
-} from '../../connectors/toggle-refinement/connectToggleRefinement.js';
-import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement.js';
-import defaultTemplates from './defaultTemplates.js';
+} from '../../connectors/toggle-refinement/connectToggleRefinement';
+import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement';
+import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,
   prepareTemplateProps,
   createDocumentationMessageGenerator,
-} from '../../lib/utils/index.js';
-import type {
-  RendererOptions,
-  Template,
-  WidgetFactory,
-} from '../../types/index.js';
-import { component } from '../../lib/suit.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
+} from '../../lib/utils';
+import type { RendererOptions, Template, WidgetFactory } from '../../types';
+import { component } from '../../lib/suit';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',

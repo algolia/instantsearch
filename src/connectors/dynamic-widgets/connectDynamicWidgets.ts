@@ -4,8 +4,8 @@ import {
   createDocumentationMessageGenerator,
   getWidgetAttribute,
   noop,
-} from '../../lib/utils/index.js';
-import type { Connector, Widget } from '../../types/index.js';
+} from '../../lib/utils';
+import type { Connector, Widget } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'dynamic-widgets',

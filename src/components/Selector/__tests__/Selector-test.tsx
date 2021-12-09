@@ -1,8 +1,8 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import Selector from '../Selector.js';
-import { mount } from '../../../../test/utils/enzyme.js';
+import Selector from '../Selector';
+import { mount } from '../../../../test/utils/enzyme';
 
 describe('Selector', () => {
   it('should render <Selector/> with strings', () => {

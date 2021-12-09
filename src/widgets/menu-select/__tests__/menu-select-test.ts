@@ -5,15 +5,15 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import menuSelect from '../menu-select.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import menuSelect from '../menu-select';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+} from '../../../../test/mock/createWidget';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

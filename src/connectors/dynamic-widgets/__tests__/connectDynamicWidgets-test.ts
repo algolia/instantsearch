@@ -1,20 +1,20 @@
-import { connectMenu, connectDynamicWidgets } from '../../index.js';
-import { index } from '../../../widgets/index.js';
-import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer.js';
+import { connectMenu, connectDynamicWidgets } from '../..';
+import { index } from '../../../widgets';
+import { widgetSnapshotSerializer } from '../../../../test/utils/widgetSnapshotSerializer';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { wait } from '../../../../test/utils/wait.js';
+} from '../../../../test/mock/createWidget';
+import { wait } from '../../../../test/utils/wait';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import {
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../test/mock/createAPIResponse.js';
-import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu.js';
-import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets.js';
-import connectRefinementList from '../../refinement-list/connectRefinementList.js';
+} from '../../../../test/mock/createAPIResponse';
+import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
+import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
+import connectRefinementList from '../../refinement-list/connectRefinementList';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 

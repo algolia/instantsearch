@@ -5,17 +5,17 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import type { HitsPerPageCSSClasses } from '../hits-per-page.js';
-import hitsPerPage from '../hits-per-page.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
-import type { SelectorProps } from '../../../components/Selector/Selector.js';
-import type { HitsPerPageConnectorParamsItem } from '../../../connectors/hits-per-page/connectHitsPerPage.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+import type { HitsPerPageCSSClasses } from '../hits-per-page';
+import hitsPerPage from '../hits-per-page';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import type { SelectorProps } from '../../../components/Selector/Selector';
+import type { HitsPerPageConnectorParamsItem } from '../../../connectors/hits-per-page/connectHitsPerPage';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
+} from '../../../../test/mock/createWidget';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

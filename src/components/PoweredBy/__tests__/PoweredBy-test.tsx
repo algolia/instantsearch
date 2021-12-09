@@ -3,7 +3,7 @@
 import { h } from 'preact';
 import { render } from '@testing-library/preact';
 
-import PoweredBy from '../PoweredBy.js';
+import PoweredBy from '../PoweredBy';
 
 const cssClasses = {
   root: 'root',

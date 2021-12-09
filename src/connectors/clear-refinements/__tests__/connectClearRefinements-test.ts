@@ -3,10 +3,10 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import connectClearRefinements from '../connectClearRefinements.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+} from '../../../../test/mock/createWidget';
+import connectClearRefinements from '../connectClearRefinements';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 describe('connectClearRefinements', () => {
   describe('Usage', () => {

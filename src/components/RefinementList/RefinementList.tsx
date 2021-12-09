@@ -3,24 +3,20 @@
 import type { JSX } from 'preact';
 import { h, createRef, Component } from 'preact';
 import cx from 'classnames';
-import { isSpecialClick, isEqual } from '../../lib/utils/index.js';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps.js';
-import Template from '../Template/Template.js';
-import RefinementListItem from './RefinementListItem.js';
+import { isSpecialClick, isEqual } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import Template from '../Template/Template';
+import RefinementListItem from './RefinementListItem';
 import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
-} from '../SearchBox/SearchBox.js';
-import SearchBox from '../SearchBox/SearchBox.js';
-import type { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu.js';
-import type {
-  ComponentCSSClasses,
-  CreateURL,
-  Templates,
-} from '../../types/index.js';
-import type { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list.js';
-import type { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu.js';
-import type { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu.js';
+} from '../SearchBox/SearchBox';
+import SearchBox from '../SearchBox/SearchBox';
+import type { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import type { ComponentCSSClasses, CreateURL, Templates } from '../../types';
+import type { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
+import type { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
+import type { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 
 // CSS types
 type RefinementListOptionalClasses =

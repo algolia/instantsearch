@@ -2,14 +2,14 @@ import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
 import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
-} from '../../../../test/mock/createWidget.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
-import queryRuleCustomData from '../query-rule-custom-data.js';
-import type { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData.js';
+} from '../../../../test/mock/createWidget';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import queryRuleCustomData from '../query-rule-custom-data';
+import type { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

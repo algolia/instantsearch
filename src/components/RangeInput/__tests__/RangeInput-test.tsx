@@ -1,10 +1,10 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from '../../../../test/utils/enzyme.js';
+import { shallow } from '../../../../test/utils/enzyme';
 import { render, fireEvent } from '@testing-library/preact';
-import type { RangeInputProps } from '../RangeInput.js';
-import RangeInput from '../RangeInput.js';
+import type { RangeInputProps } from '../RangeInput';
+import RangeInput from '../RangeInput';
 
 describe('RangeInput', () => {
   const defaultProps: RangeInputProps = {

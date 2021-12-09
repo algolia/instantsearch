@@ -1,4 +1,4 @@
-import { safelyRunOnBrowser } from '../safelyRunOnBrowser.js';
+import { safelyRunOnBrowser } from '../safelyRunOnBrowser';
 
 type CallbackReturn = {
   env: 'client' | 'server';

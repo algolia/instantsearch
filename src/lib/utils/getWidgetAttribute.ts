@@ -1,5 +1,5 @@
-import type { InitOptions, Widget } from '../../types/index.js';
-import type { IndexWidget } from '../../widgets/index/index.js';
+import type { InitOptions, Widget } from '../../types';
+import type { IndexWidget } from '../../widgets/index/index';
 
 export function getWidgetAttribute(
   widget: Widget | IndexWidget,

@@ -2,9 +2,9 @@
 
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import type { PanelProps } from '../Panel.js';
-import Panel from '../Panel.js';
-import { createRenderOptions } from '../../../../test/mock/createWidget.js';
+import type { PanelProps } from '../Panel';
+import Panel from '../Panel';
+import { createRenderOptions } from '../../../../test/mock/createWidget';
 
 const cssClasses = {
   root: 'root',

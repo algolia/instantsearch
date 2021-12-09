@@ -2,15 +2,15 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { connectHitsPerPage } from '../../index.js';
-import type { HitsPerPageConnectorParams } from '../connectHitsPerPage.js';
+import { connectHitsPerPage } from '../..';
+import type { HitsPerPageConnectorParams } from '../connectHitsPerPage';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+} from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectHitsPerPage', () => {
   describe('Usage', () => {

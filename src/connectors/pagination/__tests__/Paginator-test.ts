@@ -1,4 +1,4 @@
-import Paginator from '../Paginator.js';
+import Paginator from '../Paginator';
 
 describe('paginator: simple cases', () => {
   describe('on the first page', () => {

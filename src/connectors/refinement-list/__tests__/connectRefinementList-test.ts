@@ -2,18 +2,18 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/utils/index.js';
-import connectRefinementList from '../connectRefinementList.js';
-import { createInstantSearch } from '../../../../test/mock/createInstantSearch.js';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
+import connectRefinementList from '../connectRefinementList';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
-import { castToJestMock } from '../../../../test/utils/castToJestMock.js';
-import { wait } from '../../../../test/utils/wait.js';
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { wait } from '../../../../test/utils/wait';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {

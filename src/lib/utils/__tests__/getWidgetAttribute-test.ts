@@ -1,13 +1,13 @@
-import { getWidgetAttribute } from '../index.js';
-import { createInitOptions } from '../../../../test/mock/createWidget.js';
-import { connectRefinementList } from '../../../connectors/index.js';
+import { getWidgetAttribute } from '..';
+import { createInitOptions } from '../../../../test/mock/createWidget';
+import { connectRefinementList } from '../../../connectors';
 import {
   hierarchicalMenu,
   hits,
   panel,
   refinementList,
   toggleRefinement,
-} from '../../../widgets/index.js';
+} from '../../../widgets';
 
 describe('getWidgetAttribute', () => {
   it('reads the attribute from a refinementList', () => {

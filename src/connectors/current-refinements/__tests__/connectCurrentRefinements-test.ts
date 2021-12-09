@@ -3,15 +3,15 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type { CurrentRefinementsConnectorParamsItem } from '../connectCurrentRefinements.js';
-import connectCurrentRefinements from '../connectCurrentRefinements.js';
-import { createSearchClient } from '../../../../test/mock/createSearchClient.js';
+import type { CurrentRefinementsConnectorParamsItem } from '../connectCurrentRefinements';
+import connectCurrentRefinements from '../connectCurrentRefinements';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/mock/createWidget.js';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse.js';
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectCurrentRefinements', () => {
   describe('Usage', () => {

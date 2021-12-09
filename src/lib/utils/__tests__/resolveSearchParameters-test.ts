@@ -1,6 +1,6 @@
-import { createInitOptions } from '../../../../test/mock/createWidget.js';
-import index from '../../../widgets/index/index.js';
-import resolve from '../resolveSearchParameters.js';
+import { createInitOptions } from '../../../../test/mock/createWidget';
+import index from '../../../widgets/index/index';
+import resolve from '../resolveSearchParameters';
 
 describe('mergeSearchParameters', () => {
   describe('1 level', () => {

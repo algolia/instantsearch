@@ -1,9 +1,5 @@
-import type { SendEventForFacet } from '../../lib/utils/index.js';
-import type {
-  Connector,
-  CreateURL,
-  WidgetRenderState,
-} from '../../types/index.js';
+import type { SendEventForFacet } from '../../lib/utils';
+import type { Connector, CreateURL, WidgetRenderState } from '../../types';
 
 type ToggleRefinementConnectorParams = {
   attribute: string;
