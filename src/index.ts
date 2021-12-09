@@ -4,14 +4,14 @@ import type { Expand, UiState } from './types';
 
 import version from './lib/version';
 
-import * as connectors from './connectors';
-import * as widgets from './widgets';
-import * as helpers from './helpers';
-import * as middlewares from './middlewares';
+import * as connectors from './connectors/index';
+import * as widgets from './widgets/index';
+import * as helpers from './helpers/index';
+import * as middlewares from './middlewares/index';
 
-import * as routers from './lib/routers';
-import * as stateMappings from './lib/stateMappings';
-import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache';
+import * as routers from './lib/routers/index';
+import * as stateMappings from './lib/stateMappings/index';
+import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
 
 type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(

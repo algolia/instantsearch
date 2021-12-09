@@ -1,5 +1,5 @@
-import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { withInsights, inferInsightsPayload } from '../insights';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import type { InstantSearch, Widget } from '../../types';
 import { createInstantSearch } from '../../../test/mock/createInstantSearch';
 import { createSingleSearchResponse } from '../../../test/mock/createAPIResponse';
