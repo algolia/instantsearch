@@ -5,6 +5,7 @@ export * from './Highlight';
 export * from './Hits';
 export * from './InfiniteHits';
 export * from './Menu';
+export * from './NumericMenu';
 export * from './Pagination';
 export * from './HitsPerPage';
 export * from './Panel';

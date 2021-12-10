@@ -13,6 +13,7 @@ export * from './useHits';
 export * from './useHitsPerPage';
 export * from './useInfiniteHits';
 export * from './useMenu';
+export * from './useNumericMenu';
 export * from './usePagination';
 export * from './useQueryRules';
 export * from './useRange';
