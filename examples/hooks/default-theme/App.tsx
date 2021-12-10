@@ -8,6 +8,7 @@ import {
   HierarchicalMenu,
   Highlight,
   Hits,
+  InfiniteHits,
   Pagination,
   Panel,
   RangeInput,
@@ -20,6 +21,7 @@ import {
   QueryRuleCustomData,
   CurrentRefinements,
 } from './components';
+import { Tab, Tabs } from './components/layout';
 
 import './App.css';
 
@@ -139,8 +141,15 @@ export function App() {
             )}
           </QueryRuleCustomData>
 
-          <Hits hitComponent={Hit} />
-          <Pagination className="Pagination" />
+          <Tabs>
+            <Tab title="Hits">
+              <Hits hitComponent={Hit} />
+              <Pagination className="Pagination" />
+            </Tab>
+            <Tab title="InfiniteHits">
+              <InfiniteHits showPrevious hitComponent={Hit} />
+            </Tab>
+          </Tabs>
         </div>
       </div>
     </InstantSearch>
