@@ -138,10 +138,10 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
         };
       },
 
-      getWidgetRenderState({ helper, searchMetadata }) {
+      getWidgetRenderState({ helper, searchMetadata, state }) {
         if (!_refine) {
           const setQueryAndSearch = (query: string) => {
-            if (query !== helper.state.query) {
+            if (query !== state.query) {
               helper.setQuery(query).search();
             }
           };
@@ -159,7 +159,7 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
         _clear = clear(helper);
 
         return {
-          query: helper.state.query || '',
+          query: state.query || '',
           refine: _refine,
           clear: _cachedClear,
           widgetParams,

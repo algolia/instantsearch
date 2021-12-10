@@ -12,14 +12,15 @@ export const createInitOptions = (
   args: Partial<InitOptions> = {}
 ): InitOptions => {
   const { instantSearchInstance = createInstantSearch(), ...rest } = args;
+  const helper = args.helper || instantSearchInstance.helper!;
 
   return {
     instantSearchInstance,
     parent: instantSearchInstance.mainIndex,
     uiState: instantSearchInstance._initialUiState,
     templatesConfig: instantSearchInstance.templatesConfig,
-    helper: instantSearchInstance.helper!,
-    state: instantSearchInstance.helper!.state,
+    helper,
+    state: helper.state,
     renderState: instantSearchInstance.renderState,
     scopedResults: [],
     createURL: jest.fn(() => '#'),
@@ -68,10 +69,11 @@ export const createDisposeOptions = (
   args: Partial<DisposeOptions> = {}
 ): DisposeOptions => {
   const instantSearchInstance = createInstantSearch();
+  const helper = args.helper || instantSearchInstance.helper!;
 
   return {
-    helper: instantSearchInstance.helper!,
-    state: instantSearchInstance.helper!.state,
+    helper,
+    state: helper.state,
     parent: instantSearchInstance.mainIndex,
     ...args,
   };

@@ -26,7 +26,7 @@ exports[`toggleRefinement() Lifecycle render supports negative numeric off or on
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
@@ -60,7 +60,7 @@ exports[`toggleRefinement() Lifecycle render supports negative numeric off or on
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
@@ -94,7 +94,7 @@ exports[`toggleRefinement() Lifecycle render understands cssClasses 1`] = `
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
@@ -128,7 +128,7 @@ exports[`toggleRefinement() Lifecycle render when refined 1`] = `
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
@@ -162,7 +162,7 @@ exports[`toggleRefinement() Lifecycle render when refined 2`] = `
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
@@ -196,7 +196,7 @@ exports[`toggleRefinement() Lifecycle render with facet values 1`] = `
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
@@ -230,7 +230,7 @@ exports[`toggleRefinement() Lifecycle render with facet values 2`] = `
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
@@ -264,7 +264,7 @@ exports[`toggleRefinement() Lifecycle render without facet values 1`] = `
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
@@ -298,7 +298,7 @@ exports[`toggleRefinement() Lifecycle render without facet values 2`] = `
     "templates": {
       "labelText": "{{name}}",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": {},
     "useCustomCompileOptions": {
       "labelText": false,
     },
