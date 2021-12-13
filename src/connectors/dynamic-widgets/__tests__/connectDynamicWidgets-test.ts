@@ -8,6 +8,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { wait } from '../../../../test/utils/wait';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createMultiSearchResponse,
   createSingleSearchResponse,
@@ -15,6 +16,7 @@ import {
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
+import instantsearch from '../../../index.es';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -627,14 +629,152 @@ describe('connectDynamicWidgets', () => {
   });
 
   describe('getWidgetSearchParameters', () => {
-    test.todo('adds default facets and maxValuesPerFacet');
+    test('adds default facets and maxValuesPerFacet', () => {
+      const renderFn = jest.fn();
+      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      });
 
-    test.todo('does not set a lower maxValuesPerFacet as already set');
+      expect(
+        dynamicWidgets.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      ).toEqual(new SearchParameters({ facets: ['*'], maxValuesPerFacet: 20 }));
+    });
 
-    test.todo('warns when a widget sets a higher limit');
+    test('does not set a lower maxValuesPerFacet as already set', () => {
+      const renderFn = jest.fn();
+      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+        maxValuesPerFacet: 20,
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      });
 
-    test.todo('allows override of all parameters at once');
+      expect(
+        dynamicWidgets.getWidgetSearchParameters!(
+          new SearchParameters({ maxValuesPerFacet: 100 }),
+          {
+            uiState: {},
+          }
+        )
+      ).toEqual(
+        new SearchParameters({ facets: ['*'], maxValuesPerFacet: 100 })
+      );
+    });
 
-    test.todo('allows override with unrelated parameters');
+    test('allows override of maxValuesPerFacet', () => {
+      const renderFn = jest.fn();
+      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+        maxValuesPerFacet: 1000,
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      });
+
+      expect(
+        dynamicWidgets.getWidgetSearchParameters!(
+          new SearchParameters({ maxValuesPerFacet: 100 }),
+          {
+            uiState: {},
+          }
+        )
+      ).toEqual(
+        new SearchParameters({ facets: ['*'], maxValuesPerFacet: 1000 })
+      );
+    });
+
+    test('allows override of facets', () => {
+      const renderFn = jest.fn();
+      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+        facets: [],
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      });
+
+      expect(
+        dynamicWidgets.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      ).toEqual(new SearchParameters({ maxValuesPerFacet: 20 }));
+    });
+
+    test('keeps existing facets', () => {
+      const renderFn = jest.fn();
+      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+        facets: ['test1'],
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      });
+
+      expect(
+        dynamicWidgets.getWidgetSearchParameters!(
+          new SearchParameters({
+            facets: ['existing'],
+          }),
+          {
+            uiState: {},
+          }
+        )
+      ).toEqual(
+        new SearchParameters({
+          facets: ['existing', 'test1'],
+          maxValuesPerFacet: 20,
+        })
+      );
+    });
+
+    test('warns when a widget sets a higher limit than dynamic widgets', async () => {
+      const renderFn = jest.fn();
+      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+        facets: ['test1'],
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1', limit: 100 }),
+          connectHierarchicalMenu(() => {})({
+            attributes: ['test2', 'test3'],
+          }),
+        ],
+      });
+
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+        indexName: '',
+      });
+
+      search.addWidgets([dynamicWidgets]);
+
+      search.start();
+
+      await expect(async () => await wait(0)).toWarnDev(
+        '[InstantSearch.js]: The maxValuesPerFacet set by dynamic widgets (20) is smaller than one of the limits set by a widget (100). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.'
+      );
+    });
   });
 });
