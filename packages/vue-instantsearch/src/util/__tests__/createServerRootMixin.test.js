@@ -11,9 +11,9 @@ import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
 import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 import {
-  SearchResults,
-  SearchParameters,
   AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
 } from 'algoliasearch-helper';
 
 jest.unmock('instantsearch.js/es');
@@ -57,9 +57,11 @@ describe('createServerRootMixin', () => {
             }),
           ],
         })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"createServerRootMixin requires \`searchClient\` and \`indexName\` in the first argument"`
-      );
+      ).toThrowErrorMatchingInlineSnapshot(`
+"The \`searchClient\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
     });
 
     it('requires indexName', () => {
@@ -72,9 +74,11 @@ describe('createServerRootMixin', () => {
             }),
           ],
         })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"createServerRootMixin requires \`searchClient\` and \`indexName\` in the first argument"`
-      );
+      ).toThrowErrorMatchingInlineSnapshot(`
+"The \`indexName\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
     });
 
     it('creates an instantsearch instance on "data"', () => {
@@ -301,14 +305,13 @@ Array [
             renderToString,
           });
           expect(state).toEqual({
-            __identifier: 'stringified',
             hello: {
-              _rawResults: [
+              results: [
                 {
                   query: '',
                 },
               ],
-              _state: {
+              state: {
                 disjunctiveFacets: [],
                 disjunctiveFacetsRefinements: {},
                 facets: [],
@@ -534,7 +537,7 @@ Array [
                     this.instantsearch.mainIndex.getWidgets().map(w => w.$$type)
                   ).toEqual(['ais.configure']);
 
-                  expect(res.hello._state.hitsPerPage).toBe(100);
+                  expect(res.hello.state.hitsPerPage).toBe(100);
                 })
                 // jest throws an error we need to catch, since stuck in the flow
                 .catch(e => {
@@ -656,11 +659,73 @@ Array [
 
         await renderToString(wrapper);
       });
+
+      it('searches only once', async () => {
+        const searchClient = createFakeClient();
+        const app = {
+          mixins: [
+            forceIsServerMixin,
+            createServerRootMixin({
+              searchClient,
+              indexName: 'hello',
+            }),
+          ],
+          render: renderCompat(h =>
+            /**
+             * This code triggers this warning in Vue 3:
+             * > Non-function value encountered for default slot. Prefer function slots for better performance.
+             *
+             * To fix it, replace the third argument
+             * > [h(...), h(...)]
+             * with
+             * > { default: () => [h(...), h(...)] }
+             *
+             * but it's not important (and not compatible in vue2), we're leaving it as-is.
+             */
+            h(InstantSearchSsr, {}, [
+              h(Configure, {
+                attrs: {
+                  hitsPerPage: 100,
+                },
+              }),
+              h(SearchBox),
+            ])
+          ),
+          serverPrefetch() {
+            return this.instantsearch.findResultsState({
+              component: this,
+              renderToString,
+            });
+          },
+        };
+
+        const wrapper = createSSRApp({
+          mixins: [forceIsServerMixin],
+          render: renderCompat(h => h(app)),
+        });
+
+        await renderToString(wrapper);
+
+        expect(searchClient.search).toHaveBeenCalledTimes(1);
+        expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "indexName": "hello",
+    "params": Object {
+      "facets": Array [],
+      "hitsPerPage": 100,
+      "query": "",
+      "tagFilters": "",
+    },
+  },
+]
+`);
+      });
     }
   });
 
   describe('hydrate', () => {
-    it('sets __initialSearchResults', () => {
+    it('sets _initialResults', () => {
       const serialized = createSerializedState();
 
       const app = {
@@ -683,7 +748,6 @@ Array [
         // in test, beforeCreated doesn't have $data yet, but IRL it does
         created() {
           this.instantsearch.hydrate({
-            __identifier: 'stringified',
             hello: serialized,
           });
         },
@@ -693,55 +757,18 @@ Array [
         vm: { instantsearch },
       } = mount(app);
 
-      expect(instantsearch.__initialSearchResults).toEqual(
-        expect.objectContaining({ hello: expect.any(SearchResults) })
+      expect(instantsearch._initialResults).toEqual(
+        expect.objectContaining({
+          hello: {
+            state: expect.any(Object),
+            results: expect.any(Object),
+          },
+        })
       );
 
-      expect(instantsearch.__initialSearchResults.hello).toEqual(
+      expect(instantsearch._initialResults.hello).toEqual(
         expect.objectContaining(serialized)
       );
-    });
-
-    it('accepts non-stringified results', () => {
-      const serialized = createSerializedState();
-      const nonSerialized = new SearchResults(
-        new SearchParameters(serialized._state),
-        serialized._rawResults
-      );
-
-      const app = {
-        mixins: [
-          createServerRootMixin({
-            searchClient: createFakeClient(),
-            indexName: 'movies',
-          }),
-        ],
-        render: renderCompat(h =>
-          h(InstantSearchSsr, {}, [
-            h(Configure, {
-              attrs: {
-                hitsPerPage: 100,
-              },
-            }),
-            h(SearchBox),
-          ])
-        ),
-        created() {
-          this.instantsearch.hydrate({
-            movies: nonSerialized,
-          });
-
-          expect(this.instantsearch.__initialSearchResults).toEqual(
-            expect.objectContaining({ movies: expect.any(SearchResults) })
-          );
-
-          expect(this.instantsearch.__initialSearchResults.movies).toEqual(
-            nonSerialized
-          );
-        },
-      };
-
-      mount(app);
     });
 
     it('inits the main index', () => {
@@ -773,7 +800,6 @@ Array [
       expect(instantsearch.mainIndex.getHelper()).toBe(null);
 
       instantsearch.hydrate({
-        __identifier: 'stringified',
         hello: serialized,
       });
 
@@ -812,7 +838,6 @@ Array [
       expect(instantsearch.mainHelper).toBe(null);
 
       instantsearch.hydrate({
-        __identifier: 'stringified',
         hello: serialized,
       });
 
@@ -834,6 +859,7 @@ Array [
         created() {
           instantSearchInstance = this.instantsearch;
         },
+        render() {},
       });
 
       const widget = {
@@ -894,6 +920,58 @@ Object {
       );
     });
 
+    it('uses the results passed to hydrate for rendering', () => {
+      let instantSearchInstance;
+      mount({
+        mixins: [
+          createServerRootMixin({
+            searchClient: createFakeClient(),
+            indexName: 'lol',
+          }),
+        ],
+        created() {
+          instantSearchInstance = this.instantsearch;
+        },
+        render() {},
+      });
+
+      const widget = {
+        init: jest.fn(),
+        render: jest.fn(),
+      };
+
+      const resultsState = createSerializedState();
+      const state = new SearchParameters(resultsState.state);
+      const results = new SearchResults(state, resultsState.results);
+
+      instantSearchInstance.hydrate({
+        lol: resultsState,
+      });
+
+      instantSearchInstance.__forceRender(
+        widget,
+        instantSearchInstance.mainIndex
+      );
+
+      expect(widget.init).toHaveBeenCalledTimes(0);
+      expect(widget.render).toHaveBeenCalledTimes(1);
+
+      const renderArgs = widget.render.mock.calls[0][0];
+
+      expect(renderArgs).toEqual(
+        expect.objectContaining({
+          state,
+          results,
+          scopedResults: [
+            expect.objectContaining({
+              indexId: 'lol',
+              results,
+            }),
+          ],
+        })
+      );
+    });
+
     describe('createURL', () => {
       it('returns # if instantsearch has no routing', () => {
         let instantSearchInstance;
@@ -907,6 +985,7 @@ Object {
           created() {
             instantSearchInstance = this.instantsearch;
           },
+          render() {},
         });
 
         const widget = {
@@ -940,6 +1019,7 @@ Object {
           created() {
             instantSearchInstance = this.instantsearch;
           },
+          render() {},
         });
 
         const widget = {

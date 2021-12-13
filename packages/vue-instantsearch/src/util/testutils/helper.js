@@ -1,5 +1,5 @@
 export const createSerializedState = () => ({
-  _rawResults: [
+  results: [
     {
       hits: [
         {
@@ -50,7 +50,7 @@ export const createSerializedState = () => ({
       index: 'movies',
     },
   ],
-  _state: {
+  state: {
     index: 'movies',
     query: 'hi',
     facets: [],

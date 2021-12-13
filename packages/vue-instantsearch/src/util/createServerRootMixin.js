@@ -1,7 +1,5 @@
 import instantsearch from 'instantsearch.js/es';
-import algoliaHelper from 'algoliasearch-helper';
 import { isVue3, isVue2, Vue2, createSSRApp } from '../util/vue-compat';
-const { SearchResults, SearchParameters } = algoliaHelper;
 import { warn } from './warn';
 
 function walkIndex(indexWidget, visit) {
@@ -76,18 +74,10 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
   return app;
 }
 
-function augmentInstantSearch(
-  instantSearchOptions,
-  searchClient,
-  indexName,
-  cloneComponent
-) {
-  /* eslint-disable no-param-reassign */
-
-  const helper = algoliaHelper(searchClient, indexName);
+function augmentInstantSearch(instantSearchOptions, cloneComponent) {
   const search = instantsearch(instantSearchOptions);
 
-  let resultsState;
+  let initialResults;
 
   /**
    * main API for SSR, called in serverPrefetch of a root component which contains instantsearch
@@ -104,7 +94,7 @@ function augmentInstantSearch(
     }
 
     let app;
-    let renderedComponent;
+    let instance;
 
     return Promise.resolve()
       .then(() => {
@@ -112,55 +102,36 @@ function augmentInstantSearch(
           mixins: [
             {
               created() {
-                // eslint-disable-next-line consistent-this
-                renderedComponent = this;
-                this.instantsearch.helper = helper;
-                this.instantsearch.mainHelper = helper;
+                instance = this.instantsearch;
 
-                this.instantsearch.mainIndex.init({
-                  instantSearchInstance: this.instantsearch,
-                  parent: null,
-                  uiState: this.instantsearch._initialUiState,
-                });
+                instance.start();
+                // although we use start for initializing the main index,
+                // we don't want to send search requests yet
+                instance.started = false;
               },
             },
           ],
         });
       })
       .then(() => renderToString(app))
-      .then(() => searchOnlyWithDerivedHelpers(helper))
+      .then(() => searchOnlyWithDerivedHelpers(instance.mainHelper))
       .then(() => {
-        const results = {};
-        walkIndex(renderedComponent.instantsearch.mainIndex, widget => {
-          results[widget.getIndexId()] = widget.getResults();
+        initialResults = {};
+        walkIndex(instance.mainIndex, widget => {
+          const { _state, _rawResults } = widget.getResults();
+
+          initialResults[widget.getIndexId()] = {
+            // copy just the values of SearchParameters, not the functions
+            state: Object.keys(_state).reduce((acc, key) => {
+              // eslint-disable-next-line no-param-reassign
+              acc[key] = _state[key];
+              return acc;
+            }, {}),
+            results: _rawResults,
+          };
         });
 
-        search.hydrate(results);
-
-        resultsState = Object.keys(results)
-          .map(indexId => {
-            const { _state, _rawResults } = results[indexId];
-            return [
-              indexId,
-              {
-                // copy just the values of SearchParameters, not the functions
-                _state: Object.keys(_state).reduce((acc, key) => {
-                  acc[key] = _state[key];
-                  return acc;
-                }, {}),
-                _rawResults,
-              },
-            ];
-          })
-          .reduce(
-            (acc, [key, val]) => {
-              acc[key] = val;
-              return acc;
-            },
-            {
-              __identifier: 'stringified',
-            }
-          );
+        search.hydrate(initialResults);
         return search.getState();
       });
   };
@@ -169,10 +140,10 @@ function augmentInstantSearch(
    * @returns {Promise} result state to serialize and enter into .hydrate
    */
   search.getState = function() {
-    if (!resultsState) {
+    if (!initialResults) {
       throw new Error('You need to wait for findResultsState to finish');
     }
-    return resultsState;
+    return initialResults;
   };
 
   /**
@@ -184,18 +155,17 @@ function augmentInstantSearch(
    * @returns {void}
    */
   search.__forceRender = function(widget, parent) {
-    const localHelper = parent.getHelper();
-
-    const results = search.__initialSearchResults[parent.getIndexId()];
+    const results = parent.getResults();
 
     // this happens when a different InstantSearch gets rendered initially,
     // after the hydrate finished. There's thus no initial results available.
-    if (!results) {
+    if (results === null) {
       return;
     }
 
     const state = results._state;
 
+    const localHelper = parent.getHelper();
     // helper gets created in init, but that means it doesn't get the injected
     // parameters, because those are from the lastResults
     localHelper.state = state;
@@ -203,11 +173,7 @@ function augmentInstantSearch(
     widget.render({
       helper: localHelper,
       results,
-      scopedResults: parent.getScopedResults().map(result =>
-        Object.assign(result, {
-          results: search.__initialSearchResults[result.indexId],
-        })
-      ),
+      scopedResults: parent.getScopedResults(),
       parent,
       state,
       templatesConfig: {},
@@ -232,55 +198,18 @@ function augmentInstantSearch(
       return;
     }
 
-    const initialResults =
-      results.__identifier === 'stringified'
-        ? Object.keys(results).reduce((acc, indexId) => {
-            if (indexId === '__identifier') {
-              return acc;
-            }
-            acc[indexId] = new SearchResults(
-              new SearchParameters(results[indexId]._state),
-              results[indexId]._rawResults
-            );
-            return acc;
-          }, {})
-        : results;
+    search._initialResults = results;
 
-    search.__initialSearchResults = initialResults;
-
-    search.helper = helper;
-    search.mainHelper = helper;
-
-    search.mainIndex.init({
-      instantSearchInstance: search,
-      parent: null,
-      uiState: search._initialUiState,
-    });
+    search.start();
+    search.started = false;
   };
-
-  /* eslint-enable no-param-reassign */
   return search;
 }
 
 export function createServerRootMixin(instantSearchOptions = {}) {
-  const {
-    searchClient,
-    indexName,
-    $cloneComponent = defaultCloneComponent,
-  } = instantSearchOptions;
+  const { $cloneComponent = defaultCloneComponent } = instantSearchOptions;
 
-  if (!searchClient || !indexName) {
-    throw new Error(
-      'createServerRootMixin requires `searchClient` and `indexName` in the first argument'
-    );
-  }
-
-  const search = augmentInstantSearch(
-    instantSearchOptions,
-    searchClient,
-    indexName,
-    $cloneComponent
-  );
+  const search = augmentInstantSearch(instantSearchOptions, $cloneComponent);
 
   // put this in the user's root Vue instance
   // we can then reuse that InstantSearch instance seamlessly from `ais-instant-search-ssr`
@@ -292,7 +221,7 @@ export function createServerRootMixin(instantSearchOptions = {}) {
     },
     data() {
       return {
-        // this is in data, so that the real & duplicated render do not share
+        // this is in data, so that the real & cloned render do not share
         // the same instantsearch instance.
         instantsearch: search,
       };

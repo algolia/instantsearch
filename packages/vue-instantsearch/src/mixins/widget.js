@@ -31,7 +31,7 @@ export const createWidgetMixin = ({ connector } = {}) => ({
       this.getParentIndex().addWidgets([this.widget]);
 
       if (
-        this.instantSearchInstance.__initialSearchResults &&
+        this.instantSearchInstance._initialResults &&
         !this.instantSearchInstance.started
       ) {
         if (typeof this.instantSearchInstance.__forceRender !== 'function') {
