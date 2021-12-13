@@ -1,3 +1,14 @@
+# [4.2.0](https://github.com/algolia/vue-instantsearch/compare/v4.1.1...v4.2.0) (2021-12-13)
+
+
+### Features
+
+* **dynamicWidgets:** release as production ([#1086](https://github.com/algolia/vue-instantsearch/issues/1086)) ([9e0902b](https://github.com/algolia/vue-instantsearch/commit/9e0902bc7a3afe3eb2211b78e681e65b3677dd78))
+* **instantsearch:** update version ([dbf485f](https://github.com/algolia/vue-instantsearch/commit/dbf485f6263d9821aaf169e682ff1ab94157d15f))
+* **ssr:** prevent initial network request ([#1090](https://github.com/algolia/vue-instantsearch/issues/1090)) ([d97eea2](https://github.com/algolia/vue-instantsearch/commit/d97eea21fbd059b0ca0634a6984a6a8b02acdd3d))
+
+
+
 ## [4.1.1](https://github.com/algolia/vue-instantsearch/compare/v4.1.0...v4.1.1) (2021-10-27)
 
 
