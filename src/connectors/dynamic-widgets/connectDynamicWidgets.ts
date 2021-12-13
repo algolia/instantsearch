@@ -170,8 +170,21 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           const attributesToRender =
             results.renderingContent?.facetOrdering?.facets?.order ?? [];
 
+          const transformedAttributesToRender = transformItems(
+            attributesToRender,
+            { results }
+          );
+
+          if (!Array.isArray(transformedAttributesToRender)) {
+            throw new Error(
+              withUsage(
+                'The `transformItems` option expects a function that returns an Array.'
+              )
+            );
+          }
+
           return {
-            attributesToRender: transformItems(attributesToRender, { results }),
+            attributesToRender: transformedAttributesToRender,
             widgetParams,
           };
         },

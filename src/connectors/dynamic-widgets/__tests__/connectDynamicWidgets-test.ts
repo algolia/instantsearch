@@ -177,6 +177,27 @@ describe('connectDynamicWidgets', () => {
           false
         );
       });
+
+      it('fails when transformItems returns anything else than an array', () => {
+        const renderFn = jest.fn();
+        const widgetParams = {
+          transformItems() {
+            return null as any;
+          },
+          widgets: [],
+        };
+        const dynamicWidgets = connectDynamicWidgets(renderFn)(
+          widgetParams
+        );
+
+        expect(() => {
+          dynamicWidgets.render!(createRenderOptions());
+        }).toThrowErrorMatchingInlineSnapshot(`
+          "The \`transformItems\` option expects a function that returns an Array.
+
+          See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+        `);
+      });
     });
 
     describe('widgets', () => {
