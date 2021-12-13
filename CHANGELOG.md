@@ -1,3 +1,12 @@
+# [4.35.0](https://github.com/algolia/instantsearch.js/compare/v4.34.0...v4.35.0) (2021-12-13)
+
+
+### Features
+
+* **events:** move to @algolia/events ([#4961](https://github.com/algolia/instantsearch.js/issues/4961)) ([1c56726](https://github.com/algolia/instantsearch.js/commit/1c5672640c65d7ed6f6e381a3162e508bdda44f3))
+
+
+
 # [4.34.0](https://github.com/algolia/instantsearch.js/compare/v4.33.2...v4.34.0) (2021-12-07)
 
 
