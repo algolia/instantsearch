@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 const withKeysPropType = (keys) => (props, propName, componentName) => {
   const prop = props[propName];
   if (prop) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const key of Object.keys(prop)) {
       if (keys.indexOf(key) === -1) {
         return new Error(

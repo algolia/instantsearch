@@ -14,7 +14,7 @@ import type {
 /**
  * Returns the InstantSearch server state from a component.
  */
-export async function getServerState(
+export function getServerState(
   children: ReactNode
 ): Promise<InstantSearchServerState> {
   const searchRef: { current: InstantSearch | undefined } = {
@@ -34,28 +34,30 @@ export async function getServerState(
   );
 
   // We wait for the component to mount so that `notifyServer()` is called.
-  await new Promise((resolve) => setTimeout(resolve, 0));
+  return new Promise((resolve) => setTimeout(resolve, 0))
+    .then(() => {
+      // If `notifyServer()` is not called by then, it means that <InstantSearch>
+      // wasn't within the `children`.
+      // We decide to go with a strict behavior in that case; throwing. If users have
+      // some routes that don't mount the <InstantSearch> component, they would need
+      // to try/catch the `getServerState()` call.
+      // If this behavior turns out to be too strict for many users, we can decide
+      // to warn instead of throwing.
+      if (!searchRef.current) {
+        throw new Error(
+          "Unable to retrieve InstantSearch's server state in `getServerState()`. Did you mount the <InstantSearch> component?"
+        );
+      }
 
-  // If `notifyServer()` is not called by then, it means that <InstantSearch>
-  // wasn't within the `children`.
-  // We decide to go with a strict behavior in that case; throwing. If users have
-  // some routes that don't mount the <InstantSearch> component, they would need
-  // to try/catch the `getServerState()` call.
-  // If this behavior turns out to be too strict for many users, we can decide
-  // to warn instead of throwing.
-  if (!searchRef.current) {
-    throw new Error(
-      "Unable to retrieve InstantSearch's server state in `getServerState()`. Did you mount the <InstantSearch> component?"
-    );
-  }
+      return waitForResults(searchRef.current);
+    })
+    .then(() => {
+      const initialResults = getInitialResults(searchRef.current!.mainIndex);
 
-  await waitForResults(searchRef.current);
-
-  const initialResults = getInitialResults(searchRef.current.mainIndex);
-
-  return {
-    initialResults,
-  };
+      return {
+        initialResults,
+      };
+    });
 }
 
 /**
