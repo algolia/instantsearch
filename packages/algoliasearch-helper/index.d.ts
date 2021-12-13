@@ -19,7 +19,7 @@ import {
   FindAnswersResponse
   // @ts-ignore
 } from '@algolia/client-search';
-import { EventEmitter } from 'events';
+import EventEmitter from '@algolia/events';
 
 type DummySearchClientV4 = {
   transporter: any;

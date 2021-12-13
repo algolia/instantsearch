@@ -1,6 +1,6 @@
 'use strict';
 
-var events = require('events');
+var EventEmitter = require('@algolia/events');
 var inherits = require('../functions/inherits');
 
 /**
@@ -19,7 +19,7 @@ function DerivedHelper(mainHelper, fn) {
   this.lastResults = null;
 }
 
-inherits(DerivedHelper, events.EventEmitter);
+inherits(DerivedHelper, EventEmitter);
 
 /**
  * Detach this helper from the main helper

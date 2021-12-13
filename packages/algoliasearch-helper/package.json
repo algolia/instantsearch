@@ -97,7 +97,7 @@
     "yargs": "13.2.4"
   },
   "dependencies": {
-    "events": "^1.1.1"
+    "@algolia/events": "^4.0.1"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 5"
