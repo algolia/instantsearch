@@ -43,6 +43,7 @@
     "test:e2e:saucelabs": "wdio wdio.saucelabs.conf.js",
     "test:size": "bundlesize",
     "test:argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
+    "test:exports": "node test/module/is-es-module.mjs",
     "release": "shipjs prepare"
   },
   "files": [
@@ -59,7 +60,7 @@
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
-    "preact": "^10.0.0",
+    "preact": "^10.5.14",
     "qs": "^6.5.1 < 6.10",
     "search-insights": "^2.1.0"
   },

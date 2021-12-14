@@ -12279,10 +12279,10 @@ preact-render-to-string@^4.1.0:
   dependencies:
     pretty-format "^3.8.0"
 
-preact@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-10.0.0.tgz#c528f04ac6c792a04d8c98a5144d8b13e0cf2aed"
-  integrity sha512-v5geBMq8xlX7Ai8ed0QFXIs7/SQ+4lzdu3fpApRspZ6IiFDRHeEXQ3fqns0jDsXseHjYqgWlK1QxqdWF4QrdFw==
+preact@^10.5.14:
+  version "10.6.4"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.6.4.tgz#ad12c409ff1b4316158486e0a7b8d43636f7ced8"
+  integrity sha512-WyosM7pxGcndU8hY0OQlLd54tOU+qmG45QXj2dAYrL11HoyU/EzOSTlpJsirbBr1QW7lICxSsVJJmcmUglovHQ==
 
 prebuild-install@^5.3.0:
   version "5.3.2"
