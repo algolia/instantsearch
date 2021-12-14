@@ -47,6 +47,9 @@ jobs:
       - run:
           name: Type Export
           command: yarn run build:types
+      - run:
+          name: Test Exports
+          command: yarn run test:exports
   lint:
     <<: *defaults
     steps:
