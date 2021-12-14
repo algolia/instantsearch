@@ -182,11 +182,12 @@ describe('connectDynamicWidgets', () => {
         const renderFn = jest.fn();
         const widgetParams = {
           transformItems() {
-            // @ts-expect-error
             return null;
           },
           widgets: [],
         };
+
+        // @ts-expect-error
         const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
         expect(() => {
