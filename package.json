@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "4.34.0",
+  "version": "4.35.0",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/",
   "types": "es/index.d.ts",
@@ -56,9 +56,9 @@
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
-    "algoliasearch-helper": "^3.6.2",
+    "algoliasearch-helper": "^3.7.0",
     "classnames": "^2.2.5",
-    "events": "^1.1.0",
+    "@algolia/events": "^4.0.1",
     "hogan.js": "^3.0.2",
     "preact": "^10.5.14",
     "qs": "^6.5.1 < 6.10",
@@ -144,6 +144,9 @@
     "shipjs": "0.21.0",
     "typescript": "4.3.5",
     "webpack": "4.41.5"
+  },
+  "peerDependencies": {
+    "algoliasearch": ">= 3.1 < 5"
   },
   "resolutions": {
     "places.js/algoliasearch": "3.35.0"
