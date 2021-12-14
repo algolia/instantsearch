@@ -71,6 +71,8 @@ export type DynamicWidgetsConnector = Connector<
   DynamicWidgetsConnectorParams
 >;
 
+const MAX_WILDCARD_FACETS = 20;
+
 const connectDynamicWidgets: DynamicWidgetsConnector =
   function connectDynamicWidgets(renderFn, unmountFn = noop) {
     checkRendering(renderFn, withUsage());
@@ -187,28 +189,34 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           );
         },
         getRenderState(renderState, renderOptions) {
-          warning(
-            maxValuesPerFacet
-              ? maxValuesPerFacet >= renderOptions.state.maxValuesPerFacet!
-              : true,
-            `The maxValuesPerFacet set by dynamic widgets (${maxValuesPerFacet}) is smaller than one of the limits set by a widget (${renderOptions.state.maxValuesPerFacet}). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.`
-          );
-
           return {
             ...renderState,
             dynamicWidgets: this.getWidgetRenderState(renderOptions),
           };
         },
-        getWidgetRenderState({ results }) {
+        getWidgetRenderState({ results, state }) {
           if (!results) {
             return { attributesToRender: [], widgetParams };
           }
 
-          const attributesToRender =
-            results.renderingContent?.facetOrdering?.facets?.order ?? [];
+          const attributesToRender = transformItems(
+            results.renderingContent?.facetOrdering?.facets?.order ?? [],
+            { results }
+          );
+
+          warning(
+            maxValuesPerFacet >= (state.maxValuesPerFacet || 0),
+            `The maxValuesPerFacet set by dynamic widgets (${maxValuesPerFacet}) is smaller than one of the limits set by a widget (${state.maxValuesPerFacet}). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.`
+          );
+
+          warning(
+            attributesToRender.length <= MAX_WILDCARD_FACETS ||
+              widgetParams.facets !== undefined,
+            `More than ${MAX_WILDCARD_FACETS} facets are requested to be displayed without explicitly setting which facets to retrieve. This could have a performance impact. Set "facets" to [] to do two smaller network requests, or explicitly to ['*'] to avoid this warning.`
+          );
 
           return {
-            attributesToRender: transformItems(attributesToRender, { results }),
+            attributesToRender,
             widgetParams,
           };
         },

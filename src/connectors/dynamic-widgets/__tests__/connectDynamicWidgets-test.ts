@@ -8,7 +8,6 @@ import {
 } from '../../../../test/mock/createWidget';
 import { wait } from '../../../../test/utils/wait';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createMultiSearchResponse,
   createSingleSearchResponse,
@@ -16,7 +15,6 @@ import {
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
-import instantsearch from '../../../index.es';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -571,6 +569,52 @@ describe('connectDynamicWidgets', () => {
         widgetParams,
       });
     });
+
+    it('warns when facets is unset and more than 20 items are returned from attributesToDisplay', () => {
+      const renderFn = jest.fn();
+      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+        transformItems() {
+          return Array.from({ length: 21 }, (_, i) => `test${i}`);
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({
+            attributes: ['test2', 'test3'],
+          }),
+        ],
+      });
+
+      expect(() =>
+        dynamicWidgets.getWidgetRenderState(createRenderOptions())
+      ).toWarnDev(
+        '[InstantSearch.js]: More than 20 facets are requested to be displayed without explicitly setting which facets to retrieve. This could have a performance impact. Set "facets" to [] to do two smaller network requests, or explicitly to [\'*\'] to avoid this warning.'
+      );
+    });
+
+    it('warns when a widget sets a higher limit than dynamic widgets', () => {
+      const renderFn = jest.fn();
+      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1', limit: 100 }),
+          connectHierarchicalMenu(() => {})({
+            attributes: ['test2', 'test3'],
+          }),
+        ],
+      });
+
+      expect(() =>
+        dynamicWidgets.getWidgetRenderState(
+          createRenderOptions({
+            state: new SearchParameters({ maxValuesPerFacet: 100 }),
+          })
+        )
+      ).toWarnDev(
+        '[InstantSearch.js]: The maxValuesPerFacet set by dynamic widgets (20) is smaller than one of the limits set by a widget (100). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.'
+      );
+    });
   });
 
   describe('getRenderState', () => {
@@ -745,35 +789,6 @@ describe('connectDynamicWidgets', () => {
           facets: ['existing', 'test1'],
           maxValuesPerFacet: 20,
         })
-      );
-    });
-
-    test('warns when a widget sets a higher limit than dynamic widgets', async () => {
-      const renderFn = jest.fn();
-      const dynamicWidgets = connectDynamicWidgets(renderFn)({
-        facets: ['test1'],
-        transformItems() {
-          return ['test1'];
-        },
-        widgets: [
-          connectMenu(() => {})({ attribute: 'test1', limit: 100 }),
-          connectHierarchicalMenu(() => {})({
-            attributes: ['test2', 'test3'],
-          }),
-        ],
-      });
-
-      const search = instantsearch({
-        searchClient: createSearchClient(),
-        indexName: '',
-      });
-
-      search.addWidgets([dynamicWidgets]);
-
-      search.start();
-
-      await expect(async () => await wait(0)).toWarnDev(
-        '[InstantSearch.js]: The maxValuesPerFacet set by dynamic widgets (20) is smaller than one of the limits set by a widget (100). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.'
       );
     });
   });
