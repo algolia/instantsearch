@@ -20,11 +20,11 @@
           <div class="search-panel__filters">
             {{#if flags.dynamicWidgets}}
             <ais-configure :facets="['*']" :max-values-per-facet.camel="20" />
-            <ais-experimental-dynamic-widgets>
+            <ais-dynamic-widgets>
               {{#each attributesForFaceting}}
               <ais-refinement-list attribute="{{this}}" />
               {{/each}}
-            </ais-experimental-dynamic-widgets>
+            </ais-dynamic-widgets>
             {{else}}
             {{#each attributesForFaceting}}
             <ais-refinement-list attribute="{{this}}" />

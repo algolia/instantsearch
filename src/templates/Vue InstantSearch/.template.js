@@ -6,7 +6,7 @@ module.exports = {
   libraryName: 'vue-instantsearch',
   supportedVersion: '>= 3.0.0 < 5.0.0',
   flags: {
-    dynamicWidgets: '>=3.8.0',
+    dynamicWidgets: '>=4.2.0',
   },
   templateName: 'vue-instantsearch',
   appName: 'vue-instantsearch-app',

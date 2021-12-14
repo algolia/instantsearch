@@ -6,7 +6,7 @@ import {
   SearchBox,
   {{#if flags.dynamicWidgets}}
   Configure,
-  ExperimentalDynamicWidgets,
+  DynamicWidgets,
   {{/if}}
   {{#if attributesForFaceting}}
   RefinementList,
@@ -42,11 +42,11 @@ function App() {
             <div className="search-panel__filters">
               {{#if flags.dynamicWidgets}}
               <Configure facets={['*']} maxValuesPerFacet={20} />
-              <ExperimentalDynamicWidgets fallbackWidget={RefinementList}>
+              <DynamicWidgets fallbackWidget={RefinementList}>
                 {{#each attributesForFaceting}}
                 <RefinementList attribute="{{this}}" />
                 {{/each}}
-              </ExperimentalDynamicWidgets>
+              </DynamicWidgets>
               {{else}}
               {{#each attributesForFaceting}}
               <RefinementList attribute="{{this}}" />

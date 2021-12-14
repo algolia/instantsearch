@@ -6,7 +6,7 @@ module.exports = {
   libraryName: 'react-instantsearch-dom',
   supportedVersion: '>= 5.0.0 < 7.0.0',
   flags: {
-    dynamicWidgets: '>=6.12',
+    dynamicWidgets: '>=6.16',
   },
   templateName: 'react-instantsearch',
   appName: 'react-instantsearch-app',

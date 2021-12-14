@@ -5737,7 +5737,7 @@ import {
   Hits,
   SearchBox,
   Configure,
-  ExperimentalDynamicWidgets,
+  DynamicWidgets,
   RefinementList,
   Pagination,
   Highlight,
@@ -5767,10 +5767,10 @@ function App() {
           <div className=\\"search-panel\\">
             <div className=\\"search-panel__filters\\">
               <Configure facets={['*']} maxValuesPerFacet={20} />
-              <ExperimentalDynamicWidgets fallbackWidget={RefinementList}>
+              <DynamicWidgets fallbackWidget={RefinementList}>
                 <RefinementList attribute=\\"facet1\\" />
                 <RefinementList attribute=\\"facet2\\" />
-              </ExperimentalDynamicWidgets>
+              </DynamicWidgets>
             </div>
 
             <div className=\\"search-panel__results\\">
@@ -7456,10 +7456,10 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
         <div class=\\"search-panel\\">
           <div class=\\"search-panel__filters\\">
             <ais-configure :facets=\\"['*']\\" :max-values-per-facet.camel=\\"20\\" />
-            <ais-experimental-dynamic-widgets>
+            <ais-dynamic-widgets>
               <ais-refinement-list attribute=\\"facet1\\" />
               <ais-refinement-list attribute=\\"facet2\\" />
-            </ais-experimental-dynamic-widgets>
+            </ais-dynamic-widgets>
           </div>
 
           <div class=\\"search-panel__results\\">
