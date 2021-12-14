@@ -91,12 +91,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         Element
       ];
 
-      // Cast our props as an object (exluding `string` and `number` from VNode.props)
-      const props = firstRender[0].props!;
-      const { cssClasses } = firstRender[0].props as Exclude<
-        typeof props,
-        string | number
-      >;
+      const { cssClasses } = firstRender[0].props;
 
       expect(cssClasses).toMatchSnapshot();
     });
@@ -119,12 +114,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         Element
       ];
 
-      // Cast our props as an object (exluding `string` and `number` from VNode.props)
-      const props = secondRender[0].props!;
-      const { isSearchStalled } = secondRender[0].props as Exclude<
-        typeof props,
-        string | number
-      >;
+      const { isSearchStalled } = secondRender[0].props;
 
       expect(isSearchStalled).toBe(true);
     });
