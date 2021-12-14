@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/instantsearchjs
   docker:
-    - image: cimg/node:12.14.1
+    - image: cimg/node:12.22.7
 
 version: 2
 jobs:
