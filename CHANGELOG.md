@@ -1,3 +1,12 @@
+# [5.1.0](https://github.com/algolia/create-instantsearch-app/compare/5.0.1...5.1.0) (2021-12-14)
+
+
+### Features
+
+* **templates:** use non-experimental dynamic widgets ([#544](https://github.com/algolia/create-instantsearch-app/issues/544)) ([efda539](https://github.com/algolia/create-instantsearch-app/commit/efda5395cef7865c7b4cebe741e7ab5e8ea4b2f8))
+
+
+
 ## [5.0.1](https://github.com/algolia/create-instantsearch-app/compare/5.0.0...5.0.1) (2021-12-02)
 
 
