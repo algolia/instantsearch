@@ -186,9 +186,7 @@ describe('connectDynamicWidgets', () => {
           },
           widgets: [],
         };
-        const dynamicWidgets = connectDynamicWidgets(renderFn)(
-          widgetParams
-        );
+        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
         expect(() => {
           dynamicWidgets.render!(createRenderOptions());

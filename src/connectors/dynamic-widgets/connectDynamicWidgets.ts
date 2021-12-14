@@ -172,7 +172,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
             { results }
           );
 
-          if (!Array.isArray(transformedAttributesToRender)) {
+          if (!Array.isArray(attributesToRender)) {
             throw new Error(
               withUsage(
                 'The `transformItems` option expects a function that returns an Array.'
@@ -181,7 +181,7 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           }
 
           return {
-            attributesToRender: transformedAttributesToRender,
+            attributesToRender,
             widgetParams,
           };
         },
