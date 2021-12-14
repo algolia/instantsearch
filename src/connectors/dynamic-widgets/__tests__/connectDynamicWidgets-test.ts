@@ -178,11 +178,12 @@ describe('connectDynamicWidgets', () => {
         );
       });
 
-      it('fails when transformItems returns anything else than an array', () => {
+      it('throws when transformItems returns anything else than an array', () => {
         const renderFn = jest.fn();
         const widgetParams = {
           transformItems() {
-            return null as any;
+            // @ts-expect-error
+            return null;
           },
           widgets: [],
         };
