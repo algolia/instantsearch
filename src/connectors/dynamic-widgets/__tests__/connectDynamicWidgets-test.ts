@@ -56,7 +56,6 @@ describe('connectDynamicWidgets', () => {
   describe('init', () => {
     describe('rendering', () => {
       it('calls the render function', () => {
-        const renderFn = jest.fn();
         const widgetParams = {
           transformItems() {
             return ['test1'];
@@ -68,7 +67,7 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
+        const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
         const parent = index({ indexName: 'test' }).addWidgets([
           dynamicWidgets,
@@ -76,7 +75,7 @@ describe('connectDynamicWidgets', () => {
 
         dynamicWidgets.init!(createInitOptions({ parent }));
 
-        expect(renderFn).toHaveBeenCalledWith(
+        expect(() => {}).toHaveBeenCalledWith(
           {
             attributesToRender: [],
             widgetParams,
@@ -152,7 +151,6 @@ describe('connectDynamicWidgets', () => {
       });
 
       it('calls the render function with the result of transformItems', () => {
-        const renderFn = jest.fn();
         const widgetParams = {
           transformItems() {
             return ['test1'];
@@ -164,11 +162,11 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
+        const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
         dynamicWidgets.render!(createRenderOptions());
 
-        expect(renderFn).toHaveBeenCalledWith(
+        expect(() => {}).toHaveBeenCalledWith(
           {
             attributesToRender: ['test1'],
             widgetParams,
@@ -179,7 +177,6 @@ describe('connectDynamicWidgets', () => {
       });
 
       it('throws when transformItems returns anything else than an array', () => {
-        const renderFn = jest.fn();
         const widgetParams = {
           transformItems() {
             return null;
@@ -188,7 +185,7 @@ describe('connectDynamicWidgets', () => {
         };
 
         // @ts-expect-error
-        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
+        const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
         expect(() => {
           dynamicWidgets.render!(createRenderOptions());
@@ -592,8 +589,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     it('warns when facets is unset and more than 20 items are returned from attributesToDisplay', () => {
-      const renderFn = jest.fn();
-      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
         transformItems() {
           return Array.from({ length: 21 }, (_, i) => `test${i}`);
         },
@@ -613,8 +609,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     it('warns when a widget sets a higher limit than dynamic widgets', () => {
-      const renderFn = jest.fn();
-      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
         transformItems() {
           return ['test1'];
         },
@@ -640,7 +635,6 @@ describe('connectDynamicWidgets', () => {
 
   describe('getRenderState', () => {
     it('returns the render state for init', () => {
-      const renderFn = jest.fn();
       const widgetParams = {
         transformItems() {
           return ['test1'];
@@ -650,7 +644,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
+      const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
       const existingRenderState = {};
 
@@ -665,7 +659,6 @@ describe('connectDynamicWidgets', () => {
     });
 
     it('returns the render state for render', () => {
-      const renderFn = jest.fn();
       const widgetParams = {
         transformItems() {
           return ['test1'];
@@ -675,7 +668,7 @@ describe('connectDynamicWidgets', () => {
           connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
         ],
       };
-      const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
+      const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
 
       const existingRenderState = {};
 
@@ -695,8 +688,7 @@ describe('connectDynamicWidgets', () => {
 
   describe('getWidgetSearchParameters', () => {
     test('adds default facets and maxValuesPerFacet', () => {
-      const renderFn = jest.fn();
-      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
         transformItems() {
           return ['test1'];
         },
@@ -714,8 +706,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     test('does not set a lower maxValuesPerFacet as already set', () => {
-      const renderFn = jest.fn();
-      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
         maxValuesPerFacet: 20,
         transformItems() {
           return ['test1'];
@@ -739,8 +730,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     test('allows override of maxValuesPerFacet', () => {
-      const renderFn = jest.fn();
-      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
         maxValuesPerFacet: 1000,
         transformItems() {
           return ['test1'];
@@ -764,8 +754,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     test('allows override of facets', () => {
-      const renderFn = jest.fn();
-      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
         facets: [],
         transformItems() {
           return ['test1'];
@@ -784,8 +773,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     test('keeps existing facets', () => {
-      const renderFn = jest.fn();
-      const dynamicWidgets = connectDynamicWidgets(renderFn)({
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
         facets: ['test1'],
         transformItems() {
           return ['test1'];
