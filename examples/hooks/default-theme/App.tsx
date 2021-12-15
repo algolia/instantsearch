@@ -117,19 +117,13 @@ export function App() {
           <CurrentRefinements
             transformItems={(items) =>
               items.map((item) => {
-                const attribute = item.attribute.startsWith(
-                  'hierarchicalCategories'
-                )
+                const label = item.label.startsWith('hierarchicalCategories')
                   ? 'Hierarchy'
-                  : item.attribute;
+                  : item.label;
 
                 return {
                   ...item,
-                  attribute,
-                  refinements: item.refinements.map((refinement) => ({
-                    ...refinement,
-                    attribute,
-                  })),
+                  attribute: label,
                 };
               })
             }
