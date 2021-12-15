@@ -56,6 +56,7 @@ describe('connectDynamicWidgets', () => {
   describe('init', () => {
     describe('rendering', () => {
       it('calls the render function', () => {
+        const renderFn = jest.fn();
         const widgetParams = {
           transformItems() {
             return ['test1'];
@@ -67,7 +68,7 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
+        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
         const parent = index({ indexName: 'test' }).addWidgets([
           dynamicWidgets,
@@ -75,7 +76,7 @@ describe('connectDynamicWidgets', () => {
 
         dynamicWidgets.init!(createInitOptions({ parent }));
 
-        expect(() => {}).toHaveBeenCalledWith(
+        expect(renderFn).toHaveBeenCalledWith(
           {
             attributesToRender: [],
             widgetParams,
@@ -151,6 +152,7 @@ describe('connectDynamicWidgets', () => {
       });
 
       it('calls the render function with the result of transformItems', () => {
+        const renderFn = jest.fn();
         const widgetParams = {
           transformItems() {
             return ['test1'];
@@ -162,11 +164,11 @@ describe('connectDynamicWidgets', () => {
             }),
           ],
         };
-        const dynamicWidgets = connectDynamicWidgets(() => {})(widgetParams);
+        const dynamicWidgets = connectDynamicWidgets(renderFn)(widgetParams);
 
         dynamicWidgets.render!(createRenderOptions());
 
-        expect(() => {}).toHaveBeenCalledWith(
+        expect(renderFn).toHaveBeenCalledWith(
           {
             attributesToRender: ['test1'],
             widgetParams,
