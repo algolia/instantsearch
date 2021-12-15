@@ -60,7 +60,7 @@
     "classnames": "^2.2.5",
     "@algolia/events": "^4.0.1",
     "hogan.js": "^3.0.2",
-    "preact": "^10.5.14",
+    "preact": "^10.6.4",
     "qs": "^6.5.1 < 6.10",
     "search-insights": "^2.1.0"
   },
