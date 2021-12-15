@@ -29,6 +29,7 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 - [Why](#why)
 - [Getting started](#getting-started)
 - [Installation](#installation)
+  - [TypeScript users](#typescript-users)
 - [Documentation](#documentation)
 - [Demos](#demos)
 - [Playground](#playground)

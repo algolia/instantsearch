@@ -1,3 +1,26 @@
+# [4.35.0](https://github.com/algolia/instantsearch.js/compare/v4.34.0...v4.35.0) (2021-12-13)
+
+
+### Features
+
+* **events:** move to @algolia/events ([#4961](https://github.com/algolia/instantsearch.js/issues/4961)) ([1c56726](https://github.com/algolia/instantsearch.js/commit/1c5672640c65d7ed6f6e381a3162e508bdda44f3))
+
+### Bug Fixes
+
+* **deps:** Add missing peer dependency ([#4950](https://github.com/algolia/instantsearch.js/issues/4950)) ([468578da9](https://github.com/algolia/instantsearch.js/commit/468578da948a12224c892fd12cba4c880aa7b25f))
+
+
+
+# [4.34.0](https://github.com/algolia/instantsearch.js/compare/v4.33.2...v4.34.0) (2021-12-07)
+
+
+### Features
+
+* rely on `state` in `getWidgetRenderState` ([#4960](https://github.com/algolia/instantsearch.js/issues/4960)) ([5006841](https://github.com/algolia/instantsearch.js/commit/50068417e5e7211802bc717b582946f6e630d7ac))
+* support initial results (experimental) ([#4967](https://github.com/algolia/instantsearch.js/issues/4967)) ([db11c13](https://github.com/algolia/instantsearch.js/commit/db11c13ea55433491f5e924633bff12a303c1bc6))
+
+
+
 ## [4.33.2](https://github.com/algolia/instantsearch.js/compare/v4.33.1...v4.33.2) (2021-11-16)
 
 

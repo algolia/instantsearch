@@ -1,6 +1,7 @@
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import EventEmitter from 'events';
+import EventEmitter from '@algolia/events';
+
 import type { IndexWidget } from '../widgets/index/index';
 import index, { isIndexWidget } from '../widgets/index/index';
 import version from './version';
@@ -22,6 +23,7 @@ import type {
   Middleware,
   MiddlewareDefinition,
   RenderState,
+  InitialResults,
 } from '../types';
 import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
@@ -157,6 +159,7 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
+  public _initialResults: InitialResults | null;
   public _createURL: CreateURL<UiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
@@ -253,6 +256,7 @@ See ${createDocumentationLink({
 
     this._createURL = defaultCreateURL;
     this._initialUiState = initialUiState;
+    this._initialResults = null;
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
@@ -492,7 +496,23 @@ See ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
-    this.scheduleSearch();
+    if (this._initialResults) {
+      const originalScheduleSearch = this.scheduleSearch;
+      // We don't schedule a first search when initial results are provided
+      // because we already have the results to render. This skips the initial
+      // network request on the browser on `start`.
+      this.scheduleSearch = defer(noop);
+      // We also skip the initial network request when widgets are dynamically
+      // added in the first tick (that's the case in all the framework-based flavors).
+      // When we add a widget to `index`, it calls `scheduleSearch`. We can rely
+      // on our `defer` util to restore the original `scheduleSearch` value once
+      // widgets are added to hook back to the regular lifecycle.
+      defer(() => {
+        this.scheduleSearch = originalScheduleSearch;
+      })();
+    } else {
+      this.scheduleSearch();
+    }
 
     // Keep the previous reference for legacy purpose, some pattern use
     // the direct Helper access `search.helper` (e.g multi-index).

@@ -1,5 +1,9 @@
 import type { PlainSearchParameters } from 'algoliasearch-helper';
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -14,6 +18,8 @@ import InstantSearch from '../../../lib/InstantSearch';
 import index from '../index';
 import { warning } from '../../../lib/utils';
 import { refinementList } from '../..';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { connectHits } from '../../../connectors';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
@@ -2880,6 +2886,278 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       }).not.toWarnDev(
         '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
       );
+    });
+  });
+
+  describe('with initial results', () => {
+    it('injects the results to the index helper', () => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      search._initialResults = {
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
+      };
+
+      search.start();
+
+      const expectedResults = {
+        _rawResults: [
+          {
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            hitsPerPage: 20,
+            nbHits: 3,
+            nbPages: 1,
+            page: 0,
+            params: '',
+            processingTimeMS: 0,
+            query: 'iphone',
+          },
+        ],
+        _state: {
+          disjunctiveFacets: [],
+          disjunctiveFacetsRefinements: {},
+          facets: [],
+          facetsExcludes: {},
+          facetsRefinements: {},
+          hierarchicalFacets: [],
+          hierarchicalFacetsRefinements: {},
+          numericRefinements: {},
+          tagRefinements: [],
+        },
+        disjunctiveFacets: [],
+        exhaustiveFacetsCount: true,
+        exhaustiveNbHits: true,
+        facets: [],
+        hierarchicalFacets: [],
+        hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+        hitsPerPage: 20,
+        nbHits: 3,
+        nbPages: 1,
+        page: 0,
+        params: '',
+        processingTimeMS: 0,
+        query: 'iphone',
+      };
+
+      const helperResults = search.mainIndex.getHelper()!.lastResults;
+      const derivedHelperResults = search.mainIndex.getResults();
+
+      expect(derivedHelperResults).toEqual(expectedResults);
+      expect(derivedHelperResults).toBeInstanceOf(SearchResults);
+      expect(helperResults).toEqual(expectedResults);
+      expect(helperResults).toBeInstanceOf(SearchResults);
+    });
+
+    it('supports nested indices', () => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      search._initialResults = {
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
+        indexName2: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '4' }, { objectID: '5' }, { objectID: '6' }],
+            }),
+          ],
+        },
+        indexName3: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
+            }),
+          ],
+        },
+      };
+
+      const nestedIndex1 = index({ indexName: 'indexName2' });
+      const nestedIndex2 = index({ indexName: 'indexName3' });
+
+      nestedIndex1.addWidgets([nestedIndex2]);
+      search.addWidgets([nestedIndex1]);
+      search.start();
+
+      const indexExpectedResults = expect.objectContaining({
+        _rawResults: [
+          expect.objectContaining({
+            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+          }),
+        ],
+        hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+      });
+      const nestedIndex1ExpectedResults = expect.objectContaining({
+        _rawResults: [
+          expect.objectContaining({
+            hits: [{ objectID: '4' }, { objectID: '5' }, { objectID: '6' }],
+          }),
+        ],
+        hits: [{ objectID: '4' }, { objectID: '5' }, { objectID: '6' }],
+      });
+      const nestedIndex2ExpectedResults = expect.objectContaining({
+        _rawResults: [
+          expect.objectContaining({
+            hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
+          }),
+        ],
+        hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
+      });
+
+      expect(search.mainIndex.getHelper()!.lastResults).toEqual(
+        indexExpectedResults
+      );
+      expect(search.mainIndex.getResults()).toEqual(indexExpectedResults);
+      expect(nestedIndex1.getHelper()!.lastResults).toEqual(
+        nestedIndex1ExpectedResults
+      );
+      expect(nestedIndex1.getResults()).toEqual(nestedIndex1ExpectedResults);
+      expect(nestedIndex2.getHelper()!.lastResults).toEqual(
+        nestedIndex2ExpectedResults
+      );
+      expect(nestedIndex2.getResults()).toEqual(nestedIndex2ExpectedResults);
+    });
+
+    it('does not fail with non-provided index results', () => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      search._initialResults = {
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
+        // Notice that `indexName2` is not provided
+        indexName3: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
+            }),
+          ],
+        },
+      };
+
+      const nestedIndex1 = index({ indexName: 'indexName2' });
+      const nestedIndex2 = index({ indexName: 'indexName3' });
+
+      nestedIndex1.addWidgets([nestedIndex2]);
+      search.addWidgets([nestedIndex1]);
+      search.start();
+
+      const indexExpectedResults = expect.objectContaining({
+        _rawResults: [
+          expect.objectContaining({
+            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+          }),
+        ],
+        hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+      });
+      const nestedIndex1ExpectedResults = null;
+      const nestedIndex2ExpectedResults = expect.objectContaining({
+        _rawResults: [
+          expect.objectContaining({
+            hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
+          }),
+        ],
+        hits: [{ objectID: '7' }, { objectID: '8' }, { objectID: '9' }],
+      });
+
+      expect(search.mainIndex.getHelper()!.lastResults).toEqual(
+        indexExpectedResults
+      );
+      expect(search.mainIndex.getResults()).toEqual(indexExpectedResults);
+      expect(nestedIndex1.getHelper()!.lastResults).toEqual(
+        nestedIndex1ExpectedResults
+      );
+      expect(nestedIndex1.getResults()).toEqual(nestedIndex1ExpectedResults);
+      expect(nestedIndex2.getHelper()!.lastResults).toEqual(
+        nestedIndex2ExpectedResults
+      );
+      expect(nestedIndex2.getResults()).toEqual(nestedIndex2ExpectedResults);
+    });
+
+    it('schedules a render after init', () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch({
+        scheduleRender: jest.fn() as any,
+      });
+      instantSearchInstance._initialResults = {
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
+      };
+
+      instance.init(createInitOptions({ instantSearchInstance, parent: null }));
+
+      expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders the hits coming from the initial results', async () => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      search._initialResults = {
+        indexName: {
+          state: new SearchParameters(),
+          results: [
+            createSingleSearchResponse({
+              query: 'iphone',
+              hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            }),
+          ],
+        },
+      };
+      const renderFn = jest.fn();
+
+      const customHits = connectHits(renderFn);
+
+      search.addWidgets([customHits({})]);
+      search.start();
+      await wait(0);
+
+      const receivedHits = renderFn.mock.calls[1][0].hits;
+      expect(receivedHits).toEqual([
+        expect.objectContaining({ objectID: '1' }),
+        expect.objectContaining({ objectID: '2' }),
+        expect.objectContaining({ objectID: '3' }),
+      ]);
     });
   });
 });

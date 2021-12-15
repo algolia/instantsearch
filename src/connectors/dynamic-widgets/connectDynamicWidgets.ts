@@ -204,6 +204,14 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
             { results }
           );
 
+          if (!Array.isArray(attributesToRender)) {
+            throw new Error(
+              withUsage(
+                'The `transformItems` option expects a function that returns an Array.'
+              )
+            );
+          }
+
           warning(
             maxValuesPerFacet >= (state.maxValuesPerFacet || 0),
             `The maxValuesPerFacet set by dynamic widgets (${maxValuesPerFacet}) is smaller than one of the limits set by a widget (${state.maxValuesPerFacet}). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.`
