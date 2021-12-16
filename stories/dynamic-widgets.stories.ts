@@ -70,7 +70,6 @@ storiesOf('Basics/DynamicWidgets', module)
                 },
               },
             })(instantsearch.widgets.refinementList)({ attribute, container }),
-          facets: [],
           widgets: [
             (container) =>
               instantsearch.widgets.menu({
@@ -89,6 +88,7 @@ storiesOf('Basics/DynamicWidgets', module)
                 ],
               }),
           ],
+          facets: [],
         }),
       ]);
     })

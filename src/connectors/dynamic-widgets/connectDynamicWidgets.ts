@@ -47,7 +47,7 @@ export type DynamicWidgetsConnectorParams = {
    *
    * @default ['*']
    */
-  facets?: string[];
+  facets?: ['*'] | never[];
 
   /**
    * If you have more than 20 facet values pinned, you need to increase the
@@ -95,6 +95,22 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
       ) {
         throw new Error(
           withUsage('The `widgets` option expects an array of widgets.')
+        );
+      }
+
+      if (
+        !(
+          Array.isArray(facets) &&
+          facets.length <= 1 &&
+          (facets[0] === '*' || facets[0] === undefined)
+        )
+      ) {
+        throw new Error(
+          withUsage(
+            `The \`facets\` option only accepts [] or ["*"], you passed ${JSON.stringify(
+              facets
+            )}`
+          )
         );
       }
 
@@ -178,7 +194,8 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           unmountFn();
         },
         getWidgetSearchParameters(state) {
-          return facets.reduce(
+          // broadening the scope of facets to avoid conflict between never and *
+          return (facets as string[]).reduce(
             (acc, curr) => acc.addFacet(curr),
             state.setQueryParameters({
               maxValuesPerFacet: Math.max(

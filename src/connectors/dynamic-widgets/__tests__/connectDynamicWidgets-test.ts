@@ -51,6 +51,44 @@ describe('connectDynamicWidgets', () => {
         })
       ).not.toThrow();
     });
+
+    it('fails when a non-star facet is given', () => {
+      expect(() =>
+        connectDynamicWidgets(() => {})(
+          // @ts-expect-error
+          { widgets: [], facets: ['lol'] }
+        )
+      ).toThrowErrorMatchingInlineSnapshot(`
+        "The \`facets\` option only accepts [] or [\\"*\\"], you passed [\\"lol\\"]
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+      `);
+    });
+
+    it('fails when a multiple star facets are given', () => {
+      expect(() =>
+        connectDynamicWidgets(() => {})(
+          // @ts-expect-error
+          { widgets: [], facets: ['*', '*'] }
+        )
+      ).toThrowErrorMatchingInlineSnapshot(`
+        "The \`facets\` option only accepts [] or [\\"*\\"], you passed [\\"*\\",\\"*\\"]
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+      `);
+    });
+
+    it('does not fail when only star facet is given', () => {
+      expect(() =>
+        connectDynamicWidgets(() => {})({ widgets: [], facets: ['*'] })
+      ).not.toThrow();
+    });
+
+    it('does not fail when no facet is given', () => {
+      expect(() =>
+        connectDynamicWidgets(() => {})({ widgets: [], facets: [] })
+      ).not.toThrow();
+    });
   });
 
   describe('init', () => {
@@ -776,7 +814,7 @@ describe('connectDynamicWidgets', () => {
 
     test('keeps existing facets', () => {
       const dynamicWidgets = connectDynamicWidgets(() => {})({
-        facets: ['test1'],
+        facets: ['*'],
         transformItems() {
           return ['test1'];
         },
@@ -797,7 +835,7 @@ describe('connectDynamicWidgets', () => {
         )
       ).toEqual(
         new SearchParameters({
-          facets: ['existing', 'test1'],
+          facets: ['existing', '*'],
           maxValuesPerFacet: 20,
         })
       );
