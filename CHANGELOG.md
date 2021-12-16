@@ -1,3 +1,14 @@
+# [6.18.0](https://github.com/algolia/react-instantsearch/compare/v6.17.0...v6.18.0) (2021-12-16)
+
+
+### Features
+
+* **dynamicWidgets:** send facets * and maxValuesPerFacet by default ([#3242](https://github.com/algolia/react-instantsearch/issues/3242)) ([c071776](https://github.com/algolia/react-instantsearch/commit/c07177670ac30dced55250774654e8b2a77b6739))
+* **hooks:** introduce `useNumericMenu` ([#3237](https://github.com/algolia/react-instantsearch/issues/3237)) ([e3056c9](https://github.com/algolia/react-instantsearch/commit/e3056c9e2c64b5afafb7a736599a5cbf6137575b))
+* **hooks:** introduce useInfiniteHits ([#3224](https://github.com/algolia/react-instantsearch/issues/3224)) ([177ec56](https://github.com/algolia/react-instantsearch/commit/177ec56af274670c2bf8599ba104b5544979bbe8))
+
+
+
 # [6.17.0](https://github.com/algolia/react-instantsearch/compare/v6.16.0...v6.17.0) (2021-12-08)
 
 

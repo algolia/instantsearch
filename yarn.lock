@@ -18295,6 +18295,16 @@ react-instantsearch-dom@6.12.0:
     react-fast-compare "^3.0.0"
     react-instantsearch-core "^6.12.0"
 
+react-instantsearch-hooks@6.17.0:
+  version "6.17.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-hooks/-/react-instantsearch-hooks-6.17.0.tgz#5ba8c4dc8286bd65130a82c119b8ee014c76669a"
+  integrity sha512-uyBJbO2Jjtwl+8CSvxHUTiqLoVBvQrah75v0BJyE8PVG9/QtCS+C/irYA0dGTRwJtM8ToCB6Erb+g2ijt8hxqg==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    algoliasearch-helper "^3.6.2"
+    dequal "^2.0.0"
+    instantsearch.js "^4.34.0"
+
 react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
