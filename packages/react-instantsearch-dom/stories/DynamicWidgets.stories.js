@@ -11,35 +11,54 @@ import { WrapWithHits } from './util';
 
 const stories = storiesOf('DynamicWidgets', module);
 
-stories.add('default', () => (
-  <WrapWithHits
-    initialSearchState={{ refinementList: { brand: ['Apple'] } }}
-    hasPlayground={true}
-    linkedStoryGroup="DynamicWidgets.stories.js"
-  >
-    <DynamicWidgets
-      transformItems={(_attributes, { results }) => {
-        if (results._state.query === 'dog') {
-          return ['categories'];
-        }
-        if (results._state.query === 'lego') {
-          return ['categories', 'brand'];
-        }
-        return ['brand', 'hierarchicalCategories.lvl0', 'categories'];
-      }}
+stories
+  .add('default', () => (
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="DynamicWidgets.stories.js"
     >
-      <HierarchicalMenu
-        attributes={[
-          'hierarchicalCategories.lvl0',
-          'hierarchicalCategories.lvl1',
-          'hierarchicalCategories.lvl2',
-          'hierarchicalCategories.lvl3',
-        ]}
-      />
-      <Panel>
-        <RefinementList attribute="brand" />
-      </Panel>
-      <Menu attribute="categories" />
-    </DynamicWidgets>
-  </WrapWithHits>
-));
+      <p>
+        try the queries: <q>dog</q> or <q>lego</q>.
+      </p>
+      <DynamicWidgets fallbackWidget={RefinementList}>
+        <HierarchicalMenu
+          attributes={[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+            'hierarchicalCategories.lvl3',
+          ]}
+        />
+        <Panel header="Brand">
+          <RefinementList attribute="brand" />
+        </Panel>
+        <Menu attribute="categories" />
+      </DynamicWidgets>
+    </WrapWithHits>
+  ))
+  .add('multiple requests', () => (
+    <WrapWithHits
+      initialSearchState={{ refinementList: { brand: ['Apple'] } }}
+      hasPlayground={true}
+      linkedStoryGroup="DynamicWidgets.stories.js"
+    >
+      <p>
+        try the queries: <q>dog</q> or <q>lego</q>. Notice how there are two
+        network requests, with a minimal payload each.
+      </p>
+      <DynamicWidgets fallbackWidget={RefinementList} facets={[]}>
+        <HierarchicalMenu
+          attributes={[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+            'hierarchicalCategories.lvl3',
+          ]}
+        />
+        <Panel header="Brand">
+          <RefinementList attribute="brand" />
+        </Panel>
+        <Menu attribute="categories" />
+      </DynamicWidgets>
+    </WrapWithHits>
+  ));

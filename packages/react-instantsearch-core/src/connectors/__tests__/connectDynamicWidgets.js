@@ -24,12 +24,81 @@ const EMPTY_RESPONSE = {
 
 describe('connectDynamicWidgets', () => {
   const empty = {};
+  const contextValue = {
+    mainTargetedIndex: 'index',
+  };
+
+  describe('getSearchParameters', () => {
+    it('sets facets * and maxValuesPerFacet by default', () => {
+      const props = {
+        contextValue,
+        ...connector.defaultProps,
+      };
+      const searchState = {};
+
+      const actual = connector.getSearchParameters(
+        new SearchParameters(),
+        props,
+        searchState
+      );
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          facets: ['*'],
+          maxValuesPerFacet: 20,
+        })
+      );
+    });
+
+    it('gets added onto existing parameters', () => {
+      const props = {
+        contextValue,
+        ...connector.defaultProps,
+      };
+      const searchState = {};
+
+      const actual = connector.getSearchParameters(
+        new SearchParameters({
+          facets: ['123'],
+          maxValuesPerFacet: 1000,
+        }),
+        props,
+        searchState
+      );
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          facets: ['123', '*'],
+          maxValuesPerFacet: 1000,
+        })
+      );
+    });
+
+    it('allows override of facets and maxValuesPerFacet', () => {
+      const props = {
+        contextValue,
+        ...connector.defaultProps,
+        facets: ['lol'],
+        maxValuesPerFacet: 1000,
+      };
+      const searchState = {};
+
+      const actual = connector.getSearchParameters(
+        new SearchParameters(),
+        props,
+        searchState
+      );
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          facets: ['lol'],
+          maxValuesPerFacet: 1000,
+        })
+      );
+    });
+  });
 
   describe('single index', () => {
-    const contextValue = {
-      mainTargetedIndex: 'index',
-    };
-
     const createSingleIndexSearchResults = (result = {}, state) => ({
       results: new SearchResults(new SearchParameters(state), [
         {
@@ -151,11 +220,143 @@ describe('connectDynamicWidgets', () => {
 
         expect(actual.attributesToRender).toEqual(['one', 'two']);
       });
+
+      it('fails when a non-star facet is given', () => {
+        const props = {
+          contextValue,
+          ...connector.defaultProps,
+          facets: ['lol'],
+        };
+        const searchState = {};
+        const searchResults = createSingleIndexSearchResults({});
+
+        expect(() =>
+          connector.getProvidedProps(props, searchState, searchResults)
+        ).toThrowErrorMatchingInlineSnapshot(
+          `"The \`facets\` prop only accepts [] or [\\"*\\"], you passed [\\"lol\\"]"`
+        );
+      });
+
+      it('fails when a multiple star facets are given', () => {
+        const props = {
+          contextValue,
+          ...connector.defaultProps,
+          facets: ['*', '*'],
+        };
+        const searchState = {};
+        const searchResults = createSingleIndexSearchResults({});
+
+        expect(() =>
+          connector.getProvidedProps(props, searchState, searchResults)
+        ).toThrowErrorMatchingInlineSnapshot(
+          `"The \`facets\` prop only accepts [] or [\\"*\\"], you passed [\\"*\\",\\"*\\"]"`
+        );
+      });
+
+      it('does not fail when only star facet is given', () => {
+        const props = {
+          contextValue,
+          ...connector.defaultProps,
+          facets: ['*'],
+        };
+        const searchState = {};
+        const searchResults = createSingleIndexSearchResults({});
+
+        expect(() =>
+          connector.getProvidedProps(props, searchState, searchResults)
+        ).not.toThrow();
+      });
+
+      it('does not fail when no facet is given', () => {
+        const props = {
+          contextValue,
+          ...connector.defaultProps,
+          facets: [],
+        };
+        const searchState = {};
+        const searchResults = createSingleIndexSearchResults({});
+
+        expect(() =>
+          connector.getProvidedProps(props, searchState, searchResults)
+        ).not.toThrow();
+      });
+
+      it('warns if maxValuesPerFacet is lower than set by another widget', () => {
+        const spy = jest.spyOn(console, 'warn');
+        const props = {
+          contextValue,
+          ...connector.defaultProps,
+        };
+        const searchState = {};
+        const searchResults = createSingleIndexSearchResults(
+          {},
+          new SearchParameters({ maxValuesPerFacet: 100 })
+        );
+
+        connector.getProvidedProps(props, searchState, searchResults);
+
+        expect(spy).toHaveBeenCalledWith(
+          'The maxValuesPerFacet set by dynamic widgets (20) is smaller than one of the limits set by a widget (100). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.'
+        );
+      });
+
+      it('warns if >20 facets are displayed due to implicit *', () => {
+        const spy = jest.spyOn(console, 'warn');
+        const props = {
+          contextValue,
+          transformItems: (_items, { results }) =>
+            results.userData[0].MOCK_FACET_ORDER,
+        };
+        const searchState = {};
+        const searchResults = createSingleIndexSearchResults({
+          userData: [
+            {
+              MOCK_FACET_ORDER: Array.from(
+                { length: 21 },
+                (_, i) => `item${i}`
+              ),
+            },
+          ],
+        });
+
+        const actual = connector.getProvidedProps(
+          props,
+          searchState,
+          searchResults
+        );
+
+        expect(spy).toHaveBeenCalledWith(
+          'More than 20 facets are requested to be displayed without explicitly setting which facets to retrieve. This could have a performance impact. Set "facets" to [] to do two smaller network requests, or explicitly to [\'*\'] to avoid this warning.'
+        );
+
+        expect(actual.attributesToRender).toEqual([
+          'item0',
+          'item1',
+          'item2',
+          'item3',
+          'item4',
+          'item5',
+          'item6',
+          'item7',
+          'item8',
+          'item9',
+          'item10',
+          'item11',
+          'item12',
+          'item13',
+          'item14',
+          'item15',
+          'item16',
+          'item17',
+          'item18',
+          'item19',
+          'item20',
+        ]);
+      });
     });
   });
 
   describe('multi index', () => {
-    const contextValue = { mainTargetedIndex: 'first' };
     const indexContextValue = { targetedIndex: 'second' };
 
     const createMultiIndexSearchState = (state = {}) => ({
