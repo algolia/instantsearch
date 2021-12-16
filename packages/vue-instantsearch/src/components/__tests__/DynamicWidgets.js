@@ -46,6 +46,51 @@ const MockHierarchicalMenu = {
   `,
 };
 
+it('passes arguments to connector', () => {
+  __setState(null);
+
+  const transformItems = items => items;
+  const facets = ['test'];
+  const maxValuesPerFacet = 100;
+  const wrapper = mount({
+    data() {
+      return { props: { transformItems, facets, maxValuesPerFacet } };
+    },
+    template: `
+      <DynamicWidgets v-bind="props">
+        <MockRefinementList attribute="test1"/>
+        <MockMenu attribute="test2"/>
+        <AisPanel>
+          <MockHierarchicalMenu :attributes="['test3', 'test4']" />
+        </AisPanel>
+      </DynamicWidgets>
+      `,
+    components: {
+      DynamicWidgets,
+      MockRefinementList,
+      MockMenu,
+      MockHierarchicalMenu,
+      AisPanel,
+    },
+  });
+
+  const dynamicWidgets = wrapper.findComponent(DynamicWidgets);
+
+  expect(dynamicWidgets.props()).toEqual({
+    classNames: undefined,
+    transformItems,
+    facets: ['test'],
+    maxValuesPerFacet: 100,
+  });
+
+  expect(dynamicWidgets.vm.widgetParams).toEqual({
+    transformItems,
+    facets: ['test'],
+    maxValuesPerFacet: 100,
+    widgets: [],
+  });
+});
+
 it('renders all children without state', () => {
   __setState(null);
 

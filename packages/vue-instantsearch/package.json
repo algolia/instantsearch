@@ -48,7 +48,7 @@
     "release": "shipjs prepare"
   },
   "dependencies": {
-    "instantsearch.js": "^4.35.0",
+    "instantsearch.js": "^4.36.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {

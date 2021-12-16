@@ -50,6 +50,14 @@ export default {
       type: Function,
       default: undefined,
     },
+    facets: {
+      type: Array,
+      default: undefined,
+    },
+    maxValuesPerFacet: {
+      type: Number,
+      default: undefined,
+    },
   },
   render: renderCompat(function(h) {
     const components = new Map();
@@ -91,6 +99,8 @@ export default {
     widgetParams() {
       return {
         transformItems: this.transformItems,
+        facets: this.facets,
+        maxValuesPerFacet: this.maxValuesPerFacet,
         // we do not pass "widgets" to the connector, since Vue is in charge of rendering
         widgets: [],
       };
