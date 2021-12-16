@@ -1,3 +1,13 @@
+# [4.36.0](https://github.com/algolia/instantsearch.js/compare/v4.35.0...v4.36.0) (2021-12-16)
+
+
+### Features
+
+* **dynamicWidgets:** send facets * and maxValuesPerFacet by default ([#4968](https://github.com/algolia/instantsearch.js/issues/4968)) ([969ae89](https://github.com/algolia/instantsearch.js/commit/969ae8980f7c8a055bb4c6c5967d04744644f555))
+* **DynamicWidgets:** throw when transformItems returns anything that isn't an array ([#4975](https://github.com/algolia/instantsearch.js/issues/4975)) ([5c328c8](https://github.com/algolia/instantsearch.js/commit/5c328c85428eb9a5c1450fd01154751f4e0ea2fa))
+
+
+
 # [4.35.0](https://github.com/algolia/instantsearch.js/compare/v4.34.0...v4.35.0) (2021-12-13)
 
 
