@@ -1,3 +1,12 @@
+# [4.3.0](https://github.com/algolia/vue-instantsearch/compare/v4.2.0...v4.3.0) (2021-12-16)
+
+
+### Features
+
+* **dynamicWidgets:** pass parameters to connector ([#1093](https://github.com/algolia/vue-instantsearch/issues/1093)) ([247ed0f](https://github.com/algolia/vue-instantsearch/commit/247ed0f101b5dabd5eebf35a7b8c3a2504eef2e2))
+
+
+
 # [4.2.0](https://github.com/algolia/vue-instantsearch/compare/v4.1.1...v4.2.0) (2021-12-13)
 
 
