@@ -4,6 +4,7 @@ import {
   createDocumentationMessageGenerator,
   getWidgetAttribute,
   noop,
+  warning,
 } from '../../lib/utils';
 import type { Connector, Widget } from '../../types';
 
@@ -39,6 +40,22 @@ export type DynamicWidgetsConnectorParams = {
     items: string[],
     metadata: { results: SearchResults }
   ): string[];
+
+  /**
+   * To prevent unneeded extra network requests when widgets mount or unmount,
+   * we request all facet values.
+   *
+   * @default ['*']
+   */
+  facets?: ['*'] | never[];
+
+  /**
+   * If you have more than 20 facet values pinned, you need to increase the
+   * maxValuesPerFacet to at least that value.
+   *
+   * @default 20
+   */
+  maxValuesPerFacet?: number;
 };
 
 export type DynamicWidgetsWidgetDescription = {
@@ -54,6 +71,8 @@ export type DynamicWidgetsConnector = Connector<
   DynamicWidgetsConnectorParams
 >;
 
+const MAX_WILDCARD_FACETS = 20;
+
 const connectDynamicWidgets: DynamicWidgetsConnector =
   function connectDynamicWidgets(renderFn, unmountFn = noop) {
     checkRendering(renderFn, withUsage());
@@ -61,6 +80,8 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
     return (widgetParams) => {
       const {
         widgets,
+        maxValuesPerFacet = 20,
+        facets = ['*'],
         transformItems = (items) => items,
         fallbackWidget,
       } = widgetParams;
@@ -74,6 +95,22 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
       ) {
         throw new Error(
           withUsage('The `widgets` option expects an array of widgets.')
+        );
+      }
+
+      if (
+        !(
+          Array.isArray(facets) &&
+          facets.length <= 1 &&
+          (facets[0] === '*' || facets[0] === undefined)
+        )
+      ) {
+        throw new Error(
+          withUsage(
+            `The \`facets\` option only accepts [] or ["*"], you passed ${JSON.stringify(
+              facets
+            )}`
+          )
         );
       }
 
@@ -156,13 +193,25 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
 
           unmountFn();
         },
+        getWidgetSearchParameters(state) {
+          // broadening the scope of facets to avoid conflict between never and *
+          return (facets as string[]).reduce(
+            (acc, curr) => acc.addFacet(curr),
+            state.setQueryParameters({
+              maxValuesPerFacet: Math.max(
+                maxValuesPerFacet || 0,
+                state.maxValuesPerFacet || 0
+              ),
+            })
+          );
+        },
         getRenderState(renderState, renderOptions) {
           return {
             ...renderState,
             dynamicWidgets: this.getWidgetRenderState(renderOptions),
           };
         },
-        getWidgetRenderState({ results }) {
+        getWidgetRenderState({ results, state }) {
           if (!results) {
             return { attributesToRender: [], widgetParams };
           }
@@ -179,6 +228,17 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
               )
             );
           }
+
+          warning(
+            maxValuesPerFacet >= (state.maxValuesPerFacet || 0),
+            `The maxValuesPerFacet set by dynamic widgets (${maxValuesPerFacet}) is smaller than one of the limits set by a widget (${state.maxValuesPerFacet}). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.`
+          );
+
+          warning(
+            attributesToRender.length <= MAX_WILDCARD_FACETS ||
+              widgetParams.facets !== undefined,
+            `More than ${MAX_WILDCARD_FACETS} facets are requested to be displayed without explicitly setting which facets to retrieve. This could have a performance impact. Set "facets" to [] to do two smaller network requests, or explicitly to ['*'] to avoid this warning.`
+          );
 
           return {
             attributesToRender,

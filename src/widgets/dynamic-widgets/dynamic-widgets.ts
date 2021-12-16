@@ -60,9 +60,9 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
 ) {
   const {
     container: containerSelector,
-    transformItems,
     widgets,
     fallbackWidget,
+    ...otherWidgetParams
   } = widgetParams || {};
 
   if (!containerSelector) {
@@ -108,7 +108,7 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
   );
 
   const widget = makeWidget({
-    transformItems,
+    ...otherWidgetParams,
     widgets: connectorWidgets,
     fallbackWidget:
       typeof fallbackWidget === 'function'
