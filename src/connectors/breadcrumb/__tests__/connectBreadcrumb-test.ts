@@ -290,6 +290,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         widgetParams: { attributes: ['category', 'subCategory'] },
       });
     });
+
+    const renderFn = jest.fn();
+    test('refine method called with null does not mutate the current helper state if no hierarchicalFacets exist', () => {
+      const unmountFn = jest.fn();
+      const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
+      const breadcrumb = createBreadcrumb({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+
+      const renderState = breadcrumb.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      renderState.refine(null);
+
+      expect(helper.state).toEqual({
+        facets: [],
+        disjunctiveFacets: [],
+        hierarchicalFacets: [],
+        facetsRefinements: {},
+        facetsExcludes: {},
+        disjunctiveFacetsRefinements: {},
+        numericRefinements: {},
+        tagRefinements: [],
+        hierarchicalFacetsRefinements: {},
+        index: 'indexName',
+      });
+    });
   });
 
   describe('getWidgetSearchParameters', () => {

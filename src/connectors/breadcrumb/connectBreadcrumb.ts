@@ -132,7 +132,9 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         const breadcrumb = state.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
         );
-        if (breadcrumb.length > 0) {
+        if (breadcrumb.length === 0) {
+          return state;
+        } else {
           return state
             .resetPage()
             .toggleFacetRefinement(hierarchicalFacetName, breadcrumb[0]);
