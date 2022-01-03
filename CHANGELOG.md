@@ -1,3 +1,12 @@
+## [5.1.1](https://github.com/algolia/create-instantsearch-app/compare/5.1.0...5.1.1) (2022-01-03)
+
+
+### Bug Fixes
+
+* **react-native:** update template and related dependencies ([#546](https://github.com/algolia/create-instantsearch-app/issues/546)) ([858d33f](https://github.com/algolia/create-instantsearch-app/commit/858d33fb01272e8a13964a739c247743cbd855dc))
+
+
+
 # [5.1.0](https://github.com/algolia/create-instantsearch-app/compare/5.0.1...5.1.0) (2021-12-14)
 
 
