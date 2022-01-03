@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const InfiniteHits = ({ hits, hasMore, refine }) => (
+const InfiniteHits = ({ hits, hasMore, refineNext }) => (
   <FlatList
     data={hits}
     keyExtractor={item => item.objectID}
     ItemSeparatorComponent={() => <View style={styles.separator} />}
-    onEndReached={() => hasMore && refine()}
+    onEndReached={() => hasMore && refineNext()}
     renderItem={({ item }) => (
       <View style={styles.item}>
         {{#if attributesToDisplay}}
@@ -50,7 +50,7 @@ const InfiniteHits = ({ hits, hasMore, refine }) => (
 InfiniteHits.propTypes = {
   hits: PropTypes.arrayOf(PropTypes.object).isRequired,
   hasMore: PropTypes.bool.isRequired,
-  refine: PropTypes.func.isRequired,
+  refineNext: PropTypes.func.isRequired,
 };
 
 export default connectInfiniteHits(InfiniteHits);

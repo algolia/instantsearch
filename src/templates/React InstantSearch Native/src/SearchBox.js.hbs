@@ -6,6 +6,7 @@ import { connectSearchBox } from 'react-instantsearch-native';
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: '#252b33',
   },
   input: {
     height: 48,

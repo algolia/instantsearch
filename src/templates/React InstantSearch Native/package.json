@@ -10,22 +10,23 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "algoliasearch": "3.32.1",
-    "expo": "32.0.6",
-    "prop-types": "15.7.2",
-    "react": "16.5.0",
+    "algoliasearch": "4.11.0",
+    "expo": "44.0.3",
+    "prop-types": "15.8.0",
+    "react": "17.0.2",
     "react-instantsearch-native": "{{libraryVersion}}",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
+    "react-native": "0.64.3"
   },
   "devDependencies": {
-    "babel-preset-expo": "5.2.0",
-    "eslint": "5.7.0",
-    "eslint-config-algolia": "13.2.3",
-    "eslint-config-prettier": "3.6.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-prettier": "3.1.0",
-    "eslint-plugin-react": "7.13.0",
-    "expo-cli": "2.21.2",
-    "prettier": "1.19.1"
+    "@babel/core": "7.16.5",
+    "babel-preset-expo": "9.0.2",
+    "eslint": "8.5.0",
+    "eslint-config-algolia": "20.0.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.28.0",
+    "expo-cli": "5.0.3",
+    "prettier": "2.5.1"
   }
 }

@@ -3451,7 +3451,7 @@ If you want to publish it as a public scoped package, run \`npm publish --access
 exports[`Templates InstantSearch.js widget File content: LICENSE.md 1`] = `
 "The MIT License (MIT)
 
-Copyright (c) 2021-present algolia.
+Copyright (c) 2022-present algolia.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the \\"Software\\"), to deal
@@ -5904,7 +5904,7 @@ exports[`Templates React InstantSearch Native File content: .watchmanconfig 1`] 
 exports[`Templates React InstantSearch Native File content: App.js 1`] = `
 "import React from 'react';
 import { StyleSheet, View, SafeAreaView, StatusBar } from 'react-native';
-import algoliasearch from 'algoliasearch/reactnative';
+import algoliasearch from 'algoliasearch';
 import { InstantSearch } from 'react-instantsearch-native';
 import SearchBox from './src/SearchBox';
 import InfiniteHits from './src/InfiniteHits';
@@ -5925,34 +5925,19 @@ const styles = StyleSheet.create({
   },
 });
 
-class App extends React.Component {
-  root = {
-    Root: View,
-    props: {
-      style: {
-        flex: 1,
-      },
-    },
-  };
-
-  render() {
-    return (
-      <SafeAreaView style={styles.safe}>
-        <StatusBar barStyle=\\"light-content\\" />
-        <View style={styles.container}>
-          <InstantSearch
-            searchClient={searchClient}
-            indexName=\\"indexName\\"
-            root={this.root}
-          >
-            <SearchBox />
-            <InfiniteHits />
-          </InstantSearch>
-        </View>
-      </SafeAreaView>
-    );
-  }
-}
+const App = () => {
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar barStyle=\\"light-content\\" />
+      <View style={styles.container}>
+        <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+          <SearchBox />
+          <InfiniteHits />
+        </InstantSearch>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 export default App;"
 `;
@@ -5984,7 +5969,7 @@ exports[`Templates React InstantSearch Native File content: app.json 1`] = `
   \\"expo\\": {
     \\"name\\": \\"react-instantsearch-native-app\\",
     \\"slug\\": \\"react-instantsearch-native-app\\",
-    \\"sdkVersion\\": \\"32.0.0\\"
+    \\"sdkVersion\\": \\"44.0.0\\"
   }
 }"
 `;
@@ -6076,12 +6061,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const InfiniteHits = ({ hits, hasMore, refine }) => (
+const InfiniteHits = ({ hits, hasMore, refineNext }) => (
   <FlatList
     data={hits}
     keyExtractor={item => item.objectID}
     ItemSeparatorComponent={() => <View style={styles.separator} />}
-    onEndReached={() => hasMore && refine()}
+    onEndReached={() => hasMore && refineNext()}
     renderItem={({ item }) => (
       <View style={styles.item}>
         <Text style={styles.titleText}>
@@ -6098,7 +6083,7 @@ const InfiniteHits = ({ hits, hasMore, refine }) => (
 InfiniteHits.propTypes = {
   hits: PropTypes.arrayOf(PropTypes.object).isRequired,
   hasMore: PropTypes.bool.isRequired,
-  refine: PropTypes.func.isRequired,
+  refineNext: PropTypes.func.isRequired,
 };
 
 export default connectInfiniteHits(InfiniteHits);"
@@ -6113,6 +6098,7 @@ import { connectSearchBox } from 'react-instantsearch-native';
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: '#252b33',
   },
   input: {
     height: 48,
@@ -6258,7 +6244,7 @@ If you want to publish it as a public scoped package, run \`npm publish --access
 exports[`Templates React InstantSearch widget File content: LICENSE.md 1`] = `
 "The MIT License (MIT)
 
-Copyright (c) 2021-present algolia.
+Copyright (c) 2022-present algolia.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the \\"Software\\"), to deal
