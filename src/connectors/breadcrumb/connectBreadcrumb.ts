@@ -182,7 +182,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
       getWidgetRenderState({ helper, createURL, results, state }) {
         function getItems() {
-          if (!results) {
+          if (!results || state.hierarchicalFacets.length === 0) {
             return [];
           }
 
