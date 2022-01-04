@@ -49,20 +49,6 @@ function Pagination(props: PaginationProps) {
     props.setCurrentPage(pageNumber);
   };
 
-  const pages = props.pages!.map((pageNumber) => (
-    <PaginationLink
-      key={pageNumber}
-      ariaLabel={`${pageNumber + 1}`}
-      additionalClassName={props.cssClasses.pageItem}
-      isSelected={pageNumber === props.currentPage}
-      label={`${pageNumber + 1}`}
-      pageNumber={pageNumber}
-      createURL={props.createURL}
-      cssClasses={props.cssClasses}
-      handleClick={handleClick}
-    />
-  ));
-
   return (
     <div
       className={cx(props.cssClasses.root, {
@@ -98,7 +84,19 @@ function Pagination(props: PaginationProps) {
           />
         )}
 
-        {pages}
+        {props.pages!.map((pageNumber) => (
+          <PaginationLink
+            key={pageNumber}
+            ariaLabel={`${pageNumber + 1}`}
+            additionalClassName={props.cssClasses.pageItem}
+            isSelected={pageNumber === props.currentPage}
+            label={`${pageNumber + 1}`}
+            pageNumber={pageNumber}
+            createURL={props.createURL}
+            cssClasses={props.cssClasses}
+            handleClick={handleClick}
+          />
+        ))}
 
         {props.showNext && (
           <PaginationLink
