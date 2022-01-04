@@ -3,7 +3,7 @@
 
 ### Features
 
-* **build:** expose /es as a real es module ([#4971](https://github.com/algolia/instantsearch.js/issues/4971)) ([e5b3434](https://github.com/algolia/instantsearch.js/commit/e5b343490921f70736e11a7758bdc7a3aeed6d69))
+* **build:** expose `/es` as a real ES module ([#4971](https://github.com/algolia/instantsearch.js/issues/4971)) ([e5b3434](https://github.com/algolia/instantsearch.js/commit/e5b343490921f70736e11a7758bdc7a3aeed6d69))
 
 
 
