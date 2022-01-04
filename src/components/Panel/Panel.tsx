@@ -34,7 +34,7 @@ function Panel<TWidget extends UnknownWidgetFactory>(
 ) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(props.isCollapsed);
   const [isControlled, setIsControlled] = useState<boolean>(false);
-  const bodyRef = useRef<HTMLElement | null>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const node = bodyRef.current;

@@ -82,6 +82,12 @@ module.exports = {
       },
     },
     {
+      files: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js'],
+      rules: {
+        'import/extensions': ['error', 'never'],
+      },
+    },
+    {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/explicit-member-accessibility': 'off',

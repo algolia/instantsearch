@@ -1,6 +1,7 @@
 /* eslint-disable import/no-commonjs */
 
 const wrapWarningWithDevCheck = require('./scripts/babel/wrap-warning-with-dev-check');
+const extensionResolver = require('./scripts/babel/extension-resolver');
 
 const isCJS = process.env.BABEL_ENV === 'cjs';
 const isES = process.env.BABEL_ENV === 'es';
@@ -29,15 +30,20 @@ module.exports = (api) => {
     '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
     wrapWarningWithDevCheck,
-    (isCJS || isES) && [
-      'inline-replace-variables',
-      {
-        __DEV__: {
-          type: 'node',
-          replacement: "process.env.NODE_ENV === 'development'",
-        },
-      },
-    ],
+    ...(isCJS || isES
+      ? [
+          [
+            'inline-replace-variables',
+            {
+              __DEV__: {
+                type: 'node',
+                replacement: "process.env.NODE_ENV === 'development'",
+              },
+            },
+          ],
+          extensionResolver,
+        ]
+      : []),
     // this plugin is used to test if we need polyfills, not to actually insert them
     // only UMD, since cjs & esm have false positives due to imports
     isUMD && [

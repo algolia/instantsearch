@@ -1,7 +1,7 @@
 import { getByText, waitFor, fireEvent } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
-import { infiniteHits, configure } from '../../';
+import { infiniteHits, configure } from '../..';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { wait } from '../../../../test/utils/wait';
 import type { PlainSearchParameters } from 'algoliasearch-helper';

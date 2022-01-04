@@ -162,7 +162,6 @@ class SearchBox extends Component<
           className={cssClasses.form}
           noValidate
           onSubmit={this.onSubmit}
-          // @ts-expect-error `onReset` attibute is missing in preact 10.0.0 JSX types
           onReset={this.onReset}
         >
           <input
@@ -175,8 +174,8 @@ class SearchBox extends Component<
             autoFocus={autofocus}
             autoComplete="off"
             autoCorrect="off"
-            // @ts-expect-error `autoCapitalize` attibute is missing in preact 10.0.0 JSX types
             autoCapitalize="off"
+            // @ts-expect-error `spellCheck` attribute is missing in preact JSX types
             spellCheck="false"
             maxLength={512}
             onInput={this.onInput}
