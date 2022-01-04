@@ -115,3 +115,28 @@ describe('middleware', () => {
     expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('errors', () => {
+  it('client errors can be handled', () => {
+    const search = instantsearch({
+      searchClient: createSearchClient({
+        search() {
+          return Promise.reject(new Error('test!'));
+        },
+      }),
+      indexName: '123',
+    });
+
+    expect.assertions(4);
+
+    search.on('error', (error) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe('test!');
+
+      expect(error.error).toBeInstanceOf(Error);
+      expect(error.error.message).toBe('test!');
+    });
+
+    search.start();
+  });
+});

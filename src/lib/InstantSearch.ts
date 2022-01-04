@@ -479,9 +479,14 @@ See ${createDocumentationLink({
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.
     mainHelper.on('error', ({ error }) => {
-      this.emit('error', {
-        error,
-      });
+      // If an error is emitted, it is re-thrown by events. In previous versions
+      // we emitted {error}, which is thrown as:
+      // "Uncaught, unspecified \"error\" event. ([object Object])"
+      // To avoid breaking changes, we make the error available in both
+      // `error` and `error.error`
+      // @MAJOR emit only error
+      (error as any).error = error;
+      this.emit('error', error);
     });
 
     this.mainHelper = mainHelper;
