@@ -1,7 +1,7 @@
 import { getByText, fireEvent } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
-import { hits, configure } from '../../';
+import { hits, configure } from '../..';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { wait } from '../../../../test/utils/wait';

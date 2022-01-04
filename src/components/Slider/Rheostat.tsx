@@ -175,7 +175,7 @@ class Rheostat extends Component<Props, State> {
     values: this.props.values!,
   };
 
-  private rheostat = createRef<HTMLAnchorElement>();
+  private rheostat = createRef<HTMLDivElement>();
 
   public constructor(props: Props) {
     super(props);

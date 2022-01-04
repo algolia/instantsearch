@@ -1,5 +1,5 @@
 import instantsearch from '../../index.es';
-import { createInsightsMiddleware } from '../';
+import { createInsightsMiddleware } from '..';
 import {
   createInsights,
   createInsightsUmdVersion,

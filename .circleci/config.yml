@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/instantsearchjs
   docker:
-    - image: cimg/node:12.14.1
+    - image: cimg/node:12.22.7
 
 version: 2
 jobs:
@@ -47,6 +47,9 @@ jobs:
       - run:
           name: Type Export
           command: yarn run build:types
+      - run:
+          name: Test Exports
+          command: yarn run test:exports
   lint:
     <<: *defaults
     steps:

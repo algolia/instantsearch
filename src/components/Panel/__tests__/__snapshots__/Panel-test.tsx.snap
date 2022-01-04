@@ -12,6 +12,7 @@ exports[`Panel collapsible should render component with \`collapsible\` and \`co
         Header
       </span>
       <button
+        aria-expanded="false"
         class="collapseButton"
       >
         <span>
