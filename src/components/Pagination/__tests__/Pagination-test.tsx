@@ -2,6 +2,7 @@
 
 import { h } from 'preact';
 import { mount } from '../../../../test/utils/enzyme';
+import { render, fireEvent, createEvent } from '@testing-library/preact';
 import type { PaginationProps } from '../Pagination';
 import Pagination from '../Pagination';
 import Paginator from '../../../connectors/pagination/Paginator';
@@ -81,23 +82,25 @@ describe('Pagination', () => {
     const props = {
       setCurrentPage: jest.fn(),
     };
-    const preventDefault = jest.fn();
-    const component = new Pagination({ ...defaultProps, ...props });
+
+    const { container } = render(<Pagination {...defaultProps} {...props} />);
+
+    const firstItem = container.querySelector('.link')!;
+
     const modifiers = ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'] as const;
-    modifiers.forEach((e) => {
-      const event: Partial<KeyboardEvent> = { preventDefault };
-      (event as any)[e] = true;
-      // @ts-expect-error
-      component.handleClick(42, event);
+    modifiers.forEach((modifier) => {
+      const clickEvent = createEvent.click(firstItem, { [modifier]: true });
+      fireEvent(firstItem, clickEvent);
 
       expect(props.setCurrentPage).toHaveBeenCalledTimes(0);
-      expect(preventDefault).toHaveBeenCalledTimes(0);
+      expect(clickEvent.defaultPrevented).toBe(false);
     });
-    // @ts-expect-error
-    component.handleClick(42, { preventDefault });
+
+    const clickEvent = createEvent.click(firstItem);
+    fireEvent(firstItem, clickEvent);
 
     expect(props.setCurrentPage).toHaveBeenCalledTimes(1);
-    expect(preventDefault).toHaveBeenCalledTimes(1);
+    expect(clickEvent.defaultPrevented).toBe(true);
   });
 
   it('should have all buttons disabled if there are no results', () => {

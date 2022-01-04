@@ -1,36 +1,48 @@
 /** @jsx h */
 
 import { h } from 'preact';
+import cx from 'classnames';
 
-export type PaginationLinkComponentCSSClasses = {
-  item: string;
-  link: string;
-};
+import type { PaginationComponentCSSClasses } from './Pagination';
 
-export type PaginationLinkProps = {
-  ariaLabel: string;
-  cssClasses: PaginationLinkComponentCSSClasses;
-  handleClick(pageNumber: number, event: MouseEvent): void;
-  isDisabled: boolean;
+type PageLinkProps = {
   label: string;
+  ariaLabel: string;
   pageNumber: number;
-  url?: string;
+  additionalClassName: string | null;
+  isDisabled?: boolean;
+  isSelected?: boolean;
+  cssClasses: PaginationComponentCSSClasses;
+  createURL(value: number): string;
+  handleClick(pageNumber: number, event: MouseEvent): void;
 };
 
-const PaginationLink = ({
-  cssClasses,
+function PaginationLink({
   label,
   ariaLabel,
-  url,
-  isDisabled,
-  handleClick,
   pageNumber,
-}: PaginationLinkProps) => {
+  additionalClassName = null,
+  isDisabled = false,
+  isSelected = false,
+  cssClasses,
+  createURL,
+  handleClick,
+}: PageLinkProps) {
+  const classes = {
+    item: cx(
+      cssClasses.item,
+      additionalClassName,
+      isDisabled && cssClasses.disabledItem,
+      isSelected && cssClasses.selectedItem
+    ),
+    link: cssClasses.link,
+  };
+
   if (isDisabled) {
     return (
-      <li className={cssClasses.item}>
+      <li className={classes.item}>
         <span
-          className={cssClasses.link}
+          className={classes.link}
           dangerouslySetInnerHTML={{
             __html: label,
           }}
@@ -40,11 +52,11 @@ const PaginationLink = ({
   }
 
   return (
-    <li className={cssClasses.item}>
+    <li className={classes.item}>
       <a
-        className={cssClasses.link}
+        className={classes.link}
         aria-label={ariaLabel}
-        href={url}
+        href={createURL(pageNumber)}
         onClick={(event) => handleClick(pageNumber, event)}
         dangerouslySetInnerHTML={{
           __html: label,
@@ -52,6 +64,6 @@ const PaginationLink = ({
       />
     </li>
   );
-};
+}
 
 export default PaginationLink;
