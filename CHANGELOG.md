@@ -1,3 +1,12 @@
+# [4.37.0](https://github.com/algolia/instantsearch.js/compare/v4.36.0...v4.37.0) (2022-01-04)
+
+
+### Features
+
+* **build:** expose /es as a real es module ([#4971](https://github.com/algolia/instantsearch.js/issues/4971)) ([e5b3434](https://github.com/algolia/instantsearch.js/commit/e5b343490921f70736e11a7758bdc7a3aeed6d69))
+
+
+
 # [4.36.0](https://github.com/algolia/instantsearch.js/compare/v4.35.0...v4.36.0) (2021-12-16)
 
 
