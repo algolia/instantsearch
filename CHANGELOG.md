@@ -1,3 +1,14 @@
+## [4.37.1](https://github.com/algolia/instantsearch.js/compare/v4.37.0...v4.37.1) (2022-01-05)
+
+
+### Bug Fixes
+
+* **connectBreadcrumb:** returns an empty array if no hierarchicalFacets exist ([#4980](https://github.com/algolia/instantsearch.js/issues/4980)) ([3ea9b91](https://github.com/algolia/instantsearch.js/commit/3ea9b918f85c686a07b06cfc12b8c59b80181f28))
+* **es:** mark inner package.json as side-effect free ([#4984](https://github.com/algolia/instantsearch.js/issues/4984)) ([74f56f3](https://github.com/algolia/instantsearch.js/commit/74f56f35b7ccc78904592edfc40e782e40847986)), closes [#4971](https://github.com/algolia/instantsearch.js/issues/4971)
+* **events:** emit error as typeof Error ([#4983](https://github.com/algolia/instantsearch.js/issues/4983)) ([4adfaf2](https://github.com/algolia/instantsearch.js/commit/4adfaf2eba40fffa7f4800664dc89e0edf2d819e))
+
+
+
 # [4.37.0](https://github.com/algolia/instantsearch.js/compare/v4.36.0...v4.37.0) (2022-01-04)
 
 
