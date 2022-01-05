@@ -143,6 +143,12 @@ const config = {
             pathGroupsExcludedImportTypes: ['builtin'],
           },
         ],
+        'import/extensions': ['error', 'never'],
+      },
+      settings: {
+        'import/parsers': {
+          '@typescript-eslint/parser': ['.ts', '.tsx'],
+        },
       },
     },
     {

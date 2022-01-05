@@ -1,4 +1,5 @@
 const wrapWarningWithDevCheck = require('./scripts/babel/wrap-warning-with-dev-check');
+const extensionResolver = require('./scripts/babel/extension-resolver');
 
 const isES = process.env.BABEL_ENV === 'es';
 const isRollup = process.env.BABEL_ENV === 'rollup';
@@ -38,6 +39,18 @@ module.exports = (api) => {
             type: 'node',
             replacement: "process.env.NODE_ENV !== 'production'",
           },
+        },
+      ],
+      isES && [
+        extensionResolver,
+        {
+          // For verification, see test/module/packages-are-es-modules.mjs
+          modulesToResolve: [
+            // InstantSearch.js/es is an ES Module, so needs complete paths,
+            'instantsearch.js',
+            // React-DOM also fails if the paths are incomplete
+            'react-dom',
+          ],
         },
       ],
     ]),

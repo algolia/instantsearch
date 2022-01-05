@@ -29,6 +29,8 @@ version: 2
 jobs:
   test_build:
     <<: *defaults
+    docker:
+      - image: cimg/node:14.18.2
     steps:
       - checkout
       - run: *install_yarn_version
@@ -38,6 +40,20 @@ jobs:
       - run:
           name: Build & Test packages size
           command: yarn test:build
+      - store_artifacts:
+          path: packages/react-instantsearch/dist
+      - store_artifacts:
+          path: packages/react-instantsearch-core/dist
+      - store_artifacts:
+          path: packages/react-instantsearch-dom/dist
+      - store_artifacts:
+          path: packages/react-instantsearch-dom-maps/dist
+      - store_artifacts:
+          path: packages/react-instantsearch-hooks/dist
+      - store_artifacts:
+          path: packages/react-instantsearch-hooks-server/dist
+      - store_artifacts:
+          path: packages/react-instantsearch-native/dist
 
   test_unit:
     <<: *defaults

@@ -6,6 +6,13 @@
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "sideEffects": false,
   "license": "MIT",
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
@@ -33,16 +40,16 @@
     "clean": "rm -rf dist",
     "watch": "yarn build:cjs --watch",
     "build": "yarn build:cjs && yarn build:es && yarn build:umd && yarn build:types",
-    "build:cjs": "babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
+    "build:cjs": "babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/replace-import-for-cjs.sh",
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "algoliasearch-helper": "^3.6.2",
+    "algoliasearch-helper": "^3.7.0",
     "dequal": "^2.0.0",
-    "instantsearch.js": "^4.34.0"
+    "instantsearch.js": "^4.37.1"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 5",
