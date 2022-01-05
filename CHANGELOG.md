@@ -1,3 +1,13 @@
+# [6.19.0](https://github.com/algolia/react-instantsearch/compare/v6.18.0...v6.19.0) (2022-01-05)
+
+
+### Features
+
+* **hooks:** bundle as es-module ([#3232](https://github.com/algolia/react-instantsearch/issues/3232)) ([ae4df8a](https://github.com/algolia/react-instantsearch/commit/ae4df8a7dec396e5ea15a4ab2243cd05e05d3ebc))
+* **dependencies:** update to latest algoliasearch-helper ([#3232](https://github.com/algolia/react-instantsearch/issues/3232)) ([ae4df8a](https://github.com/algolia/react-instantsearch/commit/ae4df8a7dec396e5ea15a4ab2243cd05e05d3ebc))
+
+
+
 # [6.18.0](https://github.com/algolia/react-instantsearch/compare/v6.17.0...v6.18.0) (2021-12-16)
 
 

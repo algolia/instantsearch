@@ -1,6 +1,6 @@
 {
   "name": "hooks-ssr-example",
-  "version": "6.18.0",
+  "version": "6.19.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -28,6 +28,6 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-instantsearch-hooks": "6.18.0",
-    "react-instantsearch-hooks-server": "6.18.0"
+    "react-instantsearch-hooks-server": "6.19.0"
   }
 }
