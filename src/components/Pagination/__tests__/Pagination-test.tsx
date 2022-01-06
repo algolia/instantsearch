@@ -1,7 +1,6 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from '../../../../test/utils/enzyme';
 import { render, fireEvent, createEvent } from '@testing-library/preact';
 import type { PaginationProps } from '../Pagination';
 import Pagination from '../Pagination';
@@ -39,28 +38,30 @@ describe('Pagination', () => {
   };
 
   it('should render five elements', () => {
-    const wrapper = mount(<Pagination {...defaultProps} />);
+    const { container } = render(<Pagination {...defaultProps} />);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('should display the first/last link', () => {
-    const wrapper = mount(<Pagination {...defaultProps} showFirst showLast />);
+    const { container } = render(
+      <Pagination {...defaultProps} showFirst showLast />
+    );
 
-    expect(wrapper.find('.firstPageItem')).toHaveLength(1);
-    expect(wrapper.find('.lastPageItem')).toHaveLength(1);
-    expect(wrapper).toMatchSnapshot();
+    expect(container.querySelectorAll('.firstPageItem')).toHaveLength(1);
+    expect(container.querySelectorAll('.lastPageItem')).toHaveLength(1);
+    expect(container).toMatchSnapshot();
   });
 
   it('should add the noRefinement CSS class with a single page', () => {
-    const wrapper = mount(<Pagination {...defaultProps} nbPages={1} />);
+    const { container } = render(<Pagination {...defaultProps} nbPages={1} />);
 
-    expect(wrapper.find('.noRefinementRoot')).toHaveLength(1);
-    expect(wrapper).toMatchSnapshot();
+    expect(container.querySelectorAll('.noRefinementRoot')).toHaveLength(1);
+    expect(container).toMatchSnapshot();
   });
 
   it('should disable last page if already on it', () => {
-    const wrapper = mount(
+    const { container } = render(
       <Pagination
         {...defaultProps}
         showFirst
@@ -74,8 +75,13 @@ describe('Pagination', () => {
       />
     );
 
-    expect(wrapper.find('.lastPageItem').hasClass('disabledItem')).toBe(true);
-    expect(wrapper).toMatchSnapshot();
+    expect(container.querySelectorAll('.lastPageItem')).toHaveLength(1);
+    expect(
+      container
+        .querySelector('.lastPageItem')
+        ?.classList.contains('disabledItem')
+    ).toBe(true);
+    expect(container).toMatchSnapshot();
   });
 
   it('should handle special clicks', () => {
@@ -109,7 +115,7 @@ describe('Pagination', () => {
       total: 0,
       padding: 3,
     });
-    const wrapper = mount(
+    const { container } = render(
       <Pagination
         {...defaultProps}
         showFirst
@@ -124,6 +130,6 @@ describe('Pagination', () => {
       />
     );
 
-    expect(wrapper).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

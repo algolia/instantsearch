@@ -63,9 +63,4 @@ const Hits = ({
   );
 };
 
-Hits.defaultProps = {
-  results: { hits: [] },
-  hits: [],
-};
-
 export default Hits;
