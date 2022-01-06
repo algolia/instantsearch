@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/react-instantsearch
   docker:
-    - image: cimg/node:12.14.1
+    - image: cimg/node:12.22.7
 
 version: 2
 jobs:
@@ -100,7 +100,7 @@ jobs:
   test_integration:
     <<: *defaults
     docker:
-      - image: cimg/node:12.15.0-browsers
+      - image: cimg/node:12.22.7-browsers
     steps:
       - checkout
       - run: *install_yarn_version
@@ -133,6 +133,9 @@ jobs:
       - restore_cache: *restore_yarn_cache
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
+      - run:
+          name: Build libraries
+          command: yarn build
       - run:
           name: Build & Test examples
           command: yarn test:examples
