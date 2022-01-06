@@ -52,6 +52,13 @@ module.exports = {
       },
     ],
     '@typescript-eslint/consistent-type-imports': 'error',
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'AssignmentExpression [name=defaultProps]',
+        message: 'defaultProps are not allowed, use function defaults instead.',
+      },
+    ],
   },
   overrides: [
     {
