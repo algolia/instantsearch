@@ -3,7 +3,6 @@
 import { h } from 'preact';
 import cx from 'classnames';
 
-import PaginationLink from './PaginationLink';
 import { isSpecialClick } from '../../lib/utils';
 import type {
   PaginationCSSClasses,
@@ -33,15 +32,17 @@ export type PaginationProps = {
 };
 
 function Pagination(props: PaginationProps) {
-  const handleClick = (pageNumber: number, event: MouseEvent) => {
-    if (isSpecialClick(event)) {
-      // do not alter the default browser behavior
-      // if one special key is down
-      return;
-    }
-    event.preventDefault();
-    props.setCurrentPage(pageNumber);
-  };
+  function createClickHandler(pageNumber: number) {
+    return (event: MouseEvent) => {
+      if (isSpecialClick(event)) {
+        // do not alter the default browser behavior
+        // if one special key is down
+        return;
+      }
+      event.preventDefault();
+      props.setCurrentPage(pageNumber);
+    };
+  }
 
   return (
     <div
@@ -59,7 +60,7 @@ function Pagination(props: PaginationProps) {
             pageNumber={0}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
-            handleClick={handleClick}
+            createClickHandler={createClickHandler}
           />
         )}
 
@@ -72,7 +73,7 @@ function Pagination(props: PaginationProps) {
             pageNumber={props.currentPage - 1}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
-            handleClick={handleClick}
+            createClickHandler={createClickHandler}
           />
         )}
 
@@ -86,7 +87,7 @@ function Pagination(props: PaginationProps) {
             pageNumber={pageNumber}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
-            handleClick={handleClick}
+            createClickHandler={createClickHandler}
           />
         ))}
 
@@ -99,7 +100,7 @@ function Pagination(props: PaginationProps) {
             pageNumber={props.currentPage + 1}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
-            handleClick={handleClick}
+            createClickHandler={createClickHandler}
           />
         )}
 
@@ -112,11 +113,61 @@ function Pagination(props: PaginationProps) {
             pageNumber={props.nbPages - 1}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
-            handleClick={handleClick}
+            createClickHandler={createClickHandler}
           />
         )}
       </ul>
     </div>
+  );
+}
+
+type PaginationLinkProps = {
+  label: string;
+  ariaLabel: string;
+  pageNumber: number;
+  isDisabled?: boolean;
+  isSelected?: boolean;
+  className?: string;
+  cssClasses: PaginationComponentCSSClasses;
+  createURL(value: number): string;
+  createClickHandler: (pageNumber: number) => (event: MouseEvent) => void;
+};
+
+function PaginationLink({
+  label,
+  ariaLabel,
+  pageNumber,
+  className,
+  isDisabled = false,
+  isSelected = false,
+  cssClasses,
+  createURL,
+  createClickHandler,
+}: PaginationLinkProps) {
+  return (
+    <li
+      className={cx(
+        cssClasses.item,
+        className,
+        isDisabled && cssClasses.disabledItem,
+        isSelected && cssClasses.selectedItem
+      )}
+    >
+      {isDisabled ? (
+        <span
+          className={cssClasses.link}
+          dangerouslySetInnerHTML={{ __html: label }}
+        />
+      ) : (
+        <a
+          className={cssClasses.link}
+          aria-label={ariaLabel}
+          href={createURL(pageNumber)}
+          onClick={createClickHandler(pageNumber)}
+          dangerouslySetInnerHTML={{ __html: label }}
+        />
+      )}
+    </li>
   );
 }
 
