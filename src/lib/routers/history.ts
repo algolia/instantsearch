@@ -22,6 +22,7 @@ type BrowserHistoryArgs<TRouteState> = {
   // so we should accept a subset of it that is easier to work with in any
   // environments.
   getLocation(): Location;
+  writeOnDispose?: boolean;
 };
 
 const setWindowTitle = (title?: string): void => {
@@ -78,6 +79,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   private shouldPushState: boolean = true;
 
+  private writeOnDispose: boolean = true;
+
   /**
    * Initializes a new storage provider that syncs the search state to the URL
    * using web APIs (`window.location.pushState` and `onpopstate` event).
@@ -88,6 +91,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     createURL,
     parseURL,
     getLocation,
+    writeOnDispose = true,
   }: BrowserHistoryArgs<TRouteState>) {
     this.windowTitle = windowTitle;
     this.writeTimer = undefined;
@@ -95,6 +99,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this._createURL = createURL;
     this.parseURL = parseURL;
     this.getLocation = getLocation;
+    this.writeOnDispose = writeOnDispose;
 
     safelyRunOnBrowser(() => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -190,7 +195,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       clearTimeout(this.writeTimer);
     }
 
-    this.write({} as TRouteState);
+    if (this.writeOnDispose) {
+      this.write({} as TRouteState);
+    } else {
+      this.shouldPushState = false;
+    }
   }
 }
 
@@ -231,6 +240,7 @@ export default function historyRouter<TRouteState = UiState>({
       },
     });
   },
+  writeOnDispose,
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({
     createURL,
@@ -238,5 +248,6 @@ export default function historyRouter<TRouteState = UiState>({
     writeDelay,
     windowTitle,
     getLocation,
+    writeOnDispose,
   });
 }
