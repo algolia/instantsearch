@@ -19,10 +19,10 @@ export type PaginationComponentTemplates = Required<PaginationTemplates>;
 export type PaginationProps = {
   createURL(value: number): string;
   cssClasses: PaginationComponentCSSClasses;
-  currentPage: number;
   templates: PaginationComponentTemplates;
-  nbPages?: number;
-  pages?: number[];
+  currentPage: number;
+  nbPages: number;
+  pages: number[];
   isFirstPage: boolean;
   isLastPage: boolean;
   setCurrentPage(value: number): void;
@@ -30,12 +30,6 @@ export type PaginationProps = {
   showLast?: boolean;
   showPrevious?: boolean;
   showNext?: boolean;
-};
-
-const defaultProps = {
-  currentPage: 0,
-  nbPages: 0,
-  pages: [],
 };
 
 function Pagination(props: PaginationProps) {
@@ -52,15 +46,14 @@ function Pagination(props: PaginationProps) {
   return (
     <div
       className={cx(props.cssClasses.root, {
-        [props.cssClasses.noRefinementRoot]: props.nbPages! <= 1,
+        [props.cssClasses.noRefinementRoot]: props.nbPages <= 1,
       })}
     >
       <ul className={props.cssClasses.list}>
         {props.showFirst && (
           <PaginationLink
-            key="first"
-            ariaLabel={'First'}
-            additionalClassName={props.cssClasses.firstPageItem}
+            ariaLabel="First"
+            className={props.cssClasses.firstPageItem}
             isDisabled={props.isFirstPage}
             label={props.templates.first}
             pageNumber={0}
@@ -72,9 +65,8 @@ function Pagination(props: PaginationProps) {
 
         {props.showPrevious && (
           <PaginationLink
-            key="previous"
-            ariaLabel={'Previous'}
-            additionalClassName={props.cssClasses.previousPageItem}
+            ariaLabel="Previous"
+            className={props.cssClasses.previousPageItem}
             isDisabled={props.isFirstPage}
             label={props.templates.previous}
             pageNumber={props.currentPage - 1}
@@ -84,11 +76,11 @@ function Pagination(props: PaginationProps) {
           />
         )}
 
-        {props.pages!.map((pageNumber) => (
+        {props.pages.map((pageNumber) => (
           <PaginationLink
             key={pageNumber}
             ariaLabel={`${pageNumber + 1}`}
-            additionalClassName={props.cssClasses.pageItem}
+            className={props.cssClasses.pageItem}
             isSelected={pageNumber === props.currentPage}
             label={`${pageNumber + 1}`}
             pageNumber={pageNumber}
@@ -100,9 +92,8 @@ function Pagination(props: PaginationProps) {
 
         {props.showNext && (
           <PaginationLink
-            key="next"
-            ariaLabel={'Next'}
-            additionalClassName={props.cssClasses.nextPageItem}
+            ariaLabel="Next"
+            className={props.cssClasses.nextPageItem}
             isDisabled={props.isLastPage}
             label={props.templates.next}
             pageNumber={props.currentPage + 1}
@@ -114,12 +105,11 @@ function Pagination(props: PaginationProps) {
 
         {props.showLast && (
           <PaginationLink
-            key="last"
-            ariaLabel={'Last'}
-            additionalClassName={props.cssClasses.lastPageItem}
+            ariaLabel="Last"
+            className={props.cssClasses.lastPageItem}
             isDisabled={props.isLastPage}
             label={props.templates.last}
-            pageNumber={props.nbPages! - 1}
+            pageNumber={props.nbPages - 1}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
             handleClick={handleClick}
@@ -129,7 +119,5 @@ function Pagination(props: PaginationProps) {
     </div>
   );
 }
-
-Pagination.defaultProps = defaultProps;
 
 export default Pagination;

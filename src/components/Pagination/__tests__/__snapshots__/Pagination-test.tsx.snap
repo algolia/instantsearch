@@ -1,708 +1,461 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Pagination should add the noRefinement CSS class with a single page 1`] = `
-[
+<div>
   <div
-    className="root noRefinementRoot"
+    class="root noRefinementRoot"
   >
     <ul
-      className="list"
+      class="list"
     >
-      [
-        <li
-          className="item pageItem selectedItem"
+      <li
+        class="item pageItem selectedItem"
+      >
+        <a
+          aria-label="1"
+          class="link"
+          href="0"
         >
-          <a
-            aria-label="1"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "1",
-              }
-            }
-            href="0"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          1
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="2"
+          class="link"
+          href="1"
         >
-          <a
-            aria-label="2"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "2",
-              }
-            }
-            href="1"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          2
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="3"
+          class="link"
+          href="2"
         >
-          <a
-            aria-label="3"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "3",
-              }
-            }
-            href="2"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          3
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="4"
+          class="link"
+          href="3"
         >
-          <a
-            aria-label="4"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "4",
-              }
-            }
-            href="3"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          4
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="5"
+          class="link"
+          href="4"
         >
-          <a
-            aria-label="5"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "5",
-              }
-            }
-            href="4"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          5
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="6"
+          class="link"
+          href="5"
         >
-          <a
-            aria-label="6"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "6",
-              }
-            }
-            href="5"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          6
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="7"
+          class="link"
+          href="6"
         >
-          <a
-            aria-label="7"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "7",
-              }
-            }
-            href="6"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
+          7
+        </a>
+      </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`Pagination should disable last page if already on it 1`] = `
-[
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
-      [
-        <li
-          className="item firstPageItem"
+      <li
+        class="item firstPageItem"
+      >
+        <a
+          aria-label="First"
+          class="link"
+          href="0"
+        />
+      </li>
+      <li
+        class="item previousPageItem"
+      >
+        <a
+          aria-label="Previous"
+          class="link"
+          href="18"
+        />
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="14"
+          class="link"
+          href="13"
         >
-          <a
-            aria-label="First"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-            href="0"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item previousPageItem"
+          14
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="15"
+          class="link"
+          href="14"
         >
-          <a
-            aria-label="Previous"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-            href="18"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          15
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="16"
+          class="link"
+          href="15"
         >
-          <a
-            aria-label="14"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "14",
-              }
-            }
-            href="13"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          16
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="17"
+          class="link"
+          href="16"
         >
-          <a
-            aria-label="15"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "15",
-              }
-            }
-            href="14"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          17
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="18"
+          class="link"
+          href="17"
         >
-          <a
-            aria-label="16"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "16",
-              }
-            }
-            href="15"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          18
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="19"
+          class="link"
+          href="18"
         >
-          <a
-            aria-label="17"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "17",
-              }
-            }
-            href="16"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          19
+        </a>
+      </li>
+      <li
+        class="item pageItem selectedItem"
+      >
+        <a
+          aria-label="20"
+          class="link"
+          href="19"
         >
-          <a
-            aria-label="18"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "18",
-              }
-            }
-            href="17"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
-        >
-          <a
-            aria-label="19"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "19",
-              }
-            }
-            href="18"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem selectedItem"
-        >
-          <a
-            aria-label="20"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "20",
-              }
-            }
-            href="19"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item nextPageItem disabledItem"
-        >
-          <span
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item lastPageItem disabledItem"
-        >
-          <span
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-          />
-        </li>,
-      ]
+          20
+        </a>
+      </li>
+      <li
+        class="item nextPageItem disabledItem"
+      >
+        <span
+          class="link"
+        />
+      </li>
+      <li
+        class="item lastPageItem disabledItem"
+      >
+        <span
+          class="link"
+        />
+      </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`Pagination should display the first/last link 1`] = `
-[
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
-      [
-        <li
-          className="item firstPageItem disabledItem"
+      <li
+        class="item firstPageItem disabledItem"
+      >
+        <span
+          class="link"
+        />
+      </li>
+      <li
+        class="item pageItem selectedItem"
+      >
+        <a
+          aria-label="1"
+          class="link"
+          href="0"
         >
-          <span
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem selectedItem"
+          1
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="2"
+          class="link"
+          href="1"
         >
-          <a
-            aria-label="1"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "1",
-              }
-            }
-            href="0"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          2
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="3"
+          class="link"
+          href="2"
         >
-          <a
-            aria-label="2"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "2",
-              }
-            }
-            href="1"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          3
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="4"
+          class="link"
+          href="3"
         >
-          <a
-            aria-label="3"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "3",
-              }
-            }
-            href="2"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          4
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="5"
+          class="link"
+          href="4"
         >
-          <a
-            aria-label="4"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "4",
-              }
-            }
-            href="3"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          5
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="6"
+          class="link"
+          href="5"
         >
-          <a
-            aria-label="5"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "5",
-              }
-            }
-            href="4"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          6
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="7"
+          class="link"
+          href="6"
         >
-          <a
-            aria-label="6"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "6",
-              }
-            }
-            href="5"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
-        >
-          <a
-            aria-label="7"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "7",
-              }
-            }
-            href="6"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item lastPageItem"
-        >
-          <a
-            aria-label="Last"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-            href="19"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
+          7
+        </a>
+      </li>
+      <li
+        class="item lastPageItem"
+      >
+        <a
+          aria-label="Last"
+          class="link"
+          href="19"
+        />
+      </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`Pagination should have all buttons disabled if there are no results 1`] = `
-[
+<div>
   <div
-    className="root noRefinementRoot"
+    class="root noRefinementRoot"
   >
     <ul
-      className="list"
+      class="list"
     >
-      [
-        <li
-          className="item firstPageItem disabledItem"
+      <li
+        class="item firstPageItem disabledItem"
+      >
+        <span
+          class="link"
+        />
+      </li>
+      <li
+        class="item previousPageItem disabledItem"
+      >
+        <span
+          class="link"
+        />
+      </li>
+      <li
+        class="item pageItem selectedItem"
+      >
+        <a
+          aria-label="1"
+          class="link"
+          href="0"
         >
-          <span
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item previousPageItem disabledItem"
-        >
-          <span
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem selectedItem"
-        >
-          <a
-            aria-label="1"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "1",
-              }
-            }
-            href="0"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item nextPageItem disabledItem"
-        >
-          <span
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item lastPageItem disabledItem"
-        >
-          <span
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "",
-              }
-            }
-          />
-        </li>,
-      ]
+          1
+        </a>
+      </li>
+      <li
+        class="item nextPageItem disabledItem"
+      >
+        <span
+          class="link"
+        />
+      </li>
+      <li
+        class="item lastPageItem disabledItem"
+      >
+        <span
+          class="link"
+        />
+      </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`Pagination should render five elements 1`] = `
-[
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
-      [
-        <li
-          className="item pageItem selectedItem"
+      <li
+        class="item pageItem selectedItem"
+      >
+        <a
+          aria-label="1"
+          class="link"
+          href="0"
         >
-          <a
-            aria-label="1"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "1",
-              }
-            }
-            href="0"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          1
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="2"
+          class="link"
+          href="1"
         >
-          <a
-            aria-label="2"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "2",
-              }
-            }
-            href="1"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          2
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="3"
+          class="link"
+          href="2"
         >
-          <a
-            aria-label="3"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "3",
-              }
-            }
-            href="2"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          3
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="4"
+          class="link"
+          href="3"
         >
-          <a
-            aria-label="4"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "4",
-              }
-            }
-            href="3"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          4
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="5"
+          class="link"
+          href="4"
         >
-          <a
-            aria-label="5"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "5",
-              }
-            }
-            href="4"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          5
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="6"
+          class="link"
+          href="5"
         >
-          <a
-            aria-label="6"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "6",
-              }
-            }
-            href="5"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
-      [
-        <li
-          className="item pageItem"
+          6
+        </a>
+      </li>
+      <li
+        class="item pageItem"
+      >
+        <a
+          aria-label="7"
+          class="link"
+          href="6"
         >
-          <a
-            aria-label="7"
-            className="link"
-            dangerouslySetInnerHTML={
-              {
-                "__html": "7",
-              }
-            }
-            href="6"
-            onClick={[Function]}
-          />
-        </li>,
-      ]
+          7
+        </a>
+      </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;

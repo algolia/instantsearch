@@ -9,9 +9,9 @@ type PageLinkProps = {
   label: string;
   ariaLabel: string;
   pageNumber: number;
-  additionalClassName: string | null;
   isDisabled?: boolean;
   isSelected?: boolean;
+  className?: string;
   cssClasses: PaginationComponentCSSClasses;
   createURL(value: number): string;
   handleClick(pageNumber: number, event: MouseEvent): void;
@@ -21,47 +21,40 @@ function PaginationLink({
   label,
   ariaLabel,
   pageNumber,
-  additionalClassName = null,
+  className,
   isDisabled = false,
   isSelected = false,
   cssClasses,
   createURL,
   handleClick,
 }: PageLinkProps) {
-  const classes = {
-    item: cx(
-      cssClasses.item,
-      additionalClassName,
-      isDisabled && cssClasses.disabledItem,
-      isSelected && cssClasses.selectedItem
-    ),
-    link: cssClasses.link,
-  };
-
-  if (isDisabled) {
-    return (
-      <li className={classes.item}>
+  return (
+    <li
+      className={cx(
+        cssClasses.item,
+        className,
+        isDisabled && cssClasses.disabledItem,
+        isSelected && cssClasses.selectedItem
+      )}
+    >
+      {isDisabled ? (
         <span
-          className={classes.link}
+          className={cssClasses.link}
           dangerouslySetInnerHTML={{
             __html: label,
           }}
         />
-      </li>
-    );
-  }
-
-  return (
-    <li className={classes.item}>
-      <a
-        className={classes.link}
-        aria-label={ariaLabel}
-        href={createURL(pageNumber)}
-        onClick={(event) => handleClick(pageNumber, event)}
-        dangerouslySetInnerHTML={{
-          __html: label,
-        }}
-      />
+      ) : (
+        <a
+          className={cssClasses.link}
+          aria-label={ariaLabel}
+          href={createURL(pageNumber)}
+          onClick={(event) => handleClick(pageNumber, event)}
+          dangerouslySetInnerHTML={{
+            __html: label,
+          }}
+        />
+      )}
     </li>
   );
 }
