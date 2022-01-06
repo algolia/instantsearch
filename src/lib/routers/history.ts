@@ -79,6 +79,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   private shouldPushState: boolean = true;
 
+  /**
+   * Indicates if `write` should be called on `dispose`.
+   *
+   * @default true
+   */
   private writeOnDispose: boolean = true;
 
   /**
