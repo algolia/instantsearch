@@ -1,14 +1,14 @@
 {
   "name": "react-instantsearch-e-commerce",
-  "version": "6.13.0",
+  "version": "6.19.0",
   "private": true,
   "dependencies": {
-    "algoliasearch": "4.9.3",
+    "algoliasearch": "4.11.0",
     "classnames": "2.2.6",
     "qs": "6.8.0",
-    "react": "16.8.6",
+    "react": "17.0.2",
     "react-compound-slider": "2.2.0",
-    "react-dom": "16.8.6",
-    "react-instantsearch-dom": "6.12.0"
+    "react-dom": "17.0.2",
+    "react-instantsearch-dom": "6.19.0"
   }
 }

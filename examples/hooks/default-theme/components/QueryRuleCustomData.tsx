@@ -4,7 +4,7 @@ import { useQueryRules, UseQueryRulesProps } from 'react-instantsearch-hooks';
 import { cx } from '../cx';
 
 export type QueryRuleCustomDataProps = React.ComponentProps<'div'> &
-  Pick<UseQueryRulesProps, 'transformItems'> & {
+  Partial<Pick<UseQueryRulesProps, 'transformItems'>> & {
     children: (options: { items: any[] }) => React.ReactNode;
   };
 

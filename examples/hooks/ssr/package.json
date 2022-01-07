@@ -6,8 +6,7 @@
   "scripts": {
     "start": "webpack && nodemon dist/server.js",
     "watch": "webpack --watch",
-    "build": "webpack --mode=production",
-    "test": "jest"
+    "build": "webpack --mode=production"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
@@ -23,11 +22,11 @@
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
-    "algoliasearch": "4.9.3",
+    "algoliasearch": "4.11.0",
     "express": "4.17.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-instantsearch-hooks": "6.18.0",
+    "react-instantsearch-hooks": "6.19.0",
     "react-instantsearch-hooks-server": "6.19.0"
   }
 }

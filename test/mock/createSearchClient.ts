@@ -55,6 +55,7 @@ export function createSearchClient(
     clearCache: jest.fn(),
     initIndex: jest.fn(),
     transporter,
+    customRequest: jest.fn(),
     search: jest.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(

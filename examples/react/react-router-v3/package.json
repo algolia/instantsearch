@@ -1,6 +1,6 @@
 {
   "name": "example-react-router-v3",
-  "version": "1.0.0",
+  "version": "6.19.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -10,17 +10,17 @@
   },
   "devDependencies": {
     "react-scripts": "3.1.2",
-    "react-test-renderer": "16.8.6"
+    "react-test-renderer": "17.0.2"
   },
   "dependencies": {
-    "algoliasearch": "4.9.3",
-    "instantsearch.css": "7.3.1",
+    "algoliasearch": "4.11.0",
+    "instantsearch.css": "7.4.5",
     "lodash": "4.17.15",
     "prop-types": "15.6.0",
     "qs": "6.8.0",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-instantsearch-dom": "6.12.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-instantsearch-dom": "6.19.0",
     "react-router": "3.2.1"
   },
   "browserslist": [

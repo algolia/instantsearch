@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-// const getLatestVersion = require('latest-version');
 
 const packages = [
   'packages/react-instantsearch-core',
@@ -66,22 +65,6 @@ module.exports = {
   pullRequestTeamReviewers: ['frontend-experiences-web'],
   buildCommand: ({ version }) =>
     `NODE_ENV=production VERSION=${version} yarn build`,
-  // @TODO: updating the examples and pushing to the `master` branch breaks
-  // the release process because of access rights.
-  // To keep the examples updated with the newly released version, we should rely
-  // on the monorepo feature.
-  // afterPublish: async ({ exec, version }) => {
-  //   await waitUntil(async () => {
-  //     const latestVersion = await getLatestVersion('react-instantsearch', {
-  //       version: 'latest',
-  //     });
-  //     return latestVersion === version;
-  //   });
-  //   exec(`git config --global user.email "instantsearch-bot@algolia.com"`);
-  //   exec(`git config --global user.name "InstantSearch"`);
-  //   exec(`node scripts/update-examples.js ${version}`);
-  //   exec(`git push origin master`);
-  // },
   slack: {
     // disable slack notification for `prepared` lifecycle.
     // Ship.js will send slack message only for `releaseSuccess`.
@@ -121,14 +104,3 @@ module.exports = {
     }),
   },
 };
-
-// function waitUntil(checkFn) {
-//   return new Promise((resolve) => {
-//     const intervalId = setInterval(async () => {
-//       if (await checkFn()) {
-//         clearInterval(intervalId);
-//         resolve();
-//       }
-//     }, 3000);
-//   });
-// }
