@@ -89,7 +89,7 @@ export type ToggleRefinementValue = {
 
 export type ToggleRefinementConnectorParams = {
   /**
-   * Name of the attribute for faceting (eg. "free_shipping").
+   * Name of the attribute for faceting (e.g., "free_shipping").
    */
   attribute: string;
   /**
@@ -132,7 +132,7 @@ export type ToggleRefinementRenderState = {
    */
   createURL: CreateURL<string>;
   /**
-   * Send a "facet clicked" insights event.
+   * Send a "Facet Clicked" Insights event.
    */
   sendEvent: SendEventForToggle;
   /**
