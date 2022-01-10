@@ -77,14 +77,20 @@ const createSendEvent = ({
 };
 
 export type ToggleRefinementValue = {
-  /** whether this option is enabled */
+  /**
+   * Whether this option is enabled.
+   */
   isRefined: boolean;
-  /** number of result if this option is enabled */
+  /**
+   * Number of result if this option is toggled.
+   */
   count: number | null;
 };
 
 export type ToggleRefinementConnectorParams = {
-  /** Name of the attribute for faceting (eg. "free_shipping"). */
+  /**
+   * Name of the attribute for faceting (e.g., "free_shipping").
+   */
   attribute: string;
   /**
    * Value to filter on when toggled.
@@ -100,19 +106,42 @@ export type ToggleRefinementConnectorParams = {
 export type ToggleRefinementRenderState = {
   /** The current toggle value */
   value: {
+    /**
+     * The attribute name of this toggle.
+     */
     name: string;
+    /**
+     * Whether the current option is "on" (true) or "off" (false)
+     */
     isRefined: boolean;
+    /**
+     * Number of results if this option is toggled.
+     */
     count: number | null;
+    /**
+     * Information about the "on" toggle.
+     */
     onFacetValue: ToggleRefinementValue;
+    /**
+     * Information about the "off" toggle.
+     */
     offFacetValue: ToggleRefinementValue;
   };
-  /** Creates an URL for the next state. */
+  /**
+   * Creates an URL for the next state.
+   */
   createURL: CreateURL<string>;
-  /** send a "facet clicked" insights event */
+  /**
+   * Send a "Facet Clicked" Insights event.
+   */
   sendEvent: SendEventForToggle;
-  /** Indicates if search state can be refined. */
+  /**
+   * Indicates if search state can be refined.
+   */
   canRefine: boolean;
-  /** Updates to the next state by applying the toggle refinement. */
+  /**
+   * Updates to the next state by applying the toggle refinement.
+   */
   refine: (value?: { isRefined: boolean }) => void;
 };
 
