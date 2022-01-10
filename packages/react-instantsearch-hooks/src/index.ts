@@ -20,3 +20,4 @@ export * from './useRange';
 export * from './useRefinementList';
 export * from './useSearchBox';
 export * from './useSortBy';
+export * from './useToggleRefinement';
