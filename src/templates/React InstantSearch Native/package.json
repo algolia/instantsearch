@@ -10,7 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "algoliasearch": "4.11.0",
+    "algoliasearch": "4",
     "expo": "44.0.3",
     "prop-types": "15.8.0",
     "react": "17.0.2",

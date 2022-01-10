@@ -36,8 +36,8 @@
     "node": ">= 10"
   },
   "dependencies": {
-    "@algolia/cache-in-memory": "4.11.0",
-    "algoliasearch": "4.11.0",
+    "@algolia/cache-in-memory": "4",
+    "algoliasearch": "4",
     "chalk": "3.0.0",
     "commander": "4.1.1",
     "inquirer": "8.0.0",

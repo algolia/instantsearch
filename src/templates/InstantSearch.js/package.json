@@ -20,7 +20,7 @@
     "prettier": "1.19.1"
   },
   "dependencies": {
-    "algoliasearch": "4.10.4",
+    "algoliasearch": "4",
     "instantsearch.js": "{{libraryVersion}}"
   }
 }
