@@ -5,7 +5,7 @@ import {
 } from 'react-instantsearch-hooks';
 
 import { cx } from '../cx';
-import { isSpecialClick } from '../isSpecialClick';
+import { isModifierClick } from '../isModifierClick';
 
 export type CurrentRefinementsProps = React.ComponentProps<'div'> &
   UseCurrentRefinementsProps;
@@ -42,7 +42,7 @@ export function CurrentRefinements(props: CurrentRefinementsProps) {
                 </span>
                 <button
                   onClick={(event) => {
-                    if (isSpecialClick(event)) {
+                    if (isModifierClick(event)) {
                       return;
                     }
 

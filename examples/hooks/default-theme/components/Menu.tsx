@@ -2,7 +2,7 @@ import React from 'react';
 import { useMenu, UseMenuProps } from 'react-instantsearch-hooks';
 
 import { cx } from '../cx';
-import { isSpecialClick } from '../isSpecialClick';
+import { isModifierClick } from '../isModifierClick';
 
 export type MenuProps = React.ComponentProps<'div'> & UseMenuProps;
 
@@ -30,7 +30,7 @@ export function Menu(props: MenuProps) {
             <a
               className="ais-Menu-link"
               onClick={(event) => {
-                if (isSpecialClick(event)) {
+                if (isModifierClick(event)) {
                   return;
                 }
                 event.preventDefault();

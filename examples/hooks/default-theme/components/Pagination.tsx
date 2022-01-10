@@ -1,12 +1,14 @@
 import React from 'react';
 import { usePagination, UsePaginationProps } from 'react-instantsearch-hooks';
 import { cx } from '../cx';
+import { isModifierClick } from '../isModifierClick';
 
 export type PaginationProps = React.ComponentProps<'div'> & UsePaginationProps;
 
 export function Pagination(props: PaginationProps) {
   const {
     refine,
+    createURL,
     pages,
     currentRefinement,
     isFirstPage,
@@ -25,31 +27,29 @@ export function Pagination(props: PaginationProps) {
     >
       <ul className="ais-Pagination-list">
         <PaginationItem
+          aria-label="First"
+          value={0}
+          isDisabled={isFirstPage}
+          createURL={createURL}
+          refine={refine}
           className={cx(
             'ais-Pagination-item',
             'ais-Pagination-item--firstPage'
           )}
-          aria-label="First"
-          isDisabled={isFirstPage}
-          onClick={(event) => {
-            event.preventDefault();
-            refine(0);
-          }}
         >
           ‹‹
         </PaginationItem>
 
         <PaginationItem
+          aria-label="Previous"
+          value={currentRefinement - 1}
+          isDisabled={isFirstPage}
+          createURL={createURL}
+          refine={refine}
           className={cx(
             'ais-Pagination-item',
             'ais-Pagination-item--previousPage'
           )}
-          aria-label="Previous"
-          isDisabled={isFirstPage}
-          onClick={(event) => {
-            event.preventDefault();
-            refine(currentRefinement - 1);
-          }}
         >
           ‹
         </PaginationItem>
@@ -57,41 +57,38 @@ export function Pagination(props: PaginationProps) {
         {pages.map((page) => (
           <PaginationItem
             key={page}
+            aria-label={String(page)}
+            value={page}
+            isDisabled={false}
+            createURL={createURL}
+            refine={refine}
             className={cx(
               'ais-Pagination-item',
               page === currentRefinement && 'ais-Pagination-item--selected'
             )}
-            aria-label={String(page)}
-            isDisabled={false}
-            onClick={(event) => {
-              event.preventDefault();
-              refine(page);
-            }}
           >
             {page + 1}
           </PaginationItem>
         ))}
 
         <PaginationItem
-          className={cx('ais-Pagination-item', 'ais-Pagination-item--nextPage')}
           aria-label="Next"
+          value={currentRefinement + 1}
           isDisabled={isLastPage}
-          onClick={(event) => {
-            event.preventDefault();
-            refine(currentRefinement + 1);
-          }}
+          createURL={createURL}
+          refine={refine}
+          className={cx('ais-Pagination-item', 'ais-Pagination-item--nextPage')}
         >
           ›
         </PaginationItem>
 
         <PaginationItem
-          className={cx('ais-Pagination-item', 'ais-Pagination-item--lastPage')}
           aria-label="Last"
+          value={nbPages - 1}
           isDisabled={isLastPage}
-          onClick={(event) => {
-            event.preventDefault();
-            refine(nbPages - 1);
-          }}
+          createURL={createURL}
+          refine={refine}
+          className={cx('ais-Pagination-item', 'ais-Pagination-item--lastPage')}
         >
           ››
         </PaginationItem>
@@ -100,12 +97,15 @@ export function Pagination(props: PaginationProps) {
   );
 }
 
-type PaginationItemProps = React.ComponentProps<'a'> & {
-  isDisabled: boolean;
-};
+type PaginationItemProps = React.ComponentProps<'a'> &
+  Pick<ReturnType<typeof usePagination>, 'refine' | 'createURL'> & {
+    isDisabled: boolean;
+    value: number;
+  };
 
 function PaginationItem(props: PaginationItemProps) {
-  const { isDisabled, className, ...rest } = props;
+  const { isDisabled, className, href, value, createURL, refine, ...rest } =
+    props;
 
   if (isDisabled) {
     return (
@@ -117,7 +117,19 @@ function PaginationItem(props: PaginationItemProps) {
 
   return (
     <li className={className}>
-      <a className="ais-Pagination-link" href="#" {...rest} />
+      <a
+        className="ais-Pagination-link"
+        href={createURL(value)}
+        onClick={(event) => {
+          if (isModifierClick(event)) {
+            return;
+          }
+
+          event.preventDefault();
+          refine(value);
+        }}
+        {...rest}
+      />
     </li>
   );
 }

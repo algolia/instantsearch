@@ -5,7 +5,7 @@ import {
 } from 'react-instantsearch-hooks';
 
 import { cx } from '../cx';
-import { isSpecialClick } from '../isSpecialClick';
+import { isModifierClick } from '../isModifierClick';
 
 export type HierarchicalMenuProps = React.ComponentProps<'div'> &
   UseHierarchicalMenuProps;
@@ -32,7 +32,7 @@ function HierarchicalList({
             className="ais-HierarchicalMenu-link"
             href={createURL(item.value)}
             onClick={(event) => {
-              if (isSpecialClick(event)) {
+              if (isModifierClick(event)) {
                 return;
               }
               event.preventDefault();

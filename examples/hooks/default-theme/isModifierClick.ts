@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function isSpecialClick(event: React.MouseEvent) {
+export function isModifierClick(event: React.MouseEvent) {
   const isMiddleClick = event.button === 1;
   return Boolean(
     isMiddleClick ||
