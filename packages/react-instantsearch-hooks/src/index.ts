@@ -15,6 +15,7 @@ export * from './useInfiniteHits';
 export * from './useMenu';
 export * from './useNumericMenu';
 export * from './usePagination';
+export * from './usePoweredBy';
 export * from './useQueryRules';
 export * from './useRange';
 export * from './useRefinementList';

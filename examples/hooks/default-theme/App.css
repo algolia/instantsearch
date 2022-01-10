@@ -54,3 +54,11 @@ body {
 .ais-CurrentRefinements-label {
   text-transform: capitalize;
 }
+
+.ais-PoweredBy {
+  margin-top: 0.5rem;
+}
+
+.ais-PoweredBy-logo {
+  height: 1rem;
+}

@@ -9,6 +9,7 @@ export * from './NumericMenu';
 export * from './Pagination';
 export * from './HitsPerPage';
 export * from './Panel';
+export * from './PoweredBy';
 export * from './QueryRuleContext';
 export * from './QueryRuleCustomData';
 export * from './RangeInput';
