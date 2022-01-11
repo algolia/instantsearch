@@ -4,6 +4,7 @@ export * from './InstantSearch';
 export * from './InstantSearchServerContext';
 export * from './InstantSearchSSRProvider';
 export * from './SearchIndex';
+export * from './useClearRefinements';
 export * from './useConfigure';
 export * from './useConnector';
 export * from './useCurrentRefinements';

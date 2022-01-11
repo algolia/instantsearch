@@ -4,6 +4,7 @@ import React from 'react';
 import { InstantSearch, DynamicWidgets } from 'react-instantsearch-hooks';
 
 import {
+  ClearRefinements,
   Configure,
   CurrentRefinements,
   HierarchicalMenu,
@@ -120,20 +121,23 @@ export function App() {
           </div>
           <PoweredBy />
 
-          <CurrentRefinements
-            transformItems={(items) =>
-              items.map((item) => {
-                const label = item.label.startsWith('hierarchicalCategories')
-                  ? 'Hierarchy'
-                  : item.label;
+          <div className="CurrentRefinements">
+            <ClearRefinements />
+            <CurrentRefinements
+              transformItems={(items) =>
+                items.map((item) => {
+                  const label = item.label.startsWith('hierarchicalCategories')
+                    ? 'Hierarchy'
+                    : item.label;
 
-                return {
-                  ...item,
-                  attribute: label,
-                };
-              })
-            }
-          />
+                  return {
+                    ...item,
+                    attribute: label,
+                  };
+                })
+              }
+            />
+          </div>
 
           <QueryRuleContext
             trackedFilters={{
