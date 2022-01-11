@@ -1,3 +1,12 @@
+## [4.3.1](https://github.com/algolia/vue-instantsearch/compare/v4.3.0...v4.3.1) (2022-01-11)
+
+
+### Bug Fixes
+
+* **dependencies:** update instantsearch.js requirement ([a36ae2b](https://github.com/algolia/vue-instantsearch/commit/a36ae2b964110f3e4bc98c39895dd31b79527701)), closes [#1096](https://github.com/algolia/vue-instantsearch/issues/1096)
+
+
+
 # [4.3.0](https://github.com/algolia/vue-instantsearch/compare/v4.2.0...v4.3.0) (2021-12-16)
 
 
