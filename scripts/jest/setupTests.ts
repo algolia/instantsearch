@@ -1,4 +1,4 @@
-import { warnCache } from '../../packages/react-instantsearch-hooks/src/utils';
+import { warnCache } from '../../packages/react-instantsearch-hooks/src/lib/warn';
 import { toWarnDev } from './matchers';
 
 expect.extend({ toWarnDev });

@@ -3,8 +3,8 @@ import React from 'react';
 import { InstantSearch as InstantSearchCore } from 'react-instantsearch-core';
 
 import { createSearchClient } from '../../../../test/mock';
-import { useSearchBox } from '../useSearchBox';
-import { noop } from '../utils';
+import { useSearchBox } from '../connectors/useSearchBox';
+import { noop } from '../lib/noop';
 
 function SearchBox() {
   useSearchBox({});
