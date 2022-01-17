@@ -1,3 +1,17 @@
+# [2.0.0](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.3.0...v2.0.0) (2022-01-17)
+
+
+### Features
+
+* generate junit test reports by default with saucelabs ([#29](https://github.com/algolia/instantsearch-e2e-tests/issues/29)) ([5f2c0b3](https://github.com/algolia/instantsearch-e2e-tests/commit/5f2c0b3))
+
+
+### BREAKING CHANGES
+
+* tested projects now require `@wdio/junit-reporter`.
+
+
+
 # [1.3.0](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.2.4...v1.3.0) (2020-04-17)
 
 
