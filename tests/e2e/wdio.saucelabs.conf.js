@@ -5,6 +5,27 @@ const baseConfig = require('./wdio.base.conf');
 module.exports = {
   ...baseConfig,
   /*
+   * List of reporters to use
+   * https://webdriver.io/docs/options.html#reporters
+   * https://github.com/webdriverio/webdriverio/tree/master/packages/wdio-spec-reporter
+   */
+  reporters: [
+    'spec',
+    [
+      'junit',
+      {
+        outputDir: `${__dirname}/junit/wdio`,
+        outputFileFormat({
+          cid,
+          capabilities: { browserName, browserVersion },
+        }) {
+          return `results-${cid}.${browserName}-${browserVersion}.xml`;
+        },
+        addFileAttribute: true,
+      },
+    ],
+  ],
+  /*
    * Add Sauce Labs integration to WebdriverIO
    * https://webdriver.io/docs/sauce-service.html
    * https://github.com/webdriverio/webdriverio/tree/master/packages/wdio-sauce-service
