@@ -1,5 +1,4 @@
 export * from './ClearRefinements';
-export * from './Configure';
 export * from './CurrentRefinements';
 export * from './HierarchicalMenu';
 export * from './Highlight';

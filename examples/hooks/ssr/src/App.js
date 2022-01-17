@@ -3,6 +3,7 @@ import {
   InstantSearch,
   InstantSearchSSRProvider,
   Index,
+  Configure,
 } from 'react-instantsearch-hooks';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
@@ -10,7 +11,6 @@ import { history } from 'instantsearch.js/es/lib/routers';
 import { searchClient } from './searchClient';
 
 import {
-  Configure,
   Highlight,
   Hits,
   Pagination,

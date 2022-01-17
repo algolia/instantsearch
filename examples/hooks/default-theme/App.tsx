@@ -1,11 +1,14 @@
 import { Hit as AlgoliaHit } from '@algolia/client-search';
 import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
-import { InstantSearch, DynamicWidgets } from 'react-instantsearch-hooks';
+import {
+  InstantSearch,
+  Configure,
+  DynamicWidgets,
+} from 'react-instantsearch-hooks';
 
 import {
   ClearRefinements,
-  Configure,
   CurrentRefinements,
   HierarchicalMenu,
   Highlight,

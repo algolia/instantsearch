@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import React, { createRef } from 'react';
 
 import { createSearchClient } from '../../../../../test/mock';
-import { useConfigure } from '../../connectors/useConfigure';
+import { Configure } from '../../components/Configure';
 import { IndexContext } from '../../lib/IndexContext';
 import { noop } from '../../lib/noop';
 import { Index } from '../Index';
@@ -10,11 +10,6 @@ import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
-
-function Configure(props) {
-  useConfigure(props);
-  return null;
-}
 
 describe('Index', () => {
   test('throws when used outside of <InstantSearch>', () => {
