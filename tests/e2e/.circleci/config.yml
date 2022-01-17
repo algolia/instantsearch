@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/instantsearch-e2-tests
   docker:
-    - image: circleci/node:10.16.3@sha256:6ab62742cec4a68e75e7cac063f6549bae0bcfd0541700df7fde54765eed4ad2
+    - image: cimg/node:10.24
 
 version: 2
 jobs:

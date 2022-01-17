@@ -10,7 +10,7 @@ Install `instantsearch-e2e-tests` and its peerDependencies in your InstantSearch
 yarn add --dev \
 algolia/instantsearch-e2e-tests \
 @wdio/cli @wdio/jasmine-framework @wdio/spec-reporter \
-@wdio/static-server-service \
+@wdio/junit-reporter @wdio/static-server-service \
 @wdio/local-runner @wdio/selenium-standalone-service \
 @wdio/sauce-service
 ```
@@ -82,6 +82,19 @@ exports.config = {
     },
   ],
 };
+```
+
+## Sending reports to CircleCI
+
+CircleCI can [read JUnit XML test metadata files](https://circleci.com/docs/2.0/collect-test-data/) to provide insights on the stability of the test suite. To enable this feature, you can the following key to your e2e job in **.circleci/config.yml**:
+
+```yaml
+  test_e2e:
+  	# ...
+  	steps:
+  		# ...
+  		- store_test_results:
+  			path: junit/wdio
 ```
 
 # License
