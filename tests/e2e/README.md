@@ -54,7 +54,7 @@ exports.config = saucelabs;
 
 You'll need a username and access key to be able to run the test suite on Sauce Labs. You can find them in the User **Profile** > **User Settings** section of your Sauce Labs dashboard.
 
-`instantsearch-e2-tests` will read the username and access key from the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables respectively. More information about [setting up environment variables for Sauce Labs](https://wiki.saucelabs.com/display/DOCS/Best+Practice%3A+Use+Environment+Variables+for+Authentication+Credentials).
+`instantsearch-e2e-tests` will read the username and access key from the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables respectively. More information about [setting up environment variables for Sauce Labs](https://wiki.saucelabs.com/display/DOCS/Best+Practice%3A+Use+Environment+Variables+for+Authentication+Credentials).
 
 Alternatively you can store them in a `.env` file at the root of your project, `instantsearch-e2e-tests` will automatically load them using [dotenv](https://github.com/motdotla/dotenv). **But don't forget to add this file to your `.gitignore`.**
 
@@ -86,17 +86,17 @@ exports.config = {
 
 ## Sending reports to CircleCI
 
-CircleCI can [read JUnit XML test metadata files](https://circleci.com/docs/2.0/collect-test-data/) to provide insights on the stability of the test suite. To enable this feature, you can the following key to your e2e job in **.circleci/config.yml**:
+CircleCI can [read JUnit XML test metadata files](https://circleci.com/docs/2.0/collect-test-data/) to provide insights on the stability of the test suite. To enable this feature, you can add the following key to your e2e job in **.circleci/config.yml**:
 
 ```yaml
   test_e2e:
-  	# ...
-  	steps:
-  		# ...
-  		- store_test_results:
-  			path: junit/wdio
+    # ...
+    steps:
+      # ...
+      - store_test_results:
+        path: junit/wdio
 ```
 
 # License
 
-instantsearch-e2-tests is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
+instantsearch-e2e-tests is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).

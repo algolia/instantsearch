@@ -21,7 +21,7 @@ aliases:
     command: yarn install
 
 defaults: &defaults
-  working_directory: ~/instantsearch-e2-tests
+  working_directory: ~/instantsearch-e2e-tests
   docker:
     - image: cimg/node:10.24
 
