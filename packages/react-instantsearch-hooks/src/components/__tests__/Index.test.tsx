@@ -19,7 +19,7 @@ describe('Index', () => {
     expect(() => {
       render(<Index indexName="childIndex">Children</Index>);
     }).toThrowErrorMatchingInlineSnapshot(
-      `"The <Index> component must be used within <InstantSearch>."`
+      `"[InstantSearch] The <Index> component must be used within <InstantSearch>."`
     );
 
     jest.spyOn(console, 'error').mockRestore();
