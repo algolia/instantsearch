@@ -18,3 +18,6 @@ preview.zip
 
 # Argos CI screenshots
 integration/screenshots/
+
+# Test output
+/junit
