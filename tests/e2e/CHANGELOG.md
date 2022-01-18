@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/algolia/instantsearch-e2e-tests/compare/v2.0.0...v2.0.1) (2022-01-18)
+
+
+### Bug Fixes
+
+* correctly output junit report in target repository ([#32](https://github.com/algolia/instantsearch-e2e-tests/issues/32)) ([d3e9e1b](https://github.com/algolia/instantsearch-e2e-tests/commit/d3e9e1b))
+
+
+
 # [2.0.0](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.3.0...v2.0.0) (2022-01-17)
 
 
