@@ -20,3 +20,6 @@ coverage
 # published files
 vue2/
 vue3/
+
+# Test output
+/junit
