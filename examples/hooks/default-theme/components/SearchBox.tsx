@@ -28,15 +28,6 @@ export function SearchBox(props: SearchBoxProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, refine]);
 
-  useEffect(() => {
-    if (query !== value) {
-      setValue(query);
-    }
-    // We want to track when the query coming from InstantSearch.js changes
-    // to update the React state, so we don't need to track the state value.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-
   return (
     <ControlledSearchBox
       className={props.className}
