@@ -124,7 +124,7 @@ angular.module('searchApp', ['ngSanitize', 'algoliasearch'])
 }]);
 </script>
 ```
-You can see the full [Angular example here](examples/instantsearch%2Bhelper%2Bangular.html)
+You can see the full [Angular example here](https://codepen.io/Algolia/pen/PzZobK)
 
 ## Helper cheatsheet
 
