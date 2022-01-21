@@ -602,7 +602,8 @@ describe('createConnector', () => {
         expect.any(Function),
         { ais: context },
         { ...props, contextValue: context },
-        expect.any(Function)
+        expect.any(Function),
+        'CoolConnector'
       );
     });
 

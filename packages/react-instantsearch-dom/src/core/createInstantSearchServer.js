@@ -11,20 +11,10 @@ const getIndexId = (context) =>
     : context.ais.mainTargetedIndex;
 
 function createWidgetsCollector(accumulator) {
-  return ({
-    getSearchParameters,
-    getMetadata: getMeta,
-    context,
-    props,
-    searchState,
-  }) => {
+  return (props) => {
     accumulator.push({
-      getSearchParameters,
-      getMetadata: getMeta,
-      index: getIndexId(context),
-      context,
-      props,
-      searchState,
+      ...props,
+      index: getIndexId(props.context),
     });
   };
 }
@@ -159,49 +149,66 @@ export const findResultsState = function (App, props) {
     );
   }
 
-  const { indexName, searchClient } = props;
-
-  const widgets = [];
-
-  renderToString(
-    <App {...props} widgetsCollector={createWidgetsCollector(widgets)} />
-  );
-
-  if (widgets.length === 0) {
-    throw new Error(
-      '[ssr]: no widgets were added, you likely did not pass the `widgetsCollector` down to the InstantSearch component.'
+  let widgets = [];
+  // eslint-disable-next-line no-shadow
+  function execute(props) {
+    widgets = [];
+    renderToString(
+      <App {...props} widgetsCollector={createWidgetsCollector(widgets)} />
     );
-  }
 
-  const { sharedParameters, derivedParameters } = getSearchParameters(
-    indexName,
-    widgets
-  );
+    if (widgets.length === 0) {
+      throw new Error(
+        '[ssr]: no widgets were added, you likely did not pass the `widgetsCollector` down to the InstantSearch component.'
+      );
+    }
 
-  const metadata = getMetadata(widgets);
+    const { sharedParameters, derivedParameters } = getSearchParameters(
+      props.indexName,
+      widgets
+    );
 
-  const helper = algoliasearchHelper(searchClient, sharedParameters.index);
+    const metadata = getMetadata(widgets);
 
-  if (typeof searchClient.addAlgoliaAgent === 'function') {
-    searchClient.addAlgoliaAgent(`react-instantsearch-server (${version})`);
-  }
+    const helper = algoliasearchHelper(
+      props.searchClient,
+      sharedParameters.index
+    );
 
-  if (Object.keys(derivedParameters).length === 0) {
-    return singleIndexSearch(helper, sharedParameters).then((res) => {
-      return {
-        metadata,
-        ...res,
-      };
+    if (typeof props.searchClient.addAlgoliaAgent === 'function') {
+      props.searchClient.addAlgoliaAgent(
+        `react-instantsearch-server (${version})`
+      );
+    }
+
+    if (Object.keys(derivedParameters).length === 0) {
+      return singleIndexSearch(helper, sharedParameters).then((res) => {
+        return {
+          metadata,
+          ...res,
+        };
+      });
+    }
+
+    return multiIndexSearch(
+      props.indexName,
+      props.searchClient,
+      helper,
+      sharedParameters,
+      derivedParameters
+    ).then((results) => {
+      return { metadata, results };
     });
   }
 
-  return multiIndexSearch(
-    indexName,
-    searchClient,
-    helper,
-    sharedParameters,
-    derivedParameters
-  ).then((results) => {
-    return { metadata, results };
+  return execute(props).then((resultsState) => {
+    // <DynamicWidgets> requires another query to retrieve the dynamic widgets
+    // to render.
+    if (
+      widgets.some((widget) => widget.displayName === 'AlgoliaDynamicWidgets')
+    ) {
+      return execute({ ...props, resultsState });
+    }
+    return resultsState;
   });
 };

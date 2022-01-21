@@ -64,6 +64,7 @@ type Props = {
     searchState: SearchState;
     context: { ais: InstantSearchContext; multiIndexContext: IndexContext };
     props: object;
+    displayName: string;
   }) => void;
   stalledSearchDelay?: number;
   resultsState?: ResultsState | { [indexId: string]: ResultsState };
@@ -276,7 +277,8 @@ class InstantSearch extends Component<Props, State> {
       multiIndexContext: IndexContext;
     },
     props: object,
-    getMetadata: ConnectorDescription['getMetadata']
+    getMetadata: ConnectorDescription['getMetadata'],
+    displayName: string
   ) {
     if (this.props.onSearchParameters) {
       const searchState = this.props.searchState ? this.props.searchState : {};
@@ -295,6 +297,7 @@ class InstantSearch extends Component<Props, State> {
         context,
         props,
         searchState,
+        displayName,
       });
     }
   }

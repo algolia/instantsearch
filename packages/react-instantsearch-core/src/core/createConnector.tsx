@@ -109,7 +109,8 @@ export function createConnectorWithoutContext(
               multiIndexContext: this.props.indexContextValue,
             },
             this.props,
-            connectorDesc.getMetadata && connectorDesc.getMetadata.bind(this)
+            connectorDesc.getMetadata && connectorDesc.getMetadata.bind(this),
+            connectorDesc.displayName
           );
         }
       }
