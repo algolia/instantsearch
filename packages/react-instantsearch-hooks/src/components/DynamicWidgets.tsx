@@ -10,13 +10,19 @@ function FallbackComponent() {
   return null;
 }
 
+type AtLeastOne<
+  TTarget,
+  TMapped = { [Key in keyof TTarget]: Pick<TTarget, Key> }
+> = Partial<TTarget> & TMapped[keyof TMapped];
+
 export type DynamicWidgetsProps = Pick<
   DynamicWidgetsConnectorParams,
   'transformItems'
-> & {
-  children: ReactNode;
-  fallbackComponent?: ComponentType<{ attribute: string }>;
-};
+> &
+  AtLeastOne<{
+    children: ReactNode;
+    fallbackComponent: ComponentType<{ attribute: string }>;
+  }>;
 
 export function DynamicWidgets({
   children,

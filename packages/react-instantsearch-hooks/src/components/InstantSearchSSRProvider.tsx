@@ -22,6 +22,14 @@ export function InstantSearchSSRProvider({
   children,
   ...props
 }: InstantSearchSSRProviderProps) {
+  // When <DynamicWidgets> is mounted, a second provider is used above the user-land
+  // <InstantSearchSSRProvider> in `getServerState()`.
+  // To avoid the user's provider overriding the context value with an empty object,
+  // we skip this provider.
+  if (Object.keys(props).length === 0) {
+    return <>{children}</>;
+  }
+
   return (
     <InstantSearchSSRContext.Provider value={props}>
       {children}

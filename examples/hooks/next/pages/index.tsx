@@ -2,6 +2,7 @@ import Head from 'next/head';
 import algoliasearch from 'algoliasearch/lite';
 import { Hit as AlgoliaHit } from '@algolia/client-search';
 import {
+  DynamicWidgets,
   InstantSearch,
   InstantSearchServerState,
   InstantSearchSSRProvider,
@@ -11,6 +12,8 @@ import { Highlight } from '../components/Highlight';
 import { Hits } from '../components/Hits';
 import { SearchBox } from '../components/SearchBox';
 import { history } from 'instantsearch.js/es/lib/routers/index.js';
+import { RefinementList } from '../components/RefinementList';
+import { Panel } from '../components/Panel';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
@@ -57,10 +60,25 @@ export default function HomePage({ serverState, url }: HomePageProps) {
           }),
         }}
       >
-        <SearchBox />
-        <Hits hitComponent={Hit} />
+        <div className="Container">
+          <div>
+            <DynamicWidgets fallbackComponent={FallbackComponent} />
+          </div>
+          <div>
+            <SearchBox />
+            <Hits hitComponent={Hit} />
+          </div>
+        </div>
       </InstantSearch>
     </InstantSearchSSRProvider>
+  );
+}
+
+function FallbackComponent({ attribute }: { attribute: string }) {
+  return (
+    <Panel header={attribute}>
+      <RefinementList attribute={attribute} />
+    </Panel>
   );
 }
 
