@@ -291,8 +291,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
     });
 
-    const renderFn = jest.fn();
     test('refine method called with null does not mutate the current helper state if no hierarchicalFacets exist', () => {
+      const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
       const breadcrumb = createBreadcrumb({
