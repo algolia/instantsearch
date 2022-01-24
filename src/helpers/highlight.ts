@@ -31,7 +31,7 @@ export default function highlight({
     `Could not enable highlight for "${attribute}", will display an empty string.
 Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/
+See: https://alg.li/highlighting
 `
   );
 

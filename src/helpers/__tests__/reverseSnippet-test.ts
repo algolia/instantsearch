@@ -208,7 +208,7 @@ describe('reverseSnippet', () => {
       .toWarnDev(`[InstantSearch.js]: Could not enable reverse snippet for "does.not.exist", will display an empty string.
 Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/`);
+See: https://alg.li/highlighting`);
   });
 
   test('warns if attribute does not have snippeting', () => {
@@ -223,6 +223,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/hi
       .toWarnDev(`[InstantSearch.js]: Could not enable reverse snippet for "link", will display an empty string.
 Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/`);
+See: https://alg.li/highlighting`);
   });
 });

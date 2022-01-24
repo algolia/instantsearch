@@ -158,7 +158,7 @@ describe('highlight', () => {
       .toWarnDev(`[InstantSearch.js]: Could not enable highlight for "does.not.exist", will display an empty string.
 Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/`);
+See: https://alg.li/highlighting`);
   });
 
   test('warns if attribute does not have highlighting', () => {
@@ -173,6 +173,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/hi
       .toWarnDev(`[InstantSearch.js]: Could not enable highlight for "link", will display an empty string.
 Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/`);
+See: https://alg.li/highlighting`);
   });
 });

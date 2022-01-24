@@ -38,7 +38,7 @@ export default function reverseSnippet({
     `Could not enable reverse snippet for "${attribute}", will display an empty string.
 Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/
+See: https://alg.li/highlighting
 `
   );
 
