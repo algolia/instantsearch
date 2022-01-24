@@ -81,6 +81,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
 
   /**
    * Indicates if `write` should be called on `dispose`.
+   * When using other client-side routing utilities to navigate between pages
+   * (e.g., a front-end SPA routing library), set this option to `false`.
    *
    * @default true
    */
