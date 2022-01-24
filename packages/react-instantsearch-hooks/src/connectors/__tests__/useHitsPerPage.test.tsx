@@ -27,7 +27,7 @@ describe('useHitsPerPage', () => {
       items: [
         {
           default: true,
-          isRefined: false,
+          isRefined: true,
           label: '4 hits per page',
           value: 4,
         },
