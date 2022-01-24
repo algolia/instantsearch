@@ -16,7 +16,6 @@
   "dependencies": {
     "algoliasearch": "4.11.0",
     "instantsearch.css": "7.4.5",
-    "lodash": "4.17.15",
     "prop-types": "15.6.0",
     "qs": "6.8.0",
     "react": "17.0.2",

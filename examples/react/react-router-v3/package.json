@@ -15,11 +15,11 @@
   "dependencies": {
     "algoliasearch": "4.11.0",
     "instantsearch.css": "7.4.5",
-    "lodash": "4.17.15",
     "prop-types": "15.6.0",
     "qs": "6.8.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-fast-compare": "3.0.1",
     "react-instantsearch-dom": "6.21.0",
     "react-router": "3.2.1"
   },

@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'react-fast-compare';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
