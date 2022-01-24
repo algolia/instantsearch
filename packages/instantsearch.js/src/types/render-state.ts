@@ -55,8 +55,10 @@ type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
 type WidgetRenderStates = AnalyticsWidgetDescription['indexRenderState'] &
   PlacesWidgetDescription['indexRenderState'];
 
+type GlobalRenderStates = { PREVENT_RENDER: boolean };
+
 export type IndexRenderState = Partial<
-  ConnectorRenderStates & WidgetRenderStates
+  ConnectorRenderStates & WidgetRenderStates & GlobalRenderStates
 >;
 
 export type RenderState = {

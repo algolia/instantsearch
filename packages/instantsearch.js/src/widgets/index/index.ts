@@ -591,6 +591,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
+      // a widget that causes the current state to be incomplete (dynamic widgets)
+      // can prevent following widgets from rendering this pass by setting the
+      // PREVENT_RENDER flag to "true"
+      if (instantSearchInstance.renderState[this.getIndexId()].PREVENT_RENDER) {
+        return;
+      }
+
       localWidgets.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute

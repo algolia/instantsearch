@@ -212,9 +212,13 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           );
         },
         getRenderState(renderState, renderOptions) {
+          const dynamicWidgets = this.getWidgetRenderState(renderOptions);
           return {
             ...renderState,
-            dynamicWidgets: this.getWidgetRenderState(renderOptions),
+            // if we are in a "has results, but only just mounted widgets" state, add a flag
+            // in other cases the flag isn't set and we *do* render the other widgets
+            PREVENT_RENDER: renderState.PREVENT_RENDER && true,
+            dynamicWidgets,
           };
         },
         getWidgetRenderState({ results, state }) {
