@@ -62,7 +62,7 @@ export const createRouterMiddleware = <
 
     const initialUiState = instantSearchInstance._initialUiState;
 
-    let unsubscribed = false;
+    let subscribed = false;
 
     return {
       onStateChange({ uiState }) {
@@ -71,7 +71,7 @@ export const createRouterMiddleware = <
         if (
           (lastRouteState === undefined ||
             !isEqual(lastRouteState, routeState)) &&
-          !unsubscribed
+          subscribed
         ) {
           router.write(routeState);
           lastRouteState = routeState;
@@ -79,6 +79,8 @@ export const createRouterMiddleware = <
       },
 
       subscribe() {
+        subscribed = true;
+
         instantSearchInstance._initialUiState = {
           ...initialUiState,
           ...stateMapping.routeToState(router.read()),
@@ -90,7 +92,8 @@ export const createRouterMiddleware = <
       },
 
       unsubscribe() {
-        unsubscribed = true;
+        subscribed = false;
+
         router.dispose();
       },
     };
