@@ -1,4 +1,3 @@
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -71,6 +70,9 @@ export type SearchBoxConnector = Connector<
   SearchBoxConnectorParams
 >;
 
+const defaultQueryHook: SearchBoxConnectorParams['queryHook'] = (query, hook) =>
+  hook(query);
+
 /**
  * **SearchBox** connector provides the logic to build a widget that will let the user search for a query.
  *
@@ -84,19 +86,10 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { queryHook } = widgetParams || {};
-
-    function clear(helper: AlgoliaSearchHelper) {
-      return function () {
-        helper.setQuery('').search();
-      };
-    }
+    const { queryHook = defaultQueryHook } = widgetParams || {};
 
     let _refine: SearchBoxRenderState['refine'];
-    let _clear = () => {};
-    function _cachedClear() {
-      _clear();
-    }
+    let _clear: SearchBoxRenderState['clear'];
 
     return {
       $$type: 'ais.searchBox',
@@ -140,28 +133,19 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
 
       getWidgetRenderState({ helper, searchMetadata, state }) {
         if (!_refine) {
-          const setQueryAndSearch = (query: string) => {
-            if (query !== state.query) {
-              helper.setQuery(query).search();
-            }
+          _refine = (query) => {
+            queryHook(query, (q) => helper.setQuery(q).search());
           };
 
-          _refine = (query) => {
-            if (queryHook) {
-              queryHook(query, setQueryAndSearch);
-              return;
-            }
-
-            setQueryAndSearch(query);
+          _clear = () => {
+            helper.setQuery('').search();
           };
         }
-
-        _clear = clear(helper);
 
         return {
           query: state.query || '',
           refine: _refine,
-          clear: _cachedClear,
+          clear: _clear,
           widgetParams,
           isSearchStalled: searchMetadata.isSearchStalled,
         };

@@ -1,3 +1,12 @@
+## [4.37.2](https://github.com/algolia/instantsearch.js/compare/v4.37.1...v4.37.2) (2022-01-10)
+
+
+### Bug Fixes
+
+* **searchbox:** make sure setting query to the initial doesn't cause a stale state ([#4990](https://github.com/algolia/instantsearch.js/issues/4990)) ([3faca01](https://github.com/algolia/instantsearch.js/commit/3faca014aad08145c3b4cc66a5e841da3a0f64b8))
+
+
+
 ## [4.37.1](https://github.com/algolia/instantsearch.js/compare/v4.37.0...v4.37.1) (2022-01-05)
 
 

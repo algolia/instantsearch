@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "4.37.1",
+  "version": "4.37.2",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/",
   "types": "es/index.d.ts",
@@ -140,7 +140,7 @@
     "rollup-plugin-uglify": "6.0.4",
     "scriptjs": "2.5.9",
     "semver": "6.3.0",
-    "shelljs": "0.8.3",
+    "shelljs": "0.8.4",
     "shipjs": "0.21.0",
     "typescript": "4.3.5",
     "webpack": "4.41.5"

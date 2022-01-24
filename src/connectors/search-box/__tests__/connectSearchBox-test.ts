@@ -117,48 +117,138 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     );
   });
 
-  it('Provides a function to update the refinements at each step', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectSearchBox(renderFn);
-    const widget = makeWidget({});
+  describe('refine', () => {
+    it('Provides a function to update the refinements at init', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectSearchBox(renderFn);
+      const widget = makeWidget({});
 
-    const helper = algoliasearchHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      helper.search = jest.fn();
 
-    widget.init!(
-      createInitOptions({
-        helper,
-        state: helper.state,
-      })
-    );
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
-    {
       const { refine, query } = renderFn.mock.calls[0][0];
       expect(helper.state.query).toBeUndefined();
       expect(query).toBe('');
       refine('bip');
       expect(helper.state.query).toBe('bip');
       expect(helper.search).toHaveBeenCalledTimes(1);
-    }
+    });
 
-    widget.render!(
-      createRenderOptions({
-        results: new SearchResults(helper.state, [
-          createSingleSearchResponse(),
-        ]),
-        state: helper.state,
-        helper,
-      })
-    );
+    it('Provides a function to update the refinements at render', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectSearchBox(renderFn);
+      const widget = makeWidget({});
 
-    {
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      helper.search = jest.fn();
+
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+          state: helper.state,
+          helper,
+        })
+      );
+
       const { refine, query } = renderFn.mock.calls[1][0];
-      expect(helper.state.query).toBe('bip');
-      expect(query).toBe('bip');
+      expect(helper.state.query).toBeUndefined();
+      expect(query).toBe('');
       refine('bop');
       expect(helper.state.query).toBe('bop');
+      expect(helper.search).toHaveBeenCalledTimes(1);
+    });
+
+    it('searches if query is the same as initial query (init)', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectSearchBox(renderFn);
+      const widget = makeWidget({});
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      helper.search = jest.fn();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+
+      const { refine, query } = renderFn.mock.calls[0][0];
+
+      expect(helper.state.query).toBe('');
+      expect(query).toBe('');
+
+      refine('something');
+      expect(helper.state.query).toBe('something');
+      expect(helper.search).toHaveBeenCalledTimes(1);
+
+      // back to initial query
+      refine('');
+      expect(helper.state.query).toBe('');
       expect(helper.search).toHaveBeenCalledTimes(2);
-    }
+    });
+
+    it('searches if query is the same as initial query (render)', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectSearchBox(renderFn);
+      const widget = makeWidget({});
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      helper.search = jest.fn();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+          state: helper.state,
+          helper,
+        })
+      );
+
+      const { refine, query } = renderFn.mock.calls[1][0];
+
+      expect(helper.state.query).toBe('');
+      expect(query).toBe('');
+
+      refine('something');
+      expect(helper.state.query).toBe('something');
+      expect(helper.search).toHaveBeenCalledTimes(1);
+
+      // back to initial query
+      refine('');
+      expect(helper.state.query).toBe('');
+      expect(helper.search).toHaveBeenCalledTimes(2);
+    });
   });
 
   it('provides a function to clear the query and perform new search', () => {
