@@ -1,3 +1,13 @@
+# [6.21.0](https://github.com/algolia/react-instantsearch/compare/v6.20.0...v6.21.0) (2022-01-24)
+
+
+### Features
+
+* **hooks-server:** load data twice in the case of dynamic widget usage ([#3259](https://github.com/algolia/react-instantsearch/issues/3259)) ([9b4903b](https://github.com/algolia/react-instantsearch/commit/9b4903b2ea73d9d7e33729b87d9d55990e64312c))
+* **server:** load data twice in the case of dynamic widget usage ([#3268](https://github.com/algolia/react-instantsearch/issues/3268)) ([91cd085](https://github.com/algolia/react-instantsearch/commit/91cd085f9a323ed6b872f3a098f561007a72d0d2)), closes [/github.com/algolia/react-instantsearch/blob/d459e62f5cae4c98427ab302531873f5ee23d149/packages/react-instantsearch-core/src/core/indexUtils.js#L14-L16](https://github.com//github.com/algolia/react-instantsearch/blob/d459e62f5cae4c98427ab302531873f5ee23d149/packages/react-instantsearch-core/src/core/indexUtils.js/issues/L14-L16)
+
+
+
 # [6.20.0](https://github.com/algolia/react-instantsearch/compare/v6.19.0...v6.20.0) (2022-01-18)
 
 
