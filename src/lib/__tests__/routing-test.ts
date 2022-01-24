@@ -4,15 +4,21 @@ import historyRouter from '../routers/history';
 import instantsearch from '../..';
 import { connectSearchBox } from '../../connectors';
 
+const writeDelay = 10;
+const writeWait = 1.5 * writeDelay;
+
+// This test may tear and not execute the tests in the right order.
+// It seems to be related to a timing issue but we are not sure.
+
 describe('routing', () => {
-  afterEach(() => {
+  beforeEach(() => {
+    window.history.pushState({}, '', 'http://localhost/');
     jest.clearAllMocks();
   });
 
   describe('writeOnDispose=true', () => {
     test('cleans URL on dispose', async () => {
       const pushState = jest.spyOn(window.history, 'pushState');
-      const writeDelay = 400;
 
       const search = instantsearch({
         indexName: 'indexName',
@@ -28,16 +34,16 @@ describe('routing', () => {
 
       search.start();
 
-      // Wait for ${writeDelay} to pass then check URL has been initialized
-      await wait(1.5 * writeDelay);
+      // Check URL has been initialized
+      await wait(writeWait);
       expect(window.location.search).toEqual('');
       expect(pushState).toHaveBeenCalledTimes(0);
 
       // Trigger an update - push a change
       search.renderState.indexName!.searchBox!.refine('Apple');
 
-      // Wait for ${writeDelay} to pass then check URL has been updated
-      await wait(1.5 * writeDelay);
+      // Check URL has been updated
+      await wait(writeWait);
       expect(window.location.search).toEqual(
         `?${encodeURI('indexName[query]=Apple')}`
       );
@@ -46,15 +52,45 @@ describe('routing', () => {
       // Trigger a dispose
       search.dispose();
 
-      // Wait for ${writeDelay} to pass then check URL has been cleaned
-      await wait(1.5 * writeDelay);
+      // Check URL has been cleaned
+      await wait(writeWait);
       expect(window.location.search).toEqual('');
       expect(pushState).toHaveBeenCalledTimes(2);
     });
 
     test('refine after dispose', async () => {
       const pushState = jest.spyOn(window.history, 'pushState');
-      const writeDelay = 400;
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+        routing: {
+          router: historyRouter({
+            writeDelay,
+          }),
+        },
+      });
+
+      search.addWidgets([connectSearchBox(() => {})({})]);
+      search.start();
+
+      // Trigger an update - push a change
+      search.renderState.indexName!.searchBox!.refine('Apple');
+
+      // Trigger a dispose
+      search.dispose();
+
+      // Trigger an update - push a change
+      search.renderState.indexName!.searchBox!.refine('Apple');
+
+      // Check URL has not been updated
+      await wait(writeWait);
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(1);
+    });
+
+    test('URL is updated after starting instantsearch again', async () => {
+      const pushState = jest.spyOn(window.history, 'pushState');
 
       const search = instantsearch({
         indexName: 'indexName',
@@ -70,43 +106,44 @@ describe('routing', () => {
 
       search.start();
 
-      // Wait for ${writeDelay} to pass then check URL has been initialized
-      await wait(1.5 * writeDelay);
-      expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(0);
-
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName!.searchBox!.refine('Query');
 
-      // Wait for ${writeDelay} to pass then check URL has been updated
-      await wait(1.5 * writeDelay);
+      // Check URL has been updated
+      await wait(writeWait);
       expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Apple')}`
+        `?${encodeURI('indexName[query]=Query')}`
       );
       expect(pushState).toHaveBeenCalledTimes(1);
 
       // Trigger a dispose
       search.dispose();
 
-      // Wait for ${writeDelay} to pass then check URL has been cleaned
-      await wait(1.5 * writeDelay);
+      // Check URL has been cleaned
+      await wait(writeWait);
       expect(window.location.search).toEqual('');
       expect(pushState).toHaveBeenCalledTimes(2);
+
+      // Start again
+      search.addWidgets([connectSearchBox(() => {})({})]);
+
+      search.start();
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName!.searchBox!.refine('Test');
 
-      // Wait for ${writeDelay} to pass then check URL has not been updated
-      await wait(1.5 * writeDelay);
-      expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(2);
+      // Check URL has been updated
+      await wait(writeWait);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Test')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(3);
     });
   });
 
   describe('writeOnDispose=false', () => {
     test('does not clean URL on dispose', async () => {
       const pushState = jest.spyOn(window.history, 'pushState');
-      const writeDelay = 400;
 
       const search = instantsearch({
         indexName: 'indexName',
@@ -123,16 +160,16 @@ describe('routing', () => {
 
       search.start();
 
-      // Wait for ${writeDelay} to pass then check URL has been initialized
-      await wait(1.5 * writeDelay);
+      // Check URL has been initialized
+      await wait(writeWait);
       expect(window.location.search).toEqual('');
       expect(pushState).toHaveBeenCalledTimes(0);
 
       // Trigger an update - push a change
       search.renderState.indexName!.searchBox!.refine('Apple');
 
-      // Wait for ${writeDelay} to pass then check URL has been updated
-      await wait(1.5 * writeDelay);
+      // Check URL has been updated
+      await wait(writeWait);
       expect(window.location.search).toEqual(
         `?${encodeURI('indexName[query]=Apple')}`
       );
@@ -141,8 +178,8 @@ describe('routing', () => {
       // Trigger a dispose
       search.dispose();
 
-      // Wait for ${writeDelay} to pass then check URL has been cleaned
-      await wait(1.5 * writeDelay);
+      // Check URL has not been cleaned
+      await wait(writeWait);
       expect(window.location.search).toEqual(
         `?${encodeURI('indexName[query]=Apple')}`
       );
