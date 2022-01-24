@@ -5,6 +5,7 @@ import {
   getHighlightedParts,
   reverseHighlightedParts,
   concatHighlightedParts,
+  warning,
 } from '../lib/utils';
 import { component } from '../lib/suit';
 
@@ -26,8 +27,22 @@ export default function reverseSnippet({
   hit,
   cssClasses = {},
 }: ReverseSnippetOptions): string {
-  const { value: attributeValue = '' } =
-    getPropertyByPath(hit._snippetResult, attribute) || {};
+  const snippetAttributeResult = getPropertyByPath(
+    hit._snippetResult,
+    attribute
+  );
+
+  // @MAJOR fallback to attribute value if snippet is not found
+  warning(
+    snippetAttributeResult,
+    `Could not enable reverse snippet for "${attribute}", will display an empty string.
+Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/
+`
+  );
+
+  const { value: attributeValue = '' } = snippetAttributeResult || {};
 
   // cx is not used, since it would be bundled as a dependency for Vue & Angular
   const className =

@@ -198,4 +198,34 @@ describe('reverseHighlight', () => {
       `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Streaming - (</mark>media<mark class=\\"ais-ReverseHighlight-highlighted\\"> plyr)</mark>"`
     );
   });
+
+  test('warns if attribute does not exist', () => {
+    const trigger = () => {
+      reverseHighlight({
+        attribute: 'does.not.exist',
+        hit,
+      });
+    };
+
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: Could not enable reverse highlight for "does.not.exist", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/`);
+  });
+
+  test('warns if attribute does not have highlighting', () => {
+    const trigger = () => {
+      reverseHighlight({
+        attribute: 'link',
+        hit,
+      });
+    };
+
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: Could not enable reverse highlight for "link", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/`);
+  });
 });

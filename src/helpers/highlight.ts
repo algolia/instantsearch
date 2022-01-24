@@ -1,6 +1,6 @@
 import type { Hit } from '../types';
 import { component } from '../lib/suit';
-import { getPropertyByPath, TAG_REPLACEMENT } from '../lib/utils';
+import { getPropertyByPath, TAG_REPLACEMENT, warning } from '../lib/utils';
 
 export type HighlightOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path
@@ -20,8 +20,22 @@ export default function highlight({
   hit,
   cssClasses = {},
 }: HighlightOptions): string {
-  const { value: attributeValue = '' } =
-    getPropertyByPath(hit._highlightResult, attribute) || {};
+  const highlightAttributeResult = getPropertyByPath(
+    hit._highlightResult,
+    attribute
+  );
+
+  // @MAJOR fallback to attribute value if highlight is not found
+  warning(
+    highlightAttributeResult,
+    `Could not enable highlight for "${attribute}", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/
+`
+  );
+
+  const { value: attributeValue = '' } = highlightAttributeResult || {};
 
   // cx is not used, since it would be bundled as a dependency for Vue & Angular
   const className =

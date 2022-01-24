@@ -5,6 +5,7 @@ import {
   getHighlightedParts,
   reverseHighlightedParts,
   concatHighlightedParts,
+  warning,
 } from '../lib/utils';
 import { component } from '../lib/suit';
 
@@ -26,8 +27,22 @@ export default function reverseHighlight({
   hit,
   cssClasses = {},
 }: ReverseHighlightOptions): string {
-  const { value: attributeValue = '' } =
-    getPropertyByPath(hit._highlightResult, attribute) || {};
+  const highlightAttributeResult = getPropertyByPath(
+    hit._highlightResult,
+    attribute
+  );
+
+  // @MAJOR fallback to attribute value if highlight is not found
+  warning(
+    highlightAttributeResult,
+    `Could not enable reverse highlight for "${attribute}", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/
+`
+  );
+
+  const { value: attributeValue = '' } = highlightAttributeResult || {};
 
   // cx is not used, since it would be bundled as a dependency for Vue & Angular
   const className =
