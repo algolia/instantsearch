@@ -184,6 +184,9 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
       getWidgetRenderState({ helper, createURL, results, state }) {
         function getItems() {
+          // The hierarchicalFacets condition is required for flavors
+          // that render immediately with empty results, without relying
+          // on init() (like React InstantSearch Hooks).
           if (!results || state.hierarchicalFacets.length === 0) {
             return [];
           }
