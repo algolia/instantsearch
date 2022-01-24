@@ -211,12 +211,13 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
             })
           );
         },
+        rendersOnPrevented: true,
         getRenderState(renderState, renderOptions) {
           const dynamicWidgets = this.getWidgetRenderState(renderOptions);
           return {
             ...renderState,
             PREVENT_RENDER:
-              renderState.PREVENT_RENDER &&
+              renderState.PREVENT_RENDER !== false &&
               // if we are in a "has results, but only just mounted widgets" state, add a flag
               // in other cases the flag isn't set and we *do* render the other widgets
               // TODO: improve this condition, reordering is allowed, we just want to make sure it's the same items
