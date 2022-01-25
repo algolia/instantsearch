@@ -150,4 +150,34 @@ describe('snippet', () => {
       })
     ).toMatchInlineSnapshot(`"Streaming Media Players"`);
   });
+
+  test('warns if attribute does not exist', () => {
+    const trigger = () => {
+      snippet({
+        attribute: 'does.not.exist',
+        hit,
+      });
+    };
+
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: Could not enable snippet for "does.not.exist", will display an empty string.
+Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
+
+See: https://alg.li/highlighting`);
+  });
+
+  test('warns if attribute does not have snippeting', () => {
+    const trigger = () => {
+      snippet({
+        attribute: 'link',
+        hit,
+      });
+    };
+
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: Could not enable snippet for "link", will display an empty string.
+Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
+
+See: https://alg.li/highlighting`);
+  });
 });

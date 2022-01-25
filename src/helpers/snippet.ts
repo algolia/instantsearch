@@ -1,6 +1,6 @@
 import type { Hit } from '../types';
 import { component } from '../lib/suit';
-import { TAG_REPLACEMENT, getPropertyByPath } from '../lib/utils';
+import { TAG_REPLACEMENT, getPropertyByPath, warning } from '../lib/utils';
 
 export type SnippetOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path
@@ -20,8 +20,22 @@ export default function snippet({
   hit,
   cssClasses = {},
 }: SnippetOptions): string {
-  const { value: attributeValue = '' } =
-    getPropertyByPath(hit._snippetResult, attribute) || {};
+  const snippetAttributeResult = getPropertyByPath(
+    hit._snippetResult,
+    attribute
+  );
+
+  // @MAJOR fallback to attribute value if snippet is not found
+  warning(
+    snippetAttributeResult,
+    `Could not enable snippet for "${attribute}", will display an empty string.
+Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
+
+See: https://alg.li/highlighting
+`
+  );
+
+  const { value: attributeValue = '' } = snippetAttributeResult || {};
 
   // cx is not used, since it would be bundled as a dependency for Vue & Angular
   const className =
