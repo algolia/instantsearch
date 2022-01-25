@@ -195,4 +195,34 @@ describe('reverseSnippet', () => {
       `"<mark class=\\"ais-ReverseSnippet-highlighted\\">Streaming - (</mark>media<mark class=\\"ais-ReverseSnippet-highlighted\\"> plyr)</mark>"`
     );
   });
+
+  test('warns if attribute does not exist', () => {
+    const trigger = () => {
+      reverseSnippet({
+        attribute: 'does.not.exist',
+        hit,
+      });
+    };
+
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: Could not enable reverse snippet for "does.not.exist", will display an empty string.
+Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
+
+See: https://alg.li/highlighting`);
+  });
+
+  test('warns if attribute does not have snippeting', () => {
+    const trigger = () => {
+      reverseSnippet({
+        attribute: 'link',
+        hit,
+      });
+    };
+
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: Could not enable reverse snippet for "link", will display an empty string.
+Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
+
+See: https://alg.li/highlighting`);
+  });
 });

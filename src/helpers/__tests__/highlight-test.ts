@@ -145,4 +145,34 @@ describe('highlight', () => {
       })
     ).toMatchInlineSnapshot(`"Streaming Media Players"`);
   });
+
+  test('warns if attribute does not exist', () => {
+    const trigger = () => {
+      highlight({
+        attribute: 'does.not.exist',
+        hit,
+      });
+    };
+
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: Could not enable highlight for "does.not.exist", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://alg.li/highlighting`);
+  });
+
+  test('warns if attribute does not have highlighting', () => {
+    const trigger = () => {
+      highlight({
+        attribute: 'link',
+        hit,
+      });
+    };
+
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: Could not enable highlight for "link", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://alg.li/highlighting`);
+  });
 });
