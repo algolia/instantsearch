@@ -5,6 +5,7 @@ export * from './components/Index';
 export * from './components/InstantSearch';
 export * from './components/InstantSearchServerContext';
 export * from './components/InstantSearchSSRProvider';
+export * from './connectors/useBreadcrumb';
 export * from './connectors/useClearRefinements';
 export * from './connectors/useConfigure';
 export * from './connectors/useCurrentRefinements';

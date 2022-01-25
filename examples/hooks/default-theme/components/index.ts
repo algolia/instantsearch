@@ -1,3 +1,4 @@
+export * from './Breadcrumb';
 export * from './ClearRefinements';
 export * from './CurrentRefinements';
 export * from './HierarchicalMenu';
