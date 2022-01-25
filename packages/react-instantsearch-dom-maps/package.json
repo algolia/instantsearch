@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-dom-maps",
-  "version": "6.21.0",
+  "version": "6.21.1",
   "description": "⚡ Lightning-fast search for React DOM & Google Maps, by Algolia",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -26,7 +26,10 @@
     "geo search",
     "google maps"
   ],
-  "files": ["README.md", "dist"],
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "scripts": {
     "clean": "rm -rf dist",
     "watch": "yarn build:cjs --watch",

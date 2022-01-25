@@ -1,3 +1,12 @@
+## [6.21.1](https://github.com/algolia/react-instantsearch/compare/v6.21.0...v6.21.1) (2022-01-25)
+
+
+### Bug Fixes
+
+* **hooks:** apply initial search parameters in useConnector ([#3276](https://github.com/algolia/react-instantsearch/issues/3276)) ([f85d679](https://github.com/algolia/react-instantsearch/commit/f85d6794c31eac61521fd8fc16b75673f02ed75b))
+
+
+
 # [6.21.0](https://github.com/algolia/react-instantsearch/compare/v6.20.0...v6.21.0) (2022-01-24)
 
 

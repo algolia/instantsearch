@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-dom",
-  "version": "6.21.0",
+  "version": "6.21.1",
   "description": "⚡ Lightning-fast search for React DOM, by Algolia",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -24,7 +24,11 @@
     "react-dom",
     "search"
   ],
-  "files": ["README.md", "server.js", "dist"],
+  "files": [
+    "README.md",
+    "server.js",
+    "dist"
+  ],
   "scripts": {
     "clean": "rm -rf dist",
     "watch": "yarn build:cjs --watch",
@@ -39,7 +43,7 @@
     "classnames": "^2.2.5",
     "prop-types": "^15.6.2",
     "react-fast-compare": "^3.0.0",
-    "react-instantsearch-core": "^6.21.0"
+    "react-instantsearch-core": "6.21.1"
   },
   "peerDependencies": {
     "react": ">= 16.3.0 < 18",
