@@ -3,7 +3,7 @@
 
 ### Bug Fixes
 
-* **helpers:** display warning if attribute is cannot be highlighted/snippeted ([#4996](https://github.com/algolia/instantsearch.js/issues/4996)) ([e81bf59](https://github.com/algolia/instantsearch.js/commit/e81bf59f0f28eb7b9f54f7d4424c60546b9a4d8c))
+* **helpers:** display warning if attribute cannot be highlighted/snippeted ([#4996](https://github.com/algolia/instantsearch.js/issues/4996)) ([e81bf59](https://github.com/algolia/instantsearch.js/commit/e81bf59f0f28eb7b9f54f7d4424c60546b9a4d8c))
 
 
 
