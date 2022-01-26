@@ -1,4 +1,4 @@
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import {
   checkRendering,
   clearRefinements,
@@ -90,7 +90,9 @@ const connectClearRefinements: ClearRefinementsConnector =
       const {
         includedAttributes = [],
         excludedAttributes = ['query'],
-        transformItems = ((items) => items) as TransformItems<string>,
+        transformItems = ((items) => items) as NonNullable<
+          ClearRefinementsConnectorParams['transformItems']
+        >,
       } = widgetParams || {};
 
       if (
@@ -158,16 +160,17 @@ const connectClearRefinements: ClearRefinementsConnector =
           };
         },
 
-        getWidgetRenderState({ createURL, scopedResults }) {
+        getWidgetRenderState({ createURL, scopedResults, results }) {
           connectorState.attributesToClear = scopedResults.reduce<
             Array<ReturnType<typeof getAttributesToClear>>
-          >((results, scopedResult) => {
-            return results.concat(
+          >((attributesToClear, scopedResult) => {
+            return attributesToClear.concat(
               getAttributesToClear({
                 scopedResult,
                 includedAttributes,
                 excludedAttributes,
                 transformItems,
+                results,
               })
             );
           }, []);
@@ -222,11 +225,13 @@ function getAttributesToClear({
   includedAttributes,
   excludedAttributes,
   transformItems,
+  results,
 }: {
   scopedResult: ScopedResult;
   includedAttributes: string[];
   excludedAttributes: string[];
   transformItems: TransformItems<string>;
+  results: SearchResults | undefined;
 }): AttributesToClear {
   const includesQuery =
     includedAttributes.indexOf('query') !== -1 ||
@@ -256,7 +261,8 @@ function getAttributesToClear({
               // Otherwise, ignore the excluded attributes
               excludedAttributes.indexOf(attribute) === -1
           )
-      )
+      ),
+      { results }
     ),
   };
 }

@@ -286,7 +286,7 @@ describe('connectDynamicWidgets', () => {
       it('renders widgets returned by transformItems', async () => {
         const dynamicWidgets = connectDynamicWidgets(() => {})({
           transformItems(_items, { results }) {
-            return results.userData[0].MOCK_facetOrder;
+            return results!.userData[0].MOCK_facetOrder;
           },
           fallbackWidget: ({ attribute }) =>
             connectRefinementList(() => {})({ attribute }),

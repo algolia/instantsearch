@@ -270,7 +270,12 @@ export type Widget<
 /**
  * Transforms the given items.
  */
-export type TransformItems<TItem> = (items: TItem[]) => TItem[];
+export type TransformItems<TItem, TResults = SearchResults<TItem>> = (
+  items: TItem[],
+  metadata: {
+    results: TResults | undefined;
+  }
+) => TItem[];
 
 /**
  * Transforms the given items.

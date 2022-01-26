@@ -187,7 +187,9 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
   return (widgetParams) => {
     const {
       escapeHTML = true,
-      transformItems = ((items) => items) as TransformItems<Hit>,
+      transformItems = ((items) => items) as NonNullable<
+        InfiniteHitsConnectorParams['transformItems']
+      >,
       cache = getInMemoryCache(),
     } = widgetParams || {};
     let showPrevious: () => void;
@@ -324,7 +326,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           );
 
           const transformedHits = transformItems(
-            hitsWithAbsolutePositionAndQueryID
+            hitsWithAbsolutePositionAndQueryID,
+            { results }
           );
 
           if (cachedHits[page] === undefined) {

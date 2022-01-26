@@ -184,7 +184,9 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     const {
       attribute = '',
       items = [],
-      transformItems = ((x) => x) as TransformItems<NumericMenuRenderStateItem>,
+      transformItems = ((item) => item) as NonNullable<
+        NumericMenuConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
 
     if (attribute === '') {
@@ -355,7 +357,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
 
         return {
           createURL: connectorState.createURL(state),
-          items: transformItems(prepareItems(state)),
+          items: transformItems(prepareItems(state), { results }),
           hasNoResults: results ? results.nbHits === 0 : true,
           refine: connectorState.refine,
           sendEvent: connectorState.sendEvent,

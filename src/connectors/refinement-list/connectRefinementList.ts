@@ -1,4 +1,8 @@
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+import type {
+  AlgoliaSearchHelper,
+  SearchForFacetValues,
+  SearchResults,
+} from 'algoliasearch-helper';
 import type { SendEventForFacet } from '../../lib/utils';
 import {
   escapeFacets,
@@ -89,7 +93,10 @@ export type RefinementListConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<RefinementListItem>;
+  transformItems?: TransformItems<
+    RefinementListItem,
+    SearchResults | SearchForFacetValues.Result
+  >;
 };
 
 export type RefinementListRenderState = {
@@ -188,8 +195,9 @@ const connectRefinementList: RefinementListConnector =
         showMoreLimit = 20,
         sortBy = DEFAULT_SORT,
         escapeFacetValues = true,
-        transformItems = ((items) =>
-          items) as TransformItems<RefinementListItem>,
+        transformItems = ((items) => items) as NonNullable<
+          RefinementListConnectorParams['transformItems']
+        >,
       } = widgetParams || {};
 
       type ThisWidget = Widget<
@@ -305,7 +313,8 @@ const connectRefinementList: RefinementListConnector =
                       ...item,
                       value,
                       label: value,
-                    }))
+                    })),
+                    { results }
                   );
 
                   renderFn(
@@ -389,7 +398,8 @@ const connectRefinementList: RefinementListConnector =
             });
             facetValues = values && Array.isArray(values) ? values : [];
             items = transformItems(
-              facetValues.slice(0, getLimit()).map(formatItems)
+              facetValues.slice(0, getLimit()).map(formatItems),
+              { results }
             );
 
             const maxValuesPerFacetConfig = state.maxValuesPerFacet;

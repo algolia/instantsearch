@@ -24,12 +24,11 @@ export type ParamTrackedFilters = {
   ) => TrackedFilterRefinement[];
 };
 export type ParamTransformRuleContexts = (ruleContexts: string[]) => string[];
-type ParamTransformItems = TransformItems<any>;
 
 export type QueryRulesConnectorParams = {
   trackedFilters?: ParamTrackedFilters;
   transformRuleContexts?: ParamTransformRuleContexts;
-  transformItems?: ParamTransformItems;
+  transformItems?: TransformItems<any>;
 };
 
 export type QueryRulesRenderState = {
@@ -168,7 +167,9 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
     const {
       trackedFilters = {} as ParamTrackedFilters,
       transformRuleContexts = ((rules) => rules) as ParamTransformRuleContexts,
-      transformItems = ((items) => items) as ParamTransformItems,
+      transformItems = ((items) => items) as NonNullable<
+        QueryRulesConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
 
     Object.keys(trackedFilters).forEach((facetName) => {
@@ -242,7 +243,7 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
 
       getWidgetRenderState({ results }) {
         const { userData = [] } = results || {};
-        const items = transformItems(userData);
+        const items = transformItems(userData, { results });
 
         return {
           items,

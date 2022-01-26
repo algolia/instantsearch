@@ -153,7 +153,9 @@ const connectMenu: MenuConnector = function connectMenu(
       showMore = false,
       showMoreLimit = 20,
       sortBy = DEFAULT_SORT,
-      transformItems = ((items) => items) as TransformItems<MenuItem>,
+      transformItems = ((items) => items) as NonNullable<
+        MenuConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
 
     if (!attribute) {
@@ -303,7 +305,8 @@ const connectMenu: MenuConnector = function connectMenu(
                 ...item,
                 label,
                 value,
-              }))
+              })),
+            { results }
           );
         }
 
