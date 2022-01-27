@@ -267,15 +267,17 @@ export type Widget<
     RenderStateLifeCycle<TWidgetDescription>
 >;
 
+export type TransformItemsMetadata = {
+  results?: SearchResults;
+};
+
 /**
  * Transforms the given items.
  */
-export type TransformItems<
-  TItem,
-  TMetadata = {
-    results?: SearchResults;
-  }
-> = (items: TItem[], metadata: TMetadata) => TItem[];
+export type TransformItems<TItem, TMetadata = TransformItemsMetadata> = (
+  items: TItem[],
+  metadata: TMetadata
+) => TItem[];
 
 /**
  * Transforms the given items.
