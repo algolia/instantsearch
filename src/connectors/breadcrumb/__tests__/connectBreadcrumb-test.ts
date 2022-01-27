@@ -786,6 +786,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     ]);
   });
 
+  it('provides search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const makeWidget = connectBreadcrumb(() => {});
+    const widget = makeWidget({
+      attributes: ['category'],
+      transformItems,
+    });
+
+    const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      uiState: {},
+    });
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        results: expect.objectContaining({ _state: helper.state }),
+      })
+    );
+  });
+
   it('returns the correct URL', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);

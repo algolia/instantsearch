@@ -233,6 +233,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     );
   });
 
+  it('Provides search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const makeWidget = connectHitsPerPage(() => {});
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page', default: true },
+        { value: 10, label: '10 items per page' },
+      ],
+      transformItems,
+    });
+
+    const helper = algoliasearchHelper(createSearchClient(), '', {
+      hitsPerPage: 3,
+    });
+
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        helper,
+        state: helper.state,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        results: expect.objectContaining({ _state: helper.state }),
+      })
+    );
+  });
+
   it('Configures the search with the default hitsPerPage provided', () => {
     const renderFn = jest.fn();
     const makeWidget = connectHitsPerPage(renderFn);

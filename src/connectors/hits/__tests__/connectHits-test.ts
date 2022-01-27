@@ -266,6 +266,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     );
   });
 
+  it('provides search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const makeWidget = connectHits(() => {});
+    const widget = makeWidget({
+      transformItems,
+    });
+
+    const helper = algoliasearchHelper(createSearchClient(), '');
+
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        helper,
+        state: helper.state,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        results: expect.objectContaining({ _state: helper.state }),
+      })
+    );
+  });
+
   it('adds queryID if provided to results', () => {
     const renderFn = jest.fn();
     const makeWidget = connectHits(renderFn);

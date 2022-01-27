@@ -825,6 +825,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(rendering.mock.calls[2][0].canRefine).toBe(false);
     });
 
+    it('provides search results within transformItems', () => {
+      const transformItems = jest.fn((items) => items);
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        facets: ['facet1'],
+      });
+      const makeWidget = connectClearRefinements(() => {});
+      const widget = makeWidget({
+        includedAttributes: ['facet1'],
+        transformItems,
+      });
+
+      widget.init!(createInitOptions({ helper, state: helper.state }));
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      expect(transformItems).lastCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          results: expect.objectContaining({ _state: helper.state }),
+        })
+      );
+    });
+
     describe('createURL', () => {
       it('consistent with the list of excludedAttributes', () => {
         const helper = algoliasearchHelper(createSearchClient(), 'indexName', {

@@ -1,8 +1,4 @@
-import type {
-  AlgoliaSearchHelper,
-  SearchForFacetValues,
-  SearchResults,
-} from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import type { SendEventForFacet } from '../../lib/utils';
 import {
   escapeFacets,
@@ -93,10 +89,7 @@ export type RefinementListConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<
-    RefinementListItem,
-    SearchResults | SearchForFacetValues.Result
-  >;
+  transformItems?: TransformItems<RefinementListItem>;
 };
 
 export type RefinementListRenderState = {
@@ -270,7 +263,8 @@ const connectRefinementList: RefinementListConnector =
       ) {
         return (renderOptions: RenderOptions | InitOptions) =>
           (query: string) => {
-            const { instantSearchInstance } = renderOptions;
+            const { instantSearchInstance, results: searchResults } =
+              renderOptions;
             if (query === '' && lastItemsFromMainSearch) {
               // render with previous data from the helper.
               renderFn(
@@ -314,7 +308,7 @@ const connectRefinementList: RefinementListConnector =
                       value,
                       label: value,
                     })),
-                    { results }
+                    { results: searchResults }
                   );
 
                   renderFn(

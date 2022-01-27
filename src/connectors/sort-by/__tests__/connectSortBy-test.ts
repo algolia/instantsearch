@@ -210,6 +210,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     );
   });
 
+  it('Provides search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const makeWidget = connectSortBy(() => {});
+    const widget = makeWidget({
+      items: [{ label: 'Sort products by relevance', value: 'relevance' }],
+      transformItems,
+    });
+
+    const helper = algoliasearchHelper(createSearchClient(), '');
+
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        helper,
+        state: helper.state,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        results: expect.objectContaining({ _state: helper.state }),
+      })
+    );
+  });
+
   it('Provides a function to update the index at each step', () => {
     const rendering = jest.fn();
     const makeWidget = connectSortBy(rendering);
