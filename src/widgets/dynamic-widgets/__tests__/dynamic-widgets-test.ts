@@ -401,7 +401,7 @@ describe('dynamicWidgets()', () => {
         dynamicWidgets({
           container: rootContainer,
           transformItems(_items, { results }) {
-            return results!.userData[0].MOCK_facetOrder;
+            return results.userData[0].MOCK_facetOrder;
           },
           fallbackWidget: ({ container, attribute }) =>
             refinementList({

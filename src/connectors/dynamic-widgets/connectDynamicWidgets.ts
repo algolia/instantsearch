@@ -1,3 +1,5 @@
+import type { SearchResults } from 'algoliasearch-helper';
+
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -35,7 +37,7 @@ export type DynamicWidgetsConnectorParams = {
    * Function to transform the items to render.
    * The function also exposes the full search response.
    */
-  transformItems?: TransformItems<string>;
+  transformItems?: TransformItems<string, { results: SearchResults }>;
 
   /**
    * To prevent unneeded extra network requests when widgets mount or unmount,

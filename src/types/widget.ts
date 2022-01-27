@@ -272,7 +272,7 @@ export type Widget<
  */
 export type TransformItems<
   TItem,
-  TMetaData = {
+  TMetadata = {
     results?: SearchResults;
   }
 > = (items: TItem[], metadata: TMetadata) => TItem[];
