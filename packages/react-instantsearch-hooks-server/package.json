@@ -15,7 +15,7 @@
   },
   "sideEffects": false,
   "license": "MIT",
-  "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
+  "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/",
   "repository": {
     "type": "git",
     "url": "https://github.com/algolia/react-instantsearch"
