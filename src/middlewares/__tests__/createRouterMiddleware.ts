@@ -4,7 +4,44 @@ import instantsearch from '../../index.es';
 import { searchBox } from '../../widgets';
 
 describe('router', () => {
-  it('sets initial ui state after reading URL', async () => {
+  it('sets initial ui state by reading URL before start', () => {
+    const searchClient = createSearchClient();
+    const search = instantsearch({
+      indexName: 'my-index',
+      searchClient,
+      initialUiState: {
+        'other-index': { query: 'dogs' },
+      },
+      routing: {
+        router: {
+          onUpdate: () => {},
+          read: () => {
+            return {
+              'my-index': {
+                query: 'iPhone',
+              },
+            };
+          },
+          write: () => {},
+          createURL: () => '',
+          dispose: () => {},
+        },
+      },
+    });
+
+    expect(search._initialUiState).toMatchInlineSnapshot(`
+      {
+        "my-index": {
+          "query": "iPhone",
+        },
+        "other-index": {
+          "query": "dogs",
+        },
+      }
+    `);
+  });
+
+  it('sets initial ui state by reading URL on subscribe', async () => {
     const searchClient = createSearchClient();
     const search = instantsearch({
       indexName: 'my-index',

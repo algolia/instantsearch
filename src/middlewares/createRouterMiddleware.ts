@@ -62,6 +62,11 @@ export const createRouterMiddleware = <
 
     const initialUiState = instantSearchInstance._initialUiState;
 
+    instantSearchInstance._initialUiState = {
+      ...initialUiState,
+      ...stateMapping.routeToState(router.read()),
+    };
+
     return {
       onStateChange({ uiState }) {
         const routeState = stateMapping.stateToRoute(uiState);
