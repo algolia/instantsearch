@@ -827,21 +827,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
     it('provides search results within transformItems', () => {
       const transformItems = jest.fn((items) => items);
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        facets: ['facet1'],
-      });
       const makeWidget = connectClearRefinements(() => {});
       const widget = makeWidget({
         includedAttributes: ['facet1'],
         transformItems,
       });
 
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        facets: ['facet1'],
+      });
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
       widget.init!(createInitOptions({ helper, state: helper.state }));
       widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
-          ]),
+          results,
           helper,
           state: helper.state,
         })
@@ -849,9 +851,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(transformItems).lastCalledWith(
         expect.anything(),
-        expect.objectContaining({
-          results: expect.objectContaining({ _state: helper.state }),
-        })
+        expect.objectContaining({ results })
       );
     });
 

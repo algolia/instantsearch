@@ -387,13 +387,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     const helper = algoliasearchHelper(createSearchClient(), '');
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse(),
+    ]);
 
     widget.init!(createInitOptions({ helper, state: helper.state }));
     widget.render!(
       createRenderOptions({
-        results: new SearchResults(helper.state, [
-          createSingleSearchResponse(),
-        ]),
+        results,
         helper,
         state: helper.state,
       })
@@ -401,9 +402,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
     expect(transformItems).lastCalledWith(
       expect.anything(),
-      expect.objectContaining({
-        results: expect.objectContaining({ _state: helper.state }),
-      })
+      expect.objectContaining({ results })
     );
   });
 

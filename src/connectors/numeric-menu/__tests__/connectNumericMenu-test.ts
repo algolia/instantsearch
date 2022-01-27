@@ -245,13 +245,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse(),
+    ]);
 
     widget.init!(createInitOptions({ helper, state: helper.state }));
     widget.render!(
       createRenderOptions({
-        results: new SearchResults(helper.state, [
-          createSingleSearchResponse(),
-        ]),
+        results,
         helper,
         state: helper.state,
       })
@@ -259,9 +260,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
     expect(transformItems).lastCalledWith(
       expect.anything(),
-      expect.objectContaining({
-        results: expect.objectContaining({ _state: helper.state }),
-      })
+      expect.objectContaining({ results })
     );
   });
 

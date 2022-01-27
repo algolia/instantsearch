@@ -640,12 +640,13 @@ describe('connectDynamicWidgets', () => {
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
 
       dynamicWidgets.getWidgetRenderState(
         createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
-          ]),
+          results,
           state: helper.state,
           helper,
         })
@@ -653,9 +654,7 @@ describe('connectDynamicWidgets', () => {
 
       expect(transformItems).lastCalledWith(
         expect.anything(),
-        expect.objectContaining({
-          results: expect.objectContaining({ _state: helper.state }),
-        })
+        expect.objectContaining({ results })
       );
     });
 

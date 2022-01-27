@@ -608,12 +608,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         transformItems,
       });
 
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
       widget.init!(createInitOptions({ helper, state: helper.state }));
       widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
-          ]),
+          results,
           state: helper.state,
           helper,
         })
@@ -621,9 +623,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       expect(transformItems).lastCalledWith(
         expect.anything(),
-        expect.objectContaining({
-          results: expect.objectContaining({ _state: helper.state }),
-        })
+        expect.objectContaining({ results })
       );
     });
 
