@@ -58,7 +58,3 @@ shell.cp(
   path.join(__dirname, '../../dist/instantsearch.production.d.ts'),
   path.join(__dirname, '../../dist/instantsearch.development.d.ts')
 );
-shell.cp(
-  path.join(__dirname, '../../dist/instantsearch.production.d.ts'),
-  path.join(__dirname, '../../dist/instantsearch.development.min.d.ts')
-);
