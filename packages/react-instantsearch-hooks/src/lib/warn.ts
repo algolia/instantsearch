@@ -1,3 +1,5 @@
+/* eslint-disable no-console, no-empty */
+
 export const warnCache = {
   current: {},
 };
@@ -22,7 +24,15 @@ export function warn(condition: boolean, message: string) {
     warnCache.current[sanitizedMessage] = true;
     const warning = `[InstantSearch] ${sanitizedMessage}`;
 
-    // eslint-disable-next-line no-console
     console.warn(warning);
+
+    try {
+      // Welcome to debugging InstantSearch.
+      //
+      // This error was thrown as a convenience so that you can find the source
+      // of the warning that appears in the console by enabling "Pause on exceptions"
+      // in your debugger.
+      throw new Error(warning);
+    } catch (error) {}
   }
 }
