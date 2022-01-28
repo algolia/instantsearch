@@ -93,8 +93,12 @@ const connectSortBy: SortByConnector = function connectSortBy(
   };
 
   return (widgetParams) => {
-    const { items, transformItems = ((x) => x) as TransformItems<SortByItem> } =
-      widgetParams || {};
+    const {
+      items,
+      transformItems = ((x) => x) as NonNullable<
+        SortByConnectorParams['transformItems']
+      >,
+    } = widgetParams || {};
 
     if (!Array.isArray(items)) {
       throw new Error(
@@ -167,7 +171,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
 
         return {
           currentRefinement: state.index,
-          options: transformItems(items),
+          options: transformItems(items, { results }),
           refine: connectorState.setIndex,
           hasNoResults: results ? results.nbHits === 0 : true,
           widgetParams,

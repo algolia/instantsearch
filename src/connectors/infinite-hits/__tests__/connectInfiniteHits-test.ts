@@ -565,6 +565,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(secondRenderOptions.results).toEqual(results);
   });
 
+  it('provides search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const makeWidget = connectInfiniteHits(() => {});
+    const widget = makeWidget({
+      transformItems,
+    });
+
+    const helper = algoliasearchHelper(createSearchClient(), '');
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse(),
+    ]);
+
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results,
+        helper,
+        state: helper.state,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({ results })
+    );
+  });
+
   it('transform items after escaping', () => {
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);

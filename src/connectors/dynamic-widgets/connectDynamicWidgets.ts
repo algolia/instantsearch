@@ -1,4 +1,3 @@
-import type { SearchResults } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -6,7 +5,12 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import type { Connector, Widget } from '../../types';
+import type {
+  Connector,
+  TransformItems,
+  TransformItemsMetadata,
+  Widget,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'dynamic-widgets',
@@ -36,10 +40,12 @@ export type DynamicWidgetsConnectorParams = {
    * Function to transform the items to render.
    * The function also exposes the full search response.
    */
-  transformItems?(
-    items: string[],
-    metadata: { results: SearchResults }
-  ): string[];
+  transformItems?: TransformItems<
+    string,
+    Omit<TransformItemsMetadata, 'results'> & {
+      results: NonNullable<TransformItemsMetadata['results']>;
+    }
+  >;
 
   /**
    * To prevent unneeded extra network requests when widgets mount or unmount,

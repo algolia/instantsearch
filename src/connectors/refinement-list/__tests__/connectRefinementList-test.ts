@@ -520,6 +520,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     ]);
   });
 
+  it('Provides search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const makeWidget = connectRefinementList(() => {});
+    const widget = makeWidget({
+      attribute: 'category',
+      transformItems,
+    });
+
+    const helper = jsHelper(createSearchClient(), '');
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse(),
+    ]);
+
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results,
+        helper,
+        state: helper.state,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({ results })
+    );
+  });
+
   it('Provide a function to clear the refinements at each step (or)', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const instantSearchInstance = createInstantSearch();

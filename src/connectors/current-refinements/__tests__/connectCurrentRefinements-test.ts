@@ -601,6 +601,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       );
     });
 
+    it('provides search results within transformItems', () => {
+      const transformItems = jest.fn((items) => items);
+      const customCurrentRefinements = connectCurrentRefinements(() => {});
+      const widget = customCurrentRefinements({
+        transformItems,
+      });
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      widget.init!(createInitOptions({ helper, state: helper.state }));
+      widget.render!(
+        createRenderOptions({
+          results,
+          state: helper.state,
+          helper,
+        })
+      );
+
+      expect(transformItems).lastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ results })
+      );
+    });
+
     it('sort numeric refinements by numeric value', () => {
       const rendering = jest.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);

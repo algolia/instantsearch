@@ -82,7 +82,9 @@ const connectHits: HitsConnector = function connectHits(
   return (widgetParams) => {
     const {
       escapeHTML = true,
-      transformItems = ((items) => items) as TransformItems<Hit>,
+      transformItems = ((items) => items) as NonNullable<
+        HitsConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
     let sendEvent: SendEventForHits;
     let bindEvent: BindEventForHits;
@@ -162,7 +164,8 @@ const connectHits: HitsConnector = function connectHits(
         );
 
         const transformedHits = transformItems(
-          hitsWithAbsolutePositionAndQueryID
+          hitsWithAbsolutePositionAndQueryID,
+          { results }
         );
 
         return {

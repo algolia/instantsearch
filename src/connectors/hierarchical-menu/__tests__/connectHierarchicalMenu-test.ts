@@ -378,6 +378,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
   });
 
+  it('provides search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const makeWidget = connectHierarchicalMenu(() => {});
+    const widget = makeWidget({
+      attributes: ['category', 'subCategory'],
+      transformItems,
+    });
+
+    const helper = algoliasearchHelper(createSearchClient(), '');
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse(),
+    ]);
+
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results,
+        helper,
+        state: helper.state,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({ results })
+    );
+  });
+
   describe('dispose', () => {
     it('does not throw without the unmount function', () => {
       const rendering = jest.fn();

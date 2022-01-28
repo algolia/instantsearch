@@ -465,6 +465,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     );
   });
 
+  it('provides search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const widget = makeWidget({
+      attribute: 'category',
+      transformItems,
+    });
+
+    const helper = jsHelper(createSearchClient(), '');
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse(),
+    ]);
+
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results,
+        helper,
+        state: helper.state,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({ results })
+    );
+  });
+
   it('does not throw without the unmount function', () => {
     const widget = connectMenu(() => {})({
       attribute: 'category',

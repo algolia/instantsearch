@@ -123,8 +123,9 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
   return (widgetParams) => {
     const {
       items: userItems,
-      transformItems = ((items) =>
-        items) as TransformItems<HitsPerPageRenderStateItem>,
+      transformItems = ((items) => items) as NonNullable<
+        HitsPerPageConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
 
     if (!Array.isArray(userItems)) {
@@ -259,7 +260,7 @@ You may want to add another entry to the \`items\` option with this value.`
 
       getWidgetRenderState({ state, results, createURL, helper }) {
         return {
-          items: transformItems(normalizeItems(state)),
+          items: transformItems(normalizeItems(state), { results }),
           refine: connectorState.getRefine(helper),
           createURL: connectorState.createURLFactory({ state, createURL }),
           hasNoResults: results ? results.nbHits === 0 : true,

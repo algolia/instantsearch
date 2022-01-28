@@ -310,6 +310,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         widgetParams: { transformItems },
       });
     });
+
+    it('provides search results within transformItems', () => {
+      const transformItems = jest.fn((items) => items);
+      const makeWidget = connectQueryRules(() => {});
+      const widget = makeWidget({
+        transformItems,
+      });
+
+      const helper = createFakeHelper();
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      widget.init!(createInitOptions({ helper, state: helper.state }));
+      widget.render!(
+        createRenderOptions({
+          results,
+          helper,
+          state: helper.state,
+        })
+      );
+
+      expect(transformItems).lastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ results })
+      );
+    });
   });
 
   describe('getRenderState', () => {

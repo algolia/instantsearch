@@ -112,8 +112,9 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
       attributes,
       separator = ' > ',
       rootPath = null,
-      transformItems = ((items) =>
-        items) as TransformItems<BreadcrumbConnectorParamsItem>,
+      transformItems = ((items) => items) as NonNullable<
+        BreadcrumbConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
 
     if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
@@ -198,7 +199,9 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
             {}
           ) as SearchResults.HierarchicalFacet;
           const data = Array.isArray(facetValues.data) ? facetValues.data : [];
-          const items = transformItems(shiftItemsValues(prepareItems(data)));
+          const items = transformItems(shiftItemsValues(prepareItems(data)), {
+            results,
+          });
 
           return items;
         }

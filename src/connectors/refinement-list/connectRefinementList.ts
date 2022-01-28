@@ -188,8 +188,9 @@ const connectRefinementList: RefinementListConnector =
         showMoreLimit = 20,
         sortBy = DEFAULT_SORT,
         escapeFacetValues = true,
-        transformItems = ((items) =>
-          items) as TransformItems<RefinementListItem>,
+        transformItems = ((items) => items) as NonNullable<
+          RefinementListConnectorParams['transformItems']
+        >,
       } = widgetParams || {};
 
       type ThisWidget = Widget<
@@ -262,7 +263,8 @@ const connectRefinementList: RefinementListConnector =
       ) {
         return (renderOptions: RenderOptions | InitOptions) =>
           (query: string) => {
-            const { instantSearchInstance } = renderOptions;
+            const { instantSearchInstance, results: searchResults } =
+              renderOptions;
             if (query === '' && lastItemsFromMainSearch) {
               // render with previous data from the helper.
               renderFn(
@@ -305,7 +307,8 @@ const connectRefinementList: RefinementListConnector =
                       ...item,
                       value,
                       label: value,
-                    }))
+                    })),
+                    { results: searchResults }
                   );
 
                   renderFn(
@@ -389,7 +392,8 @@ const connectRefinementList: RefinementListConnector =
             });
             facetValues = values && Array.isArray(values) ? values : [];
             items = transformItems(
-              facetValues.slice(0, getLimit()).map(formatItems)
+              facetValues.slice(0, getLimit()).map(formatItems),
+              { results }
             );
 
             const maxValuesPerFacetConfig = state.maxValuesPerFacet;

@@ -177,8 +177,9 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
         showMore = false,
         showMoreLimit = 20,
         sortBy = DEFAULT_SORT,
-        transformItems = ((items) =>
-          items) as TransformItems<HierarchicalMenuItem>,
+        transformItems = ((items) => items) as NonNullable<
+          HierarchicalMenuConnectorParams['transformItems']
+        >,
       } = widgetParams || {};
 
       if (
@@ -361,7 +362,9 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             canToggleShowMore =
               showMore && (isShowingMore || !hasExhaustiveItems);
 
-            items = transformItems(_prepareFacetValues(facetItems));
+            items = transformItems(_prepareFacetValues(facetItems), {
+              results,
+            });
           }
 
           return {

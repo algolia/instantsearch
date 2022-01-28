@@ -173,8 +173,9 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
       const {
         includedAttributes,
         excludedAttributes = ['query'],
-        transformItems = (items: CurrentRefinementsConnectorParamsItem[]) =>
-          items,
+        transformItems = ((items) => items) as NonNullable<
+          CurrentRefinementsConnectorParams['transformItems']
+        >,
       } = widgetParams || {};
 
       return {
@@ -224,7 +225,8 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
                   helper,
                   includedAttributes,
                   excludedAttributes,
-                })
+                }),
+                { results }
               );
             }
 
@@ -238,7 +240,8 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
                     helper: scopedResult.helper,
                     includedAttributes,
                     excludedAttributes,
-                  })
+                  }),
+                  { results }
                 )
               );
             }, []);

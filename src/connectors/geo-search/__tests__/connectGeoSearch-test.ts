@@ -396,6 +396,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
   });
 
+  it('expect to provide search results within transformItems', () => {
+    const transformItems = jest.fn((items) => items);
+    const customGeoSearch = connectGeoSearch(() => {});
+    const widget = customGeoSearch({
+      transformItems,
+    });
+
+    const helper = createFakeHelper();
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse(),
+    ]);
+
+    widget.init!(createInitOptions({ helper, state: helper.state }));
+    widget.render!(
+      createRenderOptions({
+        results,
+        helper,
+      })
+    );
+
+    expect(transformItems).lastCalledWith(
+      expect.anything(),
+      expect.objectContaining({ results })
+    );
+  });
+
   it('expect to reset the map state when position changed', () => {
     const render = jest.fn();
     const unmount = jest.fn();

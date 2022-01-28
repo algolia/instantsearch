@@ -159,7 +159,9 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
   return (widgetParams) => {
     const {
       enableRefineOnMapMove = true,
-      transformItems = ((items) => items) as TransformItems<GeoHit>,
+      transformItems = ((items) => items) as NonNullable<
+        GeoSearchConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
 
     const widgetState = {
@@ -325,7 +327,10 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
         const state = helper.state;
 
         const items = results
-          ? transformItems(results.hits.filter((hit) => hit._geoloc))
+          ? transformItems(
+              results.hits.filter((hit) => hit._geoloc),
+              { results }
+            )
           : [];
 
         if (!sendEvent) {

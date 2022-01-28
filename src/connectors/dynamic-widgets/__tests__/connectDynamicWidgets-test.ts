@@ -7,7 +7,10 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { wait } from '../../../../test/utils/wait';
-import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import {
   createMultiSearchResponse,
   createSingleSearchResponse,
@@ -15,6 +18,7 @@ import {
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -626,6 +630,32 @@ describe('connectDynamicWidgets', () => {
         attributesToRender: ['test2', 'test1'],
         widgetParams,
       });
+    });
+
+    it('provides search results within transformItems', () => {
+      const transformItems = jest.fn((items) => items);
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
+        transformItems,
+        widgets: [],
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      dynamicWidgets.getWidgetRenderState(
+        createRenderOptions({
+          results,
+          state: helper.state,
+          helper,
+        })
+      );
+
+      expect(transformItems).lastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ results })
+      );
     });
 
     it('warns when facets is unset and more than 20 items are returned from attributesToDisplay', () => {
