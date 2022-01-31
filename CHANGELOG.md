@@ -1,3 +1,17 @@
+# [4.38.0](https://github.com/algolia/instantsearch.js/compare/v4.37.3...v4.38.0) (2022-01-28)
+
+
+### Bug Fixes
+
+* **typescript:** remove non-existing UMD type definition ([#5001](https://github.com/algolia/instantsearch.js/issues/5001)) ([c234374](https://github.com/algolia/instantsearch.js/commit/c234374a1f5333f6625980c45fa0833a8c130257))
+
+
+### Features
+
+* **connectors:** expose search results to `transformItems` when available ([#5000](https://github.com/algolia/instantsearch.js/issues/5000)) ([58c2651](https://github.com/algolia/instantsearch.js/commit/58c26517aad916ce49b474458e3411ff7ef5497a))
+
+
+
 ## [4.37.3](https://github.com/algolia/instantsearch.js/compare/v4.37.2...v4.37.3) (2022-01-25)
 
 
