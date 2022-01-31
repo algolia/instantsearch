@@ -56,7 +56,10 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
 
     const Extended = componentInstance.$vnode
       ? componentInstance.$vnode.componentOptions.Ctor.extend(options)
-      : Vue2.component(Object.assign({}, componentInstance.$options, options));
+      : Vue2.component(
+          options.name,
+          Object.assign({}, componentInstance.$options, options)
+        );
 
     app = new Extended({
       propsData: componentInstance.$options.propsData,
