@@ -1,3 +1,12 @@
+## [4.3.2](https://github.com/algolia/vue-instantsearch/compare/v4.3.1...v4.3.2) (2022-01-31)
+
+
+### Bug Fixes
+
+* **ssr:** extend component correctly if at root (vue2) ([#1104](https://github.com/algolia/vue-instantsearch/issues/1104)) ([08b7124](https://github.com/algolia/vue-instantsearch/commit/08b71244c3bf7cf2cbd8183a671d1a589af75798)), closes [#1054](https://github.com/algolia/vue-instantsearch/issues/1054)
+
+
+
 ## [4.3.1](https://github.com/algolia/vue-instantsearch/compare/v4.3.0...v4.3.1) (2022-01-11)
 
 
