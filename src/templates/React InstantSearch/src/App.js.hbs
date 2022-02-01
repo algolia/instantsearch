@@ -7,9 +7,11 @@ import {
   {{#if flags.dynamicWidgets}}
   Configure,
   DynamicWidgets,
-  {{/if}}
+  RefinementList,
+  {{else}}
   {{#if attributesForFaceting}}
   RefinementList,
+  {{/if}}
   {{/if}}
   Pagination,
   {{#if attributesToDisplay}}
