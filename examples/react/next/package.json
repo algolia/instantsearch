@@ -1,6 +1,6 @@
 {
   "name": "example-next",
-  "version": "6.21.1",
+  "version": "6.22.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -22,6 +22,6 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-fast-compare": "3.0.1",
-    "react-instantsearch-dom": "6.21.1"
+    "react-instantsearch-dom": "6.22.0"
   }
 }

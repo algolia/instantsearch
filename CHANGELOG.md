@@ -1,3 +1,17 @@
+# [6.22.0](https://github.com/algolia/react-instantsearch/compare/v6.21.1...v6.22.0) (2022-02-01)
+
+
+### Bug Fixes
+
+* **hooks:** enable pause on exceptions on warning ([#3283](https://github.com/algolia/react-instantsearch/issues/3283)) ([ce3a6c3](https://github.com/algolia/react-instantsearch/commit/ce3a6c3f2700a05ae54a91278fd23fa64a97d733))
+
+
+### Features
+
+* **hooks:** introduce `useBreadcrumb()` ([#3245](https://github.com/algolia/react-instantsearch/issues/3245)) ([5bfbaaf](https://github.com/algolia/react-instantsearch/commit/5bfbaaf746e7632968ac9b30b73357bcb0b37e91))
+
+
+
 ## [6.21.1](https://github.com/algolia/react-instantsearch/compare/v6.21.0...v6.21.1) (2022-01-25)
 
 
