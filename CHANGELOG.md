@@ -1,3 +1,14 @@
+## [5.1.2](https://github.com/algolia/create-instantsearch-app/compare/5.1.1...5.1.2) (2022-02-02)
+
+
+### Bug Fixes
+
+* **angular:** remove @types/algoliasearch dep ([#553](https://github.com/algolia/create-instantsearch-app/issues/553)) ([b280725](https://github.com/algolia/create-instantsearch-app/commit/b2807252dff74f79d887c746327f03f28f53840d))
+* **angular:** update angular packages ([#555](https://github.com/algolia/create-instantsearch-app/issues/555)) ([9987264](https://github.com/algolia/create-instantsearch-app/commit/9987264f32582721ac2a8e7f3348fa3d54be3975))
+* **React InstantSearch:** import RefinementList if DynamicWidgets used ([#554](https://github.com/algolia/create-instantsearch-app/issues/554)) ([402ec63](https://github.com/algolia/create-instantsearch-app/commit/402ec63261db8a60aa6927e84ec46d45eb27fef3))
+
+
+
 ## [5.1.1](https://github.com/algolia/create-instantsearch-app/compare/5.1.0...5.1.1) (2022-01-03)
 
 
