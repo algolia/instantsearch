@@ -45,6 +45,7 @@ describe('routing', () => {
 
     // Check URL has been updated
     await wait(writeWait);
+    expect(window.location.pathname).toEqual('/');
     expect(window.location.search).toEqual(
       `?${encodeURI('indexName[query]=Apple')}`
     );
@@ -55,6 +56,7 @@ describe('routing', () => {
 
     // Check URL has been cleaned
     await wait(writeWait);
+    expect(window.location.pathname).toEqual('/');
     expect(window.location.search).toEqual('');
     expect(pushState).toHaveBeenCalledTimes(2);
   });

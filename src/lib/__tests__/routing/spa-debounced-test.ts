@@ -58,8 +58,8 @@ describe('routing', () => {
 
     // Check URL has been updated to new page
     await wait(writeWait);
-    expect(window.location.search).toEqual('');
     expect(window.location.pathname).toEqual('/');
+    expect(window.location.search).toEqual('');
     expect(pushState).toHaveBeenCalledTimes(2);
 
     // Navigate to a new page (like a router would do)
@@ -67,8 +67,8 @@ describe('routing', () => {
 
     // Check URL has been updated to new page
     await wait(writeWait);
-    expect(window.location.search).toEqual('');
     expect(window.location.pathname).toEqual('/about');
+    expect(window.location.search).toEqual('');
     expect(pushState).toHaveBeenCalledTimes(3);
 
     // Go back to previous page without the refinement
@@ -76,18 +76,18 @@ describe('routing', () => {
 
     // Check URL has been updated to previous page
     await wait(writeWait);
-    expect(window.location.search).toEqual('');
     expect(window.location.pathname).toEqual('/');
+    expect(window.location.search).toEqual('');
 
     // Go back to previous page with the refinement
     window.history.back();
 
     // Check URL has been updated to previous page
     await wait(writeWait);
+    expect(window.location.pathname).toEqual('/');
     expect(window.location.search).toEqual(
       `?${encodeURI('indexName[query]=Apple')}`
     );
-    expect(window.location.pathname).toEqual('/');
     expect(pushState).toHaveBeenCalledTimes(3);
   });
 });

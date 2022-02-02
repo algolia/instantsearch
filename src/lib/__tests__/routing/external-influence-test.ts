@@ -13,12 +13,12 @@ describe('routing', () => {
     jest.clearAllMocks();
   });
 
-  test('SPA (Single Page App) use case: URL should not be cleaned', async () => {
+  test('Something else updates the URL: IS.js stay responsive', async () => {
     // --- Flow
     // Initial: '/'
     // Refine: '/?indexName[query]=Apple'
-    // Route change: '/about'
-    // Back: '/?indexName[query]=Apple'
+    // External influence: '/about'
+    // Refine: '/about?indexName[query]=Samsung'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -51,9 +51,6 @@ describe('routing', () => {
     );
     expect(pushState).toHaveBeenCalledTimes(1);
 
-    // Trigger a dispose
-    search.dispose();
-
     // Navigate to a new page (like a router would do)
     window.history.pushState({}, '', '/about');
 
@@ -63,14 +60,14 @@ describe('routing', () => {
     expect(window.location.search).toEqual('');
     expect(pushState).toHaveBeenCalledTimes(2);
 
-    // Go back to previous page
-    window.history.back();
+    // Trigger an update by refining
+    search.renderState.indexName!.searchBox!.refine('Samsung');
 
     // Check URL has been updated to previous page
     await wait(writeWait);
-    expect(window.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/about');
     expect(window.location.search).toEqual(
-      `?${encodeURI('indexName[query]=Apple')}`
+      `?${encodeURI('indexName[query]=Samsung')}`
     );
   });
 });

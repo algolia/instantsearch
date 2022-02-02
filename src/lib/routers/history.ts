@@ -78,6 +78,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   private shouldPushState: boolean = true;
 
+  private isSubscribed: boolean = false;
+
   /**
    * Indicates the window.history.length before the last call to
    * window.history.pushState (called in `write`).
@@ -103,6 +105,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this._createURL = createURL;
     this.parseURL = parseURL;
     this.getLocation = getLocation;
+
+    this.isSubscribed = true;
 
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -133,9 +137,13 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
 
       this.writeTimer = setTimeout(() => {
         setWindowTitle(title);
+
         if (
           this.shouldPushState &&
-          this.lastHistoryLength === window.history.length
+          (this.isSubscribed ||
+            // We do want to write if the last write was from InstantSearch
+            // Unlike a SPA, where it would have last written
+            this.lastHistoryLength === window.history.length)
         ) {
           window.history.pushState(routeState, title || '', url);
           this.lastHistoryLength = window.history.length;
@@ -194,6 +202,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Removes the event listener and cleans up the URL.
    */
   public dispose(): void {
+    this.isSubscribed = false;
+
     safelyRunOnBrowser(({ window }) => {
       if (this._onPopState) {
         window.removeEventListener('popstate', this._onPopState);
