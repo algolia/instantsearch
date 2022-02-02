@@ -149,11 +149,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       // At initial load, the state is read from the URL without update.
       // Therefore the state object is not available.
       // In this case, we fallback and read the URL.
-      if (!routeState) {
-        callback(this.read());
-      } else {
-        callback(routeState);
-      }
+      // if (!routeState) {
+      callback(this.read());
+      // } else {
+      //   callback(routeState);
+      // }
     };
 
     safelyRunOnBrowser(({ window }) => {
