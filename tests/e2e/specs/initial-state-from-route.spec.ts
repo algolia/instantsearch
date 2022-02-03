@@ -93,6 +93,8 @@ describe('InstantSearch - State and route', () => {
   });
 
   describe('write', () => {
+    const priceBounds = { lower: 0, upper: 0 };
+
     it('sets "cooktop" as search box value', async () => {
       await browser.setSearchBoxValue('cooktop');
     });
@@ -123,8 +125,11 @@ describe('InstantSearch - State and route', () => {
     });
 
     it('sets lower price to $250 and the upper price to $1250 in the price range', async () => {
-      await browser.dragRangeSliderLowerBoundTo(250);
-      await browser.dragRangeSliderUpperBoundTo(1250);
+      // Depending of the steps calculation there can be a difference between
+      // the wanted value and the actual value of the slider, so we store
+      // the actual value to use it in for subsequent tests
+      priceBounds.lower = await browser.dragRangeSliderLowerBoundTo(250);
+      priceBounds.upper = await browser.dragRangeSliderUpperBoundTo(1250);
     });
 
     it('selects "64 hits per page" in the hits per page select', async () => {
@@ -148,9 +153,8 @@ describe('InstantSearch - State and route', () => {
             searchParams.get('page') === '2' &&
             searchParams.get('brands') === 'Whirlpool' &&
             searchParams.get('rating') === '3' &&
-            /^(23[0-9]|24[0-9]|250):(124[0-9]|1250)$/.test(
-              searchParams.get('price') || ''
-            ) &&
+            searchParams.get('price') ===
+              `${priceBounds.lower}:${priceBounds.upper}` &&
             searchParams.get('sortBy') === 'instant_search_price_asc' &&
             searchParams.get('hitsPerPage') === '64'
           );
