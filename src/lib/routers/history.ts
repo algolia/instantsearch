@@ -78,7 +78,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   private shouldPushState: boolean = true;
 
-  private isSubscribed: boolean = false;
+  /**
+   * Indicates whether the history router is disposed or not.
+   */
+  private isDisposed: boolean = false;
 
   /**
    * Indicates the window.history.length before the last call to
@@ -106,7 +109,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.parseURL = parseURL;
     this.getLocation = getLocation;
 
-    this.isSubscribed = true;
+    this.isDisposed = false;
 
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -140,7 +143,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
 
         if (
           this.shouldPushState &&
-          (this.isSubscribed ||
+          (!this.isDisposed ||
             // We do want to write if the last write was from InstantSearch
             // Unlike a SPA, where it would have last written
             this.lastHistoryLength === window.history.length)
@@ -202,7 +205,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Removes the event listener and cleans up the URL.
    */
   public dispose(): void {
-    this.isSubscribed = false;
+    this.isDisposed = true;
 
     safelyRunOnBrowser(({ window }) => {
       if (this._onPopState) {
