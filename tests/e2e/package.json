@@ -1,6 +1,6 @@
 {
   "name": "instantsearch-e2e-tests",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "End-2-End test suite for InstantSearch",
   "homepage": "https://github.com/algolia/instantsearch-e2e-tests",
   "main": "./index.js",

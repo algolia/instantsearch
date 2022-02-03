@@ -1,3 +1,12 @@
+## [2.0.2](https://github.com/algolia/instantsearch-e2e-tests/compare/v2.0.1...v2.0.2) (2022-02-03)
+
+
+### Bug Fixes
+
+* **spec:** reduce flakiness related to range slider manipulation ([#33](https://github.com/algolia/instantsearch-e2e-tests/issues/33)) ([a008f38](https://github.com/algolia/instantsearch-e2e-tests/commit/a008f38))
+
+
+
 ## [2.0.1](https://github.com/algolia/instantsearch-e2e-tests/compare/v2.0.0...v2.0.1) (2022-01-18)
 
 
