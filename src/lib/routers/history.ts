@@ -109,8 +109,6 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.parseURL = parseURL;
     this.getLocation = getLocation;
 
-    this.isDisposed = false;
-
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
       setWindowTitle(title);
