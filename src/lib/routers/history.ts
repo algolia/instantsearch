@@ -89,7 +89,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * It allows to determine if a `pushState` has been triggered elsewhere,
    * and thus to prevent the `write` method from calling `pushState`.
    */
-  private lastHistoryLength: number = 0;
+  private latestAcknowledgedHistory: number = 0;
 
   /**
    * Initializes a new storage provider that syncs the search state to the URL
@@ -113,7 +113,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       const title = this.windowTitle && this.windowTitle(this.read());
       setWindowTitle(title);
 
-      this.lastHistoryLength = window.history.length;
+      this.latestAcknowledgedHistory = window.history.length;
     });
   }
 
@@ -139,15 +139,18 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       this.writeTimer = setTimeout(() => {
         setWindowTitle(title);
 
-        if (
-          this.shouldPushState &&
-          (!this.isDisposed ||
-            // We do want to write if the last write was from InstantSearch
-            // Unlike a SPA, where it would have last written
-            this.lastHistoryLength === window.history.length)
-        ) {
+        // We do want to `pushState` if:
+        // - the router is not disposed, IS.js needs to update the URL
+        // OR
+        // - the last write was from InstantSearch.js
+        // (unlike a SPA, where it would have last written)
+        const lastPushWasByISAfterDispose =
+          !this.isDisposed ||
+          this.latestAcknowledgedHistory === window.history.length;
+
+        if (this.shouldPushState && lastPushWasByISAfterDispose) {
           window.history.pushState(routeState, title || '', url);
-          this.lastHistoryLength = window.history.length;
+          this.latestAcknowledgedHistory = window.history.length;
         }
         this.shouldPushState = true;
         this.writeTimer = undefined;
