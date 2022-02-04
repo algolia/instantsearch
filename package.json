@@ -104,7 +104,7 @@
     "file-loader": "4.2.0",
     "glob": "7.1.4",
     "html-webpack-plugin": "3.2.0",
-    "instantsearch-e2e-tests": "algolia/instantsearch-e2e-tests#v2.0.1",
+    "instantsearch-e2e-tests": "algolia/instantsearch-e2e-tests#v2.0.2",
     "instantsearch.css": "7.4.5",
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
