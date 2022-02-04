@@ -96,7 +96,7 @@
     "eslint-plugin-jest": "22.3.0",
     "eslint-plugin-prettier": "3.0.0",
     "eslint-plugin-vue": "4.7.1",
-    "instantsearch-e2e-tests": "algolia/instantsearch-e2e-tests#v2.0.1",
+    "instantsearch-e2e-tests": "algolia/instantsearch-e2e-tests#v2.0.2",
     "instantsearch.css": "7.3.1",
     "jest": "23.6.0",
     "jest-serializer-html": "7.1.0",
