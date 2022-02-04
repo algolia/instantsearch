@@ -4,20 +4,17 @@ import historyRouter from '../../routers/history';
 import instantsearch from '../../..';
 import { connectSearchBox } from '../../../connectors';
 
+/* eslint no-lone-blocks: "off" */
+
 const writeDelay = 10;
 const writeWait = 1.5 * writeDelay;
 
-describe('routing', () => {
-  beforeEach(() => {
-    window.history.replaceState({}, '', 'http://localhost/');
-    jest.clearAllMocks();
-  });
-
-  test('Modal use case: dispose is manually called', async () => {
-    // --- Flow
-    // Initial: '/'
-    // Refine: '/?indexName[query]=Apple'
-    // Dispose: '/'
+describe('routing with no navigation', () => {
+  test('cleans the URL when InstantSearch is disposed within the same page', async () => {
+    // -- Flow
+    // 1. Initial: '/'
+    // 2. Refine: '/?indexName[query]=Apple'
+    // 3. Dispose: '/'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -31,33 +28,36 @@ describe('routing', () => {
       },
     });
 
-    search.addWidgets([connectSearchBox(() => {})({})]);
+    // 1. Initial: '/'
+    {
+      search.addWidgets([connectSearchBox(() => {})({})]);
+      search.start();
 
-    search.start();
+      await wait(writeWait);
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(0);
+    }
 
-    // Check URL has been initialized
-    await wait(writeWait);
-    expect(window.location.search).toEqual('');
-    expect(pushState).toHaveBeenCalledTimes(0);
+    // 2. Refine: '/?indexName[query]=Apple'
+    {
+      search.renderState.indexName!.searchBox!.refine('Apple');
 
-    // Trigger an update by refining
-    search.renderState.indexName!.searchBox!.refine('Apple');
+      await wait(writeWait);
+      expect(window.location.pathname).toEqual('/');
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(1);
+    }
 
-    // Check URL has been updated
-    await wait(writeWait);
-    expect(window.location.pathname).toEqual('/');
-    expect(window.location.search).toEqual(
-      `?${encodeURI('indexName[query]=Apple')}`
-    );
-    expect(pushState).toHaveBeenCalledTimes(1);
+    // 3. Dispose: '/'
+    {
+      search.dispose();
 
-    // Trigger a dispose (modal closed, for example)
-    search.dispose();
-
-    // Check URL has been cleaned
-    await wait(writeWait);
-    expect(window.location.pathname).toEqual('/');
-    expect(window.location.search).toEqual('');
-    expect(pushState).toHaveBeenCalledTimes(2);
+      await wait(writeWait);
+      expect(window.location.pathname).toEqual('/');
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(2);
+    }
   });
 });

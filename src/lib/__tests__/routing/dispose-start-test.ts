@@ -3,22 +3,27 @@ import { wait } from '../../../../test/utils/wait';
 import historyRouter from '../../routers/history';
 import instantsearch from '../../..';
 import { connectSearchBox } from '../../../connectors';
+import type InstantSearch from '../../InstantSearch';
 
 /* eslint no-lone-blocks: "off" */
 
 const writeDelay = 10;
 const writeWait = 1.5 * writeDelay;
 
-describe('routing using `replaceState`', () => {
-  // We can't assert whether another router did update the URL
-  // So there's no way to prevent `write` after `dispose`
-  test('cleans the URL after navigating', async () => {
+const addWidgetsAndStart = (search: InstantSearch) => {
+  search.addWidgets([connectSearchBox(() => {})({})]);
+  search.start();
+};
+
+describe('routing with `dispose` and `start`', () => {
+  test('URL is updated after a `dispose` and a `start`', async () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/about'
-    // 4. Route change (with `replaceState`): '/about'
-    // 5. Back: '/about'
+    // 3. Dispose: '/'
+    // 4. Refine: '/'
+    // 5. Start: '/'
+    // 6. Refine: '/?indexName[query]=Apple'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -34,8 +39,7 @@ describe('routing using `replaceState`', () => {
 
     // 1. Initial: '/'
     {
-      search.addWidgets([connectSearchBox(() => {})({})]);
-      search.start();
+      addWidgetsAndStart(search);
 
       await wait(writeWait);
       expect(window.location.search).toEqual('');
@@ -53,31 +57,42 @@ describe('routing using `replaceState`', () => {
       expect(pushState).toHaveBeenCalledTimes(1);
     }
 
-    // 3. Dispose: '/about'
-    // 4. Route change (with `replaceState`): '/about'
+    // 3. Dispose: '/'
     {
       search.dispose();
-      window.history.replaceState({}, '', '/about');
 
-      // Asserting `replaceState` call
-      expect(window.location.pathname).toEqual('/about');
-      expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(1);
-
-      // Asserting `dispose` calling `pushState`
       await wait(writeWait);
-      expect(window.location.pathname).toEqual('/about');
       expect(window.location.search).toEqual('');
       expect(pushState).toHaveBeenCalledTimes(2);
     }
 
-    // 5. Back: '/about'
+    // 4. Refine: '/'
     {
-      window.history.back();
+      search.renderState.indexName!.searchBox!.refine('Apple');
 
       await wait(writeWait);
-      expect(window.location.pathname).toEqual('/about');
       expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(2);
+    }
+
+    // 5. Start: '/'
+    {
+      addWidgetsAndStart(search);
+
+      await wait(writeWait);
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(2);
+    }
+
+    // 6. Refine: '/?indexName[query]=Apple'
+    {
+      search.renderState.indexName!.searchBox!.refine('Samsung');
+
+      await wait(writeWait);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Samsung')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(3);
     }
   });
 });

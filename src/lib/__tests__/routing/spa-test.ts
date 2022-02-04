@@ -4,21 +4,18 @@ import historyRouter from '../../routers/history';
 import instantsearch from '../../..';
 import { connectSearchBox } from '../../../connectors';
 
+/* eslint no-lone-blocks: "off" */
+
 const writeDelay = 10;
 const writeWait = 1.5 * writeDelay;
 
-describe('routing', () => {
-  beforeEach(() => {
-    window.history.replaceState({}, '', 'http://localhost/');
-    jest.clearAllMocks();
-  });
-
-  test('SPA (Single Page App) use case: URL should not be cleaned', async () => {
-    // --- Flow
-    // Initial: '/'
-    // Refine: '/?indexName[query]=Apple'
-    // Route change: '/about'
-    // Back: '/?indexName[query]=Apple'
+describe('routing with third-party client-side router', () => {
+  test('does not clean the URL after navigating', async () => {
+    // -- Flow
+    // 1. Initial: '/'
+    // 2. Refine: '/?indexName[query]=Apple'
+    // 3. Navigate: '/about'
+    // 4. Back: '/?indexName[query]=Apple'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -32,45 +29,47 @@ describe('routing', () => {
       },
     });
 
-    search.addWidgets([connectSearchBox(() => {})({})]);
+    // 1. Initial: '/'
+    {
+      search.addWidgets([connectSearchBox(() => {})({})]);
+      search.start();
 
-    search.start();
+      await wait(writeWait);
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(0);
+    }
 
-    // Check URL has been initialized
-    await wait(writeWait);
-    expect(window.location.search).toEqual('');
-    expect(pushState).toHaveBeenCalledTimes(0);
+    // 2. Refine: '/?indexName[query]=Apple'
+    {
+      search.renderState.indexName!.searchBox!.refine('Apple');
 
-    // Trigger an update by refining
-    search.renderState.indexName!.searchBox!.refine('Apple');
+      await wait(writeWait);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(1);
+    }
 
-    // Check URL has been updated
-    await wait(writeWait);
-    expect(window.location.search).toEqual(
-      `?${encodeURI('indexName[query]=Apple')}`
-    );
-    expect(pushState).toHaveBeenCalledTimes(1);
+    // 3. Navigate: '/about'
+    {
+      search.dispose();
+      window.history.pushState({}, '', '/about');
 
-    // Trigger a dispose
-    search.dispose();
+      await wait(writeWait);
+      expect(window.location.pathname).toEqual('/about');
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(2);
+    }
 
-    // Navigate to a new page (like a router would do)
-    window.history.pushState({}, '', '/about');
+    // 4. Back to previous page
+    {
+      window.history.back();
 
-    // Check URL has been updated to new page
-    await wait(writeWait);
-    expect(window.location.pathname).toEqual('/about');
-    expect(window.location.search).toEqual('');
-    expect(pushState).toHaveBeenCalledTimes(2);
-
-    // Go back to previous page
-    window.history.back();
-
-    // Check URL has been updated to previous page
-    await wait(writeWait);
-    expect(window.location.pathname).toEqual('/');
-    expect(window.location.search).toEqual(
-      `?${encodeURI('indexName[query]=Apple')}`
-    );
+      await wait(writeWait);
+      expect(window.location.pathname).toEqual('/');
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+    }
   });
 });
