@@ -15,8 +15,8 @@ const addWidgetsAndStart = (search: InstantSearch) => {
   search.start();
 };
 
-describe('routing with `dispose` and `start`', () => {
-  test('URL is updated after a `dispose` and a `start`', async () => {
+describe('routing back and forth to an InstantSearch instance', () => {
+  test('updates the URL after the instance is disposed then restarted', async () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
