@@ -79,6 +79,19 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private shouldPushState: boolean = true;
 
   /**
+   * Indicates whether the history router is disposed or not.
+   */
+  private isDisposed: boolean = false;
+
+  /**
+   * Indicates the window.history.length before the last call to
+   * window.history.pushState (called in `write`).
+   * It allows to determine if a `pushState` has been triggered elsewhere,
+   * and thus to prevent the `write` method from calling `pushState`.
+   */
+  private latestAcknowledgedHistory: number = 0;
+
+  /**
    * Initializes a new storage provider that syncs the search state to the URL
    * using web APIs (`window.location.pushState` and `onpopstate` event).
    */
@@ -96,9 +109,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.parseURL = parseURL;
     this.getLocation = getLocation;
 
-    safelyRunOnBrowser(() => {
+    safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
       setWindowTitle(title);
+
+      this.latestAcknowledgedHistory = window.history.length;
     });
   }
 
@@ -123,8 +138,19 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
 
       this.writeTimer = setTimeout(() => {
         setWindowTitle(title);
-        if (this.shouldPushState) {
+
+        // We do want to `pushState` if:
+        // - the router is not disposed, IS.js needs to update the URL
+        // OR
+        // - the last write was from InstantSearch.js
+        // (unlike a SPA, where it would have last written)
+        const lastPushWasByISAfterDispose =
+          !this.isDisposed ||
+          this.latestAcknowledgedHistory === window.history.length;
+
+        if (this.shouldPushState && lastPushWasByISAfterDispose) {
           window.history.pushState(routeState, title || '', url);
+          this.latestAcknowledgedHistory = window.history.length;
         }
         this.shouldPushState = true;
         this.writeTimer = undefined;
@@ -180,6 +206,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Removes the event listener and cleans up the URL.
    */
   public dispose(): void {
+    this.isDisposed = true;
+
     safelyRunOnBrowser(({ window }) => {
       if (this._onPopState) {
         window.removeEventListener('popstate', this._onPopState);
