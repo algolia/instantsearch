@@ -1,3 +1,12 @@
+## [4.38.1](https://github.com/algolia/instantsearch.js/compare/v4.38.0...v4.38.1) (2022-02-08)
+
+
+### Bug Fixes
+
+* **routing:** fix history router based on history length ([#5004](https://github.com/algolia/instantsearch.js/issues/5004)) ([40541af](https://github.com/algolia/instantsearch.js/commit/40541af5c8face0e32a1ec3a4665a8387d89c626))
+
+
+
 # [4.38.0](https://github.com/algolia/instantsearch.js/compare/v4.37.3...v4.38.0) (2022-01-28)
 
 
