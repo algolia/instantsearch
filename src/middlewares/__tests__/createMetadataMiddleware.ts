@@ -13,8 +13,11 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Global {
-      navigator: {
-        userAgent: string;
+      navigator?: {
+        userAgent?: string;
+        // Deprecated property, but still used in React Native
+        // https://github.com/facebook/react-native/blob/8bd3edec88148d0ab1f225d2119435681fbbba33/Libraries/Core/setUpNavigator.js
+        product?: string;
       };
       window: Window;
     }
@@ -22,6 +25,7 @@ declare global {
 }
 
 const { window } = global;
+
 Object.defineProperty(
   window.navigator,
   'userAgent',
@@ -29,10 +33,27 @@ Object.defineProperty(
     get() {
       return value;
     },
-    set(v: string) {
-      value = v;
+    // TypeScript infers from the namespace, this isn't used.
+    // @ts-ignore
+    set(newValue) {
+      value = newValue;
     },
   }))(window.navigator.userAgent)
+);
+
+Object.defineProperty(
+  window.navigator,
+  'product',
+  ((value) => ({
+    get() {
+      return value;
+    },
+    // TypeScript infers from the namespace, this isn't used.
+    // @ts-ignore
+    set(newValue) {
+      value = newValue;
+    },
+  }))(window.navigator.product)
 );
 
 const defaultUserAgent =
@@ -46,16 +67,37 @@ describe('createMetadataMiddleware', () => {
 
   describe('metadata disabled', () => {
     it('does not enable on normal user agent', () => {
-      global.navigator.userAgent = defaultUserAgent;
+      global.navigator!.userAgent = defaultUserAgent;
 
       expect(isMetadataEnabled()).toBe(false);
+
+      global.window = window;
     });
 
     it("does not enable when there's no window", () => {
-      global.navigator.userAgent = algoliaUserAgent;
-
       // @ts-expect-error
       delete global.window;
+
+      createMetadataMiddleware();
+
+      expect(isMetadataEnabled()).toBe(false);
+
+      global.window = window;
+    });
+
+    it("does not enable when there's a window but no navigator", () => {
+      global.navigator = undefined;
+
+      createMetadataMiddleware();
+
+      expect(isMetadataEnabled()).toBe(false);
+
+      global.window = window;
+    });
+
+    it("does not enable when navigator is different from browser's (React Native)", () => {
+      global.navigator!.product = 'ReactNative';
+      global.navigator!.userAgent = undefined;
 
       createMetadataMiddleware();
 
@@ -67,7 +109,7 @@ describe('createMetadataMiddleware', () => {
 
   describe('metadata enabled', () => {
     beforeEach(() => {
-      global.navigator.userAgent = algoliaUserAgent;
+      global.navigator!.userAgent = algoliaUserAgent;
     });
 
     it('metadata enabled returns true', () => {
