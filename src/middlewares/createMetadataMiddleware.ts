@@ -70,7 +70,8 @@ function extractPayload(
 
 export function isMetadataEnabled() {
   return safelyRunOnBrowser(
-    ({ window }) => window.navigator.userAgent.indexOf('Algolia Crawler') > -1,
+    ({ window }) =>
+      window.navigator?.userAgent?.indexOf('Algolia Crawler') > -1,
     { fallback: () => false }
   );
 }
