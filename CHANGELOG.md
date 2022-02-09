@@ -4,7 +4,7 @@
 ### Bug Fixes
 
 * **routing:** fix history router based on history length ([#5004](https://github.com/algolia/instantsearch.js/issues/5004)) ([40541af](https://github.com/algolia/instantsearch.js/commit/40541af5c8face0e32a1ec3a4665a8387d89c626))
-
+* **metadata:** ensure safe user agent detection ([#5009](https://github.com/algolia/instantsearch.js/pull/5009) [15a6a9d](https://github.com/algolia/instantsearch.js/commit/15a6a9d10ee512fab6884696bc59bedea13bd1b3))
 
 
 # [4.38.0](https://github.com/algolia/instantsearch.js/compare/v4.37.3...v4.38.0) (2022-01-28)
