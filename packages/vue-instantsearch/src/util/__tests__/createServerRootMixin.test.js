@@ -660,6 +660,60 @@ Array [
         await renderToString(wrapper);
       });
 
+      it('forwards nuxt', async () => {
+        const searchClient = createFakeClient();
+
+        let nuxt = 0;
+        // every time the function gets called, we get a different "nuxt"
+        // this can be used to assert both "nuxt" objects are equal
+        const getNuxtCounter = () => ++nuxt;
+
+        // there are two renders of App, each with an assertion
+        expect.assertions(2);
+
+        const App = {
+          mixins: [
+            {
+              beforeCreate() {
+                this.$nuxt = getNuxtCounter();
+              },
+            },
+            forceIsServerMixin,
+            createServerRootMixin({
+              searchClient,
+              indexName: 'hello',
+            }),
+          ],
+          data() {
+            expect(this.$nuxt).toEqual(1);
+            return {};
+          },
+          render: renderCompat(h =>
+            h(InstantSearchSsr, {}, [
+              h(Configure, {
+                attrs: {
+                  hitsPerPage: 100,
+                },
+              }),
+              h(SearchBox),
+            ])
+          ),
+          serverPrefetch() {
+            return this.instantsearch.findResultsState({
+              component: this,
+              renderToString,
+            });
+          },
+        };
+
+        const wrapper = createSSRApp({
+          mixins: [forceIsServerMixin],
+          render: renderCompat(h => h(App)),
+        });
+
+        await renderToString(wrapper);
+      });
+
       it('searches only once', async () => {
         const searchClient = createFakeClient();
         const app = {

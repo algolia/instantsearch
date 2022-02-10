@@ -41,7 +41,7 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
 
   if (isVue3) {
     const appOptions = Object.assign({}, componentInstance.$options, options);
-    appOptions.mixins = [...appOptions.mixins, ...mixins];
+    appOptions.mixins = [...mixins, ...appOptions.mixins];
     app = createSSRApp(appOptions);
     if (componentInstance.$router) {
       app.use(componentInstance.$router);
@@ -104,6 +104,13 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
         app = cloneComponent(component, {
           mixins: [
             {
+              beforeCreate() {
+                if (component.$nuxt) {
+                  // In case of Nuxt (3), we ensure the context is shared between
+                  // the real and cloned component
+                  this.$nuxt = component.$nuxt;
+                }
+              },
               created() {
                 instance = this.instantsearch;
 
