@@ -1,5 +1,5 @@
 import instantsearch from 'instantsearch.js/es';
-import { isVue3, isVue2, Vue2, createSSRApp } from '../util/vue-compat';
+import { isVue3, isVue2, Vue2, createSSRApp } from './vue-compat';
 import { warn } from './warn';
 
 function walkIndex(indexWidget, visit) {

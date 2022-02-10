@@ -28,9 +28,7 @@
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
     "prebuild": "rm -rf vue2 vue3",
-    "build": "yarn build:vue2 && yarn build:vue3",
-    "build:vue2": "./scripts/build-vue2.sh",
-    "build:vue3": "./scripts/build-vue3.sh",
+    "build": "rollup -c",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook:build": "build-storybook -c .storybook -o website/stories",
     "examples:build": "yarn build && ./examples/build.sh",
@@ -66,6 +64,7 @@
     }
   },
   "devDependencies": {
+    "@babel/core": "^7.17.0",
     "@storybook/addon-actions": "3.4.11",
     "@storybook/addon-knobs": "3.4.11",
     "@storybook/addon-options": "3.4.11",
@@ -105,6 +104,7 @@
     "lodash": "4.17.19",
     "prettier": "1.14.3",
     "rollup": "1.32.1",
+    "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-buble": "0.19.6",
     "rollup-plugin-commonjs": "10.0.1",
     "rollup-plugin-filesize": "9.0.0",

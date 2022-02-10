@@ -18,8 +18,8 @@ yarn-error.log
 coverage
 
 # published files
-vue2/
-vue3/
+/vue2/
+/vue3/
 
 # Test output
 /junit

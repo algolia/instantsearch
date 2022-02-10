@@ -1,3 +1,4 @@
+import path from 'path';
 import vueV2 from 'rollup-plugin-vue2';
 import vueV3 from 'rollup-plugin-vue3';
 import buble from 'rollup-plugin-buble';
@@ -7,90 +8,156 @@ import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
-
-if (process.env.VUE_VERSION !== 'vue2' && process.env.VUE_VERSION !== 'vue3') {
-  throw new Error(
-    'The environment variable VUE_VERSION (`vue2` | `vue3`) is required.'
-  );
-}
+import babel from 'rollup-plugin-babel';
+import { extensionResolver } from './scripts/babel-plugin-extension-resolver';
 
 const processEnv = conf => ({
   // parenthesis to avoid syntax errors in places where {} is interpreted as a block
   'process.env': `(${JSON.stringify(conf)})`,
 });
 
-const vuePlugin = process.env.VUE_VERSION === 'vue3' ? vueV3 : vueV2;
-const outputDir = process.env.VUE_VERSION === 'vue3' ? 'vue3' : 'vue2';
-
-const plugins = [
-  vuePlugin({ compileTemplate: true, css: false }),
-  commonjs(),
-  json(),
-  buble({
-    transforms: {
-      dangerousForOf: true,
-    },
-  }),
-  replace(processEnv({ NODE_ENV: 'production' })),
-  terser({
-    sourcemap: true,
-  }),
-  filesize(),
-];
-
-const external = id =>
-  ['algoliasearch-helper', 'instantsearch.js', 'vue', 'mitt'].some(
-    dep => id === dep || id.startsWith(`${dep}/`)
-  );
-
-export default [
-  {
-    input: 'src/instantsearch.js',
-    external,
-    output: [
-      {
-        sourcemap: true,
-        file: `${outputDir}/cjs/index.js`,
-        format: 'cjs',
-        exports: 'named',
-      },
-    ],
-    plugins: [...plugins],
+const createFile = (fileName, content) => ({
+  name: 'inject-package-json',
+  buildEnd() {
+    this.emitFile({
+      type: 'asset',
+      fileName,
+      source: content,
+    });
   },
-  {
-    input: 'src/instantsearch.js',
-    external,
-    output: [
-      {
-        sourcemap: true,
-        dir: `${outputDir}/es`,
-        format: 'es',
-      },
-    ],
-    preserveModules: true,
-    plugins: [...plugins],
+});
+
+const aliasVueCompat = vueVersion => ({
+  name: 'alias-vue-compat',
+  resolveId(source, fileName) {
+    if (source.includes('vue-compat')) {
+      const matchingVueCompatFile = `./index-${vueVersion}.js`;
+
+      const compatFolder = path.resolve(
+        path.dirname(fileName),
+        // source is either './vue-compat' or './vue-compat/index.js'
+        source.replace(/\/index\.js$/, '/')
+      );
+
+      return path.resolve(compatFolder, matchingVueCompatFile);
+    }
+    return null;
   },
-  {
-    input: 'src/instantsearch.umd.js',
-    external: ['vue'],
-    output: [
-      {
-        sourcemap: true,
-        file: `${outputDir}/umd/index.js`,
-        format: 'umd',
-        name: 'VueInstantSearch',
-        exports: 'named',
-        globals: {
-          vue: 'Vue',
+});
+
+function outputs(vueVersion) {
+  const vuePlugin = vueVersion === 'vue3' ? vueV3 : vueV2;
+
+  const plugins = [
+    vuePlugin({ compileTemplate: true, css: false }),
+    commonjs(),
+    json(),
+    buble({
+      transforms: {
+        dangerousForOf: true,
+      },
+    }),
+    replace(processEnv({ NODE_ENV: 'production' })),
+    aliasVueCompat(vueVersion),
+    terser({
+      sourcemap: true,
+    }),
+  ];
+
+  const external = id =>
+    ['algoliasearch-helper', 'instantsearch.js', 'vue', 'mitt'].some(
+      dep => id === dep || id.startsWith(`${dep}/`)
+    );
+
+  return [
+    {
+      input: 'src/instantsearch.js',
+      external,
+      output: [
+        {
+          sourcemap: true,
+          file: `${vueVersion}/cjs/index.js`,
+          format: 'cjs',
+          exports: 'named',
         },
-      },
-    ],
-    plugins: [
-      ...plugins,
-      resolve({
-        browser: true,
-        preferBuiltins: false,
-      }),
-    ],
-  },
-];
+      ],
+      plugins: [
+        ...plugins,
+        replace({
+          'instantsearch.js/es': 'instantsearch.js/cjs',
+        }),
+        createFile(
+          'package.json',
+          JSON.stringify({ type: 'commonjs', sideEffects: true })
+        ),
+      ],
+    },
+    {
+      input: 'src/instantsearch.js',
+      external,
+      output: [
+        {
+          sourcemap: true,
+          dir: `${vueVersion}/es`,
+          format: 'es',
+        },
+      ],
+      preserveModules: true,
+      plugins: [
+        ...plugins,
+        createFile(
+          'index.js',
+          `import InstantSearch from './src/instantsearch.js';
+export default InstantSearch;
+export * from './src/instantsearch.js';`
+        ),
+        createFile(
+          'package.json',
+          JSON.stringify({ type: 'module', sideEffects: true })
+        ),
+        babel({
+          extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
+          babelrc: false,
+          plugins: [
+            [
+              extensionResolver,
+              {
+                // For verification, see test/module/packages-are-es-modules.mjs
+                modulesToResolve: [
+                  // InstantSearch.js/es is an ES Module, so needs complete paths,
+                  'instantsearch.js',
+                ],
+              },
+            ],
+          ],
+        }),
+      ],
+    },
+    {
+      input: 'src/instantsearch.umd.js',
+      external: ['vue'],
+      output: [
+        {
+          sourcemap: true,
+          file: `${vueVersion}/umd/index.js`,
+          format: 'umd',
+          name: 'VueInstantSearch',
+          exports: 'named',
+          globals: {
+            vue: 'Vue',
+          },
+        },
+      ],
+      plugins: [
+        ...plugins,
+        resolve({
+          browser: true,
+          preferBuiltins: false,
+        }),
+        filesize(),
+      ],
+    },
+  ];
+}
+
+export default [...outputs('vue2'), ...outputs('vue3')];
