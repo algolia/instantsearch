@@ -1,3 +1,13 @@
+## [4.3.3](https://github.com/algolia/vue-instantsearch/compare/v4.3.2...v4.3.3) (2022-02-10)
+
+
+### Bug Fixes
+
+* **esm:** mark esm exports as type: module ([#1111](https://github.com/algolia/vue-instantsearch/issues/1111)) ([71c25d4](https://github.com/algolia/vue-instantsearch/commit/71c25d460e1b077b62ca41a59a5c4df7b713ec56))
+* **nuxt3:** forward `$nuxt` on the instance by default ([#1112](https://github.com/algolia/vue-instantsearch/issues/1112)) ([acda293](https://github.com/algolia/vue-instantsearch/commit/acda29326475bd1b73f12b058a0c02df00b8b239))
+
+
+
 ## [4.3.2](https://github.com/algolia/vue-instantsearch/compare/v4.3.1...v4.3.2) (2022-01-31)
 
 
