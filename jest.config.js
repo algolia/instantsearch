@@ -1,6 +1,8 @@
 /* eslint-disable import/no-commonjs */
+// @ts-check
 
-module.exports = {
+/** @type {import('@jest/types').Config.InitialOptions} */
+const config = {
   rootDir: process.cwd(),
   testRunner: 'jest-circus',
   testEnvironment: 'node',
@@ -43,3 +45,5 @@ module.exports = {
     ],
   ],
 };
+
+module.exports = config;
