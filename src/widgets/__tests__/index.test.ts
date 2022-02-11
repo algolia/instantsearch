@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 /* global google */
 import type { PlacesInstance } from 'places.js';
 import * as widgets from '..';

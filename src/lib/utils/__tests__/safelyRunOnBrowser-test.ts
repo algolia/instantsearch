@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { safelyRunOnBrowser } from '../safelyRunOnBrowser';
 
 type CallbackReturn = {

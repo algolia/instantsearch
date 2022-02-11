@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createBindEventForHits,

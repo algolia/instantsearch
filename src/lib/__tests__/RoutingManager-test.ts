@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom-global
+ */
+
 import qs from 'qs';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';

@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from 'preact';
 import type { RelevantSortTemplates } from '../relevant-sort';
 import relevantSort from '../relevant-sort';

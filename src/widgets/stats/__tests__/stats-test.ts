@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render as preactRender } from 'preact';
 import stats from '../stats';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';

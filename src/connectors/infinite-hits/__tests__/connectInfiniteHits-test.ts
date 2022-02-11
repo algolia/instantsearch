@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import type { SearchParameters } from 'algoliasearch-helper';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import type {

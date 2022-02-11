@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import historyRouter from '../history';
 import type { UiState } from '../../../types';
 import { noop } from '../../utils';

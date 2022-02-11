@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { getWidgetAttribute } from '..';
 import { createInitOptions } from '../../../../test/mock/createWidget';
 import { connectRefinementList } from '../../../connectors';

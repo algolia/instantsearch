@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import jsHelper from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {

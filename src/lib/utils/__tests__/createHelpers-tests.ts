@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import renderTemplate from '../renderTemplate';
 import createHelpers from '../../createHelpers';
 import { insights } from '../../../helpers';

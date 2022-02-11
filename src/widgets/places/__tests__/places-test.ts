@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import algoliaPlaces from 'places.js';
 import places from '../places';
