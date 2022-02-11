@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import getInsightsAnonymousUserToken, {
   ANONYMOUS_TOKEN_COOKIE_KEY,
 } from '../get-insights-anonymous-user-token';

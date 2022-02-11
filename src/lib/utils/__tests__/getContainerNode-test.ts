@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import getContainerNode from '../getContainerNode';
 
 describe('getContainerNode', () => {

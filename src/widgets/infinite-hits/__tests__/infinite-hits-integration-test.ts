@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { getByText, waitFor, fireEvent } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';

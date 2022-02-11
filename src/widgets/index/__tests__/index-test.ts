@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import algoliasearchHelper, {
   SearchResults,

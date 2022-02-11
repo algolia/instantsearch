@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import isDomElement from '../isDomElement';
 
 describe('isDomElement', () => {

@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';

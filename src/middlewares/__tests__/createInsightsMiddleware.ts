@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import instantsearch from '../../index.es';
 import { createInsightsMiddleware } from '..';
 import {

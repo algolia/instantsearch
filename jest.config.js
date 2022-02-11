@@ -2,7 +2,8 @@
 
 module.exports = {
   rootDir: process.cwd(),
-  testEnvironment: 'jest-environment-jsdom-global',
+  testRunner: 'jest-circus',
+  testEnvironment: 'node',
   setupFilesAfterEnv: ['./scripts/jest/setupTests.ts'],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',

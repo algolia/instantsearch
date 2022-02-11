@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 /* global google */
 import createHTMLMarker from '../createHTMLMarker';
 

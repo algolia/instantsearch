@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 /** @jsx h */
 
 import algoliasearchHelper from 'algoliasearch-helper';

@@ -1,4 +1,8 @@
+/**
+ * @jest-environment jsdom
+ */
 /* global SpeechRecognition */
+
 import createVoiceSearchHelper from '..';
 
 type DummySpeechRecognition = () => void;

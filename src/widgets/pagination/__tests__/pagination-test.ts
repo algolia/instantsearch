@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render as preactRender } from 'preact';
 import utilsGetContainerNode from '../../../lib/utils/getContainerNode';
 import type {
