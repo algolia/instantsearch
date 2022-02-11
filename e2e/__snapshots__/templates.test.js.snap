@@ -7591,3 +7591,289 @@ Array [
   "src/main.js",
 ]
 `;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: .editorconfig 1`] = `
+"root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true"
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: .gitignore 1`] = `
+"# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?"
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: README.md 1`] = `
+"# vue-instantsearch-app
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
+
+## Get started
+
+To run this project locally, install the dependencies and run the local server:
+
+\`\`\`sh
+npm install
+npm run dev
+\`\`\`
+
+Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+
+\`\`\`sh
+yarn
+yarn dev
+\`\`\`
+
+Open http://localhost:3000 to see your app."
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: index.html 1`] = `
+"<!DOCTYPE html>
+<html lang=\\"en\\">
+  <head>
+    <meta charset=\\"UTF-8\\" />
+    <meta http-equiv=\\"X-UA-Compatible\\" content=\\"ie=edge\\">
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\" />
+    <link rel=\\"icon\\" href=\\"/favicon.png\\" />
+    <!--
+      Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
+      https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
+    -->
+    <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
+    <title>vue-instantsearch-app</title>
+  </head>
+  <body>
+    <div id=\\"app\\"></div>
+    <script type=\\"module\\" src=\\"/src/main.js\\"></script>
+  </body>
+</html>"
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: package.json 1`] = `
+"{
+  \\"name\\": \\"vue-instantsearch-app\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"dev\\": \\"vite\\",
+    \\"build\\": \\"vite build\\",
+    \\"preview\\": \\"vite preview\\"
+  },
+  \\"partialDependencies\\": {
+    \\"vue-instantsearch\\": \\"4.3.3\\"
+  }
+}"
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: src/App.vue 1`] = `
+"<template>
+  <div>
+    <header class=\\"header\\">
+      <h1 class=\\"header-title\\">
+        <a href=\\"/\\">vue-instantsearch-app</a>
+      </h1>
+      <p class=\\"header-subtitle\\">
+        using
+        <a href=\\"https://github.com/algolia/vue-instantsearch\\">
+          Vue InstantSearch
+        </a>
+      </p>
+    </header>
+
+    <div class=\\"container\\">
+      <ais-instant-search :search-client=\\"searchClient\\" index-name=\\"indexName\\">
+        <div class=\\"search-panel\\">
+          <div class=\\"search-panel__filters\\">
+            <ais-dynamic-widgets>
+              <ais-refinement-list attribute=\\"facet1\\" />
+              <ais-refinement-list attribute=\\"facet2\\" />
+            </ais-dynamic-widgets>
+          </div>
+
+          <div class=\\"search-panel__results\\">
+            <div class=\\"searchbox\\">
+              <ais-search-box placeholder=\\"Search placeholder\\" />
+            </div>
+            <ais-hits>
+              <template v-slot:item=\\"{ item }\\">
+                <article>
+                  <h1>
+                    <ais-highlight :hit=\\"item\\" attribute=\\"attribute1\\" />
+                  </h1>
+                  <p>
+                    <ais-highlight :hit=\\"item\\" attribute=\\"attribute2\\" />
+                  </p>
+                </article>
+              </template>
+            </ais-hits>
+
+            <div class=\\"pagination\\">
+              <ais-pagination />
+            </div>
+          </div>
+        </div>
+      </ais-instant-search>
+    </div>
+  </div>
+</template>
+
+<script>
+import algoliasearch from 'algoliasearch/lite';
+
+export default {
+  data() {
+    return {
+      searchClient: algoliasearch('appId', 'apiKey'),
+    };
+  },
+};
+</script>
+
+<style>
+body,
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+h1 {
+  font-size: 1rem;
+}
+
+em {
+  background: cyan;
+  font-style: normal;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 0.5rem 1rem;
+  background-image: linear-gradient(to right, #4dba87, #2f9088);
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+
+.header-title::after {
+  content: ' ▸ ';
+  padding: 0 0.5rem;
+}
+
+.header-subtitle {
+  font-size: 1.2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.search-panel {
+  display: flex;
+}
+
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
+}
+
+.searchbox {
+  margin-bottom: 2rem;
+}
+
+.pagination {
+  margin: 2rem auto;
+  text-align: center;
+}
+</style>"
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: src/main.js 1`] = `
+"import { createApp } from 'vue';
+import InstantSearch from 'vue-instantsearch/vue3/es';
+import App from './App.vue';
+
+const app = createApp(App);
+app.use(InstantSearch);
+app.mount('#app');"
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 File content: vite.config.js 1`] = `
+"import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [vue()]
+})"
+`;
+
+exports[`Templates Vue InstantSearch with Vue 3 Folder structure: contains the right files 1`] = `
+Array [
+  ".editorconfig",
+  ".gitignore",
+  ".prettierrc",
+  "README.md",
+  "index.html",
+  "package.json",
+  "public/favicon.png",
+  "src/App.vue",
+  "src/main.js",
+  "vite.config.js",
+]
+`;
