@@ -1,0 +1,6 @@
+{
+  "rules": {
+    // This rule fails on code from the `react-native` module.
+    "import/namespace": "off"
+  }
+}
