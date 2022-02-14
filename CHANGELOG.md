@@ -1,3 +1,13 @@
+# [5.2.0](https://github.com/algolia/create-instantsearch-app/compare/5.1.2...5.2.0) (2022-02-14)
+
+
+### Features
+
+* **templates:** introduce React InstantSearch Hooks Native template ([#559](https://github.com/algolia/create-instantsearch-app/issues/559)) ([495f014](https://github.com/algolia/create-instantsearch-app/commit/495f0140301185bba9192ccd779597d4d5028241))
+* **vue:** add vue3 template ([#558](https://github.com/algolia/create-instantsearch-app/issues/558)) ([117067e](https://github.com/algolia/create-instantsearch-app/commit/117067ea0c4da0d08105d2de1e8b611f935b533a))
+
+
+
 ## [5.1.2](https://github.com/algolia/create-instantsearch-app/compare/5.1.1...5.1.2) (2022-02-02)
 
 
