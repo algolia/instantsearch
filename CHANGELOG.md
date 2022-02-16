@@ -1,3 +1,12 @@
+## [5.2.1](https://github.com/algolia/create-instantsearch-app/compare/5.2.0...5.2.1) (2022-02-16)
+
+
+### Bug Fixes
+
+* **Vue 3:** add vite plugin to correctly handle jsx ([#563](https://github.com/algolia/create-instantsearch-app/issues/563)) ([0a4162a](https://github.com/algolia/create-instantsearch-app/commit/0a4162ae2067a15b30242e0b54ae3ff768e836d9))
+
+
+
 # [5.2.0](https://github.com/algolia/create-instantsearch-app/compare/5.1.2...5.2.0) (2022-02-14)
 
 
