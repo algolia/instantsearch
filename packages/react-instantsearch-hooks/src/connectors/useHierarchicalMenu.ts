@@ -2,6 +2,7 @@ import connectHierarchicalMenu from 'instantsearch.js/es/connectors/hierarchical
 
 import { useConnector } from '../hooks/useConnector';
 
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   HierarchicalMenuConnectorParams,
   HierarchicalMenuWidgetDescription,
@@ -9,9 +10,12 @@ import type {
 
 export type UseHierarchicalMenuProps = HierarchicalMenuConnectorParams;
 
-export function useHierarchicalMenu(props: UseHierarchicalMenuProps) {
+export function useHierarchicalMenu(
+  props: UseHierarchicalMenuProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
   return useConnector<
     HierarchicalMenuConnectorParams,
     HierarchicalMenuWidgetDescription
-  >(connectHierarchicalMenu, props);
+  >(connectHierarchicalMenu, props, additionalWidgetProperties);
 }

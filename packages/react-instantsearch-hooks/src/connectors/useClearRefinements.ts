@@ -2,6 +2,7 @@ import connectClearRefinements from 'instantsearch.js/es/connectors/clear-refine
 
 import { useConnector } from '../hooks/useConnector';
 
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsWidgetDescription,
@@ -9,9 +10,12 @@ import type {
 
 export type UseClearRefinementsProps = ClearRefinementsConnectorParams;
 
-export function useClearRefinements(props?: UseClearRefinementsProps) {
+export function useClearRefinements(
+  props?: UseClearRefinementsProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
   return useConnector<
     ClearRefinementsConnectorParams,
     ClearRefinementsWidgetDescription
-  >(connectClearRefinements, props);
+  >(connectClearRefinements, props, additionalWidgetProperties);
 }

@@ -2,6 +2,7 @@ import connectSearchBox from 'instantsearch.js/es/connectors/search-box/connectS
 
 import { useConnector } from '../hooks/useConnector';
 
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   SearchBoxConnectorParams,
   SearchBoxWidgetDescription,
@@ -9,9 +10,13 @@ import type {
 
 export type UseSearchBoxProps = SearchBoxConnectorParams;
 
-export function useSearchBox(props?: UseSearchBoxProps) {
+export function useSearchBox(
+  props?: UseSearchBoxProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
   return useConnector<SearchBoxConnectorParams, SearchBoxWidgetDescription>(
     connectSearchBox,
-    props
+    props,
+    additionalWidgetProperties
   );
 }

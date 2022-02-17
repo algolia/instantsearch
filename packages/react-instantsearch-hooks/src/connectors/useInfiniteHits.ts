@@ -2,6 +2,7 @@ import connectInfiniteHits from 'instantsearch.js/es/connectors/infinite-hits/co
 
 import { useConnector } from '../hooks/useConnector';
 
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   InfiniteHitsConnectorParams,
   InfiniteHitsWidgetDescription,
@@ -9,9 +10,12 @@ import type {
 
 export type UseInfiniteHitsProps = InfiniteHitsConnectorParams;
 
-export function useInfiniteHits(props?: UseInfiniteHitsProps) {
+export function useInfiniteHits(
+  props?: UseInfiniteHitsProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
   return useConnector<
     InfiniteHitsConnectorParams,
     InfiniteHitsWidgetDescription
-  >(connectInfiniteHits, props);
+  >(connectInfiniteHits, props, additionalWidgetProperties);
 }

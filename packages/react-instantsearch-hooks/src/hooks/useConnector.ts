@@ -7,19 +7,25 @@ import { useInstantSearchServerContext } from '../lib/useInstantSearchServerCont
 import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect';
 import { useStableValue } from '../lib/useStableValue';
 
-import type { Connector, WidgetDescription } from 'instantsearch.js';
+import type { Connector, Widget, WidgetDescription } from 'instantsearch.js';
+
+export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>>;
 
 export function useConnector<
   TProps extends Record<string, unknown>,
   TDescription extends WidgetDescription
 >(
   connector: Connector<TDescription, TProps>,
-  props: TProps = {} as TProps
+  props: TProps = {} as TProps,
+  additionalWidgetProperties: AdditionalWidgetProperties = {}
 ): TDescription['renderState'] {
   const serverContext = useInstantSearchServerContext();
   const search = useInstantSearchContext();
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
+  const stableAdditionalWidgetProperties = useStableValue(
+    additionalWidgetProperties
+  );
   const shouldSetStateRef = useRef(true);
 
   const widget = useMemo(() => {
@@ -59,7 +65,10 @@ export function useConnector<
       }
     );
 
-    const instance = createWidget(stableProps);
+    const instance = {
+      ...createWidget(stableProps),
+      ...stableAdditionalWidgetProperties,
+    };
 
     // On the server, we add the widget early in the memo to retrieve its search
     // parameters in the render pass.
@@ -68,7 +77,13 @@ export function useConnector<
     }
 
     return instance;
-  }, [connector, parentIndex, serverContext, stableProps]);
+  }, [
+    connector,
+    parentIndex,
+    serverContext,
+    stableProps,
+    stableAdditionalWidgetProperties,
+  ]);
 
   const [state, setState] = useState<TDescription['renderState']>(() => {
     if (widget.getWidgetRenderState) {

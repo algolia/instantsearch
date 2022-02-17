@@ -2,6 +2,7 @@ import connectNumericMenu from 'instantsearch.js/es/connectors/numeric-menu/conn
 
 import { useConnector } from '../hooks/useConnector';
 
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   NumericMenuConnectorParams,
   NumericMenuWidgetDescription,
@@ -9,9 +10,13 @@ import type {
 
 export type UseNumericMenuProps = NumericMenuConnectorParams;
 
-export function useNumericMenu(props: UseNumericMenuProps) {
+export function useNumericMenu(
+  props: UseNumericMenuProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
   return useConnector<NumericMenuConnectorParams, NumericMenuWidgetDescription>(
     connectNumericMenu,
-    props
+    props,
+    additionalWidgetProperties
   );
 }

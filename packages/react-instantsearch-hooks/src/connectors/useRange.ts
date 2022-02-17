@@ -2,6 +2,7 @@ import connectRange from 'instantsearch.js/es/connectors/range/connectRange';
 
 import { useConnector } from '../hooks/useConnector';
 
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   RangeConnectorParams,
   RangeWidgetDescription,
@@ -9,9 +10,13 @@ import type {
 
 export type UseRangeProps = RangeConnectorParams;
 
-export function useRange(props: UseRangeProps) {
+export function useRange(
+  props: UseRangeProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
   return useConnector<RangeConnectorParams, RangeWidgetDescription>(
     connectRange,
-    props
+    props,
+    additionalWidgetProperties
   );
 }

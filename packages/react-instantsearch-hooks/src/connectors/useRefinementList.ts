@@ -2,6 +2,7 @@ import connectRefinementList from 'instantsearch.js/es/connectors/refinement-lis
 
 import { useConnector } from '../hooks/useConnector';
 
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   RefinementListConnectorParams,
   RefinementListWidgetDescription,
@@ -9,9 +10,12 @@ import type {
 
 export type UseRefinementListProps = RefinementListConnectorParams;
 
-export function useRefinementList(props: UseRefinementListProps) {
+export function useRefinementList(
+  props: UseRefinementListProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
   return useConnector<
     RefinementListConnectorParams,
     RefinementListWidgetDescription
-  >(connectRefinementList, props);
+  >(connectRefinementList, props, additionalWidgetProperties);
 }

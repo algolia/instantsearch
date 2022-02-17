@@ -126,7 +126,7 @@ describe('useConnector', () => {
     const wrapper = createInstantSearchTestWrapper();
 
     const { result, waitForNextUpdate } = renderHook(
-      () => useConnector(connectCustomSearchBox, {}),
+      () => useConnector(connectCustomSearchBox, {}, {}),
       { wrapper }
     );
 
@@ -163,7 +163,7 @@ describe('useConnector', () => {
     }
 
     const { result, waitForNextUpdate } = renderHook(
-      () => useConnector(connectCustomSearchBox, {}),
+      () => useConnector(connectCustomSearchBox, {}, {}),
       { wrapper: Wrapper }
     );
 
@@ -192,7 +192,7 @@ describe('useConnector', () => {
     const wrapper = createInstantSearchTestWrapper();
 
     const { result, waitForNextUpdate } = renderHook(
-      () => useConnector(connectCustomSearchBoxWithoutRenderState, {}),
+      () => useConnector(connectCustomSearchBoxWithoutRenderState, {}, {}),
       { wrapper }
     );
 
@@ -234,7 +234,7 @@ describe('useConnector', () => {
       );
     }
 
-    renderHook(() => useConnector(connectCustomSearchBoxMock, {}), {
+    renderHook(() => useConnector(connectCustomSearchBoxMock, {}, {}), {
       wrapper: SearchProvider,
     });
 
@@ -268,7 +268,8 @@ describe('useConnector', () => {
     function CustomSearchBox() {
       useConnector<Record<never, never>, CustomSearchBoxWidgetDescription>(
         connectCustomSearchBox,
-        {}
+        {},
+        { $$widgetType: 'test.customSearchBox' }
       );
 
       return null;
@@ -305,7 +306,10 @@ describe('useConnector', () => {
     expect(indexContext!.addWidgets).toHaveBeenCalledTimes(1);
     expect(indexContext!.addWidgets).toHaveBeenCalledWith(
       expect.arrayContaining([
-        expect.objectContaining({ $$type: 'test.searchBox' }),
+        expect.objectContaining({
+          $$type: 'test.searchBox',
+          $$widgetType: 'test.customSearchBox',
+        }),
       ])
     );
 
@@ -314,7 +318,10 @@ describe('useConnector', () => {
     expect(indexContext!.removeWidgets).toHaveBeenCalledTimes(1);
     expect(indexContext!.removeWidgets).toHaveBeenCalledWith(
       expect.arrayContaining([
-        expect.objectContaining({ $$type: 'test.searchBox' }),
+        expect.objectContaining({
+          $$type: 'test.searchBox',
+          $$widgetType: 'test.customSearchBox',
+        }),
       ])
     );
   });

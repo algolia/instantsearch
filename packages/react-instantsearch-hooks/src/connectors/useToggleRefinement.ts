@@ -2,6 +2,7 @@ import connectToggleRefinement from 'instantsearch.js/es/connectors/toggle-refin
 
 import { useConnector } from '../hooks/useConnector';
 
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
@@ -9,9 +10,12 @@ import type {
 
 export type UseToggleRefinementProps = ToggleRefinementConnectorParams;
 
-export function useToggleRefinement(props: UseToggleRefinementProps) {
+export function useToggleRefinement(
+  props: UseToggleRefinementProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
   return useConnector<
     ToggleRefinementConnectorParams,
     ToggleRefinementWidgetDescription
-  >(connectToggleRefinement, props);
+  >(connectToggleRefinement, props, additionalWidgetProperties);
 }
