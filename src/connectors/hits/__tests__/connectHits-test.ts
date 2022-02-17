@@ -781,6 +781,55 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           });
         });
 
+        it('sends view event after hits are rendered', () => {
+          const renderFn = jest.fn();
+          const makeWidget = connectHits(renderFn);
+          const widget = makeWidget({});
+
+          const helper = algoliasearchHelper(createSearchClient(), '', {});
+          helper.search = jest.fn();
+
+          const initOptions = createInitOptions({
+            helper,
+            state: helper.state,
+          });
+          const instantSearchInstance = initOptions.instantSearchInstance;
+          instantSearchInstance.sendEventToInsights = jest.fn();
+          widget.init!(initOptions);
+
+          const hits = [
+            {
+              __position: 0,
+              __queryID: 'test-query-id',
+              fake: 'data',
+              objectID: '1',
+            },
+          ];
+
+          const results = new SearchResults(helper.state, [
+            createSingleSearchResponse({ hits }),
+          ]);
+
+          widget.render!(
+            createRenderOptions({
+              results,
+              state: helper.state,
+              helper,
+            })
+          );
+
+          const lastInvocationCallOrder = (mockFn: jest.Mock): number =>
+            mockFn.mock.invocationCallOrder[
+              mockFn.mock.invocationCallOrder.length - 1
+            ];
+
+          expect(lastInvocationCallOrder(renderFn)).toBeLessThan(
+            lastInvocationCallOrder(
+              instantSearchInstance.sendEventToInsights as jest.Mock
+            )
+          );
+        });
+
         it('sends click event', () => {
           const { instantSearchInstance, renderFn, hits } =
             createRenderedWidget();

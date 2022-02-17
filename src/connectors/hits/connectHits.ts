@@ -104,7 +104,6 @@ const connectHits: HitsConnector = function connectHits(
 
       render(renderOptions) {
         const renderState = this.getWidgetRenderState(renderOptions);
-        renderState.sendEvent('view', renderState.hits);
 
         renderFn(
           {
@@ -113,6 +112,8 @@ const connectHits: HitsConnector = function connectHits(
           },
           false
         );
+
+        renderState.sendEvent('view', renderState.hits);
       },
 
       getRenderState(renderState, renderOptions) {
