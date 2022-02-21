@@ -36,8 +36,9 @@ export type GeoLoc = {
   lng: number;
 };
 
-export type AlgoliaHit = {
-  [attribute: string]: any;
+export type AlgoliaHit<
+  THit extends Record<string, unknown> = Record<string, any>
+> = {
   objectID: string;
   _highlightResult?: HitHighlightResult;
   _snippetResult?: HitSnippetResult;
@@ -60,13 +61,16 @@ export type AlgoliaHit = {
   };
   _distinctSeqID?: number;
   _geoLoc?: GeoLoc;
-};
+} & THit;
 
-export type Hit = {
+export type Hit<THit extends Record<string, unknown> = Record<string, any>> = {
   __position: number;
   __queryID?: string;
-} & AlgoliaHit;
+} & AlgoliaHit<THit>;
 
+/**
+ * @deprecated use Hit[] directly instead
+ */
 export type Hits = Hit[];
 
 export type EscapedHits<THit = Hit> = THit[] & { __escaped: boolean };

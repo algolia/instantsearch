@@ -5,7 +5,6 @@ import type {
   SearchResults,
 } from 'algoliasearch-helper';
 import type {
-  Hits,
   Connector,
   TransformItems,
   Hit,
@@ -25,30 +24,34 @@ import {
   createBindEventForHits,
 } from '../../lib/utils';
 
-export type InfiniteHitsCachedHits = {
-  [page: number]: Hits;
+export type InfiniteHitsCachedHits<THit extends Record<string, unknown>> = {
+  [page: number]: Array<Hit<THit>>;
 };
 
-type Read = ({
+type Read<THit extends Record<string, unknown>> = ({
   state,
 }: {
   state: PlainSearchParameters;
-}) => InfiniteHitsCachedHits | null;
+}) => InfiniteHitsCachedHits<THit> | null;
 
-type Write = ({
+type Write<THit extends Record<string, unknown>> = ({
   state,
   hits,
 }: {
   state: PlainSearchParameters;
-  hits: InfiniteHitsCachedHits;
+  hits: InfiniteHitsCachedHits<THit>;
 }) => void;
 
-export type InfiniteHitsCache = {
-  read: Read;
-  write: Write;
+export type InfiniteHitsCache<
+  THit extends Record<string, unknown> = Record<string, unknown>
+> = {
+  read: Read<THit>;
+  write: Write<THit>;
 };
 
-export type InfiniteHitsConnectorParams = {
+export type InfiniteHitsConnectorParams<
+  THit extends Record<string, unknown> = Record<string, unknown>
+> = {
   /**
    * Escapes HTML entities from hits string values.
    *
@@ -67,17 +70,19 @@ export type InfiniteHitsConnectorParams = {
    * Receives the items, and is called before displaying them.
    * Useful for mapping over the items to transform, and remove or reorder them.
    */
-  transformItems?: TransformItems<Hit>;
+  transformItems?: TransformItems<Hit<THit>>;
 
   /**
    * Reads and writes hits from/to cache.
    * When user comes back to the search page after leaving for product page,
    * this helps restore InfiniteHits and its scroll position.
    */
-  cache?: InfiniteHitsCache;
+  cache?: InfiniteHitsCache<THit>;
 };
 
-export type InfiniteHitsRenderState = {
+export type InfiniteHitsRenderState<
+  THit extends Record<string, unknown> = Record<string, unknown>
+> = {
   /**
    * Loads the previous results.
    */
@@ -111,17 +116,17 @@ export type InfiniteHitsRenderState = {
   /**
    * Hits for the current page
    */
-  currentPageHits: Hits;
+  currentPageHits: Array<Hit<THit>>;
 
   /**
    * Hits for current and cached pages
    */
-  hits: Hits;
+  hits: Array<Hit<THit>>;
 
   /**
    * The response from the Algolia API.
    */
-  results?: SearchResults<Hit>;
+  results?: SearchResults<Hit<THit>>;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -129,13 +134,15 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type InfiniteHitsWidgetDescription = {
+export type InfiniteHitsWidgetDescription<
+  THit extends Record<string, unknown> = Record<string, unknown>
+> = {
   $$type: 'ais.infiniteHits';
-  renderState: InfiniteHitsRenderState;
+  renderState: InfiniteHitsRenderState<THit>;
   indexRenderState: {
     infiniteHits: WidgetRenderState<
-      InfiniteHitsRenderState,
-      InfiniteHitsConnectorParams
+      InfiniteHitsRenderState<THit>,
+      InfiniteHitsConnectorParams<THit>
     >;
   };
   indexUiState: {
@@ -143,9 +150,11 @@ export type InfiniteHitsWidgetDescription = {
   };
 };
 
-export type InfiniteHitsConnector = Connector<
-  InfiniteHitsWidgetDescription,
-  InfiniteHitsConnectorParams
+export type InfiniteHitsConnector<
+  THit extends Record<string, unknown> = Record<string, unknown>
+> = Connector<
+  InfiniteHitsWidgetDescription<THit>,
+  InfiniteHitsConnectorParams<THit>
 >;
 
 function getStateWithoutPage(state: PlainSearchParameters) {
@@ -153,8 +162,10 @@ function getStateWithoutPage(state: PlainSearchParameters) {
   return rest;
 }
 
-function getInMemoryCache(): InfiniteHitsCache {
-  let cachedHits: InfiniteHitsCachedHits | null = null;
+function getInMemoryCache<
+  THit extends Record<string, unknown>
+>(): InfiniteHitsCache<THit> {
+  let cachedHits: InfiniteHitsCachedHits<THit> | null = null;
   let cachedState: PlainSearchParameters | null = null;
   return {
     read({ state }) {
@@ -169,11 +180,13 @@ function getInMemoryCache(): InfiniteHitsCache {
   };
 }
 
-function extractHitsFromCachedHits(cachedHits: InfiniteHitsCachedHits) {
+function extractHitsFromCachedHits<THit extends Record<string, unknown>>(
+  cachedHits: InfiniteHitsCachedHits<THit>
+) {
   return Object.keys(cachedHits)
     .map(Number)
     .sort((a, b) => a - b)
-    .reduce((acc: Hits, page) => {
+    .reduce((acc: Array<Hit<THit>>, page) => {
       return acc.concat(cachedHits[page]);
     }, []);
 }
@@ -183,6 +196,9 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
   unmountFn = noop
 ) {
   checkRendering(renderFn, withUsage());
+
+  // @TODO: this should be a generic, but a Connector can not yet be generic itself
+  type THit = Record<string, unknown>;
 
   return (widgetParams) => {
     const {
@@ -198,7 +214,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     let bindEvent: BindEventForHits;
     const getFirstReceivedPage = (
       state: SearchParameters,
-      cachedHits: InfiniteHitsCachedHits
+      cachedHits: InfiniteHitsCachedHits<THit>
     ) => {
       const { page = 0 } = state;
       const pages = Object.keys(cachedHits).map(Number);
@@ -210,7 +226,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     };
     const getLastReceivedPage = (
       state: SearchParameters,
-      cachedHits: InfiniteHitsCachedHits
+      cachedHits: InfiniteHitsCachedHits<THit>
     ) => {
       const { page = 0 } = state;
       const pages = Object.keys(cachedHits).map(Number);
@@ -289,7 +305,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 
       getWidgetRenderState({ results, helper, state, instantSearchInstance }) {
         let isFirstPage: boolean;
-        let currentPageHits: Hits = [];
+        let currentPageHits: Array<Hit<THit>> = [];
         const cachedHits = cache.read({ state }) || {};
 
         if (!results) {
