@@ -1,3 +1,12 @@
+## [5.2.2](https://github.com/algolia/create-instantsearch-app/compare/5.2.1...5.2.2) (2022-02-21)
+
+
+### Bug Fixes
+
+* **vue:** support optional chaining ([#564](https://github.com/algolia/create-instantsearch-app/issues/564)) ([2dfa2ec](https://github.com/algolia/create-instantsearch-app/commit/2dfa2ecebdbcea5604db451c0e0e57010b36de04))
+
+
+
 ## [5.2.1](https://github.com/algolia/create-instantsearch-app/compare/5.2.0...5.2.1) (2022-02-16)
 
 
