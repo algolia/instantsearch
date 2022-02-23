@@ -36,9 +36,7 @@ export type GeoLoc = {
   lng: number;
 };
 
-export type AlgoliaHit<
-  THit extends Record<string, unknown> = Record<string, any>
-> = {
+export type AlgoliaHit<THit extends BaseHit = Record<string, any>> = {
   objectID: string;
   _highlightResult?: HitHighlightResult;
   _snippetResult?: HitSnippetResult;
