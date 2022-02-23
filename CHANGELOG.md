@@ -1,3 +1,12 @@
+# [4.39.0](https://github.com/algolia/instantsearch.js/compare/v4.38.1...v4.39.0) (2022-02-23)
+
+
+### Features
+
+* **ts:** allow Hits related connectors to be generic ([#5019](https://github.com/algolia/instantsearch.js/issues/5019)) ([e986f7e](https://github.com/algolia/instantsearch.js/commit/e986f7e46d57173da4d3d6c3c23fbdf3f9c0f78c))
+
+
+
 ## [4.38.1](https://github.com/algolia/instantsearch.js/compare/v4.38.0...v4.38.1) (2022-02-08)
 
 
