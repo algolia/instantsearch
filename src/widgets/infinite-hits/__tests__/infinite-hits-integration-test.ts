@@ -68,7 +68,8 @@ describe('infiniteHits', () => {
       const isEqual = (a: any, b: any) =>
         JSON.stringify(a) === JSON.stringify(b);
       let cachedState: PlainSearchParameters | undefined = undefined;
-      let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
+      let cachedHits: InfiniteHitsCachedHits<Record<string, any>> | undefined =
+        undefined;
 
       type Cache = InfiniteHitsCache & { clear(): void };
       type MockedCache = {

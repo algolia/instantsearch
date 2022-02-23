@@ -13,9 +13,9 @@ import {
 import type {
   TransformItems,
   Connector,
-  Hits,
   Hit,
   WidgetRenderState,
+  BaseHit,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -24,16 +24,16 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type HitsRenderState = {
+export type HitsRenderState<THit extends BaseHit = BaseHit> = {
   /**
    * The matched hits from Algolia API.
    */
-  hits: Hits;
+  hits: Array<Hit<THit>>;
 
   /**
    * The response from the Algolia API.
    */
-  results?: SearchResults<Hit>;
+  results?: SearchResults<Hit<THit>>;
 
   /**
    * Sends an event to the Insights middleware.
@@ -46,7 +46,7 @@ export type HitsRenderState = {
   bindEvent: BindEventForHits;
 };
 
-export type HitsConnectorParams = {
+export type HitsConnectorParams<THit extends BaseHit = BaseHit> = {
   /**
    * Whether to escape HTML tags from hits string values.
    *
@@ -57,20 +57,20 @@ export type HitsConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<Hit>;
+  transformItems?: TransformItems<Hit<THit>>;
 };
 
-export type HitsWidgetDescription = {
+export type HitsWidgetDescription<THit extends BaseHit = BaseHit> = {
   $$type: 'ais.hits';
-  renderState: HitsRenderState;
+  renderState: HitsRenderState<THit>;
   indexRenderState: {
-    hits: WidgetRenderState<HitsRenderState, HitsConnectorParams>;
+    hits: WidgetRenderState<HitsRenderState<THit>, HitsConnectorParams<THit>>;
   };
 };
 
-export type HitsConnector = Connector<
-  HitsWidgetDescription,
-  HitsConnectorParams
+export type HitsConnector<THit extends BaseHit = BaseHit> = Connector<
+  HitsWidgetDescription<THit>,
+  HitsConnectorParams<THit>
 >;
 
 const connectHits: HitsConnector = function connectHits(
