@@ -63,7 +63,9 @@ export type AlgoliaHit<
   _geoLoc?: GeoLoc;
 } & THit;
 
-export type Hit<THit extends Record<string, unknown> = Record<string, any>> = {
+export type BaseHit = Record<string, unknown>;
+
+export type Hit<THit extends BaseHit = Record<string, any>> = {
   __position: number;
   __queryID?: string;
 } & AlgoliaHit<THit>;

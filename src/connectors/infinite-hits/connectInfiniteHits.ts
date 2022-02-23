@@ -9,6 +9,7 @@ import type {
   TransformItems,
   Hit,
   WidgetRenderState,
+  BaseHit,
 } from '../../types';
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import {
@@ -24,17 +25,17 @@ import {
   createBindEventForHits,
 } from '../../lib/utils';
 
-export type InfiniteHitsCachedHits<THit extends Record<string, unknown>> = {
+export type InfiniteHitsCachedHits<THit extends BaseHit> = {
   [page: number]: Array<Hit<THit>>;
 };
 
-type Read<THit extends Record<string, unknown>> = ({
+type Read<THit extends BaseHit> = ({
   state,
 }: {
   state: PlainSearchParameters;
 }) => InfiniteHitsCachedHits<THit> | null;
 
-type Write<THit extends Record<string, unknown>> = ({
+type Write<THit extends BaseHit> = ({
   state,
   hits,
 }: {
@@ -42,16 +43,12 @@ type Write<THit extends Record<string, unknown>> = ({
   hits: InfiniteHitsCachedHits<THit>;
 }) => void;
 
-export type InfiniteHitsCache<
-  THit extends Record<string, unknown> = Record<string, unknown>
-> = {
+export type InfiniteHitsCache<THit extends BaseHit = BaseHit> = {
   read: Read<THit>;
   write: Write<THit>;
 };
 
-export type InfiniteHitsConnectorParams<
-  THit extends Record<string, unknown> = Record<string, unknown>
-> = {
+export type InfiniteHitsConnectorParams<THit extends BaseHit = BaseHit> = {
   /**
    * Escapes HTML entities from hits string values.
    *
@@ -80,9 +77,7 @@ export type InfiniteHitsConnectorParams<
   cache?: InfiniteHitsCache<THit>;
 };
 
-export type InfiniteHitsRenderState<
-  THit extends Record<string, unknown> = Record<string, unknown>
-> = {
+export type InfiniteHitsRenderState<THit extends BaseHit = BaseHit> = {
   /**
    * Loads the previous results.
    */
@@ -134,9 +129,7 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type InfiniteHitsWidgetDescription<
-  THit extends Record<string, unknown> = Record<string, unknown>
-> = {
+export type InfiniteHitsWidgetDescription<THit extends BaseHit = BaseHit> = {
   $$type: 'ais.infiniteHits';
   renderState: InfiniteHitsRenderState<THit>;
   indexRenderState: {
@@ -150,9 +143,7 @@ export type InfiniteHitsWidgetDescription<
   };
 };
 
-export type InfiniteHitsConnector<
-  THit extends Record<string, unknown> = Record<string, unknown>
-> = Connector<
+export type InfiniteHitsConnector<THit extends BaseHit = BaseHit> = Connector<
   InfiniteHitsWidgetDescription<THit>,
   InfiniteHitsConnectorParams<THit>
 >;
@@ -162,9 +153,7 @@ function getStateWithoutPage(state: PlainSearchParameters) {
   return rest;
 }
 
-function getInMemoryCache<
-  THit extends Record<string, unknown>
->(): InfiniteHitsCache<THit> {
+function getInMemoryCache<THit extends BaseHit>(): InfiniteHitsCache<THit> {
   let cachedHits: InfiniteHitsCachedHits<THit> | null = null;
   let cachedState: PlainSearchParameters | null = null;
   return {
@@ -180,7 +169,7 @@ function getInMemoryCache<
   };
 }
 
-function extractHitsFromCachedHits<THit extends Record<string, unknown>>(
+function extractHitsFromCachedHits<THit extends BaseHit>(
   cachedHits: InfiniteHitsCachedHits<THit>
 ) {
   return Object.keys(cachedHits)
@@ -198,7 +187,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
   checkRendering(renderFn, withUsage());
 
   // @TODO: this should be a generic, but a Connector can not yet be generic itself
-  type THit = Record<string, unknown>;
+  type THit = BaseHit;
 
   return (widgetParams) => {
     const {
