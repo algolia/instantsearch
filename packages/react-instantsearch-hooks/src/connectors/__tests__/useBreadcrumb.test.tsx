@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
 import React from 'react';
 
-import { createSearchClient } from '../../../../../test/mock';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../../test/mock/createAPIResponse';
+} from '../../../../../test/mock';
 import { createInstantSearchTestWrapper } from '../../../../../test/utils';
 import { useBreadcrumb } from '../useBreadcrumb';
 import { useHierarchicalMenu } from '../useHierarchicalMenu';

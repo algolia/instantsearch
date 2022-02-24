@@ -4,7 +4,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { connectHits, connectRefinementList, Index } from '../../index';
 import InstantSearch from '../InstantSearch';
-import { createSearchClient } from '../../../../../test/mock/createSearchClient';
+import { createSearchClient } from '../../../../../test/mock';
 
 Enzyme.configure({ adapter: new Adapter() });
 

@@ -3,7 +3,7 @@ import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
 import { render, fireEvent } from '@testing-library/react';
 import Answers from '../Answers';
 import { wait } from '../../../../../test/utils';
-import { createSearchClient } from '../../../../../test/mock/createSearchClient';
+import { createSearchClient } from '../../../../../test/mock';
 
 const createAnswersSearchClient = () =>
   createSearchClient({

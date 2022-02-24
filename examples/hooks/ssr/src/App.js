@@ -4,19 +4,14 @@ import {
   InstantSearchSSRProvider,
   Index,
   Configure,
-} from 'react-instantsearch-hooks';
+  Hits,
+} from 'react-instantsearch-hooks-dom';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
 import { searchClient } from './searchClient';
 
-import {
-  Highlight,
-  Hits,
-  Pagination,
-  RefinementList,
-  SearchBox,
-} from './components';
+import { Highlight, Pagination, RefinementList, SearchBox } from './components';
 
 function Hit({ hit }) {
   return <Highlight hit={hit} attribute="name" />;

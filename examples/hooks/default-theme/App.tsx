@@ -5,7 +5,8 @@ import {
   InstantSearch,
   Configure,
   DynamicWidgets,
-} from 'react-instantsearch-hooks';
+  Hits,
+} from 'react-instantsearch-hooks-dom';
 
 import {
   Breadcrumb,
@@ -13,7 +14,6 @@ import {
   CurrentRefinements,
   HierarchicalMenu,
   Highlight,
-  Hits,
   HitsPerPage,
   InfiniteHits,
   Menu,
