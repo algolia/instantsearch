@@ -4,6 +4,7 @@ import React from 'react';
 import {
   InstantSearch,
   Configure,
+  ClearRefinements,
   DynamicWidgets,
   Hits,
   SearchBox,
@@ -11,7 +12,6 @@ import {
 
 import {
   Breadcrumb,
-  ClearRefinements,
   CurrentRefinements,
   HierarchicalMenu,
   Highlight,
