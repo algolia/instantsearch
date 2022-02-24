@@ -274,8 +274,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 
         const widgetRenderState = this.getWidgetRenderState(renderOptions);
 
-        sendEvent('view', widgetRenderState.currentPageHits);
-
         renderFn(
           {
             ...widgetRenderState,
@@ -283,6 +281,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           },
           false
         );
+        sendEvent('view', widgetRenderState.currentPageHits);
       },
 
       getRenderState(renderState, renderOptions) {
