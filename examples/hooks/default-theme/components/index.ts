@@ -14,6 +14,5 @@ export * from './QueryRuleContext';
 export * from './QueryRuleCustomData';
 export * from './RangeInput';
 export * from './RefinementList';
-export * from './SearchBox';
 export * from './SortBy';
 export * from './ToggleRefinement';

@@ -5,12 +5,12 @@ import {
   DynamicWidgets,
   InstantSearch,
   Hits,
+  SearchBox,
   InstantSearchServerState,
   InstantSearchSSRProvider,
 } from 'react-instantsearch-hooks-dom';
 import { getServerState } from 'react-instantsearch-hooks-server';
 import { Highlight } from '../components/Highlight';
-import { SearchBox } from '../components/SearchBox';
 import { history } from 'instantsearch.js/es/lib/routers/index.js';
 import { RefinementList } from '../components/RefinementList';
 import { Panel } from '../components/Panel';

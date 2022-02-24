@@ -1,18 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchBox } from 'react-instantsearch-hooks';
 
-import { ControlledSearchBox } from './ControlledSearchBox';
+import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
-export function SearchBox(props) {
-  const { query, refine, isSearchStalled } = useSearchBox(props);
+import type { SearchBoxProps as SearchBoxUiComponentProps } from '../ui/SearchBox';
+import type { ChangeEvent } from 'react';
+import type { UseSearchBoxProps } from 'react-instantsearch-hooks';
+
+export type SearchBoxProps = Omit<
+  SearchBoxUiComponentProps,
+  'inputRef' | 'isSearchStalled' | 'onChange' | 'onReset' | 'value'
+> &
+  UseSearchBoxProps;
+
+export function SearchBox(props: SearchBoxProps) {
+  const { query, refine, isSearchStalled } = useSearchBox(props, {
+    $$widgetType: 'ais.searchBox',
+  });
   const [value, setValue] = useState(query);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   function onReset() {
     setValue('');
   }
 
-  function onChange(event) {
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
     setValue(event.currentTarget.value);
   }
 
@@ -39,13 +51,12 @@ export function SearchBox(props) {
   }, [query]);
 
   return (
-    <ControlledSearchBox
-      className={props.className}
+    <SearchBoxUiComponent
+      {...props}
       inputRef={inputRef}
       isSearchStalled={isSearchStalled}
       onChange={onChange}
       onReset={onReset}
-      placeholder={props.placeholder}
       value={value}
     />
   );
