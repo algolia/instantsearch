@@ -1,3 +1,12 @@
+## [4.39.1](https://github.com/algolia/instantsearch.js/compare/v4.39.0...v4.39.1) (2022-03-01)
+
+
+### Bug Fixes
+
+* **insights:** send view events after rendering ([#5014](https://github.com/algolia/instantsearch.js/issues/5014)) ([e952abc](https://github.com/algolia/instantsearch.js/commit/e952abc64043a55e06c9c46a656bc98ad45d1502))
+
+
+
 # [4.39.0](https://github.com/algolia/instantsearch.js/compare/v4.38.1...v4.39.0) (2022-02-23)
 
 
