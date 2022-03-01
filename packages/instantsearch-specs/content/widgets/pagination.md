@@ -10,7 +10,7 @@ html: |
       <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
         <span class="ais-Pagination-link" aria-label="Previous">‹</span>
       </li>
-      <li class="ais-Pagination-item ais-Pagination-item--selected">
+      <li class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected">
         <a class="ais-Pagination-link" href="#">1</a>
       </li>
       <li class="ais-Pagination-item ais-Pagination-item--page">
