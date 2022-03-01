@@ -5,6 +5,7 @@ import {
   InstantSearch,
   Configure,
   ClearRefinements,
+  CurrentRefinements,
   DynamicWidgets,
   Hits,
   SearchBox,
@@ -12,7 +13,6 @@ import {
 
 import {
   Breadcrumb,
-  CurrentRefinements,
   HierarchicalMenu,
   Highlight,
   HitsPerPage,

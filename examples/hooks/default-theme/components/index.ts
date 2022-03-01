@@ -1,5 +1,4 @@
 export * from './Breadcrumb';
-export * from './CurrentRefinements';
 export * from './HierarchicalMenu';
 export * from './Highlight';
 export * from './InfiniteHits';

@@ -120,6 +120,11 @@ describe('widgets', () => {
           "name": "ClearRefinements",
         },
         Object {
+          "$$type": "ais.currentRefinements",
+          "$$widgetType": "ais.currentRefinements",
+          "name": "CurrentRefinements",
+        },
+        Object {
           "$$type": "ais.hits",
           "$$widgetType": "ais.hits",
           "name": "Hits",
