@@ -8,6 +8,7 @@ import {
   CurrentRefinements,
   DynamicWidgets,
   Hits,
+  Pagination,
   SearchBox,
 } from 'react-instantsearch-hooks-dom';
 
@@ -19,7 +20,6 @@ import {
   InfiniteHits,
   Menu,
   NumericMenu,
-  Pagination,
   Panel,
   PoweredBy,
   QueryRuleContext,

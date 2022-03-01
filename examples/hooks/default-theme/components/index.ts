@@ -4,7 +4,6 @@ export * from './Highlight';
 export * from './InfiniteHits';
 export * from './Menu';
 export * from './NumericMenu';
-export * from './Pagination';
 export * from './HitsPerPage';
 export * from './Panel';
 export * from './PoweredBy';

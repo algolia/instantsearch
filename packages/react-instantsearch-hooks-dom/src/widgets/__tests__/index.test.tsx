@@ -130,6 +130,11 @@ describe('widgets', () => {
           "name": "Hits",
         },
         Object {
+          "$$type": "ais.pagination",
+          "$$widgetType": "ais.pagination",
+          "name": "Pagination",
+        },
+        Object {
           "$$type": "ais.searchBox",
           "$$widgetType": "ais.searchBox",
           "name": "SearchBox",
