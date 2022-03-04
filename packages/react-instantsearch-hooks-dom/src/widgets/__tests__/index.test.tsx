@@ -13,10 +13,19 @@ import { createSearchClient } from '../../../../../test/mock';
 
 import type { InstantSearch as InstantSearchClass } from 'instantsearch.js';
 
-function getMinimalProps(name: keyof typeof allWidgets) {
-  switch (name) {
+type AllWidgets = typeof allWidgets;
+
+type SingleWidget = {
+  [name in keyof AllWidgets]: { name: name; Component: AllWidgets[name] };
+}[keyof AllWidgets];
+
+function Widget({ widget }: { widget: SingleWidget }) {
+  switch (widget.name) {
+    case 'SortBy': {
+      return <widget.Component items={[]} />;
+    }
     default: {
-      return {};
+      return <widget.Component />;
     }
   }
 }
@@ -29,7 +38,7 @@ function initializeWidgets() {
   return Object.entries(allWidgets).map(([name, Component]) => {
     let instantSearchInstance: InstantSearchClass | undefined = undefined;
 
-    const props = getMinimalProps(name as keyof typeof allWidgets);
+    const widget = { name, Component } as SingleWidget;
 
     renderToString(
       <InstantSearchServerContext.Provider
@@ -43,7 +52,7 @@ function initializeWidgets() {
           searchClient={createSearchClient()}
           indexName="indexName"
         >
-          <Component {...props} />
+          <Widget widget={widget} />
         </InstantSearch>
       </InstantSearchServerContext.Provider>
     );
@@ -138,6 +147,11 @@ describe('widgets', () => {
           "$$type": "ais.searchBox",
           "$$widgetType": "ais.searchBox",
           "name": "SearchBox",
+        },
+        Object {
+          "$$type": "ais.sortBy",
+          "$$widgetType": "ais.sortBy",
+          "name": "SortBy",
         },
       ]
     `);
