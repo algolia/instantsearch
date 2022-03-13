@@ -284,7 +284,17 @@ export type TransformItems<TItem, TMetadata = TransformItemsMetadata> = (
  */
 export type SortBy<TItem> =
   | ((a: TItem, b: TItem) => number)
-  | Array<'count' | 'isRefined' | 'name:asc' | 'name:desc'>;
+  | Array<
+      | 'count'
+      | 'count:asc'
+      | 'count:desc'
+      | 'name'
+      | 'name:asc'
+      | 'name:desc'
+      | 'isRefined'
+      | 'isRefined:asc'
+      | 'isRefined:desc'
+    >;
 
 /**
  * Creates the URL for the given value.
