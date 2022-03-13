@@ -81,7 +81,7 @@ export type RefinementListConnectorParams = {
    *
    * If a facetOrdering is set in the index settings, it is used when sortBy isn't passed
    */
-  sortBy?: SortBy<RefinementListItem>;
+  sortBy?: SortBy<SearchResults.FacetValue>;
   /**
    * Escapes the content of the facet values.
    */

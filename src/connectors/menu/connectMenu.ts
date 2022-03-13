@@ -1,3 +1,4 @@
+import type { SearchResults } from 'algoliasearch-helper';
 import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
@@ -65,7 +66,7 @@ export type MenuConnectorParams = {
    *
    * If a facetOrdering is set in the index settings, it is used when sortBy isn't passed
    */
-  sortBy?: SortBy<MenuItem>;
+  sortBy?: SortBy<SearchResults.HierarchicalFacet>;
   /**
    * Function to transform the items passed to the templates.
    */
