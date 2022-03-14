@@ -1,3 +1,12 @@
+## [4.39.2](https://github.com/algolia/instantsearch.js/compare/v4.39.1...v4.39.2) (2022-03-14)
+
+
+### Bug Fixes
+
+* fix types of `sortBy` option ([#5024](https://github.com/algolia/instantsearch.js/issues/5024)) ([3f7ea32](https://github.com/algolia/instantsearch.js/commit/3f7ea32374e0e409ebf27b07d28cf3871a5b33b3))
+
+
+
 ## [4.39.1](https://github.com/algolia/instantsearch.js/compare/v4.39.0...v4.39.1) (2022-03-01)
 
 
