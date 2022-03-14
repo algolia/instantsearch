@@ -84,7 +84,7 @@ export type HierarchicalMenuConnectorParams = {
    *
    * If a facetOrdering is set in the index settings, it is used when sortBy isn't passed
    */
-  sortBy?: SortBy<HierarchicalMenuItem>;
+  sortBy?: SortBy<SearchResults.HierarchicalFacet>;
   /**
    * Function to transform the items passed to the templates.
    */
