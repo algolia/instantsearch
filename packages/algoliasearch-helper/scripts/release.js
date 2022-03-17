@@ -144,7 +144,7 @@ function commitNewFiles(version) {
 }
 
 function publish() {
-  shell.echo('Pushing new commits to Github');
+  shell.echo('Pushing new commits to GitHub');
   shell.exec('git push origin', {silent: true});
   shell.exec('git push origin --tags', {silent: true});
 
@@ -155,7 +155,7 @@ function publish() {
 }
 
 function publishOnNpm(tag) {
-  shell.echo('Publishing new version on NPM');
+  shell.echo('Publishing new version on npm');
   shell.exec(`npm publish --tag ${tag}`, {silent: true});
 }
 
@@ -163,7 +163,7 @@ function goBackToDevelop() {
   shell.echo('Merging back to develop');
   shell.exec('git checkout develop && git merge --no-edit master', {silent: true});
 
-  shell.echo('Pushing the merge to Github');
+  shell.echo('Pushing the merge to GitHub');
   shell.exec('git push origin develop', {silent: true});
 }
 

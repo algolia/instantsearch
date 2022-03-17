@@ -36,7 +36,7 @@ track of the search parameters and provides a higher level API.
   - [Helper cheatsheet](#helper-cheatsheet)
     - [Add the helper in your project](#add-the-helper-in-your-project)
     - [Regular `<script>` tag](#regular-script-tag)
-    - [With NPM](#with-npm)
+    - [With npm](#with-npm)
     - [Init the helper](#init-the-helper)
     - [Helper lifecycle](#helper-lifecycle)
     - [Objects](#objects)
@@ -138,7 +138,7 @@ Use our [jsDelivr](http://www.jsdelivr.com/) build:
 
 `<script src="https://cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script>`
 
-### With NPM
+### With npm
 
 `npm install algoliasearch-helper`
 

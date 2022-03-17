@@ -61,7 +61,7 @@ in the application.
 
 ## Integrate
 
-The helper is available on different platforms. You can use it as a script or NPM. As the helper extends the client, we need to import both of them.
+The helper is available on different platforms. You can use it as a script or npm. As the helper extends the client, we need to import both of them.
 
 ### Script tag
 
@@ -72,9 +72,9 @@ Using scripts, you can import the helper directly in your webpage. You will also
 <script src="https://cdn.jsdelivr.net/npm/algoliasearch-helper@{{pkg.version}}/dist/algoliasearch.helper.min.js"></script>
 ```
 
-### NPM
+### npm
 
-In an NPM project, include the project with this command:
+In an npm project, include the project with this command:
 
 `npm install --save algoliasearch algoliasearch-helper`
 
@@ -87,7 +87,7 @@ You can also use Yarn:
 The first step toward searching in your index is to initialize the client and provide it to the helper factory.
 
 ```javascript
-/* if you use NPM, you also need to add the correct requirements
+/* if you use npm, you also need to add the correct requirements
 var algoliasearch = require('algoliasearch');
 var algoliasearchHelper = require('algoliasearch-helper');
 */
