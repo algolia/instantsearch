@@ -1,3 +1,7 @@
+3.7.1 - 2022-03-17
+ * docs(readme): fixed angular.js example link (#885) https://github.com/algolia/algoliasearch-helper-js/commit/c16287e6685040a3786b8d0bac0922cdc583134e, closes https://github.com/algolia/algoliasearch-helper-js/issues/885
+ * fix(types): allow "__isArtificial" (#890) https://github.com/algolia/algoliasearch-helper-js/commit/1e2aef0fb8aa88c80b985ef009bff5a3dd71ca80
+
 3.7.0 - 2021-12-13
  * feat(events): move to @algolia/events (#883) https://github.com/algolia/algoliasearch-helper-js/commit/0c33fdc0063d7486db71ba0c6952339dc8b93ae5
 
