@@ -279,12 +279,17 @@ export type TransformItems<TItem, TMetadata = TransformItemsMetadata> = (
   metadata: TMetadata
 ) => TItem[];
 
+type SortByDirection<TCriterion extends string> =
+  | TCriterion
+  | `${TCriterion}:asc`
+  | `${TCriterion}:desc`;
+
 /**
  * Transforms the given items.
  */
 export type SortBy<TItem> =
   | ((a: TItem, b: TItem) => number)
-  | Array<'count' | 'isRefined' | 'name:asc' | 'name:desc'>;
+  | Array<SortByDirection<'count' | 'name' | 'isRefined'>>;
 
 /**
  * Creates the URL for the given value.
