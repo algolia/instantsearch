@@ -1,3 +1,6 @@
+3.7.3 - 2022-03-18
+ * fix(ts): remove stray comment https://github.com/algolia/algoliasearch-helper-js/commit/24fe8de4bebc74500b33c95b124500b8499ef588
+
 3.7.2 - 2022-03-18
  * chore(docs): fix capitalization of Github and npm https://github.com/algolia/algoliasearch-helper-js/commit/5babbcad0b3d406a0b56f7a55682ff169e2b853f
  * fix(results): implement search result options via an argument https://github.com/algolia/algoliasearch-helper-js/commit/4e6ac6926bd284c7eafe060480fc4258844d121a
