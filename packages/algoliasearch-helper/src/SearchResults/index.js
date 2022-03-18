@@ -224,7 +224,7 @@ function findMatchingHierarchicalFacetFromAttributeName(
 }
  **/
 /*eslint-enable */
-function SearchResults(state, results) {
+function SearchResults(state, results, options) {
   var mainSubResponse = results[0];
 
   this._rawResults = results;
@@ -234,6 +234,11 @@ function SearchResults(state, results) {
   // https://www.algolia.com/doc/api-reference/api-methods/search/#response
   Object.keys(mainSubResponse).forEach(function(key) {
     self[key] = mainSubResponse[key];
+  });
+
+  // Make every key of the result options reachable from the instance
+  Object.keys(options || {}).forEach(function(key) {
+    self[key] = options[key];
   });
 
   /**

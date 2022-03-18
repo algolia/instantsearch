@@ -13,7 +13,7 @@ import algoliasearch, {
   // @ts-ignore
   Response as SearchResponseV3,
 } from 'algoliasearch';
-import {
+import { 
   SearchOptions as SearchOptionsV4,
   SearchResponse as SearchResponseV4,
   FindAnswersResponse
@@ -1144,8 +1144,16 @@ declare namespace algoliasearchHelper {
     type Operator = '=' | '>' | '>=' | '<' | '<=' | '!=';
   }
 
+  export interface SearchResultsOptions {
+    /**
+     * Marker which can be added to search results to identify them as created without a search response.
+     * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
+     */
+    __isArtificial: boolean | undefined
+  }
+
   export class SearchResults<T = any>
-    implements Omit<SearchResponse<T>, 'facets' | 'params'> {
+    implements Omit<SearchResponse<T>, 'facets' | 'params'>, implements SearchResultsOptions {
     /**
      * query used to generate the results
      */
@@ -1302,9 +1310,13 @@ declare namespace algoliasearchHelper {
      * Marker which can be added to search results to identify them as created without a search response.
      * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
      */
-    __isArtificial?: boolean;
+    // __isArtificial?: boolean;
 
-    constructor(state: SearchParameters, results: SearchResponse<T>[]);
+    constructor(
+      state: SearchParameters,
+      results: SearchResponse<T>[],
+      options?: SearchResultsOptions
+    );
 
     /**
      * Get a facet object with its name

@@ -28,3 +28,19 @@ test('processingTime should ignore undefined', function() {
 
   expect(result.processingTimeMS).toBe(1);
 });
+
+test('options should override search result keys', function() {
+  var result = new SearchResults(
+    new SearchParameters(),
+    [
+      {
+        __isArtificial: false
+      }
+    ],
+    {
+      __isArtificial: true
+    }
+  );
+
+  expect(result.__isArtificial).toBe(true);
+});
