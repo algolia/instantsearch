@@ -1,5 +1,6 @@
 import type { HoganOptions, Template } from 'hogan.js';
 import hogan from 'hogan.js';
+import { html } from 'htm/preact';
 import type { Templates, HoganHelpers } from '../../types';
 import type { BindEventForHits } from './createSendEventForHits';
 
@@ -56,7 +57,8 @@ function renderTemplate({
   }
 
   if (typeof template === 'function') {
-    return template(data, bindEvent!);
+    // @ts-ignore
+    return template(data, bindEvent!, html);
   }
 
   const transformedHelpers = transformHelpersToHogan(

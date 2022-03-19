@@ -1,6 +1,7 @@
 import type { Hit } from '../types';
 import { component } from '../lib/suit';
 import { TAG_REPLACEMENT, getPropertyByPath, warning } from '../lib/utils';
+import { html } from 'htm/preact';
 
 export type SnippetOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path
@@ -10,6 +11,7 @@ export type SnippetOptions = {
   cssClasses?: {
     highlighted?: string;
   };
+  jsx?: boolean;
 };
 
 const suit = component('Snippet');
@@ -19,6 +21,7 @@ export default function snippet({
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
+  jsx = false,
 }: SnippetOptions): string {
   const snippetAttributeResult = getPropertyByPath(
     hit._snippetResult,
@@ -43,7 +46,7 @@ See: https://alg.li/highlighting
       descendantName: 'highlighted',
     }) + (cssClasses.highlighted ? ` ${cssClasses.highlighted}` : '');
 
-  return attributeValue
+  const patched = attributeValue
     .replace(
       new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
       `<${highlightedTagName} class="${className}">`
@@ -52,4 +55,11 @@ See: https://alg.li/highlighting
       new RegExp(TAG_REPLACEMENT.highlightPostTag, 'g'),
       `</${highlightedTagName}>`
     );
+
+  if (jsx) {
+    // @ts-ignore
+    return html([patched]);
+  }
+
+  return patched;
 }

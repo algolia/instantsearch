@@ -1,6 +1,7 @@
 import type { Hit } from '../types';
 import { component } from '../lib/suit';
 import { getPropertyByPath, TAG_REPLACEMENT, warning } from '../lib/utils';
+import { html } from 'htm/preact';
 
 export type HighlightOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path
@@ -10,6 +11,7 @@ export type HighlightOptions = {
   cssClasses?: Partial<{
     highlighted: string;
   }>;
+  jsx?: boolean;
 };
 
 const suit = component('Highlight');
@@ -19,6 +21,7 @@ export default function highlight({
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
+  jsx = false,
 }: HighlightOptions): string {
   const highlightAttributeResult = getPropertyByPath(
     hit._highlightResult,
@@ -43,7 +46,7 @@ See: https://alg.li/highlighting
       descendantName: 'highlighted',
     }) + (cssClasses.highlighted ? ` ${cssClasses.highlighted}` : '');
 
-  return attributeValue
+  const patched = attributeValue
     .replace(
       new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
       `<${highlightedTagName} class="${className}">`
@@ -52,4 +55,11 @@ See: https://alg.li/highlighting
       new RegExp(TAG_REPLACEMENT.highlightPostTag, 'g'),
       `</${highlightedTagName}>`
     );
+
+  if (jsx) {
+    // @ts-ignore
+    return html([patched]);
+  }
+
+  return patched;
 }

@@ -258,4 +258,34 @@ storiesOf('Results/Hits', module)
         insightsClient: fakeInsightsClient,
       }
     )
+  )
+  .add(
+    'with html function',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.hits({
+          container,
+          templates: {
+            // @ts-ignore
+            item(hit, _, html) {
+              return html`<img height="50" src="${hit.image}" />
+                <h2 style="font-size: 1rem">
+                  ${instantsearch.highlight({
+                    attribute: 'name',
+                    hit,
+                    jsx: true,
+                  })}
+                </h2>
+                <p>
+                  ${instantsearch.snippet({
+                    attribute: 'description',
+                    hit,
+                    jsx: true,
+                  })}
+                </p>`;
+            },
+          },
+        }),
+      ]);
+    })
   );
