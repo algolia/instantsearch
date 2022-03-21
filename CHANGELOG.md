@@ -1,3 +1,12 @@
+## [4.40.1](https://github.com/algolia/instantsearch.js/compare/v4.40.0...v4.40.1) (2022-03-21)
+
+
+### Bug Fixes
+
+* **types:** update to latest algoliasearch-helper ([6bbe790](https://github.com/algolia/instantsearch.js/commit/6bbe790a99320b4237b81614472c048ffe4426d8))
+
+
+
 # [4.40.0](https://github.com/algolia/instantsearch.js/compare/v4.39.2...v4.40.0) (2022-03-21)
 
 
