@@ -1149,11 +1149,14 @@ declare namespace algoliasearchHelper {
      * Marker which can be added to search results to identify them as created without a search response.
      * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
      */
-    __isArtificial: boolean | undefined
+    __isArtificial?: boolean | undefined
   }
 
+  type ISearchResponse<T> = Omit<SearchResponse<T>, 'facets' | 'params'> &
+    SearchResultsOptions;
+
   export class SearchResults<T = any>
-    implements Omit<SearchResponse<T>, 'facets' | 'params'>, implements SearchResultsOptions {
+    implements ISearchResponse<T> {
     /**
      * query used to generate the results
      */
