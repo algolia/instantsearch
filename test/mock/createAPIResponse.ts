@@ -1,7 +1,33 @@
-import type {
-  SearchForFacetValuesResponse,
-  SearchResponse,
-} from '@algolia/client-search';
+import type algoliasearch from 'algoliasearch/lite';
+import type * as AlgoliaSearch from 'algoliasearch/lite';
+/** @ts-ignore */
+import type * as ClientSearch from '@algolia/client-search';
+
+/** @ts-ignore */
+type SearchResponseV3<TObject> = AlgoliaSearch.Response<TObject>;
+/** @ts-ignore */
+type SearchResponseV4<TObject> = ClientSearch.SearchResponse<TObject>;
+
+type SearchForFacetValuesResponseV3 =
+  /** @ts-ignore */
+  AlgoliaSearch.SearchForFacetValues.Response;
+/** @ts-ignore */
+type SearchForFacetValuesResponseV4 = ClientSearch.SearchForFacetValuesResponse;
+
+type DummySearchClientV4 = {
+  readonly transporter: any;
+};
+
+type DefaultSearchClient = ReturnType<typeof algoliasearch>;
+
+type SearchResponse<THit> = DefaultSearchClient extends DummySearchClientV4
+  ? SearchResponseV4<THit>
+  : SearchResponseV3<THit>;
+
+type SearchForFacetValuesResponse =
+  DefaultSearchClient extends DummySearchClientV4
+    ? SearchForFacetValuesResponseV4
+    : SearchForFacetValuesResponseV3;
 
 export function createSingleSearchResponse<THit = any>(
   options: Partial<SearchResponse<THit>> = {}

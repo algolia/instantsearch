@@ -1,8 +1,13 @@
 import { render } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
 import React from 'react';
 
-import { createSearchClient } from '../../../../../test/mock';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '../../../../../test/mock';
 import { createInstantSearchTestWrapper } from '../../../../../test/utils';
 import { Index } from '../../components/Index';
 import { InstantSearch } from '../../components/InstantSearch';
@@ -15,6 +20,10 @@ import type {
   InstantSearch as InstantSearchType,
   Connector,
 } from 'instantsearch.js';
+import type {
+  HitsConnectorParams,
+  HitsWidgetDescription,
+} from 'instantsearch.js/es/connectors/hits/connectHits';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 
 type CustomSearchBoxWidgetDescription = {
@@ -201,7 +210,7 @@ describe('useConnector', () => {
     await waitForNextUpdate();
   });
 
-  test('calls getWidgetRenderState with the InstantSearch render options', () => {
+  test('calls getWidgetRenderState with the InstantSearch render options and artificial results', () => {
     const getWidgetRenderState = jest.fn();
     const connectCustomSearchBoxMock =
       (renderFn, unmountFn) => (widgetParams) => ({
@@ -243,7 +252,10 @@ describe('useConnector', () => {
       helper: expect.any(Object),
       parent: indexContext!,
       instantSearchInstance: searchContext!,
-      results: expect.objectContaining({ hitsPerPage: 20 }),
+      results: expect.objectContaining({
+        hitsPerPage: 20,
+        __isArtificial: true,
+      }),
       scopedResults: [
         {
           indexId: 'indexName',
@@ -259,6 +271,90 @@ describe('useConnector', () => {
         isSearchStalled: false,
       },
     });
+  });
+
+  test('returns state from artificial results', () => {
+    const searchClient = createSearchClient();
+
+    function SearchProvider({ children }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          {children}
+        </InstantSearch>
+      );
+    }
+
+    function CustomWidget() {
+      const state = useConnector<HitsConnectorParams, HitsWidgetDescription>(
+        connectHits
+      );
+
+      return <>{`artificial results: ${state.results!.__isArtificial}`}</>;
+    }
+
+    const { container } = render(
+      <SearchProvider>
+        <CustomWidget />
+      </SearchProvider>
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        artificial results: true
+      </div>
+    `);
+  });
+
+  test('returns state from existing index results', () => {
+    const searchClient = createSearchClient();
+
+    const results = new SearchResults(new SearchParameters(), [
+      createSingleSearchResponse(),
+    ]);
+
+    function SearchProvider({ children }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <IndexContext.Consumer>
+            {(indexContextValue) => {
+              return (
+                <IndexContext.Provider
+                  value={{
+                    ...indexContextValue!,
+                    // fake results, to simulate SSR, or a widget added after results
+                    getResults() {
+                      return results;
+                    },
+                  }}
+                >
+                  {children}
+                </IndexContext.Provider>
+              );
+            }}
+          </IndexContext.Consumer>
+        </InstantSearch>
+      );
+    }
+
+    function CustomWidget() {
+      const state = useConnector<HitsConnectorParams, HitsWidgetDescription>(
+        connectHits
+      );
+
+      return <>{`artificial results: ${state.results!.__isArtificial}`}</>;
+    }
+
+    const { container } = render(
+      <SearchProvider>
+        <CustomWidget />
+      </SearchProvider>
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        artificial results: undefined
+      </div>
+    `);
   });
 
   test('adds the widget to the parent index', () => {
