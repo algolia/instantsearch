@@ -1,3 +1,6 @@
+3.7.4 - 2022-03-21
+ * fix(type): implement correctly https://github.com/algolia/algoliasearch-helper-js/commit/1c8670b21a507024d2ddf797feae5bb15343c244
+
 3.7.3 - 2022-03-18
  * fix(ts): remove stray comment https://github.com/algolia/algoliasearch-helper-js/commit/24fe8de4bebc74500b33c95b124500b8499ef588
 
