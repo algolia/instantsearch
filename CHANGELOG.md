@@ -1,3 +1,12 @@
+# [4.40.0](https://github.com/algolia/instantsearch.js/compare/v4.39.2...v4.40.0) (2022-03-21)
+
+
+### Features
+
+* **infiniteHits:** avoid caching artificial results ([#5023](https://github.com/algolia/instantsearch.js/issues/5023)) ([e8c0145](https://github.com/algolia/instantsearch.js/commit/e8c01452ebe77b82b8a107c5d4fc026abf5645d8))
+
+
+
 ## [4.39.2](https://github.com/algolia/instantsearch.js/compare/v4.39.1...v4.39.2) (2022-03-14)
 
 
