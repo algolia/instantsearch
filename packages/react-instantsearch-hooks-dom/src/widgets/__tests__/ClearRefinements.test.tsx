@@ -77,46 +77,6 @@ describe('ClearRefinements', () => {
     `);
   });
 
-  test('renders with a custom label', async () => {
-    const { container } = render(
-      <InstantSearchHooksTestWrapper
-        initialUiState={{
-          indexName: {
-            refinementList: {
-              brand: ['Apple'],
-            },
-          },
-        }}
-      >
-        <RefinementList attribute="brand" />
-        <ClearRefinements
-          translations={{
-            resetLabel: 'Clear',
-          }}
-        />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    await wait(0);
-
-    expect(
-      document.querySelector('.ais-ClearRefinements-button')
-    ).toHaveTextContent('Clear');
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-ClearRefinements"
-        >
-          <button
-            class="ais-ClearRefinements-button"
-          >
-            Clear
-          </button>
-        </div>
-      </div>
-    `);
-  });
-
   test('clears all refinements', async () => {
     const { container, queryAllByRole } = render(
       <InstantSearchHooksTestWrapper
