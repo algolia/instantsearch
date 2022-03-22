@@ -53,6 +53,9 @@ jobs:
       - run:
           name: Unit & Integration Tests
           command: yarn test --maxWorkers=4
+      - run:
+          name: Type checking
+          command: yarn tsc
 
   'test algoliasearch v3':
     <<: *defaults
@@ -64,10 +67,13 @@ jobs:
       - save_cache: *save_yarn_cache
       - run:
           name: Install algoliasearch v3
-          command: yarn add "algoliasearch@3.35.1"
+          command: yarn add --dev algoliasearch@3.35.1 @types/algoliasearch@3.34.10
       - run:
           name: Unit & Integration Tests
           command: yarn test --maxWorkers=4
+      - run:
+          name: Type checking
+          command: yarn tsc
 
   docs:
     <<: *defaults

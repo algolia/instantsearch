@@ -1155,8 +1155,7 @@ declare namespace algoliasearchHelper {
   type ISearchResponse<T> = Omit<SearchResponse<T>, 'facets' | 'params'> &
     SearchResultsOptions;
 
-  export class SearchResults<T = any>
-    implements ISearchResponse<T> {
+  export class SearchResults<T = any> implements ISearchResponse<T> {
     /**
      * query used to generate the results
      */
