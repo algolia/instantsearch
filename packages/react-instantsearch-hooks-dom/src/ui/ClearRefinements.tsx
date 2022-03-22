@@ -2,18 +2,25 @@ import React from 'react';
 
 import { cx } from './lib/cx';
 
+export type ClearRefinementsTranslations = {
+  /**
+   * The label of the button.
+   */
+  resetLabel: string;
+};
+
 export type ClearRefinementsProps = React.HTMLAttributes<HTMLDivElement> &
   Pick<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     'disabled' | 'onClick'
   > & {
-    resetLabel?: string;
+    translations: ClearRefinementsTranslations;
   };
 
 export function ClearRefinements({
-  resetLabel = 'Clear refinements',
   disabled = false,
   onClick = () => {},
+  translations,
   ...props
 }: ClearRefinementsProps) {
   return (
@@ -26,7 +33,7 @@ export function ClearRefinements({
           disabled && 'ais-ClearRefinements-button--disabled'
         )}
       >
-        {resetLabel}
+        {translations.resetLabel}
       </button>
     </div>
   );
