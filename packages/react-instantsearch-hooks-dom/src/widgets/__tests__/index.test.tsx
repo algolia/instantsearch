@@ -13,11 +13,15 @@ import { createSearchClient } from '../../../../../test/mock';
 
 import type { InstantSearch as InstantSearchClass } from 'instantsearch.js';
 
-type AllWidgets = typeof allWidgets;
+// We only track widgets that use connectors.
+type RegularWidgets = Omit<typeof allWidgets, 'Highlight' | 'Snippet'>;
 
 type SingleWidget = {
-  [name in keyof AllWidgets]: { name: name; Component: AllWidgets[name] };
-}[keyof AllWidgets];
+  [name in keyof RegularWidgets]: {
+    name: name;
+    Component: RegularWidgets[name];
+  };
+}[keyof RegularWidgets];
 
 function Widget({ widget }: { widget: SingleWidget }) {
   switch (widget.name) {
@@ -35,36 +39,45 @@ function Widget({ widget }: { widget: SingleWidget }) {
  * components/widgets.
  */
 function initializeWidgets() {
-  return Object.entries(allWidgets).map(([name, Component]) => {
-    let instantSearchInstance: InstantSearchClass | undefined = undefined;
+  return Object.entries(allWidgets)
+    .filter(
+      (
+        regularWidget
+      ): regularWidget is [
+        keyof RegularWidgets,
+        RegularWidgets[keyof RegularWidgets]
+      ] => ['Highlight', 'Snippet'].includes(regularWidget[0]) === false
+    )
+    .map(([name, Component]) => {
+      let instantSearchInstance: InstantSearchClass | undefined = undefined;
 
-    const widget = { name, Component } as SingleWidget;
+      const widget = { name, Component } as SingleWidget;
 
-    renderToString(
-      <InstantSearchServerContext.Provider
-        value={{
-          notifyServer: ({ search }) => {
-            instantSearchInstance = search;
-          },
-        }}
-      >
-        <InstantSearch
-          searchClient={createSearchClient()}
-          indexName="indexName"
+      renderToString(
+        <InstantSearchServerContext.Provider
+          value={{
+            notifyServer: ({ search }) => {
+              instantSearchInstance = search;
+            },
+          }}
         >
-          <Widget widget={widget} />
-        </InstantSearch>
-      </InstantSearchServerContext.Provider>
-    );
+          <InstantSearch
+            searchClient={createSearchClient()}
+            indexName="indexName"
+          >
+            <Widget widget={widget} />
+          </InstantSearch>
+        </InstantSearchServerContext.Provider>
+      );
 
-    const renderedWidgets = instantSearchInstance!.mainIndex.getWidgets();
+      const renderedWidgets = instantSearchInstance!.mainIndex.getWidgets();
 
-    return {
-      name,
-      renderedWidgets,
-      widget: renderedWidgets[0],
-    };
-  });
+      return {
+        name,
+        renderedWidgets,
+        widget: renderedWidgets[0],
+      };
+    });
 }
 
 describe('widgets', () => {
