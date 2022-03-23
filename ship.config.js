@@ -11,7 +11,7 @@ module.exports = {
       'packages/react-instantsearch-dom-maps',
       'packages/react-instantsearch-dom',
       'packages/react-instantsearch-hooks',
-      'packages/react-instantsearch-hooks-dom',
+      // 'packages/react-instantsearch-hooks-dom',
       'packages/react-instantsearch-hooks-server',
       'packages/react-instantsearch-native',
       'packages/react-instantsearch',
