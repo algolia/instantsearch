@@ -1136,6 +1136,38 @@ describe('findResultsState', () => {
       });
     });
 
+    it('searches once with multiple indices', async () => {
+      const Connected = createWidget();
+      const App = (props) => (
+        <InstantSearch {...props}>
+          <Connected />
+          <Index indexId="index1WithRefinement" indexName="index1">
+            <Connected />
+          </Index>
+          <Index indexId="index2WithRefinement" indexName="index2">
+            <Connected />
+          </Index>
+        </InstantSearch>
+      );
+
+      const props = {
+        searchClient: createSearchClient(),
+        indexName: 'abc',
+        searchState: {
+          query: 'iPhone',
+        },
+      };
+
+      const { results } = await findResultsState(App, props);
+
+      expect(props.searchClient.search).toHaveBeenCalledTimes(1);
+      expect(results.map(({ _internalIndexId }) => _internalIndexId)).toEqual([
+        'abc',
+        'index1WithRefinement',
+        'index2WithRefinement',
+      ]);
+    });
+
     it('searches twice (cached) with dynamic widgets', async () => {
       const RefinementList = connectRefinementList(() => null);
       const App = (props) => (
@@ -1156,15 +1188,12 @@ describe('findResultsState', () => {
 
       await findResultsState(App, props);
 
-      // [search (index 1), search (index 2), dynamic (index 1), dynamic (index 2)]
-      expect(props.searchClient.search).toHaveBeenCalledTimes(4);
+      // [search, dynamic]
+      expect(props.searchClient.search).toHaveBeenCalledTimes(2);
 
       // both calls are the same, so they're cached
       expect(props.searchClient.search.mock.calls[0][0]).toEqual(
-        props.searchClient.search.mock.calls[2][0]
-      );
-      expect(props.searchClient.search.mock.calls[1][0]).toEqual(
-        props.searchClient.search.mock.calls[3][0]
+        props.searchClient.search.mock.calls[1][0]
       );
     });
 
@@ -1193,11 +1222,11 @@ describe('findResultsState', () => {
 
       await findResultsState(App, props);
 
-      // [search (index 1), search (index 2), dynamic (index 1), dynamic (index 2)]
-      expect(props.searchClient.search).toHaveBeenCalledTimes(4);
+      // [search, dynamic]
+      expect(props.searchClient.search).toHaveBeenCalledTimes(2);
 
       // first query doesn't have the fallback widget mounted yet
-      expect(props.searchClient.search.mock.calls[1][0][0]).toEqual({
+      expect(props.searchClient.search.mock.calls[0][0][1]).toEqual({
         indexName: 'index1WithRefinement',
         params: {
           facets: ['*'],
@@ -1209,7 +1238,7 @@ describe('findResultsState', () => {
       });
 
       // second query does have the fallback widget mounted, and thus also the refinement
-      expect(props.searchClient.search.mock.calls[3][0][0]).toEqual({
+      expect(props.searchClient.search.mock.calls[1][0][1]).toEqual({
         indexName: 'index1WithRefinement',
         params: {
           facetFilters: [['categories:refined!']],

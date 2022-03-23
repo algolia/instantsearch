@@ -1,6 +1,6 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import { version, HIGHLIGHT_TAGS } from 'react-instantsearch-core';
 
 const hasMultipleIndices = (context) => context && context.multiIndexContext;
@@ -98,33 +98,31 @@ const singleIndexSearch = (helper, parameters) =>
 const multiIndexSearch = (
   indexName,
   client,
-  helper,
   sharedParameters,
   { [indexName]: mainParameters, ...derivedParameters }
 ) => {
+  const helper = algoliasearchHelper(client, indexName);
   const indexIds = Object.keys(derivedParameters);
 
   const searches = [
-    helper.searchOnce({
-      ...sharedParameters,
-      ...mainParameters,
-    }),
-    ...indexIds.map((indexId) => {
-      const parameters = derivedParameters[indexId];
+    new SearchParameters({ ...sharedParameters, ...mainParameters }),
+    ...indexIds.map((indexId) => derivedParameters[indexId]),
+  ].map(
+    (params) =>
+      new Promise((resolve) =>
+        helper.derive(() => params).once('result', resolve)
+      )
+  );
 
-      return algoliasearchHelper(client, parameters.index).searchOnce(
-        parameters
-      );
-    }),
-  ];
+  helper.searchOnlyWithDerivedHelpers();
 
   // We attach `indexId` on the results to be able to reconstruct the object
   // on the client side. We cannot rely on `state.index` anymore because we
   // may have multiple times the same index.
   return Promise.all(searches).then((results) =>
     [indexName, ...indexIds].map((indexId, i) => ({
-      rawResults: cleanRawResults(results[i].content._rawResults),
-      state: results[i].content._state,
+      rawResults: cleanRawResults(results[i].results._rawResults),
+      state: results[i].results._state,
       _internalIndexId: indexId,
     }))
   );
@@ -193,7 +191,6 @@ export const findResultsState = function (App, props) {
     return multiIndexSearch(
       props.indexName,
       props.searchClient,
-      helper,
       sharedParameters,
       derivedParameters
     ).then((results) => {
