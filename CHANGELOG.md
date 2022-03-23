@@ -1,3 +1,19 @@
+# [6.23.0](https://algolia/compare/v6.22.0...v6.23.0) (2022-03-23)
+
+
+### Bug Fixes
+
+* **ssr:** perform initial multi-index search using a single request ([#3385](https://algolia/issues/3385)) ([b96809e](https://algolia/commits/b96809e5748d298350890647956cb7adbbb55650))
+
+
+### Features
+
+* **hooks:** allow additional widget properties to be passed from hooks ([#3359](https://algolia/issues/3359)) ([a047be4](https://algolia/commits/a047be45c7fce7ee28f7d6f61d2fbfa79e3ed2d0))
+* **hooks:** allow useHits and useInfiniteHit to be generic ([#3364](https://algolia/issues/3364)) ([8e66ad3](https://algolia/commits/8e66ad3ad587197c4811c60a5cab475137ca5afb))
+* **hooks:** mark initial results as "artificial" ([#3384](https://algolia/issues/3384)) ([937efdc](https://algolia/commits/937efdc71bae1d99270f8ecb5c5c9c501b3d7769))
+
+
+
 # [6.22.0](https://github.com/algolia/react-instantsearch/compare/v6.21.1...v6.22.0) (2022-02-01)
 
 
