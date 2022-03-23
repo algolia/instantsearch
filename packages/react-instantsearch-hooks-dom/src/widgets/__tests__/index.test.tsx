@@ -28,6 +28,11 @@ function Widget({ widget }: { widget: SingleWidget }) {
     case 'SortBy': {
       return <widget.Component items={[]} />;
     }
+    case 'HitsPerPage': {
+      return (
+        <widget.Component items={[{ label: '10', value: 10, default: true }]} />
+      );
+    }
     default: {
       return <widget.Component />;
     }
@@ -150,6 +155,11 @@ describe('widgets', () => {
           "$$type": "ais.hits",
           "$$widgetType": "ais.hits",
           "name": "Hits",
+        },
+        Object {
+          "$$type": "ais.hitsPerPage",
+          "$$widgetType": "ais.hitsPerPage",
+          "name": "HitsPerPage",
         },
         Object {
           "$$type": "ais.pagination",
