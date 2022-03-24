@@ -52,7 +52,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -158,7 +158,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -169,7 +169,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -180,7 +180,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="3"
+                aria-label="Page 3"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -191,7 +191,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="4"
+                aria-label="Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -202,7 +202,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="5"
+                aria-label="Page 5"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -213,7 +213,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="6"
+                aria-label="Page 6"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -224,7 +224,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="7"
+                aria-label="Page 7"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -321,7 +321,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -332,7 +332,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -343,7 +343,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="3"
+                aria-label="Page 3"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -354,7 +354,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="4"
+                aria-label="Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -365,7 +365,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="5"
+                aria-label="Page 5"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -376,7 +376,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="6"
+                aria-label="Page 6"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -387,7 +387,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="7"
+                aria-label="Page 7"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -498,7 +498,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -509,7 +509,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -520,7 +520,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="3"
+                aria-label="Page 3"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -531,7 +531,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="4"
+                aria-label="Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -542,7 +542,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="5"
+                aria-label="Page 5"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -553,7 +553,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="6"
+                aria-label="Page 6"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -564,7 +564,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="7"
+                aria-label="Page 7"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -645,7 +645,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -656,7 +656,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -667,7 +667,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="3"
+                aria-label="Page 3"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -678,7 +678,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="4"
+                aria-label="Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -689,7 +689,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="5"
+                aria-label="Page 5"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -700,7 +700,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="6"
+                aria-label="Page 6"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -711,7 +711,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="7"
+                aria-label="Page 7"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -792,7 +792,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="44"
+                aria-label="Page 44"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -803,7 +803,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="45"
+                aria-label="Page 45"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -814,7 +814,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="46"
+                aria-label="Page 46"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -825,7 +825,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="47"
+                aria-label="Page 47"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -836,7 +836,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="48"
+                aria-label="Page 48"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -847,7 +847,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="49"
+                aria-label="Page 49"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -858,7 +858,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="50"
+                aria-label="Page 50"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -958,7 +958,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="44"
+                aria-label="Page 44"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -969,7 +969,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="45"
+                aria-label="Page 45"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -980,7 +980,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="46"
+                aria-label="Page 46"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -991,7 +991,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="47"
+                aria-label="Page 47"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1002,7 +1002,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="48"
+                aria-label="Page 48"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1013,7 +1013,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="49"
+                aria-label="Page 49"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1024,7 +1024,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="50"
+                aria-label="Page 50"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1105,7 +1105,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1116,7 +1116,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1127,7 +1127,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="3"
+                aria-label="Page 3"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1138,7 +1138,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="4"
+                aria-label="Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1149,7 +1149,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="5"
+                aria-label="Page 5"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1160,7 +1160,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="6"
+                aria-label="Page 6"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1171,7 +1171,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="7"
+                aria-label="Page 7"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1350,7 +1350,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1361,7 +1361,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1372,7 +1372,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="3"
+                aria-label="Page 3"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1383,7 +1383,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="4"
+                aria-label="Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1394,7 +1394,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="5"
+                aria-label="Page 5"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1405,7 +1405,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="6"
+                aria-label="Page 6"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1416,7 +1416,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="7"
+                aria-label="Page 7"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1427,7 +1427,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="8"
+                aria-label="Page 8"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1438,7 +1438,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="9"
+                aria-label="Page 9"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1533,7 +1533,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1544,7 +1544,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1555,7 +1555,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="3"
+                aria-label="Page 3"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1566,7 +1566,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="4"
+                aria-label="Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1577,7 +1577,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="5"
+                aria-label="Page 5"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1588,7 +1588,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="6"
+                aria-label="Page 6"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1683,7 +1683,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1694,7 +1694,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1705,7 +1705,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="3"
+                aria-label="Page 3"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1716,7 +1716,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="4"
+                aria-label="Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1785,7 +1785,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1852,7 +1852,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1927,7 +1927,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1992,7 +1992,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -2061,7 +2061,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
               >

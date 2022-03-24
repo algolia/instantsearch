@@ -15,6 +15,7 @@ export type PaginationProps = Omit<
   | 'nbPages'
   | 'createURL'
   | 'onNavigate'
+  | 'translations'
 > &
   UsePaginationProps;
 
@@ -45,6 +46,18 @@ export function Pagination({
   return (
     <PaginationUiComponent
       {...props}
+      translations={{
+        first: '‹‹',
+        previous: '‹',
+        next: '›',
+        last: '››',
+        page: (currentPage: number) => String(currentPage),
+        ariaFirst: 'First',
+        ariaPrevious: 'Previous',
+        ariaNext: 'Next',
+        ariaLast: 'Last',
+        ariaPage: (currentPage: number) => `Page ${currentPage}`,
+      }}
       showFirst={showFirst}
       showPrevious={showPrevious}
       showNext={showNext}

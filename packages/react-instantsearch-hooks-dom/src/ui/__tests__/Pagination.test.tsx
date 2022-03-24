@@ -7,7 +7,7 @@ import { Pagination } from '../Pagination';
 import type { PaginationProps } from '../Pagination';
 
 describe('Pagination', () => {
-  function createProps({ ...props }: Partial<PaginationProps>) {
+  function createProps(props: Partial<PaginationProps>) {
     const onNavigate = jest.fn();
 
     return {
@@ -22,6 +22,18 @@ describe('Pagination', () => {
       showLast: true,
       createURL: (value: number) => `/?page=${value + 1}`,
       onNavigate,
+      translations: {
+        first: '‹‹',
+        previous: '‹',
+        next: '›',
+        last: '››',
+        page: (currentPage: number) => String(currentPage),
+        ariaFirst: 'First',
+        ariaPrevious: 'Previous',
+        ariaNext: 'Next',
+        ariaLast: 'Last',
+        ariaPage: (currentPage: number) => `Page ${currentPage}`,
+      },
       ...props,
     };
   }
@@ -99,7 +111,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -110,7 +122,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -197,7 +209,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -208,7 +220,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -298,7 +310,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -309,7 +321,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -401,7 +413,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -412,7 +424,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -509,7 +521,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -520,7 +532,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -656,7 +668,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -667,7 +679,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -734,7 +746,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -745,7 +757,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -820,7 +832,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -831,7 +843,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -895,7 +907,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -906,7 +918,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -972,7 +984,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -983,7 +995,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >
@@ -1062,7 +1074,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
-                aria-label="1"
+                aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
               >
@@ -1073,7 +1085,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page"
             >
               <a
-                aria-label="2"
+                aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
               >

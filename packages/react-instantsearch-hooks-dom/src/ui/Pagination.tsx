@@ -5,6 +5,49 @@ import { isModifierClick } from './lib/isModifierClick';
 
 import type { CreateURL } from 'instantsearch.js';
 
+export type PaginationTranslations = {
+  /**
+   * The label for the first page's button.
+   */
+  first: string;
+  /**
+   * The label for the previous page's button.
+   */
+  previous: string;
+  /**
+   * The label for the next page's button.
+   */
+  next: string;
+  /**
+   * The label for the last page's button.
+   */
+  last: string;
+  /**
+   * The label for a page's button.
+   */
+  page(currentPage: number): string;
+  /**
+   * The accessible label for the first page's button.
+   */
+  ariaFirst: string;
+  /**
+   * The accessible label for the previous page's button.
+   */
+  ariaPrevious: string;
+  /**
+   * The accessible label for the next page's button.
+   */
+  ariaNext: string;
+  /**
+   * The accessible label for the last page's button.
+   */
+  ariaLast: string;
+  /**
+   * The accessible label for a page's button.
+   */
+  ariaPage(currentPage: number): string;
+};
+
 export type PaginationProps = React.HTMLAttributes<HTMLDivElement> & {
   pages: number[];
   currentPage: number;
@@ -17,7 +60,7 @@ export type PaginationProps = React.HTMLAttributes<HTMLDivElement> & {
   showLast?: boolean;
   createURL: CreateURL<number>;
   onNavigate: (page: number) => void;
-};
+} & { translations: PaginationTranslations };
 
 export function Pagination({
   pages,
@@ -31,6 +74,7 @@ export function Pagination({
   showLast = true,
   createURL,
   onNavigate,
+  translations,
   ...props
 }: PaginationProps) {
   const firstPageIndex = 0;
@@ -52,27 +96,25 @@ export function Pagination({
           <PaginationItem
             isDisabled={isFirstPage}
             className="ais-Pagination-item--firstPage"
-            aria-label="First"
+            aria-label={translations.ariaFirst}
             href={createURL(firstPageIndex)}
             onClick={() => onNavigate(firstPageIndex)}
           >
-            ‹‹
+            {translations.first}
           </PaginationItem>
         )}
         {showPrevious && (
           <PaginationItem
             isDisabled={isFirstPage}
             className="ais-Pagination-item--previousPage"
-            aria-label="Previous"
+            aria-label={translations.ariaPrevious}
             href={createURL(previousPageIndex)}
             onClick={() => onNavigate(previousPageIndex)}
           >
-            ‹
+            {translations.previous}
           </PaginationItem>
         )}
         {pages.map((page) => {
-          const label = String(page + 1);
-
           return (
             <PaginationItem
               key={page}
@@ -81,11 +123,11 @@ export function Pagination({
                 'ais-Pagination-item--page',
                 page === currentPage && 'ais-Pagination-item--selected'
               )}
-              aria-label={label}
+              aria-label={translations.ariaPage(page + 1)}
               href={createURL(page)}
               onClick={() => onNavigate(page)}
             >
-              {label}
+              {translations.page(page + 1)}
             </PaginationItem>
           );
         })}
@@ -93,22 +135,22 @@ export function Pagination({
           <PaginationItem
             isDisabled={isLastPage}
             className="ais-Pagination-item--nextPage"
-            aria-label="Next"
+            aria-label={translations.ariaNext}
             href={createURL(nextPageIndex)}
             onClick={() => onNavigate(nextPageIndex)}
           >
-            ›
+            {translations.next}
           </PaginationItem>
         )}
         {showLast && (
           <PaginationItem
             isDisabled={isLastPage}
             className="ais-Pagination-item--lastPage"
-            aria-label="Last"
+            aria-label={translations.ariaLast}
             href={createURL(lastPageIndex)}
             onClick={() => onNavigate(lastPageIndex)}
           >
-            ››
+            {translations.last}
           </PaginationItem>
         )}
       </ul>
