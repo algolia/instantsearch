@@ -33,6 +33,9 @@ function Widget({ widget }: { widget: SingleWidget }) {
         <widget.Component items={[{ label: '10', value: 10, default: true }]} />
       );
     }
+    case 'RefinementList': {
+      return <widget.Component attribute="brand" />;
+    }
     default: {
       return <widget.Component />;
     }
@@ -165,6 +168,11 @@ describe('widgets', () => {
           "$$type": "ais.pagination",
           "$$widgetType": "ais.pagination",
           "name": "Pagination",
+        },
+        Object {
+          "$$type": "ais.refinementList",
+          "$$widgetType": "ais.refinementList",
+          "name": "RefinementList",
         },
         Object {
           "$$type": "ais.searchBox",

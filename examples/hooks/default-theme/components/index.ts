@@ -9,5 +9,4 @@ export * from './PoweredBy';
 export * from './QueryRuleContext';
 export * from './QueryRuleCustomData';
 export * from './RangeInput';
-export * from './RefinementList';
 export * from './ToggleRefinement';

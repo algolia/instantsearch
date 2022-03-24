@@ -10,6 +10,7 @@ import {
   Hits,
   HitsPerPage,
   Pagination,
+  RefinementList,
   SearchBox,
   SortBy,
 } from 'react-instantsearch-hooks-dom';
@@ -26,7 +27,6 @@ import {
   QueryRuleContext,
   QueryRuleCustomData,
   RangeInput,
-  RefinementList,
   ToggleRefinement,
 } from './components';
 import { Tab, Tabs } from './components/layout';
