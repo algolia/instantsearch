@@ -54,7 +54,9 @@ function initializeWidgets() {
       ): regularWidget is [
         keyof RegularWidgets,
         RegularWidgets[keyof RegularWidgets]
-      ] => ['Highlight', 'Snippet'].includes(regularWidget[0]) === false
+      ] =>
+        ['Highlight', 'Snippet', 'PoweredBy'].includes(regularWidget[0]) ===
+        false
     )
     .map(([name, Component]) => {
       let instantSearchInstance: InstantSearchClass | undefined = undefined;

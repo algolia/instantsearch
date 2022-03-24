@@ -5,6 +5,7 @@ export * from './Hits';
 export * from './HitsPerPage';
 export * from './Pagination';
 export * from './RefinementList';
+export * from './PoweredBy';
 export * from './SearchBox';
 export * from './Snippet';
 export * from './SortBy';

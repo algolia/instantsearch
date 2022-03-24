@@ -11,6 +11,7 @@ import {
   HitsPerPage,
   Pagination,
   RefinementList,
+  PoweredBy,
   SearchBox,
   SortBy,
 } from 'react-instantsearch-hooks-dom';
@@ -23,7 +24,6 @@ import {
   Menu,
   NumericMenu,
   Panel,
-  PoweredBy,
   QueryRuleContext,
   QueryRuleCustomData,
   RangeInput,

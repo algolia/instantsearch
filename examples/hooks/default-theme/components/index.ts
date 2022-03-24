@@ -5,7 +5,6 @@ export * from './InfiniteHits';
 export * from './Menu';
 export * from './NumericMenu';
 export * from './Panel';
-export * from './PoweredBy';
 export * from './QueryRuleContext';
 export * from './QueryRuleCustomData';
 export * from './RangeInput';
