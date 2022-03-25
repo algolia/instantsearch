@@ -1,4 +1,4 @@
-import { Hit as AlgoliaHit } from '@algolia/client-search';
+import { Hit as AlgoliaHit } from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
 import {
@@ -7,6 +7,7 @@ import {
   ClearRefinements,
   CurrentRefinements,
   DynamicWidgets,
+  Highlight,
   Hits,
   HitsPerPage,
   Pagination,
@@ -19,7 +20,6 @@ import {
 import {
   Breadcrumb,
   HierarchicalMenu,
-  Highlight,
   InfiniteHits,
   Menu,
   NumericMenu,
