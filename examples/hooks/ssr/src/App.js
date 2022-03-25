@@ -1,18 +1,19 @@
 import React from 'react';
 import {
+  Configure,
+  Highlight,
+  Hits,
+  Index,
   InstantSearch,
   InstantSearchSSRProvider,
-  Index,
-  Configure,
-  Hits,
+  Pagination,
+  RefinementList,
   SearchBox,
 } from 'react-instantsearch-hooks-dom';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
 import { searchClient } from './searchClient';
-
-import { Highlight, Pagination, RefinementList } from './components';
 
 function Hit({ hit }) {
   return <Highlight hit={hit} attribute="name" />;
