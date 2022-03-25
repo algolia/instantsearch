@@ -1,97 +1,11 @@
 /**
  * @jest-environment node
  */
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import {
-  InstantSearch,
-  InstantSearchServerContext,
-} from 'react-instantsearch-hooks';
 
-import * as allWidgets from '../';
-import { createSearchClient } from '../../../../../test/mock';
-
-import type { InstantSearch as InstantSearchClass } from 'instantsearch.js';
-
-// We only track widgets that use connectors.
-type RegularWidgets = Omit<typeof allWidgets, 'Highlight' | 'Snippet'>;
-
-type SingleWidget = {
-  [name in keyof RegularWidgets]: {
-    name: name;
-    Component: RegularWidgets[name];
-  };
-}[keyof RegularWidgets];
-
-function Widget({ widget }: { widget: SingleWidget }) {
-  switch (widget.name) {
-    case 'SortBy': {
-      return <widget.Component items={[]} />;
-    }
-    case 'HitsPerPage': {
-      return (
-        <widget.Component items={[{ label: '10', value: 10, default: true }]} />
-      );
-    }
-    case 'RefinementList': {
-      return <widget.Component attribute="brand" />;
-    }
-    default: {
-      return <widget.Component />;
-    }
-  }
-}
-
-/**
- * Uses the SSR APIs to access the InstantSearch widgets rendered by all React InstantSearch
- * components/widgets.
- */
-function initializeWidgets() {
-  return Object.entries(allWidgets)
-    .filter(
-      (
-        regularWidget
-      ): regularWidget is [
-        keyof RegularWidgets,
-        RegularWidgets[keyof RegularWidgets]
-      ] =>
-        ['Highlight', 'Snippet', 'PoweredBy'].includes(regularWidget[0]) ===
-        false
-    )
-    .map(([name, Component]) => {
-      let instantSearchInstance: InstantSearchClass | undefined = undefined;
-
-      const widget = { name, Component } as SingleWidget;
-
-      renderToString(
-        <InstantSearchServerContext.Provider
-          value={{
-            notifyServer: ({ search }) => {
-              instantSearchInstance = search;
-            },
-          }}
-        >
-          <InstantSearch
-            searchClient={createSearchClient()}
-            indexName="indexName"
-          >
-            <Widget widget={widget} />
-          </InstantSearch>
-        </InstantSearchServerContext.Provider>
-      );
-
-      const renderedWidgets = instantSearchInstance!.mainIndex.getWidgets();
-
-      return {
-        name,
-        renderedWidgets,
-        widget: renderedWidgets[0],
-      };
-    });
-}
+import { getAllInstantSearchWidgets } from '../__testutils__/all-widgets';
 
 describe('widgets', () => {
-  const widgets = initializeWidgets();
+  const widgets = getAllInstantSearchWidgets();
 
   test('renders one widget', () => {
     widgets.forEach(({ name, renderedWidgets }) => {

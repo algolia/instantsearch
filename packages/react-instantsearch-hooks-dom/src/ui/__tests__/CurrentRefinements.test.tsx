@@ -170,4 +170,105 @@ describe('CurrentRefinements', () => {
       </div>
     `);
   });
+
+  test('allows custom class names', () => {
+    {
+      const { container } = render(
+        <CurrentRefinements
+          classNames={{
+            root: 'ROOT',
+            rootNoRefinement: 'ROOTNOREFINEMENT',
+            list: 'LIST',
+            listNoRefinement: 'LISTNOREFINEMENT',
+            item: 'ITEM',
+            label: 'LABEL',
+            category: 'CATEGORY',
+            categoryLabel: 'CATEGORYLABEL',
+            delete: 'DELETE',
+          }}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement ROOTNOREFINEMENT"
+          >
+            <ul
+              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement LISTNOREFINEMENT"
+            />
+          </div>
+        </div>
+      `);
+    }
+
+    {
+      const { container } = render(
+        <CurrentRefinements
+          items={[
+            {
+              label: 'brand',
+              refinements: [
+                {
+                  attribute: 'brand',
+                  label: 'Apple',
+                  value: 'Apple',
+                  type: 'disjunctive',
+                },
+              ],
+            },
+          ]}
+          classNames={{
+            root: 'ROOT',
+            rootNoRefinement: 'ROOTNOREFINEMENT',
+            list: 'LIST',
+            listNoRefinement: 'LISTNOREFINEMENT',
+            item: 'ITEM',
+            label: 'LABEL',
+            category: 'CATEGORY',
+            categoryLabel: 'CATEGORYLABEL',
+            delete: 'DELETE',
+          }}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement ROOTNOREFINEMENT"
+          >
+            <ul
+              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement LISTNOREFINEMENT"
+            >
+              <li
+                class="ais-CurrentRefinements-item ITEM"
+              >
+                <span
+                  class="ais-CurrentRefinements-label LABEL"
+                >
+                  brand
+                  :
+                </span>
+                <span
+                  class="ais-CurrentRefinements-category CATEGORY"
+                >
+                  <span
+                    class="ais-CurrentRefinements-categoryLabel CATEGORYLABEL"
+                  >
+                    Apple
+                  </span>
+                  <button
+                    class="ais-CurrentRefinements-delete DELETE"
+                    type="button"
+                  >
+                    ✕
+                  </button>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      `);
+    }
+  });
 });

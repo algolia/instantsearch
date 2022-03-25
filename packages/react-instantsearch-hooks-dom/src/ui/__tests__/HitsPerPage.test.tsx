@@ -6,9 +6,7 @@ import { HitsPerPage } from '../HitsPerPage';
 
 import type { HitsPerPageProps } from '../HitsPerPage';
 
-function createHitsPerPageProps(
-  props?: Partial<HitsPerPageProps>
-): HitsPerPageProps {
+function createProps(props?: Partial<HitsPerPageProps>): HitsPerPageProps {
   return {
     items: [
       { label: '10', value: 10, default: true },
@@ -23,7 +21,7 @@ function createHitsPerPageProps(
 
 describe('HitsPerPage', () => {
   test('renders with items', () => {
-    const props = createHitsPerPageProps();
+    const props = createProps();
     const { container } = render(<HitsPerPage {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
@@ -59,7 +57,7 @@ describe('HitsPerPage', () => {
   });
 
   test('forwards props to the root element', () => {
-    const props = createHitsPerPageProps({
+    const props = createProps({
       title: 'Some custom title',
       className: 'MyHitsPerPage',
     });
@@ -70,8 +68,53 @@ describe('HitsPerPage', () => {
     expect(root).toHaveAttribute('title', 'Some custom title');
   });
 
+  test('allows custom class names', () => {
+    const props = createProps({});
+    const { container } = render(
+      <HitsPerPage
+        {...props}
+        classNames={{
+          root: 'ROOT',
+          select: 'SELECT',
+          option: 'OPTION',
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-HitsPerPage ROOT"
+        >
+          <select
+            class="ais-HitsPerPage-select SELECT"
+          >
+            <option
+              class="ais-HitsPerPage-option OPTION"
+              value="10"
+            >
+              10
+            </option>
+            <option
+              class="ais-HitsPerPage-option OPTION"
+              value="20"
+            >
+              20
+            </option>
+            <option
+              class="ais-HitsPerPage-option OPTION"
+              value="30"
+            >
+              30
+            </option>
+          </select>
+        </div>
+      </div>
+    `);
+  });
+
   test('selects current value', () => {
-    const props = createHitsPerPageProps({
+    const props = createProps({
       currentValue: 20,
     });
     const { getByRole } = render(<HitsPerPage {...props} />);
@@ -88,7 +131,7 @@ describe('HitsPerPage', () => {
   });
 
   test('calls `onChange` when selecting an option', () => {
-    const props = createHitsPerPageProps();
+    const props = createProps();
     const { getByRole } = render(<HitsPerPage {...props} />);
 
     userEvent.selectOptions(getByRole('combobox'), ['10']);

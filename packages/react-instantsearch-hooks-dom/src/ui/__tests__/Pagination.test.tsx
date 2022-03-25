@@ -1030,6 +1030,106 @@ describe('Pagination', () => {
     `);
   });
 
+  test('allows custom class names', () => {
+    const props = createProps({});
+    const { container } = render(
+      <Pagination
+        {...props}
+        classNames={{
+          root: 'ROOT',
+          rootNoRefinement: 'ROOTNOREFINEMENT',
+          list: 'LIST',
+          item: 'ITEM',
+          itemFirstPage: 'ITEMFIRSTPAGE',
+          itemPreviousPage: 'ITEMPREVIOUSPAGE',
+          itemPage: 'ITEMPAGE',
+          itemSelected: 'ITEMSELECTED',
+          itemDisabled: 'ITEMDISABLED',
+          itemNextPage: 'ITEMNEXTPAGE',
+          itemLastPage: 'ITEMLASTPAGE',
+          link: 'LINK',
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Pagination ROOT"
+        >
+          <ul
+            class="ais-Pagination-list LIST"
+          >
+            <li
+              class="ais-Pagination-item ITEM ais-Pagination-item--disabled ITEMDISABLED ais-Pagination-item--firstPage ITEMFIRSTPAGE"
+            >
+              <span
+                aria-label="First"
+                class="ais-Pagination-link LINK"
+              >
+                ‹‹
+              </span>
+            </li>
+            <li
+              class="ais-Pagination-item ITEM ais-Pagination-item--disabled ITEMDISABLED ais-Pagination-item--previousPage ITEMPREVIOUSPAGE"
+            >
+              <span
+                aria-label="Previous"
+                class="ais-Pagination-link LINK"
+              >
+                ‹
+              </span>
+            </li>
+            <li
+              class="ais-Pagination-item ITEM ais-Pagination-item--page ITEMPAGE ais-Pagination-item--selected ITEMSELECTED"
+            >
+              <a
+                aria-label="Page 1"
+                class="ais-Pagination-link LINK"
+                href="/?page=1"
+              >
+                1
+              </a>
+            </li>
+            <li
+              class="ais-Pagination-item ITEM ais-Pagination-item--page ITEMPAGE"
+            >
+              <a
+                aria-label="Page 2"
+                class="ais-Pagination-link LINK"
+                href="/?page=2"
+              >
+                2
+              </a>
+            </li>
+            <li
+              class="ais-Pagination-item ITEM ais-Pagination-item--nextPage ITEMNEXTPAGE"
+            >
+              <a
+                aria-label="Next"
+                class="ais-Pagination-link LINK"
+                href="/?page=2"
+              >
+                ›
+              </a>
+            </li>
+            <li
+              class="ais-Pagination-item ITEM ais-Pagination-item--lastPage ITEMLASTPAGE"
+            >
+              <a
+                aria-label="Last"
+                class="ais-Pagination-link LINK"
+                href="/?page=2"
+              >
+                ››
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    `);
+  });
+
   test('forwards `div` props to the root element', () => {
     const props = createProps({});
 

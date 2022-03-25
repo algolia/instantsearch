@@ -2093,4 +2093,89 @@ describe('Pagination', () => {
       </div>
     `);
   });
+
+  test('accepts custom class names', () => {
+    const { container } = render(
+      <InstantSearchHooksTestWrapper>
+        <Pagination
+          className="MyPagination"
+          classNames={{
+            root: 'ROOT',
+            rootNoRefinement: 'ROOTNOREFINEMENT',
+            list: 'LIST',
+            itemFirstPage: 'ITEMFIRSTPAGE',
+            itemPreviousPage: 'ITEMPREVIOUSPAGE',
+            itemPage: 'ITEMPAGE',
+            itemSelected: 'ITEMSELECTED',
+            itemNextPage: 'ITEMNEXTPAGE',
+            itemLastPage: 'ITEMLASTPAGE',
+          }}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Pagination ROOT ais-Pagination--noRefinement ROOTNOREFINEMENT MyPagination"
+        >
+          <ul
+            class="ais-Pagination-list LIST"
+          >
+            <li
+              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage ITEMFIRSTPAGE"
+            >
+              <span
+                aria-label="First"
+                class="ais-Pagination-link"
+              >
+                ‹‹
+              </span>
+            </li>
+            <li
+              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage ITEMPREVIOUSPAGE"
+            >
+              <span
+                aria-label="Previous"
+                class="ais-Pagination-link"
+              >
+                ‹
+              </span>
+            </li>
+            <li
+              class="ais-Pagination-item ais-Pagination-item--page ITEMPAGE ais-Pagination-item--selected ITEMSELECTED"
+            >
+              <a
+                aria-label="Page 1"
+                class="ais-Pagination-link"
+                href="#"
+              >
+                1
+              </a>
+            </li>
+            <li
+              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage ITEMNEXTPAGE"
+            >
+              <span
+                aria-label="Next"
+                class="ais-Pagination-link"
+              >
+                ›
+              </span>
+            </li>
+            <li
+              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage ITEMLASTPAGE"
+            >
+              <span
+                aria-label="Last"
+                class="ais-Pagination-link"
+              >
+                ››
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    `);
+  });
 });

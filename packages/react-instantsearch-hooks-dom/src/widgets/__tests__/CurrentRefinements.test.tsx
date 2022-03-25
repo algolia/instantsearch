@@ -621,6 +621,113 @@ describe('CurrentRefinements', () => {
     `);
   });
 
+  test('accepts custom class names', async () => {
+    {
+      const { container } = render(
+        <InstantSearchHooksTestWrapper>
+          <CurrentRefinements
+            className="MyCurrentRefinements"
+            classNames={{
+              root: 'ROOT',
+              rootNoRefinement: 'ROOTNOREFINEMENT',
+              list: 'LIST',
+              listNoRefinement: 'LISTNOREFINEMENT',
+              item: 'ITEM',
+              label: 'LABEL',
+              category: 'CATEGORY',
+              categoryLabel: 'CATEGORYLABEL',
+              delete: 'DELETE',
+            }}
+          />
+        </InstantSearchHooksTestWrapper>
+      );
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement ROOTNOREFINEMENT MyCurrentRefinements"
+          >
+            <ul
+              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement LISTNOREFINEMENT"
+            />
+          </div>
+        </div>
+    `);
+    }
+
+    {
+      const { container } = render(
+        <InstantSearchHooksTestWrapper
+          initialUiState={{
+            indexName: {
+              refinementList: {
+                brand: ['Apple'],
+              },
+            },
+          }}
+        >
+          <VirtualRefinementList attribute="brand" />
+          <CurrentRefinements
+            className="MyCurrentRefinements"
+            classNames={{
+              root: 'ROOT',
+              rootNoRefinement: 'ROOTNOREFINEMENT',
+              list: 'LIST',
+              listNoRefinement: 'LISTNOREFINEMENT',
+              item: 'ITEM',
+              label: 'LABEL',
+              category: 'CATEGORY',
+              categoryLabel: 'CATEGORYLABEL',
+              delete: 'DELETE',
+            }}
+          />
+        </InstantSearchHooksTestWrapper>
+      );
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-CurrentRefinements ROOT MyCurrentRefinements"
+          >
+            <ul
+              class="ais-CurrentRefinements-list LIST"
+            >
+              <li
+                class="ais-CurrentRefinements-item ITEM"
+              >
+                <span
+                  class="ais-CurrentRefinements-label LABEL"
+                >
+                  brand
+                  :
+                </span>
+                <span
+                  class="ais-CurrentRefinements-category CATEGORY"
+                >
+                  <span
+                    class="ais-CurrentRefinements-categoryLabel CATEGORYLABEL"
+                  >
+                    Apple
+                  </span>
+                  <button
+                    class="ais-CurrentRefinements-delete DELETE"
+                    type="button"
+                  >
+                    ✕
+                  </button>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      `);
+    }
+  });
+
   test('forwards `div` props to the root element', async () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>

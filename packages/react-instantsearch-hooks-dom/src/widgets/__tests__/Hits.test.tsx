@@ -6,7 +6,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
 import { Hits } from '../Hits';
 
 describe('Hits', () => {
@@ -109,6 +109,80 @@ describe('Hits', () => {
     expect(container.querySelector('.ais-Hits')!.className).toBe(
       'ais-Hits custom'
     );
+  });
+
+  test('accepts custom class names', async () => {
+    const client = createSearchClient({
+      search: (requests) =>
+        Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map((request) =>
+              createSingleSearchResponse({
+                hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+                index: request.indexName,
+              })
+            )
+          )
+        ),
+    });
+
+    const { container } = render(
+      <InstantSearchHooksTestWrapper searchClient={client}>
+        <Hits
+          className="MyHits"
+          classNames={{
+            root: 'ROOT',
+            list: 'LIST',
+            item: 'ITEM',
+          }}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    await wait(0);
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Hits ROOT MyHits"
+        >
+          <ol
+            class="ais-Hits-list LIST"
+          >
+            <li
+              class="ais-Hits-item ITEM"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"1","__position":1}
+                …
+              </div>
+            </li>
+            <li
+              class="ais-Hits-item ITEM"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"2","__position":2}
+                …
+              </div>
+            </li>
+            <li
+              class="ais-Hits-item ITEM"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"3","__position":3}
+                …
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    `);
   });
 
   test('renders with custom div props', () => {

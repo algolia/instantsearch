@@ -3,9 +3,13 @@ import { useHitsPerPage } from 'react-instantsearch-hooks';
 
 import { HitsPerPage as HitsPerPageUiComponent } from '../ui/HitsPerPage';
 
+import type { HitsPerPageProps as HitsPerPageUiComponentProps } from '../ui/HitsPerPage';
 import type { UseHitsPerPageProps } from 'react-instantsearch-hooks';
 
-export type HitsPerPageProps = React.HTMLAttributes<HTMLDivElement> &
+export type HitsPerPageProps = Omit<
+  HitsPerPageUiComponentProps,
+  'items' | 'onChange' | 'currentValue'
+> &
   UseHitsPerPageProps;
 
 export function HitsPerPage(props: HitsPerPageProps) {

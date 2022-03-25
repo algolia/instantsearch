@@ -4,7 +4,7 @@ import { cx } from './lib/cx';
 
 export type ClearRefinementsTranslations = {
   /**
-   * The label of the button.
+   * The label of the button
    */
   resetLabel: string;
 };
@@ -15,22 +15,47 @@ export type ClearRefinementsProps = React.HTMLAttributes<HTMLDivElement> &
     'disabled' | 'onClick'
   > & {
     translations: ClearRefinementsTranslations;
+    classNames?: Partial<ClearRefinementsClassNames>;
   };
 
+export type ClearRefinementsClassNames = {
+  /**
+   * Class names to apply to the root element
+   */
+  root: string;
+  /**
+   * Class names to apply to the button
+   */
+  button: string;
+  /**
+   * Class names to apply to the button when it's disabled
+   */
+  buttonDisabled: string;
+};
+
 export function ClearRefinements({
+  classNames = {},
   disabled = false,
   onClick = () => {},
   translations,
   ...props
 }: ClearRefinementsProps) {
   return (
-    <div {...props} className={cx('ais-ClearRefinements', props.className)}>
+    <div
+      {...props}
+      className={cx('ais-ClearRefinements', classNames.root, props.className)}
+    >
       <button
         disabled={disabled}
         onClick={onClick}
         className={cx(
           'ais-ClearRefinements-button',
-          disabled && 'ais-ClearRefinements-button--disabled'
+          classNames.button,
+          disabled &&
+            cx(
+              'ais-ClearRefinements-button--disabled',
+              classNames.buttonDisabled
+            )
         )}
       >
         {translations.resetLabel}

@@ -76,6 +76,57 @@ describe('HitsPerPage', () => {
     expect(root).toHaveAttribute('title', 'Some custom title');
   });
 
+  test('accepts custom class names', () => {
+    const { container } = render(
+      <InstantSearchHooksTestWrapper>
+        <HitsPerPage
+          items={[
+            { label: '10', value: 10, default: true },
+            { label: '20', value: 20 },
+            { label: '30', value: 30 },
+          ]}
+          className="MyHitsPerPage"
+          classNames={{
+            root: 'ROOT',
+            select: 'SELECT',
+            option: 'OPTION',
+          }}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-HitsPerPage ROOT MyHitsPerPage"
+        >
+          <select
+            class="ais-HitsPerPage-select SELECT"
+          >
+            <option
+              class="ais-HitsPerPage-option OPTION"
+              value="10"
+            >
+              10
+            </option>
+            <option
+              class="ais-HitsPerPage-option OPTION"
+              value="20"
+            >
+              20
+            </option>
+            <option
+              class="ais-HitsPerPage-option OPTION"
+              value="30"
+            >
+              30
+            </option>
+          </select>
+        </div>
+      </div>
+    `);
+  });
+
   test('selects current value', async () => {
     const { getByRole } = render(
       <InstantSearchHooksTestWrapper

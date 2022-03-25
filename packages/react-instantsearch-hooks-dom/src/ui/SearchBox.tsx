@@ -17,15 +17,59 @@ export type SearchBoxProps = React.HTMLAttributes<HTMLDivElement> & {
   onSubmit?(event: FormEvent): void;
   placeholder?: string;
   value: string;
-  resetIconComponent?: JSXElementConstructor<Record<string, any>>;
-  submitIconComponent?: JSXElementConstructor<Record<string, any>>;
-  loadingIconComponent?: JSXElementConstructor<Record<string, any>>;
+  resetIconComponent?: JSXElementConstructor<IconProps>;
+  submitIconComponent?: JSXElementConstructor<IconProps>;
+  loadingIconComponent?: JSXElementConstructor<IconProps>;
+  classNames?: Partial<SearchBoxClassNames>;
 };
 
-function DefaultSubmitIcon() {
+export type IconProps = {
+  classNames: Partial<SearchBoxClassNames>;
+};
+
+export type SearchBoxClassNames = {
+  /**
+   * Class names to apply to the root element
+   */
+  root: string;
+  /**
+   * Class names to apply to the form element
+   */
+  form: string;
+  /**
+   * Class names to apply to the input element
+   */
+  input: string;
+  /**
+   * Class names to apply to the submit button
+   */
+  submit: string;
+  /**
+   * Class names to apply to the reset button
+   */
+  reset: string;
+  /**
+   * Class names to apply to the loading indicator element
+   */
+  loadingIndicator: string;
+  /**
+   * Class names to apply to the submit icon
+   */
+  submitIcon: string;
+  /**
+   * Class names to apply to the reset icon
+   */
+  resetIcon: string;
+  /**
+   * Class names to apply to the loading icon
+   */
+  loadingIcon: string;
+};
+
+function DefaultSubmitIcon({ classNames }: IconProps) {
   return (
     <svg
-      className="ais-SearchBox-submitIcon"
+      className={cx('ais-SearchBox-submitIcon', classNames.submitIcon)}
       width="10"
       height="10"
       viewBox="0 0 40 40"
@@ -35,10 +79,10 @@ function DefaultSubmitIcon() {
   );
 }
 
-function DefaultResetIcon() {
+function DefaultResetIcon({ classNames }: IconProps) {
   return (
     <svg
-      className="ais-SearchBox-resetIcon"
+      className={cx('ais-SearchBox-resetIcon', classNames.resetIcon)}
       viewBox="0 0 20 20"
       width="10"
       height="10"
@@ -48,14 +92,14 @@ function DefaultResetIcon() {
   );
 }
 
-function DefaultLoadingIcon() {
+function DefaultLoadingIcon({ classNames }: IconProps) {
   return (
     <svg
       width="16"
       height="16"
       viewBox="0 0 38 38"
       stroke="#444"
-      className="ais-SearchBox-loadingIcon"
+      className={cx('ais-SearchBox-loadingIcon', classNames.loadingIcon)}
     >
       <g fill="none" fillRule="evenodd">
         <g transform="translate(1 1)" strokeWidth="2">
@@ -87,6 +131,7 @@ export function SearchBox({
   resetIconComponent: ResetIcon = DefaultResetIcon,
   submitIconComponent: SubmitIcon = DefaultSubmitIcon,
   loadingIconComponent: LoadingIcon = DefaultLoadingIcon,
+  classNames = {},
   ...props
 }: SearchBoxProps) {
   function handleSubmit(event: FormEvent) {
@@ -114,17 +159,20 @@ export function SearchBox({
   }
 
   return (
-    <div {...props} className={cx('ais-SearchBox', props.className)}>
+    <div
+      {...props}
+      className={cx('ais-SearchBox', classNames.root, props.className)}
+    >
       <form
         action=""
-        className="ais-SearchBox-form"
+        className={cx('ais-SearchBox-form', classNames.form)}
         noValidate
         onSubmit={handleSubmit}
         onReset={handleReset}
       >
         <input
           ref={inputRef}
-          className="ais-SearchBox-input"
+          className={cx('ais-SearchBox-input', classNames.input)}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
@@ -136,25 +184,28 @@ export function SearchBox({
           onChange={onChange}
         />
         <button
-          className="ais-SearchBox-submit"
+          className={cx('ais-SearchBox-submit', classNames.submit)}
           type="submit"
           title="Submit the search query."
         >
-          <SubmitIcon />
+          <SubmitIcon classNames={classNames} />
         </button>
         <button
-          className="ais-SearchBox-reset"
+          className={cx('ais-SearchBox-reset', classNames.reset)}
           type="reset"
           title="Clear the search query."
           hidden={value.length === 0 && !isSearchStalled}
         >
-          <ResetIcon />
+          <ResetIcon classNames={classNames} />
         </button>
         <span
-          className="ais-SearchBox-loadingIndicator"
+          className={cx(
+            'ais-SearchBox-loadingIndicator',
+            classNames.loadingIndicator
+          )}
           hidden={!isSearchStalled}
         >
-          <LoadingIcon />
+          <LoadingIcon classNames={classNames} />
         </span>
       </form>
     </div>

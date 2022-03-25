@@ -499,6 +499,84 @@ describe('RefinementList', () => {
     );
   });
 
+  test('allows custom class names', () => {
+    const props = createProps({
+      classNames: {
+        root: 'ROOT',
+        searchBox: 'SEARCHBOX',
+        noResults: 'NORESULTS',
+        list: 'LIST',
+        item: 'ITEM',
+        itemSelected: 'ITEMSELECTED',
+        label: 'LABEL',
+        checkbox: 'CHECKBOX',
+        labelText: 'LABELTEXT',
+        count: 'COUNT',
+      },
+    });
+    const { container } = render(<RefinementList {...props} />);
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-RefinementList ROOT"
+        >
+          <ul
+            class="ais-RefinementList-list LIST"
+          >
+            <li
+              class="ais-RefinementList-item ITEM ais-RefinementList-item--selected ITEMSELECTED"
+            >
+              <label
+                class="ais-RefinementList-label LABEL"
+              >
+                <input
+                  checked=""
+                  class="ais-RefinementList-checkbox CHECKBOX"
+                  type="checkbox"
+                  value="Insignia™"
+                />
+                <span
+                  class="ais-RefinementList-labelText LABELTEXT"
+                >
+                  Insignia™
+                </span>
+                <span
+                  class="ais-RefinementList-count COUNT"
+                >
+                  746
+                </span>
+              </label>
+            </li>
+            <li
+              class="ais-RefinementList-item ITEM"
+            >
+              <label
+                class="ais-RefinementList-label LABEL"
+              >
+                <input
+                  class="ais-RefinementList-checkbox CHECKBOX"
+                  type="checkbox"
+                  value="Samsung"
+                />
+                <span
+                  class="ais-RefinementList-labelText LABELTEXT"
+                >
+                  Samsung
+                </span>
+                <span
+                  class="ais-RefinementList-count COUNT"
+                >
+                  633
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    `);
+  });
+
   test('forwards `div` props to the root element', () => {
     const props = createProps({ title: 'Some custom title' });
     const { container } = render(<RefinementList {...props} />);

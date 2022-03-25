@@ -111,6 +111,53 @@ describe('Hits', () => {
     );
   });
 
+  test('allows custom class names', () => {
+    const props = createProps({});
+    const { container } = render(
+      <Hits
+        {...props}
+        classNames={{
+          root: 'ROOT',
+          list: 'LIST',
+          item: 'ITEM',
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Hits ROOT"
+        >
+          <ol
+            class="ais-Hits-list LIST"
+          >
+            <li
+              class="ais-Hits-item ITEM"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"abc","__position":1}
+                …
+              </div>
+            </li>
+            <li
+              class="ais-Hits-item ITEM"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"def","__position":2}
+                …
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    `);
+  });
+
   test('renders with custom div props', () => {
     const props = createProps({ hidden: true });
 

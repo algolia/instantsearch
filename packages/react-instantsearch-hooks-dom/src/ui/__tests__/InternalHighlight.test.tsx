@@ -1,12 +1,12 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { Highlight } from '../Highlight';
+import { InternalHighlight } from '../InternalHighlight';
 
 describe('Highlight', () => {
   test('renders only wrapper with empty match', () => {
     const { container } = render(
-      <Highlight
+      <InternalHighlight
         classNames={{
           root: 'ROOT',
           highlighted: 'HIGHLIGHTED',
@@ -28,7 +28,7 @@ describe('Highlight', () => {
 
   test('renders parts', () => {
     const { container } = render(
-      <Highlight
+      <InternalHighlight
         classNames={{
           root: 'ROOT',
           highlighted: 'HIGHLIGHTED',
@@ -84,7 +84,7 @@ describe('Highlight', () => {
     }
 
     const { container } = render(
-      <Highlight
+      <InternalHighlight
         classNames={{
           root: 'ROOT',
           highlighted: 'HIGHLIGHTED',
@@ -132,7 +132,7 @@ describe('Highlight', () => {
 
   test('forwards `className` and root props', () => {
     const { container } = render(
-      <Highlight
+      <InternalHighlight
         classNames={{
           root: 'ROOT',
           highlighted: 'HIGHLIGHTED',

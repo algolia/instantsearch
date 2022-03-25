@@ -13,6 +13,50 @@ export type RefinementListProps = React.HTMLAttributes<HTMLDivElement> & {
   searchBox?: React.ReactNode;
   noResults?: React.ReactNode;
   showMoreButton?: React.ReactNode;
+  classNames?: Partial<RefinementListClassNames>;
+};
+
+export type RefinementListClassNames = {
+  /**
+   * Class names to apply to the root element
+   */
+  root: string;
+  /**
+   * Class names to apply to the search box wrapper element
+   */
+  searchBox: string;
+  /**
+   * Class names to apply to the root element
+   */
+  noResults: string;
+  /**
+   * Class names to apply to the list element
+   */
+  list: string;
+  /**
+   * Class names to apply to each item element
+   */
+  item: string;
+  /**
+   * Class names to apply to each selected item element
+   */
+  itemSelected: string;
+  /**
+   * Class names to apply to each label element
+   */
+  label: string;
+  /**
+   * Class names to apply to each checkbox element
+   */
+  checkbox: string;
+  /**
+   * Class names to apply to the text for each label
+   */
+  labelText: string;
+  /**
+   * Class names to apply to the facet count of each item
+   */
+  count: string;
 };
 
 export function RefinementList({
@@ -22,53 +66,79 @@ export function RefinementList({
   searchBox,
   noResults,
   showMoreButton,
+  className,
+  classNames = {},
   ...props
 }: RefinementListProps) {
   return (
-    <div {...props} className={cx('ais-RefinementList', props.className)}>
+    <div
+      {...props}
+      className={cx('ais-RefinementList', classNames.root, className)}
+    >
       {searchBox && (
-        <div className="ais-RefinementList-searchBox">{searchBox}</div>
+        <div
+          className={cx('ais-RefinementList-searchBox', classNames.searchBox)}
+        >
+          {searchBox}
+        </div>
       )}
       {noResults ? (
-        <div className="ais-RefinementList-noResults">{noResults}</div>
+        <div
+          className={cx('ais-RefinementList-noResults', classNames.noResults)}
+        >
+          {noResults}
+        </div>
       ) : (
-        <ul className="ais-RefinementList-list">
+        <ul className={cx('ais-RefinementList-list', classNames.list)}>
           {items.map((item) => (
             <li
               key={item.value}
               className={cx(
                 'ais-RefinementList-item',
-                item.isRefined && 'ais-RefinementList-item--selected'
+                classNames.item,
+                item.isRefined &&
+                  cx(
+                    'ais-RefinementList-item--selected',
+                    classNames.itemSelected
+                  )
               )}
             >
-              <label className="ais-RefinementList-label">
+              <label
+                className={cx('ais-RefinementList-label', classNames.label)}
+              >
                 <input
                   checked={item.isRefined}
-                  className="ais-RefinementList-checkbox"
+                  className={cx(
+                    'ais-RefinementList-checkbox',
+                    classNames.checkbox
+                  )}
                   type="checkbox"
                   value={item.value}
                   onChange={() => {
                     onRefine(item);
                   }}
                 />
-                <span className="ais-RefinementList-labelText">
+                <span
+                  className={cx(
+                    'ais-RefinementList-labelText',
+                    classNames.labelText
+                  )}
+                >
                   {query.length > 0 ? (
                     <Highlight
                       parts={[
                         getHighlightedParts(unescape(item.highlighted || '')),
                       ]}
-                      classNames={{
-                        root: 'ais-Highlight',
-                        highlighted: 'ais-Highlight-highlighted',
-                        nonHighlighted: 'ais-Highlight-nonHighlighted',
-                        separator: 'ais-Highlight-separator',
-                      }}
                     />
                   ) : (
                     item.label
                   )}
                 </span>
-                <span className="ais-RefinementList-count">{item.count}</span>
+                <span
+                  className={cx('ais-RefinementList-count', classNames.count)}
+                >
+                  {item.count}
+                </span>
               </label>
             </li>
           ))}

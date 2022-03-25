@@ -429,6 +429,36 @@ describe('ClearRefinements', () => {
     `);
   });
 
+  test('accepts custom class names', () => {
+    const { container } = render(
+      <InstantSearchHooksTestWrapper>
+        <ClearRefinements
+          className="MyClearsRefinements"
+          classNames={{
+            root: 'ROOT',
+            button: 'BUTTON',
+            buttonDisabled: 'DISABLED',
+          }}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-ClearRefinements ROOT MyClearsRefinements"
+        >
+          <button
+            class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLED"
+            disabled=""
+          >
+            Clear refinements
+          </button>
+        </div>
+      </div>
+    `);
+  });
+
   test('forwards `div` props to the root element', async () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
