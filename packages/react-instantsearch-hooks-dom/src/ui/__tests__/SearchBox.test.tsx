@@ -20,6 +20,10 @@ describe('SearchBox', () => {
       onSubmit,
       placeholder: '',
       value: '',
+      translations: {
+        submitTitle: 'Submit the search query.',
+        resetTitle: 'Clear the search query.',
+      },
       ...props,
     };
   }

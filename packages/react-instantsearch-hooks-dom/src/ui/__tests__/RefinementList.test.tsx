@@ -196,6 +196,10 @@ describe('RefinementList', () => {
           onChange={jest.fn}
           onReset={jest.fn}
           onSubmit={jest.fn}
+          translations={{
+            submitTitle: 'Submit the search query.',
+            resetTitle: 'Clear the search query.',
+          }}
         />
       ),
     });
@@ -388,6 +392,10 @@ describe('RefinementList', () => {
           onChange={jest.fn}
           onReset={jest.fn}
           onSubmit={jest.fn}
+          translations={{
+            submitTitle: 'Submit the search query.',
+            resetTitle: 'Clear the search query.',
+          }}
         />
       ),
       query: 'sam',

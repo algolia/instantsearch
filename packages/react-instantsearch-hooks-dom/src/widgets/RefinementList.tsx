@@ -101,6 +101,10 @@ export function RefinementList({
             onChange={onChange}
             onReset={onReset}
             onSubmit={onSubmit}
+            translations={{
+              submitTitle: 'Submit the search query.',
+              resetTitle: 'Clear the search query.',
+            }}
           />
         )
       }
