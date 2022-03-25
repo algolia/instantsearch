@@ -38,7 +38,7 @@ function Hits() {
 
 describe('InstantSearchSSRProvider', () => {
   test('provides initialResults to InstantSearch', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const initialResults = {
       indexName: {
         state: {},
@@ -90,7 +90,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('renders initial results state with initialUiState', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const initialResults = {
       indexName: {
         state: { query: 'iphone' },
@@ -147,7 +147,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('renders initial results state with router', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const initialResults = {
       indexName: {
         state: { query: 'iphone' },
@@ -210,7 +210,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('without server state renders children', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     function App() {
       return (
@@ -232,7 +232,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('does not trigger a network request with initialResults', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const initialResults = {
       indexName: {
         state: {},

@@ -72,7 +72,7 @@ describe('DynamicWidgets', () => {
     const consoleError = jest.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     expect(() => {
       render(
@@ -93,7 +93,7 @@ describe('DynamicWidgets', () => {
     const consoleError = jest.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     expect(() => {
       render(
@@ -109,7 +109,7 @@ describe('DynamicWidgets', () => {
   });
 
   test('renders only the result of transformItems', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
 
     const { container } = render(
@@ -141,7 +141,7 @@ describe('DynamicWidgets', () => {
   });
 
   test('renders widgets in components', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
 
     const { container } = render(
@@ -182,7 +182,7 @@ describe('DynamicWidgets', () => {
     const consoleError = jest.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     function MyComponent({ children }) {
       return (
@@ -228,7 +228,7 @@ describe('DynamicWidgets', () => {
     const consoleError = jest.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     function WrappedRefinementList() {
       return <RefinementList attribute="brand" />;
@@ -250,7 +250,7 @@ describe('DynamicWidgets', () => {
   });
 
   test('does not render attributes without widget by default', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
 
     const { container } = render(
@@ -282,7 +282,7 @@ describe('DynamicWidgets', () => {
   });
 
   test('renders attributes without widget with fallbackComponent', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
 
     const { container } = render(
@@ -319,7 +319,7 @@ describe('DynamicWidgets', () => {
   });
 
   test('renders attributes without widget with fallbackComponent (function form)', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     const { container } = render(
       <InstantSearch indexName="indexName" searchClient={searchClient}>
@@ -348,7 +348,7 @@ describe('DynamicWidgets', () => {
   });
 
   test('renders dynamic widgets in an Index', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
 
     const { container } = render(
@@ -384,7 +384,7 @@ describe('DynamicWidgets', () => {
   });
 
   test('dynamically updates widgets when attributes change', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
 
     function App({ attributes }: { attributes: string[] }) {

@@ -161,7 +161,7 @@ describe('useConnector', () => {
   });
 
   test('returns the connector render state in a child index', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     function Wrapper({ children }) {
       return (
@@ -217,7 +217,7 @@ describe('useConnector', () => {
         ...connectCustomSearchBox(renderFn, unmountFn)(widgetParams),
         getWidgetRenderState,
       });
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     let searchContext: InstantSearchType | null = null;
     let indexContext: IndexWidget | null = null;
 
@@ -274,7 +274,7 @@ describe('useConnector', () => {
   });
 
   test('returns state from artificial results', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     function SearchProvider({ children }) {
       return (
@@ -306,7 +306,7 @@ describe('useConnector', () => {
   });
 
   test('returns state from existing index results', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     const results = new SearchResults(new SearchParameters(), [
       createSingleSearchResponse(),
@@ -358,7 +358,7 @@ describe('useConnector', () => {
   });
 
   test('adds the widget to the parent index', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     let indexContext: IndexWidget | null = null;
 
     function CustomSearchBox() {

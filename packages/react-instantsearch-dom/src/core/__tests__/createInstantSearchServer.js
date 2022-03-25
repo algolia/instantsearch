@@ -78,7 +78,7 @@ describe('findResultsState', () => {
 
   const requiredProps = {
     indexName: 'indexName',
-    searchClient: createSearchClient(),
+    searchClient: createSearchClient({}),
   };
 
   it('throws an error if props are not provided', () => {
@@ -107,7 +107,7 @@ describe('findResultsState', () => {
     const App = () => <div />;
 
     const props = {
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     };
 
     const trigger = () => findResultsState(App, props);
@@ -125,7 +125,7 @@ describe('findResultsState', () => {
     );
 
     const searchClient = {
-      ...createSearchClient(),
+      ...createSearchClient({}),
       addAlgoliaAgent: jest.fn(),
     };
 
@@ -162,7 +162,7 @@ describe('findResultsState', () => {
 
     const props = {
       ...requiredProps,
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     };
 
     const trigger = () => findResultsState(App, props);
@@ -175,7 +175,7 @@ describe('findResultsState', () => {
 
     const props = {
       ...requiredProps,
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     };
 
     expect(() =>
@@ -333,7 +333,7 @@ describe('findResultsState', () => {
 
         const props = {
           ...requiredProps,
-          searchClient: createSearchClient(),
+          searchClient: createSearchClient({}),
           searchState: {
             query: 'iPhone',
           },
@@ -383,7 +383,7 @@ describe('findResultsState', () => {
 
         const props = {
           ...requiredProps,
-          searchClient: createSearchClient(),
+          searchClient: createSearchClient({}),
           searchState: {
             query: 'iPhone&query=iphone',
           },
@@ -535,7 +535,7 @@ describe('findResultsState', () => {
       );
 
       const props = {
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
         indexName: 'abc',
         searchState: {
           query: 'iPhone',
@@ -560,7 +560,7 @@ describe('findResultsState', () => {
       );
 
       const props = {
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
         indexName: 'instant_search',
         searchState: {
           query: 'iPhone',
@@ -1028,7 +1028,7 @@ describe('findResultsState', () => {
 
         const props = {
           ...requiredProps,
-          searchClient: createSearchClient(),
+          searchClient: createSearchClient({}),
           indexName: 'index1',
           searchState: {
             query: 'iPhone',
@@ -1151,7 +1151,7 @@ describe('findResultsState', () => {
       );
 
       const props = {
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
         indexName: 'abc',
         searchState: {
           query: 'iPhone',
@@ -1179,7 +1179,7 @@ describe('findResultsState', () => {
       );
 
       const props = {
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
         indexName: 'abc',
         searchState: {
           query: 'iPhone',
@@ -1208,7 +1208,7 @@ describe('findResultsState', () => {
       );
 
       const props = {
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
         indexName: 'instant_search',
         searchState: {
           query: 'iPhone',

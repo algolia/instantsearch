@@ -5,7 +5,7 @@ import { createSearchClient } from '../mock';
 
 import type { InstantSearchProps } from 'react-instantsearch-hooks';
 
-const searchClient = createSearchClient();
+const searchClient = createSearchClient({});
 
 type InstantSearchHooksTestWrapperProps = {
   children: React.ReactNode;

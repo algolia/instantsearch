@@ -27,7 +27,7 @@ function RefinementList(props: UseRefinementListProps) {
 
 describe('InstantSearch', () => {
   test('renders children', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     const { container } = render(
       <InstantSearch indexName="indexName" searchClient={searchClient}>
@@ -43,7 +43,7 @@ describe('InstantSearch', () => {
   });
 
   test('provides the search instance', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     let searchContext: InstantSearchType | null = null;
 
     render(
@@ -68,7 +68,7 @@ describe('InstantSearch', () => {
   });
 
   test('provides the main index', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     let indexContext: IndexWidget | null = null;
 
     render(
@@ -92,7 +92,7 @@ describe('InstantSearch', () => {
   });
 
   test('attaches users agents', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     render(<InstantSearch indexName="indexName" searchClient={searchClient} />);
 
@@ -108,7 +108,7 @@ describe('InstantSearch', () => {
   });
 
   test('starts the search on mount', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     let searchContext: InstantSearchType | null = null;
 
     render(
@@ -126,7 +126,7 @@ describe('InstantSearch', () => {
   });
 
   test('disposes the search on unmount', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     let searchContext: InstantSearchType | null = null;
 
     const { unmount } = render(
@@ -146,7 +146,7 @@ describe('InstantSearch', () => {
   });
 
   test('triggers a single network request on mount with widgets', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     render(
       <InstantSearch indexName="indexName" searchClient={searchClient}>
@@ -163,7 +163,7 @@ describe('InstantSearch', () => {
   });
 
   test('renders components and their lifecycles in StrictMode', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     act(() => {
       render(
@@ -185,7 +185,7 @@ describe('InstantSearch', () => {
 
   describe('experimental warning', () => {
     test('displays an experimental warning', () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       expect(() => {
         render(
@@ -199,7 +199,7 @@ describe('InstantSearch', () => {
     });
 
     test('hides the experimental warning with suppressExperimentalWarning', () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       expect(() => {
         render(

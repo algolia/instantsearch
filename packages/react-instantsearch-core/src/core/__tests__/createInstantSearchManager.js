@@ -42,7 +42,7 @@ describe('createInstantSearchManager', () => {
   it('initializes the manager with an empty state', () => {
     const ism = createInstantSearchManager({
       indexName: 'index',
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     });
 
     expect(ism.store.getState()).toEqual({
@@ -323,7 +323,7 @@ describe('createInstantSearchManager', () => {
     it('initializes the manager with a single index hydrated results', () => {
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
         resultsState: {
           metadata: [],
           rawResults: [
@@ -346,7 +346,7 @@ describe('createInstantSearchManager', () => {
     it('initializes the manager with a multi index hydrated results', () => {
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
         resultsState: {
           metadata: [],
           results: [
@@ -391,7 +391,7 @@ describe('createInstantSearchManager', () => {
     test('replaces value with a function returning empty search state', () => {
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
         resultsState: {
           metadata: [
             { stuff: 1, items: [{ stuff: 2, items: [{ stuff: 3 }] }] },
@@ -438,7 +438,7 @@ describe('createInstantSearchManager', () => {
 
   describe('widget manager', () => {
     it('triggers a search when a widget is added', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -467,7 +467,7 @@ describe('createInstantSearchManager', () => {
     it('executes widgets hook', () => {
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
       });
 
       ism.widgetsManager.registerWidget({
@@ -503,7 +503,7 @@ describe('createInstantSearchManager', () => {
     it('returns the list of ids of all registered widgets', async () => {
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
       });
 
       expect(ism.getWidgetsIds()).toEqual([]);
@@ -528,7 +528,7 @@ describe('createInstantSearchManager', () => {
 
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
       });
 
       // <SearchBox defaultRefinement="shared" />
@@ -577,7 +577,7 @@ describe('createInstantSearchManager', () => {
 
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
       });
 
       // <Index indexId="index" indexName="main" />
@@ -609,7 +609,7 @@ describe('createInstantSearchManager', () => {
 
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
       });
 
       // <Index indexId="index_main" indexName="main" />
@@ -650,7 +650,7 @@ describe('createInstantSearchManager', () => {
 
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
       });
 
       // <Index indexId="index" indexName="index" />
@@ -700,7 +700,7 @@ describe('createInstantSearchManager', () => {
 
       const ism = createInstantSearchManager({
         indexName: 'index',
-        searchClient: createSearchClient(),
+        searchClient: createSearchClient({}),
       });
 
       // <Index indexId="index_with_refinement" indexName="index" />
@@ -748,7 +748,7 @@ describe('createInstantSearchManager', () => {
 
     it('expects widgets main parameters and derived parameters to be correctly calculated within a multi index context', () => {
       const wrapper = mount(
-        <InstantSearch indexName="index1" searchClient={createSearchClient()}>
+        <InstantSearch indexName="index1" searchClient={createSearchClient({})}>
           <Index indexName="bestbuy" />
           <Index indexName="instant_search" />
 
@@ -815,7 +815,7 @@ describe('createInstantSearchManager', () => {
 
     it('expects widgets main parameters and derived parameters to be correctly calculated with SortBy within a multi index context', () => {
       const wrapper = mount(
-        <InstantSearch indexName="index1" searchClient={createSearchClient()}>
+        <InstantSearch indexName="index1" searchClient={createSearchClient({})}>
           <Index indexName="categories">
             <SortBy
               defaultRefinement="bestbuy"
@@ -867,7 +867,7 @@ describe('createInstantSearchManager', () => {
 
   describe('searchStalled', () => {
     it('should be updated if search is stalled', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -932,7 +932,7 @@ describe('createInstantSearchManager', () => {
 
   describe('client.search', () => {
     it('should be called when there is a new widget', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -952,8 +952,8 @@ describe('createInstantSearchManager', () => {
     });
 
     it('should be called when there is a new client', () => {
-      const searchClient = createSearchClient();
-      const nextSearchClient = createSearchClient();
+      const searchClient = createSearchClient({});
+      const nextSearchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -970,7 +970,7 @@ describe('createInstantSearchManager', () => {
     });
 
     it('should not be called when the search is skipped', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',

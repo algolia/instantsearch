@@ -111,7 +111,7 @@ describe('SortBy', () => {
   });
 
   test('updates the selected index', async () => {
-    const client = createSearchClient();
+    const client = createSearchClient({});
 
     const { getByRole } = render(
       <InstantSearchHooksTestWrapper

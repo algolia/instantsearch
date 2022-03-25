@@ -118,7 +118,7 @@ describe('getServerState', () => {
   });
 
   test('adds the server user agents', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
     await getServerState(<App />);
@@ -138,7 +138,7 @@ describe('getServerState', () => {
   });
 
   test('calls search with widgets search parameters', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
     await getServerState(<App />);
@@ -269,7 +269,7 @@ describe('getServerState', () => {
   });
 
   test('returns initialResults', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
     const serverState = await getServerState(<App />);
@@ -279,7 +279,7 @@ describe('getServerState', () => {
   });
 
   test('searches twice (cached) with dynamic widgets', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({ searchClient, initialUiState: {} });
 
     await getServerState(
@@ -296,7 +296,7 @@ describe('getServerState', () => {
   });
 
   test('searches twice (cached) with dynamic widgets inside index', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({ searchClient, initialUiState: {} });
 
     await getServerState(
@@ -315,7 +315,7 @@ describe('getServerState', () => {
   });
 
   test('searches twice with dynamic widgets and a refinement', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({
       searchClient,
       initialUiState: {

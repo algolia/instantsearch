@@ -26,7 +26,7 @@ describe('Index', () => {
   });
 
   test('renders children', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     const { container } = render(
       <InstantSearch indexName="indexName" searchClient={searchClient}>
@@ -42,7 +42,7 @@ describe('Index', () => {
   });
 
   test('provides the parent index', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     let indexContext: IndexWidget | null = null;
 
     render(
@@ -69,7 +69,7 @@ describe('Index', () => {
   });
 
   test('provides the nested parent index', () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     let indexContext: IndexWidget | null = null;
 
     render(
@@ -161,7 +161,7 @@ describe('Index', () => {
 });
 
 function createInstantSearchMock() {
-  const searchClient = createSearchClient();
+  const searchClient = createSearchClient({});
   const indexContextRef = createRef<IndexWidget>();
 
   function InstantSearchMock({ children }) {

@@ -2,12 +2,7 @@ import React from 'react';
 
 import { cx } from './lib/cx';
 
-import type {
-  ChangeEvent,
-  FormEvent,
-  RefObject,
-  JSXElementConstructor,
-} from 'react';
+import type { ChangeEvent, FormEvent, RefObject } from 'react';
 
 export type SearchBoxProps = React.HTMLAttributes<HTMLDivElement> & {
   inputRef: RefObject<HTMLInputElement>;
@@ -17,9 +12,9 @@ export type SearchBoxProps = React.HTMLAttributes<HTMLDivElement> & {
   onSubmit?(event: FormEvent): void;
   placeholder?: string;
   value: string;
-  resetIconComponent?: JSXElementConstructor<IconProps>;
-  submitIconComponent?: JSXElementConstructor<IconProps>;
-  loadingIconComponent?: JSXElementConstructor<IconProps>;
+  resetIconComponent?: React.JSXElementConstructor<IconProps>;
+  submitIconComponent?: React.JSXElementConstructor<IconProps>;
+  loadingIconComponent?: React.JSXElementConstructor<IconProps>;
   classNames?: Partial<SearchBoxClassNames>;
 };
 

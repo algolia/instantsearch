@@ -10,6 +10,7 @@ import {
   Highlight,
   Hits,
   HitsPerPage,
+  InfiniteHits,
   Pagination,
   RefinementList,
   PoweredBy,
@@ -20,7 +21,6 @@ import {
 import {
   Breadcrumb,
   HierarchicalMenu,
-  InfiniteHits,
   Menu,
   NumericMenu,
   Panel,

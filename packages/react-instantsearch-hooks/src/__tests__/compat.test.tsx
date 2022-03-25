@@ -17,7 +17,7 @@ describe('Compat', () => {
     // Hide the errors from the test logs.
     jest.spyOn(console, 'error').mockImplementation(noop);
 
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     expect(() => {
       render(

@@ -36,7 +36,7 @@ describe('metadata', () => {
     const Hits = connectHits(() => null);
 
     mount(
-      <InstantSearch searchClient={createSearchClient()} indexName="root">
+      <InstantSearch searchClient={createSearchClient({})} indexName="root">
         <RefinementList attribute="brand" />
         <Index indexName="test">
           <Hits />
@@ -54,7 +54,7 @@ describe('metadata', () => {
     const Hits = connectHits(() => null);
 
     mount(
-      <InstantSearch searchClient={createSearchClient()} indexName="root">
+      <InstantSearch searchClient={createSearchClient({})} indexName="root">
         <RefinementList attribute="brand" />
         <Index indexName="test">
           <Hits />
@@ -153,7 +153,7 @@ describe('metadata', () => {
       navigator.userAgent = algoliaUserAgent;
 
       mount(
-        <InstantSearch searchClient={createSearchClient()} indexName="root" />
+        <InstantSearch searchClient={createSearchClient({})} indexName="root" />
       );
 
       expect(document.head).toMatchInlineSnapshot(`

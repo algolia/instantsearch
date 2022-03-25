@@ -1,6 +1,5 @@
 export * from './Breadcrumb';
 export * from './HierarchicalMenu';
-export * from './InfiniteHits';
 export * from './Menu';
 export * from './NumericMenu';
 export * from './Panel';

@@ -7,7 +7,7 @@ import { createSearchClient } from '../mock';
 export function createInstantSearchTestWrapper(
   props?: Partial<InstantSearchProps>
 ) {
-  const searchClient = createSearchClient();
+  const searchClient = createSearchClient({});
   const wrapper = ({ children }) => (
     <InstantSearch searchClient={searchClient} indexName="indexName" {...props}>
       {children}

@@ -9,20 +9,23 @@ import {
 import type { HostOptions } from '@algolia/transporter';
 import { createNullLogger } from '@algolia/logger-common';
 import { createNodeHttpRequester } from '@algolia/requester-node-http';
-import type {
-  // @ts-ignore Search client v3 doesn't have this type and errors on the CI v3 job
-  SearchClient,
-} from 'algoliasearch/lite';
+import type algoliasearch from 'algoliasearch';
 import {
   createSingleSearchResponse,
   createMultiSearchResponse,
   createSFFVResponse,
 } from './createAPIResponse';
 
-export function createSearchClient(
-  options: Partial<SearchClient> = {}
-): SearchClient {
-  const appId = options.appId || 'appId';
+type OverrideKeys<TTarget, TOptions> = TOptions extends Record<string, never>
+  ? TTarget
+  : Omit<TTarget, keyof TOptions> & TOptions;
+
+type SearchClient = ReturnType<typeof algoliasearch>;
+
+export function createSearchClient<TOptions extends Partial<SearchClient>>(
+  options: TOptions
+): OverrideKeys<SearchClient, TOptions> {
+  const appId = (options as Record<string, unknown>).appId || 'appId';
   const transporter = createTransporter({
     timeouts: {
       connect: 2,
@@ -72,5 +75,5 @@ export function createSearchClient(
       Promise.resolve([createSFFVResponse()])
     ),
     ...options,
-  };
+  } as SearchClient as OverrideKeys<SearchClient, TOptions>;
 }

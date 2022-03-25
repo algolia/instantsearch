@@ -23,7 +23,7 @@ const createSearchClient = () => ({
 describe('createInstantSearchManager with results', () => {
   describe('on search', () => {
     it('updates the store on widget lifecycle', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -54,7 +54,7 @@ describe('createInstantSearchManager with results', () => {
     });
 
     it('updates the store on external updates', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -87,7 +87,7 @@ describe('createInstantSearchManager with results', () => {
     // pass a custom helper (mocked or not) and don't rely on the helper + client.
 
     it('updates the store and searches', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -133,7 +133,7 @@ describe('createInstantSearchManager with results', () => {
     });
 
     it('updates the store and searches with maxFacetHits', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -169,7 +169,7 @@ describe('createInstantSearchManager with results', () => {
     });
 
     it('updates the store and searches with maxFacetHits out of range (higher)', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -205,7 +205,7 @@ describe('createInstantSearchManager with results', () => {
     });
 
     it('updates the store and searches with maxFacetHits out of range (lower)', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       const ism = createInstantSearchManager({
         indexName: 'index',

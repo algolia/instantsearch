@@ -90,7 +90,7 @@ export function getAllInstantSearchWidgets() {
           }}
         >
           <InstantSearch
-            searchClient={createSearchClient()}
+            searchClient={createSearchClient({})}
             indexName="indexName"
           >
             <Widget widget={widget} />
@@ -119,7 +119,7 @@ export function getAllWidgets() {
       name,
       Component: (props: Omit<ComponentProps<typeof Widget>, 'widget'>) => (
         <InstantSearch
-          searchClient={createSearchClient()}
+          searchClient={createSearchClient({})}
           indexName="indexName"
         >
           <Widget {...props} widget={widget} />

@@ -9,7 +9,7 @@ const createSearchClient = () => ({
 describe('createInstantSearchManager with errors', () => {
   describe('on search', () => {
     it('updates the store on widget lifecycle', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       searchClient.search.mockImplementation(() =>
         Promise.reject(new Error('API_ERROR_1'))
@@ -48,7 +48,7 @@ describe('createInstantSearchManager with errors', () => {
     });
 
     it('updates the store on external updates', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       searchClient.search.mockImplementation(() =>
         Promise.reject(new Error('API_ERROR_1'))
@@ -83,7 +83,7 @@ describe('createInstantSearchManager with errors', () => {
     });
 
     it('reset the error after a successful search', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       searchClient.search.mockImplementation(() =>
         Promise.reject(new Error('API_ERROR'))
@@ -132,7 +132,7 @@ describe('createInstantSearchManager with errors', () => {
 
   describe('on search for facet values', () => {
     it('updates the store on function call', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       searchClient.searchForFacetValues.mockImplementation(() =>
         Promise.reject(new Error('API_ERROR'))
@@ -158,7 +158,7 @@ describe('createInstantSearchManager with errors', () => {
     });
 
     it('reset the error after a successful search', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createSearchClient({});
 
       searchClient.searchForFacetValues.mockImplementation(() =>
         Promise.reject(new Error('API_ERROR'))

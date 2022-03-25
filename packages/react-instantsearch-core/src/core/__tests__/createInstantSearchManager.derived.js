@@ -42,7 +42,7 @@ describe('createInstantSearchManager with multi index', () => {
       indexName: 'first',
       initialState: {},
       searchParameters: {},
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     });
 
     // <SearchBox defaultRefinement="first query 1" />
@@ -150,7 +150,7 @@ describe('createInstantSearchManager with multi index', () => {
       indexName: 'first',
       initialState: {},
       searchParameters: {},
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     });
 
     // <SearchBox defaultRefinement="first query 1" />
@@ -250,7 +250,7 @@ describe('createInstantSearchManager with multi index', () => {
       indexName: 'first',
       initialState: {},
       searchParameters: {},
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     });
 
     // <SearchBox defaultRefinement="query" />
@@ -316,7 +316,7 @@ describe('createInstantSearchManager with multi index', () => {
     //   <Index indexName="four" />
     // </InstantSearch>;
 
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
 
     const ism = createInstantSearchManager({
       indexName: 'first',
@@ -389,7 +389,7 @@ describe('createInstantSearchManager with multi index', () => {
       indexName: 'first',
       initialState: {},
       searchParameters: {},
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     });
 
     // <SearchBox defaultRefinement="first query" />
@@ -481,7 +481,7 @@ describe('createInstantSearchManager with multi index', () => {
       indexName: 'first',
       initialState: {},
       searchParameters: {},
-      searchClient: createSearchClient(),
+      searchClient: createSearchClient({}),
     });
 
     // <SearchBox defaultRefinement="first query 1" />

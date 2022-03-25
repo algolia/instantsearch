@@ -160,7 +160,7 @@ describe('HitsPerPage', () => {
   });
 
   test('refines on select', async () => {
-    const searchClient = createSearchClient();
+    const searchClient = createSearchClient({});
     const { getByRole } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <HitsPerPage
