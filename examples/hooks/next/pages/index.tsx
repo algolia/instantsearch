@@ -83,9 +83,8 @@ function FallbackComponent({ attribute }: { attribute: string }) {
 }
 
 export async function getServerSideProps({ req }) {
-  const url = new URL(
-    req.headers.referer || `https://${req.headers.host}${req.url}`
-  ).toString();
+  const protocol = req.headers.referer?.split('://')[0] || 'https';
+  const url = `${protocol}://${req.headers.host}${req.url}`;
   const serverState = await getServerState(<HomePage url={url} />);
 
   return {
