@@ -10,3 +10,4 @@ export * from './PoweredBy';
 export * from './SearchBox';
 export * from './Snippet';
 export * from './SortBy';
+export * from './ToggleRefinement';

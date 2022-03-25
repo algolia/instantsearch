@@ -105,6 +105,11 @@ describe('widgets', () => {
           "$$widgetType": "ais.sortBy",
           "name": "SortBy",
         },
+        Object {
+          "$$type": "ais.toggleRefinement",
+          "$$widgetType": "ais.toggleRefinement",
+          "name": "ToggleRefinement",
+        },
       ]
     `);
   });

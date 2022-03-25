@@ -6,4 +6,3 @@ export * from './Panel';
 export * from './QueryRuleContext';
 export * from './QueryRuleCustomData';
 export * from './RangeInput';
-export * from './ToggleRefinement';
