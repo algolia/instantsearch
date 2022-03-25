@@ -29,13 +29,13 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'facet',
+              type: 'facet' as const,
               attribute: 'facet',
               value: 'facet-val1',
               label: 'facet-val1',
             },
             {
-              type: 'facet',
+              type: 'facet' as const,
               attribute: 'facet',
               value: 'facet-val2',
               label: 'facet-val2',
@@ -49,7 +49,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'exclude',
+              type: 'exclude' as const,
               attribute: 'facetExclude',
               value: 'disjunctiveFacet-val1',
               label: 'disjunctiveFacet-val1',
@@ -64,7 +64,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'disjunctive',
+              type: 'disjunctive' as const,
               attribute: 'disjunctiveFacet',
               value: 'disjunctiveFacet-val1',
               label: 'disjunctiveFacet-val1',
@@ -78,7 +78,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'hierarchical',
+              type: 'hierarchical' as const,
               attribute: 'hierarchicalFacet',
               value: 'hierarchicalFacet-val1',
               label: 'hierarchicalFacet-val1',
@@ -92,7 +92,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'numeric',
+              type: 'numeric' as const,
               attribute: 'numericFacet',
               value: 'numericFacet-val1',
               label: 'numericFacet-val1',
@@ -107,7 +107,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'tag',
+              type: 'tag' as const,
               attribute: '_tags',
               value: 'tag1',
               label: 'tag1',
@@ -135,7 +135,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customFacet',
-                type: 'facet',
+                type: 'facet' as const,
                 value: 'val1',
                 label: 'val1',
               },
@@ -161,7 +161,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customExcludeFacet',
-                type: 'exclude',
+                type: 'exclude' as const,
                 value: 'val1',
                 label: 'val1',
                 exclude: true,
@@ -188,7 +188,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customDisjunctiveFacet',
-                type: 'disjunctive',
+                type: 'disjunctive' as const,
                 value: 'val1',
                 label: 'val1',
               },
@@ -214,7 +214,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customHierarchicalFacet',
-                type: 'hierarchical',
+                type: 'hierarchical' as const,
                 value: 'val1',
                 label: 'val1',
               },
@@ -240,7 +240,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric',
+                type: 'numeric' as const,
                 operator: '=',
                 value: 'val1',
                 label: 'val1',
@@ -255,7 +255,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric',
+                type: 'numeric' as const,
                 operator: '<=',
                 value: 'val2',
                 label: 'val2',
@@ -270,7 +270,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric',
+                type: 'numeric' as const,
                 operator: '>=',
                 value: 'val3',
                 label: 'val3',
@@ -297,7 +297,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: '_tags',
-                type: 'tag',
+                type: 'tag' as const,
                 value: 'tag1',
                 label: 'tag1',
               },
@@ -323,7 +323,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'query',
-                type: 'query',
+                type: 'query' as const,
                 value: 'search1',
                 label: 'search1',
               },
