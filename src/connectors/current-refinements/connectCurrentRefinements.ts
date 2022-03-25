@@ -30,10 +30,15 @@ export type CurrentRefinementsConnectorParamsRefinement = {
 
   /**
    * The type of the refinement.
-   *
-   * It can be one of those: 'facet'|'exclude'|'disjunctive'|'hierarchical'|'numeric'|'query'|'tag'.
    */
-  type: string;
+  type:
+    | 'facet'
+    | 'exclude'
+    | 'disjunctive'
+    | 'hierarchical'
+    | 'numeric'
+    | 'query'
+    | 'tag';
 
   /**
    * The raw value of the refinement.
