@@ -64,8 +64,8 @@ describe('useClearRefinements', () => {
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
-      hasRefinements: false,
-      canRefine: false,
+      hasRefinements: true,
+      canRefine: true,
       refine: expect.any(Function),
       createURL: expect.any(Function),
     });

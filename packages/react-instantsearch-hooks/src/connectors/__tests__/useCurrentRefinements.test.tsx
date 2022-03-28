@@ -64,8 +64,23 @@ describe('useCurrentRefinements', () => {
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
-      items: [],
-      canRefine: false,
+      items: [
+        {
+          attribute: 'brand',
+          indexName: 'indexName',
+          label: 'brand',
+          refine: expect.any(Function),
+          refinements: [
+            {
+              attribute: 'brand',
+              label: 'Apple',
+              type: 'disjunctive',
+              value: 'Apple',
+            },
+          ],
+        },
+      ],
+      canRefine: true,
       refine: expect.any(Function),
       createURL: expect.any(Function),
     });

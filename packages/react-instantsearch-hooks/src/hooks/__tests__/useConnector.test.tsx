@@ -81,6 +81,9 @@ const connectCustomSearchBox: Connector<
           query: searchParameters.query,
         };
       },
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        return searchParameters.setQueryParameter('query', uiState.query || '');
+      },
     };
   };
 
@@ -223,7 +226,15 @@ describe('useConnector', () => {
 
     function SearchProvider({ children }) {
       return (
-        <InstantSearch searchClient={searchClient} indexName="indexName">
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="indexName"
+          initialUiState={{
+            indexName: {
+              query: 'query',
+            },
+          }}
+        >
           <InstantSearchContext.Consumer>
             {(searchContextValue) => {
               searchContext = searchContextValue;
@@ -247,9 +258,25 @@ describe('useConnector', () => {
       wrapper: SearchProvider,
     });
 
+    const helperState = {
+      disjunctiveFacets: [],
+      disjunctiveFacetsRefinements: {},
+      facets: [],
+      facetsExcludes: {},
+      facetsRefinements: {},
+      hierarchicalFacets: [],
+      hierarchicalFacetsRefinements: {},
+      index: 'indexName',
+      numericRefinements: {},
+      query: 'query',
+      tagRefinements: [],
+    };
+
     expect(getWidgetRenderState).toHaveBeenCalledTimes(1);
     expect(getWidgetRenderState).toHaveBeenCalledWith({
-      helper: expect.any(Object),
+      helper: expect.objectContaining({
+        state: helperState,
+      }),
       parent: indexContext!,
       instantSearchInstance: searchContext!,
       results: expect.objectContaining({
@@ -263,7 +290,7 @@ describe('useConnector', () => {
           helper: expect.any(Object),
         },
       ],
-      state: expect.any(Object),
+      state: helperState,
       renderState: searchContext!.renderState,
       templatesConfig: searchContext!.templatesConfig,
       createURL: indexContext!.createURL,

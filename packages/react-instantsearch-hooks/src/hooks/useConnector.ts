@@ -89,17 +89,19 @@ export function useConnector<
     if (widget.getWidgetRenderState) {
       // The helper exists because we've started InstantSearch.
       const helper = parentIndex.getHelper()!;
+      const uiState = parentIndex.getWidgetUiState({})[
+        parentIndex.getIndexId()
+      ];
+      helper.state =
+        widget.getWidgetSearchParameters?.(helper.state, { uiState }) ||
+        helper.state;
       const results =
         // On SSR, we get the results injected on the Index.
         parentIndex.getResults() ||
         // On the browser, we create fallback results based on the widget's
         // `getWidgetSearchParameters()` method to inject the initial UI state,
         // or fall back to the helper state.
-        createSearchResults(
-          widget.getWidgetSearchParameters?.(helper.state, {
-            uiState: parentIndex.getWidgetUiState({})[parentIndex.getIndexId()],
-          }) || helper.state
-        );
+        createSearchResults(helper.state);
       const scopedResults = parentIndex
         .getScopedResults()
         .map((scopedResult) => {
@@ -124,7 +126,7 @@ export function useConnector<
         instantSearchInstance: search,
         results,
         scopedResults,
-        state: results._state,
+        state: helper.state,
         renderState: search.renderState,
         templatesConfig: search.templatesConfig,
         createURL: parentIndex.createURL,
