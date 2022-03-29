@@ -1,3 +1,12 @@
+## [4.40.2](https://github.com/algolia/instantsearch.js/compare/v4.40.1...v4.40.2) (2022-03-29)
+
+
+### Bug Fixes
+
+* **currentRefinements:** more detailed type for item.type ([#5034](https://github.com/algolia/instantsearch.js/issues/5034)) ([773e2c6](https://github.com/algolia/instantsearch.js/commit/773e2c65840f86881eb3dd8825c8c4ad9c73aec9))
+
+
+
 ## [4.40.1](https://github.com/algolia/instantsearch.js/compare/v4.40.0...v4.40.1) (2022-03-21)
 
 
