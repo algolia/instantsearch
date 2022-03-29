@@ -4,7 +4,6 @@ import React, { createRef } from 'react';
 
 import { RefinementList } from '../RefinementList';
 import { SearchBox } from '../SearchBox';
-import { ShowMoreButton } from '../ShowMoreButton';
 
 import type { RefinementListProps } from '../RefinementList';
 
@@ -30,7 +29,9 @@ describe('RefinementList', () => {
       onRefine: jest.fn(),
       query: '',
       searchBox: null,
-      showMoreButton: null,
+      canToggleShowMore: true,
+      isShowingMore: false,
+      onToggleShowMore: jest.fn(),
       ...props,
     };
   }
@@ -104,24 +105,26 @@ describe('RefinementList', () => {
     const props = createProps({});
     const { container } = render(<RefinementList {...props} />);
 
-    container
-      .querySelectorAll(
-        '.ais-RefinementList-checkbox, .ais-RefinementList-label'
-      )
-      .forEach((checkbox) => {
-        userEvent.click(checkbox);
-      });
+    const checkboxes = container.querySelectorAll(
+      '.ais-RefinementList-checkbox, .ais-RefinementList-label'
+    );
+    expect(checkboxes.length).toBe(4);
 
-    expect(props.onRefine).toHaveBeenCalledTimes(4);
+    checkboxes.forEach((checkbox) => {
+      userEvent.click(checkbox);
+    });
+
+    expect(props.onRefine).toHaveBeenCalledTimes(checkboxes.length);
   });
 
-  test('displays a "Show more" button', () => {
-    const props = createProps({
-      showMoreButton: <ShowMoreButton isShowingMore={false} />,
-    });
-    const { container } = render(<RefinementList {...props} />);
+  describe('Show more / less', () => {
+    test('displays a "Show more" button', () => {
+      const props = createProps({
+        showMore: true,
+      });
+      const { container } = render(<RefinementList {...props} />);
 
-    expect(container).toMatchInlineSnapshot(`
+      expect(container).toMatchInlineSnapshot(`
       <div>
         <div
           class="ais-RefinementList"
@@ -177,12 +180,28 @@ describe('RefinementList', () => {
               </label>
             </li>
           </ul>
-          <button>
+          <button
+            class="ais-RefinementList-showMore"
+          >
             Show more
           </button>
         </div>
       </div>
     `);
+    });
+
+    test('calls onToggleShowMore', () => {
+      const props = createProps({});
+      const { container } = render(<RefinementList {...props} showMore />);
+
+      const showMore = container.querySelector('.ais-RefinementList-showMore')!;
+
+      expect(props.onToggleShowMore).not.toHaveBeenCalled();
+
+      userEvent.click(showMore);
+
+      expect(props.onToggleShowMore).toHaveBeenCalledTimes(1);
+    });
   });
 
   test('displays a search box', () => {
@@ -509,6 +528,8 @@ describe('RefinementList', () => {
 
   test('allows custom class names', () => {
     const props = createProps({
+      showMore: true,
+      canToggleShowMore: false,
       classNames: {
         root: 'ROOT',
         searchBox: 'SEARCHBOX',
@@ -520,6 +541,8 @@ describe('RefinementList', () => {
         checkbox: 'CHECKBOX',
         labelText: 'LABELTEXT',
         count: 'COUNT',
+        showMore: 'SHOWMORE',
+        showMoreDisabled: 'SHOWMOREDISABLED',
       },
     });
     const { container } = render(<RefinementList {...props} />);
@@ -580,6 +603,12 @@ describe('RefinementList', () => {
               </label>
             </li>
           </ul>
+          <button
+            class="ais-RefinementList-showMore SHOWMORE ais-RefinementList-showMore--disabled SHOWMOREDISABLED"
+            disabled=""
+          >
+            Show more
+          </button>
         </div>
       </div>
     `);

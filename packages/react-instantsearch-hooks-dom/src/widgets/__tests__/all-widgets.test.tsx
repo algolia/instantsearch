@@ -86,6 +86,11 @@ describe('widgets', () => {
           "name": "InfiniteHits",
         },
         Object {
+          "$$type": "ais.menu",
+          "$$widgetType": "ais.menu",
+          "name": "Menu",
+        },
+        Object {
           "$$type": "ais.pagination",
           "$$widgetType": "ais.pagination",
           "name": "Pagination",

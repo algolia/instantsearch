@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRefinementList } from 'react-instantsearch-hooks';
 
-import { cx } from '../ui/lib/cx';
 import { RefinementList as RefinementListUiComponent } from '../ui/RefinementList';
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
-import { ShowMoreButton } from '../ui/ShowMoreButton';
 
 import type { RefinementListProps as RefinementListUiComponentProps } from '../ui/RefinementList';
 import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
@@ -13,7 +11,14 @@ import type { UseRefinementListProps } from 'react-instantsearch-hooks';
 
 export type RefinementListProps = Omit<
   RefinementListUiComponentProps,
-  'items' | 'onRefine' | 'query' | 'searchBox' | 'noResults' | 'showMoreButton'
+  | 'items'
+  | 'onRefine'
+  | 'query'
+  | 'searchBox'
+  | 'noResults'
+  | 'canToggleShowMore'
+  | 'onToggleShowMore'
+  | 'isShowingMore'
 > &
   UseRefinementListProps &
   Pick<RefinementListWidgetParams, 'searchable' | 'searchablePlaceholder'>;
@@ -111,19 +116,10 @@ export function RefinementList({
       noResults={
         searchable && isFromSearch && items.length === 0 && 'No results.'
       }
-      showMoreButton={
-        showMore && (
-          <ShowMoreButton
-            className={cx(
-              'ais-RefinementList-showMore',
-              !canToggleShowMore && 'ais-RefinementList-showMore--disabled'
-            )}
-            disabled={!canToggleShowMore}
-            onClick={toggleShowMore}
-            isShowingMore={isShowingMore}
-          />
-        )
-      }
+      showMore={showMore}
+      canToggleShowMore={canToggleShowMore}
+      onToggleShowMore={toggleShowMore}
+      isShowingMore={isShowingMore}
     />
   );
 }

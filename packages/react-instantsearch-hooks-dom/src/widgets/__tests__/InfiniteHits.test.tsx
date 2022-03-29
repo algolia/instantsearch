@@ -1,4 +1,5 @@
-import { act, fireEvent, render, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { createSearchClient } from '../../../../../test/mock';
@@ -201,7 +202,7 @@ describe('InfiniteHits', () => {
     ]);
 
     act(() => {
-      fireEvent.click(container.querySelector('.ais-InfiniteHits-loadMore')!);
+      userEvent.click(container.querySelector('.ais-InfiniteHits-loadMore')!);
     });
 
     await wait(0);
@@ -256,7 +257,7 @@ describe('InfiniteHits', () => {
     ]);
 
     act(() => {
-      fireEvent.click(
+      userEvent.click(
         container.querySelector('.ais-InfiniteHits-loadPrevious')!
       );
     });

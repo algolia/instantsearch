@@ -1,4 +1,5 @@
-import { act, fireEvent, render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { InfiniteHits } from '../InfiniteHits';
@@ -240,7 +241,7 @@ describe('InfiniteHits', () => {
     );
 
     act(() => {
-      fireEvent.click(
+      userEvent.click(
         container.querySelector('.ais-InfiniteHits-loadPrevious')!
       );
     });
@@ -257,7 +258,7 @@ describe('InfiniteHits', () => {
     );
 
     act(() => {
-      fireEvent.click(container.querySelector('.ais-InfiniteHits-loadMore')!);
+      userEvent.click(container.querySelector('.ais-InfiniteHits-loadMore')!);
     });
 
     expect(onShowMore).toHaveBeenCalledTimes(1);

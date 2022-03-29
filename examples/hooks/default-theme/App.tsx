@@ -11,6 +11,7 @@ import {
   Hits,
   HitsPerPage,
   InfiniteHits,
+  Menu,
   Pagination,
   RefinementList,
   PoweredBy,
@@ -22,7 +23,6 @@ import {
 import {
   Breadcrumb,
   HierarchicalMenu,
-  Menu,
   NumericMenu,
   Panel,
   QueryRuleContext,

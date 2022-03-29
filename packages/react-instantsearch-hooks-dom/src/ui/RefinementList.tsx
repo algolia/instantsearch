@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Highlight } from './Highlight';
 import { cx } from './lib/cx';
+import { ShowMoreButton } from './ShowMoreButton';
 
 import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 
@@ -12,7 +13,10 @@ export type RefinementListProps = React.HTMLAttributes<HTMLDivElement> & {
   query: string;
   searchBox?: React.ReactNode;
   noResults?: React.ReactNode;
-  showMoreButton?: React.ReactNode;
+  showMore?: boolean;
+  canToggleShowMore: boolean;
+  onToggleShowMore: () => void;
+  isShowingMore: boolean;
   classNames?: Partial<RefinementListClassNames>;
 };
 
@@ -57,6 +61,14 @@ export type RefinementListClassNames = {
    * Class names to apply to the facet count of each item
    */
   count: string;
+  /**
+   * Class names to apply to the "Show more" button
+   */
+  showMore: string;
+  /**
+   * Class names to apply to the "Show more" button if it's disabled
+   */
+  showMoreDisabled: string;
 };
 
 export function RefinementList({
@@ -65,7 +77,10 @@ export function RefinementList({
   query,
   searchBox,
   noResults,
-  showMoreButton,
+  showMore,
+  canToggleShowMore,
+  onToggleShowMore,
+  isShowingMore,
   className,
   classNames = {},
   ...props
@@ -144,7 +159,22 @@ export function RefinementList({
           ))}
         </ul>
       )}
-      {showMoreButton}
+      {showMore && (
+        <ShowMoreButton
+          className={cx(
+            'ais-RefinementList-showMore',
+            classNames.showMore,
+            !canToggleShowMore &&
+              cx(
+                'ais-RefinementList-showMore--disabled',
+                classNames.showMoreDisabled
+              )
+          )}
+          disabled={!canToggleShowMore}
+          onClick={onToggleShowMore}
+          isShowingMore={isShowingMore}
+        />
+      )}
     </div>
   );
 }
