@@ -469,7 +469,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         hierarchicalFacets: [
           {
             name: 'category',
-            attributes: ['category', 'subCategory', 'sub_subCategory'],
+            attributes: ['category', 'subCategory', 'subSubCategory'],
             separator: ' > ',
             rootPath: null,
           },
