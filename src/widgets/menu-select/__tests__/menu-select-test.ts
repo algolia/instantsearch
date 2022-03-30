@@ -5,19 +5,13 @@
 import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import algoliasearchHelper, {
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import {
-  createDisposeOptions,
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/mock/createWidget';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import instantsearch from '../../../index.es';
+import { wait } from '../../../../test/utils/wait';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -42,109 +36,229 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
     });
   });
 
-  describe('Lifecycle', () => {
-    let data: { data: Array<{ name: string }> };
-    let helper: AlgoliaSearchHelper;
-    let state: SearchParameters;
-    let results: SearchResults;
-
-    beforeEach(() => {
-      data = { data: [{ name: 'foo' }, { name: 'bar' }] };
-      helper = algoliasearchHelper(createSearchClient(), 'index_name');
-      helper.search = jest.fn();
-      state = helper.state;
-      results = new SearchResults(helper.state, [createSingleSearchResponse()]);
-      // @ts-expect-error
-      results.getFacetValues = jest.fn(() => data);
-
-      render.mockClear();
-    });
-
-    describe('render', () => {
-      it('renders correctly', () => {
-        const widget = menuSelect({
-          container: document.createElement('div'),
-          attribute: 'test',
-        });
-
-        widget.init!(
-          createInitOptions({
-            helper,
-            createURL: () => '#',
-          })
-        );
-        widget.render!(
-          createRenderOptions({ results, createURL: () => '#', state })
-        );
-
-        const firstRender = render.mock.calls[0][0] as VNode;
-
-        expect(firstRender.props).toMatchSnapshot();
-      });
-
-      it('renders transformed items correctly', () => {
-        const widget = menuSelect({
-          container: document.createElement('div'),
-          attribute: 'test',
-          transformItems: (items) =>
-            items.map((item) => ({ ...item, transformed: true })),
-        });
-
-        widget.init!(
-          createInitOptions({
-            helper,
-            createURL: () => '#',
-          })
-        );
-        widget.render!(
-          createRenderOptions({ results, createURL: () => '#', state })
-        );
-
-        const firstRender = render.mock.calls[0][0] as VNode;
-
-        expect(firstRender.props).toMatchSnapshot();
-      });
-    });
-
-    describe('dispose', () => {
-      it('unmounts the component', () => {
-        const container = document.createElement('div');
-        const widget = menuSelect({
-          attribute: 'test',
-          container,
-        });
-
-        helper.setState(
-          widget.getWidgetSearchParameters(new SearchParameters({}), {
-            uiState: {
-              menu: {
-                amazingBrand: 'algolia',
+  let helper: AlgoliaSearchHelper;
+  const searchClient = createSearchClient({
+    search() {
+      return Promise.resolve({
+        results: [
+          createSingleSearchResponse({
+            facets: {
+              test: {
+                foo: 1,
+                bar: 2,
               },
             },
-          })
-        );
-
-        expect(helper.state).toEqual(
-          new SearchParameters({
-            hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
-            hierarchicalFacetsRefinements: { test: [] },
-            maxValuesPerFacet: 10,
-          })
-        );
-
-        expect(render).toHaveBeenCalledTimes(0);
-
-        const newState = widget.dispose!(
-          createDisposeOptions({
-            state: helper.state,
-            helper,
-          })
-        );
-
-        expect(render).toHaveBeenCalledTimes(1);
-        expect(render).toHaveBeenLastCalledWith(null, container);
-        expect(newState).toEqual(new SearchParameters());
+          }),
+        ],
       });
+    },
+  });
+
+  beforeEach(() => {
+    helper = algoliasearchHelper(createSearchClient(), 'index_name');
+    helper.search = jest.fn();
+
+    render.mockClear();
+  });
+
+  describe('render', () => {
+    it('renders correctly', async () => {
+      const widget = menuSelect({
+        container: document.createElement('div'),
+        attribute: 'test',
+      });
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+
+      search.start();
+
+      search.addWidgets([widget]);
+
+      await wait(0);
+
+      const firstRender = render.mock.calls[0][0] as VNode;
+
+      expect(firstRender.props).toMatchInlineSnapshot(`
+      {
+        "cssClasses": {
+          "noRefinementRoot": "ais-MenuSelect--noRefinement",
+          "option": "ais-MenuSelect-option",
+          "root": "ais-MenuSelect",
+          "select": "ais-MenuSelect-select",
+        },
+        "items": [
+          {
+            "count": 2,
+            "data": null,
+            "exhaustive": true,
+            "isRefined": false,
+            "label": "bar",
+            "value": "bar",
+          },
+          {
+            "count": 1,
+            "data": null,
+            "exhaustive": true,
+            "isRefined": false,
+            "label": "foo",
+            "value": "foo",
+          },
+        ],
+        "refine": [Function],
+        "templateProps": {
+          "templates": {
+            "defaultOption": "See all",
+            "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
+          },
+          "templatesConfig": {
+            "compileOptions": {},
+            "helpers": {
+              "formatNumber": [Function],
+              "highlight": [Function],
+              "insights": [Function],
+              "reverseHighlight": [Function],
+              "reverseSnippet": [Function],
+              "snippet": [Function],
+            },
+          },
+          "useCustomCompileOptions": {
+            "defaultOption": false,
+            "item": false,
+          },
+        },
+      }
+      `);
+    });
+
+    it('renders transformed items correctly', async () => {
+      const widget = menuSelect({
+        container: document.createElement('div'),
+        attribute: 'test',
+        transformItems: (items) =>
+          items.map((item) => ({ ...item, transformed: true })),
+      });
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+
+      search.start();
+
+      search.addWidgets([widget]);
+
+      await wait(0);
+
+      const firstRender = render.mock.calls[0][0] as VNode;
+
+      expect(firstRender.props).toMatchInlineSnapshot(`
+      {
+        "cssClasses": {
+          "noRefinementRoot": "ais-MenuSelect--noRefinement",
+          "option": "ais-MenuSelect-option",
+          "root": "ais-MenuSelect",
+          "select": "ais-MenuSelect-select",
+        },
+        "items": [
+          {
+            "count": 2,
+            "data": null,
+            "exhaustive": true,
+            "isRefined": false,
+            "label": "bar",
+            "transformed": true,
+            "value": "bar",
+          },
+          {
+            "count": 1,
+            "data": null,
+            "exhaustive": true,
+            "isRefined": false,
+            "label": "foo",
+            "transformed": true,
+            "value": "foo",
+          },
+        ],
+        "refine": [Function],
+        "templateProps": {
+          "templates": {
+            "defaultOption": "See all",
+            "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
+          },
+          "templatesConfig": {
+            "compileOptions": {},
+            "helpers": {
+              "formatNumber": [Function],
+              "highlight": [Function],
+              "insights": [Function],
+              "reverseHighlight": [Function],
+              "reverseSnippet": [Function],
+              "snippet": [Function],
+            },
+          },
+          "useCustomCompileOptions": {
+            "defaultOption": false,
+            "item": false,
+          },
+        },
+      }
+      `);
+    });
+  });
+
+  describe('dispose', () => {
+    it('unmounts the component', async () => {
+      const container = document.createElement('div');
+      const widget = menuSelect({
+        container,
+        attribute: 'test',
+        transformItems: (items) =>
+          items.map((item) => ({ ...item, transformed: true })),
+      });
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+        initialUiState: {
+          test: {
+            menu: { amazingBrand: 'Algolia' },
+          },
+        },
+      });
+
+      search.start();
+
+      expect(search.helper!.state).toEqual(
+        new SearchParameters({
+          index: 'test',
+        })
+      );
+
+      search.addWidgets([widget]);
+
+      await wait(0);
+
+      expect(search.helper!.state).toEqual(
+        new SearchParameters({
+          index: 'test',
+          hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
+          hierarchicalFacetsRefinements: { test: [] },
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      expect(render).toHaveBeenCalledTimes(1);
+
+      search.removeWidgets([widget]);
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenLastCalledWith(null, container);
+      expect(search.helper!.state).toEqual(
+        new SearchParameters({ index: 'test' })
+      );
     });
   });
 });

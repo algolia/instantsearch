@@ -4,21 +4,14 @@
 
 import type { VNode } from 'preact';
 import { render as originalRender } from 'preact';
-import type { SearchResults } from 'algoliasearch-helper';
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-import type {
-  RefinementListTemplates,
-  RefinementListWidgetParams,
-} from '../refinement-list';
+import type { RefinementListTemplates } from '../refinement-list';
 import refinementList from '../refinement-list';
 import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
-import {
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/mock/createWidget';
-import type { RefinementListConnectorParams } from '../../../connectors/refinement-list/connectRefinementList';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import instantsearch from '../../../index.es';
+import { wait } from '../../../../test/utils/wait';
 
 const render = castToJestMock(originalRender);
 jest.mock('preact', () => {
@@ -31,7 +24,22 @@ jest.mock('preact', () => {
 
 describe('refinementList()', () => {
   let container: HTMLElement;
-  let widget: ReturnType<typeof refinementList>;
+  const searchClient = createSearchClient({
+    search() {
+      return Promise.resolve({
+        results: [
+          createSingleSearchResponse({
+            facets: {
+              attribute: {
+                foo: 1,
+                bar: 2,
+              },
+            },
+          }),
+        ],
+      });
+    },
+  });
 
   beforeEach(() => {
     render.mockClear();
@@ -53,31 +61,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   describe('render', () => {
-    const helper = algoliasearchHelper(createSearchClient(), '');
-    let results: SearchResults;
-    let state: SearchParameters;
-    let createURL: () => string;
-    let options: RefinementListWidgetParams & RefinementListConnectorParams;
-
-    function renderWidget(userOptions: Partial<RefinementListWidgetParams>) {
-      widget = refinementList({ ...options, ...userOptions });
-      widget.init!(createInitOptions({ helper, createURL }));
-      return widget.render!(createRenderOptions({ results, helper, state }));
-    }
-
-    beforeEach(() => {
-      options = { container, attribute: 'attribute' };
-      results = {
-        getFacetValues: jest
-          .fn()
-          .mockReturnValue([{ name: 'foo' }, { name: 'bar' }]),
-      } as unknown as SearchResults;
-      state = SearchParameters.make({});
-      createURL = () => '#';
-    });
-
     describe('cssClasses', () => {
-      it('should call the component with the correct classes', () => {
+      it('should call the component with the correct classes', async () => {
         const cssClasses = {
           root: ['root', 'cx'],
           noRefinementRoot: 'noRefinementRoot',
@@ -103,7 +88,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           searchableLoadingIcon: 'searchableLoadingIcon',
         };
 
-        renderWidget({ cssClasses });
+        const widget = refinementList({
+          container,
+          attribute: 'attribute',
+          cssClasses,
+        });
+
+        const search = instantsearch({
+          indexName: 'test',
+          searchClient,
+        });
+        search.start();
+        search.addWidgets([widget]);
+        await wait(0);
+
         const { props } = render.mock.calls[0][0] as VNode<
           RefinementListProps<RefinementListTemplates>
         >;
@@ -180,55 +178,73 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
     });
 
-    it('renders transformed items correctly', () => {
-      widget = refinementList({
-        ...options,
+    it('renders transformed items correctly', async () => {
+      const widget = refinementList({
+        container,
+        attribute: 'attribute',
         transformItems: (items) =>
           items.map((item) => ({ ...item, transformed: true })),
       });
 
-      widget.init!(
-        createInitOptions({
-          helper,
-          createURL,
-        })
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+      search.start();
+      search.addWidgets([widget]);
+      await wait(0);
+
+      const { props } = render.mock.calls[0][0] as VNode<
+        RefinementListProps<RefinementListTemplates>
+      >;
+
+      expect(props.facetValues).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ transformed: true }),
+          expect.objectContaining({ transformed: true }),
+        ])
       );
-      widget.render!(createRenderOptions({ results, helper, state }));
-
-      const { props } = render.mock.calls[0][0] as VNode;
-
-      expect(props).toMatchSnapshot();
     });
   });
 
   describe('show more', () => {
-    it('should return a configuration with the same top-level limit value (default value)', () => {
-      const wdgt = refinementList({
+    it('should return a configuration with the same top-level limit value (default value)', async () => {
+      const widget = refinementList({
         container,
         attribute: 'attribute',
         limit: 1,
       });
-      const partialConfig = wdgt.getWidgetSearchParameters(
-        new SearchParameters({}),
-        { uiState: {} }
-      );
-      expect(partialConfig.maxValuesPerFacet).toBe(1);
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+      search.start();
+      search.addWidgets([widget]);
+      await wait(0);
+
+      expect(search.helper!.state.maxValuesPerFacet).toBe(1);
     });
 
-    it('should return a configuration with the highest limit value (custom value)', () => {
+    it('should return a configuration with the highest limit value (custom value)', async () => {
       const showMoreLimit = 99;
-      const wdgt = refinementList({
+      const widget = refinementList({
         container,
         attribute: 'attribute',
         limit: 1,
         showMore: true,
         showMoreLimit,
       });
-      const partialConfig = wdgt.getWidgetSearchParameters(
-        new SearchParameters({}),
-        { uiState: {} }
-      );
-      expect(partialConfig.maxValuesPerFacet).toBe(showMoreLimit);
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+      search.start();
+      search.addWidgets([widget]);
+      await wait(0);
+
+      expect(search.helper!.state.maxValuesPerFacet).toBe(showMoreLimit);
     });
 
     it('should not accept a show more limit that is < limit', () => {

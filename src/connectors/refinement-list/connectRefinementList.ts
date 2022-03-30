@@ -221,7 +221,6 @@ const connectRefinementList: RefinementListConnector =
       }: SearchResults.FacetValue): RefinementListItem => ({
         ...item,
         label,
-        value: label,
         highlighted: label,
       });
 

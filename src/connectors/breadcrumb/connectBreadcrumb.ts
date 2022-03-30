@@ -261,7 +261,7 @@ function prepareItems(data: SearchResults.HierarchicalFacet[]) {
     if (currentItem.isRefined) {
       result.push({
         label: currentItem.name,
-        value: currentItem.path,
+        value: currentItem.value,
       });
       if (Array.isArray(currentItem.data)) {
         result = result.concat(prepareItems(currentItem.data));

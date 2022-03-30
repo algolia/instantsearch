@@ -305,6 +305,110 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
   });
 
+  it('provides escaped facet values', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHierarchicalMenu(rendering);
+    const widget = makeWidget({
+      attributes: ['category', 'subCategory'],
+    });
+
+    const helper = algoliasearchHelper(
+      createSearchClient(),
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+    );
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', '-20 degrees');
+
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
+
+    // During the first rendering there are no facet values
+    // The function get an empty array so that it doesn't break
+    // over null-ish values.
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [],
+      }),
+      expect.anything()
+    );
+
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            facets: {
+              category: {
+                '-20 degrees': 880,
+              },
+              subCategory: {
+                '-20 degrees > -20°C': 193,
+                '-20 degrees > cold': 173,
+              },
+            },
+          }),
+          createSingleSearchResponse({
+            facets: {
+              category: {
+                '-20 degrees': 880,
+                other: 47,
+              },
+            },
+          }),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          {
+            label: '-20 degrees',
+            value: '\\-20 degrees',
+            count: 880,
+            exhaustive: true,
+            isRefined: true,
+            data: [
+              {
+                label: '-20°C',
+                value: '\\-20 degrees > -20°C',
+                count: 193,
+                exhaustive: true,
+                isRefined: false,
+                data: null,
+              },
+              {
+                label: 'cold',
+                value: '\\-20 degrees > cold',
+                count: 173,
+                exhaustive: true,
+                isRefined: false,
+                data: null,
+              },
+            ],
+          },
+          {
+            label: 'other',
+            value: 'other',
+            count: 47,
+            exhaustive: true,
+            isRefined: false,
+            data: null,
+          },
+        ],
+      }),
+      expect.anything()
+    );
+  });
+
   it('provides the correct transformed facet values', () => {
     const rendering = jest.fn();
     const makeWidget = connectHierarchicalMenu(rendering);

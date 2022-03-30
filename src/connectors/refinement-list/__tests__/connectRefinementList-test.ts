@@ -2537,9 +2537,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     it('returns the widget render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createRefinementList = connectRefinementList(renderFn, unmountFn);
+      const createRefinementList = connectRefinementList(jest.fn(), jest.fn());
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['brand'],
@@ -2547,12 +2545,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           brand: ['Apple', 'Microsoft'],
         },
       });
-
-      const initOptions = createInitOptions({ state: helper.state, helper });
-
-      const renderState1 =
-        refinementListWidget.getWidgetRenderState(initOptions);
-
       const results = new SearchResults(helper.state, [
         createSingleSearchResponse({
           hits: [],
@@ -2566,54 +2558,135 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         }),
       ]);
 
-      const renderOptions = createRenderOptions({
-        helper,
-        state: helper.state,
-        results,
+      const renderState1 = refinementListWidget.getWidgetRenderState(
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1).toEqual({
+        canRefine: false,
+        canToggleShowMore: false,
+        hasExhaustiveItems: true,
+        isFromSearch: false,
+        isShowingMore: false,
+        items: [],
+        refine: expect.any(Function),
+        searchForItems: expect.any(Function),
+        toggleShowMore: expect.any(Function),
+        createURL: expect.any(Function),
+        sendEvent: expect.any(Function),
+        widgetParams: {
+          attribute: 'brand',
+        },
       });
 
-      const renderState2 =
-        refinementListWidget.getWidgetRenderState(renderOptions);
-
-      expect(renderState2).toEqual(
-        expect.objectContaining({
-          canRefine: true,
-          canToggleShowMore: false,
-          createURL: expect.any(Function),
-          hasExhaustiveItems: true,
-          isFromSearch: false,
-          isShowingMore: false,
-          items: [
-            {
-              count: 88,
-              highlighted: 'Apple',
-              isRefined: true,
-              label: 'Apple',
-              value: 'Apple',
-            },
-            {
-              count: 66,
-              highlighted: 'Microsoft',
-              isRefined: true,
-              label: 'Microsoft',
-              value: 'Microsoft',
-            },
-            {
-              count: 44,
-              highlighted: 'Samsung',
-              isRefined: false,
-              label: 'Samsung',
-              value: 'Samsung',
-            },
-          ],
-          refine: renderState1.refine,
-          searchForItems: expect.any(Function),
-          toggleShowMore: renderState1.toggleShowMore,
-          widgetParams: {
-            attribute: 'brand',
-          },
+      const renderState2 = refinementListWidget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
         })
       );
+
+      expect(renderState2).toEqual({
+        ...renderState1,
+        canRefine: true,
+        items: [
+          {
+            count: 88,
+            highlighted: 'Apple',
+            isRefined: true,
+            label: 'Apple',
+            value: 'Apple',
+          },
+          {
+            count: 66,
+            highlighted: 'Microsoft',
+            isRefined: true,
+            label: 'Microsoft',
+            value: 'Microsoft',
+          },
+          {
+            count: 44,
+            highlighted: 'Samsung',
+            isRefined: false,
+            label: 'Samsung',
+            value: 'Samsung',
+          },
+        ],
+        searchForItems: expect.any(Function),
+        createURL: expect.any(Function),
+        sendEvent: expect.any(Function),
+      });
+    });
+
+    describe('items', () => {
+      it('returns escaped values', () => {
+        const createRefinementList = connectRefinementList(
+          jest.fn(),
+          jest.fn()
+        );
+        const refinementListWidget = createRefinementList({
+          attribute: 'discounts',
+        });
+        const helper = jsHelper(createSearchClient(), 'indexName', {
+          disjunctiveFacets: ['discounts'],
+          disjunctiveFacetsRefinements: {
+            discounts: ['-10%', '-2€'],
+          },
+        });
+        const results = new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            facets: {
+              discounts: {
+                '-2%': 88,
+                free: 66,
+                '-10%': 44,
+                '-2€': 44,
+              },
+            },
+          }),
+        ]);
+
+        const renderState = refinementListWidget.getWidgetRenderState(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+            results,
+          })
+        );
+
+        expect(renderState.items).toEqual([
+          {
+            count: 44,
+            highlighted: '-10%',
+            isRefined: true,
+            label: '-10%',
+            value: '\\-10%',
+          },
+          {
+            count: 44,
+            highlighted: '-2€',
+            isRefined: true,
+            label: '-2€',
+            value: '\\-2€',
+          },
+          {
+            count: 88,
+            highlighted: '-2%',
+            isRefined: false,
+            label: '-2%',
+            value: '\\-2%',
+          },
+          {
+            count: 66,
+            highlighted: 'free',
+            isRefined: false,
+            label: 'free',
+            value: 'free',
+          },
+        ]);
+      });
     });
 
     describe('facetOrdering', () => {
