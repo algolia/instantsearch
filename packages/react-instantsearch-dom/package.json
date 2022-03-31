@@ -46,7 +46,7 @@
     "react-instantsearch-core": "6.23.1"
   },
   "peerDependencies": {
-    "react": ">= 16.3.0 < 18",
-    "react-dom": ">= 16.3.0 < 18"
+    "react": ">= 16.3.0 < 19",
+    "react-dom": ">= 16.3.0 < 19"
   }
 }
