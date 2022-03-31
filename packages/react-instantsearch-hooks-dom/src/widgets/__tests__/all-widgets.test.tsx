@@ -61,6 +61,11 @@ describe('widgets', () => {
     ).toMatchInlineSnapshot(`
       Array [
         Object {
+          "$$type": "ais.breadcrumb",
+          "$$widgetType": "ais.breadcrumb",
+          "name": "Breadcrumb",
+        },
+        Object {
           "$$type": "ais.clearRefinements",
           "$$widgetType": "ais.clearRefinements",
           "name": "ClearRefinements",

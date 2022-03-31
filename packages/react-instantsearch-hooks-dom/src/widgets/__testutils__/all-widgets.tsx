@@ -31,6 +31,9 @@ function Widget<TWidget extends SingleWidget>({
   ...props
 }: { widget: TWidget } & ComponentProps<TWidget['Component']>) {
   switch (widget.name) {
+    case 'Breadcrumb': {
+      return <widget.Component attributes={['']} {...props} />;
+    }
     case 'SortBy': {
       return <widget.Component items={[]} {...props} />;
     }

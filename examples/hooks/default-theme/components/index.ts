@@ -1,4 +1,3 @@
-export * from './Breadcrumb';
 export * from './HierarchicalMenu';
 export * from './NumericMenu';
 export * from './Panel';
