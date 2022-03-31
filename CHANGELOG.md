@@ -1,3 +1,12 @@
+## [6.23.1](https://algolia/compare/v6.23.0...v6.23.1) (2022-03-30)
+
+
+### Bug Fixes
+
+* **hooks:** compute initial search parameters from widget ([#3399](https://algolia/issues/3399)) ([b4bd933](https://algolia/commits/b4bd93358598bdc77a1aa858252e6eee23441345))
+
+
+
 # [6.23.0](https://algolia/compare/v6.22.0...v6.23.0) (2022-03-23)
 
 
