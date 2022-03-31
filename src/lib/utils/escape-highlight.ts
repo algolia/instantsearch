@@ -72,8 +72,6 @@ export function escapeHits<THit extends Hit>(
 export function escapeFacets(facetHits: FacetHit[]): FacetHit[] {
   return facetHits.map((h) => ({
     ...h,
-    // TODO: write a test for this and decide if it's the right place
-    value: h.value.replace(/^-/, '\\-'),
     highlighted: replaceTagsAndEscape(h.highlighted),
   }));
 }
