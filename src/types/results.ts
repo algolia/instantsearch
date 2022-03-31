@@ -1,5 +1,6 @@
 import type {
   PlainSearchParameters,
+  SearchForFacetValues,
   SearchResults,
 } from 'algoliasearch-helper';
 
@@ -75,12 +76,7 @@ export type Hits = Hit[];
 
 export type EscapedHits<THit = Hit> = THit[] & { __escaped: boolean };
 
-export type FacetHit = {
-  value: string;
-  highlighted: string;
-  count: number;
-  isRefined: boolean;
-};
+export type FacetHit = SearchForFacetValues.Hit;
 
 export type FacetRefinement = {
   value: string;

@@ -3156,9 +3156,9 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@~6.12.6:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-"algoliasearch-helper@https://pkg.csb.dev/algolia/algoliasearch-helper-js/commit/493f99a3/algoliasearch-helper":
+"algoliasearch-helper@https://pkg.csb.dev/algolia/algoliasearch-helper-js/commit/a74fc213/algoliasearch-helper":
   version "3.7.4"
-  resolved "https://pkg.csb.dev/algolia/algoliasearch-helper-js/commit/493f99a3/algoliasearch-helper#ef4ddbf32d08675e0f4a77ae3fac7ee87945a095"
+  resolved "https://pkg.csb.dev/algolia/algoliasearch-helper-js/commit/a74fc213/algoliasearch-helper#f67e3eda5e5f4cfa2ec4d39a9941ec9191e5f3c2"
   dependencies:
     "@algolia/events" "^4.0.1"
 

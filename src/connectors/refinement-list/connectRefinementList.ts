@@ -302,9 +302,9 @@ const connectRefinementList: RefinementListConnector =
                     : results.facetHits;
 
                   const normalizedFacetValues = transformItems(
-                    facetValues.map(({ value, ...item }) => ({
+                    facetValues.map(({ safeValue, value, ...item }) => ({
                       ...item,
-                      value,
+                      value: safeValue,
                       label: value,
                     })),
                     { results: searchResults }
