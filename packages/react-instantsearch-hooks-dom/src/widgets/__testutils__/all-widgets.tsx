@@ -37,6 +37,17 @@ function Widget<TWidget extends SingleWidget>({
     case 'SortBy': {
       return <widget.Component items={[]} {...props} />;
     }
+    case 'HierarchicalMenu': {
+      return (
+        <widget.Component
+          attributes={[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+          ]}
+          {...props}
+        />
+      );
+    }
     case 'HitsPerPage': {
       return (
         <widget.Component

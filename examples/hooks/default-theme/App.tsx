@@ -8,6 +8,7 @@ import {
   ClearRefinements,
   CurrentRefinements,
   DynamicWidgets,
+  HierarchicalMenu,
   Highlight,
   Hits,
   HitsPerPage,
@@ -22,7 +23,6 @@ import {
 } from 'react-instantsearch-hooks-dom';
 
 import {
-  HierarchicalMenu,
   NumericMenu,
   Panel,
   QueryRuleContext,

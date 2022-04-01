@@ -76,6 +76,11 @@ describe('widgets', () => {
           "name": "CurrentRefinements",
         },
         Object {
+          "$$type": "ais.hierarchicalMenu",
+          "$$widgetType": "ais.hierarchicalMenu",
+          "name": "HierarchicalMenu",
+        },
+        Object {
           "$$type": "ais.hits",
           "$$widgetType": "ais.hits",
           "name": "Hits",
