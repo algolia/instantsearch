@@ -71,22 +71,26 @@ test('hierarchical facets: using sortBy', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'escapedValue': null,
     'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
+      'escapedValue': 'beers',
       'count': 5,
       'isRefined': true,
       'exhaustive': true,
       'data': [{
         'name': 'IPA',
         'path': 'beers > IPA',
+        'escapedValue': 'beers > IPA',
         'count': 5,
         'isRefined': true,
         'exhaustive': true,
         'data': [{
           'name': 'Brewdog punk IPA',
           'path': 'beers > IPA > Brewdog punk IPA',
+          'escapedValue': 'beers > IPA > Brewdog punk IPA',
           'count': 3,
           'isRefined': false,
           'exhaustive': true,
@@ -94,6 +98,7 @@ test('hierarchical facets: using sortBy', function(done) {
         }, {
           'name': 'Anchor steam',
           'path': 'beers > IPA > Anchor steam',
+          'escapedValue': 'beers > IPA > Anchor steam',
           'count': 1,
           'isRefined': false,
           'exhaustive': true,
@@ -101,6 +106,7 @@ test('hierarchical facets: using sortBy', function(done) {
         }, {
           'name': 'Flying dog',
           'path': 'beers > IPA > Flying dog',
+          'escapedValue': 'beers > IPA > Flying dog',
           'count': 1,
           'isRefined': true,
           'exhaustive': true,

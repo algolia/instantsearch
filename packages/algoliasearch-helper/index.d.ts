@@ -397,6 +397,7 @@ declare namespace algoliasearchHelper {
      */
     export interface Hit {
       value: string;
+      escapedValue: string;
       highlighted: string;
       count: number;
       isRefined: boolean;
@@ -1415,14 +1416,16 @@ declare namespace algoliasearchHelper {
 
     interface HierarchicalFacet {
       name: string;
-      count: number;
       path: string;
+      escapedValue: string;
+      count: number;
       isRefined: boolean;
       data: HierarchicalFacet[];
     }
 
     interface FacetValue {
       name: string;
+      escapedValue: string;
       count: number;
       isRefined: boolean;
       isExcluded: boolean;

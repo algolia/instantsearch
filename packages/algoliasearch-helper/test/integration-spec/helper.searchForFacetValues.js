@@ -40,8 +40,8 @@ test(
         expect(content).toBeTruthy();
 
         expect(content.facetHits).toEqual([
-          {value: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false},
-          {value: 'bb', highlighted: '<em>b</em>b', count: 2, isRefined: false}
+          {value: 'ba', escapedValue: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false},
+          {value: 'bb', escapedValue: 'bb', highlighted: '<em>b</em>b', count: 2, isRefined: false}
         ]);
 
         helper.addFacetRefinement('f2', 'c');
@@ -51,8 +51,8 @@ test(
         expect(content).toBeTruthy();
 
         expect(content.facetHits).toEqual([
-          {value: 'ba', highlighted: '<em>b</em>a', count: 1, isRefined: false},
-          {value: 'bb', highlighted: '<em>b</em>b', count: 1, isRefined: false}
+          {value: 'ba', escapedValue: 'ba', highlighted: '<em>b</em>a', count: 1, isRefined: false},
+          {value: 'bb', escapedValue: 'bb', highlighted: '<em>b</em>b', count: 1, isRefined: false}
         ]);
 
         helper.clearRefinements().addFacetRefinement('f2', 'c');
@@ -62,9 +62,9 @@ test(
         expect(content).toBeTruthy();
 
         expect(content.facetHits).toEqual([
-          {value: 'c', highlighted: 'c', count: 2, isRefined: true},
-          {value: 'x', highlighted: 'x', count: 1, isRefined: false},
-          {value: 'y', highlighted: 'y', count: 1, isRefined: false}
+          {value: 'c', escapedValue: 'c', highlighted: 'c', count: 2, isRefined: true},
+          {value: 'x', escapedValue: 'x', highlighted: 'x', count: 1, isRefined: false},
+          {value: 'y', escapedValue: 'y', highlighted: 'y', count: 1, isRefined: false}
         ]);
       });
     });
@@ -87,8 +87,8 @@ test(
         expect(content).toBeTruthy();
 
         expect(content.facetHits).toEqual([
-          {value: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false},
-          {value: 'bb', highlighted: '<em>b</em>b', count: 2, isRefined: false}
+          {value: 'ba', escapedValue: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false},
+          {value: 'bb', escapedValue: 'bb', highlighted: '<em>b</em>b', count: 2, isRefined: false}
         ]);
 
         helper.addDisjunctiveFacetRefinement('f2', 'd');
@@ -98,7 +98,7 @@ test(
         expect(content).toBeTruthy();
 
         expect(content.facetHits).toEqual([
-          {value: 'ba', highlighted: '<em>b</em>a', count: 1, isRefined: false}
+          {value: 'ba', escapedValue: 'ba', highlighted: '<em>b</em>a', count: 1, isRefined: false}
         ]);
 
         helper.clearRefinements().addDisjunctiveFacetRefinement('f2', 'c');
@@ -108,11 +108,11 @@ test(
         expect(content).toBeTruthy();
 
         expect(content.facetHits).toEqual([
-          {value: 'b', highlighted: 'b', count: 2, isRefined: false},
-          {value: 'c', highlighted: 'c', count: 2, isRefined: true},
-          {value: 'd', highlighted: 'd', count: 1, isRefined: false},
-          {value: 'x', highlighted: 'x', count: 1, isRefined: false},
-          {value: 'y', highlighted: 'y', count: 1, isRefined: false}
+          {value: 'b', escapedValue: 'b', highlighted: 'b', count: 2, isRefined: false},
+          {value: 'c', escapedValue: 'c', highlighted: 'c', count: 2, isRefined: true},
+          {value: 'd', escapedValue: 'd', highlighted: 'd', count: 1, isRefined: false},
+          {value: 'x', escapedValue: 'x', highlighted: 'x', count: 1, isRefined: false},
+          {value: 'y', escapedValue: 'y', highlighted: 'y', count: 1, isRefined: false}
         ]);
       });
     });
@@ -131,7 +131,7 @@ test(
         expect(content.facetHits.length).toBeTruthy();
 
         expect(content.facetHits).toEqual([
-          {value: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false}
+          {value: 'ba', escapedValue: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false}
         ]);
       });
     });

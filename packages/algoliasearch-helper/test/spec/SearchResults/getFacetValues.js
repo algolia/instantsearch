@@ -11,9 +11,9 @@ test('getFacetValues(facetName) returns a list of values using the defaults', fu
   var facetValues = result.getFacetValues('brand');
 
   var expected = [
-    {count: 386, isRefined: true, name: 'Apple'},
-    {count: 551, isRefined: false, name: 'Insignia™'},
-    {count: 511, isRefined: false, name: 'Samsung'}
+    {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
+    {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
+    {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'}
   ];
 
   expect(facetValues).toEqual(expected);
@@ -101,9 +101,9 @@ test('getFacetValues(facetName) with disabled sorting', function() {
   });
 
   var expected = [
-    {count: 551, isRefined: false, name: 'Insignia™'},
-    {count: 511, isRefined: false, name: 'Samsung'},
-    {count: 386, isRefined: true, name: 'Apple'}
+    {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
+    {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
+    {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
   ];
 
   expect(facetValues).toEqual(expected);
@@ -131,8 +131,8 @@ test('getFacetValues(conjunctive) returns correct facet values with the name `le
   var facetValues = results.getFacetValues('type');
 
   var expected = [
-    {name: 'length', count: 5, isRefined: false, isExcluded: false},
-    {name: 'dogs', count: 0, isRefined: false, isExcluded: false}
+    {name: 'length', escapedValue: 'length', count: 5, isRefined: false, isExcluded: false},
+    {name: 'dogs', escapedValue: 'dogs', count: 0, isRefined: false, isExcluded: false}
   ];
 
   expect(facetValues).toEqual(expected);
@@ -161,12 +161,171 @@ test('getFacetValues(disjunctive) returns correct facet values with the name `le
   var facetValues = results.getFacetValues('type');
 
   var expected = [
-    {name: 'length', count: 5, isRefined: false},
-    {name: 'dogs', count: 0, isRefined: false}
+    {name: 'length', escapedValue: 'length', count: 5, isRefined: false},
+    {name: 'dogs', escapedValue: 'dogs', count: 0, isRefined: false}
   ];
 
   expect(facetValues).toEqual(expected);
   expect(facetValues.length).toBe(2);
+});
+
+test('getFacetValues(conjunctive) returns escaped facet values', function() {
+  var searchParams = new SearchParameters({
+    index: 'instant_search',
+    facets: ['type'],
+    facetsRefinements: {
+      type: ['dogs', '\\-20%']
+    }
+  });
+
+  var result = {
+    query: '',
+    facets: {
+      type: {
+        'dogs': 1,
+        '-something': 5,
+        '-20%': 2
+      }
+    }
+  };
+
+  var results = new SearchResults(searchParams, [result, result]);
+
+  var facetValues = results.getFacetValues('type');
+
+  var expected = [
+    {name: '-20%', escapedValue: '\\-20%', count: 2, isRefined: true, isExcluded: false},
+    {name: 'dogs', escapedValue: 'dogs', count: 1, isRefined: true, isExcluded: false},
+    {name: '-something', escapedValue: '\\-something', count: 5, isRefined: false, isExcluded: false}
+  ];
+
+  expect(facetValues).toEqual(expected);
+  expect(facetValues.length).toBe(3);
+});
+
+test('getFacetValues(disjunctive) returns escaped facet values', function() {
+  var searchParams = new SearchParameters({
+    index: 'instant_search',
+    disjunctiveFacets: ['type'],
+    disjunctiveFacetsRefinements: {
+      type: ['dogs', '\\-20%']
+    }
+  });
+
+  var result = {
+    query: '',
+    facets: {
+      type: {
+        'dogs': 1,
+        '-something': 5,
+        '-20%': 2
+      }
+    }
+  };
+
+  var results = new SearchResults(searchParams, [result, result]);
+
+  var facetValues = results.getFacetValues('type');
+
+  var expected = [
+    {name: '-20%', escapedValue: '\\-20%', count: 2, isRefined: true},
+    {name: 'dogs', escapedValue: 'dogs', count: 1, isRefined: true},
+    {name: '-something', escapedValue: '\\-something', count: 5, isRefined: false}
+  ];
+
+  expect(facetValues).toEqual(expected);
+  expect(facetValues.length).toBe(3);
+});
+
+test('getFacetValues(hierachical) returns escaped facet values', function() {
+  var searchParams = new SearchParameters({
+    index: 'instant_search',
+    hierarchicalFacets: [{
+      name: 'type',
+      attributes: ['type1', 'type2', 'type3']
+    }],
+    hierarchicalFacetsRefinements: {type: ['\\-something > discounts']}
+  });
+
+  var result = {
+    query: '',
+    facets: {
+      type1: {
+        'dogs': 1,
+        '-something': 5
+      },
+      type2: {
+        'dogs > hounds': 1,
+        '-something > discounts': 5
+      },
+      type3: {
+        '-something > discounts > -5%': 1,
+        '-something > discounts > full price': 4
+      }
+    },
+    exhaustiveFacetsCount: true
+  };
+
+  var results = new SearchResults(searchParams, [result, result, result]);
+
+  var facetValues = results.getFacetValues('type');
+
+  var expected = {
+    data: [
+      {
+        count: 5,
+        data: [
+          {
+            count: 5,
+            data: [{
+              count: 4,
+              data: null,
+              exhaustive: true,
+              isRefined: false,
+              name: 'full price',
+              path: '-something > discounts > full price',
+              escapedValue: '\\-something > discounts > full price'
+            }, {
+              count: 1,
+              data: null,
+              exhaustive: true,
+              isRefined: false,
+              name: '-5%',
+              path: '-something > discounts > -5%',
+              escapedValue: '\\-something > discounts > -5%'
+            }],
+            exhaustive: true,
+            isRefined: true,
+            name: 'discounts',
+            path: '-something > discounts',
+            escapedValue: '\\-something > discounts'
+          }
+        ],
+        exhaustive: true,
+        isRefined: true,
+        name: '-something',
+        path: '-something',
+        escapedValue: '\\-something'
+      },
+      {
+        count: 1,
+        data: null,
+        exhaustive: true,
+        isRefined: false,
+        name: 'dogs',
+        path: 'dogs',
+        escapedValue: 'dogs'
+      }
+    ],
+    exhaustive: true,
+    isRefined: true,
+    name: 'type',
+    path: null,
+    escapedValue: null,
+    count: null
+  };
+
+  expect(facetValues).toEqual(expected);
 });
 
 test('getFacetValues(unknown) returns undefined (does not throw)', function() {

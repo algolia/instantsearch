@@ -26,18 +26,18 @@ test('Search should call the algolia client according to the number of refinemen
 
     var cityValues = results.getFacetValues('city');
     var expectedCityValues = [
-      {name: 'Paris', count: 3, isRefined: true},
-      {name: 'New York', count: 1, isRefined: true},
-      {name: 'San Francisco', count: 1, isRefined: false}
+      {name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true},
+      {name: 'New York', escapedValue: 'New York', count: 1, isRefined: true},
+      {name: 'San Francisco', escapedValue: 'San Francisco', count: 1, isRefined: false}
     ];
 
     expect(cityValues).toEqual(expectedCityValues);
 
     var cityValuesCustom = results.getFacetValues('city', {sortBy: ['count:asc', 'name:asc']});
     var expectedCityValuesCustom = [
-      {name: 'New York', count: 1, isRefined: true},
-      {name: 'San Francisco', count: 1, isRefined: false},
-      {name: 'Paris', count: 3, isRefined: true}
+      {name: 'New York', escapedValue: 'New York', count: 1, isRefined: true},
+      {name: 'San Francisco', escapedValue: 'San Francisco', count: 1, isRefined: false},
+      {name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true}
     ];
 
 
@@ -45,9 +45,9 @@ test('Search should call the algolia client according to the number of refinemen
 
     var cityValuesFn = results.getFacetValues('city', {sortBy: function(a, b) { return a.count - b.count; }});
     var expectedCityValuesFn = [
-      {name: 'New York', count: 1, isRefined: true},
-      {name: 'San Francisco', count: 1, isRefined: false},
-      {name: 'Paris', count: 3, isRefined: true}
+      {name: 'New York', escapedValue: 'New York', count: 1, isRefined: true},
+      {name: 'San Francisco', escapedValue: 'San Francisco', count: 1, isRefined: false},
+      {name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true}
     ];
 
     expect(cityValuesFn).toEqual(expectedCityValuesFn);

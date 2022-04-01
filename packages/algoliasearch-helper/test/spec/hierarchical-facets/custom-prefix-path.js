@@ -67,16 +67,19 @@ test('hierarchical facets: custom prefix path', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'escapedValue': null,
     'exhaustive': true,
     'data': [{
       'name': 'Belgian',
       'path': 'beers | Belgian',
+      'escapedValue': 'beers | Belgian',
       'count': 1,
       'isRefined': true,
       'exhaustive': true,
       'data': [{
         'name': 'Blond',
         'path': 'beers | Belgian | Blond',
+        'escapedValue': 'beers | Belgian | Blond',
         'count': 2,
         'isRefined': false,
         'exhaustive': true,
@@ -84,6 +87,7 @@ test('hierarchical facets: custom prefix path', function(done) {
       }, {
         'name': 'Dark',
         'path': 'beers | Belgian | Dark',
+        'escapedValue': 'beers | Belgian | Dark',
         'count': 1,
         'isRefined': false,
         'exhaustive': true,
@@ -92,6 +96,7 @@ test('hierarchical facets: custom prefix path', function(done) {
     }, {
       'name': 'IPA',
       'path': 'beers | IPA',
+      'escapedValue': 'beers | IPA',
       'count': 2,
       'isRefined': false,
       'exhaustive': true,

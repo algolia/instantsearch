@@ -38,6 +38,7 @@ test(
           count: null,
           isRefined: true,
           path: null,
+          escapedValue: null,
           exhaustive: true,
           data: null
         });

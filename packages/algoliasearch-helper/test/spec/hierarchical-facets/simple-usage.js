@@ -71,22 +71,26 @@ test('hierarchical facets: simple usage', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'escapedValue': null,
     'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
+      'escapedValue': 'beers',
       'count': 9,
       'isRefined': true,
       'exhaustive': true,
       'data': [{
         'name': 'IPA',
         'path': 'beers > IPA',
+        'escapedValue': 'beers > IPA',
         'count': 9,
         'isRefined': true,
         'exhaustive': true,
         'data': [{
           'name': 'Flying dog',
           'path': 'beers > IPA > Flying dog',
+          'escapedValue': 'beers > IPA > Flying dog',
           'count': 3,
           'isRefined': true,
           'exhaustive': true,
@@ -94,6 +98,7 @@ test('hierarchical facets: simple usage', function(done) {
         }, {
           'name': 'Brewdog punk IPA',
           'path': 'beers > IPA > Brewdog punk IPA',
+          'escapedValue': 'beers > IPA > Brewdog punk IPA',
           'count': 6,
           'isRefined': false,
           'exhaustive': true,
@@ -103,6 +108,7 @@ test('hierarchical facets: simple usage', function(done) {
     }, {
       'name': 'fruits',
       'path': 'fruits',
+      'escapedValue': 'fruits',
       'count': 5,
       'isRefined': false,
       'exhaustive': true,
@@ -110,6 +116,7 @@ test('hierarchical facets: simple usage', function(done) {
     }, {
       'name': 'sales',
       'path': 'sales',
+      'escapedValue': 'sales',
       'count': 20,
       'isRefined': false,
       'exhaustive': true,

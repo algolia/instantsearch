@@ -38,10 +38,12 @@ test('hierarchical facets: no refinement', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'escapedValue': null,
     'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
+      'escapedValue': 'beers',
       'count': 2,
       'isRefined': false,
       'exhaustive': true,
@@ -49,6 +51,7 @@ test('hierarchical facets: no refinement', function(done) {
     }, {
       'name': 'fruits',
       'path': 'fruits',
+      'escapedValue': 'fruits',
       'count': 3,
       'isRefined': false,
       'exhaustive': true,

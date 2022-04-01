@@ -15,9 +15,9 @@ describe('disjunctive facet', function() {
         }
       },
       [
-        {count: 551, isRefined: false, name: 'Insignia™'},
-        {count: 511, isRefined: false, name: 'Samsung'},
-        {count: 386, isRefined: true, name: 'Apple'}
+        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
+        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
+        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
       ]
     ],
     [
@@ -30,9 +30,9 @@ describe('disjunctive facet', function() {
         }
       },
       [
-        {count: 511, isRefined: false, name: 'Samsung'},
-        {count: 386, isRefined: true, name: 'Apple'},
-        {count: 551, isRefined: false, name: 'Insignia™'}
+        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
+        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
+        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'}
       ]
     ],
     [
@@ -45,9 +45,9 @@ describe('disjunctive facet', function() {
         }
       },
       [
-        {count: 511, isRefined: false, name: 'Samsung'},
-        {count: 551, isRefined: false, name: 'Insignia™'},
-        {count: 386, isRefined: true, name: 'Apple'}
+        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
+        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
+        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
       ]
     ],
     [
@@ -61,9 +61,9 @@ describe('disjunctive facet', function() {
         }
       },
       [
-        {count: 511, isRefined: false, name: 'Samsung'},
-        {count: 551, isRefined: false, name: 'Insignia™'},
-        {count: 386, isRefined: true, name: 'Apple'}
+        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
+        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
+        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
       ]
     ],
     [
@@ -77,9 +77,9 @@ describe('disjunctive facet', function() {
         }
       },
       [
-        {count: 511, isRefined: false, name: 'Samsung'},
-        {count: 386, isRefined: true, name: 'Apple'},
-        {count: 551, isRefined: false, name: 'Insignia™'}
+        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
+        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
+        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'}
       ]
     ],
     [
@@ -92,7 +92,7 @@ describe('disjunctive facet', function() {
           }
         }
       },
-      [{count: 511, isRefined: false, name: 'Samsung'}]
+      [{count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'}]
     ]
   ])('%p', function(_name, facetOrdering, expected) {
     var data = require('./getFacetValues/disjunctive.json');
@@ -134,9 +134,9 @@ describe('disjunctive facet', function() {
     var facetValues = result.getFacetValues('brand', {sortBy: ['name:desc']});
 
     var expected = [
-      {count: 511, isRefined: false, name: 'Samsung'},
-      {count: 551, isRefined: false, name: 'Insignia™'},
-      {count: 386, isRefined: true, name: 'Apple'}
+      {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
+      {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
+      {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
     ];
 
     expect(facetValues).toEqual(expected);
@@ -167,9 +167,9 @@ describe('disjunctive facet', function() {
     });
 
     var expected = [
-      {count: 511, isRefined: false, name: 'Samsung'},
-      {count: 386, isRefined: true, name: 'Apple'},
-      {count: 551, isRefined: false, name: 'Insignia™'}
+      {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
+      {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
+      {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'}
     ];
 
     expect(facetValues).toEqual(expected);
@@ -199,9 +199,9 @@ describe('disjunctive facet', function() {
     });
 
     var expected = [
-      {count: 386, isRefined: true, name: 'Apple'},
-      {count: 551, isRefined: false, name: 'Insignia™'},
-      {count: 511, isRefined: false, name: 'Samsung'}
+      {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
+      {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
+      {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'}
     ];
 
     expect(facetValues).toEqual(expected);
@@ -221,9 +221,9 @@ describe('disjunctive facet', function() {
     var facetValues = result.getFacetValues('brand');
 
     var expected = [
-      {count: 386, isRefined: true, name: 'Apple'},
-      {count: 551, isRefined: false, name: 'Insignia™'},
-      {count: 511, isRefined: false, name: 'Samsung'}
+      {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
+      {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
+      {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'}
     ];
 
     expect(facetValues).toEqual(expected);
@@ -251,26 +251,30 @@ describe('hierarchical facet', function() {
       count: null,
       isRefined: true,
       path: null,
+      escapedValue: null,
       exhaustive: true,
       data: [
         {
           name: 'Best Buy Gift Cards',
           path: 'Best Buy Gift Cards',
+          escapedValue: 'Best Buy Gift Cards',
           count: 80,
           isRefined: true,
           exhaustive: true,
           data: [
             {
+              name: 'Entertainment Gift Cards',
+              path: 'Best Buy Gift Cards > Entertainment Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Entertainment Gift Cards',
               count: 17,
               data: null,
               exhaustive: true,
-              isRefined: true,
-              name: 'Entertainment Gift Cards',
-              path: 'Best Buy Gift Cards > Entertainment Gift Cards'
+              isRefined: true
             },
             {
               name: 'Swag Gift Cards',
               path: 'Best Buy Gift Cards > Swag Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Swag Gift Cards',
               count: 20,
               isRefined: false,
               exhaustive: true,
@@ -279,6 +283,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Useless Gift Cards',
               path: 'Best Buy Gift Cards > Useless Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Useless Gift Cards',
               count: 12,
               isRefined: false,
               exhaustive: true,
@@ -289,6 +294,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Cell Phones',
           path: 'Cell Phones',
+          escapedValue: 'Cell Phones',
           count: 1920,
           isRefined: false,
           exhaustive: true,
@@ -297,6 +303,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Computers & Tablets',
           path: 'Computers & Tablets',
+          escapedValue: 'Computers & Tablets',
           count: 1858,
           isRefined: false,
           exhaustive: true,
@@ -305,6 +312,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Appliances',
           path: 'Appliances',
+          escapedValue: 'Appliances',
           count: 1533,
           isRefined: false,
           exhaustive: true,
@@ -313,6 +321,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Audio',
           path: 'Audio',
+          escapedValue: 'Audio',
           count: 1010,
           isRefined: false,
           exhaustive: true,
@@ -350,11 +359,13 @@ describe('hierarchical facet', function() {
       count: null,
       isRefined: true,
       path: null,
+      escapedValue: null,
       exhaustive: true,
       data: [
         {
           name: 'Appliances',
           path: 'Appliances',
+          escapedValue: 'Appliances',
           count: 1533,
           isRefined: false,
           exhaustive: true,
@@ -363,6 +374,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Best Buy Gift Cards',
           path: 'Best Buy Gift Cards',
+          escapedValue: 'Best Buy Gift Cards',
           count: 80,
           isRefined: true,
           exhaustive: true,
@@ -373,11 +385,13 @@ describe('hierarchical facet', function() {
               exhaustive: true,
               isRefined: true,
               name: 'Entertainment Gift Cards',
-              path: 'Best Buy Gift Cards > Entertainment Gift Cards'
+              path: 'Best Buy Gift Cards > Entertainment Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Entertainment Gift Cards'
             },
             {
               name: 'Swag Gift Cards',
               path: 'Best Buy Gift Cards > Swag Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Swag Gift Cards',
               count: 20,
               isRefined: false,
               exhaustive: true,
@@ -386,6 +400,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Useless Gift Cards',
               path: 'Best Buy Gift Cards > Useless Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Useless Gift Cards',
               count: 12,
               isRefined: false,
               exhaustive: true,
@@ -396,6 +411,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Audio',
           path: 'Audio',
+          escapedValue: 'Audio',
           count: 1010,
           isRefined: false,
           exhaustive: true,
@@ -407,7 +423,8 @@ describe('hierarchical facet', function() {
           exhaustive: true,
           isRefined: false,
           name: 'Cell Phones',
-          path: 'Cell Phones'
+          path: 'Cell Phones',
+          escapedValue: 'Cell Phones'
         },
         {
           count: 1858,
@@ -415,7 +432,8 @@ describe('hierarchical facet', function() {
           exhaustive: true,
           isRefined: false,
           name: 'Computers & Tablets',
-          path: 'Computers & Tablets'
+          path: 'Computers & Tablets',
+          escapedValue: 'Computers & Tablets'
         }
       ]
     };
@@ -449,12 +467,14 @@ describe('hierarchical facet', function() {
       name: 'hierarchicalCategories',
       count: null,
       isRefined: true,
+      escapedValue: null,
       path: null,
       exhaustive: true,
       data: [
         {
           name: 'Appliances',
           path: 'Appliances',
+          escapedValue: 'Appliances',
           count: 1533,
           isRefined: false,
           exhaustive: true,
@@ -463,6 +483,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Best Buy Gift Cards',
           path: 'Best Buy Gift Cards',
+          escapedValue: 'Best Buy Gift Cards',
           count: 80,
           isRefined: true,
           exhaustive: true,
@@ -470,6 +491,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Entertainment Gift Cards',
               path: 'Best Buy Gift Cards > Entertainment Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Entertainment Gift Cards',
               count: 17,
               isRefined: true,
               exhaustive: true,
@@ -478,6 +500,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Swag Gift Cards',
               path: 'Best Buy Gift Cards > Swag Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Swag Gift Cards',
               count: 20,
               isRefined: false,
               exhaustive: true,
@@ -486,6 +509,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Useless Gift Cards',
               path: 'Best Buy Gift Cards > Useless Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Useless Gift Cards',
               count: 12,
               isRefined: false,
               exhaustive: true,
@@ -496,6 +520,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Cell Phones',
           path: 'Cell Phones',
+          escapedValue: 'Cell Phones',
           count: 1920,
           isRefined: false,
           exhaustive: true,
@@ -504,6 +529,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Computers & Tablets',
           path: 'Computers & Tablets',
+          escapedValue: 'Computers & Tablets',
           count: 1858,
           isRefined: false,
           exhaustive: true,
@@ -512,6 +538,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Audio',
           path: 'Audio',
+          escapedValue: 'Audio',
           count: 1010,
           isRefined: false,
           exhaustive: true,
@@ -550,11 +577,13 @@ describe('hierarchical facet', function() {
       count: null,
       isRefined: true,
       path: null,
+      escapedValue: null,
       exhaustive: true,
       data: [
         {
           name: 'Appliances',
           path: 'Appliances',
+          escapedValue: 'Appliances',
           count: 1533,
           isRefined: false,
           exhaustive: true,
@@ -563,6 +592,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Best Buy Gift Cards',
           path: 'Best Buy Gift Cards',
+          escapedValue: 'Best Buy Gift Cards',
           count: 80,
           isRefined: true,
           exhaustive: true,
@@ -570,6 +600,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Entertainment Gift Cards',
               path: 'Best Buy Gift Cards > Entertainment Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Entertainment Gift Cards',
               count: 17,
               isRefined: true,
               exhaustive: true,
@@ -578,6 +609,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Swag Gift Cards',
               path: 'Best Buy Gift Cards > Swag Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Swag Gift Cards',
               count: 20,
               isRefined: false,
               exhaustive: true,
@@ -586,6 +618,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Useless Gift Cards',
               path: 'Best Buy Gift Cards > Useless Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Useless Gift Cards',
               count: 12,
               isRefined: false,
               exhaustive: true,
@@ -596,6 +629,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Audio',
           path: 'Audio',
+          escapedValue: 'Audio',
           count: 1010,
           isRefined: false,
           exhaustive: true,
@@ -604,6 +638,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Cell Phones',
           path: 'Cell Phones',
+          escapedValue: 'Cell Phones',
           count: 1920,
           isRefined: false,
           exhaustive: true,
@@ -612,6 +647,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Computers & Tablets',
           path: 'Computers & Tablets',
+          escapedValue: 'Computers & Tablets',
           count: 1858,
           isRefined: false,
           exhaustive: true,
@@ -650,11 +686,13 @@ describe('hierarchical facet', function() {
       count: null,
       isRefined: true,
       path: null,
+      escapedValue: null,
       exhaustive: true,
       data: [
         {
           name: 'Appliances',
           path: 'Appliances',
+          escapedValue: 'Appliances',
           count: 1533,
           isRefined: false,
           exhaustive: true,
@@ -663,6 +701,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Audio',
           path: 'Audio',
+          escapedValue: 'Audio',
           count: 1010,
           isRefined: false,
           exhaustive: true,
@@ -671,6 +710,7 @@ describe('hierarchical facet', function() {
         {
           name: 'Best Buy Gift Cards',
           path: 'Best Buy Gift Cards',
+          escapedValue: 'Best Buy Gift Cards',
           count: 80,
           isRefined: true,
           exhaustive: true,
@@ -678,6 +718,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Entertainment Gift Cards',
               path: 'Best Buy Gift Cards > Entertainment Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Entertainment Gift Cards',
               count: 17,
               isRefined: true,
               exhaustive: true,
@@ -686,6 +727,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Swag Gift Cards',
               path: 'Best Buy Gift Cards > Swag Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Swag Gift Cards',
               count: 20,
               isRefined: false,
               exhaustive: true,
@@ -694,6 +736,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Useless Gift Cards',
               path: 'Best Buy Gift Cards > Useless Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Useless Gift Cards',
               count: 12,
               isRefined: false,
               exhaustive: true,
@@ -738,11 +781,13 @@ describe('hierarchical facet', function() {
       count: null,
       isRefined: true,
       path: null,
+      escapedValue: null,
       exhaustive: true,
       data: [
         {
           name: 'Best Buy Gift Cards',
           path: 'Best Buy Gift Cards',
+          escapedValue: 'Best Buy Gift Cards',
           count: 80,
           isRefined: true,
           exhaustive: true,
@@ -750,6 +795,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Entertainment Gift Cards',
               path: 'Best Buy Gift Cards > Entertainment Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Entertainment Gift Cards',
               count: 17,
               isRefined: true,
               exhaustive: true,
@@ -758,6 +804,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Swag Gift Cards',
               path: 'Best Buy Gift Cards > Swag Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Swag Gift Cards',
               count: 20,
               isRefined: false,
               exhaustive: true,
@@ -766,6 +813,7 @@ describe('hierarchical facet', function() {
             {
               name: 'Useless Gift Cards',
               path: 'Best Buy Gift Cards > Useless Gift Cards',
+              escapedValue: 'Best Buy Gift Cards > Useless Gift Cards',
               count: 12,
               isRefined: false,
               exhaustive: true,
@@ -787,14 +835,14 @@ test('does not return empty items', function() {
   }), rawResults.results);
 
   expect(results.getFacetValues('brands', {facetOrdering: true})).toEqual([
-    {name: 'Addo', count: 321, isRefined: false},
-    {name: 'Paw Patrol', count: 130, isRefined: false},
-    {name: 'Mattel', count: 586, isRefined: false},
-    {name: 'Nick Jr.', count: 147, isRefined: false},
-    {name: 'Early Learning Centre', count: 292, isRefined: false},
-    {name: 'Hot Wheels', count: 94, isRefined: false},
-    {name: 'Fisher-Price', count: 104, isRefined: false},
-    {name: 'Funko', count: 187, isRefined: false},
-    {name: 'Nickelodeon', count: 230, isRefined: false}
+    {name: 'Addo', escapedValue: 'Addo', count: 321, isRefined: false},
+    {name: 'Paw Patrol', escapedValue: 'Paw Patrol', count: 130, isRefined: false},
+    {name: 'Mattel', escapedValue: 'Mattel', count: 586, isRefined: false},
+    {name: 'Nick Jr.', escapedValue: 'Nick Jr.', count: 147, isRefined: false},
+    {name: 'Early Learning Centre', escapedValue: 'Early Learning Centre', count: 292, isRefined: false},
+    {name: 'Hot Wheels', escapedValue: 'Hot Wheels', count: 94, isRefined: false},
+    {name: 'Fisher-Price', escapedValue: 'Fisher-Price', count: 104, isRefined: false},
+    {name: 'Funko', escapedValue: 'Funko', count: 187, isRefined: false},
+    {name: 'Nickelodeon', escapedValue: 'Nickelodeon', count: 230, isRefined: false}
   ]);
 });

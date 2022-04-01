@@ -64,16 +64,19 @@ test('hierarchical facets: objects with multiple categories', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'escapedValue': null,
     'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
+      'escapedValue': 'beers',
       'count': 5,
       'isRefined': true,
       'exhaustive': true,
       'data': [{
         'name': 'IPA',
         'path': 'beers > IPA',
+        'escapedValue': 'beers > IPA',
         'count': 3,
         'isRefined': true,
         'exhaustive': true,
@@ -81,6 +84,7 @@ test('hierarchical facets: objects with multiple categories', function(done) {
       }, {
         'name': 'Guiness',
         'path': 'beers > Guiness',
+        'escapedValue': 'beers > Guiness',
         'count': 2,
         'isRefined': false,
         'exhaustive': true,
@@ -89,6 +93,7 @@ test('hierarchical facets: objects with multiple categories', function(done) {
     }, {
       'name': 'bières',
       'path': 'bières',
+      'escapedValue': 'bières',
       'count': 3,
       'isRefined': false,
       'exhaustive': true,

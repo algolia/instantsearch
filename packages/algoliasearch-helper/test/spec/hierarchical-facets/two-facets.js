@@ -67,10 +67,12 @@ test('hierarchical facets: two hierarchical facets', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'escapedValue': null,
     'exhaustive': true,
     'data': [{
       'name': 'IPA',
       'path': 'IPA',
+      'escapedValue': 'IPA',
       'count': 2,
       'isRefined': true,
       'exhaustive': true,
@@ -78,6 +80,7 @@ test('hierarchical facets: two hierarchical facets', function(done) {
     }, {
       'name': 'Belgian',
       'path': 'Belgian',
+      'escapedValue': 'Belgian',
       'count': 3,
       'isRefined': false,
       'exhaustive': true,
@@ -86,12 +89,14 @@ test('hierarchical facets: two hierarchical facets', function(done) {
   }, {
     'name': 'fruits',
     'path': null,
+    'escapedValue': null,
     'count': null,
     'isRefined': true,
     'exhaustive': true,
     'data': [{
       'name': 'oranges',
       'path': 'oranges',
+      'escapedValue': 'oranges',
       'count': 5,
       'isRefined': true,
       'exhaustive': true,
@@ -99,6 +104,7 @@ test('hierarchical facets: two hierarchical facets', function(done) {
     }, {
       'name': 'apples',
       'path': 'apples',
+      'escapedValue': 'apples',
       'count': 4,
       'isRefined': false,
       'exhaustive': true,

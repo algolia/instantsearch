@@ -64,11 +64,13 @@ test('hierarchical facets: getFacetValues', function() {
     'count': null,
     'isRefined': true,
     'path': null,
+    'escapedValue': null,
     'exhaustive': true,
     'data': [
       {
         'name': 'beers',
         'path': 'beers',
+        'escapedValue': 'beers',
         'count': 3,
         'isRefined': true,
         'exhaustive': true,
@@ -76,6 +78,7 @@ test('hierarchical facets: getFacetValues', function() {
           {
             'name': 'Belgian',
             'path': 'beers | Belgian',
+            'escapedValue': 'beers | Belgian',
             'count': 1,
             'isRefined': false,
             'exhaustive': true,
@@ -84,6 +87,7 @@ test('hierarchical facets: getFacetValues', function() {
           {
             'name': 'IPA',
             'path': 'beers | IPA',
+            'escapedValue': 'beers | IPA',
             'count': 2,
             'isRefined': true,
             'exhaustive': true,

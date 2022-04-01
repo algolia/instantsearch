@@ -228,3 +228,184 @@ test('an error will be thrown if the client does not contain .searchForFacetValu
     );
   }
 });
+
+test('isRefined is set for disjunctive facets', function() {
+  var fakeClient = {
+    addAlgoliaAgent: function() {},
+    searchForFacetValues: function() {
+      return Promise.resolve([
+        {
+          exhaustiveFacetsCount: true,
+          facetHits: [
+            {
+              count: 318,
+              highlighted: '__ais-highlight__K__/ais-highlight__itchenAid',
+              value: 'KitchenAid'
+            },
+            {
+              count: 1,
+              highlighted: 'something',
+              value: 'something'
+            }
+          ],
+          processingTimeMS: 3
+        }
+      ]);
+    }
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index', {
+    disjunctiveFacets: ['facet'],
+    disjunctiveFacetsRefinements: {
+      facet: ['KitchenAid']
+    }
+  });
+
+  return helper.searchForFacetValues('facet', 'k', 1).then(function(content) {
+    expect(content.exhaustiveFacetsCount).toBe(true);
+    expect(content.processingTimeMS).toBe(3);
+    expect(content.facetHits.length).toBe(2);
+    expect(content.facetHits[0].value).toBe('KitchenAid');
+    expect(content.facetHits[0].isRefined).toBe(true);
+    expect(content.facetHits[1].value).toBe('something');
+    expect(content.facetHits[1].isRefined).toBe(false);
+  });
+});
+
+test('isRefined is set for conjunctive facets', function() {
+  var fakeClient = {
+    addAlgoliaAgent: function() {},
+    searchForFacetValues: function() {
+      return Promise.resolve([
+        {
+          exhaustiveFacetsCount: true,
+          facetHits: [
+            {
+              count: 318,
+              highlighted: '__ais-highlight__K__/ais-highlight__itchenAid',
+              value: 'KitchenAid'
+            },
+            {
+              count: 1,
+              highlighted: 'something',
+              value: 'something'
+            }
+          ],
+          processingTimeMS: 3
+        }
+      ]);
+    }
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index', {
+    facets: ['facet'],
+    facetsRefinements: {
+      facet: ['KitchenAid']
+    }
+  });
+
+  return helper.searchForFacetValues('facet', 'k', 1).then(function(content) {
+    expect(content.exhaustiveFacetsCount).toBe(true);
+    expect(content.processingTimeMS).toBe(3);
+    expect(content.facetHits.length).toBe(2);
+    expect(content.facetHits[0].value).toBe('KitchenAid');
+    expect(content.facetHits[0].isRefined).toBe(true);
+    expect(content.facetHits[1].value).toBe('something');
+    expect(content.facetHits[1].isRefined).toBe(false);
+  });
+});
+
+test('value is escaped when it starts with `-`', function() {
+  var fakeClient = {
+    addAlgoliaAgent: function() {},
+    searchForFacetValues: function() {
+      return Promise.resolve([
+        {
+          exhaustiveFacetsCount: true,
+          facetHits: [
+            {
+              count: 318,
+              highlighted: 'something',
+              value: 'something'
+            },
+            {
+              count: 1,
+              highlighted: '-20%',
+              value: '-20%'
+            }
+          ],
+          processingTimeMS: 3
+        }
+      ]);
+    }
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index');
+
+  return helper.searchForFacetValues('facet', 'k', 1).then(function(content) {
+    expect(content.exhaustiveFacetsCount).toBe(true);
+    expect(content.processingTimeMS).toBe(3);
+    expect(content.facetHits.length).toBe(2);
+    expect(content.facetHits[0].value).toBe('something');
+    expect(content.facetHits[0].escapedValue).toBe('something');
+    expect(content.facetHits[1].value).toBe('-20%');
+    expect(content.facetHits[1].escapedValue).toBe('\\-20%');
+  });
+});
+
+
+test('escaped value is marked as refined', function() {
+  var fakeClient = {
+    addAlgoliaAgent: function() {},
+    searchForFacetValues: function() {
+      return Promise.resolve([
+        {
+          exhaustiveFacetsCount: true,
+          facetHits: [
+            {
+              count: 318,
+              highlighted: 'something',
+              value: 'something'
+            },
+            {
+              count: 1,
+              highlighted: '-20%',
+              value: '-20%'
+            }
+          ],
+          processingTimeMS: 3
+        }
+      ]);
+    }
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index', {
+    disjunctiveFacets: ['facet'],
+    disjunctiveFacetsRefinements: {
+      facet: ['\\-20%', 'something']
+    }
+  });
+
+  return helper.searchForFacetValues('facet', 'k', 1).then(function(content) {
+    expect(content).toEqual({
+      exhaustiveFacetsCount: true,
+      processingTimeMS: 3,
+      facetHits: [
+        {
+          count: 318,
+          highlighted: 'something',
+          isRefined: true,
+          escapedValue: 'something',
+          value: 'something'
+        },
+        {
+          count: 1,
+          highlighted: '-20%',
+          isRefined: true,
+          escapedValue: '\\-20%',
+          value: '-20%'
+        }
+      ]
+    });
+  });
+});

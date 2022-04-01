@@ -55,16 +55,19 @@ test('hierarchical facets: attributes order', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'escapedValue': null,
     'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
+      'escapedValue': 'beers',
       'count': 9,
       'isRefined': true,
       'exhaustive': true,
       'data': [{
         'name': '1664',
         'path': 'beers > 1664',
+        'escapedValue': 'beers > 1664',
         'count': 3,
         'isRefined': false,
         'exhaustive': true,
@@ -72,6 +75,7 @@ test('hierarchical facets: attributes order', function(done) {
       }, {
         'name': 'IPA',
         'path': 'beers > IPA',
+        'escapedValue': 'beers > IPA',
         'count': 6,
         'isRefined': false,
         'exhaustive': true,
@@ -80,6 +84,7 @@ test('hierarchical facets: attributes order', function(done) {
     }, {
       'name': 'fruits',
       'path': 'fruits',
+      'escapedValue': 'fruits',
       'count': 5,
       'isRefined': false,
       'exhaustive': true,
@@ -87,6 +92,7 @@ test('hierarchical facets: attributes order', function(done) {
     }, {
       'name': 'sales',
       'path': 'sales',
+      'escapedValue': 'sales',
       'count': 20,
       'isRefined': false,
       'exhaustive': true,
