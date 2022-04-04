@@ -1,3 +1,12 @@
+## [4.40.3](https://github.com/algolia/instantsearch.js/compare/v4.40.2...v4.40.3) (2022-04-04)
+
+
+### Bug Fixes
+
+* **refinements:** escape facet values starting with "-" ([#5039](https://github.com/algolia/instantsearch.js/issues/5039)) ([6b6f4e8](https://github.com/algolia/instantsearch.js/commit/6b6f4e86550a3c9dd02f3a8400d832cef64cb45d))
+
+
+
 ## [4.40.2](https://github.com/algolia/instantsearch.js/compare/v4.40.1...v4.40.2) (2022-03-29)
 
 
