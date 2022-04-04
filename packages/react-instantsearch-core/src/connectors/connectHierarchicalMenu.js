@@ -28,14 +28,14 @@ function getCurrentRefinement(props, searchState, context) {
   return currentRefinement;
 }
 
-function getValue(path, props, searchState, context) {
+function getValue(value, props, searchState, context) {
   const { id, attributes, separator, rootPath, showParentLevel } = props;
 
   const currentRefinement = getCurrentRefinement(props, searchState, context);
   let nextRefinement;
 
   if (currentRefinement === null) {
-    nextRefinement = path;
+    nextRefinement = value;
   } else {
     const tmpSearchParameters = new algoliasearchHelper.SearchParameters({
       hierarchicalFacets: [
@@ -51,7 +51,7 @@ function getValue(path, props, searchState, context) {
 
     nextRefinement = tmpSearchParameters
       .toggleHierarchicalFacetRefinement(id, currentRefinement)
-      .toggleHierarchicalFacetRefinement(id, path)
+      .toggleHierarchicalFacetRefinement(id, value)
       .getHierarchicalRefinement(id)[0];
   }
 
@@ -61,7 +61,7 @@ function getValue(path, props, searchState, context) {
 function transformValue(value, props, searchState, context) {
   return value.map((v) => ({
     label: v.name,
-    value: getValue(v.path, props, searchState, context),
+    value: getValue(v.escapedValue, props, searchState, context),
     count: v.count,
     isRefined: v.isRefined,
     items: v.data && transformValue(v.data, props, searchState, context),
@@ -98,7 +98,7 @@ const sortBy = ['name:asc'];
  * websites. From a UX point of view, we suggest not displaying more than two levels deep.
  * @name connectHierarchicalMenu
  * @requirements To use this widget, your attributes must be formatted in a specific way.
- * If you want for example to have a hiearchical menu of categories, objects in your index
+ * If you want for example to have a hierarchical menu of categories, objects in your index
  * should be formatted this way:
  *
  * ```json

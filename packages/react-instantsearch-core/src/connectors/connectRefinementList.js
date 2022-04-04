@@ -34,12 +34,12 @@ function getCurrentRefinement(props, searchState, context) {
   return [];
 }
 
-function getValue(name, props, searchState, context) {
+function getValue(value, props, searchState, context) {
   const currentRefinement = getCurrentRefinement(props, searchState, context);
-  const isAnewValue = currentRefinement.indexOf(name) === -1;
+  const isAnewValue = currentRefinement.indexOf(value) === -1;
   const nextRefinement = isAnewValue
-    ? currentRefinement.concat([name]) // cannot use .push(), it mutates
-    : currentRefinement.filter((selectedValue) => selectedValue !== name); // cannot use .splice(), it mutates
+    ? currentRefinement.concat([value]) // cannot use .push(), it mutates
+    : currentRefinement.filter((selectedValue) => selectedValue !== value); // cannot use .splice(), it mutates
   return nextRefinement;
 }
 
@@ -161,7 +161,7 @@ export default createConnector({
     const items = isFromSearch
       ? searchForFacetValuesResults[attribute].map((v) => ({
           label: v.value,
-          value: getValue(v.value, props, searchState, {
+          value: getValue(v.escapedValue, props, searchState, {
             ais: props.contextValue,
             multiIndexContext: props.indexContextValue,
           }),
@@ -173,7 +173,7 @@ export default createConnector({
           .getFacetValues(attribute, { sortBy, facetOrdering })
           .map((v) => ({
             label: v.name,
-            value: getValue(v.name, props, searchState, {
+            value: getValue(v.escapedValue, props, searchState, {
               ais: props.contextValue,
               multiIndexContext: props.indexContextValue,
             }),

@@ -29,9 +29,9 @@ function getCurrentRefinement(props, searchState, context) {
   return currentRefinement;
 }
 
-function getValue(name, props, searchState, context) {
+function getValue(value, props, searchState, context) {
   const currentRefinement = getCurrentRefinement(props, searchState, context);
-  return name === currentRefinement ? '' : name;
+  return value === currentRefinement ? '' : value;
 }
 
 function getLimit({ showMore, limit, showMoreLimit }) {
@@ -139,7 +139,7 @@ export default createConnector({
     if (isFromSearch) {
       items = searchForFacetValuesResults[attribute].map((v) => ({
         label: v.value,
-        value: getValue(v.value, props, searchState, {
+        value: getValue(v.escapedValue, props, searchState, {
           ais: props.contextValue,
           multiIndexContext: props.indexContextValue,
         }),
@@ -155,7 +155,7 @@ export default createConnector({
         })
         .map((v) => ({
           label: v.name,
-          value: getValue(v.name, props, searchState, {
+          value: getValue(v.escapedValue, props, searchState, {
             ais: props.contextValue,
             multiIndexContext: props.indexContextValue,
           }),

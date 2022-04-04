@@ -44,16 +44,19 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'wat',
             path: 'wat',
+            escapedValue: 'wat',
             count: 20,
             data: [
               {
                 name: 'wot',
                 path: 'wat > wot',
+                escapedValue: 'wat > wot',
                 count: 15,
               },
               {
                 name: 'wut',
                 path: 'wat > wut',
+                escapedValue: 'wat > wut',
                 count: 5,
               },
             ],
@@ -61,6 +64,7 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'oy',
             path: 'oy',
+            escapedValue: 'oy',
             count: 10,
           },
         ],
@@ -338,21 +342,25 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'wat',
             path: 'wat',
+            escapedValue: 'wat',
             count: 20,
             data: [
               {
                 name: 'wot',
                 path: 'wat > wot',
+                escapedValue: 'wat > wot',
                 count: 15,
               },
               {
                 name: 'wut',
                 path: 'wat > wut',
+                escapedValue: 'wat > wut',
                 count: 3,
               },
               {
                 name: 'wit',
                 path: 'wat > wit',
+                escapedValue: 'wat > wit',
                 count: 5,
               },
             ],
@@ -360,11 +368,13 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'oy',
             path: 'oy',
+            escapedValue: 'oy',
             count: 10,
           },
           {
             name: 'ay',
             path: 'ay',
+            escapedValue: 'ay',
             count: 3,
           },
         ],
@@ -419,21 +429,25 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'wat',
             path: 'wat',
+            escapedValue: 'wat',
             count: 20,
             data: [
               {
                 name: 'wot',
                 path: 'wat > wot',
+                escapedValue: 'wat > wot',
                 count: 15,
               },
               {
                 name: 'wut',
                 path: 'wat > wut',
+                escapedValue: 'wat > wut',
                 count: 3,
               },
               {
                 name: 'wit',
                 path: 'wat > wit',
+                escapedValue: 'wat > wit',
                 count: 5,
               },
             ],
@@ -441,11 +455,13 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'oy',
             path: 'oy',
+            escapedValue: 'oy',
             count: 10,
           },
           {
             name: 'ay',
             path: 'ay',
+            escapedValue: 'ay',
             count: 3,
           },
         ],
@@ -785,16 +801,19 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'wat',
             path: 'wat',
+            escapedValue: 'wat',
             count: 20,
             data: [
               {
                 name: 'wot',
                 path: 'wat > wot',
+                escapedValue: 'wat > wot',
                 count: 15,
               },
               {
                 name: 'wut',
                 path: 'wat > wut',
+                escapedValue: 'wat > wut',
                 count: 5,
               },
             ],
@@ -802,6 +821,7 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'oy',
             path: 'oy',
+            escapedValue: 'oy',
             count: 10,
           },
         ],

@@ -18,9 +18,9 @@ function transformValue(values) {
     if (item.isRefined) {
       acc.push({
         label: item.name,
-        // If dealing with a nested "items", "value" is equal to the previous value concatenated with the current label
-        // If dealing with the first level, "value" is equal to the current label
-        value: item.path,
+        // If dealing with a nested "items", "value" is equal to the previous value concatenated with the current value
+        // If dealing with the first level, "value" is equal to the current value
+        value: item.escapedValue,
       });
       // Create a variable in order to keep the same acc for the recursion, otherwise "reduce" returns a new one
       if (item.data) {
