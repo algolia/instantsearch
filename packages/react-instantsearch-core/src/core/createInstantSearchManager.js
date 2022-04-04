@@ -96,6 +96,7 @@ export default function createInstantSearchManager({
   let skip = false;
   let stalledSearchTimer = null;
   let initialSearchParameters = helper.state;
+  let searchCounter;
 
   const widgetsManager = createWidgetsManager(onWidgetsUpdate);
 
@@ -215,6 +216,8 @@ export default function createInstantSearchManager({
         helper.state
       );
 
+      searchCounter = derivedParameters.length + 1;
+
       // We have to call `slice` because the method `detach` on the derived
       // helpers mutates the value `derivedHelpers`. The `forEach` loop does
       // not iterate on each value and we're not able to correctly clear the
@@ -253,6 +256,8 @@ export default function createInstantSearchManager({
 
   function handleSearchSuccess({ indexId }) {
     return (event) => {
+      searchCounter--;
+
       const state = store.getState();
       const isDerivedHelpersEmpty = !helper.derivedHelpers.length;
 
@@ -283,7 +288,7 @@ export default function createInstantSearchManager({
         ...partialState,
         results,
         isSearchStalled: nextIsSearchStalled,
-        searching: false,
+        searching: searchCounter > 0,
         error: null,
       });
     };

@@ -627,4 +627,72 @@ describe('createInstantSearchManager with multi index', () => {
       })
     );
   });
+
+  it('sets state with correct value for `searching` property', async () => {
+    // <InstantSearch indexName="first">
+    //   <Index indexName="first" />
+    //   <Index indexName="second" />
+    //   <Index indexName="third" />
+    // </InstantSearch>;
+
+    const searchClient = createSearchClient({});
+
+    const ism = createInstantSearchManager({
+      indexName: 'first',
+      initialState: {},
+      searchParameters: {},
+      searchClient,
+    });
+
+    // <SearchBox defaultRefinement="first query 1" />
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: (params) => params.setQuery('first query 1'),
+      props: {},
+    });
+
+    // <Index indexName="first" />
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: (x) => x.setIndex('first'),
+      props: {
+        indexName: 'first',
+        indexId: 'first',
+      },
+    });
+
+    // <Index indexName="second" />
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: (x) => x.setIndex('second'),
+      props: {
+        indexName: 'second',
+        indexId: 'second',
+      },
+    });
+
+    // <Index indexName="third" />
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: (x) => x.setIndex('third'),
+      props: {
+        indexName: 'third',
+        indexId: 'third',
+      },
+    });
+
+    const setStateSpy = jest.spyOn(ism.store, 'setState');
+
+    await wait(0);
+
+    expect(setStateSpy.mock.calls).toHaveLength(4);
+    expect(setStateSpy.mock.calls[0][0]).toEqual(
+      expect.objectContaining({ searching: true })
+    );
+    expect(setStateSpy.mock.calls[1][0]).toEqual(
+      expect.objectContaining({ searching: true })
+    );
+    expect(setStateSpy.mock.calls[2][0]).toEqual(
+      expect.objectContaining({ searching: true })
+    );
+    expect(setStateSpy.mock.calls[3][0]).toEqual(
+      expect.objectContaining({ searching: false })
+    );
+  });
 });
