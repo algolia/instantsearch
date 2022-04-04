@@ -217,9 +217,11 @@ const connectRefinementList: RefinementListConnector =
 
       const formatItems = ({
         name: label,
+        escapedValue: value,
         ...item
       }: SearchResults.FacetValue): RefinementListItem => ({
         ...item,
+        value,
         label,
         highlighted: label,
       });

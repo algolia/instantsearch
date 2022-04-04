@@ -240,17 +240,20 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
       ): HierarchicalMenuItem[] {
         return facetValues
           .slice(0, getLimit())
-          .map(({ name: label, data, path, ...subValue }) => {
-            const item: HierarchicalMenuItem = {
-              ...subValue,
-              label,
-              data: null,
-            };
-            if (Array.isArray(data)) {
-              item.data = _prepareFacetValues(data);
+          .map(
+            ({ name: label, escapedValue: value, data, path, ...subValue }) => {
+              const item: HierarchicalMenuItem = {
+                ...subValue,
+                value,
+                label,
+                data: null,
+              };
+              if (Array.isArray(data)) {
+                item.data = _prepareFacetValues(data);
+              }
+              return item;
             }
-            return item;
-          });
+          );
       }
 
       return {
