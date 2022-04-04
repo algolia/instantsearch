@@ -331,7 +331,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       const makeWidget = connectBreadcrumb(render);
       const helper = algoliasearchHelper(createSearchClient(), '');
       const widget = makeWidget({
-        attributes: ['category', 'sub_category'],
+        attributes: ['category', 'subCategory'],
       });
 
       const actual = widget.getWidgetSearchParameters!(helper.state, {
@@ -341,7 +341,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       expect(actual.hierarchicalFacets).toEqual([
         {
           name: 'category',
-          attributes: ['category', 'sub_category'],
+          attributes: ['category', 'subCategory'],
           rootPath: null,
           separator: ' > ',
         },
@@ -353,7 +353,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       const makeWidget = connectBreadcrumb(render);
       const helper = algoliasearchHelper(createSearchClient(), '');
       const widget = makeWidget({
-        attributes: ['category', 'sub_category'],
+        attributes: ['category', 'subCategory'],
         separator: ' / ',
       });
 
@@ -364,7 +364,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       expect(actual.hierarchicalFacets).toEqual([
         {
           name: 'category',
-          attributes: ['category', 'sub_category'],
+          attributes: ['category', 'subCategory'],
           rootPath: null,
           separator: ' / ',
         },
@@ -376,7 +376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       const makeWidget = connectBreadcrumb(render);
       const helper = algoliasearchHelper(createSearchClient(), '');
       const widget = makeWidget({
-        attributes: ['category', 'sub_category'],
+        attributes: ['category', 'subCategory'],
         rootPath: 'TopLevel > SubLevel',
       });
 
@@ -387,7 +387,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       expect(actual.hierarchicalFacets).toEqual([
         {
           name: 'category',
-          attributes: ['category', 'sub_category'],
+          attributes: ['category', 'subCategory'],
           rootPath: 'TopLevel > SubLevel',
           separator: ' > ',
         },
@@ -408,7 +408,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
 
       const widget = makeWidget({
-        attributes: ['category', 'sub_category'],
+        attributes: ['category', 'subCategory'],
       });
 
       const actual = widget.getWidgetSearchParameters!(helper.state, {
@@ -423,7 +423,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         },
         {
           name: 'category',
-          attributes: ['category', 'sub_category'],
+          attributes: ['category', 'subCategory'],
           separator: ' > ',
           rootPath: null,
         },
@@ -437,7 +437,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         hierarchicalFacets: [
           {
             name: 'category',
-            attributes: ['category', 'sub_category'],
+            attributes: ['category', 'subCategory'],
             separator: ' > ',
             rootPath: null,
           },
@@ -445,7 +445,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
 
       const widget = makeWidget({
-        attributes: ['category', 'sub_category'],
+        attributes: ['category', 'subCategory'],
       });
 
       const actual = widget.getWidgetSearchParameters!(helper.state, {
@@ -455,7 +455,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       expect(actual.hierarchicalFacets).toEqual([
         {
           name: 'category',
-          attributes: ['category', 'sub_category'],
+          attributes: ['category', 'subCategory'],
           separator: ' > ',
           rootPath: null,
         },
@@ -469,7 +469,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         hierarchicalFacets: [
           {
             name: 'category',
-            attributes: ['category', 'sub_category', 'sub_sub_category'],
+            attributes: ['category', 'subCategory', 'subSubCategory'],
             separator: ' > ',
             rootPath: null,
           },
@@ -477,7 +477,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
 
       const widget = makeWidget({
-        attributes: ['category', 'sub_category'],
+        attributes: ['category', 'subCategory'],
       });
 
       expect(() =>
@@ -494,7 +494,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         hierarchicalFacets: [
           {
             name: 'category',
-            attributes: ['category', 'sub_category'],
+            attributes: ['category', 'subCategory'],
             separator: ' > ',
             rootPath: null,
           },
@@ -502,7 +502,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
 
       const widget = makeWidget({
-        attributes: ['category', 'sub_category'],
+        attributes: ['category', 'subCategory'],
         separator: ' / ',
       });
 
@@ -520,7 +520,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         hierarchicalFacets: [
           {
             name: 'category',
-            attributes: ['category', 'sub_category'],
+            attributes: ['category', 'subCategory'],
             separator: ' > ',
             rootPath: 'TopLevel > SubLevel',
           },
@@ -528,7 +528,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
 
       const widget = makeWidget({
-        attributes: ['category', 'sub_category'],
+        attributes: ['category', 'subCategory'],
         rootPath: 'TopLevel',
       });
 
@@ -543,7 +543,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   it('Renders during init and render', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
-    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+    const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
     const config = widget.getWidgetSearchParameters!(new SearchParameters({}), {
       uiState: {},
@@ -552,7 +552,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       new SearchParameters({
         hierarchicalFacets: [
           {
-            attributes: ['category', 'sub_category'],
+            attributes: ['category', 'subCategory'],
             name: 'category',
             rootPath: null,
             separator: ' > ',
@@ -578,7 +578,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     // Verify that rendering has been called upon init with isFirstRendering = true
     expect(rendering.mock.calls).toHaveLength(1);
     expect(rendering.mock.calls[0][0].widgetParams).toEqual({
-      attributes: ['category', 'sub_category'],
+      attributes: ['category', 'subCategory'],
     });
     expect(rendering.mock.calls[0][1]).toBe(true);
 
@@ -614,7 +614,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     // Verify that rendering has been called upon render with isFirstRendering = false
     expect(rendering.mock.calls).toHaveLength(2);
     expect(rendering.mock.calls[1][0].widgetParams).toEqual({
-      attributes: ['category', 'sub_category'],
+      attributes: ['category', 'subCategory'],
     });
     expect(rendering.mock.calls[1][1]).toBe(false);
   });
@@ -622,7 +622,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   it('provides the correct facet values', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
-    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+    const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},
@@ -677,11 +677,73 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     ]);
   });
 
+  it('provides escaped facet values', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectBreadcrumb(rendering);
+    const widget = makeWidget({ attributes: ['category', 'subCategory'] });
+
+    const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
+      uiState: {},
+    });
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
+    helper.search = jest.fn();
+
+    helper.toggleFacetRefinement('category', '-20 degrees > -20°C');
+
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items).toEqual([]);
+
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            facets: {
+              category: {
+                discounts: 880,
+                '-20 degrees': 15,
+              },
+              subCategory: {
+                '-20 degrees > -20°C': 193,
+                '-20 degrees > cold': 173,
+                'discounts > -50%': 193,
+                'discounts > FREE!!8!': 173,
+              },
+            },
+          }),
+          createSingleSearchResponse({
+            facets: {
+              category: {
+                discounts: 880,
+                '-20 degrees': 15,
+              },
+            },
+          }),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items).toEqual([
+      { label: '-20 degrees', value: '\\-20 degrees > -20°C' },
+      { label: '-20°C', value: null },
+    ]);
+  });
+
   it('provides items from an empty results', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({
-      attributes: ['category', 'sub_category'],
+      attributes: ['category', 'subCategory'],
     });
 
     const config = widget.getWidgetSearchParameters!(new SearchParameters({}), {
@@ -728,7 +790,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({
-      attributes: ['category', 'sub_category'],
+      attributes: ['category', 'subCategory'],
       transformItems: (items) =>
         items.map((item) => ({ ...item, label: 'transformed' })),
     });
@@ -820,7 +882,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   it('returns the correct URL', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
-    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+    const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},
@@ -1053,7 +1115,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   it('toggles the refine function when passed the special value null', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
-    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+    const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
     const config = widget.getWidgetSearchParameters!(new SearchParameters(), {
       uiState: {},

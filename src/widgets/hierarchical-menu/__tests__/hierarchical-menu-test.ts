@@ -2,28 +2,22 @@
  * @jest-environment jsdom
  */
 
-import { render } from 'preact';
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import algoliasearchHelper, {
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
-import type { HierarchicalMenuWidgetParams } from '../hierarchical-menu';
-import hierarchicalMenu from '../hierarchical-menu';
+import type { VNode } from 'preact';
+import { render as originalRender } from 'preact';
 import type {
-  HierarchicalMenuConnectorParams,
-  HierarchicalMenuWidgetDescription,
-} from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import {
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/mock/createWidget';
+  HierarchicalMenuComponentTemplates,
+  HierarchicalMenuWidgetParams,
+} from '../hierarchical-menu';
+import hierarchicalMenu from '../hierarchical-menu';
+import type { HierarchicalMenuConnectorParams } from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import type { Widget } from '../../../types';
+import instantsearch from '../../../index.es';
+import { wait } from '../../../../test/utils/wait';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
 
-const mockedRender = render as jest.Mock;
-
+const render = castToJestMock(originalRender);
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');
 
@@ -34,20 +28,41 @@ jest.mock('preact', () => {
 
 describe('hierarchicalMenu()', () => {
   let container: HTMLDivElement;
-  let attributes: string[];
+  const attributes = ['hierarchy.1', 'hierarchy.2', 'hierarchy.3'];
   let options: HierarchicalMenuConnectorParams & HierarchicalMenuWidgetParams;
-  let widget: Widget<
-    HierarchicalMenuWidgetDescription & {
-      widgetParams: HierarchicalMenuConnectorParams;
-    }
-  >;
+  const singleResults = createSingleSearchResponse({
+    facets: {
+      'hierarchy.1': {
+        zero: 0,
+      },
+      'hierarchy.2': {
+        'zero > one': 1,
+        'zero > two': 2,
+        'zero > three': 3,
+        'zero > four': 4,
+        'zero > five': 5,
+      },
+      'hierarchy.3': {
+        'zero > one > six': 6,
+        'zero > one > seven': 7,
+        'zero > one > eight': 8,
+        'zero > one > nine': 9,
+      },
+    },
+  });
+  const searchClient = createSearchClient({
+    search: jest.fn(() =>
+      Promise.resolve({
+        results: [singleResults, singleResults, singleResults],
+      })
+    ),
+  });
 
   beforeEach(() => {
     container = document.createElement('div');
-    attributes = ['hello', 'world'];
     options = { container, attributes };
-
-    mockedRender.mockClear();
+    render.mockClear();
+    castToJestMock(searchClient.search).mockClear();
   });
 
   describe('Usage', () => {
@@ -64,34 +79,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   describe('render', () => {
-    let results: SearchResults<any>;
-    let data: SearchResults.HierarchicalFacet;
-    let helper: AlgoliaSearchHelper;
-    let state: SearchParameters;
-
-    beforeEach(() => {
-      data = {
-        name: 'baz',
-        count: 3,
-        path: '',
-        isRefined: false,
-        data: [
-          { name: 'foo', count: 1, path: '', isRefined: false, data: [] },
-          { name: 'bar', count: 2, path: '', isRefined: false, data: [] },
-        ],
-      };
-      helper = algoliasearchHelper(createSearchClient(), '');
-      helper.toggleFacetRefinement = jest.fn().mockReturnThis();
-      helper.search = jest.fn();
-      results = new SearchResults(helper.state, [
-        createSingleSearchResponse({}),
-      ]);
-      results.getFacetValues = jest.fn(() => data);
-      state = new SearchParameters();
-      options = { container, attributes };
-    });
-
-    it('understand provided cssClasses', () => {
+    it('understand provided cssClasses', async () => {
       const userCssClasses = {
         root: 'root',
         noRefinementRoot: 'noRefinementRoot',
@@ -108,194 +96,384 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         showMore: 'showMore',
         disabledShowMore: 'disabledShowMore',
       };
-      widget = hierarchicalMenu({ ...options, cssClasses: userCssClasses });
+      const widget = hierarchicalMenu({
+        ...options,
+        cssClasses: userCssClasses,
+      });
 
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+      const { props } = render.mock.calls[0][0] as VNode<
+        RefinementListProps<HierarchicalMenuComponentTemplates>
+      >;
 
-      const [firstRender] = mockedRender.mock.calls;
-
-      expect(firstRender[0].props).toMatchSnapshot();
-    });
-
-    it('calls render', () => {
-      widget = hierarchicalMenu(options);
-
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
-
-      const [firstRender] = mockedRender.mock.calls;
-
-      expect(mockedRender).toHaveBeenCalledTimes(1);
-      expect(firstRender[0].props).toMatchSnapshot();
-    });
-
-    it('asks for results.getFacetValues', () => {
-      widget = hierarchicalMenu(options);
-
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
-
-      expect(results.getFacetValues).toHaveBeenCalledTimes(1);
-      expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
-        facetOrdering: true,
-        sortBy: ['name:asc'],
+      expect(props.cssClasses).toEqual({
+        childList: 'ais-HierarchicalMenu-list--child childList',
+        count: 'ais-HierarchicalMenu-count count',
+        disabledShowMore:
+          'ais-HierarchicalMenu-showMore--disabled disabledShowMore',
+        item: 'ais-HierarchicalMenu-item item',
+        label: 'ais-HierarchicalMenu-label label',
+        link: 'ais-HierarchicalMenu-link link',
+        list: 'ais-HierarchicalMenu-list list',
+        noRefinementRoot: 'ais-HierarchicalMenu--noRefinement noRefinementRoot',
+        parentItem: 'ais-HierarchicalMenu-item--parent parentItem',
+        root: 'ais-HierarchicalMenu root',
+        selectedItem: 'ais-HierarchicalMenu-item--selected selectedItem',
+        showMore: 'ais-HierarchicalMenu-showMore showMore',
       });
     });
 
-    it('has a sortBy option', () => {
-      widget = hierarchicalMenu({ ...options, sortBy: ['name:desc'] });
+    it('calls render', async () => {
+      const widget = hierarchicalMenu(options);
 
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
-
-      expect(results.getFacetValues).toHaveBeenCalledTimes(1);
-      expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
-        facetOrdering: false,
-        sortBy: ['name:desc'],
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
       });
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      expect(render).toHaveBeenCalledTimes(1);
     });
 
-    it('has a templates option', () => {
-      widget = hierarchicalMenu({
+    it('has a sortBy option', async () => {
+      const resultsWithOrdering = createSingleSearchResponse({
+        ...singleResults,
+        renderingContent: {
+          facetOrdering: {
+            values: {
+              'hierarchy.2': { order: ['zero > two', 'zero > one'] },
+            },
+          },
+        },
+      });
+      castToJestMock(searchClient.search).mockResolvedValueOnce({
+        results: [resultsWithOrdering, resultsWithOrdering],
+      });
+
+      const widget = hierarchicalMenu({ ...options, sortBy: ['name:desc'] });
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+        initialUiState: {
+          test: {
+            hierarchicalMenu: {
+              'hierarchy.1': ['zero'],
+            },
+          },
+        },
+      });
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      const { props } = render.mock.calls[0][0] as VNode<
+        RefinementListProps<HierarchicalMenuComponentTemplates>
+      >;
+
+      // not ordered via count or facet ordering, via label descending
+      expect(props.facetValues![0].data).toEqual([
+        {
+          count: 2,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'two',
+          value: 'zero > two',
+        },
+        {
+          count: 3,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'three',
+          value: 'zero > three',
+        },
+        {
+          count: 1,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'one',
+          value: 'zero > one',
+        },
+        {
+          count: 4,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'four',
+          value: 'zero > four',
+        },
+        {
+          count: 5,
+          data: null,
+          exhaustive: true,
+          isRefined: false,
+          label: 'five',
+          value: 'zero > five',
+        },
+      ]);
+    });
+
+    it('has a templates option', async () => {
+      const widget = hierarchicalMenu({
         ...options,
         templates: {
           item: 'item2',
         },
       });
 
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
 
-      const [firstRender] = mockedRender.mock.calls;
+      const { props } = render.mock.calls[0][0] as VNode<
+        RefinementListProps<HierarchicalMenuComponentTemplates>
+      >;
 
-      expect(firstRender[0].props).toMatchSnapshot();
+      expect(props.templateProps).toMatchInlineSnapshot(`
+      {
+        "templates": {
+          "item": "item2",
+          "showMoreText": "
+          {{#isShowingMore}}
+            Show less
+          {{/isShowingMore}}
+          {{^isShowingMore}}
+            Show more
+          {{/isShowingMore}}
+        ",
+        },
+        "templatesConfig": {
+          "compileOptions": {},
+          "helpers": {
+            "formatNumber": [Function],
+            "highlight": [Function],
+            "insights": [Function],
+            "reverseHighlight": [Function],
+            "reverseSnippet": [Function],
+            "snippet": [Function],
+          },
+        },
+        "useCustomCompileOptions": {
+          "item": true,
+          "showMoreText": false,
+        },
+      }
+      `);
     });
 
-    it('has a transformItems options', () => {
-      widget = hierarchicalMenu({
+    it('has a transformItems options', async () => {
+      const widget = hierarchicalMenu({
         ...options,
         transformItems: (items) =>
           items.map((item) => ({ ...item, transformed: true })),
       });
 
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
 
-      const [firstRender] = mockedRender.mock.calls;
+      const { props } = render.mock.calls[0][0] as VNode<
+        RefinementListProps<HierarchicalMenuComponentTemplates>
+      >;
 
-      expect(firstRender[0].props).toMatchSnapshot();
-    });
-
-    it('sets facetValues to empty array when no results', () => {
-      data = {
-        name: 'baz',
-        count: 0,
-        path: '',
-        isRefined: false,
-        data: [],
-      };
-      widget = hierarchicalMenu(options);
-
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
-
-      const [firstRender] = mockedRender.mock.calls;
-
-      expect(firstRender[0].props).toMatchSnapshot();
-    });
-
-    it('has a toggleRefinement method', () => {
-      widget = hierarchicalMenu(options);
-
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
-
-      const [firstRender] = mockedRender.mock.calls;
-
-      const elementToggleRefinement = firstRender[0].props.toggleRefinement;
-      elementToggleRefinement('mom');
-
-      expect(helper.toggleFacetRefinement).toHaveBeenCalledTimes(1);
-      expect(helper.toggleFacetRefinement).toHaveBeenCalledWith('hello', 'mom');
-      expect(helper.search).toHaveBeenCalledTimes(1);
-    });
-
-    it('has a limit option', () => {
-      const secondLevel: SearchResults.HierarchicalFacet[] = [
-        { name: 'six', path: 'six', count: 6, isRefined: false, data: [] },
-        { name: 'seven', path: 'seven', count: 7, isRefined: false, data: [] },
-        { name: 'eight', path: 'eight', count: 8, isRefined: false, data: [] },
-        { name: 'nine', path: 'nine', count: 9, isRefined: false, data: [] },
-      ];
-      const firstLevel: SearchResults.HierarchicalFacet[] = [
-        { name: 'one', path: 'one', count: 1, isRefined: false, data: [] },
+      expect(props.facetValues).toEqual([
         {
-          name: 'two',
-          path: 'two',
-          count: 2,
+          count: 0,
+          data: null,
+          exhaustive: true,
           isRefined: false,
-          data: secondLevel,
+          label: 'zero',
+          transformed: true,
+          value: 'zero',
         },
-        { name: 'three', path: 'three', count: 3, isRefined: false, data: [] },
-        { name: 'four', path: 'four', count: 4, isRefined: false, data: [] },
-        { name: 'five', path: 'five', count: 5, isRefined: false, data: [] },
-      ];
-      data = {
-        name: 'zero',
-        path: 'zero',
-        count: 0,
-        isRefined: false,
-        data: firstLevel,
-      };
-      const expectedFacetValues = [
-        { label: 'one', value: 'one', count: 1, isRefined: false, data: [] },
+      ]);
+    });
+
+    it('sets facetValues to empty array when no results', async () => {
+      castToJestMock(searchClient.search).mockResolvedValueOnce({
+        results: [createSingleSearchResponse()],
+      });
+      const widget = hierarchicalMenu(options);
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      const { props } = render.mock.calls[0][0] as VNode<
+        RefinementListProps<HierarchicalMenuComponentTemplates>
+      >;
+
+      expect(props.facetValues).toEqual([]);
+    });
+
+    it('has a toggleRefinement method', async () => {
+      const widget = hierarchicalMenu(options);
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+      });
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(castToJestMock(searchClient.search).mock.calls[0][0]).toEqual([
         {
-          label: 'two',
-          value: 'two',
-          count: 2,
-          isRefined: false,
+          indexName: 'test',
+          params: {
+            facets: ['hierarchy.1'],
+            maxValuesPerFacet: 10,
+            tagFilters: '',
+          },
+        },
+      ]);
+
+      const { props } = render.mock.calls[0][0] as VNode<
+        RefinementListProps<HierarchicalMenuComponentTemplates>
+      >;
+
+      const elementToggleRefinement = props.toggleRefinement;
+      elementToggleRefinement('zero');
+
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+
+      expect(castToJestMock(searchClient.search).mock.calls[1][0]).toEqual([
+        {
+          indexName: 'test',
+          params: {
+            facetFilters: [['hierarchy.1:zero']],
+            facets: ['hierarchy.1', 'hierarchy.2'],
+            maxValuesPerFacet: 10,
+            tagFilters: '',
+          },
+        },
+        {
+          indexName: 'test',
+          params: {
+            analytics: false,
+            attributesToHighlight: [],
+            attributesToRetrieve: [],
+            attributesToSnippet: [],
+            clickAnalytics: false,
+            facets: ['hierarchy.1'],
+            hitsPerPage: 1,
+            maxValuesPerFacet: 10,
+            page: 0,
+            tagFilters: '',
+          },
+        },
+      ]);
+    });
+
+    it('has a limit option', async () => {
+      const widget = hierarchicalMenu({ ...options, limit: 3 });
+
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient,
+        initialUiState: {
+          test: {
+            hierarchicalMenu: {
+              'hierarchy.1': ['zero', 'one'],
+            },
+          },
+        },
+      });
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      const { props } = render.mock.calls[0][0] as VNode<
+        RefinementListProps<HierarchicalMenuComponentTemplates>
+      >;
+
+      expect(props.facetValues![0].data).toHaveLength(3);
+      expect(props.facetValues![0].data![2].data).toHaveLength(3);
+
+      expect(props.facetValues).toEqual([
+        {
+          count: 0,
+          isRefined: true,
+          exhaustive: true,
+          value: 'zero',
+          label: 'zero',
           data: [
             {
-              label: 'six',
-              value: 'six',
-              count: 6,
+              count: 5,
               isRefined: false,
-              data: [],
+              exhaustive: true,
+              value: 'zero > five',
+              label: 'five',
+              data: null,
             },
             {
-              label: 'seven',
-              value: 'seven',
-              count: 7,
+              count: 4,
               isRefined: false,
-              data: [],
+              exhaustive: true,
+              value: 'zero > four',
+              label: 'four',
+              data: null,
             },
             {
-              label: 'eight',
-              value: 'eight',
-              count: 8,
-              isRefined: false,
-              data: [],
+              count: 1,
+              isRefined: true,
+              exhaustive: true,
+              value: 'zero > one',
+              label: 'one',
+              data: [
+                {
+                  count: 8,
+                  isRefined: false,
+                  exhaustive: true,
+                  value: 'zero > one > eight',
+                  label: 'eight',
+                  data: null,
+                },
+                {
+                  count: 9,
+                  isRefined: false,
+                  exhaustive: true,
+                  value: 'zero > one > nine',
+                  label: 'nine',
+                  data: null,
+                },
+                {
+                  count: 7,
+                  isRefined: false,
+                  exhaustive: true,
+                  value: 'zero > one > seven',
+                  label: 'seven',
+                  data: null,
+                },
+              ],
             },
           ],
         },
-        {
-          label: 'three',
-          value: 'three',
-          count: 3,
-          isRefined: false,
-          data: [],
-        },
-      ];
-      widget = hierarchicalMenu({ ...options, limit: 3 });
-
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ results, state }));
-
-      const [firstRender] = mockedRender.mock.calls;
-
-      const actualFacetValues = firstRender[0].props.facetValues;
-      expect(actualFacetValues).toEqual(expectedFacetValues);
+      ]);
     });
   });
 });

@@ -355,6 +355,95 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     );
   });
 
+  it('provides escaped facet values', () => {
+    const widget = makeWidget({
+      attribute: 'category',
+    });
+
+    const helper = jsHelper(
+      createSearchClient(),
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+    );
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', '-50%');
+
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
+
+    // During the first rendering there are no facet values
+    // The function get an empty array so that it doesn't break
+    // over null-ish values.
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({ items: [] }),
+      expect.anything()
+    );
+
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [],
+            facets: {
+              category: {
+                '-50%': 880,
+              },
+            },
+          }),
+          createSingleSearchResponse({
+            facets: {
+              category: {
+                '-50%': 880,
+                '-10': 10,
+                free: 47,
+              },
+            },
+          }),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          {
+            label: '-50%',
+            value: '\\-50%',
+            count: 880,
+            exhaustive: true,
+            isRefined: true,
+            data: null,
+          },
+          {
+            label: '-10',
+            value: '\\-10',
+            count: 10,
+            exhaustive: true,
+            isRefined: false,
+            data: null,
+          },
+          {
+            label: 'free',
+            value: 'free',
+            count: 47,
+            exhaustive: true,
+            isRefined: false,
+            data: null,
+          },
+        ],
+      }),
+      expect.anything()
+    );
+  });
+
   it('returns empty items if the facet is not declared', () => {
     const widget = makeWidget({
       attribute: 'category',

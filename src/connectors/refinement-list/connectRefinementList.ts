@@ -217,11 +217,12 @@ const connectRefinementList: RefinementListConnector =
 
       const formatItems = ({
         name: label,
+        escapedValue: value,
         ...item
       }: SearchResults.FacetValue): RefinementListItem => ({
         ...item,
+        value,
         label,
-        value: label,
         highlighted: label,
       });
 
@@ -303,9 +304,9 @@ const connectRefinementList: RefinementListConnector =
                     : results.facetHits;
 
                   const normalizedFacetValues = transformItems(
-                    facetValues.map(({ value, ...item }) => ({
+                    facetValues.map(({ escapedValue, value, ...item }) => ({
                       ...item,
-                      value,
+                      value: escapedValue,
                       label: value,
                     })),
                     { results: searchResults }

@@ -302,7 +302,7 @@ const connectMenu: MenuConnector = function connectMenu(
           items = transformItems(
             facetItems
               .slice(0, getLimit())
-              .map(({ name: label, path: value, ...item }) => ({
+              .map(({ name: label, escapedValue: value, path, ...item }) => ({
                 ...item,
                 label,
                 value,
