@@ -1,3 +1,13 @@
+## [6.23.3](https://github.com/algolia/react-instantsearch/compare/v6.23.2...v6.23.3) (2022-04-05)
+
+
+### Bug Fixes
+
+* **facets:** show raw value in currentRefinements ([#3420](https://github.com/algolia/react-instantsearch/issues/3420)) ([1199ce6](https://github.com/algolia/react-instantsearch/commit/1199ce6bd4152e4b54bd2ee0e1f0c9d81021c7d5)), closes [#3412](https://github.com/algolia/react-instantsearch/issues/3412)
+* **multi-index:** correctly set `searching` prop in multi-index result states ([#3419](https://github.com/algolia/react-instantsearch/issues/3419)) ([7f8e97e](https://github.com/algolia/react-instantsearch/commit/7f8e97e31b3dd5e49d3febef673f41f7dfa6d45d))
+
+
+
 ## [6.23.2](https://github.com/algolia/react-instantsearch/compare/v6.23.1...v6.23.2) (2022-04-04)
 
 
