@@ -237,6 +237,36 @@ test('getFacetValues(disjunctive) returns escaped facet values', function() {
   expect(facetValues.length).toBe(3);
 });
 
+test('getFacetValues introduces numeric disjunctive refinements', function() {
+  var searchParams = new SearchParameters({
+    index: 'instant_search',
+    disjunctiveFacets: ['type'],
+    disjunctiveFacetsRefinements: {
+      type: ['5', 50]
+    }
+  });
+
+  var result = {
+    query: '',
+    facets: {
+      type: {}
+    }
+  };
+
+  var results = new SearchResults(searchParams, [result, result]);
+
+  var facetValues = results.getFacetValues('type');
+
+  var expected = [
+    {name: '5', escapedValue: '5', count: 0, isRefined: true},
+    // even though this could be considered refined, it's not because it's a number (existing bug)
+    {name: '50', escapedValue: '50', count: 0, isRefined: false}
+  ];
+
+  expect(facetValues).toEqual(expected);
+  expect(facetValues.length).toBe(2);
+});
+
 test('getFacetValues(hierachical) returns escaped facet values', function() {
   var searchParams = new SearchParameters({
     index: 'instant_search',

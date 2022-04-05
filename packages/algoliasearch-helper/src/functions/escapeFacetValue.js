@@ -3,20 +3,24 @@
 /**
  * Replaces a leading - with \-
  * @private
- * @param {string} value the facet value to replace
- * @returns string
+ * @param {any} value the facet value to replace
+ * @returns any
  */
 function escapeFacetValue(value) {
-  return value.replace(/^-/, '\\-');
+  if (typeof value !== 'string') return value;
+
+  return String(value).replace(/^-/, '\\-');
 }
 
 /**
  * Replaces a leading \- with -
  * @private
- * @param {string} value the escaped facet value
- * @returns string
+ * @param {any} value the escaped facet value
+ * @returns any
  */
 function unescapeFacetValue(value) {
+  if (typeof value !== 'string') return value;
+
   return value.replace(/^\\-/, '-');
 }
 
