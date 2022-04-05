@@ -1,3 +1,6 @@
+3.8.1 - 2022-04-05
+ * fix(disjunctiveFacets): avoid escaping non-string values (#902) https://github.com/algolia/algoliasearch-helper-js/commit/4ac67bda2a8e5a2b8c53c960637b72a77951af76
+
 3.8.0 - 2022-04-04
  * ci(codesandbox): set up (#899) https://github.com/algolia/algoliasearch-helper-js/commit/ac7de4458f31c01da4e682cabee357e6300e147a
  * ci(typescript): run type tests in CI (#898) https://github.com/algolia/algoliasearch-helper-js/commit/4d45118ef64a8c6352d2e75618df4e18a149ba64
