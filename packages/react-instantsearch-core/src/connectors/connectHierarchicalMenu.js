@@ -8,6 +8,7 @@ import {
   getCurrentRefinementValue,
   getResults,
 } from '../core/indexUtils';
+import { unescapeFacetValue } from '../core/utils';
 
 export const getId = (props) => props.attributes[0];
 
@@ -286,7 +287,7 @@ export default createConnector({
       ? []
       : [
           {
-            label: `${rootAttribute}: ${currentRefinement}`,
+            label: `${rootAttribute}: ${unescapeFacetValue(currentRefinement)}`,
             attribute: rootAttribute,
             value: (nextState) =>
               refine(props, nextState, '', {

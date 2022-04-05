@@ -7,6 +7,7 @@ import {
   getCurrentRefinementValue,
   getResults,
 } from '../core/indexUtils';
+import { unescapeFacetValue } from '../core/utils';
 
 const namespace = 'menu';
 
@@ -245,7 +246,9 @@ export default createConnector({
           ? []
           : [
               {
-                label: `${props.attribute}: ${currentRefinement}`,
+                label: `${props.attribute}: ${unescapeFacetValue(
+                  currentRefinement
+                )}`,
                 attribute: props.attribute,
                 value: (nextState) =>
                   refine(props, nextState, '', {

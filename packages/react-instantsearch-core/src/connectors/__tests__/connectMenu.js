@@ -962,84 +962,106 @@ describe('connectMenu', () => {
       );
     });
 
-    it('registers its filter in metadata', () => {
-      const metadata = connect.getMetadata(
-        { attribute: 'wot', contextValue, indexContextValue },
-        { indices: { second: { menu: { wot: 'wat' } } } }
-      );
-      expect(metadata).toEqual({
-        id: 'wot',
-        index: 'second',
-        items: [
+    describe('getMetaData', () => {
+      it('registers its filter in metadata', () => {
+        const metadata = connect.getMetadata(
+          { attribute: 'wot', contextValue, indexContextValue },
+          { indices: { second: { menu: { wot: 'wat' } } } }
+        );
+        expect(metadata).toEqual({
+          id: 'wot',
+          index: 'second',
+          items: [
+            {
+              label: 'wot: wat',
+              attribute: 'wot',
+              currentRefinement: 'wat',
+              // Ignore clear, we test it later
+              value: metadata.items[0].value,
+            },
+          ],
+        });
+      });
+
+      it('registers escaped metadata', () => {
+        const metadata = connect.getMetadata(
+          { attribute: 'wot', contextValue, indexContextValue },
+          { indices: { second: { menu: { wot: '\\-wat' } } } }
+        );
+        expect(metadata).toEqual({
+          id: 'wot',
+          index: 'second',
+          items: [
+            {
+              label: 'wot: -wat',
+              attribute: 'wot',
+              currentRefinement: '\\-wat',
+              // Ignore clear, we test it later
+              value: metadata.items[0].value,
+            },
+          ],
+        });
+      });
+
+      it('items value function should clear it from the search state', () => {
+        const metadata = connect.getMetadata(
+          { attribute: 'one', contextValue, indexContextValue },
+          { indices: { second: { menu: { one: 'one', two: 'two' } } } }
+        );
+
+        const searchState = metadata.items[0].value({
+          indices: { second: { menu: { one: 'one', two: 'two' } } },
+        });
+
+        expect(searchState).toEqual({
+          indices: { second: { page: 1, menu: { one: '', two: 'two' } } },
+        });
+      });
+
+      it('should return the right searchState when clean up', () => {
+        let searchState = connect.cleanUp(
+          { attribute: 'name', contextValue, indexContextValue },
           {
-            label: 'wot: wat',
-            attribute: 'wot',
-            currentRefinement: 'wat',
-            // Ignore clear, we test it later
-            value: metadata.items[0].value,
-          },
-        ],
-      });
-    });
+            indices: {
+              first: {
+                random: { untouched: 'yes' },
+              },
+              second: {
+                menu: { name: 'searchState', name2: 'searchState2' },
+                another: { searchState: 'searchState' },
+              },
+            },
+          }
+        );
 
-    it('items value function should clear it from the search state', () => {
-      const metadata = connect.getMetadata(
-        { attribute: 'one', contextValue, indexContextValue },
-        { indices: { second: { menu: { one: 'one', two: 'two' } } } }
-      );
-
-      const searchState = metadata.items[0].value({
-        indices: { second: { menu: { one: 'one', two: 'two' } } },
-      });
-
-      expect(searchState).toEqual({
-        indices: { second: { page: 1, menu: { one: '', two: 'two' } } },
-      });
-    });
-
-    it('should return the right searchState when clean up', () => {
-      let searchState = connect.cleanUp(
-        { attribute: 'name', contextValue, indexContextValue },
-        {
+        expect(searchState).toEqual({
           indices: {
             first: {
               random: { untouched: 'yes' },
             },
             second: {
-              menu: { name: 'searchState', name2: 'searchState2' },
-              another: { searchState: 'searchState' },
+              another: {
+                searchState: 'searchState',
+              },
+              menu: {
+                name2: 'searchState2',
+              },
             },
           },
-        }
-      );
+        });
 
-      expect(searchState).toEqual({
-        indices: {
-          first: {
-            random: { untouched: 'yes' },
-          },
-          second: {
-            another: {
-              searchState: 'searchState',
+        searchState = connect.cleanUp(
+          { attribute: 'name2', contextValue, indexContextValue },
+          searchState
+        );
+        expect(searchState).toEqual({
+          indices: {
+            first: {
+              random: { untouched: 'yes' },
             },
-            menu: {
-              name2: 'searchState2',
-            },
+            second: { another: { searchState: 'searchState' }, menu: {} },
           },
-        },
-      });
-
-      searchState = connect.cleanUp(
-        { attribute: 'name2', contextValue, indexContextValue },
-        searchState
-      );
-      expect(searchState).toEqual({
-        indices: {
-          first: {
-            random: { untouched: 'yes' },
-          },
-          second: { another: { searchState: 'searchState' }, menu: {} },
-        },
+        });
       });
     });
 

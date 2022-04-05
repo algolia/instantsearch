@@ -675,47 +675,68 @@ describe('connectHierarchicalMenu', () => {
       );
     });
 
-    it('registers its id in metadata', () => {
-      const metadata = connect.getMetadata(
-        { attributes: ['ok'], contextValue },
-        {}
-      );
-      expect(metadata).toEqual({ items: [], index: 'index', id: 'ok' });
-    });
-
-    it('registers its filter in metadata', () => {
-      const metadata = connect.getMetadata(
-        { attributes: ['ok'], contextValue },
-        { hierarchicalMenu: { ok: 'wat' } }
-      );
-      expect(metadata).toEqual({
-        id: 'ok',
-        index: 'index',
-        items: [
-          {
-            label: 'ok: wat',
-            attribute: 'ok',
-            currentRefinement: 'wat',
-            // Ignore clear, we test it later
-            value: metadata.items[0].value,
-          },
-        ],
-      });
-    });
-
-    it('items value function should clear it from the search state', () => {
-      const metadata = connect.getMetadata(
-        { attributes: ['one'], contextValue },
-        { hierarchicalMenu: { one: 'one', two: 'two' } }
-      );
-
-      const searchState = metadata.items[0].value({
-        hierarchicalMenu: { one: 'one', two: 'two' },
+    describe('getMetaData', () => {
+      it('registers its id in metadata', () => {
+        const metadata = connect.getMetadata(
+          { attributes: ['ok'], contextValue },
+          {}
+        );
+        expect(metadata).toEqual({ items: [], index: 'index', id: 'ok' });
       });
 
-      expect(searchState).toEqual({
-        page: 1,
-        hierarchicalMenu: { one: '', two: 'two' },
+      it('registers its filter in metadata', () => {
+        const metadata = connect.getMetadata(
+          { attributes: ['ok'], contextValue },
+          { hierarchicalMenu: { ok: 'wat' } }
+        );
+        expect(metadata).toEqual({
+          id: 'ok',
+          index: 'index',
+          items: [
+            {
+              label: 'ok: wat',
+              attribute: 'ok',
+              currentRefinement: 'wat',
+              // Ignore clear, we test it later
+              value: metadata.items[0].value,
+            },
+          ],
+        });
+      });
+
+      it('registers escaped filter in metadata', () => {
+        const metadata = connect.getMetadata(
+          { attributes: ['ok'], contextValue },
+          { hierarchicalMenu: { ok: '\\-wat' } }
+        );
+        expect(metadata).toEqual({
+          id: 'ok',
+          index: 'index',
+          items: [
+            {
+              label: 'ok: -wat',
+              attribute: 'ok',
+              currentRefinement: '\\-wat',
+              value: metadata.items[0].value,
+            },
+          ],
+        });
+      });
+
+      it('items value function should clear it from the search state', () => {
+        const metadata = connect.getMetadata(
+          { attributes: ['one'], contextValue },
+          { hierarchicalMenu: { one: 'one', two: 'two' } }
+        );
+
+        const searchState = metadata.items[0].value({
+          hierarchicalMenu: { one: 'one', two: 'two' },
+        });
+
+        expect(searchState).toEqual({
+          page: 1,
+          hierarchicalMenu: { one: '', two: 'two' },
+        });
       });
     });
 

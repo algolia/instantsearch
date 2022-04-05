@@ -7,6 +7,7 @@ import {
   getCurrentRefinementValue,
   getResults,
 } from '../core/indexUtils';
+import { unescapeFacetValue } from '../core/utils';
 
 const namespace = 'refinementList';
 
@@ -266,7 +267,7 @@ export default createConnector({
                 value: (nextState) => refine(props, nextState, [], context),
                 items: getCurrentRefinement(props, searchState, context).map(
                   (item) => ({
-                    label: `${item}`,
+                    label: unescapeFacetValue(`${item}`),
                     value: (nextState) => {
                       const nextSelectedItems = getCurrentRefinement(
                         props,

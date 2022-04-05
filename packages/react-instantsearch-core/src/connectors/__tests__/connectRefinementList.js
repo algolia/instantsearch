@@ -452,64 +452,95 @@ describe('connectRefinementList', () => {
       );
     });
 
-    it('registers its id in metadata', () => {
-      const metadata = connect.getMetadata(
-        { attribute: 'ok', contextValue },
-        {}
-      );
-      expect(metadata).toEqual({ id: 'ok', index: 'index', items: [] });
-    });
-
-    it('registers its filter in metadata', () => {
-      const metadata = connect.getMetadata(
-        { attribute: 'wot', contextValue },
-        { refinementList: { wot: ['wat', 'wut'] } }
-      );
-      expect(metadata).toEqual({
-        id: 'wot',
-        index: 'index',
-        items: [
-          {
-            label: 'wot: ',
-            attribute: 'wot',
-            currentRefinement: ['wat', 'wut'],
-            value: metadata.items[0].value,
-            items: [
-              {
-                label: 'wat',
-                value: metadata.items[0].items[0].value,
-              },
-              {
-                label: 'wut',
-                value: metadata.items[0].items[1].value,
-              },
-            ],
-            // Ignore value, we test it later
-          },
-        ],
-      });
-    });
-
-    it('items value function should clear it from the search state', () => {
-      const metadata = connect.getMetadata(
-        { attribute: 'one', contextValue },
-        { refinementList: { one: ['one1', 'one2'], two: ['two'] } }
-      );
-
-      let searchState = metadata.items[0].items[0].value({
-        refinementList: { one: ['one1', 'one2'], two: ['two'] },
+    describe('getMetadata', () => {
+      it('registers its id in metadata', () => {
+        const metadata = connect.getMetadata(
+          { attribute: 'ok', contextValue },
+          {}
+        );
+        expect(metadata).toEqual({ id: 'ok', index: 'index', items: [] });
       });
 
-      expect(searchState).toEqual({
-        page: 1,
-        refinementList: { one: ['one2'], two: ['two'] },
+      it('registers its filter in metadata', () => {
+        const metadata = connect.getMetadata(
+          { attribute: 'wot', contextValue },
+          { refinementList: { wot: ['wat', 'wut'] } }
+        );
+        expect(metadata).toEqual({
+          id: 'wot',
+          index: 'index',
+          items: [
+            {
+              label: 'wot: ',
+              attribute: 'wot',
+              currentRefinement: ['wat', 'wut'],
+              value: metadata.items[0].value,
+              items: [
+                {
+                  label: 'wat',
+                  value: metadata.items[0].items[0].value,
+                },
+                {
+                  label: 'wut',
+                  value: metadata.items[0].items[1].value,
+                },
+              ],
+              // Ignore value, we test it later
+            },
+          ],
+        });
       });
 
-      searchState = metadata.items[0].items[1].value(searchState);
+      it('registers escaped filterd in metadata', () => {
+        const metadata = connect.getMetadata(
+          { attribute: 'wot', contextValue },
+          { refinementList: { wot: ['\\-wat', 'wut'] } }
+        );
+        expect(metadata).toEqual({
+          id: 'wot',
+          index: 'index',
+          items: [
+            {
+              label: 'wot: ',
+              attribute: 'wot',
+              currentRefinement: ['\\-wat', 'wut'],
+              value: metadata.items[0].value,
+              items: [
+                {
+                  label: '-wat',
+                  value: metadata.items[0].items[0].value,
+                },
+                {
+                  label: 'wut',
+                  value: metadata.items[0].items[1].value,
+                },
+              ],
+            },
+          ],
+        });
+      });
 
-      expect(searchState).toEqual({
-        page: 1,
-        refinementList: { one: '', two: ['two'] },
+      it('items value function should clear it from the search state', () => {
+        const metadata = connect.getMetadata(
+          { attribute: 'one', contextValue },
+          { refinementList: { one: ['one1', 'one2'], two: ['two'] } }
+        );
+
+        let searchState = metadata.items[0].items[0].value({
+          refinementList: { one: ['one1', 'one2'], two: ['two'] },
+        });
+
+        expect(searchState).toEqual({
+          page: 1,
+          refinementList: { one: ['one2'], two: ['two'] },
+        });
+
+        searchState = metadata.items[0].items[1].value(searchState);
+
+        expect(searchState).toEqual({
+          page: 1,
+          refinementList: { one: '', two: ['two'] },
+        });
       });
     });
 
