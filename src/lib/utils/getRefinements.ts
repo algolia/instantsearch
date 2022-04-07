@@ -1,43 +1,55 @@
 import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import find from './find';
-import unescapeRefinement from './unescapeRefinement';
+import { unescapeFacetValue, escapeFacetValue } from './escapeFacetValue';
 
 export type FacetRefinement = {
-  type:
-    | 'facet'
-    | 'exclude'
-    | 'disjunctive'
-    | 'hierarchical'
-    | 'numeric'
-    | 'tag'
-    | 'query';
+  type: 'facet' | 'disjunctive' | 'hierarchical';
+  attribute: string;
+  name: string;
+  escapedValue: string;
+  count?: number;
+  exhaustive?: boolean;
+};
+
+export type TagRefinement = {
+  type: 'tag';
+  attribute: string;
+  name: string;
+};
+
+export type QueryRefinement = {
+  type: 'query';
+  attribute: 'query';
+  query: string;
+  name: string;
+};
+
+export type NumericRefinement = {
+  type: 'numeric';
+  numericValue: number;
+  operator: '<' | '<=' | '=' | '!=' | '>=' | '>';
+  attribute: string;
+  name: string;
+  escapedValue: string;
+  count?: number;
+  exhaustive?: boolean;
+};
+
+export type FacetExcludeRefinement = {
+  type: 'exclude';
+  exclude: boolean;
   attribute: string;
   name: string;
   count?: number;
   exhaustive?: boolean;
 };
 
-export type QueryRefinement = {
-  type: 'query';
-  query: string;
-} & Pick<FacetRefinement, 'type' | 'attribute' | 'name'>;
-
-export type NumericRefinement = {
-  type: 'numeric';
-  numericValue: number;
-  operator: '<' | '<=' | '=' | '!=' | '>=' | '>';
-} & FacetRefinement;
-
-export type FacetExcludeRefinement = {
-  type: 'exclude';
-  exclude: boolean;
-} & FacetRefinement;
-
 export type Refinement =
   | FacetRefinement
   | QueryRefinement
   | NumericRefinement
-  | FacetExcludeRefinement;
+  | FacetExcludeRefinement
+  | TagRefinement;
 
 function getRefinement(
   state: SearchParameters,
@@ -46,9 +58,14 @@ function getRefinement(
   name: Refinement['name'],
   resultsFacets: SearchResults['facets' | 'hierarchicalFacets'] = []
 ): Refinement {
-  const res: Refinement = { type, attribute, name };
+  const res: Refinement = {
+    type,
+    attribute,
+    name,
+    escapedValue: escapeFacetValue(name),
+  };
   let facet: any = find(
-    resultsFacets as Array<{ name: string }>,
+    resultsFacets,
     (resultsFacet) => resultsFacet.name === attribute
   );
   let count: number;
@@ -77,14 +94,12 @@ function getRefinement(
     count = facet && facet.data && facet.data[res.name];
   }
 
-  const exhaustive = facet && facet.exhaustive;
-
   if (count !== undefined) {
     res.count = count;
   }
 
-  if (exhaustive !== undefined) {
-    res.exhaustive = exhaustive;
+  if (facet && facet.exhaustive !== undefined) {
+    res.exhaustive = facet.exhaustive;
   }
 
   return res;
@@ -137,9 +152,9 @@ function getRefinements(
           state,
           'disjunctive',
           attribute,
-          // We unescape any disjunctive refined values with `unescapeRefinement` because
-          // they can be escaped on negative numeric values with `escapeRefinement`.
-          unescapeRefinement(refinementName),
+          // We unescape any disjunctive refined values with `unescapeFacetValue` because
+          // they can be escaped on negative numeric values with `escapeFacetValue`.
+          unescapeFacetValue(refinementName),
           results.disjunctiveFacets
         )
       );

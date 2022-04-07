@@ -5,8 +5,7 @@ import type {
 } from 'algoliasearch-helper';
 import {
   checkRendering,
-  escapeRefinement,
-  unescapeRefinement,
+  escapeFacetValue,
   createDocumentationMessageGenerator,
   find,
   noop,
@@ -188,9 +187,9 @@ const connectToggleRefinement: ToggleRefinementConnector =
       }
 
       const hasAnOffValue = userOff !== undefined;
-      const on = toArray(userOn).map(escapeRefinement);
+      const on = toArray(userOn).map(escapeFacetValue);
       const off = hasAnOffValue
-        ? toArray(userOff).map(escapeRefinement)
+        ? toArray(userOff).map(escapeFacetValue)
         : undefined;
 
       let sendEvent: SendEventForToggle;
@@ -336,7 +335,8 @@ const connectToggleRefinement: ToggleRefinementConnector =
               .map((v) =>
                 find(
                   allFacetValues,
-                  ({ name }) => name === unescapeRefinement(v)
+                  ({ escapedValue }) =>
+                    escapedValue === escapeFacetValue(String(v))
                 )
               )
               .filter((v): v is SearchResults.FacetValue => v !== undefined);
@@ -346,7 +346,8 @@ const connectToggleRefinement: ToggleRefinementConnector =
                   .map((v) =>
                     find(
                       allFacetValues,
-                      ({ name }) => name === unescapeRefinement(v)
+                      ({ escapedValue }) =>
+                        escapedValue === escapeFacetValue(String(v))
                     )
                   )
                   .filter((v): v is SearchResults.FacetValue => v !== undefined)
