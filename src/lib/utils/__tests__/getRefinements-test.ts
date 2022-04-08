@@ -38,7 +38,6 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve one tag', () => {
-    // @ts-expect-error not the correct call
     helper.addTag('tag1');
 
     expect(getRefinements(results, helper.state)).toEqual([
@@ -47,7 +46,6 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve multiple tags', () => {
-    // @ts-expect-error not the correct call
     helper.addTag('tag1').addTag('tag2');
 
     expect(getRefinements(results, helper.state)).toEqual([
@@ -530,8 +528,7 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve a numericRefinement on one facet', () => {
-    // @ts-expect-error
-    helper.addNumericRefinement('numericFacet1', '>', '1');
+    helper.addNumericRefinement('numericFacet1', '>', 1);
 
     expect(getRefinements(results, helper.state)).toEqual([
       {
@@ -545,8 +542,7 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve a numericRefinement on one disjunctive facet', () => {
-    // @ts-expect-error
-    helper.addNumericRefinement('numericDisjunctiveFacet1', '>', '1');
+    helper.addNumericRefinement('numericDisjunctiveFacet1', '>', 1);
 
     expect(getRefinements(results, helper.state)).toEqual([
       {
@@ -561,10 +557,8 @@ describe('getRefinements', () => {
 
   it('should retrieve multiple numericRefinements with same operator', () => {
     helper
-      // @ts-expect-error
-      .addNumericRefinement('numericFacet1', '>', '1')
-      // @ts-expect-error
-      .addNumericRefinement('numericFacet1', '>', '2');
+      .addNumericRefinement('numericFacet1', '>', 1)
+      .addNumericRefinement('numericFacet1', '>', 2);
 
     expect(getRefinements(results, helper.state)).toEqual([
       {
@@ -586,16 +580,11 @@ describe('getRefinements', () => {
 
   it('should retrieve multiple conjunctive and numericRefinements', () => {
     helper
-      // @ts-expect-error
-      .addNumericRefinement('numericFacet1', '>', '1')
-      // @ts-expect-error
-      .addNumericRefinement('numericFacet1', '>', '2')
-      // @ts-expect-error
-      .addNumericRefinement('numericFacet1', '<=', '3')
-      // @ts-expect-error
-      .addNumericRefinement('numericDisjunctiveFacet1', '>', '1')
-      // @ts-expect-error
-      .addNumericRefinement('numericDisjunctiveFacet1', '>', '2');
+      .addNumericRefinement('numericFacet1', '>', 1)
+      .addNumericRefinement('numericFacet1', '>', 2)
+      .addNumericRefinement('numericFacet1', '<=', 3)
+      .addNumericRefinement('numericDisjunctiveFacet1', '>', 1)
+      .addNumericRefinement('numericDisjunctiveFacet1', '>', 2);
 
     expect(getRefinements(results, helper.state)).toEqual([
       {
