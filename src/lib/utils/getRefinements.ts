@@ -30,7 +30,6 @@ export type NumericRefinement = {
   operator: '<' | '<=' | '=' | '!=' | '>=' | '>';
   attribute: string;
   name: string;
-  escapedValue: string;
   count?: number;
   exhaustive?: boolean;
 };
@@ -53,12 +52,12 @@ export type Refinement =
 
 function getRefinement(
   state: SearchParameters,
-  type: Refinement['type'],
-  attribute: Refinement['attribute'],
-  name: Refinement['name'],
+  type: FacetRefinement['type'],
+  attribute: FacetRefinement['attribute'],
+  name: FacetRefinement['name'],
   resultsFacets: SearchResults['facets' | 'hierarchicalFacets'] = []
-): Refinement {
-  const res: Refinement = {
+): FacetRefinement {
+  const res: FacetRefinement = {
     type,
     attribute,
     name,
@@ -105,7 +104,7 @@ function getRefinement(
   return res;
 }
 
-function getRefinements(
+export default function getRefinements(
   results: SearchResults | Record<string, never>,
   state: SearchParameters,
   includesQuery: boolean = false
@@ -214,5 +213,3 @@ function getRefinements(
 
   return refinements;
 }
-
-export default getRefinements;

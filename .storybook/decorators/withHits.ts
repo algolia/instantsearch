@@ -49,20 +49,6 @@ export const withHits =
     } = searchOptions || {};
 
     const searchClient = algoliasearch(appId, apiKey);
-    const srch = searchClient.search;
-    searchClient.search = (queries) =>
-      srch(queries).then(({ results }) => ({
-        results: results.map((res) => ({
-          ...res,
-          facets: {
-            ...res.facets,
-            brand: {
-              '-10': 1,
-              10: 2,
-            },
-          },
-        })),
-      }));
 
     const urlLogger = action('Routing state');
     const search = instantsearch({
