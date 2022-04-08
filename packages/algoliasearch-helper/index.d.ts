@@ -283,7 +283,7 @@ declare namespace algoliasearchHelper {
      * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
      */
     addExclude: AlgoliaSearchHelper['addFacetExclusion'];
-    addTag(facet: string, value: string): this;
+    addTag(tag: string): this;
     removeNumericRefinement(facet: string, operator?: SearchParameters.Operator, value?: number | number[]): this;
     removeDisjunctiveFacetRefinement(facet: string, value?: string): this;
     /**
