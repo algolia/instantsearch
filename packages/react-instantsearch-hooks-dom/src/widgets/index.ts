@@ -9,6 +9,7 @@ export * from './InfiniteHits';
 export * from './Menu';
 export * from './Pagination';
 export * from './PoweredBy';
+export * from './RangeInput';
 export * from './RefinementList';
 export * from './SearchBox';
 export * from './Snippet';

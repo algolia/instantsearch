@@ -67,6 +67,7 @@ function Widget<TWidget extends SingleWidget>({
       );
     }
     case 'ToggleRefinement':
+    case 'RangeInput':
     case 'RefinementList':
     case 'Menu': {
       return <widget.Component attribute="brand" {...props} />;

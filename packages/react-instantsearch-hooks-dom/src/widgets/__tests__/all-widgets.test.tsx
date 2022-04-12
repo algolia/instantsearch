@@ -106,6 +106,11 @@ describe('widgets', () => {
           "name": "Pagination",
         },
         Object {
+          "$$type": "ais.range",
+          "$$widgetType": "ais.rangeInput",
+          "name": "RangeInput",
+        },
+        Object {
           "$$type": "ais.refinementList",
           "$$widgetType": "ais.refinementList",
           "name": "RefinementList",
