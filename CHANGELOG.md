@@ -1,3 +1,12 @@
+## [4.40.4](https://github.com/algolia/instantsearch.js/compare/v4.40.3...v4.40.4) (2022-04-13)
+
+
+### Bug Fixes
+
+* **currentRefinements:** correctly show and allow for refining escaped values ([#5041](https://github.com/algolia/instantsearch.js/issues/5041)) ([277f4df](https://github.com/algolia/instantsearch.js/commit/277f4dff21fb7eeaeb41a8c49aaaf707f880ee58))
+
+
+
 ## [4.40.3](https://github.com/algolia/instantsearch.js/compare/v4.40.2...v4.40.3) (2022-04-04)
 
 
