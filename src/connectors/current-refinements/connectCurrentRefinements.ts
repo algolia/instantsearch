@@ -374,8 +374,7 @@ function getOperatorSymbol(operator: SearchParameters.Operator): string {
 function normalizeRefinement(
   refinement: Refinement
 ): CurrentRefinementsConnectorParamsRefinement {
-  const value =
-    refinement.type === 'numeric' ? Number(refinement.name) : refinement.name;
+  const value = getValue(refinement);
   const label = (refinement as NumericRefinement).operator
     ? `${getOperatorSymbol(
         (refinement as NumericRefinement).operator as SearchParameters.Operator
@@ -402,6 +401,18 @@ function normalizeRefinement(
   }
 
   return normalizedRefinement;
+}
+
+function getValue(refinement: Refinement) {
+  if (refinement.type === 'numeric') {
+    return Number(refinement.name);
+  }
+
+  if ('escapedValue' in refinement) {
+    return refinement.escapedValue;
+  }
+
+  return refinement.name;
 }
 
 export default connectCurrentRefinements;

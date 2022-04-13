@@ -2,16 +2,16 @@
  * @jest-environment jsdom
  */
 
+import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
-import jsHelper, { SearchParameters } from 'algoliasearch-helper';
 import toggleRefinement from '../toggle-refinement';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import {
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/mock/createWidget';
+import { createRenderOptions } from '../../../../test/mock/createWidget';
+import { wait } from '../../../../test/utils/wait';
+import instantsearch from '../../..';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import type { ToggleRefinementProps } from '../../../components/ToggleRefinement/ToggleRefinement';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -38,499 +38,347 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
   describe('Lifecycle', () => {
     let containerNode: HTMLElement;
-    let widget: ReturnType<typeof toggleRefinement>;
-    let attribute: string;
+    const attribute = 'world!';
 
     beforeEach(() => {
       render.mockClear();
-
       containerNode = document.createElement('div');
-      attribute = 'world!';
-      widget = toggleRefinement({
-        container: containerNode,
-        attribute,
-      });
     });
 
     describe('render', () => {
-      let results: SearchResults;
-      let helper: AlgoliaSearchHelper;
-      let createURL: () => string;
-
-      beforeEach(() => {
-        helper = jsHelper(createSearchClient(), '');
-        helper.state.isDisjunctiveFacetRefined = jest
-          .fn()
-          .mockReturnValue(false);
-        helper.removeDisjunctiveFacetRefinement = jest.fn();
-        helper.addDisjunctiveFacetRefinement = jest.fn();
-        helper.search = jest.fn();
-        helper.state = {
-          removeDisjunctiveFacetRefinement: jest.fn(),
-          addDisjunctiveFacetRefinement: jest.fn(),
-          isDisjunctiveFacetRefined: jest.fn().mockReturnValue(false),
-        } as unknown as SearchParameters;
-        createURL = () => '#';
-        widget.init!(createInitOptions({ helper, createURL }));
-      });
-
-      it('calls twice render', () => {
-        results = {
-          hits: [{ Hello: ', world!' }],
-          nbHits: 1,
-          getFacetValues: jest.fn().mockReturnValue([
-            { name: 'true', count: 2 },
-            { name: 'false', count: 1 },
-          ]),
-        } as unknown as SearchResults;
-        widget = toggleRefinement({
+      it('calls render with container', async () => {
+        const widget = toggleRefinement({
           container: containerNode,
           attribute,
           /* on: true, off: undefined */
         });
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
+
+        const search = instantsearch({
+          indexName: 'test',
+          searchClient: createSearchClient(),
         });
-        widget.init!(createInitOptions({ helper, createURL }));
-        widget.render!(createRenderOptions({ results, helper }));
-        widget.render!(createRenderOptions({ results, helper }));
+        search.start();
+        search.addWidgets([widget]);
+        await wait(0);
 
-        const [firstRender, secondRender] = render.mock.calls;
+        const firstRender = render.mock.calls[0];
 
-        expect(render).toHaveBeenCalledTimes(2);
         expect(firstRender[1]).toEqual(containerNode);
-        expect(secondRender[1]).toEqual(containerNode);
       });
 
-      it('understands cssClasses', () => {
-        results = {
-          hits: [{ Hello: ', world!' }],
-          nbHits: 1,
-          getFacetValues: jest.fn().mockReturnValue([
-            { name: 'true', count: 2, isRefined: false },
-            { name: 'false', count: 1, isRefined: false },
-          ]),
-        } as unknown as SearchResults;
-        widget = toggleRefinement({
+      it('understands cssClasses', async () => {
+        const widget = toggleRefinement({
           container: containerNode,
           attribute,
           cssClasses: {
-            root: 'test',
-            label: 'test-label',
-            labelText: 'test-labelText',
-            checkbox: 'test-checkbox',
+            root: 'TEST',
+            label: 'TEST-label',
+            labelText: 'TEST-labelText',
+            checkbox: 'TEST-checkbox',
           },
           /* on: true, off: undefined */
         });
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
+
+        const search = instantsearch({
+          indexName: 'test',
+          searchClient: createSearchClient(),
         });
-        widget.init!(createInitOptions({ helper, createURL }));
-        widget.render!(createRenderOptions({ results, helper }));
+        search.addWidgets([widget]);
+        search.start();
+        await wait(0);
 
-        const [firstRender] = render.mock.calls;
+        const { props } = render.mock
+          .calls[0][0] as VNode<ToggleRefinementProps>;
 
-        // @ts-expect-error
-        expect(firstRender[0].props).toMatchSnapshot();
+        expect(props.cssClasses).toEqual({
+          checkbox: 'ais-ToggleRefinement-checkbox TEST-checkbox',
+          label: 'ais-ToggleRefinement-label TEST-label',
+          labelText: 'ais-ToggleRefinement-labelText TEST-labelText',
+          root: 'ais-ToggleRefinement TEST',
+        });
       });
 
-      it('with facet values', () => {
-        results = {
-          hits: [{ Hello: ', world!' }],
-          nbHits: 1,
-          getFacetValues: jest.fn().mockReturnValue([
-            { name: 'true', count: 2, isRefined: false },
-            { name: 'false', count: 1, isRefined: false },
-          ]),
-        } as unknown as SearchResults;
-        widget = toggleRefinement({
+      it('with facet values', async () => {
+        const widget = toggleRefinement({
           container: containerNode,
           attribute,
           /* on: true, off: undefined */
         });
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
+
+        const search = instantsearch({
+          indexName: 'test',
+          searchClient: createSearchClient({
+            search: (queries) =>
+              Promise.resolve({
+                results: queries.map(() =>
+                  createSingleSearchResponse({
+                    facets: {
+                      [attribute]: { true: 2, false: 1 },
+                    },
+                  })
+                ),
+              }),
+          }),
         });
-        widget.init!(createInitOptions({ helper, createURL }));
-        widget.render!(createRenderOptions({ results, helper }));
-        widget.render!(createRenderOptions({ results, helper }));
+        search.addWidgets([widget]);
+        search.start();
+        await wait(0);
 
-        const [firstRender, secondRender] = render.mock.calls;
+        const { props } = render.mock
+          .calls[0][0] as VNode<ToggleRefinementProps>;
 
-        // @ts-expect-error
-        expect(firstRender[0].props).toMatchSnapshot();
-        // @ts-expect-error
-        expect(secondRender[0].props).toMatchSnapshot();
+        expect(props.currentRefinement).toEqual({
+          count: 2,
+          isRefined: false,
+          name: 'world!',
+          offFacetValue: {
+            count: 3,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: 2,
+            isRefined: false,
+          },
+        });
       });
 
-      it('supports negative numeric off or on values', () => {
-        results = {
-          hits: [{ Hello: ', world!' }],
-          nbHits: 1,
-          getFacetValues: jest.fn().mockReturnValue([
-            { name: '-2', count: 2, isRefined: true },
-            { name: '5', count: 1, isRefined: false },
-          ]),
-        } as unknown as SearchResults;
-
-        widget = toggleRefinement({
+      it('supports negative numeric off or on values', async () => {
+        const widget = toggleRefinement({
           container: containerNode,
           attribute,
           off: -2,
           on: 5,
         });
 
-        const config = widget.getWidgetSearchParameters(
-          new SearchParameters({}),
-          { uiState: {} }
-        );
-        const altHelper = jsHelper(createSearchClient(), '', config);
+        const search = instantsearch({
+          indexName: 'test',
+          searchClient: createSearchClient({
+            search: (queries) =>
+              Promise.resolve({
+                results: queries.map(() =>
+                  createSingleSearchResponse({
+                    facets: {
+                      [attribute]: { '-2': 2, 5: 1 },
+                    },
+                  })
+                ),
+              }),
+          }),
+        });
+        search.addWidgets([widget]);
+        search.start();
+        await wait(0);
 
-        widget.init!(createInitOptions({ helper: altHelper, createURL }));
-        widget.render!(createRenderOptions({ results, helper: altHelper }));
-        widget.render!(createRenderOptions({ results, helper: altHelper }));
+        const { props } = render.mock
+          .calls[0][0] as VNode<ToggleRefinementProps>;
 
-        const [firstRender, secondRender] = render.mock.calls;
-
-        // The first call is not the one expected, because of the new init rendering..
-        // @ts-expect-error
-        expect(firstRender[0].props).toMatchSnapshot();
-        // @ts-expect-error
-        expect(secondRender[0].props).toMatchSnapshot();
+        expect(props.currentRefinement).toEqual({
+          count: 1,
+          isRefined: false,
+          name: 'world!',
+          offFacetValue: {
+            count: 2,
+            isRefined: true,
+          },
+          onFacetValue: {
+            count: 1,
+            isRefined: false,
+          },
+        });
 
         widget
-          .getWidgetRenderState(
-            createRenderOptions({ helper, createURL, results })
-          )
+          .getWidgetRenderState(createRenderOptions({ helper: search.helper! }))
           .refine({ isRefined: true });
 
-        // @ts-expect-error
-        expect(altHelper.state.isDisjunctiveFacetRefined(attribute, 5)).toBe(
-          false
-        );
         expect(
-          altHelper.state.isDisjunctiveFacetRefined(attribute, '\\-2')
+          // @ts-expect-error we are using a numeric facet, even if the type only allows strings
+          search.helper!.state.isDisjunctiveFacetRefined(attribute, 5)
+        ).toBe(false);
+        expect(
+          search.helper!.state.isDisjunctiveFacetRefined(attribute, '\\-2')
         ).toBe(true);
       });
 
-      it('without facet values', () => {
-        results = {
-          hits: [],
-          nbHits: 0,
-          getFacetValues: jest.fn().mockReturnValue([]),
-        } as unknown as SearchResults;
-        widget = toggleRefinement({
+      it('without facet values', async () => {
+        const widget = toggleRefinement({
           container: containerNode,
           attribute,
           /* on: true, off: undefined */
         });
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
+
+        const search = instantsearch({
+          indexName: 'test',
+          searchClient: createSearchClient({
+            search: (queries) =>
+              Promise.resolve({
+                results: queries.map(() =>
+                  createSingleSearchResponse({
+                    facets: {
+                      [attribute]: {},
+                    },
+                  })
+                ),
+              }),
+          }),
         });
-        widget.init!(createInitOptions({ helper, createURL }));
-        widget.render!(createRenderOptions({ results, helper }));
-        widget.render!(createRenderOptions({ results, helper }));
+        search.addWidgets([widget]);
+        search.start();
+        await wait(0);
 
-        const [firstRender, secondRender] = render.mock.calls;
+        const { props } = render.mock
+          .calls[0][0] as VNode<ToggleRefinementProps>;
 
-        // @ts-expect-error
-        expect(firstRender[0].props).toMatchSnapshot();
-        // @ts-expect-error
-        expect(secondRender[0].props).toMatchSnapshot();
-      });
-
-      it('when refined', () => {
-        helper.state.isDisjunctiveFacetRefined = jest
-          .fn()
-          .mockReturnValue(true);
-        results = {
-          hits: [{ Hello: ', world!' }],
-          nbHits: 1,
-          getFacetValues: jest.fn().mockReturnValue([
-            { name: 'true', count: 2, isRefined: true },
-            { name: 'false', count: 1, isRefined: false },
-          ]),
-        } as unknown as SearchResults;
-        widget = toggleRefinement({
-          container: containerNode,
-          attribute,
-          /* on: true, off: undefined */
-        });
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
-        });
-        widget.init!(createInitOptions({ helper, createURL }));
-        widget.render!(createRenderOptions({ results, helper }));
-        widget.render!(createRenderOptions({ results, helper }));
-
-        const [firstRender, secondRender] = render.mock.calls;
-
-        // @ts-expect-error
-        expect(firstRender[0].props).toMatchSnapshot();
-        // @ts-expect-error
-        expect(secondRender[0].props).toMatchSnapshot();
-      });
-
-      it('using props.refine', () => {
-        results = {
-          hits: [{ Hello: ', world!' }],
-          nbHits: 1,
-          getFacetValues: jest.fn().mockReturnValue([
-            { name: 'true', count: 2 },
-            { name: 'false', count: 1 },
-          ]),
-        } as unknown as SearchResults;
-        widget = toggleRefinement({
-          container: containerNode,
-          attribute,
-          /* on: true, off: undefined */
-        });
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
-        });
-        widget.init!(createInitOptions({ helper, createURL }));
-        widget.render!(createRenderOptions({ results, helper }));
-
-        const [firstRender] = render.mock.calls;
-        // @ts-expect-error
-        const { refine } = firstRender[0].props;
-
-        expect(typeof refine).toEqual('function');
-        refine();
-        expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
-        expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledWith(
-          attribute,
-          true
-        );
-        helper.hasRefinements = jest.fn().mockReturnValue(true);
-      });
-    });
-
-    describe('refine', () => {
-      let helper: AlgoliaSearchHelper;
-
-      function toggleOn({
-        createURL,
-        altHelper = helper,
-      }: {
-        createURL: () => string;
-        altHelper?: AlgoliaSearchHelper;
-      }) {
-        widget
-          .getWidgetRenderState(
-            createInitOptions({ helper: altHelper, createURL })
-          )
-          .refine({ isRefined: false });
-      }
-      function toggleOff({ createURL }: { createURL: () => string }) {
-        widget
-          .getWidgetRenderState(createInitOptions({ helper, createURL }))
-          .refine({ isRefined: true });
-      }
-
-      beforeEach(() => {
-        helper = jsHelper(createSearchClient(), '');
-        helper.removeDisjunctiveFacetRefinement = jest.fn();
-        helper.addDisjunctiveFacetRefinement = jest.fn();
-        helper.search = jest.fn();
-      });
-
-      describe('default values', () => {
-        it('toggle on should add filter to true', () => {
-          // Given
-          widget = toggleRefinement({
-            container: containerNode,
-            attribute,
-            /* on: true, off: undefined */
-          });
-          widget.getWidgetSearchParameters(new SearchParameters({}), {
-            uiState: {},
-          });
-          helper.state.isDisjunctiveFacetRefined = jest
-            .fn()
-            .mockReturnValue(false);
-          const createURL = () => '#';
-          widget.init!(createInitOptions({ helper, createURL }));
-
-          // When
-          toggleOn({ createURL });
-
-          // Then
-          expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledWith(
-            attribute,
-            true
-          );
-          expect(
-            helper.removeDisjunctiveFacetRefinement
-          ).not.toHaveBeenCalled();
-        });
-        it('toggle off should remove all filters', () => {
-          // Given
-          widget = toggleRefinement({
-            container: containerNode,
-            attribute,
-            /* on: true, off: undefined */
-          });
-          widget.getWidgetSearchParameters(new SearchParameters({}), {
-            uiState: {},
-          });
-          helper.state.isDisjunctiveFacetRefined = jest
-            .fn()
-            .mockReturnValue(true);
-          const createURL = () => '#';
-          widget.init!(createInitOptions({ helper, createURL }));
-
-          // When
-          toggleOff({ createURL });
-
-          // Then
-          expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledWith(
-            attribute,
-            true
-          );
-          expect(helper.addDisjunctiveFacetRefinement).not.toHaveBeenCalled();
-        });
-      });
-      describe('specific values', () => {
-        it('toggle on should change the refined value', () => {
-          // Given
-          const userValues = { on: 'on', off: 'off' };
-          widget = toggleRefinement({
-            container: containerNode,
-            attribute,
-            ...userValues,
-          });
-
-          const config = widget.getWidgetSearchParameters(
-            new SearchParameters({}),
-            { uiState: {} }
-          );
-          const altHelper = jsHelper(createSearchClient(), '', config);
-
-          const createURL = () => '#';
-
-          widget.init!(createInitOptions({ helper: altHelper, createURL }));
-
-          // When
-          toggleOn({ createURL, altHelper });
-
-          // Then
-          expect(
-            altHelper.state.isDisjunctiveFacetRefined(attribute, 'off')
-          ).toBe(false);
-          expect(
-            altHelper.state.isDisjunctiveFacetRefined(attribute, 'on')
-          ).toBe(true);
-        });
-
-        it('toggle off should change the refined value', () => {
-          // Given
-          const userValues = { on: 'on', off: 'off' };
-          widget = toggleRefinement({
-            container: containerNode,
-            attribute,
-            ...userValues,
-          });
-          widget.getWidgetSearchParameters(new SearchParameters({}), {
-            uiState: {},
-          });
-          helper.state.isDisjunctiveFacetRefined = jest
-            .fn()
-            .mockReturnValue(true);
-          const createURL = () => '#';
-          widget.init!(createInitOptions({ helper, createURL }));
-
-          // When
-          toggleOff({ createURL });
-
-          // Then
-          expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledWith(
-            attribute,
-            'on'
-          );
-          expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledWith(
-            attribute,
-            'off'
-          );
-        });
-      });
-    });
-
-    describe('custom off value', () => {
-      const createURL = () => '#';
-      it('should add a refinement for custom off value on init', () => {
-        // Given
-        const userValues = { on: 'on', off: 'off' };
-        widget = toggleRefinement({
-          container: containerNode,
-          attribute,
-          ...userValues,
-        });
-        const config = widget.getWidgetSearchParameters(
-          new SearchParameters({}),
-          { uiState: {} }
-        );
-        const helper = jsHelper(createSearchClient(), '', config);
-
-        // When
-        widget.init!(createInitOptions({ helper, createURL }));
-
-        // Then
-        expect(helper.state.isDisjunctiveFacetRefined(attribute, 'off')).toBe(
-          true
-        );
-      });
-
-      it('should not add a refinement for custom off value on init if already checked', () => {
-        // Given
-        const userValues = { on: 'on', off: 'off' };
-        widget = toggleRefinement({
-          container: containerNode,
-          attribute,
-          ...userValues,
-        });
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
-        });
-
-        const helper = {
-          addDisjunctiveFacetRefinement: jest.fn(),
-          state: {
-            isDisjunctiveFacetRefined: jest.fn().mockReturnValue(true),
+        expect(props.currentRefinement).toEqual({
+          count: null,
+          isRefined: false,
+          name: 'world!',
+          offFacetValue: {
+            count: 0,
+            isRefined: false,
           },
-        } as unknown as AlgoliaSearchHelper;
-
-        // When
-        widget.init!(createInitOptions({ helper, createURL }));
-
-        // Then
-        expect(helper.addDisjunctiveFacetRefinement).not.toHaveBeenCalled();
+          onFacetValue: {
+            count: null,
+            isRefined: false,
+          },
+        });
       });
 
-      it('should not add a refinement for no custom off value on init', () => {
-        // Given
-        const userValues = { on: 'on' };
-        widget = toggleRefinement({
+      it('when refined', async () => {
+        const widget = toggleRefinement({
           container: containerNode,
           attribute,
-          ...userValues,
-        });
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
+          /* on: true, off: undefined */
         });
 
-        const helper = {
-          addDisjunctiveFacetRefinement: jest.fn(),
-          state: {
-            isDisjunctiveFacetRefined: () => false,
+        const search = instantsearch({
+          indexName: 'test',
+          initialUiState: {
+            test: {
+              toggle: {
+                [attribute]: true,
+              },
+            },
           },
-        } as unknown as AlgoliaSearchHelper;
+          searchClient: createSearchClient({
+            search(queries) {
+              return Promise.resolve({
+                results: queries.map(() =>
+                  createSingleSearchResponse({
+                    facets: {
+                      [attribute]: {
+                        true: 2,
+                        false: 1,
+                      },
+                    },
+                  })
+                ),
+              });
+            },
+          }),
+        });
+        search.start();
+        search.addWidgets([widget]);
+        await wait(0);
 
-        // When
-        widget.init!(createInitOptions({ helper, createURL }));
+        const firstRender = render.mock
+          .calls[0][0] as VNode<ToggleRefinementProps>;
+        const secondRender = render.mock
+          .calls[0][0] as VNode<ToggleRefinementProps>;
 
-        // Then
-        expect(helper.addDisjunctiveFacetRefinement).not.toHaveBeenCalled();
+        expect(firstRender.props.currentRefinement).toEqual({
+          count: 3,
+          isRefined: true,
+          name: 'world!',
+          offFacetValue: {
+            count: 3,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: 2,
+            isRefined: true,
+          },
+        });
+
+        expect(secondRender.props.currentRefinement).toEqual(
+          firstRender.props.currentRefinement
+        );
+      });
+
+      it('using props.refine', async () => {
+        const widget = toggleRefinement({
+          container: containerNode,
+          attribute,
+          /* on: true, off: undefined */
+        });
+
+        const searchClient = createSearchClient({
+          search: (queries) => {
+            return Promise.resolve({
+              results: queries.map(() =>
+                createSingleSearchResponse({
+                  facets: {
+                    [attribute]: {
+                      true: 2,
+                      false: 1,
+                    },
+                  },
+                })
+              ),
+            });
+          },
+        });
+
+        const searchSpy = jest.spyOn(searchClient, 'search');
+
+        const search = instantsearch({
+          indexName: 'test',
+          searchClient,
+        });
+        search.start();
+        search.addWidgets([widget]);
+        await wait(0);
+
+        expect(searchSpy).toHaveBeenCalledTimes(1);
+
+        const firstRender = render.mock
+          .calls[0][0] as VNode<ToggleRefinementProps>;
+
+        expect(firstRender.props.currentRefinement).toEqual({
+          count: 2,
+          isRefined: false,
+          name: 'world!',
+          offFacetValue: {
+            count: 3,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: 2,
+            isRefined: false,
+          },
+        });
+
+        expect(typeof firstRender.props.refine).toEqual('function');
+        firstRender.props.refine();
+        await wait(0);
+
+        expect(searchSpy).toHaveBeenCalledTimes(2);
+
+        const secondRender = render.mock
+          .calls[1][0] as VNode<ToggleRefinementProps>;
+
+        expect(secondRender.props.currentRefinement).toEqual({
+          count: 3,
+          isRefined: true,
+          name: 'world!',
+          offFacetValue: {
+            count: 3,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: 2,
+            isRefined: true,
+          },
+        });
       });
     });
   });
