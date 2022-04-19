@@ -13,7 +13,7 @@ html: |
           <span class="ais-HierarchicalMenu-count">4,306</span>
         </a>
         <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
-          <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+          <li class="ais-HierarchicalMenu-item">
             <a class="ais-HierarchicalMenu-link" href="#">
               <span class="ais-HierarchicalMenu-label">Dishwashers</span>
               <span class="ais-HierarchicalMenu-count">181</span>
@@ -27,7 +27,7 @@ html: |
           </li>
         </ul>
       </li>
-      <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+      <li class="ais-HierarchicalMenu-item">
         <a class="ais-HierarchicalMenu-link" href="#">
           <span class="ais-HierarchicalMenu-label">Audio</span>
           <span class="ais-HierarchicalMenu-count">1,570</span>
@@ -49,7 +49,7 @@ althtml1: |
           <span class="ais-HierarchicalMenu-count">4,306</span>
         </a>
         <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
-          <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+          <li class="ais-HierarchicalMenu-item">
             <a class="ais-HierarchicalMenu-link" href="#">
               <span class="ais-HierarchicalMenu-label">Dishwashers</span>
               <span class="ais-HierarchicalMenu-count">181</span>
@@ -63,7 +63,7 @@ althtml1: |
           </li>
         </ul>
       </li>
-      <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+      <li class="ais-HierarchicalMenu-item">
         <a class="ais-HierarchicalMenu-link" href="#">
           <span class="ais-HierarchicalMenu-label">Audio</span>
           <span class="ais-HierarchicalMenu-count">1,570</span>
