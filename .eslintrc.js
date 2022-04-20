@@ -83,6 +83,10 @@ const config = {
         // We disallow InstantSearch.js CJS imports to only use ESM and not
         // end up having duplicated source code in our bundle.
         patterns: ['instantsearch.js/cjs/*'],
+        // We disallow importing the root ES import because the transformed CJS
+        // build then includes everything (widgets, components, etc.) and these
+        // aren't required or useful.
+        paths: ['instantsearch.js/es'],
       },
     ],
   },

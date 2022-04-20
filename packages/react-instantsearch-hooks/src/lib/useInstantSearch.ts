@@ -1,4 +1,4 @@
-import instantsearch from 'instantsearch.js/es';
+import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
 import { useEffect, useMemo, version as ReactVersion } from 'react';
 
 import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
@@ -11,11 +11,7 @@ import { warn } from './warn';
 
 import type { InstantSearchServerContextApi } from '../components/InstantSearchServerContext';
 import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
-import type {
-  InstantSearchOptions,
-  InstantSearch,
-  SearchClient,
-} from 'instantsearch.js';
+import type { InstantSearchOptions, SearchClient } from 'instantsearch.js';
 
 const defaultUserAgents = [
   `react (${ReactVersion})`,
@@ -44,7 +40,7 @@ export function useInstantSearch({
   const search = useMemo(
     () =>
       serverAdapter(
-        instantsearch(stableProps),
+        new InstantSearch(stableProps),
         stableProps,
         serverContext,
         serverState
