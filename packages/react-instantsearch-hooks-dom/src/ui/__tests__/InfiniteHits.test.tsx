@@ -99,9 +99,9 @@ describe('InfiniteHits', () => {
         classNames={{
           root: 'ROOT',
           loadPrevious: 'LOADPREVIOUS',
-          loadPreviousDisabled: 'LOADPREVIOUSDISABLED',
+          disabledLoadPrevious: 'LOADPREVIOUSDISABLED',
           loadMore: 'LOADMORE',
-          loadMoreDisabled: 'LOADMOREDISABLED',
+          disabledLoadMore: 'LOADMOREDISABLED',
           list: 'LIST',
           item: 'ITEM',
         }}
@@ -114,7 +114,7 @@ describe('InfiniteHits', () => {
           class="ais-InfiniteHits ROOT"
         >
           <button
-            class="ais-InfiniteHits-loadPrevious LOADPREVIOUS LOADPREVIOUSDISABLED ais-InfiniteHits-loadPrevious--disabled"
+            class="ais-InfiniteHits-loadPrevious LOADPREVIOUS ais-InfiniteHits-loadPrevious--disabled LOADPREVIOUSDISABLED"
             disabled=""
           >
             Show previous results
@@ -145,6 +145,45 @@ describe('InfiniteHits', () => {
           </ol>
           <button
             class="ais-InfiniteHits-loadMore LOADMORE"
+          >
+            Show more results
+          </button>
+        </div>
+      </div>
+    `);
+  });
+
+  test('accepts custom class names (empty)', () => {
+    const props = createProps({ hits: [] as Hit[], isLastPage: true });
+    const { container } = render(
+      <InfiniteHits
+        {...props}
+        classNames={{
+          root: 'ROOT',
+          emptyRoot: 'EMPTYROOT',
+          loadMore: 'LOADMORE',
+          disabledLoadMore: 'DISABLEDLOADMORE',
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-InfiniteHits ROOT ais-InfiniteHits--empty EMPTYROOT"
+        >
+          <button
+            class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+            disabled=""
+          >
+            Show previous results
+          </button>
+          <ol
+            class="ais-InfiniteHits-list"
+          />
+          <button
+            class="ais-InfiniteHits-loadMore LOADMORE ais-InfiniteHits-loadMore--disabled DISABLEDLOADMORE"
+            disabled=""
           >
             Show more results
           </button>

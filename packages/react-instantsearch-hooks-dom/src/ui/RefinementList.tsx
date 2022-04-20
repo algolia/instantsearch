@@ -8,6 +8,7 @@ import { ShowMoreButton } from './ShowMoreButton';
 import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 
 export type RefinementListProps = React.HTMLAttributes<HTMLDivElement> & {
+  canRefine: boolean;
   items: RefinementListItem[];
   onRefine(item: RefinementListItem): void;
   query: string;
@@ -25,6 +26,10 @@ export type RefinementListClassNames = {
    * Class names to apply to the root element
    */
   root: string;
+  /**
+   * Class names to apply to the root element when there are no refinements possible
+   */
+  noRefinementRoot: string;
   /**
    * Class names to apply to the search box wrapper element
    */
@@ -44,7 +49,7 @@ export type RefinementListClassNames = {
   /**
    * Class names to apply to each selected item element
    */
-  itemSelected: string;
+  selectedItem: string;
   /**
    * Class names to apply to each label element
    */
@@ -68,10 +73,11 @@ export type RefinementListClassNames = {
   /**
    * Class names to apply to the "Show more" button if it's disabled
    */
-  showMoreDisabled: string;
+  disabledShowMore: string;
 };
 
 export function RefinementList({
+  canRefine,
   items,
   onRefine,
   query,
@@ -88,7 +94,13 @@ export function RefinementList({
   return (
     <div
       {...props}
-      className={cx('ais-RefinementList', classNames.root, className)}
+      className={cx(
+        'ais-RefinementList',
+        classNames.root,
+        !canRefine &&
+          cx('ais-RefinementList--noRefinement', classNames.noRefinementRoot),
+        className
+      )}
     >
       {searchBox && (
         <div
@@ -114,7 +126,7 @@ export function RefinementList({
                 item.isRefined &&
                   cx(
                     'ais-RefinementList-item--selected',
-                    classNames.itemSelected
+                    classNames.selectedItem
                   )
               )}
             >
@@ -167,7 +179,7 @@ export function RefinementList({
             !canToggleShowMore &&
               cx(
                 'ais-RefinementList-showMore--disabled',
-                classNames.showMoreDisabled
+                classNames.disabledShowMore
               )
           )}
           disabled={!canToggleShowMore}

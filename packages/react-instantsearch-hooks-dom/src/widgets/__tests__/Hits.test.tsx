@@ -20,7 +20,7 @@ describe('Hits', () => {
     await waitFor(() => {
       expect(container.querySelector('.ais-Hits')).toMatchInlineSnapshot(`
         <div
-          class="ais-Hits"
+          class="ais-Hits ais-Hits--empty"
         >
           <ol
             class="ais-Hits-list"
@@ -107,7 +107,7 @@ describe('Hits', () => {
     );
 
     expect(container.querySelector('.ais-Hits')!.className).toBe(
-      'ais-Hits custom'
+      'ais-Hits ais-Hits--empty custom'
     );
   });
 

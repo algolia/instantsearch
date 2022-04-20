@@ -158,6 +158,32 @@ describe('Hits', () => {
     `);
   });
 
+  test('allows custom class names (empty)', () => {
+    const props = createProps({ hits: [] });
+    const { container } = render(
+      <Hits
+        {...props}
+        classNames={{
+          root: 'ROOT',
+          emptyRoot: 'EMPTYROOT',
+          list: 'LIST',
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Hits ROOT ais-Hits--empty EMPTYROOT"
+        >
+          <ol
+            class="ais-Hits-list LIST"
+          />
+        </div>
+      </div>
+    `);
+  });
+
   test('renders with custom div props', () => {
     const props = createProps({ hidden: true });
 

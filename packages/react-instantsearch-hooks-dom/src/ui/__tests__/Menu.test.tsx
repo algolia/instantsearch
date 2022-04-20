@@ -193,12 +193,12 @@ describe('Menu', () => {
         root: 'ROOT',
         list: 'LIST',
         item: 'ITEM',
-        itemSelected: 'ITEMSELECTED',
+        selectedItem: 'SELECTEDITEM',
         label: 'LABEL',
         link: 'LINK',
         count: 'COUNT',
         showMore: 'SHOWMORE',
-        showMoreDisabled: 'SHOWMOREDISABLED',
+        disabledShowMore: 'DISABLEDSHOWMORE',
       },
     });
     const { container } = render(<Menu {...props} />);
@@ -212,7 +212,7 @@ describe('Menu', () => {
             class="ais-Menu-list LIST"
           >
             <li
-              class="ais-Menu-item ITEM ais-Menu-item--selected ITEMSELECTED"
+              class="ais-Menu-item ITEM ais-Menu-item--selected SELECTEDITEM"
             >
               <a
                 class="ais-Menu-link LINK"
@@ -251,11 +251,33 @@ describe('Menu', () => {
             </li>
           </ul>
           <button
-            class="ais-Menu-showMore SHOWMORE ais-Menu-showMore--disabled SHOWMOREDISABLED"
+            class="ais-Menu-showMore SHOWMORE ais-Menu-showMore--disabled DISABLEDSHOWMORE"
             disabled=""
           >
             Show more
           </button>
+        </div>
+      </div>
+    `);
+  });
+
+  test('allows custom class names (empty)', () => {
+    const props = createProps({ items: [] });
+    const { container } = render(
+      <Menu
+        {...props}
+        classNames={{ root: 'ROOT', noRefinementRoot: 'NOREFINEMENTROOT' }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Menu ROOT ais-Menu--noRefinement NOREFINEMENTROOT"
+        >
+          <ul
+            class="ais-Menu-list"
+          />
         </div>
       </div>
     `);

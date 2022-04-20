@@ -30,7 +30,7 @@ export type ClearRefinementsClassNames = {
   /**
    * Class names to apply to the button when it's disabled
    */
-  buttonDisabled: string;
+  disabledButton: string;
 };
 
 export function ClearRefinements({
@@ -54,7 +54,7 @@ export function ClearRefinements({
           disabled &&
             cx(
               'ais-ClearRefinements-button--disabled',
-              classNames.buttonDisabled
+              classNames.disabledButton
             )
         )}
       >

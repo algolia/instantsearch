@@ -295,7 +295,7 @@ describe('InfiniteHits', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
-            class="ais-InfiniteHits"
+            class="ais-InfiniteHits ais-InfiniteHits--empty"
           >
             <ol
               class="ais-InfiniteHits-list"

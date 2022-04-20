@@ -20,7 +20,7 @@ export type BreadcrumbClassNames = {
   /**
    * Class names to apply to the root element when there are no refinements possible
    */
-  rootNoRefinement: string;
+  noRefinementRoot: string;
   /**
    * Class names to apply to the list element
    */
@@ -32,7 +32,7 @@ export type BreadcrumbClassNames = {
   /**
    * Class names to apply to the selected item
    */
-  itemSelected: string;
+  selectedItem: string;
   /**
    * Class names to apply to the separator between items
    */
@@ -82,7 +82,7 @@ export function Breadcrumb({
         'ais-Breadcrumb',
         classNames.root,
         !hasItems &&
-          cx('ais-Breadcrumb--noRefinement', classNames.rootNoRefinement),
+          cx('ais-Breadcrumb--noRefinement', classNames.noRefinementRoot),
         props.className
       )}
     >
@@ -92,7 +92,7 @@ export function Breadcrumb({
             'ais-Breadcrumb-item',
             classNames.item,
             !hasItems &&
-              cx('ais-Breadcrumb-item--selected', classNames.itemSelected)
+              cx('ais-Breadcrumb-item--selected', classNames.selectedItem)
           )}
         >
           <a
@@ -114,7 +114,7 @@ export function Breadcrumb({
                 'ais-Breadcrumb-item',
                 classNames.item,
                 isLast &&
-                  cx('ais-Breadcrumb-item--selected', classNames.itemSelected)
+                  cx('ais-Breadcrumb-item--selected', classNames.selectedItem)
               )}
             >
               <span

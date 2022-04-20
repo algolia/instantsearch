@@ -147,7 +147,7 @@ describe('ClearRefinements', () => {
         classNames={{
           root: 'ROOT',
           button: 'BUTTON',
-          buttonDisabled: 'DISABLED',
+          disabledButton: 'DISABLEDBUTTON',
         }}
       />
     );
@@ -158,7 +158,7 @@ describe('ClearRefinements', () => {
           class="ais-ClearRefinements ROOT"
         >
           <button
-            class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLED"
+            class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLEDBUTTON"
             disabled=""
           >
             Clear refinements

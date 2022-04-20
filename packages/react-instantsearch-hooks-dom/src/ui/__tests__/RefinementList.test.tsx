@@ -10,6 +10,7 @@ import type { RefinementListProps } from '../RefinementList';
 describe('RefinementList', () => {
   function createProps(props: Partial<RefinementListProps>) {
     return {
+      canRefine: true,
       items: [
         {
           value: 'Insignia™',
@@ -125,69 +126,69 @@ describe('RefinementList', () => {
       const { container } = render(<RefinementList {...props} />);
 
       expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-RefinementList"
-        >
-          <ul
-            class="ais-RefinementList-list"
-          >
-            <li
-              class="ais-RefinementList-item ais-RefinementList-item--selected"
-            >
-              <label
-                class="ais-RefinementList-label"
-              >
-                <input
-                  checked=""
-                  class="ais-RefinementList-checkbox"
-                  type="checkbox"
-                  value="Insignia™"
-                />
-                <span
-                  class="ais-RefinementList-labelText"
+              <div>
+                <div
+                  class="ais-RefinementList"
                 >
-                  Insignia™
-                </span>
-                <span
-                  class="ais-RefinementList-count"
-                >
-                  746
-                </span>
-              </label>
-            </li>
-            <li
-              class="ais-RefinementList-item"
-            >
-              <label
-                class="ais-RefinementList-label"
-              >
-                <input
-                  class="ais-RefinementList-checkbox"
-                  type="checkbox"
-                  value="Samsung"
-                />
-                <span
-                  class="ais-RefinementList-labelText"
-                >
-                  Samsung
-                </span>
-                <span
-                  class="ais-RefinementList-count"
-                >
-                  633
-                </span>
-              </label>
-            </li>
-          </ul>
-          <button
-            class="ais-RefinementList-showMore"
-          >
-            Show more
-          </button>
-        </div>
-      </div>
-    `);
+                  <ul
+                    class="ais-RefinementList-list"
+                  >
+                    <li
+                      class="ais-RefinementList-item ais-RefinementList-item--selected"
+                    >
+                      <label
+                        class="ais-RefinementList-label"
+                      >
+                        <input
+                          checked=""
+                          class="ais-RefinementList-checkbox"
+                          type="checkbox"
+                          value="Insignia™"
+                        />
+                        <span
+                          class="ais-RefinementList-labelText"
+                        >
+                          Insignia™
+                        </span>
+                        <span
+                          class="ais-RefinementList-count"
+                        >
+                          746
+                        </span>
+                      </label>
+                    </li>
+                    <li
+                      class="ais-RefinementList-item"
+                    >
+                      <label
+                        class="ais-RefinementList-label"
+                      >
+                        <input
+                          class="ais-RefinementList-checkbox"
+                          type="checkbox"
+                          value="Samsung"
+                        />
+                        <span
+                          class="ais-RefinementList-labelText"
+                        >
+                          Samsung
+                        </span>
+                        <span
+                          class="ais-RefinementList-count"
+                        >
+                          633
+                        </span>
+                      </label>
+                    </li>
+                  </ul>
+                  <button
+                    class="ais-RefinementList-showMore"
+                  >
+                    Show more
+                  </button>
+                </div>
+              </div>
+          `);
     });
 
     test('calls onToggleShowMore', () => {
@@ -536,13 +537,13 @@ describe('RefinementList', () => {
         noResults: 'NORESULTS',
         list: 'LIST',
         item: 'ITEM',
-        itemSelected: 'ITEMSELECTED',
+        selectedItem: 'SELECTEDITEM',
         label: 'LABEL',
         checkbox: 'CHECKBOX',
         labelText: 'LABELTEXT',
         count: 'COUNT',
         showMore: 'SHOWMORE',
-        showMoreDisabled: 'SHOWMOREDISABLED',
+        disabledShowMore: 'DISABLEDSHOWMORE',
       },
     });
     const { container } = render(<RefinementList {...props} />);
@@ -556,7 +557,7 @@ describe('RefinementList', () => {
             class="ais-RefinementList-list LIST"
           >
             <li
-              class="ais-RefinementList-item ITEM ais-RefinementList-item--selected ITEMSELECTED"
+              class="ais-RefinementList-item ITEM ais-RefinementList-item--selected SELECTEDITEM"
             >
               <label
                 class="ais-RefinementList-label LABEL"
@@ -604,11 +605,43 @@ describe('RefinementList', () => {
             </li>
           </ul>
           <button
-            class="ais-RefinementList-showMore SHOWMORE ais-RefinementList-showMore--disabled SHOWMOREDISABLED"
+            class="ais-RefinementList-showMore SHOWMORE ais-RefinementList-showMore--disabled DISABLEDSHOWMORE"
             disabled=""
           >
             Show more
           </button>
+        </div>
+      </div>
+    `);
+  });
+
+  test('allows custom class names (empty)', () => {
+    const props = createProps({
+      canRefine: false,
+      items: undefined,
+      noResults: 'No results.',
+    });
+    const { container } = render(
+      <RefinementList
+        {...props}
+        classNames={{
+          root: 'ROOT',
+          noRefinementRoot: 'NOREFINEMENTROOT',
+          noResults: 'NORESULTS',
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-RefinementList ROOT ais-RefinementList--noRefinement NOREFINEMENTROOT"
+        >
+          <div
+            class="ais-RefinementList-noResults NORESULTS"
+          >
+            No results.
+          </div>
         </div>
       </div>
     `);

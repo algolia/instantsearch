@@ -2101,14 +2101,14 @@ describe('Pagination', () => {
           className="MyPagination"
           classNames={{
             root: 'ROOT',
-            rootNoRefinement: 'ROOTNOREFINEMENT',
+            noRefinementRoot: 'NOREFINEMENTROOT',
             list: 'LIST',
-            itemFirstPage: 'ITEMFIRSTPAGE',
-            itemPreviousPage: 'ITEMPREVIOUSPAGE',
-            itemPage: 'ITEMPAGE',
-            itemSelected: 'ITEMSELECTED',
-            itemNextPage: 'ITEMNEXTPAGE',
-            itemLastPage: 'ITEMLASTPAGE',
+            firstPageItem: 'FIRSTPAGEITEM',
+            previousPageItem: 'PREVIOUSPAGEITEM',
+            pageItem: 'PAGEITEM',
+            selectedItem: 'SELECTEDITEM',
+            nextPageItem: 'NEXTPAGEITEM',
+            lastPageItem: 'LASTPAGEITEM',
           }}
         />
       </InstantSearchHooksTestWrapper>
@@ -2117,13 +2117,13 @@ describe('Pagination', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-Pagination ROOT ais-Pagination--noRefinement ROOTNOREFINEMENT MyPagination"
+          class="ais-Pagination ROOT ais-Pagination--noRefinement NOREFINEMENTROOT MyPagination"
         >
           <ul
             class="ais-Pagination-list LIST"
           >
             <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage ITEMFIRSTPAGE"
+              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage FIRSTPAGEITEM"
             >
               <span
                 aria-label="First"
@@ -2133,7 +2133,7 @@ describe('Pagination', () => {
               </span>
             </li>
             <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage ITEMPREVIOUSPAGE"
+              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage PREVIOUSPAGEITEM"
             >
               <span
                 aria-label="Previous"
@@ -2143,7 +2143,7 @@ describe('Pagination', () => {
               </span>
             </li>
             <li
-              class="ais-Pagination-item ais-Pagination-item--page ITEMPAGE ais-Pagination-item--selected ITEMSELECTED"
+              class="ais-Pagination-item ais-Pagination-item--page PAGEITEM ais-Pagination-item--selected SELECTEDITEM"
             >
               <a
                 aria-label="Page 1"
@@ -2154,7 +2154,7 @@ describe('Pagination', () => {
               </a>
             </li>
             <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage ITEMNEXTPAGE"
+              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage NEXTPAGEITEM"
             >
               <span
                 aria-label="Next"
@@ -2164,7 +2164,7 @@ describe('Pagination', () => {
               </span>
             </li>
             <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage ITEMLASTPAGE"
+              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage LASTPAGEITEM"
             >
               <span
                 aria-label="Last"

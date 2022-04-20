@@ -26,13 +26,13 @@ export type RangeInputClassNames = {
   /**
    * Class names to apply to the root element when there are no refinements possible
    */
-  rootNoRefinement: string;
+  noRefinementRoot: string;
   /**
    * Class names to apply to the form element
    */
   form: string;
   /**
-   * Class name to apply to each label element
+   * Class names to apply to each label element
    */
   label: string;
   /**
@@ -107,7 +107,7 @@ export function RangeInput({
       className={cx(
         cx('ais-RangeInput', classNames.root),
         disabled &&
-          cx('ais-RangeInput-noRefinement', classNames.rootNoRefinement),
+          cx('ais-RangeInput--noRefinement', classNames.noRefinementRoot),
         props.className
       )}
     >

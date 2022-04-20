@@ -64,7 +64,7 @@ describe('HierarchicalMenu', () => {
             class="ais-HierarchicalMenu-list"
           >
             <li
-              class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
+              class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected"
             >
               <a
                 class="ais-HierarchicalMenu-link"
@@ -82,7 +82,7 @@ describe('HierarchicalMenu', () => {
                 </span>
               </a>
               <ul
-                class="ais-HierarchicalMenu-list"
+                class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
               >
                 <li
                   class="ais-HierarchicalMenu-item"
@@ -175,7 +175,7 @@ describe('HierarchicalMenu', () => {
               class="ais-HierarchicalMenu-list"
             >
               <li
-                class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
+                class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected"
               >
                 <a
                   class="ais-HierarchicalMenu-link"
@@ -193,7 +193,7 @@ describe('HierarchicalMenu', () => {
                   </span>
                 </a>
                 <ul
-                  class="ais-HierarchicalMenu-list"
+                  class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
                 >
                   <li
                     class="ais-HierarchicalMenu-item"
@@ -296,15 +296,17 @@ describe('HierarchicalMenu', () => {
       canToggleShowMore: false,
       classNames: {
         root: 'ROOT',
-        rootNoRefinement: 'ROOTNOREFINEMENT',
+        noRefinementRoot: 'NOREFINEMENTROOT',
         list: 'LIST',
+        childList: 'CHILDLIST',
         item: 'ITEM',
-        itemSelected: 'ITEMSELECTED',
+        selectedItem: 'SELECTEDITEM',
+        parentItem: 'PARENTITEM',
         link: 'LINK',
         label: 'LABEL',
         count: 'COUNT',
         showMore: 'SHOWMORE',
-        showMoreDisabled: 'SHOWMOREDISABLED',
+        disabledShowMore: 'DISABLEDSHOWMORE',
       },
     });
     const { container } = render(<HierarchicalMenu {...props} />);
@@ -318,7 +320,7 @@ describe('HierarchicalMenu', () => {
             class="ais-HierarchicalMenu-list LIST"
           >
             <li
-              class="ais-HierarchicalMenu-item ITEM ais-HierarchicalMenu-item--selected ITEMSELECTED"
+              class="ais-HierarchicalMenu-item ITEM ais-HierarchicalMenu-item--parent PARENTITEM ais-HierarchicalMenu-item--selected SELECTEDITEM"
             >
               <a
                 class="ais-HierarchicalMenu-link LINK"
@@ -336,7 +338,7 @@ describe('HierarchicalMenu', () => {
                 </span>
               </a>
               <ul
-                class="ais-HierarchicalMenu-list LIST"
+                class="ais-HierarchicalMenu-list LIST ais-HierarchicalMenu-list--child CHILDLIST"
               >
                 <li
                   class="ais-HierarchicalMenu-item ITEM"
@@ -399,7 +401,7 @@ describe('HierarchicalMenu', () => {
             </li>
           </ul>
           <button
-            class="ais-HierarchicalMenu-showMore SHOWMORE ais-HierarchicalMenu-showMore--disabled SHOWMOREDISABLED"
+            class="ais-HierarchicalMenu-showMore SHOWMORE ais-HierarchicalMenu-showMore--disabled DISABLEDSHOWMORE"
             disabled=""
           >
             Show more

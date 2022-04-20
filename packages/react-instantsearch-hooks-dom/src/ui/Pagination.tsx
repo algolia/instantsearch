@@ -69,9 +69,9 @@ export type PaginationClassNames = {
    */
   root: string;
   /**
-   * Class names to apply to the root element, when there's no refinement possible
+   * Class names to apply to the root element when there are no refinements possible
    */
-  rootNoRefinement: string;
+  noRefinementRoot: string;
   /**
    * Class names to apply to the list element
    */
@@ -83,33 +83,33 @@ export type PaginationClassNames = {
   /**
    * Class names to apply to the first page element
    */
-  itemFirstPage: string;
+  firstPageItem: string;
   /**
    * Class names to apply to the previous page element
    */
-  itemPreviousPage: string;
+  previousPageItem: string;
   /**
    * Class names to apply to each page element
    */
-  itemPage: string;
+  pageItem: string;
   /**
    * Class names to apply to a selected page element
    */
-  itemSelected: string;
+  selectedItem: string;
   /**
    * Class names to apply to a disabled page element
    */
-  itemDisabled: string;
+  disabledItem: string;
   /**
    * Class names to apply to the next page element
    */
-  itemNextPage: string;
+  nextPageItem: string;
   /**
    * Class names to apply to the last page element
    */
-  itemLastPage: string;
+  lastPageItem: string;
   /**
-   * Class names to apply to the link element
+   * Class names to apply to each link element
    */
   link: string;
 };
@@ -142,7 +142,7 @@ export function Pagination({
         'ais-Pagination',
         classNames.root,
         nbPages <= 1 &&
-          cx('ais-Pagination--noRefinement', classNames.rootNoRefinement),
+          cx('ais-Pagination--noRefinement', classNames.noRefinementRoot),
         props.className
       )}
     >
@@ -152,7 +152,7 @@ export function Pagination({
             isDisabled={isFirstPage}
             className={cx(
               'ais-Pagination-item--firstPage',
-              classNames.itemFirstPage
+              classNames.firstPageItem
             )}
             classNames={classNames}
             aria-label={translations.ariaFirst}
@@ -167,7 +167,7 @@ export function Pagination({
             isDisabled={isFirstPage}
             className={cx(
               'ais-Pagination-item--previousPage',
-              classNames.itemPreviousPage
+              classNames.previousPageItem
             )}
             classNames={classNames}
             aria-label={translations.ariaPrevious}
@@ -184,9 +184,9 @@ export function Pagination({
               isDisabled={false}
               className={cx(
                 'ais-Pagination-item--page',
-                classNames.itemPage,
+                classNames.pageItem,
                 page === currentPage &&
-                  cx('ais-Pagination-item--selected', classNames.itemSelected)
+                  cx('ais-Pagination-item--selected', classNames.selectedItem)
               )}
               classNames={classNames}
               aria-label={translations.ariaPage(page + 1)}
@@ -202,7 +202,7 @@ export function Pagination({
             isDisabled={isLastPage}
             className={cx(
               'ais-Pagination-item--nextPage',
-              classNames.itemNextPage
+              classNames.nextPageItem
             )}
             classNames={classNames}
             aria-label={translations.ariaNext}
@@ -217,7 +217,7 @@ export function Pagination({
             isDisabled={isLastPage}
             className={cx(
               'ais-Pagination-item--lastPage',
-              classNames.itemLastPage
+              classNames.lastPageItem
             )}
             classNames={classNames}
             aria-label={translations.ariaLast}
@@ -258,7 +258,7 @@ function PaginationItem({
           'ais-Pagination-item',
           classNames.item,
           'ais-Pagination-item--disabled',
-          classNames.itemDisabled,
+          classNames.disabledItem,
           className
         )}
       >

@@ -11,6 +11,7 @@ import type { UseRefinementListProps } from 'react-instantsearch-hooks';
 
 export type RefinementListProps = Omit<
   RefinementListUiComponentProps,
+  | 'canRefine'
   | 'items'
   | 'onRefine'
   | 'query'
@@ -37,6 +38,7 @@ export function RefinementList({
   ...props
 }: RefinementListProps) {
   const {
+    canRefine,
     canToggleShowMore,
     isFromSearch,
     isShowingMore,
@@ -93,6 +95,7 @@ export function RefinementList({
   return (
     <RefinementListUiComponent
       {...props}
+      canRefine={canRefine}
       items={items}
       onRefine={onRefine}
       query={query}

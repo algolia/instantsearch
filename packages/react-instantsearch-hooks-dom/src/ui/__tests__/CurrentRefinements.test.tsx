@@ -177,9 +177,9 @@ describe('CurrentRefinements', () => {
         <CurrentRefinements
           classNames={{
             root: 'ROOT',
-            rootNoRefinement: 'ROOTNOREFINEMENT',
+            noRefinementRoot: 'NOREFINEMENTROOT',
             list: 'LIST',
-            listNoRefinement: 'LISTNOREFINEMENT',
+            noRefinementList: 'NOREFINEMENTLIST',
             item: 'ITEM',
             label: 'LABEL',
             category: 'CATEGORY',
@@ -192,10 +192,10 @@ describe('CurrentRefinements', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
-            class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement ROOTNOREFINEMENT"
+            class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement NOREFINEMENTROOT"
           >
             <ul
-              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement LISTNOREFINEMENT"
+              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement NOREFINEMENTLIST"
             />
           </div>
         </div>
@@ -220,9 +220,9 @@ describe('CurrentRefinements', () => {
           ]}
           classNames={{
             root: 'ROOT',
-            rootNoRefinement: 'ROOTNOREFINEMENT',
+            noRefinementRoot: 'NOREFINEMENTROOT',
             list: 'LIST',
-            listNoRefinement: 'LISTNOREFINEMENT',
+            noRefinementList: 'NOREFINEMENTLIST',
             item: 'ITEM',
             label: 'LABEL',
             category: 'CATEGORY',
@@ -235,10 +235,10 @@ describe('CurrentRefinements', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
-            class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement ROOTNOREFINEMENT"
+            class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement NOREFINEMENTROOT"
           >
             <ul
-              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement LISTNOREFINEMENT"
+              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement NOREFINEMENTLIST"
             >
               <li
                 class="ais-CurrentRefinements-item ITEM"

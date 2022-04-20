@@ -197,10 +197,10 @@ describe('Breadcrumb', () => {
       className: 'MyCustomBreadcrumb',
       classNames: {
         root: 'ROOT',
-        rootNoRefinement: 'ROOTNOREFINEMENT',
+        noRefinementRoot: 'NOREFINEMENTROOT',
         list: 'LIST',
         item: 'ITEM',
-        itemSelected: 'ITEMSELECTED',
+        selectedItem: 'SELECTEDITEM',
         separator: 'SEPARATOR',
         link: 'LINK',
       },
@@ -242,7 +242,7 @@ describe('Breadcrumb', () => {
               </a>
             </li>
             <li
-              class="ais-Breadcrumb-item ITEM ais-Breadcrumb-item--selected ITEMSELECTED"
+              class="ais-Breadcrumb-item ITEM ais-Breadcrumb-item--selected SELECTEDITEM"
             >
               <span
                 aria-hidden="true"

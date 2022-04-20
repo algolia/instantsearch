@@ -1037,16 +1037,16 @@ describe('Pagination', () => {
         {...props}
         classNames={{
           root: 'ROOT',
-          rootNoRefinement: 'ROOTNOREFINEMENT',
+          noRefinementRoot: 'NOREFINEMENTROOT',
           list: 'LIST',
           item: 'ITEM',
-          itemFirstPage: 'ITEMFIRSTPAGE',
-          itemPreviousPage: 'ITEMPREVIOUSPAGE',
-          itemPage: 'ITEMPAGE',
-          itemSelected: 'ITEMSELECTED',
-          itemDisabled: 'ITEMDISABLED',
-          itemNextPage: 'ITEMNEXTPAGE',
-          itemLastPage: 'ITEMLASTPAGE',
+          firstPageItem: 'FIRSTPAGEITEM',
+          previousPageItem: 'PREVIOUSPAGEITEM',
+          pageItem: 'PAGEITEM',
+          selectedItem: 'SELECTEDITEM',
+          disabledItem: 'DISABLEDITEM',
+          nextPageItem: 'NEXTPAGEITEM',
+          lastPageItem: 'LASTPAGEITEM',
           link: 'LINK',
         }}
       />
@@ -1061,7 +1061,7 @@ describe('Pagination', () => {
             class="ais-Pagination-list LIST"
           >
             <li
-              class="ais-Pagination-item ITEM ais-Pagination-item--disabled ITEMDISABLED ais-Pagination-item--firstPage ITEMFIRSTPAGE"
+              class="ais-Pagination-item ITEM ais-Pagination-item--disabled DISABLEDITEM ais-Pagination-item--firstPage FIRSTPAGEITEM"
             >
               <span
                 aria-label="First"
@@ -1071,7 +1071,7 @@ describe('Pagination', () => {
               </span>
             </li>
             <li
-              class="ais-Pagination-item ITEM ais-Pagination-item--disabled ITEMDISABLED ais-Pagination-item--previousPage ITEMPREVIOUSPAGE"
+              class="ais-Pagination-item ITEM ais-Pagination-item--disabled DISABLEDITEM ais-Pagination-item--previousPage PREVIOUSPAGEITEM"
             >
               <span
                 aria-label="Previous"
@@ -1081,7 +1081,7 @@ describe('Pagination', () => {
               </span>
             </li>
             <li
-              class="ais-Pagination-item ITEM ais-Pagination-item--page ITEMPAGE ais-Pagination-item--selected ITEMSELECTED"
+              class="ais-Pagination-item ITEM ais-Pagination-item--page PAGEITEM ais-Pagination-item--selected SELECTEDITEM"
             >
               <a
                 aria-label="Page 1"
@@ -1092,7 +1092,7 @@ describe('Pagination', () => {
               </a>
             </li>
             <li
-              class="ais-Pagination-item ITEM ais-Pagination-item--page ITEMPAGE"
+              class="ais-Pagination-item ITEM ais-Pagination-item--page PAGEITEM"
             >
               <a
                 aria-label="Page 2"
@@ -1103,7 +1103,7 @@ describe('Pagination', () => {
               </a>
             </li>
             <li
-              class="ais-Pagination-item ITEM ais-Pagination-item--nextPage ITEMNEXTPAGE"
+              class="ais-Pagination-item ITEM ais-Pagination-item--nextPage NEXTPAGEITEM"
             >
               <a
                 aria-label="Next"
@@ -1114,7 +1114,7 @@ describe('Pagination', () => {
               </a>
             </li>
             <li
-              class="ais-Pagination-item ITEM ais-Pagination-item--lastPage ITEMLASTPAGE"
+              class="ais-Pagination-item ITEM ais-Pagination-item--lastPage LASTPAGEITEM"
             >
               <a
                 aria-label="Last"
