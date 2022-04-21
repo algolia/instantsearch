@@ -1,16 +1,15 @@
 // Custom types to support both algoliasearch
 // `v3` and algoliasearch `v4` clients.
 
-import type algoliasearch from 'algoliasearch';
-import type {
-  // @ts-ignore
-  Response as SearchResponseV3,
-} from 'algoliasearch';
+import type algoliasearch from 'algoliasearch/lite';
+import type * as AlgoliaSearch from 'algoliasearch/lite';
+/** @ts-ignore */
+import type * as ClientSearch from '@algolia/client-search';
 
-import type {
-  // @ts-ignore
-  SearchResponse as SearchResponseV4,
-} from '@algolia/client-search';
+/** @ts-ignore */
+type SearchResponseV3<TObject> = AlgoliaSearch.Response<TObject>;
+/** @ts-ignore */
+type SearchResponseV4<TObject> = ClientSearch.SearchResponse<TObject>;
 
 type DummySearchClientV4 = {
   readonly addAlgoliaAgent: (segment: string, version?: string) => void;

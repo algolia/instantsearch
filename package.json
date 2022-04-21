@@ -32,7 +32,12 @@
     "website:build": "yarn build && yarn webpack --config website/webpack.config.js"
   },
   "devDependencies": {
-    "@algolia/client-search": "4.10.5",
+    "@algolia/client-search": "4.11.0",
+    "@algolia/cache-common": "4.11.0",
+    "@algolia/cache-in-memory": "4.11.0",
+    "@algolia/logger-common": "4.11.0",
+    "@algolia/requester-node-http": "4.11.0",
+    "@algolia/transporter": "4.11.0",
     "@babel/cli": "7.15.4",
     "@babel/core": "7.15.5",
     "@babel/plugin-proposal-class-properties": "7.14.5",

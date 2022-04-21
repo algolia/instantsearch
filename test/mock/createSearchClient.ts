@@ -9,7 +9,7 @@ import {
 import type { HostOptions } from '@algolia/transporter';
 import { createNullLogger } from '@algolia/logger-common';
 import { createNodeHttpRequester } from '@algolia/requester-node-http';
-import type algoliasearch from 'algoliasearch';
+import algoliasearch from 'algoliasearch';
 import {
   createSingleSearchResponse,
   createMultiSearchResponse,
@@ -26,38 +26,49 @@ export function createSearchClient<TOptions extends Partial<SearchClient>>(
   options: TOptions
 ): OverrideKeys<SearchClient, TOptions> {
   const appId = (options as Record<string, unknown>).appId || 'appId';
-  const transporter = createTransporter({
-    timeouts: {
-      connect: 2,
-      read: 5,
-      write: 30,
-    },
-    userAgent: createUserAgent('test'),
-    requester: createNodeHttpRequester(),
-    logger: createNullLogger(),
-    responsesCache: createNullCache(),
-    requestsCache: createNullCache(),
-    hostsCache: createInMemoryCache(),
-    hosts: (
-      [
-        { url: `${appId}-dsn.algolia.net`, accept: CallEnum.Read },
-        { url: `${appId}.algolia.net`, accept: CallEnum.Write },
-      ] as readonly HostOptions[]
-    ).concat([
-      { url: `${appId}-1.algolianet.com` },
-      { url: `${appId}-2.algolianet.com` },
-      { url: `${appId}-3.algolianet.com` },
-    ]),
-    headers: {},
-    queryParameters: {},
-  });
+
+  // check if algoliasearch is v4 (has transporter)
+  if ('transporter' in algoliasearch('appId', 'apiKey')) {
+    options = {
+      transporter: createTransporter({
+        timeouts: {
+          connect: 2,
+          read: 5,
+          write: 30,
+        },
+        userAgent: createUserAgent('test'),
+        requester: createNodeHttpRequester(),
+        logger: createNullLogger(),
+        responsesCache: createNullCache(),
+        requestsCache: createNullCache(),
+        hostsCache: createInMemoryCache(),
+        hosts: (
+          [
+            { url: `${appId}-dsn.algolia.net`, accept: CallEnum.Read },
+            { url: `${appId}.algolia.net`, accept: CallEnum.Write },
+          ] as readonly HostOptions[]
+        ).concat([
+          { url: `${appId}-1.algolianet.com` },
+          { url: `${appId}-2.algolianet.com` },
+          { url: `${appId}-3.algolianet.com` },
+        ]),
+        headers: {},
+        queryParameters: {},
+      }),
+      ...options,
+    };
+  } else {
+    options = {
+      _ua: 'Algolia for JavaScript (test)',
+      ...options,
+    };
+  }
 
   return {
     appId,
     addAlgoliaAgent: jest.fn(),
     clearCache: jest.fn(),
     initIndex: jest.fn(),
-    transporter,
     customRequest: jest.fn(),
     search: jest.fn((requests) =>
       Promise.resolve(
