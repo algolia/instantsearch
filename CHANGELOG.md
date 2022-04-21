@@ -1,3 +1,13 @@
+## [6.23.4](https://github.com/algolia/react-instantsearch/compare/v6.23.3...v6.23.4) (2022-04-21)
+
+
+### Bug Fixes
+
+* **hooks:** forbid importing from instantsearch.js root path ([#3437](https://github.com/algolia/react-instantsearch/issues/3437)) ([82ef9ea](https://github.com/algolia/react-instantsearch/commit/82ef9eaaec42bc54f15796b5b031a8656330a45c))
+* **packages:** correctly mark peer dependency ([#3439](https://github.com/algolia/react-instantsearch/issues/3439)) ([51e8818](https://github.com/algolia/react-instantsearch/commit/51e8818fce224819230c8bf6dea2a08d71d9be29)), closes [#3428](https://github.com/algolia/react-instantsearch/issues/3428)
+
+
+
 ## [6.23.3](https://github.com/algolia/react-instantsearch/compare/v6.23.2...v6.23.3) (2022-04-05)
 
 
