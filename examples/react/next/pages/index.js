@@ -1,7 +1,5 @@
-import isEqual from 'react-fast-compare';
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import qs from 'qs';
 import algoliasearch from 'algoliasearch/lite';
 import { findResultsState } from 'react-instantsearch-dom/server';
@@ -27,70 +25,54 @@ const DEFAULT_PROPS = {
   indexName: 'instant_search',
 };
 
-class Page extends React.Component {
-  static propTypes = {
-    router: PropTypes.object.isRequired,
-    resultsState: PropTypes.object,
-    searchState: PropTypes.object,
-  };
+export default function Page(props) {
+  const [searchState, setSearchState] = React.useState(props.searchState);
+  const router = useRouter();
+  const debouncedSetState = React.useRef();
 
-  state = {
-    searchState: this.props.searchState,
-    lastRouter: this.props.router,
-  };
-
-  static async getInitialProps({ asPath }) {
-    const searchState = pathToSearchState(asPath);
-    const resultsState = await findResultsState(App, {
-      ...DEFAULT_PROPS,
-      searchState,
-    });
-
-    return {
-      resultsState,
-      searchState,
-    };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (!isEqual(state.lastRouter, props.router)) {
-      return {
-        searchState: pathToSearchState(props.router.asPath),
-        lastRouter: props.router,
-      };
-    }
-
-    return null;
-  }
-
-  onSearchStateChange = (searchState) => {
-    clearTimeout(this.debouncedSetState);
-
-    this.debouncedSetState = setTimeout(() => {
-      const href = searchStateToURL(searchState);
-
-      this.props.router.push(href, href, {
-        shallow: true,
+  React.useEffect(() => {
+    if (router) {
+      router.beforePopState(({ url }) => {
+        setSearchState(pathToSearchState(url));
       });
-    }, updateAfter);
+    }
+  }, [router]);
 
-    this.setState({ searchState });
-  };
+  return (
+    <div>
+      <Head title="Home" />
+      <App
+        {...DEFAULT_PROPS}
+        searchState={searchState}
+        resultsState={props.resultsState}
+        onSearchStateChange={(nextSearchState) => {
+          clearTimeout(debouncedSetState.current);
 
-  render() {
-    return (
-      <div>
-        <Head title="Home" />
-        <App
-          {...DEFAULT_PROPS}
-          searchState={this.state.searchState}
-          resultsState={this.props.resultsState}
-          onSearchStateChange={this.onSearchStateChange}
-          createURL={createURL}
-        />
-      </div>
-    );
-  }
+          debouncedSetState.current = setTimeout(() => {
+            const href = searchStateToURL(nextSearchState);
+
+            router.push(href, href, { shallow: true });
+          }, updateAfter);
+
+          setSearchState(nextSearchState);
+        }}
+        createURL={createURL}
+      />
+    </div>
+  );
 }
 
-export default withRouter(Page);
+export async function getServerSideProps({ resolvedUrl }) {
+  const searchState = pathToSearchState(resolvedUrl);
+  const resultsState = await findResultsState(App, {
+    ...DEFAULT_PROPS,
+    searchState,
+  });
+
+  return {
+    props: {
+      resultsState: JSON.parse(JSON.stringify(resultsState)),
+      searchState,
+    },
+  };
+}

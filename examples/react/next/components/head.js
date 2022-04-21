@@ -1,5 +1,4 @@
 import NextHead from 'next/head';
-import { string } from 'prop-types';
 import React from 'react';
 
 const defaultDescription = '';
@@ -34,12 +33,3 @@ export const Head = (props) => (
     <link rel="stylesheet" href="instantsearch.css" />
   </NextHead>
 );
-
-Head.propTypes = {
-  title: string,
-  description: string,
-  url: string,
-  ogImage: string,
-};
-
-export default Head;
