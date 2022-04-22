@@ -22,8 +22,8 @@ describe('routing using `replaceState`', () => {
     // 2. Refine: '/?indexName[query]=Apple'
     // 3. Dispose: does not yet write
     // 4. Route change (with `replaceState`): '/about?external=true', replaces state 2
-    // 3. Dispose: writes '/about' (this is a bug, and should be fixed when we have a way to prevent it)
-    // 5. Back: '/about?external=true'
+    // 5. Dispose: writes '/about' (this is a bug, and should be fixed when we have a way to prevent it)
+    // 6. Back: '/about?external=true'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 

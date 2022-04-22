@@ -224,7 +224,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       );
 
       return (
-        // When the the last state change was through popstate, the IS.js state changes,
+        // When the last state change was through popstate, the IS.js state changes,
         // but that should not write the URL.
         !this.inPopState &&
         // When the previous pushState after dispose was by IS.js, we want to write the URL.
