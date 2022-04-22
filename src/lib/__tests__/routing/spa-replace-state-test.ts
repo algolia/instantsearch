@@ -20,9 +20,10 @@ describe('routing using `replaceState`', () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/about'
-    // 4. Route change (with `replaceState`): '/about'
-    // 5. Back: '/about'
+    // 3. Dispose: does not yet write
+    // 4. Route change (with `replaceState`): '/about?external=true', replaces state 2
+    // 5. Dispose: writes '/about' (this is a bug, and should be fixed when we have a way to prevent it)
+    // 6. Back: '/about?external=true'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -61,11 +62,11 @@ describe('routing using `replaceState`', () => {
     // 4. Route change (with `replaceState`): '/about'
     {
       search.dispose();
-      window.history.replaceState({}, '', '/about');
+      window.history.replaceState({}, '', '/about?external=true');
 
       // Asserting `replaceState` call
       expect(window.location.pathname).toEqual('/about');
-      expect(window.location.search).toEqual('');
+      expect(window.location.search).toEqual('?external=true');
       expect(pushState).toHaveBeenCalledTimes(1);
 
       // Asserting `dispose` calling `pushState`
@@ -81,7 +82,7 @@ describe('routing using `replaceState`', () => {
 
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/about');
-      expect(window.location.search).toEqual('');
+      expect(window.location.search).toEqual('?external=true');
     }
   });
 });

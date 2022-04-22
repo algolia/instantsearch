@@ -73,10 +73,9 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private _onPopState?(event: PopStateEvent): void;
 
   /**
-   * Indicates if history.pushState should be executed.
-   * It needs to avoid pushing state to history in case of back/forward in browser
+   * Indicates if last action was back/forward in the browser.
    */
-  private shouldPushState: boolean = true;
+  private inPopState: boolean = false;
 
   /**
    * Indicates whether the history router is disposed or not.
@@ -139,20 +138,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       this.writeTimer = setTimeout(() => {
         setWindowTitle(title);
 
-        // We do want to `pushState` if:
-        // - the router is not disposed, IS.js needs to update the URL
-        // OR
-        // - the last write was from InstantSearch.js
-        // (unlike a SPA, where it would have last written)
-        const lastPushWasByISAfterDispose =
-          !this.isDisposed ||
-          this.latestAcknowledgedHistory === window.history.length;
-
-        if (this.shouldPushState && lastPushWasByISAfterDispose) {
+        if (this.shouldWrite(url)) {
           window.history.pushState(routeState, title || '', url);
           this.latestAcknowledgedHistory = window.history.length;
         }
-        this.shouldPushState = true;
+        this.inPopState = false;
         this.writeTimer = undefined;
       }, this.writeDelay);
     });
@@ -169,7 +159,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
         this.writeTimer = undefined;
       }
 
-      this.shouldPushState = false;
+      this.inPopState = true;
       const routeState = event.state;
 
       // At initial load, the state is read from the URL without update.
@@ -219,6 +209,30 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     }
 
     this.write({} as TRouteState);
+  }
+
+  private shouldWrite(url: string): boolean {
+    return safelyRunOnBrowser(({ window }) => {
+      // We do want to `pushState` if:
+      // - the router is not disposed, IS.js needs to update the URL
+      // OR
+      // - the last write was from InstantSearch.js
+      // (unlike a SPA, where it would have last written)
+      const lastPushWasByISAfterDispose = !(
+        this.isDisposed &&
+        this.latestAcknowledgedHistory !== window.history.length
+      );
+
+      return (
+        // When the last state change was through popstate, the IS.js state changes,
+        // but that should not write the URL.
+        !this.inPopState &&
+        // When the previous pushState after dispose was by IS.js, we want to write the URL.
+        lastPushWasByISAfterDispose &&
+        // When the URL is the same as the current one, we do not want to write it.
+        url !== window.location.href
+      );
+    });
   }
 }
 
