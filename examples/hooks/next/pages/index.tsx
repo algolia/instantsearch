@@ -11,7 +11,7 @@ import {
   SearchBox,
   InstantSearchServerState,
   InstantSearchSSRProvider,
-} from 'react-instantsearch-hooks-dom';
+} from 'react-instantsearch-hooks-web';
 import { getServerState } from 'react-instantsearch-hooks-server';
 import { history } from 'instantsearch.js/es/lib/routers/index.js';
 import { Panel } from '../components/Panel';

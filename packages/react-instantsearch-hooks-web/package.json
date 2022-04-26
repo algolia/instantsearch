@@ -1,5 +1,5 @@
 {
-  "name": "react-instantsearch-hooks-dom",
+  "name": "react-instantsearch-hooks-web",
   "version": "6.23.4",
   "description": "⚡ Lightning-fast search for React, by Algolia",
   "source": "src/index.ts",

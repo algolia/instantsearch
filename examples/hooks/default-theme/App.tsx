@@ -21,7 +21,7 @@ import {
   SearchBox,
   SortBy,
   ToggleRefinement,
-} from 'react-instantsearch-hooks-dom';
+} from 'react-instantsearch-hooks-web';
 
 import { Panel, QueryRuleContext, QueryRuleCustomData } from './components';
 import { Tab, Tabs } from './components/layout';
