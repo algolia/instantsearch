@@ -1,3 +1,12 @@
+## [4.40.5](https://github.com/algolia/instantsearch.js/compare/v4.40.4...v4.40.5) (2022-04-26)
+
+
+### Bug Fixes
+
+* **routing:** prevent writing the same URL twice ([#5045](https://github.com/algolia/instantsearch.js/issues/5045)) ([5d79d92](https://github.com/algolia/instantsearch.js/commit/5d79d92b30e188e5206dcb5fe86fcac058c3f09b))
+
+
+
 ## [4.40.4](https://github.com/algolia/instantsearch.js/compare/v4.40.3...v4.40.4) (2022-04-13)
 
 
