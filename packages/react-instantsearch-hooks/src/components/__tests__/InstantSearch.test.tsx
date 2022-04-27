@@ -182,34 +182,4 @@ describe('InstantSearch', () => {
       expect(searchClient.search).toHaveBeenCalledTimes(1);
     });
   });
-
-  describe('experimental warning', () => {
-    test('displays an experimental warning', () => {
-      const searchClient = createSearchClient({});
-
-      expect(() => {
-        render(
-          <InstantSearch indexName="indexName" searchClient={searchClient} />
-        );
-      }).toWarnDev(
-        '[InstantSearch] This version is experimental and not production-ready.\n\n' +
-          'Please report any bugs at https://github.com/algolia/react-instantsearch/issues/new?template=Bug_report_Hooks.md&labels=Scope%3A%20Hooks\n\n' +
-          '(To disable this warning, pass `suppressExperimentalWarning` to <InstantSearch>.)'
-      );
-    });
-
-    test('hides the experimental warning with suppressExperimentalWarning', () => {
-      const searchClient = createSearchClient({});
-
-      expect(() => {
-        render(
-          <InstantSearch
-            indexName="indexName"
-            searchClient={searchClient}
-            suppressExperimentalWarning={true}
-          />
-        );
-      }).not.toWarnDev();
-    });
-  });
 });

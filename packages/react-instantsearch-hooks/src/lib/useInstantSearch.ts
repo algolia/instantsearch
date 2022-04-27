@@ -7,7 +7,6 @@ import version from '../version';
 
 import { useForceUpdate } from './useForceUpdate';
 import { useStableValue } from './useStableValue';
-import { warn } from './warn';
 
 import type { InstantSearchServerContextApi } from '../components/InstantSearchServerContext';
 import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
@@ -19,21 +18,9 @@ const defaultUserAgents = [
   `react-instantsearch-hooks (${version})`,
 ];
 
-export type UseInstantSearchProps = InstantSearchOptions & {
-  /**
-   * Removes the console warning about the experimental version.
-   *
-   * Note that this warning is only displayed in development mode.
-   *
-   * @default false
-   */
-  suppressExperimentalWarning?: boolean;
-};
+export type UseInstantSearchProps = InstantSearchOptions;
 
-export function useInstantSearch({
-  suppressExperimentalWarning = false,
-  ...props
-}: UseInstantSearchProps) {
+export function useInstantSearch(props: UseInstantSearchProps) {
   const serverContext = useInstantSearchServerContext();
   const serverState = useInstantSearchSSRContext();
   const stableProps = useStableValue(props);
@@ -48,15 +35,6 @@ export function useInstantSearch({
     [stableProps, serverContext, serverState]
   );
   const forceUpdate = useForceUpdate();
-
-  useEffect(() => {
-    warn(
-      suppressExperimentalWarning,
-      'This version is experimental and not production-ready.\n\n' +
-        'Please report any bugs at https://github.com/algolia/react-instantsearch/issues/new?template=Bug_report_Hooks.md&labels=Scope%3A%20Hooks\n\n' +
-        '(To disable this warning, pass `suppressExperimentalWarning` to <InstantSearch>.)'
-    );
-  }, [suppressExperimentalWarning]);
 
   useEffect(() => {
     addAlgoliaAgents(stableProps.searchClient, defaultUserAgents);
