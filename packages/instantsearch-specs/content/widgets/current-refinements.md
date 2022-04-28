@@ -52,6 +52,8 @@ alt1: with empty excludedAttributes
 classes:
   - name: .ais-CurrentRefinements
     description: the root div of the widget
+  - name: .ais-CurrentRefinements--noRefinement
+    description: the root div of the widget with no refinement
   - name: .ais-CurrentRefinements-list
     description: the list of all refined items
   - name: .ais-CurrentRefinements-item
