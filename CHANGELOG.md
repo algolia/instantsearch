@@ -1,3 +1,13 @@
+# [6.24.0](https://github.com/algolia/react-instantsearch/compare/v6.23.4...v6.24.0) (2022-04-28)
+
+
+### Features
+
+* **hooks:** expose DOM components ([#3450](https://github.com/algolia/react-instantsearch/issues/3450)) ([5732e3d](https://github.com/algolia/react-instantsearch/commit/5732e3de732275911f94b26ba9e2c4165bdf77e7))
+* **hooks:** remove experimental warning ([#3446](https://github.com/algolia/react-instantsearch/issues/3446)) ([84c99fe](https://github.com/algolia/react-instantsearch/commit/84c99fe91d6906a877bec620b44c61d762f0ea57))
+
+
+
 ## [6.23.4](https://github.com/algolia/react-instantsearch/compare/v6.23.3...v6.23.4) (2022-04-21)
 
 
