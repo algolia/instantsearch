@@ -801,7 +801,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Enable the advanced syntax.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-advancedSyntax">advancedSyntax on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/advancedSyntax/">advancedSyntax on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -813,7 +813,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Should the engine allow typos on numerics.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-allowTyposOnNumericTokens">allowTyposOnNumericTokens on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/allowTyposOnNumericTokens/">allowTyposOnNumericTokens on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -825,7 +825,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Enable the analytics</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-analytics">analytics on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/analytics/">analytics on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -837,7 +837,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Tag of the query in the analytics.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-analyticsTags">analyticsTags on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/">analyticsTags on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -849,7 +849,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Center of the geo search.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-aroundLatLng">aroundLatLng on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLng/">aroundLatLng on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -861,7 +861,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Center of the search, retrieve from the user IP.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-aroundLatLngViaIP">aroundLatLngViaIP on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLngViaIP/">aroundLatLngViaIP on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -873,7 +873,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Precision of the geo search.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-aroundPrecision">aroundPrecision on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision/">aroundPrecision on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -885,7 +885,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Radius of the geo search.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-aroundRadius">aroundRadius on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius/">aroundRadius on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -897,7 +897,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Minimum radius of the geo search.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-minimumAroundRadius">minimumAroundRadius on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/minimumAroundRadius/">minimumAroundRadius on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -909,7 +909,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">List of attributes to highlight</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-attributesToHighlight">attributesToHighlight on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/attributesToHighlight/">attributesToHighlight on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -921,7 +921,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">List of attributes to retrieve</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-attributesToRetrieve">attributesToRetrieve on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/attributesToRetrieve/">attributesToRetrieve on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -933,7 +933,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">List of attributes to snippet</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-attributesToSnippet">attributesToSnippet on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/attributesToSnippet/">attributesToSnippet on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -956,7 +956,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Remove duplicates based on the index setting attributeForDistinct</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-distinct">distinct on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/distinct/">distinct on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -991,7 +991,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Enable the ranking informations in the response</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-getRankingInfo">getRankingInfo on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/getRankingInfo/">getRankingInfo on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1003,7 +1003,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Number of hits to be returned by the search API</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-hitsPerPage">hitsPerPage on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/hitsPerPage/">hitsPerPage on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1015,7 +1015,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Should the plurals be ignored</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-ignorePlurals">ignorePlurals on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/ignorePlurals/">ignorePlurals on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1027,7 +1027,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Geo search inside a box.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-insideBoundingBox">insideBoundingBox on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/insideBoundingBox/">insideBoundingBox on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1039,7 +1039,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Geo search inside a polygon.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-insidePolygon">insidePolygon on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/insidePolygon/">insidePolygon on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1051,7 +1051,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Number of values for each facetted attribute</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-maxValuesPerFacet">maxValuesPerFacet on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/maxValuesPerFacet/">maxValuesPerFacet on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1063,7 +1063,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Number of characters to wait before doing one character replacement.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-minWordSizefor1Typo">minWordSizefor1Typo on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/minWordSizefor1Typo/">minWordSizefor1Typo on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1075,7 +1075,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Number of characters to wait before doing a second character replacement.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-minWordSizefor2Typos">minWordSizefor2Typos on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/minWordSizefor2Typos/">minWordSizefor2Typos on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1087,7 +1087,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Add some optional words to those defined in the dashboard</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-optionalWords">optionalWords on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/optionalWords/">optionalWords on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1099,7 +1099,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">The current page number</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-page">page on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="algolia.com/doc/api-reference/api-parameters/page/">page on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1111,7 +1111,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Query string of the instant search. The empty string is a valid query.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-query">query on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/query/">query on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1123,7 +1123,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">How the query should be treated by the search engine. Possible values: prefixAll, prefixLast, prefixNone</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-queryType">queryType on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/queryType/">queryType on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1135,7 +1135,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Possible values are "lastWords" "firstWords" "allOptional" "none" (default)</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-removeWordsIfNoResults">removeWordsIfNoResults on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/removeWordsIfNoResults/">removeWordsIfNoResults on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1147,7 +1147,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Should the engine replace the synonyms in the highlighted results.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-replaceSynonymsInHighlight">replaceSynonymsInHighlight on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/replaceSynonymsInHighlight/">replaceSynonymsInHighlight on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1159,7 +1159,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Restrict which attribute is searched.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-restrictSearchableAttributes">restrictSearchableAttributes on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/restrictSearchableAttributes/">restrictSearchableAttributes on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1171,7 +1171,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Enable the synonyms</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-synonyms">synonyms on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/synonyms/">synonyms on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1183,7 +1183,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Contains the tag filters in the raw format of the Algolia API. Setting this parameter is not compatible with the of the add/remove/toggle methods of the tag api.</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-tagFilters">tagFilters on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/tagFilters/">tagFilters on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
     <tr>
@@ -1195,7 +1195,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">How the typo tolerance behave in the search engine. Possible values: true, false, min, strict</span></p>
-        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/ruby#param-typoTolerance">typoTolerance on Algolia.com<span class="s3"></span></a></span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/typoTolerance/">typoTolerance on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
   </tbody>
