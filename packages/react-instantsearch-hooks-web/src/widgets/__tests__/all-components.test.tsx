@@ -4,7 +4,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { getAllWidgets } from '../__testutils__/all-widgets';
+import { getAllWidgets } from './__utils__/all-widgets';
 
 describe('rendering', () => {
   const widgets = getAllWidgets();

@@ -5,8 +5,8 @@ import {
   InstantSearchServerContext,
 } from 'react-instantsearch-hooks';
 
-import * as widgets from '../';
-import { createSearchClient } from '../../../../../test/mock';
+import * as widgets from '../..';
+import { createSearchClient } from '../../../../../../test/mock';
 
 import type { InstantSearch as InstantSearchClass } from 'instantsearch.js';
 import type { ComponentProps } from 'react';

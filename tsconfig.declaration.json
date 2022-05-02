@@ -5,5 +5,5 @@
     "emitDeclarationOnly": true,
     "noEmit": false
   },
-  "exclude": ["**/__tests__/**/*", "**/dist/**/*"]
+  "exclude": ["**/__tests__/**/*", "**/dist/**/*"],
 }

@@ -3,7 +3,11 @@ module.exports = {
     '@testing-library/jest-dom/extend-expect',
     './scripts/jest/setupTests.ts',
   ],
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/examples/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/examples/',
+    '/__utils__/',
+  ],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testEnvironment: 'jsdom',
   watchPlugins: [

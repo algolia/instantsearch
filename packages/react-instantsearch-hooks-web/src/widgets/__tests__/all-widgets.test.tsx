@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { getAllInstantSearchWidgets } from '../__testutils__/all-widgets';
+import { getAllInstantSearchWidgets } from './__utils__/all-widgets';
 
 describe('widgets', () => {
   const widgets = getAllInstantSearchWidgets();
