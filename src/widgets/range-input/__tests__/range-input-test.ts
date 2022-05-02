@@ -17,6 +17,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import type { InstantSearch } from '../../../types';
+import type { RangeInputProps } from '../../../components/RangeInput/RangeInput';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -108,11 +109,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     // @ts-expect-error SearchResults are missing properties that are not useful for this test
     widget.render!(createRenderOptions({ results, helper }));
 
-    const firstRender = render.mock.calls[0][0] as VNode;
+    const firstRender = render.mock.calls[0][0] as VNode<RangeInputProps>;
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect((firstRender.props as any).min).toBe(10);
-    expect((firstRender.props as any).max).toBe(500);
+    expect(firstRender.props.min).toBe(10);
+    expect(firstRender.props.max).toBe(500);
     expect(firstRender.props).toMatchSnapshot();
   });
 
@@ -186,10 +187,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init!(createInitOptions({ helper, instantSearchInstance }));
     widget.render!(createRenderOptions({ helper }));
 
-    const firstRender = render.mock.calls[0][0] as VNode;
+    const firstRender = render.mock.calls[0][0] as VNode<RangeInputProps>;
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect((firstRender.props as any).min).toBe(20);
+    expect(firstRender.props.min).toBe(20);
   });
 
   it('expect to render with max', () => {
@@ -202,10 +203,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init!(createInitOptions({ helper, instantSearchInstance }));
     widget.render!(createRenderOptions({ helper }));
 
-    const firstRender = render.mock.calls[0][0] as VNode;
+    const firstRender = render.mock.calls[0][0] as VNode<RangeInputProps>;
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect((firstRender.props as any).max).toBe(480);
+    expect(firstRender.props.max).toBe(480);
   });
 
   it('expect to render with refinement', () => {
@@ -233,11 +234,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     // @ts-expect-error SearchResults are missing properties that are not useful for this test
     widget.render!(createRenderOptions({ results, helper }));
 
-    const firstRender = render.mock.calls[0][0] as VNode;
+    const firstRender = render.mock.calls[0][0] as VNode<RangeInputProps>;
 
     expect(render).toHaveBeenCalledTimes(1);
     expect(firstRender.props).toMatchSnapshot();
-    expect((firstRender.props as any).values).toEqual({
+    expect(firstRender.props.values).toEqual({
       min: 25,
       max: 475,
     });
@@ -257,11 +258,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init!(createInitOptions({ helper, instantSearchInstance }));
     widget.render!(createRenderOptions({ helper }));
 
-    const firstRender = render.mock.calls[0][0] as VNode;
+    const firstRender = render.mock.calls[0][0] as VNode<RangeInputProps>;
 
     expect(render).toHaveBeenCalledTimes(1);
     expect(firstRender.props).toMatchSnapshot();
-    expect((firstRender.props as any).values).toEqual({
+    expect(firstRender.props.values).toEqual({
       min: undefined,
       max: undefined,
     });
@@ -278,10 +279,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget.init!(createInitOptions({ helper, instantSearchInstance }));
       widget.render!(createRenderOptions({ helper }));
 
-      const firstRender = render.mock.calls[0][0] as VNode;
+      const firstRender = render.mock.calls[0][0] as VNode<RangeInputProps>;
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect((firstRender.props as any).step).toBe(0.01);
+      expect(firstRender.props.step).toBe(0.01);
     });
 
     it('expect to render with precision of 0', () => {
@@ -294,10 +295,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget.init!(createInitOptions({ helper, instantSearchInstance }));
       widget.render!(createRenderOptions({ helper }));
 
-      const firstRender = render.mock.calls[0][0] as VNode;
+      const firstRender = render.mock.calls[0][0] as VNode<RangeInputProps>;
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect((firstRender.props as any).step).toBe(1);
+      expect(firstRender.props.step).toBe(1);
     });
 
     it('expect to render with precision of 1', () => {
@@ -310,10 +311,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget.init!(createInitOptions({ helper, instantSearchInstance }));
       widget.render!(createRenderOptions({ helper }));
 
-      const firstRender = render.mock.calls[0][0] as VNode;
+      const firstRender = render.mock.calls[0][0] as VNode<RangeInputProps>;
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect((firstRender.props as any).step).toBe(0.1);
+      expect(firstRender.props.step).toBe(0.1);
     });
   });
 });

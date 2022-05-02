@@ -192,7 +192,7 @@ class InstantSearch<
       throw new Error(withUsage('The `searchClient` option is required.'));
     }
 
-    if (typeof (searchClient as any).search !== 'function') {
+    if (typeof searchClient.search !== 'function') {
       throw new Error(
         `The \`searchClient\` must implement a \`search\` method.
 

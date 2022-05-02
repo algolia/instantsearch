@@ -6,16 +6,11 @@ import qs from 'qs';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
 import { wait } from '../../../test/utils/wait';
-import type {
-  Router,
-  Widget,
-  UiState,
-  StateMapping,
-  IndexUiState,
-} from '../../types';
+import type { Router, UiState, StateMapping, IndexUiState } from '../../types';
 import historyRouter from '../routers/history';
 import instantsearch from '../..';
 import type { JSDOM } from 'jsdom';
+import { connectHitsPerPage, connectSearchBox } from '../../connectors';
 
 declare const jsdom: JSDOM;
 
@@ -81,40 +76,6 @@ const createFakeHistory = <TEntry = Record<string, unknown>>(
     },
   };
 };
-
-const createFakeSearchBox = (): Widget =>
-  createWidget({
-    render({ helper }) {
-      (this as any).refine = (value: string) => {
-        helper.setQuery(value).search();
-      };
-    },
-    dispose({ state }) {
-      return state.setQuery('');
-    },
-    getWidgetSearchParameters(searchParameters, { uiState }) {
-      return searchParameters.setQuery(uiState.query || '');
-    },
-    getWidgetUiState(uiState, { searchParameters }) {
-      return {
-        ...uiState,
-        query: searchParameters.query,
-      };
-    },
-  });
-
-const createFakeHitsPerPage = (): Widget =>
-  createWidget({
-    dispose({ state }) {
-      return state;
-    },
-    getWidgetSearchParameters(parameters) {
-      return parameters;
-    },
-    getWidgetUiState(uiState) {
-      return uiState;
-    },
-  });
 
 describe('RoutingManager', () => {
   describe('within instantsearch', () => {
@@ -305,8 +266,10 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox: any = createFakeSearchBox();
-      const fakeHitsPerPage = createFakeHitsPerPage();
+      const fakeSearchBox = connectSearchBox(() => {})({});
+      const fakeHitsPerPage = connectHitsPerPage(() => {})({
+        items: [{ default: true, value: 1, label: 'one' }],
+      });
 
       search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
@@ -315,7 +278,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      fakeSearchBox.refine('Apple');
+      search.renderState.indexName!.searchBox!.refine('Apple');
 
       await wait(0);
 
@@ -358,8 +321,10 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox = createFakeSearchBox();
-      const fakeHitsPerPage = createFakeHitsPerPage();
+      const fakeSearchBox = connectSearchBox(() => {})({});
+      const fakeHitsPerPage = connectHitsPerPage(() => {})({
+        items: [{ default: true, value: 1, label: 'one' }],
+      });
 
       search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
@@ -409,8 +374,10 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox: any = createFakeSearchBox();
-      const fakeHitsPerPage = createFakeHitsPerPage();
+      const fakeSearchBox = connectSearchBox(() => {})({});
+      const fakeHitsPerPage = connectHitsPerPage(() => {})({
+        items: [{ default: true, value: 1, label: 'one' }],
+      });
 
       search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
@@ -419,7 +386,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      fakeSearchBox.refine('Apple');
+      search.renderState.indexName!.searchBox!.refine('Apple');
 
       await wait(0);
 
@@ -431,7 +398,7 @@ describe('RoutingManager', () => {
       });
 
       // Trigger an update - push a change
-      fakeSearchBox.refine('Apple iPhone');
+      search.renderState.indexName!.searchBox!.refine('Apple iPhone');
 
       await wait(0);
 
@@ -501,9 +468,13 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox: any = createFakeSearchBox();
-      const fakeHitsPerPage1 = createFakeHitsPerPage();
-      const fakeHitsPerPage2 = createFakeHitsPerPage();
+      const fakeSearchBox = connectSearchBox(() => {})({});
+      const fakeHitsPerPage1 = connectHitsPerPage(() => {})({
+        items: [{ default: true, value: 1, label: 'one' }],
+      });
+      const fakeHitsPerPage2 = connectHitsPerPage(() => {})({
+        items: [{ default: true, value: 1, label: 'one' }],
+      });
 
       search.addWidgets([fakeSearchBox, fakeHitsPerPage1, fakeHitsPerPage2]);
 
@@ -512,7 +483,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      fakeSearchBox.refine('Apple');
+      search.renderState.indexName!.searchBox!.refine('Apple');
 
       await wait(0);
 
@@ -572,7 +543,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox = createFakeSearchBox();
+      const fakeSearchBox = connectSearchBox(() => {})({});
 
       search.addWidgets([fakeSearchBox]);
       search.start();

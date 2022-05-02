@@ -8,6 +8,7 @@ import type {
   SearchClient,
   HitAttributeHighlightResult,
   Hit,
+  EscapedHits,
 } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -198,7 +199,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.setPage(1);
     helper.search = jest.fn();
-    (helper as any).searchWithoutTriggeringOnStateChange = jest.fn();
+    helper.searchWithoutTriggeringOnStateChange = jest.fn();
     helper.emit = jest.fn();
 
     widget.init!(
@@ -236,9 +237,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(helper.state.page).toBe(0);
     expect(helper.emit).not.toHaveBeenCalled();
     expect(helper.search).toHaveBeenCalledTimes(0);
-    expect(
-      (helper as any).searchWithoutTriggeringOnStateChange
-    ).toHaveBeenCalledTimes(1);
+    expect(helper.searchWithoutTriggeringOnStateChange).toHaveBeenCalledTimes(
+      1
+    );
 
     // the results should be prepended if there is an decrement in page
     const previousHits = [
@@ -857,7 +858,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       })
     );
 
-    expect((results.hits as any).__escaped).toBe(true);
+    expect((results.hits as unknown as EscapedHits).__escaped).toBe(true);
   });
 
   describe('dispose', () => {
@@ -1284,7 +1285,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(actual.highlightPostTag).toBeUndefined();
     });
 
-    test('return Search Parameters with resetted page when `showPrevious` without `page` in the UI state', () => {
+    test('return Search Parameters with page reset when `showPrevious` without `page` in the UI state', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
@@ -1299,7 +1300,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(actual.page).toEqual(0);
     });
 
-    test('return Search Parameters with resetted page when `showPrevious` and `page` is 0 in the UI state', () => {
+    test('return Search Parameters with page reset when `showPrevious` and `page` is 0 in the UI state', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
