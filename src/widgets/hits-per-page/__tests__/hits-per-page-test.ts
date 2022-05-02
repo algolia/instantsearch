@@ -102,12 +102,12 @@ describe('hitsPerPage()', () => {
     widget.render!(createRenderOptions({ results, state }));
     widget.render!(createRenderOptions({ results, state }));
 
-    const firstRender = render.mock.calls[0][0] as VNode;
-    const { children, ...rootProps } = firstRender.props as any;
+    const firstRender = render.mock.calls[0][0] as VNode<SelectorProps>;
+    const { children, ...rootProps } = firstRender.props;
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(rootProps).toMatchSnapshot();
-    expect(children.props).toMatchSnapshot();
+    expect((children! as VNode).props).toMatchSnapshot();
   });
 
   it('renders transformed items', () => {

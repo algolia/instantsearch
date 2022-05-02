@@ -23,28 +23,30 @@ describe('escapeHits()', () => {
       },
     ];
 
-    const output = [
-      {
-        _highlightResult: {
-          foobar: {
-            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
-            matchLevel: 'full' as const,
-            matchedWords: [],
+    const output = Object.assign(
+      [
+        {
+          _highlightResult: {
+            foobar: {
+              value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
+            },
           },
-        },
-        _snippetResult: {
-          foobar: {
-            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
-            matchLevel: 'full' as const,
-            matchedWords: [],
+          _snippetResult: {
+            foobar: {
+              value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
+            },
           },
+          objectID: '1',
+          __position: 1,
         },
-        objectID: '1',
-        __position: 1,
-      },
-    ];
+      ],
+      { __escaped: true }
+    );
 
-    (output as any).__escaped = true;
     expect(escapeHits(hits)).toEqual(output);
   });
 
@@ -76,32 +78,34 @@ describe('escapeHits()', () => {
       },
     ];
 
-    const output = [
-      {
-        _highlightResult: {
-          foo: {
-            bar: {
-              value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
-              matchLevel: 'full' as const,
-              matchedWords: [],
+    const output = Object.assign(
+      [
+        {
+          _highlightResult: {
+            foo: {
+              bar: {
+                value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+                matchLevel: 'full' as const,
+                matchedWords: [],
+              },
             },
           },
-        },
-        _snippetResult: {
-          foo: {
-            bar: {
-              value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
-              matchLevel: 'full' as const,
-              matchedWords: [],
+          _snippetResult: {
+            foo: {
+              bar: {
+                value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+                matchLevel: 'full' as const,
+                matchedWords: [],
+              },
             },
           },
+          objectID: '1',
+          __position: 1,
         },
-        objectID: '1',
-        __position: 1,
-      },
-    ];
+      ],
+      { __escaped: true }
+    );
 
-    (output as any).__escaped = true;
     expect(escapeHits(hits)).toEqual(output);
   });
 
@@ -141,42 +145,44 @@ describe('escapeHits()', () => {
       },
     ];
 
-    const output = [
-      {
-        _highlightResult: {
-          foobar: [
-            {
-              value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
-              matchLevel: 'full' as const,
-              matchedWords: [],
-            },
-            {
-              value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
-              matchLevel: 'full' as const,
-              matchedWords: [],
-            },
-          ],
+    const output = Object.assign(
+      [
+        {
+          _highlightResult: {
+            foobar: [
+              {
+                value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
+                matchLevel: 'full' as const,
+                matchedWords: [],
+              },
+              {
+                value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+                matchLevel: 'full' as const,
+                matchedWords: [],
+              },
+            ],
+          },
+          _snippetResult: {
+            foobar: [
+              {
+                value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
+                matchLevel: 'full' as const,
+                matchedWords: [],
+              },
+              {
+                value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+                matchLevel: 'full' as const,
+                matchedWords: [],
+              },
+            ],
+          },
+          objectID: '1',
+          __position: 1,
         },
-        _snippetResult: {
-          foobar: [
-            {
-              value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
-              matchLevel: 'full' as const,
-              matchedWords: [],
-            },
-            {
-              value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
-              matchLevel: 'full' as const,
-              matchedWords: [],
-            },
-          ],
-        },
-        objectID: '1',
-        __position: 1,
-      },
-    ];
+      ],
+      { __escaped: true }
+    );
 
-    (output as any).__escaped = true;
     expect(escapeHits(hits)).toEqual(output);
   });
 
@@ -236,57 +242,60 @@ describe('escapeHits()', () => {
       },
     ];
 
-    const output = [
-      {
-        _highlightResult: {
-          foobar: [
-            {
-              foo: {
-                bar: {
-                  value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
-                  matchLevel: 'full' as const,
-                  matchedWords: [],
+    const output = Object.assign(
+      [
+        {
+          _highlightResult: {
+            foobar: [
+              {
+                foo: {
+                  bar: {
+                    value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
+                    matchLevel: 'full' as const,
+                    matchedWords: [],
+                  },
                 },
               },
-            },
-            {
-              foo: {
-                bar: {
-                  value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
-                  matchLevel: 'full' as const,
-                  matchedWords: [],
+              {
+                foo: {
+                  bar: {
+                    value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+                    matchLevel: 'full' as const,
+                    matchedWords: [],
+                  },
                 },
               },
-            },
-          ],
+            ],
+          },
+          _snippetResult: {
+            foobar: [
+              {
+                foo: {
+                  bar: {
+                    value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
+                    matchLevel: 'full' as const,
+                    matchedWords: [],
+                  },
+                },
+              },
+              {
+                foo: {
+                  bar: {
+                    value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+                    matchLevel: 'full' as const,
+                    matchedWords: [],
+                  },
+                },
+              },
+            ],
+          },
+          objectID: '1',
+          __position: 1,
         },
-        _snippetResult: {
-          foobar: [
-            {
-              foo: {
-                bar: {
-                  value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
-                  matchLevel: 'full' as const,
-                  matchedWords: [],
-                },
-              },
-            },
-            {
-              foo: {
-                bar: {
-                  value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
-                  matchLevel: 'full' as const,
-                  matchedWords: [],
-                },
-              },
-            },
-          ],
-        },
-        objectID: '1',
-        __position: 1,
-      },
-    ];
-    (output as any).__escaped = true;
+      ],
+      { __escaped: true }
+    );
+
     expect(escapeHits(hits)).toEqual(output);
   });
 
@@ -308,21 +317,22 @@ describe('escapeHits()', () => {
     hits = escapeHits(hits);
     hits = escapeHits(hits);
 
-    const output = [
-      {
-        _highlightResult: {
-          foobar: {
-            value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
-            matchLevel: 'full' as const,
-            matchedWords: [],
+    const output = Object.assign(
+      [
+        {
+          _highlightResult: {
+            foobar: {
+              value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
+              matchLevel: 'full' as const,
+              matchedWords: [],
+            },
           },
+          objectID: '1',
+          __position: 1,
         },
-        objectID: '1',
-        __position: 1,
-      },
-    ];
-
-    (output as any).__escaped = true;
+      ],
+      { __escaped: true }
+    );
 
     expect(hits).toEqual(output);
   });

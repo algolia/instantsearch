@@ -8,12 +8,12 @@ type SafelyRunOnBrowserOptions<TReturn> = {
 };
 
 /**
- * Runs code on browser enviromnents safely.
+ * Runs code on browser environments safely.
  */
 export function safelyRunOnBrowser<TReturn>(
   callback: BrowserCallback<TReturn>,
   { fallback }: SafelyRunOnBrowserOptions<TReturn> = {
-    fallback: () => undefined as any,
+    fallback: () => undefined as unknown as TReturn,
   }
 ): TReturn {
   // eslint-disable-next-line no-restricted-globals

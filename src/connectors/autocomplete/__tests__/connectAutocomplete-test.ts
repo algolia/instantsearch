@@ -12,7 +12,7 @@ import { createSingleSearchResponse } from '../../../../test/mock/createAPIRespo
 import type { AutocompleteRenderState } from '../connectAutocomplete';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import type { EscapedHits, Hit, SearchClient } from '../../../types';
+import type { SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
@@ -239,18 +239,19 @@ search.addWidgets([
       },
     ];
 
-    const escapedHits = [
-      {
-        _highlightResult: {
-          foobar: {
-            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+    const escapedHits = Object.assign(
+      [
+        {
+          _highlightResult: {
+            foobar: {
+              value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+            },
           },
+          objectID: '1',
         },
-        objectID: '1',
-      },
-    ];
-
-    (escapedHits as any).__escaped = true;
+      ],
+      { __escaped: true }
+    );
 
     widget.init!(createInitOptions({ helper }));
 
@@ -533,8 +534,7 @@ search.addWidgets([
         createRenderOptions({ helper })
       );
 
-      const hits: Hit[] = [];
-      (hits as EscapedHits).__escaped = true;
+      const hits = Object.assign([], { __escaped: true });
 
       expect(renderState).toEqual({
         currentRefinement: 'query',

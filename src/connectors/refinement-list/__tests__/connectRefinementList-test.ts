@@ -30,8 +30,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     expect(() =>
       connectRefinementList({
+        // @ts-expect-error we pass an object instead of renderer
         operator: 'and',
-      } as any)
+      })
     ).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Object).
 

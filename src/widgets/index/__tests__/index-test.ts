@@ -115,7 +115,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   it('throws without `indexName` option', () => {
     expect(() => {
-      index({} as any);
+      // @ts-expect-error
+      index({});
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`indexName\` option is required.
 
@@ -190,7 +191,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instance = index({ indexName: 'indexName' });
 
       expect(() => {
-        instance.addWidgets([{ dummy: true } as any]);
+        // @ts-expect-error
+        instance.addWidgets([{ dummy: true }]);
       }).toThrowErrorMatchingInlineSnapshot(`
 "The widget definition expects a \`render\` and/or an \`init\` method.
 

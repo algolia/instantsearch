@@ -48,7 +48,7 @@ function recursiveEscape(input: any): any {
 export function escapeHits<THit extends Hit>(
   hits: THit[] | EscapedHits<THit>
 ): EscapedHits<THit> {
-  if ((hits as any).__escaped === undefined) {
+  if ((hits as EscapedHits).__escaped === undefined) {
     // We don't override the value on hit because it will mutate the raw results
     // instead we make a shallow copy and we assign the escaped values on it.
     hits = hits.map(({ ...hit }) => {
@@ -63,10 +63,10 @@ export function escapeHits<THit extends Hit>(
       return hit;
     });
 
-    (hits as any).__escaped = true;
+    (hits as EscapedHits).__escaped = true;
   }
 
-  return hits as unknown as EscapedHits<THit>;
+  return hits as EscapedHits<THit>;
 }
 
 export function escapeFacets(facetHits: FacetHit[]): FacetHit[] {
