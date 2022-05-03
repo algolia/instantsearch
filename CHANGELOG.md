@@ -1,3 +1,12 @@
+## [6.24.1](https://github.com/algolia/react-instantsearch/compare/v6.24.0...v6.24.1) (2022-05-03)
+
+
+### Bug Fixes
+
+* **types:** export correct types for react-instantsearch-hooks-web ([#3454](https://github.com/algolia/react-instantsearch/issues/3454)) ([a863430](https://github.com/algolia/react-instantsearch/commit/a8634306621f7a05a2b3056a6db25ccf8d9eabf0))
+
+
+
 # [6.24.0](https://github.com/algolia/react-instantsearch/compare/v6.23.4...v6.24.0) (2022-04-28)
 
 
