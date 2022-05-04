@@ -8,9 +8,13 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '../../../../../test/mock';
-import { createInstantSearchTestWrapper } from '../../../../../test/utils';
+import {
+  createInstantSearchTestWrapper,
+  wait,
+} from '../../../../../test/utils';
 import { Index } from '../../components/Index';
 import { InstantSearch } from '../../components/InstantSearch';
+import { useHits } from '../../connectors/useHits';
 import { IndexContext } from '../../lib/IndexContext';
 import { InstantSearchContext } from '../../lib/InstantSearchContext';
 import { noop } from '../../lib/noop';
@@ -129,6 +133,56 @@ const connectCustomSearchBoxWithoutRenderState: Connector<
           ...uiState,
           query: searchParameters.query,
         };
+      },
+    };
+  };
+
+const connectUnstableSearchBox: Connector<
+  CustomSearchBoxWidgetDescription,
+  Record<string, never>
+> =
+  (renderFn, unmountFn = noop) =>
+  (widgetParams) => {
+    return {
+      $$type: 'test.searchBox',
+      init(params) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState!(params),
+            instantSearchInstance: params.instantSearchInstance,
+          },
+          true
+        );
+      },
+      render(params) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState!(params),
+            query: 'query',
+            instantSearchInstance: params.instantSearchInstance,
+          },
+          false
+        );
+      },
+      dispose() {
+        unmountFn();
+      },
+      getWidgetRenderState({ helper, state }) {
+        return {
+          query: state.query || '',
+          // This creates a new reference for `refine()` at every render.
+          refine: (value) => helper.setQuery(value).search(),
+          widgetParams,
+        };
+      },
+      getWidgetUiState(uiState, { searchParameters }) {
+        return {
+          ...uiState,
+          query: searchParameters.query,
+        };
+      },
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        return searchParameters.setQueryParameter('query', uiState.query || '');
       },
     };
   };
@@ -447,5 +501,44 @@ describe('useConnector', () => {
         }),
       ])
     );
+  });
+
+  test('limits the number of renders with unstable function references from render state', async () => {
+    const searchClient = createSearchClient({});
+
+    function Hits(props) {
+      useHits(props);
+      return null;
+    }
+
+    function Search() {
+      // Use a connector with unstable function references in render state
+      const { query } = useConnector(connectUnstableSearchBox);
+
+      return (
+        <>
+          <input value={query} />
+          {/* Use unstable function as prop */}
+          <Hits transformItems={(items) => items} />
+        </>
+      );
+    }
+
+    function App() {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Search />
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
+
+    await wait(0);
+
+    // This checks that InstantSearch doesn't re-render endlessly. We should
+    // still be able to optimize this render count to `1`, but `2` is acceptable
+    // for now compared to an infinite loop.
+    expect(searchClient.search).toHaveBeenCalledTimes(2);
   });
 });

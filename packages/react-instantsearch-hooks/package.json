@@ -48,7 +48,6 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "algoliasearch-helper": "^3.7.4",
-    "dequal": "^2.0.0",
     "instantsearch.js": "^4.40.1"
   },
   "peerDependencies": {

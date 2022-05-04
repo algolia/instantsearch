@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 
 import { createSearchResults } from '../lib/createSearchResults';
+import { dequal } from '../lib/dequal';
 import { useIndexContext } from '../lib/useIndexContext';
 import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
@@ -27,6 +28,9 @@ export function useConnector<
     additionalWidgetProperties
   );
   const shouldSetStateRef = useRef(true);
+  const previousRenderStateRef = useRef<TDescription['renderState'] | null>(
+    null
+  );
 
   const widget = useMemo(() => {
     const createWidget = connector(
@@ -54,8 +58,22 @@ export function useConnector<
           const { instantSearchInstance, widgetParams, ...renderState } =
             connectorState;
 
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
-          setState(renderState);
+          // We only update the state when a widget render state param changes,
+          // except for functions. We ignore function reference changes to avoid
+          // infinite loops. It's safe to omit them because they get updated
+          // every time another render param changes.
+          if (
+            !dequal(
+              renderState,
+              previousRenderStateRef.current,
+              (a, b) =>
+                a?.constructor === Function && b?.constructor === Function
+            )
+          ) {
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
+            setState(renderState);
+            previousRenderStateRef.current = renderState;
+          }
         }
       },
       () => {
