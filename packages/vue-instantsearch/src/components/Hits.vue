@@ -34,7 +34,14 @@ import { createSuitMixin } from '../mixins/suit';
 export default {
   name: 'AisHits',
   mixins: [
-    createWidgetMixin({ connector: connectHitsWithInsights }),
+    createWidgetMixin(
+      {
+        connector: connectHitsWithInsights,
+      },
+      {
+        $$widgetType: 'ais.hits',
+      }
+    ),
     createSuitMixin({ name: 'Hits' }),
   ],
   props: {

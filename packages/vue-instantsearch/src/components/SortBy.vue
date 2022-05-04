@@ -35,7 +35,12 @@ export default {
   name: 'AisSortBy',
   mixins: [
     createSuitMixin({ name: 'SortBy' }),
-    createWidgetMixin({ connector: connectSortBy }),
+    createWidgetMixin(
+      { connector: connectSortBy },
+      {
+        $$widgetType: 'ais.sortBy',
+      }
+    ),
 
     createPanelConsumerMixin({
       mapStateToCanRefine: state => state.hasNoResults === false,

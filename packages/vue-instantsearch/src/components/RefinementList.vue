@@ -110,7 +110,14 @@ export default {
   components: { SearchInput, AisHighlight },
   mixins: [
     createSuitMixin({ name: 'RefinementList' }),
-    createWidgetMixin({ connector: connectRefinementList }),
+    createWidgetMixin(
+      {
+        connector: connectRefinementList,
+      },
+      {
+        $$widgetType: 'ais.refinementList',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => Boolean(state.canRefine),
     }),

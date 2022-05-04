@@ -28,9 +28,14 @@ export default {
   name: 'AisQueryRuleCustomData',
   mixins: [
     createSuitMixin({ name: 'QueryRuleCustomData' }),
-    createWidgetMixin({
-      connector: connectQueryRules,
-    }),
+    createWidgetMixin(
+      {
+        connector: connectQueryRules,
+      },
+      {
+        $$widgetType: 'ais.queryRuleCustomData',
+      }
+    ),
   ],
   props: {
     transformItems: {

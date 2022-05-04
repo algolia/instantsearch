@@ -84,7 +84,14 @@ import { createWidgetMixin } from '../mixins/widget';
 export default {
   name: 'AisVoiceSearch',
   mixins: [
-    createWidgetMixin({ connector: connectVoiceSearch }),
+    createWidgetMixin(
+      {
+        connector: connectVoiceSearch,
+      },
+      {
+        $$widgetType: 'ais.voiceSearch',
+      }
+    ),
     createSuitMixin({ name: 'VoiceSearch' }),
   ],
   props: {

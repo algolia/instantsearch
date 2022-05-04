@@ -28,7 +28,14 @@ import { createSuitMixin } from '../mixins/suit';
 export default {
   name: 'AisAutocomplete',
   mixins: [
-    createWidgetMixin({ connector: connectAutocomplete }),
+    createWidgetMixin(
+      {
+        connector: connectAutocomplete,
+      },
+      {
+        $$widgetType: 'ais.autocomplete',
+      }
+    ),
     createSuitMixin({ name: 'Autocomplete' }),
   ],
   props: {

@@ -63,7 +63,14 @@ export default {
   name: 'AisCurrentRefinements',
   mixins: [
     createSuitMixin({ name: 'CurrentRefinements' }),
-    createWidgetMixin({ connector: connectCurrentRefinements }),
+    createWidgetMixin(
+      {
+        connector: connectCurrentRefinements,
+      },
+      {
+        $$widgetType: 'ais.currentRefinements',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine: state =>
         Boolean(state.items) && state.items.length > 0,

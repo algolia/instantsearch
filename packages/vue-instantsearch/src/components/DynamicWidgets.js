@@ -42,7 +42,14 @@ function getWidgetAttribute(vnode) {
 export default {
   name: 'AisDynamicWidgets',
   mixins: [
-    createWidgetMixin({ connector: connectDynamicWidgets }),
+    createWidgetMixin(
+      {
+        connector: connectDynamicWidgets,
+      },
+      {
+        $$widgetType: 'ais.dynamicWidgets',
+      }
+    ),
     createSuitMixin({ name: 'DynamicWidgets' }),
   ],
   props: {

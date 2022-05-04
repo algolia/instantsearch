@@ -5,7 +5,14 @@ export default {
   inheritAttrs: false,
   name: 'AisExperimentalConfigureRelatedItems',
   mixins: [
-    createWidgetMixin({ connector: EXPERIMENTAL_connectConfigureRelatedItems }),
+    createWidgetMixin(
+      {
+        connector: EXPERIMENTAL_connectConfigureRelatedItems,
+      },
+      {
+        $$widgetType: 'ais.configureRelatedItems',
+      }
+    ),
   ],
   props: {
     hit: {

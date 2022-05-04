@@ -174,7 +174,14 @@ export default {
   name: 'AisPagination',
   mixins: [
     createSuitMixin({ name: 'Pagination' }),
-    createWidgetMixin({ connector: connectPagination }),
+    createWidgetMixin(
+      {
+        connector: connectPagination,
+      },
+      {
+        $$widgetType: 'ais.pagination',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => state.nbPages > 1,
     }),

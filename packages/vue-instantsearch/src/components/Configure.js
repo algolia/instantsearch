@@ -8,7 +8,14 @@ export default {
   name: 'AisConfigure',
   mixins: [
     createSuitMixin({ name: 'Configure' }),
-    createWidgetMixin({ connector: connectConfigure }),
+    createWidgetMixin(
+      {
+        connector: connectConfigure,
+      },
+      {
+        $$widgetType: 'ais.configure',
+      }
+    ),
   ],
   computed: {
     widgetParams() {

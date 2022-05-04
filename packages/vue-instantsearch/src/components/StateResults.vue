@@ -25,7 +25,14 @@ import connectStateResults from '../connectors/connectStateResults';
 export default {
   name: 'AisStateResults',
   mixins: [
-    createWidgetMixin({ connector: connectStateResults }),
+    createWidgetMixin(
+      {
+        connector: connectStateResults,
+      },
+      {
+        $$widgetType: 'ais.stateResults',
+      }
+    ),
     createSuitMixin({ name: 'StateResults' }),
   ],
   computed: {

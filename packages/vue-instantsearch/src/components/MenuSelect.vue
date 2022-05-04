@@ -47,7 +47,12 @@ export default {
   name: 'AisMenuSelect',
   mixins: [
     createSuitMixin({ name: 'MenuSelect' }),
-    createWidgetMixin({ connector: connectMenu }),
+    createWidgetMixin(
+      { connector: connectMenu },
+      {
+        $$widgetType: 'ais.menuSelect',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => Boolean(state.canRefine),
     }),

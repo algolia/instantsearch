@@ -87,7 +87,14 @@ export default {
   name: 'AisRatingMenu',
   mixins: [
     createSuitMixin({ name: 'RatingMenu' }),
-    createWidgetMixin({ connector: connectRatingMenu }),
+    createWidgetMixin(
+      {
+        connector: connectRatingMenu,
+      },
+      {
+        $$widgetType: 'ais.ratingMenu',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => state.hasNoResults === false,
     }),

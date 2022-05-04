@@ -36,7 +36,14 @@ export default {
   name: 'AisRelevantSort',
   mixins: [
     createSuitMixin({ name: 'RelevantSort' }),
-    createWidgetMixin({ connector: connectRelevantSort }),
+    createWidgetMixin(
+      {
+        connector: connectRelevantSort,
+      },
+      {
+        $$widgetType: 'ais.relevantSort',
+      }
+    ),
   ],
   methods: {
     refine() {

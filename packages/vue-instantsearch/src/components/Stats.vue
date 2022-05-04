@@ -20,7 +20,12 @@ import { createSuitMixin } from '../mixins/suit';
 export default {
   name: 'AisStats',
   mixins: [
-    createWidgetMixin({ connector: connectStats }),
+    createWidgetMixin(
+      { connector: connectStats },
+      {
+        $$widgetType: 'ais.stats',
+      }
+    ),
     createSuitMixin({ name: 'Stats' }),
   ],
   computed: {

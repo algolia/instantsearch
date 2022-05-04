@@ -41,7 +41,14 @@ export default {
   name: 'AisToggleRefinement',
   mixins: [
     createSuitMixin({ name: 'ToggleRefinement' }),
-    createWidgetMixin({ connector: connectToggleRefinement }),
+    createWidgetMixin(
+      {
+        connector: connectToggleRefinement,
+      },
+      {
+        $$widgetType: 'ais.toggleRefinement',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine,
     }),

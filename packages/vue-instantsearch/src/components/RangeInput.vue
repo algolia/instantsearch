@@ -67,7 +67,14 @@ export default {
   name: 'AisRangeInput',
   mixins: [
     createSuitMixin({ name: 'RangeInput' }),
-    createWidgetMixin({ connector: connectRange }),
+    createWidgetMixin(
+      {
+        connector: connectRange,
+      },
+      {
+        $$widgetType: 'ais.rangeInput',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine,
     }),

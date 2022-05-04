@@ -29,7 +29,14 @@ import { createWidgetMixin } from '../mixins/widget';
 export default {
   name: 'AisClearRefinements',
   mixins: [
-    createWidgetMixin({ connector: connectClearRefinements }),
+    createWidgetMixin(
+      {
+        connector: connectClearRefinements,
+      },
+      {
+        $$widgetType: 'ais.clearRefinements',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => Boolean(state.hasRefinements),
     }),

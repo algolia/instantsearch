@@ -56,7 +56,14 @@ import { createWidgetMixin } from '../mixins/widget';
 export default {
   name: 'AisBreadcrumb',
   mixins: [
-    createWidgetMixin({ connector: connectBreadcrumb }),
+    createWidgetMixin(
+      {
+        connector: connectBreadcrumb,
+      },
+      {
+        $$widgetType: 'ais.breadcrumb',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => Boolean(state.canRefine),
     }),

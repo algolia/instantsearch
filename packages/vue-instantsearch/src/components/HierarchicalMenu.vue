@@ -53,7 +53,14 @@ export default {
   name: 'AisHierarchicalMenu',
   mixins: [
     createSuitMixin({ name: 'HierarchicalMenu' }),
-    createWidgetMixin({ connector: connectHierarchicalMenu }),
+    createWidgetMixin(
+      {
+        connector: connectHierarchicalMenu,
+      },
+      {
+        $$widgetType: 'ais.hierarchicalMenu',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine,
     }),

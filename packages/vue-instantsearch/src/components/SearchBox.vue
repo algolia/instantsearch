@@ -77,7 +77,14 @@ import SearchInput from './SearchInput.vue';
 export default {
   name: 'AisSearchBox',
   mixins: [
-    createWidgetMixin({ connector: connectSearchBox }),
+    createWidgetMixin(
+      {
+        connector: connectSearchBox,
+      },
+      {
+        $$widgetType: 'ais.searchBox',
+      }
+    ),
     createSuitMixin({ name: 'SearchBox' }),
   ],
   components: {

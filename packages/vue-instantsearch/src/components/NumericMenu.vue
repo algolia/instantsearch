@@ -42,7 +42,14 @@ import { createSuitMixin } from '../mixins/suit';
 export default {
   name: 'AisNumericMenu',
   mixins: [
-    createWidgetMixin({ connector: connectNumericMenu }),
+    createWidgetMixin(
+      {
+        connector: connectNumericMenu,
+      },
+      {
+        $$widgetType: 'ais.numericMenu',
+      }
+    ),
     createSuitMixin({ name: 'NumericMenu' }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => state.hasNoResults === false,

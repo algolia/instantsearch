@@ -68,7 +68,14 @@ import { createSuitMixin } from '../mixins/suit';
 export default {
   name: 'AisInfiniteHits',
   mixins: [
-    createWidgetMixin({ connector: connectInfiniteHitsWithInsights }),
+    createWidgetMixin(
+      {
+        connector: connectInfiniteHitsWithInsights,
+      },
+      {
+        $$widgetType: 'ais.infiniteHits',
+      }
+    ),
     createSuitMixin({ name: 'InfiniteHits' }),
   ],
   props: {

@@ -34,7 +34,14 @@ export default {
   name: 'AisHitsPerPage',
   mixins: [
     createSuitMixin({ name: 'HitsPerPage' }),
-    createWidgetMixin({ connector: connectHitsPerPage }),
+    createWidgetMixin(
+      {
+        connector: connectHitsPerPage,
+      },
+      {
+        $$widgetType: 'ais.hitsPerPage',
+      }
+    ),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => state.hasNoResults === false,
     }),

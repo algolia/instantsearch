@@ -10,7 +10,12 @@ export default {
   name: 'AisIndex',
   mixins: [
     createSuitMixin({ name: 'Index' }),
-    createWidgetMixin({ connector: connectIndex }),
+    createWidgetMixin(
+      { connector: connectIndex },
+      {
+        $$widgetType: 'ais.index',
+      }
+    ),
   ],
   provide() {
     return {
