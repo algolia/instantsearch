@@ -1,3 +1,12 @@
+## [6.24.2](https://github.com/algolia/react-instantsearch/compare/v6.24.1...v6.24.2) (2022-05-05)
+
+
+### Bug Fixes
+
+* **hooks:** prevent infinite loops from render state ([#3455](https://github.com/algolia/react-instantsearch/issues/3455)) ([1799fc9](https://github.com/algolia/react-instantsearch/commit/1799fc9f78a4a5aafb54df339c3e211ff9187748))
+
+
+
 ## [6.24.1](https://github.com/algolia/react-instantsearch/compare/v6.24.0...v6.24.1) (2022-05-03)
 
 
