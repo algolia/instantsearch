@@ -53,15 +53,15 @@ function getCurrentRefinement(props, searchState, context) {
 
 function isRefinementsRangeIncludesInsideItemRange(stats, start, end) {
   return (
-    (stats.min > start && stats.min < end) ||
-    (stats.max > start && stats.max < end)
+    (stats.min >= start && stats.min <= end) ||
+    (stats.max >= start && stats.max <= end)
   );
 }
 
 function isItemRangeIncludedInsideRefinementsRange(stats, start, end) {
   return (
-    (start > stats.min && start < stats.max) ||
-    (end > stats.min && end < stats.max)
+    (start >= stats.min && start <= stats.max) ||
+    (end >= stats.min && end <= stats.max)
   );
 }
 

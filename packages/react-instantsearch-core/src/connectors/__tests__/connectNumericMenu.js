@@ -268,6 +268,8 @@ describe('connectNumericMenu', () => {
             { label: '2', start: 400 },
             { label: '3', end: 200 },
             { label: '4', start: 100, end: 200 },
+            { label: '5', start: 300 },
+            { label: '6', start: 300, end: 300 },
           ],
           contextValue,
         },
@@ -282,6 +284,13 @@ describe('connectNumericMenu', () => {
           {
             label: '4',
             value: '100:200',
+            isRefined: false,
+            noRefinement: false,
+          },
+          { label: '5', value: '300:', isRefined: false, noRefinement: false },
+          {
+            label: '6',
+            value: '300:300',
             isRefined: false,
             noRefinement: false,
           },
