@@ -1,3 +1,12 @@
+## [6.24.3](https://github.com/algolia/react-instantsearch/compare/v6.24.2...v6.24.3) (2022-05-10)
+
+
+### Bug Fixes
+
+* **numericmenu:** include range values in comparison with minmax bounds ([#3461](https://github.com/algolia/react-instantsearch/issues/3461)) ([e4c2682](https://github.com/algolia/react-instantsearch/commit/e4c268261dc42a6aa43d985934b53c82f8b71089))
+
+
+
 ## [6.24.2](https://github.com/algolia/react-instantsearch/compare/v6.24.1...v6.24.2) (2022-05-05)
 
 

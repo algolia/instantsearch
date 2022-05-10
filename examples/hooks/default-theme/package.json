@@ -1,6 +1,6 @@
 {
   "name": "hooks-example",
-  "version": "6.24.2",
+  "version": "6.24.3",
   "private": true,
   "scripts": {
     "build": "parcel build index.html",
@@ -11,8 +11,8 @@
     "instantsearch.js": "4.40.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-instantsearch-hooks": "6.24.2",
-    "react-instantsearch-hooks-web": "6.24.2"
+    "react-instantsearch-hooks": "6.24.3",
+    "react-instantsearch-hooks-web": "6.24.3"
   },
   "devDependencies": {
     "parcel": "2.2.1"
