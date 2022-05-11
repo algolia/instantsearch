@@ -5,13 +5,20 @@ import { InstantSearchContext } from '../lib/InstantSearchContext';
 import { useInstantSearch } from '../lib/useInstantSearch';
 
 import type { UseInstantSearchProps } from '../lib/useInstantSearch';
+import type { UiState } from 'instantsearch.js';
 
-export type InstantSearchProps = UseInstantSearchProps & {
+export type InstantSearchProps<
+  TUiState extends UiState = UiState,
+  TRouteState = TUiState
+> = UseInstantSearchProps<TUiState, TRouteState> & {
   children?: React.ReactNode;
 };
 
-export function InstantSearch({ children, ...props }: InstantSearchProps) {
-  const search = useInstantSearch(props);
+export function InstantSearch<
+  TUiState extends UiState = UiState,
+  TRouteState = TUiState
+>({ children, ...props }: InstantSearchProps<TUiState, TRouteState>) {
+  const search = useInstantSearch<TUiState, TRouteState>(props);
 
   if (!search.started) {
     return null;

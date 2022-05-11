@@ -10,7 +10,11 @@ import { useStableValue } from './useStableValue';
 
 import type { InstantSearchServerContextApi } from '../components/InstantSearchServerContext';
 import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
-import type { InstantSearchOptions, SearchClient } from 'instantsearch.js';
+import type {
+  InstantSearchOptions,
+  SearchClient,
+  UiState,
+} from 'instantsearch.js';
 
 const defaultUserAgents = [
   `react (${ReactVersion})`,
@@ -18,9 +22,14 @@ const defaultUserAgents = [
   `react-instantsearch-hooks (${version})`,
 ];
 
-export type UseInstantSearchProps = InstantSearchOptions;
+export type UseInstantSearchProps<
+  TUiState extends UiState,
+  TRouteState
+> = InstantSearchOptions<TUiState, TRouteState>;
 
-export function useInstantSearch(props: UseInstantSearchProps) {
+export function useInstantSearch<TUiState extends UiState, TRouteState>(
+  props: UseInstantSearchProps<TUiState, TRouteState>
+) {
   const serverContext = useInstantSearchServerContext();
   const serverState = useInstantSearchSSRContext();
   const stableProps = useStableValue(props);
@@ -55,12 +64,12 @@ export function useInstantSearch(props: UseInstantSearchProps) {
   return search;
 }
 
-function serverAdapter(
+function serverAdapter<TUiState extends UiState, TRouteState>(
   search: InstantSearch,
-  props: UseInstantSearchProps,
+  props: UseInstantSearchProps<TUiState, TRouteState>,
   serverContext: InstantSearchServerContextApi | null,
   serverState: Partial<InstantSearchServerState> | null
-): InstantSearch {
+): InstantSearch<TUiState, TRouteState> {
   const initialResults = serverState?.initialResults;
 
   if (serverContext || initialResults) {
