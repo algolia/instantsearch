@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNEXT",
-    "module": "es2015",
+    "module": "es2020",
     "moduleResolution": "node",
     "jsx": "preserve",
     "noEmit": true,

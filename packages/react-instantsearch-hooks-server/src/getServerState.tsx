@@ -1,6 +1,5 @@
 import { isIndexWidget } from 'instantsearch.js/es/widgets/index/index';
 import React from 'react';
-import ReactDOM from 'react-dom/server';
 import {
   InstantSearchServerContext,
   InstantSearchSSRProvider,
@@ -9,10 +8,13 @@ import {
 import type { InitialResults, InstantSearch } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 import type { ReactNode } from 'react';
+import type { renderToString as RenderToString } from 'react-dom/server';
 import type {
   InstantSearchServerContextApi,
   InstantSearchServerState,
 } from 'react-instantsearch-hooks';
+
+type SearchRef = { current: InstantSearch | undefined };
 
 /**
  * Returns the InstantSearch server state from a component.
@@ -20,7 +22,7 @@ import type {
 export function getServerState(
   children: ReactNode
 ): Promise<InstantSearchServerState> {
-  const searchRef: { current: InstantSearch | undefined } = {
+  const searchRef: SearchRef = {
     current: undefined,
   };
 
@@ -30,64 +32,89 @@ export function getServerState(
     searchRef.current = search;
   };
 
-  // eslint-disable-next-line no-shadow
-  function execute(children: ReactNode) {
-    ReactDOM.renderToString(
-      <InstantSearchServerContext.Provider value={{ notifyServer }}>
-        {children}
-      </InstantSearchServerContext.Provider>
-    );
+  return importRenderToString()
+    .then((renderToString) => {
+      return execute({
+        children,
+        renderToString,
+        searchRef,
+        notifyServer,
+      }).then((serverState) => ({ serverState, renderToString }));
+    })
+    .then(({ renderToString, serverState }) => {
+      let shouldRefetch = false;
 
-    // We wait for the component to mount so that `notifyServer()` is called.
-    return new Promise((resolve) => setTimeout(resolve, 0))
-      .then(() => {
-        // If `notifyServer()` is not called by then, it means that <InstantSearch>
-        // wasn't within the `children`.
-        // We decide to go with a strict behavior in that case; throwing. If users have
-        // some routes that don't mount the <InstantSearch> component, they would need
-        // to try/catch the `getServerState()` call.
-        // If this behavior turns out to be too strict for many users, we can decide
-        // to warn instead of throwing.
-        if (!searchRef.current) {
-          throw new Error(
-            "Unable to retrieve InstantSearch's server state in `getServerState()`. Did you mount the <InstantSearch> component?"
-          );
-        }
-
-        return waitForResults(searchRef.current);
-      })
-      .then(() => {
-        const initialResults = getInitialResults(searchRef.current!.mainIndex);
-
-        return {
-          initialResults,
-        };
+      // <DynamicWidgets> requires another query to retrieve the dynamic widgets
+      // to render.
+      walkIndex(searchRef.current!.mainIndex, (index) => {
+        shouldRefetch =
+          shouldRefetch ||
+          index
+            .getWidgets()
+            .some((widget) => widget.$$type === 'ais.dynamicWidgets');
       });
-  }
 
-  return execute(children).then((serverState) => {
-    let shouldRefetch = false;
+      if (shouldRefetch) {
+        return execute({
+          children: (
+            <InstantSearchSSRProvider {...serverState}>
+              {children}
+            </InstantSearchSSRProvider>
+          ),
+          renderToString,
+          searchRef,
+          notifyServer,
+        });
+      }
 
-    // <DynamicWidgets> requires another query to retrieve the dynamic widgets
-    // to render.
-    walkIndex(searchRef.current!.mainIndex, (index) => {
-      shouldRefetch =
-        shouldRefetch ||
-        index
-          .getWidgets()
-          .some((widget) => widget.$$type === 'ais.dynamicWidgets');
+      return serverState;
     });
+}
 
-    if (shouldRefetch) {
-      return execute(
-        <InstantSearchSSRProvider {...serverState}>
-          {children}
-        </InstantSearchSSRProvider>
-      );
-    }
+type ExecuteArgs = {
+  children: ReactNode;
+  renderToString: typeof RenderToString;
+  notifyServer: InstantSearchServerContextApi['notifyServer'];
+  searchRef: SearchRef;
+};
 
-    return serverState;
-  });
+function execute({
+  children,
+  renderToString,
+  notifyServer,
+  searchRef,
+}: ExecuteArgs) {
+  renderToString(
+    <InstantSearchServerContext.Provider value={{ notifyServer }}>
+      {children}
+    </InstantSearchServerContext.Provider>
+  );
+
+  // We wait for the component to mount so that `notifyServer()` is called.
+  return new Promise((resolve) => setTimeout(resolve, 0))
+    .then(() => {
+      // If `notifyServer()` is not called by then, it means that <InstantSearch>
+      // wasn't within the `children`.
+      // We decide to go with a strict behavior in that case; throwing. If users have
+      // some routes that don't mount the <InstantSearch> component, they would need
+      // to try/catch the `getServerState()` call.
+      // If this behavior turns out to be too strict for many users, we can decide
+      // to warn instead of throwing.
+      if (!searchRef.current) {
+        throw new Error(
+          "Unable to retrieve InstantSearch's server state in `getServerState()`. Did you mount the <InstantSearch> component?"
+        );
+      }
+
+      return waitForResults(searchRef.current);
+    })
+    .then(() => {
+      const initialResults = getInitialResults(searchRef.current!.mainIndex);
+
+      return {
+        initialResults,
+      };
+    });
 }
 
 /**
@@ -152,4 +179,25 @@ function getInitialResults(rootIndex: IndexWidget): InitialResults {
   });
 
   return initialResults;
+}
+
+function importRenderToString() {
+  return Promise.all([
+    // React pre-18 doesn't use `exports` in package.json, requiring a fully resolved path
+    // Thus, only one of these imports is correct
+    // eslint-disable-next-line import/extensions
+    import('react-dom/server.js').catch(() => {}),
+    import('react-dom/server').catch(() => {}),
+  ]).then((imports) => {
+    const ReactDOMServer = imports.find(
+      (mod): mod is { renderToString: typeof RenderToString } =>
+        mod !== undefined
+    );
+
+    if (!ReactDOMServer) {
+      throw new Error('Could not import ReactDOMServer.');
+    }
+
+    return ReactDOMServer.renderToString;
+  });
 }
