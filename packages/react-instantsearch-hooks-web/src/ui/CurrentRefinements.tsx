@@ -8,7 +8,7 @@ import type {
   CurrentRefinementsConnectorParamsRefinement,
 } from 'instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements';
 
-export type CurrentRefinementsProps = React.HTMLAttributes<HTMLDivElement> & {
+export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
   classNames?: Partial<CurrentRefinementsClassNames>;
   items?: Array<
     Pick<CurrentRefinementsConnectorParamsItem, 'label' | 'refinements'> &

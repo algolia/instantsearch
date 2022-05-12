@@ -6,10 +6,7 @@ import type { useRange } from 'react-instantsearch-hooks';
 
 type RangeRenderState = ReturnType<typeof useRange>;
 
-export type RangeInputProps = Omit<
-  React.HTMLAttributes<HTMLDivElement>,
-  'onSubmit'
-> &
+export type RangeInputProps = Omit<React.ComponentProps<'div'>, 'onSubmit'> &
   Pick<RangeRenderState, 'range' | 'start'> & {
     classNames?: Partial<RangeInputClassNames>;
     disabled: boolean;

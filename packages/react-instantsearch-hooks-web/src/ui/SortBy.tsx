@@ -4,12 +4,9 @@ import { cx } from './lib/cx';
 
 import type { UseSortByProps } from 'react-instantsearch-hooks';
 
-export type SortByProps = Omit<
-  React.HTMLAttributes<HTMLDivElement>,
-  'onChange'
-> &
+export type SortByProps = Omit<React.ComponentProps<'div'>, 'onChange'> &
   Pick<UseSortByProps, 'items'> &
-  Pick<React.SelectHTMLAttributes<HTMLSelectElement>, 'value'> & {
+  Pick<React.ComponentProps<'select'>, 'value'> & {
     onChange?(value: string): void;
     classNames?: Partial<SortByClassNames>;
   };

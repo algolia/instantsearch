@@ -25,7 +25,7 @@ export type PoweredByClassNames = {
   logo: string;
 };
 
-export type PoweredByProps = React.HTMLAttributes<HTMLDivElement> & {
+export type PoweredByProps = React.ComponentProps<'div'> & {
   classNames?: Partial<PoweredByClassNames>;
   url: string;
   theme?: 'light' | 'dark';

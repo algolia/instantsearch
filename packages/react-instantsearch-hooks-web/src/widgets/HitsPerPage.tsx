@@ -6,9 +6,14 @@ import { HitsPerPage as HitsPerPageUiComponent } from '../ui/HitsPerPage';
 import type { HitsPerPageProps as HitsPerPageUiComponentProps } from '../ui/HitsPerPage';
 import type { UseHitsPerPageProps } from 'react-instantsearch-hooks';
 
-export type HitsPerPageProps = Omit<
+type UiProps = Pick<
   HitsPerPageUiComponentProps,
   'items' | 'onChange' | 'currentValue'
+>;
+
+export type HitsPerPageProps = Omit<
+  HitsPerPageUiComponentProps,
+  keyof UiProps
 > &
   UseHitsPerPageProps;
 
@@ -19,14 +24,11 @@ export function HitsPerPage(props: HitsPerPageProps) {
   const { value: currentValue } =
     items.find(({ isRefined }) => isRefined)! || {};
 
-  return (
-    <HitsPerPageUiComponent
-      {...props}
-      items={items}
-      currentValue={currentValue}
-      onChange={(value) => {
-        refine(value);
-      }}
-    />
-  );
+  const uiProps: UiProps = {
+    items,
+    currentValue,
+    onChange: (value) => refine(value),
+  };
+
+  return <HitsPerPageUiComponent {...props} {...uiProps} />;
 }

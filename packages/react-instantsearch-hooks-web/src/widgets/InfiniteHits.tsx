@@ -7,7 +7,7 @@ import type { InfiniteHitsProps as InfiniteHitsUiComponentProps } from '../ui/In
 import type { BaseHit, Hit } from 'instantsearch.js';
 import type { UseInfiniteHitsProps } from 'react-instantsearch-hooks';
 
-export type InfiniteHitsProps<THit extends BaseHit = BaseHit> = Omit<
+type UiProps<THit extends BaseHit = BaseHit> = Pick<
   InfiniteHitsUiComponentProps<Hit<THit>>,
   | 'hits'
   | 'onShowPrevious'
@@ -15,6 +15,11 @@ export type InfiniteHitsProps<THit extends BaseHit = BaseHit> = Omit<
   | 'isFirstPage'
   | 'isLastPage'
   | 'translations'
+>;
+
+export type InfiniteHitsProps<THit extends BaseHit = BaseHit> = Omit<
+  InfiniteHitsUiComponentProps<Hit<THit>>,
+  keyof UiProps<THit>
 > &
   UseInfiniteHitsProps<THit> & {
     /**
@@ -32,18 +37,17 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   const { hits, showPrevious, showMore, isFirstPage, isLastPage } =
     useInfiniteHits<THit>(props, { $$widgetType: 'ais.infiniteHits' });
 
-  return (
-    <InfiniteHitsUiComponent
-      {...props}
-      translations={{
-        showPrevious: 'Show previous results',
-        showMore: 'Show more results',
-      }}
-      hits={hits}
-      onShowPrevious={shouldShowPrevious ? showPrevious : undefined}
-      onShowMore={showMore}
-      isFirstPage={isFirstPage}
-      isLastPage={isLastPage}
-    />
-  );
+  const uiProps: UiProps<THit> = {
+    hits,
+    onShowPrevious: shouldShowPrevious ? showPrevious : undefined,
+    onShowMore: showMore,
+    isFirstPage,
+    isLastPage,
+    translations: {
+      showPrevious: 'Show previous results',
+      showMore: 'Show more results',
+    },
+  };
+
+  return <InfiniteHitsUiComponent {...props} {...uiProps} />;
 }

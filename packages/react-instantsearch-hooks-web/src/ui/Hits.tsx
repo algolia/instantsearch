@@ -4,7 +4,7 @@ import { cx } from './lib/cx';
 
 import type { Hit } from 'instantsearch.js';
 
-export type HitsProps<THit> = React.HTMLAttributes<HTMLDivElement> & {
+export type HitsProps<THit> = React.ComponentProps<'div'> & {
   hits: THit[];
   hitComponent?: React.JSXElementConstructor<{ hit: THit }>;
   classNames?: Partial<HitsClassNames>;

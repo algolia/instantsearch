@@ -1,6 +1,6 @@
 import React from 'react';
 
-type ShowMoreButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type ShowMoreButtonProps = React.ComponentProps<'button'> & {
   isShowingMore: boolean;
 };
 

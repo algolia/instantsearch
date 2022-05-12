@@ -6,10 +6,9 @@ import { SortBy as SortByUiComponent } from '../ui/SortBy';
 import type { SortByProps as SortByUiComponentProps } from '../ui/SortBy';
 import type { UseSortByProps } from 'react-instantsearch-hooks';
 
-export type SortByProps = Omit<
-  SortByUiComponentProps,
-  'items' | 'value' | 'onSelect'
-> &
+type UiProps = Pick<SortByUiComponentProps, 'items' | 'value' | 'onChange'>;
+
+export type SortByProps = Omit<SortByUiComponentProps, keyof UiProps> &
   UseSortByProps;
 
 export function SortBy({ items, transformItems, ...props }: SortByProps) {
@@ -23,12 +22,11 @@ export function SortBy({ items, transformItems, ...props }: SortByProps) {
     }
   );
 
-  return (
-    <SortByUiComponent
-      {...props}
-      value={currentRefinement}
-      items={options}
-      onChange={refine}
-    />
-  );
+  const uiProps: UiProps = {
+    items: options,
+    value: currentRefinement,
+    onChange: refine,
+  };
+
+  return <SortByUiComponent {...props} {...uiProps} />;
 }

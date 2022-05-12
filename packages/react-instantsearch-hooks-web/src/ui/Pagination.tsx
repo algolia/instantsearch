@@ -48,7 +48,7 @@ export type PaginationTranslations = {
   ariaPage(currentPage: number): string;
 };
 
-export type PaginationProps = React.HTMLAttributes<HTMLDivElement> & {
+export type PaginationProps = React.ComponentProps<'div'> & {
   classNames?: Partial<PaginationClassNames>;
   pages: number[];
   currentPage: number;
@@ -232,13 +232,8 @@ export function Pagination({
   );
 }
 
-type PaginationItemProps = Omit<
-  React.AnchorHTMLAttributes<HTMLAnchorElement>,
-  'onClick'
-> & {
-  onClick: NonNullable<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>['onClick']
-  >;
+type PaginationItemProps = Omit<React.ComponentProps<'a'>, 'onClick'> & {
+  onClick: NonNullable<React.ComponentProps<'a'>['onClick']>;
   isDisabled: boolean;
   classNames: Partial<PaginationClassNames>;
 };

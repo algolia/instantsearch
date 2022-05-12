@@ -9,7 +9,7 @@ import type { RefinementListItem } from 'instantsearch.js/es/connectors/refineme
 import type { RefinementListWidgetParams } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
 import type { UseRefinementListProps } from 'react-instantsearch-hooks';
 
-export type RefinementListProps = Omit<
+type UiProps = Pick<
   RefinementListUiComponentProps,
   | 'canRefine'
   | 'items'
@@ -20,6 +20,11 @@ export type RefinementListProps = Omit<
   | 'canToggleShowMore'
   | 'onToggleShowMore'
   | 'isShowingMore'
+>;
+
+export type RefinementListProps = Omit<
+  RefinementListUiComponentProps,
+  keyof UiProps
 > &
   UseRefinementListProps &
   Pick<RefinementListWidgetParams, 'searchable' | 'searchablePlaceholder'>;
@@ -92,37 +97,34 @@ export function RefinementList({
     }
   }
 
+  const uiProps: UiProps = {
+    items,
+    canRefine,
+    onRefine,
+    query,
+    searchBox: searchable && (
+      <SearchBoxUiComponent
+        inputRef={inputRef}
+        placeholder={searchablePlaceholder}
+        isSearchStalled={false}
+        value={query}
+        onChange={onChange}
+        onReset={onReset}
+        onSubmit={onSubmit}
+        translations={{
+          submitTitle: 'Submit the search query.',
+          resetTitle: 'Clear the search query.',
+        }}
+      />
+    ),
+    noResults:
+      searchable && isFromSearch && items.length === 0 && 'No results.',
+    canToggleShowMore,
+    onToggleShowMore: toggleShowMore,
+    isShowingMore,
+  };
+
   return (
-    <RefinementListUiComponent
-      {...props}
-      canRefine={canRefine}
-      items={items}
-      onRefine={onRefine}
-      query={query}
-      searchBox={
-        searchable && (
-          <SearchBoxUiComponent
-            inputRef={inputRef}
-            placeholder={searchablePlaceholder}
-            isSearchStalled={false}
-            value={query}
-            onChange={onChange}
-            onReset={onReset}
-            onSubmit={onSubmit}
-            translations={{
-              submitTitle: 'Submit the search query.',
-              resetTitle: 'Clear the search query.',
-            }}
-          />
-        )
-      }
-      noResults={
-        searchable && isFromSearch && items.length === 0 && 'No results.'
-      }
-      showMore={showMore}
-      canToggleShowMore={canToggleShowMore}
-      onToggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-    />
+    <RefinementListUiComponent {...props} {...uiProps} showMore={showMore} />
   );
 }

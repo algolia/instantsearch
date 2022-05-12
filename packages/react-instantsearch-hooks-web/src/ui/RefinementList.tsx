@@ -7,7 +7,7 @@ import { ShowMoreButton } from './ShowMoreButton';
 
 import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 
-export type RefinementListProps = React.HTMLAttributes<HTMLDivElement> & {
+export type RefinementListProps = React.ComponentProps<'div'> & {
   canRefine: boolean;
   items: RefinementListItem[];
   onRefine(item: RefinementListItem): void;

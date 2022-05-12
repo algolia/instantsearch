@@ -7,8 +7,10 @@ import type { PartialKeys } from '../types';
 import type { ToggleRefinementProps as ToggleRefinementUiComponentProps } from '../ui/ToggleRefinement';
 import type { UseToggleRefinementProps } from 'react-instantsearch-hooks';
 
+type UiProps = Pick<ToggleRefinementUiComponentProps, 'onChange' | 'checked'>;
+
 export type ToggleRefinementProps = PartialKeys<
-  Omit<ToggleRefinementUiComponentProps, 'onChange' | 'checked'>,
+  Omit<ToggleRefinementUiComponentProps, keyof UiProps>,
   'label'
 > &
   UseToggleRefinementProps;
@@ -26,14 +28,12 @@ export function ToggleRefinement({
     }
   );
 
+  const uiProps: UiProps = {
+    checked: value.isRefined,
+    onChange: (isChecked) => refine({ isRefined: !isChecked }),
+  };
+
   return (
-    <ToggleRefinementUiComponent
-      label={value.name}
-      {...props}
-      checked={value.isRefined}
-      onChange={(isChecked) => {
-        refine({ isRefined: !isChecked });
-      }}
-    />
+    <ToggleRefinementUiComponent label={value.name} {...props} {...uiProps} />
   );
 }

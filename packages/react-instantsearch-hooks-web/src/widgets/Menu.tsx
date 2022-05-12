@@ -6,16 +6,17 @@ import { Menu as MenuUiComponent } from '../ui/Menu';
 import type { MenuProps as MenuUiComponentProps } from '../ui/Menu';
 import type { UseMenuProps } from 'react-instantsearch-hooks';
 
-export type MenuProps = Omit<
+type UiProps = Pick<
   MenuUiComponentProps,
   | 'items'
   | 'onRefine'
   | 'createURL'
-  | 'noResults'
   | 'canToggleShowMore'
   | 'onToggleShowMore'
   | 'isShowingMore'
-> &
+>;
+
+export type MenuProps = Omit<MenuUiComponentProps, keyof UiProps> &
   UseMenuProps;
 
 export function Menu({
@@ -48,18 +49,14 @@ export function Menu({
     }
   );
 
-  return (
-    <MenuUiComponent
-      {...props}
-      items={items}
-      createURL={createURL}
-      onRefine={(item) => {
-        refine(item.value);
-      }}
-      showMore={showMore}
-      canToggleShowMore={canToggleShowMore}
-      onToggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-    />
-  );
+  const uiProps: UiProps = {
+    items,
+    createURL,
+    onRefine: (item) => refine(item.value),
+    canToggleShowMore,
+    onToggleShowMore: toggleShowMore,
+    isShowingMore,
+  };
+
+  return <MenuUiComponent {...props} {...uiProps} showMore={showMore} />;
 }

@@ -6,7 +6,7 @@ import { Pagination as PaginationUiComponent } from '../ui/Pagination';
 import type { PaginationProps as PaginationUiComponentProps } from '../ui/Pagination';
 import type { UsePaginationProps } from 'react-instantsearch-hooks';
 
-export type PaginationProps = Omit<
+type UiProps = Pick<
   PaginationUiComponentProps,
   | 'pages'
   | 'currentPage'
@@ -16,7 +16,9 @@ export type PaginationProps = Omit<
   | 'createURL'
   | 'onNavigate'
   | 'translations'
-> &
+>;
+
+export type PaginationProps = Omit<PaginationUiComponentProps, keyof UiProps> &
   UsePaginationProps;
 
 export function Pagination({
@@ -43,32 +45,36 @@ export function Pagination({
     }
   );
 
+  const uiProps: UiProps = {
+    pages,
+    currentPage: currentRefinement,
+    isFirstPage,
+    isLastPage,
+    nbPages,
+    createURL,
+    onNavigate: refine,
+    translations: {
+      first: '‹‹',
+      previous: '‹',
+      next: '›',
+      last: '››',
+      page: (currentPage: number) => String(currentPage),
+      ariaFirst: 'First',
+      ariaPrevious: 'Previous',
+      ariaNext: 'Next',
+      ariaLast: 'Last',
+      ariaPage: (currentPage: number) => `Page ${currentPage}`,
+    },
+  };
+
   return (
     <PaginationUiComponent
       {...props}
-      translations={{
-        first: '‹‹',
-        previous: '‹',
-        next: '›',
-        last: '››',
-        page: (currentPage: number) => String(currentPage),
-        ariaFirst: 'First',
-        ariaPrevious: 'Previous',
-        ariaNext: 'Next',
-        ariaLast: 'Last',
-        ariaPage: (currentPage: number) => `Page ${currentPage}`,
-      }}
+      {...uiProps}
       showFirst={showFirst}
       showPrevious={showPrevious}
       showNext={showNext}
       showLast={showLast}
-      isFirstPage={isFirstPage}
-      isLastPage={isLastPage}
-      currentPage={currentRefinement}
-      nbPages={nbPages}
-      createURL={createURL}
-      onNavigate={refine}
-      pages={pages}
     />
   );
 }

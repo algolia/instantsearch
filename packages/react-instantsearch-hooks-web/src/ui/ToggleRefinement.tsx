@@ -22,10 +22,10 @@ export type ToggleRefinementClassNames = {
 };
 
 export type ToggleRefinementProps = Omit<
-  React.HTMLAttributes<HTMLDivElement>,
+  React.ComponentProps<'div'>,
   'onChange'
 > &
-  Pick<React.InputHTMLAttributes<HTMLInputElement>, 'checked'> & {
+  Pick<React.ComponentProps<'input'>, 'checked'> & {
     classNames?: Partial<ToggleRefinementClassNames>;
     onChange(isChecked: boolean): void;
     label: string;

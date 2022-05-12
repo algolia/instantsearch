@@ -6,7 +6,7 @@ import { ShowMoreButton } from './ShowMoreButton';
 import type { CreateURL } from 'instantsearch.js';
 import type { MenuItem } from 'instantsearch.js/es/connectors/menu/connectMenu';
 
-export type MenuProps = React.HTMLAttributes<HTMLDivElement> & {
+export type MenuProps = React.ComponentProps<'div'> & {
   items: MenuItem[];
   classNames?: Partial<MenuCSSClasses>;
   showMore?: boolean;

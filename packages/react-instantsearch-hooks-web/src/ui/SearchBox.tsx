@@ -56,13 +56,13 @@ export type SearchBoxTranslations = {
   resetTitle: string;
 };
 
-export type SearchBoxProps = React.HTMLAttributes<HTMLDivElement> &
-  Pick<React.HTMLAttributes<HTMLFormElement>, 'onSubmit'> &
-  Required<Pick<React.HTMLAttributes<HTMLFormElement>, 'onReset'>> &
-  Pick<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    'placeholder' | 'onChange'
-  > & {
+export type SearchBoxProps = Omit<
+  React.ComponentProps<'div'>,
+  'onSubmit' | 'onReset' | 'onChange'
+> &
+  Pick<React.ComponentProps<'form'>, 'onSubmit'> &
+  Required<Pick<React.ComponentProps<'form'>, 'onReset'>> &
+  Pick<React.ComponentProps<'input'>, 'placeholder' | 'onChange'> & {
     inputRef: React.RefObject<HTMLInputElement>;
     isSearchStalled: boolean;
     value: string;

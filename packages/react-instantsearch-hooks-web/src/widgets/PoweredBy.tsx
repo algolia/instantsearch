@@ -5,10 +5,16 @@ import { PoweredBy as PoweredByUiComponent } from '../ui/PoweredBy';
 
 import type { PoweredByProps as PoweredByUiComponentProps } from '../ui/PoweredBy';
 
-export type PoweredByProps = Omit<PoweredByUiComponentProps, 'url'>;
+type UiProps = Pick<PoweredByUiComponentProps, 'url'>;
+
+export type PoweredByProps = Omit<PoweredByUiComponentProps, keyof UiProps>;
 
 export function PoweredBy(props: PoweredByProps) {
   const { url } = usePoweredBy();
 
-  return <PoweredByUiComponent {...props} url={url} />;
+  const uiProps: UiProps = {
+    url,
+  };
+
+  return <PoweredByUiComponent {...props} {...uiProps} />;
 }

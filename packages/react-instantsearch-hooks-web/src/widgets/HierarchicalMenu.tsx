@@ -6,7 +6,7 @@ import { HierarchicalMenu as HierarchicalMenuUiComponent } from '../ui/Hierarchi
 import type { HierarchicalMenuProps as HierarchicalMenuUiComponentProps } from '../ui/HierarchicalMenu';
 import type { UseHierarchicalMenuProps } from 'react-instantsearch-hooks';
 
-export type HierarchicalMenuProps = Omit<
+type UiProps = Pick<
   HierarchicalMenuUiComponentProps,
   | 'items'
   | 'createURL'
@@ -15,6 +15,11 @@ export type HierarchicalMenuProps = Omit<
   | 'canToggleShowMore'
   | 'onToggleShowMore'
   | 'isShowingMore'
+>;
+
+export type HierarchicalMenuProps = Omit<
+  HierarchicalMenuUiComponentProps,
+  keyof UiProps
 > &
   UseHierarchicalMenuProps;
 
@@ -55,17 +60,17 @@ export function HierarchicalMenu({
     }
   );
 
+  const uiProps: UiProps = {
+    items,
+    hasItems: canRefine,
+    createURL,
+    onNavigate: refine,
+    canToggleShowMore,
+    onToggleShowMore: toggleShowMore,
+    isShowingMore,
+  };
+
   return (
-    <HierarchicalMenuUiComponent
-      {...props}
-      items={items}
-      hasItems={canRefine}
-      createURL={createURL}
-      onNavigate={refine}
-      showMore={showMore}
-      canToggleShowMore={canToggleShowMore}
-      onToggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-    />
+    <HierarchicalMenuUiComponent {...props} {...uiProps} showMore={showMore} />
   );
 }

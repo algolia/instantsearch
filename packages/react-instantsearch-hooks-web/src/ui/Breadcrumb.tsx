@@ -47,7 +47,7 @@ type UseBreadcrumbRenderState = ReturnType<typeof useBreadcrumb>;
 
 type BreadcrumbItem = UseBreadcrumbRenderState['items'][number];
 
-export type BreadcrumbProps = React.HTMLAttributes<HTMLDivElement> &
+export type BreadcrumbProps = React.ComponentProps<'div'> &
   Pick<UseBreadcrumbRenderState, 'items' | 'createURL'> & {
     classNames?: Partial<BreadcrumbClassNames>;
     hasItems: boolean;

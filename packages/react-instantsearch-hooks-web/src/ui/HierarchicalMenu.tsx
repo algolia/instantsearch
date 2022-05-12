@@ -66,7 +66,7 @@ type HierarchicalListProps = Pick<
   onNavigate: (value: string) => void;
 };
 
-export type HierarchicalMenuProps = React.HTMLAttributes<HTMLDivElement> &
+export type HierarchicalMenuProps = React.ComponentProps<'div'> &
   HierarchicalListProps & {
     hasItems: boolean;
     showMore?: boolean;

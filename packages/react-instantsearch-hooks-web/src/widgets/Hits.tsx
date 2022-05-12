@@ -7,14 +7,23 @@ import type { HitsProps as HitsUiComponentProps } from '../ui/Hits';
 import type { Hit, BaseHit } from 'instantsearch.js';
 import type { UseHitsProps } from 'react-instantsearch-hooks';
 
-export type HitsProps<THit extends BaseHit> = Omit<
+type UiProps<THit extends BaseHit> = Pick<
   HitsUiComponentProps<Hit<THit>>,
   'hits'
+>;
+
+export type HitsProps<THit extends BaseHit> = Omit<
+  HitsUiComponentProps<Hit<THit>>,
+  keyof UiProps<THit>
 > &
   UseHitsProps<THit>;
 
 export function Hits<THit extends BaseHit = BaseHit>(props: HitsProps<THit>) {
   const { hits } = useHits<THit>(props, { $$widgetType: 'ais.hits' });
 
-  return <HitsUiComponent {...props} hits={hits} />;
+  const uiProps: UiProps<THit> = {
+    hits,
+  };
+
+  return <HitsUiComponent {...props} {...uiProps} />;
 }
