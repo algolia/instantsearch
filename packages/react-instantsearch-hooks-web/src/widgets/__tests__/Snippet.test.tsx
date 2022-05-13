@@ -195,6 +195,46 @@ describe('Snippet', () => {
     `);
   });
 
+  test("doesn't render html escaped content", () => {
+    const { container } = render(
+      <Snippet
+        hit={{
+          objectID: '1',
+          __position: 1,
+          data: 'test',
+          _snippetResult: {
+            data: {
+              matchedWords: ["don't"],
+              matchLevel: 'partial',
+              value:
+                '<mark>don</mark>&#39;t &lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;',
+            },
+          },
+        }}
+        attribute="data"
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <span
+          class="ais-Snippet"
+        >
+          <mark
+            class="ais-Snippet-highlighted"
+          >
+            don
+          </mark>
+          <span
+            class="ais-Snippet-nonHighlighted"
+          >
+            't &lt;script&gt;alert("xss");&lt;/script&gt;
+          </span>
+        </span>
+      </div>
+    `);
+  });
+
   test('forwards `className` and root props', () => {
     const { container } = render(
       <Snippet

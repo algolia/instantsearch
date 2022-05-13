@@ -1,6 +1,7 @@
 import {
   getHighlightedParts,
   getPropertyByPath,
+  unescape,
 } from 'instantsearch.js/es/lib/utils';
 import React from 'react';
 
@@ -31,7 +32,7 @@ export function Snippet<THit extends Hit<BaseHit>>({
   const properties = Array.isArray(property) ? property : [property];
 
   const parts = properties.map((singleValue) =>
-    getHighlightedParts(singleValue.value || '')
+    getHighlightedParts(unescape(singleValue.value || ''))
   );
 
   return (
