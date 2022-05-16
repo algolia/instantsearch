@@ -37,7 +37,7 @@ function createSearchClientWithFacetsStats() {
 }
 
 describe('RangeInput', () => {
-  test('renders with default attributes', async () => {
+  test('renders with default props', async () => {
     const client = createSearchClientWithFacetsStats();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={client}>
@@ -100,7 +100,7 @@ describe('RangeInput', () => {
     `);
   });
 
-  test('renders with initial values', async () => {
+  test('renders with initial refinements', async () => {
     const client = createSearchClientWithFacetsStats();
     const { container } = render(
       <InstantSearchHooksTestWrapper
@@ -181,26 +181,21 @@ describe('RangeInput', () => {
     );
   });
 
-  test('forwards `div` props to the root element', async () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const client = createSearchClientWithFacetsStats();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={client}>
         <RangeInput
           attribute="price"
           className="MyRangeInput"
+          classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(container.querySelector('.ais-RangeInput')).toHaveClass(
-      'MyRangeInput'
-    );
-    expect(container.querySelector('.ais-RangeInput')).toHaveAttribute(
-      'title',
-      'Some custom title'
-    );
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyRangeInput', 'ROOT');
+    expect(root).toHaveAttribute('title', 'Some custom title');
   });
 });

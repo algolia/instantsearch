@@ -163,18 +163,19 @@ describe('PoweredBy', () => {
     );
   });
 
-  test('forwards `div` props to the root element', async () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
-        <PoweredBy className="MyPoweredBy" title="Some custom title" />
+        <PoweredBy
+          className="MyPoweredBy"
+          classNames={{ root: 'ROOT' }}
+          title="Some custom title"
+        />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
     const root = container.firstChild;
-
-    expect(root).toHaveClass('MyPoweredBy');
+    expect(root).toHaveClass('MyPoweredBy', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
   });
 });

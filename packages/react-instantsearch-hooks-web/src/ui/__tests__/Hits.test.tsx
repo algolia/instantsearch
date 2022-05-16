@@ -101,33 +101,21 @@ describe('Hits', () => {
     `);
   });
 
-  test('renders with custom className', () => {
-    const props = createProps({ className: 'custom' });
-
+  test('accepts custom class names', () => {
+    const props = createProps({
+      className: 'MyCustomHits',
+      classNames: {
+        root: 'ROOT',
+        list: 'LIST',
+        item: 'ITEM',
+      },
+    });
     const { container } = render(<Hits {...props} />);
-
-    expect(container.querySelector('.ais-Hits')!.className).toBe(
-      'ais-Hits custom'
-    );
-  });
-
-  test('allows custom class names', () => {
-    const props = createProps({});
-    const { container } = render(
-      <Hits
-        {...props}
-        classNames={{
-          root: 'ROOT',
-          list: 'LIST',
-          item: 'ITEM',
-        }}
-      />
-    );
 
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-Hits ROOT"
+          class="ais-Hits ROOT MyCustomHits"
         >
           <ol
             class="ais-Hits-list LIST"
@@ -158,23 +146,22 @@ describe('Hits', () => {
     `);
   });
 
-  test('allows custom class names (empty)', () => {
-    const props = createProps({ hits: [] });
-    const { container } = render(
-      <Hits
-        {...props}
-        classNames={{
-          root: 'ROOT',
-          emptyRoot: 'EMPTYROOT',
-          list: 'LIST',
-        }}
-      />
-    );
+  test('accepts custom class names (empty)', () => {
+    const props = createProps({
+      hits: [],
+      className: 'MyCustomHits',
+      classNames: {
+        root: 'ROOT',
+        emptyRoot: 'EMPTYROOT',
+        list: 'LIST',
+      },
+    });
+    const { container } = render(<Hits {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-Hits ROOT ais-Hits--empty EMPTYROOT"
+          class="ais-Hits ROOT ais-Hits--empty EMPTYROOT MyCustomHits"
         >
           <ol
             class="ais-Hits-list LIST"

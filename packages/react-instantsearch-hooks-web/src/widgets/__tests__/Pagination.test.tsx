@@ -85,7 +85,7 @@ describe('Pagination', () => {
     `);
   });
 
-  test('renders with items', async () => {
+  test('renders with props', async () => {
     const client = createSearchClient({
       search: (requests) =>
         Promise.resolve(
@@ -2015,167 +2015,19 @@ describe('Pagination', () => {
     `);
   });
 
-  test('forwards `div` props to the root element', async () => {
-    const { container } = render(
-      <InstantSearchHooksTestWrapper>
-        <Pagination className="MyPagination" title="Some custom title" />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    await wait(0);
-
-    const root = document.querySelector('.ais-Pagination');
-
-    expect(root).toHaveClass('MyPagination');
-    expect(root).toHaveAttribute('title', 'Some custom title');
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-Pagination ais-Pagination--noRefinement MyPagination"
-          title="Some custom title"
-        >
-          <ul
-            class="ais-Pagination-list"
-          >
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
-            >
-              <span
-                aria-label="First"
-                class="ais-Pagination-link"
-              >
-                ‹‹
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
-            >
-              <span
-                aria-label="Previous"
-                class="ais-Pagination-link"
-              >
-                ‹
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
-            >
-              <a
-                aria-label="Page 1"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                1
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage"
-            >
-              <span
-                aria-label="Next"
-                class="ais-Pagination-link"
-              >
-                ›
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage"
-            >
-              <span
-                aria-label="Last"
-                class="ais-Pagination-link"
-              >
-                ››
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    `);
-  });
-
-  test('accepts custom class names', () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <Pagination
           className="MyPagination"
-          classNames={{
-            root: 'ROOT',
-            noRefinementRoot: 'NOREFINEMENTROOT',
-            list: 'LIST',
-            firstPageItem: 'FIRSTPAGEITEM',
-            previousPageItem: 'PREVIOUSPAGEITEM',
-            pageItem: 'PAGEITEM',
-            selectedItem: 'SELECTEDITEM',
-            nextPageItem: 'NEXTPAGEITEM',
-            lastPageItem: 'LASTPAGEITEM',
-          }}
+          classNames={{ root: 'ROOT' }}
+          title="Some custom title"
         />
       </InstantSearchHooksTestWrapper>
     );
 
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-Pagination ROOT ais-Pagination--noRefinement NOREFINEMENTROOT MyPagination"
-        >
-          <ul
-            class="ais-Pagination-list LIST"
-          >
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage FIRSTPAGEITEM"
-            >
-              <span
-                aria-label="First"
-                class="ais-Pagination-link"
-              >
-                ‹‹
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage PREVIOUSPAGEITEM"
-            >
-              <span
-                aria-label="Previous"
-                class="ais-Pagination-link"
-              >
-                ‹
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page PAGEITEM ais-Pagination-item--selected SELECTEDITEM"
-            >
-              <a
-                aria-label="Page 1"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                1
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage NEXTPAGEITEM"
-            >
-              <span
-                aria-label="Next"
-                class="ais-Pagination-link"
-              >
-                ›
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage LASTPAGEITEM"
-            >
-              <span
-                aria-label="Last"
-                class="ais-Pagination-link"
-              >
-                ››
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    `);
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyPagination', 'ROOT');
+    expect(root).toHaveAttribute('title', 'Some custom title');
   });
 });

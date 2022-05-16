@@ -239,55 +239,6 @@ describe('Highlight', () => {
     `);
   });
 
-  test('forwards `className` and root props', () => {
-    const { container } = render(
-      <Highlight
-        className="custom-className"
-        classNames={{
-          root: 'custom-rootClass',
-        }}
-        hidden={true}
-        hit={{
-          objectID: '1',
-          __position: 1,
-        }}
-        attribute="objectID"
-      />
-    );
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <span
-          class="ais-Highlight custom-rootClass custom-className"
-          hidden=""
-        />
-      </div>
-    `);
-  });
-
-  test('forwards `classNames`', () => {
-    const { container } = render(
-      <Highlight
-        classNames={{
-          root: 'custom-rootclass',
-        }}
-        hit={{
-          objectID: '1',
-          __position: 1,
-        }}
-        attribute="objectID"
-      />
-    );
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <span
-          class="ais-Highlight custom-rootclass"
-        />
-      </div>
-    `);
-  });
-
   test('forwards tag names and separator', () => {
     function Highlighted({ children }) {
       return <strong>{children}</strong>;
@@ -344,5 +295,24 @@ describe('Highlight', () => {
         </span>
       </div>
     `);
+  });
+
+  test('forwards custom class names and `div` props to the root element', () => {
+    const { container } = render(
+      <Highlight
+        className="MyHighlight"
+        classNames={{ root: 'ROOT' }}
+        aria-hidden={true}
+        hit={{
+          objectID: '1',
+          __position: 1,
+        }}
+        attribute="objectID"
+      />
+    );
+
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyHighlight', 'ROOT');
+    expect(root).toHaveAttribute('aria-hidden', 'true');
   });
 });

@@ -7,7 +7,7 @@ import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
 import { HitsPerPage } from '../HitsPerPage';
 
 describe('HitsPerPage', () => {
-  test('renders with items', async () => {
+  test('renders with props', async () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <HitsPerPage
@@ -44,79 +44,6 @@ describe('HitsPerPage', () => {
             </option>
             <option
               class="ais-HitsPerPage-option"
-              value="30"
-            >
-              30
-            </option>
-          </select>
-        </div>
-      </div>
-    `);
-  });
-
-  test('forwards props to the root element', async () => {
-    const { container } = render(
-      <InstantSearchHooksTestWrapper>
-        <HitsPerPage
-          className="MyHitsPerPage"
-          title="Some custom title"
-          items={[
-            { label: '10', value: 10, default: true },
-            { label: '20', value: 20 },
-            { label: '30', value: 30 },
-          ]}
-        />
-      </InstantSearchHooksTestWrapper>
-    );
-    const root = container.firstChild;
-
-    await wait(0);
-
-    expect(root).toHaveClass('ais-HitsPerPage', 'MyHitsPerPage');
-    expect(root).toHaveAttribute('title', 'Some custom title');
-  });
-
-  test('accepts custom class names', () => {
-    const { container } = render(
-      <InstantSearchHooksTestWrapper>
-        <HitsPerPage
-          items={[
-            { label: '10', value: 10, default: true },
-            { label: '20', value: 20 },
-            { label: '30', value: 30 },
-          ]}
-          className="MyHitsPerPage"
-          classNames={{
-            root: 'ROOT',
-            select: 'SELECT',
-            option: 'OPTION',
-          }}
-        />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-HitsPerPage ROOT MyHitsPerPage"
-        >
-          <select
-            class="ais-HitsPerPage-select SELECT"
-          >
-            <option
-              class="ais-HitsPerPage-option OPTION"
-              value="10"
-            >
-              10
-            </option>
-            <option
-              class="ais-HitsPerPage-option OPTION"
-              value="20"
-            >
-              20
-            </option>
-            <option
-              class="ais-HitsPerPage-option OPTION"
               value="30"
             >
               30
@@ -189,5 +116,26 @@ describe('HitsPerPage', () => {
         }),
       ])
     );
+  });
+
+  test('forwards custom class names and `div` props to the root element', () => {
+    const { container } = render(
+      <InstantSearchHooksTestWrapper>
+        <HitsPerPage
+          className="MyHitsPerPage"
+          classNames={{ root: 'ROOT' }}
+          title="Some custom title"
+          items={[
+            { label: '10', value: 10, default: true },
+            { label: '20', value: 20 },
+            { label: '30', value: 30 },
+          ]}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyHitsPerPage', 'ROOT');
+    expect(root).toHaveAttribute('title', 'Some custom title');
   });
 });

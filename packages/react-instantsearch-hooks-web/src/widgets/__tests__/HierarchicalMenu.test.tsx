@@ -37,7 +37,7 @@ const search = jest.fn((requests) =>
 );
 
 describe('HierarchicalMenu', () => {
-  test('renders with items', async () => {
+  test('renders with props', async () => {
     const client = createSearchClient({ search });
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={client}>
@@ -212,97 +212,17 @@ describe('HierarchicalMenu', () => {
 
     await wait(0);
 
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-HierarchicalMenu"
-        >
-          <ul
-            class="ais-HierarchicalMenu-list"
-          >
-            <li
-              class="ais-HierarchicalMenu-item"
-            >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
-              >
-                <span
-                  class="ais-HierarchicalMenu-labelText"
-                >
-                  CAMERAS & CAMCORDERS
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  1369
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-HierarchicalMenu-item"
-            >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
-              >
-                <span
-                  class="ais-HierarchicalMenu-labelText"
-                >
-                  VIDEO GAMES
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  505
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-HierarchicalMenu-item"
-            >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
-              >
-                <span
-                  class="ais-HierarchicalMenu-labelText"
-                >
-                  WEARABLE TECHNOLOGY
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  271
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+    expect(
+      [...container.querySelectorAll('.ais-HierarchicalMenu-item')].map(
+        (item) => item.textContent
+      )
+    ).toMatchInlineSnapshot(`
+      Array [
+        "CAMERAS & CAMCORDERS1369",
+        "VIDEO GAMES505",
+        "WEARABLE TECHNOLOGY271",
+      ]
     `);
-  });
-
-  test('forwards `div` props to the root element', async () => {
-    const client = createSearchClient({ search });
-    const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
-        <HierarchicalMenu
-          attributes={attributes}
-          className="MyHierarchicalMenu"
-          title="Some custom title"
-        />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    await wait(0);
-
-    const rootElement = container.querySelector(
-      '.ais-HierarchicalMenu'
-    ) as HTMLDivElement;
-
-    expect(rootElement).toHaveClass('MyHierarchicalMenu');
-    expect(rootElement).toHaveAttribute('title', 'Some custom title');
   });
 
   describe('sorting', () => {
@@ -500,81 +420,6 @@ describe('HierarchicalMenu', () => {
       expect(
         container.querySelectorAll('.ais-HierarchicalMenu-item')
       ).toHaveLength(3);
-
-      expect(container).toMatchInlineSnapshot(`
-        <div>
-          <div
-            class="ais-HierarchicalMenu"
-          >
-            <ul
-              class="ais-HierarchicalMenu-list"
-            >
-              <li
-                class="ais-HierarchicalMenu-item"
-              >
-                <a
-                  class="ais-HierarchicalMenu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-HierarchicalMenu-labelText"
-                  >
-                    Cameras & Camcorders
-                  </span>
-                  <span
-                    class="ais-HierarchicalMenu-count"
-                  >
-                    1369
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-HierarchicalMenu-item"
-              >
-                <a
-                  class="ais-HierarchicalMenu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-HierarchicalMenu-labelText"
-                  >
-                    Video Games
-                  </span>
-                  <span
-                    class="ais-HierarchicalMenu-count"
-                  >
-                    505
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-HierarchicalMenu-item"
-              >
-                <a
-                  class="ais-HierarchicalMenu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-HierarchicalMenu-labelText"
-                  >
-                    Wearable Technology
-                  </span>
-                  <span
-                    class="ais-HierarchicalMenu-count"
-                  >
-                    271
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <button
-              class="ais-HierarchicalMenu-showMore"
-            >
-              Show less
-            </button>
-          </div>
-        </div>
-      `);
     });
 
     test('limits the number of items to reveal', async () => {
@@ -600,42 +445,6 @@ describe('HierarchicalMenu', () => {
         container.querySelectorAll('.ais-HierarchicalMenu-item')
       ).toHaveLength(1);
       expect(showMoreButton).toBeInTheDocument();
-      expect(container).toMatchInlineSnapshot(`
-        <div>
-          <div
-            class="ais-HierarchicalMenu"
-          >
-            <ul
-              class="ais-HierarchicalMenu-list"
-            >
-              <li
-                class="ais-HierarchicalMenu-item"
-              >
-                <a
-                  class="ais-HierarchicalMenu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-HierarchicalMenu-labelText"
-                  >
-                    Cameras & Camcorders
-                  </span>
-                  <span
-                    class="ais-HierarchicalMenu-count"
-                  >
-                    1369
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <button
-              class="ais-HierarchicalMenu-showMore"
-            >
-              Show more
-            </button>
-          </div>
-        </div>
-      `);
 
       userEvent.click(showMoreButton);
 
@@ -644,62 +453,24 @@ describe('HierarchicalMenu', () => {
       expect(
         container.querySelectorAll('.ais-HierarchicalMenu-item')
       ).toHaveLength(2);
-      expect(showMoreButton).toBeInTheDocument();
-      expect(container).toMatchInlineSnapshot(`
-        <div>
-          <div
-            class="ais-HierarchicalMenu"
-          >
-            <ul
-              class="ais-HierarchicalMenu-list"
-            >
-              <li
-                class="ais-HierarchicalMenu-item"
-              >
-                <a
-                  class="ais-HierarchicalMenu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-HierarchicalMenu-labelText"
-                  >
-                    Cameras & Camcorders
-                  </span>
-                  <span
-                    class="ais-HierarchicalMenu-count"
-                  >
-                    1369
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-HierarchicalMenu-item"
-              >
-                <a
-                  class="ais-HierarchicalMenu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-HierarchicalMenu-labelText"
-                  >
-                    Video Games
-                  </span>
-                  <span
-                    class="ais-HierarchicalMenu-count"
-                  >
-                    505
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <button
-              class="ais-HierarchicalMenu-showMore"
-            >
-              Show less
-            </button>
-          </div>
-        </div>
-      `);
     });
+  });
+
+  test('forwards custom class names and `div` props to the root element', () => {
+    const client = createSearchClient({ search });
+    const { container } = render(
+      <InstantSearchHooksTestWrapper searchClient={client}>
+        <HierarchicalMenu
+          attributes={attributes}
+          className="MyHierarchicalMenu"
+          classNames={{ root: 'ROOT' }}
+          title="Some custom title"
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyHierarchicalMenu', 'ROOT');
+    expect(root).toHaveAttribute('title', 'Some custom title');
   });
 });

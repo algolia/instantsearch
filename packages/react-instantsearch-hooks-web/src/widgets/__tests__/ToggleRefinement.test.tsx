@@ -182,62 +182,20 @@ describe('ToggleRefinement', () => {
     );
   });
 
-  test('customizes the class names', async () => {
-    const { container } = render(
-      <InstantSearchHooksTestWrapper>
-        <ToggleRefinement
-          attribute="free_shipping"
-          classNames={{
-            root: 'ROOT',
-            label: 'LABEL',
-            checkbox: 'CHECKBOX',
-            labelText: 'LABELTEXT',
-          }}
-        />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    await wait(0);
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-ToggleRefinement ROOT"
-        >
-          <label
-            class="ais-ToggleRefinement-label LABEL"
-          >
-            <input
-              class="ais-ToggleRefinement-checkbox CHECKBOX"
-              type="checkbox"
-            />
-            <span
-              class="ais-ToggleRefinement-labelText LABELTEXT"
-            >
-              free_shipping
-            </span>
-          </label>
-        </div>
-      </div>
-    `);
-  });
-
-  test('forwards `div` props to the root element', async () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <ToggleRefinement
           attribute="free_shipping"
           className="MyToggleRefinement"
+          classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
     const root = container.firstChild;
-
-    expect(root).toHaveClass('MyToggleRefinement');
+    expect(root).toHaveClass('MyToggleRefinement', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
   });
 });

@@ -360,4 +360,20 @@ describe('InfiniteHits', () => {
       'ais-InfiniteHits-loadMore--disabled'
     );
   });
+
+  test('forwards custom class names and `div` props to the root element', () => {
+    const { container } = render(
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InfiniteHits
+          className="MyInfiniteHits"
+          classNames={{ root: 'ROOT' }}
+          aria-hidden={true}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyInfiniteHits', 'ROOT');
+    expect(root).toHaveAttribute('aria-hidden', 'true');
+  });
 });

@@ -621,141 +621,20 @@ describe('CurrentRefinements', () => {
     `);
   });
 
-  test('accepts custom class names', async () => {
-    {
-      const { container } = render(
-        <InstantSearchHooksTestWrapper>
-          <CurrentRefinements
-            className="MyCurrentRefinements"
-            classNames={{
-              root: 'ROOT',
-              noRefinementRoot: 'NOREFINEMENTROOT',
-              list: 'LIST',
-              noRefinementList: 'NOREFINEMENTLIST',
-              item: 'ITEM',
-              label: 'LABEL',
-              category: 'CATEGORY',
-              categoryLabel: 'CATEGORYLABEL',
-              delete: 'DELETE',
-            }}
-          />
-        </InstantSearchHooksTestWrapper>
-      );
-
-      await wait(0);
-
-      expect(container).toMatchInlineSnapshot(`
-        <div>
-          <div
-            class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement NOREFINEMENTROOT MyCurrentRefinements"
-          >
-            <ul
-              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement NOREFINEMENTLIST"
-            />
-          </div>
-        </div>
-      `);
-    }
-
-    {
-      const { container } = render(
-        <InstantSearchHooksTestWrapper
-          initialUiState={{
-            indexName: {
-              refinementList: {
-                brand: ['Apple'],
-              },
-            },
-          }}
-        >
-          <VirtualRefinementList attribute="brand" />
-          <CurrentRefinements
-            className="MyCurrentRefinements"
-            classNames={{
-              root: 'ROOT',
-              noRefinementRoot: 'NOREFINEMENTROOT',
-              list: 'LIST',
-              noRefinementList: 'NOREFINEMENTLIST',
-              item: 'ITEM',
-              label: 'LABEL',
-              category: 'CATEGORY',
-              categoryLabel: 'CATEGORYLABEL',
-              delete: 'DELETE',
-            }}
-          />
-        </InstantSearchHooksTestWrapper>
-      );
-
-      await wait(0);
-
-      expect(container).toMatchInlineSnapshot(`
-        <div>
-          <div
-            class="ais-CurrentRefinements ROOT MyCurrentRefinements"
-          >
-            <ul
-              class="ais-CurrentRefinements-list LIST"
-            >
-              <li
-                class="ais-CurrentRefinements-item ITEM"
-              >
-                <span
-                  class="ais-CurrentRefinements-label LABEL"
-                >
-                  brand
-                  :
-                </span>
-                <span
-                  class="ais-CurrentRefinements-category CATEGORY"
-                >
-                  <span
-                    class="ais-CurrentRefinements-categoryLabel CATEGORYLABEL"
-                  >
-                    Apple
-                  </span>
-                  <button
-                    class="ais-CurrentRefinements-delete DELETE"
-                    type="button"
-                  >
-                    ✕
-                  </button>
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      `);
-    }
-  });
-
-  test('forwards `div` props to the root element', async () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <CurrentRefinements
           className="MyCurrentRefinements"
+          classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    const root = document.querySelector('.ais-CurrentRefinements');
-
-    expect(root).toHaveClass('MyCurrentRefinements');
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyCurrentRefinements', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement MyCurrentRefinements"
-          title="Some custom title"
-        >
-          <ul
-            class="ais-CurrentRefinements-list ais-CurrentRefinements-list--noRefinement"
-          />
-        </div>
-      </div>
-    `);
   });
 });
 

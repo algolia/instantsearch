@@ -32,7 +32,7 @@ describe('Menu', () => {
     };
   }
 
-  test('renders with items', () => {
+  test('renders with props', () => {
     const props = createProps({});
     const { container } = render(<Menu {...props} />);
 
@@ -88,7 +88,7 @@ describe('Menu', () => {
     `);
   });
 
-  test('triggers an `onRefine` callback when clicking a link', () => {
+  test('calls an `onRefine` callback when clicking a link', () => {
     const props = createProps({});
     const { container } = render(<Menu {...props} />);
 
@@ -178,17 +178,11 @@ describe('Menu', () => {
     });
   });
 
-  test('forwards a custom class name to the root element', () => {
-    const props = createProps({ className: 'MyMenu' });
-    const { container } = render(<Menu {...props} />);
-
-    expect(container.querySelector('.ais-Menu')).toHaveClass('ais-Menu MyMenu');
-  });
-
-  test('allows custom class names', () => {
+  test('accepts custom class names', () => {
     const props = createProps({
       showMore: true,
       canToggleShowMore: false,
+      className: 'MyCustomMenu',
       classNames: {
         root: 'ROOT',
         list: 'LIST',
@@ -206,7 +200,7 @@ describe('Menu', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-Menu ROOT"
+          class="ais-Menu ROOT MyCustomMenu"
         >
           <ul
             class="ais-Menu-list LIST"
@@ -261,19 +255,18 @@ describe('Menu', () => {
     `);
   });
 
-  test('allows custom class names (empty)', () => {
-    const props = createProps({ items: [] });
-    const { container } = render(
-      <Menu
-        {...props}
-        classNames={{ root: 'ROOT', noRefinementRoot: 'NOREFINEMENTROOT' }}
-      />
-    );
+  test('accepts custom class names (empty)', () => {
+    const props = createProps({
+      items: [],
+      className: 'MyCustomMenu',
+      classNames: { root: 'ROOT', noRefinementRoot: 'NOREFINEMENTROOT' },
+    });
+    const { container } = render(<Menu {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-Menu ROOT ais-Menu--noRefinement NOREFINEMENTROOT"
+          class="ais-Menu ROOT ais-Menu--noRefinement NOREFINEMENTROOT MyCustomMenu"
         >
           <ul
             class="ais-Menu-list"

@@ -37,7 +37,7 @@ describe('RefinementList', () => {
     };
   }
 
-  test('renders with items', () => {
+  test('renders with props', () => {
     const props = createProps({});
     const { container } = render(<RefinementList {...props} />);
 
@@ -102,7 +102,7 @@ describe('RefinementList', () => {
     `);
   });
 
-  test('triggers an `onRefine` callback when clicking a checkbox', () => {
+  test('calls an `onRefine` callback when clicking a checkbox', () => {
     const props = createProps({});
     const { container } = render(<RefinementList {...props} />);
 
@@ -518,19 +518,11 @@ describe('RefinementList', () => {
     `);
   });
 
-  test('forwards a custom class name to the root element', () => {
-    const props = createProps({ className: 'MyRefinementList' });
-    const { container } = render(<RefinementList {...props} />);
-
-    expect(container.querySelector('.ais-RefinementList')).toHaveClass(
-      'ais-RefinementList MyRefinementList'
-    );
-  });
-
-  test('allows custom class names', () => {
+  test('accepts custom class names', () => {
     const props = createProps({
       showMore: true,
       canToggleShowMore: false,
+      className: 'MyCustomRefinementList',
       classNames: {
         root: 'ROOT',
         searchBox: 'SEARCHBOX',
@@ -551,7 +543,7 @@ describe('RefinementList', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-RefinementList ROOT"
+          class="ais-RefinementList ROOT MyCustomRefinementList"
         >
           <ul
             class="ais-RefinementList-list LIST"
@@ -615,27 +607,24 @@ describe('RefinementList', () => {
     `);
   });
 
-  test('allows custom class names (empty)', () => {
+  test('accepts custom class names (empty)', () => {
     const props = createProps({
       canRefine: false,
       items: undefined,
       noResults: 'No results.',
+      className: 'MyCustomRefinementList',
+      classNames: {
+        root: 'ROOT',
+        noRefinementRoot: 'NOREFINEMENTROOT',
+        noResults: 'NORESULTS',
+      },
     });
-    const { container } = render(
-      <RefinementList
-        {...props}
-        classNames={{
-          root: 'ROOT',
-          noRefinementRoot: 'NOREFINEMENTROOT',
-          noResults: 'NORESULTS',
-        }}
-      />
-    );
+    const { container } = render(<RefinementList {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-RefinementList ROOT ais-RefinementList--noRefinement NOREFINEMENTROOT"
+          class="ais-RefinementList ROOT ais-RefinementList--noRefinement NOREFINEMENTROOT MyCustomRefinementList"
         >
           <div
             class="ais-RefinementList-noResults NORESULTS"

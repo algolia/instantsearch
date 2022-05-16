@@ -37,7 +37,30 @@ describe('ClearRefinements', () => {
     `);
   });
 
-  test('passes an `onClick` callback to the button', () => {
+  test('renders with translations', () => {
+    const props = createProps({
+      translations: {
+        resetLabel: 'Reset filters',
+      },
+    });
+    const { container } = render(<ClearRefinements {...props} />);
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-ClearRefinements"
+        >
+          <button
+            class="ais-ClearRefinements-button"
+          >
+            Reset filters
+          </button>
+        </div>
+      </div>
+    `);
+  });
+
+  test('calls an `onClick` callback when clicking the button', () => {
     const props = createProps({});
     const onClick = jest.fn();
     const { container } = render(
@@ -64,20 +87,6 @@ describe('ClearRefinements', () => {
 
     expect(button).toBeDisabled();
     expect(button).toHaveClass('ais-ClearRefinements-button--disabled');
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-ClearRefinements"
-        >
-          <button
-            class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      </div>
-    `);
 
     userEvent.click(
       container.querySelector(
@@ -88,22 +97,26 @@ describe('ClearRefinements', () => {
     expect(onClick).toHaveBeenCalledTimes(0);
   });
 
-  test('forwards a custom class name to the root element', () => {
-    const props = createProps({});
-    const { container } = render(
-      <ClearRefinements {...props} className="MyClearsRefinements" />
-    );
+  test('accepts custom class names', () => {
+    const props = createProps({
+      disabled: true,
+      className: 'MyCustomClearRefinements',
+      classNames: {
+        root: 'ROOT',
+        button: 'BUTTON',
+        disabledButton: 'DISABLEDBUTTON',
+      },
+    });
+    const { container } = render(<ClearRefinements {...props} />);
 
-    expect(container.querySelector('.ais-ClearRefinements')).toHaveClass(
-      'MyClearsRefinements'
-    );
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-ClearRefinements MyClearsRefinements"
+          class="ais-ClearRefinements ROOT MyCustomClearRefinements"
         >
           <button
-            class="ais-ClearRefinements-button"
+            class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLEDBUTTON"
+            disabled=""
           >
             Clear refinements
           </button>
@@ -122,49 +135,5 @@ describe('ClearRefinements', () => {
       'title',
       'Some custom title'
     );
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-ClearRefinements"
-          title="Some custom title"
-        >
-          <button
-            class="ais-ClearRefinements-button"
-          >
-            Clear refinements
-          </button>
-        </div>
-      </div>
-    `);
-  });
-
-  test('allows custom class names', () => {
-    const props = createProps({});
-    const { container } = render(
-      <ClearRefinements
-        {...props}
-        disabled
-        classNames={{
-          root: 'ROOT',
-          button: 'BUTTON',
-          disabledButton: 'DISABLEDBUTTON',
-        }}
-      />
-    );
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-ClearRefinements ROOT"
-        >
-          <button
-            class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLEDBUTTON"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      </div>
-    `);
   });
 });

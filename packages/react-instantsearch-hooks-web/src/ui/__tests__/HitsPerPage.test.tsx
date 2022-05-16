@@ -20,7 +20,7 @@ function createProps(props?: Partial<HitsPerPageProps>): HitsPerPageProps {
 }
 
 describe('HitsPerPage', () => {
-  test('renders with items', () => {
+  test('renders with props', () => {
     const props = createProps();
     const { container } = render(<HitsPerPage {...props} />);
 
@@ -56,35 +56,53 @@ describe('HitsPerPage', () => {
     `);
   });
 
-  test('forwards props to the root element', () => {
+  test('selects current value', () => {
     const props = createProps({
-      title: 'Some custom title',
-      className: 'MyHitsPerPage',
+      currentValue: 20,
     });
-    const { container } = render(<HitsPerPage {...props} />);
-    const root = container.firstChild;
+    const { getByRole } = render(<HitsPerPage {...props} />);
 
-    expect(root).toHaveClass('ais-HitsPerPage', 'MyHitsPerPage');
-    expect(root).toHaveAttribute('title', 'Some custom title');
+    expect(
+      (getByRole('option', { name: '10' }) as HTMLOptionElement).selected
+    ).toBe(false);
+    expect(
+      (getByRole('option', { name: '20' }) as HTMLOptionElement).selected
+    ).toBe(true);
+    expect(
+      (getByRole('option', { name: '30' }) as HTMLOptionElement).selected
+    ).toBe(false);
   });
 
-  test('allows custom class names', () => {
-    const props = createProps({});
-    const { container } = render(
-      <HitsPerPage
-        {...props}
-        classNames={{
-          root: 'ROOT',
-          select: 'SELECT',
-          option: 'OPTION',
-        }}
-      />
-    );
+  test('calls an `onChange` callback when selecting an option', () => {
+    const props = createProps();
+    const { getByRole } = render(<HitsPerPage {...props} />);
+
+    userEvent.selectOptions(getByRole('combobox'), ['10']);
+
+    expect(props.onChange).toHaveBeenCalledTimes(1);
+    expect(props.onChange).toHaveBeenLastCalledWith(10);
+
+    userEvent.selectOptions(getByRole('combobox'), ['20']);
+
+    expect(props.onChange).toHaveBeenCalledTimes(2);
+    expect(props.onChange).toHaveBeenLastCalledWith(20);
+  });
+
+  test('accepts custom class names', () => {
+    const props = createProps({
+      className: 'MyCustomHitsPerPage',
+      classNames: {
+        root: 'ROOT',
+        select: 'SELECT',
+        option: 'OPTION',
+      },
+    });
+    const { container } = render(<HitsPerPage {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-HitsPerPage ROOT"
+          class="ais-HitsPerPage ROOT MyCustomHitsPerPage"
         >
           <select
             class="ais-HitsPerPage-select SELECT"
@@ -113,35 +131,15 @@ describe('HitsPerPage', () => {
     `);
   });
 
-  test('selects current value', () => {
+  test('forwards `div` props to the root element', () => {
     const props = createProps({
-      currentValue: 20,
+      title: 'Some custom title',
     });
-    const { getByRole } = render(<HitsPerPage {...props} />);
+    const { container } = render(<HitsPerPage {...props} />);
 
-    expect(
-      (getByRole('option', { name: '10' }) as HTMLOptionElement).selected
-    ).toBe(false);
-    expect(
-      (getByRole('option', { name: '20' }) as HTMLOptionElement).selected
-    ).toBe(true);
-    expect(
-      (getByRole('option', { name: '30' }) as HTMLOptionElement).selected
-    ).toBe(false);
-  });
-
-  test('calls `onChange` when selecting an option', () => {
-    const props = createProps();
-    const { getByRole } = render(<HitsPerPage {...props} />);
-
-    userEvent.selectOptions(getByRole('combobox'), ['10']);
-
-    expect(props.onChange).toHaveBeenCalledTimes(1);
-    expect(props.onChange).toHaveBeenLastCalledWith(10);
-
-    userEvent.selectOptions(getByRole('combobox'), ['20']);
-
-    expect(props.onChange).toHaveBeenCalledTimes(2);
-    expect(props.onChange).toHaveBeenLastCalledWith(20);
+    expect(container.querySelector('.ais-HitsPerPage')).toHaveAttribute(
+      'title',
+      'Some custom title'
+    );
   });
 });

@@ -7,7 +7,7 @@ import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
 import { SortBy } from '../SortBy';
 
 describe('SortBy', () => {
-  test('renders with items', async () => {
+  test('renders with props', async () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <SortBy
@@ -153,11 +153,12 @@ describe('SortBy', () => {
     );
   });
 
-  test('forwards `div` props to the root element', async () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <SortBy
           className="MySortBy"
+          classNames={{ root: 'ROOT' }}
           title="Some custom title"
           items={[
             { label: 'Featured', value: 'instant_search' },
@@ -168,93 +169,8 @@ describe('SortBy', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    const root = document.querySelector('.ais-SortBy');
-
-    expect(root).toHaveClass('MySortBy');
+    const root = container.firstChild;
+    expect(root).toHaveClass('MySortBy', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-SortBy MySortBy"
-          title="Some custom title"
-        >
-          <select
-            class="ais-SortBy-select"
-          >
-            <option
-              class="ais-SortBy-option"
-              value="instant_search"
-            >
-              Featured
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_asc"
-            >
-              Price (asc)
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_desc"
-            >
-              Price (desc)
-            </option>
-          </select>
-        </div>
-      </div>
-    `);
-  });
-
-  test('accepts custom class names', () => {
-    const { container } = render(
-      <InstantSearchHooksTestWrapper>
-        <SortBy
-          className="MySortBy"
-          classNames={{
-            root: 'ROOT',
-            select: 'SELECT',
-            option: 'OPTION',
-          }}
-          items={[
-            { label: 'Featured', value: 'instant_search' },
-            { label: 'Price (asc)', value: 'instant_search_price_asc' },
-            { label: 'Price (desc)', value: 'instant_search_price_desc' },
-          ]}
-        />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-SortBy ROOT MySortBy"
-        >
-          <select
-            class="ais-SortBy-select SELECT"
-          >
-            <option
-              class="ais-SortBy-option OPTION"
-              value="instant_search"
-            >
-              Featured
-            </option>
-            <option
-              class="ais-SortBy-option OPTION"
-              value="instant_search_price_asc"
-            >
-              Price (asc)
-            </option>
-            <option
-              class="ais-SortBy-option OPTION"
-              value="instant_search_price_desc"
-            >
-              Price (desc)
-            </option>
-          </select>
-        </div>
-      </div>
-    `);
   });
 });

@@ -42,7 +42,7 @@ describe('Breadcrumb', () => {
     searchClient.search.mockClear();
   });
 
-  test('renders with attributes', async () => {
+  test('renders with props', async () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <VirtualHierarchicalMenu attributes={hierarchicalAttributes} />
@@ -148,7 +148,7 @@ describe('Breadcrumb', () => {
     `);
   });
 
-  test('transforms the passed items', async () => {
+  test('transforms the items', async () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper
         searchClient={searchClient}
@@ -174,54 +174,16 @@ describe('Breadcrumb', () => {
 
     await wait(0);
 
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-Breadcrumb"
-        >
-          <ul
-            class="ais-Breadcrumb-list"
-          >
-            <li
-              class="ais-Breadcrumb-item"
-            >
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Home
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item"
-            >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                CAMERAS & CAMCORDERS
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
-            >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              DIGITAL CAMERAS
-            </li>
-          </ul>
-        </div>
-      </div>
+    expect(
+      [...container.querySelectorAll('.ais-Breadcrumb-item')].map(
+        (item) => item.textContent
+      )
+    ).toMatchInlineSnapshot(`
+      Array [
+        "Home",
+        ">CAMERAS & CAMCORDERS",
+        ">DIGITAL CAMERAS",
+      ]
     `);
   });
 
@@ -315,43 +277,22 @@ describe('Breadcrumb', () => {
     );
   });
 
-  test('forwards `div` props to the root element', async () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <VirtualHierarchicalMenu attributes={hierarchicalAttributes} />
         <Breadcrumb
           className="MyBreadcrumb"
+          classNames={{ root: 'ROOT' }}
           title="Some custom title"
           attributes={hierarchicalAttributes}
         />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-Breadcrumb ais-Breadcrumb--noRefinement MyBreadcrumb"
-          title="Some custom title"
-        >
-          <ul
-            class="ais-Breadcrumb-list"
-          >
-            <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
-            >
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Home
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    `);
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyBreadcrumb', 'ROOT');
+    expect(root).toHaveAttribute('title', 'Some custom title');
   });
 });
 

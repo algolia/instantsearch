@@ -31,7 +31,7 @@ describe('Breadcrumb', () => {
     };
   }
 
-  test('renders with items', () => {
+  test('renders with props', () => {
     const props = createProps();
     const { container } = render(<Breadcrumb {...props} />);
 
@@ -181,18 +181,7 @@ describe('Breadcrumb', () => {
     expect(props.onNavigate).toHaveBeenCalledTimes(1);
   });
 
-  test('forwards a custom class name to the root element', () => {
-    const props = createProps();
-    const { container } = render(
-      <Breadcrumb className="MyBreadcrumb" {...props} />
-    );
-
-    expect(container.querySelector('.ais-Breadcrumb')).toHaveClass(
-      'MyBreadcrumb'
-    );
-  });
-
-  test('allows custom class names', () => {
+  test('accepts custom class names', () => {
     const props = createProps({
       className: 'MyCustomBreadcrumb',
       classNames: {

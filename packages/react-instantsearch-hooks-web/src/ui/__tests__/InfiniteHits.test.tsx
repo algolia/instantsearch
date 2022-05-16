@@ -78,52 +78,31 @@ describe('InfiniteHits', () => {
     `);
   });
 
-  test('forwards a custom class name to the root element', () => {
-    const props = createProps({});
-
-    const { container } = render(
-      <InfiniteHits {...props} className="MyInfiniteHits" />
-    );
-
-    expect(container.querySelector('.ais-InfiniteHits')!.className).toBe(
-      'ais-InfiniteHits MyInfiniteHits'
-    );
-  });
-
-  test('accepts custom class names', () => {
-    const props = createProps({});
-
-    const { container } = render(
-      <InfiniteHits
-        {...props}
-        classNames={{
-          root: 'ROOT',
-          loadPrevious: 'LOADPREVIOUS',
-          disabledLoadPrevious: 'LOADPREVIOUSDISABLED',
-          loadMore: 'LOADMORE',
-          disabledLoadMore: 'LOADMOREDISABLED',
-          list: 'LIST',
-          item: 'ITEM',
-        }}
-      />
-    );
+  test('renders with translations', () => {
+    const props = createProps({
+      translations: {
+        showPrevious: 'Load previous page',
+        showMore: 'Load next page',
+      },
+    });
+    const { container } = render(<InfiniteHits {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-InfiniteHits ROOT"
+          class="ais-InfiniteHits"
         >
           <button
-            class="ais-InfiniteHits-loadPrevious LOADPREVIOUS ais-InfiniteHits-loadPrevious--disabled LOADPREVIOUSDISABLED"
+            class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
             disabled=""
           >
-            Show previous results
+            Load previous page
           </button>
           <ol
-            class="ais-InfiniteHits-list LIST"
+            class="ais-InfiniteHits-list"
           >
             <li
-              class="ais-InfiniteHits-item ITEM"
+              class="ais-InfiniteHits-item"
             >
               <div
                 style="word-break: break-all;"
@@ -133,7 +112,7 @@ describe('InfiniteHits', () => {
               </div>
             </li>
             <li
-              class="ais-InfiniteHits-item ITEM"
+              class="ais-InfiniteHits-item"
             >
               <div
                 style="word-break: break-all;"
@@ -144,64 +123,13 @@ describe('InfiniteHits', () => {
             </li>
           </ol>
           <button
-            class="ais-InfiniteHits-loadMore LOADMORE"
+            class="ais-InfiniteHits-loadMore"
           >
-            Show more results
+            Load next page
           </button>
         </div>
       </div>
     `);
-  });
-
-  test('accepts custom class names (empty)', () => {
-    const props = createProps({ hits: [] as Hit[], isLastPage: true });
-    const { container } = render(
-      <InfiniteHits
-        {...props}
-        classNames={{
-          root: 'ROOT',
-          emptyRoot: 'EMPTYROOT',
-          loadMore: 'LOADMORE',
-          disabledLoadMore: 'DISABLEDLOADMORE',
-        }}
-      />
-    );
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-InfiniteHits ROOT ais-InfiniteHits--empty EMPTYROOT"
-        >
-          <button
-            class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
-            disabled=""
-          >
-            Show previous results
-          </button>
-          <ol
-            class="ais-InfiniteHits-list"
-          />
-          <button
-            class="ais-InfiniteHits-loadMore LOADMORE ais-InfiniteHits-loadMore--disabled DISABLEDLOADMORE"
-            disabled=""
-          >
-            Show more results
-          </button>
-        </div>
-      </div>
-    `);
-  });
-
-  test('forwards `div` props to the root element', () => {
-    const props = createProps({});
-
-    const { container } = render(
-      <InfiniteHits {...props} title="hello world" />
-    );
-
-    expect(
-      container.querySelector<HTMLDivElement>('.ais-InfiniteHits')!.title
-    ).toBe('hello world');
   });
 
   test('renders with custom hitComponent', () => {
@@ -255,77 +183,195 @@ describe('InfiniteHits', () => {
     `);
   });
 
-  test('renders without showPrevious if disabled', () => {
-    const props = createProps({});
+  describe('showPrevious', () => {
+    test('renders without showPrevious if disabled', () => {
+      const props = createProps({});
 
-    const { container } = render(
-      <InfiniteHits {...props} onShowPrevious={undefined} />
-    );
+      const { container } = render(
+        <InfiniteHits {...props} onShowPrevious={undefined} />
+      );
 
-    expect(
-      container.querySelector('.ais-InfiniteHits-loadPrevious')
-    ).toBeNull();
-  });
+      expect(
+        container.querySelector('.ais-InfiniteHits-loadPrevious')
+      ).toBeNull();
+    });
 
-  test('passes an `onShowPrevious` callback to the "Show Previous" button', () => {
-    const props = createProps({});
-    const onShowPrevious = jest.fn();
+    test('passes an `onShowPrevious` callback to the "Show Previous" button', () => {
+      const props = createProps({});
+      const onShowPrevious = jest.fn();
 
-    const { container } = render(
-      <InfiniteHits
-        {...props}
-        isFirstPage={false}
-        onShowPrevious={onShowPrevious}
-      />
-    );
+      const { container } = render(
+        <InfiniteHits
+          {...props}
+          isFirstPage={false}
+          onShowPrevious={onShowPrevious}
+        />
+      );
 
-    act(() => {
-      userEvent.click(
-        container.querySelector('.ais-InfiniteHits-loadPrevious')!
+      act(() => {
+        userEvent.click(
+          container.querySelector('.ais-InfiniteHits-loadPrevious')!
+        );
+      });
+
+      expect(onShowPrevious).toHaveBeenCalledTimes(1);
+    });
+
+    test('disables the "Show Previous" button', () => {
+      const props = createProps({});
+
+      const { container } = render(
+        <InfiniteHits {...props} isFirstPage onShowPrevious={() => {}} />
+      );
+
+      expect(
+        container.querySelector('.ais-InfiniteHits-loadPrevious')!.className
+      ).toEqual(
+        'ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled'
       );
     });
-
-    expect(onShowPrevious).toHaveBeenCalledTimes(1);
   });
 
-  test('passes an `onShowMore` callback to the "Show More" button', () => {
-    const props = createProps({});
-    const onShowMore = jest.fn();
+  describe('showMore', () => {
+    test('passes an `onShowMore` callback to the "Show More" button', () => {
+      const props = createProps({});
+      const onShowMore = jest.fn();
 
-    const { container } = render(
-      <InfiniteHits {...props} isFirstPage={false} onShowMore={onShowMore} />
-    );
+      const { container } = render(
+        <InfiniteHits {...props} isFirstPage={false} onShowMore={onShowMore} />
+      );
 
-    act(() => {
-      userEvent.click(container.querySelector('.ais-InfiniteHits-loadMore')!);
+      act(() => {
+        userEvent.click(container.querySelector('.ais-InfiniteHits-loadMore')!);
+      });
+
+      expect(onShowMore).toHaveBeenCalledTimes(1);
     });
 
-    expect(onShowMore).toHaveBeenCalledTimes(1);
+    test('disables the "Show More" button', () => {
+      const props = createProps({});
+
+      const { container } = render(
+        <InfiniteHits {...props} isLastPage onShowMore={() => {}} />
+      );
+
+      expect(
+        container.querySelector('.ais-InfiniteHits-loadMore')!.className
+      ).toEqual(
+        'ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled'
+      );
+    });
   });
 
-  test('disables the "Show Previous" button', () => {
-    const props = createProps({});
+  test('accepts custom class names', () => {
+    const props = createProps({
+      className: 'MyCustomInfiniteHits',
+      classNames: {
+        root: 'ROOT',
+        loadPrevious: 'LOADPREVIOUS',
+        disabledLoadPrevious: 'LOADPREVIOUSDISABLED',
+        loadMore: 'LOADMORE',
+        disabledLoadMore: 'LOADMOREDISABLED',
+        list: 'LIST',
+        item: 'ITEM',
+      },
+    });
 
-    const { container } = render(
-      <InfiniteHits {...props} isFirstPage onShowPrevious={() => {}} />
-    );
+    const { container } = render(<InfiniteHits {...props} />);
 
-    expect(
-      container.querySelector('.ais-InfiniteHits-loadPrevious')!.className
-    ).toEqual(
-      'ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled'
-    );
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-InfiniteHits ROOT MyCustomInfiniteHits"
+        >
+          <button
+            class="ais-InfiniteHits-loadPrevious LOADPREVIOUS ais-InfiniteHits-loadPrevious--disabled LOADPREVIOUSDISABLED"
+            disabled=""
+          >
+            Show previous results
+          </button>
+          <ol
+            class="ais-InfiniteHits-list LIST"
+          >
+            <li
+              class="ais-InfiniteHits-item ITEM"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"abc","__position":1}
+                …
+              </div>
+            </li>
+            <li
+              class="ais-InfiniteHits-item ITEM"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"def","__position":2}
+                …
+              </div>
+            </li>
+          </ol>
+          <button
+            class="ais-InfiniteHits-loadMore LOADMORE"
+          >
+            Show more results
+          </button>
+        </div>
+      </div>
+    `);
   });
 
-  test('disables the "Show More" button', () => {
-    const props = createProps({});
+  test('accepts custom class names (empty)', () => {
+    const props = createProps({
+      hits: [] as Hit[],
+      isLastPage: true,
+      className: 'MyCustomInfiniteHits',
+      classNames: {
+        root: 'ROOT',
+        emptyRoot: 'EMPTYROOT',
+        loadMore: 'LOADMORE',
+        disabledLoadMore: 'DISABLEDLOADMORE',
+      },
+    });
+    const { container } = render(<InfiniteHits {...props} />);
 
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-InfiniteHits ROOT ais-InfiniteHits--empty EMPTYROOT MyCustomInfiniteHits"
+        >
+          <button
+            class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+            disabled=""
+          >
+            Show previous results
+          </button>
+          <ol
+            class="ais-InfiniteHits-list"
+          />
+          <button
+            class="ais-InfiniteHits-loadMore LOADMORE ais-InfiniteHits-loadMore--disabled DISABLEDLOADMORE"
+            disabled=""
+          >
+            Show more results
+          </button>
+        </div>
+      </div>
+    `);
+  });
+
+  test('forwards `div` props to the root element', () => {
+    const props = createProps({});
     const { container } = render(
-      <InfiniteHits {...props} isLastPage onShowMore={() => {}} />
+      <InfiniteHits {...props} title="hello world" />
     );
 
-    expect(
-      container.querySelector('.ais-InfiniteHits-loadMore')!.className
-    ).toEqual('ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled');
+    expect(container.querySelector('.ais-InfiniteHits')).toHaveAttribute(
+      'title',
+      'hello world'
+    );
   });
 });

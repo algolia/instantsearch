@@ -67,7 +67,7 @@ describe('ToggleRefinement', () => {
     ).toBe(true);
   });
 
-  test('passes an `onChange` callback to the checkbox', () => {
+  test('calls an `onChange` callback when clicking a checkbox', () => {
     const props = createProps({});
     const { container } = render(<ToggleRefinement {...props} />);
 
@@ -81,8 +81,9 @@ describe('ToggleRefinement', () => {
     expect(props.onChange).toHaveBeenLastCalledWith(true);
   });
 
-  test('customizes the class names', () => {
+  test('accepts custom class names', () => {
     const props = createProps({
+      className: 'MyCustomToggleRefinement',
       classNames: {
         root: 'ROOT',
         label: 'LABEL',
@@ -95,7 +96,7 @@ describe('ToggleRefinement', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-ToggleRefinement ROOT"
+          class="ais-ToggleRefinement ROOT MyCustomToggleRefinement"
         >
           <label
             class="ais-ToggleRefinement-label LABEL"
@@ -116,13 +117,9 @@ describe('ToggleRefinement', () => {
   });
 
   test('forwards `div` props to the root element', () => {
-    const props = createProps({
-      className: 'MyToggleRefinement',
-      title: 'Some custom title',
-    });
+    const props = createProps({ title: 'Some custom title' });
     const { container } = render(<ToggleRefinement {...props} />);
 
-    expect(container.firstChild).toHaveClass('MyToggleRefinement');
     expect(container.firstChild).toHaveAttribute('title', 'Some custom title');
   });
 });

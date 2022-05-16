@@ -18,7 +18,7 @@ describe('SortBy', () => {
     };
   }
 
-  test('renders with items', () => {
+  test('renders with props', () => {
     const props = createProps({});
     const { container } = render(<SortBy {...props} />);
 
@@ -84,61 +84,21 @@ describe('SortBy', () => {
     expect(onChange).toHaveBeenCalledTimes(1);
   });
 
-  test('forwards a custom class name to the root element', () => {
-    const props = createProps({});
-
-    const { container } = render(<SortBy {...props} className="MySortBy" />);
-
-    expect(document.querySelector('.ais-SortBy')).toHaveClass('MySortBy');
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-SortBy MySortBy"
-        >
-          <select
-            class="ais-SortBy-select"
-          >
-            <option
-              class="ais-SortBy-option"
-              value="instant_search"
-            >
-              Featured
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_asc"
-            >
-              Price (asc)
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_desc"
-            >
-              Price (desc)
-            </option>
-          </select>
-        </div>
-      </div>
-    `);
-  });
-
-  test('allows custom class names', () => {
-    const props = createProps({});
-    const { container } = render(
-      <SortBy
-        {...props}
-        classNames={{
-          root: 'ROOT',
-          select: 'SELECT',
-          option: 'OPTION',
-        }}
-      />
-    );
+  test('accepts custom class names', () => {
+    const props = createProps({
+      className: 'MyCustomSortBy',
+      classNames: {
+        root: 'ROOT',
+        select: 'SELECT',
+        option: 'OPTION',
+      },
+    });
+    const { container } = render(<SortBy {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-SortBy ROOT"
+          class="ais-SortBy ROOT MyCustomSortBy"
         >
           <select
             class="ais-SortBy-select SELECT"
@@ -168,46 +128,12 @@ describe('SortBy', () => {
   });
 
   test('forwards `div` props to the root element', () => {
-    const props = createProps({});
+    const props = createProps({ title: 'Some custom title' });
+    const { container } = render(<SortBy {...props} />);
 
-    const { container } = render(
-      <SortBy {...props} title="Some custom title" />
-    );
-
-    expect(document.querySelector('.ais-SortBy')).toHaveAttribute(
+    expect(container.querySelector('.ais-SortBy')).toHaveAttribute(
       'title',
       'Some custom title'
     );
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-SortBy"
-          title="Some custom title"
-        >
-          <select
-            class="ais-SortBy-select"
-          >
-            <option
-              class="ais-SortBy-option"
-              value="instant_search"
-            >
-              Featured
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_asc"
-            >
-              Price (asc)
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_desc"
-            >
-              Price (desc)
-            </option>
-          </select>
-        </div>
-      </div>
-    `);
   });
 });

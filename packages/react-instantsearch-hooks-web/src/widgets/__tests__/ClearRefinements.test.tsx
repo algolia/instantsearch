@@ -429,67 +429,20 @@ describe('ClearRefinements', () => {
     `);
   });
 
-  test('accepts custom class names', () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <ClearRefinements
           className="MyClearsRefinements"
-          classNames={{
-            root: 'ROOT',
-            button: 'BUTTON',
-            disabledButton: 'DISABLED',
-          }}
-        />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-ClearRefinements ROOT MyClearsRefinements"
-        >
-          <button
-            class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLED"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      </div>
-    `);
-  });
-
-  test('forwards `div` props to the root element', async () => {
-    const { container } = render(
-      <InstantSearchHooksTestWrapper>
-        <ClearRefinements
-          className="MyClearsRefinements"
+          classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    const root = document.querySelector('.ais-ClearRefinements');
-
-    expect(root).toHaveClass('MyClearsRefinements');
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyClearsRefinements', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-ClearRefinements MyClearsRefinements"
-          title="Some custom title"
-        >
-          <button
-            class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      </div>
-    `);
   });
 });
 

@@ -6,7 +6,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
+import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { Hits } from '../Hits';
 
 describe('Hits', () => {
@@ -99,101 +99,19 @@ describe('Hits', () => {
     });
   });
 
-  test('renders with custom className', () => {
+  test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
-        <Hits className="custom" />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    expect(container.querySelector('.ais-Hits')!.className).toBe(
-      'ais-Hits ais-Hits--empty custom'
-    );
-  });
-
-  test('accepts custom class names', async () => {
-    const client = createSearchClient({
-      search: (requests) =>
-        Promise.resolve(
-          createMultiSearchResponse(
-            ...requests.map((request) =>
-              createSingleSearchResponse({
-                hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
-                index: request.indexName,
-              })
-            )
-          )
-        ),
-    });
-
-    const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
         <Hits
           className="MyHits"
-          classNames={{
-            root: 'ROOT',
-            list: 'LIST',
-            item: 'ITEM',
-          }}
+          classNames={{ root: 'ROOT' }}
+          aria-hidden={true}
         />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="ais-Hits ROOT MyHits"
-        >
-          <ol
-            class="ais-Hits-list LIST"
-          >
-            <li
-              class="ais-Hits-item ITEM"
-            >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"1","__position":1}
-                …
-              </div>
-            </li>
-            <li
-              class="ais-Hits-item ITEM"
-            >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"2","__position":2}
-                …
-              </div>
-            </li>
-            <li
-              class="ais-Hits-item ITEM"
-            >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"3","__position":3}
-                …
-              </div>
-            </li>
-          </ol>
-        </div>
-      </div>
-    `);
-  });
-
-  test('renders with custom div props', () => {
-    const { container } = render(
-      <InstantSearchHooksTestWrapper>
-        <Hits hidden={true} />
-      </InstantSearchHooksTestWrapper>
-    );
-
-    expect(container.querySelector<HTMLDivElement>('.ais-Hits')!.hidden).toBe(
-      true
-    );
+    const root = container.firstChild;
+    expect(root).toHaveClass('MyHits', 'ROOT');
+    expect(root).toHaveAttribute('aria-hidden', 'true');
   });
 });

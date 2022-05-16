@@ -29,7 +29,7 @@ describe('ShowMoreButton', () => {
     `);
   });
 
-  test('forwards an `onClick` callback', () => {
+  test('calls an `onClick` callback when clicking the button', () => {
     const onClick = jest.fn();
     const { getByRole } = render(
       <ShowMoreButton isShowingMore={false} onClick={onClick} />
