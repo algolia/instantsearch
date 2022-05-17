@@ -3082,7 +3082,6 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1, shrink-to-fit=no\\">
   <meta name=\\"theme-color\\" content=\\"#000000\\">
 
-  <link rel=\\"manifest\\" href=\\"./manifest.webmanifest\\">
   <link rel=\\"shortcut icon\\" href=\\"./favicon.png\\">
 
   <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
@@ -3128,35 +3127,16 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
 </html>"
 `;
 
-exports[`Templates InstantSearch.js File content: manifest.webmanifest 1`] = `
-"{
-  \\"short_name\\": \\"instantsearch.js-app\\",
-  \\"name\\": \\"instantsearch.js-app Sample\\",
-  \\"icons\\": [
-    {
-      \\"src\\": \\"favicon.png\\",
-      \\"sizes\\": \\"64x64 32x32 24x24 16x16\\",
-      \\"type\\": \\"image/x-icon\\"
-    }
-  ],
-  \\"start_url\\": \\"./index.html\\",
-  \\"display\\": \\"standalone\\",
-  \\"theme_color\\": \\"#000000\\",
-  \\"background_color\\": \\"#ffffff\\"
-}"
-`;
-
 exports[`Templates InstantSearch.js File content: package.json 1`] = `
 "{
   \\"name\\": \\"instantsearch.js-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
-  \\"main\\": \\"src/app.js\\",
   \\"scripts\\": {
     \\"start\\": \\"parcel index.html --port 3000\\",
     \\"build\\": \\"parcel build index.html\\",
-    \\"lint\\": \\"eslint .\\",
-    \\"lint:fix\\": \\"npm run lint -- --fix\\"
+    \\"lint\\": \\"eslint . && prettier --check .\\",
+    \\"lint:fix\\": \\"eslint . --fix && prettier --write .\\"
   },
   \\"partialDependencies\\": {
     \\"instantsearch.js\\": \\"3.0.0\\"
@@ -3342,7 +3322,6 @@ Array [
   "README.md",
   "favicon.png",
   "index.html",
-  "manifest.webmanifest",
   "package.json",
   "src/app.css",
   "src/app.js",
