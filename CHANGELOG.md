@@ -1,3 +1,20 @@
+# [6.25.0](https://github.com/algolia/react-instantsearch/compare/v6.24.3...v6.25.0) (2022-05-17)
+
+
+### Bug Fixes
+
+* **hooks-highlight:** make sure highlight and snippet don't show html-escaped content ([#3471](https://github.com/algolia/react-instantsearch/issues/3471)) ([c18ddd2](https://github.com/algolia/react-instantsearch/commit/c18ddd25faca37d6bfa3d1c28f6fc22ec5fcf6d8))
+* **hooks-server:** remove faulty UMD build ([#3465](https://github.com/algolia/react-instantsearch/issues/3465)) ([c1ddfe4](https://github.com/algolia/react-instantsearch/commit/c1ddfe408b411551ac8524877a9d65ded8133c42))
+
+
+### Features
+
+* **dom-maps:** expose GeoSearchContext ([#3468](https://github.com/algolia/react-instantsearch/issues/3468)) ([a61ff96](https://github.com/algolia/react-instantsearch/commit/a61ff96222bfd4f6301cf93bf95e2fa18b263d3c)), closes [#3448](https://github.com/algolia/react-instantsearch/issues/3448)
+* **hooks-server:** support import from React 18 ([#3464](https://github.com/algolia/react-instantsearch/issues/3464)) ([0a13867](https://github.com/algolia/react-instantsearch/commit/0a13867f7dd5a8a18e0957b2072bbde3b02d6490)), closes [#3453](https://github.com/algolia/react-instantsearch/issues/3453)
+* **hooks:** make InstantSearch type generic ([#3466](https://github.com/algolia/react-instantsearch/issues/3466)) ([b0905b7](https://github.com/algolia/react-instantsearch/commit/b0905b73bed558c62eedb7ae701be20c2ebe25c9))
+
+
+
 ## [6.24.3](https://github.com/algolia/react-instantsearch/compare/v6.24.2...v6.24.3) (2022-05-10)
 
 
