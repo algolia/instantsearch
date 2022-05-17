@@ -48,7 +48,7 @@ describe('checkAppPath', () => {
       expect(() =>
         utils.checkAppPath('path')
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project in destination folder \\"[31mpath[39m\\" because it is not empty."`
+        `"Could not create project in destination folder \\"path\\" because it is not empty."`
       );
     });
 
@@ -71,7 +71,7 @@ describe('checkAppPath', () => {
       expect(() =>
         utils.checkAppPath('path')
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project at path [31mpath[39m because a file of the same name already exists."`
+        `"Could not create project at path path because a file of the same name already exists."`
       );
     });
 

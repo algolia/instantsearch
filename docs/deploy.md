@@ -13,7 +13,7 @@ Your app can be deployed in a single command, assuming you're located in its fol
 
 - [CodeSandbox](#codesandbox)
 - [Surge](#surge)
-- [Now](#now)
+- [Vercel](#vercel)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -35,10 +35,10 @@ npx surge
 
 [Learn more about Surge →](https://surge.sh)
 
-## Now
+## Vercel
 
 ```
-npx now .
+npx vercel
 ```
 
-[Learn more about Now →](https://zeit.co/now)
+[Learn more about Vercel →](https://vercel.com)

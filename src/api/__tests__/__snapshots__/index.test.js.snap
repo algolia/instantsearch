@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Options with invalid name throws 1`] = `
-"Could not create a project called \\"[31m./WrongNpmName[39m\\" because of npm naming restrictions.
+"Could not create a project called \\"./WrongNpmName\\" because of npm naming restrictions.
   - name cannot start with a period
   - name can only contain URL-friendly characters"
 `;

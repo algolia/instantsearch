@@ -25,15 +25,15 @@ aliases:
 defaults: &defaults
   working_directory: ~/create-instantsearch-app
   docker:
-    - image: cimg/node:12.22
+    - image: cimg/node:16.15
 
 executors:
-  node10:
+  node14:
     docker:
-      - image: cimg/node:10.24
-  node12:
+      - image: cimg/node:14.19
+  node16:
     docker:
-      - image: cimg/node:12.22
+      - image: cimg/node:16.15
 
 commands:
   build_app:
@@ -88,35 +88,8 @@ jobs:
           name: End-to-end tests
           command: yarn run test:e2e --maxWorkers=4
 
-  test_apps_node_10:
-    executor: node10
-    steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
-      - build_app:
-          template: 'Autocomplete.js 0'
-          app: 'autocomplete.js'
-      - build_app:
-          template: 'InstantSearch.js'
-          app: 'instantsearch.js'
-      - build_app:
-          template: 'JavaScript Client'
-          app: 'javascript-client'
-      - build_app:
-          template: 'JavaScript Helper'
-          app: 'javascript-helper'
-      # - build_app:
-      #     template: 'React InstantSearch'
-      #     app: 'react-instantsearch'
-      - build_app:
-          template: 'Vue InstantSearch'
-          app: 'vue-instantsearch'
-
-  test_apps_node_12:
-    executor: node12
+  test_apps_node_14:
+    executor: node14
     steps:
       - checkout
       - run: *install_yarn_version
@@ -126,9 +99,6 @@ jobs:
       - build_app:
           template: 'Angular InstantSearch'
           app: 'angular-instantsearch'
-      - build_app:
-          template: 'Autocomplete.js 0'
-          app: 'autocomplete.js'
       - build_app:
           template: 'Autocomplete'
           app: 'autocomplete'
@@ -147,6 +117,42 @@ jobs:
       - build_app:
           template: 'Vue InstantSearch'
           app: 'vue-instantsearch'
+      - build_app:
+          template: 'Vue InstantSearch with Vue 3'
+          app: 'vue-instantsearch-vue3'
+
+  test_apps_node_16:
+    executor: node16
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - build_app:
+          template: 'Angular InstantSearch'
+          app: 'angular-instantsearch'
+      - build_app:
+          template: 'Autocomplete'
+          app: 'autocomplete'
+      - build_app:
+          template: 'InstantSearch.js'
+          app: 'instantsearch.js'
+      - build_app:
+          template: 'JavaScript Client'
+          app: 'javascript-client'
+      - build_app:
+          template: 'JavaScript Helper'
+          app: 'javascript-helper'
+      - build_app:
+          template: 'React InstantSearch'
+          app: 'react-instantsearch'
+      - build_app:
+          template: 'Vue InstantSearch'
+          app: 'vue-instantsearch'
+      - build_app:
+          template: 'Vue InstantSearch with Vue 3'
+          app: 'vue-instantsearch-vue3'
 
 workflows:
   version: 2.1
@@ -155,5 +161,5 @@ workflows:
       - test_lint
       - test_unit
       - test_e2e
-      - test_apps_node_10
-      - test_apps_node_12
+      - test_apps_node_14
+      - test_apps_node_16
