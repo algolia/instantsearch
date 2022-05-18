@@ -1,3 +1,25 @@
+# [6.0.0](https://github.com/algolia/create-instantsearch-app/compare/5.2.2...6.0.0) (2022-05-18)
+
+
+### Bug Fixes
+
+* **js:** update and simplify dependencies ([#567](https://github.com/algolia/create-instantsearch-app/issues/567)) ([f42cf21](https://github.com/algolia/create-instantsearch-app/commit/f42cf21d5b6b433c9cf3a8d6b871bcaa5e1c8618)), closes [#566](https://github.com/algolia/create-instantsearch-app/issues/566)
+
+
+### Features
+
+* **hooks:** add react instantsearch hooks template ([#568](https://github.com/algolia/create-instantsearch-app/issues/568)) ([d91e970](https://github.com/algolia/create-instantsearch-app/commit/d91e970b4683de2b7511b0621468d61a10c4f3f7))
+* check for compatibility with current LTS versions of node ([#569](https://github.com/algolia/create-instantsearch-app/issues/569)) ([781642b](https://github.com/algolia/create-instantsearch-app/commit/781642b35a0df601f03b4cdf9b8b1f3b8aceaeac))
+
+
+### BREAKING CHANGES
+
+* compatibility with versions that are EOL (up to 12) is not guaranteed
+
+* remove terminal colors from unit test snapshots
+
+
+
 ## [5.2.2](https://github.com/algolia/create-instantsearch-app/compare/5.2.1...5.2.2) (2022-02-21)
 
 
