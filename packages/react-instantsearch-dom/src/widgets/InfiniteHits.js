@@ -38,4 +38,6 @@ import InfiniteHits from '../components/InfiniteHits';
  * );
  */
 
-export default connectInfiniteHits(InfiniteHits);
+export default connectInfiniteHits(InfiniteHits, {
+  $$widgetType: 'ais.infiniteHits',
+});

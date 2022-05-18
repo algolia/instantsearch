@@ -44,4 +44,6 @@ import HitsPerPage from '../components/HitsPerPage';
  * );
  */
 
-export default connectHitsPerPage(HitsPerPage);
+export default connectHitsPerPage(HitsPerPage, {
+  $$widgetType: 'ais.hitsPerPage',
+});

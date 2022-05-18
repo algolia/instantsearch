@@ -35,6 +35,9 @@ import connectConfigure from '../connectors/connectConfigure';
  * );
  */
 
-export default connectConfigure(function Configure() {
-  return null;
-});
+export default connectConfigure(
+  function Configure() {
+    return null;
+  },
+  { $$widgetType: 'ais.configure' }
+);

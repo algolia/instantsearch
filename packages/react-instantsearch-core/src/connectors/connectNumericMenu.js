@@ -113,6 +113,7 @@ function cleanUp(props, searchState, context) {
  */
 export default createConnector({
   displayName: 'AlgoliaNumericMenu',
+  $$type: 'ais.numericMenu',
 
   propTypes: {
     id: PropTypes.string,

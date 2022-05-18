@@ -12,7 +12,7 @@ import HierarchicalMenu from '../components/HierarchicalMenu';
  * @name HierarchicalMenu
  * @kind widget
  * @requirements To use this widget, your attributes must be formatted in a specific way.
- * If you want for example to have a hiearchical menu of categories, objects in your index
+ * If you want for example to have a hierarchical menu of categories, objects in your index
  * should be formatted this way:
  *
  * ```json
@@ -99,4 +99,6 @@ const HierarchicalMenuWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectHierarchicalMenu(HierarchicalMenuWidget);
+export default connectHierarchicalMenu(HierarchicalMenuWidget, {
+  $$widgetType: 'ais.hierarchicalMenu',
+});

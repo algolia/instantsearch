@@ -31,4 +31,4 @@ import ScrollTo from '../components/ScrollTo';
  *   </InstantSearch>
  * );
  */
-export default connectScrollTo(ScrollTo);
+export default connectScrollTo(ScrollTo, { $$widgetType: 'ais.scrollTo' });

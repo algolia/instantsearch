@@ -45,4 +45,4 @@ import Snippet from '../components/Snippet';
  * );
  */
 
-export default connectHighlight(Snippet);
+export default connectHighlight(Snippet, { $$widgetType: 'ais.snippet' });

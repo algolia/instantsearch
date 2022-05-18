@@ -9,6 +9,7 @@ import createConnector from '../core/createConnector';
  */
 export default createConnector({
   displayName: 'AlgoliaPoweredBy',
+  $$type: 'ais.poweredBy',
 
   getProvidedProps() {
     const hostname =

@@ -139,6 +139,7 @@ const sortBy = ['name:asc'];
  */
 export default createConnector({
   displayName: 'AlgoliaHierarchicalMenu',
+  $$type: 'ais.hierarchicalMenu',
 
   propTypes: {
     attributes: (props, propName, componentName) => {

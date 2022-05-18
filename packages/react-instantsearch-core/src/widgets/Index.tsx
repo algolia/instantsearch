@@ -58,6 +58,8 @@ class Index extends Component<InnerProps, State> {
   };
 
   static displayName = 'AlgoliaIndex';
+  static $$type = 'ais.index';
+  static $$widgetType = 'ais.index';
 
   static getDerivedStateFromProps(props: InnerProps) {
     return {

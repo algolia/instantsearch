@@ -61,4 +61,6 @@ const RefinementListWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectRefinementList(RefinementListWidget);
+export default connectRefinementList(RefinementListWidget, {
+  $$widgetType: 'ais.refinementList',
+});

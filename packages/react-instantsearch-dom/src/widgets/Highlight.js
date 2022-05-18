@@ -42,4 +42,4 @@ import Highlight from '../components/Highlight';
  * );
  */
 
-export default connectHighlight(Highlight);
+export default connectHighlight(Highlight, { $$widgetType: 'ais.highlight' });

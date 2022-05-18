@@ -49,4 +49,4 @@ import SearchBox from '../components/SearchBox';
  * );
  */
 
-export default connectSearchBox(SearchBox);
+export default connectSearchBox(SearchBox, { $$widgetType: 'ais.searchBox' });

@@ -57,4 +57,6 @@ const RatingMenuWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectRange(RatingMenuWidget);
+export default connectRange(RatingMenuWidget, {
+  $$widgetType: 'ais.ratingMenu',
+});

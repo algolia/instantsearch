@@ -119,6 +119,7 @@ const defaultProps: QueryRulesProps = {
 
 export default createConnector({
   displayName: 'AlgoliaQueryRules',
+  $$type: 'ais.queryRules',
 
   defaultProps,
 

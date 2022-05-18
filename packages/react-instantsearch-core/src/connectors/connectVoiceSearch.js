@@ -80,6 +80,7 @@ function cleanUp(props, searchState, context) {
 
 export default createConnector({
   displayName: 'AlgoliaVoiceSearch',
+  $$type: 'ais.voiceSearch',
 
   propTypes: {
     defaultRefinement: PropTypes.string,

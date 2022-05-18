@@ -34,4 +34,4 @@ import Hits from '../components/Hits';
  * );
  */
 
-export default connectHits(Hits);
+export default connectHits(Hits, { $$widgetType: 'ais.hits' });

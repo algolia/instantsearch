@@ -41,4 +41,4 @@ import SortBy from '../components/SortBy';
  * );
  */
 
-export default connectSortBy(SortBy);
+export default connectSortBy(SortBy, { $$widgetType: 'ais.sortBy' });

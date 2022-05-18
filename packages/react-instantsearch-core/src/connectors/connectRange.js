@@ -187,6 +187,7 @@ function cleanUp(props, searchState, context) {
 
 export default createConnector({
   displayName: 'AlgoliaRange',
+  $$type: 'ais.range',
 
   propTypes: {
     id: PropTypes.string,

@@ -78,16 +78,20 @@ describe('metadata', () => {
         "ua": "Algolia for JavaScript (test)",
         "widgets": Array [
           Object {
+            "$$type": "ais.refinementList",
             "displayName": "AlgoliaRefinementList",
             "params": Array [
               "attribute",
             ],
           },
           Object {
+            "$$type": "ais.hits",
             "displayName": "AlgoliaHits",
             "params": Array [],
           },
           Object {
+            "$$type": "ais.index",
+            "$$widgetType": "ais.index",
             "displayName": "AlgoliaIndex",
             "params": Array [
               "indexId",

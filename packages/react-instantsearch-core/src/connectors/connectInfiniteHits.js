@@ -71,6 +71,7 @@ function extractHitsFromCachedHits(cachedHits) {
  */
 export default createConnector({
   displayName: 'AlgoliaInfiniteHits',
+  $$type: 'ais.infiniteHits',
 
   getProvidedProps(props, searchState, searchResults) {
     const results = getResults(searchResults, {

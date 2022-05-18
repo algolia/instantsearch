@@ -7,6 +7,7 @@ import { InstantSearchConsumer, IndexConsumer } from './context';
 
 export type ConnectorDescription = {
   displayName: string;
+  $$type: string;
   /**
    * a function to filter the local state
    */
@@ -45,6 +46,10 @@ export type ConnectorDescription = {
   defaultProps?: {};
 };
 
+export type AdditionalWidgetProperties = {
+  $$widgetType?: string;
+};
+
 type ConnectorProps = {
   contextValue: InstantSearchContext;
   indexContextValue?: IndexContext;
@@ -80,11 +85,16 @@ export function createConnectorWithoutContext(
     typeof connectorDesc.getMetadata === 'function' ||
     typeof connectorDesc.transitionState === 'function';
 
-  return (Composed: ReactType) => {
+  return (
+    Composed: ReactType,
+    additionalWidgetProperties: AdditionalWidgetProperties = {}
+  ) => {
     class Connector extends Component<ConnectorProps, ConnectorState> {
       static displayName = `${connectorDesc.displayName}(${getDisplayName(
         Composed
       )})`;
+      static $$type = connectorDesc.$$type;
+      static $$widgetType = additionalWidgetProperties.$$widgetType;
       static propTypes = connectorDesc.propTypes;
       static defaultProps = connectorDesc.defaultProps;
       static _connectorDesc = connectorDesc;
@@ -351,8 +361,15 @@ export function createConnectorWithoutContext(
 }
 
 const createConnectorWithContext =
-  (connectorDesc: ConnectorDescription) => (Composed: ReactType) => {
-    const Connector = createConnectorWithoutContext(connectorDesc)(Composed);
+  (connectorDesc: ConnectorDescription) =>
+  (
+    Composed: ReactType,
+    additionalWidgetProperties?: AdditionalWidgetProperties
+  ) => {
+    const Connector = createConnectorWithoutContext(connectorDesc)(
+      Composed,
+      additionalWidgetProperties
+    );
 
     const ConnectorWrapper: React.FC<any> = (props) => (
       <InstantSearchConsumer>

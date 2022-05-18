@@ -7,6 +7,7 @@ const MAX_WILDCARD_FACETS = 20;
 
 export default createConnector({
   displayName: 'AlgoliaDynamicWidgets',
+  $$type: 'ais.dynamicWidgets',
 
   defaultProps: {
     transformItems: (items) => items,

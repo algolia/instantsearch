@@ -29,4 +29,4 @@ import Stats from '../components/Stats';
  * );
  */
 
-export default connectStats(Stats);
+export default connectStats(Stats, { $$widgetType: 'ais.stats' });

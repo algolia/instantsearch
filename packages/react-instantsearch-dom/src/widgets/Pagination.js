@@ -63,4 +63,6 @@ const PaginationWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectPagination(PaginationWidget);
+export default connectPagination(PaginationWidget, {
+  $$widgetType: 'ais.pagination',
+});

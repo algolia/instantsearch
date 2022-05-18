@@ -44,4 +44,6 @@ import ToggleRefinement from '../components/ToggleRefinement';
  * );
  */
 
-export default connectToggleRefinement(ToggleRefinement);
+export default connectToggleRefinement(ToggleRefinement, {
+  $$widgetType: 'ais.toggleRefinement',
+});

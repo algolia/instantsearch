@@ -55,4 +55,6 @@ const NumericMenuWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectNumericMenu(NumericMenuWidget);
+export default connectNumericMenu(NumericMenuWidget, {
+  $$widgetType: 'ais.numericMenu',
+});

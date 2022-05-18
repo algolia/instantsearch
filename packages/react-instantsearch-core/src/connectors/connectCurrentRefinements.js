@@ -15,6 +15,7 @@ import createConnector from '../core/createConnector';
  */
 export default createConnector({
   displayName: 'AlgoliaCurrentRefinements',
+  $$type: 'ais.currentRefinements',
 
   propTypes: {
     transformItems: PropTypes.func,

@@ -58,4 +58,4 @@ const MenuWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectMenu(MenuWidget);
+export default connectMenu(MenuWidget, { $$widgetType: 'ais.menu' });

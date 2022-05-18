@@ -57,4 +57,6 @@ function DynamicWidgets({
   );
 }
 
-export default connectDynamicWidgets(DynamicWidgets);
+export default connectDynamicWidgets(DynamicWidgets, {
+  $$widgetType: 'ais.dynamicWidgets',
+});

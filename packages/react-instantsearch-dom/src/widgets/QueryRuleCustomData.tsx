@@ -13,4 +13,6 @@ const QueryRuleCustomDataWidget: React.FC<
   </PanelCallbackHandler>
 );
 
-export default connectQueryRules(QueryRuleCustomDataWidget);
+export default connectQueryRules(QueryRuleCustomDataWidget, {
+  $$widgetType: 'ais.queryRuleCustomData',
+});

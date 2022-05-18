@@ -97,4 +97,6 @@ const BreadcrumbWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectBreadcrumb(BreadcrumbWidget);
+export default connectBreadcrumb(BreadcrumbWidget, {
+  $$widgetType: 'ais.breadcrumb',
+});

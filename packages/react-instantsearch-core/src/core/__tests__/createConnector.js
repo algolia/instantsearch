@@ -16,8 +16,8 @@ describe('createConnector', () => {
     searching: false,
     searchingForFacetValues: false,
     isSearchStalled: false,
-    metadata: {},
-    error: {},
+    metadata: [],
+    error: new Error(),
     ...props,
   });
 

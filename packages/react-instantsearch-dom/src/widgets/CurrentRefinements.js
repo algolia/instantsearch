@@ -51,4 +51,6 @@ const CurrentRefinementsWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectCurrentRefinements(CurrentRefinementsWidget);
+export default connectCurrentRefinements(CurrentRefinementsWidget, {
+  $$widgetType: 'ais.currentRefinements',
+});

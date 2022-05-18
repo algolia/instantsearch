@@ -31,4 +31,4 @@ import PoweredBy from '../components/PoweredBy';
  *   </InstantSearch>
  * );
  */
-export default connectPoweredBy(PoweredBy);
+export default connectPoweredBy(PoweredBy, { $$widgetType: 'ais.poweredBy' });

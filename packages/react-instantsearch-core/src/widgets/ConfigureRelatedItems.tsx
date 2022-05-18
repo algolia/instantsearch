@@ -11,4 +11,6 @@ ConfigureRelatedItems.propTypes = {
   transformSearchParameters: PropTypes.func,
 };
 
-export default connectConfigureRelatedItems(ConfigureRelatedItems);
+export default connectConfigureRelatedItems(ConfigureRelatedItems, {
+  $$widgetType: 'ais.configureRelatedItems',
+});

@@ -18,6 +18,7 @@ import { shallowEqual, omit } from '../core/utils';
  */
 export default createConnector({
   displayName: 'AlgoliaScrollTo',
+  $$type: 'ais.scrollTo',
 
   propTypes: {
     scrollOn: PropTypes.string,

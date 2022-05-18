@@ -43,4 +43,6 @@ const ClearRefinementsWidget = (props) => (
   </PanelCallbackHandler>
 );
 
-export default connectCurrentRefinements(ClearRefinementsWidget);
+export default connectCurrentRefinements(ClearRefinementsWidget, {
+  $$widgetType: 'ais.clearRefinements',
+});

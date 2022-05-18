@@ -92,6 +92,7 @@ function cleanUp(props, searchState, context) {
 const sortBy = ['isRefined', 'count:desc', 'name:asc'];
 export default createConnector({
   displayName: 'AlgoliaRefinementList',
+  $$type: 'ais.refinementList',
 
   propTypes: {
     id: PropTypes.string,

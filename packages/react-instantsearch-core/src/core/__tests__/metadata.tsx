@@ -1,5 +1,10 @@
 import algoliasearch from 'algoliasearch/lite';
+import React from 'react';
+import { render } from '@testing-library/react';
+import { connectSearchBox } from '../..';
 import type { SearchClient } from '../../widgets/InstantSearch';
+import { InstantSearchProvider } from '../context';
+import createStore from '../createStore';
 import createWidgetsManager from '../createWidgetsManager';
 import { isMetadataEnabled, getMetadataPayload } from '../metadata';
 
@@ -142,5 +147,107 @@ describe('getMetadataPayload', () => {
 
       expect(widgets).toEqual([]);
     });
+
+    test('detects a widget', () => {
+      const widgetsManager = createWidgetsManager(() => {});
+      const searchClient = algoliasearch(
+        'appId',
+        'apiKey'
+      ) as unknown as SearchClient;
+
+      const RawSearchBox = () => null;
+
+      const SearchBox = connectSearchBox(RawSearchBox);
+
+      render(
+        <FakeProvider widgetsManager={widgetsManager}>
+          <SearchBox />
+        </FakeProvider>
+      );
+
+      const { widgets } = getMetadataPayload(
+        widgetsManager.getWidgets(),
+        searchClient
+      );
+
+      expect(widgets).toEqual([
+        {
+          $$type: 'ais.searchBox',
+          $$widgetType: undefined,
+          displayName: 'AlgoliaSearchBox',
+          params: [],
+        },
+      ]);
+    });
+
+    test('detects $$widgetType', () => {
+      const widgetsManager = createWidgetsManager(() => {});
+      const searchClient = algoliasearch(
+        'appId',
+        'apiKey'
+      ) as unknown as SearchClient;
+
+      const RawSearchBox = () => null;
+
+      const SearchBox = connectSearchBox(RawSearchBox, {
+        $$widgetType: 'ais.searchBox',
+      });
+
+      render(
+        <FakeProvider widgetsManager={widgetsManager}>
+          <SearchBox />
+        </FakeProvider>
+      );
+
+      const { widgets } = getMetadataPayload(
+        widgetsManager.getWidgets(),
+        searchClient
+      );
+
+      expect(widgets).toEqual([
+        {
+          $$type: 'ais.searchBox',
+          $$widgetType: 'ais.searchBox',
+          displayName: 'AlgoliaSearchBox',
+          params: [],
+        },
+      ]);
+    });
   });
 });
+
+function FakeProvider({
+  children,
+  widgetsManager,
+}: {
+  children: React.ReactChild;
+  widgetsManager: any;
+}) {
+  const createFakeState = () => ({
+    widgets: {},
+    results: {},
+    resultsFacetValues: {},
+    searching: false,
+    searchingForFacetValues: false,
+    isSearchStalled: false,
+    metadata: [],
+    error: new Error(),
+  });
+
+  return (
+    <InstantSearchProvider
+      value={{
+        createHrefForState: () => '',
+        mainTargetedIndex: '',
+        onInternalStateUpdate: () => {},
+        onSearchForFacetValues: () => {},
+        onSearchParameters: () => {},
+        onSearchStateChange: () => {},
+        store: createStore(createFakeState()),
+        widgetsManager,
+      }}
+    >
+      {children}
+    </InstantSearchProvider>
+  );
+}

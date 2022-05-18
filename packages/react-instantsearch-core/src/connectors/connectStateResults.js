@@ -52,6 +52,7 @@ import { getResults } from '../core/indexUtils';
  */
 export default createConnector({
   displayName: 'AlgoliaStateResults',
+  $$type: 'ais.stateResults',
 
   getProvidedProps(props, searchState, searchResults) {
     const results = getResults(searchResults, {

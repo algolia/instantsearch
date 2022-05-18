@@ -28,6 +28,7 @@ function getCurrentRefinement(
 
 export default createConnector({
   displayName: 'AlgoliaRelevantSort',
+  $$type: 'ais.relevantSort',
 
   getProvidedProps(props, _searchState, searchResults) {
     const results = getResults(searchResults, {

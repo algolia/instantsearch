@@ -87,6 +87,7 @@ function cleanUp(props, searchState, context) {
  */
 export default createConnector({
   displayName: 'AlgoliaAutoComplete',
+  $$type: 'ais.autoComplete',
 
   getProvidedProps(props, searchState, searchResults) {
     return {
