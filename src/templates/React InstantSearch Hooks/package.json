@@ -1,0 +1,20 @@
+{
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "parcel build index.html",
+    "start": "parcel index.html"
+  },
+  "dependencies": {
+    "algoliasearch": "4",
+    "instantsearch.js": "4.40.5",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-instantsearch-hooks-web": "{{libraryVersion}}"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.45",
+    "parcel": "2.5.0"
+  }
+}

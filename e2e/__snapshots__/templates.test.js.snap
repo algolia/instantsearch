@@ -5832,6 +5832,322 @@ Array [
 ]
 `;
 
+exports[`Templates React InstantSearch Hooks File content: .editorconfig 1`] = `
+"root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: .gitignore 1`] = `
+"# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+.parcel-cache
+*.local
+
+# Editor directories and files
+.vscode
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: README.md 1`] = `
+"# react-instantsearch-hooks-app
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
+
+## Get started
+
+To run this project locally, install the dependencies and run the local server:
+
+\`\`\`sh
+npm install
+npm start
+\`\`\`
+
+Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+
+\`\`\`sh
+yarn
+yarn start
+\`\`\`"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: index.html 1`] = `
+"<!DOCTYPE html>
+<html lang=\\"en\\">
+  <head>
+    <meta charset=\\"utf-8\\" />
+    <meta
+      name=\\"viewport\\"
+      content=\\"width=device-width, initial-scale=1, shrink-to-fit=no\\"
+    />
+
+    <link rel=\\"shortcut icon\\" href=\\"favicon.png\\">
+
+    <!--
+    Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
+    https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
+    -->
+    <link
+      rel=\\"stylesheet\\"
+      href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\"
+    />
+
+    <title>react-instantsearch-hooks-app</title>
+  </head>
+
+  <body>
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+
+    <div id=\\"root\\"></div>
+
+    <script type=\\"module\\" src=\\"src/index.tsx\\"></script>
+  </body>
+</html>"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: package.json 1`] = `
+"{
+  \\"name\\": \\"react-instantsearch-hooks-app\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"build\\": \\"parcel build index.html\\",
+    \\"start\\": \\"parcel index.html\\"
+  },
+  \\"partialDependencies\\": {
+    \\"react-instantsearch-hooks-web\\": \\"6.24.0\\"
+  }
+}"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: src/App.css 1`] = `
+"body,
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+em {
+  background: cyan;
+  font-style: normal;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 0.5rem 1rem;
+  background-image: linear-gradient(to right, #8e43e7, #00aeff);
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+
+.header-title::after {
+  content: ' ▸ ';
+  padding: 0 0.5rem;
+}
+
+.header-subtitle {
+  font-size: 1.2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.search-panel {
+  display: flex;
+}
+
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
+}
+
+.searchbox {
+  margin-bottom: 2rem;
+}
+
+.pagination {
+  margin: 2rem auto;
+  text-align: center;
+}"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: src/App.tsx 1`] = `
+"import algoliasearch from 'algoliasearch/lite';
+import {
+  DynamicWidgets,
+  Highlight,
+  Hits,
+  InstantSearch,
+  Pagination,
+  RefinementList,
+  SearchBox,
+} from 'react-instantsearch-hooks-web';
+
+import { Panel } from './Panel';
+
+import type { Hit } from 'instantsearch.js';
+
+import './App.css';
+
+const searchClient = algoliasearch(
+  'appId',
+  'apiKey'
+);
+
+export function App() {
+  return (
+    <div>
+      <header className=\\"header\\">
+        <h1 className=\\"header-title\\">
+          <a href=\\"/\\">react-instantsearch-hooks-app</a>
+        </h1>
+        <p className=\\"header-subtitle\\">
+          using{' '}
+          <a href=\\"https://github.com/algolia/react-instantsearch\\">
+            React InstantSearch Hooks
+          </a>
+        </p>
+      </header>
+
+      <div className=\\"container\\">
+        <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+          <div className=\\"search-panel\\">
+            <div className=\\"search-panel__filters\\">
+              <DynamicWidgets fallback={RefinementList}>
+                <Panel header=\\"facet1\\">
+                  <RefinementList attribute=\\"facet1\\" />
+                </Panel>
+                <Panel header=\\"facet2\\">
+                  <RefinementList attribute=\\"facet2\\" />
+                </Panel>
+              </DynamicWidgets>
+            </div>
+
+            <div className=\\"search-panel__results\\">
+              <SearchBox placeholder=\\"Search placeholder\\" className=\\"searchbox\\" />
+              <Hits hitComponent={Hit} />
+
+              <div className=\\"pagination\\">
+                <Pagination />
+              </div>
+            </div>
+          </div>
+        </InstantSearch>
+      </div>
+    </div>
+  );
+}
+
+type HitProps = {
+  hit: Hit;
+};
+
+function Hit({ hit }: HitProps) {
+  return (
+    <article>
+      <h1>
+        <Highlight attribute=\\"attribute1\\" hit={hit} />
+      </h1>
+      <p>
+        <Highlight attribute=\\"attribute2\\" hit={hit} />
+      </p>
+    </article>
+  );
+}"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: src/Panel.tsx 1`] = `
+"type PanelProps = React.PropsWithChildren<{
+  header: string;
+}>;
+
+export function Panel({ header, children }: PanelProps) {
+  return (
+    <div className=\\"ais-Panel\\">
+      <div className=\\"ais-Panel-header\\">
+        <span>{header}</span>
+      </div>
+      <div className=\\"ais-Panel-body\\">{children}</div>
+    </div>
+  );
+}"
+`;
+
+exports[`Templates React InstantSearch Hooks File content: src/index.tsx 1`] = `
+"import ReactDOM from 'react-dom';
+
+import { App } from './App';
+
+ReactDOM.render(<App />, document.getElementById('root'));"
+`;
+
+exports[`Templates React InstantSearch Hooks Folder structure: contains the right files 1`] = `
+Array [
+  ".editorconfig",
+  ".gitignore",
+  ".prettierrc",
+  "README.md",
+  "favicon.png",
+  "index.html",
+  "package.json",
+  "src/App.css",
+  "src/App.tsx",
+  "src/Panel.tsx",
+  "src/index.tsx",
+]
+`;
+
 exports[`Templates React InstantSearch Hooks Native File content: .expo-shared/assets.json.hbs 1`] = `
 "{
   \\"12bb71342c6255bbf50437ec8f4441c083f47cdb74bd89160c15e4f43e52a1cb\\": true,
