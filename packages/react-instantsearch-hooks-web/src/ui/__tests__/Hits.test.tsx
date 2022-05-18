@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { Hits } from '../Hits';
@@ -15,6 +16,7 @@ describe('Hits', () => {
         { objectID: 'abc', __position: 1 },
         { objectID: 'def', __position: 2 },
       ] as THit[],
+      sendEvent: jest.fn(),
       ...props,
     };
   }
@@ -99,6 +101,21 @@ describe('Hits', () => {
         </div>
       </div>
     `);
+  });
+
+  test('passes sendEvent to hitComponent', () => {
+    const props = createProps({
+      hitComponent: ({ hit, sendEvent }) => (
+        <button onClick={() => sendEvent(hit)}>{hit.objectID}</button>
+      ),
+    });
+
+    const { container } = render(<Hits {...props} />);
+
+    userEvent.click(container.querySelector('button')!);
+
+    expect(props.sendEvent).toHaveBeenCalledTimes(1);
+    expect(props.sendEvent).toHaveBeenLastCalledWith(props.hits[0]);
   });
 
   test('accepts custom class names', () => {

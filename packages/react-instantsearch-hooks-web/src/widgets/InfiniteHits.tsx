@@ -10,6 +10,7 @@ import type { UseInfiniteHitsProps } from 'react-instantsearch-hooks';
 type UiProps<THit extends BaseHit = BaseHit> = Pick<
   InfiniteHitsUiComponentProps<Hit<THit>>,
   | 'hits'
+  | 'sendEvent'
   | 'onShowPrevious'
   | 'onShowMore'
   | 'isFirstPage'
@@ -34,11 +35,12 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   showPrevious: shouldShowPrevious = true,
   ...props
 }: InfiniteHitsProps<THit>) {
-  const { hits, showPrevious, showMore, isFirstPage, isLastPage } =
+  const { hits, sendEvent, showPrevious, showMore, isFirstPage, isLastPage } =
     useInfiniteHits<THit>(props, { $$widgetType: 'ais.infiniteHits' });
 
   const uiProps: UiProps<THit> = {
     hits,
+    sendEvent,
     onShowPrevious: shouldShowPrevious ? showPrevious : undefined,
     onShowMore: showMore,
     isFirstPage,

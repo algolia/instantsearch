@@ -3,10 +3,15 @@ import React from 'react';
 import { cx } from './lib/cx';
 
 import type { Hit } from 'instantsearch.js';
+import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
 export type InfiniteHitsProps<THit> = React.ComponentProps<'div'> & {
-  hitComponent?: React.JSXElementConstructor<{ hit: THit }>;
   hits: THit[];
+  sendEvent: SendEventForHits;
+  hitComponent?: React.JSXElementConstructor<{
+    hit: THit;
+    sendEvent: SendEventForHits;
+  }>;
   isFirstPage: boolean;
   isLastPage: boolean;
   onShowPrevious?: () => void;
@@ -66,6 +71,7 @@ function DefaultHitComponent({ hit }: { hit: Hit }) {
 export function InfiniteHits<THit extends Hit>({
   hitComponent: HitComponent = DefaultHitComponent,
   hits,
+  sendEvent,
   isFirstPage,
   isLastPage,
   onShowPrevious,
@@ -108,7 +114,7 @@ export function InfiniteHits<THit extends Hit>({
             key={hit.objectID}
             className={cx('ais-InfiniteHits-item', classNames.item)}
           >
-            <HitComponent hit={hit} />
+            <HitComponent hit={hit} sendEvent={sendEvent} />
           </li>
         ))}
       </ol>

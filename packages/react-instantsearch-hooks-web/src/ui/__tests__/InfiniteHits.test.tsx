@@ -16,6 +16,7 @@ describe('InfiniteHits', () => {
         { objectID: 'abc', __position: 1 },
         { objectID: 'def', __position: 2 },
       ],
+      sendEvent: jest.fn(),
       isFirstPage: true,
       isLastPage: false,
       onShowPrevious: jest.fn(),
@@ -181,6 +182,23 @@ describe('InfiniteHits', () => {
         </div>
       </div>
     `);
+  });
+
+  test('passes sendEvent to hitComponent', () => {
+    const props = createProps({
+      hitComponent: ({ hit, sendEvent }) => (
+        <button className="hitButton" onClick={() => sendEvent(hit)}>
+          {hit.objectID}
+        </button>
+      ),
+    });
+
+    const { container } = render(<InfiniteHits {...props} />);
+
+    userEvent.click(container.querySelector('.hitButton')!);
+
+    expect(props.sendEvent).toHaveBeenCalledTimes(1);
+    expect(props.sendEvent).toHaveBeenLastCalledWith(props.hits[0]);
   });
 
   describe('showPrevious', () => {
