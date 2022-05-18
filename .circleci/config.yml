@@ -74,7 +74,22 @@ jobs:
           command: yarn type-check
       - run:
           name: Unit Tests
-          command: yarn test --maxWorkers=4
+          command: |
+            retry() {
+              MAX_RETRY=2
+              n=0
+              until [ $n -ge $MAX_RETRY ]
+              do
+                  "$@" && break
+                  n=$[$n+1]
+              done
+              if [ $n -ge $MAX_RETRY ]; then
+                exit 1
+              fi
+            }
+
+            retry yarn test --maxWorkers=4
+
 
   test_unit_algoliasearch_v3:
     <<: *defaults
@@ -94,7 +109,21 @@ jobs:
           command: yarn type-check
       - run:
           name: Unit Tests
-          command: yarn test --maxWorkers=4
+          command: |
+            retry() {
+              MAX_RETRY=2
+              n=0
+              until [ $n -ge $MAX_RETRY ]
+              do
+                  "$@" && break
+                  n=$[$n+1]
+              done
+              if [ $n -ge $MAX_RETRY ]; then
+                exit 1
+              fi
+            }
+
+            retry yarn test --maxWorkers=4
 
   test_integration:
     <<: *defaults
