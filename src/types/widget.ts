@@ -17,7 +17,7 @@ export type ScopedResult = {
 
 type SharedRenderOptions = {
   instantSearchInstance: InstantSearch;
-  parent: IndexWidget | null;
+  parent: IndexWidget;
   templatesConfig: Record<string, unknown>;
   scopedResults: ScopedResult[];
   state: SearchParameters;

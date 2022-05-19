@@ -12,7 +12,7 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createWidget,
-  createInitOptions,
+  createIndexInitOptions,
   createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
@@ -212,7 +212,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           }),
         ]);
 
-        instance.init(createInitOptions({ parent: null }));
+        instance.init(createIndexInitOptions({ parent: null }));
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
@@ -244,7 +244,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const widgets = [createSearchBox(), createPagination()];
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -294,7 +294,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const innerWidgets = [createSearchBox()];
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -347,7 +347,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         });
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -367,7 +367,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         });
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -486,7 +486,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           pagination,
         ]);
 
-        instance.init(createInitOptions({ parent: null }));
+        instance.init(createIndexInitOptions({ parent: null }));
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
@@ -525,7 +525,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ]);
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -574,7 +574,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         instance.addWidgets(widgets);
 
-        instance.init(createInitOptions({ parent: null }));
+        instance.init(createIndexInitOptions({ parent: null }));
 
         widgets.forEach((widget) => {
           expect(widget.dispose).toHaveBeenCalledTimes(0);
@@ -603,7 +603,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.addWidgets([searchBox, createPagination()]);
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -627,7 +627,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.addWidgets([searchBox]);
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -651,7 +651,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.addWidgets([searchBox]);
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -674,7 +674,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       instance.addWidgets([searchBox, pagination]);
 
-      instance.init(createInitOptions());
+      instance.init(createIndexInitOptions());
 
       expect(instance.createURL(new SearchParameters())).toEqual('#');
     });
@@ -687,7 +687,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.addWidgets([searchBox, pagination]);
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance: createInstantSearch({
             // @ts-expect-error
             _createURL(routeState) {
@@ -710,7 +710,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.addWidgets([searchBox, pagination]);
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance: createInstantSearch({
             // @ts-expect-error
             _createURL(routeState) {
@@ -740,7 +740,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       ]);
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance: createInstantSearch({
             // @ts-expect-error
             _createURL(routeState) {
@@ -790,7 +790,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         level3.addWidgets([createSearchBox()]),
       ]);
 
-      level0.init(createInitOptions({ parent: null }));
+      level0.init(createIndexInitOptions({ parent: null }));
 
       // Simulate a call to search from a widget - this step is required otherwise
       // the DerivedHelper does not contain the results. The `lastResults` attribute
@@ -907,7 +907,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = jest.spyOn(mainHelper, 'search').mockImplementation();
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -931,7 +931,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         .mockImplementation();
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -978,7 +978,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       ]);
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -1017,7 +1017,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       ]);
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -1093,7 +1093,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       ]);
 
       level0.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -1153,7 +1153,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       ]);
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -1190,7 +1190,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -1213,7 +1213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -1243,7 +1243,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -1350,7 +1350,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ]);
 
         level0.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -1420,7 +1420,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           ]),
         ]);
 
-        level0.init(createInitOptions({ parent: null }));
+        level0.init(createIndexInitOptions({ parent: null }));
 
         level0
           .getHelper()!
@@ -1561,7 +1561,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ]);
 
         level0.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -1676,7 +1676,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ]);
 
         level0.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -1730,7 +1730,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         instance.addWidgets(widgets);
 
-        instance.init(createInitOptions({ parent: null }));
+        instance.init(createIndexInitOptions({ parent: null }));
 
         // Simulate a state change
         instance
@@ -1753,7 +1753,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         topLevelInstance.addWidgets([subLevelInstance]);
 
         topLevelInstance.init(
-          createInitOptions({
+          createIndexInitOptions({
             parent: null,
             uiState: {
               topLevelIndexName: {
@@ -1810,7 +1810,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.addWidgets(widgets);
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -1856,7 +1856,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.addWidgets(widgets);
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -1888,7 +1888,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         level0.addWidgets([...widgets, level1]);
 
-        level0.init(createInitOptions({ parent: null }));
+        level0.init(createIndexInitOptions({ parent: null }));
 
         // Simulate a state change
         level0
@@ -1912,7 +1912,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.addWidgets([createSearchBox()]);
 
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -1978,7 +1978,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ]);
 
         topLevelInstance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -2034,7 +2034,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           ]),
         ]);
 
-        level0.init(createInitOptions({ parent: null }));
+        level0.init(createIndexInitOptions({ parent: null }));
 
         // Simulate a state change
         level0
@@ -2109,13 +2109,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
 
       instantSearchInstance.mainIndex.init(
-        createInitOptions({ instantSearchInstance, parent: null })
+        createIndexInitOptions({ instantSearchInstance, parent: null })
       );
 
       instantSearchInstance.mainIndex.addWidgets([level0]);
 
       level0.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: instantSearchInstance.mainIndex,
         })
@@ -2308,7 +2308,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       searchIndex.addWidgets([searchBox, pagination]);
 
       searchIndex.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -2354,11 +2354,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         expect(instance.getHelper()).toBe(null);
 
-        instance.init(createInitOptions());
+        instance.init(createIndexInitOptions());
 
         const helper1 = instance.getHelper()!;
 
-        instance.init(createInitOptions());
+        instance.init(createIndexInitOptions());
 
         const helper2 = instance.getHelper()!;
 
@@ -2370,13 +2370,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         expect(instance.getHelper()).toBe(null);
 
-        instance.init(createInitOptions());
+        instance.init(createIndexInitOptions());
 
         const helper = instance.getHelper()!;
 
         expect(helper.listenerCount('change')).toBe(2);
 
-        instance.init(createInitOptions());
+        instance.init(createIndexInitOptions());
 
         expect(helper.listenerCount('change')).toBe(2);
       });
@@ -2390,11 +2390,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         expect(instance.getHelper()).toBe(null);
 
-        instance.init(createInitOptions({ instantSearchInstance }));
+        instance.init(createIndexInitOptions({ instantSearchInstance }));
 
         expect(mainHelper.derivedHelpers.length).toBe(1);
 
-        instance.init(createInitOptions({ instantSearchInstance }));
+        instance.init(createIndexInitOptions({ instantSearchInstance }));
 
         expect(mainHelper.derivedHelpers.length).toBe(1);
       });
@@ -2415,7 +2415,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -2475,7 +2475,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
-      instance.init(createInitOptions({ parent: null }));
+      instance.init(createIndexInitOptions({ parent: null }));
 
       widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(0);
@@ -2514,7 +2514,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         level3.addWidgets([createSearchBox()]),
       ]);
 
-      level0.init(createInitOptions({ parent: null }));
+      level0.init(createIndexInitOptions({ parent: null }));
 
       // Simulate a call to search from a widget - this step is required otherwise
       // the DerivedHelper does not contain the results. The `lastResults` attribute
@@ -2653,7 +2653,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.addWidgets(widgets);
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -2692,7 +2692,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.addWidgets([searchBox, pagination]);
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -2711,7 +2711,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       topLevelInstance.addWidgets([subLevelInstance]);
 
-      topLevelInstance.init(createInitOptions({ parent: null }));
+      topLevelInstance.init(createIndexInitOptions({ parent: null }));
 
       expect(subLevelInstance.getHelper()).toBeDefined();
 
@@ -2726,7 +2726,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       instance.addWidgets([searchBox]);
 
-      instance.init(createInitOptions({ parent: null }));
+      instance.init(createIndexInitOptions({ parent: null }));
 
       // Save the Helper to be able to simulate a change
       const helper = instance.getHelper()!;
@@ -2747,7 +2747,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     it('removes the internal Helper', () => {
       const instance = index({ indexName: 'indexName' });
 
-      instance.init(createInitOptions({ parent: null }));
+      instance.init(createIndexInitOptions({ parent: null }));
 
       expect(instance.getHelper()).toBeDefined();
 
@@ -2763,7 +2763,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -2793,7 +2793,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
 
       instance.init(
-        createInitOptions({
+        createIndexInitOptions({
           instantSearchInstance,
           parent: null,
         })
@@ -2860,7 +2860,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(() => {
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -2884,7 +2884,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(() => {
         instance.init(
-          createInitOptions({
+          createIndexInitOptions({
             instantSearchInstance,
             parent: null,
           })
@@ -3129,7 +3129,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         },
       };
 
-      instance.init(createInitOptions({ instantSearchInstance, parent: null }));
+      instance.init(
+        createIndexInitOptions({ instantSearchInstance, parent: null })
+      );
 
       expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(1);
     });

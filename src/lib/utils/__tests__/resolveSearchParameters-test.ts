@@ -1,4 +1,4 @@
-import { createInitOptions } from '../../../../test/mock/createWidget';
+import { createIndexInitOptions } from '../../../../test/mock/createWidget';
 import index from '../../../widgets/index/index';
 import resolve from '../resolveSearchParameters';
 
@@ -7,7 +7,7 @@ describe('mergeSearchParameters', () => {
     it('resolves the `SearchParameters` from the level 0', () => {
       const level0 = index({ indexName: 'level_0_index_name' });
 
-      level0.init(createInitOptions({ parent: null }));
+      level0.init(createIndexInitOptions({ parent: null }));
 
       const actual = resolve(level0);
 
@@ -20,7 +20,7 @@ describe('mergeSearchParameters', () => {
     const level1 = index({ indexName: 'level_1_index_name' });
 
     level0.addWidgets([level1]);
-    level0.init(createInitOptions({ parent: null }));
+    level0.init(createIndexInitOptions({ parent: null }));
 
     it('resolves the `SearchParameters` from the level 0', () => {
       expect(resolve(level0)).toEqual([level0.getHelper()!.state]);
@@ -40,7 +40,7 @@ describe('mergeSearchParameters', () => {
     const level2 = index({ indexName: 'level_2_index_name' });
 
     level0.addWidgets([level1.addWidgets([level2])]);
-    level0.init(createInitOptions({ parent: null }));
+    level0.init(createIndexInitOptions({ parent: null }));
 
     it('resolves the `SearchParameters` from the level 0', () => {
       expect(resolve(level0)).toEqual([level0.getHelper()!.state]);
