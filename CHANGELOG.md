@@ -1,3 +1,13 @@
+# [6.26.0](https://github.com/algolia/react-instantsearch/compare/v6.25.0...v6.26.0) (2022-05-19)
+
+
+### Features
+
+* **hooks-web:** expose `sendEvent` to `hitComponent` ([#3476](https://github.com/algolia/react-instantsearch/issues/3476)) ([5cc18d1](https://github.com/algolia/react-instantsearch/commit/5cc18d19d9f22305f33d92e43fd0aca2a5cb949a))
+* **react-instantsearch-core:** allow widgets to set their `$$widgetType` ([#3472](https://github.com/algolia/react-instantsearch/issues/3472)) ([1c436e1](https://github.com/algolia/react-instantsearch/commit/1c436e1429ab4230bbfea7c6d2474d141f5c5c64))
+
+
+
 # [6.25.0](https://github.com/algolia/react-instantsearch/compare/v6.24.3...v6.25.0) (2022-05-17)
 
 
