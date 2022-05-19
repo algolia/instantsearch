@@ -1,8 +1,6 @@
 import { {{ pascalCaseName }}Component } from './component';
 import { connect{{ pascalCaseName }} } from './connector';
 
-import type { ElementType } from 'react';
-
 type WidgetParams = {
   /**
    * Placeholder text for input element.
@@ -10,5 +8,7 @@ type WidgetParams = {
   placeholder?: string;
 };
 
-export const {{ pascalCaseName }}: ElementType<WidgetParams> =
-  connect{{ pascalCaseName }}({{ pascalCaseName }}Component);
+export const {{ pascalCaseName }}: React.ElementType<WidgetParams> = connect{{ pascalCaseName }}(
+  {{ pascalCaseName }}Component,
+  { $$widgetType: '{{ widgetType }}' }
+);

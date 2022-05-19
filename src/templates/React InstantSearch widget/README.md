@@ -19,8 +19,8 @@ yarn add {{ packageName }}
 ### Usage
 
 ```jsx
-import instantsearch from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
+import { InstantSearch } from 'react-instantsearch-dom';
 import { {{ pascalCaseName }} } from '{{ packageName }}';
 
 const searchClient = algoliasearch('appId', 'apiKey');

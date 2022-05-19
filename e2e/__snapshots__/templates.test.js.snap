@@ -7032,8 +7032,8 @@ yarn add @algolia/react-instantsearch-widget-date-picker
 ### Usage
 
 \`\`\`jsx
-import instantsearch from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
+import { InstantSearch } from 'react-instantsearch-dom';
 import { DatePicker } from '@algolia/react-instantsearch-widget-date-picker';
 
 const searchClient = algoliasearch('appId', 'apiKey');
@@ -7260,16 +7260,19 @@ export const DatePickerComponent = ({}: Props) => {
 `;
 
 exports[`Templates React InstantSearch widget File content: src/lib/connector.ts 1`] = `
-"import { createConnector } from 'react-instantsearch-dom';
+"import type { Connector } from '../types/connector';
+
+import { createConnector } from 'react-instantsearch-dom';
 
 export type ProvidedProps = {
   // TODO: fill props that are returned by \`getProvidedProps\`
-};
+}
 
-export const connectDatePicker = createConnector({
+export const connectDatePicker: Connector<ProvidedProps> = createConnector<ProvidedProps>({
   displayName: 'DatePicker',
+  $$type: 'algolia.date-picker',
 
-  getProvidedProps(props, searchState, searchResults): ProvidedProps {
+  getProvidedProps(props, searchState, searchResults) {
     return {
       // TODO: return a props for the component
     };
@@ -7281,7 +7284,7 @@ export const connectDatePicker = createConnector({
     };
   },
 
-  cleanUp(props, searchState, context) {
+  cleanUp(props, searchState) {
     return {
       // TODO: return a searchState where this widget is removed from the widget tree
     };
@@ -7298,8 +7301,6 @@ exports[`Templates React InstantSearch widget File content: src/lib/widget.tsx 1
 "import { DatePickerComponent } from './component';
 import { connectDatePicker } from './connector';
 
-import type { ElementType } from 'react';
-
 type WidgetParams = {
   /**
    * Placeholder text for input element.
@@ -7307,8 +7308,30 @@ type WidgetParams = {
   placeholder?: string;
 };
 
-export const DatePicker: ElementType<WidgetParams> =
-  connectDatePicker(DatePickerComponent);"
+export const DatePicker: React.ElementType<WidgetParams> = connectDatePicker(
+  DatePickerComponent,
+  { $$widgetType: 'algolia.date-picker' }
+);"
+`;
+
+exports[`Templates React InstantSearch widget File content: src/types/connector.ts 1`] = `
+"import type {
+  ConnectedComponentClass,
+  ConnectorProvided,
+} from 'react-instantsearch-core';
+
+type AdditionalWidgetProperties = {
+  $$widgetType?: string;
+};
+
+export type Connector<TProvided = {}, TExposed = {}> = ((
+  stateless: React.FunctionComponent<ConnectorProvided<TProvided>>,
+  additionalWidgetProperties: AdditionalWidgetProperties
+) => React.ComponentClass<TExposed>) &
+  (<TProps extends Partial<ConnectorProvided<TProvided>>>(
+    Composed: React.ComponentType<TProps>,
+    additionalWidgetProperties: AdditionalWidgetProperties
+  ) => ConnectedComponentClass<TProps, ConnectorProvided<TProvided>, TExposed>);"
 `;
 
 exports[`Templates React InstantSearch widget File content: tsconfig.declaration.json 1`] = `
@@ -7402,6 +7425,7 @@ Array [
   "src/lib/component.tsx",
   "src/lib/connector.ts",
   "src/lib/widget.tsx",
+  "src/types/connector.ts",
   "tsconfig.declaration.json",
   "tsconfig.json",
   "vite.config.ts",
