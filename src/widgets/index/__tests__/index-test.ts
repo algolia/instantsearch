@@ -13,7 +13,6 @@ import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createWidget,
   createIndexInitOptions,
-  createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
 import { wait } from '../../../../test/utils/wait';
@@ -1928,11 +1927,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           query: 'Apple iPhone',
         });
 
-        instance.render(
-          createRenderOptions({
-            instantSearchInstance,
-          })
-        );
+        instance.render({
+          instantSearchInstance,
+        });
 
         expect(
           instantSearchInstance.onInternalStateChange
@@ -1949,11 +1946,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           query: 'Apple iPhone XS',
         });
 
-        instance.render(
-          createRenderOptions({
-            instantSearchInstance,
-          })
-        );
+        instance.render({
+          instantSearchInstance,
+        });
 
         expect(
           instantSearchInstance.onInternalStateChange
@@ -2002,11 +1997,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         await wait(0);
 
-        topLevelInstance.render(
-          createRenderOptions({
-            instantSearchInstance,
-          })
-        );
+        topLevelInstance.render({
+          instantSearchInstance,
+        });
 
         expect(
           instantSearchInstance.onInternalStateChange
@@ -2432,11 +2425,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
-      instance.render(
-        createRenderOptions({
-          instantSearchInstance,
-        })
-      );
+      instance.render({
+        instantSearchInstance,
+      });
 
       widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(1);
@@ -2481,7 +2472,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
-      instance.render(createRenderOptions());
+      instance.render({ instantSearchInstance: createInstantSearch() });
 
       widgets.forEach((widget) => {
         expect(widget.render).toHaveBeenCalledTimes(0);
@@ -2523,7 +2514,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       await wait(0);
 
-      level0.render(createRenderOptions());
+      level0.render({ instantSearchInstance: createInstantSearch() });
 
       // First-level child index
       expect(searchBoxLevel1.render).toHaveBeenCalledTimes(1);
