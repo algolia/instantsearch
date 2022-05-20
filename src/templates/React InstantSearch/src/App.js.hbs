@@ -2,14 +2,16 @@ import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
+  Configure,
   Hits,
   SearchBox,
   {{#if flags.dynamicWidgets}}
-  Configure,
   DynamicWidgets,
+  Panel,
   RefinementList,
   {{else}}
   {{#if attributesForFaceting}}
+  Panel,
   RefinementList,
   {{/if}}
   {{/if}}
@@ -40,18 +42,22 @@ function App() {
 
       <div className="container">
         <InstantSearch searchClient={searchClient} indexName="{{indexName}}">
+          <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
               {{#if flags.dynamicWidgets}}
-              <Configure facets={['*']} maxValuesPerFacet={20} />
               <DynamicWidgets fallbackWidget={RefinementList}>
                 {{#each attributesForFaceting}}
-                <RefinementList attribute="{{this}}" />
+                <Panel header="{{this}}">
+                  <RefinementList attribute="{{this}}" />
+                </Panel>
                 {{/each}}
               </DynamicWidgets>
               {{else}}
               {{#each attributesForFaceting}}
-              <RefinementList attribute="{{this}}" />
+              <Panel header="{{this}}">
+                <RefinementList attribute="{{this}}" />
+              </Panel>
               {{/each}}
               {{/if}}
             </div>

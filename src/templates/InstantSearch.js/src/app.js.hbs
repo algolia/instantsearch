@@ -31,22 +31,26 @@ search.addWidgets([
     },
     {{/if}}
   }),
-  {{#if flags.dynamicWidgets}}
   instantsearch.widgets.configure({
-    facets: ['*'],
-    maxValuesPerFacet: 20,
+    hitsPerPage: 8,
   }),
+  {{#if flags.dynamicWidgets}}
   instantsearch.widgets.dynamicWidgets({
     container: '#dynamic-widgets',
     fallbackWidget({ container, attribute }) {
-      return instantsearch.widgets.refinementList({
+      return instantsearch.widgets.panel({ templates: { header: attribute } })(
+        instantsearch.widgets.refinementList
+      )({
         container,
         attribute,
       });
     },
     widgets: [
       {{#each attributesForFaceting}}
-      container => instantsearch.widgets.refinementList({
+      container =>
+        instantsearch.widgets.panel({
+          templates: { header: '{{this}}' },
+        })(instantsearch.widgets.refinementList)({
           container,
           attribute: '{{this}}',
         }),
@@ -55,7 +59,9 @@ search.addWidgets([
   }),
   {{else}}
   {{#each attributesForFaceting}}
-  instantsearch.widgets.refinementList({
+  instantsearch.widgets.panel({
+    templates: { header: '{{this}}' },
+  })(instantsearch.widgets.refinementList)({
     container: '#{{this}}-list',
     attribute: '{{this}}',
   }),

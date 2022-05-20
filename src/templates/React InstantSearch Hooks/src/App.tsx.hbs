@@ -1,5 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
 import {
+  Configure,
   {{#if flags.dynamicWidgets}}
   DynamicWidgets,
   {{#unless attributesForFaceting}}
@@ -46,6 +47,7 @@ export function App() {
 
       <div className="container">
         <InstantSearch searchClient={searchClient} indexName="{{indexName}}">
+          <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
               {{#if flags.dynamicWidgets}}

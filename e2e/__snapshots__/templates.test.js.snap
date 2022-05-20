@@ -319,10 +319,15 @@ exports[`Templates Angular InstantSearch File content: src/app/app.component.htm
 
 <div class=\\"container\\">
   <ais-instantsearch [config]=\\"config\\">
+    <ais-configure [searchParameters]=\\"{ hitsPerPage: 8 }\\"></ais-configure>
     <div class=\\"search-panel\\">
       <div class=\\"search-panel__filters\\">
-        <ais-refinement-list attribute=\\"facet1\\"></ais-refinement-list>
-        <ais-refinement-list attribute=\\"facet2\\"></ais-refinement-list>
+        <ais-panel header=\\"facet1\\">
+          <ais-refinement-list attribute=\\"facet1\\"></ais-refinement-list>
+        </ais-panel>
+        <ais-panel header=\\"facet2\\">
+          <ais-refinement-list attribute=\\"facet2\\"></ais-refinement-list>
+        </ais-panel>
       </div>
 
       <div class=\\"search-panel__results\\">
@@ -3084,7 +3089,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
 
   <link rel=\\"shortcut icon\\" href=\\"./favicon.png\\">
 
-  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
+  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\">
   <link rel=\\"stylesheet\\" href=\\"./src/index.css\\">
   <link rel=\\"stylesheet\\" href=\\"./src/app.css\\">
 
@@ -3113,10 +3118,9 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
       <div class=\\"search-panel__results\\">
         <div id=\\"searchbox\\"></div>
         <div id=\\"hits\\"></div>
+        <div id=\\"pagination\\"></div>
       </div>
     </div>
-
-    <div id=\\"pagination\\"></div>
   </div>
 
   <script src=\\"https://cdn.jsdelivr.net/npm/algoliasearch@4.10.5/dist/algoliasearch-lite.umd.js\\"></script>
@@ -3234,25 +3238,30 @@ search.addWidgets([
     },
   }),
   instantsearch.widgets.configure({
-    facets: ['*'],
-    maxValuesPerFacet: 20,
+    hitsPerPage: 8,
   }),
   instantsearch.widgets.dynamicWidgets({
     container: '#dynamic-widgets',
     fallbackWidget({ container, attribute }) {
-      return instantsearch.widgets.refinementList({
+      return instantsearch.widgets.panel({ templates: { header: attribute } })(
+        instantsearch.widgets.refinementList
+      )({
         container,
         attribute,
       });
     },
     widgets: [
       container =>
-        instantsearch.widgets.refinementList({
+        instantsearch.widgets.panel({
+          templates: { header: 'facet1' },
+        })(instantsearch.widgets.refinementList)({
           container,
           attribute: 'facet1',
         }),
       container =>
-        instantsearch.widgets.refinementList({
+        instantsearch.widgets.panel({
+          templates: { header: 'facet2' },
+        })(instantsearch.widgets.refinementList)({
           container,
           attribute: 'facet2',
         }),
@@ -5611,7 +5620,7 @@ exports[`Templates React InstantSearch File content: public/index.html 1`] = `
     Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
     https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
   -->
-  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
+  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\">
 
   <title>react-instantsearch-app</title>
 </head>
@@ -5713,10 +5722,11 @@ exports[`Templates React InstantSearch File content: src/App.js 1`] = `
 import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
+  Configure,
   Hits,
   SearchBox,
-  Configure,
   DynamicWidgets,
+  Panel,
   RefinementList,
   Pagination,
   Highlight,
@@ -5743,12 +5753,16 @@ function App() {
 
       <div className=\\"container\\">
         <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+          <Configure hitsPerPage={8} />
           <div className=\\"search-panel\\">
             <div className=\\"search-panel__filters\\">
-              <Configure facets={['*']} maxValuesPerFacet={20} />
               <DynamicWidgets fallbackWidget={RefinementList}>
-                <RefinementList attribute=\\"facet1\\" />
-                <RefinementList attribute=\\"facet2\\" />
+                <Panel header=\\"facet1\\">
+                  <RefinementList attribute=\\"facet1\\" />
+                </Panel>
+                <Panel header=\\"facet2\\">
+                  <RefinementList attribute=\\"facet2\\" />
+                </Panel>
               </DynamicWidgets>
             </div>
 
@@ -6025,6 +6039,7 @@ em {
 exports[`Templates React InstantSearch Hooks File content: src/App.tsx 1`] = `
 "import algoliasearch from 'algoliasearch/lite';
 import {
+  Configure,
   DynamicWidgets,
   Highlight,
   Hits,
@@ -6062,6 +6077,7 @@ export function App() {
 
       <div className=\\"container\\">
         <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+          <Configure hitsPerPage={8} />
           <div className=\\"search-panel\\">
             <div className=\\"search-panel__filters\\">
               <DynamicWidgets fallback={RefinementList}>
@@ -8176,7 +8192,7 @@ exports[`Templates Vue InstantSearch File content: public/index.html 1`] = `
       Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
       https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
     -->
-    <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
+    <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\">
     <title>vue-instantsearch-app</title>
   </head>
   <body>
@@ -8208,12 +8224,18 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
 
     <div class=\\"container\\">
       <ais-instant-search :search-client=\\"searchClient\\" index-name=\\"indexName\\">
+        <ais-configure :hits-per-page.camel=\\"8\\" />
         <div class=\\"search-panel\\">
           <div class=\\"search-panel__filters\\">
-            <ais-configure :facets=\\"['*']\\" :max-values-per-facet.camel=\\"20\\" />
             <ais-dynamic-widgets>
-              <ais-refinement-list attribute=\\"facet1\\" />
-              <ais-refinement-list attribute=\\"facet2\\" />
+              <ais-panel>
+                <template v-slot:header>facet1</template>
+                <ais-refinement-list attribute=\\"facet1\\" />
+              </ais-panel>
+              <ais-panel>
+                <template v-slot:header>facet2</template>
+                <ais-refinement-list attribute=\\"facet2\\" />
+              </ais-panel>
             </ais-dynamic-widgets>
           </div>
 
@@ -8443,7 +8465,7 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: index.html 1`] = `
       Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
       https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
     -->
-    <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
+    <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\">
     <title>vue-instantsearch-app</title>
   </head>
   <body>
@@ -8487,11 +8509,18 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: src/App.vue 1`] = 
 
     <div class=\\"container\\">
       <ais-instant-search :search-client=\\"searchClient\\" index-name=\\"indexName\\">
+        <ais-configure :hits-per-page.camel=\\"8\\" />
         <div class=\\"search-panel\\">
           <div class=\\"search-panel__filters\\">
             <ais-dynamic-widgets>
-              <ais-refinement-list attribute=\\"facet1\\" />
-              <ais-refinement-list attribute=\\"facet2\\" />
+              <ais-panel>
+                <template v-slot:header>facet1</template>
+                <ais-refinement-list attribute=\\"facet1\\" />
+              </ais-panel>
+              <ais-panel>
+                <template v-slot:header>facet2</template>
+                <ais-refinement-list attribute=\\"facet2\\" />
+              </ais-panel>
             </ais-dynamic-widgets>
           </div>
 

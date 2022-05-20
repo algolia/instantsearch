@@ -12,11 +12,14 @@
 
 <div class="container">
   <ais-instantsearch [config]="config">
+    <ais-configure [searchParameters]="{ hitsPerPage: 8 }"></ais-configure>
     <div class="search-panel">
       {{#if attributesForFaceting}}
       <div class="search-panel__filters">
         {{#each attributesForFaceting}}
-        <ais-refinement-list attribute="{{this}}"></ais-refinement-list>
+        <ais-panel header="{{this}}">
+          <ais-refinement-list attribute="{{this}}"></ais-refinement-list>
+        </ais-panel>
         {{/each}}
       </div>
 

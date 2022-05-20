@@ -15,19 +15,28 @@
     </header>
 
     <div class="container">
-      <ais-instant-search :search-client="searchClient" index-name="{{indexName}}">
+      <ais-instant-search
+        :search-client="searchClient"
+        index-name="{{indexName}}"
+      >
+        <ais-configure :hits-per-page.camel="8" />
         <div class="search-panel">
           <div class="search-panel__filters">
             {{#if flags.dynamicWidgets}}
-            <ais-configure :facets="['*']" :max-values-per-facet.camel="20" />
             <ais-dynamic-widgets>
               {{#each attributesForFaceting}}
-              <ais-refinement-list attribute="{{this}}" />
+              <ais-panel>
+                <template v-slot:header>{{this}}</template>
+                <ais-refinement-list attribute="{{this}}" />
+              </ais-panel>
               {{/each}}
             </ais-dynamic-widgets>
             {{else}}
             {{#each attributesForFaceting}}
-            <ais-refinement-list attribute="{{this}}" />
+            <ais-panel>
+              <template v-slot:header>{{this}}</template>
+              <ais-refinement-list attribute="{{this}}" />
+            </ais-panel>
             {{/each}}
             {{/if}}
           </div>
@@ -41,7 +50,10 @@
               <template slot="item" slot-scope="{ item }">
                 <article>
                   <h1>
-                    <ais-highlight :hit="item" attribute="{{attributesToDisplay.[0]}}" />
+                    <ais-highlight
+                      :hit="item"
+                      attribute="{{attributesToDisplay.[0]}}"
+                    />
                   </h1>
                   {{#each attributesToDisplay}}
                   {{#unless @first}}
@@ -54,7 +66,7 @@
               </template>
             </ais-hits>
             {{else}}
-            <ais-hits/>
+            <ais-hits />
             {{/if}}
 
             <div class="pagination">

@@ -17,17 +17,24 @@
         :search-client="searchClient"
         index-name="{{indexName}}"
       >
+        <ais-configure :hits-per-page.camel="8" />
         <div class="search-panel">
           <div class="search-panel__filters">
             {{#if flags.dynamicWidgets}}
             <ais-dynamic-widgets>
               {{#each attributesForFaceting}}
-              <ais-refinement-list attribute="{{this}}" />
+              <ais-panel>
+                <template v-slot:header>{{this}}</template>
+                <ais-refinement-list attribute="{{this}}" />
+              </ais-panel>
               {{/each}}
             </ais-dynamic-widgets>
             {{else}}
             {{#each attributesForFaceting}}
-            <ais-refinement-list attribute="{{this}}" />
+            <ais-panel>
+              <template v-slot:header>{{this}}</template>
+              <ais-refinement-list attribute="{{this}}" />
+            </ais-panel>
             {{/each}}
             {{/if}}
           </div>
