@@ -5,6 +5,7 @@ import type {
   DisposeOptions,
   Widget,
 } from '../../src/types';
+import type { IndexInitOptions } from '../../src/widgets/index/index';
 import { createMultiSearchResponse } from './createAPIResponse';
 import { createInstantSearch } from './createInstantSearch';
 
@@ -27,6 +28,19 @@ export const createInitOptions = (
     searchMetadata: {
       isSearchStalled: false,
     },
+    ...rest,
+  };
+};
+
+export const createIndexInitOptions = (
+  args: Partial<IndexInitOptions> = {}
+): IndexInitOptions => {
+  const { instantSearchInstance = createInstantSearch(), ...rest } = args;
+
+  return {
+    instantSearchInstance,
+    parent: instantSearchInstance.mainIndex,
+    uiState: instantSearchInstance._initialUiState,
     ...rest,
   };
 };

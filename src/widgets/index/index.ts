@@ -12,8 +12,6 @@ import type {
   UiState,
   IndexUiState,
   Widget,
-  InitOptions,
-  RenderOptions,
   ScopedResult,
   SearchClient,
   IndexRenderState,
@@ -35,12 +33,15 @@ export type IndexWidgetParams = {
   indexId?: string;
 };
 
-type IndexInitOptions = Pick<
-  InitOptions,
-  'instantSearchInstance' | 'parent' | 'uiState'
->;
+export type IndexInitOptions = {
+  instantSearchInstance: InstantSearch;
+  parent: IndexWidget | null;
+  uiState: UiState;
+};
 
-type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
+export type IndexRenderOptions = {
+  instantSearchInstance: InstantSearch;
+};
 
 type WidgetSearchParametersOptions = Parameters<
   NonNullable<Widget['getWidgetSearchParameters']>

@@ -174,11 +174,11 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
             }
           });
 
-          parent!.addWidgets(widgetsToMount);
+          parent.addWidgets(widgetsToMount);
           // make sure this only happens after the regular render, otherwise it
           // happens too quick, since render is "deferred" for the next microtask,
           // so this needs to be a whole task later
-          setTimeout(() => parent!.removeWidgets(widgetsToUnmount), 0);
+          setTimeout(() => parent.removeWidgets(widgetsToUnmount), 0);
 
           renderFn(
             {
