@@ -88,6 +88,8 @@ jobs:
               fi
             }
 
+            # https://github.com/facebook/jest/issues/8987 - Jest fails to run tests on CI sporadically
+            # retry introduced in https://github.com/algolia/react-instantsearch/pull/3475
             retry yarn test --maxWorkers=4
 
 
@@ -123,6 +125,8 @@ jobs:
               fi
             }
 
+            # https://github.com/facebook/jest/issues/8987 - Jest fails to run tests on CI sporadically
+            # retry introduced in https://github.com/algolia/react-instantsearch/pull/3475
             retry yarn test --maxWorkers=4
 
   test_integration:
