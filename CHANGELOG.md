@@ -1,3 +1,12 @@
+## [4.40.6](https://github.com/algolia/instantsearch.js/compare/v4.40.5...v4.40.6) (2022-05-24)
+
+
+### Bug Fixes
+
+* **types:** only allow `null` for parent in `getWidgetRenderState` if widget is an index ([#5052](https://github.com/algolia/instantsearch.js/issues/5052)) ([fe0fce0](https://github.com/algolia/instantsearch.js/commit/fe0fce0641ffff9af1d1303b7ee71d77ba08f8bd))
+
+
+
 ## [4.40.5](https://github.com/algolia/instantsearch.js/compare/v4.40.4...v4.40.5) (2022-04-26)
 
 
