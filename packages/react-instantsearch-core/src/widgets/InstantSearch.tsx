@@ -68,6 +68,7 @@ type Props = {
   }) => void;
   stalledSearchDelay?: number;
   resultsState?: ResultsState | { [indexId: string]: ResultsState };
+  children?: React.ReactNode;
 };
 
 type State = {

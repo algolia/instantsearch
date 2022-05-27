@@ -5,8 +5,8 @@ import { cx } from './lib/cx';
 type HighlightPartProps = {
   children: React.ReactNode;
   classNames: InternalHighlightClassNames;
-  highlightedTagName: React.ReactType;
-  nonHighlightedTagName: React.ReactType;
+  highlightedTagName: React.ElementType;
+  nonHighlightedTagName: React.ElementType;
   isHighlighted: boolean;
 };
 
@@ -56,8 +56,8 @@ export type InternalHighlightClassNames = {
 
 export type InternalHighlightProps = React.HTMLAttributes<HTMLSpanElement> & {
   classNames: InternalHighlightClassNames;
-  highlightedTagName?: React.ReactType;
-  nonHighlightedTagName?: React.ReactType;
+  highlightedTagName?: React.ElementType;
+  nonHighlightedTagName?: React.ElementType;
   separator?: React.ReactNode;
   parts: HighlightedPart[][];
 };

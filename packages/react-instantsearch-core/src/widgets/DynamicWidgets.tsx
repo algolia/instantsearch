@@ -1,21 +1,25 @@
-import type { ReactChild, ComponentType, ReactNode } from 'react';
+import type { ComponentType, ReactElement, ReactNode } from 'react';
 import React, { Fragment } from 'react';
 import { getDisplayName } from '../core/utils';
 import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
 
-function getAttribute(component: ReactChild): string | undefined {
-  if (typeof component !== 'object') {
+function isReactElement(element: any): element is ReactElement {
+  return typeof element === 'object' && element.props;
+}
+
+function getAttribute(element: ReactNode): string | undefined {
+  if (!isReactElement(element)) {
     return undefined;
   }
 
-  if (component.props.attribute) {
-    return component.props.attribute;
+  if (element.props.attribute) {
+    return element.props.attribute;
   }
-  if (Array.isArray(component.props.attributes)) {
-    return component.props.attributes[0];
+  if (Array.isArray(element.props.attributes)) {
+    return element.props.attributes[0];
   }
-  if (component.props.children) {
-    return getAttribute(React.Children.only(component.props.children));
+  if (element.props.children) {
+    return getAttribute(React.Children.only(element.props.children));
   }
 
   return undefined;
@@ -32,7 +36,7 @@ function DynamicWidgets({
   attributesToRender,
   fallbackComponent: Fallback = () => null,
 }: DynamicWidgetsProps) {
-  const widgets: Map<string, ReactChild> = new Map();
+  const widgets: Map<string, ReactNode> = new Map();
 
   React.Children.forEach(children, (child) => {
     const attribute = getAttribute(child);

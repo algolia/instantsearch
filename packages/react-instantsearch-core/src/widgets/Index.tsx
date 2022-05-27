@@ -12,6 +12,7 @@ function getIndexContext(props: Props): IndexContext {
 type Props = {
   indexName: string;
   indexId: string;
+  children?: React.ReactNode;
 };
 
 type InnerProps = Props & { contextValue: InstantSearchContext };

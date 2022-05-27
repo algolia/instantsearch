@@ -8,7 +8,7 @@ import {
 import type { InitialResults, InstantSearch } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 import type { ReactNode } from 'react';
-import type { renderToString as RenderToString } from 'react-dom/server';
+import type { renderToString as reactRenderToString } from 'react-dom/server';
 import type {
   InstantSearchServerContextApi,
   InstantSearchServerState,
@@ -73,7 +73,7 @@ export function getServerState(
 
 type ExecuteArgs = {
   children: ReactNode;
-  renderToString: typeof RenderToString;
+  renderToString: typeof reactRenderToString;
   notifyServer: InstantSearchServerContextApi['notifyServer'];
   searchRef: SearchRef;
 };
@@ -190,7 +190,7 @@ function importRenderToString() {
   return Promise.all(modules.map((mod) => import(mod).catch(() => {}))).then(
     (imports: unknown[]) => {
       const ReactDOMServer = imports.find(
-        (mod): mod is { renderToString: typeof RenderToString } =>
+        (mod): mod is { renderToString: typeof reactRenderToString } =>
           mod !== undefined
       );
 

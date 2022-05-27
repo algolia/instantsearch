@@ -16,7 +16,7 @@ type Props = {
   className?: string;
   hitComponent?:
     | string
-    | React.ReactType<HitProps>
+    | React.ElementType<HitProps>
     | React.ExoticComponent<HitProps>;
 };
 

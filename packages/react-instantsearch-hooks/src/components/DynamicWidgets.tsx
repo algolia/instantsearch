@@ -4,7 +4,7 @@ import { useDynamicWidgets } from '../connectors/useDynamicWidgets';
 import { invariant } from '../lib/invariant';
 
 import type { DynamicWidgetsConnectorParams } from 'instantsearch.js/es/connectors/dynamic-widgets/connectDynamicWidgets';
-import type { ReactChild, ComponentType, ReactNode } from 'react';
+import type { ReactElement, ComponentType, ReactNode } from 'react';
 
 function FallbackComponent() {
   return null;
@@ -32,7 +32,7 @@ export function DynamicWidgets({
   const { attributesToRender } = useDynamicWidgets(props, {
     $$widgetType: 'ais.dynamicWidgets',
   });
-  const widgets: Map<string, ReactChild> = new Map();
+  const widgets: Map<string, ReactNode> = new Map();
 
   React.Children.forEach(children, (child) => {
     const attribute = getWidgetAttribute(child);
@@ -56,22 +56,26 @@ export function DynamicWidgets({
   );
 }
 
-function getWidgetAttribute(component: ReactChild): string | undefined {
-  if (typeof component !== 'object') {
+function isReactElement(element: any): element is ReactElement {
+  return typeof element === 'object' && element.props;
+}
+
+function getWidgetAttribute(element: ReactNode): string | undefined {
+  if (!isReactElement(element)) {
     return undefined;
   }
 
-  if (component.props.attribute) {
-    return component.props.attribute;
+  if (element.props.attribute) {
+    return element.props.attribute;
   }
 
-  if (Array.isArray(component.props.attributes)) {
-    return component.props.attributes[0];
+  if (Array.isArray(element.props.attributes)) {
+    return element.props.attributes[0];
   }
 
-  if (component.props.children) {
+  if (element.props.children) {
     invariant(
-      React.Children.count(component.props.children) === 1,
+      React.Children.count(element.props.children) === 1,
       `<DynamicWidgets> only supports a single component in nested components. Make sure to not render multiple children in a parent component.
 
 Example of an unsupported scenario:
@@ -87,7 +91,7 @@ Example of an unsupported scenario:
 `
     );
 
-    return getWidgetAttribute(React.Children.only(component.props.children));
+    return getWidgetAttribute(React.Children.only(element.props.children));
   }
 
   return undefined;
