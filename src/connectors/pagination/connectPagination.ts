@@ -30,7 +30,7 @@ export type PaginationRenderState = {
   createURL: CreateURL<number>;
 
   /** Sets the current page and triggers a search. */
-  refine(page: number): void;
+  refine: (page: number) => void;
 
   /** true if this search returned more than one page */
   canRefine: boolean;

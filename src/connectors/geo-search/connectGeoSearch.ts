@@ -56,7 +56,7 @@ export type GeoSearchRenderState = {
   /**
    * Reset the current bounding box refinement.
    */
-  clearMapRefinement(): void;
+  clearMapRefinement: () => void;
   /**
    * The current bounding box of the search.
    */
@@ -64,15 +64,15 @@ export type GeoSearchRenderState = {
   /**
    * Return true if the map has move since the last refinement.
    */
-  hasMapMoveSinceLastRefine(): boolean;
+  hasMapMoveSinceLastRefine: () => boolean;
   /**
    * Return true if the current refinement is set with the map bounds.
    */
-  isRefinedWithMap(): boolean;
+  isRefinedWithMap: () => boolean;
   /**
    * Return true if the user is able to refine on map move.
    */
-  isRefineOnMapMove(): boolean;
+  isRefineOnMapMove: () => boolean;
   /**
    * The matched hits from Algolia API.
    */
@@ -84,7 +84,7 @@ export type GeoSearchRenderState = {
   /**
    * Sets a bounding box to filter the results from the given map bounds.
    */
-  refine(bounds: Bounds): void;
+  refine: (bounds: Bounds) => void;
   /**
    * Send event to insights middleware
    */
@@ -94,11 +94,11 @@ export type GeoSearchRenderState = {
    * called on each map move. The call to the function triggers a new rendering
    * only when the value change.
    */
-  setMapMoveSinceLastRefine(): void;
+  setMapMoveSinceLastRefine: () => void;
   /**
    * Toggle the fact that the user is able to refine on map move.
    */
-  toggleRefineOnMapMove(): void;
+  toggleRefineOnMapMove: () => void;
 };
 
 export type GeoSearchConnectorParams = {

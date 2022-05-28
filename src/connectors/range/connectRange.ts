@@ -39,7 +39,7 @@ export type RangeRenderState = {
    * previously set bound or to set an infinite bound.
    * @param rangeValue tuple of [min, max] bounds
    */
-  refine(rangeValue: RangeBoundaries): void;
+  refine: (rangeValue: RangeBoundaries) => void;
 
   /**
    * Indicates whether this widget can be refined
