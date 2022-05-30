@@ -32,9 +32,10 @@ https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/
 
 ## Environment
 
+- React InstantSearch version: [e.g. 6.24.0]
+- React version: [e.g. 18.1.0]
+- Browser: [e.g. Chrome 102.0.5005.61, Safari 15.2]
 - OS: [e.g. Windows / Linux / macOS / iOS / Android]
-- Browser: [e.g. Chrome, Safari]
-- Version: [e.g. 22]
 
 ## Additional context
 
