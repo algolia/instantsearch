@@ -1,39 +1,16 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React from 'react';
+import { Hits, SearchBox } from 'react-instantsearch-hooks-web';
 
 import { createSearchClient } from '../../../../../test/mock';
 import { wait } from '../../../../../test/utils';
-import { useHits } from '../../connectors/useHits';
-import { useSearchBox } from '../../connectors/useSearchBox';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
-function SearchBox() {
-  const { query } = useSearchBox();
-
-  return (
-    <form role="search">
-      <input defaultValue={query} />
-    </form>
-  );
-}
-
-function Hits() {
-  const { hits } = useHits();
-
-  if (hits.length === 0) {
-    return null;
-  }
-
-  return (
-    <ol>
-      {hits.map((hit) => (
-        <li key={hit.objectID}>{hit.objectID}</li>
-      ))}
-    </ol>
-  );
+function Hit({ hit }) {
+  return hit.objectID;
 }
 
 describe('InstantSearchSSRProvider', () => {
@@ -64,7 +41,7 @@ describe('InstantSearchSSRProvider', () => {
       return (
         <InstantSearchSSRProvider initialResults={initialResults}>
           <InstantSearch searchClient={searchClient} indexName="indexName">
-            <Hits />
+            <Hits hitComponent={Hit} />
           </InstantSearch>
         </InstantSearchSSRProvider>
       );
@@ -74,18 +51,26 @@ describe('InstantSearchSSRProvider', () => {
 
     await waitFor(() => {
       expect(screen.getByRole('list')).toMatchInlineSnapshot(`
-<ol>
-  <li>
-    1
-  </li>
-  <li>
-    2
-  </li>
-  <li>
-    3
-  </li>
-</ol>
-`);
+        <ol
+          class="ais-Hits-list"
+        >
+          <li
+            class="ais-Hits-item"
+          >
+            1
+          </li>
+          <li
+            class="ais-Hits-item"
+          >
+            2
+          </li>
+          <li
+            class="ais-Hits-item"
+          >
+            3
+          </li>
+        </ol>
+      `);
     });
   });
 
@@ -125,7 +110,7 @@ describe('InstantSearchSSRProvider', () => {
             }}
           >
             <SearchBox />
-            <Hits />
+            <Hits hitComponent={Hit} />
           </InstantSearch>
         </InstantSearchSSRProvider>
       );
@@ -134,15 +119,7 @@ describe('InstantSearchSSRProvider', () => {
     render(<App />);
 
     await waitFor(() => {
-      expect(screen.getByRole('search')).toMatchInlineSnapshot(`
-<form
-  role="search"
->
-  <input
-    value="iphone"
-  />
-</form>
-`);
+      expect(screen.getByRole('searchbox')).toHaveValue('iphone');
     });
   });
 
@@ -188,7 +165,7 @@ describe('InstantSearchSSRProvider', () => {
             routing={routing}
           >
             <SearchBox />
-            <Hits />
+            <Hits hitComponent={Hit} />
           </InstantSearch>
         </InstantSearchSSRProvider>
       );
@@ -197,15 +174,7 @@ describe('InstantSearchSSRProvider', () => {
     render(<App />);
 
     await waitFor(() => {
-      expect(screen.getByRole('search')).toMatchInlineSnapshot(`
-<form
-  role="search"
->
-  <input
-    value="iphone"
-  />
-</form>
-`);
+      expect(screen.getByRole('searchbox')).toHaveValue('iphone');
     });
   });
 
@@ -216,8 +185,10 @@ describe('InstantSearchSSRProvider', () => {
       return (
         <InstantSearchSSRProvider>
           <InstantSearch searchClient={searchClient} indexName="indexName">
-            <h1>Search</h1>
-            <Hits />
+            <main>
+              <h1>Search</h1>
+              <Hits hitComponent={Hit} />
+            </main>
           </InstantSearch>
         </InstantSearchSSRProvider>
       );
@@ -226,8 +197,20 @@ describe('InstantSearchSSRProvider', () => {
     render(<App />);
 
     await waitFor(() => {
-      expect(screen.queryAllByRole('heading')).toHaveLength(1);
-      expect(screen.queryByRole('list')).toBeNull();
+      expect(screen.getByRole('main')).toMatchInlineSnapshot(`
+        <main>
+          <h1>
+            Search
+          </h1>
+          <div
+            class="ais-Hits ais-Hits--empty"
+          >
+            <ol
+              class="ais-Hits-list"
+            />
+          </div>
+        </main>
+      `);
     });
   });
 
@@ -258,15 +241,13 @@ describe('InstantSearchSSRProvider', () => {
       return (
         <InstantSearchSSRProvider initialResults={initialResults}>
           <InstantSearch searchClient={searchClient} indexName="indexName">
-            <Hits />
+            <Hits hitComponent={Hit} />
           </InstantSearch>
         </InstantSearchSSRProvider>
       );
     }
 
-    act(() => {
-      render(<App />);
-    });
+    render(<App />);
 
     await wait(0);
 
