@@ -68,6 +68,8 @@ jest.mock('algoliasearch-helper', () => {
   return mock;
 });
 
+const virtualSearchBox = connectSearchBox(() => {});
+
 beforeEach(() => {
   algoliasearchHelper.mockClear();
 });
@@ -414,6 +416,8 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       searchClient,
     });
 
+    search.addWidgets([virtualSearchBox({})]);
+
     expect(search.helper).toBe(null);
 
     search.start();
@@ -674,6 +678,35 @@ describe('start', () => {
     expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient, indexName);
   });
 
+  it('schedules a search with widgets', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not schedule a search without widgets', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.start();
+
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
+  });
+
   it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -681,6 +714,7 @@ describe('start', () => {
       searchClient,
     });
 
+    search.addWidgets([virtualSearchBox({})]);
     search.start();
 
     await wait(0);
@@ -700,6 +734,8 @@ describe('start', () => {
       searchFunction,
       searchClient,
     });
+
+    search.addWidgets([virtualSearchBox({})]);
 
     expect(searchFunction).toHaveBeenCalledTimes(0);
     expect(searchClient.search).toHaveBeenCalledTimes(0);
@@ -726,6 +762,8 @@ describe('start', () => {
         helper.setState(nextState).search();
       },
     });
+
+    search.addWidgets([virtualSearchBox({})]);
 
     expect(() => {
       search.start();
@@ -817,6 +855,7 @@ describe('start', () => {
 
     expect(searchClient.search).toHaveBeenCalledTimes(0);
 
+    search.addWidgets([virtualSearchBox({})]);
     search.start();
 
     await wait(0);
@@ -833,6 +872,7 @@ describe('start', () => {
 
     expect(searchClient.search).toHaveBeenCalledTimes(0);
 
+    search.addWidgets([virtualSearchBox({})]);
     search.start();
 
     await wait(0);
@@ -854,6 +894,7 @@ describe('start', () => {
 
     expect(searchClient.search).toHaveBeenCalledTimes(0);
 
+    search.addWidgets([virtualSearchBox({})]);
     search.start();
 
     search.on('error', (event) => {
@@ -1097,6 +1138,7 @@ describe('dispose', () => {
 
     search.on('render', onRender);
 
+    search.addWidgets([virtualSearchBox({})]);
     search.start();
 
     await wait(0);
@@ -1109,6 +1151,7 @@ describe('dispose', () => {
 
     search.on('render', onRender);
 
+    search.addWidgets([virtualSearchBox({})]);
     search.start();
 
     await wait(0);
@@ -1549,6 +1592,7 @@ describe('refresh', () => {
       searchClient,
     });
 
+    search.addWidgets([virtualSearchBox({})]);
     search.start();
 
     await wait(0);
@@ -1813,6 +1857,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       searchClient,
     });
 
+    search.addWidgets([virtualSearchBox({})]);
     search.start();
     await wait(0);
     expect(searchClient.search).toHaveBeenCalledTimes(1);
