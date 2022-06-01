@@ -1,3 +1,12 @@
+# [4.41.0](https://github.com/algolia/instantsearch.js/compare/v4.40.6...v4.41.0) (2022-06-01)
+
+
+### Features
+
+* **core:** don't schedule search without widgets ([#5056](https://github.com/algolia/instantsearch.js/issues/5056)) ([ea3d6d9](https://github.com/algolia/instantsearch.js/commit/ea3d6d9c6ae1fe2f90bf5643d4bdcbb89507e9bc))
+
+
+
 ## [4.40.6](https://github.com/algolia/instantsearch.js/compare/v4.40.5...v4.40.6) (2022-05-24)
 
 
