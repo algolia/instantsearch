@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React from 'react';
-import { Hits, SearchBox } from 'react-instantsearch-hooks-web';
+import { Hits, RefinementList, SearchBox } from 'react-instantsearch-hooks-web';
 
 import { createSearchClient } from '../../../../../test/mock';
 import { wait } from '../../../../../test/utils';
@@ -175,6 +175,96 @@ describe('InstantSearchSSRProvider', () => {
 
     await waitFor(() => {
       expect(screen.getByRole('searchbox')).toHaveValue('iphone');
+    });
+  });
+
+  test('renders refinements from initial results state', async () => {
+    const searchClient = createSearchClient({});
+    const initialResults = {
+      indexName: {
+        state: {
+          facets: [],
+          disjunctiveFacets: ['brand'],
+          hierarchicalFacets: [],
+          facetsRefinements: {},
+          facetsExcludes: {},
+          disjunctiveFacetsRefinements: { brand: ['Apple'] },
+          numericRefinements: {},
+          tagRefinements: [],
+          hierarchicalFacetsRefinements: {},
+          index: 'indexName',
+          query: '',
+        },
+        results: [
+          {
+            hits: [
+              {
+                name: 'Apple - MacBook Air® (Latest Model) - 13.3" Display - Intel Core i5 - 8GB Memory - 128GB Flash Storage - Silver',
+                objectID: '6443034',
+              },
+              {
+                name: 'Apple - EarPods™ with Remote and Mic - White',
+                objectID: '6848136',
+              },
+            ],
+            nbHits: 442,
+            page: 0,
+            nbPages: 23,
+            hitsPerPage: 2,
+            facets: { brand: { Apple: 442, Samsung: 633 } },
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            exhaustiveTypo: true,
+            query: '',
+            queryAfterRemoval: '',
+            params: '',
+            index: 'indexName',
+            processingTimeMS: 1,
+          },
+          {
+            hits: [
+              {
+                name: 'Amazon - Fire TV Stick with Alexa Voice Remote - Black',
+                objectID: '5477500',
+              },
+            ],
+            nbHits: 21469,
+            page: 0,
+            nbPages: 1000,
+            hitsPerPage: 1,
+            facets: {
+              brand: { Samsung: 633, Apple: 442 },
+            },
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            exhaustiveTypo: true,
+            query: '',
+            queryAfterRemoval: '',
+            params: '',
+            index: 'indexName',
+            processingTimeMS: 1,
+          },
+        ],
+      },
+    };
+
+    function App() {
+      return (
+        <InstantSearchSSRProvider initialResults={initialResults}>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <RefinementList attribute="brand" />
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      );
+    }
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('checkbox', { name: 'Apple 442' })).toBeChecked();
+      expect(
+        screen.getByRole('checkbox', { name: 'Samsung 633' })
+      ).not.toBeChecked();
     });
   });
 
