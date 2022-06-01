@@ -515,7 +515,16 @@ See ${createDocumentationLink({
       defer(() => {
         this.scheduleSearch = originalScheduleSearch;
       })();
-    } else {
+    }
+    // We only schedule a search when widgets have been added before `start()`
+    // because there are listeners that can use these results.
+    // This is especially useful in framework-based flavors that wait for
+    // dynamically-added widgets to trigger a network request. It avoids
+    // having to batch this initial network request with the one coming from
+    // `addWidgets()`.
+    // Later, we could also skip `index()` widgets and widgets that don't read
+    // the results, but this is an optimization that has a very low impact for now.
+    else if (this.mainIndex.getWidgets().length > 0) {
       this.scheduleSearch();
     }
 

@@ -5,7 +5,7 @@
 import { getByText, fireEvent } from '@testing-library/dom';
 import instantsearch from '../../index.es';
 import { configure, searchBox } from '../../widgets';
-import { connectConfigure } from '../../connectors';
+import { connectConfigure, connectSearchBox } from '../../connectors';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import type { MiddlewareDefinition } from '../../types';
 import { wait } from '../../../test/utils/wait';
@@ -121,6 +121,8 @@ describe('middleware', () => {
 });
 
 describe('errors', () => {
+  const virtualSearchBox = connectSearchBox(() => {});
+
   it('client errors can be handled', () => {
     const search = instantsearch({
       searchClient: createSearchClient({
@@ -130,6 +132,8 @@ describe('errors', () => {
       }),
       indexName: '123',
     });
+
+    search.addWidgets([virtualSearchBox({})]);
 
     expect.assertions(4);
 
