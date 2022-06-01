@@ -1,5 +1,5 @@
 import { act, render, waitFor } from '@testing-library/react';
-import React, { version as ReactVersion } from 'react';
+import React, { Suspense, version as ReactVersion } from 'react';
 
 import { createSearchClient } from '../../../../../test/mock';
 import { wait } from '../../../../../test/utils';
@@ -162,7 +162,7 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
-  test('renders components and their lifecycles in StrictMode', async () => {
+  test('renders components in Strict Mode', async () => {
     const searchClient = createSearchClient({});
 
     act(() => {
@@ -180,6 +180,95 @@ describe('InstantSearch', () => {
 
     await waitFor(() => {
       expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: { facets: [], query: '', tagFilters: '' },
+        },
+        {
+          indexName: 'subIndexName',
+          params: {
+            facets: ['brand'],
+            maxValuesPerFacet: 10,
+            query: '',
+            tagFilters: '',
+          },
+        },
+      ]);
+    });
+  });
+
+  test('renders components in Strict Mode with a Suspense boundary', async () => {
+    const searchClient = createSearchClient({});
+
+    act(() => {
+      render(
+        <React.StrictMode>
+          <InstantSearch indexName="indexName" searchClient={searchClient}>
+            <SearchBox />
+            <Suspense fallback={null}>
+              <Index indexName="subIndexName">
+                <RefinementList attribute="brand" />
+              </Index>
+            </Suspense>
+          </InstantSearch>
+        </React.StrictMode>
+      );
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: { facets: [], query: '', tagFilters: '' },
+        },
+        {
+          indexName: 'subIndexName',
+          params: {
+            facets: ['brand'],
+            maxValuesPerFacet: 10,
+            query: '',
+            tagFilters: '',
+          },
+        },
+      ]);
+    });
+  });
+
+  test('renders components with a Suspense boundary', async () => {
+    const searchClient = createSearchClient({});
+
+    act(() => {
+      render(
+        <InstantSearch indexName="indexName" searchClient={searchClient}>
+          <SearchBox />
+          <Suspense fallback={null}>
+            <Index indexName="subIndexName">
+              <RefinementList attribute="brand" />
+            </Index>
+          </Suspense>
+        </InstantSearch>
+      );
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: { facets: [], query: '', tagFilters: '' },
+        },
+        {
+          indexName: 'subIndexName',
+          params: {
+            facets: ['brand'],
+            maxValuesPerFacet: 10,
+            query: '',
+            tagFilters: '',
+          },
+        },
+      ]);
     });
   });
 });
