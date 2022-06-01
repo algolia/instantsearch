@@ -26,7 +26,13 @@ const plugins = [
     preferBuiltins: false,
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   }),
-  commonjs(),
+  commonjs({
+    namedExports: {
+      '../../node_modules/use-sync-external-store/shim/index.js': [
+        'useSyncExternalStore',
+      ],
+    },
+  }),
   globals(),
   replace({
     'process.env.NODE_ENV': JSON.stringify('production'),

@@ -83,25 +83,11 @@ export function useConnector<
       }
     );
 
-    const instance = {
+    return {
       ...createWidget(stableProps),
       ...stableAdditionalWidgetProperties,
     };
-
-    // On the server, we add the widget early in the memo to retrieve its search
-    // parameters in the render pass.
-    if (serverContext) {
-      parentIndex.addWidgets([instance]);
-    }
-
-    return instance;
-  }, [
-    connector,
-    parentIndex,
-    serverContext,
-    stableProps,
-    stableAdditionalWidgetProperties,
-  ]);
+  }, [connector, stableProps, stableAdditionalWidgetProperties]);
 
   const [state, setState] = useState<TDescription['renderState']>(() => {
     if (widget.getWidgetRenderState) {
@@ -159,15 +145,19 @@ export function useConnector<
     return {};
   });
 
-  // Using a layout effect adds the widget at the same time as rendering, which
-  // triggers a single network request, instead of two with a regular effect.
   useIsomorphicLayoutEffect(() => {
     parentIndex.addWidgets([widget]);
 
     return () => {
       parentIndex.removeWidgets([widget]);
     };
-  }, [widget, parentIndex]);
+  }, [parentIndex, widget]);
+
+  // On the server, we add the widget early to retrieve its search parameters
+  // in the render pass.
+  if (serverContext && !parentIndex.getWidgets().includes(widget)) {
+    parentIndex.addWidgets([widget]);
+  }
 
   return state;
 }

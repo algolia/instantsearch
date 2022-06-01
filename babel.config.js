@@ -50,6 +50,8 @@ module.exports = (api) => {
             'instantsearch.js',
             // React-DOM also fails if the paths are incomplete
             'react-dom',
+            // `use-sync-external-store` also fails if the paths are incomplete
+            'use-sync-external-store',
           ],
         },
       ],
