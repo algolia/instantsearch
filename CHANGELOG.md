@@ -1,3 +1,17 @@
+# [6.1.0](https://github.com/algolia/create-instantsearch-app/compare/6.0.0...6.1.0) (2022-06-02)
+
+
+### Bug Fixes
+
+* **vue instantsearch with vue 3:** use `yarn start` to run template ([#571](https://github.com/algolia/create-instantsearch-app/issues/571)) ([c17089f](https://github.com/algolia/create-instantsearch-app/commit/c17089fe59bb10cde5963c43016526a8a736d338))
+
+
+### Features
+
+* **react instantsearch widget:** add connector and widget metadata ([#570](https://github.com/algolia/create-instantsearch-app/issues/570)) ([b22a9e6](https://github.com/algolia/create-instantsearch-app/commit/b22a9e6977ea98d8c354d0a634bda50cccb4ecaf))
+
+
+
 # [6.0.0](https://github.com/algolia/create-instantsearch-app/compare/5.2.2...6.0.0) (2022-05-18)
 
 

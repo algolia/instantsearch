@@ -1,9 +1,12 @@
 {
   "name": "create-instantsearch-app",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "license": "MIT",
   "description": "⚡️ Build InstantSearch apps at the speed of thought",
-  "keywords": ["algolia", "instantsearch"],
+  "keywords": [
+    "algolia",
+    "instantsearch"
+  ],
   "repository": "algolia/create-instantsearch-app",
   "author": "Algolia <support@algolia.com>",
   "main": "index.js",
@@ -24,7 +27,10 @@
     "release-templates": "node ./scripts/release-templates",
     "release": "shipjs prepare"
   },
-  "files": ["index.js", "src"],
+  "files": [
+    "index.js",
+    "src"
+  ],
   "engines": {
     "node": ">= 10"
   },
