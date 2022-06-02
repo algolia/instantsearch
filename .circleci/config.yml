@@ -154,6 +154,18 @@ jobs:
           template: 'Vue InstantSearch with Vue 3'
           app: 'vue-instantsearch-vue3'
 
+  release_if_needed:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Trigger a release if the latest commit is a release commit
+          command: yarn shipjs trigger
+
 workflows:
   version: 2.1
   ci:
@@ -163,3 +175,8 @@ workflows:
       - test_e2e
       - test_apps_node_14
       - test_apps_node_16
+      - release_if_needed:
+          filters:
+            branches:
+              only:
+                - master

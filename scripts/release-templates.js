@@ -124,10 +124,17 @@ async function build() {
 
     execSync(`git commit -m "${commitMessage}"`);
 
+    // Use the `origin-with-token` remote if it exists (when run with Ship.js)
+    const origin = execSync(
+      `git remote | grep origin-with-token || echo origin`
+    )
+      .toString()
+      .trim();
+
     // Push the new demos to the `templates` branch
     console.log();
     console.log(`▶︎  Pushing to branch "${chalk.green(TEMPLATES_BRANCH)}"`);
-    execSync(`git push origin ${TEMPLATES_BRANCH}`);
+    execSync(`git push ${origin} ${TEMPLATES_BRANCH}`);
 
     console.log();
     console.log(

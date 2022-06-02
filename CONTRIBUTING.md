@@ -98,32 +98,17 @@ You will need to follow these steps:
 
 We will then review your pull request!
 
-### Releasing
+### Release
 
-We rely on [release-it](https://github.com/webpro/release-it) to release new versions of Create InstantSearch App.
+We rely on [Ship.js](https://github.com/algolia/shipjs) to release new versions of Create InstantSearch App.
 
-#### Release flow
+You need to have `GITHUB_TOKEN` added to your `.env` file. You can create a [personal access token](https://github.com/settings/tokens).
 
-1.  Bump the project version in [`package.json`](package.json) based on [the commits](#conventions)
-1.  Generate the changelog
-1.  Commit the new release
-1.  Create the new release tag
-1.  Push to GitHub
-1.  Create the new release on GitHub
-1.  Publish to npm
-1.  Push the generated templates to the [`templates`](https://github.com/algolia/create-instantsearch-app/tree/templates) branch (usable on CodeSandbox)
+```sh
+yarn release
+```
 
-#### Release steps
-
-To release a new version of the package, you need to:
-
-1.  [Generate a new GitHub token](https://github.com/settings/tokens/new) with the scope `repo` (necessary for creating GitHub releases)
-1.  Store this token in an [environment variable](https://en.wikipedia.org/wiki/Environment_variable) called `GITHUB_TOKEN_CISA`
-1.  Make sure you're on the `master` branch
-1.  Run commands (_do not_ use `yarn` for releasing):
-    - `npm run release:beta` for a new beta version
-    - `npm run release` for a new stable version
-1.  Follow the command-line instructions
+It will create a pull request for the next release. When it's reviewed, approved and merged, CircleCI will automatically publish it to npm.
 
 ### Updating templates on CodeSandbox
 
