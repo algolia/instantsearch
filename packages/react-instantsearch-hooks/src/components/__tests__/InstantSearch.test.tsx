@@ -1,10 +1,13 @@
-import { act, render, waitFor } from '@testing-library/react';
-import React, { Suspense, version as ReactVersion } from 'react';
+import { act, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { history } from 'instantsearch.js/es/lib/routers';
+import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
+import { SearchBox } from 'react-instantsearch-hooks-web';
 
 import { createSearchClient } from '../../../../../test/mock';
 import { wait } from '../../../../../test/utils';
 import { useRefinementList } from '../../connectors/useRefinementList';
-import { useSearchBox } from '../../connectors/useSearchBox';
 import { IndexContext } from '../../lib/IndexContext';
 import { InstantSearchContext } from '../../lib/InstantSearchContext';
 import version from '../../version';
@@ -14,11 +17,6 @@ import { InstantSearch } from '../InstantSearch';
 import type { UseRefinementListProps } from '../../connectors/useRefinementList';
 import type { InstantSearch as InstantSearchType } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
-
-function SearchBox() {
-  useSearchBox();
-  return null;
-}
 
 function RefinementList(props: UseRefinementListProps) {
   useRefinementList(props);
@@ -167,14 +165,14 @@ describe('InstantSearch', () => {
 
     act(() => {
       render(
-        <React.StrictMode>
+        <StrictMode>
           <InstantSearch indexName="indexName" searchClient={searchClient}>
             <SearchBox />
             <Index indexName="subIndexName">
               <RefinementList attribute="brand" />
             </Index>
           </InstantSearch>
-        </React.StrictMode>
+        </StrictMode>
       );
     });
 
@@ -203,7 +201,7 @@ describe('InstantSearch', () => {
 
     act(() => {
       render(
-        <React.StrictMode>
+        <StrictMode>
           <InstantSearch indexName="indexName" searchClient={searchClient}>
             <SearchBox />
             <Suspense fallback={null}>
@@ -212,7 +210,7 @@ describe('InstantSearch', () => {
               </Index>
             </Suspense>
           </InstantSearch>
-        </React.StrictMode>
+        </StrictMode>
       );
     });
 
@@ -233,6 +231,66 @@ describe('InstantSearch', () => {
           },
         },
       ]);
+    });
+  });
+
+  test('renders with state from router in Strict Mode', async () => {
+    const searchClient = createSearchClient({});
+    const routing = {
+      stateMapping: simple(),
+      router: history({
+        getLocation() {
+          return new URL(
+            `http://localhost/?indexName[query]=iphone`
+          ) as unknown as Location;
+        },
+      }),
+    };
+
+    function App() {
+      return (
+        <StrictMode>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName="indexName"
+            routing={routing}
+          >
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App />);
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({ query: 'iphone' }),
+        },
+      ]);
+      expect(screen.getByRole('searchbox')).toHaveValue('iphone');
+    });
+
+    rerender(<App />);
+
+    expect(screen.getByRole('searchbox')).toHaveValue('iphone');
+
+    userEvent.type(screen.getByRole('searchbox'), ' case', {
+      initialSelectionStart: 6,
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(6);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({ query: 'iphone case' }),
+        },
+      ]);
+      expect(screen.getByRole('searchbox')).toHaveValue('iphone case');
     });
   });
 
@@ -267,6 +325,176 @@ describe('InstantSearch', () => {
             query: '',
             tagFilters: '',
           },
+        },
+      ]);
+    });
+  });
+
+  test('catches up with lifecycle on re-renders', async () => {
+    const searchClient = createSearchClient({});
+
+    function App() {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <SearchBox />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<App />);
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    userEvent.type(screen.getByRole('searchbox'), 'iphone');
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(7);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'iphone',
+          }),
+        },
+      ]);
+    });
+
+    rerender(<App />);
+
+    userEvent.type(screen.getByRole('searchbox'), ' case', {
+      initialSelectionStart: 6,
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(12);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'iphone case',
+          }),
+        },
+      ]);
+    });
+  });
+
+  test('catches up with lifecycle on re-renders with a stable onStateChange', async () => {
+    const searchClient = createSearchClient({});
+    const onStateChange = ({ uiState, setUiState }) => {
+      setUiState(uiState);
+    };
+
+    function App() {
+      return (
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="indexName"
+          onStateChange={onStateChange}
+        >
+          <SearchBox />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<App />);
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    userEvent.type(screen.getByRole('searchbox'), 'iphone');
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'iphone',
+          }),
+        },
+      ]);
+    });
+
+    rerender(<App />);
+
+    userEvent.type(screen.getByRole('searchbox'), ' case', {
+      initialSelectionStart: 6,
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'iphone case',
+          }),
+        },
+      ]);
+    });
+  });
+
+  // This test shows that giving an unstable `onStateChange` reference (or any
+  // unstable prop) remounts the <InstantSearch> component and therefore resets
+  // the state after the remount.
+  // Users need to provide stable references for re-renders to keep the state.
+  test('catches up with lifecycle on re-renders with an unstable onStateChange', async () => {
+    const searchClient = createSearchClient({});
+
+    function App() {
+      return (
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="indexName"
+          onStateChange={({ uiState, setUiState }) => {
+            setUiState(uiState);
+          }}
+        >
+          <SearchBox />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<App />);
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    userEvent.type(screen.getByRole('searchbox'), 'iphone');
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'iphone',
+          }),
+        },
+      ]);
+    });
+
+    // After this rerender, the UI state is reset to the initial state because
+    // the `onStateChange` reference has changed.
+    rerender(<App />);
+
+    userEvent.type(screen.getByRole('searchbox'), ' case', {
+      initialSelectionStart: 6,
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            // The query was reset because of the remount
+            query: ' case',
+          }),
         },
       ]);
     });

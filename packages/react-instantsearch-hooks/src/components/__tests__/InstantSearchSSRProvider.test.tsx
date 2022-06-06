@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React from 'react';
@@ -150,7 +151,7 @@ describe('InstantSearchSSRProvider', () => {
       router: history({
         getLocation() {
           return new URL(
-            `https://website.com/?indexName[query]=iphone`
+            `http://localhost/?indexName[query]=iphone`
           ) as unknown as Location;
         },
       }),
@@ -342,5 +343,79 @@ describe('InstantSearchSSRProvider', () => {
     await wait(0);
 
     expect(searchClient.search).toHaveBeenCalledTimes(0);
+  });
+
+  test('catches up with lifecycle on re-renders', async () => {
+    const searchClient = createSearchClient({});
+    const initialResults = {
+      indexName: {
+        state: {},
+        results: [
+          {
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            hitsPerPage: 20,
+            index: 'indexName',
+            nbHits: 0,
+            nbPages: 0,
+            page: 0,
+            params: '',
+            processingTimeMS: 0,
+            query: '',
+          },
+        ],
+      },
+    };
+
+    function App() {
+      return (
+        <InstantSearchSSRProvider initialResults={initialResults}>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <SearchBox />
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      );
+    }
+
+    const { rerender } = render(<App />);
+
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
+
+    rerender(<App />);
+
+    userEvent.type(screen.getByRole('searchbox'), 'iphone');
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(6);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'iphone',
+          }),
+        },
+      ]);
+    });
+
+    rerender(<App />);
+
+    userEvent.type(screen.getByRole('searchbox'), ' case', {
+      initialSelectionStart: 6,
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(11);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'iphone case',
+          }),
+        },
+      ]);
+    });
   });
 });
