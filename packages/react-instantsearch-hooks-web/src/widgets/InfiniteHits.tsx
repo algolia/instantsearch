@@ -33,10 +33,17 @@ export type InfiniteHitsProps<THit extends BaseHit = BaseHit> = Omit<
 
 export function InfiniteHits<THit extends BaseHit = BaseHit>({
   showPrevious: shouldShowPrevious = true,
+  cache,
+  escapeHTML,
+  showPrevious: userShowPrevious,
+  transformItems,
   ...props
 }: InfiniteHitsProps<THit>) {
   const { hits, sendEvent, showPrevious, showMore, isFirstPage, isLastPage } =
-    useInfiniteHits<THit>(props, { $$widgetType: 'ais.infiniteHits' });
+    useInfiniteHits<THit>(
+      { cache, escapeHTML, showPrevious: userShowPrevious, transformItems },
+      { $$widgetType: 'ais.infiniteHits' }
+    );
 
   const uiProps: UiProps<THit> = {
     hits,
