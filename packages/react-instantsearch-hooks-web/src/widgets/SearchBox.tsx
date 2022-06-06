@@ -19,10 +19,11 @@ type UiProps = Pick<
 export type SearchBoxProps = Omit<SearchBoxUiComponentProps, keyof UiProps> &
   UseSearchBoxProps;
 
-export function SearchBox(props: SearchBoxProps) {
-  const { query, refine, isSearchStalled } = useSearchBox(props, {
-    $$widgetType: 'ais.searchBox',
-  });
+export function SearchBox({ queryHook, ...props }: SearchBoxProps) {
+  const { query, refine, isSearchStalled } = useSearchBox(
+    { queryHook },
+    { $$widgetType: 'ais.searchBox' }
+  );
   const [value, setValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
