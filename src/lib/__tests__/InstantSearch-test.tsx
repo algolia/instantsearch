@@ -1671,12 +1671,7 @@ describe('use', () => {
 
     await wait(0);
 
-    expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(2);
-    expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
-      uiState: {
-        indexName: {},
-      },
-    });
+    expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
@@ -1758,18 +1753,8 @@ describe('use', () => {
 
     await wait(0);
 
-    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(2);
-    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(2);
-    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledWith({
-      uiState: {
-        indexName: {},
-      },
-    });
-    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledWith({
-      uiState: {
-        indexName: {},
-      },
-    });
+    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(1);
+    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareBeforeStartSpy.unsubscribe).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.unsubscribe).toHaveBeenCalledTimes(1);
   });

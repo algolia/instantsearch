@@ -160,6 +160,7 @@ class InstantSearch<
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
   public _initialResults: InitialResults | null;
+  public _routerOptions: RouterProps<TUiState, TRouteState> | null;
   public _createURL: CreateURL<UiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
@@ -264,13 +265,12 @@ See ${createDocumentationLink({
 
     this.sendEventToInsights = noop;
 
-    if (routing) {
-      const routerOptions = typeof routing === 'boolean' ? undefined : routing;
-      this.use(createRouterMiddleware(routerOptions));
-    }
-
-    if (isMetadataEnabled()) {
-      this.use(createMetadataMiddleware());
+    if (routing === true) {
+      this._routerOptions = {};
+    } else if (routing === false) {
+      this._routerOptions = null;
+    } else {
+      this._routerOptions = routing;
     }
   }
 
@@ -283,7 +283,12 @@ See ${createDocumentationLink({
         subscribe: noop,
         unsubscribe: noop,
         onStateChange: noop,
-        ...fn({ instantSearchInstance: this }),
+        ...fn({
+          instantSearchInstance: this as unknown as InstantSearch<
+            UiState,
+            UiState
+          >,
+        }),
       };
       this.middleware.push({
         creator: fn,
@@ -432,6 +437,14 @@ See ${createDocumentationLink({
       );
     }
 
+    if (this._routerOptions) {
+      this.use(createRouterMiddleware(this._routerOptions));
+    }
+
+    if (isMetadataEnabled()) {
+      this.use(createMetadataMiddleware());
+    }
+
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
     // DerivedHelper scoped into the `index` widgets.
@@ -496,7 +509,7 @@ See ${createDocumentationLink({
     });
 
     this.mainIndex.init({
-      instantSearchInstance: this,
+      instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
       parent: null,
       uiState: this._initialUiState,
     });
@@ -563,9 +576,7 @@ See ${createDocumentationLink({
     this.mainHelper = null;
     this.helper = null;
 
-    this.middleware.forEach(({ instance }) => {
-      instance.unsubscribe();
-    });
+    this.unuse(...this.middleware.map(({ creator }) => creator));
   }
 
   public scheduleSearch = defer(() => {
@@ -582,7 +593,7 @@ See ${createDocumentationLink({
     }
 
     this.mainIndex.render({
-      instantSearchInstance: this,
+      instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
     });
 
     this.emit('render');
