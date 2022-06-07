@@ -281,7 +281,10 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           },
           false
         );
-        sendEvent('view', widgetRenderState.currentPageHits);
+
+        if (!renderOptions.searchMetadata.isSearchStalled) {
+          sendEvent('view', widgetRenderState.currentPageHits);
+        }
       },
 
       getRenderState(renderState, renderOptions) {

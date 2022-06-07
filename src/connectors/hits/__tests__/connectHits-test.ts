@@ -14,12 +14,18 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '../../../../test/mock/createAPIResponse';
 import type {
   EscapedHits,
   Hit,
   HitAttributeHighlightResult,
 } from '../../../types';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { wait } from '../../../../test/utils/wait';
+import instantsearch from '../../../index.es';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
@@ -749,7 +755,50 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     describe('insights', () => {
       describe('sendEvent', () => {
         it('sends view event when hits are rendered', () => {
-          const { instantSearchInstance } = createRenderedWidget();
+          const renderFn = jest.fn();
+          const makeWidget = connectHits(renderFn);
+          const widget = makeWidget({});
+
+          const instantSearchInstance = createInstantSearch({
+            sendEventToInsights: jest.fn(),
+          });
+
+          widget.init!(
+            createInitOptions({
+              instantSearchInstance,
+            })
+          );
+
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(0);
+
+          const hits = [
+            {
+              objectID: '1',
+              fake: 'data',
+              __queryID: 'test-query-id',
+              __position: 0,
+            },
+            {
+              objectID: '2',
+              sample: 'infos',
+              __queryID: 'test-query-id',
+              __position: 1,
+            },
+          ];
+
+          const results = new SearchResults(new SearchParameters(), [
+            createSingleSearchResponse({ hits }),
+          ]);
+
+          widget.render!(
+            createRenderOptions({
+              instantSearchInstance,
+              results,
+            })
+          );
+
           expect(
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledTimes(1);
@@ -774,11 +823,65 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             insightsMethod: 'viewedObjectIDs',
             payload: {
               eventName: 'Hits Viewed',
-              index: '',
+              index: 'indexName',
               objectIDs: ['1', '2'],
             },
             widgetType: 'ais.hits',
           });
+        });
+
+        it('does not send view event when hits are stalled rendered', async () => {
+          const renderFn = jest.fn();
+          const makeWidget = connectHits(renderFn);
+          const widget = makeWidget({});
+
+          const hits = [
+            {
+              objectID: '1',
+              fake: 'data',
+              __queryID: 'test-query-id',
+              __position: 0,
+            },
+            {
+              objectID: '2',
+              sample: 'infos',
+              __queryID: 'test-query-id',
+              __position: 1,
+            },
+          ];
+
+          const instantSearchInstance = instantsearch({
+            searchClient: createSearchClient({
+              search() {
+                return Promise.resolve(
+                  createMultiSearchResponse(
+                    createSingleSearchResponse({ hits })
+                  )
+                );
+              },
+            }),
+            indexName: 'indexName',
+          });
+          instantSearchInstance.sendEventToInsights = jest.fn();
+          instantSearchInstance.start();
+
+          instantSearchInstance.addWidgets([widget]);
+
+          await wait(0);
+
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1);
+
+          instantSearchInstance.mainHelper!.hasPendingRequests = () => true;
+          instantSearchInstance._isSearchStalled = true;
+          instantSearchInstance.scheduleRender();
+
+          await wait(0);
+
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1);
         });
 
         it('sends view event after hits are rendered', () => {

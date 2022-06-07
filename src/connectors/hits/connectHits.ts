@@ -113,7 +113,9 @@ const connectHits: HitsConnector = function connectHits(
           false
         );
 
-        renderState.sendEvent('view', renderState.hits);
+        if (!renderOptions.searchMetadata.isSearchStalled) {
+          renderState.sendEvent('view', renderState.hits);
+        }
       },
 
       getRenderState(renderState, renderOptions) {

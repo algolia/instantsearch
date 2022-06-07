@@ -8,11 +8,16 @@ import {
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '../../../../test/mock/createAPIResponse';
 import type { AutocompleteRenderState } from '../connectAutocomplete';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import type { SearchClient } from '../../../types';
+import { wait } from '../../../../test/utils/wait';
+import instantsearch from '../../../index.es';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
@@ -811,6 +816,58 @@ search.addWidgets([
         },
         widgetType: 'ais.autocomplete',
       });
+    });
+
+    it('does not send view event when hits are stalled rendered', async () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget({});
+
+      const hits = [
+        {
+          objectID: '1',
+          fake: 'data',
+          __queryID: 'test-query-id',
+          __position: 0,
+        },
+        {
+          objectID: '2',
+          sample: 'infos',
+          __queryID: 'test-query-id',
+          __position: 1,
+        },
+      ];
+
+      const instantSearchInstance = instantsearch({
+        searchClient: createSearchClient({
+          search() {
+            return Promise.resolve(
+              createMultiSearchResponse(createSingleSearchResponse({ hits }))
+            );
+          },
+        }),
+        indexName: 'indexName',
+      });
+      instantSearchInstance.sendEventToInsights = jest.fn();
+      instantSearchInstance.start();
+
+      instantSearchInstance.addWidgets([widget]);
+
+      await wait(0);
+
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+
+      instantSearchInstance.mainHelper!.hasPendingRequests = () => true;
+      instantSearchInstance._isSearchStalled = true;
+      instantSearchInstance.scheduleRender();
+
+      await wait(0);
+
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
     });
 
     it('sends click event', () => {
