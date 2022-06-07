@@ -1,12 +1,12 @@
 {
   "name": "media",
-  "version": "6.26.0",
+  "version": "6.27.0",
   "private": true,
   "dependencies": {
     "algoliasearch": "4.11.0",
     "qs": "6.8.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-instantsearch-dom": "6.26.0"
+    "react-instantsearch-dom": "6.27.0"
   }
 }

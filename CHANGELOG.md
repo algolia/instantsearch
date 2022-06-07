@@ -1,3 +1,19 @@
+# [6.27.0](https://github.com/algolia/react-instantsearch/compare/v6.26.0...v6.27.0) (2022-06-07)
+
+
+### Bug Fixes
+
+* **hooks-web:** don't pass widget props to ui components ([#3501](https://github.com/algolia/react-instantsearch/issues/3501)) ([5bd53c1](https://github.com/algolia/react-instantsearch/commit/5bd53c128ddeeea87f75ae89eb8f2324d476c70e)), closes [#3499](https://github.com/algolia/react-instantsearch/issues/3499)
+* **SearchBox-hooks:** correctly pass widget props ([#3499](https://github.com/algolia/react-instantsearch/issues/3499)) ([2cdf906](https://github.com/algolia/react-instantsearch/commit/2cdf90602b7c2c5895124ef64c389ce574154386)), closes [#3498](https://github.com/algolia/react-instantsearch/issues/3498)
+
+
+### Features
+
+* **hooks:** migrate to `useSyncExternalStore()` ([#3489](https://github.com/algolia/react-instantsearch/issues/3489)) ([81bbdf2](https://github.com/algolia/react-instantsearch/commit/81bbdf28f2d28d8b0081cfd7d9e84c3e33038dd2))
+* **hooks:** upgrade to InstantSearch.js 4.41.0 ([#3502](https://github.com/algolia/react-instantsearch/issues/3502)) ([0b76792](https://github.com/algolia/react-instantsearch/commit/0b76792ea0c4e2ac9fe742810d70ba1aee2a3e79))
+
+
+
 # [6.26.0](https://github.com/algolia/react-instantsearch/compare/v6.25.0...v6.26.0) (2022-05-19)
 
 
