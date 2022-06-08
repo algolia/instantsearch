@@ -2038,7 +2038,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
   test('with function form sets indices state', async () => {
     const searchClient = createSearchClient();
-    const search = new InstantSearch<UiState>({
+    const search = new InstantSearch({
       indexName: 'indexName',
       searchClient,
       initialUiState: {
@@ -2681,7 +2681,9 @@ describe('onStateChange', () => {
 describe('initialUiState', () => {
   it('warns if UI state contains unmounted widgets in development mode', async () => {
     const searchClient = createSearchClient();
-    const search = new InstantSearch({
+    const search = new InstantSearch<
+      UiState & { [indexName: string]: { customWidget?: { query: string } } }
+    >({
       indexName: 'indexName',
       searchClient,
       initialUiState: {
