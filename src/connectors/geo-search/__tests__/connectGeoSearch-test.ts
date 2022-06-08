@@ -1751,11 +1751,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         1
       );
 
-      instantSearchInstance.mainHelper!.hasPendingRequests = () => true;
-      instantSearchInstance._isSearchStalled = true;
-      instantSearchInstance.scheduleRender();
-
-      await wait(0);
+      // this client never resolves, thus search is stalled
+      instantSearchInstance.client.search = () => new Promise(() => {});
+      instantSearchInstance.scheduleSearch();
+      await wait(400);
 
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
