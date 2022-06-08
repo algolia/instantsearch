@@ -71,7 +71,7 @@ describe('routing using `replaceState`', () => {
 
       // Asserting `dispose` calling `pushState`
       await wait(writeWait);
-      expect(window.location.pathname).toEqual('/about');
+      expect(window.location.pathname).toEqual('/');
       expect(window.location.search).toEqual('');
       expect(pushState).toHaveBeenCalledTimes(2);
     }

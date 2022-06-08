@@ -257,21 +257,13 @@ See ${createDocumentationLink({
     this._createURL = defaultCreateURL;
     this._initialUiState = initialUiState;
     this._initialResults = null;
+    this._routing = routing;
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
     }
 
     this.sendEventToInsights = noop;
-
-    if (routing) {
-      const routerOptions = typeof routing === 'boolean' ? undefined : routing;
-      this.use(createRouterMiddleware(routerOptions));
-    }
-
-    if (isMetadataEnabled()) {
-      this.use(createMetadataMiddleware());
-    }
   }
 
   /**
@@ -432,6 +424,16 @@ See ${createDocumentationLink({
       );
     }
 
+    if (this._routing) {
+      const routerOptions =
+        typeof this._routing === 'boolean' ? undefined : this._routing;
+      this.use(createRouterMiddleware(routerOptions));
+    }
+
+    if (isMetadataEnabled()) {
+      this.use(createMetadataMiddleware());
+    }
+
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
     // DerivedHelper scoped into the `index` widgets.
@@ -563,9 +565,7 @@ See ${createDocumentationLink({
     this.mainHelper = null;
     this.helper = null;
 
-    this.middleware.forEach(({ instance }) => {
-      instance.unsubscribe();
-    });
+    this.unuse(...this.middleware.map((m) => m.creator));
   }
 
   public scheduleSearch = defer(() => {

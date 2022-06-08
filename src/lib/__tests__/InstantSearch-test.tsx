@@ -454,11 +454,10 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     it("doesn't add metadata middleware by default", () => {
       const useSpy = jest.spyOn(InstantSearch.prototype, 'use');
 
-      // eslint-disable-next-line no-new
       new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
-      });
+      }).start();
 
       expect(useSpy).toHaveBeenCalledTimes(0);
     });
@@ -468,11 +467,10 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
       const useSpy = jest.spyOn(InstantSearch.prototype, 'use');
 
-      // eslint-disable-next-line no-new
       new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
-      });
+      }).start();
 
       expect(useSpy).toHaveBeenCalledTimes(1);
     });
@@ -1671,12 +1669,7 @@ describe('use', () => {
 
     await wait(0);
 
-    expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(2);
-    expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
-      uiState: {
-        indexName: {},
-      },
-    });
+    expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
@@ -1758,18 +1751,8 @@ describe('use', () => {
 
     await wait(0);
 
-    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(2);
-    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(2);
-    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledWith({
-      uiState: {
-        indexName: {},
-      },
-    });
-    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledWith({
-      uiState: {
-        indexName: {},
-      },
-    });
+    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(1);
+    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareBeforeStartSpy.unsubscribe).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.unsubscribe).toHaveBeenCalledTimes(1);
   });
