@@ -102,9 +102,9 @@ export type InstantSearchOptions<
    * become in charge of updating the UI state with the `setUiState` function.
    */
   onStateChange?: (params: {
-    uiState: UiState;
+    uiState: TUiState;
     setUiState(
-      uiState: UiState | ((previousUiState: UiState) => UiState)
+      uiState: TUiState | ((previousUiState: TUiState) => TUiState)
     ): void;
   }) => void;
 
@@ -148,7 +148,8 @@ class InstantSearch<
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
   public insightsClient: AlgoliaInsightsClient | null;
-  public onStateChange: InstantSearchOptions['onStateChange'] | null = null;
+  public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
+    null;
   public helper: AlgoliaSearchHelper | null;
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
@@ -158,9 +159,9 @@ class InstantSearch<
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
-  public _initialUiState: UiState;
+  public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
-  public _createURL: CreateURL<UiState>;
+  public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: Array<{
@@ -175,7 +176,7 @@ class InstantSearch<
     const {
       indexName = null,
       numberLocale,
-      initialUiState = {},
+      initialUiState = {} as TUiState,
       routing = null,
       searchFunction,
       stalledSearchDelay = 200,
@@ -283,7 +284,12 @@ See ${createDocumentationLink({
         subscribe: noop,
         unsubscribe: noop,
         onStateChange: noop,
-        ...fn({ instantSearchInstance: this }),
+        ...fn({
+          instantSearchInstance: this as unknown as InstantSearch<
+            UiState,
+            UiState
+          >,
+        }),
       };
       this.middleware.push({
         creator: fn,
@@ -496,7 +502,7 @@ See ${createDocumentationLink({
     });
 
     this.mainIndex.init({
-      instantSearchInstance: this,
+      instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
       parent: null,
       uiState: this._initialUiState,
     });
@@ -582,7 +588,7 @@ See ${createDocumentationLink({
     }
 
     this.mainIndex.render({
-      instantSearchInstance: this,
+      instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
     });
 
     this.emit('render');
@@ -598,7 +604,7 @@ See ${createDocumentationLink({
   }
 
   public setUiState(
-    uiState: UiState | ((previousUiState: UiState) => UiState)
+    uiState: TUiState | ((previousUiState: TUiState) => TUiState)
   ): void {
     if (!this.mainHelper) {
       throw new Error(
@@ -611,7 +617,7 @@ See ${createDocumentationLink({
     this.mainIndex.refreshUiState();
     const nextUiState =
       typeof uiState === 'function'
-        ? uiState(this.mainIndex.getWidgetUiState({}))
+        ? uiState(this.mainIndex.getWidgetUiState({}) as TUiState)
         : uiState;
 
     const setIndexHelperState = (indexWidget: IndexWidget) => {
@@ -642,13 +648,13 @@ See ${createDocumentationLink({
     this.onInternalStateChange();
   }
 
-  public getUiState(): UiState {
+  public getUiState(): TUiState {
     if (this.started) {
       // We refresh the index UI state to make sure changes from `refine` are taken in account
       this.mainIndex.refreshUiState();
     }
 
-    return this.mainIndex.getWidgetUiState({});
+    return this.mainIndex.getWidgetUiState({}) as TUiState;
   }
 
   public onInternalStateChange = defer(() => {
@@ -661,7 +667,7 @@ See ${createDocumentationLink({
     });
   });
 
-  public createURL(nextState: UiState = {}): string {
+  public createURL(nextState: TUiState = {} as TUiState): string {
     if (!this.started) {
       throw new Error(
         withUsage('The `start` method needs to be called before `createURL`.')
