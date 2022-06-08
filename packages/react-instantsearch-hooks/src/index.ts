@@ -25,3 +25,4 @@ export * from './connectors/useSearchBox';
 export * from './connectors/useSortBy';
 export * from './connectors/useToggleRefinement';
 export * from './hooks/useConnector';
+export * from './hooks/useInstantSearch';

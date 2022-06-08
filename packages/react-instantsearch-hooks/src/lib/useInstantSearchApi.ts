@@ -21,13 +21,13 @@ const defaultUserAgents = [
   `react-instantsearch-hooks (${version})`,
 ];
 
-export type UseInstantSearchProps<
+export type UseInstantSearchApiProps<
   TUiState extends UiState,
   TRouteState
 > = InstantSearchOptions<TUiState, TRouteState>;
 
-export function useInstantSearch<TUiState extends UiState, TRouteState>(
-  props: UseInstantSearchProps<TUiState, TRouteState>
+export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
+  props: UseInstantSearchApiProps<TUiState, TRouteState>
 ) {
   const forceUpdate = useForceUpdate();
   const serverContext = useInstantSearchServerContext();

@@ -23,7 +23,12 @@ import {
   ToggleRefinement,
 } from 'react-instantsearch-hooks-web';
 
-import { Panel, QueryRuleContext, QueryRuleCustomData } from './components';
+import {
+  Panel,
+  QueryRuleContext,
+  QueryRuleCustomData,
+  Refresh,
+} from './components';
 import { Tab, Tabs } from './components/layout';
 
 import './App.css';
@@ -102,8 +107,16 @@ export function App() {
             ]}
           />
 
+          <SearchBox placeholder="Search" />
+
           <div className="Search-header">
-            <SearchBox placeholder="Search" />
+            <PoweredBy />
+            <HitsPerPage
+              items={[
+                { label: '20 hits per page', value: 20, default: true },
+                { label: '40 hits per page', value: 40 },
+              ]}
+            />
             <SortBy
               items={[
                 { label: 'Relevance', value: 'instant_search' },
@@ -111,14 +124,8 @@ export function App() {
                 { label: 'Price (desc)', value: 'instant_search_price_desc' },
               ]}
             />
-            <HitsPerPage
-              items={[
-                { label: '20 hits per page', value: 20, default: true },
-                { label: '40 hits per page', value: 40 },
-              ]}
-            />
+            <Refresh />
           </div>
-          <PoweredBy />
 
           <div className="CurrentRefinements">
             <ClearRefinements />
