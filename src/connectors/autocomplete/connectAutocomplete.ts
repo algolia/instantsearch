@@ -139,11 +139,9 @@ search.addWidgets([
 
         const renderState = this.getWidgetRenderState(renderOptions);
 
-        if (!renderOptions.searchMetadata.isSearchStalled) {
-          renderState.indices.forEach(({ sendEvent, hits }) => {
-            sendEvent('view', hits);
-          });
-        }
+        renderState.indices.forEach(({ sendEvent, hits }) => {
+          sendEvent('view', hits);
+        });
 
         renderFn(
           {
