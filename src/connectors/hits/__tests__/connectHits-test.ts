@@ -850,16 +850,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             },
           ];
 
+          const searchClient = createSearchClient({
+            search() {
+              return Promise.resolve(
+                createMultiSearchResponse(createSingleSearchResponse({ hits }))
+              );
+            },
+          });
+
           const instantSearchInstance = instantsearch({
-            searchClient: createSearchClient({
-              search() {
-                return Promise.resolve(
-                  createMultiSearchResponse(
-                    createSingleSearchResponse({ hits })
-                  )
-                );
-              },
-            }),
+            searchClient,
+            stalledSearchDelay: 1,
             indexName: 'indexName',
           });
           instantSearchInstance.sendEventToInsights = jest.fn();
@@ -874,9 +875,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           ).toHaveBeenCalledTimes(1);
 
           // this client never resolves, thus search is stalled
-          instantSearchInstance.client.search = () => new Promise(() => {});
+          searchClient.search = () => new Promise(() => {});
           instantSearchInstance.scheduleSearch();
-          await wait(400);
+          await wait(10); // stalled search + a margin of error
 
           expect(
             instantSearchInstance.sendEventToInsights
