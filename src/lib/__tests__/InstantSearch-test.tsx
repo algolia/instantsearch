@@ -21,7 +21,7 @@ import {
 } from '../../../test/mock/createWidget';
 import { castToJestMock } from '../../../test/utils/castToJestMock';
 import type { IndexWidget } from '../../widgets/index/index';
-import type { Widget } from '../../types';
+import type { UiState, Widget } from '../../types';
 import type {
   PaginationConnectorParams,
   PaginationWidgetDescription,
@@ -2038,7 +2038,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
   test('with function form sets indices state', async () => {
     const searchClient = createSearchClient();
-    const search = new InstantSearch({
+    const search = new InstantSearch<UiState>({
       indexName: 'indexName',
       searchClient,
       initialUiState: {
