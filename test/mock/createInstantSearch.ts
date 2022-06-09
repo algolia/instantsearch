@@ -32,7 +32,7 @@ export const createInstantSearch = (
     scheduleStalledRender: defer(jest.fn()),
     scheduleSearch: defer(jest.fn()),
     scheduleRender: defer(jest.fn()),
-    _isSearchStalled: true,
+    _isSearchStalled: false,
     _stalledSearchDelay: 200,
     _searchStalledTimer: null,
     _initialUiState: {},
