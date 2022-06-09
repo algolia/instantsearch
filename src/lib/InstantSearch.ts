@@ -41,6 +41,11 @@ function defaultCreateURL() {
   return '#';
 }
 
+// this purposely breaks typescript's type inference to ensure it's not used
+// as it's used for a default parameter for example
+// source: https://github.com/Microsoft/TypeScript/issues/14829#issuecomment-504042546
+type NoInfer<T> = [T][T extends any ? 0 : never];
+
 /**
  * Global options for an InstantSearch instance.
  */
@@ -114,7 +119,7 @@ export type InstantSearchOptions<
    * for the first search. To unconditionally pass additional parameters to the
    * Algolia API, take a look at the `configure` widget.
    */
-  initialUiState?: TUiState;
+  initialUiState?: NoInfer<TUiState>;
 
   /**
    * Time before a search is considered stalled. The default is 200ms
