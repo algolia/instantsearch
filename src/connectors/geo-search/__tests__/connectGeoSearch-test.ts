@@ -10,7 +10,12 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '../../../../test/mock/createAPIResponse';
+import instantsearch from '../../../index.es';
+import { wait } from '../../../../test/utils/wait';
 
 describe('connectGeoSearch', () => {
   const createFakeHelper = () => {
@@ -1697,6 +1702,66 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
         widgetType: 'ais.geoSearch',
       });
+    });
+
+    it('does not send view event when hits are stalled rendered', async () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectGeoSearch(renderFn);
+      const widget = makeWidget({});
+
+      const hits = [
+        {
+          objectID: '123',
+          _geoloc: { lat: 10, lng: 12 },
+          __position: 0,
+          __queryID: 'test-query-id',
+        },
+        {
+          objectID: '456',
+          _geoloc: { lat: 12, lng: 14 },
+          __position: 1,
+          __queryID: 'test-query-id',
+        },
+        {
+          objectID: '789',
+          _geoloc: { lat: 14, lng: 16 },
+          __position: 2,
+          __queryID: 'test-query-id',
+        },
+      ];
+
+      const searchClient = createSearchClient({
+        search() {
+          return Promise.resolve(
+            createMultiSearchResponse(createSingleSearchResponse({ hits }))
+          );
+        },
+      });
+
+      const instantSearchInstance = instantsearch({
+        searchClient,
+        stalledSearchDelay: 1,
+        indexName: 'indexName',
+      });
+      instantSearchInstance.sendEventToInsights = jest.fn();
+      instantSearchInstance.start();
+
+      instantSearchInstance.addWidgets([widget]);
+
+      await wait(0);
+
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+
+      // this client never resolves, thus search is stalled
+      searchClient.search = () => new Promise(() => {});
+      instantSearchInstance.scheduleSearch();
+      await wait(10); // stalled search + a margin of error
+
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
     });
 
     it('sends click event', () => {

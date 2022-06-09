@@ -2038,7 +2038,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
   test('with function form sets indices state', async () => {
     const searchClient = createSearchClient();
-    const search = new InstantSearch({
+    const search = new InstantSearch<UiState>({
       indexName: 'indexName',
       searchClient,
       initialUiState: {

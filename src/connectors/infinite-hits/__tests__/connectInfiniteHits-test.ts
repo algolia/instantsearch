@@ -16,10 +16,15 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import {
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '../../../../test/mock/createAPIResponse';
 import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
 import connectInfiniteHits from '../connectInfiniteHits';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import instantsearch from '../../../index.es';
+import { wait } from '../../../../test/utils/wait';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
@@ -1413,6 +1418,60 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             },
             widgetType: 'ais.infiniteHits',
           });
+        });
+
+        it('does not send view event when hits are stalled rendered', async () => {
+          const renderFn = jest.fn();
+          const makeWidget = connectInfiniteHits(renderFn);
+          const widget = makeWidget({});
+
+          const hits = [
+            {
+              objectID: '1',
+              fake: 'data',
+              __queryID: 'test-query-id',
+              __position: 0,
+            },
+            {
+              objectID: '2',
+              sample: 'infos',
+              __queryID: 'test-query-id',
+              __position: 1,
+            },
+          ];
+
+          const searchClient = createSearchClient({
+            search() {
+              return Promise.resolve(
+                createMultiSearchResponse(createSingleSearchResponse({ hits }))
+              );
+            },
+          });
+
+          const instantSearchInstance = instantsearch({
+            searchClient,
+            stalledSearchDelay: 1,
+            indexName: 'indexName',
+          });
+          instantSearchInstance.sendEventToInsights = jest.fn();
+          instantSearchInstance.start();
+
+          instantSearchInstance.addWidgets([widget]);
+
+          await wait(0);
+
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1);
+
+          // this client never resolves, thus search is stalled
+          searchClient.search = () => new Promise(() => {});
+          instantSearchInstance.scheduleSearch();
+          await wait(10); // stalled search + a margin of error
+
+          expect(
+            instantSearchInstance.sendEventToInsights
+          ).toHaveBeenCalledTimes(1);
         });
 
         it('sends view event after hits are rendered', () => {
