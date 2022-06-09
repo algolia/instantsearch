@@ -1,29 +1,36 @@
 import { useConnector } from '../hooks/useConnector';
 
-import type { Connector, IndexUiState, UiState } from 'instantsearch.js';
+import type { Connector, UiState } from 'instantsearch.js';
 
-type SearchStateRenderState = {
-  uiState: UiState;
-  indexUiState: IndexUiState;
-  setUiState(uiState: UiState | ((previousUiState: UiState) => UiState)): void;
+export type SearchStateRenderState<TUiState extends UiState> = {
+  uiState: TUiState;
+  indexUiState: TUiState[keyof TUiState];
+  setUiState(
+    uiState: TUiState | ((previousUiState: TUiState) => TUiState)
+  ): void;
   setIndexUiState(
     indexUiState:
-      | IndexUiState
-      | ((previousIndexUiState: IndexUiState) => IndexUiState)
+      | TUiState[keyof TUiState]
+      | ((
+          previousIndexUiState: TUiState[keyof UiState]
+        ) => TUiState[keyof UiState])
   ): void;
 };
 
-type SearchStateWidgetDescription = {
+type SearchStateWidgetDescription<TUiState extends UiState = UiState> = {
   $$type: 'ais.searchState';
-  renderState: SearchStateRenderState;
+  renderState: SearchStateRenderState<TUiState>;
 };
 
-const connectSearchState: Connector<SearchStateWidgetDescription, never> = (
-  renderFn
-) => {
+type SearchStateConnector<TUiState extends UiState = UiState> = Connector<
+  SearchStateWidgetDescription<TUiState>,
+  never
+>;
+
+const connectSearchState: SearchStateConnector = (renderFn) => {
   return (widgetParams) => {
-    let setUiState: SearchStateRenderState['setUiState'];
-    let setIndexUiState: SearchStateRenderState['setIndexUiState'];
+    let setUiState: SearchStateRenderState<UiState>['setUiState'];
+    let setIndexUiState: SearchStateRenderState<UiState>['setIndexUiState'];
     return {
       $$type: 'ais.searchState',
       getWidgetRenderState({ instantSearchInstance, parent }) {
@@ -69,6 +76,8 @@ const connectSearchState: Connector<SearchStateWidgetDescription, never> = (
   };
 };
 
-export function useSearchState() {
-  return useConnector(connectSearchState);
+export function useSearchState<TUiState extends UiState = UiState>() {
+  return useConnector<never, SearchStateWidgetDescription<TUiState>>(
+    connectSearchState as unknown as SearchStateConnector<TUiState>
+  );
 }

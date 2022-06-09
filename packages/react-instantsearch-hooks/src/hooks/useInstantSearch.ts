@@ -4,33 +4,26 @@ import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 import { useSearchResults } from '../lib/useSearchResults';
 import { useSearchState } from '../lib/useSearchState';
 
-import type { SearchResults } from 'algoliasearch-helper';
-import type {
-  IndexUiState,
-  InstantSearch,
-  Middleware,
-  ScopedResult,
-  UiState,
-} from 'instantsearch.js';
+import type { SearchResultsRenderState } from '../lib/useSearchResults';
+import type { SearchStateRenderState } from '../lib/useSearchState';
+import type { InstantSearch, Middleware, UiState } from 'instantsearch.js';
 
-type InstantSearchApi = {
-  scopedResults: ScopedResult[];
-  results: SearchResults<any>;
-  uiState: UiState;
-  setUiState: InstantSearch['setUiState'];
-  indexUiState: IndexUiState;
-  setIndexUiState: (indexUiState: IndexUiState) => void;
-  use: (...middlewares: Middleware[]) => () => void;
-  refresh: InstantSearch['refresh'];
-};
+type InstantSearchApi<TUiState extends UiState> =
+  SearchStateRenderState<TUiState> &
+    SearchResultsRenderState & {
+      use: (...middlewares: Middleware[]) => () => void;
+      refresh: InstantSearch['refresh'];
+    };
 
-export function useInstantSearch(): InstantSearchApi {
-  const search = useInstantSearchContext();
+export function useInstantSearch<
+  TUiState extends UiState = UiState
+>(): InstantSearchApi<TUiState> {
+  const search = useInstantSearchContext<TUiState>();
   const { uiState, setUiState, indexUiState, setIndexUiState } =
-    useSearchState();
+    useSearchState<TUiState>();
   const { results, scopedResults } = useSearchResults();
 
-  const use: InstantSearchApi['use'] = useCallback(
+  const use: InstantSearchApi<TUiState>['use'] = useCallback(
     (...middlewares: Middleware[]) => {
       search.use(...middlewares);
 
@@ -41,7 +34,7 @@ export function useInstantSearch(): InstantSearchApi {
     [search]
   );
 
-  const refresh: InstantSearchApi['refresh'] = useCallback(() => {
+  const refresh: InstantSearchApi<TUiState>['refresh'] = useCallback(() => {
     search.refresh();
   }, [search]);
 

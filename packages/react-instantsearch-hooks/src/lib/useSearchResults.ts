@@ -3,7 +3,7 @@ import { useConnector } from '../hooks/useConnector';
 import type { SearchResults } from 'algoliasearch-helper';
 import type { Connector, ScopedResult } from 'instantsearch.js';
 
-type SearchResultsRenderState = {
+export type SearchResultsRenderState = {
   results: SearchResults<any>;
   scopedResults: ScopedResult[];
 };
