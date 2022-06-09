@@ -1,9 +1,10 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { useRefinementList } from 'react-instantsearch-hooks';
 
-import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
+import { createSearchClient } from '../../../../../test/mock';
+import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { CurrentRefinements } from '../CurrentRefinements';
 
 import type { UseRefinementListProps } from 'react-instantsearch-hooks';
@@ -27,14 +28,15 @@ describe('CurrentRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => {
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-item')
+      ).toHaveLength(2);
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-category')
+      ).toHaveLength(3);
+    });
 
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-item')
-    ).toHaveLength(2);
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-category')
-    ).toHaveLength(3);
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
@@ -115,13 +117,14 @@ describe('CurrentRefinements', () => {
   });
 
   test('renders with a specific set of class names when there are no refinements', async () => {
+    const searchClient = createSearchClient({});
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <CurrentRefinements />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -154,14 +157,15 @@ describe('CurrentRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => {
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-item')
+      ).toHaveLength(2);
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-category')
+      ).toHaveLength(3);
+    });
 
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-item')
-    ).toHaveLength(2);
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-category')
-    ).toHaveLength(3);
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
@@ -246,54 +250,58 @@ describe('CurrentRefinements', () => {
 
     userEvent.click(button3);
 
-    await wait(0);
+    await waitFor(() => {
+      expect(queryByText('Audio')).toBeNull();
+      expect(queryByText('Apple')).not.toBeNull();
+      expect(queryByText('Samsung')).not.toBeNull();
 
-    expect(queryByText('Audio')).toBeNull();
-    expect(queryByText('Apple')).not.toBeNull();
-    expect(queryByText('Samsung')).not.toBeNull();
-
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-item')
-    ).toHaveLength(1);
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-category')
-    ).toHaveLength(2);
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-item')
+      ).toHaveLength(1);
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-category')
+      ).toHaveLength(2);
+    });
 
     userEvent.click(button1);
 
-    await wait(0);
+    await waitFor(() => {
+      expect(queryByText('Audio')).toBeNull();
+      expect(queryByText('Apple')).toBeNull();
+      expect(queryByText('Samsung')).not.toBeNull();
 
-    expect(queryByText('Audio')).toBeNull();
-    expect(queryByText('Apple')).toBeNull();
-    expect(queryByText('Samsung')).not.toBeNull();
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-item')
-    ).toHaveLength(1);
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-category')
-    ).toHaveLength(1);
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-item')
+      ).toHaveLength(1);
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-category')
+      ).toHaveLength(1);
+    });
 
     userEvent.click(button2);
 
-    await wait(0);
+    await waitFor(() => {
+      expect(queryByText('Audio')).toBeNull();
+      expect(queryByText('Apple')).toBeNull();
+      expect(queryByText('Samsung')).toBeNull();
 
-    expect(queryByText('Audio')).toBeNull();
-    expect(queryByText('Apple')).toBeNull();
-    expect(queryByText('Samsung')).toBeNull();
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-item')
-    ).toHaveLength(0);
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-category')
-    ).toHaveLength(0);
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-item')
+      ).toHaveLength(0);
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-category')
+      ).toHaveLength(0);
+    });
   });
 
   test('does not trigger default event', async () => {
+    const searchClient = createSearchClient({});
     const onSubmit = jest.fn();
 
     render(
       <form onSubmit={onSubmit}>
         <InstantSearchHooksTestWrapper
+          searchClient={searchClient}
           initialUiState={{
             indexName: {
               refinementList: {
@@ -308,7 +316,7 @@ describe('CurrentRefinements', () => {
       </form>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     userEvent.click(
       document.querySelector(
@@ -316,14 +324,14 @@ describe('CurrentRefinements', () => {
       ) as HTMLButtonElement
     );
 
-    await wait(0);
-
-    expect(onSubmit).not.toHaveBeenCalled();
+    await waitFor(() => expect(onSubmit).not.toHaveBeenCalled());
   });
 
   test('does not clear when pressing a modifier key', async () => {
+    const searchClient = createSearchClient({});
     const { container } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -337,7 +345,7 @@ describe('CurrentRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(
       document.querySelectorAll('.ais-CurrentRefinements-item')
@@ -390,11 +398,12 @@ describe('CurrentRefinements', () => {
     userEvent.click(button, { metaKey: true });
     userEvent.click(button, { shiftKey: true });
 
-    await wait(0);
+    await waitFor(() =>
+      expect(
+        document.querySelectorAll('.ais-CurrentRefinements-item')
+      ).toHaveLength(1)
+    );
 
-    expect(
-      document.querySelectorAll('.ais-CurrentRefinements-item')
-    ).toHaveLength(1);
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
@@ -435,8 +444,10 @@ describe('CurrentRefinements', () => {
   });
 
   test('inclusively restricts what refinements to display', async () => {
+    const searchClient = createSearchClient({});
     const { container, queryByText } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -452,7 +463,7 @@ describe('CurrentRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(queryByText('Apple')).toBeNull();
     expect(queryByText('Audio')).not.toBeNull();
@@ -496,8 +507,10 @@ describe('CurrentRefinements', () => {
   });
 
   test('exclusively restricts what refinements to display', async () => {
+    const searchClient = createSearchClient({});
     const { container, queryByText } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -513,7 +526,7 @@ describe('CurrentRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(queryByText('Apple')).toBeNull();
     expect(queryByText('Audio')).not.toBeNull();
@@ -557,8 +570,10 @@ describe('CurrentRefinements', () => {
   });
 
   test('restricts what refinements to display with custom logic', async () => {
+    const searchClient = createSearchClient({});
     const { container, queryByText } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -578,7 +593,7 @@ describe('CurrentRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(queryByText('Apple')).toBeNull();
     expect(queryByText('Audio')).not.toBeNull();

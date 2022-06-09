@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -7,10 +7,10 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
+import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { RangeInput } from '../RangeInput';
 
-function createSearchClientWithFacetsStats() {
+function createMockedSearchClient() {
   return createSearchClient({
     search: jest.fn((requests) => {
       return Promise.resolve(
@@ -38,16 +38,16 @@ function createSearchClientWithFacetsStats() {
 
 describe('RangeInput', () => {
   test('renders with default props', async () => {
-    const client = createSearchClientWithFacetsStats();
+    const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <RangeInput attribute="price" />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(client.search).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -101,10 +101,10 @@ describe('RangeInput', () => {
   });
 
   test('renders with initial refinements', async () => {
-    const client = createSearchClientWithFacetsStats();
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper
-        searchClient={client}
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             range: {
@@ -117,7 +117,7 @@ describe('RangeInput', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(container.querySelector('.ais-RangeInput-input--min')).toHaveValue(
       100
@@ -128,14 +128,14 @@ describe('RangeInput', () => {
   });
 
   test('renders with precision', async () => {
-    const client = createSearchClientWithFacetsStats();
+    const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <RangeInput attribute="price" precision={2} />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     ['min', 'max'].forEach((target) => {
       expect(
@@ -145,16 +145,16 @@ describe('RangeInput', () => {
   });
 
   test('refines on submit', async () => {
-    const client = createSearchClientWithFacetsStats();
+    const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <RangeInput attribute="price" />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(client.search).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
 
     userEvent.type(
       container.querySelector('.ais-RangeInput-input--min')!,
@@ -167,10 +167,9 @@ describe('RangeInput', () => {
 
     userEvent.click(container.querySelector('.ais-RangeInput-submit')!);
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
 
-    expect(client.search).toHaveBeenCalledTimes(2);
-    expect(client.search).toHaveBeenLastCalledWith(
+    expect(searchClient.search).toHaveBeenLastCalledWith(
       expect.arrayContaining([
         expect.objectContaining({
           params: expect.objectContaining({
@@ -182,9 +181,9 @@ describe('RangeInput', () => {
   });
 
   test('forwards custom class names and `div` props to the root element', () => {
-    const client = createSearchClientWithFacetsStats();
+    const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <RangeInput
           attribute="price"
           className="MyRangeInput"

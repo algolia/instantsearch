@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { useHierarchicalMenu } from 'react-instantsearch-hooks';
@@ -8,7 +8,7 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
+import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { Breadcrumb } from '../Breadcrumb';
 
 import type { UseHierarchicalMenuProps } from 'react-instantsearch-hooks';
@@ -24,25 +24,24 @@ describe('Breadcrumb', () => {
   };
   const hierarchicalAttributes = Object.keys(hierarchicalFacets);
 
-  const searchClient = createSearchClient({
-    search: jest.fn((requests) =>
-      Promise.resolve(
-        createMultiSearchResponse(
-          ...requests.map(() =>
-            createSingleSearchResponse({
-              facets: hierarchicalFacets,
-            })
+  function createMockedSearchClient() {
+    return createSearchClient({
+      search: jest.fn((requests) =>
+        Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map(() =>
+              createSingleSearchResponse({
+                facets: hierarchicalFacets,
+              })
+            )
           )
         )
-      )
-    ),
-  });
-
-  beforeEach(() => {
-    searchClient.search.mockClear();
-  });
+      ),
+    });
+  }
 
   test('renders with props', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <VirtualHierarchicalMenu attributes={hierarchicalAttributes} />
@@ -50,7 +49,7 @@ describe('Breadcrumb', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -77,6 +76,7 @@ describe('Breadcrumb', () => {
   });
 
   test('renders with initial refinements', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper
         searchClient={searchClient}
@@ -95,7 +95,7 @@ describe('Breadcrumb', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -149,6 +149,7 @@ describe('Breadcrumb', () => {
   });
 
   test('transforms the items', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper
         searchClient={searchClient}
@@ -172,7 +173,7 @@ describe('Breadcrumb', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(
       [...container.querySelectorAll('.ais-Breadcrumb-item')].map(
@@ -188,6 +189,7 @@ describe('Breadcrumb', () => {
   });
 
   test('navigates to a parent category', async () => {
+    const searchClient = createMockedSearchClient();
     const { container, getByText } = render(
       <InstantSearchHooksTestWrapper
         searchClient={searchClient}
@@ -206,9 +208,8 @@ describe('Breadcrumb', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
-    expect(searchClient.search).toHaveBeenCalledTimes(1);
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
@@ -261,8 +262,6 @@ describe('Breadcrumb', () => {
 
     userEvent.click(getByText('Cameras & Camcorders'));
 
-    await wait(0);
-
     expect(searchClient.search).toHaveBeenCalledTimes(2);
     expect(searchClient.search).toHaveBeenLastCalledWith(
       expect.arrayContaining([
@@ -278,6 +277,7 @@ describe('Breadcrumb', () => {
   });
 
   test('forwards custom class names and `div` props to the root element', () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <VirtualHierarchicalMenu attributes={hierarchicalAttributes} />

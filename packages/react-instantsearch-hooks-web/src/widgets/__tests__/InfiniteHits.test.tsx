@@ -7,58 +7,57 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '../../../../../test/mock/createAPIResponse';
-import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
+import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { InfiniteHits } from '../InfiniteHits';
 
 type CustomHit = {
   somethingSpecial: string;
 };
 
-const searchClient = createSearchClient({
-  search: jest.fn((requests) =>
-    Promise.resolve(
-      createMultiSearchResponse(
-        ...requests.map((request) => {
-          const { hitsPerPage = 3, page = 0 } = request.params!;
-          const hits = Array.from({ length: hitsPerPage }, (_, i) => {
-            const offset = hitsPerPage * page;
-            return {
-              objectID: (i + offset).toString(),
-              somethingSpecial: String.fromCharCode(
-                'a'.charCodeAt(0) + i + offset
-              ),
-            };
-          });
+function createMockedSearchClient() {
+  return createSearchClient({
+    search: jest.fn((requests) =>
+      Promise.resolve(
+        createMultiSearchResponse(
+          ...requests.map((request) => {
+            const { hitsPerPage = 3, page = 0 } = request.params!;
+            const hits = Array.from({ length: hitsPerPage }, (_, i) => {
+              const offset = hitsPerPage * page;
+              return {
+                objectID: (i + offset).toString(),
+                somethingSpecial: String.fromCharCode(
+                  'a'.charCodeAt(0) + i + offset
+                ),
+              };
+            });
 
-          return createSingleSearchResponse<CustomHit>({
-            hits,
-            page,
-            nbPages: 10,
-            hitsPerPage,
-            index: request.indexName,
-          });
-        })
+            return createSingleSearchResponse<CustomHit>({
+              hits,
+              page,
+              nbPages: 10,
+              hitsPerPage,
+              index: request.indexName,
+            });
+          })
+        )
       )
-    )
-  ),
-});
+    ),
+  });
+}
 
 describe('InfiniteHits', () => {
-  beforeEach(() => {
-    searchClient.search.mockClear();
-  });
-
   test('renders with default props', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <InfiniteHits />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(container.querySelectorAll('.ais-InfiniteHits-item')).toHaveLength(
-      3
+    await waitFor(() =>
+      expect(container.querySelectorAll('.ais-InfiniteHits-item')).toHaveLength(
+        3
+      )
     );
 
     expect(container.querySelector('.ais-InfiniteHits')).toMatchInlineSnapshot(`
@@ -115,6 +114,7 @@ describe('InfiniteHits', () => {
   });
 
   test('renders with a custom hit component', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <InfiniteHits<CustomHit>
@@ -125,9 +125,10 @@ describe('InfiniteHits', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() =>
+      expect(container.querySelectorAll('strong')).toHaveLength(3)
+    );
 
-    expect(container.querySelectorAll('strong')).toHaveLength(3);
     expect(container.querySelector('.ais-InfiniteHits')).toMatchInlineSnapshot(`
         <div
           class="ais-InfiniteHits"
@@ -173,6 +174,7 @@ describe('InfiniteHits', () => {
   });
 
   test('displays more hits when clicking the "Show More" button', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <InfiniteHits
@@ -183,9 +185,9 @@ describe('InfiniteHits', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(container.querySelectorAll('strong')).toHaveLength(3);
+    await waitFor(() =>
+      expect(container.querySelectorAll('strong')).toHaveLength(3)
+    );
 
     expect(searchClient.search).toHaveBeenCalledTimes(1);
     expect(searchClient.search).toHaveBeenLastCalledWith([
@@ -205,26 +207,27 @@ describe('InfiniteHits', () => {
       userEvent.click(container.querySelector('.ais-InfiniteHits-loadMore')!);
     });
 
-    await wait(0);
+    await waitFor(() => {
+      expect(container.querySelectorAll('strong')).toHaveLength(6);
 
-    expect(container.querySelectorAll('strong')).toHaveLength(6);
-
-    expect(searchClient.search).toHaveBeenCalledTimes(2);
-    expect(searchClient.search).toHaveBeenLastCalledWith([
-      {
-        indexName: 'indexName',
-        params: {
-          facets: [],
-          highlightPostTag: '__/ais-highlight__',
-          highlightPreTag: '__ais-highlight__',
-          page: 1,
-          tagFilters: '',
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: {
+            facets: [],
+            highlightPostTag: '__/ais-highlight__',
+            highlightPreTag: '__ais-highlight__',
+            page: 1,
+            tagFilters: '',
+          },
         },
-      },
-    ]);
+      ]);
+    });
   });
 
   test('displays previous hits when clicking the "Show Previous" button', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper
         searchClient={searchClient}
@@ -238,9 +241,9 @@ describe('InfiniteHits', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(container.querySelectorAll('strong')).toHaveLength(3);
+    await waitFor(() =>
+      expect(container.querySelectorAll('strong')).toHaveLength(3)
+    );
 
     expect(searchClient.search).toHaveBeenCalledTimes(1);
     expect(searchClient.search).toHaveBeenLastCalledWith([
@@ -262,26 +265,27 @@ describe('InfiniteHits', () => {
       );
     });
 
-    await wait(0);
+    await waitFor(() => {
+      expect(container.querySelectorAll('strong')).toHaveLength(6);
 
-    expect(container.querySelectorAll('strong')).toHaveLength(6);
-
-    expect(searchClient.search).toHaveBeenCalledTimes(2);
-    expect(searchClient.search).toHaveBeenLastCalledWith([
-      {
-        indexName: 'indexName',
-        params: {
-          facets: [],
-          highlightPostTag: '__/ais-highlight__',
-          highlightPreTag: '__ais-highlight__',
-          page: 2,
-          tagFilters: '',
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: {
+            facets: [],
+            highlightPostTag: '__/ais-highlight__',
+            highlightPreTag: '__ais-highlight__',
+            page: 2,
+            tagFilters: '',
+          },
         },
-      },
-    ]);
+      ]);
+    });
   });
 
   test('hides the "Show Previous" button when `showPrevious` is `false`', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <InfiniteHits showPrevious={false} />
@@ -313,13 +317,14 @@ describe('InfiniteHits', () => {
   });
 
   test('marks the "Show Previous" button as disabled on first page', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <InfiniteHits />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(
       container.querySelector<HTMLButtonElement>(
@@ -338,6 +343,7 @@ describe('InfiniteHits', () => {
   });
 
   test('marks the "Show More" button as disabled on last page', async () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper
         searchClient={searchClient}
@@ -347,7 +353,7 @@ describe('InfiniteHits', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(
       container.querySelector<HTMLButtonElement>('.ais-InfiniteHits-loadMore')
@@ -362,6 +368,7 @@ describe('InfiniteHits', () => {
   });
 
   test('forwards custom class names and `div` props to the root element', () => {
+    const searchClient = createMockedSearchClient();
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <InfiniteHits

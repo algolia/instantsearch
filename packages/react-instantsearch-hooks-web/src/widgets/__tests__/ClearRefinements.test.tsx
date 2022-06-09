@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import {
@@ -6,7 +6,8 @@ import {
   useRefinementList,
 } from 'react-instantsearch-hooks';
 
-import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
+import { createSearchClient } from '../../../../../test/mock';
+import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { ClearRefinements } from '../ClearRefinements';
 
 import type {
@@ -16,8 +17,10 @@ import type {
 
 describe('ClearRefinements', () => {
   test('renders with default props', async () => {
+    const searchClient = createSearchClient({});
     const { container } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -31,7 +34,7 @@ describe('ClearRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -49,13 +52,14 @@ describe('ClearRefinements', () => {
   });
 
   test('renders with a disabled button when there are no refinements', async () => {
+    const searchClient = createSearchClient({});
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
         <ClearRefinements />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     const button = document.querySelector('.ais-ClearRefinements-button');
 
@@ -78,8 +82,10 @@ describe('ClearRefinements', () => {
   });
 
   test('clears all refinements', async () => {
+    const searchClient = createSearchClient({});
     const { container, queryAllByRole } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -94,7 +100,7 @@ describe('ClearRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(queryAllByRole('listitem')).toHaveLength(1);
     expect(container).toMatchInlineSnapshot(`
@@ -128,9 +134,8 @@ describe('ClearRefinements', () => {
       ) as HTMLButtonElement
     );
 
-    await wait(0);
+    await waitFor(() => expect(queryAllByRole('listitem')).toHaveLength(0));
 
-    expect(queryAllByRole('listitem')).toHaveLength(0);
     expect(container).toMatchInlineSnapshot(`
       <div>
         <ul />
@@ -149,8 +154,10 @@ describe('ClearRefinements', () => {
   });
 
   test('inclusively restricts what refinements to clear', async () => {
+    const searchClient = createSearchClient({});
     const { container, queryAllByRole } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -167,7 +174,7 @@ describe('ClearRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(queryAllByRole('listitem')).toHaveLength(2);
     expect(container).toMatchInlineSnapshot(`
@@ -210,9 +217,8 @@ describe('ClearRefinements', () => {
       ) as HTMLButtonElement
     );
 
-    await wait(0);
+    await waitFor(() => expect(queryAllByRole('listitem')).toHaveLength(1));
 
-    expect(queryAllByRole('listitem')).toHaveLength(1);
     expect(queryAllByRole('listitem')[0]).toHaveTextContent('brand:Apple');
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -242,8 +248,10 @@ describe('ClearRefinements', () => {
   });
 
   test('exclusively restricts what refinements to clear', async () => {
+    const searchClient = createSearchClient({});
     const { container, queryAllByRole } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -260,7 +268,7 @@ describe('ClearRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(queryAllByRole('listitem')).toHaveLength(2);
     expect(container).toMatchInlineSnapshot(`
@@ -303,9 +311,8 @@ describe('ClearRefinements', () => {
       ) as HTMLButtonElement
     );
 
-    await wait(0);
+    await waitFor(() => expect(queryAllByRole('listitem')).toHaveLength(1));
 
-    expect(queryAllByRole('listitem')).toHaveLength(1);
     expect(queryAllByRole('listitem')[0]).toHaveTextContent('categories:Audio');
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -335,8 +342,10 @@ describe('ClearRefinements', () => {
   });
 
   test('restricts what refinements to clear with custom logic', async () => {
+    const searchClient = createSearchClient({});
     const { container, queryAllByRole } = render(
       <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
         initialUiState={{
           indexName: {
             refinementList: {
@@ -355,7 +364,7 @@ describe('ClearRefinements', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     expect(queryAllByRole('listitem')).toHaveLength(2);
     expect(container).toMatchInlineSnapshot(`
@@ -398,9 +407,8 @@ describe('ClearRefinements', () => {
       ) as HTMLButtonElement
     );
 
-    await wait(0);
+    await waitFor(() => expect(queryAllByRole('listitem')).toHaveLength(1));
 
-    expect(queryAllByRole('listitem')).toHaveLength(1);
     expect(queryAllByRole('listitem')[0]).toHaveTextContent('brand:Apple');
     expect(container).toMatchInlineSnapshot(`
       <div>

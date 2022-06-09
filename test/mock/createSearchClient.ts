@@ -22,9 +22,17 @@ type OverrideKeys<TTarget, TOptions> = TOptions extends Record<string, never>
 
 type SearchClient = ReturnType<typeof algoliasearch>;
 
+type MockSearchClient = OverrideKeys<
+  SearchClient,
+  {
+    search: jest.Mock<any, any>;
+    searchForFacetValues: jest.Mock<any, any>;
+  }
+>;
+
 export function createSearchClient<TOptions extends Partial<SearchClient>>(
   options: TOptions
-): OverrideKeys<SearchClient, TOptions> {
+): OverrideKeys<MockSearchClient, TOptions> {
   const appId = (options as Record<string, unknown>).appId || 'appId';
 
   // check if algoliasearch is v4 (has transporter)
@@ -86,5 +94,5 @@ export function createSearchClient<TOptions extends Partial<SearchClient>>(
       Promise.resolve([createSFFVResponse()])
     ),
     ...options,
-  } as SearchClient as OverrideKeys<SearchClient, TOptions>;
+  } as SearchClient as OverrideKeys<MockSearchClient, TOptions>;
 }

@@ -1,20 +1,18 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { createSearchClient } from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
+import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { ToggleRefinement } from '../ToggleRefinement';
 
 describe('ToggleRefinement', () => {
-  test('renders with props', async () => {
+  test('renders with props', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <ToggleRefinement attribute="free_shipping" />
       </InstantSearchHooksTestWrapper>
     );
-
-    await wait(0);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -39,21 +37,19 @@ describe('ToggleRefinement', () => {
     `);
   });
 
-  test('customizes the label', async () => {
+  test('customizes the label', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <ToggleRefinement attribute="free_shipping" label="Free shipping" />
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
     expect(
       container.querySelector('.ais-ToggleRefinement-labelText')
     ).toHaveTextContent('Free shipping');
   });
 
-  test('renders checked when the attribute is refined', async () => {
+  test('renders checked when the attribute is refined', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper
         initialUiState={{
@@ -67,8 +63,6 @@ describe('ToggleRefinement', () => {
         <ToggleRefinement attribute="free_shipping" />
       </InstantSearchHooksTestWrapper>
     );
-
-    await wait(0);
 
     expect(
       container.querySelector<HTMLInputElement>(
@@ -86,9 +80,9 @@ describe('ToggleRefinement', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(client.search).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(client.search).toHaveBeenCalledTimes(1);
+    });
 
     const checkbox = container.querySelector<HTMLInputElement>(
       '.ais-ToggleRefinement-checkbox'
@@ -98,38 +92,38 @@ describe('ToggleRefinement', () => {
 
     userEvent.click(checkbox);
 
-    await wait(0);
-
-    expect(client.search).toHaveBeenCalledTimes(2);
-    expect(client.search).toHaveBeenLastCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          params: {
-            facetFilters: [['free_shipping:true']],
-            facets: ['free_shipping'],
-            tagFilters: '',
-          },
-        }),
-      ])
-    );
-    expect(checkbox.checked).toBe(true);
+    await waitFor(() => {
+      expect(client.search).toHaveBeenCalledTimes(2);
+      expect(client.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: {
+              facetFilters: [['free_shipping:true']],
+              facets: ['free_shipping'],
+              tagFilters: '',
+            },
+          }),
+        ])
+      );
+      expect(checkbox.checked).toBe(true);
+    });
 
     userEvent.click(checkbox);
 
-    await wait(0);
-
-    expect(client.search).toHaveBeenCalledTimes(3);
-    expect(client.search).toHaveBeenLastCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          params: expect.objectContaining({
-            facets: ['free_shipping'],
-            tagFilters: '',
+    await waitFor(() => {
+      expect(client.search).toHaveBeenCalledTimes(3);
+      expect(client.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              facets: ['free_shipping'],
+              tagFilters: '',
+            }),
           }),
-        }),
-      ])
-    );
-    expect(checkbox.checked).toBe(false);
+        ])
+      );
+      expect(checkbox.checked).toBe(false);
+    });
   });
 
   test('changes the value to filter on and off', async () => {
@@ -141,9 +135,9 @@ describe('ToggleRefinement', () => {
       </InstantSearchHooksTestWrapper>
     );
 
-    await wait(0);
-
-    expect(client.search).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(client.search).toHaveBeenCalledTimes(1);
+    });
 
     const checkbox = container.querySelector<HTMLInputElement>(
       '.ais-ToggleRefinement-checkbox'
@@ -151,35 +145,37 @@ describe('ToggleRefinement', () => {
 
     userEvent.click(checkbox);
 
-    await wait(0);
-
-    expect(client.search).toHaveBeenCalledTimes(2);
-    expect(client.search).toHaveBeenLastCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          params: {
-            facetFilters: [['free_shipping:yes']],
-            facets: ['free_shipping'],
-            tagFilters: '',
-          },
-        }),
-      ])
-    );
+    await waitFor(() => {
+      expect(checkbox).toBeChecked();
+      expect(client.search).toHaveBeenCalledTimes(2);
+      expect(client.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: {
+              facetFilters: [['free_shipping:yes']],
+              facets: ['free_shipping'],
+              tagFilters: '',
+            },
+          }),
+        ])
+      );
+    });
 
     userEvent.click(checkbox);
 
-    await wait(0);
-
-    expect(client.search).toHaveBeenCalledTimes(3);
-    expect(client.search).toHaveBeenLastCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          params: expect.objectContaining({
-            facetFilters: [['free_shipping:no']],
+    await waitFor(() => {
+      expect(checkbox).not.toBeChecked();
+      expect(client.search).toHaveBeenCalledTimes(3);
+      expect(client.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              facetFilters: [['free_shipping:no']],
+            }),
           }),
-        }),
-      ])
-    );
+        ])
+      );
+    });
   });
 
   test('forwards custom class names and `div` props to the root element', () => {

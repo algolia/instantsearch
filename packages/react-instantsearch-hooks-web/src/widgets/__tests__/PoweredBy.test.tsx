@@ -1,18 +1,16 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { InstantSearchHooksTestWrapper, wait } from '../../../../../test/utils';
+import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { PoweredBy } from '../PoweredBy';
 
 describe('PoweredBy', () => {
-  test('renders with default props', async () => {
+  test('renders with default props', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <PoweredBy />
       </InstantSearchHooksTestWrapper>
     );
-
-    await wait(0);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -53,14 +51,12 @@ describe('PoweredBy', () => {
     `);
   });
 
-  test('renders for dark themes', async () => {
+  test('renders for dark themes', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <PoweredBy theme="dark" />
       </InstantSearchHooksTestWrapper>
     );
-
-    await wait(0);
 
     expect(container.firstChild).toHaveClass('ais-PoweredBy--dark');
     expect(container).toMatchInlineSnapshot(`
@@ -102,7 +98,7 @@ describe('PoweredBy', () => {
     `);
   });
 
-  test('customizes the class names with the light theme', async () => {
+  test('customizes the class names with the light theme', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <PoweredBy
@@ -115,8 +111,6 @@ describe('PoweredBy', () => {
         />
       </InstantSearchHooksTestWrapper>
     );
-
-    await wait(0);
 
     expect(container.firstChild).toHaveClass(
       'ais-PoweredBy',
@@ -132,7 +126,7 @@ describe('PoweredBy', () => {
     );
   });
 
-  test('customizes the class names with the dark theme', async () => {
+  test('customizes the class names with the dark theme', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
         <PoweredBy
@@ -146,8 +140,6 @@ describe('PoweredBy', () => {
         />
       </InstantSearchHooksTestWrapper>
     );
-
-    await wait(0);
 
     expect(container.firstChild).toHaveClass(
       'ais-PoweredBy',
