@@ -268,7 +268,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             createURL: expect.any(Function),
             scopedResults: [],
             searchMetadata: {
-              isSearchStalled: true,
+              isSearchStalled: instantSearchInstance._isSearchStalled,
             },
           });
         });
@@ -325,7 +325,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             createURL: expect.any(Function),
             scopedResults: [],
             searchMetadata: {
-              isSearchStalled: true,
+              isSearchStalled: instantSearchInstance._isSearchStalled,
             },
           });
         });
@@ -2331,7 +2331,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         {
           searchBox: {
             clear: expect.any(Function),
-            isSearchStalled: true,
+            isSearchStalled: instantSearchInstance._isSearchStalled,
             query: '',
             refine: expect.any(Function),
             widgetParams: {},
