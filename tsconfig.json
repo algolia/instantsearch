@@ -21,9 +21,6 @@
   },
   "exclude": [
     "examples/hooks-next/next-env.d.ts",
-    // @TODO: we need to re-enable type checking in the Next.js example
-    // once it's migrated to React 18.
-    "examples/hooks-next",
     // @TODO: we need to re-enable type checking in the React Native example
     // when the RN types work with React 18.
     "examples/hooks-react-native"

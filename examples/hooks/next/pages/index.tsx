@@ -43,7 +43,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
   return (
     <InstantSearchSSRProvider {...serverState}>
       <Head>
-        <title>React InstantSearch - Next.js</title>
+        <title>React InstantSearch Hooks - Next.js</title>
       </Head>
 
       <InstantSearch
