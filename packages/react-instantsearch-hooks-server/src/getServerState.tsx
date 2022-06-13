@@ -182,22 +182,23 @@ function getInitialResults(rootIndex: IndexWidget): InitialResults {
 }
 
 function importRenderToString() {
-  return Promise.all([
-    // React pre-18 doesn't use `exports` in package.json, requiring a fully resolved path
-    // Thus, only one of these imports is correct
-    // eslint-disable-next-line import/extensions
-    import('react-dom/server.js').catch(() => {}),
-    import('react-dom/server').catch(() => {}),
-  ]).then((imports) => {
-    const ReactDOMServer = imports.find(
-      (mod): mod is { renderToString: typeof RenderToString } =>
-        mod !== undefined
-    );
+  // React pre-18 doesn't use `exports` in package.json, requiring a fully resolved path
+  // Thus, only one of these imports is correct
+  const modules = ['react-dom/server.js', 'react-dom/server'];
 
-    if (!ReactDOMServer) {
-      throw new Error('Could not import ReactDOMServer.');
+  // import is an expression to make sure https://github.com/webpack/webpack/issues/13865 does not kick in
+  return Promise.all(modules.map((mod) => import(mod).catch(() => {}))).then(
+    (imports: unknown[]) => {
+      const ReactDOMServer = imports.find(
+        (mod): mod is { renderToString: typeof RenderToString } =>
+          mod !== undefined
+      );
+
+      if (!ReactDOMServer) {
+        throw new Error('Could not import ReactDOMServer.');
+      }
+
+      return ReactDOMServer.renderToString;
     }
-
-    return ReactDOMServer.renderToString;
-  });
+  );
 }
