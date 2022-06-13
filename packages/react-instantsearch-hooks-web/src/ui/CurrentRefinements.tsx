@@ -91,7 +91,7 @@ export function CurrentRefinements({
       >
         {items.map((item) => (
           <li
-            key={item.label}
+            key={[item.indexName, item.label].join('/')}
             className={cx('ais-CurrentRefinements-item', classNames.item)}
           >
             <span
