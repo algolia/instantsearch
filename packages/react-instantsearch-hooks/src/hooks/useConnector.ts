@@ -5,8 +5,8 @@ import { dequal } from '../lib/dequal';
 import { useIndexContext } from '../lib/useIndexContext';
 import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
-import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect';
 import { useStableValue } from '../lib/useStableValue';
+import { useWidget } from '../lib/useWidget';
 
 import type { Connector, Widget, WidgetDescription } from 'instantsearch.js';
 
@@ -145,13 +145,7 @@ export function useConnector<
     return {};
   });
 
-  useIsomorphicLayoutEffect(() => {
-    parentIndex.addWidgets([widget]);
-
-    return () => {
-      parentIndex.removeWidgets([widget]);
-    };
-  }, [parentIndex, widget]);
+  useWidget(widget, parentIndex, stableProps);
 
   // On the server, we add the widget early to retrieve its search parameters
   // in the render pass.

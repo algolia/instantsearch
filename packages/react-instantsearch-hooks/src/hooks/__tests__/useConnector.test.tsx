@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
-import React from 'react';
+import React, { StrictMode, useState } from 'react';
 
 import {
   createSearchClient,
@@ -10,25 +10,20 @@ import {
 } from '../../../../../test/mock';
 import {
   createInstantSearchTestWrapper,
-  wait,
+  createInstantSearchSpy,
 } from '../../../../../test/utils';
 import { Index } from '../../components/Index';
 import { InstantSearch } from '../../components/InstantSearch';
 import { useHits } from '../../connectors/useHits';
 import { IndexContext } from '../../lib/IndexContext';
-import { InstantSearchContext } from '../../lib/InstantSearchContext';
 import { noop } from '../../lib/noop';
 import { useConnector } from '../useConnector';
 
-import type {
-  InstantSearch as InstantSearchType,
-  Connector,
-} from 'instantsearch.js';
+import type { Connector } from 'instantsearch.js';
 import type {
   HitsConnectorParams,
   HitsWidgetDescription,
 } from 'instantsearch.js/es/connectors/hits/connectHits';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 
 type CustomSearchBoxWidgetDescription = {
   $$type: 'test.searchBox';
@@ -40,7 +35,7 @@ type CustomSearchBoxWidgetDescription = {
 
 const connectCustomSearchBox: Connector<
   CustomSearchBoxWidgetDescription,
-  Record<string, never>
+  Record<string, any>
 > =
   (renderFn, unmountFn = noop) =>
   (widgetParams) => {
@@ -90,6 +85,14 @@ const connectCustomSearchBox: Connector<
       },
     };
   };
+
+function CustomSearchBox(props: Record<string, any>) {
+  useConnector<Record<never, never>, CustomSearchBoxWidgetDescription>(
+    connectCustomSearchBox,
+    props
+  );
+  return null;
+}
 
 const connectCustomSearchBoxWithoutRenderState: Connector<
   CustomSearchBoxWidgetDescription,
@@ -187,6 +190,50 @@ const connectUnstableSearchBox: Connector<
     };
   };
 
+type CustomWidgetParams = Record<string, any>;
+
+type CustomWidgetDescription = {
+  $$type: 'test.customWidget';
+  renderState: Record<string, any>;
+};
+
+const connectCustomWidget: Connector<
+  CustomWidgetDescription,
+  CustomWidgetParams
+> =
+  (renderFn, unmountFn = noop) =>
+  (widgetParams) => {
+    return {
+      $$type: 'test.customWidget',
+      init(params) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState!(params),
+            instantSearchInstance: params.instantSearchInstance,
+          },
+          true
+        );
+      },
+      render(params) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState!(params),
+            instantSearchInstance: params.instantSearchInstance,
+          },
+          false
+        );
+      },
+      dispose() {
+        unmountFn();
+      },
+      getWidgetRenderState() {
+        return {
+          widgetParams,
+        };
+      },
+    };
+  };
+
 describe('useConnector', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
@@ -275,12 +322,12 @@ describe('useConnector', () => {
         getWidgetRenderState,
       });
     const searchClient = createSearchClient({});
-    let searchContext: InstantSearchType | null = null;
-    let indexContext: IndexWidget | null = null;
+    const { InstantSearchSpy, indexContext, searchContext } =
+      createInstantSearchSpy();
 
     function SearchProvider({ children }) {
       return (
-        <InstantSearch
+        <InstantSearchSpy
           searchClient={searchClient}
           indexName="indexName"
           initialUiState={{
@@ -289,22 +336,8 @@ describe('useConnector', () => {
             },
           }}
         >
-          <InstantSearchContext.Consumer>
-            {(searchContextValue) => {
-              searchContext = searchContextValue;
-
-              return (
-                <IndexContext.Consumer>
-                  {(indexContextValue) => {
-                    indexContext = indexContextValue;
-
-                    return children;
-                  }}
-                </IndexContext.Consumer>
-              );
-            }}
-          </InstantSearchContext.Consumer>
-        </InstantSearch>
+          {children}
+        </InstantSearchSpy>
       );
     }
 
@@ -331,8 +364,8 @@ describe('useConnector', () => {
       helper: expect.objectContaining({
         state: helperState,
       }),
-      parent: indexContext!,
-      instantSearchInstance: searchContext!,
+      parent: indexContext.current!,
+      instantSearchInstance: searchContext.current!,
       results: expect.objectContaining({
         hitsPerPage: 20,
         __isArtificial: true,
@@ -345,9 +378,9 @@ describe('useConnector', () => {
         },
       ],
       state: helperState,
-      renderState: searchContext!.renderState,
-      templatesConfig: searchContext!.templatesConfig,
-      createURL: indexContext!.createURL,
+      renderState: searchContext.current!.renderState,
+      templatesConfig: searchContext.current!.templatesConfig,
+      createURL: indexContext.current!.createURL,
       searchMetadata: {
         isSearchStalled: false,
       },
@@ -365,7 +398,7 @@ describe('useConnector', () => {
       );
     }
 
-    function CustomWidget() {
+    function CustomHitsWidget() {
       const state = useConnector<HitsConnectorParams, HitsWidgetDescription>(
         connectHits
       );
@@ -375,7 +408,7 @@ describe('useConnector', () => {
 
     const { container } = render(
       <SearchProvider>
-        <CustomWidget />
+        <CustomHitsWidget />
       </SearchProvider>
     );
 
@@ -417,7 +450,7 @@ describe('useConnector', () => {
       );
     }
 
-    function CustomWidget() {
+    function CustomHitsWidget() {
       const state = useConnector<HitsConnectorParams, HitsWidgetDescription>(
         connectHits
       );
@@ -427,7 +460,7 @@ describe('useConnector', () => {
 
     const { container } = render(
       <SearchProvider>
-        <CustomWidget />
+        <CustomHitsWidget />
       </SearchProvider>
     );
 
@@ -438,69 +471,50 @@ describe('useConnector', () => {
     `);
   });
 
-  test('adds the widget to the parent index', () => {
+  test('runs the widget lifecycle', async () => {
     const searchClient = createSearchClient({});
-    let indexContext: IndexWidget | null = null;
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
 
-    function CustomSearchBox() {
-      useConnector<Record<never, never>, CustomSearchBoxWidgetDescription>(
-        connectCustomSearchBox,
-        {},
-        { $$widgetType: 'test.customSearchBox' }
-      );
-
-      return null;
-    }
-
-    function InstantSearchMock({ children }) {
+    function App() {
       return (
-        <InstantSearch searchClient={searchClient} indexName="indexName">
-          <IndexContext.Consumer>
-            {(value) => {
-              indexContext = {
-                ...value!,
-                addWidgets: jest.fn(),
-                removeWidgets: jest.fn(),
-              };
-
-              return (
-                <IndexContext.Provider value={indexContext}>
-                  {children}
-                </IndexContext.Provider>
-              );
-            }}
-          </IndexContext.Consumer>
-        </InstantSearch>
+        <StrictMode>
+          <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+            <CustomSearchBox />
+          </InstantSearchSpy>
+        </StrictMode>
       );
     }
 
-    const { unmount } = render(
-      <InstantSearchMock>
-        <CustomSearchBox />
-      </InstantSearchMock>
-    );
+    // Step 1: we render the widget for the first time.
+    const { unmount, rerender } = render(<App />);
 
-    expect(indexContext!.addWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContext!.addWidgets).toHaveBeenCalledWith(
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.addWidgets).toHaveBeenLastCalledWith(
       expect.arrayContaining([
-        expect.objectContaining({
-          $$type: 'test.searchBox',
-          $$widgetType: 'test.customSearchBox',
-        }),
+        expect.objectContaining({ $$type: 'test.searchBox' }),
       ])
     );
 
+    // Step 2: we rerender the widget with the same props
+    rerender(<App />);
+
+    // We rerendered the widget with the same props so we shouldn't
+    // remove/add it again.
+    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(0);
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
+
+    // Step 3: we unmount the widget.
     unmount();
 
-    expect(indexContext!.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContext!.removeWidgets).toHaveBeenCalledWith(
+    await waitFor(() =>
+      expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1)
+    );
+    expect(indexContext.current!.removeWidgets).toHaveBeenLastCalledWith(
       expect.arrayContaining([
-        expect.objectContaining({
-          $$type: 'test.searchBox',
-          $$widgetType: 'test.customSearchBox',
-        }),
+        expect.objectContaining({ $$type: 'test.searchBox' }),
       ])
     );
+    expect(indexContext.current!.getWidgets()).toEqual([]);
   });
 
   test('limits the number of renders with unstable function references from render state', async () => {
@@ -526,19 +540,114 @@ describe('useConnector', () => {
 
     function App() {
       return (
-        <InstantSearch searchClient={searchClient} indexName="indexName">
-          <Search />
-        </InstantSearch>
+        <StrictMode>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <Search />
+          </InstantSearch>
+        </StrictMode>
       );
     }
 
     render(<App />);
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+  });
+
+  function CustomWidget(props: CustomWidgetParams) {
+    useConnector(connectCustomWidget, props);
+    return <div data-testid="attribute">{props.attribute}</div>;
+  }
+
+  test('rerenders the widget on prop change', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
+
+    function App({ attribute }) {
+      return (
+        <StrictMode>
+          <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+            <CustomWidget attribute={attribute} />
+          </InstantSearchSpy>
+        </StrictMode>
+      );
+    }
+
+    const { rerender, getByTestId } = render(<App attribute="brands" />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
+    expect(getByTestId('attribute')).toHaveTextContent('brands');
+
+    rerender(<App attribute="categories" />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
+    expect(getByTestId('attribute')).toHaveTextContent('categories');
+  });
+
+  test('rerenders the widget on state change', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
+
+    function App() {
+      const [attribute, setAttribute] = useState('brands');
+
+      return (
+        <StrictMode>
+          <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+            <CustomWidget attribute={attribute} />
+            <button onClick={() => setAttribute('categories')}>
+              Change attribute
+            </button>
+          </InstantSearchSpy>
+        </StrictMode>
+      );
+    }
+
+    const { getByRole, getByTestId } = render(<App />);
+    const button = getByRole('button');
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+    expect(getByTestId('attribute')).toHaveTextContent('brands');
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
+
+    button.click();
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+    expect(getByTestId('attribute')).toHaveTextContent('categories');
+    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
+  });
+
+  // Ideally we would like to avoid this behavior, but we don't have any way
+  // to memo function props, so they're always considered as new reference.
+  test('always removes/adds the widget on rerenders when using an unstable function prop', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
+
+    function App({ callback }) {
+      return (
+        <StrictMode>
+          <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+            <CustomWidget callback={callback} />
+          </InstantSearchSpy>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App callback={() => {}} />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
+
+    rerender(<App callback={() => {}} />);
 
     // This checks that InstantSearch doesn't re-render endlessly. We should
     // still be able to optimize this render count to `1`, but `2` is acceptable
     // for now compared to an infinite loop.
-    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
   });
 });

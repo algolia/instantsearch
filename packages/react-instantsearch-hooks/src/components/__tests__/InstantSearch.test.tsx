@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
@@ -6,17 +6,13 @@ import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
 import { createSearchClient } from '../../../../../test/mock';
-import { wait } from '../../../../../test/utils';
+import { createInstantSearchSpy } from '../../../../../test/utils';
 import { useRefinementList } from '../../connectors/useRefinementList';
-import { IndexContext } from '../../lib/IndexContext';
-import { InstantSearchContext } from '../../lib/InstantSearchContext';
 import version from '../../version';
 import { Index } from '../Index';
 import { InstantSearch } from '../InstantSearch';
 
 import type { UseRefinementListProps } from '../../connectors/useRefinementList';
-import type { InstantSearch as InstantSearchType } from 'instantsearch.js';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 
 function RefinementList(props: UseRefinementListProps) {
   useRefinementList(props);
@@ -28,9 +24,11 @@ describe('InstantSearch', () => {
     const searchClient = createSearchClient({});
 
     const { container } = render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        Children
-      </InstantSearch>
+      <StrictMode>
+        <InstantSearch indexName="indexName" searchClient={searchClient}>
+          Children
+        </InstantSearch>
+      </StrictMode>
     );
 
     expect(container).toMatchInlineSnapshot(`
@@ -42,20 +40,15 @@ describe('InstantSearch', () => {
 
   test('provides the search instance', () => {
     const searchClient = createSearchClient({});
-    let searchContext: InstantSearchType | null = null;
+    const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
 
     render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <InstantSearchContext.Consumer>
-          {(context) => {
-            searchContext = context;
-            return null;
-          }}
-        </InstantSearchContext.Consumer>
-      </InstantSearch>
+      <StrictMode>
+        <InstantSearchSpy indexName="indexName" searchClient={searchClient} />
+      </StrictMode>
     );
 
-    expect(searchContext).toEqual(
+    expect(searchContext.current).toEqual(
       expect.objectContaining({
         start: expect.any(Function),
         dispose: expect.any(Function),
@@ -67,20 +60,15 @@ describe('InstantSearch', () => {
 
   test('provides the main index', () => {
     const searchClient = createSearchClient({});
-    let indexContext: IndexWidget | null = null;
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
 
     render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <IndexContext.Consumer>
-          {(context) => {
-            indexContext = context;
-            return null;
-          }}
-        </IndexContext.Consumer>
-      </InstantSearch>
+      <StrictMode>
+        <InstantSearchSpy indexName="indexName" searchClient={searchClient} />
+      </StrictMode>
     );
 
-    expect(indexContext).toEqual(
+    expect(indexContext.current).toEqual(
       expect.objectContaining({
         $$type: 'ais.index',
         addWidgets: expect.any(Function),
@@ -92,7 +80,11 @@ describe('InstantSearch', () => {
   test('attaches users agents', () => {
     const searchClient = createSearchClient({});
 
-    render(<InstantSearch indexName="indexName" searchClient={searchClient} />);
+    render(
+      <StrictMode>
+        <InstantSearch indexName="indexName" searchClient={searchClient} />
+      </StrictMode>
+    );
 
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `react (${ReactVersion})`
@@ -105,136 +97,129 @@ describe('InstantSearch', () => {
     );
   });
 
-  test('starts the search on mount', () => {
+  test('starts the search on mount', async () => {
     const searchClient = createSearchClient({});
-    let searchContext: InstantSearchType | null = null;
+    const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
 
     render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <InstantSearchContext.Consumer>
-          {(context) => {
-            searchContext = context;
-            return null;
-          }}
-        </InstantSearchContext.Consumer>
-      </InstantSearch>
+      <StrictMode>
+        <InstantSearchSpy indexName="indexName" searchClient={searchClient} />
+      </StrictMode>
     );
 
-    expect(searchContext!.started).toEqual(true);
+    expect(searchContext.current!.started).toEqual(true);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(0));
   });
 
-  test('disposes the search on unmount', () => {
+  test('starts the search on mount with a widget and triggers a search', async () => {
     const searchClient = createSearchClient({});
-    let searchContext: InstantSearchType | null = null;
+    const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
+
+    render(
+      <StrictMode>
+        <InstantSearchSpy indexName="indexName" searchClient={searchClient}>
+          <SearchBox />
+        </InstantSearchSpy>
+      </StrictMode>
+    );
+
+    expect(searchContext.current!.started).toEqual(true);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+  });
+
+  test('disposes the search on unmount', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
 
     const { unmount } = render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <InstantSearchContext.Consumer>
-          {(context) => {
-            searchContext = context;
-            return null;
-          }}
-        </InstantSearchContext.Consumer>
-      </InstantSearch>
+      <StrictMode>
+        <InstantSearchSpy indexName="indexName" searchClient={searchClient}>
+          <SearchBox />
+        </InstantSearchSpy>
+      </StrictMode>
     );
+
+    expect(searchContext.current!.started).toEqual(true);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     unmount();
 
-    expect(searchContext!.started).toEqual(false);
+    expect(searchContext.current!.dispose).toHaveBeenCalledTimes(1);
+    expect(searchContext.current!.started).toEqual(false);
   });
 
   test('triggers a single network request on mount with widgets', async () => {
     const searchClient = createSearchClient({});
 
     render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <SearchBox />
-        <Index indexName="subIndexName">
-          <RefinementList attribute="brand" />
-        </Index>
-      </InstantSearch>
+      <StrictMode>
+        <InstantSearch indexName="indexName" searchClient={searchClient}>
+          <SearchBox />
+          <Index indexName="subIndexName">
+            <RefinementList attribute="brand" />
+          </Index>
+        </InstantSearch>
+      </StrictMode>
     );
 
-    await wait(0);
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
-    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      {
+        indexName: 'indexName',
+        params: { facets: [], query: '', tagFilters: '' },
+      },
+      {
+        indexName: 'subIndexName',
+        params: {
+          facets: ['brand'],
+          maxValuesPerFacet: 10,
+          query: '',
+          tagFilters: '',
+        },
+      },
+    ]);
   });
 
-  test('renders components in Strict Mode', async () => {
+  test('renders components within a Suspense boundary', async () => {
     const searchClient = createSearchClient({});
 
-    act(() => {
-      render(
-        <StrictMode>
-          <InstantSearch indexName="indexName" searchClient={searchClient}>
-            <SearchBox />
+    render(
+      <StrictMode>
+        <InstantSearch indexName="indexName" searchClient={searchClient}>
+          <SearchBox />
+          <Suspense fallback={null}>
             <Index indexName="subIndexName">
               <RefinementList attribute="brand" />
             </Index>
-          </InstantSearch>
-        </StrictMode>
-      );
-    });
+          </Suspense>
+        </InstantSearch>
+      </StrictMode>
+    );
 
-    await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(1);
-      expect(searchClient.search).toHaveBeenCalledWith([
-        {
-          indexName: 'indexName',
-          params: { facets: [], query: '', tagFilters: '' },
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      {
+        indexName: 'indexName',
+        params: { facets: [], query: '', tagFilters: '' },
+      },
+      {
+        indexName: 'subIndexName',
+        params: {
+          facets: ['brand'],
+          maxValuesPerFacet: 10,
+          query: '',
+          tagFilters: '',
         },
-        {
-          indexName: 'subIndexName',
-          params: {
-            facets: ['brand'],
-            maxValuesPerFacet: 10,
-            query: '',
-            tagFilters: '',
-          },
-        },
-      ]);
-    });
+      },
+    ]);
   });
 
-  test('renders components in Strict Mode with a Suspense boundary', async () => {
-    const searchClient = createSearchClient({});
-
-    act(() => {
-      render(
-        <StrictMode>
-          <InstantSearch indexName="indexName" searchClient={searchClient}>
-            <SearchBox />
-            <Suspense fallback={null}>
-              <Index indexName="subIndexName">
-                <RefinementList attribute="brand" />
-              </Index>
-            </Suspense>
-          </InstantSearch>
-        </StrictMode>
-      );
-    });
-
-    await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(1);
-      expect(searchClient.search).toHaveBeenCalledWith([
-        {
-          indexName: 'indexName',
-          params: { facets: [], query: '', tagFilters: '' },
-        },
-        {
-          indexName: 'subIndexName',
-          params: {
-            facets: ['brand'],
-            maxValuesPerFacet: 10,
-            query: '',
-            tagFilters: '',
-          },
-        },
-      ]);
-    });
-  });
-
-  test('renders with state from router in Strict Mode', async () => {
+  test('renders with router state', async () => {
     const searchClient = createSearchClient({});
     const routing = {
       stateMapping: simple(),
@@ -294,50 +279,16 @@ describe('InstantSearch', () => {
     });
   });
 
-  test('renders components with a Suspense boundary', async () => {
-    const searchClient = createSearchClient({});
-
-    act(() => {
-      render(
-        <InstantSearch indexName="indexName" searchClient={searchClient}>
-          <SearchBox />
-          <Suspense fallback={null}>
-            <Index indexName="subIndexName">
-              <RefinementList attribute="brand" />
-            </Index>
-          </Suspense>
-        </InstantSearch>
-      );
-    });
-
-    await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(1);
-      expect(searchClient.search).toHaveBeenCalledWith([
-        {
-          indexName: 'indexName',
-          params: { facets: [], query: '', tagFilters: '' },
-        },
-        {
-          indexName: 'subIndexName',
-          params: {
-            facets: ['brand'],
-            maxValuesPerFacet: 10,
-            query: '',
-            tagFilters: '',
-          },
-        },
-      ]);
-    });
-  });
-
-  test('catches up with lifecycle on re-renders', async () => {
+  test('recovers the state on rerender', async () => {
     const searchClient = createSearchClient({});
 
     function App() {
       return (
-        <InstantSearch searchClient={searchClient} indexName="indexName">
-          <SearchBox />
-        </InstantSearch>
+        <StrictMode>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
       );
     }
 
@@ -380,7 +331,7 @@ describe('InstantSearch', () => {
     });
   });
 
-  test('catches up with lifecycle on re-renders with a stable onStateChange', async () => {
+  test('recovers the state on rerender with a stable onStateChange', async () => {
     const searchClient = createSearchClient({});
     const onStateChange = ({ uiState, setUiState }) => {
       setUiState(uiState);
@@ -388,13 +339,15 @@ describe('InstantSearch', () => {
 
     function App() {
       return (
-        <InstantSearch
-          searchClient={searchClient}
-          indexName="indexName"
-          onStateChange={onStateChange}
-        >
-          <SearchBox />
-        </InstantSearch>
+        <StrictMode>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName="indexName"
+            onStateChange={onStateChange}
+          >
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
       );
     }
 
@@ -440,21 +393,23 @@ describe('InstantSearch', () => {
   // This test shows that giving an unstable `onStateChange` reference (or any
   // unstable prop) remounts the <InstantSearch> component and therefore resets
   // the state after the remount.
-  // Users need to provide stable references for re-renders to keep the state.
-  test('catches up with lifecycle on re-renders with an unstable onStateChange', async () => {
+  // Users need to provide stable references for rerenders to keep the state.
+  test('recovers the state on rerender with an unstable onStateChange', async () => {
     const searchClient = createSearchClient({});
 
     function App() {
       return (
-        <InstantSearch
-          searchClient={searchClient}
-          indexName="indexName"
-          onStateChange={({ uiState, setUiState }) => {
-            setUiState(uiState);
-          }}
-        >
-          <SearchBox />
-        </InstantSearch>
+        <StrictMode>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName="indexName"
+            onStateChange={({ uiState, setUiState }) => {
+              setUiState(uiState);
+            }}
+          >
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
       );
     }
 

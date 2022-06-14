@@ -1,7 +1,8 @@
-import { render } from '@testing-library/react';
-import React, { createRef } from 'react';
+import { render, waitFor } from '@testing-library/react';
+import React, { StrictMode } from 'react';
 
 import { createSearchClient } from '../../../../../test/mock';
+import { createInstantSearchSpy } from '../../../../../test/utils';
 import { Configure } from '../../components/Configure';
 import { IndexContext } from '../../lib/IndexContext';
 import { noop } from '../../lib/noop';
@@ -29,9 +30,11 @@ describe('Index', () => {
     const searchClient = createSearchClient({});
 
     const { container } = render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <Index indexName="childIndex">Children</Index>
-      </InstantSearch>
+      <StrictMode>
+        <InstantSearch indexName="indexName" searchClient={searchClient}>
+          <Index indexName="childIndex">Children</Index>
+        </InstantSearch>
+      </StrictMode>
     );
 
     expect(container).toMatchInlineSnapshot(`
@@ -46,16 +49,18 @@ describe('Index', () => {
     let indexContext: IndexWidget | null = null;
 
     render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <Index indexName="childIndex">
-          <IndexContext.Consumer>
-            {(context) => {
-              indexContext = context;
-              return null;
-            }}
-          </IndexContext.Consumer>
-        </Index>
-      </InstantSearch>
+      <StrictMode>
+        <InstantSearch indexName="indexName" searchClient={searchClient}>
+          <Index indexName="childIndex">
+            <IndexContext.Consumer>
+              {(context) => {
+                indexContext = context;
+                return null;
+              }}
+            </IndexContext.Consumer>
+          </Index>
+        </InstantSearch>
+      </StrictMode>
     );
 
     expect(indexContext).toEqual(
@@ -73,18 +78,20 @@ describe('Index', () => {
     let indexContext: IndexWidget | null = null;
 
     render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <Index indexName="childIndex">
-          <Index indexName="subchildIndex">
-            <IndexContext.Consumer>
-              {(context) => {
-                indexContext = context;
-                return null;
-              }}
-            </IndexContext.Consumer>
+      <StrictMode>
+        <InstantSearch indexName="indexName" searchClient={searchClient}>
+          <Index indexName="childIndex">
+            <Index indexName="subchildIndex">
+              <IndexContext.Consumer>
+                {(context) => {
+                  indexContext = context;
+                  return null;
+                }}
+              </IndexContext.Consumer>
+            </Index>
           </Index>
-        </Index>
-      </InstantSearch>
+        </InstantSearch>
+      </StrictMode>
     );
 
     expect(indexContext).toEqual(
@@ -97,28 +104,38 @@ describe('Index', () => {
     expect(indexContext!.getIndexName()).toEqual('subchildIndex');
   });
 
-  test('adds the index only once on CSR', () => {
-    const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
+  test('adds the index only once on CSR', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
 
     const { unmount } = render(
-      <InstantSearchMock>
-        <Configure />
-      </InstantSearchMock>
+      <StrictMode>
+        <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+          <Index indexName="indexName2">
+            <Configure />
+          </Index>
+        </InstantSearchSpy>
+      </StrictMode>
     );
 
-    expect(indexContextRef.current!.addWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContextRef.current!.addWidgets).toHaveBeenLastCalledWith([
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.addWidgets).toHaveBeenLastCalledWith([
       expect.objectContaining({ $$type: 'ais.index' }),
     ]);
+
     unmount();
-    expect(indexContextRef.current!.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContextRef.current!.removeWidgets).toHaveBeenLastCalledWith([
-      expect.objectContaining({ $$type: 'ais.index' }),
-    ]);
+
+    await waitFor(() => {
+      expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
+      expect(indexContext.current!.removeWidgets).toHaveBeenCalledWith([
+        expect.objectContaining({ $$type: 'ais.index' }),
+      ]);
+    });
   });
 
-  test('adds the index only once on SSR', () => {
-    const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
+  test('adds the index only once on SSR', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
     const initialResults = {
       indexName: {
         state: {},
@@ -141,54 +158,29 @@ describe('Index', () => {
     };
 
     const { unmount } = render(
-      <InstantSearchSSRProvider initialResults={initialResults}>
-        <InstantSearchMock>
-          <Configure />
-        </InstantSearchMock>
-      </InstantSearchSSRProvider>
+      <StrictMode>
+        <InstantSearchSSRProvider initialResults={initialResults}>
+          <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+            <Index indexName="indexName2">
+              <Configure />
+            </Index>
+          </InstantSearchSpy>
+        </InstantSearchSSRProvider>{' '}
+      </StrictMode>
     );
 
-    expect(indexContextRef.current!.addWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContextRef.current!.addWidgets).toHaveBeenLastCalledWith([
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.addWidgets).toHaveBeenLastCalledWith([
       expect.objectContaining({ $$type: 'ais.index' }),
     ]);
+
     unmount();
-    expect(indexContextRef.current!.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContextRef.current!.removeWidgets).toHaveBeenLastCalledWith([
-      expect.objectContaining({ $$type: 'ais.index' }),
-    ]);
+
+    await waitFor(() => {
+      expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
+      expect(indexContext.current!.removeWidgets).toHaveBeenCalledWith([
+        expect.objectContaining({ $$type: 'ais.index' }),
+      ]);
+    });
   });
 });
-
-function createInstantSearchMock() {
-  const searchClient = createSearchClient({});
-  const indexContextRef = createRef<IndexWidget>();
-
-  function InstantSearchMock({ children }) {
-    return (
-      <InstantSearch searchClient={searchClient} indexName="indexName">
-        <IndexContext.Consumer>
-          {(value) => {
-            // @ts-ignore `React.RefObject` is typed as immutable
-            indexContextRef.current = {
-              ...value,
-              addWidgets: jest.fn(value!.addWidgets),
-              removeWidgets: jest.fn(value!.removeWidgets),
-            };
-
-            return (
-              <IndexContext.Provider value={indexContextRef.current}>
-                <Index indexName="indexName2">{children}</Index>
-              </IndexContext.Provider>
-            );
-          }}
-        </IndexContext.Consumer>
-      </InstantSearch>
-    );
-  }
-
-  return {
-    InstantSearchMock,
-    indexContextRef,
-  };
-}
