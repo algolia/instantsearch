@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
 import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
@@ -9,7 +9,6 @@ import { createSearchClient } from '../../../../../test/mock';
 import {
   createInstantSearchTestWrapper,
   InstantSearchHooksTestWrapper,
-  wait,
 } from '../../../../../test/utils';
 import { useInstantSearch } from '../useInstantSearch';
 
@@ -173,15 +172,15 @@ describe('useInstantSearch', () => {
 
       const button = await findByTestId('button');
 
-      await wait(0);
-
-      expect(button).toHaveTextContent('');
+      await waitFor(() => {
+        expect(button).toHaveTextContent('');
+      });
 
       userEvent.click(button);
 
-      await wait(0);
-
-      expect(button).toHaveTextContent('new query');
+      await waitFor(() => {
+        expect(button).toHaveTextContent('new query');
+      });
     });
 
     test('returns a function to modify the index state', async () => {
@@ -212,15 +211,15 @@ describe('useInstantSearch', () => {
 
       const button = await findByTestId('button');
 
-      await wait(0);
-
-      expect(button).toHaveTextContent('');
+      await waitFor(() => {
+        expect(button).toHaveTextContent('');
+      });
 
       userEvent.click(button);
 
-      await wait(0);
-
-      expect(button).toHaveTextContent('new query');
+      await waitFor(() => {
+        expect(button).toHaveTextContent('new query');
+      });
     });
   });
 
@@ -261,9 +260,11 @@ describe('useInstantSearch', () => {
       // simulate a change in query
       const searchBox = await findByPlaceholderText('searchbox');
       userEvent.type(searchBox, 'new query');
-      await wait(0);
 
-      expect(middleware).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(middleware).toHaveBeenCalledTimes(1);
+      });
+
       expect(subscribe).toHaveBeenCalledTimes(1);
       expect(onStateChange).toHaveBeenCalledTimes(1);
       expect(unsubscribe).toHaveBeenCalledTimes(0);
@@ -308,9 +309,9 @@ describe('useInstantSearch', () => {
         </InstantSearchHooksTestWrapper>
       );
 
-      await wait(0);
-
-      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(searchClient.search).toHaveBeenCalledTimes(1);
+      });
 
       userEvent.click(container.querySelector('button')!);
 

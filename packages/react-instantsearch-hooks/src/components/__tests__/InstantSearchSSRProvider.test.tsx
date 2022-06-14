@@ -6,7 +6,6 @@ import React from 'react';
 import { Hits, RefinementList, SearchBox } from 'react-instantsearch-hooks-web';
 
 import { createSearchClient } from '../../../../../test/mock';
-import { wait } from '../../../../../test/utils';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
@@ -340,9 +339,9 @@ describe('InstantSearchSSRProvider', () => {
 
     render(<App />);
 
-    await wait(0);
-
-    expect(searchClient.search).toHaveBeenCalledTimes(0);
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(0);
+    });
   });
 
   test('catches up with lifecycle on re-renders', async () => {
@@ -380,9 +379,9 @@ describe('InstantSearchSSRProvider', () => {
 
     const { rerender } = render(<App />);
 
-    await wait(0);
-
-    expect(searchClient.search).toHaveBeenCalledTimes(0);
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(0);
+    });
 
     rerender(<App />);
 

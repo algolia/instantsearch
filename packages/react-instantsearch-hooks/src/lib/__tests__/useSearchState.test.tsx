@@ -1,12 +1,11 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import {
-  InstantSearchHooksTestWrapper,
-  wait,
   createInstantSearchTestWrapper,
+  InstantSearchHooksTestWrapper,
 } from '../../../../../test/utils';
 import { useSearchBox } from '../../connectors/useSearchBox';
 import { useSearchState } from '../useSearchState';
@@ -112,19 +111,19 @@ describe('useSearchState', () => {
     const button = getByRole('button');
     const uiState = getByTestId('uiState');
 
-    await wait(0);
-
-    expect(button).toHaveTextContent('');
-    expect(uiState).toHaveTextContent(JSON.stringify({}));
+    await waitFor(() => {
+      expect(button).toHaveTextContent('');
+      expect(uiState).toHaveTextContent(JSON.stringify({}));
+    });
 
     userEvent.click(button);
 
-    await wait(0);
-
-    expect(button).toHaveTextContent('new query');
-    expect(uiState).toHaveTextContent(
-      JSON.stringify({ indexName: { query: 'new query' } })
-    );
+    await waitFor(() => {
+      expect(button).toHaveTextContent('new query');
+      expect(uiState).toHaveTextContent(
+        JSON.stringify({ indexName: { query: 'new query' } })
+      );
+    });
   });
 
   test('returns a function to modify the whole state via callback', async () => {
@@ -161,28 +160,28 @@ describe('useSearchState', () => {
     const button = getByRole('button');
     const uiState = getByTestId('uiState');
 
-    await wait(0);
-
-    expect(button).toHaveTextContent('');
-    expect(uiState).toHaveTextContent(JSON.stringify({}));
-
-    userEvent.click(button);
-
-    await wait(0);
-
-    expect(button).toHaveTextContent('undefined added');
-    expect(uiState).toHaveTextContent(
-      JSON.stringify({ indexName: { query: 'undefined added' } })
-    );
+    await waitFor(() => {
+      expect(button).toHaveTextContent('');
+      expect(uiState).toHaveTextContent(JSON.stringify({}));
+    });
 
     userEvent.click(button);
 
-    await wait(0);
+    await waitFor(() => {
+      expect(button).toHaveTextContent('undefined added');
+      expect(uiState).toHaveTextContent(
+        JSON.stringify({ indexName: { query: 'undefined added' } })
+      );
+    });
 
-    expect(button).toHaveTextContent('undefined added added');
-    expect(uiState).toHaveTextContent(
-      JSON.stringify({ indexName: { query: 'undefined added added' } })
-    );
+    userEvent.click(button);
+
+    await waitFor(() => {
+      expect(button).toHaveTextContent('undefined added added');
+      expect(uiState).toHaveTextContent(
+        JSON.stringify({ indexName: { query: 'undefined added added' } })
+      );
+    });
   });
 
   test('returns a function to modify the index state', async () => {
@@ -213,19 +212,19 @@ describe('useSearchState', () => {
     const button = getByRole('button');
     const indexUiState = getByTestId('indexUiState');
 
-    await wait(0);
-
-    expect(button).toHaveTextContent('');
-    expect(indexUiState).toHaveTextContent(JSON.stringify({}));
+    await waitFor(() => {
+      expect(button).toHaveTextContent('');
+      expect(indexUiState).toHaveTextContent(JSON.stringify({}));
+    });
 
     userEvent.click(button);
 
-    await wait(0);
-
-    expect(button).toHaveTextContent('new query');
-    expect(indexUiState).toHaveTextContent(
-      JSON.stringify({ query: 'new query' })
-    );
+    await waitFor(() => {
+      expect(button).toHaveTextContent('new query');
+      expect(indexUiState).toHaveTextContent(
+        JSON.stringify({ query: 'new query' })
+      );
+    });
   });
 
   test('returns a function to modify the index state via callback', async () => {
@@ -259,27 +258,27 @@ describe('useSearchState', () => {
     const button = getByRole('button');
     const indexUiState = getByTestId('indexUiState');
 
-    await wait(0);
-
-    expect(button).toHaveTextContent('');
-    expect(indexUiState).toHaveTextContent(JSON.stringify({}));
-
-    userEvent.click(button);
-
-    await wait(0);
-
-    expect(button).toHaveTextContent('undefined added');
-    expect(indexUiState).toHaveTextContent(
-      JSON.stringify({ query: 'undefined added' })
-    );
+    await waitFor(() => {
+      expect(button).toHaveTextContent('');
+      expect(indexUiState).toHaveTextContent(JSON.stringify({}));
+    });
 
     userEvent.click(button);
 
-    await wait(0);
+    await waitFor(() => {
+      expect(button).toHaveTextContent('undefined added');
+      expect(indexUiState).toHaveTextContent(
+        JSON.stringify({ query: 'undefined added' })
+      );
+    });
 
-    expect(button).toHaveTextContent('undefined added added');
-    expect(indexUiState).toHaveTextContent(
-      JSON.stringify({ query: 'undefined added added' })
-    );
+    userEvent.click(button);
+
+    await waitFor(() => {
+      expect(button).toHaveTextContent('undefined added added');
+      expect(indexUiState).toHaveTextContent(
+        JSON.stringify({ query: 'undefined added added' })
+      );
+    });
   });
 });
