@@ -1,3 +1,8 @@
+3.8.3 - 2022-06-15
+ * chore: update yarn lockfile (#909) https://github.com/algolia/algoliasearch-helper-js/commit/e561c35ce30dc36c162886b828835bf18887dab1
+ * doc(readme): fix api parameter links (#904) https://github.com/algolia/algoliasearch-helper-js/commit/64356a40bd88972bcd256acb5c6f483982d4557d, closes https://github.com/algolia/algoliasearch-helper-js/issues/904
+ * fix(facetValues): retrieve all hierarchical facet parent values (#908) https://github.com/algolia/algoliasearch-helper-js/commit/420111b29f82fe3af8e5861a977f024a61f4025f
+
 3.8.2 - 2022-04-08
  * fix(types): correct type for addTag (#903) https://github.com/algolia/algoliasearch-helper-js/commit/ca82ef302ceff8e0e31767c90e2f272914c703af
 
