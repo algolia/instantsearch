@@ -63,6 +63,21 @@ test('hierarchical facets: simple usage', function(done) {
       'facets': {
         'categories.lvl0': {'beers': 20, 'fruits': 5, 'sales': 20}
       }
+    }, {
+      'query': 'a',
+      'index': indexName,
+      'hits': [{'objectID': 'one'}],
+      'nbHits': 1,
+      'page': 0,
+      'nbPages': 1,
+      'hitsPerPage': 1,
+      'facets': {
+        'categories.lvl1': {
+          'beers > IPA': 9,
+          'beers > Pale Ale': 10,
+          'beers > Stout': 1
+        }
+      }
     }]
   };
 
@@ -104,6 +119,22 @@ test('hierarchical facets: simple usage', function(done) {
           'exhaustive': true,
           'data': null
         }]
+      }, {
+        'name': 'Pale Ale',
+        'path': 'beers > Pale Ale',
+        'escapedValue': 'beers > Pale Ale',
+        'count': 10,
+        'isRefined': false,
+        'exhaustive': true,
+        'data': null
+      }, {
+        'name': 'Stout',
+        'path': 'beers > Stout',
+        'escapedValue': 'beers > Stout',
+        'count': 1,
+        'isRefined': false,
+        'exhaustive': true,
+        'data': null
       }]
     }, {
       'name': 'fruits',
@@ -134,17 +165,26 @@ test('hierarchical facets: simple usage', function(done) {
     var queries = client.search.mock.calls[0][0];
     var hitsQuery = queries[0];
     var parentValuesQuery = queries[1];
-    var rootValuesQuery = queries[2];
+    var fullParentsValuesQueries = queries.slice(2);
 
-    expect(queries.length).toBe(3);
+    expect(queries.length).toBe(4);
+
     expect(hitsQuery.params.facets).toEqual(
       ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']
     );
     expect(hitsQuery.params.facetFilters).toEqual([['categories.lvl2:beers > IPA > Flying dog']]);
+
     expect(parentValuesQuery.params.facets).toEqual(['categories.lvl0', 'categories.lvl1', 'categories.lvl2']);
     expect(parentValuesQuery.params.facetFilters).toEqual([['categories.lvl1:beers > IPA']]);
-    expect(rootValuesQuery.params.facets).toEqual(['categories.lvl0']);
-    expect(rootValuesQuery.params.facetFilters).toBe(undefined);
+
+    // Root
+    expect(fullParentsValuesQueries[0].params.facets).toEqual('categories.lvl0');
+    expect(fullParentsValuesQueries[0].params.facetFilters).toBe(undefined);
+
+    // Level 1
+    expect(fullParentsValuesQueries[1].params.facets).toEqual('categories.lvl1');
+    expect(fullParentsValuesQueries[1].params.facetFilters).toEqual(['categories.lvl0:beers']);
+
     expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     expect(event.results.getFacetByName('categories')).toEqual(expectedHelperResponse[0]);
 

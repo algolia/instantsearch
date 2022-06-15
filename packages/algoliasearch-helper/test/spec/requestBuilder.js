@@ -67,6 +67,30 @@ test('does only a single query if refinements are empty', function() {
   expect(queries).toHaveLength(1);
 });
 
+test('does multiple queries to retrieve all facet values of hierarchical parent levels', function() {
+  var searchParams = new SearchParameters({
+    hierarchicalFacets: [{
+      name: 'categories.lvl0',
+      attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2']
+    }],
+    hierarchicalFacetsRefinements: {
+      'categories.lvl0': ['beers > IPA > Flying dog']
+    }
+  });
+
+  var queries = getQueries(searchParams.index, searchParams);
+
+  expect(queries).toHaveLength(4);
+
+  // Root
+  expect(queries[2].params.facets).toEqual(['categories.lvl0']);
+  expect(queries[2].params.facetsFilters).toBeUndefined();
+
+  // Level 1
+  expect(queries[3].params.facets).toEqual('categories.lvl1');
+  expect(queries[3].params.facetFilters).toEqual(['categories.lvl0:beers']);
+});
+
 describe('wildcard facets', function() {
   test('keeps as-is if no * present', function() {
     var searchParams = new SearchParameters({

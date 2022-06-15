@@ -521,7 +521,7 @@ function SearchResults(state, results, options) {
     nextDisjunctiveResult++;
   });
 
-  // if we have some root level values for hierarchical facets, merge them
+  // if we have some parent level values for hierarchical facets, merge them
   state.getRefinedHierarchicalFacets().forEach(function(refinedFacet) {
     var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
     var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
@@ -533,47 +533,49 @@ function SearchResults(state, results, options) {
       return;
     }
 
-    var result = results[nextDisjunctiveResult];
-    var facets = result && result.facets
-      ? result.facets
-      : {};
-    Object.keys(facets).forEach(function(dfacet) {
-      var facetResults = facets[dfacet];
-      var position = findIndex(state.hierarchicalFacets, function(f) {
-        return f.name === hierarchicalFacet.name;
+    results.slice(nextDisjunctiveResult).forEach(function(result) {
+      var facets = result && result.facets
+        ? result.facets
+        : {};
+
+      Object.keys(facets).forEach(function(dfacet) {
+        var facetResults = facets[dfacet];
+        var position = findIndex(state.hierarchicalFacets, function(f) {
+          return f.name === hierarchicalFacet.name;
+        });
+        var attributeIndex = findIndex(self.hierarchicalFacets[position], function(f) {
+          return f.attribute === dfacet;
+        });
+
+        // previous refinements and no results so not able to find it
+        if (attributeIndex === -1) {
+          return;
+        }
+
+        // when we always get root levels, if the hits refinement is `beers > IPA` (count: 5),
+        // then the disjunctive values will be `beers` (count: 100),
+        // but we do not want to display
+        //   | beers (100)
+        //     > IPA (5)
+        // We want
+        //   | beers (5)
+        //     > IPA (5)
+        var defaultData = {};
+
+        if (currentRefinement.length > 0) {
+          var root = currentRefinement[0].split(separator)[0];
+          defaultData[root] = self.hierarchicalFacets[position][attributeIndex].data[root];
+        }
+
+        self.hierarchicalFacets[position][attributeIndex].data = defaultsPure(
+          defaultData,
+          facetResults,
+          self.hierarchicalFacets[position][attributeIndex].data
+        );
       });
-      var attributeIndex = findIndex(self.hierarchicalFacets[position], function(f) {
-        return f.attribute === dfacet;
-      });
 
-      // previous refinements and no results so not able to find it
-      if (attributeIndex === -1) {
-        return;
-      }
-
-      // when we always get root levels, if the hits refinement is `beers > IPA` (count: 5),
-      // then the disjunctive values will be `beers` (count: 100),
-      // but we do not want to display
-      //   | beers (100)
-      //     > IPA (5)
-      // We want
-      //   | beers (5)
-      //     > IPA (5)
-      var defaultData = {};
-
-      if (currentRefinement.length > 0) {
-        var root = currentRefinement[0].split(separator)[0];
-        defaultData[root] = self.hierarchicalFacets[position][attributeIndex].data[root];
-      }
-
-      self.hierarchicalFacets[position][attributeIndex].data = defaultsPure(
-        defaultData,
-        facetResults,
-        self.hierarchicalFacets[position][attributeIndex].data
-      );
+      nextDisjunctiveResult++;
     });
-
-    nextDisjunctiveResult++;
   });
 
   // add the excludes

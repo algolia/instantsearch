@@ -26,18 +26,38 @@ var requestBuilder = {
       });
     });
 
-    // maybe more to get the root level of hierarchical facets when activated
+    // More to get the parent levels of the hierarchical facets when refined
     state.getRefinedHierarchicalFacets().forEach(function(refinedFacet) {
       var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
-
       var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
-      // if we are deeper than level 0 (starting from `beer > IPA`)
-      // we want to get the root values
       var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+
+      // If we are deeper than level 0 (starting from `beer > IPA`)
+      // we want to get all parent values
       if (currentRefinement.length > 0 && currentRefinement[0].split(separator).length > 1) {
-        queries.push({
-          indexName: index,
-          params: requestBuilder._getDisjunctiveFacetSearchParams(state, refinedFacet, true)
+        // We generate a map of the filters we will use for our facet values queries
+        var filtersMap = currentRefinement[0].split(separator).slice(0, -1).reduce(
+          function createFiltersMap(map, segment, level) {
+            return map.concat({
+              attribute: hierarchicalFacet.attributes[level],
+              value: level === 0
+                ? segment
+                : [map[map.length - 1].value, segment].join(separator)
+            });
+          }
+        , []);
+
+        filtersMap.forEach(function(filter, level) {
+          var params = requestBuilder._getDisjunctiveFacetSearchParams(
+            state,
+            filter.attribute,
+            level === 0
+          );
+
+          var parent = filtersMap[level - 1];
+          params.facetFilters = level > 0 ? [parent.attribute + ':' + parent.value] : undefined;
+
+          queries.push({indexName: index, params: params});
         });
       }
     });
