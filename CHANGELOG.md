@@ -1,3 +1,12 @@
+## [4.41.2](https://github.com/algolia/instantsearch.js/compare/v4.41.1...v4.41.2) (2022-06-15)
+
+
+### Bug Fixes
+
+* **hierarchicalMenu:** show full hierarchical parent values ([#5063](https://github.com/algolia/instantsearch.js/issues/5063)) ([cd1db34](https://github.com/algolia/instantsearch.js/commit/cd1db34815f92acb3d2d0cec6c1ae7865d14fb13))
+
+
+
 ## [4.41.1](https://github.com/algolia/instantsearch.js/compare/v4.41.0...v4.41.1) (2022-06-14)
 
 
