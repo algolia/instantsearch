@@ -8,7 +8,7 @@ module.exports = {
     '<rootDir>/examples/',
     '/__utils__/',
   ],
-  snapshotSerializers: ['enzyme-to-json/serializer'],
+  snapshotSerializers: ['enzyme-to-json/serializer', 'jest-serializer-html'],
   testEnvironment: 'jsdom',
   watchPlugins: [
     'jest-watch-typeahead/filename',

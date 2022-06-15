@@ -3,25 +3,48 @@
  */
 
 import React, { version as ReactVersion } from 'react';
+import { renderToString } from 'react-dom/server';
 import {
   InstantSearch,
   InstantSearchSSRProvider,
   Index,
   DynamicWidgets,
-  useHits,
-  useRefinementList,
-  useSearchBox,
   version,
+  useSearchBox,
 } from 'react-instantsearch-hooks';
+import { Hits, RefinementList } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../test/mock';
+import {
+  createMultiSearchResponse,
+  createSearchClient,
+  createSingleSearchResponse,
+} from '../../../../test/mock';
 import { getServerState } from '../getServerState';
 
 import type {
   InstantSearchServerState,
   InstantSearchProps,
-  UseRefinementListProps,
 } from 'react-instantsearch-hooks';
+
+function SearchBox() {
+  const { query } = useSearchBox();
+
+  return (
+    <div className="ais-SearchBox">
+      <form action="" className="ais-SearchBox-form" noValidate>
+        <input
+          className="ais-SearchBox-input"
+          type="search"
+          defaultValue={query}
+        />
+      </form>
+    </div>
+  );
+}
+
+function Hit({ hit }) {
+  return <>{hit.objectID}</>;
+}
 
 type CreateTestEnvironmentProps = {
   searchClient: InstantSearchProps['searchClient'];
@@ -55,18 +78,23 @@ function createTestEnvironment({
         {children}
         <RefinementList attribute="brand" />
         <SearchBox />
-        <Hits />
+
+        <h2>instant_search</h2>
+        <Hits hitComponent={Hit} />
 
         <Index indexName="instant_search_price_asc">
-          <Hits />
+          <h2>instant_search_price_asc</h2>
+          <Hits hitComponent={Hit} />
 
           <Index indexName="instant_search_rating_desc">
-            <Hits />
+            <h2>instant_search_rating_desc</h2>
+            <Hits hitComponent={Hit} />
           </Index>
         </Index>
 
         <Index indexName="instant_search_price_desc">
-          <Hits />
+          <h2>instant_search_price_desc</h2>
+          <Hits hitComponent={Hit} />
         </Index>
       </InstantSearch>
     );
@@ -362,19 +390,94 @@ describe('getServerState', () => {
       },
     });
   });
+
+  test('returns HTML from server state', async () => {
+    const searchClient = createSearchClient({
+      search: jest.fn((requests) =>
+        Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map(() =>
+              createSingleSearchResponse({
+                hits: [{ objectID: '1' }, { objectID: '2' }],
+              })
+            )
+          )
+        )
+      ),
+    });
+    const { App } = createTestEnvironment({ searchClient });
+
+    const serverState = await getServerState(<App />);
+    const html = renderToString(<App serverState={serverState} />);
+
+    expect(html).toMatchInlineSnapshot(`
+      <div class="ais-RefinementList ais-RefinementList--noRefinement">
+        <ul class="ais-RefinementList-list">
+        </ul>
+      </div>
+      <div class="ais-SearchBox">
+        <form action
+              class="ais-SearchBox-form"
+              novalidate
+        >
+          <input class="ais-SearchBox-input"
+                 type="search"
+                 value="iphone"
+          >
+        </form>
+      </div>
+      <h2>
+        instant_search
+      </h2>
+      <div class="ais-Hits">
+        <ol class="ais-Hits-list">
+          <li class="ais-Hits-item">
+            1
+          </li>
+          <li class="ais-Hits-item">
+            2
+          </li>
+        </ol>
+      </div>
+      <h2>
+        instant_search_price_asc
+      </h2>
+      <div class="ais-Hits">
+        <ol class="ais-Hits-list">
+          <li class="ais-Hits-item">
+            1
+          </li>
+          <li class="ais-Hits-item">
+            2
+          </li>
+        </ol>
+      </div>
+      <h2>
+        instant_search_rating_desc
+      </h2>
+      <div class="ais-Hits">
+        <ol class="ais-Hits-list">
+          <li class="ais-Hits-item">
+            1
+          </li>
+          <li class="ais-Hits-item">
+            2
+          </li>
+        </ol>
+      </div>
+      <h2>
+        instant_search_price_desc
+      </h2>
+      <div class="ais-Hits">
+        <ol class="ais-Hits-list">
+          <li class="ais-Hits-item">
+            1
+          </li>
+          <li class="ais-Hits-item">
+            2
+          </li>
+        </ol>
+      </div>
+    `);
+  });
 });
-
-function SearchBox() {
-  useSearchBox();
-  return null;
-}
-
-function Hits() {
-  useHits();
-  return null;
-}
-
-function RefinementList(props: UseRefinementListProps) {
-  useRefinementList(props);
-  return null;
-}

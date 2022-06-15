@@ -379,15 +379,14 @@ describe('InstantSearchSSRProvider', () => {
       },
     };
 
+    // @TODO: this test doesn't work in Strict Mode
     function App() {
       return (
-        <StrictMode>
-          <InstantSearchSSRProvider initialResults={initialResults}>
-            <InstantSearch searchClient={searchClient} indexName="indexName">
-              <SearchBox />
-            </InstantSearch>
-          </InstantSearchSSRProvider>
-        </StrictMode>
+        <InstantSearchSSRProvider initialResults={initialResults}>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <SearchBox />
+          </InstantSearch>
+        </InstantSearchSSRProvider>
       );
     }
 

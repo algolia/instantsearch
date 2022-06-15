@@ -32,9 +32,9 @@
     "website:build": "yarn build && yarn webpack --config website/webpack.config.js"
   },
   "devDependencies": {
-    "@algolia/client-search": "4.11.0",
     "@algolia/cache-common": "4.11.0",
     "@algolia/cache-in-memory": "4.11.0",
+    "@algolia/client-search": "4.11.0",
     "@algolia/logger-common": "4.11.0",
     "@algolia/requester-node-http": "4.11.0",
     "@algolia/transporter": "4.11.0",
@@ -114,6 +114,7 @@
     "instantsearch.css": "7.4.5",
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
+    "jest-serializer-html": "7.1.0",
     "jest-watch-typeahead": "1.0.0",
     "json": "9.0.6",
     "latest-version": "5.1.0",

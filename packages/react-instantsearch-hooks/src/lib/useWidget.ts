@@ -6,11 +6,17 @@ import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 import type { Widget } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 
-export function useWidget<TWidget extends Widget | IndexWidget, TProps>(
-  widget: TWidget,
-  parentIndex: IndexWidget,
-  props: TProps
-) {
+export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
+  widget,
+  parentIndex,
+  props,
+  shouldSsr,
+}: {
+  widget: TWidget;
+  parentIndex: IndexWidget;
+  props: TProps;
+  shouldSsr: boolean;
+}) {
   const prevPropsRef = useRef<TProps>(props);
   useEffect(() => {
     prevPropsRef.current = props;
@@ -22,6 +28,8 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>(
   }, [widget]);
 
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const shouldAddWidgetEarly =
+    shouldSsr && !parentIndex.getWidgets().includes(widget);
 
   // This effect is responsible for adding, removing, and updating the widget.
   // We need to support scenarios where the widget is remounted quickly, like in
@@ -35,7 +43,9 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>(
 
     // Scenario 1: the widget is added for the first time.
     if (cleanupTimerRef.current === null) {
-      parentIndex.addWidgets([widget]);
+      if (!shouldAddWidgetEarly) {
+        parentIndex.addWidgets([widget]);
+      }
     }
     // Scenario 2: the widget is rerendered or updated.
     else {
@@ -66,5 +76,9 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>(
       // we're able to cancel it in the next effect.
       cleanupTimerRef.current = setTimeout(cleanup);
     };
-  }, [parentIndex, widget]);
+  }, [parentIndex, widget, shouldAddWidgetEarly]);
+
+  if (shouldAddWidgetEarly) {
+    parentIndex.addWidgets([widget]);
+  }
 }

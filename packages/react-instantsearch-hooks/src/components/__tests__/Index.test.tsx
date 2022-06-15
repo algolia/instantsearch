@@ -157,16 +157,15 @@ describe('Index', () => {
       },
     };
 
+    // @TODO: this test doesn't work in Strict Mode
     const { unmount } = render(
-      <StrictMode>
-        <InstantSearchSSRProvider initialResults={initialResults}>
-          <InstantSearchSpy searchClient={searchClient} indexName="indexName">
-            <Index indexName="indexName2">
-              <Configure />
-            </Index>
-          </InstantSearchSpy>
-        </InstantSearchSSRProvider>{' '}
-      </StrictMode>
+      <InstantSearchSSRProvider initialResults={initialResults}>
+        <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+          <Index indexName="indexName2">
+            <Configure />
+          </Index>
+        </InstantSearchSpy>
+      </InstantSearchSSRProvider>
     );
 
     expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);

@@ -145,13 +145,12 @@ export function useConnector<
     return {};
   });
 
-  useWidget(widget, parentIndex, stableProps);
-
-  // On the server, we add the widget early to retrieve its search parameters
-  // in the render pass.
-  if (serverContext && !parentIndex.getWidgets().includes(widget)) {
-    parentIndex.addWidgets([widget]);
-  }
+  useWidget({
+    widget,
+    parentIndex,
+    props: stableProps,
+    shouldSsr: Boolean(serverContext),
+  });
 
   return state;
 }

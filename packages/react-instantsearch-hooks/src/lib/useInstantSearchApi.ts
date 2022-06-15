@@ -32,10 +32,10 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const forceUpdate = useForceUpdate();
   const serverContext = useInstantSearchServerContext();
   const serverState = useInstantSearchSSRContext();
+  const initialResults = serverState?.initialResults;
   const stableProps = useStableValue(props);
   const search = useMemo(() => {
     const instance = new InstantSearch(stableProps);
-    const initialResults = serverState?.initialResults;
 
     if (serverContext || initialResults) {
       // InstantSearch.js has a private Initial Results API that lets us inject
@@ -53,17 +53,15 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     ]);
 
     return instance;
-  }, [
-    props.searchClient,
-    serverContext,
-    serverState?.initialResults,
-    stableProps,
-  ]);
+  }, [initialResults, props.searchClient, serverContext, stableProps]);
 
   const store = useSyncExternalStore<InstantSearch<TUiState, TRouteState>>(
     useCallback(() => {
-      search.start();
-      forceUpdate();
+      // On SSR, the instance is already started so we don't start it again here.
+      if (!search.started) {
+        search.start();
+        forceUpdate();
+      }
 
       return () => {
         search.dispose();
@@ -73,13 +71,19 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     () => search
   );
 
-  if (serverContext && !search.started) {
+  if (!search.started) {
     // On the server, we start the search early to compute the search parameters.
-    search.start();
+    // On SSR, we start the search early to directly catch up with the lifecycle
+    // and render.
+    if (serverContext || initialResults) {
+      search.start();
+    }
 
-    // We notify `getServerState()` of the InstantSearch internals to retrieve
-    // the server state and pass it to the render on SSR.
-    serverContext.notifyServer({ search });
+    if (serverContext) {
+      // We notify `getServerState()` of the InstantSearch internals to retrieve
+      // the server state and pass it to the render on SSR.
+      serverContext.notifyServer({ search });
+    }
   }
 
   return store;
