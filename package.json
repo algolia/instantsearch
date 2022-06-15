@@ -53,12 +53,12 @@
     "scripts/transforms"
   ],
   "dependencies": {
+    "@algolia/events": "^4.0.1",
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
-    "algoliasearch-helper": "^3.8.2",
+    "algoliasearch-helper": "^3.8.3",
     "classnames": "^2.2.5",
-    "@algolia/events": "^4.0.1",
     "hogan.js": "^3.0.2",
     "preact": "^10.6.0",
     "qs": "^6.5.1 < 6.10",
