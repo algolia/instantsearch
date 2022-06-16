@@ -7581,10 +7581,10 @@ algolia-aerial@^1.5.3:
   resolved "https://registry.yarnpkg.com/algolia-aerial/-/algolia-aerial-1.5.3.tgz#c8b8ca6bc484164ffc7b36717689a424ea6bfe6c"
   integrity sha512-LZTpVlYnhqNFd+ru/Spm73omhsagiRQLmjrosa5bJ6/I9OMRp4Sb9pYZkAxcx3RSr+ZNXZqthL7rpXqMFdrnPA==
 
-algoliasearch-helper@^3.8.2:
-  version "3.8.2"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.8.2.tgz#35726dc6d211f49dbab0bf6d37b4658165539523"
-  integrity sha512-AXxiF0zT9oYwl8ZBgU/eRXvfYhz7cBA5YrLPlw9inZHdaYF0QEya/f1Zp1mPYMXc1v6VkHwBq4pk6/vayBLICg==
+algoliasearch-helper@^3.8.3:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.8.3.tgz#74066a6aa56a6dfa7af1f3ab8c6a545d707d5d5e"
+  integrity sha512-J0H08fQoyhZ2qLi7Uy8EvUeN/NJ4Trtt7NWB8mF1CGLuYpdXPyjZu9+Uoya2eayxQ20RP+QGF9Om/LddPv49vw==
   dependencies:
     "@algolia/events" "^4.0.1"
 
@@ -17122,16 +17122,16 @@ instantsearch.css@7.4.5:
   resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.4.5.tgz#2a521aa634329bf1680f79adf87c79d67669ec8d"
   integrity sha512-iIGBYjCokU93DDB8kbeztKtlu4qVEyTg1xvS6iSO1YvqRwkIZgf0tmsl/GytsLdZhuw8j4wEaeYsCzNbeJ/zEQ==
 
-instantsearch.js@4.41.0, instantsearch.js@^4.41.0:
-  version "4.41.0"
-  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-4.41.0.tgz#c879d7b892e3d9159a17a803e793e695aeb5431f"
-  integrity sha512-g9l+Cty0xxMT06L36gc6x6Nz6HsEbrqbNQOXAZDORb2g9ADjMQwR1YtOVqN28pTuwXnhWJ4UfEKlLfHTgTVKmg==
+instantsearch.js@4.41.2, instantsearch.js@^4.41.2:
+  version "4.41.2"
+  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-4.41.2.tgz#5f8aa367a00ce828db0b825dac77d4a36ec27336"
+  integrity sha512-YsVd2tOxKPMZQSlqOgVzCYq9zIYqda1p8N6PDKgCdYoLbjngxAdIj7VHxWQEnJjGdAAkGqFPjr+RFx1l6WlwgA==
   dependencies:
     "@algolia/events" "^4.0.1"
     "@types/google.maps" "^3.45.3"
     "@types/hogan.js" "^3.0.0"
     "@types/qs" "^6.5.3"
-    algoliasearch-helper "^3.8.2"
+    algoliasearch-helper "^3.8.3"
     classnames "^2.2.5"
     hogan.js "^3.0.2"
     preact "^10.6.0"

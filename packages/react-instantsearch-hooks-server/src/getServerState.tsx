@@ -5,7 +5,7 @@ import {
   InstantSearchSSRProvider,
 } from 'react-instantsearch-hooks';
 
-import type { InitialResults, InstantSearch } from 'instantsearch.js';
+import type { InitialResults, InstantSearch, UiState } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 import type { ReactNode } from 'react';
 import type { renderToString as reactRenderToString } from 'react-dom/server';
@@ -26,9 +26,10 @@ export function getServerState(
     current: undefined,
   };
 
-  const notifyServer: InstantSearchServerContextApi['notifyServer'] = ({
-    search,
-  }) => {
+  const notifyServer: InstantSearchServerContextApi<
+    UiState,
+    UiState
+  >['notifyServer'] = ({ search }) => {
     searchRef.current = search;
   };
 
@@ -74,7 +75,7 @@ export function getServerState(
 type ExecuteArgs = {
   children: ReactNode;
   renderToString: typeof reactRenderToString;
-  notifyServer: InstantSearchServerContextApi['notifyServer'];
+  notifyServer: InstantSearchServerContextApi<UiState, UiState>['notifyServer'];
   searchRef: SearchRef;
 };
 

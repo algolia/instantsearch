@@ -30,7 +30,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   props: UseInstantSearchApiProps<TUiState, TRouteState>
 ) {
   const forceUpdate = useForceUpdate();
-  const serverContext = useInstantSearchServerContext();
+  const serverContext = useInstantSearchServerContext<TUiState, TRouteState>();
   const serverState = useInstantSearchSSRContext();
   const initialResults = serverState?.initialResults;
   const stableProps = useStableValue(props);
