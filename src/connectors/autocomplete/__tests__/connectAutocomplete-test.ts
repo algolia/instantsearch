@@ -841,7 +841,11 @@ search.addWidgets([
       const searchClient = createSearchClient({
         search() {
           return Promise.resolve(
-            createMultiSearchResponse(createSingleSearchResponse({ hits }))
+            createMultiSearchResponse(
+              createSingleSearchResponse({
+                hits,
+              })
+            ) as any
           );
         },
       });

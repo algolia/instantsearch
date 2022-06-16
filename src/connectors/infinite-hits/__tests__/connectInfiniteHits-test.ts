@@ -1443,7 +1443,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           const searchClient = createSearchClient({
             search() {
               return Promise.resolve(
-                createMultiSearchResponse(createSingleSearchResponse({ hits }))
+                createMultiSearchResponse(
+                  createSingleSearchResponse({ hits })
+                ) as any
               );
             },
           });

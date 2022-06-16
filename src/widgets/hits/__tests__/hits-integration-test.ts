@@ -47,7 +47,7 @@ const createInstantSearch = ({
 } = {}) => {
   const search = instantsearch({
     indexName: 'instant_search',
-    searchClient: createSearchClient({ hitsPerPage }) as any,
+    searchClient: createSearchClient({ hitsPerPage }),
   });
 
   search.addWidgets([
