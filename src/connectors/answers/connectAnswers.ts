@@ -138,7 +138,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
     // this does not directly use DebouncedFunction<findAnswers>, since then the generic will disappear
     let debouncedRefine: DebouncedFunction<
-      ReturnType<NonNullable<SearchClient['initIndex']>>['findAnswers']
+      ReturnType<NonNullable<SearchClient['initIndex']>> extends {
+        findAnswers: infer FindAnswers;
+      }
+        ? FindAnswers
+        : any
     >;
 
     return {
