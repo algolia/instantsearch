@@ -330,30 +330,57 @@ AlgoliaSearchHelper.prototype.findAnswers = function(options) {
  */
 AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxFacetHits, userState) {
   var clientHasSFFV = typeof this.client.searchForFacetValues === 'function';
+  var clientHasInitIndex = typeof this.client.initIndex === 'function';
   if (
     !clientHasSFFV &&
-    typeof this.client.initIndex !== 'function'
+    !clientHasInitIndex &&
+    typeof this.client.search !== 'function'
   ) {
     throw new Error(
       'search for facet values (searchable) was called, but this client does not have a function client.searchForFacetValues or client.initIndex(index).searchForFacetValues'
     );
   }
+
   var state = this.state.setQueryParameters(userState || {});
   var isDisjunctive = state.isDisjunctiveFacet(facet);
   var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, state);
 
   this._currentNbQueries++;
   var self = this;
+  var searchForFacetValuesPromise;
+  // newer algoliasearch ^3.27.1 - ~4.0.0
+  if (clientHasSFFV) {
+    searchForFacetValuesPromise = this.client.searchForFacetValues([
+      {indexName: state.index, params: algoliaQuery}
+    ]);
+    // algoliasearch < 3.27.1
+  } else if (clientHasInitIndex) {
+    searchForFacetValuesPromise = this.client
+      .initIndex(state.index)
+      .searchForFacetValues(algoliaQuery);
+    // algoliasearch ~5.0.0
+  } else {
+    // @MAJOR only use client.search
+    delete algoliaQuery.facetName;
+    searchForFacetValuesPromise = this.client
+      .search([
+        {
+          type: 'facet',
+          facet: facet,
+          indexName: state.index,
+          params: algoliaQuery
+        }
+      ])
+      .then(function processResponse(response) {
+        return response.results[0];
+      });
+  }
 
   this.emit('searchForFacetValues', {
     state: state,
     facet: facet,
     query: query
   });
-
-  var searchForFacetValuesPromise = clientHasSFFV
-    ? this.client.searchForFacetValues([{indexName: state.index, params: algoliaQuery}])
-    : this.client.initIndex(state.index).searchForFacetValues(algoliaQuery);
 
   return searchForFacetValuesPromise.then(function addIsRefined(content) {
     self._currentNbQueries--;

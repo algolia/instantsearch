@@ -216,6 +216,65 @@ test('client.searchForFacetValues can override the current search state', functi
   expect(lastArguments.params.highlightPostTag).toBe('<HIGHLIGHT');
 });
 
+test('client.search should search for facetValues with the current state', function() {
+  var clientSearch = jest.fn(function() {
+    return Promise.resolve({results: [makeFakeSearchForFacetValuesResponse()]});
+  });
+
+  var fakeClient = {
+    search: clientSearch
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index', {
+    highlightPreTag: 'HIGHLIGHT>',
+    highlightPostTag: '<HIGHLIGHT',
+    query: 'iphone'
+  });
+
+  helper.searchForFacetValues('facet', 'query', 75);
+
+  var lastArguments = clientSearch.mock.calls[0][0][0];
+
+  expect(lastArguments.indexName).toBe('index');
+  expect(lastArguments.params.query).toBe('iphone');
+  expect(lastArguments.params.facetQuery).toBe('query');
+  expect(lastArguments.params.hasOwnProperty('facetName')).toBeFalsy();
+  expect(lastArguments.facet).toBe('facet');
+  expect(lastArguments.params.highlightPreTag).toBe('HIGHLIGHT>');
+  expect(lastArguments.params.highlightPostTag).toBe('<HIGHLIGHT');
+});
+
+test('client.search can override the current search state', function() {
+  var clientSearch = jest.fn(function() {
+    return Promise.resolve({results: [makeFakeSearchForFacetValuesResponse()]});
+  });
+
+  var fakeClient = {
+    search: clientSearch
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index', {
+    highlightPreTag: 'HIGHLIGHT>',
+    highlightPostTag: '<HIGHLIGHT',
+    query: 'iphone'
+  });
+
+  helper.searchForFacetValues('facet', 'query', 75, {
+    query: undefined,
+    highlightPreTag: 'highlightTag'
+  });
+
+  var lastArguments = clientSearch.mock.calls[0][0][0];
+
+  expect(lastArguments.indexName).toBe('index');
+  expect(lastArguments.params.hasOwnProperty('query')).toBeFalsy();
+  expect(lastArguments.params.facetQuery).toBe('query');
+  expect(lastArguments.params.hasOwnProperty('facetName')).toBeFalsy();
+  expect(lastArguments.facet).toBe('facet');
+  expect(lastArguments.params.highlightPreTag).toBe('highlightTag');
+  expect(lastArguments.params.highlightPostTag).toBe('<HIGHLIGHT');
+});
+
 test('an error will be thrown if the client does not contain .searchForFacetValues', function() {
   var fakeClient = {};
   var helper = algoliasearchHelper(fakeClient, 'index');
