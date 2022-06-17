@@ -933,8 +933,9 @@ Array [
         hello: serialized,
       });
 
-      // TODO: assert that this is expect.any(AlgoliaSearchHelper), but test fails
-      // even though it's an object with all the right properties (including constructor)
+      expect(instantsearch.mainIndex.getHelper()).toEqual(
+        expect.any(AlgoliaSearchHelper)
+      );
       expect(instantsearch.mainIndex.getHelper()).not.toBeNull();
     });
 
