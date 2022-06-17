@@ -2,6 +2,17 @@
 
 var merge = require('./functions/merge');
 
+function sortObject(obj) {
+  return Object.keys(obj)
+    .sort(function(a, b) {
+      return a.localeCompare(b);
+    })
+    .reduce(function(acc, curr) {
+      acc[curr] = obj[curr];
+      return acc;
+    }, {});
+}
+
 var requestBuilder = {
   /**
    * Get all the queries to send to the client, those queries can used directly
@@ -92,7 +103,7 @@ var requestBuilder = {
       additionalParams.numericFilters = numericFilters;
     }
 
-    return merge({}, state.getQueryParams(), additionalParams);
+    return sortObject(merge({}, state.getQueryParams(), additionalParams));
   },
 
   /**
@@ -137,7 +148,7 @@ var requestBuilder = {
       additionalParams.facetFilters = facetFilters;
     }
 
-    return merge({}, state.getQueryParams(), additionalParams);
+    return sortObject(merge({}, state.getQueryParams(), additionalParams));
   },
 
   /**
@@ -330,11 +341,11 @@ var requestBuilder = {
     if (typeof maxFacetHits === 'number') {
       searchForFacetSearchParameters.maxFacetHits = maxFacetHits;
     }
-    return merge(
+    return sortObject(merge(
       {},
       requestBuilder._getHitsSearchParams(stateForSearchForFacetValues),
       searchForFacetSearchParameters
-    );
+    ));
   }
 };
 

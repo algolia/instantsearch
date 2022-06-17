@@ -91,6 +91,81 @@ test('does multiple queries to retrieve all facet values of hierarchical parent 
   expect(queries[3].params.facetFilters).toEqual(['categories.lvl0:beers']);
 });
 
+test('orders parameters alphabetically in every query', function() {
+  var searchParams = new SearchParameters({
+    facets: ['test'],
+    disjunctiveFacets: ['test_disjunctive', 'test_numeric'],
+    disjunctiveFacetsRefinements: {
+      test_disjunctive: ['test_disjunctive_value']
+    },
+    numericRefinements: {
+      test_numeric: {
+        '>=': [10]
+      }
+    },
+    hierarchicalFacets: [{name: 'test_hierarchical', attributes: ['whatever']}],
+    hierarchicalFacetsRefinements: {
+      test_hierarchical: ['item']
+    },
+    attributesToRetrieve: ['this is last in parameters, but first in queries']
+  });
+
+  var queries = getQueries(searchParams.index, searchParams);
+
+  expect(queries.length).toBe(4);
+  expect(JSON.stringify(queries[0].params)).toBe(JSON.stringify({
+    attributesToRetrieve: ['this is last in parameters, but first in queries'],
+    facetFilters: [
+      ['test_disjunctive:test_disjunctive_value'],
+      ['whatever:item']
+    ],
+    facets: ['test', 'test_disjunctive', 'test_numeric', 'whatever'],
+    numericFilters: ['test_numeric>=10'],
+    tagFilters: ''
+  }));
+  expect(JSON.stringify(queries[1].params)).toBe(JSON.stringify({
+    analytics: false,
+    attributesToHighlight: [],
+    attributesToRetrieve: ['this is last in parameters, but first in queries'],
+    attributesToSnippet: [],
+    clickAnalytics: false,
+    facetFilters: [['whatever:item']],
+    facets: 'test_disjunctive',
+    hitsPerPage: 1,
+    numericFilters: ['test_numeric>=10'],
+    page: 0,
+    tagFilters: ''
+  }));
+  expect(JSON.stringify(queries[2].params)).toBe(JSON.stringify({
+    analytics: false,
+    attributesToHighlight: [],
+    attributesToRetrieve: ['this is last in parameters, but first in queries'],
+    attributesToSnippet: [],
+    clickAnalytics: false,
+    facetFilters: [
+      ['test_disjunctive:test_disjunctive_value'],
+      ['whatever:item']
+    ],
+    facets: 'test_numeric',
+    hitsPerPage: 1,
+    page: 0,
+    tagFilters: ''
+  }));
+  expect(JSON.stringify(queries[3].params)).toBe(JSON.stringify({
+    analytics: false,
+    attributesToHighlight: [],
+    attributesToRetrieve: ['this is last in parameters, but first in queries'],
+    attributesToSnippet: [],
+    clickAnalytics: false,
+    facetFilters: [['test_disjunctive:test_disjunctive_value']],
+    facets: ['whatever'],
+    hitsPerPage: 1,
+    numericFilters: ['test_numeric>=10'],
+    page: 0,
+    tagFilters: ''
+  }));
+});
+
 describe('wildcard facets', function() {
   test('keeps as-is if no * present', function() {
     var searchParams = new SearchParameters({
