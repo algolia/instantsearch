@@ -3156,10 +3156,10 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@~6.12.6:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-algoliasearch-helper@^3.8.3:
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.8.3.tgz#74066a6aa56a6dfa7af1f3ab8c6a545d707d5d5e"
-  integrity sha512-J0H08fQoyhZ2qLi7Uy8EvUeN/NJ4Trtt7NWB8mF1CGLuYpdXPyjZu9+Uoya2eayxQ20RP+QGF9Om/LddPv49vw==
+algoliasearch-helper@^3.9.0:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.9.0.tgz#1e99d351ecdcff48449644157a8d250c7c592828"
+  integrity sha512-siWWl8QYJ3sh1yzJf9h/cHHpZC8wuPoPdVx5OtQ8X62ruUembTwvsLYoicrL7pF7fsYxdyvJfV9Yb2/nrVGrfg==
   dependencies:
     "@algolia/events" "^4.0.1"
 
