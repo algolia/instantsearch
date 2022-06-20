@@ -1,3 +1,7 @@
+3.9.0 - 2022-06-20
+ * feat(searchForFacetValues): fall back to client.search if it's present (#906) https://github.com/algolia/algoliasearch-helper-js/commit/d9ebb01382ec83e0c579c393c3e9df83a9261699
+ * fix(requests): send a sorted object of parameters (#911) https://github.com/algolia/algoliasearch-helper-js/commit/832507fae48c54ab41d3241254753100bb86910b
+
 3.8.3 - 2022-06-15
  * chore: update yarn lockfile (#909) https://github.com/algolia/algoliasearch-helper-js/commit/e561c35ce30dc36c162886b828835bf18887dab1
  * doc(readme): fix api parameter links (#904) https://github.com/algolia/algoliasearch-helper-js/commit/64356a40bd88972bcd256acb5c6f483982d4557d, closes https://github.com/algolia/algoliasearch-helper-js/issues/904
