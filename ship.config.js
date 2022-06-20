@@ -7,5 +7,4 @@ module.exports = {
     return true;
   },
   buildCommand: () => null,
-  afterPublish: ({ exec }) => exec('yarn run release-templates'),
 };

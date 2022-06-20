@@ -1,0 +1,37 @@
+name: release-templates
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: 📦  install dependencies
+        run: yarn install
+
+      - name: 🔧  build templates
+        run: yarn release-templates
+
+      - name: 🚀  push templates
+        run: |
+          cd build
+          UNCOMMITTED_CHANGES=`git status --porcelain`
+          if [ ! -z "$UNCOMMITTED_CHANGES" ]; then
+            git config --global user.name "InstantSearch"
+            git config --global user.email "66688561+instantsearch-bot@users.noreply.github.com"
+            git commit -a -m "feat(template): Update templates"
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+            git push origin templates
+            echo "✅  Templates have been compiled to the branch templates."
+          else
+            echo "ℹ️  No changes made to the templates."
+          fi

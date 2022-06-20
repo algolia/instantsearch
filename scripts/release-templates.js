@@ -104,53 +104,48 @@ async function build() {
     })
   );
 
-  // Change directory to the build folder to execute Git commands
-  process.chdir(BUILD_FOLDER);
+  if (!process.env.GITHUB_ACTION) {
+    // Change directory to the build folder to execute Git commands
+    process.chdir(BUILD_FOLDER);
 
-  const uncommitedChanges = execSync('git status --porcelain')
-    .toString()
-    .trim();
-
-  if (uncommitedChanges) {
-    // Stage all new demos to Git
-    execSync('git add -A');
-
-    // Commit the new demos
-    const commitMessage = 'feat(template): Update templates';
-
-    console.log('▶︎  Commiting');
-    console.log();
-    console.log(`  ${chalk.cyan(commitMessage)}`);
-
-    execSync(`git commit -m "${commitMessage}"`);
-
-    // Use the `origin-with-token` remote if it exists (when run with Ship.js)
-    const origin = execSync(
-      `git remote | grep origin-with-token || echo origin`
-    )
+    const uncommitedChanges = execSync('git status --porcelain')
       .toString()
       .trim();
 
-    // Push the new demos to the `templates` branch
-    console.log();
-    console.log(`▶︎  Pushing to branch "${chalk.green(TEMPLATES_BRANCH)}"`);
-    execSync(`git push ${origin} ${TEMPLATES_BRANCH}`);
+    if (uncommitedChanges) {
+      // Stage all new demos to Git
+      execSync('git add -A');
+
+      // Commit the new demos
+      const commitMessage = 'feat(template): Update templates';
+
+      console.log('▶︎  Commiting');
+      console.log();
+      console.log(`  ${chalk.cyan(commitMessage)}`);
+
+      execSync(`git commit -m "${commitMessage}"`);
+
+      // Push the new demos to the `templates` branch
+      console.log();
+      console.log(`▶︎  Pushing to branch "${chalk.green(TEMPLATES_BRANCH)}"`);
+      execSync(`git push origin ${TEMPLATES_BRANCH}`);
+
+      console.log();
+      console.log(
+        `✅  Templates have been compiled to the branch "${chalk.green(
+          TEMPLATES_BRANCH
+        )}".`
+      );
+    } else {
+      console.log();
+      console.log('ℹ️  No changes made to the templates.');
+    }
 
     console.log();
-    console.log(
-      `✅  Templates have been compiled to the branch "${chalk.green(
-        TEMPLATES_BRANCH
-      )}".`
-    );
-  } else {
-    console.log();
-    console.log('ℹ️  No changes made to the templates.');
+    process.chdir('..');
+
+    cleanup();
   }
-
-  console.log();
-  process.chdir('..');
-
-  cleanup();
 }
 
 build().catch(err => {
