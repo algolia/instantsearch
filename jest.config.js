@@ -22,4 +22,17 @@ module.exports = {
   globals: {
     __DEV__: true,
   },
+  // reporter for circleci
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: 'junit/jest',
+        suiteNameTemplate: '{filepath}',
+        ancestorSeparator: ' › ',
+        addFileAttribute: 'true',
+      },
+    ],
+  ],
 };

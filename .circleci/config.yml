@@ -91,6 +91,8 @@ jobs:
             # https://github.com/facebook/jest/issues/8987 - Jest fails to run tests on CI sporadically
             # retry introduced in https://github.com/algolia/react-instantsearch/pull/3475
             retry yarn test --maxWorkers=4
+      - store_test_results:
+          path: junit/jest/
 
   test_unit_react_v17:
     <<: *defaults
@@ -130,6 +132,8 @@ jobs:
             # https://github.com/facebook/jest/issues/8987 - Jest fails to run tests on CI sporadically
             # retry introduced in https://github.com/algolia/react-instantsearch/pull/3475
             retry yarn test --maxWorkers=4
+      - store_test_results:
+          path: junit/jest/
 
   test_unit_algoliasearch_v3:
     <<: *defaults
@@ -166,6 +170,8 @@ jobs:
             # https://github.com/facebook/jest/issues/8987 - Jest fails to run tests on CI sporadically
             # retry introduced in https://github.com/algolia/react-instantsearch/pull/3475
             retry yarn test --maxWorkers=4
+      - store_test_results:
+          path: junit/jest/
 
   test_integration:
     <<: *defaults
