@@ -41,7 +41,7 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
 
   if (isVue3) {
     const appOptions = Object.assign({}, componentInstance.$options, options);
-    appOptions.mixins = [...mixins, ...appOptions.mixins];
+    appOptions.mixins = [...mixins, ...(appOptions.mixins || [])];
     app = createSSRApp(appOptions);
     if (componentInstance.$router) {
       app.use(componentInstance.$router);
