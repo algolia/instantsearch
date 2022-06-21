@@ -1,3 +1,17 @@
+# [4.42.0](https://github.com/algolia/instantsearch.js/compare/v4.41.2...v4.42.0) (2022-06-21)
+
+
+### Bug Fixes
+
+* **es:** update import path for `infiniteHitsCache` in depreciation message ([#5068](https://github.com/algolia/instantsearch.js/issues/5068)) ([545cbaf](https://github.com/algolia/instantsearch.js/commit/545cbafd748bb8be32bff66ac60b5f3f9133a5b4))
+
+
+### Features
+
+* **core:** sort parameters & support client.search for sffv ([#5069](https://github.com/algolia/instantsearch.js/issues/5069)) ([34e2b00](https://github.com/algolia/instantsearch.js/commit/34e2b00cbc93f1bc86ee0abaec6b6e132bd18354))
+
+
+
 ## [4.41.2](https://github.com/algolia/instantsearch.js/compare/v4.41.1...v4.41.2) (2022-06-15)
 
 
