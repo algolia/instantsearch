@@ -13,7 +13,7 @@ Object {
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
         "renderingContent": Object {
@@ -55,7 +55,7 @@ Object {
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=brand",
+        "params": "analytics=false&attributesToHighlight=%5B%5D&attributesToRetrieve=%5B%5D&attributesToSnippet=%5B%5D&clickAnalytics=false&facets=brand&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=1&maxValuesPerFacet=10&page=0&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
         "renderingContent": Object {
@@ -123,7 +123,7 @@ Object {
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
         "renderingContent": Object {
@@ -165,7 +165,7 @@ Object {
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=brand",
+        "params": "analytics=false&attributesToHighlight=%5B%5D&attributesToRetrieve=%5B%5D&attributesToSnippet=%5B%5D&clickAnalytics=false&facets=brand&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=1&maxValuesPerFacet=10&page=0&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
         "renderingContent": Object {
@@ -233,7 +233,7 @@ Object {
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
         "renderingContent": Object {
@@ -275,7 +275,7 @@ Object {
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=brand",
+        "params": "analytics=false&attributesToHighlight=%5B%5D&attributesToRetrieve=%5B%5D&attributesToSnippet=%5B%5D&clickAnalytics=false&facets=brand&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=1&maxValuesPerFacet=10&page=0&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
         "renderingContent": Object {
@@ -343,7 +343,7 @@ Object {
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
         "renderingContent": Object {
@@ -385,7 +385,7 @@ Object {
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "maxValuesPerFacet=10&query=iphone&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=brand",
+        "params": "analytics=false&attributesToHighlight=%5B%5D&attributesToRetrieve=%5B%5D&attributesToSnippet=%5B%5D&clickAnalytics=false&facets=brand&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=1&maxValuesPerFacet=10&page=0&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
         "renderingContent": Object {

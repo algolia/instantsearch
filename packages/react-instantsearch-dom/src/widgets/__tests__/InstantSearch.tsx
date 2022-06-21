@@ -20,7 +20,7 @@ const EMPTY_RESPONSE = {
       query: '',
       queryAfterRemoval: '',
       params:
-        'highlightPreTag=%3Cais-highlight-0000000000%3E&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&query=&facets=%5B%5D&tagFilters=',
+        'facets=%5B%5D&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&query=&tagFilters=',
       index: 'instant_search',
       processingTimeMS: 2,
     },

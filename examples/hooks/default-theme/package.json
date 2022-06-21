@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "algoliasearch": "4.11.0",
-    "instantsearch.js": "4.41.2",
+    "instantsearch.js": "4.42.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-instantsearch-hooks-web": "6.28.0"
