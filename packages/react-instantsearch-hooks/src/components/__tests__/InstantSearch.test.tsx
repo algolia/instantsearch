@@ -279,6 +279,67 @@ describe('InstantSearch', () => {
     });
   });
 
+  test('renders with router state from unstable routing', async () => {
+    const searchClient = createSearchClient({});
+
+    function App({ url }) {
+      const routing = {
+        stateMapping: simple(),
+        router: history({
+          getLocation() {
+            return new URL(url) as unknown as Location;
+          },
+        }),
+      };
+
+      return (
+        <StrictMode>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName="indexName"
+            routing={routing}
+          >
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(
+      <App url="http://localhost/?indexName[query]=iphone" />
+    );
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({ query: 'iphone' }),
+        },
+      ]);
+      expect(screen.getByRole('searchbox')).toHaveValue('iphone');
+    });
+
+    rerender(<App url="http://localhost/?indexName[query]=iphone" />);
+
+    expect(screen.getByRole('searchbox')).toHaveValue('iphone');
+
+    userEvent.type(screen.getByRole('searchbox'), ' case', {
+      initialSelectionStart: 6,
+    });
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(6);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({ query: 'iphone case' }),
+        },
+      ]);
+      expect(screen.getByRole('searchbox')).toHaveValue('iphone case');
+    });
+  });
+
   test('recovers the state on rerender', async () => {
     const searchClient = createSearchClient({});
 
