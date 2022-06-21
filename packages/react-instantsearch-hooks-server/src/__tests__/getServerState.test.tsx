@@ -32,11 +32,7 @@ function SearchBox() {
   return (
     <div className="ais-SearchBox">
       <form action="" className="ais-SearchBox-form" noValidate>
-        <input
-          className="ais-SearchBox-input"
-          type="search"
-          defaultValue={query}
-        />
+        <input className="ais-SearchBox-input" defaultValue={query} />
       </form>
     </div>
   );
@@ -421,7 +417,6 @@ describe('getServerState', () => {
               novalidate
         >
           <input class="ais-SearchBox-input"
-                 type="search"
                  value="iphone"
           >
         </form>
