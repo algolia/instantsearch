@@ -20,7 +20,7 @@ type InstantSearchModule = {
   version: string;
 
   // @major remove these in favour of the exports
-  /** @deprecated import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/helpers' */
+  /** @deprecated import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache' */
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
   /** @deprecated import { highlight } from 'instantsearch.js/es/helpers' */
   highlight: typeof highlight;
@@ -64,7 +64,7 @@ instantsearch.version = version;
 
 instantsearch.createInfiniteHitsSessionStorageCache = deprecate(
   createInfiniteHitsSessionStorageCache,
-  "import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/helpers'"
+  "import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache'"
 );
 instantsearch.highlight = deprecate(
   highlight,
