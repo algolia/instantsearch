@@ -36,7 +36,9 @@
     "dist",
     "src",
     "index.js",
-    "index.d.ts"
+    "index.d.ts",
+    "types/algoliasearch.d.ts",
+    "types/algoliasearch.js"
   ],
   "devDependencies": {
     "@types/algoliasearch": "3.34.11",
@@ -101,7 +103,7 @@
     "@algolia/events": "^4.0.1"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 5"
+    "algoliasearch": ">= 3.1 < 6"
   },
   "resolutions": {
     "node-sass": "4.14.1"

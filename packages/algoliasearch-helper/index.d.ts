@@ -1,45 +1,10 @@
-// Note: Below, we will be importing both algoliasearch
-// `v3` and algoliasearch `v4` types. The goal is being
-// able to export the algoliasearch-helper types using
-// the developer installed version of the client.
-
-import algoliasearch, {
-  // @ts-ignore
-  SearchClient as SearchClientV4,
-  // @ts-ignore
-  Client as SearchClientV3,
-  // @ts-ignore
-  QueryParameters as SearchOptionsV3,
-  // @ts-ignore
-  Response as SearchResponseV3,
-} from 'algoliasearch';
-import { 
-  SearchOptions as SearchOptionsV4,
-  SearchResponse as SearchResponseV4,
-  FindAnswersResponse
-  // @ts-ignore
-} from '@algolia/client-search';
 import EventEmitter from '@algolia/events';
-
-type DummySearchClientV4 = {
-  transporter: any;
-};
-
-type Client = ReturnType<typeof algoliasearch> extends DummySearchClientV4
-  ? SearchClientV4
-  : SearchClientV3;
-type SearchOptions = ReturnType<
-  typeof algoliasearch
-> extends DummySearchClientV4
-  ? SearchOptionsV4
-  : SearchOptionsV3;
-type SearchResponse<T> = ReturnType<
-  typeof algoliasearch
-> extends DummySearchClientV4
-  ? SearchResponseV4<T>
-  : SearchResponseV3<T>;
-
-type SearchClient = Pick<Client, 'search' | 'searchForFacetValues'>;
+import {
+  FindAnswersResponse,
+  SearchClient,
+  SearchOptions,
+  SearchResponse,
+} from './types/algoliasearch';
 
 /**
  * The algoliasearchHelper module is the function that will let its
@@ -272,7 +237,11 @@ declare namespace algoliasearchHelper {
      */
     addDisjunctiveRefine(facet: string, value: string): this;
     addHierarchicalFacetRefinement(facet: string, path: string): this;
-    addNumericRefinement(facet: string, operator?: SearchParameters.Operator, value?: number | number[]): this;
+    addNumericRefinement(
+      facet: string,
+      operator?: SearchParameters.Operator,
+      value?: number | number[]
+    ): this;
     addFacetRefinement(facet: string, value: string): this;
     /**
      * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
@@ -284,7 +253,11 @@ declare namespace algoliasearchHelper {
      */
     addExclude: AlgoliaSearchHelper['addFacetExclusion'];
     addTag(tag: string): this;
-    removeNumericRefinement(facet: string, operator?: SearchParameters.Operator, value?: number | number[]): this;
+    removeNumericRefinement(
+      facet: string,
+      operator?: SearchParameters.Operator,
+      value?: number | number[]
+    ): this;
     removeDisjunctiveFacetRefinement(facet: string, value?: string): this;
     /**
      * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
@@ -530,7 +503,7 @@ declare namespace algoliasearchHelper {
       'facetsRefinements',
       'hierarchicalFacets',
       'facetsExcludes',
-  
+
       'disjunctiveFacetsRefinements',
       'numericRefinements',
       'tagRefinements',
@@ -950,7 +923,7 @@ declare namespace algoliasearchHelper {
     queryType?: 'prefixAll' | 'prefixLast' | 'prefixNone';
     /**
      * Search entries inside a given area defined by a set of points
-     * defauly: ''
+     * default: ''
      * https://www.algolia.com/doc/api-reference/api-parameters/insidePolygon/
      */
     insidePolygon?: number[][];
@@ -1150,7 +1123,7 @@ declare namespace algoliasearchHelper {
      * Marker which can be added to search results to identify them as created without a search response.
      * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
      */
-    __isArtificial?: boolean | undefined
+    __isArtificial?: boolean | undefined;
   }
 
   type ISearchResponse<T> = Omit<SearchResponse<T>, 'facets' | 'params'> &
@@ -1392,7 +1365,7 @@ declare namespace algoliasearchHelper {
 
     /**
      * Returns all refinements for all filters + tags. It also provides
-     * additional information: count and exhausistivity for each filter.
+     * additional information: count and exhaustiveness for each filter.
      *
      * See the [refinement type](#Refinement) for an exhaustive view of the available
      * data.
