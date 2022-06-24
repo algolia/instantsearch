@@ -125,44 +125,35 @@ test('orders parameters alphabetically in every query', function() {
   }));
   expect(JSON.stringify(queries[1].params)).toBe(JSON.stringify({
     analytics: false,
-    attributesToHighlight: [],
     attributesToRetrieve: ['this is last in parameters, but first in queries'],
-    attributesToSnippet: [],
     clickAnalytics: false,
     facetFilters: [['whatever:item']],
     facets: 'test_disjunctive',
-    hitsPerPage: 1,
+    hitsPerPage: 0,
     numericFilters: ['test_numeric>=10'],
-    page: 0,
-    tagFilters: ''
+    page: 0
   }));
   expect(JSON.stringify(queries[2].params)).toBe(JSON.stringify({
     analytics: false,
-    attributesToHighlight: [],
     attributesToRetrieve: ['this is last in parameters, but first in queries'],
-    attributesToSnippet: [],
     clickAnalytics: false,
     facetFilters: [
       ['test_disjunctive:test_disjunctive_value'],
       ['whatever:item']
     ],
     facets: 'test_numeric',
-    hitsPerPage: 1,
-    page: 0,
-    tagFilters: ''
+    hitsPerPage: 0,
+    page: 0
   }));
   expect(JSON.stringify(queries[3].params)).toBe(JSON.stringify({
     analytics: false,
-    attributesToHighlight: [],
     attributesToRetrieve: ['this is last in parameters, but first in queries'],
-    attributesToSnippet: [],
     clickAnalytics: false,
     facetFilters: [['test_disjunctive:test_disjunctive_value']],
     facets: ['whatever'],
-    hitsPerPage: 1,
+    hitsPerPage: 0,
     numericFilters: ['test_numeric>=10'],
-    page: 0,
-    tagFilters: ''
+    page: 0
   }));
 });
 

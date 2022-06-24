@@ -118,15 +118,15 @@ var requestBuilder = {
     var numericFilters = requestBuilder._getNumericFilters(state, facet);
     var tagFilters = requestBuilder._getTagFilters(state);
     var additionalParams = {
-      hitsPerPage: 1,
+      hitsPerPage: 0,
       page: 0,
-      attributesToRetrieve: [],
-      attributesToHighlight: [],
-      attributesToSnippet: [],
-      tagFilters: tagFilters,
       analytics: false,
       clickAnalytics: false
     };
+
+    if (tagFilters.length > 0) {
+      additionalParams.tagFilters = tagFilters;
+    }
 
     var hierarchicalFacet = state.getHierarchicalFacetByName(facet);
 
