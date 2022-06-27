@@ -1,3 +1,7 @@
+3.10.0 - 2022-06-27
+ * feat(disjunctiveFacetParams): reduce payload size (#912) https://github.com/algolia/algoliasearch-helper-js/commit/95185750fb05e82c06d3ddd9e907f06ce66d0317
+ * feat(types): support algoliasearch v5 (#910) https://github.com/algolia/algoliasearch-helper-js/commit/524272a2fe62c852d9ed8d0cd698cc184897b9c5
+
 3.9.0 - 2022-06-20
  * feat(searchForFacetValues): fall back to client.search if it's present (#906) https://github.com/algolia/algoliasearch-helper-js/commit/d9ebb01382ec83e0c579c393c3e9df83a9261699
  * fix(requests): send a sorted object of parameters (#911) https://github.com/algolia/algoliasearch-helper-js/commit/832507fae48c54ab41d3241254753100bb86910b
