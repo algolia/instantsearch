@@ -9,6 +9,7 @@ import type {
   HitAttributeHighlightResult,
   Hit,
   EscapedHits,
+  SearchResponse,
 } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -1441,10 +1442,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           ];
 
           const searchClient = createSearchClient({
-            search() {
+            search<T>() {
               return Promise.resolve(
                 createMultiSearchResponse(
-                  createSingleSearchResponse({ hits: hits as any[] })
+                  createSingleSearchResponse({
+                    hits: hits as unknown as SearchResponse<T>['hits'],
+                  })
                 )
               );
             },

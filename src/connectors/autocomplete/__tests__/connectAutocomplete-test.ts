@@ -15,7 +15,7 @@ import {
 import type { AutocompleteRenderState } from '../connectAutocomplete';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import type { SearchClient } from '../../../types';
+import type { SearchClient, SearchResponse } from '../../../types';
 import { wait } from '../../../../test/utils/wait';
 import instantsearch from '../../../index.es';
 
@@ -839,10 +839,12 @@ search.addWidgets([
       ];
 
       const searchClient = createSearchClient({
-        search() {
+        search<T>() {
           return Promise.resolve(
             createMultiSearchResponse(
-              createSingleSearchResponse({ hits: hits as any[] })
+              createSingleSearchResponse({
+                hits: hits as unknown as SearchResponse<T>['hits'],
+              })
             )
           );
         },

@@ -16,6 +16,7 @@ import {
 } from '../../../../test/mock/createAPIResponse';
 import instantsearch from '../../../index.es';
 import { wait } from '../../../../test/utils/wait';
+import type { SearchResponse } from '../../../types';
 
 describe('connectGeoSearch', () => {
   const createFakeHelper = () => {
@@ -1731,10 +1732,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       ];
 
       const searchClient = createSearchClient({
-        search() {
+        search<T>() {
           return Promise.resolve(
             createMultiSearchResponse(
-              createSingleSearchResponse({ hits: hits as any[] })
+              createSingleSearchResponse({
+                hits: hits as unknown as SearchResponse<T>['hits'],
+              })
             )
           );
         },
