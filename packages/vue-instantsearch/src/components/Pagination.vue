@@ -78,6 +78,7 @@
         <li
           :class="{
             [suit('item')]: true,
+            [suit('item', 'page')]: true,
             [suit('item', 'selected')]: state.currentRefinement === page
           }"
           v-for="page in state.pages"
