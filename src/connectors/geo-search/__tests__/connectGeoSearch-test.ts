@@ -1731,7 +1731,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       ];
 
       const searchClient = createSearchClient({
-        search<T>() {
+        search() {
           return Promise.resolve(
             createMultiSearchResponse(
               createSingleSearchResponse<T>({ hits: hits as any[] })
