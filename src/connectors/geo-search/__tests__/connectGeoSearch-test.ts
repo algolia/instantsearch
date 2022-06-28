@@ -1731,10 +1731,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       ];
 
       const searchClient = createSearchClient({
-        search() {
+        search<T>() {
           return Promise.resolve(
-            createMultiSearchResponse(createSingleSearchResponse({ hits }))
-          ) as any;
+            createMultiSearchResponse(
+              createSingleSearchResponse<T>({ hits: hits as any[] })
+            )
+          );
         },
       });
 

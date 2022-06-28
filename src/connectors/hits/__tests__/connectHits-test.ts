@@ -853,8 +853,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           const searchClient = createSearchClient({
             search() {
               return Promise.resolve(
-                createMultiSearchResponse(createSingleSearchResponse({ hits }))
-              ) as any;
+                createMultiSearchResponse(
+                  createSingleSearchResponse({ hits: hits as any[] })
+                )
+              );
             },
           });
 

@@ -223,7 +223,7 @@ describe('hits', () => {
         searchClient: createSearchClient({
           hitsPerPage,
           includeQueryID: true,
-        }) as any,
+        }),
         insightsClient: aa,
       });
 

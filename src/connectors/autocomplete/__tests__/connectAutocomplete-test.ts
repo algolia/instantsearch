@@ -842,10 +842,8 @@ search.addWidgets([
         search() {
           return Promise.resolve(
             createMultiSearchResponse(
-              createSingleSearchResponse({
-                hits,
-              })
-            ) as any
+              createSingleSearchResponse({ hits: hits as any[] })
+            )
           );
         },
       });

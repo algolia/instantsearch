@@ -1444,8 +1444,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             search() {
               return Promise.resolve(
                 createMultiSearchResponse(
-                  createSingleSearchResponse({ hits })
-                ) as any
+                  createSingleSearchResponse({ hits: hits as any[] })
+                )
               );
             },
           });
