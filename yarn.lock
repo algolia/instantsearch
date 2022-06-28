@@ -111,6 +111,18 @@
     "@algolia/logger-common" "4.11.0"
     "@algolia/requester-common" "4.11.0"
 
+"@algolia/ui-components-highlight-vdom@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-highlight-vdom/-/ui-components-highlight-vdom-1.1.2.tgz#686b29a905bb876672f79f14dab3a7e0de37855c"
+  integrity sha512-Idrugh06V8Pszfw0SgAylc4ZMSxx+GJ8TVEjyfHT/2od4Z8jvo4WKY1Sq9JEt0CDdneX+ZWcRLsgNqE99nWAgw==
+  dependencies:
+    "@algolia/ui-components-shared" "1.1.2"
+
+"@algolia/ui-components-shared@1.1.2", "@algolia/ui-components-shared@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-shared/-/ui-components-shared-1.1.2.tgz#6cc200f57288ad65db562ac4d637783c5f13e527"
+  integrity sha512-/aAWrvPIlhb6IdOiZHU5rktRxil0WVODitPr9afrTverSjHFj60dFjwMbqxXFVMw1GvIpZHtoTTXedaG7AWw2Q==
+
 "@babel/cli@7.8.4":
   version "7.8.4"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.8.4.tgz#505fb053721a98777b2b175323ea4f090b7d3c1c"
