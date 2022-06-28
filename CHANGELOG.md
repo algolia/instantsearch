@@ -1,3 +1,12 @@
+# [4.43.0](https://github.com/algolia/instantsearch.js/compare/v4.42.0...v4.43.0) (2022-06-28)
+
+
+### Features
+
+* **types:** support algoliasearch v5 ([#5066](https://github.com/algolia/instantsearch.js/issues/5066)) ([3eb4dc7](https://github.com/algolia/instantsearch.js/commit/3eb4dc75a5935f2ee4fead8787f39af0150b24c4))
+
+
+
 # [4.42.0](https://github.com/algolia/instantsearch.js/compare/v4.41.2...v4.42.0) (2022-06-21)
 
 
