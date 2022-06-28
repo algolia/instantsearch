@@ -1734,7 +1734,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         search() {
           return Promise.resolve(
             createMultiSearchResponse(
-              createSingleSearchResponse<T>({ hits: hits as any[] })
+              createSingleSearchResponse({ hits: hits as any[] })
             )
           );
         },
