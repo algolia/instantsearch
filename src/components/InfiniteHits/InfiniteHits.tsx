@@ -35,6 +35,7 @@ export type InfiniteHitsProps = {
 const InfiniteHits = ({
   results,
   hits,
+  sendEvent,
   bindEvent,
   hasShowPrevious,
   showPrevious,
@@ -87,6 +88,7 @@ const InfiniteHits = ({
               __hitIndex: position,
             }}
             bindEvent={bindEvent}
+            sendEvent={sendEvent}
           />
         ))}
       </ol>

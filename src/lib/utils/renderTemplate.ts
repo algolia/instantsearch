@@ -1,7 +1,11 @@
 import type { HoganOptions, Template } from 'hogan.js';
 import hogan from 'hogan.js';
-import type { Templates, HoganHelpers } from '../../types';
-import type { BindEventForHits } from './createSendEventForHits';
+import type { Templates, HoganHelpers, TemplateParams } from '../../types';
+import { html } from '../html';
+import type {
+  BindEventForHits,
+  SendEventForHits,
+} from './createSendEventForHits';
 
 type TransformedHoganHelpers = {
   [helper: string]: () => (text: string) => string;
@@ -39,6 +43,7 @@ function renderTemplate({
   helpers,
   data,
   bindEvent,
+  sendEvent,
 }: {
   templates: Templates;
   templateKey: string;
@@ -46,6 +51,7 @@ function renderTemplate({
   helpers?: HoganHelpers;
   data?: Record<string, any>;
   bindEvent?: BindEventForHits;
+  sendEvent?: SendEventForHits;
 }) {
   const template = templates[templateKey];
 
@@ -56,7 +62,13 @@ function renderTemplate({
   }
 
   if (typeof template === 'function') {
-    return template(data, bindEvent!);
+    const params = (bindEvent || {}) as TemplateParams;
+
+    params.html = html;
+    params.sendEvent = sendEvent;
+    params.components = {};
+
+    return template(data, params);
   }
 
   const transformedHelpers = transformHelpersToHogan(
