@@ -1,3 +1,20 @@
+# [4.4.0](https://github.com/algolia/vue-instantsearch/compare/v4.3.3...v4.4.0) (2022-06-28)
+
+
+### Bug Fixes
+
+* **ais-hierarchical-menu:** show full hierarchical parent values ([#1126](https://github.com/algolia/vue-instantsearch/issues/1126)) ([51aadf0](https://github.com/algolia/vue-instantsearch/commit/51aadf076e7116637c2046ff903279cafc5222c7))
+* **pagination:** add page class for "page" item ([#1129](https://github.com/algolia/vue-instantsearch/issues/1129)) ([afacf8b](https://github.com/algolia/vue-instantsearch/commit/afacf8b3a9b8f3c99a15c9a31d2524f66142c67f))
+* **ssr:** allow component without mixins to be extended ([#1127](https://github.com/algolia/vue-instantsearch/issues/1127)) ([3b8b887](https://github.com/algolia/vue-instantsearch/commit/3b8b887e918b8f59d92c73b6c57bd6836a99b771))
+
+
+### Features
+
+* **core:** update instantsearch ([69a3aa8](https://github.com/algolia/vue-instantsearch/commit/69a3aa805a3e8f309d4a058c6c2a5c4534eed7ef))
+* **widgets:** pass $$widgetType ([#1121](https://github.com/algolia/vue-instantsearch/issues/1121)) ([7696acc](https://github.com/algolia/vue-instantsearch/commit/7696acc8a30c40c682f3b7df2e82803c388a377f))
+
+
+
 ## [4.3.3](https://github.com/algolia/vue-instantsearch/compare/v4.3.2...v4.3.3) (2022-02-10)
 
 
