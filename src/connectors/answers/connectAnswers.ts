@@ -14,9 +14,9 @@ import type {
   Hits,
   Hit,
   FindAnswersOptions,
-  FindAnswersParameters,
   FindAnswersResponse,
   WidgetRenderState,
+  SearchClient,
 } from '../../types';
 
 type IndexWithAnswers = {
@@ -138,7 +138,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
     // this does not directly use DebouncedFunction<findAnswers>, since then the generic will disappear
     let debouncedRefine: DebouncedFunction<
-      (...params: FindAnswersParameters) => Promise<FindAnswersResponse<Hit>>
+      ReturnType<NonNullable<SearchClient['initIndex']>> extends {
+        findAnswers: infer FindAnswers;
+      }
+        ? FindAnswers
+        : any
     >;
 
     return {
@@ -199,7 +203,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
             ...extraParameters,
             nbHits,
             attributesForPrediction,
-          })
+          }) as unknown as Promise<FindAnswersResponse<Hit>>
         ).then((result) => {
           if (!result) {
             // It's undefined when it's debounced.

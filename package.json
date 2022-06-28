@@ -57,7 +57,7 @@
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
-    "algoliasearch-helper": "^3.9.0",
+    "algoliasearch-helper": "^3.10.0",
     "classnames": "^2.2.5",
     "hogan.js": "^3.0.2",
     "preact": "^10.6.0",
@@ -146,7 +146,7 @@
     "webpack": "4.41.5"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 5"
+    "algoliasearch": ">= 3.1 < 6"
   },
   "resolutions": {
     "places.js/algoliasearch": "3.35.0"

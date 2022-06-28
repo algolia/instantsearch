@@ -375,15 +375,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           indexName: 'test',
           params: {
             analytics: false,
-            attributesToHighlight: [],
-            attributesToRetrieve: [],
-            attributesToSnippet: [],
             clickAnalytics: false,
             facets: ['hierarchy.1'],
-            hitsPerPage: 1,
+            hitsPerPage: 0,
             maxValuesPerFacet: 10,
             page: 0,
-            tagFilters: '',
           },
         },
       ]);

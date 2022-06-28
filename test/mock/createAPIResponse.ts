@@ -1,6 +1,6 @@
 import type {
-  MultiResponse,
   SearchResponse,
+  SearchResponses,
   SearchForFacetValuesResponse,
 } from '../../src/types';
 
@@ -38,7 +38,7 @@ export const createSingleSearchResponse = <THit = any>(
 
 export const createMultiSearchResponse = <THit = any>(
   ...args: Array<Partial<SearchResponse<THit>>>
-): MultiResponse => {
+): SearchResponses<THit> => {
   if (!args.length) {
     return {
       results: [createSingleSearchResponse()],
