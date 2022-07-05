@@ -59,7 +59,7 @@ export type AlgoliaHit<THit extends BaseHit = Record<string, any>> = {
     };
   };
   _distinctSeqID?: number;
-  _geoLoc?: GeoLoc;
+  _geoloc?: GeoLoc;
 } & THit;
 
 export type BaseHit = Record<string, unknown>;
