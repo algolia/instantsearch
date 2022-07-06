@@ -1,3 +1,12 @@
+# [6.30.0](https://github.com/algolia/react-instantsearch/compare/v6.29.0...v6.30.0) (2022-07-05)
+
+
+### Features
+
+* **core:** update instantsearch and helper ([#3539](https://github.com/algolia/react-instantsearch/issues/3539)) ([0ac2c7a](https://github.com/algolia/react-instantsearch/commit/0ac2c7a3f2e2a827721f5b2b7c69c54560f8574f))
+
+
+
 # [6.29.0](https://github.com/algolia/react-instantsearch/compare/v6.28.0...v6.29.0) (2022-06-21)
 
 
