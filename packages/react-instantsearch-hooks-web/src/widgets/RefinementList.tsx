@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useRefinementList } from 'react-instantsearch-hooks';
 
 import { RefinementList as RefinementListUiComponent } from '../ui/RefinementList';
@@ -66,16 +66,13 @@ export function RefinementList({
       $$widgetType: 'ais.refinementList',
     }
   );
-  const [query, setQuery] = useState('');
-  const previousQueryRef = useRef(query);
+  const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (previousQueryRef.current !== query) {
-      previousQueryRef.current = query;
-      searchForItems(query);
-    }
-  }, [query, searchForItems]);
+  function setQuery(newQuery: string) {
+    setInputValue(newQuery);
+    searchForItems(newQuery);
+  }
 
   function onRefine(item: RefinementListItem) {
     refine(item.value);
@@ -101,13 +98,13 @@ export function RefinementList({
     items,
     canRefine,
     onRefine,
-    query,
+    query: inputValue,
     searchBox: searchable && (
       <SearchBoxUiComponent
         inputRef={inputRef}
         placeholder={searchablePlaceholder}
         isSearchStalled={false}
-        value={query}
+        value={inputValue}
         onChange={onChange}
         onReset={onReset}
         onSubmit={onSubmit}
