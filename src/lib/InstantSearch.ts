@@ -493,10 +493,10 @@ See ${createDocumentationLink({
       if (!(error instanceof Error)) {
         // typescript lies here, error is in some cases { name: string, message: string }
         const err = error as Record<string, any>;
-        error = new Error(err.message);
-        Object.keys(err).forEach((key) => {
-          (error as any)[key] = err[key];
-        });
+        error = Object.keys(err).reduce((acc, key) => {
+          (acc as any)[key] = err[key];
+          return acc;
+        }, new Error(err.message));
       }
       // If an error is emitted, it is re-thrown by events. In previous versions
       // we emitted {error}, which is thrown as:
