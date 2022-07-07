@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { cx } from './lib/cx';
 
@@ -88,15 +88,17 @@ export function RangeInput({
         ? maxValue
         : unsetNumberInputValue,
   };
+  const [prevValues, setPrevValues] = useState(values);
 
   const [{ from, to }, setRange] = useState({
     from: values.min,
     to: values.max,
   });
 
-  useEffect(() => {
+  if (values.min !== prevValues.min || values.max !== prevValues.max) {
     setRange({ from: values.min, to: values.max });
-  }, [values.min, values.max]);
+    setPrevValues(values);
+  }
 
   return (
     <div
