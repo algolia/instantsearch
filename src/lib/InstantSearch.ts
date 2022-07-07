@@ -490,6 +490,14 @@ See ${createDocumentationLink({
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.
     mainHelper.on('error', ({ error }) => {
+      if (!(error instanceof Error)) {
+        // typescript lies here, error is in some cases { name: string, message: string }
+        const err = error as Record<string, any>;
+        error = new Error(err.message);
+        Object.keys(err).forEach((key) => {
+          (error as any)[key] = err[key];
+        });
+      }
       // If an error is emitted, it is re-thrown by events. In previous versions
       // we emitted {error}, which is thrown as:
       // "Uncaught, unspecified \"error\" event. ([object Object])"
