@@ -1,5 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+import React from 'react';
+import { SearchBox } from 'react-instantsearch-hooks-web';
 
 import { createInstantSearchTestWrapper } from '../../../../../test/utils';
 import { useSearchResults } from '../useSearchResults';
@@ -8,10 +10,18 @@ describe('useSearchResults', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
     const { result, waitForNextUpdate } = renderHook(() => useSearchResults(), {
-      wrapper,
+      wrapper: ({ children }) =>
+        wrapper({
+          children: (
+            <>
+              <SearchBox />
+              {children}
+            </>
+          ),
+        }),
     });
 
-    // Initial render state from manual `getWidgetRenderState`
+    // Initial render
     expect(result.current).toEqual({
       results: expect.any(SearchResults),
       scopedResults: [
@@ -26,7 +36,7 @@ describe('useSearchResults', () => {
 
     await waitForNextUpdate();
 
-    // InstantSearch.js state from the `render` lifecycle step
+    // Update caused by <SearchBox>
     expect(result.current).toEqual({
       results: expect.any(SearchResults),
       scopedResults: [
@@ -37,7 +47,6 @@ describe('useSearchResults', () => {
         }),
       ],
     });
-
     expect(result.current.results.__isArtificial).toBeUndefined();
   });
 });

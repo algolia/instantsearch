@@ -27,30 +27,10 @@ describe('useInstantSearch', () => {
   });
 
   describe('results', () => {
-    test('gives access to results', async () => {
+    test('gives access to results', () => {
       const wrapper = createInstantSearchTestWrapper();
-      const { result, waitForNextUpdate } = renderHook(
-        () => useInstantSearch(),
-        { wrapper }
-      );
+      const { result } = renderHook(() => useInstantSearch(), { wrapper });
 
-      // Initial render state from manual `getWidgetRenderState`
-      expect(result.current).toEqual(
-        expect.objectContaining({
-          results: expect.any(SearchResults),
-          scopedResults: [
-            expect.objectContaining({
-              helper: expect.any(AlgoliaSearchHelper),
-              indexId: 'indexName',
-              results: expect.any(SearchResults),
-            }),
-          ],
-        })
-      );
-
-      await waitForNextUpdate();
-
-      // InstantSearch.js state from the `render` lifecycle step
       expect(result.current).toEqual(
         expect.objectContaining({
           results: expect.any(SearchResults),
@@ -67,14 +47,10 @@ describe('useInstantSearch', () => {
   });
 
   describe('state', () => {
-    test('returns the ui state', async () => {
+    test('returns the ui state', () => {
       const wrapper = createInstantSearchTestWrapper();
-      const { result, waitForNextUpdate } = renderHook(
-        () => useInstantSearch(),
-        { wrapper }
-      );
+      const { result } = renderHook(() => useInstantSearch(), { wrapper });
 
-      // Initial render state from manual `getWidgetRenderState`
       expect(result.current).toEqual(
         expect.objectContaining({
           uiState: {
@@ -85,26 +61,9 @@ describe('useInstantSearch', () => {
           setIndexUiState: expect.any(Function),
         })
       );
-
-      const setUiState = result.current.setUiState;
-      const setIndexUiState = result.current.setIndexUiState;
-
-      await waitForNextUpdate();
-
-      // InstantSearch.js state from the `render` lifecycle step
-      expect(result.current).toEqual(
-        expect.objectContaining({
-          uiState: {
-            indexName: {},
-          },
-          indexUiState: {},
-          setUiState,
-          setIndexUiState,
-        })
-      );
     });
 
-    test('returns the ui state with initial state', async () => {
+    test('returns the ui state with initial state', () => {
       const wrapper = createInstantSearchTestWrapper({
         initialUiState: {
           indexName: {
@@ -112,26 +71,9 @@ describe('useInstantSearch', () => {
           },
         },
       });
-      const { result, waitForNextUpdate } = renderHook(
-        () => useInstantSearch(),
-        { wrapper }
-      );
+      const { result } = renderHook(() => useInstantSearch(), { wrapper });
 
       // Initial render state from manual `getWidgetRenderState`
-      expect(result.current).toEqual(
-        expect.objectContaining({
-          uiState: {
-            indexName: { query: 'iphone' },
-          },
-          indexUiState: { query: 'iphone' },
-          setUiState: expect.any(Function),
-          setIndexUiState: expect.any(Function),
-        })
-      );
-
-      await waitForNextUpdate();
-
-      // InstantSearch.js state from the `render` lifecycle step
       expect(result.current).toEqual(
         expect.objectContaining({
           uiState: {
@@ -281,62 +223,71 @@ describe('useInstantSearch', () => {
       // This is a problem in InstantSearch.js and will be fixed there.
       expect(unsubscribe).toHaveBeenCalledTimes(2);
     });
+
+    test('provides a stable reference', () => {
+      const wrapper = createInstantSearchTestWrapper();
+      const { result, rerender } = renderHook(() => useInstantSearch(), {
+        wrapper,
+      });
+
+      expect(result.current.use).toBeInstanceOf(Function);
+
+      const ref = result.current.use;
+
+      rerender();
+
+      expect(result.current.use).toBe(ref);
+    });
   });
 
   describe('refresh', () => {
     test('refreshes the search', async () => {
       const searchClient = createSearchClient({});
-      function App() {
+      function Refresh() {
         const { refresh } = useInstantSearch();
 
         return (
-          <>
-            <button
-              type="button"
-              onClick={() => {
-                refresh();
-              }}
-            >
-              refresh
-            </button>
-          </>
+          <button
+            type="button"
+            data-testid="refresh-button"
+            onClick={() => {
+              refresh();
+            }}
+          >
+            Refresh
+          </button>
         );
       }
 
-      const { container } = render(
+      const { getByTestId } = render(
         <InstantSearchHooksTestWrapper searchClient={searchClient}>
-          <App />
+          <SearchBox />
+          <Refresh />
         </InstantSearchHooksTestWrapper>
       );
+      const refreshButton = getByTestId('refresh-button');
 
       await waitFor(() => {
         expect(searchClient.search).toHaveBeenCalledTimes(1);
       });
 
-      userEvent.click(container.querySelector('button')!);
+      userEvent.click(refreshButton);
 
       expect(searchClient.search).toHaveBeenCalledTimes(2);
     });
 
-    test('provides a stable reference', async () => {
+    test('provides a stable reference', () => {
       const wrapper = createInstantSearchTestWrapper();
-      const { result, waitForNextUpdate, rerender } = renderHook(
-        () => useInstantSearch(),
-        { wrapper }
-      );
+      const { result, rerender } = renderHook(() => useInstantSearch(), {
+        wrapper,
+      });
 
       expect(result.current.refresh).toBeInstanceOf(Function);
 
       const ref = result.current.refresh;
 
-      await waitForNextUpdate();
-
-      // reference has not changed
-      expect(result.current.refresh).toBe(ref);
-
       rerender();
 
-      // reference has not changed
       expect(result.current.refresh).toBe(ref);
     });
   });

@@ -1,45 +1,38 @@
-import { useConnector } from '../hooks/useConnector';
+import { useEffect, useState } from 'react';
+
+import { getIndexSearchResults } from './getIndexSearchResults';
+import { useIndexContext } from './useIndexContext';
+import { useInstantSearchContext } from './useInstantSearchContext';
 
 import type { SearchResults } from 'algoliasearch-helper';
-import type { Connector, ScopedResult } from 'instantsearch.js';
+import type { ScopedResult } from 'instantsearch.js';
 
-export type SearchResultsRenderState = {
+export type SearchResultsApi = {
   results: SearchResults<any>;
   scopedResults: ScopedResult[];
 };
 
-type SearchResultsWidgetDescription = {
-  $$type: 'ais.searchResults';
-  renderState: SearchResultsRenderState;
-};
+export function useSearchResults(): SearchResultsApi {
+  const search = useInstantSearchContext();
+  const searchIndex = useIndexContext();
+  const [searchResults, setSearchResults] = useState(() =>
+    getIndexSearchResults(searchIndex)
+  );
 
-const connectSearchResults: Connector<SearchResultsWidgetDescription, never> = (
-  renderFn
-) => {
-  return (widgetParams) => {
-    return {
-      $$type: 'ais.searchResults',
-      getWidgetRenderState({ results, scopedResults }) {
-        return {
-          results: results!,
-          scopedResults,
-          widgetParams,
-        };
-      },
-      render(renderOptions) {
-        renderFn(
-          {
-            ...this.getWidgetRenderState!(renderOptions),
-            instantSearchInstance: renderOptions.instantSearchInstance,
-          },
-          false
-        );
-      },
-      dispose() {},
+  useEffect(() => {
+    function handleRender() {
+      setSearchResults({
+        results: searchIndex.getResults()!, // Results can't be `null` after the first render.
+        scopedResults: searchIndex.getScopedResults(),
+      });
+    }
+
+    search.addListener('render', handleRender);
+
+    return () => {
+      search.removeListener('render', handleRender);
     };
-  };
-};
+  }, [search, searchIndex]);
 
-export function useSearchResults() {
-  return useConnector(connectSearchResults);
+  return searchResults;
 }

@@ -4,16 +4,15 @@ import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 import { useSearchResults } from '../lib/useSearchResults';
 import { useSearchState } from '../lib/useSearchState';
 
-import type { SearchResultsRenderState } from '../lib/useSearchResults';
-import type { SearchStateRenderState } from '../lib/useSearchState';
+import type { SearchResultsApi } from '../lib/useSearchResults';
+import type { SearchStateApi } from '../lib/useSearchState';
 import type { InstantSearch, Middleware, UiState } from 'instantsearch.js';
 
-type InstantSearchApi<TUiState extends UiState> =
-  SearchStateRenderState<TUiState> &
-    SearchResultsRenderState & {
-      use: (...middlewares: Middleware[]) => () => void;
-      refresh: InstantSearch['refresh'];
-    };
+type InstantSearchApi<TUiState extends UiState> = SearchStateApi<TUiState> &
+  SearchResultsApi & {
+    use: (...middlewares: Middleware[]) => () => void;
+    refresh: InstantSearch['refresh'];
+  };
 
 export function useInstantSearch<
   TUiState extends UiState = UiState

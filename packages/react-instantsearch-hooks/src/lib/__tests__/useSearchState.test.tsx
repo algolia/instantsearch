@@ -16,13 +16,12 @@ function SearchBox() {
 }
 
 describe('useSearchState', () => {
-  test('returns the ui state', async () => {
+  test('returns the ui state', () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(() => useSearchState(), {
+    const { result, rerender } = renderHook(() => useSearchState(), {
       wrapper,
     });
 
-    // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
       uiState: {
         indexName: {},
@@ -35,9 +34,8 @@ describe('useSearchState', () => {
     const setUiState = result.current.setUiState;
     const setIndexUiState = result.current.setIndexUiState;
 
-    await waitForNextUpdate();
+    rerender();
 
-    // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
       uiState: {
         indexName: {},
@@ -48,7 +46,7 @@ describe('useSearchState', () => {
     });
   });
 
-  test('returns the ui state with initial state', async () => {
+  test('returns the ui state with initial state', () => {
     const wrapper = createInstantSearchTestWrapper({
       initialUiState: {
         indexName: {
@@ -56,23 +54,8 @@ describe('useSearchState', () => {
         },
       },
     });
-    const { result, waitForNextUpdate } = renderHook(() => useSearchState(), {
-      wrapper,
-    });
+    const { result } = renderHook(() => useSearchState(), { wrapper });
 
-    // Initial render state from manual `getWidgetRenderState`
-    expect(result.current).toEqual({
-      uiState: {
-        indexName: { query: 'iphone' },
-      },
-      indexUiState: { query: 'iphone' },
-      setUiState: expect.any(Function),
-      setIndexUiState: expect.any(Function),
-    });
-
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
       uiState: {
         indexName: { query: 'iphone' },

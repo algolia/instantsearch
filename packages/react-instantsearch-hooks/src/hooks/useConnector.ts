@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 
-import { createSearchResults } from '../lib/createSearchResults';
 import { dequal } from '../lib/dequal';
+import { getIndexSearchResults } from '../lib/getIndexSearchResults';
 import { useIndexContext } from '../lib/useIndexContext';
 import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
@@ -99,27 +99,7 @@ export function useConnector<
       helper.state =
         widget.getWidgetSearchParameters?.(helper.state, { uiState }) ||
         helper.state;
-      const results =
-        // On SSR, we get the results injected on the Index.
-        parentIndex.getResults() ||
-        // On the browser, we create fallback results based on the widget's
-        // `getWidgetSearchParameters()` method to inject the initial UI state,
-        // or fall back to the helper state.
-        createSearchResults(helper.state);
-      const scopedResults = parentIndex
-        .getScopedResults()
-        .map((scopedResult) => {
-          const fallbackResults =
-            scopedResult.indexId === parentIndex.getIndexId()
-              ? results
-              : createSearchResults(scopedResult.helper.state);
-
-          return {
-            ...scopedResult,
-            // We keep `results` from being `null`.
-            results: scopedResult.results || fallbackResults,
-          };
-        });
+      const { results, scopedResults } = getIndexSearchResults(parentIndex);
 
       // We get the widget render state by providing the same parameters as
       // InstantSearch provides to the widget's `render` method.
