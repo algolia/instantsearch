@@ -347,7 +347,7 @@ const App = (props) => {
           data-action="open-overlay"
           onClick={openFilters}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 14">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 14">
             <path
               d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z"
               stroke="#fff"

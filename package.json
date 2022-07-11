@@ -29,7 +29,7 @@
     "test:size": "bundlesize",
     "storybook": "start-storybook -p 6006 -c storybook -s storybook/public",
     "storybook:build": "build-storybook -s storybook/public -o website/storybook -c storybook",
-    "website:build": "yarn build && yarn webpack --config website/webpack.config.js"
+    "website:build": "yarn build && ./scripts/build-website.sh"
   },
   "devDependencies": {
     "@algolia/cache-common": "4.11.0",
