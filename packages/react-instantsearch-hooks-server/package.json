@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "instantsearch.js": "^4.43.0",
+    "instantsearch.js": "^4.43.1",
     "react-instantsearch-hooks": "6.30.0"
   },
   "peerDependencies": {
