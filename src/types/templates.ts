@@ -1,3 +1,10 @@
+import type {
+  Highlight,
+  ReverseHighlight,
+  Snippet,
+  ReverseSnippet,
+} from '../helpers/components';
+
 import type { VNode } from 'preact';
 import type { html } from '../lib/html';
 import type { BindEventForHits, SendEventForHits } from '../lib/utils';
@@ -8,7 +15,12 @@ export type Template<TTemplateData = void> =
 
 export type TemplateParams = BindEventForHits & {
   html: typeof html;
-  components: {};
+  components: {
+    Highlight: typeof Highlight;
+    ReverseHighlight: typeof ReverseHighlight;
+    Snippet: typeof Snippet;
+    ReverseSnippet: typeof ReverseSnippet;
+  };
   sendEvent?: SendEventForHits;
 };
 

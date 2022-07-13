@@ -1,3 +1,9 @@
+import {
+  Highlight,
+  ReverseHighlight,
+  Snippet,
+  ReverseSnippet,
+} from '../../helpers/components';
 import type { HoganOptions, Template } from 'hogan.js';
 import hogan from 'hogan.js';
 import type { Templates, HoganHelpers, TemplateParams } from '../../types';
@@ -66,7 +72,12 @@ function renderTemplate({
 
     params.html = html;
     params.sendEvent = sendEvent;
-    params.components = {};
+    params.components = {
+      Highlight,
+      ReverseHighlight,
+      Snippet,
+      ReverseSnippet,
+    };
 
     return template(data, params);
   }
