@@ -5,6 +5,7 @@ import { ReverseHighlight as ReverseHighlightUiComponent } from '../../component
 import getHighlightedParts from '../../lib/utils/getHighlightedParts';
 import getPropertyByPath from '../../lib/utils/getPropertyByPath';
 import unescape from '../../lib/utils/unescape';
+import { warning } from '../../lib/utils';
 
 import type { BaseHit, Hit, PartialKeys } from '../../types';
 import type { ReverseHighlightProps as ReverseHighlightUiComponentProps } from '../../components/ReverseHighlight/ReverseHighlight';
@@ -27,6 +28,15 @@ export function ReverseHighlight<THit extends Hit<BaseHit>>({
   const property =
     getPropertyByPath(hit._highlightResult, attribute as string) || [];
   const properties = Array.isArray(property) ? property : [property];
+
+  warning(
+    Boolean(properties.length),
+    `Could not enable highlight for "${attribute.toString()}", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://alg.li/highlighting
+`
+  );
 
   const parts = properties.map(({ value }) =>
     getHighlightedParts(unescape(value || '')).map(

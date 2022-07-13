@@ -5,6 +5,7 @@ import { ReverseSnippet as ReverseSnippetUiComponent } from '../../components/Re
 import getHighlightedParts from '../../lib/utils/getHighlightedParts';
 import getPropertyByPath from '../../lib/utils/getPropertyByPath';
 import unescape from '../../lib/utils/unescape';
+import { warning } from '../../lib/utils';
 
 import type { BaseHit, Hit, PartialKeys } from '../../types';
 import type { ReverseSnippetProps as ReverseSnippetUiComponentProps } from '../../components/ReverseSnippet/ReverseSnippet';
@@ -27,6 +28,15 @@ export function ReverseSnippet<THit extends Hit<BaseHit>>({
   const property =
     getPropertyByPath(hit._snippetResult, attribute as string) || [];
   const properties = Array.isArray(property) ? property : [property];
+
+  warning(
+    Boolean(properties.length),
+    `Could not enable snippet for "${attribute.toString()}", will display an empty string.
+Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
+
+See: https://alg.li/highlighting
+`
+  );
 
   const parts = properties.map(({ value }) =>
     getHighlightedParts(unescape(value || '')).map(

@@ -320,4 +320,58 @@ describe('Highlight', () => {
     expect(root).toHaveClass('MyHighlight', 'ROOT');
     expect(root).toHaveAttribute('aria-hidden', 'true');
   });
+
+  test('warns if attribute does not exist', () => {
+    expect(() => {
+      render(
+        <Highlight
+          hit={{
+            objectID: '1',
+            __position: 1,
+            data: 'test',
+            _highlightResult: {
+              data: {
+                matchedWords: ['test'],
+                matchLevel: 'partial',
+                value: '<mark>te</mark>st',
+              },
+            },
+          }}
+          // @ts-expect-error
+          attribute="does.not.exist"
+        />
+      );
+    })
+      .toWarnDev(`[InstantSearch.js]: Could not enable highlight for "does.not.exist", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://alg.li/highlighting`);
+  });
+
+  test('warns if attribute does not have highlighting', () => {
+    expect(() => {
+      render(
+        <Highlight
+          hit={{
+            objectID: '1',
+            __position: 1,
+            data: 'test',
+            title: 'title',
+            _highlightResult: {
+              data: {
+                matchedWords: ['test'],
+                matchLevel: 'partial',
+                value: '<mark>te</mark>st',
+              },
+            },
+          }}
+          attribute="title"
+        />
+      );
+    })
+      .toWarnDev(`[InstantSearch.js]: Could not enable highlight for "title", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
+
+See: https://alg.li/highlighting`);
+  });
 });
