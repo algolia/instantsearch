@@ -9,7 +9,7 @@ import unescape from '../../lib/utils/unescape';
 import type { BaseHit, Hit, PartialKeys } from '../../types';
 import type { HighlightProps as HighlightUiComponentProps } from '../../components/Highlight/Highlight';
 
-export type SnippetProps<THit extends Hit<BaseHit>> = {
+export type ReverseHighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;
   attribute: keyof THit | string[];
   cssClasses: HighlightUiComponentProps['classNames'];
@@ -18,18 +18,23 @@ export type SnippetProps<THit extends Hit<BaseHit>> = {
   'highlightedTagName' | 'nonHighlightedTagName' | 'separator'
 >;
 
-export function Snippet<THit extends Hit<BaseHit>>({
+export function ReverseHighlight<THit extends Hit<BaseHit>>({
   hit,
   attribute,
   cssClasses,
   ...props
-}: SnippetProps<THit>) {
+}: ReverseHighlightProps<THit>) {
   const property =
-    getPropertyByPath(hit._snippetResult, attribute as string) || [];
+    getPropertyByPath(hit._highlightResult, attribute as string) || [];
   const properties = Array.isArray(property) ? property : [property];
 
   const parts = properties.map(({ value }) =>
-    getHighlightedParts(unescape(value || ''))
+    getHighlightedParts(unescape(value || '')).map(
+      ({ isHighlighted, ...rest }) => ({
+        ...rest,
+        isHighlighted: !isHighlighted,
+      })
+    )
   );
 
   return (

@@ -1,53 +1,38 @@
-// @ts-nocheck
 /** @jsx h */
-import { h, Fragment } from 'preact';
+import { h } from 'preact';
+
+import { Highlight as HighlightUiComponent } from '../../components/Highlight/Highlight';
 import getHighlightedParts from '../../lib/utils/getHighlightedParts';
 import getPropertyByPath from '../../lib/utils/getPropertyByPath';
 import unescape from '../../lib/utils/unescape';
-import { cx, InternalHighlight } from './InternalHighlight';
 
-function HighlightUiComponent({ classNames = {}, ...props }) {
-  return (
-    <InternalHighlight
-      classNames={{
-        root: cx('ais-Highlight', classNames.root),
+import type { BaseHit, Hit, PartialKeys } from '../../types';
+import type { HighlightProps as HighlightUiComponentProps } from '../../components/Highlight/Highlight';
 
-        highlighted: cx('ais-Highlight-highlighted', classNames.highlighted),
-        nonHighlighted: cx(
-          'ais-Highlight-nonHighlighted',
+export type HighlightProps<THit extends Hit<BaseHit>> = {
+  hit: THit;
+  attribute: keyof THit | string[];
+  cssClasses: HighlightUiComponentProps['classNames'];
+} & PartialKeys<
+  Omit<HighlightUiComponentProps, 'parts' | 'classNames'>,
+  'highlightedTagName' | 'nonHighlightedTagName' | 'separator'
+>;
 
-          classNames.nonHighlighted
-        ),
-
-        separator: cx('ais-Highlight-separator', classNames.separator),
-      }}
-      {...props}
-    />
-  );
-}
-
-export function Highlight({
+export function Highlight<THit extends Hit<BaseHit>>({
   hit,
   attribute,
-  highlightedTagName,
-  nonHighlightedTagName,
-  separator,
+  cssClasses,
   ...props
-}) {
-  const property = getPropertyByPath(hit._highlightResult, attribute) || [];
+}: HighlightProps<THit>) {
+  const property =
+    getPropertyByPath(hit._highlightResult, attribute as string) || [];
   const properties = Array.isArray(property) ? property : [property];
 
-  const parts = properties.map((singleValue) =>
-    getHighlightedParts(unescape(singleValue.value || ''))
+  const parts = properties.map(({ value }) =>
+    getHighlightedParts(unescape(value || ''))
   );
 
   return (
-    <HighlightUiComponent
-      {...props}
-      parts={parts}
-      highlightedTagName={highlightedTagName}
-      nonHighlightedTagName={nonHighlightedTagName}
-      separator={separator}
-    />
+    <HighlightUiComponent {...props} parts={parts} classNames={cssClasses} />
   );
 }
