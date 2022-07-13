@@ -1,20 +1,20 @@
 /** @jsx h */
 import { h } from 'preact';
 
-import { Highlight as HighlightUiComponent } from '../../components/Highlight/Highlight';
+import { ReverseSnippet as ReverseSnippetUiComponent } from '../../components/ReverseSnippet/ReverseSnippet';
 import getHighlightedParts from '../../lib/utils/getHighlightedParts';
 import getPropertyByPath from '../../lib/utils/getPropertyByPath';
 import unescape from '../../lib/utils/unescape';
 
 import type { BaseHit, Hit, PartialKeys } from '../../types';
-import type { HighlightProps as HighlightUiComponentProps } from '../../components/Highlight/Highlight';
+import type { ReverseSnippetProps as ReverseSnippetUiComponentProps } from '../../components/ReverseSnippet/ReverseSnippet';
 
 export type ReverseSnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;
   attribute: keyof THit | string[];
-  cssClasses: HighlightUiComponentProps['classNames'];
+  cssClasses?: ReverseSnippetUiComponentProps['classNames'];
 } & PartialKeys<
-  Omit<HighlightUiComponentProps, 'parts' | 'classNames'>,
+  Omit<ReverseSnippetUiComponentProps, 'parts' | 'classNames'>,
   'highlightedTagName' | 'nonHighlightedTagName' | 'separator'
 >;
 
@@ -38,6 +38,10 @@ export function ReverseSnippet<THit extends Hit<BaseHit>>({
   );
 
   return (
-    <HighlightUiComponent {...props} parts={parts} classNames={cssClasses} />
+    <ReverseSnippetUiComponent
+      {...props}
+      parts={parts}
+      classNames={cssClasses}
+    />
   );
 }

@@ -6,7 +6,7 @@ import type {
 } from '@algolia/ui-components-highlight-vdom';
 import { h } from 'preact';
 
-import { InternalHighlight } from './InternalHighlight';
+import { InternalHighlight } from '../InternalHighlight/InternalHighlight';
 
 export type HighlightClassNames = InternalHighlightClassNames;
 export type HighlightProps = Omit<InternalHighlightProps, 'classNames'> & {

@@ -1,20 +1,20 @@
 /** @jsx h */
 import { h } from 'preact';
 
-import { Highlight as HighlightUiComponent } from '../../components/Highlight/Highlight';
+import { Snippet as SnippetUiComponent } from '../../components/Snippet/Snippet';
 import getHighlightedParts from '../../lib/utils/getHighlightedParts';
 import getPropertyByPath from '../../lib/utils/getPropertyByPath';
 import unescape from '../../lib/utils/unescape';
 
 import type { BaseHit, Hit, PartialKeys } from '../../types';
-import type { HighlightProps as HighlightUiComponentProps } from '../../components/Highlight/Highlight';
+import type { SnippetProps as SnippetUiComponentProps } from '../../components/Snippet/Snippet';
 
 export type SnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;
   attribute: keyof THit | string[];
-  cssClasses: HighlightUiComponentProps['classNames'];
+  cssClasses?: SnippetUiComponentProps['classNames'];
 } & PartialKeys<
-  Omit<HighlightUiComponentProps, 'parts' | 'classNames'>,
+  Omit<SnippetUiComponentProps, 'parts' | 'classNames'>,
   'highlightedTagName' | 'nonHighlightedTagName' | 'separator'
 >;
 
@@ -33,6 +33,6 @@ export function Snippet<THit extends Hit<BaseHit>>({
   );
 
   return (
-    <HighlightUiComponent {...props} parts={parts} classNames={cssClasses} />
+    <SnippetUiComponent {...props} parts={parts} classNames={cssClasses} />
   );
 }

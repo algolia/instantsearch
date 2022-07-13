@@ -12,7 +12,7 @@ import type { HighlightProps as HighlightUiComponentProps } from '../../componen
 export type HighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;
   attribute: keyof THit | string[];
-  cssClasses: HighlightUiComponentProps['classNames'];
+  cssClasses?: HighlightUiComponentProps['classNames'];
 } & PartialKeys<
   Omit<HighlightUiComponentProps, 'parts' | 'classNames'>,
   'highlightedTagName' | 'nonHighlightedTagName' | 'separator'
