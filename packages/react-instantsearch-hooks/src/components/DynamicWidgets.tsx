@@ -15,9 +15,9 @@ type AtLeastOne<
   TMapped = { [Key in keyof TTarget]: Pick<TTarget, Key> }
 > = Partial<TTarget> & TMapped[keyof TMapped];
 
-export type DynamicWidgetsProps = Pick<
+export type DynamicWidgetsProps = Omit<
   DynamicWidgetsConnectorParams,
-  'transformItems'
+  'widgets' | 'fallbackWidget'
 > &
   AtLeastOne<{
     children: ReactNode;
