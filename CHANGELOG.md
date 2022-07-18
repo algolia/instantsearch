@@ -1,3 +1,13 @@
+## [6.30.2](https://github.com/algolia/react-instantsearch/compare/v6.30.1...v6.30.2) (2022-07-18)
+
+
+### Bug Fixes
+
+* **hooks:** type of DynamicWidgets props ([#3566](https://github.com/algolia/react-instantsearch/issues/3566)) ([612c98b](https://github.com/algolia/react-instantsearch/commit/612c98b5a77fb9037185c4b5efda8c07663dbd1a)), closes [#3563](https://github.com/algolia/react-instantsearch/issues/3563)
+* **hooks:** use single instance in <InstantSearch> ([#3561](https://github.com/algolia/react-instantsearch/issues/3561)) ([4c358be](https://github.com/algolia/react-instantsearch/commit/4c358bebfc91451b1610f677f89c595d7a427f1f))
+
+
+
 ## [6.30.1](https://github.com/algolia/react-instantsearch/compare/v6.30.0...v6.30.1) (2022-07-12)
 
 
