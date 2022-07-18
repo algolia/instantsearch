@@ -147,8 +147,11 @@ describe('InstantSearch', () => {
 
     unmount();
 
-    expect(searchContext.current!.dispose).toHaveBeenCalledTimes(1);
-    expect(searchContext.current!.started).toEqual(false);
+    await waitFor(() => {
+      expect(searchContext.current!.dispose).toHaveBeenCalledTimes(1);
+      expect(searchContext.current!.started).toEqual(false);
+      expect(searchContext.current!.mainIndex.getWidgets()).toEqual([]);
+    });
   });
 
   test('triggers a single network request on mount with widgets', async () => {
@@ -452,9 +455,10 @@ describe('InstantSearch', () => {
   });
 
   // This test shows that giving an unstable `onStateChange` reference (or any
-  // unstable prop) remounts the <InstantSearch> component and therefore resets
-  // the state after the remount.
-  // Users need to provide stable references for rerenders to keep the state.
+  // unstable prop) does not remount the <InstantSearch> component and therefore
+  // keeps the state.
+  // Prior to the current implementation, we created a new InstantSearch.js
+  // instance at each prop change, which made this test fail.
   test('recovers the state on rerender with an unstable onStateChange', async () => {
     const searchClient = createSearchClient({});
 
@@ -494,8 +498,6 @@ describe('InstantSearch', () => {
       ]);
     });
 
-    // After this rerender, the UI state is reset to the initial state because
-    // the `onStateChange` reference has changed.
     rerender(<App />);
 
     userEvent.type(screen.getByRole('searchbox'), ' case', {
@@ -508,11 +510,243 @@ describe('InstantSearch', () => {
         {
           indexName: 'indexName',
           params: expect.objectContaining({
-            // The query was reset because of the remount
-            query: ' case',
+            query: 'iphone case',
           }),
         },
       ]);
+    });
+  });
+
+  test('updates the client on client prop change', async () => {
+    const searchClient1 = createSearchClient({});
+    const searchClient2 = createSearchClient({});
+    const searchClient3 = createSearchClient({});
+
+    function App({ searchClient }) {
+      return (
+        <StrictMode>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App searchClient={searchClient1} />);
+
+    await waitFor(() => {
+      expect(searchClient1.search).toHaveBeenCalledTimes(1);
+    });
+
+    rerender(<App searchClient={searchClient2} />);
+
+    await waitFor(() => {
+      expect(searchClient1.search).toHaveBeenCalledTimes(1);
+      expect(searchClient2.search).toHaveBeenCalledTimes(1);
+      expect(searchClient2.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react (${ReactVersion})`
+      );
+      expect(searchClient2.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react-instantsearch (${version})`
+      );
+      expect(searchClient2.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react-instantsearch-hooks (${version})`
+      );
+    });
+
+    rerender(<App searchClient={searchClient3} />);
+
+    await waitFor(() => {
+      expect(searchClient1.search).toHaveBeenCalledTimes(1);
+      expect(searchClient2.search).toHaveBeenCalledTimes(1);
+      expect(searchClient3.search).toHaveBeenCalledTimes(1);
+      expect(searchClient3.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react (${ReactVersion})`
+      );
+      expect(searchClient3.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react-instantsearch (${version})`
+      );
+      expect(searchClient3.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react-instantsearch-hooks (${version})`
+      );
+    });
+
+    userEvent.type(screen.getByRole('searchbox'), 'iphone');
+
+    await waitFor(() => {
+      expect(searchClient3.search).toHaveBeenCalledTimes(7);
+      expect(searchClient3.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'iphone',
+          }),
+        },
+      ]);
+    });
+  });
+
+  test('updates the index on index prop change', async () => {
+    const searchClient = createSearchClient({});
+
+    function App({ indexName }) {
+      return (
+        <StrictMode>
+          <InstantSearch searchClient={searchClient} indexName={indexName}>
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App indexName="indexName1" />);
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          indexName: 'indexName1',
+        }),
+      ]);
+    });
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+    rerender(<App indexName="indexName2" />);
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          indexName: 'indexName2',
+        }),
+      ]);
+    });
+
+    rerender(<App indexName="indexName3" />);
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          indexName: 'indexName3',
+        }),
+      ]);
+    });
+
+    userEvent.type(screen.getByRole('searchbox'), 'iphone');
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(9);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName3',
+          params: expect.objectContaining({
+            query: 'iphone',
+          }),
+        },
+      ]);
+    });
+  });
+
+  test('updates onStateChange on onStateChange prop change', async () => {
+    const searchClient = createSearchClient({});
+    const onStateChange1 = jest.fn(({ uiState, setUiState }) => {
+      setUiState(uiState);
+    });
+    const onStateChange2 = jest.fn(({ uiState, setUiState }) => {
+      setUiState(uiState);
+    });
+
+    function App({ onStateChange }) {
+      return (
+        <StrictMode>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName="indexName"
+            onStateChange={onStateChange}
+          >
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App onStateChange={onStateChange1} />);
+
+    userEvent.type(screen.getByRole('searchbox'), 'iphone');
+
+    await waitFor(() => {
+      expect(onStateChange1).toHaveBeenCalledTimes(6);
+    });
+
+    rerender(<App onStateChange={onStateChange2} />);
+
+    userEvent.type(screen.getByRole('searchbox'), ' case', {
+      initialSelectionStart: 6,
+    });
+
+    await waitFor(() => {
+      expect(onStateChange1).toHaveBeenCalledTimes(6);
+      expect(onStateChange2).toHaveBeenCalledTimes(5);
+    });
+
+    rerender(<App onStateChange={undefined} />);
+
+    userEvent.type(screen.getByRole('searchbox'), ' red', {
+      initialSelectionStart: 11,
+    });
+
+    await waitFor(() => {
+      expect(onStateChange1).toHaveBeenCalledTimes(6);
+      expect(onStateChange2).toHaveBeenCalledTimes(5);
+    });
+  });
+
+  test('updates searchFunction on searchFunction prop change', async () => {
+    const searchClient = createSearchClient({});
+    const searchFunction1 = jest.fn((helper) => {
+      helper.search();
+    });
+    const searchFunction2 = jest.fn((helper) => {
+      helper.search();
+    });
+
+    function App({ searchFunction }) {
+      return (
+        <StrictMode>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName="indexName"
+            searchFunction={searchFunction}
+          >
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App searchFunction={searchFunction1} />);
+
+    await waitFor(() => {
+      expect(searchFunction1).toHaveBeenCalledTimes(1);
+    });
+
+    userEvent.type(screen.getByRole('searchbox'), 'iphone');
+
+    await waitFor(() => {
+      expect(searchFunction1).toHaveBeenCalledTimes(7);
+    });
+
+    rerender(<App searchFunction={searchFunction2} />);
+
+    userEvent.type(screen.getByRole('searchbox'), ' case', {
+      initialSelectionStart: 6,
+    });
+
+    await waitFor(() => {
+      expect(searchFunction1).toHaveBeenCalledTimes(7);
+      expect(searchFunction2).toHaveBeenCalledTimes(5);
     });
   });
 });

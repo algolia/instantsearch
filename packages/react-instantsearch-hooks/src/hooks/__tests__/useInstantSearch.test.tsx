@@ -216,12 +216,7 @@ describe('useInstantSearch', () => {
       expect(middleware).toHaveBeenCalledTimes(1);
       expect(subscribe).toHaveBeenCalledTimes(1);
       expect(onStateChange).toHaveBeenCalledTimes(1);
-      // unsubscribe is first called by the parent InstantSearch unmounting
-      // 🚨 dispose doesn't remove middleware (because otherwise routing would break)
-      // then unuse is called by this widget itself unmounting.
-      // if only the component with useInstantSearch is unmounted, unsubscribe is called once.
-      // This is a problem in InstantSearch.js and will be fixed there.
-      expect(unsubscribe).toHaveBeenCalledTimes(2);
+      expect(unsubscribe).toHaveBeenCalledTimes(1);
     });
 
     test('provides a stable reference', () => {
