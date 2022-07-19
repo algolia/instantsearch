@@ -1,3 +1,12 @@
+## [4.4.1](https://github.com/algolia/vue-instantsearch/compare/v4.4.0...v4.4.1) (2022-07-19)
+
+
+### Bug Fixes
+
+* **searchbox:** prevent concurrent query updates from state while input is focused ([#1133](https://github.com/algolia/vue-instantsearch/issues/1133)) ([c468c0a](https://github.com/algolia/vue-instantsearch/commit/c468c0aee633358f3fb64e41d7aa73b14b344fd2))
+
+
+
 # [4.4.0](https://github.com/algolia/vue-instantsearch/compare/v4.3.3...v4.4.0) (2022-06-28)
 
 
