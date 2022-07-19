@@ -170,6 +170,9 @@ export default {
     };
   },
   methods: {
+    isFocused() {
+      return document.activeElement === this.$refs.input;
+    },
     onFormSubmit() {
       const input = this.$refs.input;
       input.blur();

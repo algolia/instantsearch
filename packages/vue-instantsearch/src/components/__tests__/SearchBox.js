@@ -147,6 +147,21 @@ test('refine on empty string on form reset', async () => {
   expect(state.refine).toHaveBeenCalledWith('');
 });
 
+test('keep local query when out of sync and input is focused', async () => {
+  const state = { ...defaultState, refine: jest.fn() };
+  __setState(state);
+
+  const wrapper = mount(SearchBox, { attachTo: document.body });
+  const input = wrapper.find('.ais-SearchBox-input');
+  input.element.focus();
+  await input.setValue('hello');
+
+  await wrapper.setData({ state: { query: 'hel' } });
+
+  expect(input.element.value).toBe('hello');
+  expect(state.refine).toHaveBeenLastCalledWith('hello');
+});
+
 test('overriding slots', () => {
   __setState({
     ...defaultState,
