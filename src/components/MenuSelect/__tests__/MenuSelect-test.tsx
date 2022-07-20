@@ -7,6 +7,7 @@ import { h } from 'preact';
 import MenuSelect from '../MenuSelect';
 import { mount } from '../../../../test/utils/enzyme';
 import defaultTemplates from '../../../widgets/menu-select/defaultTemplates';
+import { render } from '@testing-library/preact';
 
 describe('MenuSelect', () => {
   const cssClasses = {
@@ -64,5 +65,81 @@ describe('MenuSelect', () => {
     const wrapper = mount(<MenuSelect {...props} />);
 
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders component with custom `html` templates', () => {
+    const { container } = render(
+      <MenuSelect
+        cssClasses={cssClasses}
+        items={[
+          { value: 'Apple', label: 'Apple', count: 25, isRefined: true },
+          { value: 'Samsung', label: 'Samsung', count: 13, isRefined: false },
+        ]}
+        refine={() => {}}
+        templateProps={{
+          templates: {
+            item({ label, value, count, isRefined }, { html }) {
+              return html`<span
+                title="${value}"
+                style="font-weight: ${isRefined ? 'bold' : 'normal'}"
+                >${label} - (${count})</span
+              >`;
+            },
+            defaultOption(_, { html }) {
+              return html`<span>See all</span>`;
+            },
+          },
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <select
+      class="select"
+    >
+      <option
+        class="option"
+        value=""
+      >
+        <span>
+          See all
+        </span>
+      </option>
+      <option
+        class="option"
+        value="Apple"
+      >
+        <span
+          style="font-weight: bold;"
+          title="Apple"
+        >
+          Apple
+           - (
+          25
+          )
+        </span>
+      </option>
+      <option
+        class="option"
+        value="Samsung"
+      >
+        <span
+          style="font-weight: normal;"
+          title="Samsung"
+        >
+          Samsung
+           - (
+          13
+          )
+        </span>
+      </option>
+    </select>
+  </div>
+</div>
+`);
   });
 });

@@ -72,6 +72,77 @@ describe('RangeInput', () => {
     expect(component).toMatchSnapshot();
   });
 
+  it('renders component with custom `html` templates', () => {
+    const { container } = render(
+      <RangeInput
+        {...defaultProps}
+        values={{ min: 20, max: 480 }}
+        templateProps={{
+          templates: {
+            separatorText(_, { html }) {
+              return html`<span>to</span>`;
+            },
+            submitText(_, { html }) {
+              return html`<span>Go</span>`;
+            },
+          },
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <form
+      class="form"
+    >
+      <label
+        class="label"
+      >
+        <input
+          class="input inputMin"
+          max="500"
+          min="0"
+          placeholder="0"
+          step="1"
+          type="number"
+        />
+      </label>
+      <span
+        class="separator"
+      >
+        <span>
+          to
+        </span>
+      </span>
+      <label
+        class="label"
+      >
+        <input
+          class="input inputMax"
+          max="500"
+          min="0"
+          placeholder="500"
+          step="1"
+          type="number"
+        />
+      </label>
+      <button
+        class="submit"
+        type="submit"
+      >
+        <span>
+          Go
+        </span>
+      </button>
+    </form>
+  </div>
+</div>
+`);
+  });
+
   describe('willReceiveProps', () => {
     it('expect to update the empty state from given props', () => {
       const props = {};

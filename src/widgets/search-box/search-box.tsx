@@ -28,15 +28,15 @@ export type SearchBoxTemplates = Partial<{
   /**
    * Template used for displaying the submit button. Can accept a function or a Hogan string.
    */
-  submit: Template;
+  submit: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
    * Template used for displaying the reset button. Can accept a function or a Hogan string.
    */
-  reset: Template;
+  reset: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
    * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
    */
-  loadingIndicator: Template;
+  loadingIndicator: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
 }>;
 
 export type SearchBoxCSSClasses = Partial<{

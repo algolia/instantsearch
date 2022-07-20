@@ -124,5 +124,54 @@ describe('VoiceSearch', () => {
 
       expect(status).toMatchSnapshot();
     });
+
+    it('renders component with custom `html` templates', () => {
+      const { container } = render(
+        <VoiceSearch
+          {...defaultProps}
+          templates={{
+            buttonText({ isListening }, { html }) {
+              return html`<span>${isListening ? 'Stop' : 'Start'}</span>`;
+            },
+            status({ isListening, status }, { html }) {
+              return html`
+                <div class="${isListening ? 'listening' : 'not-listening'}">
+                  <span>${status}</span>
+                </div>
+              `;
+            },
+          }}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <button
+      class="button"
+      title="Search by voice"
+      type="button"
+    >
+      <span>
+        Start
+      </span>
+    </button>
+    <div
+      class="status"
+    >
+      <div
+        class="not-listening"
+      >
+        <span>
+          initial
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`);
+    });
   });
 });

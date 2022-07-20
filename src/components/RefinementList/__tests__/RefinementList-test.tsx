@@ -690,5 +690,103 @@ describe('RefinementList', () => {
 
       expect(toggleRefinement).toHaveBeenCalledTimes(0);
     });
+
+    it('renders component with custom `html` templates', () => {
+      const { container } = render(
+        <RefinementList
+          {...defaultProps}
+          facetValues={[
+            { value: 'Apple', label: 'Apple', count: 1, isRefined: false },
+            { value: 'Samsung', label: 'Samsung', count: 2, isRefined: false },
+          ]}
+          templateProps={{
+            ...defaultProps.templateProps,
+            templates: {
+              item({ url, label, count, isRefined }, { html }) {
+                return html`<a
+                  href="${url}"
+                  style="${isRefined ? 'font-weight: bold' : ''}"
+                >
+                  <span>${label} (${count})</span>
+                </a>`;
+              },
+              showMoreText({ isShowingMore }, { html }) {
+                return html`<span
+                  >${isShowingMore ? 'Show less' : 'Show more'}</span
+                >`;
+              },
+              searchableNoResults(_, { html }) {
+                return html`<span>No results</span>`;
+              },
+              searchableSubmit(_, { html }) {
+                return html`<span>Submit</span>`;
+              },
+              searchableReset(_, { html }) {
+                return html`<span>Reset</span>`;
+              },
+              searchableLoadingIndicator(_, { html }) {
+                return html`<span>Loading</span>`;
+              },
+            },
+          }}
+          showMore={true}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-RefinementList"
+  >
+    <ul
+      class="ais-RefinementList-list"
+    >
+      <li
+        class="ais-RefinementList-item"
+      >
+        <div>
+          <a
+            href="#"
+            style=""
+          >
+            <span>
+              Apple
+               (
+              1
+              )
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="ais-RefinementList-item"
+      >
+        <div>
+          <a
+            href="#"
+            style=""
+          >
+            <span>
+              Samsung
+               (
+              2
+              )
+            </span>
+          </a>
+        </div>
+      </li>
+    </ul>
+    <button
+      class="ais-RefinementList-showMore ais-RefinementList-showMore--disabled"
+      disabled=""
+    >
+      <span>
+        Show more
+      </span>
+    </button>
+  </div>
+</div>
+`);
+    });
   });
 });

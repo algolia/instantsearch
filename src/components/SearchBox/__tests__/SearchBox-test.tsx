@@ -467,5 +467,83 @@ describe('SearchBox', () => {
 
       expect(mount(<SearchBox {...props} />)).toMatchSnapshot();
     });
+
+    test('renders component with custom `html` templates', () => {
+      const { container } = render(
+        <SearchBox
+          {...defaultProps}
+          templates={{
+            submit({ cssClasses }, { html }) {
+              return html`<span class="${cssClasses.submitIcon}">Submit</span>`;
+            },
+            reset({ cssClasses }, { html }) {
+              return html`<span class="${cssClasses.resetIcon}">Reset</span>`;
+            },
+            loadingIndicator({ cssClasses }, { html }) {
+              return html`<span class="${cssClasses.loadingIcon}">Wait…</span>`;
+            },
+          }}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <form
+      action=""
+      class="form"
+      novalidate=""
+      role="search"
+    >
+      <input
+        autocapitalize="off"
+        autocomplete="off"
+        autocorrect="off"
+        class="input"
+        maxlength="512"
+        placeholder=""
+        spellcheck="false"
+        type="search"
+      />
+      <button
+        class="submit"
+        title="Submit the search query."
+        type="submit"
+      >
+        <span
+          class="submitIcon"
+        >
+          Submit
+        </span>
+      </button>
+      <button
+        class="reset"
+        hidden=""
+        title="Clear the search query."
+        type="reset"
+      >
+        <span
+          class="resetIcon"
+        >
+          Reset
+        </span>
+      </button>
+      <span
+        class="loadingIndicator"
+        hidden=""
+      >
+        <span
+          class="loadingIcon"
+        >
+          Wait…
+        </span>
+      </span>
+    </form>
+  </div>
+</div>
+`);
+    });
   });
 });

@@ -118,6 +118,70 @@ describe('Panel', () => {
 
       expect(container).toMatchSnapshot();
     });
+
+    test('renders component with custom `html` templates', () => {
+      const { container } = render(
+        <Panel
+          {...getDefaultProps()}
+          collapsible={true}
+          templates={{
+            header({ results }, { html }) {
+              return html`<span>Brand (${results.nbHits} results)</span>`;
+            },
+            footer({ results }, { html }) {
+              return html`<span>Brand (${results.nbHits} results)</span>`;
+            },
+            collapseButtonText({ collapsed }, { html }) {
+              return html`<span>${collapsed ? 'More' : 'Less'}</span>`;
+            },
+          }}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root collapsibleRoot"
+  >
+    <div
+      class="header"
+    >
+      <span>
+        <span>
+          Brand (
+          0
+           results)
+        </span>
+      </span>
+      <button
+        aria-expanded="true"
+        class="collapseButton"
+      >
+        <span>
+          <span>
+            Less
+          </span>
+        </span>
+      </button>
+    </div>
+    <div
+      class="body"
+    >
+      <div />
+    </div>
+    <div
+      class="footer"
+    >
+      <span>
+        Brand (
+        0
+         results)
+      </span>
+    </div>
+  </div>
+</div>
+`);
+    });
   });
 
   describe('hidden', () => {

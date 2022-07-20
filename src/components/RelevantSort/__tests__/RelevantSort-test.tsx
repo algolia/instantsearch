@@ -144,4 +144,57 @@ describe('RelevantSort', () => {
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith(0);
   });
+
+  it('renders component with custom `html` templates', () => {
+    const { container } = render(
+      <RelevantSort
+        cssClasses={cssClasses}
+        templates={{
+          text({ isRelevantSorted }, { html }) {
+            return html`<p>
+              Click the button to
+              ${isRelevantSorted ? 'see all results.' : 'see relevant results.'}
+            </p>`;
+          },
+          button({ isRelevantSorted }, { html }) {
+            return html`<span
+              >${isRelevantSorted
+                ? 'See all results'
+                : 'See relevant results'}</span
+            >`;
+          },
+        }}
+        isRelevantSorted={false}
+        isVirtualReplica={true}
+        refine={() => {}}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <div
+      class="text"
+    >
+      <p>
+        Click the button to
+        see relevant results.
+      </p>
+    </div>
+    <button
+      class="button"
+      type="button"
+    >
+      <span>
+        <span>
+          See relevant results
+        </span>
+      </span>
+    </button>
+  </div>
+</div>
+`);
+  });
 });

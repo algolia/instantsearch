@@ -130,6 +130,56 @@ describe('Stats', () => {
     `);
   });
 
+  it('renders component with custom `html` templates', () => {
+    const { container } = render(
+      <Stats
+        {...getProps()}
+        templateProps={{
+          templates: {
+            text({ query, nbHits, processingTimeMS }, { html }) {
+              if (nbHits === 0) {
+                return html`<span>No results</span>`;
+              }
+
+              return html`<span
+                ><strong>"${query}"</strong> returned ${nbHits}
+                result${nbHits > 1 ? 's' : ''} found in
+                ${processingTimeMS}ms</span
+              >`;
+            },
+          },
+        }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <span
+      class="text"
+    >
+      <span>
+        <strong>
+          "
+          a query
+          "
+        </strong>
+         returned 
+        1234
+        result
+        s
+         found in
+        42
+        ms
+      </span>
+    </span>
+  </div>
+</div>
+`);
+  });
+
   function getProps(extraProps = {}) {
     return {
       cssClasses,

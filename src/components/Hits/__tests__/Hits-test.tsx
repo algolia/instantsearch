@@ -13,6 +13,7 @@ import Hits from '../Hits';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import defaultTemplates from '../../../widgets/hits/defaultTemplates';
+import { render } from '@testing-library/preact';
 
 describe('Hits', () => {
   const cssClasses = {
@@ -22,8 +23,8 @@ describe('Hits', () => {
     list: 'list',
   };
 
-  function shallowRender(extraProps: Partial<HitsProps> = {}) {
-    const props: HitsProps = {
+  function createProps(props: Partial<HitsProps>) {
+    return {
       cssClasses,
       templateProps: prepareTemplateProps({
         templates: {},
@@ -34,8 +35,12 @@ describe('Hits', () => {
         createSingleSearchResponse(),
       ]),
       hits: [],
-      ...extraProps,
+      ...props,
     };
+  }
+
+  function shallowRender(extraProps: Partial<HitsProps> = {}) {
+    const props = createProps(extraProps);
 
     return shallow(<Hits {...props} />);
   }
@@ -233,6 +238,315 @@ describe('Hits', () => {
 
       expect(wrapper.at(0).key()).toEqual('BAR');
       expect(wrapper.at(1).key()).toEqual('BAZ');
+    });
+
+    it('renders component with custom `html` templates (with hits)', () => {
+      const hits = [
+        {
+          objectID: '1',
+          name: 'Apple iPhone smartphone',
+          description: 'A smartphone by Apple.',
+          _highlightResult: {
+            name: {
+              value: `Apple iPhone ${TAG_REPLACEMENT.highlightPreTag}smartphone`,
+              matchLevel: 'full' as const,
+              matchedWords: ['smartphone'],
+            },
+          },
+          _snippetResult: {
+            description: {
+              value: `A ${TAG_REPLACEMENT.highlightPreTag}smartphone${TAG_REPLACEMENT.highlightPostTag} by Apple.`,
+              matchLevel: 'full' as const,
+              matchedWords: ['smartphone'],
+            },
+          },
+          __position: 1,
+        },
+        {
+          objectID: '2',
+          name: 'Samsung Galaxy smartphone',
+          description: 'A smartphone by Samsung.',
+          _highlightResult: {
+            name: {
+              value: `Samsung Galaxy ${TAG_REPLACEMENT.highlightPreTag}smartphone${TAG_REPLACEMENT.highlightPostTag}`,
+              matchLevel: 'full' as const,
+              matchedWords: ['smartphone'],
+            },
+          },
+          _snippetResult: {
+            description: {
+              value: `A ${TAG_REPLACEMENT.highlightPreTag}smartphone${TAG_REPLACEMENT.highlightPostTag} by Samsung.`,
+              matchLevel: 'full' as const,
+              matchedWords: ['smartphone'],
+            },
+          },
+          __position: 2,
+        },
+      ];
+
+      const props: HitsProps = {
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({ hits, query: 'smartphone' }),
+        ]),
+        hits,
+        templateProps: prepareTemplateProps({
+          defaultTemplates,
+          templatesConfig: {},
+        }),
+        cssClasses,
+      };
+
+      const { container } = render(
+        <Hits
+          {...props}
+          templateProps={{
+            ...props.templateProps,
+            templates: {
+              empty({ query }, { html }) {
+                return html`<p>No results for <q>${query}</q></p>`;
+              },
+              item(hit, { html, components }) {
+                return html`
+                  <h2>${components.Highlight({ hit, attribute: 'name' })}</h2>
+                  <h3>
+                    ${components.ReverseHighlight({ hit, attribute: 'name' })}
+                  </h3>
+                  <p>
+                    ${components.Snippet({ hit, attribute: 'description' })}
+                  </p>
+                  <p>
+                    ${components.ReverseSnippet({
+                      hit,
+                      attribute: 'description',
+                    })}
+                  </p>
+                `;
+              },
+            },
+          }}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <ol
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <h2>
+          <span
+            class="ais-Highlight"
+          >
+            <span
+              class="ais-Highlight-nonHighlighted"
+            >
+              Apple iPhone 
+            </span>
+            <mark
+              class="ais-Highlight-highlighted"
+            >
+              smartphone
+            </mark>
+            <span
+              class="ais-Highlight-nonHighlighted"
+            />
+          </span>
+        </h2>
+        <h3>
+          <span
+            class="ais-ReverseHighlight"
+          >
+            <mark
+              class="ais-ReverseHighlight-highlighted"
+            >
+              Apple iPhone 
+            </mark>
+            <span
+              class="ais-ReverseHighlight-nonHighlighted"
+            >
+              smartphone
+            </span>
+            <mark
+              class="ais-ReverseHighlight-highlighted"
+            />
+          </span>
+        </h3>
+        <p>
+          <span
+            class="ais-Snippet"
+          >
+            <span
+              class="ais-Snippet-nonHighlighted"
+            >
+              A 
+            </span>
+            <mark
+              class="ais-Snippet-highlighted"
+            >
+              smartphone
+            </mark>
+            <span
+              class="ais-Snippet-nonHighlighted"
+            >
+               by Apple.
+            </span>
+          </span>
+        </p>
+        <p>
+          <span
+            class="ais-ReverseSnippet"
+          >
+            <mark
+              class="ais-ReverseSnippet-highlighted"
+            >
+              A 
+            </mark>
+            <span
+              class="ais-ReverseSnippet-nonHighlighted"
+            >
+              smartphone
+            </span>
+            <mark
+              class="ais-ReverseSnippet-highlighted"
+            >
+               by Apple.
+            </mark>
+          </span>
+        </p>
+      </li>
+      <li
+        class="item"
+      >
+        <h2>
+          <span
+            class="ais-Highlight"
+          >
+            <span
+              class="ais-Highlight-nonHighlighted"
+            >
+              Samsung Galaxy 
+            </span>
+            <mark
+              class="ais-Highlight-highlighted"
+            >
+              smartphone
+            </mark>
+          </span>
+        </h2>
+        <h3>
+          <span
+            class="ais-ReverseHighlight"
+          >
+            <mark
+              class="ais-ReverseHighlight-highlighted"
+            >
+              Samsung Galaxy 
+            </mark>
+            <span
+              class="ais-ReverseHighlight-nonHighlighted"
+            >
+              smartphone
+            </span>
+          </span>
+        </h3>
+        <p>
+          <span
+            class="ais-Snippet"
+          >
+            <span
+              class="ais-Snippet-nonHighlighted"
+            >
+              A 
+            </span>
+            <mark
+              class="ais-Snippet-highlighted"
+            >
+              smartphone
+            </mark>
+            <span
+              class="ais-Snippet-nonHighlighted"
+            >
+               by Samsung.
+            </span>
+          </span>
+        </p>
+        <p>
+          <span
+            class="ais-ReverseSnippet"
+          >
+            <mark
+              class="ais-ReverseSnippet-highlighted"
+            >
+              A 
+            </mark>
+            <span
+              class="ais-ReverseSnippet-nonHighlighted"
+            >
+              smartphone
+            </span>
+            <mark
+              class="ais-ReverseSnippet-highlighted"
+            >
+               by Samsung.
+            </mark>
+          </span>
+        </p>
+      </li>
+    </ol>
+  </div>
+</div>
+`);
+    });
+
+    it('renders component with custom `html` templates (without hits)', () => {
+      const props: HitsProps = {
+        results: new SearchResults(new SearchParameters(), [
+          createSingleSearchResponse({ hits: [], query: 'smartphone' }),
+        ]),
+        hits: [],
+        templateProps: prepareTemplateProps({
+          defaultTemplates,
+          templatesConfig: {},
+        }),
+        cssClasses,
+      };
+
+      const { container } = render(
+        <Hits
+          {...props}
+          templateProps={{
+            ...props.templateProps,
+            templates: {
+              empty({ query }, { html }) {
+                return html`<p>No results for <q>${query}</q></p>`;
+              },
+              item(hit, { html }) {
+                return html`<pre>${JSON.stringify(hit)}</pre>`;
+              },
+            },
+          }}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root emptyRoot"
+  >
+    <p>
+      No results for 
+      <q>
+        smartphone
+      </q>
+    </p>
+  </div>
+</div>
+`);
     });
   });
 

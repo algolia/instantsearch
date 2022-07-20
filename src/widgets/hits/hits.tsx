@@ -1,5 +1,6 @@
 /** @jsx h */
 
+import { SearchResults } from 'algoliasearch-helper';
 import { h, render } from 'preact';
 import cx from 'classnames';
 import type {
@@ -107,7 +108,7 @@ export type HitsTemplates = Partial<{
    *
    * @default 'No Results'
    */
-  empty: Template;
+  empty: Template<SearchResults>;
 
   /**
    * Template to use for each result. This template will receive an object containing a single record.

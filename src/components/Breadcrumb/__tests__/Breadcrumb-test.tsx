@@ -84,6 +84,90 @@ describe('Breadcrumb', () => {
       expect(root.classList).not.toContain('noRefinementRoot');
       expect(container).toMatchSnapshot();
     });
+
+    test('renders component with custom `html` templates', () => {
+      const { container } = render(
+        <Breadcrumb
+          {...defaultProps}
+          items={[
+            {
+              value: 'menswear',
+              label: 'Menswear',
+            },
+            {
+              value: 'sneakers',
+              label: 'Sneakers',
+            },
+          ]}
+          templateProps={{
+            ...defaultProps.templateProps,
+            templates: {
+              home(_, { html }) {
+                return html`<span>Home</span>`;
+              },
+              separator(_, { html }) {
+                return html`<span>/</span>`;
+              },
+            },
+          }}
+        />
+      );
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <a
+          class="link"
+        >
+          <span>
+            Home
+          </span>
+        </a>
+      </li>
+      <li
+        class="item"
+      >
+        <span
+          aria-hidden="true"
+          class="separator"
+        >
+          <span>
+            /
+          </span>
+        </span>
+        <a
+          class="link"
+          href="menswear"
+        >
+          Menswear
+        </a>
+      </li>
+      <li
+        class="item selectedItem"
+      >
+        <span
+          aria-hidden="true"
+          class="separator"
+        >
+          <span>
+            /
+          </span>
+        </span>
+        Sneakers
+      </li>
+    </ul>
+  </div>
+</div>
+`);
+    });
   });
 
   describe('Events', () => {

@@ -14,7 +14,7 @@ export type SearchBoxComponentCSSClasses =
 
 export type SearchBoxComponentTemplates = Required<SearchBoxTemplates>;
 
-type SearchBoxProps = {
+export type SearchBoxProps = {
   placeholder?: string;
   cssClasses: SearchBoxComponentCSSClasses;
   templates: SearchBoxComponentTemplates;

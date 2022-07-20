@@ -52,4 +52,39 @@ describe('QueryRuleCustomData', () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  test('renders component with custom `html` templates', () => {
+    const { container } = render(
+      <QueryRuleCustomData
+        items={[{ banner: 'image-1.png' }, { banner: 'image-2.png' }]}
+        templates={{
+          default({ items }, { html }) {
+            return html`<ul>
+              ${items.map(
+                (item) => html`<li key="${item.banner}">${item.banner}</li>`
+              )}
+            </ul>`;
+          },
+        }}
+        cssClasses={{ root: 'root' }}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <ul>
+      <li>
+        image-1.png
+      </li>
+      <li>
+        image-2.png
+      </li>
+    </ul>
+  </div>
+</div>
+`);
+  });
 });
