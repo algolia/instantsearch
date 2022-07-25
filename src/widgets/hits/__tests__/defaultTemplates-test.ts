@@ -1,3 +1,4 @@
+import { TemplateParams } from '../../../types';
 import defaultTemplates from '../defaultTemplates';
 
 describe('hits defaultTemplates', () => {
@@ -28,7 +29,7 @@ describe('hits defaultTemplates', () => {
 
     expect(
       typeof defaultTemplates.item === 'function' &&
-        defaultTemplates.item(item, () => '')
+        defaultTemplates.item(item, {} as TemplateParams)
     ).toBe(expected);
   });
 });
