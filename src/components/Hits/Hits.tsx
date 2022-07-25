@@ -25,6 +25,7 @@ const Hits = ({
   results,
   hits,
   bindEvent,
+  sendEvent,
   cssClasses,
   templateProps,
 }: HitsProps) => {
@@ -56,6 +57,7 @@ const Hits = ({
               __hitIndex: index,
             }}
             bindEvent={bindEvent}
+            sendEvent={sendEvent}
           />
         ))}
       </ol>
