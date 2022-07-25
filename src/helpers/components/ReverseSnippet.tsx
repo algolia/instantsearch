@@ -5,7 +5,7 @@ import { ReverseSnippet as ReverseSnippetUiComponent } from '../../components/Re
 import getHighlightedParts from '../../lib/utils/getHighlightedParts';
 import getPropertyByPath from '../../lib/utils/getPropertyByPath';
 import unescape from '../../lib/utils/unescape';
-import { warning } from '../../lib/utils';
+import { warning } from '../../lib/utils/logger';
 
 import type { BaseHit, Hit, PartialKeys } from '../../types';
 import type { ReverseSnippetProps as ReverseSnippetUiComponentProps } from '../../components/ReverseSnippet/ReverseSnippet';

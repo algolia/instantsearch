@@ -5,7 +5,7 @@ import { Snippet as SnippetUiComponent } from '../../components/Snippet/Snippet'
 import getHighlightedParts from '../../lib/utils/getHighlightedParts';
 import getPropertyByPath from '../../lib/utils/getPropertyByPath';
 import unescape from '../../lib/utils/unescape';
-import { warning } from '../../lib/utils';
+import { warning } from '../../lib/utils/logger';
 
 import type { BaseHit, Hit, PartialKeys } from '../../types';
 import type { SnippetProps as SnippetUiComponentProps } from '../../components/Snippet/Snippet';
