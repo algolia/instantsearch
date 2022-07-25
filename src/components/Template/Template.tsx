@@ -2,10 +2,10 @@
 
 import type { JSX } from 'preact';
 import { h, Component } from 'preact';
-import type { SendEventForHits } from '../../lib/utils';
+import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
 import { renderTemplate, isEqual } from '../../lib/utils';
 import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
-import type { Templates, TemplateParams } from '../../types';
+import type { Templates } from '../../types';
 
 const defaultProps = {
   data: {},
@@ -20,7 +20,7 @@ type TemplateProps = {
   rootProps?: Record<string, any>;
   rootTagName?: keyof JSX.IntrinsicElements;
   templateKey: string;
-  bindEvent?: TemplateParams;
+  bindEvent?: BindEventForHits;
   sendEvent?: SendEventForHits;
 } & PreparedTemplateProps<Templates> &
   Readonly<typeof defaultProps>;
