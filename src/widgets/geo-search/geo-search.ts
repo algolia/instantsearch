@@ -269,7 +269,7 @@ const geoSearch: GeoSearchWidget = (widgetParams) => {
         templateKey: 'HTMLMarker',
         templates,
         data: item,
-      }),
+      }) as string,
     });
 
   const createMarker = !customHTMLMarker

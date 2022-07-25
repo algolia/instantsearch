@@ -3,33 +3,39 @@ import defaultTemplates from '../defaultTemplates';
 
 describe('hits defaultTemplates', () => {
   it('has a `empty` default template', () => {
-    expect(defaultTemplates.empty).toEqual(expect.any(Function));
+    expect(defaultTemplates.empty).toBe('No results');
   });
 
   it('has a `item` default template', () => {
     const item = {
-      objectID: '1',
       hello: 'there,',
       how: {
         are: 'you?',
       },
-      __position: 4,
-      __hitIndex: 3,
+      objectID: 'lol',
+      __position: 42,
+      __hitIndex: 1,
     };
 
     const expected = `{
-  "objectID": "1",
   "hello": "there,",
   "how": {
     "are": "you?"
   },
-  "__position": 4,
-  "__hitIndex": 3
+  "objectID": "lol",
+  "__position": 42,
+  "__hitIndex": 1
 }`;
 
     expect(
       typeof defaultTemplates.item === 'function' &&
         defaultTemplates.item(item, {} as TemplateParams)
     ).toBe(expected);
+  });
+
+  it('has a `showPreviousText` default template', () => {
+    expect(defaultTemplates.showPreviousText).toMatchInlineSnapshot(
+      `"Show previous results"`
+    );
   });
 });
