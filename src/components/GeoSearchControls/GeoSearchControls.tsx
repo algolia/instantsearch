@@ -55,6 +55,7 @@ const GeoSearchControls = ({
               >
                 <Template
                   {...templateProps}
+                  $$widgetType="ais.geoSearch"
                   templateKey="toggle"
                   rootTagName="span"
                 />
@@ -67,6 +68,7 @@ const GeoSearchControls = ({
               >
                 <Template
                   {...templateProps}
+                  $$widgetType="ais.geoSearch"
                   templateKey="redo"
                   rootTagName="span"
                 />
@@ -86,6 +88,7 @@ const GeoSearchControls = ({
             >
               <Template
                 {...templateProps}
+                $$widgetType="ais.geoSearch"
                 templateKey="redo"
                 rootTagName="span"
               />
@@ -97,6 +100,7 @@ const GeoSearchControls = ({
           <GeoSearchButton className={cssClasses.reset} onClick={onClearClick}>
             <Template
               {...templateProps}
+              $$widgetType="ais.geoSearch"
               templateKey="reset"
               rootTagName="span"
             />

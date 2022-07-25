@@ -4,8 +4,11 @@
 /** @jsx h */
 
 import { h } from 'preact';
+import type { TemplateProps } from '../Template';
 import Template from '../Template';
 import { mount, shallow } from '../../../../test/utils/enzyme';
+import { render } from '@testing-library/preact';
+import { warning } from '../../../lib/utils';
 
 function getProps({
   templates = { test: '' },
@@ -15,7 +18,7 @@ function getProps({
   useCustomCompileOptions = {},
   templatesConfig = { helpers: {}, compileOptions: {} },
   ...props
-}) {
+}: Partial<TemplateProps>) {
   return {
     ...props,
     templates,
@@ -28,6 +31,10 @@ function getProps({
 }
 
 describe('Template', () => {
+  afterEach(() => {
+    warning.cache = {};
+  });
+
   it('can configure compilation options', () => {
     const props = getProps({
       templates: { test: 'it configures compilation <%options%>' },
@@ -56,6 +63,27 @@ describe('Template', () => {
     const wrapper = mount(<Template {...props} />);
 
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('warns when using string-based templates', () => {
+    expect(() =>
+      render(
+        <Template
+          {...getProps({ templates: { test: 'test', test2: () => 'test' } })}
+        />
+      )
+    )
+      .toWarnDev(`[InstantSearch.js]: Hogan.js and string-based templates are deprecated and will not be supported in InstantSearch.js 5.x.
+
+You can replace them with function-form templates and use either the provided \`html\` function or JSX templates.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`);
+  });
+
+  it('does not warn when using exclusively function-based templates', () => {
+    expect(() =>
+      render(<Template {...getProps({ templates: { test: () => 'test' } })} />)
+    ).not.toWarnDev();
   });
 
   describe('shouldComponentUpdate', () => {
