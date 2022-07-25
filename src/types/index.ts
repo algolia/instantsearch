@@ -2,6 +2,7 @@
 export * from './utils';
 
 // Algolia-related
+// eslint-disable-next-line import/export
 export * from './algoliasearch';
 export * from './results';
 

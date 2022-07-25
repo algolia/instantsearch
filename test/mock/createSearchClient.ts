@@ -1,4 +1,4 @@
-import type { SearchClient, MultiResponse } from '../../src/types';
+import type { SearchClient, SearchResponses } from '../../src/types';
 
 import {
   createSingleSearchResponse,
@@ -23,7 +23,7 @@ export const createSearchClient = (
 type ControlledClient = {
   searchClient: SearchClient;
   searches: Array<{
-    promise: Promise<MultiResponse>;
+    promise: Promise<SearchResponses<any>>;
     resolver: () => void;
   }>;
 };
@@ -35,7 +35,7 @@ export const createControlledSearchClient = (
   const searchClient = createSearchClient({
     search: jest.fn(() => {
       let resolver: () => void;
-      const promise: Promise<MultiResponse> = new Promise((resolve) => {
+      const promise: Promise<SearchResponses<any>> = new Promise((resolve) => {
         resolver = () => resolve(createMultiSearchResponse());
       });
 

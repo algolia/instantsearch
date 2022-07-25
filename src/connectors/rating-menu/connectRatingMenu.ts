@@ -352,7 +352,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
           const maxFacets = Math.pow(10, maxDecimalPlaces) * max;
 
           warning(
-            maxFacets <= maxValuesPerFacet,
+            maxFacets <= maxValuesPerFacet || Boolean(results.__isArtificial),
             getFacetValuesWarningMessage({
               maxDecimalPlaces,
               maxFacets,
