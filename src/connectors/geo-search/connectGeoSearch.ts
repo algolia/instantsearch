@@ -39,7 +39,7 @@ function setBoundingBoxAsString(state: SearchParameters, value: string) {
   );
 }
 
-export type GeoHit = Hit & Required<Pick<Hit, '_geoLoc'>>;
+export type GeoHit = Hit & Required<Pick<Hit, '_geoloc'>>;
 
 type Bounds = {
   /**

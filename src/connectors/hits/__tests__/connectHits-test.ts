@@ -22,6 +22,7 @@ import type {
   EscapedHits,
   Hit,
   HitAttributeHighlightResult,
+  SearchResponse,
 } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { wait } from '../../../../test/utils/wait';
@@ -851,9 +852,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           ];
 
           const searchClient = createSearchClient({
-            search() {
+            search<T>() {
               return Promise.resolve(
-                createMultiSearchResponse(createSingleSearchResponse({ hits }))
+                createMultiSearchResponse(
+                  createSingleSearchResponse({
+                    hits: hits as unknown as SearchResponse<T>['hits'],
+                  })
+                )
               );
             },
           });

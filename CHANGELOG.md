@@ -1,3 +1,23 @@
+## [4.43.1](https://github.com/algolia/instantsearch.js/compare/v4.43.0...v4.43.1) (2022-07-11)
+
+
+### Bug Fixes
+
+* **errors:** rethrow error as error if it's an object ([#5075](https://github.com/algolia/instantsearch.js/issues/5075)) ([34132bb](https://github.com/algolia/instantsearch.js/commit/34132bba38c05fa2f5e4e54c6889e9335e62e4f4))
+* **ratingMenu:** don't warn if results are artificial ([#5073](https://github.com/algolia/instantsearch.js/issues/5073)) ([d747d23](https://github.com/algolia/instantsearch.js/commit/d747d23b28c380fe82a40eeab06c57359af8004a))
+* **types:** use correct case for _geoloc property ([#5074](https://github.com/algolia/instantsearch.js/issues/5074)) ([6fed7d8](https://github.com/algolia/instantsearch.js/commit/6fed7d870c3607980776d33a3697f8e2789aa08b))
+
+
+
+# [4.43.0](https://github.com/algolia/instantsearch.js/compare/v4.42.0...v4.43.0) (2022-06-28)
+
+
+### Features
+
+* **types:** support algoliasearch v5 ([#5066](https://github.com/algolia/instantsearch.js/issues/5066)) ([3eb4dc7](https://github.com/algolia/instantsearch.js/commit/3eb4dc75a5935f2ee4fead8787f39af0150b24c4))
+
+
+
 # [4.42.0](https://github.com/algolia/instantsearch.js/compare/v4.41.2...v4.42.0) (2022-06-21)
 
 
