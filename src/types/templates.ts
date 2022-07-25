@@ -23,6 +23,17 @@ export type TemplateParams = BindEventForHits & {
   sendEvent?: SendEventForHits;
 };
 
+export type TemplateParams = BindEventForHits & {
+  html: typeof html;
+  components: {
+    Highlight: typeof Highlight;
+    ReverseHighlight: typeof ReverseHighlight;
+    Snippet: typeof Snippet;
+    ReverseSnippet: typeof ReverseSnippet;
+  };
+  sendEvent?: SendEventForHits;
+};
+
 export type TemplateWithBindEvent<TTemplateData = void> =
   | string
   | ((data: TTemplateData, params: TemplateParams) => VNode | VNode[] | string);
