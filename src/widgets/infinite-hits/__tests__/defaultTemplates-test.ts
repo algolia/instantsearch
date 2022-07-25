@@ -1,4 +1,4 @@
-import { TemplateParams } from '../../../types';
+import type { TemplateParams } from '../../../types';
 import defaultTemplates from '../defaultTemplates';
 
 describe('hits defaultTemplates', () => {
