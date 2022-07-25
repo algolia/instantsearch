@@ -120,6 +120,10 @@ export default {
       type: String,
       default: undefined,
     },
+    queryHook: {
+      type: Function,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -129,6 +133,11 @@ export default {
     };
   },
   computed: {
+    widgetParams() {
+      return {
+        queryHook: this.queryHook,
+      };
+    },
     isControlled() {
       return (
         typeof this.value !== 'undefined' ||

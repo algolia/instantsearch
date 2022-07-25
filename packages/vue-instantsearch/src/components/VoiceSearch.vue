@@ -100,6 +100,14 @@ export default {
       required: false,
       default: undefined,
     },
+    language: {
+      type: String,
+      default: undefined,
+    },
+    additionalQueryParameters: {
+      type: Object,
+      default: undefined,
+    },
     buttonTitle: {
       type: String,
       required: false,
@@ -130,6 +138,8 @@ export default {
     widgetParams() {
       return {
         searchAsYouSpeak: this.searchAsYouSpeak,
+        language: this.language,
+        additionalQueryParameters: this.additionalQueryParameters,
       };
     },
     errorNotAllowed() {
