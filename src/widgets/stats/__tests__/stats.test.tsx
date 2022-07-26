@@ -66,9 +66,9 @@ describe('stats', () => {
     >
       <span>
         <strong>
-          
+
         </strong>
-         returned 
+         returned
         2
         result
         s
@@ -150,9 +150,9 @@ describe('stats', () => {
     >
       <span>
         <strong>
-          
+
         </strong>
-         returned 
+         returned
         2
         result
         s
