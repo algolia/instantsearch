@@ -138,7 +138,7 @@ export type RefinementListOwnTemplates = Partial<{
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
    */
-  showMoreText: Template;
+  showMoreText: Template<{ isShowingMore: boolean }>;
   /**
    * Templates to use for search for facet values when there are no results.
    */
