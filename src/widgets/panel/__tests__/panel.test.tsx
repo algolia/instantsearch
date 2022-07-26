@@ -36,7 +36,14 @@ describe('panel', () => {
         }),
       ]);
 
-      search.start();
+      // @MAJOR Once Hogan.js and string-based templates are removed,
+      // `search.start()` can be moved to the test body and the following
+      // assertion can go away.
+      expect(async () => {
+        search.start();
+
+        await wait(0);
+      }).not.toWarnDev();
 
       await wait(0);
 
@@ -45,7 +52,7 @@ describe('panel', () => {
   <div
     class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed"
   >
-    
+
     <div
       class="ais-Panel-body"
     >
@@ -61,7 +68,7 @@ describe('panel', () => {
         </div>
       </div>
     </div>
-    
+
   </div>
 </div>
 `);
@@ -111,7 +118,7 @@ describe('panel', () => {
     >
       <span>
         <span>
-          Header 
+          Header
           (10 results)
         </span>
       </span>
@@ -147,7 +154,7 @@ describe('panel', () => {
       <a
         href="#"
       >
-        Footer 
+        Footer
         (10 results)
       </a>
     </div>
@@ -202,7 +209,7 @@ describe('panel', () => {
     >
       <span>
         <span>
-          Header 
+          Header
           (10 results)
         </span>
       </span>
@@ -238,7 +245,7 @@ describe('panel', () => {
       <a
         href="#"
       >
-        Footer 
+        Footer
         (10 results)
       </a>
     </div>

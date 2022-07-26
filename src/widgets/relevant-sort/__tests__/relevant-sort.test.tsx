@@ -27,7 +27,14 @@ describe('relevantSort', () => {
 
       search.addWidgets([relevantSort({ container })]);
 
-      search.start();
+      // @MAJOR Once Hogan.js and string-based templates are removed,
+      // `search.start()` can be moved to the test body and the following
+      // assertion can go away.
+      expect(async () => {
+        search.start();
+
+        await wait(0);
+      }).not.toWarnDev();
 
       await wait(0);
 
@@ -160,7 +167,7 @@ describe('relevantSort', () => {
     >
       <p>
         Click the button to
-         
+
         see all results.
       </p>
     </div>

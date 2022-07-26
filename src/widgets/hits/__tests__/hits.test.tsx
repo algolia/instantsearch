@@ -34,7 +34,14 @@ describe('hits', () => {
         hits({ container }),
       ]);
 
-      search.start();
+      // @MAJOR Once Hogan.js and string-based templates are removed,
+      // `search.start()` can be moved to the test body and the following
+      // assertion can go away.
+      expect(async () => {
+        search.start();
+
+        await wait(0);
+      }).not.toWarnDev();
 
       await wait(0);
 
@@ -189,7 +196,7 @@ describe('hits', () => {
               <span
                 class="ais-Highlight-nonHighlighted"
               >
-                Apple iPhone 
+                Apple iPhone
               </span>
               <mark
                 class="ais-Highlight-highlighted"
@@ -205,7 +212,7 @@ describe('hits', () => {
               <mark
                 class="ais-ReverseHighlight-highlighted"
               >
-                Apple iPhone 
+                Apple iPhone
               </mark>
               <span
                 class="ais-ReverseHighlight-nonHighlighted"
@@ -221,7 +228,7 @@ describe('hits', () => {
               <span
                 class="ais-Snippet-nonHighlighted"
               >
-                A 
+                A
               </span>
               <mark
                 class="ais-Snippet-highlighted"
@@ -242,7 +249,7 @@ describe('hits', () => {
               <mark
                 class="ais-ReverseSnippet-highlighted"
               >
-                A 
+                A
               </mark>
               <span
                 class="ais-ReverseSnippet-nonHighlighted"
@@ -267,7 +274,7 @@ describe('hits', () => {
               <span
                 class="ais-Highlight-nonHighlighted"
               >
-                Samsung Galaxy 
+                Samsung Galaxy
               </span>
               <mark
                 class="ais-Highlight-highlighted"
@@ -283,7 +290,7 @@ describe('hits', () => {
               <mark
                 class="ais-ReverseHighlight-highlighted"
               >
-                Samsung Galaxy 
+                Samsung Galaxy
               </mark>
               <span
                 class="ais-ReverseHighlight-nonHighlighted"
@@ -299,7 +306,7 @@ describe('hits', () => {
               <span
                 class="ais-Snippet-nonHighlighted"
               >
-                A 
+                A
               </span>
               <mark
                 class="ais-Snippet-highlighted"
@@ -320,7 +327,7 @@ describe('hits', () => {
               <mark
                 class="ais-ReverseSnippet-highlighted"
               >
-                A 
+                A
               </mark>
               <span
                 class="ais-ReverseSnippet-nonHighlighted"
@@ -354,7 +361,7 @@ describe('hits', () => {
       class="ais-Hits ais-Hits--empty"
     >
       <p>
-        No results for 
+        No results for
         <q>
           query with no results
         </q>
@@ -432,7 +439,7 @@ describe('hits', () => {
               <span
                 class="ais-Highlight-nonHighlighted"
               >
-                Apple iPhone 
+                Apple iPhone
               </span>
               <mark
                 class="ais-Highlight-highlighted"
@@ -448,7 +455,7 @@ describe('hits', () => {
               <mark
                 class="ais-ReverseHighlight-highlighted"
               >
-                Apple iPhone 
+                Apple iPhone
               </mark>
               <span
                 class="ais-ReverseHighlight-nonHighlighted"
@@ -464,7 +471,7 @@ describe('hits', () => {
               <span
                 class="ais-Snippet-nonHighlighted"
               >
-                A 
+                A
               </span>
               <mark
                 class="ais-Snippet-highlighted"
@@ -485,7 +492,7 @@ describe('hits', () => {
               <mark
                 class="ais-ReverseSnippet-highlighted"
               >
-                A 
+                A
               </mark>
               <span
                 class="ais-ReverseSnippet-nonHighlighted"
@@ -510,7 +517,7 @@ describe('hits', () => {
               <span
                 class="ais-Highlight-nonHighlighted"
               >
-                Samsung Galaxy 
+                Samsung Galaxy
               </span>
               <mark
                 class="ais-Highlight-highlighted"
@@ -526,7 +533,7 @@ describe('hits', () => {
               <mark
                 class="ais-ReverseHighlight-highlighted"
               >
-                Samsung Galaxy 
+                Samsung Galaxy
               </mark>
               <span
                 class="ais-ReverseHighlight-nonHighlighted"
@@ -542,7 +549,7 @@ describe('hits', () => {
               <span
                 class="ais-Snippet-nonHighlighted"
               >
-                A 
+                A
               </span>
               <mark
                 class="ais-Snippet-highlighted"
@@ -563,7 +570,7 @@ describe('hits', () => {
               <mark
                 class="ais-ReverseSnippet-highlighted"
               >
-                A 
+                A
               </mark>
               <span
                 class="ais-ReverseSnippet-nonHighlighted"
@@ -597,7 +604,7 @@ describe('hits', () => {
       class="ais-Hits ais-Hits--empty"
     >
       <p>
-        No results for 
+        No results for
         <q>
           query with no results
         </q>
