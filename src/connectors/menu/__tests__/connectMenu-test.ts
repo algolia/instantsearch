@@ -237,7 +237,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'value');
+    helper.toggleFacetRefinement('category', 'value');
 
     widget.init!(
       createInitOptions({
@@ -287,7 +287,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init!(
       createInitOptions({
@@ -367,7 +367,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', '-50%');
+    helper.toggleFacetRefinement('category', '-50%');
 
     widget.init!(
       createInitOptions({
@@ -502,7 +502,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init!(
       createInitOptions({
@@ -1011,7 +1011,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(createSearchClient(), '', config);
 
       helper.search = jest.fn();
-      helper.toggleRefinement('category', 'Decoration');
+      helper.toggleFacetRefinement('category', 'Decoration');
 
       widget.init!(
         createInitOptions({
@@ -1081,7 +1081,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(createSearchClient(), '', config);
 
       helper.search = jest.fn();
-      helper.toggleRefinement('category', 'Decoration');
+      helper.toggleFacetRefinement('category', 'Decoration');
 
       widget.init!(
         createInitOptions({

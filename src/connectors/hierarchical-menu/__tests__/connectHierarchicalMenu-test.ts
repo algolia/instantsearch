@@ -166,7 +166,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'value');
+    helper.toggleFacetRefinement('category', 'value');
 
     widget.init!(
       createInitOptions({
@@ -194,10 +194,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
-    const { refine: renderToggleRefinement } = secondRenderingOptions;
-    renderToggleRefinement('value');
+    const { refine: renderToggleFacetRefinement } = secondRenderingOptions;
+    renderToggleFacetRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
-    renderToggleRefinement('value');
+    renderToggleFacetRefinement('value');
     expect(helper.hasRefinements('category')).toBe(true);
   });
 
@@ -215,7 +215,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init!(
       createInitOptions({
@@ -319,7 +319,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', '-20 degrees');
+    helper.toggleFacetRefinement('category', '-20 degrees');
 
     widget.init!(
       createInitOptions({
@@ -428,7 +428,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init!(
       createInitOptions({
