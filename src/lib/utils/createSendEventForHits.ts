@@ -2,13 +2,13 @@
  * @jest-environment jsdom
  */
 
-import type { InstantSearch, Hit, Hits, EscapedHits } from '../../types';
+import type { InstantSearch, Hit, EscapedHits } from '../../types';
 import { serializePayload } from '../../lib/utils/serializer';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type BuiltInSendEventForHits = (
   eventType: string,
-  hits: Hit | Hits,
+  hits: Hit | Hit[],
   eventName?: string
 ) => void;
 type CustomSendEventForHits = (customPayload: any) => void;
@@ -16,7 +16,7 @@ export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
 
 type BuiltInBindEventForHits = (
   eventType: string,
-  hits: Hit | Hits,
+  hits: Hit | Hit[],
   eventName?: string
 ) => string;
 type CustomBindEventForHits = (customPayload: any) => string;
@@ -48,7 +48,7 @@ const buildPayloads = ({
     return [args[0]];
   }
   const eventType: string = args[0];
-  const hits: Hit | Hits | EscapedHits = args[1];
+  const hits: Hit | Hit[] | EscapedHits = args[1];
   const eventName: string | undefined = args[2];
   if (!hits) {
     if (__DEV__) {
@@ -74,7 +74,7 @@ const buildPayloads = ({
       return [];
     }
   }
-  const hitsArray: Hits = Array.isArray(hits)
+  const hitsArray: Hit[] = Array.isArray(hits)
     ? removeEscapedFromHits(hits)
     : [hits];
 
@@ -100,7 +100,7 @@ const buildPayloads = ({
         widgetType,
         eventType,
         payload: {
-          eventName: eventName || 'Hits Viewed',
+          eventName: eventName || 'Hit[] Viewed',
           index,
           objectIDs: objectIDsByChunk[i],
         },
@@ -147,7 +147,7 @@ const buildPayloads = ({
   }
 };
 
-function removeEscapedFromHits(hits: Hits | EscapedHits): Hits {
+function removeEscapedFromHits(hits: Hit[] | EscapedHits): Hit[] {
   // remove `hits.__escaped` without mutating
   return hits.slice();
 }

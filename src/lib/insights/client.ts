@@ -6,14 +6,14 @@ import {
   warning,
 } from '../utils';
 import type {
-  Hits,
+  Hit,
   InsightsClient,
   InsightsClientMethod,
   InsightsClientPayload,
   Connector,
 } from '../../types';
 
-const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
+const getSelectedHits = (hits: Hit[], selectedObjectIDs: string[]): Hit[] => {
   return selectedObjectIDs.map((objectID) => {
     const hit = find(hits, (h) => h.objectID === objectID);
     if (typeof hit === 'undefined') {
@@ -25,7 +25,7 @@ const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
   });
 };
 
-const getQueryID = (selectedHits: Hits): string => {
+const getQueryID = (selectedHits: Hit[]): string => {
   const queryIDs = uniq(selectedHits.map((hit) => hit.__queryID));
   if (queryIDs.length > 1) {
     throw new Error(
@@ -43,7 +43,7 @@ See: https://alg.li/lNiZZ7`
   return queryID;
 };
 
-const getPositions = (selectedHits: Hits): number[] =>
+const getPositions = (selectedHits: Hit[]): number[] =>
   selectedHits.map((hit) => hit.__position);
 
 export const inferPayload = ({
@@ -54,7 +54,7 @@ export const inferPayload = ({
 }: {
   method: InsightsClientMethod;
   results: SearchResults;
-  hits: Hits;
+  hits: Hit[];
   objectIDs: string[];
 }): Omit<InsightsClientPayload, 'eventName'> => {
   const { index } = results;
@@ -79,7 +79,7 @@ const wrapInsightsClient =
   (
     aa: InsightsClient | null,
     results: SearchResults,
-    hits: Hits
+    hits: Hit[]
   ): InsightsClient =>
   (method, ...payloads) => {
     const [payload] = payloads;
