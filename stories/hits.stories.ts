@@ -1,7 +1,6 @@
 import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
-import insights from '../src/helpers/insights';
 import type { InsightsClient } from '../src/types/insights';
 
 const fakeInsightsClient: InsightsClient = (method, ...payloads) => {
@@ -210,14 +209,18 @@ storiesOf('Results/Hits', module)
           instantsearch.widgets.hits({
             container,
             templates: {
-              item: (item) => `
-          <h4>${item.name}</h4>
-          <button
-            ${insights('clickedObjectIDsAfterSearch', {
-              objectIDs: [item.objectID],
-              eventName: 'Add to cart',
-            })} >Add to cart</button>
-          `,
+              item: (item, bindEvent) => `
+                <h4>${item.name}</h4>
+                <button
+                  ${bindEvent(
+                    'clickedObjectIDsAfterSearch',
+                    [item],
+                    'Add to cart'
+                  )}
+                >
+                  Add to cart
+                </button>
+              `,
             },
           }),
         ]);
