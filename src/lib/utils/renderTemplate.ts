@@ -68,6 +68,7 @@ function renderTemplate({
   }
 
   if (typeof template === 'function') {
+    // @MAJOR no longer pass bindEvent when string templates are removed
     const params = (bindEvent || {}) as TemplateParams;
 
     params.html = html;
