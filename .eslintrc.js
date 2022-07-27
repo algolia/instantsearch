@@ -1,6 +1,6 @@
 module.exports = {
   extends: ['algolia', 'algolia/jest', 'algolia/react', 'algolia/typescript'],
-  plugins: ['react-hooks'],
+  plugins: ['react-hooks', 'deprecation'],
   rules: {
     'no-param-reassign': 'off',
     'import/no-extraneous-dependencies': 'off',
@@ -85,6 +85,7 @@ module.exports = {
         project: './tsconfig.json',
       },
       rules: {
+        'deprecation/deprecation': 'warn',
         '@typescript-eslint/no-unnecessary-type-assertion': 'error',
       },
     },
