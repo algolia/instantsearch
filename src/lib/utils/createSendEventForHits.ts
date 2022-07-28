@@ -100,7 +100,7 @@ const buildPayloads = ({
         widgetType,
         eventType,
         payload: {
-          eventName: eventName || 'Hit[] Viewed',
+          eventName: eventName || 'Hits Viewed',
           index,
           objectIDs: objectIDsByChunk[i],
         },
