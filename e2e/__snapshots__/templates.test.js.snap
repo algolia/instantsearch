@@ -5821,11 +5821,11 @@ body {
 
 exports[`Templates React InstantSearch File content: src/index.js 1`] = `
 "import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));"
+createRoot(document.getElementById('root')).render(<App />);"
 `;
 
 exports[`Templates React InstantSearch Folder structure: contains the right files 1`] = `
@@ -6037,7 +6037,8 @@ em {
 `;
 
 exports[`Templates React InstantSearch Hooks File content: src/App.tsx 1`] = `
-"import algoliasearch from 'algoliasearch/lite';
+"import React from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import {
   Configure,
   DynamicWidgets,
@@ -6124,7 +6125,9 @@ function Hit({ hit }: HitProps) {
 `;
 
 exports[`Templates React InstantSearch Hooks File content: src/Panel.tsx 1`] = `
-"type PanelProps = React.PropsWithChildren<{
+"import React from 'react';
+
+type PanelProps = React.PropsWithChildren<{
   header: string;
 }>;
 
@@ -6141,11 +6144,12 @@ export function Panel({ header, children }: PanelProps) {
 `;
 
 exports[`Templates React InstantSearch Hooks File content: src/index.tsx 1`] = `
-"import ReactDOM from 'react-dom';
+"import React from 'react';
+import { createRoot } from 'react-dom/client';
 
 import { App } from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));"
+createRoot(document.getElementById('root')!).render(<App />);"
 `;
 
 exports[`Templates React InstantSearch Hooks Folder structure: contains the right files 1`] = `

@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "algoliasearch": "4",
-    "react": "16.12.0",
-    "react-dom": "16.12.0",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
     "react-instantsearch-dom": "{{libraryVersion}}",
     "react-scripts": "2.1.1"
   },
