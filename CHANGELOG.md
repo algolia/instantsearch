@@ -1,3 +1,12 @@
+# [6.2.0](https://github.com/algolia/create-instantsearch-app/compare/v6.1.0...v6.2.0) (2022-08-01)
+
+
+### Features
+
+* **templates:** update react instantsearch web templates to react 18 ([#576](https://github.com/algolia/create-instantsearch-app/issues/576)) ([25f170f](https://github.com/algolia/create-instantsearch-app/commit/25f170f9b074ea0cd628ec535059a56d57908bc0))
+
+
+
 # [6.1.0](https://github.com/algolia/create-instantsearch-app/compare/6.0.0...6.1.0) (2022-06-02)
 
 
