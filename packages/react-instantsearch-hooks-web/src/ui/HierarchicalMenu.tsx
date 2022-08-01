@@ -108,7 +108,7 @@ function HierarchicalList({
             }}
           >
             <span
-              className={cx('ais-HierarchicalMenu-labelText', classNames.label)}
+              className={cx('ais-HierarchicalMenu-label', classNames.label)}
             >
               {item.label}
             </span>

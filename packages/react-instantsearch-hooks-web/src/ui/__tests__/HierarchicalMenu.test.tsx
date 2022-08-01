@@ -71,7 +71,7 @@ describe('HierarchicalMenu', () => {
                 href="#Apple"
               >
                 <span
-                  class="ais-HierarchicalMenu-labelText"
+                  class="ais-HierarchicalMenu-label"
                 >
                   Apple
                 </span>
@@ -92,7 +92,7 @@ describe('HierarchicalMenu', () => {
                     href="#iPhone"
                   >
                     <span
-                      class="ais-HierarchicalMenu-labelText"
+                      class="ais-HierarchicalMenu-label"
                     >
                       iPhone
                     </span>
@@ -111,7 +111,7 @@ describe('HierarchicalMenu', () => {
                     href="#iPad"
                   >
                     <span
-                      class="ais-HierarchicalMenu-labelText"
+                      class="ais-HierarchicalMenu-label"
                     >
                       iPad
                     </span>
@@ -132,7 +132,7 @@ describe('HierarchicalMenu', () => {
                 href="#Samsung"
               >
                 <span
-                  class="ais-HierarchicalMenu-labelText"
+                  class="ais-HierarchicalMenu-label"
                 >
                   Samsung
                 </span>
@@ -182,7 +182,7 @@ describe('HierarchicalMenu', () => {
                   href="#Apple"
                 >
                   <span
-                    class="ais-HierarchicalMenu-labelText"
+                    class="ais-HierarchicalMenu-label"
                   >
                     Apple
                   </span>
@@ -203,7 +203,7 @@ describe('HierarchicalMenu', () => {
                       href="#iPhone"
                     >
                       <span
-                        class="ais-HierarchicalMenu-labelText"
+                        class="ais-HierarchicalMenu-label"
                       >
                         iPhone
                       </span>
@@ -222,7 +222,7 @@ describe('HierarchicalMenu', () => {
                       href="#iPad"
                     >
                       <span
-                        class="ais-HierarchicalMenu-labelText"
+                        class="ais-HierarchicalMenu-label"
                       >
                         iPad
                       </span>
@@ -243,7 +243,7 @@ describe('HierarchicalMenu', () => {
                   href="#Samsung"
                 >
                   <span
-                    class="ais-HierarchicalMenu-labelText"
+                    class="ais-HierarchicalMenu-label"
                   >
                     Samsung
                   </span>
@@ -319,7 +319,7 @@ describe('HierarchicalMenu', () => {
                 href="#Apple"
               >
                 <span
-                  class="ais-HierarchicalMenu-labelText LABEL"
+                  class="ais-HierarchicalMenu-label LABEL"
                 >
                   Apple
                 </span>
@@ -340,7 +340,7 @@ describe('HierarchicalMenu', () => {
                     href="#iPhone"
                   >
                     <span
-                      class="ais-HierarchicalMenu-labelText LABEL"
+                      class="ais-HierarchicalMenu-label LABEL"
                     >
                       iPhone
                     </span>
@@ -359,7 +359,7 @@ describe('HierarchicalMenu', () => {
                     href="#iPad"
                   >
                     <span
-                      class="ais-HierarchicalMenu-labelText LABEL"
+                      class="ais-HierarchicalMenu-label LABEL"
                     >
                       iPad
                     </span>
@@ -380,7 +380,7 @@ describe('HierarchicalMenu', () => {
                 href="#Samsung"
               >
                 <span
-                  class="ais-HierarchicalMenu-labelText LABEL"
+                  class="ais-HierarchicalMenu-label LABEL"
                 >
                   Samsung
                 </span>

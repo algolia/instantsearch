@@ -74,7 +74,7 @@ describe('HierarchicalMenu', () => {
                 href="#"
               >
                 <span
-                  class="ais-HierarchicalMenu-labelText"
+                  class="ais-HierarchicalMenu-label"
                 >
                   Cameras & Camcorders
                 </span>
@@ -93,7 +93,7 @@ describe('HierarchicalMenu', () => {
                 href="#"
               >
                 <span
-                  class="ais-HierarchicalMenu-labelText"
+                  class="ais-HierarchicalMenu-label"
                 >
                   Video Games
                 </span>
@@ -112,7 +112,7 @@ describe('HierarchicalMenu', () => {
                 href="#"
               >
                 <span
-                  class="ais-HierarchicalMenu-labelText"
+                  class="ais-HierarchicalMenu-label"
                 >
                   Wearable Technology
                 </span>
@@ -187,7 +187,7 @@ describe('HierarchicalMenu', () => {
                 href="#"
               >
                 <span
-                  class="ais-HierarchicalMenu-labelText"
+                  class="ais-HierarchicalMenu-label"
                 >
                   Cameras & Camcorders
                 </span>
@@ -242,7 +242,7 @@ describe('HierarchicalMenu', () => {
       await waitFor(() =>
         expect(
           Array.from(
-            container.querySelectorAll('.ais-HierarchicalMenu-labelText')
+            container.querySelectorAll('.ais-HierarchicalMenu-label')
           ).map((item) => item.textContent)
         ).toEqual([
           'Cameras & Camcorders',
@@ -263,7 +263,7 @@ describe('HierarchicalMenu', () => {
       await waitFor(() =>
         expect(
           Array.from(
-            container.querySelectorAll('.ais-HierarchicalMenu-labelText')
+            container.querySelectorAll('.ais-HierarchicalMenu-label')
           ).map((item) => item.textContent)
         ).toEqual([
           'Wearable Technology',
@@ -310,7 +310,7 @@ describe('HierarchicalMenu', () => {
       await waitFor(() =>
         expect(
           Array.from(
-            container.querySelectorAll('.ais-HierarchicalMenu-labelText')
+            container.querySelectorAll('.ais-HierarchicalMenu-label')
           ).map((item) => item.textContent)
         ).toEqual([
           'Cameras & Camcorders n',
@@ -324,7 +324,7 @@ describe('HierarchicalMenu', () => {
       await waitFor(() => {
         expect(
           Array.from(
-            container.querySelectorAll('.ais-HierarchicalMenu-labelText')
+            container.querySelectorAll('.ais-HierarchicalMenu-label')
           ).map((item) => item.textContent)
         ).toEqual([
           'Video Games y',
@@ -338,7 +338,7 @@ describe('HierarchicalMenu', () => {
       await waitFor(() => {
         expect(
           Array.from(
-            container.querySelectorAll('.ais-HierarchicalMenu-labelText')
+            container.querySelectorAll('.ais-HierarchicalMenu-label')
           ).map((item) => item.textContent)
         ).toEqual([
           'Wearable Technology y',
@@ -362,7 +362,7 @@ describe('HierarchicalMenu', () => {
       await waitFor(() =>
         expect(
           Array.from(
-            container.querySelectorAll('.ais-HierarchicalMenu-labelText')
+            container.querySelectorAll('.ais-HierarchicalMenu-label')
           ).map((item) => item.textContent)
         ).toEqual([
           'Wearable Technology',
@@ -409,7 +409,7 @@ describe('HierarchicalMenu', () => {
                   href="#"
                 >
                   <span
-                    class="ais-HierarchicalMenu-labelText"
+                    class="ais-HierarchicalMenu-label"
                   >
                     Cameras & Camcorders
                   </span>
