@@ -66,6 +66,32 @@ type DefaultSearchClient = PickForClient<{
   v5: ClientV5;
 }>;
 
+export type HighlightResult<T> = PickForClient<{
+  // @ts-ignore this doesn't exist as an exact type in v3
+  v3: any;
+  // @ts-ignore
+  v4: ClientSearch.HighlightResult<T>;
+  // @ts-ignore the type in the v5 library is not yet correct https://github.com/algolia/api-clients-automation/issues/853
+  v5: any;
+}>;
+
+export type SnippetResult<T> = PickForClient<{
+  // @ts-ignore this doesn't exist as an exact type in v3
+  v3: any;
+  // @ts-ignore
+  v4: ClientSearch.SnippetResult<T>;
+  // @ts-ignore the type in the v5 library is not yet correct https://github.com/algolia/api-clients-automation/issues/853
+  v5: any;
+}>;
+
+export type RankingInfo = PickForClient<{
+  v3: Record<string, unknown>;
+  // @ts-ignore
+  v4: ClientSearch.RankingInfo;
+  // @ts-ignore
+  v5: AlgoliaSearch.RankingInfo;
+}>;
+
 export type SearchOptions = PickForClient<{
   // @ts-ignore
   v3: AlgoliaSearch.QueryParameters;
@@ -99,7 +125,7 @@ export type SearchResponse<T> = PickForClient<{
   // @ts-ignore
   v4: ClientSearch.SearchResponse<T>;
   // @ts-ignore
-  v5: AlgoliaSearch.SearchResponse; // TODO: should be generic
+  v5: AlgoliaSearch.SearchResponse; // TODO: should be generic https://github.com/algolia/api-clients-automation/issues/853
 }>;
 
 export type SearchResponses<T> = PickForClient<{
@@ -108,7 +134,7 @@ export type SearchResponses<T> = PickForClient<{
   // @ts-ignore
   v4: ClientSearch.MultipleQueriesResponse<T>;
   // @ts-ignore
-  v5: AlgoliaSearch.SearchResponses; // TODO: should be generic
+  v5: AlgoliaSearch.SearchResponses; // TODO: should be generic https://github.com/algolia/api-clients-automation/issues/853
 }>;
 
 export type SearchForFacetValuesResponse = PickForClient<{
@@ -121,17 +147,17 @@ export type SearchForFacetValuesResponse = PickForClient<{
 }>;
 
 export type FindAnswersOptions = PickForClient<{
-  v3: any;
+  v3: any; // answers only exists in v4
   // @ts-ignore
   v4: ClientSearch.FindAnswersOptions;
-  v5: any;
+  v5: any; // answers only exists in v4
 }>;
 
 export type FindAnswersResponse<T> = PickForClient<{
-  v3: any;
+  v3: any; // answers only exists in v4
   // @ts-ignore
   v4: ClientSearch.FindAnswersResponse<T>;
-  v5: any;
+  v5: any; // answers only exists in v4
 }>;
 
 export interface SearchClient {

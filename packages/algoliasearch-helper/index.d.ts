@@ -1,9 +1,12 @@
 import EventEmitter from '@algolia/events';
 import {
   FindAnswersResponse,
+  HighlightResult,
+  RankingInfo,
   SearchClient,
   SearchOptions,
   SearchResponse,
+  SnippetResult,
 } from './types/algoliasearch';
 
 /**
@@ -1147,6 +1150,10 @@ declare namespace algoliasearchHelper {
      */
     hits: (T & {
       readonly objectID: string;
+      readonly _highlightResult?: HighlightResult<T>;
+      readonly _snippetResult?: SnippetResult<T>;
+      readonly _rankingInfo?: RankingInfo;
+      readonly _distinctSeqID?: number;
     })[];
     /**
      * index where the results come from
