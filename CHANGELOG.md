@@ -1,3 +1,12 @@
+# [6.31.0](https://github.com/algolia/react-instantsearch/compare/v6.30.3...v6.31.0) (2022-08-03)
+
+
+### Features
+
+* **hooks:** add `searchAsYouType` option to `<SearchBox>` ([#3585](https://github.com/algolia/react-instantsearch/issues/3585)) ([c610385](https://github.com/algolia/react-instantsearch/commit/c610385cb9688b23b3e041e31b9edd60392b341d))
+
+
+
 ## [6.30.3](https://github.com/algolia/react-instantsearch/compare/v6.30.2...v6.30.3) (2022-08-01)
 
 
