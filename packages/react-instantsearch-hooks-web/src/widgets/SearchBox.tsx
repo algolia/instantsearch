@@ -12,14 +12,28 @@ type UiProps = Pick<
   | 'isSearchStalled'
   | 'onChange'
   | 'onReset'
+  | 'onSubmit'
   | 'value'
   | 'translations'
 >;
 
-export type SearchBoxProps = Omit<SearchBoxUiComponentProps, keyof UiProps> &
-  UseSearchBoxProps;
+export type SearchBoxProps = Omit<
+  SearchBoxUiComponentProps,
+  Exclude<keyof UiProps, 'onSubmit'>
+> &
+  UseSearchBoxProps & {
+    /**
+     * Whether to trigger the search only on submit.
+     * @default true
+     */
+    searchAsYouType?: boolean;
+  };
 
-export function SearchBox({ queryHook, ...props }: SearchBoxProps) {
+export function SearchBox({
+  queryHook,
+  searchAsYouType = true,
+  ...props
+}: SearchBoxProps) {
   const { query, refine, isSearchStalled } = useSearchBox(
     { queryHook },
     { $$widgetType: 'ais.searchBox' }
@@ -29,7 +43,10 @@ export function SearchBox({ queryHook, ...props }: SearchBoxProps) {
 
   function setQuery(newQuery: string) {
     setInputValue(newQuery);
-    refine(newQuery);
+
+    if (searchAsYouType) {
+      refine(newQuery);
+    }
   }
 
   function onReset() {
@@ -38,6 +55,16 @@ export function SearchBox({ queryHook, ...props }: SearchBoxProps) {
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     setQuery(event.currentTarget.value);
+  }
+
+  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    if (!searchAsYouType) {
+      refine(inputValue);
+    }
+
+    if (props.onSubmit) {
+      props.onSubmit(event);
+    }
   }
 
   // Track when the InstantSearch query changes to synchronize it with
@@ -53,6 +80,7 @@ export function SearchBox({ queryHook, ...props }: SearchBoxProps) {
     isSearchStalled,
     onChange,
     onReset,
+    onSubmit,
     value: inputValue,
     translations: {
       submitTitle: 'Submit the search query.',
