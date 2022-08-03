@@ -1,3 +1,6 @@
+3.11.0 - 2022-08-03
+ * feat(typing): Update SearchResults hits, expose optional hit typings (#914) https://github.com/algolia/algoliasearch-helper-js/commit/bf4c4c6cdc84a5b9d8daff60d591a419df01beed
+
 3.10.0 - 2022-06-27
  * feat(disjunctiveFacetParams): reduce payload size (#912) https://github.com/algolia/algoliasearch-helper-js/commit/95185750fb05e82c06d3ddd9e907f06ce66d0317
  * feat(types): support algoliasearch v5 (#910) https://github.com/algolia/algoliasearch-helper-js/commit/524272a2fe62c852d9ed8d0cd698cc184897b9c5
