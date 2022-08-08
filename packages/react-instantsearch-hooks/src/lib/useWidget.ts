@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import { dequal } from './dequal';
+import { useInstantSearchContext } from './useInstantSearchContext';
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 import type { Widget } from 'instantsearch.js';
@@ -31,6 +32,8 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   const shouldAddWidgetEarly =
     shouldSsr && !parentIndex.getWidgets().includes(widget);
 
+  const search = useInstantSearchContext();
+
   // This effect is responsible for adding, removing, and updating the widget.
   // We need to support scenarios where the widget is remounted quickly, like in
   // Strict Mode, so that we don't lose its state, and therefore that we don't
@@ -38,6 +41,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   useIsomorphicLayoutEffect(() => {
     const previousWidget = prevWidgetRef.current;
     function cleanup() {
+      if (search._preventWidgetCleanup) return;
       parentIndex.removeWidgets([previousWidget]);
     }
 
@@ -76,7 +80,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
       // we're able to cancel it in the next effect.
       cleanupTimerRef.current = setTimeout(cleanup);
     };
-  }, [parentIndex, widget, shouldAddWidgetEarly]);
+  }, [parentIndex, widget, shouldAddWidgetEarly, search, props]);
 
   if (shouldAddWidgetEarly) {
     parentIndex.addWidgets([widget]);

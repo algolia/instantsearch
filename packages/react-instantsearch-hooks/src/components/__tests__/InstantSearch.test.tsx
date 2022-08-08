@@ -6,7 +6,7 @@ import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
 import { createSearchClient } from '../../../../../test/mock';
-import { createInstantSearchSpy } from '../../../../../test/utils';
+import { createInstantSearchSpy, wait } from '../../../../../test/utils';
 import { useRefinementList } from '../../connectors/useRefinementList';
 import version from '../../version';
 import { Index } from '../Index';
@@ -748,5 +748,56 @@ describe('InstantSearch', () => {
       expect(searchFunction1).toHaveBeenCalledTimes(7);
       expect(searchFunction2).toHaveBeenCalledTimes(5);
     });
+  });
+
+  test('triggers no search on unmount', async () => {
+    const searchClient = createSearchClient({});
+
+    function App() {
+      return (
+        <StrictMode>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <SearchBox />
+            <RefinementList attribute="brand" />
+            <RefinementList attribute="price" />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { unmount } = render(<App />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+
+    unmount();
+
+    // We need to wait for the `cleanup` functions of the instance and
+    // the widgets to get called since they are schedule with a `setTimeout`.
+    await wait(100);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+  });
+
+  test('triggers a search on widget unmount', async () => {
+    const searchClient = createSearchClient({});
+
+    function App({ isMounted }) {
+      return (
+        <StrictMode>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <SearchBox />
+            {isMounted && <RefinementList attribute="brand" />}
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App isMounted={true} />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+
+    rerender(<App isMounted={false} />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
   });
 });

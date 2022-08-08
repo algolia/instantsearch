@@ -89,6 +89,12 @@ const config = {
         paths: ['instantsearch.js/es'],
       },
     ],
+    'react-hooks/exhaustive-deps': [
+      'warn',
+      {
+        additionalHooks: '(useIsomorphicLayoutEffect)',
+      },
+    ],
   },
   overrides: [
     {

@@ -138,19 +138,12 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         // We cancel the previous cleanup function because we don't want to
         // dispose the search during an update.
         clearTimeout(cleanupTimerRef.current);
+        search._preventWidgetCleanup = false;
       }
 
       return () => {
         function cleanup() {
-          // When `dispose()` is called, InstantSearch.js also calls `removeWigets()`.
-          // This is not desired because React starts by unmounting each widget
-          // before unmounting <InstantSearch>, so their `dispose()` methods are
-          // already called.
-          // Calling `removeWidgets()` would remove each widget multiple times.
-          const originalRemoveWidgets = search.removeWidgets;
-          search.removeWidgets = () => search;
           search.dispose();
-          search.removeWidgets = originalRemoveWidgets;
         }
 
         // We clean up only when the component that uses this subscription unmounts,
@@ -159,7 +152,12 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         // Executing the cleanup function in a `setTimeout()` lets us cancel it
         // in the next effect.
         // (There might be better ways to do this.)
-        cleanupTimerRef.current = setTimeout(cleanup, 0);
+        cleanupTimerRef.current = setTimeout(cleanup);
+
+        // We need to prevent the `useWidget` cleanup function so that widgets
+        // are not removed before the instance is disposed, triggering
+        // an unwanted search request.
+        search._preventWidgetCleanup = true;
       };
     }, [forceUpdate]),
     () => searchRef.current,
