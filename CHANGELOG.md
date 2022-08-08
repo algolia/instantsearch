@@ -1,3 +1,12 @@
+## [6.31.1](https://github.com/algolia/react-instantsearch/compare/v6.31.0...v6.31.1) (2022-08-08)
+
+
+### Bug Fixes
+
+* **hooks:** prevent widget cleanup on `<InstantSearch>` unmount ([#3590](https://github.com/algolia/react-instantsearch/issues/3590)) ([d94899d](https://github.com/algolia/react-instantsearch/commit/d94899d1264134f0cb1ca2d266a660f1fb2a588c))
+
+
+
 # [6.31.0](https://github.com/algolia/react-instantsearch/compare/v6.30.3...v6.31.0) (2022-08-03)
 
 
