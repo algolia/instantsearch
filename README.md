@@ -61,7 +61,7 @@ const App = () => (
 ```
 
 <p align="center">
-  <a href="https://codesandbox.io/s/github/algolia/doc-code-samples/tree/master/React InstantSearch/getting-started" title="Edit on CodeSandbox">
+  <a href="https://codesandbox.io/s/github/algolia/doc-code-samples/tree/master/react-instantsearch/getting-started" title="Edit on CodeSandbox">
     <img alt="Edit on CodeSandbox" src="https://codesandbox.io/static/img/play-codesandbox.svg">
   </a>
 </p>
