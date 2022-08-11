@@ -1,3 +1,12 @@
+# [4.44.0](https://github.com/algolia/instantsearch.js/compare/v4.43.1...v4.44.0) (2022-08-08)
+
+
+### Features
+
+* **geo-search:** make `GeoHit` type generic ([#5083](https://github.com/algolia/instantsearch.js/issues/5083)) ([3d3c7b2](https://github.com/algolia/instantsearch.js/commit/3d3c7b298b74effe9bb722a04fbb47dc39a4bd95))
+
+
+
 ## [4.43.1](https://github.com/algolia/instantsearch.js/compare/v4.43.0...v4.43.1) (2022-07-11)
 
 
