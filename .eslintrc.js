@@ -7,7 +7,8 @@ module.exports = {
     'new-cap': [
       'error',
       {
-        capIsNewExceptionPattern: '(\\.|^)EXPERIMENTAL_.+',
+        capIsNewExceptionPattern:
+          '(\\.|^)EXPERIMENTAL_.+|components\\.[A-Z][a-z]+',
       },
     ],
     'react/no-string-refs': 'error',
@@ -67,6 +68,7 @@ module.exports = {
         'valid-jsdoc': 'off',
         'no-redeclare': 'off',
         '@typescript-eslint/no-redeclare': ['error'],
+        'react/prop-types': 'off',
       },
     },
     {
