@@ -1,3 +1,12 @@
+# [6.32.0](https://github.com/algolia/react-instantsearch/compare/v6.31.1...v6.32.0) (2022-08-22)
+
+
+### Features
+
+* **SearchBox:** introduce `autoFocus` prop ([#3599](https://github.com/algolia/react-instantsearch/issues/3599)) ([99121b9](https://github.com/algolia/react-instantsearch/commit/99121b952fd002cb6dae52af41f08beed8f6c3e2))
+
+
+
 ## [6.31.1](https://github.com/algolia/react-instantsearch/compare/v6.31.0...v6.31.1) (2022-08-08)
 
 
