@@ -107,7 +107,7 @@ export function App() {
             ]}
           />
 
-          <SearchBox placeholder="Search" />
+          <SearchBox placeholder="Search" autoFocus />
 
           <div className="Search-header">
             <PoweredBy />

@@ -62,7 +62,10 @@ export type SearchBoxProps = Omit<
 > &
   Pick<React.ComponentProps<'form'>, 'onSubmit'> &
   Required<Pick<React.ComponentProps<'form'>, 'onReset'>> &
-  Pick<React.ComponentProps<'input'>, 'placeholder' | 'onChange'> & {
+  Pick<
+    React.ComponentProps<'input'>,
+    'placeholder' | 'onChange' | 'autoFocus'
+  > & {
     inputRef: React.RefObject<HTMLInputElement>;
     isSearchStalled: boolean;
     value: string;
@@ -135,6 +138,7 @@ export function SearchBox({
   onSubmit,
   placeholder,
   value,
+  autoFocus,
   resetIconComponent: ResetIcon = DefaultResetIcon,
   submitIconComponent: SubmitIcon = DefaultSubmitIcon,
   loadingIconComponent: LoadingIcon = DefaultLoadingIcon,
@@ -190,6 +194,7 @@ export function SearchBox({
           type="search"
           value={value}
           onChange={onChange}
+          autoFocus={autoFocus}
         />
         <button
           className={cx('ais-SearchBox-submit', classNames.submit)}

@@ -1,4 +1,4 @@
-import { act, render, waitFor } from '@testing-library/react';
+import { act, render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -113,6 +113,8 @@ describe('SearchBox', () => {
         </div>
       `);
     });
+
+    expect(within(container).getByRole('searchbox')).not.toHaveFocus();
   });
 
   test('forwards placeholder prop', async () => {
@@ -127,6 +129,18 @@ describe('SearchBox', () => {
         'placeholder',
         'Placeholder'
       );
+    });
+  });
+
+  test('forwards `autoFocus` prop', async () => {
+    const { container } = render(
+      <InstantSearchHooksTestWrapper>
+        <SearchBox autoFocus />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    await waitFor(() => {
+      expect(within(container).getByRole('searchbox')).toHaveFocus();
     });
   });
 

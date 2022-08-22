@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { createRef } from 'react';
 
@@ -20,6 +20,7 @@ describe('SearchBox', () => {
       onSubmit,
       placeholder: '',
       value: '',
+      autoFocus: false,
       translations: {
         submitTitle: 'Submit the search query.',
         resetTitle: 'Clear the search query.',
@@ -132,6 +133,8 @@ describe('SearchBox', () => {
         </div>
       </div>
     `);
+
+    expect(within(container).getByRole('searchbox')).not.toHaveFocus();
   });
 
   test('renders with translations', () => {
@@ -320,6 +323,14 @@ describe('SearchBox', () => {
       'placeholder',
       'Search'
     );
+  });
+
+  test('forwards the `autoFocus` prop to the input', () => {
+    const props = createProps({ autoFocus: true });
+
+    const { container } = render(<SearchBox {...props} />);
+
+    expect(within(container).getByRole('searchbox')).toHaveFocus();
   });
 
   test('with input value shows the reset button', () => {

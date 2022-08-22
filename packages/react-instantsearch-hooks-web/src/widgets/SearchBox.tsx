@@ -14,12 +14,13 @@ type UiProps = Pick<
   | 'onReset'
   | 'onSubmit'
   | 'value'
+  | 'autoFocus'
   | 'translations'
 >;
 
 export type SearchBoxProps = Omit<
   SearchBoxUiComponentProps,
-  Exclude<keyof UiProps, 'onSubmit'>
+  Exclude<keyof UiProps, 'onSubmit' | 'autoFocus'>
 > &
   UseSearchBoxProps & {
     /**
