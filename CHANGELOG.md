@@ -1,3 +1,12 @@
+## [6.2.1](https://github.com/algolia/create-instantsearch-app/compare/v6.2.0...v6.2.1) (2022-08-23)
+
+
+### Bug Fixes
+
+* **templates:** wrap React InstantSearch Hooks native hit attributes in `Fragment` ([#578](https://github.com/algolia/create-instantsearch-app/issues/578)) ([da7b811](https://github.com/algolia/create-instantsearch-app/commit/da7b811c3585f88214d7b8df2f07a5d5e5c13c63))
+
+
+
 # [6.2.0](https://github.com/algolia/create-instantsearch-app/compare/v6.1.0...v6.2.0) (2022-08-01)
 
 
