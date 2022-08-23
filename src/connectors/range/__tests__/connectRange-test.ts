@@ -2214,3 +2214,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
   });
 });
+
+describe('insights', () => {
+  // See: https://github.com/algolia/instantsearch.js/pull/5085
+  it(`doesn't send event when a facet is added`, () => {
+    const rendering = jest.fn();
+    const makeWidget = connectRange(rendering);
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const instantSearchInstance = createInstantSearch();
+    const helper = jsHelper(
+      createSearchClient(),
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters(), {
+        uiState: {},
+      })
+    );
+
+    widget.init!(
+      createInitOptions({
+        instantSearchInstance,
+        helper,
+      })
+    );
+
+    const firstRenderingOptions =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0];
+    const { refine } = firstRenderingOptions;
+    refine([10, 30]);
+
+    expect(instantSearchInstance.sendEventToInsights).not.toHaveBeenCalled();
+  });
+});

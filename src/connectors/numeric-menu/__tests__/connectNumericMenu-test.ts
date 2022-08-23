@@ -1127,6 +1127,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
   });
 
+  describe('insights', () => {
+    // See: https://github.com/algolia/instantsearch.js/pull/5085
+    it(`doesn't send event when a facet is added`, () => {
+      const rendering = jest.fn();
+      const makeWidget = connectNumericMenu(rendering);
+      const widget = makeWidget({
+        attribute: 'numerics',
+        items: [
+          { label: 'below 10', end: 10 },
+          { label: '10 - 20', start: 10, end: 20 },
+          { label: 'more than 20', start: 20 },
+          { label: '42', start: 42, end: 42 },
+          { label: 'void' },
+        ],
+      });
+
+      const helper = jsHelper(createSearchClient(), '');
+      const initOptions = createInitOptions({ helper, state: helper.state });
+      const { instantSearchInstance } = initOptions;
+      widget.init!(initOptions);
+
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine, items } = firstRenderingOptions;
+      refine(items[0].value);
+
+      expect(instantSearchInstance.sendEventToInsights).not.toHaveBeenCalled();
+    });
+  });
+
   describe('getRenderState', () => {
     it('returns the render state', () => {
       const [widget, helper] = getInitializedWidget();
