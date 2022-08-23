@@ -268,7 +268,7 @@ describe('numericMenu', () => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) => {
-                return createSingleSearchResponse({
+                return createSingleSearchResponse<any>({
                   index: request.indexName,
                   hits: [
                     {

@@ -66,9 +66,9 @@ describe('stats', () => {
     >
       <span>
         <strong>
-          
+
         </strong>
-         returned 
+         returned
         2
         result
         s
@@ -150,9 +150,9 @@ describe('stats', () => {
     >
       <span>
         <strong>
-          
+
         </strong>
-         returned 
+         returned
         2
         result
         s
@@ -198,7 +198,7 @@ describe('stats', () => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) => {
-                return createSingleSearchResponse<CustomHit>({
+                return createSingleSearchResponse<any>({
                   index: request.indexName,
                   query: request.params?.query,
                   hits:
