@@ -6235,12 +6235,14 @@ type HitProps = {
 
 function Hit({ hit }: HitProps) {
   return (
-    <Text>
-      <Highlight hit={hit} attribute=\\"attribute1\\" />
-    </Text>
-    <Text>
-      <Highlight hit={hit} attribute=\\"attribute2\\" />
-    </Text>
+    <>
+      <Text>
+        <Highlight hit={hit} attribute=\\"attribute1\\" />
+      </Text>
+      <Text>
+        <Highlight hit={hit} attribute=\\"attribute2\\" />
+      </Text>
+    </>
   );
 }
 

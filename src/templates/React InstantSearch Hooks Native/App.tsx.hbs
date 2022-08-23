@@ -42,20 +42,22 @@ type HitProps = {
 
 function Hit({ hit }: HitProps) {
   return (
-    {{#if attributesToDisplay}}
-    <Text>
-      <Highlight hit={hit} attribute="{{attributesToDisplay.[0]}}" />
-    </Text>
-    {{#each attributesToDisplay}}
-    {{#unless @first}}
-    <Text>
-      <Highlight hit={hit} attribute="{{this}}" />
-    </Text>
-    {{/unless}}
-    {{/each}}
-    {{else}}
-    <Text>{JSON.stringify(hit).slice(0, 100)}</Text>
-    {{/if}}
+    <>
+      {{#if attributesToDisplay}}
+      <Text>
+        <Highlight hit={hit} attribute="{{attributesToDisplay.[0]}}" />
+      </Text>
+      {{#each attributesToDisplay}}
+      {{#unless @first}}
+      <Text>
+        <Highlight hit={hit} attribute="{{this}}" />
+      </Text>
+      {{/unless}}
+      {{/each}}
+      {{else}}
+      <Text>{JSON.stringify(hit).slice(0, 100)}</Text>
+      {{/if}}
+    </>
   );
 }
 
