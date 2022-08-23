@@ -1128,7 +1128,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   describe('insights', () => {
-    it('sends event when a facet is added', () => {
+    // See: https://github.com/algolia/instantsearch.js/pull/5085
+    it(`doesn't send event when a facet is added`, () => {
       const rendering = jest.fn();
       const makeWidget = connectNumericMenu(rendering);
       const widget = makeWidget({
@@ -1143,47 +1144,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       });
 
       const helper = jsHelper(createSearchClient(), '');
-      helper.search = jest.fn();
-      const initOptions = createInitOptions({
-        helper,
-        state: helper.state,
-      });
+      const initOptions = createInitOptions({ helper, state: helper.state });
       const { instantSearchInstance } = initOptions;
       widget.init!(initOptions);
 
       const firstRenderingOptions = rendering.mock.calls[0][0];
       const { refine, items } = firstRenderingOptions;
       refine(items[0].value);
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-        1
-      );
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
-        attribute: 'numerics',
-        eventType: 'click',
-        insightsMethod: 'clickedFilters',
-        payload: {
-          eventName: 'Filter Applied',
-          filters: ['numerics<=10'],
-          index: '',
-        },
-        widgetType: 'ais.numericMenu',
-      });
 
-      refine(items[1].value);
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-        2
-      );
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
-        attribute: 'numerics',
-        eventType: 'click',
-        insightsMethod: 'clickedFilters',
-        payload: {
-          eventName: 'Filter Applied',
-          filters: ['numerics<=20', 'numerics>=10'],
-          index: '',
-        },
-        widgetType: 'ais.numericMenu',
-      });
+      expect(instantSearchInstance.sendEventToInsights).not.toHaveBeenCalled();
     });
   });
 
