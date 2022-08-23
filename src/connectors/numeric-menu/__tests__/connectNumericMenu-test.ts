@@ -1200,6 +1200,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         numerics: {
           createURL: expect.any(Function),
           hasNoResults: true,
+          canRefine: false,
           items: [
             {
               isRefined: false,
@@ -1259,6 +1260,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           refine: renderState1.numericMenu.numerics.refine,
           sendEvent: renderState1.numericMenu.numerics.sendEvent,
           hasNoResults: true,
+          canRefine: false,
           items: [
             {
               isRefined: false,
@@ -1340,6 +1342,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         hasNoResults: true,
+        canRefine: false,
         widgetParams: {
           attribute: 'numerics',
           items: [
@@ -1390,6 +1393,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
         hasNoResults: true,
+        canRefine: false,
         widgetParams: {
           attribute: 'numerics',
           items: [
@@ -1425,6 +1429,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect(renderState2).toEqual({
         createURL: expect.any(Function),
         hasNoResults: true,
+        canRefine: false,
         items: [
           {
             isRefined: false,
@@ -1462,6 +1467,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
             },
           ],
         },
+      });
+    });
+
+    describe('canRefine', () => {
+      it('should be true if there are no results but a refinement is being applied', () => {
+        const [widget, helper] = getInitializedWidget();
+        helper.setQueryParameter('numericRefinements', {
+          numerics: { '>=': [20] },
+        });
+        const renderState = widget.getWidgetRenderState(
+          createInitOptions({ state: helper.state, helper })
+        );
+        expect(renderState.canRefine).toBe(true);
+      });
+
+      it('should be false if there are no results and no refinement is being applied', () => {
+        const [widget, helper] = getInitializedWidget();
+
+        const renderState = widget.getWidgetRenderState(
+          createInitOptions({ state: helper.state, helper })
+        );
+        expect(renderState.canRefine).toBe(false);
       });
     });
   });

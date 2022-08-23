@@ -91,8 +91,14 @@ export type HitsPerPageRenderState = {
 
   /**
    * Indicates whether or not the search has results.
+   * @deprecated Use `canRefine` instead.
    */
   hasNoResults: boolean;
+
+  /**
+   * Indicates if search state can be refined.
+   */
+  canRefine: boolean;
 };
 
 export type HitsPerPageWidgetDescription = {
@@ -259,11 +265,14 @@ You may want to add another entry to the \`items\` option with this value.`
       },
 
       getWidgetRenderState({ state, results, createURL, helper }) {
+        const hasNoResults = results ? results.nbHits === 0 : true;
+
         return {
           items: transformItems(normalizeItems(state), { results }),
           refine: connectorState.getRefine(helper),
           createURL: connectorState.createURLFactory({ state, createURL }),
-          hasNoResults: results ? results.nbHits === 0 : true,
+          hasNoResults,
+          canRefine: !hasNoResults,
           widgetParams,
         };
       },

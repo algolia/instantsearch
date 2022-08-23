@@ -126,6 +126,8 @@ export type RatingMenuRenderState = {
 
   /**
    * `true` if the last search contains no result.
+   *
+   * @deprecated Use `canRefine` instead.
    */
   hasNoResults: boolean;
 
@@ -341,6 +343,8 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
           });
         }
 
+        let refinementIsApplied = false;
+
         if (results) {
           const facetResults = results.getFacetValues(
             attribute,
@@ -364,6 +368,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
 
           for (let star = STEP; star < max; star += STEP) {
             const isRefined = refinedStar === star;
+            refinementIsApplied = refinementIsApplied || isRefined;
 
             const count = facetResults
               .filter((f) => Number(f.name) >= star && Number(f.name) <= max)
@@ -392,10 +397,12 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
         }
         facetValues = facetValues.reverse();
 
+        const hasNoResults = results ? results.nbHits === 0 : true;
+
         return {
           items: facetValues,
-          hasNoResults: results ? results.nbHits === 0 : true,
-          canRefine: facetValues.length > 0,
+          hasNoResults,
+          canRefine: !hasNoResults || refinementIsApplied,
           refine: connectorState.toggleRefinementFactory(helper),
           sendEvent,
           createURL: connectorState.createURLFactory({ state, createURL }),

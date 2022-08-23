@@ -328,6 +328,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         currentRefinement: 'index_default',
         refine: expect.any(Function),
         hasNoResults: true,
+        canRefine: false,
         options: [
           { label: 'default', value: 'index_default' },
           { label: 'asc', value: 'index_asc' },
@@ -369,6 +370,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         currentRefinement: 'index_desc',
         refine: expect.any(Function),
         hasNoResults: false,
+        canRefine: true,
         options: [
           { label: 'default', value: 'index_default' },
           { label: 'asc', value: 'index_asc' },
@@ -409,6 +411,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         currentRefinement: 'index_desc',
         refine: expect.any(Function),
         hasNoResults: true,
+        canRefine: false,
         options: [
           { label: 'default', value: 'index_default' },
           { label: 'asc', value: 'index_asc' },
@@ -448,6 +451,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         currentRefinement: 'index_default',
         refine: expect.any(Function),
         hasNoResults: false,
+        canRefine: true,
         options: [
           { label: 'default', value: 'index_default' },
           { label: 'asc', value: 'index_asc' },
@@ -461,6 +465,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           ],
         },
       });
+    });
+
+    test('canRefine is false if there are results but no item to chose from', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createSortBy = connectSortBy(renderFn, unmountFn);
+      const sortBy = createSortBy({
+        items: [],
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'index_desc', {
+        index: 'index_desc',
+      });
+
+      const renderState = sortBy.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [
+                { brand: 'samsung', objectID: '1' },
+                { brand: 'apple', objectID: '2' },
+              ],
+              hitsPerPage: 20,
+            }),
+          ]),
+        })
+      );
+
+      expect(renderState.canRefine).toBe(false);
     });
   });
 
