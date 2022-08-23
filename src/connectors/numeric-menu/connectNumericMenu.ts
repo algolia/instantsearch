@@ -3,7 +3,6 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   isFiniteNumber,
-  convertNumericRefinementsToFilters,
   noop,
 } from '../../lib/utils';
 import type {
@@ -13,10 +12,7 @@ import type {
   TransformItems,
   WidgetRenderState,
 } from '../../types';
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-} from 'algoliasearch-helper';
+import type { SearchParameters } from 'algoliasearch-helper';
 import type { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -141,45 +137,11 @@ export type NumericMenuConnector = Connector<
 const $$type = 'ais.numericMenu';
 
 const createSendEvent =
-  ({
-    instantSearchInstance,
-    helper,
-    attribute,
-  }: {
-    instantSearchInstance: InstantSearch;
-    helper: AlgoliaSearchHelper;
-    attribute: string;
-  }) =>
+  ({ instantSearchInstance }: { instantSearchInstance: InstantSearch }) =>
   (...args: [InsightsEvent] | [string, string, string?]) => {
     if (args.length === 1) {
       instantSearchInstance.sendEventToInsights(args[0]);
       return;
-    }
-
-    const [eventType, facetValue, eventName = 'Filter Applied'] = args;
-    if (eventType !== 'click') {
-      return;
-    }
-    // facetValue === "%7B%22start%22:5,%22end%22:10%7D"
-    const filters = convertNumericRefinementsToFilters(
-      getRefinedState(helper.state, attribute, facetValue),
-      attribute
-    );
-    if (filters && filters.length > 0) {
-      /*
-        filters === ["price<=10", "price>=5"]
-      */
-      instantSearchInstance.sendEventToInsights({
-        insightsMethod: 'clickedFilters',
-        widgetType: $$type,
-        eventType,
-        payload: {
-          eventName,
-          index: helper.getIndex(),
-          filters,
-        },
-        attribute,
-      });
     }
   };
 
@@ -359,8 +321,6 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         if (!connectorState.sendEvent) {
           connectorState.sendEvent = createSendEvent({
             instantSearchInstance,
-            helper,
-            attribute,
           });
         }
 

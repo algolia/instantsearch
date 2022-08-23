@@ -1,13 +1,8 @@
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
-  convertNumericRefinementsToFilters,
   isFiniteNumber,
   find,
   noop,
@@ -260,60 +255,13 @@ const connectRange: RangeConnector = function connectRange(
       return null;
     };
 
-    const sendEventWithRefinedState = (
-      refinedState: SearchParameters | null,
-      instantSearchInstance: InstantSearch,
-      helper: AlgoliaSearchHelper,
-      eventName = 'Filter Applied'
-    ) => {
-      const filters = convertNumericRefinementsToFilters(
-        refinedState,
-        attribute
-      );
-      if (filters && filters.length > 0) {
-        instantSearchInstance.sendEventToInsights({
-          insightsMethod: 'clickedFilters',
-          widgetType: $$type,
-          eventType: 'click',
-          payload: {
-            eventName,
-            index: helper.getIndex(),
-            filters,
-          },
-          attribute,
-        });
-      }
-    };
-
     const createSendEvent =
-      (
-        instantSearchInstance: InstantSearch,
-        helper: AlgoliaSearchHelper,
-        currentRange: Range
-      ) =>
+      (instantSearchInstance: InstantSearch) =>
       (...args: [InsightsEvent] | [string, string, string?]) => {
         if (args.length === 1) {
           instantSearchInstance.sendEventToInsights(args[0]);
           return;
         }
-
-        const [eventType, facetValue, eventName] = args;
-        if (eventType !== 'click') {
-          return;
-        }
-        const [nextMin, nextMax] = facetValue;
-        const refinedState = getRefinedState(
-          helper,
-          currentRange,
-          nextMin,
-          nextMax
-        );
-        sendEventWithRefinedState(
-          refinedState,
-          instantSearchInstance,
-          helper,
-          eventName
-        );
       };
 
     function _getCurrentRange(
@@ -353,11 +301,7 @@ const connectRange: RangeConnector = function connectRange(
       return [min, max];
     }
 
-    function _refine(
-      instantSearchInstance: InstantSearch,
-      helper: AlgoliaSearchHelper,
-      currentRange: Range
-    ) {
+    function _refine(helper: AlgoliaSearchHelper, currentRange: Range) {
       return ([nextMin, nextMax]: RangeBoundaries = [undefined, undefined]) => {
         const refinedState = getRefinedState(
           helper,
@@ -366,11 +310,6 @@ const connectRange: RangeConnector = function connectRange(
           nextMax
         );
         if (refinedState) {
-          sendEventWithRefinedState(
-            refinedState,
-            instantSearchInstance,
-            helper
-          );
           helper.setState(refinedState).search();
         }
       };
@@ -429,12 +368,12 @@ const connectRange: RangeConnector = function connectRange(
           // On first render pass an empty range
           // to be able to bypass the validation
           // related to it
-          refine = _refine(instantSearchInstance, helper, {
+          refine = _refine(helper, {
             min: undefined,
             max: undefined,
           });
         } else {
-          refine = _refine(instantSearchInstance, helper, currentRange);
+          refine = _refine(helper, currentRange);
         }
 
         return {
@@ -442,11 +381,7 @@ const connectRange: RangeConnector = function connectRange(
           canRefine: currentRange.min !== currentRange.max,
           format: rangeFormatter,
           range: currentRange,
-          sendEvent: createSendEvent(
-            instantSearchInstance,
-            helper,
-            currentRange
-          ),
+          sendEvent: createSendEvent(instantSearchInstance),
           widgetParams: {
             ...widgetParams,
             precision,
