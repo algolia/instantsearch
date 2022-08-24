@@ -73,7 +73,7 @@ describe('refinementList', () => {
             <span
               class="ais-HierarchicalMenu-count"
             >
-              1 369
+              1,369
             </span>
           </a>
         </div>

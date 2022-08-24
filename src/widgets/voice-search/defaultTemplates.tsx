@@ -48,9 +48,14 @@ const defaultTemplates: VoiceSearchComponentTemplates = {
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
+        /* eslint-disable react/no-unknown-property */
+        // Preact supports kebab case attributes, and using camel case would
+        // require using `preact/compat`.
+        // @TODO: reconsider using the `react` ESLint preset
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
+        /* eslint-enable react/no-unknown-property */
       >
         <ButtonInnerElement
           status={status}

@@ -1,6 +1,7 @@
 /** @jsx h */
-import { ComponentChild, h } from 'preact';
+import { h } from 'preact';
 
+import type { ComponentChild } from 'preact';
 import type {
   RatingMenuComponentTemplates,
   RatingMenuCSSClasses,
@@ -50,8 +51,9 @@ const defaultTemplates: RatingMenuComponentTemplates = {
         url={url}
         cssClasses={cssClasses}
       >
-        {stars.map((isFull) => (
+        {stars.map((isFull, index) => (
           <svg
+            key={index}
             className={cx(
               cssClasses.starIcon?.concat(
                 isFull ? 'cssClasses.fullStarIcon' : 'cssClasses.emptyStarIcon'
