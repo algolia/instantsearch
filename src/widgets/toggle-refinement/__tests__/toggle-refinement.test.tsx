@@ -15,6 +15,46 @@ beforeEach(() => {
 
 describe('toggleRefinement', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        toggleRefinement({
+          container,
+          attribute: 'free_shipping',
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-ToggleRefinement"
+  >
+    <label
+      class="ais-ToggleRefinement-label"
+    >
+      <input
+        class="ais-ToggleRefinement-checkbox"
+        type="checkbox"
+      />
+      <span
+        class="ais-ToggleRefinement-labelText"
+      >
+        free_shipping
+      </span>
+    </label>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createSearchClient();

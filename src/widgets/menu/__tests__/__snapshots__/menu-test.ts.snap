@@ -43,15 +43,8 @@ exports[`menu render renders transformed items 1`] = `
   "showMore": undefined,
   "templateProps": {
     "templates": {
-      "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
-      "showMoreText": "
-    {{#isShowingMore}}
-      Show less
-    {{/isShowingMore}}
-    {{^isShowingMore}}
-      Show more
-    {{/isShowingMore}}
-  ",
+      "item": [Function],
+      "showMoreText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -105,15 +98,8 @@ exports[`menu render snapshot 1`] = `
   "showMore": undefined,
   "templateProps": {
     "templates": {
-      "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
-      "showMoreText": "
-    {{#isShowingMore}}
-      Show less
-    {{/isShowingMore}}
-    {{^isShowingMore}}
-      Show more
-    {{/isShowingMore}}
-  ",
+      "item": [Function],
+      "showMoreText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {

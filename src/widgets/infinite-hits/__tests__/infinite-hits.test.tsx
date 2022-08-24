@@ -22,6 +22,128 @@ beforeEach(() => {
 
 describe('infiniteHits', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchBoxContainer = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        searchBox({ container: searchBoxContainer }),
+        infiniteHits({ container, showPrevious: true }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div>
+    <div
+      class="ais-InfiniteHits"
+    >
+      <button
+        class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+        disabled=""
+      >
+        Show previous results
+      </button>
+      <ol
+        class="ais-InfiniteHits-list"
+      >
+        <li
+          class="ais-InfiniteHits-item"
+        >
+          {
+  "objectID": "1",
+  "name": "Apple iPhone smartphone",
+  "description": "A smartphone by Apple.",
+  "_highlightResult": {
+    "name": {
+      "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
+      "matchLevel": "full",
+      "matchedWords": [
+        "smartphone"
+      ]
+    }
+  },
+  "_snippetResult": {
+    "name": {
+      "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
+      "matchLevel": "full"
+    },
+    "description": {
+      "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Apple.",
+      "matchLevel": "full"
+    }
+  },
+  "__position": 1,
+  "__hitIndex": 0
+}
+        </li>
+        <li
+          class="ais-InfiniteHits-item"
+        >
+          {
+  "objectID": "1",
+  "name": "Samsung Galaxy smartphone",
+  "description": "A smartphone by Samsung.",
+  "_highlightResult": {
+    "name": {
+      "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
+      "matchLevel": "full",
+      "matchedWords": [
+        "smartphone"
+      ]
+    }
+  },
+  "_snippetResult": {
+    "name": {
+      "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
+      "matchLevel": "full"
+    },
+    "description": {
+      "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Samsung.",
+      "matchLevel": "full"
+    }
+  },
+  "__position": 2,
+  "__hitIndex": 1
+}
+        </li>
+      </ol>
+      <button
+        class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
+        disabled=""
+      >
+        Show more results
+      </button>
+    </div>
+  </div>
+</div>
+`);
+
+      fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
+        target: { value: 'query with no results' },
+      });
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div>
+    <div
+      class="ais-InfiniteHits ais-InfiniteHits--empty"
+    >
+      No results
+    </div>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchBoxContainer = document.createElement('div');

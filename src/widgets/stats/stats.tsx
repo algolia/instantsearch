@@ -21,6 +21,7 @@ import {
 import { component } from '../../lib/suit';
 import type { Renderer, Template, WidgetFactory } from '../../types';
 import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import { formatNumber } from '../../lib/formatNumber';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');
@@ -39,13 +40,16 @@ export type StatsCSSClasses = Partial<{
 
 export type StatsTemplates = Partial<{
   /**
-   * Text template, provided with `hasManyResults`, `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbSortedHits`, `nbPages`, `areHitsSorted`, `page`, `processingTimeMS`, `query`.
+   * Text template, provided with `hasManyResults`, `hasNoResults`, `hasOneResult`, `hasNoSortedResults`, `hasOneSortedResults`, `hasManySortedResults`, `hitsPerPage`, `nbHits`, `nbSortedHits`, `nbPages`, `areHitsSorted`, `page`, `processingTimeMS`, `query`.
    */
   text: Template<
     {
       hasManyResults: boolean;
       hasNoResults: boolean;
       hasOneResult: boolean;
+      hasNoSortedResults: boolean;
+      hasOneSortedResults: boolean;
+      hasManySortedResults: boolean;
     } & StatsRenderState
   >;
 }>;
@@ -74,19 +78,50 @@ export type StatsWidget = WidgetFactory<
 >;
 
 export const defaultTemplates: StatsComponentTemplates = {
-  text: `
-    {{#areHitsSorted}}
-      {{#hasNoSortedResults}}No relevant results{{/hasNoSortedResults}}
-      {{#hasOneSortedResults}}1 relevant result{{/hasOneSortedResults}}
-      {{#hasManySortedResults}}{{#helpers.formatNumber}}{{nbSortedHits}}{{/helpers.formatNumber}} relevant results{{/hasManySortedResults}}
-      sorted out of {{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}}
-    {{/areHitsSorted}}
-    {{^areHitsSorted}}
-      {{#hasNoResults}}No results{{/hasNoResults}}
-      {{#hasOneResult}}1 result{{/hasOneResult}}
-      {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-    {{/areHitsSorted}}
-    found in {{processingTimeMS}}ms`,
+  text({
+    areHitsSorted,
+    hasNoSortedResults,
+    hasOneSortedResults,
+    hasManySortedResults,
+    hasNoResults,
+    hasOneResult,
+    hasManyResults,
+    nbSortedHits,
+    nbHits,
+    processingTimeMS,
+  }) {
+    let sentence = '';
+
+    if (areHitsSorted) {
+      if (hasNoSortedResults) {
+        sentence = 'No relevant results';
+      }
+
+      if (hasOneSortedResults) {
+        sentence = '1 relevant result';
+      }
+
+      if (hasManySortedResults) {
+        sentence = `${formatNumber(String(nbSortedHits))} relevant results`;
+      }
+
+      sentence += ` sorted out of ${formatNumber(String(nbHits))}`;
+    } else {
+      if (hasNoResults) {
+        sentence = 'No results';
+      }
+
+      if (hasOneResult) {
+        sentence = '1 result';
+      }
+
+      if (hasManyResults) {
+        sentence = `${formatNumber(String(nbHits))} results`;
+      }
+    }
+
+    return `${sentence} found in ${processingTimeMS}ms`;
+  },
 };
 
 const renderer =

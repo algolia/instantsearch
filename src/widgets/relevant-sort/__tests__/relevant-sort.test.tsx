@@ -19,6 +19,39 @@ beforeEach(() => {
 
 describe('relevantSort', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([relevantSort({ container })]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-RelevantSort"
+  >
+    <div
+      class="ais-RelevantSort-text"
+    />
+    <button
+      class="ais-RelevantSort-button"
+      type="button"
+    >
+      <span>
+        See all results
+      </span>
+    </button>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();

@@ -19,6 +19,68 @@ beforeEach(() => {
 
 describe('menuSelect', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        initialUiState: {
+          indexName: {
+            menu: {
+              brand: 'Apple',
+            },
+          },
+        },
+      });
+
+      search.addWidgets([
+        menuSelect({ container, attribute: 'brand', limit: 3 }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-MenuSelect"
+  >
+    <select
+      class="ais-MenuSelect-select"
+    >
+      <option
+        class="ais-MenuSelect-option"
+        value=""
+      >
+        See all
+      </option>
+      <option
+        class="ais-MenuSelect-option"
+        value="Apple"
+      >
+        Apple (442)
+      </option>
+      <option
+        class="ais-MenuSelect-option"
+        value="Canon"
+      >
+        Canon (287)
+      </option>
+      <option
+        class="ais-MenuSelect-option"
+        value="Dell"
+      >
+        Dell (174)
+      </option>
+    </select>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();

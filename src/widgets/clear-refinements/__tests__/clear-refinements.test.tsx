@@ -17,6 +17,68 @@ beforeEach(() => {
 
 describe('clearRefinements', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        initialUiState: {
+          indexName: {
+            refinementList: {
+              brand: ['Apple'],
+            },
+          },
+        },
+      });
+
+      search.addWidgets([
+        refinementList({
+          container: document.createElement('div'),
+          attribute: 'brand',
+        }),
+        clearRefinements({ container }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-ClearRefinements"
+  >
+    <button
+      class="ais-ClearRefinements-button"
+    >
+      Clear refinements
+    </button>
+  </div>
+</div>
+`);
+
+      fireEvent.click(within(container).getByRole('button'));
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-ClearRefinements"
+  >
+    <button
+      class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+      disabled=""
+    >
+      Clear refinements
+    </button>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createSearchClient();

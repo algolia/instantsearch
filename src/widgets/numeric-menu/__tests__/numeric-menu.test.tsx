@@ -20,6 +20,134 @@ beforeEach(() => {
 
 describe('numericMenu', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        numericMenu({
+          container,
+          attribute: 'price',
+          items: [
+            { label: 'All' },
+            { label: 'Less than 500$', end: 500 },
+            { label: 'Between 500$ - 1000$', start: 500, end: 1000 },
+            { label: 'More than 1000$', start: 1000 },
+          ],
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-NumericMenu"
+  >
+    <ul
+      class="ais-NumericMenu-list"
+    >
+      <li
+        class="ais-NumericMenu-item ais-NumericMenu-item--selected"
+      >
+        <div>
+          <label
+            class="ais-NumericMenu-label"
+          >
+            <input
+              checked=""
+              class="ais-NumericMenu-radio"
+              name="price"
+              type="radio"
+            />
+            <span
+              class="ais-NumericMenu-labelText"
+            >
+              All
+            </span>
+          </label>
+        </div>
+      </li>
+      <li
+        class="ais-NumericMenu-item"
+      >
+        <div>
+          <label
+            class="ais-NumericMenu-label"
+          >
+            <input
+              class="ais-NumericMenu-radio"
+              name="price"
+              type="radio"
+            />
+            <span
+              class="ais-NumericMenu-labelText"
+            >
+              Less than 500$
+            </span>
+          </label>
+        </div>
+      </li>
+      <li
+        class="ais-NumericMenu-item"
+      >
+        <div>
+          <label
+            class="ais-NumericMenu-label"
+          >
+            <input
+              class="ais-NumericMenu-radio"
+              name="price"
+              type="radio"
+            />
+            <span
+              class="ais-NumericMenu-labelText"
+            >
+              Between 500$ - 1000$
+            </span>
+          </label>
+        </div>
+      </li>
+      <li
+        class="ais-NumericMenu-item"
+      >
+        <div>
+          <label
+            class="ais-NumericMenu-label"
+          >
+            <input
+              class="ais-NumericMenu-radio"
+              name="price"
+              type="radio"
+            />
+            <span
+              class="ais-NumericMenu-labelText"
+            >
+              More than 1000$
+            </span>
+          </label>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+`);
+
+      const [firstRadioInput, secondRadioInput] =
+        within(container).getAllByRole('radio');
+
+      fireEvent.click(secondRadioInput);
+
+      await wait(0);
+
+      expect(firstRadioInput).not.toBeChecked();
+      expect(secondRadioInput).toBeChecked();
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();

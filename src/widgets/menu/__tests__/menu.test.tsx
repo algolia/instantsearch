@@ -20,6 +20,129 @@ beforeEach(() => {
 
 describe('menu', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        initialUiState: {
+          indexName: {
+            menu: {
+              brand: 'Apple',
+            },
+          },
+        },
+      });
+
+      search.addWidgets([
+        menu({
+          container,
+          attribute: 'brand',
+          limit: 3,
+          showMore: true,
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-Menu"
+  >
+    <ul
+      class="ais-Menu-list"
+    >
+      <li
+        class="ais-Menu-item ais-Menu-item--selected"
+      >
+        <div>
+          <a
+            class="ais-Menu-link"
+            href="#"
+          >
+            <span
+              class="ais-Menu-label"
+            >
+              Apple
+            </span>
+            <span
+              class="ais-Menu-count"
+            >
+              442
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="ais-Menu-item"
+      >
+        <div>
+          <a
+            class="ais-Menu-link"
+            href="#"
+          >
+            <span
+              class="ais-Menu-label"
+            >
+              Canon
+            </span>
+            <span
+              class="ais-Menu-count"
+            >
+              287
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="ais-Menu-item"
+      >
+        <div>
+          <a
+            class="ais-Menu-link"
+            href="#"
+          >
+            <span
+              class="ais-Menu-label"
+            >
+              Dell
+            </span>
+            <span
+              class="ais-Menu-count"
+            >
+              174
+            </span>
+          </a>
+        </div>
+      </li>
+    </ul>
+    <button
+      class="ais-Menu-showMore"
+    >
+      Show more
+    </button>
+  </div>
+</div>
+`);
+
+      const toggleButton = within(container).getByRole('button');
+
+      fireEvent.click(toggleButton);
+
+      expect(toggleButton).toMatchInlineSnapshot(`
+<button
+  class="ais-Menu-showMore"
+>
+  Show less
+</button>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();
