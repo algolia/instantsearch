@@ -80,7 +80,11 @@ describe('refinementList', () => {
             <span
               class="ais-HierarchicalMenu-count"
             >
+<<<<<<< HEAD
               1,369
+=======
+              1 369
+>>>>>>> c21296c2 (refactor(html): migrate default templates to VDOM)
             </span>
           </a>
         </div>

@@ -80,7 +80,11 @@ describe('voiceSearch', () => {
       class="ais-VoiceSearch-status"
     >
       <p>
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> c21296c2 (refactor(html): migrate default templates to VDOM)
       </p>
     </div>
   </div>

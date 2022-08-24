@@ -29,10 +29,10 @@ describe('menuSelect', () => {
         // @ts-expect-error
         menuSelect({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+  "The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select/js/"
-`);
+  See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select/js/"
+  `);
     });
   });
 
@@ -82,55 +82,55 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
       const firstRender = render.mock.calls[0][0] as VNode;
 
       expect(firstRender.props).toMatchInlineSnapshot(`
-{
-  "cssClasses": {
-    "noRefinementRoot": "ais-MenuSelect--noRefinement",
-    "option": "ais-MenuSelect-option",
-    "root": "ais-MenuSelect",
-    "select": "ais-MenuSelect-select",
-  },
-  "items": [
-    {
-      "count": 2,
-      "data": null,
-      "exhaustive": true,
-      "isRefined": false,
-      "label": "bar",
-      "value": "bar",
+  {
+    "cssClasses": {
+      "noRefinementRoot": "ais-MenuSelect--noRefinement",
+      "option": "ais-MenuSelect-option",
+      "root": "ais-MenuSelect",
+      "select": "ais-MenuSelect-select",
     },
-    {
-      "count": 1,
-      "data": null,
-      "exhaustive": true,
-      "isRefined": false,
-      "label": "foo",
-      "value": "foo",
-    },
-  ],
-  "refine": [Function],
-  "templateProps": {
-    "templates": {
-      "defaultOption": [Function],
-      "item": [Function],
-    },
-    "templatesConfig": {
-      "compileOptions": {},
-      "helpers": {
-        "formatNumber": [Function],
-        "highlight": [Function],
-        "insights": [Function],
-        "reverseHighlight": [Function],
-        "reverseSnippet": [Function],
-        "snippet": [Function],
+    "items": [
+      {
+        "count": 2,
+        "data": null,
+        "exhaustive": true,
+        "isRefined": false,
+        "label": "bar",
+        "value": "bar",
+      },
+      {
+        "count": 1,
+        "data": null,
+        "exhaustive": true,
+        "isRefined": false,
+        "label": "foo",
+        "value": "foo",
+      },
+    ],
+    "refine": [Function],
+    "templateProps": {
+      "templates": {
+        "defaultOption": [Function],
+        "item": [Function],
+      },
+      "templatesConfig": {
+        "compileOptions": {},
+        "helpers": {
+          "formatNumber": [Function],
+          "highlight": [Function],
+          "insights": [Function],
+          "reverseHighlight": [Function],
+          "reverseSnippet": [Function],
+          "snippet": [Function],
+        },
+      },
+      "useCustomCompileOptions": {
+        "defaultOption": false,
+        "item": false,
       },
     },
-    "useCustomCompileOptions": {
-      "defaultOption": false,
-      "item": false,
-    },
-  },
-}
-`);
+  }
+  `);
     });
 
     it('renders transformed items correctly', async () => {
@@ -155,57 +155,57 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
       const firstRender = render.mock.calls[0][0] as VNode;
 
       expect(firstRender.props).toMatchInlineSnapshot(`
-{
-  "cssClasses": {
-    "noRefinementRoot": "ais-MenuSelect--noRefinement",
-    "option": "ais-MenuSelect-option",
-    "root": "ais-MenuSelect",
-    "select": "ais-MenuSelect-select",
-  },
-  "items": [
-    {
-      "count": 2,
-      "data": null,
-      "exhaustive": true,
-      "isRefined": false,
-      "label": "bar",
-      "transformed": true,
-      "value": "bar",
+  {
+    "cssClasses": {
+      "noRefinementRoot": "ais-MenuSelect--noRefinement",
+      "option": "ais-MenuSelect-option",
+      "root": "ais-MenuSelect",
+      "select": "ais-MenuSelect-select",
     },
-    {
-      "count": 1,
-      "data": null,
-      "exhaustive": true,
-      "isRefined": false,
-      "label": "foo",
-      "transformed": true,
-      "value": "foo",
-    },
-  ],
-  "refine": [Function],
-  "templateProps": {
-    "templates": {
-      "defaultOption": [Function],
-      "item": [Function],
-    },
-    "templatesConfig": {
-      "compileOptions": {},
-      "helpers": {
-        "formatNumber": [Function],
-        "highlight": [Function],
-        "insights": [Function],
-        "reverseHighlight": [Function],
-        "reverseSnippet": [Function],
-        "snippet": [Function],
+    "items": [
+      {
+        "count": 2,
+        "data": null,
+        "exhaustive": true,
+        "isRefined": false,
+        "label": "bar",
+        "transformed": true,
+        "value": "bar",
+      },
+      {
+        "count": 1,
+        "data": null,
+        "exhaustive": true,
+        "isRefined": false,
+        "label": "foo",
+        "transformed": true,
+        "value": "foo",
+      },
+    ],
+    "refine": [Function],
+    "templateProps": {
+      "templates": {
+        "defaultOption": [Function],
+        "item": [Function],
+      },
+      "templatesConfig": {
+        "compileOptions": {},
+        "helpers": {
+          "formatNumber": [Function],
+          "highlight": [Function],
+          "insights": [Function],
+          "reverseHighlight": [Function],
+          "reverseSnippet": [Function],
+          "snippet": [Function],
+        },
+      },
+      "useCustomCompileOptions": {
+        "defaultOption": false,
+        "item": false,
       },
     },
-    "useCustomCompileOptions": {
-      "defaultOption": false,
-      "item": false,
-    },
-  },
-}
-`);
+  }
+  `);
     });
   });
 

@@ -77,6 +77,10 @@ const createSendEvent = ({
 
 export type ToggleRefinementValue = {
   /**
+   * The attribute name of this toggle.
+   */
+  name: string;
+  /**
    * Whether this option is enabled.
    */
   isRefined: boolean;
