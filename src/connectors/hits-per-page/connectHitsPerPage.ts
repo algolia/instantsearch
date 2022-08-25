@@ -265,14 +265,14 @@ You may want to add another entry to the \`items\` option with this value.`
       },
 
       getWidgetRenderState({ state, results, createURL, helper }) {
-        const hasNoResults = results ? results.nbHits === 0 : true;
+        const canRefine = results ? results.nbHits > 0 : false;
 
         return {
           items: transformItems(normalizeItems(state), { results }),
           refine: connectorState.getRefine(helper),
           createURL: connectorState.createURLFactory({ state, createURL }),
-          hasNoResults,
-          canRefine: !hasNoResults,
+          hasNoResults: !canRefine,
+          canRefine,
           widgetParams,
         };
       },
