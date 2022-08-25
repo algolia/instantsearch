@@ -1,3 +1,12 @@
+## [4.44.1](https://github.com/algolia/instantsearch.js/compare/v4.44.0...v4.44.1) (2022-08-25)
+
+
+### Bug Fixes
+
+* **connectNumericMenu + connectRange:** stop sending invalid clickedFilters event ([#5085](https://github.com/algolia/instantsearch.js/issues/5085)) ([20996c7](https://github.com/algolia/instantsearch.js/commit/20996c7a159988c58e00ff24d2d2dc98af8b980f))
+
+
+
 # [4.44.0](https://github.com/algolia/instantsearch.js/compare/v4.43.1...v4.44.0) (2022-08-08)
 
 
