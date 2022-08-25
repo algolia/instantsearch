@@ -344,6 +344,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
         }
 
         let refinementIsApplied = false;
+        let totalCount = 0;
 
         if (results) {
           const facetResults = results.getFacetValues(
@@ -374,6 +375,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
               .filter((f) => Number(f.name) >= star && Number(f.name) <= max)
               .map((f) => f.count)
               .reduce((sum, current) => sum + current, 0);
+            totalCount += count;
 
             if (refinedStar && !isRefined && count === 0) {
               // skip count==0 when at least 1 refinement is enabled
@@ -402,7 +404,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
         return {
           items: facetValues,
           hasNoResults,
-          canRefine: !hasNoResults || refinementIsApplied,
+          canRefine: (!hasNoResults || refinementIsApplied) && totalCount > 0,
           refine: connectorState.toggleRefinementFactory(helper),
           sendEvent,
           createURL: connectorState.createURLFactory({ state, createURL }),

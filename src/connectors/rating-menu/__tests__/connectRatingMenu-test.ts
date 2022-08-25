@@ -699,76 +699,103 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       });
     });
 
-    it('should return canRefine false if there are no results and no refinement is applied', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
-      const ratingMenuWidget = createRatingMenu({
-        attribute: 'grade',
-      });
-      const helper = jsHelper(createSearchClient(), 'indexName', {
-        disjunctiveFacets: ['grade'],
-      });
-
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({
-          facets: {
-            grade: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
-          },
-        }),
-      ]);
-
-      const renderOptions = createRenderOptions({
-        helper,
-        state: helper.state,
-        results,
-      });
-
-      const renderState = ratingMenuWidget.getWidgetRenderState(renderOptions);
-
-      expect(renderState).toEqual({
-        items: [
-          {
-            count: 1000,
-            isRefined: false,
-            label: '4',
-            name: '4',
-            stars: [true, true, true, true, false],
-            value: '4',
-          },
-          {
-            count: 1050,
-            isRefined: false,
-            label: '3',
-            name: '3',
-            stars: [true, true, true, false, false],
-            value: '3',
-          },
-          {
-            count: 1070,
-            isRefined: false,
-            label: '2',
-            name: '2',
-            stars: [true, true, false, false, false],
-            value: '2',
-          },
-          {
-            count: 1080,
-            isRefined: false,
-            label: '1',
-            name: '1',
-            stars: [true, false, false, false, false],
-            value: '1',
-          },
-        ],
-        createURL: expect.any(Function),
-        canRefine: false,
-        refine: expect.any(Function),
-        sendEvent: expect.any(Function),
-        hasNoResults: true,
-        widgetParams: {
+    describe('canRefine', () => {
+      it('returns `true`  if there are no results but a refinement is applied and total facet count is higher than 0', () => {
+        const renderFn = jest.fn();
+        const unmountFn = jest.fn();
+        const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
+        const ratingMenuWidget = createRatingMenu({
           attribute: 'grade',
-        },
+        });
+        const helper = jsHelper(createSearchClient(), 'indexName', {
+          disjunctiveFacets: ['grade'],
+          numericRefinements: {
+            grade: {
+              '>=': [2],
+            },
+          },
+        });
+
+        const results = new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              grade: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            },
+          }),
+        ]);
+
+        const renderOptions = createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        });
+
+        const renderState =
+          ratingMenuWidget.getWidgetRenderState(renderOptions);
+
+        expect(renderState.canRefine).toBe(true);
+      });
+
+      it('returns `false`  if there are no results and no refinement is applied', () => {
+        const renderFn = jest.fn();
+        const unmountFn = jest.fn();
+        const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
+        const ratingMenuWidget = createRatingMenu({
+          attribute: 'grade',
+        });
+        const helper = jsHelper(createSearchClient(), 'indexName', {
+          disjunctiveFacets: ['grade'],
+        });
+
+        const results = new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              grade: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            },
+          }),
+        ]);
+
+        const renderOptions = createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        });
+
+        const renderState =
+          ratingMenuWidget.getWidgetRenderState(renderOptions);
+
+        expect(renderState.canRefine).toBe(false);
+      });
+
+      it('returns `false` if there are no results and a refinement is applied but total facet count is 0', () => {
+        const renderFn = jest.fn();
+        const unmountFn = jest.fn();
+        const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
+        const ratingMenuWidget = createRatingMenu({
+          attribute: 'grade',
+        });
+        const helper = jsHelper(createSearchClient(), 'indexName', {
+          disjunctiveFacets: ['grade'],
+        });
+
+        const results = new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            facets: {
+              grade: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+            },
+          }),
+        ]);
+
+        const renderOptions = createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        });
+
+        const renderState =
+          ratingMenuWidget.getWidgetRenderState(renderOptions);
+
+        expect(renderState.canRefine).toBe(false);
       });
     });
   });
