@@ -87,8 +87,17 @@ export type NumericMenuRenderState = {
 
   /**
    * `true` if the last search contains no result
+   * @deprecated Use `canRefine` instead.
    */
   hasNoResults: boolean;
+
+  /**
+   * Indicates if search state can be refined.
+   *
+   * This is `true` if the last search contains no result and
+   * "All" range is selected
+   */
+  canRefine: boolean;
 
   /**
    * Sets the selected value and trigger a new search
@@ -315,10 +324,21 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
           });
         }
 
+        const hasNoResults = results ? results.nbHits === 0 : true;
+        const preparedItems = prepareItems(state);
+        let allIsSelected = true;
+        for (const item of preparedItems) {
+          if (item.isRefined && decodeURI(item.value) !== '{}') {
+            allIsSelected = false;
+            break;
+          }
+        }
+
         return {
           createURL: connectorState.createURL(state),
-          items: transformItems(prepareItems(state), { results }),
-          hasNoResults: results ? results.nbHits === 0 : true,
+          items: transformItems(preparedItems, { results }),
+          hasNoResults,
+          canRefine: !(hasNoResults && allIsSelected),
           refine: connectorState.refine,
           sendEvent: connectorState.sendEvent,
           widgetParams,
