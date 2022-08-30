@@ -19,6 +19,67 @@ beforeEach(() => {
 
 describe('rangeInput', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([rangeInput({ container, attribute: 'price' })]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-RangeInput ais-RangeInput--noRefinement"
+  >
+    <form
+      class="ais-RangeInput-form"
+    >
+      <label
+        class="ais-RangeInput-label"
+      >
+        <input
+          class="ais-RangeInput-input ais-RangeInput-input--min"
+          max="1000"
+          min="1"
+          placeholder="1"
+          step="1"
+          type="number"
+        />
+      </label>
+      <span
+        class="ais-RangeInput-separator"
+      >
+        to
+      </span>
+      <label
+        class="ais-RangeInput-label"
+      >
+        <input
+          class="ais-RangeInput-input ais-RangeInput-input--max"
+          max="1000"
+          min="1"
+          placeholder="1000"
+          step="1"
+          type="number"
+        />
+      </label>
+      <button
+        class="ais-RangeInput-submit"
+        type="submit"
+      >
+        Go
+      </button>
+    </form>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();

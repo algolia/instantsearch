@@ -87,7 +87,7 @@ describe('infiniteHits', () => {
           class="ais-InfiniteHits-item"
         >
           {
-  "objectID": "1",
+  "objectID": "2",
   "name": "Samsung Galaxy smartphone",
   "description": "A smartphone by Samsung.",
   "_highlightResult": {
@@ -707,7 +707,7 @@ describe('infiniteHits', () => {
                             },
                           },
                           {
-                            objectID: '1',
+                            objectID: '2',
                             name: 'Samsung Galaxy smartphone',
                             description: 'A smartphone by Samsung.',
                             _highlightResult: {
