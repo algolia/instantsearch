@@ -94,11 +94,7 @@ describe('infiniteHits', () => {
           class="ais-InfiniteHits-item"
         >
           {
-<<<<<<< HEAD
   "objectID": "2",
-=======
-  "objectID": "1",
->>>>>>> c21296c2 (refactor(html): migrate default templates to VDOM)
   "name": "Samsung Galaxy smartphone",
   "description": "A smartphone by Samsung.",
   "_highlightResult": {
