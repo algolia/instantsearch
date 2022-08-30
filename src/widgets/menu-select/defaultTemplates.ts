@@ -5,7 +5,9 @@ const defaultTemplates: MenuSelectComponentTemplates = {
   item({ label, count }) {
     return `${label} (${formatNumber(String(count))})`;
   },
-  defaultOption: 'See all',
+  defaultOption() {
+    return 'See all';
+  },
 };
 
 export default defaultTemplates;
