@@ -110,7 +110,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
   "refine": [Function],
   "templateProps": {
     "templates": {
-      "defaultOption": "See all",
+      "defaultOption": [Function],
       "item": [Function],
     },
     "templatesConfig": {
@@ -185,7 +185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
   "refine": [Function],
   "templateProps": {
     "templates": {
-      "defaultOption": "See all",
+      "defaultOption": [Function],
       "item": [Function],
     },
     "templatesConfig": {
