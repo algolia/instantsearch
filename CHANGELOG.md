@@ -1,3 +1,12 @@
+# [4.45.0](https://github.com/algolia/instantsearch.js/compare/v4.44.1...v4.45.0) (2022-08-29)
+
+
+### Features
+
+* **connectors:** deprecate `hasNoResults` in favor of `canRefine` ([#5091](https://github.com/algolia/instantsearch.js/issues/5091)) ([1749a4e](https://github.com/algolia/instantsearch.js/commit/1749a4eb9a2f28fa4a8d442163e3b10acbde7c22))
+
+
+
 ## [4.44.1](https://github.com/algolia/instantsearch.js/compare/v4.44.0...v4.44.1) (2022-08-25)
 
 
