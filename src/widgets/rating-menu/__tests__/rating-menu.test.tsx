@@ -61,13 +61,13 @@ describe('ratingMenu', () => {
       class="ais-RatingMenu-list"
     >
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
-          <div
+          <a
             aria-label="4 & up"
             class="ais-RatingMenu-link"
-            disabled="true"
+            href="#"
           >
             <svg
               aria-hidden="true"
@@ -124,18 +124,22 @@ describe('ratingMenu', () => {
             >
               & Up
             </span>
-            0
-          </div>
+            <span
+              class="ais-RatingMenu-count"
+            >
+              401
+            </span>
+          </a>
         </div>
       </li>
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
-          <div
+          <a
             aria-label="3 & up"
             class="ais-RatingMenu-link"
-            disabled="true"
+            href="#"
           >
             <svg
               aria-hidden="true"
@@ -192,18 +196,22 @@ describe('ratingMenu', () => {
             >
               & Up
             </span>
-            0
-          </div>
+            <span
+              class="ais-RatingMenu-count"
+            >
+              528
+            </span>
+          </a>
         </div>
       </li>
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
-          <div
+          <a
             aria-label="2 & up"
             class="ais-RatingMenu-link"
-            disabled="true"
+            href="#"
           >
             <svg
               aria-hidden="true"
@@ -260,8 +268,12 @@ describe('ratingMenu', () => {
             >
               & Up
             </span>
-            0
-          </div>
+            <span
+              class="ais-RatingMenu-count"
+            >
+              632
+            </span>
+          </a>
         </div>
       </li>
       <li
@@ -331,7 +343,7 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              42
+              674
             </span>
           </a>
         </div>
@@ -411,7 +423,7 @@ describe('ratingMenu', () => {
       class="ais-RatingMenu-list"
     >
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
           <a
@@ -442,13 +454,13 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              0
+              401
             </span>
           </a>
         </div>
       </li>
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
           <a
@@ -479,13 +491,13 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              0
+              528
             </span>
           </a>
         </div>
       </li>
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
           <a
@@ -516,7 +528,7 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              0
+              632
             </span>
           </a>
         </div>
@@ -553,7 +565,7 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              42
+              674
             </span>
           </a>
         </div>
@@ -634,7 +646,7 @@ describe('ratingMenu', () => {
       class="ais-RatingMenu-list"
     >
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
           <a
@@ -665,13 +677,13 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              0
+              401
             </span>
           </a>
         </div>
       </li>
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
           <a
@@ -702,13 +714,13 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              0
+              528
             </span>
           </a>
         </div>
       </li>
       <li
-        class="ais-RatingMenu-item ais-RatingMenu-item--disabled"
+        class="ais-RatingMenu-item"
       >
         <div>
           <a
@@ -739,7 +751,7 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              0
+              632
             </span>
           </a>
         </div>
@@ -776,7 +788,7 @@ describe('ratingMenu', () => {
             <span
               class="ais-RatingMenu-count"
             >
-              42
+              674
             </span>
           </a>
         </div>
@@ -795,7 +807,7 @@ describe('ratingMenu', () => {
               ...requests.map((request) =>
                 createSingleSearchResponse({
                   index: request.indexName,
-                  facets: { price: { 1: 42 } },
+                  facets: { price: { 1: 42, 2: 104, 3: 127, 4: 189, 5: 212 } },
                 })
               )
             )
