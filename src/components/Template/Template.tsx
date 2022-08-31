@@ -62,7 +62,7 @@ class Template extends Component<TemplateProps> {
       return null;
     }
 
-    if (typeof content !== 'string') {
+    if (typeof content === 'object') {
       return <RootTagName {...this.props.rootProps}>{content}</RootTagName>;
     }
 
