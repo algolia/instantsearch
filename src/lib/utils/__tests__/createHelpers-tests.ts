@@ -26,7 +26,7 @@ describe('insights hogan helper', () => {
       data: {
         objectID: 'xxx',
       },
-    });
+    }) as string;
 
     const expected = `<button ${insights('clickedObjectIDsAfterSearch', {
       objectIDs: ['xxx'],
@@ -34,7 +34,7 @@ describe('insights hogan helper', () => {
     })}>Add to cart</button>
     `;
 
-    expect((output as string).trim()).toEqual(expected.trim());
+    expect(output.trim()).toEqual(expected.trim());
 
     expect(warn).toHaveBeenLastCalledWith(
       `[InstantSearch.js]: \`insights\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
