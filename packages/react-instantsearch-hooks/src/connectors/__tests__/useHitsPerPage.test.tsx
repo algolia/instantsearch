@@ -24,6 +24,7 @@ describe('useHitsPerPage', () => {
       refine: expect.any(Function),
       createURL: expect.any(Function),
       hasNoResults: true,
+      canRefine: false,
       items: [
         {
           default: true,
@@ -46,6 +47,7 @@ describe('useHitsPerPage', () => {
       refine: expect.any(Function),
       createURL: expect.any(Function),
       hasNoResults: true,
+      canRefine: false,
       items: [
         {
           default: true,

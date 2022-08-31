@@ -215,6 +215,19 @@
     "@algolia/logger-common" "4.12.1"
     "@algolia/requester-common" "4.12.1"
 
+"@algolia/ui-components-highlight-vdom@^1.1.2":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-highlight-vdom/-/ui-components-highlight-vdom-1.1.3.tgz#ba3ec05d4657286e2e688e1446c591d0e4217166"
+  integrity sha512-KgSiQ+FQf+e2HDNgw9J66HmpbIdZA9VQpLwDn950DCgo7BEZQrMqgqkMPJhHYZfkPvRfxV+1T3XwS43zib8w4w==
+  dependencies:
+    "@algolia/ui-components-shared" "1.1.3"
+    "@babel/runtime" "^7.0.0"
+
+"@algolia/ui-components-shared@1.1.3", "@algolia/ui-components-shared@^1.1.2":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-shared/-/ui-components-shared-1.1.3.tgz#d62760b20584f628f57e8a144f5796bc42fd68f1"
+  integrity sha512-eBxvljiwvajSsg9Pz9nYNH+QH/b5q66Z4xRDr1LhICNuLibDF64mH+Vv4mg29qPxmmgMWlmWiwJQmQqR9Z229w==
+
 "@ampproject/remapping@^2.0.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.1.0.tgz#72becdf17ee44b2d1ac5651fb12f1952c336fe23"
@@ -16253,6 +16266,11 @@ hsla-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/hsla-regex/-/hsla-regex-1.0.0.tgz#c1ce7a3168c8c6614033a4b5f7877f3b225f9c38"
   integrity sha1-wc56MWjIxmFAM6S194d/OyJfnDg=
 
+htm@^3.0.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/htm/-/htm-3.1.1.tgz#49266582be0dc66ed2235d5ea892307cc0c24b78"
+  integrity sha512-983Vyg8NwUE7JkZ6NmOqpCZ+sh1bKv2iYTlUkzlWmA5JD2acKoxd4KVxbMmxX/85mtfdnDmTFoNKcg5DGAvxNQ==
+
 html-element-map@^1.2.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/html-element-map/-/html-element-map-1.3.1.tgz#44b2cbcfa7be7aa4ff59779e47e51012e1c73c08"
@@ -16993,7 +17011,7 @@ instantsearch.css@7.4.5:
   resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.4.5.tgz#2a521aa634329bf1680f79adf87c79d67669ec8d"
   integrity sha512-iIGBYjCokU93DDB8kbeztKtlu4qVEyTg1xvS6iSO1YvqRwkIZgf0tmsl/GytsLdZhuw8j4wEaeYsCzNbeJ/zEQ==
 
-instantsearch.js@4.43.1, instantsearch.js@^4.43.1:
+instantsearch.js@4.43.1:
   version "4.43.1"
   resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-4.43.1.tgz#9f316c13f63a1e53bf999f5d3716dc73bc7e9f4d"
   integrity sha512-JEaODN0MDb5atW39nWmdxCPlcaNmX7THBlhy3cAJhVG9c19Cfaw27DXRBdE9E9B7WO45YYAhyNTnGITNKBXC0w==
@@ -17005,6 +17023,25 @@ instantsearch.js@4.43.1, instantsearch.js@^4.43.1:
     algoliasearch-helper "^3.10.0"
     classnames "^2.2.5"
     hogan.js "^3.0.2"
+    preact "^10.6.0"
+    qs "^6.5.1 < 6.10"
+    search-insights "^2.1.0"
+
+instantsearch.js@4.45.0, instantsearch.js@^4.45.0:
+  version "4.45.0"
+  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-4.45.0.tgz#52be36dffd9b6b9616184c783bb8ac1f39ff205c"
+  integrity sha512-gjJDnFJO2yfkmOb0X1mZumqMGHlZIxAVNusnKfNh8s4u6SsRCM9p8S3eJi5aYo3mbS9NrePR8B44/gXh4YGcQQ==
+  dependencies:
+    "@algolia/events" "^4.0.1"
+    "@algolia/ui-components-highlight-vdom" "^1.1.2"
+    "@algolia/ui-components-shared" "^1.1.2"
+    "@types/google.maps" "^3.45.3"
+    "@types/hogan.js" "^3.0.0"
+    "@types/qs" "^6.5.3"
+    algoliasearch-helper "^3.10.0"
+    classnames "^2.2.5"
+    hogan.js "^3.0.2"
+    htm "^3.0.0"
     preact "^10.6.0"
     qs "^6.5.1 < 6.10"
     search-insights "^2.1.0"

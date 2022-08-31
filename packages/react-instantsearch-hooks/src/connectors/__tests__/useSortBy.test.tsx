@@ -22,6 +22,7 @@ describe('useSortBy', () => {
       options: items,
       refine: expect.any(Function),
       hasNoResults: expect.any(Boolean),
+      canRefine: expect.any(Boolean),
     });
 
     await waitForNextUpdate();
@@ -31,6 +32,7 @@ describe('useSortBy', () => {
       options: items,
       refine: expect.any(Function),
       hasNoResults: expect.any(Boolean),
+      canRefine: expect.any(Boolean),
     });
   });
 });

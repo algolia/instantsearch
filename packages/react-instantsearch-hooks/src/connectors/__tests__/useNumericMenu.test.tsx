@@ -26,6 +26,7 @@ describe('useNumericMenu', () => {
     expect(result.current).toEqual({
       createURL: expect.any(Function),
       hasNoResults: true,
+      canRefine: false,
       items: [
         {
           isRefined: true,
@@ -58,6 +59,7 @@ describe('useNumericMenu', () => {
     expect(result.current).toEqual({
       createURL: expect.any(Function),
       hasNoResults: true,
+      canRefine: false,
       items: [
         {
           isRefined: true,
