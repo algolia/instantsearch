@@ -1,3 +1,30 @@
+# [4.45.0](https://github.com/algolia/instantsearch.js/compare/v4.44.1...v4.45.0) (2022-08-29)
+
+
+### Features
+
+* **connectors:** deprecate `hasNoResults` in favor of `canRefine` ([#5091](https://github.com/algolia/instantsearch.js/issues/5091)) ([1749a4e](https://github.com/algolia/instantsearch.js/commit/1749a4eb9a2f28fa4a8d442163e3b10acbde7c22))
+
+
+
+## [4.44.1](https://github.com/algolia/instantsearch.js/compare/v4.44.0...v4.44.1) (2022-08-25)
+
+
+### Bug Fixes
+
+* **connectNumericMenu + connectRange:** stop sending invalid clickedFilters event ([#5085](https://github.com/algolia/instantsearch.js/issues/5085)) ([20996c7](https://github.com/algolia/instantsearch.js/commit/20996c7a159988c58e00ff24d2d2dc98af8b980f))
+
+
+
+# [4.44.0](https://github.com/algolia/instantsearch.js/compare/v4.43.1...v4.44.0) (2022-08-08)
+
+
+### Features
+
+* **geo-search:** make `GeoHit` type generic ([#5083](https://github.com/algolia/instantsearch.js/issues/5083)) ([3d3c7b2](https://github.com/algolia/instantsearch.js/commit/3d3c7b298b74effe9bb722a04fbb47dc39a4bd95))
+
+
+
 ## [4.43.1](https://github.com/algolia/instantsearch.js/compare/v4.43.0...v4.43.1) (2022-07-11)
 
 

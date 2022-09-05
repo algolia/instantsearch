@@ -2213,91 +2213,38 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       );
     });
   });
+});
 
-  describe('insights', () => {
-    const attribute = 'price';
-
-    it('sends event when a facet is added at each step', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRange(rendering);
-      const widget = makeWidget({
-        attribute,
-      });
-
-      const instantSearchInstance = createInstantSearch();
-      const helper = jsHelper(
-        createSearchClient(),
-        '',
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          instantSearchInstance,
-          helper,
-        })
-      );
-
-      {
-        // first rendering
-        const renderOptions =
-          rendering.mock.calls[rendering.mock.calls.length - 1][0];
-        const { refine } = renderOptions;
-        refine([10, 30]);
-        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-          1
-        );
-        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
-          attribute: 'price',
-          eventType: 'click',
-          insightsMethod: 'clickedFilters',
-          payload: {
-            eventName: 'Filter Applied',
-            filters: ['price>=10', 'price<=30'],
-            index: '',
-          },
-          widgetType: 'ais.range',
-        });
-      }
-
-      widget.render!(
-        createRenderOptions({
-          results: createFacetStatsResults({
-            min: 10,
-            max: 30,
-            helper,
-            attribute: 'price',
-          }),
-          state: helper.state,
-          helper,
-          instantSearchInstance,
-        })
-      );
-
-      {
-        // Second rendering
-        const renderOptions =
-          rendering.mock.calls[rendering.mock.calls.length - 1][0];
-        const { refine } = renderOptions;
-        refine([23, 27]);
-        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-          2
-        );
-        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
-          attribute: 'price',
-          eventType: 'click',
-          insightsMethod: 'clickedFilters',
-          payload: {
-            eventName: 'Filter Applied',
-            filters: ['price>=23', 'price<=27'],
-            index: '',
-          },
-          widgetType: 'ais.range',
-        });
-      }
+describe('insights', () => {
+  // See: https://github.com/algolia/instantsearch.js/pull/5085
+  it(`doesn't send event when a facet is added`, () => {
+    const rendering = jest.fn();
+    const makeWidget = connectRange(rendering);
+    const widget = makeWidget({
+      attribute: 'price',
     });
+
+    const instantSearchInstance = createInstantSearch();
+    const helper = jsHelper(
+      createSearchClient(),
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters(), {
+        uiState: {},
+      })
+    );
+
+    widget.init!(
+      createInitOptions({
+        instantSearchInstance,
+        helper,
+      })
+    );
+
+    const firstRenderingOptions =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0];
+    const { refine } = firstRenderingOptions;
+    refine([10, 30]);
+
+    expect(instantSearchInstance.sendEventToInsights).not.toHaveBeenCalled();
   });
 });

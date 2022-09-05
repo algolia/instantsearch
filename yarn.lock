@@ -111,6 +111,18 @@
     "@algolia/logger-common" "4.11.0"
     "@algolia/requester-common" "4.11.0"
 
+"@algolia/ui-components-highlight-vdom@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-highlight-vdom/-/ui-components-highlight-vdom-1.1.2.tgz#686b29a905bb876672f79f14dab3a7e0de37855c"
+  integrity sha512-Idrugh06V8Pszfw0SgAylc4ZMSxx+GJ8TVEjyfHT/2od4Z8jvo4WKY1Sq9JEt0CDdneX+ZWcRLsgNqE99nWAgw==
+  dependencies:
+    "@algolia/ui-components-shared" "1.1.2"
+
+"@algolia/ui-components-shared@1.1.2", "@algolia/ui-components-shared@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-shared/-/ui-components-shared-1.1.2.tgz#6cc200f57288ad65db562ac4d637783c5f13e527"
+  integrity sha512-/aAWrvPIlhb6IdOiZHU5rktRxil0WVODitPr9afrTverSjHFj60dFjwMbqxXFVMw1GvIpZHtoTTXedaG7AWw2Q==
+
 "@babel/cli@7.8.4":
   version "7.8.4"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.8.4.tgz#505fb053721a98777b2b175323ea4f090b7d3c1c"
@@ -7870,6 +7882,11 @@ hosted-git-info@^2.1.4:
   version "2.8.4"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.4.tgz#44119abaf4bc64692a16ace34700fed9c03e2546"
   integrity sha512-pzXIvANXEFrc5oFFXRMkbLPQ2rXRoDERwDLyrcUxGhaZhgP54BBSl9Oheh7Vv0T090cszWBxPjkQQ5Sq1PbBRQ==
+
+htm@^3.0.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/htm/-/htm-3.1.1.tgz#49266582be0dc66ed2235d5ea892307cc0c24b78"
+  integrity sha512-983Vyg8NwUE7JkZ6NmOqpCZ+sh1bKv2iYTlUkzlWmA5JD2acKoxd4KVxbMmxX/85mtfdnDmTFoNKcg5DGAvxNQ==
 
 html-element-map@^1.2.0:
   version "1.2.0"
