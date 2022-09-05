@@ -45,7 +45,7 @@ const renderer =
     ClearRefinementsRenderState,
     Partial<ClearRefinementsWidgetParams>
   > =>
-  ({ refine, hasRefinements, instantSearchInstance }, isFirstRendering) => {
+  ({ refine, canRefine, instantSearchInstance }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
@@ -59,7 +59,7 @@ const renderer =
       <ClearRefinements
         refine={refine}
         cssClasses={cssClasses}
-        hasRefinements={hasRefinements}
+        hasRefinements={canRefine}
         templateProps={renderState.templateProps!}
       />,
       containerNode

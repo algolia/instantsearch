@@ -168,7 +168,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
         clearRefinements.init!(createInitOptions());
 
-        helper.toggleRefinement('category', 'Decoration');
+        helper.toggleFacetRefinement('category', 'Decoration');
 
         const renderState2 = clearRefinements.getRenderState(
           {},
@@ -249,7 +249,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
         clearRefinements.init!(createInitOptions());
 
-        helper.toggleRefinement('category', 'Decoration');
+        helper.toggleFacetRefinement('category', 'Decoration');
 
         const renderState2 = clearRefinements.getWidgetRenderState(
           createRenderOptions({
@@ -303,7 +303,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
       helper.search = () => helper;
       helper.setQuery('not empty');
-      helper.toggleRefinement('myFacet', 'myValue');
+      helper.toggleFacetRefinement('myFacet', 'myValue');
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
@@ -318,7 +318,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(rendering.mock.calls[0][0].refine).toBeInstanceOf(Function);
 
-      helper.toggleRefinement('myFacet', 'someOtherValue');
+      helper.toggleFacetRefinement('myFacet', 'someOtherValue');
 
       widget.render!(
         createRenderOptions({
@@ -346,7 +346,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
       helper.search = () => helper;
       helper.setQuery('a query');
-      helper.toggleRefinement('myFacet', 'myValue');
+      helper.toggleFacetRefinement('myFacet', 'myValue');
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
@@ -361,7 +361,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(rendering.mock.calls[0][0].refine).toBeInstanceOf(Function);
 
-      helper.toggleRefinement('myFacet', 'someOtherValue');
+      helper.toggleFacetRefinement('myFacet', 'someOtherValue');
       helper.setQuery('another query');
 
       widget.render!(
@@ -432,7 +432,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const helper = algoliasearchHelper(createSearchClient(), '', {
         facets: ['aFacet'],
       });
-      helper.toggleRefinement('aFacet', 'some value');
+      helper.toggleFacetRefinement('aFacet', 'some value');
       helper.search = () => helper;
 
       const rendering = jest.fn();
@@ -582,8 +582,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const widget = makeWidget({ includedAttributes: ['facet1'] });
 
       helper
-        .toggleRefinement('facet1', 'value')
-        .toggleRefinement('facet2', 'value')
+        .toggleFacetRefinement('facet1', 'value')
+        .toggleFacetRefinement('facet2', 'value')
         .setQuery('not empty');
 
       widget.init!(
@@ -635,7 +635,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({ includedAttributes: ['facet1', 'query'] });
 
-      helper.toggleRefinement('facet1', 'value').setQuery('not empty');
+      helper.toggleFacetRefinement('facet1', 'value').setQuery('not empty');
 
       widget.init!(
         createInitOptions({
@@ -689,8 +689,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
 
       helper
-        .toggleRefinement('facet1', 'value')
-        .toggleRefinement('facet2', 'value');
+        .toggleFacetRefinement('facet1', 'value')
+        .toggleFacetRefinement('facet2', 'value');
 
       {
         helper.setQuery('not empty');
@@ -777,9 +777,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
 
       helper
-        .toggleRefinement('facet1', 'value')
-        .toggleRefinement('facet2', 'value')
-        .toggleRefinement('facet3', 'value')
+        .toggleFacetRefinement('facet1', 'value')
+        .toggleFacetRefinement('facet2', 'value')
+        .toggleFacetRefinement('facet3', 'value')
         .setQuery('not empty');
 
       widget.init!(
@@ -868,8 +868,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           excludedAttributes: ['facet'],
         });
 
-        helper.toggleRefinement('facet', 'value');
-        helper.toggleRefinement('otherFacet', 'value');
+        helper.toggleFacetRefinement('facet', 'value');
+        helper.toggleFacetRefinement('otherFacet', 'value');
 
         {
           helper.setQuery('not empty');

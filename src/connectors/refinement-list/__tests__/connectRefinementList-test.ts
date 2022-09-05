@@ -564,7 +564,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'value');
+    helper.toggleFacetRefinement('category', 'value');
 
     widget.init!(
       createInitOptions({
@@ -595,10 +595,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
-    const { refine: renderToggleRefinement } = secondRenderingOptions;
-    renderToggleRefinement('value');
+    const { refine: renderToggleFacetRefinement } = secondRenderingOptions;
+    renderToggleFacetRefinement('value');
     expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(0);
-    renderToggleRefinement('value');
+    renderToggleFacetRefinement('value');
     expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(1);
   });
 
@@ -619,7 +619,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     );
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'value');
+    helper.toggleFacetRefinement('category', 'value');
 
     widget.init!(
       createInitOptions({
@@ -650,10 +650,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
-    const { refine: renderToggleRefinement } = secondRenderingOptions;
-    renderToggleRefinement('value');
+    const { refine: renderToggleFacetRefinement } = secondRenderingOptions;
+    renderToggleFacetRefinement('value');
     expect(helper.state.facetsRefinements.category).toHaveLength(0);
-    renderToggleRefinement('value');
+    renderToggleFacetRefinement('value');
     expect(helper.state.facetsRefinements.category).toHaveLength(1);
   });
 
