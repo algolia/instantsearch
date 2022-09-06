@@ -54,11 +54,10 @@ const defaultTemplates: RatingMenuComponentTemplates = {
         {stars.map((isFull, index) => (
           <svg
             key={index}
-            className={cx(
-              cssClasses.starIcon?.concat(
-                isFull ? 'cssClasses.fullStarIcon' : 'cssClasses.emptyStarIcon'
-              )
-            )}
+            className={cx([
+              cx(cssClasses.starIcon),
+              cx(isFull ? cssClasses.fullStarIcon : cssClasses.emptyStarIcon),
+            ])}
             aria-hidden="true"
             width="24"
             height="24"

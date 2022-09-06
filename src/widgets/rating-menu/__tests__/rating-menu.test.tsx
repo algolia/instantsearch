@@ -71,7 +71,7 @@ describe('ratingMenu', () => {
           >
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -81,7 +81,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -91,7 +91,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -101,7 +101,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -111,7 +111,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -143,7 +143,7 @@ describe('ratingMenu', () => {
           >
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -153,7 +153,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -163,7 +163,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -173,7 +173,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -183,7 +183,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -215,7 +215,7 @@ describe('ratingMenu', () => {
           >
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -225,7 +225,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -235,7 +235,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -245,7 +245,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -255,7 +255,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -287,7 +287,7 @@ describe('ratingMenu', () => {
           >
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.fullStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
               height="24"
               width="24"
             >
@@ -297,7 +297,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -307,7 +307,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -317,7 +317,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
@@ -327,7 +327,7 @@ describe('ratingMenu', () => {
             </svg>
             <svg
               aria-hidden="true"
-              class="ais-RatingMenu-starIconcssClasses.emptyStarIcon"
+              class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
               height="24"
               width="24"
             >
