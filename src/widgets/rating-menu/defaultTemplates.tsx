@@ -73,9 +73,7 @@ const defaultTemplates: RatingMenuComponentTemplates = {
         ))}
         <span className={cx(cssClasses.label)}>&amp; Up</span>
         {count && (
-          <span className={cx(cssClasses.count)}>
-            {formatNumber(String(count))}
-          </span>
+          <span className={cx(cssClasses.count)}>{formatNumber(count)}</span>
         )}
       </ItemWrapper>
     );

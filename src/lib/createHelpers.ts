@@ -35,7 +35,7 @@ export default function hoganHelpers({
 }): DefaultHoganHelpers {
   return {
     formatNumber(value, render) {
-      return formatNumber(value, render, numberLocale);
+      return formatNumber(Number(render(value)), numberLocale);
     },
     highlight(options, render) {
       try {

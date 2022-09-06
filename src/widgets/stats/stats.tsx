@@ -102,10 +102,10 @@ export const defaultTemplates: StatsComponentTemplates = {
       }
 
       if (hasManySortedResults) {
-        sentence = `${formatNumber(String(nbSortedHits))} relevant results`;
+        sentence = `${formatNumber(nbSortedHits || 0)} relevant results`;
       }
 
-      sentence += ` sorted out of ${formatNumber(String(nbHits))}`;
+      sentence += ` sorted out of ${formatNumber(nbHits)}`;
     } else {
       if (hasNoResults) {
         sentence = 'No results';
@@ -116,7 +116,7 @@ export const defaultTemplates: StatsComponentTemplates = {
       }
 
       if (hasManyResults) {
-        sentence = `${formatNumber(String(nbHits))} results`;
+        sentence = `${formatNumber(nbHits)} results`;
       }
     }
 

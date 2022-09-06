@@ -10,9 +10,7 @@ const defaultTemplates: HierarchicalMenuComponentTemplates = {
     return (
       <a className={cx(cssClasses.link)} href={url}>
         <span className={cx(cssClasses.label)}>{label}</span>
-        <span className={cx(cssClasses.count)}>
-          {formatNumber(String(count))}
-        </span>
+        <span className={cx(cssClasses.count)}>{formatNumber(count)}</span>
       </a>
     );
   },

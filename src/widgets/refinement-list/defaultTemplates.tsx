@@ -23,9 +23,7 @@ const defaultTemplates: RefinementListComponentTemplates = {
         >
           {!isFromSearch && highlighted}
         </span>
-        <span className={cx(cssClasses.count)}>
-          {formatNumber(String(count))}
-        </span>
+        <span className={cx(cssClasses.count)}>{formatNumber(count)}</span>
       </label>
     );
   },
