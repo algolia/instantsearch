@@ -15,6 +15,7 @@ const defaultTemplates: RefinementListComponentTemplates = {
           value={value}
           defaultChecked={isRefined}
         />
+        {/* @MAJOR: use the `<Highlight>` component instead */}
         <span
           className={cx(cssClasses.labelText)}
           dangerouslySetInnerHTML={
