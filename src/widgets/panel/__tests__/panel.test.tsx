@@ -12,7 +12,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '../../../../test/mock/createAPIResponse';
-import refinementList from '../../refinement-list/refinement-list';
+import stats from '../../stats/stats';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -34,12 +34,12 @@ describe('panel', () => {
           templates: {
             header({ results }, { html }) {
               return html`<span
-                >Brand ${results && `(${results.nbHits} results)`}</span
+                >Header ${results && `(${results.nbHits} results)`}</span
               >`;
             },
             footer({ results }, { html }) {
               return html`<a href="#"
-                >More brands ${results && `(${results.nbHits} results)`}</a
+                >Footer ${results && `(${results.nbHits} results)`}</a
               >`;
             },
             collapseButtonText({ collapsed }, { html }) {
@@ -47,7 +47,7 @@ describe('panel', () => {
             },
           },
           collapsed: () => true,
-        })(refinementList)({ container, attribute: 'brand' }),
+        })(stats)({ container }),
       ]);
 
       search.start();
@@ -64,7 +64,7 @@ describe('panel', () => {
     >
       <span>
         <span>
-          Brand 
+          Header 
           (10 results)
         </span>
       </span>
@@ -84,99 +84,13 @@ describe('panel', () => {
     >
       <div>
         <div
-          class="ais-RefinementList"
+          class="ais-Stats"
         >
-          <ul
-            class="ais-RefinementList-list"
+          <span
+            class="ais-Stats-text"
           >
-            <li
-              class="ais-RefinementList-item"
-            >
-              <div>
-                <label
-                  class="ais-RefinementList-label"
-                >
-                   
-                  <input
-                    class="ais-RefinementList-checkbox"
-                    type="checkbox"
-                    value="Insignia™"
-                  />
-                   
-                  <span
-                    class="ais-RefinementList-labelText"
-                  >
-                    Insignia™
-                  </span>
-                   
-                  <span
-                    class="ais-RefinementList-count"
-                  >
-                    746
-                  </span>
-                   
-                </label>
-              </div>
-            </li>
-            <li
-              class="ais-RefinementList-item"
-            >
-              <div>
-                <label
-                  class="ais-RefinementList-label"
-                >
-                   
-                  <input
-                    class="ais-RefinementList-checkbox"
-                    type="checkbox"
-                    value="Samsung"
-                  />
-                   
-                  <span
-                    class="ais-RefinementList-labelText"
-                  >
-                    Samsung
-                  </span>
-                   
-                  <span
-                    class="ais-RefinementList-count"
-                  >
-                    633
-                  </span>
-                   
-                </label>
-              </div>
-            </li>
-            <li
-              class="ais-RefinementList-item"
-            >
-              <div>
-                <label
-                  class="ais-RefinementList-label"
-                >
-                   
-                  <input
-                    class="ais-RefinementList-checkbox"
-                    type="checkbox"
-                    value="Metra"
-                  />
-                   
-                  <span
-                    class="ais-RefinementList-labelText"
-                  >
-                    Metra
-                  </span>
-                   
-                  <span
-                    class="ais-RefinementList-count"
-                  >
-                    591
-                  </span>
-                   
-                </label>
-              </div>
-            </li>
-          </ul>
+            10 results found in 0ms
+          </span>
         </div>
       </div>
     </div>
@@ -186,7 +100,7 @@ describe('panel', () => {
       <a
         href="#"
       >
-        More brands 
+        Footer 
         (10 results)
       </a>
     </div>
@@ -209,13 +123,13 @@ describe('panel', () => {
           templates: {
             header({ results }) {
               return (
-                <span>Brand {results && `(${results.nbHits} results)`}</span>
+                <span>Header {results && `(${results.nbHits} results)`}</span>
               );
             },
             footer({ results }) {
               return (
                 <a href="#">
-                  More brands {results && `(${results.nbHits} results)`}
+                  Footer {results && `(${results.nbHits} results)`}
                 </a>
               );
             },
@@ -224,7 +138,7 @@ describe('panel', () => {
             },
           },
           collapsed: () => true,
-        })(refinementList)({ container, attribute: 'brand' }),
+        })(stats)({ container, attribute: 'brand' }),
       ]);
 
       search.start();
@@ -241,7 +155,7 @@ describe('panel', () => {
     >
       <span>
         <span>
-          Brand 
+          Header 
           (10 results)
         </span>
       </span>
@@ -261,99 +175,13 @@ describe('panel', () => {
     >
       <div>
         <div
-          class="ais-RefinementList"
+          class="ais-Stats"
         >
-          <ul
-            class="ais-RefinementList-list"
+          <span
+            class="ais-Stats-text"
           >
-            <li
-              class="ais-RefinementList-item"
-            >
-              <div>
-                <label
-                  class="ais-RefinementList-label"
-                >
-                   
-                  <input
-                    class="ais-RefinementList-checkbox"
-                    type="checkbox"
-                    value="Insignia™"
-                  />
-                   
-                  <span
-                    class="ais-RefinementList-labelText"
-                  >
-                    Insignia™
-                  </span>
-                   
-                  <span
-                    class="ais-RefinementList-count"
-                  >
-                    746
-                  </span>
-                   
-                </label>
-              </div>
-            </li>
-            <li
-              class="ais-RefinementList-item"
-            >
-              <div>
-                <label
-                  class="ais-RefinementList-label"
-                >
-                   
-                  <input
-                    class="ais-RefinementList-checkbox"
-                    type="checkbox"
-                    value="Samsung"
-                  />
-                   
-                  <span
-                    class="ais-RefinementList-labelText"
-                  >
-                    Samsung
-                  </span>
-                   
-                  <span
-                    class="ais-RefinementList-count"
-                  >
-                    633
-                  </span>
-                   
-                </label>
-              </div>
-            </li>
-            <li
-              class="ais-RefinementList-item"
-            >
-              <div>
-                <label
-                  class="ais-RefinementList-label"
-                >
-                   
-                  <input
-                    class="ais-RefinementList-checkbox"
-                    type="checkbox"
-                    value="Metra"
-                  />
-                   
-                  <span
-                    class="ais-RefinementList-labelText"
-                  >
-                    Metra
-                  </span>
-                   
-                  <span
-                    class="ais-RefinementList-count"
-                  >
-                    591
-                  </span>
-                   
-                </label>
-              </div>
-            </li>
-          </ul>
+            10 results found in 0ms
+          </span>
         </div>
       </div>
     </div>
@@ -363,7 +191,7 @@ describe('panel', () => {
       <a
         href="#"
       >
-        More brands 
+        Footer 
         (10 results)
       </a>
     </div>
