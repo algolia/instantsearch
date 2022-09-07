@@ -105,7 +105,16 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
           mixins: [
             {
               beforeCreate() {
-                if (component.$nuxt) {
+                const descriptor = Object.getOwnPropertyDescriptor(
+                  component,
+                  '$nuxt'
+                );
+
+                const isWritable = descriptor
+                  ? descriptor.writable || descriptor.set
+                  : false;
+
+                if (component.$nuxt && isWritable) {
                   // In case of Nuxt (3), we ensure the context is shared between
                   // the real and cloned component
                   this.$nuxt = component.$nuxt;
