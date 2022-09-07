@@ -173,20 +173,6 @@ jobs:
       - store_test_results:
           path: junit/jest/
 
-  test_integration:
-    <<: *defaults
-    docker:
-      - image: cimg/node:12.22.7-browsers
-    steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
-      - run:
-          name: Integration Tests
-          command: yarn test:integration
-
   test_e2e:
     <<: *defaults
     steps:
@@ -253,7 +239,6 @@ workflows:
       - test_unit
       - test_unit_react_v17
       - test_unit_algoliasearch_v3
-      - test_integration
       - test_e2e
       - test_examples
       - release_if_needed:
