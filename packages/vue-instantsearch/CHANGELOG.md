@@ -1,3 +1,17 @@
+# [4.5.0](https://github.com/algolia/vue-instantsearch/compare/v4.4.2...v4.5.0) (2022-09-07)
+
+
+### Bug Fixes
+
+* **nuxt:** only write $nuxt if it's writable ([#1117](https://github.com/algolia/vue-instantsearch/issues/1117)) ([bdecca9](https://github.com/algolia/vue-instantsearch/commit/bdecca9334322e9405ca21e6c6d51735d3ec042f)), closes [/github.com/algolia/vue-instantsearch/commit/acda29326475bd1b73f12b058a0c02df00b8b239#commitcomment-67430759](https://github.com//github.com/algolia/vue-instantsearch/commit/acda29326475bd1b73f12b058a0c02df00b8b239/issues/commitcomment-67430759)
+
+
+### Features
+
+* **can-refine:** provide `canRefine` for multiple widget slots ([#1141](https://github.com/algolia/vue-instantsearch/issues/1141)) ([424316d](https://github.com/algolia/vue-instantsearch/commit/424316d8c6e23d4573c0d6a63c56ef919da864e1))
+
+
+
 ## [4.4.2](https://github.com/algolia/vue-instantsearch/compare/v4.4.1...v4.4.2) (2022-07-25)
 
 
