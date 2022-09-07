@@ -47,6 +47,6 @@
     "algoliasearch": ">= 3.1 < 5",
     "react": ">= 16.3.0 < 19",
     "react-dom": ">= 16.3.0 < 19",
-    "react-instantsearch-dom": "6.26.0"
+    "react-instantsearch-dom": "6.32.1"
   }
 }

@@ -46,6 +46,17 @@ module.exports = {
     exec(
       `yarn lerna version ${version} --exact --no-git-tag-version --no-push --yes`
     );
+
+    // Update peerDependency in `react-instantsearch-dom-maps`
+    const file = path.resolve(
+      dir,
+      'packages',
+      'react-instantsearch-dom-maps',
+      'package.json'
+    );
+    const package = require(file);
+    package.peerDependencies['react-instantsearch-dom'] = `${version}`;
+    fs.writeFileSync(file, JSON.stringify(package, null, 2));
   },
   shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
     const { fix = 0 } = commitNumbersPerType;
