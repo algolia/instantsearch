@@ -183,9 +183,7 @@ export default {
         $$widgetType: 'ais.pagination',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state => state.nbPages > 1,
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     padding: {

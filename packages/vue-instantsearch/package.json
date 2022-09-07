@@ -46,7 +46,7 @@
     "release": "shipjs prepare"
   },
   "dependencies": {
-    "instantsearch.js": "^4.43.0",
+    "instantsearch.js": "^4.45.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {
@@ -133,11 +133,11 @@
   "bundlesize": [
     {
       "path": "./vue2/umd/index.js",
-      "maxSize": "56.50 kB"
+      "maxSize": "56.75 kB"
     },
     {
       "path": "./vue3/umd/index.js",
-      "maxSize": "57.75 kB"
+      "maxSize": "58.00 kB"
     },
     {
       "path": "./vue2/cjs/index.js",

@@ -167,23 +167,6 @@ describe.each([
   });
 });
 
-it('calls the Panel mixin with `canRefine`', async () => {
-  __setState({ items: [{}] });
-
-  const wrapper = mount(CurrentRefinements);
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({ state: { items: [] } });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
-});
-
 it('calls `refine` with a refinement', async () => {
   const spies = [jest.fn(), jest.fn()];
 

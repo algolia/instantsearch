@@ -61,9 +61,7 @@ export default {
         $$widgetType: 'ais.menu',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state => Boolean(state.canRefine),
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     attribute: {

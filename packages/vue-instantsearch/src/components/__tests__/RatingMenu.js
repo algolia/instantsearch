@@ -126,29 +126,6 @@ it('calls refine when clicked on link', async () => {
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('1');
 });
 
-it('calls the Panel mixin with `hasNoResults`', async () => {
-  __setState({ hasNoResults: false });
-
-  const wrapper = mount(RatingMenu, {
-    propsData: defaultProps,
-  });
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({
-    state: {
-      hasNoResults: true,
-    },
-  });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
-});
-
 it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({

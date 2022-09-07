@@ -182,31 +182,6 @@ describe('default render', () => {
   });
 });
 
-describe('panel', () => {
-  it('calls the Panel mixin with `canRefine`', async () => {
-    __setState({ ...defaultState });
-
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-    });
-
-    const mapStateToCanRefine = () =>
-      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-    expect(mapStateToCanRefine()).toBe(true);
-
-    await wrapper.setData({
-      state: {
-        canRefine: false,
-      },
-    });
-
-    expect(mapStateToCanRefine()).toBe(false);
-
-    expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
-  });
-});
-
 describe('custom default render', () => {
   const defaultSlot = `
     <template v-slot="{ items, canRefine, refine, createURL }">

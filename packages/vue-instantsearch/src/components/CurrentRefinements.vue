@@ -71,10 +71,7 @@ export default {
         $$widgetType: 'ais.currentRefinements',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state =>
-        Boolean(state.items) && state.items.length > 0,
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     includedAttributes: {

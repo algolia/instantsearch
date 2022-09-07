@@ -187,26 +187,3 @@ describe('custom resetLabel render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 });
-
-it('calls the Panel mixin with `hasRefinement`', async () => {
-  __setState({
-    hasRefinements: true,
-  });
-
-  const wrapper = mount(ClearRefinements);
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({
-    state: {
-      hasRefinements: false,
-    },
-  });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
-});

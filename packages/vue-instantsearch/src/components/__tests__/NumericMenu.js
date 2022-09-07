@@ -41,6 +41,7 @@ const moreThan500 = {
 const defaultState = {
   items: [all, lessThan10, from10to100, from100to500, moreThan500],
   hasNoResults: false,
+  canRefine: true,
   createURL: () => {},
   refine: () => {},
 };
@@ -125,7 +126,7 @@ describe('default render', () => {
   it('renders correctly without refinement', () => {
     __setState({
       ...defaultState,
-      hasNoResults: true,
+      canRefine: false,
     });
 
     const props = {
@@ -188,29 +189,6 @@ describe('default render', () => {
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('100'));
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('500'));
   });
-});
-
-it('calls the Panel mixin with `hasNoResults`', async () => {
-  __setState({ ...defaultState });
-
-  const wrapper = mount(NumericMenu, {
-    propsData: defaultProps,
-  });
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({
-    state: {
-      hasNoResults: true,
-    },
-  });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
 it('exposes send-event method for insights middleware', async () => {
@@ -281,7 +259,7 @@ describe('custom default render', () => {
   it('renders correctly without refinement', () => {
     __setState({
       ...defaultState,
-      hasNoResults: true,
+      canRefine: false,
     });
 
     const wrapper = mount({

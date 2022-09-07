@@ -1,12 +1,12 @@
 <template>
   <div
     v-if="state"
-    :class="[suit(), !canRefine && suit('', 'noRefinement')]"
+    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
   >
     <slot
       :current-refinement="values"
       :refine="refine"
-      :can-refine="canRefine"
+      :can-refine="state.canRefine"
       :range="state.range"
       :send-event="state.sendEvent"
     >
@@ -60,9 +60,6 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 
-const mapStateToCanRefine = state =>
-  state && Boolean(state.range) && state.range.min !== state.range.max;
-
 export default {
   name: 'AisRangeInput',
   mixins: [
@@ -75,9 +72,7 @@ export default {
         $$widgetType: 'ais.rangeInput',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine,
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     attribute: {
@@ -118,9 +113,6 @@ export default {
         max: this.max,
         precision: this.precision,
       };
-    },
-    canRefine() {
-      return mapStateToCanRefine(this.state);
     },
     step() {
       return 1 / Math.pow(10, this.precision);

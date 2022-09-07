@@ -64,9 +64,7 @@ export default {
         $$widgetType: 'ais.breadcrumb',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state => Boolean(state.canRefine),
-    }),
+    createPanelConsumerMixin(),
     createSuitMixin({ name: 'Breadcrumb' }),
   ],
   props: {

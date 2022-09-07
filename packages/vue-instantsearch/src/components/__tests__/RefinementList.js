@@ -166,29 +166,6 @@ it('behaves correctly', async () => {
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('yo');
 });
 
-it('calls the Panel mixin with `canRefine`', async () => {
-  __setState({ ...defaultState });
-
-  const wrapper = mount(RefinementList, {
-    propsData: { attribute: 'something' },
-  });
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({
-    state: {
-      canRefine: false,
-    },
-  });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
-});
-
 it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({

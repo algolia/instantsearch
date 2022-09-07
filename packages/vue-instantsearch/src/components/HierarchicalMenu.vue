@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="state"
-    :class="[suit(), !canRefine && suit('', 'noRefinement')]"
+    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
   >
     <slot
       :items="state.items"
-      :can-refine="canRefine"
+      :can-refine="state.canRefine"
       :can-toggle-show-more="state.canToggleShowMore"
       :is-showing-more="state.isShowingMore"
       :refine="state.refine"
@@ -46,9 +46,6 @@ import { createPanelConsumerMixin } from '../mixins/panel';
 import HierarchicalMenuList from './HierarchicalMenuList.vue';
 import { createSuitMixin } from '../mixins/suit';
 
-const mapStateToCanRefine = state =>
-  Boolean(state.items) && state.items.length > 0;
-
 export default {
   name: 'AisHierarchicalMenu',
   mixins: [
@@ -61,9 +58,7 @@ export default {
         $$widgetType: 'ais.hierarchicalMenu',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine,
-    }),
+    createPanelConsumerMixin(),
   ],
   components: {
     HierarchicalMenuList,
@@ -119,9 +114,6 @@ export default {
         sortBy: this.sortBy,
         transformItems: this.transformItems,
       };
-    },
-    canRefine() {
-      return mapStateToCanRefine(this.state);
     },
   },
 };

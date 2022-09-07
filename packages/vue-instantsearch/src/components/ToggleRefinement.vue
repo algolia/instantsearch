@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="state"
-    :class="[suit(), !canRefine && suit('', 'noRefinement')]"
+    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
   >
     <slot
       :value="state.value"
-      :can-refine="canRefine"
+      :can-refine="state.canRefine"
       :refine="state.refine"
       :createURL="state.createURL"
       :send-event="state.sendEvent"
@@ -35,8 +35,6 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 
-const mapStateToCanRefine = state => Boolean(state.value && state.value.count);
-
 export default {
   name: 'AisToggleRefinement',
   mixins: [
@@ -49,9 +47,7 @@ export default {
         $$widgetType: 'ais.toggleRefinement',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine,
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     attribute: {
@@ -81,9 +77,6 @@ export default {
         on: this.on,
         off: this.off,
       };
-    },
-    canRefine() {
-      return mapStateToCanRefine(this.state);
     },
   },
 };

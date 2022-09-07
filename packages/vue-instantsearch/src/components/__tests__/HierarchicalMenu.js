@@ -116,6 +116,7 @@ const defaultState = {
   createURL: () => {},
   isShowingMore: false,
   canToggleShowMore: true,
+  canRefine: true,
   toggleShowMore: () => {},
   sendEvent: () => {},
 };
@@ -266,6 +267,7 @@ describe('default render', () => {
     __setState({
       ...defaultState,
       items: [],
+      canRefine: false,
     });
 
     const wrapper = mount(HierarchicalMenu, {
@@ -466,25 +468,6 @@ describe('default render', () => {
   });
 });
 
-it('calls the Panel mixin with `items.length`', async () => {
-  __setState({ ...defaultState });
-
-  const wrapper = mount(HierarchicalMenu, {
-    propsData: defaultProps,
-  });
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({ state: { items: [] } });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
-});
-
 it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
@@ -574,6 +557,7 @@ describe('custom default render', () => {
     __setState({
       ...defaultState,
       items: [],
+      canRefine: false,
     });
 
     const wrapper = mount({

@@ -8,6 +8,7 @@
       :has-no-results="state.hasNoResults"
       :refine="state.refine"
       :current-refinement="state.currentRefinement"
+      :can-refine="state.canRefine"
     >
       <select
         :class="suit('select')"
@@ -42,9 +43,7 @@ export default {
       }
     ),
 
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state => state.hasNoResults === false,
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     items: {

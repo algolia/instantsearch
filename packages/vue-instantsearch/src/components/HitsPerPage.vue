@@ -7,6 +7,7 @@
       :items="state.items"
       :refine="state.refine"
       :hasNoResults="state.hasNoResults"
+      :canRefine="state.canRefine"
     >
       <select
         :class="suit('select')"
@@ -42,9 +43,7 @@ export default {
         $$widgetType: 'ais.hitsPerPage',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state => state.hasNoResults === false,
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     items: {

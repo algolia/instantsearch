@@ -118,9 +118,7 @@ export default {
         $$widgetType: 'ais.refinementList',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state => Boolean(state.canRefine),
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     attribute: {

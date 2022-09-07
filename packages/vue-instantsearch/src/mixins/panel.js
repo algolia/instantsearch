@@ -39,7 +39,9 @@ export const createPanelProviderMixin = () => ({
   },
 });
 
-export const createPanelConsumerMixin = ({ mapStateToCanRefine }) => ({
+export const createPanelConsumerMixin = ({
+  mapStateToCanRefine = state => Boolean(state.canRefine),
+} = {}) => ({
   inject: {
     emitter: {
       from: PANEL_EMITTER_NAMESPACE,

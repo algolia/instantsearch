@@ -8,6 +8,7 @@
       :refine="state.refine"
       :createURL="state.createURL"
       :send-event="state.sendEvent"
+      :can-refine="state.canRefine"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -95,9 +96,7 @@ export default {
         $$widgetType: 'ais.ratingMenu',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state => state.hasNoResults === false,
-    }),
+    createPanelConsumerMixin(),
   ],
   props: {
     attribute: {

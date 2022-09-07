@@ -13,6 +13,7 @@ const defaultValue = {
 
 const defaultState = {
   value: defaultValue,
+  canRefine: true,
   refine: () => {},
   createURL: () => {},
 };
@@ -82,6 +83,7 @@ describe('default render', () => {
   it('renders correctly without refinement (with 0)', () => {
     __setState({
       ...defaultState,
+      canRefine: false,
       value: {
         ...defaultValue,
         count: 0,
@@ -98,6 +100,7 @@ describe('default render', () => {
   it('renders correctly without refinement (with null)', () => {
     __setState({
       ...defaultState,
+      canRefine: false,
       value: {
         ...defaultValue,
         count: null,
@@ -162,39 +165,6 @@ describe('default render', () => {
   });
 });
 
-it('calls the Panel mixin with `value.count`', async () => {
-  __setState({
-    ...defaultState,
-    value: {
-      // Otherwise setData update the default value
-      // and impact the other tests. We should not
-      // rely on a global state for the tests.
-      ...defaultValue,
-    },
-  });
-
-  const wrapper = mount(Toggle, {
-    propsData: defaultProps,
-  });
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({
-    state: {
-      value: {
-        count: 0,
-      },
-    },
-  });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
-});
-
 it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({
@@ -255,6 +225,7 @@ describe('custom default render', () => {
   it('renders correctly without refinement', () => {
     __setState({
       ...defaultState,
+      canRefine: false,
       value: {
         ...defaultValue,
         count: 0,

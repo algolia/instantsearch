@@ -37,9 +37,7 @@ export default {
         $$widgetType: 'ais.clearRefinements',
       }
     ),
-    createPanelConsumerMixin({
-      mapStateToCanRefine: state => Boolean(state.hasRefinements),
-    }),
+    createPanelConsumerMixin(),
     createSuitMixin({ name: 'ClearRefinements' }),
   ],
   props: {

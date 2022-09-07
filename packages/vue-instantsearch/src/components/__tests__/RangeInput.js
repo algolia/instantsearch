@@ -13,6 +13,7 @@ const defaultRange = {
 const defaultState = {
   start: [0, 1000],
   range: defaultRange,
+  canRefine: true,
   refine: () => {},
 };
 
@@ -245,40 +246,6 @@ describe('rendering', () => {
 
     expect(wrapper.find('.ais-RangeInput-input--max').element.value).toBe('');
   });
-});
-
-it('calls the Panel mixin with `range`', async () => {
-  __setState({
-    ...defaultState,
-    range: {
-      min: 0,
-      max: 10,
-    },
-  });
-
-  const wrapper = mount(RangeInput, {
-    propsData: {
-      attribute: 'price',
-    },
-  });
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({
-    state: {
-      range: {
-        min: 0,
-        max: 0,
-      },
-    },
-  });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });
 
 it('exposes send-event method for insights middleware', async () => {

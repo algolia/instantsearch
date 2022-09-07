@@ -12,6 +12,7 @@ const defaultState = {
     { value: 'some_index_quality', label: 'Quality ascending' },
   ],
   hasNoResults: false,
+  canRefine: true,
   currentRefinement: 'some_index',
 };
 
@@ -105,27 +106,4 @@ it('calls `refine` when the selection changes with the `value`', async () => {
   expect(refine).toHaveBeenCalledTimes(1);
   expect(refine).toHaveBeenLastCalledWith('some_index_quality');
   expect(selectedOption.element.selected).toBe(true);
-});
-
-it('calls the Panel mixin with `hasNoResults`', async () => {
-  __setState({ ...defaultState });
-
-  const wrapper = mount(SortBy, {
-    propsData: defaultProps,
-  });
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({
-    state: {
-      hasNoResults: true,
-    },
-  });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
 });

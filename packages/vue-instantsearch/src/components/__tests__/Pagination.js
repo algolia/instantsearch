@@ -143,27 +143,6 @@ it('Moves to the previous page on that button', async () => {
   );
 });
 
-it('calls the Panel mixin with `nbPages`', async () => {
-  __setState({ ...defaultState });
-
-  const wrapper = mount(Pagination);
-
-  const mapStateToCanRefine = () =>
-    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
-
-  expect(mapStateToCanRefine()).toBe(true);
-
-  await wrapper.setData({
-    state: {
-      nbPages: 1,
-    },
-  });
-
-  expect(mapStateToCanRefine()).toBe(false);
-
-  expect(wrapper.vm.mapStateToCanRefine({})).toBe(false);
-});
-
 it('implements showFirst', async () => {
   __setState({ ...defaultState });
 

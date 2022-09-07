@@ -86,18 +86,12 @@ describe('createPanelProviderMixin', () => {
 });
 
 describe('createPanelConsumerMixin', () => {
-  const mapStateToCanRefine = state => state.attributeName;
-
-  it('emits PANEL_CHANGE_EVENT on `state.attributeName` change', async () => {
+  it('emits PANEL_CHANGE_EVENT on `state.canRefine` change', async () => {
     const emitter = createFakeEmitter();
     const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
-      mixins: [
-        createPanelConsumerMixin({
-          mapStateToCanRefine,
-        }),
-      ],
+      mixins: [createPanelConsumerMixin()],
       provide: {
         [PANEL_EMITTER_NAMESPACE]: emitter,
       },
@@ -105,7 +99,7 @@ describe('createPanelConsumerMixin', () => {
 
     await wrapper.setData({
       state: {
-        attributeName: false,
+        canRefine: false,
       },
     });
 
@@ -113,7 +107,7 @@ describe('createPanelConsumerMixin', () => {
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
     if (isVue3) {
-      await wrapper.setData({ state: { attributeName: true } });
+      await wrapper.setData({ state: { canRefine: true } });
     } else {
       // ↓ this should be replaceable with `wrapper.setData()` but it didn't
       // trigger the watcher in `createPanelConsumerMixin`.
@@ -121,7 +115,7 @@ describe('createPanelConsumerMixin', () => {
       // https://github.com/vuejs/vue-test-utils/issues/1756
       // https://github.com/vuejs/vue-test-utils/issues/149
       wrapper.vm.$set(wrapper.vm, 'state', {
-        attributeName: true,
+        canRefine: true,
       });
       await nextTick();
     }
@@ -135,11 +129,7 @@ describe('createPanelConsumerMixin', () => {
     const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
-      mixins: [
-        createPanelConsumerMixin({
-          mapStateToCanRefine,
-        }),
-      ],
+      mixins: [createPanelConsumerMixin()],
       provide: {
         [PANEL_EMITTER_NAMESPACE]: emitter,
       },
@@ -147,7 +137,7 @@ describe('createPanelConsumerMixin', () => {
 
     await wrapper.setData({
       state: {
-        attributeName: false,
+        canRefine: false,
       },
     });
 
@@ -156,7 +146,7 @@ describe('createPanelConsumerMixin', () => {
 
     await wrapper.setData({
       state: {
-        attributeName: false,
+        canRefine: false,
       },
     });
 
@@ -168,11 +158,7 @@ describe('createPanelConsumerMixin', () => {
     const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
-      mixins: [
-        createPanelConsumerMixin({
-          mapStateToCanRefine,
-        }),
-      ],
+      mixins: [createPanelConsumerMixin()],
       provide: {
         [PANEL_EMITTER_NAMESPACE]: emitter,
       },
@@ -180,7 +166,7 @@ describe('createPanelConsumerMixin', () => {
 
     await wrapper.setData({
       state: {
-        attributeName: true,
+        canRefine: true,
       },
     });
 
@@ -193,11 +179,7 @@ describe('createPanelConsumerMixin', () => {
     const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
-      mixins: [
-        createPanelConsumerMixin({
-          mapStateToCanRefine,
-        }),
-      ],
+      mixins: [createPanelConsumerMixin()],
       provide: {
         [PANEL_EMITTER_NAMESPACE]: emitter,
       },
@@ -205,7 +187,7 @@ describe('createPanelConsumerMixin', () => {
 
     await wrapper.setData({
       state: {
-        attributeName: true,
+        canRefine: true,
       },
     });
 
@@ -227,11 +209,7 @@ describe('createPanelConsumerMixin', () => {
     const Test = createFakeComponent();
 
     const wrapper = mount(Test, {
-      mixins: [
-        createPanelConsumerMixin({
-          mapStateToCanRefine,
-        }),
-      ],
+      mixins: [createPanelConsumerMixin()],
       provide: {
         [PANEL_EMITTER_NAMESPACE]: emitter,
       },
@@ -239,7 +217,7 @@ describe('createPanelConsumerMixin', () => {
 
     await wrapper.setData({
       state: {
-        attributeName: true,
+        canRefine: true,
       },
     });
 
@@ -247,9 +225,9 @@ describe('createPanelConsumerMixin', () => {
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, true);
 
     if (isVue3) {
-      await wrapper.setData({ state: { attributeName: false } });
+      await wrapper.setData({ state: { canRefine: false } });
     } else {
-      wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
+      wrapper.vm.$set(wrapper.vm, 'state', { canRefine: false });
       await nextTick();
     }
 
@@ -257,9 +235,9 @@ describe('createPanelConsumerMixin', () => {
     expect(emitter.emit).toHaveBeenLastCalledWith(PANEL_CHANGE_EVENT, false);
 
     if (isVue3) {
-      await wrapper.setData({ state: { attributeName: false } });
+      await wrapper.setData({ state: { canRefine: false } });
     } else {
-      wrapper.vm.$set(wrapper.vm, 'state', { attributeName: false });
+      wrapper.vm.$set(wrapper.vm, 'state', { canRefine: false });
       await nextTick();
     }
 
