@@ -26,7 +26,7 @@ describe('insights hogan helper', () => {
       data: {
         objectID: 'xxx',
       },
-    });
+    }) as string;
 
     const expected = `<button ${insights('clickedObjectIDsAfterSearch', {
       objectIDs: ['xxx'],
@@ -52,7 +52,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
         templateKey: 'item',
         templates: {
           item: `
-        <button {{#helpers.insights}}{ 
+        <button {{#helpers.insights}}{
             invalid json
         }{{/helpers.insights}}>Add to cart</button>
         `,
