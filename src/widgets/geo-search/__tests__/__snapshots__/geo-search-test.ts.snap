@@ -27,10 +27,10 @@ exports[`GeoSearch expect to render 2`] = `
   "onRefineToggle": [Function],
   "templateProps": {
     "templates": {
-      "HTMLMarker": "<p>Your custom HTML Marker</p>",
-      "redo": "Redo search here",
-      "reset": "Clear the map refinement",
-      "toggle": "Search as I move the map",
+      "HTMLMarker": [Function],
+      "redo": [Function],
+      "reset": [Function],
+      "toggle": [Function],
     },
     "templatesConfig": undefined,
     "useCustomCompileOptions": {
@@ -70,10 +70,10 @@ exports[`GeoSearch expect to render with custom classNames 2`] = `
   "onRefineToggle": [Function],
   "templateProps": {
     "templates": {
-      "HTMLMarker": "<p>Your custom HTML Marker</p>",
-      "redo": "Redo search here",
-      "reset": "Clear the map refinement",
-      "toggle": "Search as I move the map",
+      "HTMLMarker": [Function],
+      "redo": [Function],
+      "reset": [Function],
+      "toggle": [Function],
     },
     "templatesConfig": undefined,
     "useCustomCompileOptions": {

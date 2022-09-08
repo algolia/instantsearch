@@ -1410,6 +1410,11 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
+"@googlemaps/jest-mocks@2.7.5":
+  version "2.7.5"
+  resolved "https://registry.yarnpkg.com/@googlemaps/jest-mocks/-/jest-mocks-2.7.5.tgz#50bf8b22ea19577bad09def9f91ae4fa6ae6d058"
+  integrity sha512-fdHN/sN0Cpz+Acqe9Yhzvhqg/bhN4oMBoKToVIZgFhxafMXtUbQvfL12HiE9AmpvZgge2gBKTu11ImGRm3e2wg==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.0.0.tgz#10602de5570baea82f8afbfa2630b24e7a8cfe5b"

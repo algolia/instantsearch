@@ -1,10 +1,12 @@
 /* global google EventListener */
+import { render } from 'preact';
+import type { renderTemplate } from '../../lib/utils';
 
 export type HTMLMarkerArguments = {
   __id: string;
   position: google.maps.LatLngLiteral;
   map: google.maps.Map;
-  template: string;
+  template: ReturnType<typeof renderTemplate>;
   title?: string;
   className: string;
   anchor?: { x: number; y: number };
@@ -58,7 +60,12 @@ const createHTMLMarker = (
       this.element = document.createElement('div');
       this.element.className = className;
       this.element.style.position = 'absolute';
-      this.element.innerHTML = template;
+
+      if (typeof template === 'object') {
+        render(template, this.element);
+      } else {
+        this.element.innerHTML = template;
+      }
 
       this.setMap(map);
     }

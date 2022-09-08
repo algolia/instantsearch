@@ -286,10 +286,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const [firstRender] = render.mock.calls;
 
     expect((firstRender[0] as any).props.templateProps.templates).toEqual({
-      HTMLMarker: '<p>Your custom HTML Marker</p>',
-      reset: 'Clear the map refinement',
+      HTMLMarker: expect.any(Function),
+      reset: expect.any(Function),
       toggle: 'Search when the map move',
-      redo: 'Redo search here',
+      redo: expect.any(Function),
     });
   });
 
@@ -1015,19 +1015,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         [
           expect.objectContaining({
             __id: '123',
-            template: '<p>Your custom HTML Marker</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({
+                children: 'Your custom HTML Marker',
+              }),
+              type: 'p',
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '456',
-            template: '<p>Your custom HTML Marker</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({
+                children: 'Your custom HTML Marker',
+              }),
+              type: 'p',
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '789',
-            template: '<p>Your custom HTML Marker</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({
+                children: 'Your custom HTML Marker',
+              }),
+              type: 'p',
+            }),
           }),
         ],
       ]);
@@ -1224,21 +1239,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.objectContaining({
             __id: '123',
             title: 'ID: 123',
-            template: '<p>Your custom HTML Marker</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({
+                children: 'Your custom HTML Marker',
+              }),
+              type: 'p',
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '456',
             title: 'ID: 456',
-            template: '<p>Your custom HTML Marker</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({
+                children: 'Your custom HTML Marker',
+              }),
+              type: 'p',
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '789',
             title: 'ID: 789',
-            template: '<p>Your custom HTML Marker</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({
+                children: 'Your custom HTML Marker',
+              }),
+              type: 'p',
+            }),
           }),
         ],
       ]);
