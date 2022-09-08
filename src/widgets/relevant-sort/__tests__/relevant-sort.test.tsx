@@ -167,7 +167,7 @@ describe('relevantSort', () => {
     >
       <p>
         Click the button to
-
+         
         see all results.
       </p>
     </div>
