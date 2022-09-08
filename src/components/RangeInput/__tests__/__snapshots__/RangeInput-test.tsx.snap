@@ -24,7 +24,6 @@ exports[`RangeInput expect to render 1`] = `
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -58,7 +57,6 @@ exports[`RangeInput expect to render 1`] = `
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -106,7 +104,6 @@ exports[`RangeInput expect to render with disabled state 1`] = `
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -140,7 +137,6 @@ exports[`RangeInput expect to render with disabled state 1`] = `
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -188,7 +184,6 @@ exports[`RangeInput expect to render with values 1`] = `
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -222,7 +217,6 @@ exports[`RangeInput expect to render with values 1`] = `
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -270,7 +264,6 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -304,7 +297,6 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -352,7 +344,6 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -386,7 +377,6 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -434,7 +424,6 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -468,7 +457,6 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -516,7 +504,6 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {
@@ -550,7 +537,6 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       />
     </label>
     <Template
-      $$widgetType=""
       data={{}}
       rootProps={
         {

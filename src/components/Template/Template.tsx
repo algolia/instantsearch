@@ -14,7 +14,6 @@ const defaultProps = {
   useCustomCompileOptions: {},
   templates: {},
   templatesConfig: {},
-  $$widgetType: '',
 };
 
 export type TemplateProps = {
@@ -24,7 +23,6 @@ export type TemplateProps = {
   templateKey: string;
   bindEvent?: BindEventForHits;
   sendEvent?: SendEventForHits;
-  $$widgetType?: string;
 } & PreparedTemplateProps<Templates> &
   Readonly<typeof defaultProps>;
 
@@ -42,10 +40,9 @@ class Template extends Component<TemplateProps> {
 
   public render() {
     warning(
-      this.props.$$widgetType === 'ais.geoSearch' ||
-        Object.keys(this.props.templates).every(
-          (key) => typeof this.props.templates[key] === 'function'
-        ),
+      Object.keys(this.props.templates).every(
+        (key) => typeof this.props.templates[key] === 'function'
+      ),
       `Hogan.js and string-based templates are deprecated and will not be supported in InstantSearch.js 5.x.
 
 You can replace them with function-form templates and use either the provided \`html\` function or JSX templates.

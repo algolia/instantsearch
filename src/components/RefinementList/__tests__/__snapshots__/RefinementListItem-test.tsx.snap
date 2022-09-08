@@ -6,7 +6,6 @@ exports[`RefinementListItem renders an item 1`] = `
   onClick={[Function]}
 >
   <Template
-    $$widgetType=""
     data={
       {
         "template": "data",
