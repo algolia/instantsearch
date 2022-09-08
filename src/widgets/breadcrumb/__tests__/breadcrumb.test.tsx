@@ -13,14 +13,9 @@ import {
   createSingleSearchResponse,
 } from '../../../../test/mock/createAPIResponse';
 import { connectHierarchicalMenu } from '../../../connectors';
-import { warning } from '../../../lib/utils';
 
 beforeEach(() => {
   document.body.innerHTML = '';
-});
-
-afterEach(() => {
-  warning.cache = {};
 });
 
 describe('breadcrumb', () => {
