@@ -77,10 +77,6 @@ const createSendEvent = ({
 
 export type ToggleRefinementValue = {
   /**
-   * The attribute name of this toggle.
-   */
-  name: string;
-  /**
    * Whether this option is enabled.
    */
   isRefined: boolean;
@@ -320,12 +316,12 @@ const connectToggleRefinement: ToggleRefinementConnector =
             ? on.every((v) => state.isDisjunctiveFacetRefined(attribute, v))
             : on.every((v) => state.isDisjunctiveFacetRefined(attribute, v));
 
-          let onFacetValue: Omit<ToggleRefinementValue, 'name'> = {
+          let onFacetValue: ToggleRefinementValue = {
             isRefined,
             count: 0,
           };
 
-          let offFacetValue: Omit<ToggleRefinementValue, 'name'> = {
+          let offFacetValue: ToggleRefinementValue = {
             isRefined: hasAnOffValue && !isRefined,
             count: 0,
           };
