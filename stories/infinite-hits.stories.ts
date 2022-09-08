@@ -1,7 +1,6 @@
 import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
-import insights from '../src/helpers/insights';
 import { createInfiniteHitsSessionStorageCache } from '../src/lib/infiniteHitsCache';
 
 import type { InsightsClient } from '../src/types/insights';
@@ -72,14 +71,18 @@ storiesOf('Results/InfiniteHits', module)
           instantsearch.widgets.infiniteHits({
             container,
             templates: {
-              item: (item) => `
-          <h4>${item.name}</h4>
-          <button
-            ${insights('clickedObjectIDsAfterSearch', {
-              objectIDs: [item.objectID],
-              eventName: 'Add to cart',
-            })} >Add to cart</button>
-          `,
+              item: (item, bindEvent) => `
+                <h4>${item.name}</h4>
+                <button
+                  ${bindEvent(
+                    'clickedObjectIDsAfterSearch',
+                    [item],
+                    'Add to cart'
+                  )}
+                >
+                  Add to cart
+                </button>
+              `,
             },
           }),
         ]);

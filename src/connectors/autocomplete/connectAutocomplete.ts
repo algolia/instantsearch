@@ -9,7 +9,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import type { Hits, Connector, WidgetRenderState } from '../../types';
+import type { Hit, Connector, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
@@ -43,7 +43,7 @@ export type AutocompleteRenderState = {
     /**
      * The resolved hits from the index matching the query.
      */
-    hits: Hits;
+    hits: Hit[];
 
     /**
      * The full results object from the Algolia API.

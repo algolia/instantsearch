@@ -346,13 +346,12 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
         let refinementIsApplied = false;
         let totalCount = 0;
 
-        if (results) {
-          const facetResults = results.getFacetValues(
-            attribute,
-            {}
-          ) as SearchResults.FacetValue[];
-          const maxValuesPerFacet = facetResults.length;
+        const facetResults = results?.getFacetValues(attribute, {}) as
+          | SearchResults.FacetValue[]
+          | undefined;
 
+        if (results && facetResults) {
+          const maxValuesPerFacet = facetResults.length;
           const maxDecimalPlaces = getFacetsMaxDecimalPlaces(facetResults);
           const maxFacets = Math.pow(10, maxDecimalPlaces) * max;
 

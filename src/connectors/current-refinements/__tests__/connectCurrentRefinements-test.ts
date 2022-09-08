@@ -165,7 +165,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
         configure.init!(createInitOptions());
 
-        helper.toggleRefinement('category', 'Decoration');
+        helper.toggleFacetRefinement('category', 'Decoration');
 
         const renderState = configure.getRenderState(
           {},
@@ -272,7 +272,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       configure.init!(createInitOptions());
 
-      helper.toggleRefinement('category', 'Decoration');
+      helper.toggleFacetRefinement('category', 'Decoration');
 
       const renderState = configure.getWidgetRenderState(
         createRenderOptions({

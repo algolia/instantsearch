@@ -7,7 +7,7 @@ import { h } from 'preact';
 import { render } from '@testing-library/preact';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../InfiniteHits';
-import type { Hits, SearchResponse } from '../../../types';
+import type { Hit, SearchResponse } from '../../../types';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 function createResults(partialResults: Partial<SearchResponse<any>>) {
@@ -33,7 +33,7 @@ describe('InfiniteHits', () => {
 
   describe('markup', () => {
     it('should render <InfiniteHits /> on first page', () => {
-      const hits: Hits = [
+      const hits: Hit[] = [
         {
           objectID: 'one',
           foo: 'bar',
@@ -73,7 +73,7 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> on last page', () => {
-      const hits: Hits = [
+      const hits: Hit[] = [
         {
           objectID: 'one',
           foo: 'bar',
@@ -113,7 +113,7 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> without hits on first page', () => {
-      const hits: Hits = [];
+      const hits: Hit[] = [];
 
       const props = {
         hasShowPrevious: false,
@@ -142,7 +142,7 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> without hits on last page', () => {
-      const hits: Hits = [];
+      const hits: Hit[] = [];
 
       const props = {
         hasShowPrevious: false,
@@ -171,7 +171,7 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> with "Show previous" button on first page', () => {
-      const hits: Hits = [
+      const hits: Hit[] = [
         {
           objectID: 'one',
           foo: 'bar',
@@ -216,7 +216,7 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> with "Show previous" button on last page', () => {
-      const hits: Hits = [
+      const hits: Hit[] = [
         {
           objectID: 'one',
           foo: 'bar',

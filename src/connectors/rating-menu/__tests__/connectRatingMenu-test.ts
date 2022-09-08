@@ -699,8 +699,48 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       });
     });
 
+    it('returns the widget render state with no items without throwing an error', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
+      const ratingMenuWidget = createRatingMenu({
+        attribute: 'grade',
+      });
+      const helper = jsHelper(createSearchClient(), 'indexName', {
+        disjunctiveFacets: [],
+      });
+
+      const initOptions = createInitOptions({ state: helper.state, helper });
+      const renderState1 = ratingMenuWidget.getWidgetRenderState(initOptions);
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          facets: { grade: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 } },
+        }),
+      ]);
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+      const renderState2 = ratingMenuWidget.getWidgetRenderState(renderOptions);
+
+      expect(renderState2).toEqual({
+        items: [],
+        createURL: expect.any(Function),
+        canRefine: false,
+        refine: expect.any(Function),
+        sendEvent: renderState1.sendEvent,
+        hasNoResults: true,
+        widgetParams: {
+          attribute: 'grade',
+        },
+      });
+    });
+
     describe('canRefine', () => {
-      it('returns `true`  if there are no results but a refinement is applied and total facet count is higher than 0', () => {
+      it('returns `true` if there are no results but a refinement is applied and total facet count is higher than 0', () => {
         const renderFn = jest.fn();
         const unmountFn = jest.fn();
         const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
