@@ -4,7 +4,7 @@ import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
 import type { SearchResults } from 'algoliasearch-helper';
-import type { ComponentCSSClasses, Hits } from '../../types';
+import type { ComponentCSSClasses, Hit } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
@@ -17,7 +17,7 @@ export type InfiniteHitsComponentTemplates = Required<InfiniteHitsTemplates>;
 
 export type InfiniteHitsProps = {
   cssClasses: InfiniteHitsComponentCSSClasses;
-  hits: Hits;
+  hits: Hit[];
   results: SearchResults;
   hasShowPrevious: boolean;
   showPrevious: () => void;

@@ -5,7 +5,7 @@ import cx from 'classnames';
 import Template from '../Template/Template';
 import type { SearchResults } from 'algoliasearch-helper';
 import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
-import type { ComponentCSSClasses, Hits as HitsArray } from '../../types';
+import type { ComponentCSSClasses, Hit } from '../../types';
 import type { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
 import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 
@@ -14,7 +14,7 @@ export type HitsComponentTemplates = Required<HitsTemplates>;
 
 export type HitsProps = {
   results: SearchResults;
-  hits: HitsArray;
+  hits: Hit[];
   sendEvent?: SendEventForHits;
   bindEvent?: BindEventForHits;
   cssClasses: HitsComponentCSSClasses;

@@ -11,7 +11,6 @@ import {
 import type { DebouncedFunction } from '../../lib/utils/debounce';
 import type {
   Connector,
-  Hits,
   Hit,
   FindAnswersOptions,
   FindAnswersResponse,
@@ -38,7 +37,7 @@ export type AnswersRenderState = {
   /**
    * The matched hits from Algolia API.
    */
-  hits: Hits;
+  hits: Hit[];
 
   /**
    * Whether it's still loading the results from the Answers API.

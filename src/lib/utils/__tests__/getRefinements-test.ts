@@ -189,7 +189,7 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve one facetExclude', () => {
-    helper.toggleExclude('facet1', 'facet1exclude1');
+    helper.toggleFacetExclusion('facet1', 'facet1exclude1');
 
     expect(getRefinements(results, helper.state)).toEqual([
       {
@@ -203,8 +203,8 @@ describe('getRefinements', () => {
 
   it('should retrieve multiple facetsExcludes on one facet', () => {
     helper
-      .toggleExclude('facet1', 'facet1exclude1')
-      .toggleExclude('facet1', 'facet1exclude2');
+      .toggleFacetExclusion('facet1', 'facet1exclude1')
+      .toggleFacetExclusion('facet1', 'facet1exclude2');
 
     expect(getRefinements(results, helper.state)).toEqual([
       {
@@ -224,9 +224,9 @@ describe('getRefinements', () => {
 
   it('should retrieve multiple facetsExcludes on multiple facets', () => {
     helper
-      .toggleExclude('facet1', 'facet1exclude1')
-      .toggleExclude('facet1', 'facet1exclude2')
-      .toggleExclude('facet2', 'facet2exclude1');
+      .toggleFacetExclusion('facet1', 'facet1exclude1')
+      .toggleFacetExclusion('facet1', 'facet1exclude2')
+      .toggleFacetExclusion('facet2', 'facet2exclude1');
 
     expect(getRefinements(results, helper.state)).toEqual([
       {

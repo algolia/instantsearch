@@ -1,7 +1,7 @@
 import type { SearchResults } from 'algoliasearch-helper';
 import type { InstantSearch } from './instantsearch';
 import type { InsightsClient } from './insights';
-import type { Hits } from './results';
+import type { Hit } from './results';
 import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget';
 
 /**
@@ -29,7 +29,7 @@ export type RendererOptions<TWidgetParams> = {
    * The mutable list of hits. The may change depending
    * of the given transform items function.
    */
-  hits?: Hits;
+  hits?: Hit[];
 
   /**
    * The current insights client, if any.

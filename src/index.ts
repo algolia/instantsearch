@@ -31,6 +31,11 @@ type InstantSearchModule = {
   reverseHighlight: typeof helpers.reverseHighlight;
   snippet: typeof helpers.snippet;
   reverseSnippet: typeof helpers.reverseSnippet;
+
+  /**
+   * @deprecated use createInsightsMiddleware
+   * @link https://www.algolia.com/doc/api-reference/widgets/insights/js/
+   */
   insights: typeof helpers.insights;
 };
 

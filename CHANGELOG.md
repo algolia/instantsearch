@@ -1,3 +1,12 @@
+## [4.45.1](https://github.com/algolia/instantsearch.js/compare/v4.45.0...v4.45.1) (2022-09-06)
+
+
+### Bug Fixes
+
+* **ratingMenu:** fix `undefined` facet values error when `disjunctiveFacets` is empty ([#5096](https://github.com/algolia/instantsearch.js/issues/5096)) ([dd870d5](https://github.com/algolia/instantsearch.js/commit/dd870d5a658ce42b068eadf34f9b69772291aa20))
+
+
+
 # [4.45.0](https://github.com/algolia/instantsearch.js/compare/v4.44.1...v4.45.0) (2022-08-29)
 
 

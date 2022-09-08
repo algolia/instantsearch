@@ -8,8 +8,8 @@ const initHelperWithRefinements = () => {
     disjunctiveFacets: ['disjFacet'],
   });
 
-  helper.toggleRefinement('conjFacet', 'value');
-  helper.toggleRefinement('disjFacet', 'otherValue');
+  helper.toggleFacetRefinement('conjFacet', 'value');
+  helper.toggleFacetRefinement('disjFacet', 'otherValue');
   helper.toggleTag('taG');
 
   helper.setQuery('a query');
