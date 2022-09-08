@@ -20,6 +20,53 @@ beforeEach(() => {
 
 describe('panel', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        panel({ collapsed: () => true })(stats)({
+          container,
+          attribute: 'brand',
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed"
+  >
+    
+    <div
+      class="ais-Panel-body"
+    >
+      <div>
+        <div
+          class="ais-Stats"
+        >
+          <span
+            class="ais-Stats-text"
+          >
+            10 results found in 0ms
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();

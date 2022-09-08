@@ -31,6 +31,84 @@ describe('breadcrumb', () => {
     const attributes = Object.keys(hierarchicalFacets);
     const virtualHierarchicalMenu = connectHierarchicalMenu(() => null);
 
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        initialUiState: {
+          indexName: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
+          },
+        },
+      });
+
+      search.addWidgets([
+        virtualHierarchicalMenu({ attributes }),
+        breadcrumb({ container, attributes }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-Breadcrumb"
+  >
+    <ul
+      class="ais-Breadcrumb-list"
+    >
+      <li
+        class="ais-Breadcrumb-item"
+      >
+        <a
+          class="ais-Breadcrumb-link"
+          href="#"
+        >
+          Home
+        </a>
+      </li>
+      <li
+        class="ais-Breadcrumb-item"
+      >
+        <span
+          aria-hidden="true"
+          class="ais-Breadcrumb-separator"
+        >
+          &gt;
+        </span>
+        <a
+          class="ais-Breadcrumb-link"
+          href="#"
+        >
+          Cameras & Camcorders
+        </a>
+      </li>
+      <li
+        class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+      >
+        <span
+          aria-hidden="true"
+          class="ais-Breadcrumb-separator"
+        >
+          &gt;
+        </span>
+        Digital Cameras
+      </li>
+    </ul>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();

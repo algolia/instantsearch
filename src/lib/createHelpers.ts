@@ -17,6 +17,7 @@ import type {
   InsightsClientMethod,
   InsightsClientPayload,
 } from '../types';
+import { formatNumber } from './formatNumber';
 
 type DefaultHoganHelpers = HoganHelpers<
   | 'formatNumber'
@@ -34,7 +35,7 @@ export default function hoganHelpers({
 }): DefaultHoganHelpers {
   return {
     formatNumber(value, render) {
-      return Number(render(value)).toLocaleString(numberLocale);
+      return formatNumber(Number(render(value)), numberLocale);
     },
     highlight(options, render) {
       try {

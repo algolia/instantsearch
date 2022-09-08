@@ -96,7 +96,7 @@ export type ToggleRefinementTemplates = Partial<{
   /**
    * the text that describes the toggle action
    */
-  labelText: Template<ToggleRefinementValue>;
+  labelText: Template<ToggleRefinementValue & { name: string }>;
 }>;
 
 export type ToggleRefinementWidgetParams = {

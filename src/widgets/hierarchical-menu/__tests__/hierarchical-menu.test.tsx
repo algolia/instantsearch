@@ -20,6 +20,102 @@ beforeEach(() => {
 
 describe('refinementList', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        initialUiState: {
+          indexName: {
+            hierarchicalMenu: {
+              'categories.lvl0': ['Video Games'],
+            },
+          },
+        },
+      });
+
+      search.addWidgets([
+        hierarchicalMenu({
+          container,
+          attributes: ['categories.lvl0', 'categories.lvl1'],
+          showMore: true,
+          limit: 2,
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-HierarchicalMenu"
+  >
+    <ul
+      class="ais-HierarchicalMenu-list"
+    >
+      <li
+        class="ais-HierarchicalMenu-item"
+      >
+        <div>
+          <a
+            class="ais-HierarchicalMenu-link"
+            href="#"
+          >
+            <span
+              class="ais-HierarchicalMenu-label"
+            >
+              Cameras & Camcorders
+            </span>
+            <span
+              class="ais-HierarchicalMenu-count"
+            >
+              1,369
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
+      >
+        <div>
+          <a
+            class="ais-HierarchicalMenu-link"
+            href="#"
+          >
+            <span
+              class="ais-HierarchicalMenu-label"
+            >
+              Video Games
+            </span>
+            <span
+              class="ais-HierarchicalMenu-count"
+            >
+              505
+            </span>
+          </a>
+        </div>
+      </li>
+    </ul>
+    <button
+      class="ais-HierarchicalMenu-showMore"
+    >
+      Show more
+    </button>
+  </div>
+</div>
+`);
+
+      const showMoreButton = within(container).getByRole('button');
+
+      fireEvent.click(showMoreButton);
+
+      expect(showMoreButton).toHaveTextContent('Show less');
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();

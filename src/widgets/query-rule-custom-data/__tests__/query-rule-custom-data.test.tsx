@@ -19,6 +19,36 @@ beforeEach(() => {
 
 describe('queryRuleCustomData', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([queryRuleCustomData({ container })]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-QueryRuleCustomData"
+  >
+    [
+  {
+    "banner": "image-1.png"
+  },
+  {
+    "banner": "image-2.png"
+  }
+]
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();

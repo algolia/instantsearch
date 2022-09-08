@@ -44,10 +44,7 @@ exports[`numericMenu() calls twice render(<RefinementList props />, container) 1
   ],
   "templateProps": {
     "templates": {
-      "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\"{{#isRefined}} checked{{/isRefined}} />
-  <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
-</label>",
+      "item": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -102,10 +99,7 @@ exports[`numericMenu() calls twice render(<RefinementList props />, container) 2
   ],
   "templateProps": {
     "templates": {
-      "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\"{{#isRefined}} checked{{/isRefined}} />
-  <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
-</label>",
+      "item": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {

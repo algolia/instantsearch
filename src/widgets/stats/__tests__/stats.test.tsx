@@ -22,6 +22,60 @@ beforeEach(() => {
 
 describe('stats', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchBoxContainer = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        searchBox({ container: searchBoxContainer }),
+        stats({ container }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-Stats"
+  >
+    <span
+      class="ais-Stats-text"
+    >
+      2 results found in 0ms
+    </span>
+  </div>
+</div>
+`);
+
+      fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
+        target: { value: 'query with no results' },
+      });
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="ais-Stats"
+  >
+    <span
+      class="ais-Stats-text"
+    >
+      No results found in 0ms
+    </span>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchBoxContainer = document.createElement('div');

@@ -1,8 +1,12 @@
 import type { BreadcrumbComponentTemplates } from '../../components/Breadcrumb/Breadcrumb';
 
 const defaultTemplates: BreadcrumbComponentTemplates = {
-  home: 'Home',
-  separator: '>',
+  home() {
+    return 'Home';
+  },
+  separator() {
+    return '>';
+  },
 };
 
 export default defaultTemplates;

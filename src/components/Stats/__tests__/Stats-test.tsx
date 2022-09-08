@@ -39,7 +39,7 @@ describe('Stats', () => {
               className="text"
               dangerouslySetInnerHTML={
                 {
-                  "__html": "results found in 42ms",
+                  "__html": "1,234 results found in 42ms",
                 }
               }
             />,

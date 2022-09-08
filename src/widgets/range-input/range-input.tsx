@@ -26,8 +26,12 @@ const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
 const suit = component('RangeInput');
 
 const defaultTemplates: RangeInputComponentTemplates = {
-  separatorText: 'to',
-  submitText: 'Go',
+  separatorText() {
+    return 'to';
+  },
+  submitText() {
+    return 'Go';
+  },
 };
 
 export type RangeInputTemplates = Partial<{

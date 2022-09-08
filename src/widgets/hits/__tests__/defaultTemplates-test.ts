@@ -3,7 +3,7 @@ import defaultTemplates from '../defaultTemplates';
 
 describe('hits defaultTemplates', () => {
   it('has a `empty` default template', () => {
-    expect(defaultTemplates.empty).toBe('No results');
+    expect(defaultTemplates.empty).toEqual(expect.any(Function));
   });
 
   it('has a `item` default template', () => {

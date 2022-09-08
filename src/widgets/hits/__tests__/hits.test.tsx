@@ -22,6 +22,116 @@ beforeEach(() => {
 
 describe('hits', () => {
   describe('templates', () => {
+    test('renders default templates', async () => {
+      const container = document.createElement('div');
+      const searchBoxContainer = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        searchBox({ container: searchBoxContainer }),
+        hits({ container }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div>
+    <div
+      class="ais-Hits"
+    >
+      <ol
+        class="ais-Hits-list"
+      >
+        <li
+          class="ais-Hits-item"
+        >
+          {
+  "objectID": "1",
+  "name": "Apple iPhone smartphone",
+  "description": "A smartphone by Apple.",
+  "_highlightResult": {
+    "name": {
+      "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
+      "matchLevel": "full",
+      "matchedWords": [
+        "smartphone"
+      ]
+    }
+  },
+  "_snippetResult": {
+    "name": {
+      "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
+      "matchLevel": "full"
+    },
+    "description": {
+      "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Apple.",
+      "matchLevel": "full"
+    }
+  },
+  "__position": 1,
+  "__hitIndex": 0
+}
+        </li>
+        <li
+          class="ais-Hits-item"
+        >
+          {
+  "objectID": "2",
+  "name": "Samsung Galaxy smartphone",
+  "description": "A smartphone by Samsung.",
+  "_highlightResult": {
+    "name": {
+      "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
+      "matchLevel": "full",
+      "matchedWords": [
+        "smartphone"
+      ]
+    }
+  },
+  "_snippetResult": {
+    "name": {
+      "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
+      "matchLevel": "full"
+    },
+    "description": {
+      "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Samsung.",
+      "matchLevel": "full"
+    }
+  },
+  "__position": 2,
+  "__hitIndex": 1
+}
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+`);
+
+      fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
+        target: { value: 'query with no results' },
+      });
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div>
+    <div
+      class="ais-Hits ais-Hits--empty"
+    >
+      No results
+    </div>
+  </div>
+</div>
+`);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchBoxContainer = document.createElement('div');
@@ -538,7 +648,7 @@ describe('hits', () => {
                             },
                           },
                           {
-                            objectID: '1',
+                            objectID: '2',
                             name: 'Samsung Galaxy smartphone',
                             description: 'A smartphone by Samsung.',
                             _highlightResult: {

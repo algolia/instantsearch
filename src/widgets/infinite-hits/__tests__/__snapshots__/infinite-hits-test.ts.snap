@@ -87,10 +87,10 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
   "showPrevious": [Function],
   "templateProps": {
     "templates": {
-      "empty": "No results",
+      "empty": [Function],
       "item": [Function],
-      "showMoreText": "Show more results",
-      "showPreviousText": "Show previous results",
+      "showMoreText": [Function],
+      "showPreviousText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -190,10 +190,10 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
   "showPrevious": [Function],
   "templateProps": {
     "templates": {
-      "empty": "No results",
+      "empty": [Function],
       "item": [Function],
-      "showMoreText": "Show more results",
-      "showPreviousText": "Show previous results",
+      "showMoreText": [Function],
+      "showPreviousText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -295,10 +295,10 @@ exports[`infiniteHits() renders transformed items 1`] = `
   "showPrevious": [Function],
   "templateProps": {
     "templates": {
-      "empty": "No results",
+      "empty": [Function],
       "item": [Function],
-      "showMoreText": "Show more results",
-      "showPreviousText": "Show previous results",
+      "showMoreText": [Function],
+      "showPreviousText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {

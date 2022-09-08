@@ -74,7 +74,7 @@ exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
           className="option"
           dangerouslySetInnerHTML={
             {
-              "__html": "foo ()",
+              "__html": "foo (0)",
             }
           }
           value="foo"
@@ -85,7 +85,7 @@ exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
           className="option"
           dangerouslySetInnerHTML={
             {
-              "__html": "bar ()",
+              "__html": "bar (0)",
             }
           }
           value="bar"
