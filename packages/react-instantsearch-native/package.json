@@ -42,7 +42,7 @@
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 5",
-    "react": ">= 16.3.0 < 18",
+    "react": ">= 16.3.0 < 19",
     "react-native": ">= 0.54.0"
   }
 }
