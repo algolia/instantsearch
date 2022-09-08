@@ -320,12 +320,12 @@ const connectToggleRefinement: ToggleRefinementConnector =
             ? on.every((v) => state.isDisjunctiveFacetRefined(attribute, v))
             : on.every((v) => state.isDisjunctiveFacetRefined(attribute, v));
 
-          let onFacetValue: ToggleRefinementValue = {
+          let onFacetValue: Omit<ToggleRefinementValue, 'name'> = {
             isRefined,
             count: 0,
           };
 
-          let offFacetValue: ToggleRefinementValue = {
+          let offFacetValue: Omit<ToggleRefinementValue, 'name'> = {
             isRefined: hasAnOffValue && !isRefined,
             count: 0,
           };
