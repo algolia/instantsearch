@@ -41,6 +41,7 @@ type HierarchicalMenuTemplates = Partial<{
     count: number;
     isRefined: boolean;
     url: string;
+    label: string;
   }>;
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
