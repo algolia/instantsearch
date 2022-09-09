@@ -207,7 +207,7 @@ export function SearchBox({
           className={cx('ais-SearchBox-reset', classNames.reset)}
           type="reset"
           title={translations.resetTitle}
-          hidden={value.length === 0 && !isSearchStalled}
+          hidden={value.length === 0 || isSearchStalled}
         >
           <ResetIcon classNames={classNames} />
         </button>

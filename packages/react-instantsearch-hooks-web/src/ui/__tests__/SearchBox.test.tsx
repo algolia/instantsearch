@@ -349,6 +349,14 @@ describe('SearchBox', () => {
     expect(container.querySelector('.ais-SearchBox-reset')).not.toBeVisible();
   });
 
+  test('with search stalled hides the reset indicator', () => {
+    const props = createProps({ value: 'query', isSearchStalled: true });
+
+    const { container } = render(<SearchBox {...props} />);
+
+    expect(container.querySelector('.ais-SearchBox-reset')).not.toBeVisible();
+  });
+
   test('with search stalled shows the loading indicator', () => {
     const props = createProps({ isSearchStalled: true });
 
