@@ -67,7 +67,7 @@ test('does only a single query if refinements are empty', function() {
   expect(queries).toHaveLength(1);
 });
 
-test('does multiple queries to retrieve all facet values of hierarchical parent levels', function() {
+describe('hierarchical facets', function() {
   var searchParams = new SearchParameters({
     hierarchicalFacets: [{
       name: 'categories.lvl0',
@@ -78,17 +78,38 @@ test('does multiple queries to retrieve all facet values of hierarchical parent 
     }
   });
 
-  var queries = getQueries(searchParams.index, searchParams);
+  test('retrieve facet values of parent levels with multiple queries', function() {
+    var queries = getQueries(searchParams.index, searchParams);
 
-  expect(queries).toHaveLength(4);
+    expect(queries).toHaveLength(4);
 
-  // Root
-  expect(queries[2].params.facets).toEqual(['categories.lvl0']);
-  expect(queries[2].params.facetsFilters).toBeUndefined();
+    // Root
+    expect(queries[2].params.facets).toEqual(['categories.lvl0']);
+    expect(queries[2].params.facetsFilters).toBeUndefined();
 
-  // Level 1
-  expect(queries[3].params.facets).toEqual('categories.lvl1');
-  expect(queries[3].params.facetFilters).toEqual(['categories.lvl0:beers']);
+    // Level 1
+    expect(queries[3].params.facets).toEqual('categories.lvl1');
+    expect(queries[3].params.facetFilters).toEqual(['categories.lvl0:beers']);
+  });
+
+  test('take other facet filters into account', function() {
+    var newSearchParams = searchParams
+      .addDisjunctiveFacet('brand')
+      .addDisjunctiveFacetRefinement('brand', 'Incipio')
+    ;
+
+    var queries = getQueries(newSearchParams.index, newSearchParams);
+
+    expect(queries).toHaveLength(5);
+
+    // Root
+    expect(queries[3].params.facets).toEqual(['categories.lvl0']);
+    expect(queries[3].params.facetFilters).toEqual([['brand:Incipio']]);
+
+    // Level 1
+    expect(queries[4].params.facets).toEqual('categories.lvl1');
+    expect(queries[4].params.facetFilters).toEqual([['brand:Incipio'], 'categories.lvl0:beers']);
+  });
 });
 
 test('orders parameters alphabetically in every query', function() {

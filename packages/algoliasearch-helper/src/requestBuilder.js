@@ -65,8 +65,37 @@ var requestBuilder = {
             level === 0
           );
 
+          // Keep facet filters unrelated to current hierarchical attributes
+          function hasHierarchicalFacetFilter(value) {
+            return hierarchicalFacet.attributes.some(function(attribute) {
+              return attribute === value.split(':')[0];
+            });
+          }
+
+          var filteredFacetFilters = (params.facetFilters || []).reduce(function(acc, facetFilter) {
+            if (Array.isArray(facetFilter)) {
+              var filtered = facetFilter.filter(function(filterValue) {
+                return !hasHierarchicalFacetFilter(filterValue);
+              });
+
+              if (filtered.length > 0) {
+                acc.push(filtered);
+              }
+            }
+
+            if (typeof facetFilter === 'string' && !hasHierarchicalFacetFilter(facetFilter)) {
+              acc.push(facetFilter);
+            }
+
+            return acc;
+          }, []);
+
           var parent = filtersMap[level - 1];
-          params.facetFilters = level > 0 ? [parent.attribute + ':' + parent.value] : undefined;
+          if (level > 0) {
+            params.facetFilters = filteredFacetFilters.concat(parent.attribute + ':' + parent.value);
+          } else {
+            params.facetFilters = filteredFacetFilters.length > 0 ? filteredFacetFilters : undefined;
+          }
 
           queries.push({indexName: index, params: params});
         });
