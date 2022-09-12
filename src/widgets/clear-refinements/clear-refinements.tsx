@@ -87,7 +87,7 @@ export type ClearRefinementsTemplates = Partial<{
   /**
    * Template for the content of the button
    */
-  resetLabel: Template;
+  resetLabel: Template<{ hasRefinements: boolean }>;
 }>;
 
 export type ClearRefinementsWidgetParams = {

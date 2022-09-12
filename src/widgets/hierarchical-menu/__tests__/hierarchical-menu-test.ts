@@ -245,35 +245,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       >;
 
       expect(props.templateProps).toMatchInlineSnapshot(`
-      {
-        "templates": {
-          "item": "item2",
-          "showMoreText": "
-          {{#isShowingMore}}
-            Show less
-          {{/isShowingMore}}
-          {{^isShowingMore}}
-            Show more
-          {{/isShowingMore}}
-        ",
-        },
-        "templatesConfig": {
-          "compileOptions": {},
-          "helpers": {
-            "formatNumber": [Function],
-            "highlight": [Function],
-            "insights": [Function],
-            "reverseHighlight": [Function],
-            "reverseSnippet": [Function],
-            "snippet": [Function],
-          },
-        },
-        "useCustomCompileOptions": {
-          "item": true,
-          "showMoreText": false,
-        },
-      }
-      `);
+{
+  "templates": {
+    "item": "item2",
+    "showMoreText": [Function],
+  },
+  "templatesConfig": {
+    "compileOptions": {},
+    "helpers": {
+      "formatNumber": [Function],
+      "highlight": [Function],
+      "insights": [Function],
+      "reverseHighlight": [Function],
+      "reverseSnippet": [Function],
+      "snippet": [Function],
+    },
+  },
+  "useCustomCompileOptions": {
+    "item": true,
+    "showMoreText": false,
+  },
+}
+`);
     });
 
     it('has a transformItems options', async () => {

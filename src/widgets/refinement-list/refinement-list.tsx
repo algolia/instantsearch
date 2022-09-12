@@ -128,6 +128,10 @@ export type RefinementListItemData = {
    * Object containing all the classes computed for the item.
    */
   cssClasses: RefinementListCSSClasses;
+  /**
+   * Whether the `items` prop contains facet values from the global search or from the search inside the items.
+   */
+  isFromSearch: boolean;
 };
 
 export type RefinementListOwnTemplates = Partial<{
@@ -138,7 +142,7 @@ export type RefinementListOwnTemplates = Partial<{
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
    */
-  showMoreText: Template;
+  showMoreText: Template<{ isShowingMore: boolean }>;
   /**
    * Templates to use for search for facet values when there are no results.
    */

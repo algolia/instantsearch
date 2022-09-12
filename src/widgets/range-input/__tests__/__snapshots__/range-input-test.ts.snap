@@ -19,8 +19,8 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
   "step": 1,
   "templateProps": {
     "templates": {
-      "separatorText": "to",
-      "submitText": "Go",
+      "separatorText": [Function],
+      "submitText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -89,8 +89,8 @@ exports[`rangeInput expect to render with refinement 1`] = `
   "step": 1,
   "templateProps": {
     "templates": {
-      "separatorText": "to",
-      "submitText": "Go",
+      "separatorText": [Function],
+      "submitText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -124,8 +124,8 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
   "step": 1,
   "templateProps": {
     "templates": {
-      "separatorText": "to",
-      "submitText": "Go",
+      "separatorText": [Function],
+      "submitText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -159,8 +159,8 @@ exports[`rangeInput expect to render with results 1`] = `
   "step": 1,
   "templateProps": {
     "templates": {
-      "separatorText": "to",
-      "submitText": "Go",
+      "separatorText": [Function],
+      "submitText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -194,8 +194,8 @@ exports[`rangeInput expect to render without results 1`] = `
   "step": 1,
   "templateProps": {
     "templates": {
-      "separatorText": "to",
-      "submitText": "Go",
+      "separatorText": [Function],
+      "submitText": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {

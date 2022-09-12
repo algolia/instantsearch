@@ -36,6 +36,7 @@ const InfiniteHits = ({
   results,
   hits,
   bindEvent,
+  sendEvent,
   hasShowPrevious,
   showPrevious,
   showMore,
@@ -87,6 +88,7 @@ const InfiniteHits = ({
               __hitIndex: position,
             }}
             bindEvent={bindEvent}
+            sendEvent={sendEvent}
           />
         ))}
       </ol>

@@ -28,8 +28,8 @@ exports[`breadcrumb() render renders transformed items correctly 1`] = `
   "refine": [Function],
   "templateProps": {
     "templates": {
-      "home": "Home",
-      "separator": ">",
+      "home": [Function],
+      "separator": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {

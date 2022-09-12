@@ -11,7 +11,7 @@ exports[`clearRefinements() with refinements calls twice render(<ClearAll props 
   "refine": [Function],
   "templateProps": {
     "templates": {
-      "resetLabel": "Clear refinements",
+      "resetLabel": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -32,7 +32,7 @@ exports[`clearRefinements() with refinements calls twice render(<ClearAll props 
   "refine": [Function],
   "templateProps": {
     "templates": {
-      "resetLabel": "Clear refinements",
+      "resetLabel": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -53,7 +53,7 @@ exports[`clearRefinements() without refinements calls twice render(<ClearRefinem
   "refine": [Function],
   "templateProps": {
     "templates": {
-      "resetLabel": "Clear refinements",
+      "resetLabel": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {
@@ -74,7 +74,7 @@ exports[`clearRefinements() without refinements calls twice render(<ClearRefinem
   "refine": [Function],
   "templateProps": {
     "templates": {
-      "resetLabel": "Clear refinements",
+      "resetLabel": [Function],
     },
     "templatesConfig": {},
     "useCustomCompileOptions": {

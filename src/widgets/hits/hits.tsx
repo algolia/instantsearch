@@ -31,6 +31,7 @@ import type {
 } from '../../types';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
@@ -107,7 +108,7 @@ export type HitsTemplates = Partial<{
    *
    * @default 'No Results'
    */
-  empty: Template;
+  empty: Template<SearchResults>;
 
   /**
    * Template to use for each result. This template will receive an object containing a single record.

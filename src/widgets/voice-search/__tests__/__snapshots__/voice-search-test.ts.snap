@@ -11,7 +11,7 @@ exports[`voiceSearch() Rendering renders during init() 1`] = `
   "isListening": false,
   "templates": {
     "buttonText": [Function],
-    "status": "<p>{{transcript}}</p>",
+    "status": [Function],
   },
   "toggleListening": [Function],
   "voiceListeningState": {
@@ -34,7 +34,7 @@ exports[`voiceSearch() Rendering renders during render() 1`] = `
   "isListening": false,
   "templates": {
     "buttonText": [Function],
-    "status": "<p>{{transcript}}</p>",
+    "status": [Function],
   },
   "toggleListening": [Function],
   "voiceListeningState": {
@@ -57,7 +57,7 @@ exports[`voiceSearch() Rendering renders during render() 2`] = `
   "isListening": false,
   "templates": {
     "buttonText": [Function],
-    "status": "<p>{{transcript}}</p>",
+    "status": [Function],
   },
   "toggleListening": [Function],
   "voiceListeningState": {

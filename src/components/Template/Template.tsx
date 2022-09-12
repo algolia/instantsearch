@@ -2,7 +2,9 @@
 
 import type { JSX } from 'preact';
 import { h, Component } from 'preact';
-import { renderTemplate, isEqual } from '../../lib/utils';
+import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
+import { warning, renderTemplate, isEqual } from '../../lib/utils';
+
 import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
 import type { Templates } from '../../types';
 
@@ -14,12 +16,13 @@ const defaultProps = {
   templatesConfig: {},
 };
 
-type TemplateProps = {
+export type TemplateProps = {
   data?: Record<string, any>;
   rootProps?: Record<string, any>;
   rootTagName?: keyof JSX.IntrinsicElements;
   templateKey: string;
-  bindEvent?: (...args: any[]) => string;
+  bindEvent?: BindEventForHits;
+  sendEvent?: SendEventForHits;
 } & PreparedTemplateProps<Templates> &
   Readonly<typeof defaultProps>;
 
@@ -36,6 +39,17 @@ class Template extends Component<TemplateProps> {
   }
 
   public render() {
+    warning(
+      Object.keys(this.props.templates).every(
+        (key) => typeof this.props.templates[key] === 'function'
+      ),
+      `Hogan.js and string-based templates are deprecated and will not be supported in InstantSearch.js 5.x.
+
+You can replace them with function-form templates and use either the provided \`html\` function or JSX templates.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`
+    );
+
     const RootTagName = this.props.rootTagName;
 
     const useCustomCompileOptions =
@@ -51,12 +65,17 @@ class Template extends Component<TemplateProps> {
       helpers: this.props.templatesConfig.helpers,
       data: this.props.data,
       bindEvent: this.props.bindEvent,
+      sendEvent: this.props.sendEvent,
     });
 
     if (content === null) {
       // Adds a noscript to the DOM but virtual DOM is null
       // See http://facebook.github.io/react/docs/component-specs.html#render
       return null;
+    }
+
+    if (typeof content === 'object') {
+      return <RootTagName {...this.props.rootProps}>{content}</RootTagName>;
     }
 
     return (

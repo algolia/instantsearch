@@ -1,7 +1,17 @@
 import type { HoganOptions, Template } from 'hogan.js';
 import hogan from 'hogan.js';
-import type { Templates, HoganHelpers } from '../../types';
-import type { BindEventForHits } from './createSendEventForHits';
+import {
+  Highlight,
+  ReverseHighlight,
+  ReverseSnippet,
+  Snippet,
+} from '../../helpers/components';
+import type { Templates, HoganHelpers, TemplateParams } from '../../types';
+import { html } from 'htm/preact';
+import type {
+  BindEventForHits,
+  SendEventForHits,
+} from './createSendEventForHits';
 
 type TransformedHoganHelpers = {
   [helper: string]: () => (text: string) => string;
@@ -39,6 +49,7 @@ function renderTemplate({
   helpers,
   data,
   bindEvent,
+  sendEvent,
 }: {
   templates: Templates;
   templateKey: string;
@@ -46,6 +57,7 @@ function renderTemplate({
   helpers?: HoganHelpers;
   data?: Record<string, any>;
   bindEvent?: BindEventForHits;
+  sendEvent?: SendEventForHits;
 }) {
   const template = templates[templateKey];
 
@@ -56,7 +68,19 @@ function renderTemplate({
   }
 
   if (typeof template === 'function') {
-    return template(data, bindEvent!);
+    // @MAJOR no longer pass bindEvent when string templates are removed
+    const params = (bindEvent || {}) as TemplateParams;
+
+    params.html = html;
+    params.sendEvent = sendEvent;
+    params.components = {
+      Highlight,
+      ReverseHighlight,
+      Snippet,
+      ReverseSnippet,
+    };
+
+    return template(data, params);
   }
 
   const transformedHelpers = transformHelpersToHogan(

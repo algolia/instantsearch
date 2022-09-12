@@ -33,9 +33,15 @@ export type RatingMenuTemplates = Partial<{
    */
   item: Template<{
     name: string;
+    label: string;
+    value: string;
     count: number;
     isRefined: boolean;
     url: string;
+    stars: [boolean, boolean, boolean, boolean, boolean];
+    cssClasses: RatingMenuCSSClasses;
+    attribute?: string;
+    isFromSearch?: boolean;
   }>;
 }>;
 

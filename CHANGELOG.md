@@ -1,3 +1,22 @@
+# [4.46.0](https://github.com/algolia/instantsearch.js/compare/v4.45.1...v4.46.0) (2022-09-12)
+
+
+### Features
+
+* **html:** deprecate Hogan.js and string-based templates ([#5095](https://github.com/algolia/instantsearch.js/issues/5095)) ([a06ddf5](https://github.com/algolia/instantsearch.js/commit/a06ddf55f1ffd1a93cddab2fcf95d2be3220a423))
+* **html:** introduce `html` templating ([#5081](https://github.com/algolia/instantsearch.js/issues/5081)) ([e55e224](https://github.com/algolia/instantsearch.js/commit/e55e2245256193d27f2c85f24b8aab7c9048c554))
+
+
+
+## [4.45.1](https://github.com/algolia/instantsearch.js/compare/v4.45.0...v4.45.1) (2022-09-06)
+
+
+### Bug Fixes
+
+* **ratingMenu:** fix `undefined` facet values error when `disjunctiveFacets` is empty ([#5096](https://github.com/algolia/instantsearch.js/issues/5096)) ([dd870d5](https://github.com/algolia/instantsearch.js/commit/dd870d5a658ce42b068eadf34f9b69772291aa20))
+
+
+
 # [4.45.0](https://github.com/algolia/instantsearch.js/compare/v4.44.1...v4.45.0) (2022-08-29)
 
 

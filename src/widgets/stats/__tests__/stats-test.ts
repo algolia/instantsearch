@@ -64,81 +64,57 @@ describe('stats()', () => {
     expect(render).toHaveBeenCalledTimes(2);
     // @ts-expect-error
     expect(firstRender[0].props).toMatchInlineSnapshot(`
-      {
-        "areHitsSorted": false,
-        "cssClasses": {
-          "root": "ais-Stats",
-          "text": "ais-Stats-text text cx",
-        },
-        "hitsPerPage": 2,
-        "nbHits": 20,
-        "nbPages": 10,
-        "nbSortedHits": undefined,
-        "page": 0,
-        "processingTimeMS": 42,
-        "query": "a query",
-        "templateProps": {
-          "templates": {
-            "text": "
-          {{#areHitsSorted}}
-            {{#hasNoSortedResults}}No relevant results{{/hasNoSortedResults}}
-            {{#hasOneSortedResults}}1 relevant result{{/hasOneSortedResults}}
-            {{#hasManySortedResults}}{{#helpers.formatNumber}}{{nbSortedHits}}{{/helpers.formatNumber}} relevant results{{/hasManySortedResults}}
-            sorted out of {{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}}
-          {{/areHitsSorted}}
-          {{^areHitsSorted}}
-            {{#hasNoResults}}No results{{/hasNoResults}}
-            {{#hasOneResult}}1 result{{/hasOneResult}}
-            {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-          {{/areHitsSorted}}
-          found in {{processingTimeMS}}ms",
-          },
-          "templatesConfig": {},
-          "useCustomCompileOptions": {
-            "text": false,
-          },
-        },
-      }
-    `);
+{
+  "areHitsSorted": false,
+  "cssClasses": {
+    "root": "ais-Stats",
+    "text": "ais-Stats-text text cx",
+  },
+  "hitsPerPage": 2,
+  "nbHits": 20,
+  "nbPages": 10,
+  "nbSortedHits": undefined,
+  "page": 0,
+  "processingTimeMS": 42,
+  "query": "a query",
+  "templateProps": {
+    "templates": {
+      "text": [Function],
+    },
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
+      "text": false,
+    },
+  },
+}
+`);
     expect(firstRender[1]).toEqual(container);
     // @ts-expect-error
     expect(secondRender[0].props).toMatchInlineSnapshot(`
-      {
-        "areHitsSorted": false,
-        "cssClasses": {
-          "root": "ais-Stats",
-          "text": "ais-Stats-text text cx",
-        },
-        "hitsPerPage": 2,
-        "nbHits": 20,
-        "nbPages": 10,
-        "nbSortedHits": undefined,
-        "page": 0,
-        "processingTimeMS": 42,
-        "query": "a query",
-        "templateProps": {
-          "templates": {
-            "text": "
-          {{#areHitsSorted}}
-            {{#hasNoSortedResults}}No relevant results{{/hasNoSortedResults}}
-            {{#hasOneSortedResults}}1 relevant result{{/hasOneSortedResults}}
-            {{#hasManySortedResults}}{{#helpers.formatNumber}}{{nbSortedHits}}{{/helpers.formatNumber}} relevant results{{/hasManySortedResults}}
-            sorted out of {{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}}
-          {{/areHitsSorted}}
-          {{^areHitsSorted}}
-            {{#hasNoResults}}No results{{/hasNoResults}}
-            {{#hasOneResult}}1 result{{/hasOneResult}}
-            {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-          {{/areHitsSorted}}
-          found in {{processingTimeMS}}ms",
-          },
-          "templatesConfig": {},
-          "useCustomCompileOptions": {
-            "text": false,
-          },
-        },
-      }
-    `);
+{
+  "areHitsSorted": false,
+  "cssClasses": {
+    "root": "ais-Stats",
+    "text": "ais-Stats-text text cx",
+  },
+  "hitsPerPage": 2,
+  "nbHits": 20,
+  "nbPages": 10,
+  "nbSortedHits": undefined,
+  "page": 0,
+  "processingTimeMS": 42,
+  "query": "a query",
+  "templateProps": {
+    "templates": {
+      "text": [Function],
+    },
+    "templatesConfig": {},
+    "useCustomCompileOptions": {
+      "text": false,
+    },
+  },
+}
+`);
     expect(secondRender[1]).toEqual(container);
   });
 
