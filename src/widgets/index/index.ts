@@ -22,6 +22,7 @@ import {
   resolveSearchParameters,
   mergeSearchParameters,
   warning,
+  isIndexWidget,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -85,12 +86,6 @@ export type IndexWidget = Omit<
   ): SearchParameters;
   refreshUiState(): void;
 };
-
-export function isIndexWidget(
-  widget: Widget | IndexWidget
-): widget is IndexWidget {
-  return widget.$$type === 'ais.index';
-}
 
 /**
  * This is the same content as helper._change / setState, but allowing for extra
