@@ -1,3 +1,6 @@
+3.11.1 - 2022-09-12
+ * fix(facetValues): use existing facet filters in multi queries for hierarchical facet values (#915) https://github.com/algolia/algoliasearch-helper-js/commit/bae388c7143653e74628dbd3c72979a51be6ab7f
+
 3.11.0 - 2022-08-03
  * feat(typing): Update SearchResults hits, expose optional hit typings (#914) https://github.com/algolia/algoliasearch-helper-js/commit/bf4c4c6cdc84a5b9d8daff60d591a419df01beed
 
