@@ -623,7 +623,7 @@ See ${createDocumentationLink({
    */
   public setUiState(
     uiState: TUiState | ((previousUiState: TUiState) => TUiState),
-    isFromStateChange: boolean = false
+    callOnStateChange: boolean = true
   ): void {
     if (!this.mainHelper) {
       throw new Error(
@@ -639,7 +639,7 @@ See ${createDocumentationLink({
         ? uiState(this.mainIndex.getWidgetUiState({}) as TUiState)
         : uiState;
 
-    if (this.onStateChange && !isFromStateChange) {
+    if (this.onStateChange && callOnStateChange) {
       this.onStateChange({
         uiState: nextUiState,
         setUiState: (finalUiState) => {
