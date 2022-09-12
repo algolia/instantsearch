@@ -57,3 +57,4 @@ export { serializePayload, deserializePayload } from './serializer';
 export { getWidgetAttribute } from './getWidgetAttribute';
 export { safelyRunOnBrowser } from './safelyRunOnBrowser';
 export { cx } from './cx';
+export { setIndexHelperState } from './setIndexHelperState';

@@ -435,9 +435,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         if (instantSearchInstance.onStateChange) {
           instantSearchInstance.onStateChange({
             uiState: instantSearchInstance.mainIndex.getWidgetUiState({}),
-            setUiState: instantSearchInstance.setUiState.bind(
-              instantSearchInstance
-            ),
+            setUiState: (nextState) =>
+              instantSearchInstance.setUiState(nextState, true),
           });
 
           // We don't trigger a search when controlled because it becomes the
