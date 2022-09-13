@@ -5,7 +5,7 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
-import getRefinements from '../getRefinements';
+import { getRefinements } from '../getRefinements';
 
 describe('getRefinements', () => {
   let helper: AlgoliaSearchHelper;

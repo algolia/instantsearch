@@ -95,12 +95,14 @@ export type ToggleRefinementConnectorParams = {
    * Value to filter on when toggled.
    * @default "true"
    */
-  on?: string | string[] | boolean | boolean[] | number | number[];
+  on?: FacetValue | FacetValue[];
   /**
    * Value to filter on when not toggled.
    */
-  off?: string | string[] | boolean | boolean[] | number | number[];
+  off?: FacetValue | FacetValue[];
 };
+
+type FacetValue = string | boolean | number;
 
 export type ToggleRefinementRenderState = {
   /** The current toggle value */
@@ -187,9 +189,11 @@ const connectToggleRefinement: ToggleRefinementConnector =
       }
 
       const hasAnOffValue = userOff !== undefined;
-      const on = toArray(userOn).map(escapeFacetValue);
+      // even though facet values can be numbers and boolean,
+      // the helper methods only accept string in the type
+      const on = toArray(userOn).map(escapeFacetValue) as string[];
       const off = hasAnOffValue
-        ? toArray(userOff).map(escapeFacetValue)
+        ? (toArray(userOff).map(escapeFacetValue) as string[])
         : undefined;
 
       let sendEvent: SendEventForToggle;

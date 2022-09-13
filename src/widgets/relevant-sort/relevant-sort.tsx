@@ -20,7 +20,7 @@ import type {
 } from '../../components/RelevantSort/RelevantSort';
 import RelevantSort from '../../components/RelevantSort/RelevantSort';
 import defaultTemplates from './defaultTemplates';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 
 export type RelevantSortCSSClasses = Partial<{
   root: string;

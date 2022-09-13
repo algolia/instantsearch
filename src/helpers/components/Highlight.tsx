@@ -2,12 +2,20 @@
 import { h } from 'preact';
 
 import { Highlight as HighlightUiComponent } from '../../components/Highlight/Highlight';
-import getHighlightedParts from '../../lib/utils/getHighlightedParts';
-import getPropertyByPath from '../../lib/utils/getPropertyByPath';
-import unescape from '../../lib/utils/unescape';
-import { warning } from '../../lib/utils/logger';
+import {
+  getHighlightedParts,
+  getPropertyByPath,
+  unescape,
+  warning,
+  toArray,
+} from '../../lib/utils';
 
-import type { BaseHit, Hit, PartialKeys } from '../../types';
+import type {
+  BaseHit,
+  Hit,
+  HitAttributeHighlightResult,
+  PartialKeys,
+} from '../../types';
 import type { HighlightProps as HighlightUiComponentProps } from '../../components/Highlight/Highlight';
 
 export type HighlightProps<THit extends Hit<BaseHit>> = {
@@ -25,9 +33,9 @@ export function Highlight<THit extends Hit<BaseHit>>({
   cssClasses,
   ...props
 }: HighlightProps<THit>) {
-  const property =
+  const property: HitAttributeHighlightResult | HitAttributeHighlightResult[] =
     getPropertyByPath(hit._highlightResult, attribute as string) || [];
-  const properties = Array.isArray(property) ? property : [property];
+  const properties = toArray(property);
 
   warning(
     Boolean(properties.length),

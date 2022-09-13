@@ -2,12 +2,20 @@
 import { h } from 'preact';
 
 import { ReverseSnippet as ReverseSnippetUiComponent } from '../../components/ReverseSnippet/ReverseSnippet';
-import getHighlightedParts from '../../lib/utils/getHighlightedParts';
-import getPropertyByPath from '../../lib/utils/getPropertyByPath';
-import unescape from '../../lib/utils/unescape';
-import { warning } from '../../lib/utils/logger';
+import {
+  getHighlightedParts,
+  getPropertyByPath,
+  unescape,
+  warning,
+  toArray,
+} from '../../lib/utils';
 
-import type { BaseHit, Hit, PartialKeys } from '../../types';
+import type {
+  BaseHit,
+  Hit,
+  HitAttributeSnippetResult,
+  PartialKeys,
+} from '../../types';
 import type { ReverseSnippetProps as ReverseSnippetUiComponentProps } from '../../components/ReverseSnippet/ReverseSnippet';
 
 export type ReverseSnippetProps<THit extends Hit<BaseHit>> = {
@@ -25,9 +33,9 @@ export function ReverseSnippet<THit extends Hit<BaseHit>>({
   cssClasses,
   ...props
 }: ReverseSnippetProps<THit>) {
-  const property =
+  const property: HitAttributeSnippetResult | HitAttributeSnippetResult[] =
     getPropertyByPath(hit._snippetResult, attribute as string) || [];
-  const properties = Array.isArray(property) ? property : [property];
+  const properties = toArray(property);
 
   warning(
     Boolean(properties.length),

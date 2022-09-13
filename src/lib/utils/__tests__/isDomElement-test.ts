@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import isDomElement from '../isDomElement';
+import { isDomElement } from '../isDomElement';
 
 describe('isDomElement', () => {
   it('should return true for dom element', () => {

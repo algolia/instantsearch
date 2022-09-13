@@ -4,7 +4,7 @@
 // was decided as too risky.
 // @MAJOR Replace with the native `Array.prototype.findIndex` method
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-function findIndex<TItem>(
+export function findIndex<TItem>(
   array: TItem[],
   comparator: (value: TItem) => boolean
 ): number {
@@ -19,5 +19,3 @@ function findIndex<TItem>(
   }
   return -1;
 }
-
-export default findIndex;

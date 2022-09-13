@@ -1,6 +1,6 @@
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
-export default function isFacetRefined(
+export function isFacetRefined(
   helper: AlgoliaSearchHelper,
   facet: string,
   value: string

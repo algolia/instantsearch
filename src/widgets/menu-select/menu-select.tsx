@@ -21,7 +21,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import type { RendererOptions, Template, WidgetFactory } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');

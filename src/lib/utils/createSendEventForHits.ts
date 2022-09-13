@@ -1,9 +1,5 @@
-/**
- * @jest-environment jsdom
- */
-
 import type { InstantSearch, Hit, EscapedHits } from '../../types';
-import { serializePayload } from '../../lib/utils/serializer';
+import { serializePayload } from '../../lib/utils';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type BuiltInSendEventForHits = (

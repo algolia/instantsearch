@@ -1,5 +1,3 @@
-function toArray(value: any) {
-  return Array.isArray(value) ? value : [value];
+export function toArray<T>(value: T): Extract<T, unknown[]> {
+  return (Array.isArray(value) ? value : [value]) as Extract<T, unknown[]>;
 }
-
-export default toArray;

@@ -1,4 +1,4 @@
-import range from '../range';
+import { range } from '../range';
 
 describe('range', () => {
   test('with end', () => {

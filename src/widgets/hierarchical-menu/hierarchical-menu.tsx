@@ -11,7 +11,7 @@ import type {
 } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import defaultTemplates from './defaultTemplates';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 import {
   prepareTemplateProps,
   getContainerNode,

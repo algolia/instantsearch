@@ -1,4 +1,4 @@
-import isDomElement from './isDomElement';
+import { isDomElement } from './isDomElement';
 
 /**
  * Return the container. If it's a string, it is considered a
@@ -9,7 +9,7 @@ import isDomElement from './isDomElement';
  * @return {HTMLElement} Container node
  * @throws Error when the type is not correct
  */
-function getContainerNode(
+export function getContainerNode(
   selectorOrHTMLElement: string | HTMLElement
 ): HTMLElement {
   const isSelectorString = typeof selectorOrHTMLElement === 'string';
@@ -29,5 +29,3 @@ function getContainerNode(
 
   return domElement;
 }
-
-export default getContainerNode;

@@ -1,6 +1,6 @@
 import { createIndexInitOptions } from '../../../../test/mock/createWidget';
 import index from '../../../widgets/index/index';
-import resolve from '../resolveSearchParameters';
+import { resolveSearchParameters } from '../resolveSearchParameters';
 
 describe('mergeSearchParameters', () => {
   describe('1 level', () => {
@@ -9,7 +9,7 @@ describe('mergeSearchParameters', () => {
 
       level0.init(createIndexInitOptions({ parent: null }));
 
-      const actual = resolve(level0);
+      const actual = resolveSearchParameters(level0);
 
       expect(actual).toEqual([level0.getHelper()!.state]);
     });
@@ -23,11 +23,13 @@ describe('mergeSearchParameters', () => {
     level0.init(createIndexInitOptions({ parent: null }));
 
     it('resolves the `SearchParameters` from the level 0', () => {
-      expect(resolve(level0)).toEqual([level0.getHelper()!.state]);
+      expect(resolveSearchParameters(level0)).toEqual([
+        level0.getHelper()!.state,
+      ]);
     });
 
     it('resolves the `SearchParameters` from the level 1', () => {
-      expect(resolve(level1)).toEqual([
+      expect(resolveSearchParameters(level1)).toEqual([
         level0.getHelper()!.state,
         level1.getHelper()!.state,
       ]);
@@ -43,18 +45,20 @@ describe('mergeSearchParameters', () => {
     level0.init(createIndexInitOptions({ parent: null }));
 
     it('resolves the `SearchParameters` from the level 0', () => {
-      expect(resolve(level0)).toEqual([level0.getHelper()!.state]);
+      expect(resolveSearchParameters(level0)).toEqual([
+        level0.getHelper()!.state,
+      ]);
     });
 
     it('resolves the `SearchParameters` from the level 1', () => {
-      expect(resolve(level1)).toEqual([
+      expect(resolveSearchParameters(level1)).toEqual([
         level0.getHelper()!.state,
         level1.getHelper()!.state,
       ]);
     });
 
     it('resolves the `SearchParameters` from the level 2', () => {
-      expect(resolve(level2)).toEqual([
+      expect(resolveSearchParameters(level2)).toEqual([
         level0.getHelper()!.state,
         level1.getHelper()!.state,
         level2.getHelper()!.state,

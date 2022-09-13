@@ -1,4 +1,4 @@
-import findIndex from '../findIndex';
+import { findIndex } from '../findIndex';
 
 describe('findIndex', () => {
   describe('with polyfill', () => {
