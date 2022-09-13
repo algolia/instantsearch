@@ -2,13 +2,11 @@
 import { h } from 'preact';
 
 import { Highlight as HighlightUiComponent } from '../../components/Highlight/Highlight';
-import {
-  getHighlightedParts,
-  getPropertyByPath,
-  unescape,
-  warning,
-  toArray,
-} from '../../lib/utils';
+// These utils are individually imported, as utils/renderTemplate imports helpers/components, importing lib/utils would create a circular dependency.
+import { getPropertyByPath } from '../../lib/utils/getPropertyByPath';
+import { toArray } from '../../lib/utils/toArray';
+import { warning } from '../../lib/utils/logger';
+import { getHighlightedParts } from '../../lib/utils/getHighlightedParts';
 
 import type {
   BaseHit,
