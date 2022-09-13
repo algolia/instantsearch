@@ -1,5 +1,5 @@
 import type { InstantSearch, Hit, EscapedHits } from '../../types';
-import { serializePayload } from '../../lib/utils';
+import { serializePayload } from './serializer';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type BuiltInSendEventForHits = (
