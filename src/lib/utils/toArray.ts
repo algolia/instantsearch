@@ -1,3 +1,5 @@
-export function toArray<T>(value: T): Extract<T, unknown[]> {
-  return (Array.isArray(value) ? value : [value]) as Extract<T, unknown[]>;
+type ToArray<T> = T extends unknown[] ? T : T[];
+
+export function toArray<T>(value: T): ToArray<T> {
+  return (Array.isArray(value) ? value : [value]) as ToArray<T>;
 }
