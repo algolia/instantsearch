@@ -1,4 +1,4 @@
-import clearRefinements from '../clearRefinements';
+import { clearRefinements } from '../clearRefinements';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import type { SearchClient } from '../../../types';
 

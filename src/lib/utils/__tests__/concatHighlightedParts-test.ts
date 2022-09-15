@@ -1,4 +1,4 @@
-import concatHighlightedParts from '../concatHighlightedParts';
+import { concatHighlightedParts } from '../concatHighlightedParts';
 
 describe('concatHighlightedParts', () => {
   test('returns a concatenated string from HighlightedParts with a single match', () => {

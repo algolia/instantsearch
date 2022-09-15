@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 /** @jsx h */
 
 import { h } from 'preact';
@@ -8,7 +5,7 @@ import type {
   ToggleRefinementRenderState,
   ToggleRefinementValue,
 } from '../../connectors/toggle-refinement/connectToggleRefinement';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   ToggleRefinementTemplates,

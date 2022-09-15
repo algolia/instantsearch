@@ -2,10 +2,13 @@
 
 import type { JSX } from 'preact';
 import { h, Component } from 'preact';
-import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
 import { warning, renderTemplate, isEqual } from '../../lib/utils';
 
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type {
+  BindEventForHits,
+  SendEventForHits,
+  PreparedTemplateProps,
+} from '../../lib/utils';
 import type { Templates } from '../../types';
 
 const defaultProps = {

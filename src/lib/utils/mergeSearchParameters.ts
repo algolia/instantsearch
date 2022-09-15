@@ -1,6 +1,6 @@
 import type { SearchParameters } from 'algoliasearch-helper';
-import findIndex from './findIndex';
-import uniq from './uniq';
+import { findIndex } from './findIndex';
+import { uniq } from './uniq';
 
 type Merger = (
   left: SearchParameters,
@@ -112,7 +112,9 @@ const mergeRuleContexts: Merger = (left, right) => {
   return left;
 };
 
-const merge = (...parameters: SearchParameters[]): SearchParameters =>
+export const mergeSearchParameters = (
+  ...parameters: SearchParameters[]
+): SearchParameters =>
   parameters.reduce((left, right) => {
     const hierarchicalFacetsRefinementsMerged =
       mergeHierarchicalFacetsRefinements(left, right);
@@ -150,5 +152,3 @@ const merge = (...parameters: SearchParameters[]): SearchParameters =>
 
     return mergeWithRest(facetsMerged, right);
   });
-
-export default merge;
