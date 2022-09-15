@@ -1,3 +1,18 @@
+# [6.33.0](https://github.com/algolia/react-instantsearch/compare/v6.32.1...v6.33.0) (2022-09-15)
+
+
+### Bug Fixes
+
+* **react-native:** mark as compatible with react 18 ([#3614](https://github.com/algolia/react-instantsearch/issues/3614)) ([2a191a8](https://github.com/algolia/react-instantsearch/commit/2a191a84751127de5a3eb34b59b460a1d1bfe594))
+* **rish:** hide reset button when search is stalled in `SearchBox` ([#3617](https://github.com/algolia/react-instantsearch/issues/3617)) ([93ee9d0](https://github.com/algolia/react-instantsearch/commit/93ee9d0212893cef4842c86b7c78f285aa136be8))
+
+
+### Features
+
+* **dependencies:** update instantsearch and helper ([#3622](https://github.com/algolia/react-instantsearch/issues/3622)) ([6773ab1](https://github.com/algolia/react-instantsearch/commit/6773ab169cd74dfe1133e255daade4d57e99d9a4))
+
+
+
 ## [6.32.1](https://github.com/algolia/react-instantsearch/compare/v6.32.0...v6.32.1) (2022-08-26)
 
 
