@@ -1,4 +1,4 @@
-import { isIndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import { isIndexWidget } from 'instantsearch.js/es/lib/utils/index';
 import React from 'react';
 import {
   InstantSearchServerContext,
