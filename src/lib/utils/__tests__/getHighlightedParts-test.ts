@@ -1,4 +1,4 @@
-import getHighlightedParts from '../getHighlightedParts';
+import { getHighlightedParts } from '../getHighlightedParts';
 
 describe('getHighlightedParts', () => {
   test('returns an HighlightParts array of object from a string with a single match', () => {

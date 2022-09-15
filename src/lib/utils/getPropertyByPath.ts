@@ -1,4 +1,4 @@
-function getPropertyByPath(
+export function getPropertyByPath(
   object: Record<string, any> | undefined,
   path: string | string[]
 ): any {
@@ -6,5 +6,3 @@ function getPropertyByPath(
 
   return parts.reduce((current, key) => current && current[key], object);
 }
-
-export default getPropertyByPath;

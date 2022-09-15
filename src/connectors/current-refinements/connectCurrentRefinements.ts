@@ -14,7 +14,7 @@ import type {
   Refinement,
   FacetRefinement,
   NumericRefinement,
-} from '../../lib/utils/getRefinements';
+} from '../../lib/utils';
 import type {
   Connector,
   TransformItems,

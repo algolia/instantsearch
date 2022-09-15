@@ -62,6 +62,7 @@ describe('middleware', () => {
     const middlewareDefinition: MiddlewareDefinition = {
       onStateChange: jest.fn(),
       subscribe: jest.fn(),
+      started: jest.fn(),
       unsubscribe: jest.fn(),
     };
 
@@ -97,6 +98,7 @@ describe('middleware', () => {
     const middlewareDefinition: MiddlewareDefinition = {
       onStateChange: jest.fn(),
       subscribe: jest.fn(),
+      started: jest.fn(),
       unsubscribe: jest.fn(),
     };
 

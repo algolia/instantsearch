@@ -6,7 +6,7 @@ type Defer = Callback & {
   cancel(): void;
 };
 
-const defer = (callback: Callback): Defer => {
+export function defer(callback: Callback): Defer {
   let progress: Promise<void> | null = null;
   let cancelled = false;
 
@@ -46,6 +46,4 @@ const defer = (callback: Callback): Defer => {
   };
 
   return fn;
-};
-
-export default defer;
+}

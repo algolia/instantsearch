@@ -287,6 +287,7 @@ See ${createDocumentationLink({
     const newMiddlewareList = middleware.map((fn) => {
       const newMiddleware = {
         subscribe: noop,
+        started: noop,
         unsubscribe: noop,
         onStateChange: noop,
         ...fn({
@@ -308,6 +309,7 @@ See ${createDocumentationLink({
     if (this.started) {
       newMiddlewareList.forEach((m) => {
         m.subscribe();
+        m.started();
       });
     }
 
@@ -554,6 +556,10 @@ See ${createDocumentationLink({
     // track we started the search if we add more widgets,
     // to init them directly after add
     this.started = true;
+
+    this.middleware.forEach(({ instance }) => {
+      instance.started();
+    });
   }
 
   /**

@@ -114,6 +114,8 @@ export function createMetadataMiddleware(): InternalMiddleware {
         }, 0);
       },
 
+      started() {},
+
       unsubscribe() {
         payloadContainer.remove();
       },

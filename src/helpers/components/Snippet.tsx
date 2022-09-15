@@ -2,12 +2,19 @@
 import { h } from 'preact';
 
 import { Snippet as SnippetUiComponent } from '../../components/Snippet/Snippet';
-import getHighlightedParts from '../../lib/utils/getHighlightedParts';
-import getPropertyByPath from '../../lib/utils/getPropertyByPath';
-import unescape from '../../lib/utils/unescape';
+// These utils are individually imported, as utils/renderTemplate imports helpers/components, importing lib/utils would create a circular dependency.
+import { getPropertyByPath } from '../../lib/utils/getPropertyByPath';
+import { toArray } from '../../lib/utils/toArray';
+import { unescape } from '../../lib/utils/escape-html';
 import { warning } from '../../lib/utils/logger';
+import { getHighlightedParts } from '../../lib/utils/getHighlightedParts';
 
-import type { BaseHit, Hit, PartialKeys } from '../../types';
+import type {
+  BaseHit,
+  Hit,
+  HitAttributeSnippetResult,
+  PartialKeys,
+} from '../../types';
 import type { SnippetProps as SnippetUiComponentProps } from '../../components/Snippet/Snippet';
 
 export type SnippetProps<THit extends Hit<BaseHit>> = {
@@ -25,9 +32,9 @@ export function Snippet<THit extends Hit<BaseHit>>({
   cssClasses,
   ...props
 }: SnippetProps<THit>) {
-  const property =
+  const property: HitAttributeSnippetResult | HitAttributeSnippetResult[] =
     getPropertyByPath(hit._snippetResult, attribute as string) || [];
-  const properties = Array.isArray(property) ? property : [property];
+  const properties = toArray(property);
 
   warning(
     Boolean(properties.length),

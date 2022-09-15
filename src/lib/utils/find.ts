@@ -4,7 +4,7 @@
 // was decided as too risky.
 // @MAJOR Replace with the native `Array.prototype.find` method
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
-function find<TItem>(
+export function find<TItem>(
   items: TItem[],
   predicate: (value: TItem, index: number, obj: TItem[]) => boolean
 ): TItem | undefined {
@@ -19,5 +19,3 @@ function find<TItem>(
 
   return undefined;
 }
-
-export default find;

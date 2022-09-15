@@ -21,7 +21,7 @@ import type {
   AnswersWidgetDescription,
 } from '../../connectors/answers/connectAnswers';
 import connectAnswers from '../../connectors/answers/connectAnswers';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'answers' });
 const suit = component('Answers');

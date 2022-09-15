@@ -21,7 +21,7 @@ function isObjectLike(value: any): boolean {
  * A plain object is an object created by the `Object`
  * constructor or with a `[[Prototype]]` of `null`.
  */
-function isPlainObject(value: any): boolean {
+export function isPlainObject(value: any): boolean {
   if (!isObjectLike(value) || getTag(value) !== '[object Object]') {
     return false;
   }
@@ -38,5 +38,3 @@ function isPlainObject(value: any): boolean {
 
   return Object.getPrototypeOf(value) === proto;
 }
-
-export default isPlainObject;

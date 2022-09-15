@@ -1,12 +1,9 @@
-import unescape from './unescape';
+import { unescape } from './escape-html';
 import type { HighlightedParts } from '../../types';
 
 const hasAlphanumeric = new RegExp(/\w/i);
 
-export default function getHighlightFromSiblings(
-  parts: HighlightedParts[],
-  i: number
-) {
+export function getHighlightFromSiblings(parts: HighlightedParts[], i: number) {
   const current = parts[i];
   const isNextHighlighted = parts[i + 1]?.isHighlighted || true;
   const isPreviousHighlighted = parts[i - 1]?.isHighlighted || true;

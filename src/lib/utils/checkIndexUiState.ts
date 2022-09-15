@@ -1,4 +1,4 @@
-import capitalize from './capitalize';
+import { capitalize } from './capitalize';
 import { warning } from './logger';
 import type { IndexWidget } from '../../widgets/index/index';
 import type { Widget, IndexUiState } from '../../types';

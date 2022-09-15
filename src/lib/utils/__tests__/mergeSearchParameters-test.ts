@@ -1,9 +1,9 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import merge from '../mergeSearchParameters';
+import { mergeSearchParameters } from '../mergeSearchParameters';
 
 describe('mergeSearchParameters', () => {
   it('overrides non-managed parameters', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         // Inherit
         hitsPerPage: 2,
@@ -39,7 +39,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `facets` parameters', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         facets: ['brand'],
       }),
@@ -59,7 +59,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `disjunctiveFacets` parameters', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         disjunctiveFacets: ['brand'],
       }),
@@ -79,7 +79,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `facetsRefinements` parameters, overrides conflicts', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         facets: ['brand'],
         facetsRefinements: {
@@ -114,7 +114,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `facetsExcludes` parameters, overrides conflicts', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         facets: ['brand'],
         facetsExcludes: {
@@ -149,7 +149,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `disjunctiveFacetsRefinements` parameters, overrides conflicts', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         disjunctiveFacets: ['brand'],
         disjunctiveFacetsRefinements: {
@@ -184,7 +184,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `numericRefinements` parameters, overrides conflicts', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         numericRefinements: {
           price: {
@@ -230,7 +230,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `tagRefinements` parameters, overrides conflicts', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         tagRefinements: ['brand'],
       }),
@@ -250,7 +250,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `hierarchicalFacets` parameters, overrides conflicts', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         hierarchicalFacets: [
           {
@@ -309,7 +309,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges `hierarchicalFacetsRefinements` parameters, overrides conflicts', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         hierarchicalFacets: [
           {
@@ -383,7 +383,7 @@ describe('mergeSearchParameters', () => {
   });
 
   it('merges and dedupes `ruleContexts` parameters', () => {
-    const actual = merge(
+    const actual = mergeSearchParameters(
       algoliasearchHelper.SearchParameters.make({
         ruleContexts: ['ais-genre-comedy'],
       }),

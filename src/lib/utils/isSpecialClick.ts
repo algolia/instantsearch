@@ -1,4 +1,4 @@
-function isSpecialClick(event: MouseEvent): boolean {
+export function isSpecialClick(event: MouseEvent): boolean {
   const isMiddleClick = event.button === 1;
 
   return (
@@ -9,5 +9,3 @@ function isSpecialClick(event: MouseEvent): boolean {
     event.shiftKey
   );
 }
-
-export default isSpecialClick;

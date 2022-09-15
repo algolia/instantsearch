@@ -5,6 +5,7 @@ import type { AtLeastOne } from './utils';
 export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
   onStateChange(options: { uiState: TUiState }): void;
   subscribe(): void;
+  started(): void;
   unsubscribe(): void;
 };
 

@@ -9,7 +9,7 @@ import type {
   ClearRefinementsTemplates,
 } from '../../widgets/clear-refinements/clear-refinements';
 import type { ComponentCSSClasses } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 
 export type ClearRefinementsComponentCSSClasses =
   ComponentCSSClasses<ClearRefinementsCSSClasses>;
