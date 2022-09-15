@@ -152,7 +152,7 @@ jobs:
           command: |
             curl --request POST \
               --url https://circleci.com/api/v2/project/gh/algolia/react-instantsearch/pipeline \
-              --header "Circle-Token: $CIRCLECI_API_KEY" \
+              --header "Circle-Token: $CIRCLECI_API_KEY_RIS" \
               --header "content-type: application/json" \
               --data '{"branch":"master"}'
 
