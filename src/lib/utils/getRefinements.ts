@@ -1,5 +1,5 @@
 import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import find from './find';
+import { find } from './find';
 import { unescapeFacetValue, escapeFacetValue } from './escapeFacetValue';
 
 export type FacetRefinement = {
@@ -104,7 +104,7 @@ function getRefinement(
   return res;
 }
 
-export default function getRefinements(
+export function getRefinements(
   results: SearchResults | Record<string, never>,
   state: SearchParameters,
   includesQuery: boolean = false

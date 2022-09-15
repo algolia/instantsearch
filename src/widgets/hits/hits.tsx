@@ -30,7 +30,7 @@ import type {
   InsightsClient,
 } from '../../types';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });

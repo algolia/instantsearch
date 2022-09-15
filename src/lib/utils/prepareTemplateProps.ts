@@ -1,4 +1,4 @@
-import uniq from './uniq';
+import { uniq } from './uniq';
 import type { HoganHelpers, Templates } from '../../types';
 import type { HoganOptions } from 'hogan.js';
 
@@ -56,7 +56,7 @@ function prepareTemplates<TTemplates extends Templates>(
 /**
  * Prepares an object to be passed to the Template widget
  */
-function prepareTemplateProps<TTemplates extends Templates>({
+export function prepareTemplateProps<TTemplates extends Templates>({
   defaultTemplates,
   templates,
   templatesConfig,
@@ -72,5 +72,3 @@ function prepareTemplateProps<TTemplates extends Templates>({
     ...preparedTemplates,
   };
 }
-
-export default prepareTemplateProps;

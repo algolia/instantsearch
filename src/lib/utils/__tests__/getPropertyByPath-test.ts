@@ -1,4 +1,4 @@
-import getPropertyByPath from '../getPropertyByPath';
+import { getPropertyByPath } from '../getPropertyByPath';
 
 describe('getPropertyByPath', () => {
   describe('path as string', () => {

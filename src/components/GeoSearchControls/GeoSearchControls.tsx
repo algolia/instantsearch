@@ -10,7 +10,7 @@ import type {
   GeoSearchTemplates,
 } from '../../widgets/geo-search/geo-search';
 import type { ComponentCSSClasses } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 
 type Props = {
   cssClasses: ComponentCSSClasses<GeoSearchCSSClasses>;

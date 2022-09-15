@@ -1,7 +1,7 @@
 import type { Renderer } from '../../types/connector';
-import getObjectType from './getObjectType';
+import { getObjectType } from './getObjectType';
 
-function checkRendering<TRenderOptions, TWidgetParams>(
+export function checkRendering<TRenderOptions, TWidgetParams>(
   rendering: Renderer<TRenderOptions, TWidgetParams>,
   usage: string
 ): void {
@@ -13,5 +13,3 @@ function checkRendering<TRenderOptions, TWidgetParams>(
 ${usage}`);
   }
 }
-
-export default checkRendering;

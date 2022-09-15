@@ -1,4 +1,4 @@
-type FacetValue = string | number | undefined;
+type FacetValue = string | number | boolean | undefined;
 
 export function unescapeFacetValue<TFacetValue extends FacetValue>(
   value: TFacetValue

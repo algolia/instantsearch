@@ -1,5 +1,5 @@
-function toArray(value: any) {
-  return Array.isArray(value) ? value : [value];
-}
+type ToArray<T> = T extends unknown[] ? T : T[];
 
-export default toArray;
+export function toArray<T>(value: T): ToArray<T> {
+  return (Array.isArray(value) ? value : [value]) as ToArray<T>;
+}

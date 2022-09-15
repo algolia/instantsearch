@@ -3,7 +3,7 @@
  */
 
 import { render as preactRender } from 'preact';
-import utilsGetContainerNode from '../../../lib/utils/getContainerNode';
+import { getContainerNode as utilsGetContainerNode } from '../../../lib/utils/getContainerNode';
 import type {
   PaginationCSSClasses,
   PaginationWidgetParams,
@@ -35,8 +35,8 @@ const getContainerNode = castToJestMock(utilsGetContainerNode);
 jest.mock('../../../lib/utils/getContainerNode', () => {
   const module = jest.requireActual('../../../lib/utils/getContainerNode');
 
-  const _getContainerNode = module.default;
-  module.default = jest.fn((...args) => _getContainerNode(...args));
+  const _getContainerNode = module.getContainerNode;
+  module.getContainerNode = jest.fn((...args) => _getContainerNode(...args));
 
   return module;
 });

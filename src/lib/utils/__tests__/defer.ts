@@ -1,4 +1,4 @@
-import defer from '../defer';
+import { defer } from '../defer';
 
 describe('defer', () => {
   it('defers the call to the function', async () => {

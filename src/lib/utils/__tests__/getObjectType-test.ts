@@ -1,4 +1,4 @@
-import getObjectType from '../getObjectType';
+import { getObjectType } from '../getObjectType';
 
 describe('getObjectType', () => {
   test('returns the type of a string', () => {

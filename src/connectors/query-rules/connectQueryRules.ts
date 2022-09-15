@@ -14,7 +14,7 @@ import {
 import type {
   Refinement as InternalRefinement,
   NumericRefinement as InternalNumericRefinement,
-} from '../../lib/utils/getRefinements';
+} from '../../lib/utils';
 
 type TrackedFilterRefinement = string | number | boolean;
 

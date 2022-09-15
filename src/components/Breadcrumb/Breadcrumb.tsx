@@ -8,7 +8,7 @@ import type {
   BreadcrumbTemplates,
 } from '../../widgets/breadcrumb/breadcrumb';
 import type { ComponentCSSClasses } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
 
 export type BreadcrumbComponentCSSClasses =

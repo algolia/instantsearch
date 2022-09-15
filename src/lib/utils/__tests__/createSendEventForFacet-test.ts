@@ -3,14 +3,14 @@ import { createSendEventForFacet } from '../createSendEventForFacet';
 import type { SearchClient } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
-jest.mock('../isFacetRefined', () => jest.fn());
-
-import isFacetRefined from '../isFacetRefined';
+jest.mock('../isFacetRefined', () => ({ isFacetRefined: jest.fn() }));
+import { isFacetRefined } from '../isFacetRefined';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
 const createTestEnvironment = () => {
   const instantSearchInstance = createInstantSearch();
   const helper = algoliasearchHelper({} as SearchClient, '', {});
-  (isFacetRefined as jest.Mock).mockImplementation(() => false);
+  castToJestMock(isFacetRefined).mockImplementation(() => false);
   const sendEvent = createSendEventForFacet({
     instantSearchInstance,
     helper,

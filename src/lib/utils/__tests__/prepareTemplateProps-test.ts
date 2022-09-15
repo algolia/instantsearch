@@ -1,4 +1,4 @@
-import prepareTemplateProps from '../prepareTemplateProps';
+import { prepareTemplateProps } from '../prepareTemplateProps';
 
 describe('prepareTemplateProps', () => {
   const defaultTemplates = {

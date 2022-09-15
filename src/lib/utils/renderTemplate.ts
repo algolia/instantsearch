@@ -42,7 +42,7 @@ function transformHelpersToHogan(
   );
 }
 
-function renderTemplate({
+export function renderTemplate({
   templates,
   templateKey,
   compileOptions,
@@ -99,5 +99,3 @@ function renderTemplate({
     )
     .trim();
 }
-
-export default renderTemplate;

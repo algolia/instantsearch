@@ -4,7 +4,7 @@ type RangeOptions = {
   step?: number;
 };
 
-function range({ start = 0, end, step = 1 }: RangeOptions): number[] {
+export function range({ start = 0, end, step = 1 }: RangeOptions): number[] {
   // We can't divide by 0 so we re-assign the step to 1 if it happens.
   const limitStep = step === 0 ? 1 : step;
 
@@ -19,5 +19,3 @@ function range({ start = 0, end, step = 1 }: RangeOptions): number[] {
     (_, current) => start + current * limitStep
   );
 }
-
-export default range;

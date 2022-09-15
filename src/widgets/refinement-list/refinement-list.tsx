@@ -17,7 +17,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import type { Template, WidgetFactory, Renderer } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils/prepareTemplateProps';
+import type { PreparedTemplateProps } from '../../lib/utils';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 import type { SearchBoxTemplates } from '../search-box/search-box';
 import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
