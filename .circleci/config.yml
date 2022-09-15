@@ -50,6 +50,7 @@ jobs:
       - run:
           name: Test Exports
           command: yarn run test:exports
+
   lint:
     <<: *defaults
     steps:
@@ -141,21 +142,36 @@ jobs:
             git config --global user.name "InstantSearch"
             yarn run release --yes --no-browse
 
+  'test downstream':
+    docker: 
+      - image: cimg/base:2021.11
+    resource_class: small
+    steps:
+      - run:
+          name: Ping React InstantSearch
+          command: |
+            curl --request POST \
+              --url https://circleci.com/api/v2/project/gh/algolia/react-instantsearch/pipeline \
+              --header "Circle-Token: $CIRCLECI_API_KEY" \
+              --header "content-type: application/json" \
+              --data '{"branch":"master"}'
+
 workflows:
   version: 2
   ci:
     jobs:
-      - build and size
-      - unit tests
-      - lint
-      - type check algoliasearch v3
-      - e2e tests
-      - 'release if needed':
-          filters:
-            branches:
-              only:
-                - master
-                - next
+      - test downstream
+      # - build and size
+      # - unit tests
+      # - lint
+      # - type check algoliasearch v3
+      # - e2e tests
+      # - 'release if needed':
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      #           - next
   'scheduled release':
     triggers:
       - schedule:
