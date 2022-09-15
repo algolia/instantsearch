@@ -1,4 +1,15 @@
-# [4.46.0](https://github.com/algolia/instantsearch.js/compare/v4.45.1...v4.46.0) (2022-09-12)
+## [4.46.1](https://github.com/algolia/instantsearch.js/compare/v4.46.0...v4.46.1) (2022-09-15)
+
+
+### Bug Fixes
+
+* **hierarchicalMenu:** use existing facet filters in multi queries for parent facet values ([#5105](https://github.com/algolia/instantsearch.js/issues/5105)) ([10a83f1](https://github.com/algolia/instantsearch.js/commit/10a83f146f714d9f97bb8edca2499f16df4ca22d))
+* **insights:** make sure change in userToken can't reset the search parameters ([#5101](https://github.com/algolia/instantsearch.js/issues/5101)) ([b20c8dc](https://github.com/algolia/instantsearch.js/commit/b20c8dc70e34c1f234dc10eb7fc69296f30986a4))
+* **setUiState**: call onStateChange handler ([#5104](https://github.com/algolia/instantsearch.js/issues/5104)) ([231853d](https://github.com/algolia/instantsearch.js/commit/231853dab731189a33ee480cdb196789c7336fda)))
+
+
+
+## [4.46.0](https://github.com/algolia/instantsearch.js/compare/v4.45.1...v4.46.0) (2022-09-12)
 
 
 ### Features
