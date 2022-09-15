@@ -2570,6 +2570,7 @@ describe('onStateChange', () => {
     expect(onStateChange).toHaveBeenCalledTimes(0);
 
     buttonRef.current.click();
+
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(onStateChange).toHaveBeenCalledWith({
       uiState: {
@@ -2672,6 +2673,33 @@ describe('onStateChange', () => {
         siblingIndex1: {
           query: 'Sibling query 1',
         },
+      },
+      setUiState: expect.any(Function),
+    });
+  });
+
+  test('is triggered when setUiState is called', async () => {
+    const onStateChange = jest.fn(({ uiState, setUiState }) => {
+      setUiState(uiState);
+    });
+    const search = new InstantSearch({
+      indexName: 'instant_search',
+      searchClient: createSearchClient(),
+      onStateChange,
+    });
+
+    search.addWidgets([connectSearchBox(() => {})({})]);
+
+    search.start();
+
+    await wait(0);
+
+    search.setUiState({ instant_search: { query: 'test' } });
+
+    expect(onStateChange).toHaveBeenCalledTimes(1);
+    expect(onStateChange).toHaveBeenCalledWith({
+      uiState: {
+        instant_search: { query: 'test' },
       },
       setUiState: expect.any(Function),
     });

@@ -3,7 +3,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import EventEmitter from '@algolia/events';
 
 import type { IndexWidget } from '../widgets/index/index';
-import index, { isIndexWidget } from '../widgets/index/index';
+import index from '../widgets/index/index';
 import version from './version';
 import createHelpers from './createHelpers';
 import {
@@ -12,7 +12,7 @@ import {
   defer,
   noop,
   warning,
-  checkIndexUiState,
+  setIndexHelperState,
 } from './utils';
 import type {
   InsightsClient as AlgoliaInsightsClient,
@@ -622,8 +622,14 @@ See ${createDocumentationLink({
     }
   }
 
+  /**
+   * Set the UI state and trigger a search.
+   * @param uiState The next UI state or a function computing it from the current state
+   * @param callOnStateChange private parameter used to know if the method is called from a state change
+   */
   public setUiState(
-    uiState: TUiState | ((previousUiState: TUiState) => TUiState)
+    uiState: TUiState | ((previousUiState: TUiState) => TUiState),
+    callOnStateChange: boolean = true
   ): void {
     if (!this.mainHelper) {
       throw new Error(
@@ -639,32 +645,27 @@ See ${createDocumentationLink({
         ? uiState(this.mainIndex.getWidgetUiState({}) as TUiState)
         : uiState;
 
-    const setIndexHelperState = (indexWidget: IndexWidget) => {
-      const nextIndexUiState = nextUiState[indexWidget.getIndexId()] || {};
+    if (this.onStateChange && callOnStateChange) {
+      this.onStateChange({
+        uiState: nextUiState,
+        setUiState: (finalUiState) => {
+          setIndexHelperState(
+            typeof finalUiState === 'function'
+              ? finalUiState(nextUiState)
+              : finalUiState,
+            this.mainIndex
+          );
 
-      if (__DEV__) {
-        checkIndexUiState({
-          index: indexWidget,
-          indexUiState: nextIndexUiState,
-        });
-      }
+          this.scheduleSearch();
+          this.onInternalStateChange();
+        },
+      });
+    } else {
+      setIndexHelperState(nextUiState, this.mainIndex);
 
-      indexWidget.getHelper()!.setState(
-        indexWidget.getWidgetSearchParameters(indexWidget.getHelper()!.state, {
-          uiState: nextIndexUiState,
-        })
-      );
-
-      indexWidget
-        .getWidgets()
-        .filter(isIndexWidget)
-        .forEach(setIndexHelperState);
-    };
-
-    setIndexHelperState(this.mainIndex);
-
-    this.scheduleSearch();
-    this.onInternalStateChange();
+      this.scheduleSearch();
+      this.onInternalStateChange();
+    }
   }
 
   public getUiState(): TUiState {
