@@ -1,4 +1,4 @@
-## [4.46.1](https://github.com/algolia/instantsearch.js/compare/v4.46.0...v4.46.1) (2022-09-13)
+## [4.46.1](https://github.com/algolia/instantsearch.js/compare/v4.46.0...v4.46.1) (2022-09-15)
 
 
 ### Bug Fixes
@@ -9,7 +9,7 @@
 
 
 
-# [4.46.0](https://github.com/algolia/instantsearch.js/compare/v4.45.1...v4.46.0) (2022-09-12)
+## [4.46.0](https://github.com/algolia/instantsearch.js/compare/v4.45.1...v4.46.0) (2022-09-12)
 
 
 ### Features
