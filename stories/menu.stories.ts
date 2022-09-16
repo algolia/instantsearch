@@ -97,7 +97,7 @@ storiesOf('Refinements/Menu', module)
         instantsearch.widgets.menu({
           searchable: true,
           container: container,
-          attribute: 'brand',
+          attribute: 'categories',
         }),
       ]);
     })
@@ -109,7 +109,7 @@ storiesOf('Refinements/Menu', module)
         instantsearch.widgets.menu({
           searchable: true,
           container: container,
-          attribute: 'type',
+          attribute: 'categories',
           limit: 3,
           showMore: true,
           showMoreLimit: 8,
