@@ -8,7 +8,7 @@ storiesOf('Refinements/Menu', module)
       search.addWidgets([
         instantsearch.widgets.menu({
           container,
-          attribute: 'type',
+          attribute: 'categories',
         }),
       ]);
     })
