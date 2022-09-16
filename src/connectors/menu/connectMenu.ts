@@ -1,14 +1,18 @@
-import type { SearchResults } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForFacet,
+  TAG_PLACEHOLDER,
+  TAG_REPLACEMENT,
+  escapeFacets,
   noop,
 } from '../../lib/utils';
 import type {
   Connector,
   CreateURL,
+  InitOptions,
   RenderOptions,
   SortBy,
   TransformItems,
@@ -32,6 +36,10 @@ export type MenuItem = {
    * Human-readable value of the menu item.
    */
   label: string;
+  /**
+   * Human-readable value of the searched menu item.
+   */
+  highlighted?: string;
   /**
    * Number of results matched after refinement is applied.
    */
@@ -68,6 +76,10 @@ export type MenuConnectorParams = {
    */
   sortBy?: SortBy<SearchResults.HierarchicalFacet>;
   /**
+   * Escapes the content of the facet values.
+   */
+  escapeFacetValues?: boolean;
+  /**
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<MenuItem>;
@@ -78,6 +90,10 @@ export type MenuRenderState = {
    * The elements that can be refined for the current search results.
    */
   items: MenuItem[];
+  /**
+   * indicates whether the results are exhaustive (complete)
+   */
+  hasExhaustiveItems: boolean;
   /**
    * Creates the URL for a single item name in the list.
    */
@@ -90,6 +106,14 @@ export type MenuRenderState = {
    * True if refinement can be applied.
    */
   canRefine: boolean;
+  /**
+   * Searches for values inside the list.
+   */
+  searchForItems(query: string): void;
+  /**
+   * `true` if the values are from an index search.
+   */
+  isFromSearch: boolean;
   /**
    * True if the menu is displaying all the menu items.
    */
@@ -154,6 +178,7 @@ const connectMenu: MenuConnector = function connectMenu(
       showMore = false,
       showMoreLimit = 20,
       sortBy = DEFAULT_SORT,
+      escapeFacetValues = true,
       transformItems = ((items) => items) as NonNullable<
         MenuConnectorParams['transformItems']
       >,
@@ -174,7 +199,6 @@ const connectMenu: MenuConnector = function connectMenu(
     >;
 
     let sendEvent: MenuRenderState['sendEvent'] | undefined;
-    let _createURL: MenuRenderState['createURL'] | undefined;
     let _refine: MenuRenderState['refine'] | undefined;
 
     // Provide the same function to the `renderFn` so that way the user
@@ -197,6 +221,96 @@ const connectMenu: MenuConnector = function connectMenu(
     function getLimit() {
       return isShowingMore ? showMoreLimit : limit;
     }
+
+    let searchForFacetValues: (
+      renderOptions: RenderOptions | InitOptions
+    ) => MenuRenderState['searchForItems'] = () => () => {};
+
+    const formatItems = ({
+      name: label,
+      escapedValue: value,
+      ...item
+    }: SearchResults.HierarchicalFacet): MenuItem => ({
+      ...item,
+      value,
+      label,
+      highlighted: label,
+    });
+
+    let lastResultsFromMainSearch: SearchResults;
+    let lastItemsFromMainSearch: MenuItem[] = [];
+    let hasExhaustiveItems = true;
+
+    const createSearchForFacetValues = function (
+      helper: AlgoliaSearchHelper,
+      widget: ThisWidget
+    ) {
+      return (renderOptions: RenderOptions | InitOptions) => (query: string) => {
+        const { instantSearchInstance, results: searchResults } = renderOptions;
+        if (query === '' && lastItemsFromMainSearch) {
+          // render with previous data from the helper.
+          renderFn(
+            {
+              ...widget.getWidgetRenderState({
+                ...renderOptions,
+                results: lastResultsFromMainSearch,
+              }),
+              instantSearchInstance,
+            },
+            false
+          );
+        } else {
+          const tags = {
+            highlightPreTag: escapeFacetValues
+              ? TAG_PLACEHOLDER.highlightPreTag
+              : TAG_REPLACEMENT.highlightPreTag,
+            highlightPostTag: escapeFacetValues
+              ? TAG_PLACEHOLDER.highlightPostTag
+              : TAG_REPLACEMENT.highlightPostTag,
+          };
+
+          helper
+            .searchForFacetValues(
+              attribute,
+              query,
+              // We cap the `maxFacetHits` value to 100 because the Algolia API
+              // doesn't support a greater number.
+              // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
+              Math.min(getLimit(), 100),
+              tags
+            )
+            .then((results) => {
+              const facetValues = escapeFacetValues
+                ? escapeFacets(results.facetHits)
+                : results.facetHits;
+
+              const normalizedFacetValues = transformItems(
+                facetValues.map(({ escapedValue, value, ...item }) => ({
+                  ...item,
+                  value: escapedValue,
+                  label: value,
+                })),
+                { results: searchResults }
+              );
+
+              renderFn(
+                {
+                  ...widget.getWidgetRenderState({
+                    ...renderOptions,
+                    results: lastResultsFromMainSearch,
+                  }),
+                  items: normalizedFacetValues,
+                  canToggleShowMore: false,
+                  canRefine: true,
+                  isFromSearch: true,
+                  instantSearchInstance,
+                },
+                false
+              );
+            });
+        }
+      };
+    };
 
     return {
       $$type: 'ais.menu' as const,
@@ -244,32 +358,20 @@ const connectMenu: MenuConnector = function connectMenu(
       },
 
       getWidgetRenderState(renderOptions) {
-        const { results, createURL, instantSearchInstance, helper } =
+        const { results, state, createURL, instantSearchInstance, helper } =
           renderOptions;
+        let items: MenuItem[] = [];
+        let facetValues: SearchResults.HierarchicalFacet[] = [];
 
-        let items: MenuRenderState['items'] = [];
-        let canToggleShowMore = false;
-
-        if (!sendEvent) {
+        if (!sendEvent || !_refine || !searchForFacetValues) {
           sendEvent = createSendEventForFacet({
             instantSearchInstance,
             helper,
             attribute,
             widgetType: this.$$type,
           });
-        }
 
-        if (!_createURL) {
-          _createURL = (facetValue: string) =>
-            createURL(
-              helper.state
-                .resetPage()
-                .toggleFacetRefinement(attribute, facetValue)
-            );
-        }
-
-        if (!_refine) {
-          _refine = function (facetValue: string) {
+          _refine = (facetValue) => {
             const [refinedItem] =
               helper.getHierarchicalFacetBreadcrumb(attribute);
             sendEvent!('click', facetValue ? facetValue : refinedItem);
@@ -280,47 +382,70 @@ const connectMenu: MenuConnector = function connectMenu(
               )
               .search();
           };
-        }
 
-        if (renderOptions.results) {
-          toggleShowMore = createToggleShowMore(renderOptions, this);
+          searchForFacetValues = createSearchForFacetValues(helper, this);
         }
 
         if (results) {
-          const facetValues = results.getFacetValues(attribute, {
+          const values = results.getFacetValues(attribute, {
             sortBy,
             facetOrdering: sortBy === DEFAULT_SORT,
           });
-          const facetItems =
-            facetValues && !Array.isArray(facetValues) && facetValues.data
-              ? facetValues.data
-              : [];
-
-          canToggleShowMore =
-            showMore && (isShowingMore || facetItems.length > getLimit());
-
+          facetValues =
+            values && !Array.isArray(values) && values.data ? values.data : [];
           items = transformItems(
-            facetItems
-              .slice(0, getLimit())
-              .map(({ name: label, escapedValue: value, path, ...item }) => ({
-                ...item,
-                label,
-                value,
-              })),
+            facetValues.slice(0, getLimit()).map(formatItems),
             { results }
           );
+
+          const maxValuesPerFacetConfig = state.maxValuesPerFacet;
+          const currentLimit = getLimit();
+          // If the limit is the max number of facet retrieved it is impossible to know
+          // if the facets are exhaustive. The only moment we are sure it is exhaustive
+          // is when it is strictly under the number requested unless we know that another
+          // widget has requested more values (maxValuesPerFacet > getLimit()).
+          // Because this is used for making the search of facets unable or not, it is important
+          // to be conservative here.
+          hasExhaustiveItems =
+            maxValuesPerFacetConfig! > currentLimit
+              ? facetValues.length <= currentLimit
+              : facetValues.length < currentLimit;
+
+          lastResultsFromMainSearch = results;
+          lastItemsFromMainSearch = items;
+
+          if (renderOptions.results) {
+            toggleShowMore = createToggleShowMore(renderOptions, this);
+          }
         }
+
+        // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
+        // function
+        const searchFacetValues =
+          searchForFacetValues && searchForFacetValues(renderOptions);
+
+        const canShowLess =
+          isShowingMore && lastItemsFromMainSearch.length > limit;
+        const canShowMore = showMore && !hasExhaustiveItems;
+
+        const canToggleShowMore = canShowLess || canShowMore;
 
         return {
           items,
-          createURL: _createURL,
+          createURL: (facetValue) =>
+            createURL(
+              state.resetPage().toggleFacetRefinement(attribute, facetValue)
+            ),
           refine: _refine,
           sendEvent,
+          searchForItems: searchFacetValues,
+          isFromSearch: false,
           canRefine: items.length > 0,
           widgetParams,
           isShowingMore,
           toggleShowMore: cachedToggleShowMore,
           canToggleShowMore,
+          hasExhaustiveItems,
         };
       },
 

@@ -8,7 +8,7 @@ storiesOf('Refinements/Menu', module)
       search.addWidgets([
         instantsearch.widgets.menu({
           container,
-          attribute: 'categories',
+          attribute: 'type',
         }),
       ]);
     })
@@ -88,5 +88,32 @@ storiesOf('Refinements/Menu', module)
           attribute: 'categories',
         })
       );
+    })
+  )
+  .add(
+    'with search',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.menu({
+          searchable: true,
+          container: container,
+          attribute: 'brand',
+        }),
+      ]);
+    })
+  )
+  .add(
+    'with search and show more',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.menu({
+          searchable: true,
+          container: container,
+          attribute: 'type',
+          limit: 3,
+          showMore: true,
+          showMoreLimit: 8,
+        }),
+      ]);
     })
   );
