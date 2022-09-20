@@ -30,6 +30,13 @@ export const createInstantSearchComponent = component =>
               'Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md'
           );
         },
+        onStateChange() {
+          throw new Error(
+            'onStateChange configuration can not be changed dynamically at this point.' +
+              '\n\n' +
+              'Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md'
+          );
+        },
         searchFunction(searchFunction) {
           // private InstantSearch.js API:
           this.instantSearchInstance._searchFunction = searchFunction;
