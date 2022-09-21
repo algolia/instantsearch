@@ -19,6 +19,14 @@ shell.sed(
   path.join(__dirname, '../../es/**/*.d.ts')
 );
 
+// remove @jsx pragma comments (as jsx is transpiled away)
+shell.sed(
+  '-i',
+  /\/\*\* @jsx h \*\//,
+  '',
+  path.join(__dirname, '../../es/**/*.d.ts')
+);
+
 console.log();
 console.log(`Validating definitions...`);
 
