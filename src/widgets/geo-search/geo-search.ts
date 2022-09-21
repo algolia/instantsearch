@@ -4,9 +4,9 @@ import cx from 'classnames';
 import { render } from 'preact';
 import {
   getContainerNode,
-  renderTemplate,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { renderTemplate } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import type {
   GeoSearchConnectorParams,

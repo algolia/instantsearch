@@ -11,10 +11,10 @@ import type {
 import connectMenu from '../../connectors/menu/connectMenu';
 import defaultTemplates from './defaultTemplates';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import type {
   ComponentCSSClasses,
@@ -22,7 +22,7 @@ import type {
   Template,
   WidgetFactory,
 } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');

@@ -19,7 +19,7 @@ import type {
   QueryRuleCustomDataComponentTemplates,
 } from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 export type QueryRuleCustomDataCSSClasses = Partial<{
   root: string | string[];

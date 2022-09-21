@@ -14,13 +14,13 @@ import type {
 } from '../../connectors/range/connectRange';
 import connectRange from '../../connectors/range/connectRange';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import type { Renderer, Template, WidgetFactory } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
 const suit = component('RangeInput');

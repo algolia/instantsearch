@@ -6,7 +6,8 @@
 import { h } from 'preact';
 import { shallow, mount } from '../../../../test/utils/enzyme';
 import { highlight } from '../../../helpers';
-import { prepareTemplateProps, TAG_REPLACEMENT } from '../../../lib/utils';
+import { TAG_REPLACEMENT } from '../../../lib/utils';
+import { prepareTemplateProps } from '../../../lib/templating';
 import Template from '../../Template/Template';
 import type { HitsProps } from '../Hits';
 import Hits from '../Hits';

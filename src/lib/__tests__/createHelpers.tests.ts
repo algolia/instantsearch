@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { renderTemplate } from '../utils';
+import { renderTemplate } from '../templating';
 import createHelpers from '../createHelpers';
 import { insights } from '../../helpers';
 

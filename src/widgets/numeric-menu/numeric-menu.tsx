@@ -11,7 +11,6 @@ import type {
 import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
 import defaultTemplates from './defaultTemplates';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
@@ -22,7 +21,8 @@ import type {
   Template,
   WidgetFactory,
 } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');
