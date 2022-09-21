@@ -17,12 +17,12 @@ import connectToggleRefinement from '../../connectors/toggle-refinement/connectT
 import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,
-  prepareTemplateProps,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import type { RendererOptions, Template, WidgetFactory } from '../../types';
 import { component } from '../../lib/suit';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',

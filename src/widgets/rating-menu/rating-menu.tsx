@@ -11,10 +11,10 @@ import type {
 import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
 import defaultTemplates from './defaultTemplates';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import type {
   ComponentCSSClasses,
@@ -22,7 +22,7 @@ import type {
   Template,
   WidgetFactory,
 } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
 const suit = component('RatingMenu');

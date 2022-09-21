@@ -16,10 +16,10 @@ import type {
 } from '../../connectors/infinite-hits/connectInfiniteHits';
 import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
 import type {
@@ -32,7 +32,7 @@ import type {
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',

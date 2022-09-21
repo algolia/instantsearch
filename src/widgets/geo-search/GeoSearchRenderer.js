@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h, render } from 'preact';
-import { prepareTemplateProps } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchControls';
 
 const refineWithMap = ({ refine, mapInstance }) =>

@@ -15,10 +15,10 @@ import type {
 import Hits from '../../components/Hits/Hits';
 import defaultTemplates from './defaultTemplates';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
 import type {
@@ -30,7 +30,7 @@ import type {
   InsightsClient,
 } from '../../types';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
