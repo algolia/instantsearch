@@ -91,5 +91,7 @@ module.exports = (api) => {
       ],
     ],
     plugins: isTest ? testPlugins : buildPlugins,
+    // jsx is transpiled, so the comment should no longer be present in the final files
+    shouldPrintComment: (value) => value !== '* @jsx h ',
   };
 };
