@@ -10,6 +10,7 @@ import CurrentRefinements from '../CurrentRefinements';
 describe('CurrentRefinements', () => {
   const cssClasses = {
     root: 'root',
+    noRefinementRoot: 'noRefinementRoot',
     list: 'list',
     item: 'item',
     label: 'label',
@@ -21,6 +22,7 @@ describe('CurrentRefinements', () => {
   it('renders', () => {
     const props = {
       cssClasses,
+      canRefine: true,
       items: [
         {
           indexName: 'indexName',
@@ -122,10 +124,25 @@ describe('CurrentRefinements', () => {
     expect(container).toMatchSnapshot();
   });
 
+  it('renders without items', () => {
+    const props = {
+      cssClasses,
+      canRefine: false,
+      items: [],
+    };
+
+    const { container } = render(<CurrentRefinements {...props} />);
+    const root = container.querySelector('.root')!;
+
+    expect(root.classList).toContain('noRefinementRoot');
+    expect(container).toMatchSnapshot();
+  });
+
   describe('options.refinements', () => {
     it('can be used with a facet', () => {
       const props = {
         cssClasses,
+        canRefine: true,
         items: [
           {
             indexName: 'indexName',
@@ -152,6 +169,7 @@ describe('CurrentRefinements', () => {
     it('can be used with an exclude', () => {
       const props = {
         cssClasses,
+        canRefine: true,
         items: [
           {
             indexName: 'indexName',
@@ -179,6 +197,7 @@ describe('CurrentRefinements', () => {
     it('can be used with a disjunctive facet', () => {
       const props = {
         cssClasses,
+        canRefine: true,
         items: [
           {
             indexName: 'indexName',
@@ -205,6 +224,7 @@ describe('CurrentRefinements', () => {
     it('can be used with a hierarchical facet', () => {
       const props = {
         cssClasses,
+        canRefine: true,
         items: [
           {
             indexName: 'indexName',
@@ -231,6 +251,7 @@ describe('CurrentRefinements', () => {
     it('can be used with numeric filters', () => {
       const props = {
         cssClasses,
+        canRefine: true,
         items: [
           {
             indexName: 'indexName',
@@ -288,6 +309,7 @@ describe('CurrentRefinements', () => {
     it('can be used with a tag', () => {
       const props = {
         cssClasses,
+        canRefine: true,
         items: [
           {
             indexName: 'indexName',
@@ -314,6 +336,7 @@ describe('CurrentRefinements', () => {
     it('can be used with a query', () => {
       const props = {
         cssClasses,
+        canRefine: true,
         items: [
           {
             indexName: 'indexName',
