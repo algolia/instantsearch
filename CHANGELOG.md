@@ -1,3 +1,13 @@
+## [4.46.2](https://github.com/algolia/instantsearch.js/compare/v4.46.1...v4.46.2) (2022-09-22)
+
+
+### Bug Fixes
+
+* **build:** remove jsx pragma comments from build output ([#5112](https://github.com/algolia/instantsearch.js/issues/5112)) ([6582083](https://github.com/algolia/instantsearch.js/commit/65820831b7d7e14867f13a2947795491730b8442))
+* **imports:** split out templating from ./utils ([#5111](https://github.com/algolia/instantsearch.js/issues/5111)) ([fc765f3](https://github.com/algolia/instantsearch.js/commit/fc765f35ddd85068237edc81c66932b098e3b55a)), closes [#5109](https://github.com/algolia/instantsearch.js/issues/5109)
+
+
+
 ## [4.46.1](https://github.com/algolia/instantsearch.js/compare/v4.46.0...v4.46.1) (2022-09-15)
 
 
