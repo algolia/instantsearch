@@ -163,7 +163,7 @@ export function createSendEventForHits({
       index,
       methodName: 'sendEvent',
       args,
-      isSearchStalled: instantSearchInstance._isSearchStalled,
+      isSearchStalled: instantSearchInstance.status === 'stalled',
     });
 
     payloads.forEach((payload) =>
