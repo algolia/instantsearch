@@ -13,6 +13,7 @@ describe('SearchBox', () => {
     const onSubmit = jest.fn();
 
     return {
+      formRef: createRef<HTMLFormElement>(),
       inputRef: createRef<HTMLInputElement>(),
       isSearchStalled: false,
       onChange,
@@ -381,6 +382,29 @@ describe('SearchBox', () => {
 
       userEvent.type(input, '{enter}');
       expect(props.onSubmit).toHaveBeenCalledTimes(1);
+    });
+
+    test('triggers `submit` event on current form when pressing `Enter` on the input element', () => {
+      const formRef = createRef<HTMLFormElement>();
+      const props = createProps({ formRef });
+
+      const { container } = render(<SearchBox {...props} />);
+
+      const form = formRef.current;
+      const listenerSpy = jest.fn();
+      if (form) {
+        form.addEventListener('submit', listenerSpy);
+      }
+
+      const input = container.querySelector<HTMLInputElement>(
+        '.ais-SearchBox-input'
+      )!;
+
+      userEvent.type(input, 'query');
+      expect(listenerSpy).toHaveBeenCalledTimes(0);
+
+      userEvent.type(input, '{enter}');
+      expect(listenerSpy).toHaveBeenCalledTimes(1);
     });
 
     test('blurs input onSubmit', () => {

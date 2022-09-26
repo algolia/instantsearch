@@ -82,6 +82,11 @@ class SearchBox extends Component {
     isSearchStalled: PropTypes.bool,
     showLoadingIndicator: PropTypes.bool,
 
+    formRef: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.exact({ current: PropTypes.object }),
+    ]),
+
     inputRef: PropTypes.oneOfType([
       PropTypes.func,
       PropTypes.exact({ current: PropTypes.object }),
@@ -249,6 +254,7 @@ class SearchBox extends Component {
     return (
       <div className={classNames(cx(''), className)}>
         <form
+          ref={this.props.formRef}
           noValidate
           onSubmit={this.props.onSubmit ? this.props.onSubmit : this.onSubmit}
           onReset={this.onReset}

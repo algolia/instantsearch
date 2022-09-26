@@ -66,6 +66,7 @@ export type SearchBoxProps = Omit<
     React.ComponentProps<'input'>,
     'placeholder' | 'onChange' | 'autoFocus'
   > & {
+    formRef?: React.RefObject<HTMLFormElement>;
     inputRef: React.RefObject<HTMLInputElement>;
     isSearchStalled: boolean;
     value: string;
@@ -131,6 +132,7 @@ function DefaultLoadingIcon({ classNames }: IconProps) {
 }
 
 export function SearchBox({
+  formRef,
   inputRef,
   isSearchStalled,
   onChange,
@@ -176,6 +178,7 @@ export function SearchBox({
       className={cx('ais-SearchBox', classNames.root, props.className)}
     >
       <form
+        ref={formRef}
         action=""
         className={cx('ais-SearchBox-form', classNames.form)}
         noValidate

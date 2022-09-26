@@ -319,7 +319,7 @@ describe('SearchBox', () => {
     expect(inputRef.current.tagName).toEqual('INPUT');
   });
 
-  it('should return a ref when given a callback', () => {
+  it('should return a ref when given a callback as input ref', () => {
     let inputRef;
     const wrapper = mount(
       <SearchBox
@@ -337,5 +337,26 @@ describe('SearchBox', () => {
 
     expect(refSpy).toHaveBeenCalled();
     expect(inputRef.tagName).toEqual('INPUT');
+  });
+
+  it('should point created refs to its form element', () => {
+    const formRef = React.createRef();
+    mount(<SearchBox refine={() => null} formRef={formRef} />);
+
+    expect(formRef.current.tagName).toEqual('FORM');
+  });
+
+  it('should return a ref when given a callback as form ref', () => {
+    let formRef;
+    mount(
+      <SearchBox
+        refine={() => null}
+        formRef={(ref) => {
+          formRef = ref;
+        }}
+      />
+    );
+
+    expect(formRef.tagName).toEqual('FORM');
   });
 });
