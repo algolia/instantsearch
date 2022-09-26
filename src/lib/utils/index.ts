@@ -38,6 +38,7 @@ export * from './logger';
 export * from './mergeSearchParameters';
 export * from './noop';
 export * from './range';
+export * from './render-args';
 export * from './resolveSearchParameters';
 export * from './reverseHighlightedParts';
 export * from './safelyRunOnBrowser';

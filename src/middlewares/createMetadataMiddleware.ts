@@ -1,4 +1,4 @@
-import { safelyRunOnBrowser } from '../lib/utils';
+import { createInitArgs, safelyRunOnBrowser } from '../lib/utils';
 import type { InstantSearch, InternalMiddleware, Widget } from '../types';
 import type { IndexWidget } from '../widgets/index/index';
 
@@ -18,22 +18,11 @@ function extractPayload(
   instantSearchInstance: InstantSearch,
   payload: Payload
 ) {
-  const parent = instantSearchInstance.mainIndex;
-
-  const initOptions = {
+  const initOptions = createInitArgs(
     instantSearchInstance,
-    parent,
-    scopedResults: [],
-    state: parent.getHelper()!.state,
-    helper: parent.getHelper()!,
-    createURL: parent.createURL,
-    uiState: instantSearchInstance._initialUiState,
-    renderState: instantSearchInstance.renderState,
-    templatesConfig: instantSearchInstance.templatesConfig,
-    searchMetadata: {
-      isSearchStalled: instantSearchInstance._isSearchStalled,
-    },
-  };
+    instantSearchInstance.mainIndex,
+    instantSearchInstance._initialUiState
+  );
 
   widgets.forEach((widget) => {
     let widgetParams: Record<string, unknown> = {};
