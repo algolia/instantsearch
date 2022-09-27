@@ -19,7 +19,7 @@ module.exports = {
   beforeCommitChanges: ({ exec }) => {
     exec('yarn doctoc');
   },
-  pullRequestTeamReviewers: ['instantsearch-for-websites'],
+  pullRequestTeamReviewers: ['frontend-experiences-web'],
   buildCommand: ({ version }) =>
     `NODE_ENV=production VERSION=${version} yarn build`,
   slack: {
