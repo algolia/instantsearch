@@ -1,3 +1,12 @@
+## [4.46.3](https://github.com/algolia/instantsearch.js/compare/v4.46.2...v4.46.3) (2022-09-27)
+
+
+### Bug Fixes
+
+* **currentRefinements:** implement noRefinementRoot modifier class ([#5114](https://github.com/algolia/instantsearch.js/issues/5114)) ([cb66830](https://github.com/algolia/instantsearch.js/commit/cb668305af26bf919841c25bd4cc8493fcdf8cf9))
+
+
+
 ## [4.46.2](https://github.com/algolia/instantsearch.js/compare/v4.46.1...v4.46.2) (2022-09-22)
 
 
