@@ -1,3 +1,12 @@
+# [6.34.0](https://github.com/algolia/react-instantsearch/compare/v6.33.0...v6.34.0) (2022-09-27)
+
+
+### Features
+
+* **SearchBox:** expose formRef ([#3565](https://github.com/algolia/react-instantsearch/issues/3565)) ([1c2f46d](https://github.com/algolia/react-instantsearch/commit/1c2f46da2d1cf705cfd3946c52aef4ca9ec943d7))
+
+
+
 # [6.33.0](https://github.com/algolia/react-instantsearch/compare/v6.32.1...v6.33.0) (2022-09-15)
 
 
