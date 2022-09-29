@@ -318,6 +318,33 @@ describe('SearchBox', () => {
     expect(onSubmit).toHaveBeenCalledTimes(1);
   });
 
+  test('refines on reset when searchAsYouType is set', () => {
+    let lastUiState: UiState = {};
+
+    const { container } = render(
+      <InstantSearchHooksTestWrapper
+        onStateChange={({ uiState }) => {
+          lastUiState = uiState;
+        }}
+      >
+        <SearchBox searchAsYouType={false} />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    const input = container.querySelector<HTMLInputElement>(
+      '.ais-SearchBox-input'
+    )!;
+    input.focus();
+    userEvent.type(input, 'iPhone{Enter}');
+    expect(lastUiState.indexName.query).toBe('iPhone');
+
+    const resetButton = container.querySelector<HTMLButtonElement>(
+      '.ais-SearchBox-reset'
+    )!;
+    userEvent.click(resetButton);
+    expect(lastUiState.indexName.query).toBe(undefined);
+  });
+
   test('renders with translations', () => {
     const { getByRole } = render(
       <InstantSearchHooksTestWrapper>
