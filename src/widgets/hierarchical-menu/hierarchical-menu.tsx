@@ -84,6 +84,10 @@ export type HierarchicalMenuCSSClasses = Partial<{
    */
   link: string | string[];
   /**
+   * CSS class to add to the link of each selected item element (when using the default template).
+   */
+  selectedItemLink: string | string[];
+  /**
    * CSS class to add to each label (when using the default template).
    */
   label: string | string[];
@@ -334,6 +338,10 @@ const hierarchicalMenu: HierarchicalMenuWidget = function hierarchicalMenu(
       userCssClasses.parentItem
     ),
     link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
+    selectedItemLink: cx(
+      suit({ descendantName: 'link', modifierName: 'selected' }),
+      userCssClasses.selectedItemLink
+    ),
     label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
     count: cx(suit({ descendantName: 'count' }), userCssClasses.count),
     showMore: cx(suit({ descendantName: 'showMore' }), userCssClasses.showMore),
