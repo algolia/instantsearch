@@ -389,28 +389,28 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       );
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        const nextState = widgets.reduce((state, widget) => {
-          // the `dispose` method exists at this point we already assert it
-          const next = widget.dispose!({
+        widgets.forEach((widget) => {
+          // doing nothing with the return value of dispose, this is handled by the next part
+          widget.dispose!({
             helper: helper!,
-            state,
+            state: helper!.state,
             parent: this,
           });
+        });
 
-          return next || state;
-        }, helper!.state);
+        const newState = getLocalWidgetsSearchParameters(localWidgets, {
+          uiState: localUiState,
+          initialSearchParameters: new algoliasearchHelper.SearchParameters({
+            index: this.getIndexName(),
+          }),
+        });
 
         localUiState = getLocalWidgetsUiState(localWidgets, {
-          searchParameters: nextState,
+          searchParameters: newState,
           helper: helper!,
         });
 
-        helper!.setState(
-          getLocalWidgetsSearchParameters(localWidgets, {
-            uiState: localUiState,
-            initialSearchParameters: nextState,
-          })
-        );
+        helper!.setState(newState);
 
         if (localWidgets.length) {
           localInstantSearchInstance.scheduleSearch();
@@ -492,7 +492,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       };
 
       derivedHelper = mainHelper.derive(() =>
-        mergeSearchParameters(...resolveSearchParameters(this))
+        mergeSearchParameters(
+          mainHelper.state,
+          ...resolveSearchParameters(this)
+        )
       );
 
       const indexInitialResults =
