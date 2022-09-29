@@ -1,3 +1,13 @@
+# [6.35.0](https://github.com/algolia/react-instantsearch/compare/v6.34.0...v6.35.0) (2022-09-29)
+
+
+### Features
+
+* **hooks-web:** introduce Translations API ([#3638](https://github.com/algolia/react-instantsearch/issues/3638)) ([63b506f](https://github.com/algolia/react-instantsearch/commit/63b506f9dbad284f45ac17210e17c4a2a8f099b6))
+
+### Fixes
+* **hooks-web:** when searchAsYouType=false, pressing the reset button searches (previously only reset the query) ([#3642](https://github.com/algolia/react-instantsearch/issues/3642)) ([f969deb](https://github.com/algolia/react-instantsearch/commit/f969deb05fd4f53aaa251ff88b52db2224ce0786))
+
 # [6.34.0](https://github.com/algolia/react-instantsearch/compare/v6.33.0...v6.34.0) (2022-09-27)
 
 
@@ -83,7 +93,7 @@
 ### Bug Fixes
 
 * **hooks:** provide state and results APIs from "render" event ([#3554](https://github.com/algolia/react-instantsearch/issues/3554)) ([67d4788](https://github.com/algolia/react-instantsearch/commit/67d4788ab09ec2a57b43d53e8093b8c11120b761))
-* **hooks**: update instantsearch.js dependency ([#3557](https://github.com/algolia/react-instantsearch/issues/3557)) 
+* **hooks**: update instantsearch.js dependency ([#3557](https://github.com/algolia/react-instantsearch/issues/3557))
 
 
 
