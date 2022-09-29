@@ -20,8 +20,6 @@ export function createInitArgs(
     searchMetadata: {
       isSearchStalled: instantSearchInstance.status === 'stalled',
     },
-    status: instantSearchInstance.status,
-    error: instantSearchInstance.error,
   };
 }
 
@@ -44,7 +42,5 @@ export function createRenderArgs(
     searchMetadata: {
       isSearchStalled: instantSearchInstance.status === 'stalled',
     },
-    status: instantSearchInstance.status,
-    error: instantSearchInstance.error,
   };
 }
