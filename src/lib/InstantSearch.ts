@@ -141,6 +141,8 @@ export type InstantSearchOptions<
   insightsClient?: AlgoliaInsightsClient;
 };
 
+export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
+
 /**
  * The actual implementation of the InstantSearch. This is
  * created using the `instantsearch` factory function.
@@ -163,7 +165,6 @@ class InstantSearch<
   public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
-  public _isSearchStalled: boolean;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
   public _createURL: CreateURL<TUiState>;
@@ -174,6 +175,29 @@ class InstantSearch<
     instance: MiddlewareDefinition;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
+  /**
+   * The status of the search. Can be "idle", "loading", "stalled", or "error".
+   */
+  public status: InstantSearchStatus = 'idle';
+  /**
+   * The last returned error from the Search API.
+   * The error gets cleared when the next valid search response is rendered.
+   */
+  public error: Error | undefined = undefined;
+
+  /**
+   * @deprecated use `status === 'stalled'` instead
+   */
+  public get _isSearchStalled(): boolean {
+    warning(
+      false,
+      `\`InstantSearch._isSearchStalled\` is deprecated and will be removed in InstantSearch.js 5.0.
+
+Use \`InstantSearch.status === "stalled"\` instead.`
+    );
+
+    return this.status === 'stalled';
+  }
 
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super();
@@ -258,7 +282,6 @@ See ${createDocumentationLink({
 
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
-    this._isSearchStalled = false;
 
     this._createURL = defaultCreateURL;
     this._initialUiState = initialUiState;
@@ -454,6 +477,7 @@ See ${createDocumentationLink({
       this.mainHelper || algoliasearchHelper(this.client, this.indexName);
 
     mainHelper.search = () => {
+      this.status = 'loading';
       // This solution allows us to keep the exact same API for the users but
       // under the hood, we have a different implementation. It should be
       // completely transparent for the rest of the codebase. Only this module
@@ -507,6 +531,11 @@ See ${createDocumentationLink({
       // `error` and `error.error`
       // @MAJOR emit only error
       (error as any).error = error;
+      this.error = error;
+      this.status = 'error';
+      this.scheduleRender(false);
+
+      // This needs to execute last because it throws the error.
       this.emit('error', error);
     });
 
@@ -599,11 +628,15 @@ See ${createDocumentationLink({
     }
   });
 
-  public scheduleRender = defer(() => {
+  public scheduleRender = defer((shouldResetStatus: boolean = true) => {
     if (!this.mainHelper!.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
       this._searchStalledTimer = null;
-      this._isSearchStalled = false;
+
+      if (shouldResetStatus) {
+        this.status = 'idle';
+        this.error = undefined;
+      }
     }
 
     this.mainIndex.render({
@@ -616,7 +649,7 @@ See ${createDocumentationLink({
   public scheduleStalledRender() {
     if (!this._searchStalledTimer) {
       this._searchStalledTimer = setTimeout(() => {
-        this._isSearchStalled = true;
+        this.status = 'stalled';
         this.scheduleRender();
       }, this._stalledSearchDelay);
     }

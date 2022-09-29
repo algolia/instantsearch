@@ -47,6 +47,7 @@ export type SearchBoxRenderState = {
    * `true` if the search results takes more than a certain time to come back
    * from Algolia servers. This can be configured on the InstantSearch constructor with the attribute
    * `stalledSearchDelay` which is 200ms, by default.
+   * @deprecated use `instantSearchInstance.status` instead
    */
   isSearchStalled: boolean;
 };

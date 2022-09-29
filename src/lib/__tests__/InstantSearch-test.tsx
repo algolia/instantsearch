@@ -1394,6 +1394,7 @@ describe('scheduleStalledRender', () => {
         searchMetadata: {
           isSearchStalled: false,
         },
+        status: 'idle',
       })
     );
 
@@ -1412,6 +1413,7 @@ describe('scheduleStalledRender', () => {
         searchMetadata: {
           isSearchStalled: true,
         },
+        status: 'stalled',
       })
     );
 
@@ -1428,6 +1430,7 @@ describe('scheduleStalledRender', () => {
         searchMetadata: {
           isSearchStalled: false,
         },
+        status: 'idle',
       })
     );
   });

@@ -267,8 +267,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
             scopedResults: [],
+            status: instantSearchInstance.status,
             searchMetadata: {
-              isSearchStalled: instantSearchInstance._isSearchStalled,
+              isSearchStalled: instantSearchInstance.status === 'stalled',
             },
           });
         });
@@ -324,8 +325,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
             scopedResults: [],
+            status: instantSearchInstance.status,
             searchMetadata: {
-              isSearchStalled: instantSearchInstance._isSearchStalled,
+              isSearchStalled: instantSearchInstance.status === 'stalled',
             },
           });
         });
@@ -1260,8 +1262,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           scopedResults: [],
+          status: instantSearchInstance.status,
           searchMetadata: {
-            isSearchStalled: instantSearchInstance._isSearchStalled,
+            isSearchStalled: instantSearchInstance.status === 'stalled',
           },
         });
       });
@@ -2320,8 +2323,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           scopedResults: [],
+          status: instantSearchInstance.status,
           searchMetadata: {
-            isSearchStalled: instantSearchInstance._isSearchStalled,
+            isSearchStalled: instantSearchInstance.status === 'stalled',
           },
         })
       );
@@ -2331,7 +2335,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         {
           searchBox: {
             clear: expect.any(Function),
-            isSearchStalled: instantSearchInstance._isSearchStalled,
+            isSearchStalled: instantSearchInstance.status === 'stalled',
             query: '',
             refine: expect.any(Function),
             widgetParams: {},
@@ -2447,8 +2451,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           helper: instance.getHelper(),
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
+          status: instantSearchInstance.status,
           searchMetadata: {
-            isSearchStalled: instantSearchInstance._isSearchStalled,
+            isSearchStalled: instantSearchInstance.status === 'stalled',
           },
         });
       });
