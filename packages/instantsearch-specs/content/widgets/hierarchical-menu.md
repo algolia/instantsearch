@@ -8,7 +8,7 @@ html: |
     </div>
     <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
       <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
-        <a class="ais-HierarchicalMenu-link" href="#">
+        <a class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected" href="#">
           <span class="ais-HierarchicalMenu-label">Appliances</span>
           <span class="ais-HierarchicalMenu-count">4,306</span>
         </a>
@@ -44,7 +44,7 @@ althtml1: |
     </div>
     <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
       <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
-        <a class="ais-HierarchicalMenu-link" href="#">
+        <a class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected" href="#">
           <span class="ais-HierarchicalMenu-label">Appliances</span>
           <span class="ais-HierarchicalMenu-count">4,306</span>
         </a>
@@ -95,6 +95,8 @@ classes:
     description: the menu list item containing children
   - name: .ais-HierarchicalMenu-link
     description: the clickable menu element
+  - name: .ais-HierarchicalMenu-link--selected
+    description: the clickable menu element of a selected menu list item
   - name: .ais-HierarchicalMenu-label
     description: the label of each item
   - name: .ais-HierarchicalMenu-count
