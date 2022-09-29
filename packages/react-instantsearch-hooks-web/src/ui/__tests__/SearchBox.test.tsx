@@ -23,8 +23,8 @@ describe('SearchBox', () => {
       value: '',
       autoFocus: false,
       translations: {
-        submitTitle: 'Submit the search query.',
-        resetTitle: 'Clear the search query.',
+        submitButtonTitle: 'Submit the search query.',
+        resetButtonTitle: 'Clear the search query.',
       },
       ...props,
     };
@@ -141,8 +141,8 @@ describe('SearchBox', () => {
   test('renders with translations', () => {
     const props = createProps({
       translations: {
-        submitTitle: 'Submit search',
-        resetTitle: 'Reset query',
+        submitButtonTitle: 'Submit search',
+        resetButtonTitle: 'Reset query',
       },
     });
     const { container } = render(<SearchBox {...props} />);

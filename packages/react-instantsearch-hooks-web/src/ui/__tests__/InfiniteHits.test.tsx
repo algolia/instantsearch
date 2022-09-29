@@ -22,8 +22,8 @@ describe('InfiniteHits', () => {
       onShowPrevious: jest.fn(),
       onShowMore: jest.fn(),
       translations: {
-        showPrevious: 'Show previous results',
-        showMore: 'Show more results',
+        showPreviousButtonText: 'Show previous results',
+        showMoreButtonText: 'Show more results',
       },
       ...props,
     };
@@ -82,8 +82,8 @@ describe('InfiniteHits', () => {
   test('renders with translations', () => {
     const props = createProps({
       translations: {
-        showPrevious: 'Load previous page',
-        showMore: 'Load next page',
+        showPreviousButtonText: 'Load previous page',
+        showMoreButtonText: 'Load next page',
       },
     });
     const { container } = render(<InfiniteHits {...props} />);

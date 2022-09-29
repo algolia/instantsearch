@@ -58,11 +58,11 @@ export type RangeInputTranslations = {
   /**
    * The label of the separator, between the minimum and maximum inputs
    */
-  separator: string;
+  separatorElementText: string;
   /**
    * The label of the submit button
    */
-  submit: string;
+  submitButtonText: string;
 };
 
 // if the default value is undefined, React considers the component uncontrolled initially, which we don't want 0 or NaN as the default value
@@ -138,7 +138,7 @@ export function RangeInput({
           />
         </label>
         <span className={cx('ais-RangeInput-separator', classNames.separator)}>
-          {translations.separator}
+          {translations.separatorElementText}
         </span>
         <label className={cx('ais-RangeInput-label', classNames.label)}>
           <input
@@ -164,7 +164,7 @@ export function RangeInput({
           className={cx('ais-RangeInput-submit', classNames.submit)}
           type="submit"
         >
-          {translations.submit}
+          {translations.submitButtonText}
         </button>
       </form>
     </div>

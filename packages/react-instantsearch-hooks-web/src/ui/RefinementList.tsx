@@ -5,6 +5,7 @@ import { Highlight } from './Highlight';
 import { cx } from './lib/cx';
 import { ShowMoreButton } from './ShowMoreButton';
 
+import type { ShowMoreButtonTranslations } from './ShowMoreButton';
 import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 
 export type RefinementListProps = React.ComponentProps<'div'> & {
@@ -19,6 +20,7 @@ export type RefinementListProps = React.ComponentProps<'div'> & {
   onToggleShowMore: () => void;
   isShowingMore: boolean;
   classNames?: Partial<RefinementListClassNames>;
+  translations: RefinementListTranslations;
 };
 
 export type RefinementListClassNames = {
@@ -76,6 +78,8 @@ export type RefinementListClassNames = {
   disabledShowMore: string;
 };
 
+export type RefinementListTranslations = ShowMoreButtonTranslations;
+
 export function RefinementList({
   canRefine,
   items,
@@ -89,6 +93,7 @@ export function RefinementList({
   isShowingMore,
   className,
   classNames = {},
+  translations,
   ...props
 }: RefinementListProps) {
   return (
@@ -185,6 +190,7 @@ export function RefinementList({
           disabled={!canToggleShowMore}
           onClick={onToggleShowMore}
           isShowingMore={isShowingMore}
+          translations={translations}
         />
       )}
     </div>

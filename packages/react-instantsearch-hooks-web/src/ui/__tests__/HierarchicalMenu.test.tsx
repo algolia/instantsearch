@@ -48,6 +48,11 @@ describe('HierarchicalMenu', () => {
       onToggleShowMore: jest.fn(),
       canToggleShowMore: true,
       isShowingMore: false,
+      translations: {
+        showMoreButtonText({ isShowingMore }) {
+          return isShowingMore ? 'Show less' : 'Show more';
+        },
+      },
       ...props,
     };
   }
@@ -411,5 +416,29 @@ describe('HierarchicalMenu', () => {
       'title',
       'Some custom title'
     );
+  });
+
+  test('renders with translations', () => {
+    const props = createProps({
+      showMore: true,
+      translations: {
+        showMoreButtonText({ isShowingMore }) {
+          return isShowingMore ? 'Show less brands' : 'Show more brands';
+        },
+      },
+    });
+    const { getByRole, rerender } = render(
+      <HierarchicalMenu {...props} isShowingMore={false} />
+    );
+
+    expect(
+      getByRole('button', { name: 'Show more brands' })
+    ).toBeInTheDocument();
+
+    rerender(<HierarchicalMenu {...props} isShowingMore />);
+
+    expect(
+      getByRole('button', { name: 'Show less brands' })
+    ).toBeInTheDocument();
   });
 });

@@ -10,7 +10,7 @@ import {
 import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
 import { Pagination } from '../Pagination';
 
-function createMockedSearchClient() {
+function createMockedSearchClient({ nbPages }: { nbPages?: number } = {}) {
   return createSearchClient({
     search: jest.fn((requests) =>
       Promise.resolve(
@@ -21,6 +21,7 @@ function createMockedSearchClient() {
                 objectID: String(index),
               })),
               index: request.indexName,
+              nbPages,
             })
           )
         )
@@ -2012,5 +2013,70 @@ describe('Pagination', () => {
     const root = container.firstChild;
     expect(root).toHaveClass('MyPagination', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
+  });
+
+  test('renders with translations', async () => {
+    const { getByRole, findByRole, debug } = render(
+      <InstantSearchHooksTestWrapper
+        searchClient={createMockedSearchClient({ nbPages: 3 })}
+      >
+        <Pagination
+          translations={{
+            firstPageItemAriaLabel: 'First page',
+            lastPageItemAriaLabel: 'Last page',
+            nextPageItemAriaLabel: 'Next page',
+            previousPageItemAriaLabel: 'Previous page',
+            pageItemAriaLabel: ({ currentPage, nbPages }) =>
+              `Page number ${currentPage} of ${nbPages}`,
+            firstPageItemText: 'First',
+            lastPageItemText: 'Last',
+            nextPageItemText: 'Next',
+            previousPageItemText: 'Previous',
+            pageItemText: ({ currentPage, nbPages }) =>
+              `#${currentPage}/${nbPages}`,
+          }}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    await waitFor(() =>
+      expect(
+        document.querySelectorAll('.ais-Pagination-item--page')
+      ).toHaveLength(3)
+    );
+
+    // So we can test all links, we choose a page in the middle
+    userEvent.click(
+      getByRole('link', {
+        name: /page number 2 of 3/i,
+      })
+    );
+
+    const firstPageLink = await findByRole('link', {
+      name: 'First page',
+    });
+    expect(firstPageLink).toHaveTextContent('First');
+
+    debug();
+
+    const previousPageLink = getByRole('link', {
+      name: 'Previous page',
+    });
+    expect(previousPageLink).toHaveTextContent('Previous');
+
+    const nextPageLink = getByRole('link', {
+      name: 'Next page',
+    });
+    expect(nextPageLink).toHaveTextContent('Next');
+
+    const lastPageLink = getByRole('link', {
+      name: 'Last page',
+    });
+    expect(lastPageLink).toHaveTextContent('Last');
+
+    const pageLink = getByRole('link', {
+      name: /page number 1 of 3/i,
+    });
+    expect(pageLink).toHaveTextContent('#1/3');
   });
 });

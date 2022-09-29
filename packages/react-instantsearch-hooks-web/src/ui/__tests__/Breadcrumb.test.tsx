@@ -24,7 +24,7 @@ describe('Breadcrumb', () => {
       onNavigate,
       separator: '>',
       translations: {
-        root: 'Home',
+        rootElementText: 'Home',
         ...translations,
       },
       ...props,
@@ -89,7 +89,7 @@ describe('Breadcrumb', () => {
   test('renders with translations', () => {
     const props = createProps({
       translations: {
-        root: 'Index',
+        rootElementText: 'Index',
       },
     });
     const { container } = render(<Breadcrumb {...props} />);

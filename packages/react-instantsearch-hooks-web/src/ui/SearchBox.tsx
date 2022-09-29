@@ -49,11 +49,11 @@ export type SearchBoxTranslations = {
   /**
    * The alternative text of the submit button.
    */
-  submitTitle: string;
+  submitButtonTitle: string;
   /**
    * The alternative text of the reset button.
    */
-  resetTitle: string;
+  resetButtonTitle: string;
 };
 
 export type SearchBoxProps = Omit<
@@ -202,14 +202,14 @@ export function SearchBox({
         <button
           className={cx('ais-SearchBox-submit', classNames.submit)}
           type="submit"
-          title={translations.submitTitle}
+          title={translations.submitButtonTitle}
         >
           <SubmitIcon classNames={classNames} />
         </button>
         <button
           className={cx('ais-SearchBox-reset', classNames.reset)}
           type="reset"
-          title={translations.resetTitle}
+          title={translations.resetButtonTitle}
           hidden={value.length === 0 || isSearchStalled}
         >
           <ResetIcon classNames={classNames} />

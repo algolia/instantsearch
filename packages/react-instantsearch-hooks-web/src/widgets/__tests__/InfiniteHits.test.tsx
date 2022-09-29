@@ -383,4 +383,28 @@ describe('InfiniteHits', () => {
     expect(root).toHaveClass('MyInfiniteHits', 'ROOT');
     expect(root).toHaveAttribute('aria-hidden', 'true');
   });
+
+  test('renders with translations', async () => {
+    const searchClient = createMockedSearchClient();
+    const { getByRole } = render(
+      <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
+        initialUiState={{ indexName: { page: 10 } }}
+      >
+        <InfiniteHits
+          translations={{
+            showMoreButtonText: 'Display more',
+            showPreviousButtonText: 'Display previous',
+          }}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+
+    expect(getByRole('button', { name: 'Display more' })).toBeInTheDocument();
+    expect(
+      getByRole('button', { name: 'Display previous' })
+    ).toBeInTheDocument();
+  });
 });

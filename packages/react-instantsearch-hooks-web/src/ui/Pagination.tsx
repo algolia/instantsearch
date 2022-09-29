@@ -5,47 +5,58 @@ import { isModifierClick } from './lib/isModifierClick';
 
 import type { CreateURL } from 'instantsearch.js';
 
+export type PageItemTextOptions = {
+  /**
+   * The page number to be displayed.
+   */
+  currentPage: number;
+  /**
+   * The total number of pages.
+   */
+  nbPages: number;
+};
+
 export type PaginationTranslations = {
   /**
    * The label for the first page's button.
    */
-  first: string;
+  firstPageItemText: string;
   /**
    * The label for the previous page's button.
    */
-  previous: string;
+  previousPageItemText: string;
   /**
    * The label for the next page's button.
    */
-  next: string;
+  nextPageItemText: string;
   /**
    * The label for the last page's button.
    */
-  last: string;
+  lastPageItemText: string;
   /**
    * The label for a page's button.
    */
-  page(currentPage: number): string;
+  pageItemText(options: PageItemTextOptions): string;
   /**
    * The accessible label for the first page's button.
    */
-  ariaFirst: string;
+  firstPageItemAriaLabel: string;
   /**
    * The accessible label for the previous page's button.
    */
-  ariaPrevious: string;
+  previousPageItemAriaLabel: string;
   /**
    * The accessible label for the next page's button.
    */
-  ariaNext: string;
+  nextPageItemAriaLabel: string;
   /**
    * The accessible label for the last page's button.
    */
-  ariaLast: string;
+  lastPageItemAriaLabel: string;
   /**
    * The accessible label for a page's button.
    */
-  ariaPage(currentPage: number): string;
+  pageItemAriaLabel(options: PageItemTextOptions): string;
 };
 
 export type PaginationProps = React.ComponentProps<'div'> & {
@@ -155,11 +166,11 @@ export function Pagination({
               classNames.firstPageItem
             )}
             classNames={classNames}
-            aria-label={translations.ariaFirst}
+            aria-label={translations.firstPageItemAriaLabel}
             href={createURL(firstPageIndex)}
             onClick={() => onNavigate(firstPageIndex)}
           >
-            {translations.first}
+            {translations.firstPageItemText}
           </PaginationItem>
         )}
         {showPrevious && (
@@ -170,11 +181,11 @@ export function Pagination({
               classNames.previousPageItem
             )}
             classNames={classNames}
-            aria-label={translations.ariaPrevious}
+            aria-label={translations.previousPageItemAriaLabel}
             href={createURL(previousPageIndex)}
             onClick={() => onNavigate(previousPageIndex)}
           >
-            {translations.previous}
+            {translations.previousPageItemText}
           </PaginationItem>
         )}
         {pages.map((page) => {
@@ -189,11 +200,14 @@ export function Pagination({
                   cx('ais-Pagination-item--selected', classNames.selectedItem)
               )}
               classNames={classNames}
-              aria-label={translations.ariaPage(page + 1)}
+              aria-label={translations.pageItemAriaLabel({
+                currentPage: page + 1,
+                nbPages,
+              })}
               href={createURL(page)}
               onClick={() => onNavigate(page)}
             >
-              {translations.page(page + 1)}
+              {translations.pageItemText({ currentPage: page + 1, nbPages })}
             </PaginationItem>
           );
         })}
@@ -205,11 +219,11 @@ export function Pagination({
               classNames.nextPageItem
             )}
             classNames={classNames}
-            aria-label={translations.ariaNext}
+            aria-label={translations.nextPageItemAriaLabel}
             href={createURL(nextPageIndex)}
             onClick={() => onNavigate(nextPageIndex)}
           >
-            {translations.next}
+            {translations.nextPageItemText}
           </PaginationItem>
         )}
         {showLast && (
@@ -220,11 +234,11 @@ export function Pagination({
               classNames.lastPageItem
             )}
             classNames={classNames}
-            aria-label={translations.ariaLast}
+            aria-label={translations.lastPageItemAriaLabel}
             href={createURL(lastPageIndex)}
             onClick={() => onNavigate(lastPageIndex)}
           >
-            {translations.last}
+            {translations.lastPageItemText}
           </PaginationItem>
         )}
       </ul>

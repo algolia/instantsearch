@@ -5,6 +5,7 @@ import { RefinementList as RefinementListUiComponent } from '../ui/RefinementLis
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { RefinementListProps as RefinementListUiComponentProps } from '../ui/RefinementList';
+import type { SearchBoxTranslations } from '../ui/SearchBox';
 import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 import type { RefinementListWidgetParams } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
 import type { UseRefinementListProps } from 'react-instantsearch-hooks';
@@ -20,6 +21,7 @@ type UiProps = Pick<
   | 'canToggleShowMore'
   | 'onToggleShowMore'
   | 'isShowingMore'
+  | 'translations'
 >;
 
 export type RefinementListProps = Omit<
@@ -27,7 +29,17 @@ export type RefinementListProps = Omit<
   keyof UiProps
 > &
   UseRefinementListProps &
-  Pick<RefinementListWidgetParams, 'searchable' | 'searchablePlaceholder'>;
+  Pick<RefinementListWidgetParams, 'searchable' | 'searchablePlaceholder'> & {
+    translations?: Partial<
+      UiProps['translations'] &
+        SearchBoxTranslations & {
+          /**
+           * What to display when there are no results.
+           */
+          noResultsText: string;
+        }
+    >;
+  };
 
 export function RefinementList({
   searchable,
@@ -40,6 +52,7 @@ export function RefinementList({
   sortBy,
   escapeFacetValues,
   transformItems,
+  translations,
   ...props
 }: RefinementListProps) {
   const {
@@ -94,6 +107,16 @@ export function RefinementList({
     }
   }
 
+  const mergedTranslations = {
+    resetButtonTitle: 'Clear the search query',
+    submitButtonTitle: 'Submit the search query',
+    noResultsText: 'No results.',
+    showMoreButtonText(options) {
+      return options.isShowingMore ? 'Show less' : 'Show more';
+    },
+    ...translations,
+  };
+
   const uiProps: UiProps = {
     items,
     canRefine,
@@ -109,16 +132,22 @@ export function RefinementList({
         onReset={onReset}
         onSubmit={onSubmit}
         translations={{
-          submitTitle: 'Submit the search query.',
-          resetTitle: 'Clear the search query.',
+          submitButtonTitle: mergedTranslations.submitButtonTitle,
+          resetButtonTitle: mergedTranslations.resetButtonTitle,
         }}
       />
     ),
     noResults:
-      searchable && isFromSearch && items.length === 0 && 'No results.',
+      searchable &&
+      isFromSearch &&
+      items.length === 0 &&
+      mergedTranslations.noResultsText,
     canToggleShowMore,
     onToggleShowMore: toggleShowMore,
     isShowingMore,
+    translations: {
+      showMoreButtonText: mergedTranslations.showMoreButtonText,
+    },
   };
 
   return (

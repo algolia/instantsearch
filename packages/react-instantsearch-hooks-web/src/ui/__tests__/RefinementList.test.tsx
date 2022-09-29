@@ -33,6 +33,11 @@ describe('RefinementList', () => {
       canToggleShowMore: true,
       isShowingMore: false,
       onToggleShowMore: jest.fn(),
+      translations: {
+        showMoreButtonText({ isShowingMore }) {
+          return isShowingMore ? 'Show less' : 'Show more';
+        },
+      },
       ...props,
     };
   }
@@ -217,8 +222,8 @@ describe('RefinementList', () => {
           onReset={jest.fn}
           onSubmit={jest.fn}
           translations={{
-            submitTitle: 'Submit the search query.',
-            resetTitle: 'Clear the search query.',
+            submitButtonTitle: 'Submit the search query.',
+            resetButtonTitle: 'Clear the search query.',
           }}
         />
       ),
@@ -413,8 +418,8 @@ describe('RefinementList', () => {
           onReset={jest.fn}
           onSubmit={jest.fn}
           translations={{
-            submitTitle: 'Submit the search query.',
-            resetTitle: 'Clear the search query.',
+            submitButtonTitle: 'Submit the search query.',
+            resetButtonTitle: 'Clear the search query.',
           }}
         />
       ),
@@ -644,5 +649,29 @@ describe('RefinementList', () => {
       'title',
       'Some custom title'
     );
+  });
+
+  test('renders with translations', () => {
+    const props = createProps({
+      showMore: true,
+      translations: {
+        showMoreButtonText({ isShowingMore }) {
+          return isShowingMore ? 'Show less brands' : 'Show more brands';
+        },
+      },
+    });
+    const { getByRole, rerender } = render(
+      <RefinementList {...props} isShowingMore={false} />
+    );
+
+    expect(
+      getByRole('button', { name: 'Show more brands' })
+    ).toBeInTheDocument();
+
+    rerender(<RefinementList {...props} isShowingMore />);
+
+    expect(
+      getByRole('button', { name: 'Show less brands' })
+    ).toBeInTheDocument();
   });
 });

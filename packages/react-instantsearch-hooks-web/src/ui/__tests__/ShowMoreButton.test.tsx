@@ -4,9 +4,20 @@ import React from 'react';
 
 import { ShowMoreButton } from '../ShowMoreButton';
 
+const defaultTranslations = {
+  showMoreButtonText({ isShowingMore }) {
+    return isShowingMore ? 'Show less' : 'Show more';
+  },
+};
+
 describe('ShowMoreButton', () => {
   test('renders with props', () => {
-    const { container } = render(<ShowMoreButton isShowingMore={false} />);
+    const { container } = render(
+      <ShowMoreButton
+        isShowingMore={false}
+        translations={defaultTranslations}
+      />
+    );
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -18,7 +29,9 @@ describe('ShowMoreButton', () => {
   });
 
   test('changes the button label when is showing more', () => {
-    const { container } = render(<ShowMoreButton isShowingMore={true} />);
+    const { container } = render(
+      <ShowMoreButton isShowingMore={true} translations={defaultTranslations} />
+    );
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -32,7 +45,11 @@ describe('ShowMoreButton', () => {
   test('calls an `onClick` callback when clicking the button', () => {
     const onClick = jest.fn();
     const { getByRole } = render(
-      <ShowMoreButton isShowingMore={false} onClick={onClick} />
+      <ShowMoreButton
+        isShowingMore={false}
+        onClick={onClick}
+        translations={defaultTranslations}
+      />
     );
 
     userEvent.click(getByRole('button'));
@@ -43,7 +60,12 @@ describe('ShowMoreButton', () => {
   test('disables the button', () => {
     const onClick = jest.fn();
     const { container, getByRole } = render(
-      <ShowMoreButton isShowingMore={false} disabled={true} onClick={onClick} />
+      <ShowMoreButton
+        isShowingMore={false}
+        disabled={true}
+        onClick={onClick}
+        translations={defaultTranslations}
+      />
     );
 
     expect(container).toMatchInlineSnapshot(`
@@ -59,5 +81,24 @@ describe('ShowMoreButton', () => {
     userEvent.click(getByRole('button'));
 
     expect(onClick).not.toHaveBeenCalled();
+  });
+
+  test('renders translations', () => {
+    const translations = {
+      showMoreButtonText({ isShowingMore }) {
+        return isShowingMore ? 'Display less' : 'Display more';
+      },
+    };
+    const { getByRole, rerender } = render(
+      <ShowMoreButton isShowingMore translations={translations} />
+    );
+
+    expect(getByRole('button', { name: 'Display less' })).toBeInTheDocument();
+
+    rerender(
+      <ShowMoreButton isShowingMore={false} translations={translations} />
+    );
+
+    expect(getByRole('button', { name: 'Display more' })).toBeInTheDocument();
   });
 });

@@ -9,7 +9,7 @@ export type BreadcrumbTranslations = {
   /**
    * The label of the root element
    */
-  root: string;
+  rootElementText: string;
 };
 
 export type BreadcrumbClassNames = {
@@ -100,7 +100,7 @@ export function Breadcrumb({
             onClick={handleClick(null)}
             className={cx('ais-Breadcrumb-link', classNames.link)}
           >
-            {translations.root}
+            {translations.rootElementText}
           </a>
         </li>
 

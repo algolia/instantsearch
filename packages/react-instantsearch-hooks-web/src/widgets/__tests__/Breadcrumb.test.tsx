@@ -294,6 +294,23 @@ describe('Breadcrumb', () => {
     expect(root).toHaveClass('MyBreadcrumb', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
   });
+
+  test('renders with translations', async () => {
+    const searchClient = createMockedSearchClient();
+    const { getByRole } = render(
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <VirtualHierarchicalMenu attributes={hierarchicalAttributes} />
+        <Breadcrumb
+          attributes={hierarchicalAttributes}
+          translations={{ rootElementText: 'Index' }}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+
+    expect(getByRole('link', { name: 'Index' })).toBeInTheDocument();
+  });
 });
 
 function VirtualHierarchicalMenu(props: UseHierarchicalMenuProps) {

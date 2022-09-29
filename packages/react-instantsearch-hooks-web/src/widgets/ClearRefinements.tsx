@@ -15,12 +15,15 @@ export type ClearRefinementsProps = Omit<
   ClearRefinementsUiComponentProps,
   keyof UiProps
 > &
-  UseClearRefinementsProps;
+  UseClearRefinementsProps & {
+    translations?: Partial<UiProps['translations']>;
+  };
 
 export function ClearRefinements({
   includedAttributes,
   excludedAttributes,
   transformItems,
+  translations,
   ...props
 }: ClearRefinementsProps) {
   const { canRefine, refine } = useClearRefinements(
@@ -38,7 +41,8 @@ export function ClearRefinements({
     onClick: refine,
     disabled: !canRefine,
     translations: {
-      resetLabel: 'Clear refinements',
+      resetButtonText: 'Clear refinements',
+      ...translations,
     },
   };
 

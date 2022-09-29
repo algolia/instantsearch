@@ -452,6 +452,29 @@ describe('ClearRefinements', () => {
     expect(root).toHaveClass('MyClearsRefinements', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
   });
+
+  test('renders with translations', async () => {
+    const searchClient = createSearchClient({});
+    const { getByRole } = render(
+      <InstantSearchHooksTestWrapper
+        searchClient={searchClient}
+        initialUiState={{
+          indexName: {
+            refinementList: {
+              brand: ['Apple'],
+            },
+          },
+        }}
+      >
+        <RefinementList attribute="brand" />
+        <ClearRefinements translations={{ resetButtonText: 'Reset' }} />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+
+    expect(getByRole('button', { name: 'Reset' })).toBeInTheDocument();
+  });
 });
 
 function CurrentRefinements(props: UseCurrentRefinementsProps) {

@@ -37,7 +37,7 @@ describe('SearchBox', () => {
             />
             <button
               class="ais-SearchBox-submit"
-              title="Submit the search query."
+              title="Submit the search query"
               type="submit"
             >
               <svg
@@ -54,7 +54,7 @@ describe('SearchBox', () => {
             <button
               class="ais-SearchBox-reset"
               hidden=""
-              title="Clear the search query."
+              title="Clear the search query"
               type="reset"
             >
               <svg
@@ -316,5 +316,24 @@ describe('SearchBox', () => {
 
     expect(lastUiState.indexName.query).toBe('iPhone');
     expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  test('renders with translations', () => {
+    const { getByRole } = render(
+      <InstantSearchHooksTestWrapper>
+        <SearchBox
+          translations={{
+            resetButtonTitle: 'Reset',
+            submitButtonTitle: 'Submit',
+          }}
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    expect(getByRole('button', { name: 'Submit' })).toBeInTheDocument();
+
+    userEvent.type(getByRole('searchbox'), 'nothing');
+
+    expect(getByRole('button', { name: 'Reset' })).toBeInTheDocument();
   });
 });

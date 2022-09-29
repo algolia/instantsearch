@@ -6,7 +6,7 @@ export type ClearRefinementsTranslations = {
   /**
    * The label of the button
    */
-  resetLabel: string;
+  resetButtonText: string;
 };
 
 export type ClearRefinementsProps = React.ComponentProps<'div'> &
@@ -55,7 +55,7 @@ export function ClearRefinements({
             )
         )}
       >
-        {translations.resetLabel}
+        {translations.resetButtonText}
       </button>
     </div>
   );

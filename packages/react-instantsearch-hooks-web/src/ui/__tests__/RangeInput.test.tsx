@@ -13,7 +13,7 @@ describe('RangeInput', () => {
       start: [undefined, undefined],
       disabled: false,
       onSubmit: jest.fn(),
-      translations: { separator: 'to', submit: 'Go' },
+      translations: { separatorElementText: 'to', submitButtonText: 'Go' },
       ...props,
     };
   }
@@ -75,7 +75,10 @@ describe('RangeInput', () => {
 
   test('renders with translations', () => {
     const props = createProps({
-      translations: { separator: 'SEPARATOR', submit: 'SUBMIT' },
+      translations: {
+        separatorElementText: 'SEPARATOR',
+        submitButtonText: 'SUBMIT',
+      },
     });
     const { container } = render(<RangeInput {...props} />);
 

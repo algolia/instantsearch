@@ -4,6 +4,7 @@ import { cx } from './lib/cx';
 import { isModifierClick } from './lib/isModifierClick';
 import { ShowMoreButton } from './ShowMoreButton';
 
+import type { ShowMoreButtonTranslations } from './ShowMoreButton';
 import type { useHierarchicalMenu } from 'react-instantsearch-hooks';
 
 type HierarchicalMenuClassNames = {
@@ -73,7 +74,10 @@ export type HierarchicalMenuProps = React.ComponentProps<'div'> &
     canToggleShowMore: boolean;
     onToggleShowMore: () => void;
     isShowingMore: boolean;
+    translations: ShowMoreButtonTranslations;
   };
+
+export type HierarchicalMenuTranslations = ShowMoreButtonTranslations;
 
 function HierarchicalList({
   className,
@@ -146,6 +150,7 @@ export function HierarchicalMenu({
   canToggleShowMore,
   onToggleShowMore,
   isShowingMore,
+  translations,
   ...props
 }: HierarchicalMenuProps) {
   return (
@@ -179,6 +184,7 @@ export function HierarchicalMenu({
           disabled={!canToggleShowMore}
           onClick={onToggleShowMore}
           isShowingMore={isShowingMore}
+          translations={translations}
         />
       )}
     </div>

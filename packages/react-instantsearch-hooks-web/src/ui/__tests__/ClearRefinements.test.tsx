@@ -11,7 +11,7 @@ function createProps(
 ): ClearRefinementsProps {
   return {
     translations: {
-      resetLabel: 'Clear refinements',
+      resetButtonText: 'Clear refinements',
     },
     ...props,
   };
@@ -40,7 +40,7 @@ describe('ClearRefinements', () => {
   test('renders with translations', () => {
     const props = createProps({
       translations: {
-        resetLabel: 'Reset filters',
+        resetButtonText: 'Reset filters',
       },
     });
     const { container } = render(<ClearRefinements {...props} />);

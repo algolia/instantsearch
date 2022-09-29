@@ -920,4 +920,33 @@ describe('Menu', () => {
     expect(root).toHaveClass('MyMenu', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
   });
+
+  test('renders with translations', async () => {
+    const searchClient = createMockedSearchClient();
+    const { getByRole } = render(
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <Menu
+          attribute="brand"
+          translations={{
+            showMoreButtonText({ isShowingMore }) {
+              return isShowingMore ? 'Show less brands' : 'Show more brands';
+            },
+          }}
+          showMore
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    const button = getByRole('button', { name: 'Show more brands' });
+
+    expect(button).toBeInTheDocument();
+
+    userEvent.click(button);
+
+    expect(button).toHaveTextContent('Show less brands');
+  });
 });

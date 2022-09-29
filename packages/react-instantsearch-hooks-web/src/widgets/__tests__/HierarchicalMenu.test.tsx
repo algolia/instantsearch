@@ -492,4 +492,36 @@ describe('HierarchicalMenu', () => {
     expect(root).toHaveClass('MyHierarchicalMenu', 'ROOT');
     expect(root).toHaveAttribute('title', 'Some custom title');
   });
+
+  test('renders with translations', async () => {
+    const searchClient = createMockedSearchClient();
+    const { getByRole } = render(
+      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <HierarchicalMenu
+          attributes={attributes}
+          limit={1}
+          translations={{
+            showMoreButtonText({ isShowingMore }) {
+              return isShowingMore
+                ? 'Show less categories'
+                : 'Show more categories';
+            },
+          }}
+          showMore
+        />
+      </InstantSearchHooksTestWrapper>
+    );
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    const button = getByRole('button', { name: 'Show more categories' });
+
+    expect(button).toBeInTheDocument();
+
+    userEvent.click(button);
+
+    expect(button).toHaveTextContent('Show less categories');
+  });
 });

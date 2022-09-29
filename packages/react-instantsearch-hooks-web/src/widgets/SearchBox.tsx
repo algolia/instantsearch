@@ -28,11 +28,13 @@ export type SearchBoxProps = Omit<
      * @default true
      */
     searchAsYouType?: boolean;
+    translations?: Partial<UiProps['translations']>;
   };
 
 export function SearchBox({
   queryHook,
   searchAsYouType = true,
+  translations,
   ...props
 }: SearchBoxProps) {
   const { query, refine, isSearchStalled } = useSearchBox(
@@ -84,8 +86,9 @@ export function SearchBox({
     onSubmit,
     value: inputValue,
     translations: {
-      submitTitle: 'Submit the search query.',
-      resetTitle: 'Clear the search query.',
+      submitButtonTitle: 'Submit the search query',
+      resetButtonTitle: 'Clear the search query',
+      ...translations,
     },
   };
 

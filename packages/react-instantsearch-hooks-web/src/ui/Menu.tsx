@@ -3,6 +3,7 @@ import React from 'react';
 import { cx } from './lib/cx';
 import { ShowMoreButton } from './ShowMoreButton';
 
+import type { ShowMoreButtonTranslations } from './ShowMoreButton';
 import type { CreateURL } from 'instantsearch.js';
 import type { MenuItem } from 'instantsearch.js/es/connectors/menu/connectMenu';
 
@@ -15,6 +16,7 @@ export type MenuProps = React.ComponentProps<'div'> & {
   isShowingMore: boolean;
   createURL: CreateURL<MenuItem['value']>;
   onRefine: (item: MenuItem) => void;
+  translations: MenuTranslations;
 };
 
 export type MenuCSSClasses = {
@@ -60,6 +62,8 @@ export type MenuCSSClasses = {
   disabledShowMore: string;
 };
 
+export type MenuTranslations = ShowMoreButtonTranslations;
+
 export function Menu({
   items,
   classNames = {},
@@ -69,6 +73,7 @@ export function Menu({
   isShowingMore,
   createURL,
   onRefine,
+  translations,
   ...props
 }: MenuProps) {
   return (
@@ -122,6 +127,7 @@ export function Menu({
           disabled={!canToggleShowMore}
           onClick={onToggleShowMore}
           isShowingMore={isShowingMore}
+          translations={translations}
         />
       )}
     </div>

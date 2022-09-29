@@ -56,8 +56,8 @@ export type InfiniteHitsClassNames = {
 };
 
 export type InfiniteHitsTranslations = {
-  showPrevious: string;
-  showMore: string;
+  showPreviousButtonText: string;
+  showMoreButtonText: string;
 };
 
 function DefaultHitComponent({ hit }: { hit: Hit }) {
@@ -105,7 +105,7 @@ export function InfiniteHits<THit extends Hit>({
           onClick={onShowPrevious}
           disabled={isFirstPage}
         >
-          {translations.showPrevious}
+          {translations.showPreviousButtonText}
         </button>
       )}
       <ol className={cx('ais-InfiniteHits-list', classNames.list)}>
@@ -131,7 +131,7 @@ export function InfiniteHits<THit extends Hit>({
         onClick={onShowMore}
         disabled={isLastPage}
       >
-        {translations.showMore}
+        {translations.showMoreButtonText}
       </button>
     </div>
   );
