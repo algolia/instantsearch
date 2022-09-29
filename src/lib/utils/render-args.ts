@@ -18,7 +18,7 @@ export function createInitArgs(
     createURL: parent.createURL,
     scopedResults: [],
     searchMetadata: {
-      isSearchStalled: instantSearchInstance.status === 'stalled',
+      isSearchStalled: instantSearchInstance._isSearchStalled,
     },
   };
 }
@@ -40,7 +40,7 @@ export function createRenderArgs(
     templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,
     searchMetadata: {
-      isSearchStalled: instantSearchInstance.status === 'stalled',
+      isSearchStalled: instantSearchInstance._isSearchStalled,
     },
   };
 }
