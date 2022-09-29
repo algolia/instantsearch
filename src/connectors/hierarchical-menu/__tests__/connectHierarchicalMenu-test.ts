@@ -1778,6 +1778,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         },
         widgetType: 'ais.hierarchicalMenu',
       });
+
+      refine('value > sub_value');
+
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(
+        instantSearchInstance.sendEventToInsights
+      ).toHaveBeenLastCalledWith({
+        attribute: 'sub_category',
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['sub_category:value > sub_value'],
+          index: '',
+        },
+        widgetType: 'ais.hierarchicalMenu',
+      });
     });
   });
 });
