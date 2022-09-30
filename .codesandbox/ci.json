@@ -1,5 +1,5 @@
 {
   "sandboxes": ["instantsearchjs-es-template-pcw1k"],
   "buildCommand": "build",
-  "node": "12"
+  "node": "14"
 }

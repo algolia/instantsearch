@@ -50,7 +50,7 @@ describe('dynamicWidgets()', () => {
           container: document.createElement('div'),
           widgets: [],
         })
-      ).not.toThrowError();
+      ).not.toThrow();
     });
 
     test('widgets is required to be callbacks', () => {
@@ -74,7 +74,7 @@ describe('dynamicWidgets()', () => {
           transformItems: (items) => items,
           widgets: [],
         })
-      ).not.toThrowError();
+      ).not.toThrow();
     });
   });
 

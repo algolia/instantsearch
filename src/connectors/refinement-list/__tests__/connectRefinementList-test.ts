@@ -542,7 +542,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       })
     );
 
-    expect(transformItems).lastCalledWith(
+    expect(transformItems).toHaveBeenLastCalledWith(
       expect.anything(),
       expect.objectContaining({ results })
     );
