@@ -478,6 +478,13 @@ See ${createDocumentationLink({
 
     mainHelper.search = () => {
       this.status = 'loading';
+      // @MAJOR: use scheduleRender here
+      // For now, widgets don't expect to be rendered at the start of `loading`,
+      // so it would be a breaking change to add an extra render. We don't have
+      // these guarantees about the render event, thus emitting it once more
+      // isn't a breaking change.
+      this.emit('render');
+
       // This solution allows us to keep the exact same API for the users but
       // under the hood, we have a different implementation. It should be
       // completely transparent for the rest of the codebase. Only this module
