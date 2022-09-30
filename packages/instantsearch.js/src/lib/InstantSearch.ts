@@ -158,6 +158,17 @@ export type InstantSearchOptions<
    * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
+
+  /**
+   * Changes the way `dispose` is used in InstantSearch lifecycle.
+   *
+   * If the existing default (searchParameters) is used, each widget unmounting will remove its state as well, even if there are multiple widgets reading that UI State.
+   *
+   * With the future default (uiState), each widget unmounting will only remove its own state if it's the last of its type. This allows for dynamically adding and removing widgets without losing the state of those widgets.
+   *
+   * @default 'searchParameters'
+   */
+  disposeMode?: 'searchParameters' | 'uiState';
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
@@ -204,6 +215,10 @@ class InstantSearch<
    */
   public error: Error | undefined = undefined;
 
+  public flags: {
+    disposeMode: InstantSearchOptions['disposeMode'];
+  };
+
   /**
    * @deprecated use `status === 'stalled'` instead
    */
@@ -235,7 +250,16 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       searchClient = null,
       insightsClient = null,
       onStateChange = null,
+      disposeMode = 'searchParameters',
     } = options;
+
+    this.flags = {
+      disposeMode,
+    };
+
+    if (indexName === null) {
+      throw new Error(withUsage('The `indexName` option is required.'));
+    }
 
     if (searchClient === null) {
       throw new Error(withUsage('The `searchClient` option is required.'));
