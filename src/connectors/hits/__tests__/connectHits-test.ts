@@ -298,7 +298,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       })
     );
 
-    expect(transformItems).lastCalledWith(
+    expect(transformItems).toHaveBeenLastCalledWith(
       expect.anything(),
       expect.objectContaining({ results })
     );
