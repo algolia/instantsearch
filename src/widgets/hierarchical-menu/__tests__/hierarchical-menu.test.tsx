@@ -91,7 +91,7 @@ describe('refinementList', () => {
       >
         <div>
           <a
-            class="ais-HierarchicalMenu-link"
+            class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
             href="#"
           >
             <span
