@@ -62,6 +62,7 @@ import HierarchicalMenu from '../components/HierarchicalMenu';
  * @themeKey ais-HierarchicalMenu-item--selected - the selected menu list item
  * @themeKey ais-HierarchicalMenu-item--parent - the menu list item containing children
  * @themeKey ais-HierarchicalMenu-link - the clickable menu element
+ * @themeKey ais-HierarchicalMenu-link--selected - the clickable element of a selected menu list item
  * @themeKey ais-HierarchicalMenu-label - the label of each item
  * @themeKey ais-HierarchicalMenu-count - the count of values for each item
  * @themeKey ais-HierarchicalMenu-showMore - the button used to display more categories

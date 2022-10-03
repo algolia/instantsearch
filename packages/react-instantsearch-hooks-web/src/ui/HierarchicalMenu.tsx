@@ -41,6 +41,10 @@ type HierarchicalMenuClassNames = {
    */
   link: string;
   /**
+   * Class names to apply to the link of each selected item
+   */
+  selectedItemLink: string;
+  /**
    * Class names to apply to the label of an item element
    */
   label: string;
@@ -101,7 +105,15 @@ function HierarchicalList({
           )}
         >
           <a
-            className={cx('ais-HierarchicalMenu-link', classNames.link)}
+            className={cx(
+              'ais-HierarchicalMenu-link',
+              classNames.link,
+              item.isRefined &&
+                cx(
+                  'ais-HierarchicalMenu-link--selected',
+                  classNames.selectedItemLink
+                )
+            )}
             href={createURL(item.value)}
             onClick={(event) => {
               if (isModifierClick(event)) {

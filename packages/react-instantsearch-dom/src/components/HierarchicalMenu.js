@@ -39,7 +39,7 @@ class HierarchicalMenu extends Component {
 
     return (
       <Link
-        className={cx('link')}
+        className={cx('link', item.isRefined && 'link--selected')}
         onClick={() => refine(item.value)}
         href={createURL(item.value)}
       >

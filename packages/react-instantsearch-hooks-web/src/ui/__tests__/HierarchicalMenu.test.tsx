@@ -72,7 +72,7 @@ describe('HierarchicalMenu', () => {
               class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected"
             >
               <a
-                class="ais-HierarchicalMenu-link"
+                class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
                 href="#Apple"
               >
                 <span
@@ -183,7 +183,7 @@ describe('HierarchicalMenu', () => {
                 class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected"
               >
                 <a
-                  class="ais-HierarchicalMenu-link"
+                  class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
                   href="#Apple"
                 >
                   <span
@@ -300,6 +300,7 @@ describe('HierarchicalMenu', () => {
         selectedItem: 'SELECTEDITEM',
         parentItem: 'PARENTITEM',
         link: 'LINK',
+        selectedItemLink: 'SELECTEDITEMLINK',
         label: 'LABEL',
         count: 'COUNT',
         showMore: 'SHOWMORE',
@@ -320,7 +321,7 @@ describe('HierarchicalMenu', () => {
               class="ais-HierarchicalMenu-item ITEM ais-HierarchicalMenu-item--parent PARENTITEM ais-HierarchicalMenu-item--selected SELECTEDITEM"
             >
               <a
-                class="ais-HierarchicalMenu-link LINK"
+                class="ais-HierarchicalMenu-link LINK ais-HierarchicalMenu-link--selected SELECTEDITEMLINK"
                 href="#Apple"
               >
                 <span

@@ -195,10 +195,10 @@ exports[`HierarchicalMenu default hierarchical menu 1`] = `
       </ul>
     </li>
     <li
-      className="ais-HierarchicalMenu-item"
+      className="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
     >
       <a
-        className="ais-HierarchicalMenu-link"
+        className="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
         href="#"
         onClick={[Function]}
       >

@@ -23,7 +23,7 @@ describe('HierarchicalMenu', () => {
                 { value: 'white2', label: 'white2', count: 4 },
               ],
             },
-            { value: 'black', count: 20, label: 'black' },
+            { value: 'black', isRefined: true, count: 20, label: 'black' },
             { value: 'blue', count: 30, label: 'blue' },
           ]}
           limit={2}
