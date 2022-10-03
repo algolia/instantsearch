@@ -9,6 +9,7 @@ import { createSearchClient } from '../../../../../test/mock';
 import {
   createInstantSearchTestWrapper,
   InstantSearchHooksTestWrapper,
+  wait,
 } from '../../../../../test/utils';
 import { useInstantSearch } from '../useInstantSearch';
 
@@ -285,5 +286,125 @@ describe('useInstantSearch', () => {
 
       expect(result.current.refresh).toBe(ref);
     });
+  });
+
+  describe('status', () => {
+    test('initial status: idle', () => {
+      const App = () => (
+        <InstantSearchHooksTestWrapper>
+          <SearchBox />
+          <Status />
+        </InstantSearchHooksTestWrapper>
+      );
+
+      const { getByTestId } = render(<App />);
+
+      expect(getByTestId('status')).toHaveTextContent('idle');
+    });
+
+    test('turns to loading and idle when searching', async () => {
+      const App = () => (
+        <InstantSearchHooksTestWrapper
+          searchClient={createDelayedSearchClient(20)}
+        >
+          <SearchBox placeholder="search here" />
+          <Status />
+        </InstantSearchHooksTestWrapper>
+      );
+
+      const { getByTestId, getByPlaceholderText } = render(<App />);
+
+      expect(getByTestId('status')).toHaveTextContent('idle');
+
+      userEvent.type(getByPlaceholderText('search here'), 'hey search');
+
+      await waitFor(() => {
+        expect(getByTestId('status')).toHaveTextContent('loading');
+      });
+
+      await waitFor(() => {
+        expect(getByTestId('status')).toHaveTextContent('idle');
+      });
+    });
+
+    test('turns to loading, stalled and idle when searching slowly', async () => {
+      const App = () => (
+        <InstantSearchHooksTestWrapper
+          searchClient={createDelayedSearchClient(300)}
+          stalledSearchDelay={200}
+        >
+          <SearchBox placeholder="search here" />
+          <Status />
+        </InstantSearchHooksTestWrapper>
+      );
+
+      const { getByTestId, getByPlaceholderText } = render(<App />);
+
+      expect(getByTestId('status')).toHaveTextContent('idle');
+
+      userEvent.type(getByPlaceholderText('search here'), 'h');
+
+      await waitFor(() => {
+        expect(getByTestId('status')).toHaveTextContent('loading');
+      });
+
+      await waitFor(() => {
+        expect(getByTestId('status')).toHaveTextContent('stalled');
+      });
+
+      await waitFor(() => {
+        expect(getByTestId('status')).toHaveTextContent('idle');
+      });
+    });
+
+    test('turns to loading and error when searching', async () => {
+      const searchClient = createSearchClient({});
+      searchClient.search.mockImplementation(() =>
+        Promise.reject(new Error('API_ERROR'))
+      );
+
+      const App = () => (
+        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+          <SearchBox placeholder="search here" />
+          {/* has catchError, as the real error can not be asserted upon */}
+          <Status catchError />
+        </InstantSearchHooksTestWrapper>
+      );
+
+      const { getByTestId, getByPlaceholderText } = render(<App />);
+
+      expect(getByTestId('status')).toHaveTextContent('idle');
+      expect(getByTestId('error')).toBeEmptyDOMElement();
+
+      userEvent.type(getByPlaceholderText('search here'), 'hey search');
+
+      await waitFor(() => {
+        expect(getByTestId('status')).toHaveTextContent('loading');
+        expect(getByTestId('error')).toBeEmptyDOMElement();
+      });
+
+      await waitFor(() => {
+        expect(getByTestId('status')).toHaveTextContent('error');
+        expect(getByTestId('error')).toHaveTextContent('API_ERROR');
+      });
+    });
+
+    function Status(props) {
+      const { status, error } = useInstantSearch(props);
+
+      return (
+        <>
+          <span data-testid="status">{status}</span>
+          <span data-testid="error">{error?.message}</span>
+        </>
+      );
+    }
+
+    function createDelayedSearchClient(timeout: number) {
+      const searchFn = createSearchClient({}).search!;
+      return createSearchClient({
+        search: (requests) => wait(timeout).then(() => searchFn(requests)),
+      });
+    }
   });
 });

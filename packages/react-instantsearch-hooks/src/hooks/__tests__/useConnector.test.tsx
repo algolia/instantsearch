@@ -384,6 +384,8 @@ describe('useConnector', () => {
       searchMetadata: {
         isSearchStalled: false,
       },
+      status: 'idle',
+      error: undefined,
     });
   });
 

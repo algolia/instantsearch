@@ -21,3 +21,17 @@ export function InstantSearchHooksTestWrapper({
     </InstantSearch>
   );
 }
+
+export function createInstantSearchTestWrapper(
+  props?: Partial<InstantSearchProps>
+) {
+  const client = createSearchClient({});
+
+  const wrapper = ({ children }) => (
+    <InstantSearch searchClient={client} indexName="indexName" {...props}>
+      {children}
+    </InstantSearch>
+  );
+
+  return wrapper;
+}
