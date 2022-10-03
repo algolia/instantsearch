@@ -90,6 +90,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         selectedItem: 'selectedItem',
         parentItem: 'parentItem',
         link: 'link',
+        selectedItemLink: 'selectedItemLink',
         label: 'label',
         count: 'count',
         noResults: 'noResults',
@@ -120,6 +121,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         item: 'ais-HierarchicalMenu-item item',
         label: 'ais-HierarchicalMenu-label label',
         link: 'ais-HierarchicalMenu-link link',
+        selectedItemLink:
+          'ais-HierarchicalMenu-link--selected selectedItemLink',
         list: 'ais-HierarchicalMenu-list list',
         noRefinementRoot: 'ais-HierarchicalMenu--noRefinement noRefinementRoot',
         parentItem: 'ais-HierarchicalMenu-item--parent parentItem',
