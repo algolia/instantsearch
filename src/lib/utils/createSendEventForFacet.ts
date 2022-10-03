@@ -12,19 +12,23 @@ type CustomSendEventForFacet = (customPayload: any) => void;
 export type SendEventForFacet = BuiltInSendEventForFacet &
   CustomSendEventForFacet;
 
+type CreateSendEventForFacetOptions = {
+  instantSearchInstance: InstantSearch;
+  helper: AlgoliaSearchHelper;
+  attribute: string | ((facetValue: string) => string);
+  widgetType: string;
+};
+
 export function createSendEventForFacet({
   instantSearchInstance,
   helper,
-  attribute,
+  attribute: attr,
   widgetType,
-}: {
-  instantSearchInstance: InstantSearch;
-  helper: AlgoliaSearchHelper;
-  attribute: string;
-  widgetType: string;
-}): SendEventForFacet {
+}: CreateSendEventForFacetOptions): SendEventForFacet {
   const sendEventForFacet: SendEventForFacet = (...args: any[]) => {
     const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+    const attribute = typeof attr === 'string' ? attr : attr(facetValue);
+
     if (args.length === 1 && typeof args[0] === 'object') {
       instantSearchInstance.sendEventToInsights(args[0]);
     } else if (
@@ -55,5 +59,6 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
       );
     }
   };
+
   return sendEventForFacet;
 }

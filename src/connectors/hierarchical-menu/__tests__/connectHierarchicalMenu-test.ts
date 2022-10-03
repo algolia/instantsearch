@@ -504,7 +504,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       })
     );
 
-    expect(transformItems).lastCalledWith(
+    expect(transformItems).toHaveBeenLastCalledWith(
       expect.anything(),
       expect.objectContaining({ results })
     );
@@ -1774,6 +1774,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         payload: {
           eventName: 'Filter Applied',
           filters: ['category:value'],
+          index: '',
+        },
+        widgetType: 'ais.hierarchicalMenu',
+      });
+
+      refine('value > sub_value');
+
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(
+        instantSearchInstance.sendEventToInsights
+      ).toHaveBeenLastCalledWith({
+        attribute: 'sub_category',
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['sub_category:value > sub_value'],
           index: '',
         },
         widgetType: 'ais.hierarchicalMenu',

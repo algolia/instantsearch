@@ -93,7 +93,7 @@ describe('getWidgetAttribute', () => {
         hits({ container: document.createElement('div') }),
         createInitOptions()
       )
-    ).toThrowError(`Could not find the attribute of the widget:
+    ).toThrow(`Could not find the attribute of the widget:
 
 {"$$type":"ais.hits","$$widgetType":"ais.hits"}
 
@@ -107,7 +107,7 @@ Please check whether the widget's getWidgetRenderState returns widgetParams.attr
         {},
         createInitOptions()
       )
-    ).toThrowError(`Could not find the attribute of the widget:
+    ).toThrow(`Could not find the attribute of the widget:
 
 {}
 
@@ -125,7 +125,7 @@ Please check whether the widget's getWidgetRenderState returns widgetParams.attr
         },
         createInitOptions()
       )
-    ).toThrowError(`Could not find the attribute of the widget:
+    ).toThrow(`Could not find the attribute of the widget:
 
 {}
 
@@ -141,7 +141,7 @@ Please check whether the widget's getWidgetRenderState returns widgetParams.attr
         },
         createInitOptions()
       )
-    ).toThrowError(`Could not find the attribute of the widget:
+    ).toThrow(`Could not find the attribute of the widget:
 
 {}
 
