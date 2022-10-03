@@ -20,25 +20,24 @@ export type InsightsEvent = {
   attribute?: string;
 };
 
-export type InsightsProps = {
-  insightsClient: null | InsightsClient;
+export type InsightsProps<
+  TInsightsClient extends null | InsightsClient = InsightsClient | null
+> = {
+  insightsClient: TInsightsClient;
   insightsInitParams?: {
     userHasOptedOut?: boolean;
     useCookie?: boolean;
     cookieDuration?: number;
     region?: 'de' | 'us';
   };
-  onEvent?: (
-    event: InsightsEvent,
-    insightsClient: null | InsightsClient
-  ) => void;
+  onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
 };
 
-export type CreateInsightsMiddleware = (
-  props: InsightsProps
-) => InternalMiddleware;
+export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
-export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
+export function createInsightsMiddleware<
+  TInsightsClient extends null | InsightsClient
+>(props: InsightsProps<TInsightsClient>): InternalMiddleware {
   const {
     insightsClient: _insightsClient,
     insightsInitParams,
@@ -57,8 +56,8 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = (props) => {
   }
 
   const hasInsightsClient = Boolean(_insightsClient);
-  const insightsClient =
-    _insightsClient === null ? (noop as InsightsClient) : _insightsClient;
+  const insightsClient: InsightsClient =
+    _insightsClient === null ? noop : _insightsClient;
 
   return ({ instantSearchInstance }) => {
     const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
@@ -192,4 +191,4 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       },
     };
   };
-};
+}
