@@ -3,6 +3,7 @@
  */
 /** @jsx h */
 import { h } from 'preact';
+import { fireEvent, within } from '@testing-library/dom';
 
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import instantsearch from '../../../index.es';
@@ -12,7 +13,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '../../../../test/mock/createAPIResponse';
-import { fireEvent, within } from '@testing-library/dom';
+import { createInsightsMiddleware } from '../../../middlewares';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -328,31 +329,113 @@ describe('refinementList', () => {
 
       expect(showMoreButton).toHaveTextContent('Show less');
     });
+  });
 
-    function createMockedSearchClient() {
-      const search = jest.fn((requests) =>
-        Promise.resolve(
-          createMultiSearchResponse(
-            ...requests.map(() =>
-              createSingleSearchResponse({
-                facets: {
-                  'categories.lvl0': {
-                    'Cameras & Camcorders': 1369,
-                    'Video Games': 505,
-                    'Wearable Technology': 271,
-                  },
-                  'categories.lvl1': {
-                    'Cameras & Camcorders > Digital Cameras': 170,
-                    'Cameras & Camcorders > Memory Cards': 113,
-                  },
-                },
-              })
-            )
-          )
-        )
+  describe('insights', () => {
+    test('sends "click" event when clicking on a facet', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.use(insights);
+
+      search.addWidgets([
+        hierarchicalMenu({
+          container,
+          attributes: ['categories.lvl0', 'categories.lvl1'],
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      fireEvent.click(
+        within(container).getByRole('link', {
+          name: /cameras & camcorders [\d,]+/i,
+        })
       );
 
-      return createSearchClient({ search });
-    }
+      expect(onEvent).toHaveBeenLastCalledWith(
+        {
+          attribute: 'categories.lvl0',
+          eventType: 'click',
+          insightsMethod: 'clickedFilters',
+          payload: {
+            eventName: 'Filter Applied',
+            filters: ['categories.lvl0:Cameras & Camcorders'],
+            index: 'indexName',
+          },
+          widgetType: 'ais.hierarchicalMenu',
+        },
+        null
+      );
+
+      await wait(0);
+
+      fireEvent.click(
+        within(container).getByRole('link', {
+          name: /digital cameras [\d,]+/i,
+        })
+      );
+
+      expect(onEvent).toHaveBeenLastCalledWith(
+        {
+          attribute: 'categories.lvl1',
+          eventType: 'click',
+          insightsMethod: 'clickedFilters',
+          payload: {
+            eventName: 'Filter Applied',
+            filters: ['categories.lvl1:Cameras & Camcorders > Digital Cameras'],
+            index: 'indexName',
+          },
+          widgetType: 'ais.hierarchicalMenu',
+        },
+        null
+      );
+    });
   });
+
+  function createInsightsMiddlewareWithOnEvent() {
+    const onEvent = jest.fn();
+    const insights = createInsightsMiddleware({
+      insightsClient: null,
+      onEvent,
+    });
+
+    return { onEvent, insights };
+  }
 });
+
+function createMockedSearchClient() {
+  const search = jest.fn((requests) =>
+    Promise.resolve(
+      createMultiSearchResponse(
+        ...requests.map(() =>
+          createSingleSearchResponse({
+            facets: {
+              'categories.lvl0': {
+                'Cameras & Camcorders': 1369,
+                'Video Games': 505,
+                'Wearable Technology': 271,
+              },
+              'categories.lvl1': {
+                'Cameras & Camcorders > Digital Cameras': 170,
+                'Cameras & Camcorders > Memory Cards': 113,
+              },
+            },
+          })
+        )
+      )
+    )
+  );
+
+  return createSearchClient({
+    search,
+    // @ts-ignore
+    applicationID: 'latency',
+    apiKey: '123',
+  });
+}
