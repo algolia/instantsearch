@@ -1,3 +1,17 @@
+# [4.47.0](https://github.com/algolia/instantsearch.js/compare/v4.46.3...v4.47.0) (2022-10-03)
+
+
+### Bug Fixes
+
+* **hierarchicalMenu:** pass correct attribute name to Insights ([#5124](https://github.com/algolia/instantsearch.js/issues/5124)) ([fe18a16](https://github.com/algolia/instantsearch.js/commit/fe18a168b1b195d067298770b55fd29a7fdb6edb))
+
+
+### Features
+
+* **status:** introduce status in InstantSearch class ([#5115](https://github.com/algolia/instantsearch.js/issues/5115)) ([21f3147](https://github.com/algolia/instantsearch.js/commit/21f31476e75e162b38b002d5439f231f3990e785))
+* **hierarchicalMenu**: introduce `ais-HierarchicalMenu-item--selected` class ([#5125](https://github.com/algolia/instantsearch.js/issues/5125)) ([4ebb828](https://github.com/algolia/instantsearch.js/commit/4ebb828c93afabfd8083246dfe7edfd33932d5fd))
+
+
 ## [4.46.3](https://github.com/algolia/instantsearch.js/compare/v4.46.2...v4.46.3) (2022-09-27)
 
 
