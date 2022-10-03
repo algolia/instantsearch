@@ -17,6 +17,9 @@ export const createInstantSearch = (
     mainHelper,
     client,
     started: false,
+    status: 'idle',
+    _isSearchStalled: false,
+    error: undefined,
     start() {
       this.started = true;
     },
@@ -32,7 +35,6 @@ export const createInstantSearch = (
     scheduleStalledRender: defer(jest.fn()),
     scheduleSearch: defer(jest.fn()),
     scheduleRender: defer(jest.fn()),
-    _isSearchStalled: false,
     _stalledSearchDelay: 200,
     _searchStalledTimer: null,
     _initialUiState: {},

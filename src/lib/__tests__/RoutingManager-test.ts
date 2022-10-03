@@ -79,8 +79,7 @@ const createFakeHistory = <TEntry = Record<string, unknown>>(
 
 describe('RoutingManager', () => {
   describe('within instantsearch', () => {
-    // eslint-disable-next-line jest/no-done-callback
-    test('should write in the router on searchParameters change', (done) => {
+    test('should write in the router on searchParameters change', async () => {
       const searchClient = createSearchClient();
       const router = createFakeRouter({
         write: jest.fn(),
@@ -109,27 +108,25 @@ describe('RoutingManager', () => {
 
       search.start();
 
-      search.once('render', async () => {
-        // initialization is done at this point
-        expect(widget.render).toHaveBeenCalledTimes(1);
-        expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
+      // initialization is done at this point
+      await wait(0);
 
-        await wait(0);
+      expect(widget.render).toHaveBeenCalledTimes(1);
+      expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
 
-        expect(router.write).toHaveBeenCalledTimes(0);
+      await wait(0);
 
-        search.mainIndex.getHelper()!.setQuery('q'); // routing write updates on change
+      expect(router.write).toHaveBeenCalledTimes(0);
 
-        await wait(0);
+      search.mainIndex.getHelper()!.setQuery('q'); // routing write updates on change
 
-        expect(router.write).toHaveBeenCalledTimes(1);
-        expect(router.write).toHaveBeenCalledWith({
-          indexName: {
-            q: 'q',
-          },
-        });
+      await wait(0);
 
-        done();
+      expect(router.write).toHaveBeenCalledTimes(1);
+      expect(router.write).toHaveBeenCalledWith({
+        indexName: {
+          q: 'q',
+        },
       });
     });
 
@@ -184,8 +181,7 @@ describe('RoutingManager', () => {
       });
     });
 
-    // eslint-disable-next-line jest/no-done-callback
-    test('should apply state mapping on differences after searchFunction', (done) => {
+    test('should apply state mapping on differences after searchFunction', async () => {
       const searchClient = createSearchClient();
 
       const router = createFakeRouter({
@@ -235,18 +231,15 @@ describe('RoutingManager', () => {
 
       search.start();
 
-      search.once('render', () => {
-        // initialization is done at this point
+      await wait(0);
+      // initialization is done at this point
 
-        expect(search.mainIndex.getHelper()!.state.query).toEqual('test');
+      expect(search.mainIndex.getHelper()!.state.query).toEqual('test');
 
-        expect(router.write).toHaveBeenLastCalledWith({
-          indexName: {
-            query: 'TEST',
-          },
-        });
-
-        done();
+      expect(router.write).toHaveBeenLastCalledWith({
+        indexName: {
+          query: 'TEST',
+        },
       });
     });
 

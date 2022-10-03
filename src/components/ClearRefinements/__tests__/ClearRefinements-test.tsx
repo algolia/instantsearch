@@ -6,7 +6,7 @@
 import { h } from 'preact';
 import ClearRefinements from '../ClearRefinements';
 import { mount } from '../../../../test/utils/enzyme';
-import { prepareTemplateProps } from '../../../lib/utils';
+import { prepareTemplateProps } from '../../../lib/templating';
 import defaultTemplates from '../../../widgets/clear-refinements/defaultTemplates';
 
 describe('ClearRefinements', () => {

@@ -309,7 +309,7 @@ describe('infiniteHits', () => {
 
       expect(() => {
         getByText(container, 'fake1');
-      }).toThrowError(
+      }).toThrow(
         expect.objectContaining({
           message: expect.stringContaining(
             `Unable to find an element with the text: fake1.`

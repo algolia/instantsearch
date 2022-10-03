@@ -4,7 +4,7 @@ import type { JSX } from 'preact';
 import { h, createRef, Component } from 'preact';
 import cx from 'classnames';
 import { isSpecialClick, isEqual } from '../../lib/utils';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
 import type {

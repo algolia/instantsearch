@@ -5,7 +5,7 @@ import type {
   ToggleRefinementRenderState,
   ToggleRefinementValue,
 } from '../../connectors/toggle-refinement/connectToggleRefinement';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   ToggleRefinementTemplates,

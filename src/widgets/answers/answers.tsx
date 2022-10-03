@@ -7,8 +7,8 @@ import defaultTemplates from './defaultTemplates';
 import {
   createDocumentationMessageGenerator,
   getContainerNode,
-  prepareTemplateProps,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import type {
   AnswersComponentCSSClasses,
@@ -21,7 +21,7 @@ import type {
   AnswersWidgetDescription,
 } from '../../connectors/answers/connectAnswers';
 import connectAnswers from '../../connectors/answers/connectAnswers';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'answers' });
 const suit = component('Answers');

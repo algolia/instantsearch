@@ -12,14 +12,14 @@ import type {
 import connectMenu from '../../connectors/menu/connectMenu';
 import defaultTemplates from './defaultTemplates';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import type { Renderer, Template, WidgetFactory } from '../../types';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type { SearchBoxTemplates } from '../search-box/search-box';
 import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 

@@ -11,12 +11,12 @@ import type {
 } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import defaultTemplates from './defaultTemplates';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import type {
   TransformItems,
   Template,
@@ -83,6 +83,10 @@ export type HierarchicalMenuCSSClasses = Partial<{
    * CSS class to add to each link (when using the default template).
    */
   link: string | string[];
+  /**
+   * CSS class to add to the link of each selected item element (when using the default template).
+   */
+  selectedItemLink: string | string[];
   /**
    * CSS class to add to each label (when using the default template).
    */
@@ -334,6 +338,10 @@ const hierarchicalMenu: HierarchicalMenuWidget = function hierarchicalMenu(
       userCssClasses.parentItem
     ),
     link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
+    selectedItemLink: cx(
+      suit({ descendantName: 'link', modifierName: 'selected' }),
+      userCssClasses.selectedItemLink
+    ),
     label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
     count: cx(suit({ descendantName: 'count' }), userCssClasses.count),
     showMore: cx(suit({ descendantName: 'showMore' }), userCssClasses.showMore),

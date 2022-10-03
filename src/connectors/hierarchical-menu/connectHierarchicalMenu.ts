@@ -208,6 +208,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
       // so that we can always map $hierarchicalFacetName => real attributes
       // we use the first attribute name
       const [hierarchicalFacetName] = attributes;
+
       let sendEvent: HierarchicalMenuRenderState['sendEvent'];
 
       // Provide the same function to the `renderFn` so that way the user
@@ -326,7 +327,11 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             sendEvent = createSendEventForFacet({
               instantSearchInstance,
               helper,
-              attribute: hierarchicalFacetName,
+              attribute(facetValue) {
+                const index = facetValue.split(separator).length - 1;
+
+                return attributes[index];
+              },
               widgetType: this.$$type,
             });
           }

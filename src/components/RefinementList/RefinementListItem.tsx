@@ -40,6 +40,7 @@ function RefinementListItem({
         });
       }}
     >
+      {/* @MAJOR ensure conformity with InstantSearch.css specs */}
       <Template
         {...templateProps}
         templateKey={templateKey}

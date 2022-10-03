@@ -14,13 +14,13 @@ import type {
 } from '../../connectors/stats/connectStats';
 import connectStats from '../../connectors/stats/connectStats';
 import {
-  prepareTemplateProps,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import type { Renderer, Template, WidgetFactory } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import { formatNumber } from '../../lib/formatNumber';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });

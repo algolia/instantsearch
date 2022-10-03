@@ -23,6 +23,11 @@ export type CurrentRefinementsCSSClasses = Partial<{
   root: string | string[];
 
   /**
+   * CSS class to add to the root element when no refinements.
+   */
+  noRefinementRoot: string | string[];
+
+  /**
    * CSS class to add to the list element.
    */
   list: string | string[];
@@ -73,7 +78,7 @@ const suit = component('CurrentRefinements');
 const renderer: Renderer<
   CurrentRefinementsRenderState,
   Partial<CurrentRefinementsWidgetParams>
-> = ({ items, widgetParams }, isFirstRender) => {
+> = ({ items, widgetParams, canRefine }, isFirstRender) => {
   if (isFirstRender) {
     return;
   }
@@ -84,7 +89,11 @@ const renderer: Renderer<
   };
 
   render(
-    <CurrentRefinements cssClasses={cssClasses} items={items} />,
+    <CurrentRefinements
+      cssClasses={cssClasses}
+      items={items}
+      canRefine={canRefine}
+    />,
     container
   );
 };
@@ -112,8 +121,12 @@ const currentRefinements: CurrentRefinementsWidget =
     }
 
     const containerNode = getContainerNode(container);
-    const cssClasses = {
+    const cssClasses: CurrentRefinementsCSSClasses = {
       root: cx(suit(), userCssClasses.root),
+      noRefinementRoot: cx(
+        suit({ modifierName: 'noRefinement' }),
+        userCssClasses.noRefinementRoot
+      ),
       list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
       item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
       label: cx(suit({ descendantName: 'label' }), userCssClasses.label),

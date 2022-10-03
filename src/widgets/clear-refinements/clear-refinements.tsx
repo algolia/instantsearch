@@ -16,12 +16,12 @@ import connectClearRefinements from '../../connectors/clear-refinements/connectC
 import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,
-  prepareTemplateProps,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/templating';
 import { component } from '../../lib/suit';
 import type { WidgetFactory, Template, Renderer } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/utils';
+import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
