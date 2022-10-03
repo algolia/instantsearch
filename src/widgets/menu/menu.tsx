@@ -2,9 +2,8 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList, {
-  RefinementListComponentCSSClasses,
-} from '../../components/RefinementList/RefinementList';
+import type { RefinementListComponentCSSClasses } from '../../components/RefinementList/RefinementList';
+import RefinementList from '../../components/RefinementList/RefinementList';
 import type {
   MenuConnectorParams,
   MenuRenderState,
@@ -21,8 +20,8 @@ import { component } from '../../lib/suit';
 import type { Renderer, Template, WidgetFactory } from '../../types';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 import type { PreparedTemplateProps } from '../../lib/utils';
-import { SearchBoxTemplates } from '../search-box/search-box';
-import { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
+import type { SearchBoxTemplates } from '../search-box/search-box';
+import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');

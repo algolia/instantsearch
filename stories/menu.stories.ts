@@ -96,7 +96,7 @@ storiesOf('Refinements/Menu', module)
       search.addWidgets([
         instantsearch.widgets.menu({
           searchable: true,
-          container: container,
+          container,
           attribute: 'categories',
         }),
       ]);
@@ -108,7 +108,7 @@ storiesOf('Refinements/Menu', module)
       search.addWidgets([
         instantsearch.widgets.menu({
           searchable: true,
-          container: container,
+          container,
           attribute: 'categories',
           limit: 3,
           showMore: true,
