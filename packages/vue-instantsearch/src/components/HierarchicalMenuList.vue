@@ -17,7 +17,10 @@
     >
       <a
         :href="createURL(item.value)"
-        :class="suit('link')"
+        :class="[
+          suit('link'),
+          item.isRefined && suit('link', 'selected')
+        ]"
         @click.prevent="refine(item.value)"
       >
         <span :class="suit('label')">{{ item.label }}</span>

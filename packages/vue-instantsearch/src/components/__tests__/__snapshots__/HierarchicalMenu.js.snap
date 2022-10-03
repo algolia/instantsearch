@@ -731,7 +731,7 @@ exports[`default render renders correctly a sub categories selected 1`] = `
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
-      <a class="ais-HierarchicalMenu-link">
+      <a class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected">
         <span class="ais-HierarchicalMenu-label">
           Apple
         </span>
@@ -761,7 +761,7 @@ exports[`default render renders correctly a sub categories selected 1`] = `
           </a>
         </li>
         <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
-          <a class="ais-HierarchicalMenu-link">
+          <a class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected">
             <span class="ais-HierarchicalMenu-label">
               MacBook
             </span>
