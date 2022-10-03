@@ -185,7 +185,7 @@ describe('status', () => {
   });
 
   test('lets users render on error with the `render` event', async () => {
-    expect.assertions(4);
+    // expect.assertions(4);
     const search = instantsearch({
       indexName: 'indexName',
       searchClient: createSearchClient({
@@ -210,10 +210,14 @@ describe('status', () => {
     search.start();
     await wait(0);
 
-    expect(renderer).toHaveBeenCalledTimes(1);
-    const [{ status, error }] = renderer.mock.calls[0];
-    expect(status).toBe('error');
-    expect(error).toEqual(expect.any(Error));
-    expect(error?.message).toEqual('Search error');
+    expect(renderer).toHaveBeenCalledTimes(2);
+    const [[firstRender], [secondRender]] = renderer.mock.calls;
+
+    expect(firstRender.status).toBe('loading');
+    expect(firstRender.error).toEqual(undefined);
+
+    expect(secondRender.status).toBe('error');
+    expect(secondRender.error).toEqual(expect.any(Error));
+    expect(secondRender.error?.message).toEqual('Search error');
   });
 });

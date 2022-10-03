@@ -1143,7 +1143,7 @@ describe('dispose', () => {
 
     await wait(0);
 
-    expect(onRender).toHaveBeenCalledTimes(1);
+    expect(onRender).toHaveBeenCalledTimes(2);
 
     search.dispose();
 
@@ -1156,7 +1156,7 @@ describe('dispose', () => {
 
     await wait(0);
 
-    expect(onRender).toHaveBeenCalledTimes(1);
+    expect(onRender).toHaveBeenCalledTimes(2);
   });
 
   it('removes the Helpers references', () => {
@@ -1273,12 +1273,12 @@ describe('scheduleRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
   });
 
-  // eslint-disable-next-line jest/no-done-callback
-  it('emits a `render` event once the render is complete', (done) => {
+  it('emits a `render` event once the render is complete', async () => {
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
     });
+    const renderSpy = jest.fn();
 
     const widget = createWidget();
 
@@ -1289,9 +1289,16 @@ describe('scheduleRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(0);
 
     search.on('render', () => {
-      expect(widget.render).toHaveBeenCalledTimes(1);
-      done();
+      renderSpy({
+        widgetRenderTimes: castToJestMock(widget.render!).mock.calls.length,
+      });
     });
+
+    await wait(0);
+
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+    expect(renderSpy).toHaveBeenNthCalledWith(1, { widgetRenderTimes: 0 });
+    expect(renderSpy).toHaveBeenNthCalledWith(2, { widgetRenderTimes: 1 });
   });
 });
 
