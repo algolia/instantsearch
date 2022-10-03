@@ -20,5 +20,11 @@ exports[`renders explanation if no slot is used 1`] = `
   "query"
 ]
   </pre>
+  <pre>
+    status: idle
+  </pre>
+  <pre>
+    error:
+  </pre>
 </div>
 `;

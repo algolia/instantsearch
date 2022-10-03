@@ -13,6 +13,8 @@ it('renders explanation if no slot is used', () => {
     state: {
       query: 'this is the query',
     },
+    status: 'idle',
+    error: undefined,
   });
   const wrapper = mount(StateResults);
   expect(wrapper.html()).toMatchSnapshot();
@@ -39,6 +41,8 @@ it('gives state & results to default slot', () => {
   __setState({
     state,
     results,
+    status: 'idle',
+    error: undefined,
   });
 
   mount(StateResults, {
@@ -47,6 +51,8 @@ it('gives state & results to default slot', () => {
         expect(props).toEqual(expect.objectContaining(results));
         expect(props.results).toEqual(results);
         expect(props.state).toEqual(state);
+        expect(props.status).toEqual('idle');
+        expect(props.error).toEqual(undefined);
       },
     },
   });

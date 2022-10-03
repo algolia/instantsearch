@@ -16,6 +16,7 @@ const nonWidgetComponents = [
   'AisSnippet',
   'AisPanel',
   'AisPoweredBy',
+  'AisStateResults',
 ];
 
 function getAllComponents() {

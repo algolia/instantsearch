@@ -22,6 +22,16 @@ export const createWidgetMixin = jest.fn(() => ({
     return {
       state,
       widget,
+      instantSearchInstance: {
+        status: 'idle',
+        error: undefined,
+        addListener: () => {},
+        removeListener: () => {},
+      },
+      getParentIndex: () => ({
+        getResults: () => null,
+        getHelper: () => null,
+      }),
     };
   },
 }));
