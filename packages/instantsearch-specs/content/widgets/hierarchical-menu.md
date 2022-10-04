@@ -131,4 +131,8 @@ options:
     description: array or function to sort the results by
   - name: transformItems
     description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
+translations:
+  - name: showMoreButtonText
+    default: '({ isShowingMore }) => isShowingMore ? "Show less" : "Show more"'
+    description: The text for the “Show more” button.
 ---

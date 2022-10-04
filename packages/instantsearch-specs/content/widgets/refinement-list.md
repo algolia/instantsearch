@@ -138,4 +138,17 @@ options:
     description: array or function to sort the results by
   - name: transformItems
     description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
+translations:
+  - name: resetButtonTitle
+    default: '"Clear the search query"'
+    description: The submit button title of the search box.
+  - name: submitButtonTitle
+    default: '"Submit the search query"'
+    description: The reset button title of the search box.
+  - name: noResultsText
+    default: '"No results."'
+    description: The text to display when searching for facets returns no results.
+  - name: showMoreButtonText
+    default: '({ isShowingMore }) => isShowingMore ? "Show less" : "Show more"'
+    description: The text for the “Show more” button.
 ---

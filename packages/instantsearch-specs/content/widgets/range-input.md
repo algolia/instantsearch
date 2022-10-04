@@ -43,4 +43,11 @@ options:
   - name: precision
     default: 0
     description: Number of digits after decimal point to use.
+translations:
+  - name: separatorElementText
+    default: '"to"'
+    description: The text for the separator element between the minimum and maximum inputs.
+  - name: submitButtonText
+    default: '"Go"'
+    description: The text for the submit button.
 ---

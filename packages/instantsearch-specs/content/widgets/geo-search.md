@@ -93,4 +93,14 @@ options:
     description: Precision of geo search
   - name: transformItems
     description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
+translations:
+  - name: resetButtonText
+    default: 'Clear the map refinement'
+    description: The text of the "Clear the map refinement" button.
+  - name: redoButtonText
+    default: 'Redo search here'
+    description: The text of the button that's displayed when the map was moved.
+  - name: refineOnMoveToggleLabel
+    default: 'Search as I move the map'
+    description: The label of the toggle to refine on move.
 ---

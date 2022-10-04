@@ -75,4 +75,35 @@ options:
   - name: showPrevious
     default: true
     description: Whether to show the "previous page" control
+translations:
+  - name: firstPageItemText
+    default: '"‹‹"'
+    description: The text for the first page item.
+  - name: previousPageItemText
+    default: '"‹"'
+    description: The text for the previous page item.
+  - name: nextPageItemText
+    default: '"›"'
+    description: The text for the next page item.
+  - name: lastPageItemText
+    default: '"››"'
+    description: The text for the last page item.
+  - name: pageItemText
+    default: '({ currentPage, nbPages }) => String(currentPage)'
+    description: The text for the current page item.
+  - name: ariaFirstPageLabel
+    default: '"First"'
+    description: The label for the first page item (for screen readers).
+  - name: ariaPreviousPageLabel
+    default: '"Previous"'
+    description: The label for the previous page item (for screen readers).
+  - name: ariaNextPageLabel
+    default: '"Next"'
+    description: The label for the next page item (for screen readers).
+  - name: ariaLastPageLabel
+    default: '"Last"'
+    description: The label for the last page item (for screen readers).
+  - name: ariaPageLabel
+    default: '({ currentPage, nbPages }) => `Page ${currentPage}`'
+    description: The label for the current page item (for screen readers).
 ---

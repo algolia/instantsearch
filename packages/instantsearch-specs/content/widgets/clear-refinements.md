@@ -30,4 +30,8 @@ options:
     description: The attributes to exclude from the refinements
   - name: transformItems
     description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
+translations:
+  - name: resetButtonText
+    default: '"Clear refinements"'
+    description: The text for the reset button.
 ---

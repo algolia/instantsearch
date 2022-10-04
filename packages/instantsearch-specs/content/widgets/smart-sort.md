@@ -27,4 +27,11 @@ classes:
     description: the informative text
   - name: .ais-RelevantSort-button
     description: the button text
+translations:
+  - name: informationText
+    default: '({ isRelevantSorted, isVirtualReplica }) => ""'
+    description: Information text displayed above the button.
+  - name: seeButtonText
+    default: '({ isRelevantSorted, isVirtualReplica }) => isRelevantSorted ? "See all results" : "See relevant results"'
+    description: The text of the "See _n_ results" button.
 ---

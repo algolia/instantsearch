@@ -107,6 +107,31 @@
     {{ else }}
       <p><small><strong>Note:</strong> there are no common options for this widget</small></p>
     {{ end }}
+
+    <h3 id="translations">Translations</h3>
+
+    {{ if .Params.translations }}
+
+    <p><small><strong>Note:</strong> this is a guideline for new InstantSearch flavours, not a rule.</small></p>
+
+    <table>
+      <thead>
+        <th>name</th>
+        <th>default value</th>
+        <th>description</th>
+      </thead>
+      {{ range $element := .Params.translations }}
+        <tr>
+          <td><code>{{ $element.name }}</code></td>
+          <td><code>{{ $element.default }}</code></td>
+          <td>{{ if $element.description}}{{ $element.description | markdownify }}{{ end }}</td>
+        </tr>
+      {{ end }}
+    </table>
+
+    {{ else }}
+      <p><small><strong>Note:</strong> there are no translations for this widget.</small></p>
+    {{ end }}
   </main>
 </div>
 
