@@ -115,4 +115,11 @@ options:
     description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
   - name: escapeHTML
     description: Escape raw HTML in the hits
+translations:
+  - name: showPreviousButtonText
+    default: '"Load previous page"'
+    description: The text for the “Show previous” button.
+  - name: showMoreButtonText
+    default: '"Load next page"'
+    description: The text for the “Show more” button.
 ---

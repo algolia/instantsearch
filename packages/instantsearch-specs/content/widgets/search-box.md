@@ -144,4 +144,11 @@ options:
   - name: autofocus
     default: false
     description: Focus on the input automatically
+translations:
+  - name: resetButtonTitle
+    default: '"Clear the search query"'
+    description: The submit button title of the search box.
+  - name: submitButtonTitle
+    default: '"Submit the search query"'
+    description: The reset button title of the search box.
 ---
