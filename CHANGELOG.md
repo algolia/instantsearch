@@ -1,3 +1,12 @@
+## [4.47.1](https://github.com/algolia/instantsearch.js/compare/v4.47.0...v4.47.1) (2022-10-04)
+
+
+### Bug Fixes
+
+* **insightsMiddleware:** infer type of insightsClient for onEvent ([#5130](https://github.com/algolia/instantsearch.js/issues/5130)) ([dd5fca4](https://github.com/algolia/instantsearch.js/commit/dd5fca4c185c66f1e31ebe9c0568bcad48e062f3)), closes [#5129](https://github.com/algolia/instantsearch.js/issues/5129)
+
+
+
 # [4.47.0](https://github.com/algolia/instantsearch.js/compare/v4.46.3...v4.47.0) (2022-10-03)
 
 
