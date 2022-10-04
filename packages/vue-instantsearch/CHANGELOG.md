@@ -1,3 +1,14 @@
+# [4.6.0](https://github.com/algolia/vue-instantsearch/compare/v4.5.0...v4.6.0) (2022-10-04)
+
+
+### Features
+
+* **ais-hierarchical-menu:** add css class for link of selected menu item ([#1150](https://github.com/algolia/vue-instantsearch/issues/1150)) ([93dfdc1](https://github.com/algolia/vue-instantsearch/commit/93dfdc159d54fe8f3a5e31721e8533c7c0b6ca81))
+* **InstantSearch:** support onStateChange ([#1149](https://github.com/algolia/vue-instantsearch/issues/1149)) ([badf815](https://github.com/algolia/vue-instantsearch/commit/badf8154f0869ea6449091ac97738e1eb491412b)), closes [#1148](https://github.com/algolia/vue-instantsearch/issues/1148)
+* **StateResults:** give access to status and error ([#1151](https://github.com/algolia/vue-instantsearch/issues/1151)) ([03dea3a](https://github.com/algolia/vue-instantsearch/commit/03dea3a2c540ae05202e269dfa1b92cb7583af9b))
+
+
+
 # [4.5.0](https://github.com/algolia/vue-instantsearch/compare/v4.4.2...v4.5.0) (2022-09-07)
 
 
