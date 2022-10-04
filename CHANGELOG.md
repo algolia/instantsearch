@@ -1,3 +1,13 @@
+# [6.36.0](https://github.com/algolia/react-instantsearch/compare/v6.35.0...v6.36.0) (2022-10-04)
+
+
+### Features
+
+* **HierarchicalMenu:** add css class for link of selected menu item ([#3646](https://github.com/algolia/react-instantsearch/issues/3646)) ([980ad70](https://github.com/algolia/react-instantsearch/commit/980ad70c75e970c35c11a10a534dbe3996d6c54c))
+* **useInstantSearch:** expose status & error ([#3645](https://github.com/algolia/react-instantsearch/issues/3645)) ([f436d31](https://github.com/algolia/react-instantsearch/commit/f436d31184f3f75b33a1fdaa19c665e77948df28))
+
+
+
 # [6.35.0](https://github.com/algolia/react-instantsearch/compare/v6.34.0...v6.35.0) (2022-09-29)
 
 
