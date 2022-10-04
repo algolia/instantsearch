@@ -159,11 +159,12 @@ export type MenuConnector = Connector<
 /**
  * **Menu** connector provides the logic to build a widget that will give the user the ability to choose a single value for a specific facet. The typical usage of menu is for navigation in categories.
  *
- * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
- * function to select an item. While selecting a new element, the `refine` will also unselect the
- * one that is currently selected.
- *
  * **Requirement:** the attribute passed as `attribute` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
+ *
+ *  * This connector provides:
+ * - a `refine()` function to select an item. While selecting a new element, the `refine` will also unselect the one that is currently selected.
+ * - a `toggleShowMore()` function to display more or less items
+ * - a `searchForItems()` function to search within the items.
  */
 const connectMenu: MenuConnector = function connectMenu(
   renderFn,
@@ -229,6 +230,7 @@ const connectMenu: MenuConnector = function connectMenu(
     const formatItems = ({
       name: label,
       escapedValue: value,
+      path,
       ...item
     }: SearchResults.HierarchicalFacet): MenuItem => ({
       ...item,
@@ -277,7 +279,8 @@ const connectMenu: MenuConnector = function connectMenu(
               // doesn't support a greater number.
               // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
               Math.min(getLimit(), 100),
-              tags
+              tags,
+              true
             )
             .then((results) => {
               const facetValues = escapeFacetValues

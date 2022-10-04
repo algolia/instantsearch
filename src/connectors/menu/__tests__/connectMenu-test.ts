@@ -17,6 +17,8 @@ import type {
 } from '../connectMenu';
 import connectMenu from '../connectMenu';
 import type { WidgetFactory } from '../../../types';
+import { wait } from '../../../../test/utils/wait';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
 
 describe('connectMenu', () => {
   let rendering: jest.Mock<any, [MenuRenderState, boolean]>;
@@ -336,6 +338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           {
             label: 'Decoration',
             value: 'Decoration',
+            highlighted: 'Decoration',
             count: 880,
             exhaustive: true,
             isRefined: true,
@@ -344,6 +347,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           {
             label: 'Outdoor',
             value: 'Outdoor',
+            highlighted: 'Outdoor',
             count: 47,
             exhaustive: true,
             isRefined: false,
@@ -417,6 +421,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           {
             label: '-50%',
             value: '\\-50%',
+            highlighted: '-50%',
             count: 880,
             exhaustive: true,
             isRefined: true,
@@ -425,6 +430,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           {
             label: '-10',
             value: '\\-10',
+            highlighted: '-10',
             count: 10,
             exhaustive: true,
             isRefined: false,
@@ -433,6 +439,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           {
             label: 'free',
             value: 'free',
+            highlighted: 'free',
             count: 47,
             exhaustive: true,
             isRefined: false,
@@ -619,8 +626,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       expect(renderState1.menu.brand).toEqual({
         items: [],
         createURL: expect.any(Function),
+        hasExhaustiveItems: true,
+        isFromSearch: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
+        searchForItems: expect.any(Function),
         canRefine: false,
         isShowingMore: false,
         toggleShowMore: expect.any(Function),
@@ -663,6 +673,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           brand: {
             items: [],
             canRefine: false,
+            hasExhaustiveItems: true,
+            isFromSearch: false,
+            searchForItems: expect.any(Function),
             refine: expect.any(Function),
             sendEvent: expect.any(Function),
             createURL: expect.any(Function),
@@ -696,6 +709,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
       expect(renderState1).toEqual({
         items: [],
+        hasExhaustiveItems: true,
+        isFromSearch: false,
+        searchForItems: expect.any(Function),
         createURL: expect.any(Function),
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
@@ -743,6 +759,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
             data: null,
             exhaustive: true,
             isRefined: false,
+            highlighted: 'Apple',
             label: 'Apple',
             value: 'Apple',
           },
@@ -751,10 +768,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
             data: null,
             exhaustive: true,
             isRefined: false,
+            highlighted: 'Samsung',
             label: 'Samsung',
             value: 'Samsung',
           },
         ],
+        hasExhaustiveItems: true,
+        isFromSearch: false,
+        searchForItems: expect.any(Function),
         createURL: expect.any(Function),
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
@@ -773,6 +794,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Samsung',
           label: 'Samsung',
           value: 'Samsung',
         },
@@ -781,6 +803,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Apple',
           label: 'Apple',
           value: 'Apple',
         },
@@ -789,6 +812,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Algolia',
           label: 'Algolia',
           value: 'Algolia',
         },
@@ -799,6 +823,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Algolia',
           label: 'Algolia',
           value: 'Algolia',
         },
@@ -807,6 +832,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Apple',
           label: 'Apple',
           value: 'Apple',
         },
@@ -815,6 +841,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Samsung',
           label: 'Samsung',
           value: 'Samsung',
         },
@@ -825,6 +852,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Samsung',
           label: 'Samsung',
           value: 'Samsung',
         },
@@ -833,6 +861,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Apple',
           label: 'Apple',
           value: 'Apple',
         },
@@ -841,6 +870,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           data: null,
           exhaustive: true,
           isRefined: false,
+          highlighted: 'Algolia',
           label: 'Algolia',
           value: 'Algolia',
         },
@@ -1649,6 +1679,671 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
       ); // still the same
+    });
+  });
+
+  describe('searchable', () => {
+    it('can search in facet values', async () => {
+      const widget = makeWidget({
+        attribute: 'category',
+        limit: 2,
+        escapeFacetValues: false,
+      });
+
+      const helper = jsHelper(
+        createSearchClient({
+          searchForFacetValues() {
+            return Promise.resolve([
+              {
+                exhaustiveFacetsCount: true,
+                facetHits: [
+                  {
+                    count: 33,
+                    highlighted: 'Salvador <mark>Da</mark>li',
+                    value: 'Salvador Dali',
+                  },
+                  {
+                    count: 9,
+                    highlighted: '<mark>Da</mark>vidoff',
+                    value: 'Davidoff',
+                  },
+                ],
+                processingTimeMS: 1,
+              },
+            ]);
+          },
+        }),
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+
+      helper.search = jest.fn();
+
+      const searchForFacetValuesSpy = jest.spyOn(
+        helper,
+        'searchForFacetValues'
+      );
+
+      // Simulate the lifecycle
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  c1: 880,
+                  c2: 880,
+                  c3: 880,
+                  c4: 880,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  c1: 880,
+                  c2: 880,
+                  c3: 880,
+                  c4: 880,
+                },
+              },
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(2);
+      // Simulation end
+
+      const search = rendering.mock.calls[1][0].searchForItems;
+      search('da');
+
+      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
+        searchForFacetValuesSpy.mock.calls[0];
+
+      expect(sffvQuery).toBe('da');
+      expect(sffvFacet).toBe('category');
+      expect(maxNbItems).toBe(2);
+      expect(paramOverride).toEqual({
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
+      });
+
+      await wait(0);
+
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <mark>Da</mark>li',
+          label: 'Salvador Dali',
+          value: 'Salvador Dali',
+          isRefined: false,
+        },
+        {
+          count: 9,
+          highlighted: '<mark>Da</mark>vidoff',
+          label: 'Davidoff',
+          value: 'Davidoff',
+          isRefined: false,
+        },
+      ]);
+    });
+
+    it('can search in facet values with refinement', async () => {
+      const widget = makeWidget({
+        attribute: 'category',
+        limit: 2,
+        escapeFacetValues: false,
+      });
+
+      const helper = jsHelper(
+        createSearchClient({
+          searchForFacetValues() {
+            return Promise.resolve([
+              {
+                exhaustiveFacetsCount: true,
+                facetHits: [
+                  {
+                    count: 33,
+                    highlighted: 'Salvador <mark>Da</mark>li',
+                    value: 'Salvador Dali',
+                  },
+                  {
+                    count: 9,
+                    highlighted: '<mark>Da</mark>vidoff',
+                    value: 'Davidoff',
+                  },
+                ],
+                processingTimeMS: 1,
+              },
+            ]);
+          },
+        }),
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+      helper.toggleFacetRefinement('category', 'Salvador Dali');
+      helper.search = jest.fn();
+
+      const searchForFacetValuesSpy = jest.spyOn(
+        helper,
+        'searchForFacetValues'
+      );
+
+      // Simulate the lifecycle
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  c1: 880,
+                  c2: 880,
+                  c3: 880,
+                  c4: 880,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  c1: 880,
+                  c2: 880,
+                  c3: 880,
+                  c4: 880,
+                },
+              },
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(2);
+      // Simulation end
+
+      const search = rendering.mock.calls[1][0].searchForItems;
+      search('da');
+
+      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
+        searchForFacetValuesSpy.mock.calls[0];
+
+      expect(sffvQuery).toBe('da');
+      expect(sffvFacet).toBe('category');
+      expect(maxNbItems).toBe(2);
+      expect(paramOverride).toEqual({
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
+      });
+
+      await wait(0);
+
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <mark>Da</mark>li',
+          label: 'Salvador Dali',
+          value: 'Salvador Dali',
+          isRefined: true,
+        },
+        {
+          count: 9,
+          highlighted: '<mark>Da</mark>vidoff',
+          label: 'Davidoff',
+          value: 'Davidoff',
+          isRefined: false,
+        },
+      ]);
+    });
+
+    it('caps the search in facet values to 100 facet hits', () => {
+      const widget = makeWidget({
+        attribute: 'category',
+        limit: 50,
+        showMoreLimit: 1000,
+      });
+
+      const helper = jsHelper(
+        createSearchClient({
+          searchForFacetValues() {
+            return Promise.resolve([
+              {
+                exhaustiveFacetsCount: true,
+                facetHits: [],
+                processingTimeMS: 1,
+              },
+            ]);
+          },
+        }),
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+      const searchForFacetValuesSpy = jest.spyOn(
+        helper,
+        'searchForFacetValues'
+      );
+
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
+
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  c1: 880,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  c1: 880,
+                },
+              },
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
+
+      const { toggleShowMore } = rendering.mock.calls[1][0];
+      toggleShowMore();
+
+      const { searchForItems } = rendering.mock.calls[2][0];
+      searchForItems('query');
+
+      const maxNbItems = searchForFacetValuesSpy.mock.calls[0][2];
+
+      expect(maxNbItems).toBe(100);
+    });
+
+    it('can search in facet values with transformed items', async () => {
+      const widget = makeWidget({
+        attribute: 'category',
+        limit: 2,
+        escapeFacetValues: false,
+        transformItems: (items) =>
+          items.map((item) => ({
+            ...item,
+            label: 'transformed',
+            value: 'transformed',
+            highlighted: 'transformed',
+          })),
+      });
+
+      const helper = jsHelper(
+        createSearchClient({
+          searchForFacetValues() {
+            return Promise.resolve([
+              {
+                exhaustiveFacetsCount: true,
+                facetHits: [
+                  {
+                    count: 33,
+                    highlighted: 'will be transformed',
+                    value: 'will be transformed',
+                  },
+                  {
+                    count: 9,
+                    highlighted: 'will be transformed',
+                    value: 'will be transformed',
+                  },
+                ],
+                processingTimeMS: 1,
+              },
+            ]);
+          },
+        }),
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+      const searchForFacetValuesSpy = jest.spyOn(
+        helper,
+        'searchForFacetValues'
+      );
+
+      // Simulate the lifecycle
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  c1: 880,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  c1: 880,
+                },
+              },
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(2);
+      // Simulation end
+
+      const search = rendering.mock.calls[1][0].searchForItems;
+      search('transfo');
+
+      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
+        searchForFacetValuesSpy.mock.calls[0];
+
+      expect(sffvQuery).toBe('transfo');
+      expect(sffvFacet).toBe('category');
+      expect(maxNbItems).toBe(2);
+      expect(paramOverride).toEqual({
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
+      });
+
+      await wait(0);
+
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        expect.objectContaining({
+          highlighted: 'transformed',
+          label: 'transformed',
+          value: 'transformed',
+        }),
+        expect.objectContaining({
+          highlighted: 'transformed',
+          label: 'transformed',
+          value: 'transformed',
+        }),
+      ]);
+    });
+
+    it('can search in facet values, and reset pre post tags if needed', async () => {
+      const widget = makeWidget({
+        attribute: 'category',
+        limit: 2,
+        escapeFacetValues: false,
+      });
+
+      const helper = jsHelper(
+        createSearchClient({
+          searchForFacetValues() {
+            return Promise.resolve([
+              {
+                exhaustiveFacetsCount: true,
+                facetHits: [
+                  {
+                    count: 33,
+                    highlighted: 'Salvador <mark>Da</mark>li',
+                    value: 'Salvador Dali',
+                  },
+                  {
+                    count: 9,
+                    highlighted: '<mark>Da</mark>vidoff',
+                    value: 'Davidoff',
+                  },
+                ],
+                processingTimeMS: 1,
+              },
+            ]);
+          },
+        }),
+        '',
+        {
+          ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+            uiState: {},
+          }),
+          // Here we simulate that another widget has set some highlight tags
+          ...TAG_PLACEHOLDER,
+        }
+      );
+      helper.search = jest.fn();
+      const searchForFacetValuesSpy = jest.spyOn(
+        helper,
+        'searchForFacetValues'
+      );
+
+      // Simulate the lifecycle
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  c1: 880,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  c1: 880,
+                },
+              },
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(2);
+      // Simulation end
+
+      const search = rendering.mock.calls[1][0].searchForItems;
+      search('da');
+
+      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
+        searchForFacetValuesSpy.mock.calls[0];
+
+      expect(sffvQuery).toBe('da');
+      expect(sffvFacet).toBe('category');
+      expect(maxNbItems).toBe(2);
+      expect(paramOverride).toEqual({
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
+      });
+
+      await wait(0);
+
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        {
+          count: 33,
+          isRefined: false,
+          highlighted: 'Salvador <mark>Da</mark>li',
+          label: 'Salvador Dali',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          isRefined: false,
+          highlighted: '<mark>Da</mark>vidoff',
+          label: 'Davidoff',
+          value: 'Davidoff',
+        },
+      ]);
+    });
+
+    it('can search in facet values, and set post and pre tags by default', async () => {
+      const widget = makeWidget({
+        attribute: 'category',
+        limit: 2,
+        escapeFacetValues: true,
+      });
+
+      const helper = jsHelper(
+        createSearchClient({
+          searchForFacetValues() {
+            return Promise.resolve([
+              {
+                exhaustiveFacetsCount: true,
+                facetHits: [
+                  {
+                    count: 33,
+                    highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
+                    value: 'Salvador Dali',
+                  },
+                  {
+                    count: 9,
+                    highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
+                    value: 'Davidoff',
+                  },
+                ],
+                processingTimeMS: 1,
+              },
+            ]);
+          },
+        }),
+        '',
+        {
+          ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+            uiState: {},
+          }),
+          // Here we simulate that another widget has set some highlight tags
+          ...TAG_PLACEHOLDER,
+        }
+      );
+      helper.search = jest.fn();
+      const searchForFacetValuesSpy = jest.spyOn(
+        helper,
+        'searchForFacetValues'
+      );
+
+      // Simulate the lifecycle
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse({
+              hits: [],
+              facets: {
+                category: {
+                  c1: 880,
+                },
+              },
+            }),
+            createSingleSearchResponse({
+              facets: {
+                category: {
+                  c1: 880,
+                },
+              },
+            }),
+          ]),
+          state: helper.state,
+          helper,
+          createURL: () => '#',
+        })
+      );
+      expect(rendering).toHaveBeenCalledTimes(2);
+      // Simulation end
+
+      const search = rendering.mock.calls[1][0].searchForItems;
+      search('da');
+
+      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
+        searchForFacetValuesSpy.mock.calls[0];
+
+      expect(sffvQuery).toBe('da');
+      expect(sffvFacet).toBe('category');
+      expect(maxNbItems).toBe(2);
+      expect(paramOverride).toEqual(TAG_PLACEHOLDER);
+
+      await wait(0);
+
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        {
+          count: 33,
+          isRefined: false,
+          highlighted: 'Salvador <mark>Da</mark>li',
+          label: 'Salvador Dali',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          isRefined: false,
+          highlighted: '<mark>Da</mark>vidoff',
+          label: 'Davidoff',
+          value: 'Davidoff',
+        },
+      ]);
     });
   });
 });
