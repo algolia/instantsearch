@@ -437,7 +437,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         facetName,
         facetValue,
         maxFacetHits,
-        userState: PlainSearchParameters
+        userState: PlainSearchParameters,
+        includeHierarchical
       ) => {
         const state = helper!.state.setQueryParameters(userState);
 
@@ -445,7 +446,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           facetName,
           facetValue,
           maxFacetHits,
-          state
+          state,
+          includeHierarchical
         );
       };
 

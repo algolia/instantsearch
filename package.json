@@ -59,7 +59,7 @@
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
-    "algoliasearch-helper": "^3.11.1",
+    "algoliasearch-helper": "https://pkg.csb.dev/algolia/algoliasearch-helper-js/commit/377e8f23/algoliasearch-helper",
     "classnames": "^2.2.5",
     "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
