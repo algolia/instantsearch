@@ -72,6 +72,7 @@ export type RefinementListProps<TTemplates extends Templates> = {
 
   // searchable props are optional, but will definitely be present in a searchable context
   isFromSearch?: boolean;
+  searchable?: boolean;
   searchIsAlwaysActive?: boolean;
   searchFacetValues?: (query: string) => void;
   searchPlaceholder?: string;
@@ -91,7 +92,7 @@ type RefinementListItemTemplateData<TTemplates extends Templates> =
     url: string;
   } & Pick<
       RefinementListProps<TTemplates>,
-      'attribute' | 'cssClasses' | 'isFromSearch'
+      'attribute' | 'cssClasses' | 'isFromSearch' | 'searchable'
     >;
 
 function isHierarchicalMenuItem(
@@ -157,6 +158,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
       attribute: this.props.attribute,
       cssClasses: this.props.cssClasses,
       isFromSearch: this.props.isFromSearch,
+      searchable: this.props.searchable,
     };
 
     let { value: key } = facetValue;

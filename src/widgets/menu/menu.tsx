@@ -107,6 +107,7 @@ export type MenuOwnTemplates = Partial<{
      * Whether the `items` prop contains facet values from the global search or from the search inside the items.
      */
     isFromSearch: boolean;
+    searchable: boolean;
   }>;
   /**
    * Template used for the show more text, provided with `isShowingMore` data property.
@@ -253,6 +254,7 @@ const renderer =
         isShowingMore={isShowingMore}
         hasExhaustiveItems={hasExhaustiveItems}
         canToggleShowMore={canToggleShowMore}
+        searchable={searchable}
       />,
       containerNode
     );

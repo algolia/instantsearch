@@ -953,7 +953,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           index: 'indexName',
           highlightPreTag: '<mark>',
           highlightPostTag: '</mark>',
-        })
+        }),
+        undefined
       );
     });
 
