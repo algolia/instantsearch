@@ -1,13 +1,7 @@
-/content/
-/data/
-/layouts/
 /public/
-/scripts/
 /src/
-/static/
+/dist/
 !/themes/
-.babelrc
-.nvmrc
-config.toml
-gulpfile.babel.js
+tsconfig.json
+astro.config.mjs
 yarn.lock

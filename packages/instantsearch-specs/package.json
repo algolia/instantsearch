@@ -1,36 +1,30 @@
 {
   "name": "instantsearch.css",
+  "type": "module",
   "version": "7.4.5",
   "description": "instantsearch.css is a CSS library created to help all InstantSearch users easily customize their widgets",
   "author": "Algolia <support@algolia.com>",
   "license": "MIT",
   "repository": "https://github.com/algolia/instantsearch-specs",
   "scripts": {
-    "build": "./scripts/build.sh",
-    "dev": "gulp & hugo server & wait",
-    "prepublishOnly": "npm run build"
+    "dev": "yarn styles:app && astro dev",
+    "start": "yarn styles:app && astro dev",
+    "check": "astro check && tsc",
+    "build": "yarn styles:app && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "styles:app": "sass src/styles/themes:public/styles --style compressed",
+    "styles:package": "sass src/styles/themes:themes --no-source-map",
+    "styles:min": "sass src/styles/themes/algolia.scss:themes/algolia-min.css src/styles/themes/satellite.scss:themes/satellite-min.css src/styles/themes/reset.scss:themes/reset-min.css --no-source-map --style compressed",
+    "styles:autoprefixer": "postcss themes/ --use autoprefixer --replace --no-map",
+    "prepack": "yarn styles:package && yarn styles:min && yarn styles:autoprefixer"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.6.0",
-    "babel-register": "^6.26.0",
-    "babelify": "^7.3.0",
-    "browserify": "^14.4.0",
-    "del": "^3.0.0",
-    "gulp": "3.9.0",
-    "gulp-autoprefixer": "^4.0.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-hash": "^4.1.1",
-    "gulp-load-plugins": "^1.5.0",
-    "gulp-notify": "^3.0.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.1",
-    "gulp-uglify": "^3.0.0",
-    "hugo-cli": "^0.5.4",
-    "run-sequence": "^2.1.0",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "engines": {}
+    "@types/node": "^18.0.0",
+    "astro": "^1.4.0",
+    "autoprefixer": "^10.4.12",
+    "postcss": "^8.4.17",
+    "postcss-cli": "^10.0.0",
+    "sass": "^1.55.0"
+  }
 }
