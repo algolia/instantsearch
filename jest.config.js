@@ -7,11 +7,7 @@ const config = {
   testRunner: 'jest-circus',
   testEnvironment: 'node',
   setupFilesAfterEnv: ['./scripts/jest/setupTests.ts'],
-  testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '<rootDir>/dist*',
-    '<rootDir>/functional-tests',
-  ],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist*'],
   watchPathIgnorePatterns: [
     '<rootDir>/cjs',
     '<rootDir>/dist',
