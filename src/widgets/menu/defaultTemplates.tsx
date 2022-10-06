@@ -18,7 +18,7 @@ const defaultTemplates: MenuComponentTemplates = {
   }) {
     return (
       <a className={cx(cssClasses.link)} href={url}>
-        {/* @MAJOR: use the `<Highlight>` component instead */}
+        {/* @TODO: use the `<Highlight>` component instead */}
         {searchable ? (
           <span
             className={cx(cssClasses.label)}
