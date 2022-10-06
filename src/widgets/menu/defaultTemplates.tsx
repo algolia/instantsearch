@@ -18,6 +18,7 @@ const defaultTemplates: MenuComponentTemplates = {
   }) {
     return (
       <a className={cx(cssClasses.link)} href={url}>
+        {/* @MAJOR: use the `<Highlight>` component instead */}
         {searchable ? (
           <span
             className={cx(cssClasses.label)}
@@ -28,6 +29,8 @@ const defaultTemplates: MenuComponentTemplates = {
             {!isFromSearch && highlighted}
           </span>
         ) : (
+          // @MAJOR: always use the `highlighted` value like in the refinement list.
+          // The `label` value is used right now to avoid breaking changes when not searchable
           <span className={cx(cssClasses.label)}>{label}</span>
         )}
 
