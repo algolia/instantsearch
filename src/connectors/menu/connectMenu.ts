@@ -163,7 +163,7 @@ export type MenuConnector = Connector<
  *
  *  This connector provides:
  * - a `refine()` function to select an item. Selecting a new element also unselects the one that is currently selected.
- * - a `toggleShowMore()` function to display more or less items
+ * - a `toggleShowMore()` function to display more or less items.
  * - a `searchForItems()` function to search within the items.
  */
 const connectMenu: MenuConnector = function connectMenu(
