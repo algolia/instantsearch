@@ -91,7 +91,7 @@ export type MenuRenderState = {
    */
   items: MenuItem[];
   /**
-   * indicates whether the results are exhaustive (complete)
+   * Indicates whether the results are exhaustive or not.
    */
   hasExhaustiveItems: boolean;
   /**
