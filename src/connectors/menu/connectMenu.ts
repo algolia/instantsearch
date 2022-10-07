@@ -162,7 +162,7 @@ export type MenuConnector = Connector<
  * **Requirement:** the attribute passed as `attribute` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
  *
  *  This connector provides:
- * - a `refine()` function to select an item. While selecting a new element, the `refine` will also unselect the one that is currently selected.
+ * - a `refine()` function to select an item. Selecting a new element also unselects the one that is currently selected.
  * - a `toggleShowMore()` function to display more or less items
  * - a `searchForItems()` function to search within the items.
  */
