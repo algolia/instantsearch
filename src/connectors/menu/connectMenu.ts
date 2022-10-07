@@ -313,7 +313,7 @@ const connectMenu: MenuConnector = function connectMenu(
             });
         }
       };
-    };
+    }
 
     return {
       $$type: 'ais.menu' as const,
