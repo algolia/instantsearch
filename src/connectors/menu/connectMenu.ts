@@ -243,7 +243,7 @@ const connectMenu: MenuConnector = function connectMenu(
     let lastItemsFromMainSearch: MenuItem[] = [];
     let hasExhaustiveItems = true;
 
-    const createSearchForFacetValues = function (
+    function createSearchForFacetValues(
       helper: AlgoliaSearchHelper,
       widget: ThisWidget
     ) {
