@@ -42,7 +42,6 @@
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
     "test:size": "bundlesize",
-    "test:argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
     "test:exports": "node test/module/is-es-module.mjs",
     "release": "shipjs prepare"
   },

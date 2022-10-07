@@ -785,8 +785,7 @@ describe('start', () => {
 
     search.start();
 
-    // @ts-expect-error
-    expect(search.mainIndex.getWidgetUiState()).toEqual({
+    expect(search.mainIndex.getWidgetUiState({})).toEqual({
       indexName: {
         refinementList: {
           brand: ['Apple'],
@@ -820,8 +819,7 @@ describe('start', () => {
 
     search.start();
 
-    // @ts-expect-error
-    expect(search.mainIndex.getWidgetUiState()).toEqual({
+    expect(search.mainIndex.getWidgetUiState({})).toEqual({
       indexName: {
         hierarchicalMenu: {
           'hierarchicalCategories.lvl0': ['Cell Phones'],
@@ -2467,6 +2465,34 @@ describe('getUiState', () => {
       },
       [secondIndexName]: {
         query: 'test2',
+        page: 40,
+      },
+    });
+  });
+
+  test('retrieves the correct ui state after multiple refinements (multi-index, repeated indexId)', () => {
+    const indexName = 'indexName';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectPagination(() => {})({}),
+      index({ indexName }).addWidgets([connectSearchBox(() => {})({})]),
+    ]);
+
+    search.start();
+
+    // on nested index
+    search.renderState[indexName].searchBox!.refine('test');
+    // on main index
+    search.renderState[indexName].pagination!.refine(39);
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: {
+        query: 'test',
         page: 40,
       },
     });

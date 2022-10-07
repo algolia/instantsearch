@@ -18,5 +18,4 @@ yarn-error.log
 /storybook/dist/*
 
 # Test output
-/functional-tests/screenshots/
 /junit

@@ -81,7 +81,9 @@ export type IndexWidget = Omit<
    * @deprecated
    */
   getWidgetState(uiState: UiState): UiState;
-  getWidgetUiState<TUiState = UiState>(uiState: TUiState): TUiState;
+  getWidgetUiState<TUiState extends UiState = UiState>(
+    uiState: TUiState
+  ): TUiState;
   getWidgetSearchParameters(
     searchParameters: SearchParameters,
     searchParametersOptions: { uiState: IndexUiState }
@@ -631,7 +633,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       derivedHelper = null;
     },
 
-    getWidgetUiState<TUiState = UiState>(uiState: TUiState) {
+    getWidgetUiState<TUiState extends UiState = UiState>(uiState: TUiState) {
       return localWidgets
         .filter(isIndexWidget)
         .reduce<TUiState>(
@@ -639,7 +641,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             innerIndex.getWidgetUiState(previousUiState),
           {
             ...uiState,
-            [this.getIndexId()]: localUiState,
+            [indexId]: {
+              ...uiState[indexId],
+              ...localUiState,
+            },
           }
         );
     },
