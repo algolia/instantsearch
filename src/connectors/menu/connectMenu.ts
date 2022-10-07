@@ -111,7 +111,7 @@ export type MenuRenderState = {
    */
   searchForItems(query: string): void;
   /**
-   * `true` if the values are from an index search.
+   * Whether the values are from an index search or not.
    */
   isFromSearch: boolean;
   /**
