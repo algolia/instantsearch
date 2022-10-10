@@ -10,6 +10,8 @@ InstantSearch’s goal is to help you implement awesome search experiences as sm
   </a>
 </p>
 
+> Note: `react-instantsearch-hooks` exports renderless components and hooks which can be used for both web and React Native. If you are using React in a web project, we recommend using the package `react-instantsearch-hooks-web` instead, as it includes complete components that render to the DOM.
+
 ## Installation
 
 React InstantSearch Hooks is available on the npm registry. It relies on [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript) to communicate with Algolia APIs.

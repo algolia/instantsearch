@@ -12,6 +12,8 @@ You should be using React InstantSearch Hooks Web if you want to:
 * Customize your components at will
 * Follow React principles
 
+Note: If you are working with React Native, or otherwise do not use the DOM, check out `react-instantsearch-hooks` instead.
+
 ## Installation
 
 React InstantSearch is available on the npm registry. It relies on [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript) to communicate with Algolia APIs.
