@@ -1,3 +1,17 @@
+# [4.48.0](https://github.com/algolia/instantsearch.js/compare/v4.47.0...v4.48.0) (2022-10-10)
+
+
+### Bug Fixes
+
+* **insightsMiddleware:** infer type of insightsClient for onEvent ([#5130](https://github.com/algolia/instantsearch.js/issues/5130)) ([dd5fca4](https://github.com/algolia/instantsearch.js/commit/dd5fca4c185c66f1e31ebe9c0568bcad48e062f3)), closes [#5129](https://github.com/algolia/instantsearch.js/issues/5129)
+
+
+### Features
+
+* **routing:** include repeated indexId in URL correctly ([#5134](https://github.com/algolia/instantsearch.js/issues/5134)) ([679f5da](https://github.com/algolia/instantsearch.js/commit/679f5dad839536def6ae9c3a18416296d40ed49a))
+
+
+
 # [4.47.0](https://github.com/algolia/instantsearch.js/compare/v4.46.3...v4.47.0) (2022-10-03)
 
 
