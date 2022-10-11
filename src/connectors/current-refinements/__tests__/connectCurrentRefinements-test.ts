@@ -333,6 +333,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         widgetParams: {},
       });
     });
+
+    test('resets the page on refine()', () => {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        facets: ['facet1'],
+      })
+        .addFacetRefinement('facet1', 'facetValue1')
+        .setPage(5);
+      const widget = connectCurrentRefinements(jest.fn(), jest.fn())({});
+
+      const { refine } = widget.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      refine({
+        attribute: 'facet1',
+        value: 'facetValue1',
+        type: 'facet',
+        label: 'facet1',
+      });
+
+      expect(helper.state.page).toBe(0);
+    });
   });
 
   describe('Widget options', () => {

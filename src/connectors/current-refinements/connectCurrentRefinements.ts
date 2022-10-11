@@ -316,6 +316,7 @@ function clearRefinementFromState(
   state: SearchParameters,
   refinement: CurrentRefinementsConnectorParamsRefinement
 ): SearchParameters {
+  state = state.resetPage();
   switch (refinement.type) {
     case 'facet':
       return state.removeFacetRefinement(
