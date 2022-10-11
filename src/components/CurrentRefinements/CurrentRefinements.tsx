@@ -1,6 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
+import cx from 'classnames';
 import { isSpecialClick, capitalize } from '../../lib/utils';
 import type {
   CurrentRefinementsConnectorParamsItem,
@@ -15,6 +16,7 @@ export type CurrentRefinementsComponentCSSClasses =
 export type CurrentRefinementsProps = {
   items: CurrentRefinementsConnectorParamsItem[];
   cssClasses: CurrentRefinementsComponentCSSClasses;
+  canRefine: boolean;
 };
 
 const createItemKey = ({
@@ -37,8 +39,16 @@ const handleClick = (callback: () => void) => (event: any) => {
   callback();
 };
 
-const CurrentRefinements = ({ items, cssClasses }: CurrentRefinementsProps) => (
-  <div className={cssClasses.root}>
+const CurrentRefinements = ({
+  items,
+  cssClasses,
+  canRefine,
+}: CurrentRefinementsProps) => (
+  <div
+    className={cx(cssClasses.root, {
+      [cssClasses.noRefinementRoot]: !canRefine,
+    })}
+  >
     <ul className={cssClasses.list}>
       {items.map((item, index) => (
         <li

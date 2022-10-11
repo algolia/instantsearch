@@ -643,7 +643,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         })
       );
 
-      expect(transformItems).lastCalledWith(
+      expect(transformItems).toHaveBeenLastCalledWith(
         expect.anything(),
         expect.objectContaining({ results })
       );

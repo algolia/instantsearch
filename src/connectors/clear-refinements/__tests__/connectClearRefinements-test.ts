@@ -28,7 +28,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         // @ts-expect-error widgetParams could be undefined
         // because it's supposed to work without any.
         customClearRefinements();
-      }).not.toThrowError();
+      }).not.toThrow();
     });
 
     it('throws with both `includedAttributes` and `excludedAttributes`', () => {
@@ -849,7 +849,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(transformItems).lastCalledWith(
+      expect(transformItems).toHaveBeenLastCalledWith(
         expect.anything(),
         expect.objectContaining({ results })
       );

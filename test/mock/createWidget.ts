@@ -28,6 +28,8 @@ export const createInitOptions = (
     searchMetadata: {
       isSearchStalled: false,
     },
+    status: instantSearchInstance.status,
+    error: instantSearchInstance.error,
     ...rest,
   };
 };
@@ -74,6 +76,8 @@ export const createRenderOptions = (
     searchMetadata: {
       isSearchStalled: false,
     },
+    status: instantSearchInstance.status,
+    error: instantSearchInstance.error,
     createURL: jest.fn(() => '#'),
     ...rest,
   };

@@ -23,9 +23,13 @@ type SharedRenderOptions = {
   state: SearchParameters;
   renderState: IndexRenderState;
   helper: Helper;
+  /** @deprecated use `status` instead */
   searchMetadata: {
+    /** @deprecated use `status === "stalled"` instead */
     isSearchStalled: boolean;
   };
+  status: InstantSearch['status'];
+  error: InstantSearch['error'];
   createURL(state: SearchParameters): string;
 };
 
@@ -114,9 +118,6 @@ export type BuiltinWidgetTypes =
   | 'ais.toggleRefinement'
   | 'ais.voiceSearch';
 
-// In this case we don't want to allow any record, as it would no longer warn
-// for unexpected parameters
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type UnknownWidgetParams = NonNullable<object>;
 
 export type WidgetParams = {

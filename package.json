@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "4.46.1",
+  "version": "4.48.0",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/",
   "types": "es/index.d.ts",
@@ -42,7 +42,6 @@
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
     "test:size": "bundlesize",
-    "test:argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
     "test:exports": "node test/module/is-es-module.mjs",
     "release": "shipjs prepare"
   },
@@ -81,16 +80,16 @@
     "@storybook/addon-actions": "5.3.9",
     "@storybook/html": "5.3.9",
     "@storybook/theming": "5.3.9",
-    "@testing-library/dom": "7.9.0",
-    "@testing-library/jest-dom": "4.2.0",
-    "@testing-library/preact": "1.0.2",
+    "@testing-library/dom": "8.18.1",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/preact": "3.2.2",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.1.15",
     "@types/jest": "^27.0.1",
     "@types/jsdom": "^16.2.13",
     "@types/scriptjs": "^0.0.2",
     "@types/storybook__addon-actions": "^3.4.2",
-    "@typescript-eslint/eslint-plugin": "4.15.1",
+    "@typescript-eslint/eslint-plugin": "5.38.1",
     "@typescript-eslint/parser": "4.15.1",
     "@wdio/cli": "5.16.9",
     "@wdio/jasmine-framework": "5.16.5",
@@ -121,7 +120,7 @@
     "eslint-plugin-eslint-comments": "3.2.0",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-jasmine": "4.1.0",
-    "eslint-plugin-jest": "24.3.5",
+    "eslint-plugin-jest": "27.0.4",
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-react": "7.18.0",
     "eslint-plugin-react-hooks": "2.3.0",
@@ -163,7 +162,7 @@
     },
     {
       "path": "./dist/instantsearch.development.js",
-      "maxSize": "155.75 kB"
+      "maxSize": "160 kB"
     }
   ]
 }

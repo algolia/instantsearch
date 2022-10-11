@@ -785,8 +785,7 @@ describe('start', () => {
 
     search.start();
 
-    // @ts-expect-error
-    expect(search.mainIndex.getWidgetUiState()).toEqual({
+    expect(search.mainIndex.getWidgetUiState({})).toEqual({
       indexName: {
         refinementList: {
           brand: ['Apple'],
@@ -820,8 +819,7 @@ describe('start', () => {
 
     search.start();
 
-    // @ts-expect-error
-    expect(search.mainIndex.getWidgetUiState()).toEqual({
+    expect(search.mainIndex.getWidgetUiState({})).toEqual({
       indexName: {
         hierarchicalMenu: {
           'hierarchicalCategories.lvl0': ['Cell Phones'],
@@ -1143,7 +1141,7 @@ describe('dispose', () => {
 
     await wait(0);
 
-    expect(onRender).toHaveBeenCalledTimes(1);
+    expect(onRender).toHaveBeenCalledTimes(2);
 
     search.dispose();
 
@@ -1156,7 +1154,7 @@ describe('dispose', () => {
 
     await wait(0);
 
-    expect(onRender).toHaveBeenCalledTimes(1);
+    expect(onRender).toHaveBeenCalledTimes(2);
   });
 
   it('removes the Helpers references', () => {
@@ -1273,12 +1271,12 @@ describe('scheduleRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
   });
 
-  // eslint-disable-next-line jest/no-done-callback
-  it('emits a `render` event once the render is complete', (done) => {
+  it('emits a `render` event once the render is complete', async () => {
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
     });
+    const renderSpy = jest.fn();
 
     const widget = createWidget();
 
@@ -1289,9 +1287,16 @@ describe('scheduleRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(0);
 
     search.on('render', () => {
-      expect(widget.render).toHaveBeenCalledTimes(1);
-      done();
+      renderSpy({
+        widgetRenderTimes: castToJestMock(widget.render!).mock.calls.length,
+      });
     });
+
+    await wait(0);
+
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+    expect(renderSpy).toHaveBeenNthCalledWith(1, { widgetRenderTimes: 0 });
+    expect(renderSpy).toHaveBeenNthCalledWith(2, { widgetRenderTimes: 1 });
   });
 });
 
@@ -1394,6 +1399,7 @@ describe('scheduleStalledRender', () => {
         searchMetadata: {
           isSearchStalled: false,
         },
+        status: 'idle',
       })
     );
 
@@ -1412,6 +1418,7 @@ describe('scheduleStalledRender', () => {
         searchMetadata: {
           isSearchStalled: true,
         },
+        status: 'stalled',
       })
     );
 
@@ -1428,6 +1435,7 @@ describe('scheduleStalledRender', () => {
         searchMetadata: {
           isSearchStalled: false,
         },
+        status: 'idle',
       })
     );
   });
@@ -2457,6 +2465,34 @@ describe('getUiState', () => {
       },
       [secondIndexName]: {
         query: 'test2',
+        page: 40,
+      },
+    });
+  });
+
+  test('retrieves the correct ui state after multiple refinements (multi-index, repeated indexId)', () => {
+    const indexName = 'indexName';
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectPagination(() => {})({}),
+      index({ indexName }).addWidgets([connectSearchBox(() => {})({})]),
+    ]);
+
+    search.start();
+
+    // on nested index
+    search.renderState[indexName].searchBox!.refine('test');
+    // on main index
+    search.renderState[indexName].pagination!.refine(39);
+
+    expect(search.getUiState()).toEqual({
+      [indexName]: {
+        query: 'test',
         page: 40,
       },
     });

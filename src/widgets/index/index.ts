@@ -23,6 +23,8 @@ import {
   mergeSearchParameters,
   warning,
   isIndexWidget,
+  createInitArgs,
+  createRenderArgs,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -79,7 +81,9 @@ export type IndexWidget = Omit<
    * @deprecated
    */
   getWidgetState(uiState: UiState): UiState;
-  getWidgetUiState<TUiState = UiState>(uiState: TUiState): TUiState;
+  getWidgetUiState<TUiState extends UiState = UiState>(
+    uiState: TUiState
+  ): TUiState;
   getWidgetSearchParameters(
     searchParameters: SearchParameters,
     searchParametersOptions: { uiState: IndexUiState }
@@ -294,20 +298,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           if (widget.getRenderState) {
             const renderState = widget.getRenderState(
               localInstantSearchInstance!.renderState[this.getIndexId()] || {},
-              {
-                uiState: localInstantSearchInstance!._initialUiState,
-                helper: this.getHelper()!,
-                parent: this,
-                instantSearchInstance: localInstantSearchInstance!,
-                state: helper!.state,
-                renderState: localInstantSearchInstance!.renderState,
-                templatesConfig: localInstantSearchInstance!.templatesConfig,
-                createURL: this.createURL,
-                scopedResults: [],
-                searchMetadata: {
-                  isSearchStalled: localInstantSearchInstance!._isSearchStalled,
-                },
-              }
+              createInitArgs(
+                localInstantSearchInstance!,
+                this,
+                localInstantSearchInstance!._initialUiState
+              )
             );
 
             storeRenderState({
@@ -320,20 +315,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
         widgets.forEach((widget) => {
           if (widget.init) {
-            widget.init({
-              helper: helper!,
-              parent: this,
-              uiState: localInstantSearchInstance!._initialUiState,
-              instantSearchInstance: localInstantSearchInstance!,
-              state: helper!.state,
-              renderState: localInstantSearchInstance!.renderState,
-              templatesConfig: localInstantSearchInstance!.templatesConfig,
-              createURL: this.createURL,
-              scopedResults: [],
-              searchMetadata: {
-                isSearchStalled: localInstantSearchInstance!._isSearchStalled,
-              },
-            });
+            widget.init(
+              createInitArgs(
+                localInstantSearchInstance!,
+                this,
+                localInstantSearchInstance!._initialUiState
+              )
+            );
           }
         });
 
@@ -524,20 +512,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
-            {
-              uiState,
-              helper: helper!,
-              parent: this,
-              instantSearchInstance,
-              state: helper!.state,
-              renderState: instantSearchInstance.renderState,
-              templatesConfig: instantSearchInstance.templatesConfig,
-              createURL: this.createURL,
-              scopedResults: [],
-              searchMetadata: {
-                isSearchStalled: instantSearchInstance._isSearchStalled,
-              },
-            }
+            createInitArgs(instantSearchInstance, this, uiState)
           );
 
           storeRenderState({
@@ -557,20 +532,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
 
         if (widget.init) {
-          widget.init({
-            uiState,
-            helper: helper!,
-            parent: this,
-            instantSearchInstance,
-            state: helper!.state,
-            renderState: instantSearchInstance.renderState,
-            templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: this.createURL,
-            scopedResults: [],
-            searchMetadata: {
-              isSearchStalled: instantSearchInstance._isSearchStalled,
-            },
-          });
+          widget.init(createInitArgs(instantSearchInstance, this, uiState));
         }
       });
 
@@ -618,20 +580,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
-            {
-              helper: this.getHelper()!,
-              parent: this,
-              instantSearchInstance,
-              results: this.getResults()!,
-              scopedResults: this.getScopedResults(),
-              state: this.getResults()!._state,
-              renderState: instantSearchInstance.renderState,
-              templatesConfig: instantSearchInstance.templatesConfig,
-              createURL: this.createURL,
-              searchMetadata: {
-                isSearchStalled: instantSearchInstance._isSearchStalled,
-              },
-            }
+            createRenderArgs(instantSearchInstance, this)
           );
 
           storeRenderState({
@@ -651,20 +600,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // not have results yet.
 
         if (widget.render) {
-          widget.render({
-            helper: helper!,
-            parent: this,
-            instantSearchInstance,
-            results: this.getResults()!,
-            scopedResults: this.getScopedResults(),
-            state: this.getResults()!._state,
-            renderState: instantSearchInstance.renderState,
-            templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: this.createURL,
-            searchMetadata: {
-              isSearchStalled: instantSearchInstance._isSearchStalled,
-            },
-          });
+          widget.render(createRenderArgs(instantSearchInstance, this));
         }
       });
     },
@@ -695,7 +631,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       derivedHelper = null;
     },
 
-    getWidgetUiState<TUiState = UiState>(uiState: TUiState) {
+    getWidgetUiState<TUiState extends UiState = UiState>(uiState: TUiState) {
       return localWidgets
         .filter(isIndexWidget)
         .reduce<TUiState>(
@@ -703,7 +639,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             innerIndex.getWidgetUiState(previousUiState),
           {
             ...uiState,
-            [this.getIndexId()]: localUiState,
+            [indexId]: {
+              ...uiState[indexId],
+              ...localUiState,
+            },
           }
         );
     },

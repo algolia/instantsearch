@@ -1,16 +1,18 @@
 const nextMicroTask = Promise.resolve();
 
 type Callback = (...args: any[]) => void;
-type Defer = Callback & {
+type Defer = {
   wait(): Promise<void>;
   cancel(): void;
 };
 
-export function defer(callback: Callback): Defer {
+export function defer<TCallback extends Callback>(
+  callback: TCallback
+): TCallback & Defer {
   let progress: Promise<void> | null = null;
   let cancelled = false;
 
-  const fn: Defer = (...args) => {
+  const fn = ((...args: Parameters<TCallback>) => {
     if (progress !== null) {
       return;
     }
@@ -25,7 +27,7 @@ export function defer(callback: Callback): Defer {
 
       callback(...args);
     });
-  };
+  }) as TCallback & Defer;
 
   fn.wait = () => {
     if (progress === null) {

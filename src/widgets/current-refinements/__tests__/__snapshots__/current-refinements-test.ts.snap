@@ -2,6 +2,7 @@
 
 exports[`currentRefinements() render() DOM output renders correctly 1`] = `
 {
+  "canRefine": true,
   "cssClasses": {
     "category": "ais-CurrentRefinements-category category",
     "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
@@ -9,6 +10,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     "item": "ais-CurrentRefinements-item item",
     "label": "ais-CurrentRefinements-label label",
     "list": "ais-CurrentRefinements-list list",
+    "noRefinementRoot": "ais-CurrentRefinements--noRefinement",
     "root": "ais-CurrentRefinements root",
   },
   "items": [
@@ -144,6 +146,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
 
 exports[`currentRefinements() render() options.container should render with a HTMLElement container 1`] = `
 {
+  "canRefine": false,
   "cssClasses": {
     "category": "ais-CurrentRefinements-category",
     "categoryLabel": "ais-CurrentRefinements-categoryLabel",
@@ -151,6 +154,7 @@ exports[`currentRefinements() render() options.container should render with a HT
     "item": "ais-CurrentRefinements-item",
     "label": "ais-CurrentRefinements-label",
     "list": "ais-CurrentRefinements-list",
+    "noRefinementRoot": "ais-CurrentRefinements--noRefinement",
     "root": "ais-CurrentRefinements",
   },
   "items": [],
@@ -159,6 +163,7 @@ exports[`currentRefinements() render() options.container should render with a HT
 
 exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 1`] = `
 {
+  "canRefine": true,
   "cssClasses": {
     "category": "ais-CurrentRefinements-category",
     "categoryLabel": "ais-CurrentRefinements-categoryLabel",
@@ -166,6 +171,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
     "item": "ais-CurrentRefinements-item",
     "label": "ais-CurrentRefinements-label",
     "list": "ais-CurrentRefinements-list",
+    "noRefinementRoot": "ais-CurrentRefinements--noRefinement",
     "root": "ais-CurrentRefinements",
   },
   "items": [
@@ -191,6 +197,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
 
 exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 2`] = `
 {
+  "canRefine": true,
   "cssClasses": {
     "category": "ais-CurrentRefinements-category",
     "categoryLabel": "ais-CurrentRefinements-categoryLabel",
@@ -198,6 +205,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
     "item": "ais-CurrentRefinements-item",
     "label": "ais-CurrentRefinements-label",
     "list": "ais-CurrentRefinements-list",
+    "noRefinementRoot": "ais-CurrentRefinements--noRefinement",
     "root": "ais-CurrentRefinements",
   },
   "items": [

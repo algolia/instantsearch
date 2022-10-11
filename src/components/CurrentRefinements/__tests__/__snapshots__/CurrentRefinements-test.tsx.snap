@@ -479,3 +479,15 @@ exports[`CurrentRefinements renders 1`] = `
   </div>
 </div>
 `;
+
+exports[`CurrentRefinements renders without items 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  >
+    <ul
+      class="list"
+    />
+  </div>
+</div>
+`;
