@@ -334,7 +334,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       });
     });
 
-    test('refine() resets the page', () => {
+    test('resets the page on refine()', () => {
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1'],
       })
