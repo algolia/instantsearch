@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import type { ClearRefinementsRenderState } from '../../connectors/clear-refinements/connectClearRefinements';
 import type {
@@ -36,9 +36,10 @@ const ClearRefinements = ({
       templateKey="resetLabel"
       rootTagName="button"
       rootProps={{
-        className: cx(cssClasses.button, {
-          [cssClasses.disabledButton]: !hasRefinements,
-        }),
+        className: cx(
+          cssClasses.button,
+          !hasRefinements && cssClasses.disabledButton
+        ),
         onClick: refine,
         disabled: !hasRefinements,
       }}

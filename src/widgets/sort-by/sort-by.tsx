@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h, render } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import type { SelectorComponentCSSClasses } from '../../components/Selector/Selector';
 import Selector from '../../components/Selector/Selector';
 import type {

@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import type {
   BreadcrumbCSSClasses,
@@ -33,15 +33,17 @@ const Breadcrumb = ({
   refine,
 }: BreadcrumbProps) => (
   <div
-    className={cx(cssClasses.root, {
-      [cssClasses.noRefinementRoot]: items.length === 0,
-    })}
+    className={cx(
+      cssClasses.root,
+      items.length === 0 && cssClasses.noRefinementRoot
+    )}
   >
     <ul className={cssClasses.list}>
       <li
-        className={cx(cssClasses.item, {
-          [cssClasses.selectedItem]: items.length === 0,
-        })}
+        className={cx(
+          cssClasses.item,
+          items.length === 0 && cssClasses.selectedItem
+        )}
       >
         <Template
           {...templateProps}
@@ -64,9 +66,7 @@ const Breadcrumb = ({
         return (
           <li
             key={item.label + idx}
-            className={cx(cssClasses.item, {
-              [cssClasses.selectedItem]: isLast,
-            })}
+            className={cx(cssClasses.item, isLast && cssClasses.selectedItem)}
           >
             <Template
               {...templateProps}

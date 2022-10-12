@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 
 import { isSpecialClick } from '../../lib/utils';
 import type {
@@ -46,9 +46,10 @@ function Pagination(props: PaginationProps) {
 
   return (
     <div
-      className={cx(props.cssClasses.root, {
-        [props.cssClasses.noRefinementRoot]: props.nbPages <= 1,
-      })}
+      className={cx(
+        props.cssClasses.root,
+        props.nbPages <= 1 && props.cssClasses.noRefinementRoot
+      )}
     >
       <ul className={props.cssClasses.list}>
         {props.showFirst && (

@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import type { SearchResults } from 'algoliasearch-helper';
 import type { ComponentCSSClasses, Hit } from '../../types';
@@ -66,9 +66,10 @@ const InfiniteHits = ({
           templateKey="showPreviousText"
           rootTagName="button"
           rootProps={{
-            className: cx(cssClasses.loadPrevious, {
-              [cssClasses.disabledLoadPrevious]: isFirstPage,
-            }),
+            className: cx(
+              cssClasses.loadPrevious,
+              isFirstPage && cssClasses.disabledLoadPrevious
+            ),
             disabled: isFirstPage,
             onClick: showPrevious,
           }}
@@ -98,9 +99,10 @@ const InfiniteHits = ({
         templateKey="showMoreText"
         rootTagName="button"
         rootProps={{
-          className: cx(cssClasses.loadMore, {
-            [cssClasses.disabledLoadMore]: isLastPage,
-          }),
+          className: cx(
+            cssClasses.loadMore,
+            isLastPage && cssClasses.disabledLoadMore
+          ),
           disabled: isLastPage,
           onClick: showMore,
         }}

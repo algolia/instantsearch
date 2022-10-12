@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import type { PitProps } from './Rheostat';
 
 const Pit = ({ style, children }: PitProps) => {
@@ -15,9 +15,11 @@ const Pit = ({ style, children }: PitProps) => {
   return (
     <div
       style={{ ...style, marginLeft: positionValue === 100 ? '-2px' : 0 }}
-      className={cx('rheostat-marker', 'rheostat-marker-horizontal', {
-        'rheostat-marker-large': shouldDisplayValue,
-      })}
+      className={cx(
+        'rheostat-marker',
+        'rheostat-marker-horizontal',
+        shouldDisplayValue && 'rheostat-marker-large'
+      )}
     >
       {shouldDisplayValue && <div className={'rheostat-value'}>{pitValue}</div>}
     </div>
