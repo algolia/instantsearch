@@ -4,6 +4,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import createInstantSearchManager from '../../core/createInstantSearchManager';
 import InstantSearch from '../InstantSearch';
 import { InstantSearchConsumer } from '../../core/context';
+import { wait } from '../../../../../test/utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -330,7 +331,7 @@ describe('InstantSearch', () => {
     expect(childContext.widgetsManager).toBe(ism.widgetsManager);
   });
 
-  it('onSearchStateChange should not be called and search should be skipped if the widget is unmounted', () => {
+  it('onSearchStateChange should not be called and search should be skipped if the widget is unmounted', async () => {
     const ism = createFakeInstantSearchManager();
     let childContext;
     createInstantSearchManager.mockImplementation(() => ism);
@@ -350,6 +351,9 @@ describe('InstantSearch', () => {
     );
 
     wrapper.unmount();
+
+    await wait(0);
+
     childContext.onSearchStateChange({});
 
     expect(onSearchStateChangeMock).toHaveBeenCalledTimes(0);

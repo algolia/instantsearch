@@ -5,6 +5,7 @@ import createConnector, {
   createConnectorWithoutContext,
 } from '../createConnector';
 import { InstantSearchProvider } from '../context';
+import { wait } from '../../../../../test/utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -415,7 +416,7 @@ describe('createConnector', () => {
       expect(subscribe).toHaveBeenCalledTimes(1);
     });
 
-    it('unsubscribes from the store on unmount', () => {
+    it('unsubscribes from the store on unmount', async () => {
       const Connected = createConnectorWithoutContext({
         displayName: 'Connector',
         getProvidedProps: () => {},
@@ -434,6 +435,8 @@ describe('createConnector', () => {
       expect(unsubscribe).toHaveBeenCalledTimes(0);
 
       wrapper.unmount();
+
+      await wait(0);
 
       expect(unsubscribe).toHaveBeenCalledTimes(1);
     });
@@ -787,7 +790,7 @@ describe('createConnector', () => {
       expect(onSearchStateChange).not.toHaveBeenCalled();
     });
 
-    it('unregisters itself on unmount', () => {
+    it('unregisters itself on unmount', async () => {
       const Connected = createConnectorWithoutContext({
         displayName: 'Connector',
         getProvidedProps: () => {},
@@ -808,10 +811,12 @@ describe('createConnector', () => {
 
       wrapper.unmount();
 
+      await wait(0);
+
       expect(unregisterWidget).toHaveBeenCalledTimes(1);
     });
 
-    it('calls onSearchStateChange with cleanUp on unmount', () => {
+    it('calls onSearchStateChange with cleanUp on unmount', async () => {
       const cleanUp = jest.fn(function (props, searchState) {
         return {
           instanceProps: this.props,
@@ -858,6 +863,8 @@ describe('createConnector', () => {
 
       wrapper.unmount();
 
+      await wait(0);
+
       expect(cleanUp).toHaveBeenCalledTimes(1);
       expect(onSearchStateChange).toHaveBeenCalledTimes(1);
       expect(onSearchStateChange).toHaveBeenCalledWith({
@@ -875,7 +882,7 @@ describe('createConnector', () => {
       });
     });
 
-    it('calls onSearchStateChange with cleanUp without empty keys on unmount', () => {
+    it('calls onSearchStateChange with cleanUp without empty keys on unmount', async () => {
       const cleanUp = jest.fn((_, searchState) => searchState);
 
       const Connected = createConnectorWithoutContext({
@@ -909,6 +916,8 @@ describe('createConnector', () => {
       const wrapper = shallow(<Connected contextValue={context} />);
 
       wrapper.unmount();
+
+      await wait(0);
 
       expect(onSearchStateChange).toHaveBeenCalledWith({
         query: 'hello',

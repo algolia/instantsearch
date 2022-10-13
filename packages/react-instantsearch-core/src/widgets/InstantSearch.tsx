@@ -175,6 +175,7 @@ class InstantSearch extends Component<Props, State> {
     };
   }
 
+  cleanupTimerRef: ReturnType<typeof setTimeout> | null = null;
   isUnmounting: boolean = false;
 
   constructor(props: Props) {
@@ -235,6 +236,11 @@ class InstantSearch extends Component<Props, State> {
   }
 
   componentDidMount() {
+    if (this.cleanupTimerRef) {
+      clearTimeout(this.cleanupTimerRef);
+      this.cleanupTimerRef = null;
+    }
+
     if (isMetadataEnabled()) {
       injectMetadata(
         this.state.instantSearchManager.widgetsManager.getWidgets(),
@@ -244,8 +250,10 @@ class InstantSearch extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    this.isUnmounting = true;
-    this.state.instantSearchManager.skipSearch();
+    this.cleanupTimerRef = setTimeout(() => {
+      this.isUnmounting = true;
+      this.state.instantSearchManager.skipSearch();
+    });
   }
 
   createHrefForState(searchState: SearchState) {

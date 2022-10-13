@@ -102,6 +102,7 @@ export function createConnectorWithoutContext(
       unsubscribe?: () => void;
       unregisterWidget?: () => void;
 
+      cleanupTimerRef: ReturnType<typeof setTimeout> | null = null;
       isUnmounting = false;
 
       state: ConnectorState = {
@@ -126,6 +127,11 @@ export function createConnectorWithoutContext(
       }
 
       componentDidMount() {
+        if (this.cleanupTimerRef) {
+          clearTimeout(this.cleanupTimerRef);
+          this.cleanupTimerRef = null;
+        }
+
         this.unsubscribe = this.props.contextValue.store.subscribe(() => {
           if (!this.isUnmounting) {
             this.setState({
@@ -193,32 +199,34 @@ export function createConnectorWithoutContext(
       }
 
       componentWillUnmount() {
-        this.isUnmounting = true;
+        this.cleanupTimerRef = setTimeout(() => {
+          this.isUnmounting = true;
 
-        if (this.unsubscribe) {
-          this.unsubscribe();
-        }
-
-        if (this.unregisterWidget) {
-          this.unregisterWidget();
-
-          if (typeof connectorDesc.cleanUp === 'function') {
-            const nextState = connectorDesc.cleanUp.call(
-              this,
-              this.props,
-              this.props.contextValue.store.getState().widgets
-            );
-
-            this.props.contextValue.store.setState({
-              ...this.props.contextValue.store.getState(),
-              widgets: nextState,
-            });
-
-            this.props.contextValue.onSearchStateChange(
-              removeEmptyKey(nextState)
-            );
+          if (this.unsubscribe) {
+            this.unsubscribe();
           }
-        }
+
+          if (this.unregisterWidget) {
+            this.unregisterWidget();
+
+            if (typeof connectorDesc.cleanUp === 'function') {
+              const nextState = connectorDesc.cleanUp.call(
+                this,
+                this.props,
+                this.props.contextValue.store.getState().widgets
+              );
+
+              this.props.contextValue.store.setState({
+                ...this.props.contextValue.store.getState(),
+                widgets: nextState,
+              });
+
+              this.props.contextValue.onSearchStateChange(
+                removeEmptyKey(nextState)
+              );
+            }
+          }
+        });
       }
 
       getProvidedProps(props) {
