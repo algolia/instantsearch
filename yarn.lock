@@ -116,17 +116,18 @@
     "@algolia/logger-common" "4.11.0"
     "@algolia/requester-common" "4.11.0"
 
-"@algolia/ui-components-highlight-vdom@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@algolia/ui-components-highlight-vdom/-/ui-components-highlight-vdom-1.1.2.tgz#686b29a905bb876672f79f14dab3a7e0de37855c"
-  integrity sha512-Idrugh06V8Pszfw0SgAylc4ZMSxx+GJ8TVEjyfHT/2od4Z8jvo4WKY1Sq9JEt0CDdneX+ZWcRLsgNqE99nWAgw==
+"@algolia/ui-components-highlight-vdom@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-highlight-vdom/-/ui-components-highlight-vdom-1.2.0.tgz#1042c1b61face841b9c526464213df47622a09b4"
+  integrity sha512-09maAGxVtN7qcPrOrSHcgJa6KWA+8iIAzGEIlXkFAvthDnh+EqTeKyrF3+ezYxigHVUdsK6e/ggHIba/CAfg3g==
   dependencies:
-    "@algolia/ui-components-shared" "1.1.2"
+    "@algolia/ui-components-shared" "1.2.0"
+    "@babel/runtime" "^7.0.0"
 
-"@algolia/ui-components-shared@1.1.2", "@algolia/ui-components-shared@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@algolia/ui-components-shared/-/ui-components-shared-1.1.2.tgz#6cc200f57288ad65db562ac4d637783c5f13e527"
-  integrity sha512-/aAWrvPIlhb6IdOiZHU5rktRxil0WVODitPr9afrTverSjHFj60dFjwMbqxXFVMw1GvIpZHtoTTXedaG7AWw2Q==
+"@algolia/ui-components-shared@1.2.0", "@algolia/ui-components-shared@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-shared/-/ui-components-shared-1.2.0.tgz#2dfd126558c06c06a55a0af26dfcea92569b8680"
+  integrity sha512-vPvC2SFmyIxCN0gWGrvT4sjxd2t3eJ1VHCHfNyPLG7RB6tf8s8K6SwD1bd1i8xCvXXsAJouq3Om12rey5FjqWQ==
 
 "@babel/cli@7.8.4":
   version "7.8.4"
@@ -2356,11 +2357,6 @@
   integrity sha512-OZd7dCUOUkiTorf97vJKwZnSja/DmHfuBAroe1kREZZTCf/tlFecwHhsOos3uVHxeKGZDwzolIrCUApClkdLuA==
   dependencies:
     "@types/node" "*"
-
-"@types/classnames@^2.2.7":
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.9.tgz#d868b6febb02666330410fe7f58f3c4b8258be7b"
-  integrity sha512-MNl+rT5UmZeilaPxAVs6YaPC2m6aA8rofviZbhbxpPpl61uKodfdQVsBtgJGTqGizEf02oW3tsVe7FYB8kK14A==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"
