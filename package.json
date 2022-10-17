@@ -53,8 +53,8 @@
   ],
   "dependencies": {
     "@algolia/events": "^4.0.1",
-    "@algolia/ui-components-highlight-vdom": "^1.2.0",
-    "@algolia/ui-components-shared": "^1.2.0",
+    "@algolia/ui-components-highlight-vdom": "^1.2.1",
+    "@algolia/ui-components-shared": "^1.2.1",
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
