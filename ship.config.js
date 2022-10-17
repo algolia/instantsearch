@@ -1,21 +1,22 @@
 const fs = require('fs');
 const path = require('path');
+const shell = require('shelljs');
+
+const packages = JSON.parse(
+  shell.exec('yarn run --silent lerna list --toposort --json', {
+    silent: true,
+  })
+);
+const cwd = process.cwd();
 
 module.exports = {
   monorepo: {
     mainVersionFile: 'lerna.json',
     // We rely on Lerna to bump our dependencies.
     packagesToBump: [],
-    packagesToPublish: [
-      'packages/react-instantsearch-core',
-      'packages/react-instantsearch-dom-maps',
-      'packages/react-instantsearch-dom',
-      'packages/react-instantsearch-hooks',
-      'packages/react-instantsearch-hooks-web',
-      'packages/react-instantsearch-hooks-server',
-      'packages/react-instantsearch-native',
-      'packages/react-instantsearch',
-    ],
+    packagesToPublish: packages.map(({ location }) =>
+      location.replace(`${cwd}/`, '')
+    ),
   },
   versionUpdated: ({ version, exec, dir }) => {
     // Update version in `react-instantsearch-core`
