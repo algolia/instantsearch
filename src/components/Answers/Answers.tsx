@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import type {
   AnswersCSSClasses,
@@ -30,9 +30,7 @@ const Answers = ({
   templateProps,
 }: AnswersProps) => (
   <div
-    className={cx(cssClasses.root, {
-      [cssClasses.emptyRoot]: hits.length === 0,
-    })}
+    className={cx(cssClasses.root, hits.length === 0 && cssClasses.emptyRoot)}
   >
     <Template
       {...templateProps}

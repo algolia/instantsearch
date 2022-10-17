@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import type {
   PanelCSSClasses,
@@ -55,11 +55,12 @@ function Panel<TWidget extends UnknownWidgetFactory>(
 
   return (
     <div
-      className={cx(props.cssClasses.root, {
-        [props.cssClasses.noRefinementRoot]: props.hidden,
-        [props.cssClasses.collapsibleRoot]: props.collapsible,
-        [props.cssClasses.collapsedRoot]: isCollapsed,
-      })}
+      className={cx(
+        props.cssClasses.root,
+        props.hidden && props.cssClasses.noRefinementRoot,
+        props.collapsible && props.cssClasses.collapsibleRoot,
+        isCollapsed && props.cssClasses.collapsedRoot
+      )}
       hidden={props.hidden}
     >
       {props.templates.header && (

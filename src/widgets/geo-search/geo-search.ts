@@ -1,6 +1,6 @@
 // global for TypeScript alone
 /* global google */
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import { render } from 'preact';
 import {
   getContainerNode,

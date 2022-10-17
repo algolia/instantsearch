@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h, render } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import type { WidgetFactory, Template, Hit, Renderer } from '../../types';
 import defaultTemplates from './defaultTemplates';
 import {

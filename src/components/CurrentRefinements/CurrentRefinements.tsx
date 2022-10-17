@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import { isSpecialClick, capitalize } from '../../lib/utils';
 import type {
   CurrentRefinementsConnectorParamsItem,
@@ -45,9 +45,7 @@ const CurrentRefinements = ({
   canRefine,
 }: CurrentRefinementsProps) => (
   <div
-    className={cx(cssClasses.root, {
-      [cssClasses.noRefinementRoot]: !canRefine,
-    })}
+    className={cx(cssClasses.root, !canRefine && cssClasses.noRefinementRoot)}
   >
     <ul className={cssClasses.list}>
       {items.map((item, index) => (

@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h, Component } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import type {
   RangeInputCSSClasses,
@@ -62,9 +62,10 @@ class RangeInput extends Component<RangeInputProps, Partial<Range>> {
     const { min, max, step, cssClasses, templateProps } = this.props;
     const isDisabled = min && max ? min >= max : false;
     const hasRefinements = Boolean(minValue || maxValue);
-    const rootClassNames = cx(cssClasses.root, {
-      [cssClasses.noRefinement]: !hasRefinements,
-    });
+    const rootClassNames = cx(
+      cssClasses.root,
+      !hasRefinements && cssClasses.noRefinement
+    );
 
     return (
       <div className={rootClassNames}>

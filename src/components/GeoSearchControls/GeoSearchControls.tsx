@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h, Fragment } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import GeoSearchButton from './GeoSearchButton';
 import GeoSearchToggle from './GeoSearchToggle';
@@ -46,9 +46,10 @@ const GeoSearchControls = ({
           <div className={cssClasses.control}>
             {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
               <GeoSearchToggle
-                classNameLabel={cx(cssClasses.label, {
-                  [cssClasses.selectedLabel]: isRefineOnMapMove,
-                })}
+                classNameLabel={cx(
+                  cssClasses.label,
+                  isRefineOnMapMove && cssClasses.selectedLabel
+                )}
                 classNameInput={cssClasses.input}
                 checked={isRefineOnMapMove}
                 onToggle={onRefineToggle}
@@ -78,9 +79,10 @@ const GeoSearchControls = ({
         {!enableRefineControl && !isRefineOnMapMove && (
           <div className={cssClasses.control}>
             <GeoSearchButton
-              className={cx(cssClasses.redo, {
-                [cssClasses.disabledRedo]: !hasMapMoveSinceLastRefine,
-              })}
+              className={cx(
+                cssClasses.redo,
+                !hasMapMoveSinceLastRefine && cssClasses.disabledRedo
+              )}
               disabled={!hasMapMoveSinceLastRefine}
               onClick={onRefineClick}
             >

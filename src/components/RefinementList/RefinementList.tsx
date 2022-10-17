@@ -2,7 +2,7 @@
 
 import type { JSX } from 'preact';
 import { h, createRef, Component } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import { isSpecialClick, isEqual } from '../../lib/utils';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import Template from '../Template/Template';
@@ -168,15 +168,16 @@ class RefinementList<TTemplates extends Templates> extends Component<
       key += `/${facetValue.count}`;
     }
 
-    const refinementListItemClassName = cx(this.props.cssClasses.item, {
-      [this.props.cssClasses.selectedItem]: facetValue.isRefined,
-      // cx allows `undefined` as a key but typescript doesn't
-      [this.props.cssClasses.disabledItem!]: !facetValue.count,
-      [this.props.cssClasses.parentItem!]:
+    const refinementListItemClassName = cx(
+      this.props.cssClasses.item,
+      facetValue.isRefined && this.props.cssClasses.selectedItem,
+      !facetValue.count && this.props.cssClasses.disabledItem,
+      Boolean(
         isHierarchicalMenuItem(facetValue) &&
-        Array.isArray(facetValue.data) &&
-        facetValue.data.length > 0,
-    });
+          Array.isArray(facetValue.data) &&
+          facetValue.data.length > 0
+      ) && this.props.cssClasses.parentItem!
+    );
 
     return (
       <RefinementListItem
@@ -285,11 +286,11 @@ class RefinementList<TTemplates extends Templates> extends Component<
   }
 
   public render() {
-    const showMoreButtonClassName = cx(this.props.cssClasses.showMore, {
-      [this.props.cssClasses.disabledShowMore!]: !(
-        this.props.showMore === true && this.props.canToggleShowMore
-      ),
-    });
+    const showMoreButtonClassName = cx(
+      this.props.cssClasses.showMore,
+      !(this.props.showMore === true && this.props.canToggleShowMore) &&
+        this.props.cssClasses.disabledShowMore
+    );
 
     const showMoreButton = this.props.showMore === true && (
       <Template
@@ -352,10 +353,8 @@ class RefinementList<TTemplates extends Templates> extends Component<
 
     const rootClassName = cx(
       this.props.cssClasses.root,
-      {
-        [this.props.cssClasses.noRefinementRoot]:
-          !this.props.facetValues || this.props.facetValues.length === 0,
-      },
+      (!this.props.facetValues || this.props.facetValues.length === 0) &&
+        this.props.cssClasses.noRefinementRoot,
       this.props.className
     );
 

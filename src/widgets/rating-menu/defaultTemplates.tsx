@@ -7,7 +7,7 @@ import type {
   RatingMenuCSSClasses,
 } from './rating-menu';
 import { formatNumber } from '../../lib/formatNumber';
-import { cx } from '../../lib/utils';
+import { cx } from '@algolia/ui-components-shared';
 
 type ItemWrapperProps = { children: ComponentChild } & {
   value: string;
@@ -54,10 +54,10 @@ const defaultTemplates: RatingMenuComponentTemplates = {
         {stars.map((isFull, index) => (
           <svg
             key={index}
-            className={cx([
-              cx(cssClasses.starIcon),
-              cx(isFull ? cssClasses.fullStarIcon : cssClasses.emptyStarIcon),
-            ])}
+            className={cx(
+              cssClasses.starIcon,
+              isFull ? cssClasses.fullStarIcon : cssClasses.emptyStarIcon
+            )}
             aria-hidden="true"
             width="24"
             height="24"

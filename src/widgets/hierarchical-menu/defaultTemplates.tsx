@@ -2,17 +2,17 @@
 import { h } from 'preact';
 
 import { formatNumber } from '../../lib/formatNumber';
-import { cx } from '../../lib/utils';
+import { cx } from '@algolia/ui-components-shared';
 import type { HierarchicalMenuComponentTemplates } from './hierarchical-menu';
 
 const defaultTemplates: HierarchicalMenuComponentTemplates = {
   item({ url, label, count, cssClasses, isRefined }) {
     return (
       <a
-        className={cx([
+        className={cx(
           cx(cssClasses.link),
-          cx(isRefined ? cssClasses.selectedItemLink : undefined),
-        ])}
+          cx(isRefined ? cssClasses.selectedItemLink : undefined)
+        )}
         href={url}
       >
         <span className={cx(cssClasses.label)}>{label}</span>

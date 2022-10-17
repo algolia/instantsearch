@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import type { SearchResults } from 'algoliasearch-helper';
 import type { BindEventForHits, SendEventForHits } from '../../lib/utils';

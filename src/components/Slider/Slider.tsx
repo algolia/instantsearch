@@ -3,7 +3,7 @@
 import { h, Component } from 'preact';
 import type { HandleProps } from './Rheostat';
 import Rheostat from './Rheostat';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import { range } from '../../lib/utils';
 import Pit from './Pit';
 import type { RangeBoundaries } from '../../connectors/range/connectRange';
@@ -83,10 +83,11 @@ class Slider extends Component<SliderProps> {
           ? tooltips.format(roundedValue)
           : roundedValue;
 
-      const className = cx(props.className, {
-        'rheostat-handle-lower': props['data-handle-key'] === 0,
-        'rheostat-handle-upper': props['data-handle-key'] === 1,
-      });
+      const className = cx(
+        props.className,
+        props['data-handle-key'] === 0 && 'rheostat-handle-lower',
+        props['data-handle-key'] === 1 && 'rheostat-handle-upper'
+      );
 
       return (
         <div {...props} className={className}>
@@ -109,9 +110,10 @@ class Slider extends Component<SliderProps> {
 
     return (
       <div
-        className={cx(cssClasses.root, {
-          [cssClasses.disabledRoot]: this.isDisabled,
-        })}
+        className={cx(
+          cssClasses.root,
+          this.isDisabled && cssClasses.disabledRoot
+        )}
       >
         <Rheostat
           handle={this.createHandleComponent(tooltips)}

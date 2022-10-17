@@ -12,7 +12,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '../../../../test/mock/createAPIResponse';
-import { cx } from '../../../lib/utils';
+import { cx } from '@algolia/ui-components-shared';
 
 beforeEach(() => {
   document.body.innerHTML = '';

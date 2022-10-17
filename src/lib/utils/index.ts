@@ -8,7 +8,6 @@ export * from './createSendEventForFacet';
 export * from './createSendEventForHits';
 export * from './setIndexHelperState';
 export * from './isIndexWidget';
-export * from './cx';
 export * from './debounce';
 export * from './defer';
 export * from './documentation';

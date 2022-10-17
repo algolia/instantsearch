@@ -3,7 +3,7 @@ import { h } from 'preact';
 
 import type { RefinementListComponentTemplates } from './refinement-list';
 import { formatNumber } from '../../lib/formatNumber';
-import { cx } from '../../lib/utils';
+import { cx } from '@algolia/ui-components-shared';
 
 const defaultTemplates: RefinementListComponentTemplates = {
   item({ cssClasses, count, value, highlighted, isRefined, isFromSearch }) {

@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import cx from 'classnames';
+import { cx } from '@algolia/ui-components-shared';
 import { find } from '../../lib/utils';
 import Template from '../Template/Template';
 import type {
@@ -51,9 +51,10 @@ function MenuSelect({ cssClasses, templateProps, items, refine }: Props) {
 
   return (
     <div
-      className={cx(cssClasses.root, {
-        [cssClasses.noRefinementRoot]: items.length === 0,
-      })}
+      className={cx(
+        cssClasses.root,
+        items.length === 0 && cssClasses.noRefinementRoot
+      )}
     >
       <select
         className={cssClasses.select}
