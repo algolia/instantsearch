@@ -25,7 +25,7 @@ const PoweredBy = ({ url, theme, cssClasses }: PoweredByProps) => (
       <svg
         height="1.2em"
         className={cssClasses.logo}
-        viewBox="0 0 513 66"
+        viewBox="0 0 572 64"
         // This style is necessary as long as it's not included in InstantSearch.css.
         // For now, InstantSearch.css sets a maximum width of 70px.
         style={{
