@@ -56,6 +56,7 @@ export default {
   },
   created() {
     this.instantSearchInstance.addListener('render', this.renderFn);
+    this.renderFn();
   },
   [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
     if (this.widget) {

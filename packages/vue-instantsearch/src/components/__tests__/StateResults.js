@@ -1,27 +1,25 @@
 import { mount } from '../../../test/utils';
 import StateResults from '../StateResults.vue';
-import { __setState } from '../../mixins/widget';
+import { __setIndexHelper, __setIndexResults } from '../../mixins/widget';
 jest.mock('../../mixins/widget');
 
 it('renders explanation if no slot is used', () => {
-  __setState({
-    results: {
-      query: 'this is the quer',
-      hits: [{ objectID: '1', name: 'one' }, { objectID: '2', name: 'two' }],
-      page: 1,
-    },
+  __setIndexResults({
+    query: 'this is the quer',
+    hits: [{ objectID: '1', name: 'one' }, { objectID: '2', name: 'two' }],
+    page: 1,
+  });
+  __setIndexHelper({
     state: {
       query: 'this is the query',
     },
-    status: 'idle',
-    error: undefined,
   });
   const wrapper = mount(StateResults);
   expect(wrapper.html()).toMatchSnapshot();
 });
 
 it("doesn't render if no results", () => {
-  __setState({});
+  __setIndexResults(null);
   const wrapper = mount(StateResults);
   expect(wrapper).toHaveEmptyHTML();
 });
@@ -38,12 +36,8 @@ it('gives state & results to default slot', () => {
     page: 1,
   };
 
-  __setState({
-    state,
-    results,
-    status: 'idle',
-    error: undefined,
-  });
+  __setIndexResults(results);
+  __setIndexHelper({ state });
 
   mount(StateResults, {
     scopedSlots: {
@@ -67,10 +61,8 @@ it('allows default slot to render whatever they want', () => {
   const state = {
     query: 'hi!',
   };
-  __setState({
-    state,
-    results,
-  });
+  __setIndexResults(results);
+  __setIndexHelper({ state });
 
   const wrapper = mount({
     components: { StateResults },
@@ -106,10 +98,8 @@ it('allows default slot to render whatever they want (truthy query)', () => {
   const state = {
     query: 'hi!',
   };
-  __setState({
-    state,
-    results,
-  });
+  __setIndexResults(results);
+  __setIndexHelper({ state });
 
   const wrapper = mount({
     components: { StateResults },
@@ -145,10 +135,8 @@ it('allows default slot to render whatever they want (falsy query)', () => {
   const state = {
     query: 'hi!',
   };
-  __setState({
-    state,
-    results,
-  });
+  __setIndexResults(results);
+  __setIndexHelper({ state });
 
   const wrapper = mount({
     components: { StateResults },
@@ -177,14 +165,12 @@ it('allows default slot to render whatever they want (falsy query)', () => {
 
 describe('legacy spread props', () => {
   it('allows default slot to render whatever they want (truthy query)', () => {
-    __setState({
-      results: {
-        query: 'q',
-        hits: [{ objectID: '1', name: 'one' }, { objectID: '2', name: 'two' }],
-        page: 1,
-      },
-      state: {},
+    __setIndexResults({
+      query: 'q',
+      hits: [{ objectID: '1', name: 'one' }, { objectID: '2', name: 'two' }],
+      page: 1,
     });
+    __setIndexHelper({ state: {} });
 
     const wrapper = mount({
       components: { StateResults },
@@ -212,14 +198,12 @@ describe('legacy spread props', () => {
   });
 
   it('allows default slot to render whatever they want (falsy query)', () => {
-    __setState({
-      results: {
-        query: '',
-        hits: [{ objectID: '1', name: 'one' }, { objectID: '2', name: 'two' }],
-        page: 1,
-      },
-      state: {},
+    __setIndexResults({
+      query: '',
+      hits: [{ objectID: '1', name: 'one' }, { objectID: '2', name: 'two' }],
+      page: 1,
     });
+    __setIndexHelper({ state: {} });
 
     const wrapper = mount({
       components: { StateResults },
