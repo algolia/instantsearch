@@ -202,6 +202,9 @@ Use \`InstantSearch.status === "stalled"\` instead.`
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super();
 
+    // prevent `render` event listening from causing a warning
+    this.setMaxListeners(100);
+
     const {
       indexName = null,
       numberLocale,
