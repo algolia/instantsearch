@@ -1,6 +1,6 @@
 {
   "name": "hooks-e-commerce",
-  "version": "6.36.0",
+  "version": "6.37.0",
   "private": true,
   "scripts": {
     "build": "parcel build index.html",
@@ -12,7 +12,7 @@
     "react": "18.1.0",
     "react-compound-slider": "3.4.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-web": "6.36.0"
+    "react-instantsearch-hooks-web": "6.37.0"
   },
   "devDependencies": {
     "@parcel/packager-raw-url": "2.6.2",

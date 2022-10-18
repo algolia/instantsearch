@@ -1,3 +1,12 @@
+# [6.37.0](https://github.com/algolia/react-instantsearch/compare/v6.36.0...v6.37.0) (2022-10-18)
+
+
+### Features
+
+* **core:** support react 18 strict mode ([#3653](https://github.com/algolia/react-instantsearch/issues/3653)) ([9174806](https://github.com/algolia/react-instantsearch/commit/9174806a7997a45893a24d149027119f4a0709c3))
+
+
+
 # [6.36.0](https://github.com/algolia/react-instantsearch/compare/v6.35.0...v6.36.0) (2022-10-04)
 
 
