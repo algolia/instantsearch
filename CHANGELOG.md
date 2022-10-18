@@ -1,3 +1,14 @@
+## [4.48.1](https://github.com/algolia/instantsearch.js/compare/v4.48.0...v4.48.1) (2022-10-18)
+
+
+### Bug Fixes
+
+* **bundlesize:** consolidate usage of "classnames" helper ([#5138](https://github.com/algolia/instantsearch.js/issues/5138)) ([f1ec288](https://github.com/algolia/instantsearch.js/commit/f1ec28889be5c2f906dd398f37d072587e29cf3a))
+* **currentRefinements:** reset page number on refine ([#5136](https://github.com/algolia/instantsearch.js/issues/5136)) ([407b576](https://github.com/algolia/instantsearch.js/commit/407b5767b51c26d5f471071a92f2e32762898f24))
+* **events:** prevent warning on low number of listeners ([#5143](https://github.com/algolia/instantsearch.js/issues/5143)) ([432aa70](https://github.com/algolia/instantsearch.js/commit/432aa7006e7d8eefd1c8c382f59ea2d2974a19da))
+
+
+
 # [4.48.0](https://github.com/algolia/instantsearch.js/compare/v4.47.0...v4.48.0) (2022-10-10)
 
 
