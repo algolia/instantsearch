@@ -2825,3 +2825,25 @@ If you're using custom widgets that do set these query parameters, we recommend 
 See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
   });
 });
+
+describe('events', () => {
+  test('can attach many `render` listeners', () => {
+    const spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+
+    Array.from({ length: 100 }).forEach(() => {
+      search.on('render', () => {});
+    });
+
+    expect(spy).toHaveBeenCalledTimes(0);
+
+    search.on('render', () => {});
+
+    // once for the warning, once for the trace
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
+});
