@@ -10,8 +10,13 @@ import {
   RefinementList,
   SearchBox,
 } from 'react-instantsearch-hooks-web';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
-import { history } from 'instantsearch.js/es/lib/routers';
+// because this is ran on node without type: "module" set in the package.json
+// we need to use commonjs instead of esm.
+// If you use ESM in Node, you can rely on these import statements instead:
+// import { simple } from 'instantsearch.js/es/lib/stateMappings';
+// import { history } from 'instantsearch.js/es/lib/routers';
+import { simple } from 'instantsearch.js/cjs/lib/stateMappings';
+import { history } from 'instantsearch.js/cjs/lib/routers';
 
 import { searchClient } from './searchClient';
 
