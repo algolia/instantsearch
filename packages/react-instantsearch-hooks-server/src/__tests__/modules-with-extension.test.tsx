@@ -108,12 +108,17 @@ jest.mock(
 
 describe('ReactDOMServer imports', () => {
   test('works when the import with an extension exists', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
     const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
     const serverState = await getServerState(<App />);
 
     expect(serverState.initialResults).toEqual(expect.any(Object));
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenLastCalledWith(
+      '[InstantSearch] `renderToString` should be passed to getServerState(<App/>, { renderToString })'
+    );
   });
 });
 

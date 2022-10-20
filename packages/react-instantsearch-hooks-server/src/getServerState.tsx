@@ -8,7 +8,6 @@ import {
 import type { InitialResults, InstantSearch, UiState } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 import type { ReactNode } from 'react';
-import type { renderToString as reactRenderToString } from 'react-dom/server';
 import type {
   InstantSearchServerContextApi,
   InstantSearchServerState,
@@ -16,11 +15,18 @@ import type {
 
 type SearchRef = { current: InstantSearch | undefined };
 
+export type RenderToString = (element: JSX.Element) => unknown;
+
+export type GetServerStateOptions = {
+  renderToString?: RenderToString;
+};
+
 /**
  * Returns the InstantSearch server state from a component.
  */
 export function getServerState(
-  children: ReactNode
+  children: ReactNode,
+  options: GetServerStateOptions = {}
 ): Promise<InstantSearchServerState> {
   const searchRef: SearchRef = {
     current: undefined,
@@ -33,7 +39,7 @@ export function getServerState(
     searchRef.current = search;
   };
 
-  return importRenderToString()
+  return importRenderToString(options.renderToString)
     .then((renderToString) => {
       return execute({
         children,
@@ -74,7 +80,7 @@ export function getServerState(
 
 type ExecuteArgs = {
   children: ReactNode;
-  renderToString: typeof reactRenderToString;
+  renderToString: RenderToString;
   notifyServer: InstantSearchServerContextApi<UiState, UiState>['notifyServer'];
   searchRef: SearchRef;
 };
@@ -182,7 +188,17 @@ function getInitialResults(rootIndex: IndexWidget): InitialResults {
   return initialResults;
 }
 
-function importRenderToString() {
+function importRenderToString(
+  renderToString?: RenderToString
+): Promise<RenderToString> {
+  if (renderToString) {
+    return Promise.resolve(renderToString);
+  }
+  // eslint-disable-next-line no-console
+  console.warn(
+    '[InstantSearch] `renderToString` should be passed to getServerState(<App/>, { renderToString })'
+  );
+
   // React pre-18 doesn't use `exports` in package.json, requiring a fully resolved path
   // Thus, only one of these imports is correct
   const modules = ['react-dom/server.js', 'react-dom/server'];
@@ -191,12 +207,13 @@ function importRenderToString() {
   return Promise.all(modules.map((mod) => import(mod).catch(() => {}))).then(
     (imports: unknown[]) => {
       const ReactDOMServer = imports.find(
-        (mod): mod is { renderToString: typeof reactRenderToString } =>
-          mod !== undefined
+        (mod): mod is { renderToString: RenderToString } => mod !== undefined
       );
 
       if (!ReactDOMServer) {
-        throw new Error('Could not import ReactDOMServer.');
+        throw new Error(
+          'Could not import ReactDOMServer. You can provide it as an argument: getServerState(<Search />, { renderToString }).'
+        );
       }
 
       return ReactDOMServer.renderToString;
