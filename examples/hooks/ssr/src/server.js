@@ -13,7 +13,9 @@ app.get('/', async (req, res) => {
   const location = new URL(
     `${req.protocol}://${req.get('host')}${req.originalUrl}`
   );
-  const serverState = await getServerState(<App location={location} />);
+  const serverState = await getServerState(<App location={location} />, {
+    renderToString,
+  });
   const html = renderToString(
     <App serverState={serverState} location={location} />
   );

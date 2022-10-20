@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
+import { renderToString } from 'react-dom/server';
 import algoliasearch from 'algoliasearch/lite';
 import { Hit as AlgoliaHit } from 'instantsearch.js';
 import {
@@ -87,7 +88,9 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> =
   async function getServerSideProps({ req }) {
     const protocol = req.headers.referer?.split('://')[0] || 'https';
     const url = `${protocol}://${req.headers.host}${req.url}`;
-    const serverState = await getServerState(<HomePage url={url} />);
+    const serverState = await getServerState(<HomePage url={url} />, {
+      renderToString,
+    });
 
     return {
       props: {
