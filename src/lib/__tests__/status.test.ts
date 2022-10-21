@@ -198,10 +198,9 @@ describe('status', () => {
     // prevent rethrow of error
     search.on('error', () => {});
 
-    const renderer = jest.fn<
-      void,
-      [{ status: InstantSearch['status']; error?: Error }]
-    >();
+    const renderer = jest.fn(
+      (_: { status: InstantSearch['status']; error?: Error }) => undefined
+    );
     search.on('render', () =>
       renderer({ status: search.status, error: search.error })
     );
