@@ -1,3 +1,12 @@
+# [4.49.0](https://github.com/algolia/instantsearch.js/compare/v4.48.1...v4.49.0) (2022-10-25)
+
+
+### Features
+
+* **poweredBy:** update component logo ([#5145](https://github.com/algolia/instantsearch.js/issues/5145)) ([7df7816](https://github.com/algolia/instantsearch.js/commit/7df7816eac1bb3d2eafee5da7b6f4f59611468b2))
+
+
+
 ## [4.48.1](https://github.com/algolia/instantsearch.js/compare/v4.48.0...v4.48.1) (2022-10-18)
 
 
