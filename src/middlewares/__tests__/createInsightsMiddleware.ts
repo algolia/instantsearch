@@ -17,6 +17,15 @@ import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 declare const jsdom: JSDOM;
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace NodeJS {
+    interface Global {
+      document?: Document;
+    }
+  }
+}
+
 describe('insights', () => {
   const searchClientWithCredentials = createSearchClient({
     // @ts-expect-error only available in search client v4
@@ -618,5 +627,36 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     expect(document.location.href).toEqual(url);
 
     document.cookie = '';
+  });
+
+  test('does not throw error when document or cookie are undefined', () => {
+    const originalDocument = global.document;
+    delete global.document;
+
+    const search = instantsearch({
+      indexName: 'instant_search',
+      searchClient: searchClientWithCredentials,
+      routing: {
+        router: history({
+          writeDelay: 10,
+        }),
+      },
+    });
+
+    // insights is added *after start*, like in React InstantSearch Hooks
+    search.use(
+      createInsightsMiddleware({
+        insightsClient(eventName, ...args) {
+          if (eventName === 'onUserTokenChange') {
+            const [cb] = args;
+            cb('token');
+          }
+        },
+      })
+    );
+
+    expect(() => search.start()).not.toThrow();
+
+    global.document = originalDocument;
   });
 });
