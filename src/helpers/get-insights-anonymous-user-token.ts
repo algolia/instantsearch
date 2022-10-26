@@ -3,6 +3,10 @@ import { warning } from '../lib/utils';
 export const ANONYMOUS_TOKEN_COOKIE_KEY = '_ALGOLIA';
 
 function getCookie(name: string): string | undefined {
+  if (typeof document !== 'object' || typeof document.cookie !== 'string') {
+    return undefined;
+  }
+
   const prefix = `${name}=`;
   const cookies = document.cookie.split(';');
   for (let i = 0; i < cookies.length; i++) {
