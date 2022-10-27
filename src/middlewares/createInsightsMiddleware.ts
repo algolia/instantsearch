@@ -31,6 +31,12 @@ export type InsightsProps<
     region?: 'de' | 'us';
   };
   onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
+  /**
+   * Whether you want a new search to happen if the user token changes,
+   * or wait for the next search to happen naturally.
+   * @default true
+   */
+  searchOnTokenChange?: boolean;
 };
 
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
@@ -42,6 +48,7 @@ export function createInsightsMiddleware<
     insightsClient: _insightsClient,
     insightsInitParams,
     onEvent,
+    searchOnTokenChange = true,
   } = props || {};
   if (_insightsClient !== null && !_insightsClient) {
     if (__DEV__) {
@@ -119,7 +126,9 @@ export function createInsightsMiddleware<
           ...helper.state,
           clickAnalytics: true,
         });
-        instantSearchInstance.scheduleSearch();
+        if (searchOnTokenChange) {
+          instantSearchInstance.scheduleSearch();
+        }
 
         const setUserTokenToSearch = (userToken?: string) => {
           helper.overrideStateWithoutTriggeringChangeEvent({
@@ -127,7 +136,9 @@ export function createInsightsMiddleware<
             userToken,
           });
 
-          instantSearchInstance.scheduleSearch();
+          if (searchOnTokenChange) {
+            instantSearchInstance.scheduleSearch();
+          }
         };
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
@@ -186,7 +197,9 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             ...initialParameters,
           });
 
-          instantSearchInstance.scheduleSearch();
+          if (searchOnTokenChange) {
+            instantSearchInstance.scheduleSearch();
+          }
         }
       },
     };
