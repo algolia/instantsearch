@@ -1,3 +1,12 @@
+## [4.49.1](https://github.com/algolia/instantsearch.js/compare/v4.49.0...v4.49.1) (2022-11-01)
+
+
+### Bug Fixes
+
+* **insights:** check before usage of `document` ([#5149](https://github.com/algolia/instantsearch.js/issues/5149)) ([6733dea](https://github.com/algolia/instantsearch.js/commit/6733dea1091a3a6c8ec9049eba652a7f06e9c501))
+
+
+
 # [4.49.0](https://github.com/algolia/instantsearch.js/compare/v4.48.1...v4.49.0) (2022-10-25)
 
 
