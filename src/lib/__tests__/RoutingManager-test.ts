@@ -77,6 +77,12 @@ const createFakeHistory = <TEntry = Record<string, unknown>>(
   };
 };
 
+beforeEach(() => {
+  jsdom.reconfigure({
+    url: 'https://website.com/',
+  });
+});
+
 describe('RoutingManager', () => {
   describe('within instantsearch', () => {
     test('should write in the router on searchParameters change', async () => {

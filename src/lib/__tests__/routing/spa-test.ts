@@ -39,6 +39,7 @@ describe('routing with third-party client-side router', () => {
       search.start();
 
       await wait(writeWait);
+      expect(window.location.pathname).toEqual('/');
       expect(window.location.search).toEqual('');
       expect(pushState).toHaveBeenCalledTimes(0);
     }
