@@ -238,8 +238,12 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
 
 export default function historyRouter<TRouteState = UiState>({
   createURL = ({ qsModule, routeState, location }) => {
-    const { protocol, hostname, port = '', pathname, hash } = location;
-    const queryString = qsModule.stringify(routeState);
+    const { protocol, hostname, port = '', pathname, hash, search } = location;
+    const existingSearchParameters = qsModule.parse(search.slice(1));
+    const queryString = qsModule.stringify({
+      ...existingSearchParameters,
+      ...routeState,
+    });
     const portWithPrefix = port === '' ? '' : `:${port}`;
 
     // IE <= 11 has no proper `location.origin` so we cannot rely on it.
