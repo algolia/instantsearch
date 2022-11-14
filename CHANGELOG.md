@@ -1,3 +1,12 @@
+## [6.38.1](https://github.com/algolia/react-instantsearch/compare/v6.38.0...v6.38.1) (2022-11-08)
+
+
+### Bug Fixes
+
+* **hooks:** avoid effect in useStableValue ([#3670](https://github.com/algolia/react-instantsearch/issues/3670)) ([d1f53ae](https://github.com/algolia/react-instantsearch/commit/d1f53ae815b75f13c18fd245e0403d57e7ae391c))
+
+
+
 # [6.38.0](https://github.com/algolia/react-instantsearch/compare/v6.37.0...v6.38.0) (2022-10-25)
 
 
