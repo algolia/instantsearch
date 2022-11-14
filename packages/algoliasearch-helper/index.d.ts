@@ -147,6 +147,7 @@ declare namespace algoliasearchHelper {
      * @param {string[]} options.attributesForPrediction - Attributes to use for predictions. If empty, `searchableAttributes` is used instead.
      * @param {string[]} options.queryLanguages - The languages in the query. Currently only supports ['en'].
      * @param {number} options.nbHits - Maximum number of answers to retrieve from the Answers Engine. Cannot be greater than 1000.
+     * @deprecated answers is deprecated and will be replaced with new initiatives
      */
     findAnswers<TObject>(options: {
       attributesForPrediction: string[];

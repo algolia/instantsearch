@@ -260,8 +260,10 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
  * @param {number} options.nbHits - Maximum number of answers to retrieve from the Answers Engine. Cannot be greater than 1000.
  *
  * @return {promise} the answer results
+ * @deprecated answers is deprecated and will be replaced with new initiatives
  */
 AlgoliaSearchHelper.prototype.findAnswers = function(options) {
+  console.warn('[algoliasearch-helper] answers is no longer supported');
   var state = this.state;
   var derivedHelper = this.derivedHelpers[0];
   if (!derivedHelper) {
