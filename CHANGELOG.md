@@ -1,3 +1,12 @@
+## [4.49.2](https://github.com/algolia/instantsearch.js/compare/v4.49.1...v4.49.2) (2022-11-15)
+
+
+### Bug Fixes
+
+* **answers:** mark as deprecated ([#5157](https://github.com/algolia/instantsearch.js/issues/5157)) ([d7b62ed](https://github.com/algolia/instantsearch.js/commit/d7b62eda77d894a3677a0967a05a2a357e7e5a94))
+
+
+
 ## [4.49.1](https://github.com/algolia/instantsearch.js/compare/v4.49.0...v4.49.1) (2022-11-01)
 
 
