@@ -10,7 +10,15 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["node", "webdriverio", "jasmine"]
+    "types": ["node", "webdriverio", "jasmine"],
+    "allowJs": true,
+    "checkJs": true,
   },
-  "exclude": ["node_modules", "tests"]
+  "exclude": ["node_modules"],
+  "include": [
+    "./*.ts",
+    "./*.js",
+    "./specs/**/*.ts",
+    "./helpers/**/*.ts"
+  ]
 }

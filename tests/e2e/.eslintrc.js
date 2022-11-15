@@ -15,7 +15,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['specs/**/*.spec.ts'],
+      files: ['specs/**/*.spec.ts', 'all-flavors.spec.ts'],
       extends: ['plugin:wdio/recommended'],
       plugins: ['wdio'],
       env: {

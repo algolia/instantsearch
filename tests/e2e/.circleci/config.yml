@@ -36,8 +36,8 @@ jobs:
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
       - run:
-          name: Test specs
-          command: yarn test:saucelabs
+          name: Lint
+          command: yarn lint
 
 workflows:
   version: 2
