@@ -25,9 +25,6 @@
   "scripts": {
     "commit": "git-cz",
     "version": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file && git add CHANGELOG.md",
-    "test": "yarn test:local",
-    "test:local": "yarn link && cd tests && ./instantsearch.js.sh && ./react-instantsearch.sh && ./vue-instantsearch.sh",
-    "test:saucelabs": "SAUCELABS=1 yarn test:local",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc",

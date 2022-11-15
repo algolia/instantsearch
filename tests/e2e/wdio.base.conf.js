@@ -1,4 +1,5 @@
 const path = require('path');
+const { flavors } = require('./flavors');
 
 module.exports = {
   /*
@@ -12,10 +13,10 @@ module.exports = {
       mount: '/',
       path: './website',
     },
-    {
-      mount: '/examples/e-commerce/*',
-      path: './website/examples/e-commerce',
-    },
+    ...flavors.map(flavor => ({
+      mount: `/examples/${flavor}/e-commerce/*`,
+      path: `./website/examples/${flavor}/e-commerce`,
+    })),
   ],
   staticServerPort: 5000,
   /*
@@ -32,7 +33,7 @@ module.exports = {
    * instead of the directory from which `wdio` was called
    * https://webdriver.io/docs/configurationfile.html
    */
-  specs: [path.join(__dirname, 'specs/**/*.spec.ts')],
+  specs: [path.join(__dirname, 'all-flavors.spec.ts')],
 
   /*
    * Level of logging verbosity
