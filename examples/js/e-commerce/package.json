@@ -7,6 +7,7 @@
     "build": "parcel build index.html --public-url .",
     "website:examples": "parcel build index.html --public-url . --dist-dir=../../../website/examples/js/e-commerce"
   },
+  "browserslist": "last 2 versions, IE 11",
   "dependencies": {
     "algoliasearch": "4.11.0",
     "instantsearch.js": "4.49.1"
