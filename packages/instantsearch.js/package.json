@@ -58,6 +58,8 @@
   },
   "devDependencies": {
     "@instantsearch/mocks": "1.0.0",
-    "@instantsearch/testutils": "1.0.0"
+    "@instantsearch/testutils": "1.0.0",
+    "places.js": "1.17.1",
+    "algoliasearch": "4.11.0"
   }
 }

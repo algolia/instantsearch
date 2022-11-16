@@ -5150,28 +5150,7 @@ algoliasearch-helper@3.11.1, algoliasearch-helper@^3.11.1:
   dependencies:
     "@algolia/events" "^4.0.1"
 
-"algoliasearch-v3@npm:algoliasearch@3.35.1":
-  version "3.35.1"
-  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.35.1.tgz#297d15f534a3507cab2f5dfb996019cac7568f0c"
-  integrity sha512-K4yKVhaHkXfJ/xcUnil04xiSrB8B8yHZoFEhWNpXg23eiCnqvTZw1tn/SqvdsANlYHLJlKl0qi3I/Q2Sqo7LwQ==
-  dependencies:
-    agentkeepalive "^2.2.0"
-    debug "^2.6.9"
-    envify "^4.0.0"
-    es6-promise "^4.1.0"
-    events "^1.1.0"
-    foreach "^2.0.5"
-    global "^4.3.2"
-    inherits "^2.0.1"
-    isarray "^2.0.1"
-    load-script "^1.0.0"
-    object-keys "^1.0.11"
-    querystring-es3 "^0.2.1"
-    reduce "^1.0.1"
-    semver "^5.1.0"
-    tunnel-agent "^0.6.0"
-
-algoliasearch@3.35.0, algoliasearch@^3.35.1:
+"algoliasearch-v3@npm:algoliasearch@3.35.0":
   version "3.35.0"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.35.0.tgz#03f2900698c7c547fce9fb8fb8d0b9a56c8da405"
   integrity sha512-Om4aLzkGbUi+Rc3sa8s48CRj2Qe7u5TXS7lK7Z681x2EiAa5Qx5uB/kbp8A6qY6dFDX7vstYRIYZ7t9XgdJ1dw==
@@ -5211,6 +5190,27 @@ algoliasearch@4.11.0:
     "@algolia/requester-common" "4.11.0"
     "@algolia/requester-node-http" "4.11.0"
     "@algolia/transporter" "4.11.0"
+
+algoliasearch@^3.35.1:
+  version "3.35.1"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.35.1.tgz#297d15f534a3507cab2f5dfb996019cac7568f0c"
+  integrity sha512-K4yKVhaHkXfJ/xcUnil04xiSrB8B8yHZoFEhWNpXg23eiCnqvTZw1tn/SqvdsANlYHLJlKl0qi3I/Q2Sqo7LwQ==
+  dependencies:
+    agentkeepalive "^2.2.0"
+    debug "^2.6.9"
+    envify "^4.0.0"
+    es6-promise "^4.1.0"
+    events "^1.1.0"
+    foreach "^2.0.5"
+    global "^4.3.2"
+    inherits "^2.0.1"
+    isarray "^2.0.1"
+    load-script "^1.0.0"
+    object-keys "^1.0.11"
+    querystring-es3 "^0.2.1"
+    reduce "^1.0.1"
+    semver "^5.1.0"
+    tunnel-agent "^0.6.0"
 
 anchor-markdown-header@^0.5.5:
   version "0.5.7"
@@ -10135,7 +10135,7 @@ github-build@^1.2.0:
 github-from-package@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/github-from-package/-/github-from-package-0.0.0.tgz#97fb5d96bfde8973313f20e8288ef9a167fa64ce"
-  integrity sha1-l/tdlr/eiXMxPyDoKI75oWf6ZM4=
+  integrity sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==
 
 glob-base@^0.3.0:
   version "0.3.0"
@@ -10878,14 +10878,14 @@ ignore@^5.0.5, ignore@^5.1.1, ignore@^5.1.4:
   integrity sha512-BMpfD7PpiETpBl/A6S498BaIJ6Y/ABT93ETbby2fP00v4EbvPBXWEoaR1UBPKs3iR53pJY7EtZk5KACI57i1Uw==
 
 iltorb@^2.4.3:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/iltorb/-/iltorb-2.4.3.tgz#b489689d24c8a25a2cf170c515f97954edd45577"
-  integrity sha512-cr/kC07Cf9sW3TWH7yUxV2QkNjby4LMCsXGmxPCQs5x//QzTpF3GLPNY7L66G+DkNGaTRCgY+vYZ+dyAcuDOnQ==
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/iltorb/-/iltorb-2.4.5.tgz#d64434b527099125c6839ed48b666247a172ef87"
+  integrity sha512-EMCMl3LnnNSZJS5QrxyZmMTaAC4+TJkM5woD+xbpm9RB+mFYCr7C05GFE3TEGCsVQSVHmjX+3sf5AiwsylNInQ==
   dependencies:
     detect-libc "^1.0.3"
-    nan "^2.13.2"
+    nan "^2.14.0"
     npmlog "^4.1.2"
-    prebuild-install "^5.3.0"
+    prebuild-install "^5.3.3"
     which-pm-runs "^1.0.0"
 
 immediate@^3.2.3:
@@ -13340,9 +13340,9 @@ mimic-fn@^2.1.0:
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
 mimic-response@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-2.0.0.tgz#996a51c60adf12cb8a87d7fb8ef24c2f3d5ebb46"
-  integrity sha512-8ilDoEapqA4uQ3TwS0jakGONKXVJqpy+RpM+3b7pLdOjghCrEiGp9SRkFbUHAmZW9vdnrENWHjaweIoTIJExSQ==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-2.1.0.tgz#d13763d35f613d09ec37ebb30bac0469c0ee8f43"
+  integrity sha512-wXqjST+SLt7R009ySCglWBCFpjUygmCIfD790/kVbiGmUgfYGuB14PiTd5DwVxSV4NcYHjzMkoj5LjQZwTQLEA==
 
 min-document@^2.19.0:
   version "2.19.0"
@@ -13414,7 +13414,7 @@ minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5, minimist@~1.2.0:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
-minimist@^1.2.6:
+minimist@^1.2.3, minimist@^1.2.6:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz#daa1c4d91f507390437c6a8bc01078e7000c4d18"
   integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
@@ -13538,6 +13538,11 @@ mixin-deep@^1.2.0:
   dependencies:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
+
+mkdirp-classic@^0.5.2, mkdirp-classic@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz#fa10c9115cc6d8865be221ba47ee9bed78601113"
+  integrity sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==
 
 mkdirp-infer-owner@^2.0.0:
   version "2.0.0"
@@ -13665,10 +13670,15 @@ mute-stream@0.0.8, mute-stream@~0.0.4:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-nan@^2.12.1, nan@^2.13.2:
+nan@^2.12.1:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
+
+nan@^2.14.0:
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.17.0.tgz#c0150a2368a182f033e9aa5195ec76ea41a199cb"
+  integrity sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -13688,9 +13698,9 @@ nanomatch@^1.2.9:
     to-regex "^3.0.1"
 
 napi-build-utils@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/napi-build-utils/-/napi-build-utils-1.0.1.tgz#1381a0f92c39d66bf19852e7873432fc2123e508"
-  integrity sha512-boQj1WFgQH3v4clhu3mTNfP+vOBxorDlE8EKiMjUlLG3C4qAESnn9AxIOkFgTR2c9LtzNjPrjS60cT27ZKBhaA==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/napi-build-utils/-/napi-build-utils-1.0.2.tgz#b1fddc0b2c46e380a0b7a76f984dd47c41a13806"
+  integrity sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -13753,9 +13763,9 @@ no-case@^3.0.3:
     tslib "^1.10.0"
 
 node-abi@^2.7.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-2.11.0.tgz#b7dce18815057544a049be5ae75cd1fdc2e9ea59"
-  integrity sha512-kuy/aEg75u40v378WRllQ4ZexaXJiCvB68D2scDXclp/I4cRq6togpbOoKhmN07tns9Zldu51NNERo0wehfX9g==
+  version "2.30.1"
+  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-2.30.1.tgz#c437d4b1fe0e285aaf290d45b45d4d7afedac4cf"
+  integrity sha512-/2D0wOQPgaUWzVSVgRMx+trKJRC2UG4SUc4oCJoXx9Uxjtp0Vy3/kt7zcbxHF8+Z/pK3UloLWzBISg72brfy1w==
   dependencies:
     semver "^5.4.1"
 
@@ -13909,7 +13919,7 @@ node-releases@^2.0.6:
 noop-logger@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/noop-logger/-/noop-logger-0.1.1.tgz#94a2b1633c4f1317553007d8966fd0e841b6a4c2"
-  integrity sha1-lKKxYzxPExdVMAfYlm/Q6EG2pMI=
+  integrity sha512-6kM8CLXvuW5crTxsAtva2YLrRrDaiTIkIePWs9moLHqbFWT94WpNFjwS/5dfLfECg5i/lkmw3aoqVidxt23TEQ==
 
 nopt@1.0.10:
   version "1.0.10"
@@ -15137,16 +15147,16 @@ preact@^10.10.0:
   resolved "https://registry.yarnpkg.com/preact/-/preact-10.10.3.tgz#ea82c5dce85c8a85d541f0110507b2de195ed711"
   integrity sha512-Gwwh0o531izatQQZu0yEX4mtfxVYsZJ4TT/o2VK3UZ/UuAWAWFnzsEfpZvad32vY3TKoRnSY2WqiDz2rH/viWQ==
 
-prebuild-install@^5.3.0:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-5.3.2.tgz#6392e9541ac0b879ef0f22b3d65037417eb2035e"
-  integrity sha512-INDfXzTPnhT+WYQemqnAXlP7SvfiFMopMozSgXCZ+RDLb279gKfIuLk4o7PgEawLp3WrMgIYGBpkxpraROHsSA==
+prebuild-install@^5.3.3:
+  version "5.3.6"
+  resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-5.3.6.tgz#7c225568d864c71d89d07f8796042733a3f54291"
+  integrity sha512-s8Aai8++QQGi4sSbs/M1Qku62PFK49Jm1CbgXklGz4nmHveDq0wzJkg7Na5QbnO1uNH8K7iqx2EQ/mV0MZEmOg==
   dependencies:
     detect-libc "^1.0.3"
     expand-template "^2.0.3"
     github-from-package "0.0.0"
-    minimist "^1.2.0"
-    mkdirp "^0.5.1"
+    minimist "^1.2.3"
+    mkdirp-classic "^0.5.3"
     napi-build-utils "^1.0.1"
     node-abi "^2.7.0"
     noop-logger "^0.1.1"
@@ -16910,14 +16920,14 @@ signal-exit@^3.0.7:
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
 
 simple-concat@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.0.tgz#7344cbb8b6e26fb27d66b2fc86f9f6d5997521c6"
-  integrity sha1-c0TLuLbib7J9ZrL8hvn21Zl1IcY=
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.1.tgz#f46976082ba35c2263f1c8ab5edfe26c41c9552f"
+  integrity sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==
 
 simple-get@^3.0.3:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/simple-get/-/simple-get-3.1.0.tgz#b45be062435e50d159540b576202ceec40b9c6b3"
-  integrity sha512-bCR6cP+aTdScaQCnQKbPKtJOKDp/hj9EDLJo3Nw4y1QksqaovlW/bnptB6/c1e+qmNIDHRK+oXFDdEqBT8WzUA==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/simple-get/-/simple-get-3.1.1.tgz#cc7ba77cfbe761036fbfce3d021af25fc5584d55"
+  integrity sha512-CQ5LTKGfCpvE1K0n2us+kuMPbk/q0EKl82s4aheV9oXjFEz6W/Y7oQFVJuU6QG77hRT4Ghb5RURteF5vnWjupA==
   dependencies:
     decompress-response "^4.2.0"
     once "^1.3.1"
@@ -17687,14 +17697,14 @@ tapable@^1.0.0, tapable@^1.1.3:
   integrity sha512-4WK/bYZmj8xLr+HUCODHGF1ZFzsYffasLUgEiMBY4fgtltdO6B4WJtlSbPaDTLpYTcGVwM2qLnFTICEcNxs3kA==
 
 tar-fs@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-2.0.0.tgz#677700fc0c8b337a78bee3623fdc235f21d7afad"
-  integrity sha512-vaY0obB6Om/fso8a8vakQBzwholQ7v5+uy+tF3Ozvxv1KNezmVQAiWtcNmMHFSFPqL3dJA8ha6gdtFbfX9mcxA==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-2.1.1.tgz#489a15ab85f1f0befabb370b7de4f9eb5cbe8784"
+  integrity sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==
   dependencies:
     chownr "^1.1.1"
-    mkdirp "^0.5.1"
+    mkdirp-classic "^0.5.2"
     pump "^3.0.0"
-    tar-stream "^2.0.0"
+    tar-stream "^2.1.4"
 
 tar-stream@2.0.0:
   version "2.0.0"
@@ -17707,7 +17717,7 @@ tar-stream@2.0.0:
     inherits "^2.0.3"
     readable-stream "^3.1.1"
 
-tar-stream@^2.0.0, tar-stream@^2.1.0:
+tar-stream@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/tar-stream/-/tar-stream-2.1.0.tgz#d1aaa3661f05b38b5acc9b7020efdca5179a2cc3"
   integrity sha512-+DAn4Nb4+gz6WZigRzKEZl1QuJVOLtAwwF+WUxy1fJ6X63CaGaUAxJRD2KEn1OMfcbCjySTYpNC6WmfQoIEOdw==
@@ -17718,7 +17728,7 @@ tar-stream@^2.0.0, tar-stream@^2.1.0:
     inherits "^2.0.3"
     readable-stream "^3.1.1"
 
-tar-stream@~2.2.0:
+tar-stream@^2.1.4, tar-stream@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/tar-stream/-/tar-stream-2.2.0.tgz#acad84c284136b060dc3faa64474aa9aebd77287"
   integrity sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==
@@ -19000,9 +19010,9 @@ which-module@^2.0.0:
   integrity sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho=
 
 which-pm-runs@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/which-pm-runs/-/which-pm-runs-1.0.0.tgz#670b3afbc552e0b55df6b7780ca74615f23ad1cb"
-  integrity sha1-Zws6+8VS4LVd9rd4DKdGFfI60cs=
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/which-pm-runs/-/which-pm-runs-1.1.0.tgz#35ccf7b1a0fce87bd8b92a478c9d045785d3bf35"
+  integrity sha512-n1brCuqClxfFfq/Rb0ICg9giSZqCS+pLtccdag6C2HyufBrh3fBOiy9nb6ggRMvWOVH5GrdJskj5iGTZNxd7SA==
 
 which@^1.2.9, which@^1.3.1:
   version "1.3.1"
