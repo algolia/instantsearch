@@ -2,7 +2,7 @@ version: 2
 
 references:
   workspace_root: &workspace_root
-    /tmp/workspace
+    ~/instantsearch
   attach_workspace: &attach_workspace
     attach_workspace:
       at: *workspace_root
