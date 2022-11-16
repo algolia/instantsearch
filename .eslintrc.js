@@ -74,15 +74,7 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       // this is the same files as ignored in tsconfig.json
-      excludedFiles: [
-        'examples/**/*',
-        'es',
-        // these two files are temporarily excluded because
-        // they import files from node_modules/search-insights directly
-        // and it causes the type-checking to fail.
-        'src/middlewares/__tests__/createInsightsMiddleware.ts',
-        'test/mock/createInsightsClient.ts',
-      ],
+      excludedFiles: ['examples/**/*', '*/es'],
       parserOptions: {
         project: './tsconfig.json',
       },
@@ -92,7 +84,11 @@ module.exports = {
       },
     },
     {
-      files: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js'],
+      files: [
+        'packages/instantsearch.js/src/**/*.ts',
+        'packages/instantsearch.js/src/**/*.tsx',
+        'packages/instantsearch.js/src/**/*.js',
+      ],
       rules: {
         'import/extensions': ['error', 'never'],
       },
@@ -104,8 +100,11 @@ module.exports = {
       },
     },
     {
-      files: ['src/**/*'],
-      excludedFiles: ['**/__tests__/**/*', 'src/widgets/**/*'],
+      files: ['packages/instantsearch.js/src/**/*'],
+      excludedFiles: [
+        '**/__tests__/**/*',
+        'packages/instantsearch.js/src/widgets/**/*',
+      ],
       rules: {
         'no-restricted-globals': [
           'error',

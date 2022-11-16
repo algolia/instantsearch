@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { wait } from '../../../../test/utils/wait';
+import { wait } from '@instantsearch/testutils/wait';
 
 // export is needed for TS isolatedModules
 // eslint-disable-next-line jest/no-export

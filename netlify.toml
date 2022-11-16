@@ -1,5 +1,9 @@
 [build]
-  command="yarn run storybook:build && yarn run website:build"
+  command=""" \
+    yarn build --ignore='example-*' && \
+    yarn website:storybook && \
+    yarn website:examples \
+    """
   publish="website"
 
 [build.environment]

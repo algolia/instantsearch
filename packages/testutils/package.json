@@ -1,0 +1,10 @@
+{
+  "name": "@instantsearch/testutils",
+  "version": "1.0.0",
+  "dependencies": {
+    "instantsearch.js": "4.49.1",
+    "@types/enzyme": "3.1.15",
+    "enzyme": "3.11.0",
+    "preact": "^10.10.0"
+  }
+}
