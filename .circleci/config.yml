@@ -175,7 +175,7 @@ jobs:
       - *run_yarn_install
       - run:
           name: End-2-End tests
-          command: yarn lerna run test:e2e:saucelabs
+          command: yarn run test:e2e:saucelabs
       - store_test_results:
           path: junit/wdio/
 
