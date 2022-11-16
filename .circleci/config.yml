@@ -52,7 +52,6 @@ workflows:
             - build
       - e2e tests:
           requires:
-            - build
             - examples
       - release if needed:
           requires:
