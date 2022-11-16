@@ -1,0 +1,20 @@
+{
+  "name": "example-instantsearch-calendar-widget",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "parcel index.html --port 3000",
+    "build": "parcel build index.html --public-url .",
+    "website:examples": "parcel build index.html --public-url . --dist-dir=../../../website/examples/js/calendar-widget"
+  },
+  "dependencies": {
+    "algoliasearch": "4.11.0",
+    "instantsearch.js": "4.49.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.12.0",
+    "parcel": "2.8.0",
+    "@parcel/packager-raw-url": "2.8.0",
+    "@parcel/transformer-webmanifest": "2.8.0"
+  }
+}

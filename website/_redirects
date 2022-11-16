@@ -1,3 +1,8 @@
 /           https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/
 /examples   https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
-/examples/:name/search/*   /examples/:name/index.html   200
+/examples/js   https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
+
+/examples/:name/search/*   /examples/js/:name/index.html   200
+/examples/:flavor/:name/search/*   /examples/:flavor/:name/index.html   200
+
+/stories   /stories/js   200
