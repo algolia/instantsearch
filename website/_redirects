@@ -2,7 +2,7 @@
 /examples   https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
 /examples/js   https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
 
-/examples/:name/search/   /examples/js/:name/index.html   301
+/examples/:name/*   /examples/js/:name/:splat   301
 /examples/:flavor/:name/search/*   /examples/:flavor/:name/index.html   200
 
-/stories   /stories/js   301
+/stories   /stories/js   301!
