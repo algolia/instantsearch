@@ -1,8 +1,8 @@
 import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
-import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache';
-import type { InsightsClient } from 'instantsearch.js';
+import { createInfiniteHitsSessionStorageCache } from '../src/lib/infiniteHitsCache';
+import type { InsightsClient } from '../src/types';
 
 const fakeInsightsClient: InsightsClient = (method, ...payloads) => {
   const [payload] = payloads;

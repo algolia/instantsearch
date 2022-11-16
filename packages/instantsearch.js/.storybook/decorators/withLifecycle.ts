@@ -1,5 +1,5 @@
-import { InstantSearch, Widget } from 'instantsearch.js';
-import { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import { InstantSearch, Widget } from '../../src/types';
+import { IndexWidget } from '../../src/widgets/index/index';
 
 const setDisabledState = (element: HTMLButtonElement, state: boolean) => {
   element.disabled = state;

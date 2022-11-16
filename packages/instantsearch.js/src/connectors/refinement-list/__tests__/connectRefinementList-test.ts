@@ -4,12 +4,12 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectRefinementList from '../connectRefinementList';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { wait } from '@instantsearch/testutils/wait';

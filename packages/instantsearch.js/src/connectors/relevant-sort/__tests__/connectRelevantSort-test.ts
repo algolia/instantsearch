@@ -7,7 +7,7 @@ import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { noop } from '../../../lib/utils';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';

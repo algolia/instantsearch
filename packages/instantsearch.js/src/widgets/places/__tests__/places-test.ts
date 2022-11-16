@@ -6,7 +6,7 @@ import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import algoliaPlaces from 'places.js';
 import places from '../places';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createInitOptions } from '@instantsearch/mocks/createWidget';
+import { createInitOptions } from '../../../../test/createWidget';
 import type { SearchClient } from '../../../types';
 
 jest.mock('places.js', () => {

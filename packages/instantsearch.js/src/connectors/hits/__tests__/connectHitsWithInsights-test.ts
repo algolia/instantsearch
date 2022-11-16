@@ -1,11 +1,11 @@
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import connectHitsWithInsights from '../connectHitsWithInsights';
 import type { Hit } from '../../../types';

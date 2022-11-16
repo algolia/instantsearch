@@ -10,7 +10,7 @@ import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import queryRuleCustomData from '../query-rule-custom-data';
 import type { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData';

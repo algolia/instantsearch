@@ -16,7 +16,7 @@ import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import {
   createRenderOptions,
   createInitOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';

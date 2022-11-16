@@ -13,7 +13,7 @@ import algoliasearchHelper, {
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import type { Widget } from '../../../types';

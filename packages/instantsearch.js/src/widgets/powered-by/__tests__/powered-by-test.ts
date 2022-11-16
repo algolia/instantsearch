@@ -10,7 +10,7 @@ import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import type { PoweredByProps } from '../../../components/PoweredBy/PoweredBy';
 import poweredBy from '../powered-by';

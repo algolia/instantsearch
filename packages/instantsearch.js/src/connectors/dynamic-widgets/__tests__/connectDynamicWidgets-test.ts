@@ -5,7 +5,7 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, {
   SearchParameters,

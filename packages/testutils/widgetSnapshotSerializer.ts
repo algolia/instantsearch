@@ -1,11 +1,12 @@
-import type { Widget } from 'instantsearch.js';
+import type { InitOptions, Widget } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 import { getWidgetAttribute } from 'instantsearch.js/es/lib/utils';
-import { createInitOptions } from '@instantsearch/mocks/createWidget';
+import { createInitOptions } from 'instantsearch.js/test/createWidget';
 
 function getAttribute(widget: Widget | IndexWidget) {
   try {
-    return getWidgetAttribute(widget, createInitOptions());
+    // casted to harmonize between src and es types of the same
+    return getWidgetAttribute(widget, createInitOptions() as InitOptions);
   } catch {
     return undefined;
   }

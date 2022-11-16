@@ -7,7 +7,7 @@ import { render as preactRender } from 'preact';
 import toggleRefinement from '../toggle-refinement';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createRenderOptions } from '@instantsearch/mocks/createWidget';
+import { createRenderOptions } from '../../../../test/createWidget';
 import { wait } from '@instantsearch/testutils/wait';
 import instantsearch from '../../..';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';

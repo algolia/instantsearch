@@ -1,8 +1,8 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import index from 'instantsearch.js/es/widgets/index/index';
-import type { InstantSearch } from 'instantsearch.js';
-import { createSearchClient } from './createSearchClient';
-import { defer } from 'instantsearch.js/es/lib/utils';
+import index from '../src/widgets/index/index';
+import type { InstantSearch } from '../src/types';
+import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { defer } from '../src/lib/utils';
 
 export const createInstantSearch = (
   args: Partial<InstantSearch> = {}

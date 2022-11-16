@@ -8,11 +8,11 @@ import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import type { SortByIndexDefinition } from '../sort-by';
 import sortBy from '../sort-by';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 

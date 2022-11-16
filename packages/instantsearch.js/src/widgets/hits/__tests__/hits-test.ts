@@ -12,12 +12,12 @@ import algoliasearchHelper, {
 import type { SearchClient } from '../../../types';
 import hits from '../hits';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import type { HitsProps } from '../../../components/Hits/Hits';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 const render = castToJestMock(preactRender);

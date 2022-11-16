@@ -9,7 +9,7 @@ import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import {
   createRenderOptions,
   createInitOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, {
   SearchParameters,

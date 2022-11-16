@@ -16,12 +16,12 @@ import type { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
 import type { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import type { InfiniteHitsCache } from '../../../connectors/infinite-hits/connectInfiniteHits';
 
 const render = castToJestMock(preactRender);

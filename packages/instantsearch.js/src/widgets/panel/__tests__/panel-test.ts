@@ -11,7 +11,7 @@ import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import algoliasearchHelper from 'algoliasearch-helper';
 import type { Widget } from '../../../types';
 

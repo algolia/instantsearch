@@ -8,7 +8,7 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import connectPoweredBy from '../connectPoweredBy';
 
 describe('connectPoweredBy', () => {

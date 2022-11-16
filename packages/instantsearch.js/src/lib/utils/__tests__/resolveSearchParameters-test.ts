@@ -1,4 +1,4 @@
-import { createIndexInitOptions } from '@instantsearch/mocks/createWidget';
+import { createIndexInitOptions } from '../../../../test/createWidget';
 import index from '../../../widgets/index/index';
 import { resolveSearchParameters } from '../resolveSearchParameters';
 

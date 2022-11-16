@@ -1,7 +1,7 @@
 import { withInsights, inferInsightsPayload } from '../insights';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import type { InstantSearch, Widget } from '../../types';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../test/createInstantSearch';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 const connectHits =

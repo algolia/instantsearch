@@ -8,7 +8,7 @@ import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 

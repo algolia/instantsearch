@@ -1,7 +1,7 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import { createSendEventForFacet } from '../createSendEventForFacet';
 import type { SearchClient } from '../../../types';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 
 jest.mock('../isFacetRefined', () => ({ isFacetRefined: jest.fn() }));
 import { isFacetRefined } from '../isFacetRefined';

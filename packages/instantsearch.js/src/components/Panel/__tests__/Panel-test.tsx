@@ -7,7 +7,7 @@ import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import type { PanelProps } from '../Panel';
 import Panel from '../Panel';
-import { createRenderOptions } from '@instantsearch/mocks/createWidget';
+import { createRenderOptions } from '../../../../test/createWidget';
 
 const cssClasses = {
   root: 'root',

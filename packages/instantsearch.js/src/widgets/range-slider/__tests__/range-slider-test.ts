@@ -10,11 +10,11 @@ import algoliasearchHelper, {
   SearchResults,
 } from 'algoliasearch-helper';
 import rangeSlider from '../range-slider';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import type { InstantSearch } from '../../../types';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';

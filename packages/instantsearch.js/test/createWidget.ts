@@ -4,9 +4,9 @@ import type {
   RenderOptions,
   DisposeOptions,
   Widget,
-} from 'instantsearch.js';
-import type { IndexInitOptions } from 'instantsearch.js/es/widgets/index/index';
-import { createMultiSearchResponse } from './createAPIResponse';
+} from '../src/types';
+import type { IndexInitOptions } from '../src/widgets/index/index';
+import { createMultiSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { createInstantSearch } from './createInstantSearch';
 
 export const createInitOptions = (

@@ -14,8 +14,8 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+} from '../../../../test/createWidget';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import type { InstantSearch } from '../../../types';
 import type { RangeInputProps } from '../../../components/RangeInput/RangeInput';
 

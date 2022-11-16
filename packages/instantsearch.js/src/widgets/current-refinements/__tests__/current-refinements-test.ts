@@ -11,7 +11,7 @@ import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 

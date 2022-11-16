@@ -13,7 +13,7 @@ import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import menu from '../menu';
 

@@ -12,7 +12,7 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createMultiSearchResponse,
@@ -24,7 +24,7 @@ import type {
   HitAttributeHighlightResult,
   SearchResponse,
 } from '../../../types';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { wait } from '@instantsearch/testutils/wait';
 import instantsearch from '../../../index.es';
 

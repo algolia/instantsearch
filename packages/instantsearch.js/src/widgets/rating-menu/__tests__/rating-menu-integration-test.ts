@@ -10,7 +10,7 @@ import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createMultiSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import ratingMenu from '../rating-menu';
 

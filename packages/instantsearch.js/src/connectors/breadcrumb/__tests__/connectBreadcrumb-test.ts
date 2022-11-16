@@ -10,7 +10,7 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 
 describe('connectBreadcrumb', () => {
   describe('Usage', () => {

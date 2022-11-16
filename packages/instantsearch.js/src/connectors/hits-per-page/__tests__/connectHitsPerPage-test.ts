@@ -8,7 +8,7 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 

@@ -7,12 +7,12 @@ import type { SortByRenderState } from '../connectSortBy';
 import connectSortBy from '../connectSortBy';
 import index from '../../../widgets/index/index';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 describe('connectSortBy', () => {

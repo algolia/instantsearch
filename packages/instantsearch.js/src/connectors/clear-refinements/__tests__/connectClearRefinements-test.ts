@@ -3,7 +3,7 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import connectClearRefinements from '../connectClearRefinements';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';

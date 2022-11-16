@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createBindEventForHits,
   createSendEventForHits,

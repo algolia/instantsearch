@@ -12,7 +12,7 @@ import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 
 const render = castToJestMock(preactRender);
 

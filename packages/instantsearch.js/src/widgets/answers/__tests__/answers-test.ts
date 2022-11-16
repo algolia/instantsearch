@@ -10,7 +10,7 @@ import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { wait } from '@instantsearch/testutils/wait';
 import answers from '../answers';
 import searchBox from '../../search-box/search-box';
-import { createInitOptions } from '@instantsearch/mocks/createWidget';
+import { createInitOptions } from '../../../../test/createWidget';
 
 describe('answers', () => {
   describe('Usage', () => {

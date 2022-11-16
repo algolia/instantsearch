@@ -5,9 +5,9 @@
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { index, searchBox, menu, dynamicWidgets } from '../..';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createMultiSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { wait } from '@instantsearch/testutils/wait';

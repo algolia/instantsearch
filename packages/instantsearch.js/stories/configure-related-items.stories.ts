@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import type { HitsWidgetParams } from 'instantsearch.js/es/widgets/hits/hits';
-import type { AlgoliaHit } from 'instantsearch.js';
+import type { HitsWidgetParams } from '../src/widgets/hits/hits';
+import type { AlgoliaHit } from '../src/types';
 
 storiesOf('Basics/ConfigureRelatedItems', module).add(
   'default',

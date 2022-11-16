@@ -6,7 +6,7 @@ import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createMultiSearchResponse,

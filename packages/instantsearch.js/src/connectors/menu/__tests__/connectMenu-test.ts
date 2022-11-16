@@ -4,12 +4,12 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import type {
   MenuConnectorParams,
   MenuRenderState,

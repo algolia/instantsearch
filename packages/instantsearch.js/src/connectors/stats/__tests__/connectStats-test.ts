@@ -6,7 +6,7 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 
 import type { StatsRenderState } from '../connectStats';
 import connectStats from '../connectStats';

@@ -3,8 +3,8 @@ import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+} from '../../../../test/createWidget';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import type {

@@ -4,7 +4,7 @@
 
 import qs from 'qs';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createWidget } from '@instantsearch/mocks/createWidget';
+import { createWidget } from '../../../test/createWidget';
 import { wait } from '@instantsearch/testutils/wait';
 import type { Router, UiState, StateMapping, IndexUiState } from '../../types';
 import historyRouter from '../routers/history';

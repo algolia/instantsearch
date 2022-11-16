@@ -15,10 +15,7 @@ import {
   createSearchClient,
   createControlledSearchClient,
 } from '@instantsearch/mocks/createSearchClient';
-import {
-  createRenderOptions,
-  createWidget,
-} from '@instantsearch/mocks/createWidget';
+import { createRenderOptions, createWidget } from '../../../test/createWidget';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import type { IndexWidget } from '../../widgets/index/index';
 import type { UiState, Widget } from '../../types';

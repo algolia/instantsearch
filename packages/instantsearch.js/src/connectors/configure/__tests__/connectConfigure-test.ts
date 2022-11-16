@@ -7,7 +7,7 @@ import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { noop } from '../../../lib/utils';
 
 describe('connectConfigure', () => {

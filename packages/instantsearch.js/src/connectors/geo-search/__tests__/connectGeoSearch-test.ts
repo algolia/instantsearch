@@ -3,13 +3,13 @@ import algoliasearchHelper, {
   SearchResults,
 } from 'algoliasearch-helper';
 import connectGeoSearch from '../connectGeoSearch';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import {
   createMultiSearchResponse,
   createSingleSearchResponse,

@@ -8,7 +8,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import {
   createInitOptions,
   createRenderOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import clearRefinements from '../clear-refinements';
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';

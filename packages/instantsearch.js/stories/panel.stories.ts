@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { connectHierarchicalMenu } from 'instantsearch.js/es/connectors';
-import { noop } from 'instantsearch.js/es/lib/utils';
+import { connectHierarchicalMenu } from '../src/connectors';
+import { noop } from '../src/lib/utils';
 
 const virtualHierarchicalMenu = (args = {}) =>
   connectHierarchicalMenu(

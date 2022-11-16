@@ -9,12 +9,12 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 
 import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createInstantSearch } from '@instantsearch/mocks/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createWidget,
   createIndexInitOptions,
   createDisposeOptions,
-} from '@instantsearch/mocks/createWidget';
+} from '../../../../test/createWidget';
 import { wait } from '@instantsearch/testutils/wait';
 import type { Widget } from '../../../types';
 import InstantSearch from '../../../lib/InstantSearch';
