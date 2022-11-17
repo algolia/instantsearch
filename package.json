@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "lerna run build",
-    "doctoc": "lerna run doctoc",
+    "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md packages/*/README.md",
     "website:storybook": "lerna run storybook:build",
     "website:examples": "lerna run website:examples",
     "lint": "eslint --ext .js,.ts,.tsx .",
