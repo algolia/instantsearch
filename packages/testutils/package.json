@@ -1,6 +1,7 @@
 {
   "name": "@instantsearch/testutils",
   "version": "1.0.0",
+  "private": true,
   "dependencies": {
     "instantsearch.js": "4.49.1",
     "@types/enzyme": "3.1.15",
