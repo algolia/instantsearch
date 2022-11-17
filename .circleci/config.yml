@@ -119,18 +119,18 @@ jobs:
           name: Type Checking
           command: yarn run type-check
 
-  # TODO: could this be tested some other way?
   legacy algoliasearch:
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
-            yarn remove @algolia/client-search
-            yarn add @types/algoliasearch@3.34.10 algoliasearch@3.35.1
+            ./scripts/legacy/downgrade-algoliasearch-dependency.js
       - run:
           name: Type Checking
           command: yarn run type-check:v3
