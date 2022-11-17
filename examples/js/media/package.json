@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "@babel/core": "7.12.0",
-    "parcel": "2.8.0",
     "@parcel/packager-raw-url": "2.8.0",
-    "@parcel/transformer-webmanifest": "2.8.0"
+    "@parcel/transformer-webmanifest": "2.8.0",
+    "parcel": "2.8.0"
   }
 }
