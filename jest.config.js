@@ -15,8 +15,8 @@ const config = {
     '<rootDir>/packages/*/cjs',
     '<rootDir>/packages/*/dist',
     '<rootDir>/packages/*/es',
-    '<rootDir>/packages/*/examples',
     '<rootDir>/packages/*/stories',
+    '<rootDir>/examples',
     '<rootDir>/website',
   ],
   watchPlugins: [
