@@ -48,20 +48,20 @@
     "build:cjs": "rm -rf cjs && BABEL_ENV=cjs babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir cjs/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet",
     "build:es": "rm -rf es && BABEL_ENV=es babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir es/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet && BABEL_ENV=es babel --root-mode upward src/index.es.ts --out-file es/index.js --quiet && echo '{\"type\":\"module\",\"sideEffects\":false}' > es/package.json",
     "build:types": "scripts/typescript/extract.js",
-    "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "storybook": "start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
     "storybook:build": "build-storybook --quiet --output-dir ../../website/stories/js --static-dir .storybook/static",
     "type-check": "tsc",
     "type-check:v3": "tsc --project tsconfig.v3.json",
     "test": "jest",
-    "test:exports": "node test/module/is-es-module.mjs"
+    "test:exports": "node test/module/is-es-module.mjs",
+    "version": "./scripts/version/update-version.js"
   },
   "devDependencies": {
     "@instantsearch/mocks": "1.0.0",
     "@instantsearch/testutils": "1.0.0",
-    "places.js": "1.17.1",
-    "algoliasearch": "4.11.0",
     "@types/scriptjs": "0.0.2",
+    "algoliasearch": "4.11.0",
+    "places.js": "1.17.1",
     "scriptjs": "2.5.9",
     "webpack": "4.41.5"
   }
