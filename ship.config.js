@@ -25,7 +25,9 @@ module.exports = {
     return true;
   },
   versionUpdated: () => {
-    shell.exec('yarn lerna version --no-git-tag-version --no-push');
+    shell.exec(
+      'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
+    );
   },
   pullRequestTeamReviewers: ['frontend-experiences-web'],
   buildCommand: () => 'NODE_ENV=production yarn build --ignore="example-*"',
