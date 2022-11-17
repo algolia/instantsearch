@@ -1,8 +1,22 @@
 /* eslint-disable import/no-commonjs */
-const fs = require('fs');
-const path = require('path');
+const shell = require('shelljs');
+
+const packages = JSON.parse(
+  shell.exec('yarn run --silent lerna list --toposort --no-private --json', {
+    silent: true,
+  })
+);
+const cwd = process.cwd();
 
 module.exports = {
+  monorepo: {
+    mainVersionFile: 'package.json',
+    // no packages should be versioned by shipjs, lerna should do it!
+    packagesToBump: [],
+    packagesToPublish: packages.map(({ location }) =>
+      location.replace(`${cwd}/`, '')
+    ),
+  },
   shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
     const { fix = 0 } = commitNumbersPerType;
     if (releaseType === 'patch' && fix === 0) {
@@ -10,18 +24,14 @@ module.exports = {
     }
     return true;
   },
-  versionUpdated: ({ version, dir }) => {
-    fs.writeFileSync(
-      path.resolve(dir, 'src', 'lib', 'version.ts'),
-      `export default '${version}';\n`
-    );
-  },
-  beforeCommitChanges: ({ exec }) => {
-    exec('yarn doctoc');
+  versionUpdated: () => {
+    shell.exec('yarn lerna version --no-git-tag-version --no-push');
   },
   pullRequestTeamReviewers: ['frontend-experiences-web'],
-  buildCommand: ({ version }) =>
-    `NODE_ENV=production VERSION=${version} yarn build`,
+  buildCommand: () => 'NODE_ENV=production yarn build --ignore="example-*"',
+  beforeCommitChanges: () => {
+    shell.exec('yarn run doctoc');
+  },
   slack: {
     // disable slack notification for `prepared` lifecycle.
     // Ship.js will send slack message only for `releaseSuccess`.
