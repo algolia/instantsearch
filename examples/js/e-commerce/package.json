@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-ecommerce",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "start": "parcel index.html --port 3000",
@@ -10,7 +10,7 @@
   "browserslist": "last 2 versions, IE 11",
   "dependencies": {
     "algoliasearch": "4.11.0",
-    "instantsearch.js": "4.49.1"
+    "instantsearch.js": "4.49.2"
   },
   "devDependencies": {
     "@babel/core": "7.12.0",
