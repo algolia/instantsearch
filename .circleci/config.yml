@@ -126,6 +126,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
