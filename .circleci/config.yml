@@ -158,7 +158,7 @@ jobs:
       - *run_yarn_install
       - run:
           name: Build examples
-          command: yarn run website:examples --concurrency=2
+          command: yarn run website:examples --concurrency=1
       - persist_to_workspace:
           root: *workspace_root
           paths:
