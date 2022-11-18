@@ -49,7 +49,7 @@ When merging this pull request, you need to **Squash and merge** and make sure t
 <summary>See details</summary>
 
 After that, a commit \`${title}\` will be added and you or your CI can run \`shipjs trigger\` to trigger the release based on the commit.
-![Squash and merge](https://raw.githubusercontent.com/algolia/shipjs/v${shipJsVersion}/assets/squash-and-merge.png)
+![Squash and merge](https://raw.githubusercontent.com/algolia/shipjs/v0.24.4/assets/squash-and-merge.png)
 </details>
     `.trim();
 
