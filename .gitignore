@@ -22,7 +22,7 @@ yarn-error.log
 /storybook/dist/*
 
 # Unneeded changelogs
-examples/*/CHANGELOG.md
+examples/*/*/CHANGELOG.md
 
 # Test output
 /junit
