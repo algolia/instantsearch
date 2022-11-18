@@ -9,29 +9,26 @@ const packages = JSON.parse(
 const cwd = process.cwd();
 
 module.exports = {
-  monorepo: {
-    mainVersionFile: 'package.json',
-    // no packages should be versioned by shipjs, lerna should do it!
-    packagesToBump: [],
-    packagesToPublish: packages.map(({ location }) =>
-      location.replace(`${cwd}/`, '')
-    ),
-  },
-  shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
+  shouldPrepare({ releaseType, commitNumbersPerType }) {
     const { fix = 0 } = commitNumbersPerType;
     if (releaseType === 'patch' && fix === 0) {
       return false;
     }
     return true;
   },
-  versionUpdated: () => {
+  // versionUpdated() {
+  //   shell.exec(
+  //     'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
+  //   );
+  // },
+  version() {
     shell.exec(
       'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
     );
   },
   pullRequestTeamReviewers: ['frontend-experiences-web'],
   buildCommand: () => 'NODE_ENV=production yarn build --ignore="example-*"',
-  beforeCommitChanges: () => {
+  beforeCommitChanges() {
     shell.exec('yarn run doctoc');
   },
   slack: {
