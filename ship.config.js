@@ -20,7 +20,7 @@ module.exports = {
   getStagingBranchName: () => `chore/release-${Date.now()}`,
   version({ exec }) {
     exec(
-      'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
+      'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits --yes'
     );
 
     return {
