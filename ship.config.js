@@ -28,6 +28,8 @@ module.exports = {
       nextVersion: packages[0].version,
     };
   },
+  formatCommitMessage: () => `chore: release`,
+  formatPullRequestTitle: () => `chore: release`,
   pullRequestTeamReviewers: ['frontend-experiences-web'],
   buildCommand: () => 'NODE_ENV=production yarn build --ignore="example-*"',
   publishCommand: () => 'yarn lerna publish from-package --yes',
