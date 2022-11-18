@@ -9,11 +9,6 @@ module.exports = {
     }
     return true;
   },
-  // versionUpdated() {
-  //   shell.exec(
-  //     'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
-  //   );
-  // },
   async version({ openPullRequest, commitToStagingBranch }) {
     shell.exec(
       'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
