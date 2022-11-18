@@ -9,7 +9,15 @@ const packages = JSON.parse(
 const cwd = process.cwd();
 
 module.exports = {
-  shouldPrepare({ releaseType, commitNumbersPerType }) {
+  monorepo: {
+    mainVersionFile: 'package.json',
+    // no packages should be versioned by shipjs, lerna should do it!
+    packagesToBump: [],
+    packagesToPublish: packages.map(({ location }) =>
+      location.replace(`${cwd}/`, '')
+    ),
+  },
+  shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
     const { fix = 0 } = commitNumbersPerType;
     if (releaseType === 'patch' && fix === 0) {
       return false;
