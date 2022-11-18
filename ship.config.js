@@ -1,22 +1,7 @@
 /* eslint-disable import/no-commonjs */
 const shell = require('shelljs');
 
-const packages = JSON.parse(
-  shell.exec('yarn run --silent lerna list --toposort --no-private --json', {
-    silent: true,
-  })
-);
-const cwd = process.cwd();
-
 module.exports = {
-  monorepo: {
-    mainVersionFile: 'package.json',
-    // no packages should be versioned by shipjs, lerna should do it!
-    packagesToBump: [],
-    packagesToPublish: packages.map(({ location }) =>
-      location.replace(`${cwd}/`, '')
-    ),
-  },
   shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
     const { fix = 0 } = commitNumbersPerType;
     if (releaseType === 'patch' && fix === 0) {
@@ -29,10 +14,12 @@ module.exports = {
   //     'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
   //   );
   // },
-  version() {
+  async version({ openPullRequest, commitToStagingBranch }) {
     shell.exec(
       'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
     );
+    await commitToStagingBranch();
+    await openPullRequest();
   },
   pullRequestTeamReviewers: ['frontend-experiences-web'],
   buildCommand: () => 'NODE_ENV=production yarn build --ignore="example-*"',
