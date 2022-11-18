@@ -204,4 +204,4 @@ jobs:
           command: |
             git config --global user.email "instantsearch-bot@algolia.com"
             git config --global user.name "InstantSearch"
-            yarn run release --yes --no-browse
+            yarn run shipjs prepare --yes --no-browse
