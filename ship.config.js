@@ -1,6 +1,12 @@
 /* eslint-disable import/no-commonjs */
 const shell = require('shelljs');
 
+const packages = JSON.parse(
+  shell.exec('yarn run --silent lerna list --toposort --json --no-private', {
+    silent: true,
+  })
+);
+
 module.exports = {
   shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
     const { fix = 0 } = commitNumbersPerType;
@@ -9,15 +15,22 @@ module.exports = {
     }
     return true;
   },
-  async version({ openPullRequest, commitToStagingBranch }) {
-    shell.exec(
+  getTagName: () =>
+    packages.map((package) => `${package.name}@${package.version}`),
+  getStagingBranchName: () => `chore/release-${Date.now()}`,
+  version({ exec }) {
+    exec(
       'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits'
     );
-    await commitToStagingBranch();
-    await openPullRequest();
+
+    return {
+      // This is used for shouldPrepare
+      nextVersion: packages[0].version,
+    };
   },
   pullRequestTeamReviewers: ['frontend-experiences-web'],
   buildCommand: () => 'NODE_ENV=production yarn build --ignore="example-*"',
+  publishCommand: () => 'yarn lerna publish from-package --yes',
   beforeCommitChanges() {
     shell.exec('yarn run doctoc');
   },
