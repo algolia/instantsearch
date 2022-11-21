@@ -5,6 +5,8 @@
   "dependencies": {
     "@types/enzyme": "3.1.15",
     "enzyme": "3.11.0",
+    "enzyme-adapter-preact-pure": "2.2.0",
+    "enzyme-to-json": "3.4.4",
     "instantsearch.js": "4.49.1",
     "preact": "^10.10.0"
   }
