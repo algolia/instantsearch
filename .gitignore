@@ -23,6 +23,7 @@ yarn-error.log
 
 # Unneeded changelogs
 examples/*/*/CHANGELOG.md
+tests/*/CHANGELOG.md
 
 # Test output
 /junit

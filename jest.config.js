@@ -6,7 +6,7 @@ const config = {
   rootDir: process.cwd(),
   testRunner: 'jest-circus',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['./packages/testutils/setupTests.ts'],
+  setupFilesAfterEnv: ['./tests/utils/setupTests.ts'],
   testPathIgnorePatterns: [
     '<rootDir>/packages/*/node_modules/',
     '<rootDir>/packages/*/dist*',
