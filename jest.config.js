@@ -6,14 +6,17 @@ const config = {
   rootDir: process.cwd(),
   testRunner: 'jest-circus',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['./scripts/jest/setupTests.ts'],
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist*'],
+  setupFilesAfterEnv: ['./tests/utils/setupTests.ts'],
+  testPathIgnorePatterns: [
+    '<rootDir>/packages/*/node_modules/',
+    '<rootDir>/packages/*/dist*',
+  ],
   watchPathIgnorePatterns: [
-    '<rootDir>/cjs',
-    '<rootDir>/dist',
-    '<rootDir>/es',
+    '<rootDir>/packages/*/cjs',
+    '<rootDir>/packages/*/dist',
+    '<rootDir>/packages/*/es',
+    '<rootDir>/packages/*/stories',
     '<rootDir>/examples',
-    '<rootDir>/stories',
     '<rootDir>/website',
   ],
   watchPlugins: [

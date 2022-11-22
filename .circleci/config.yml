@@ -1,63 +1,117 @@
-aliases:
-  - &install_yarn_version
-    name: Install specific Yarn version
-    command: |
-      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-      echo 'export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"' >> $BASH_ENV
+version: 2
 
-  - &restore_yarn_cache
-    name: Restore Yarn cache
-    keys:
-      - yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
-
-  - &save_yarn_cache
-    name: Save Yarn cache
-    key: yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
-    paths:
-      - ~/.cache/yarn
-
-  - &run_yarn_install
-    name: Install dependencies
-    command: yarn install
+references:
+  workspace_root: &workspace_root
+    ~/instantsearch
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+  install_yarn_version: &install_yarn_version
+    run:
+      name: Install specific Yarn version
+      command: |
+        curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+        echo 'export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"' >> $BASH_ENV
+  restore_yarn_cache: &restore_yarn_cache
+    restore_cache:
+      name: Restore Yarn cache
+      keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
+  save_yarn_cache: &save_yarn_cache
+    save_cache:
+      name: Save Yarn cache
+      key: yarn-packages-{{ checksum "yarn.lock" }}
+      paths:
+        - ~/.cache/yarn
+  run_yarn_install: &run_yarn_install
+    run:
+      name: Install dependencies
+      command: yarn install --frozen-lockfile
 
 defaults: &defaults
-  working_directory: ~/instantsearchjs
+  working_directory: ~/instantsearch
   docker:
     - image: cimg/node:14.17.0
 
-version: 2
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - unit tests:
+          requires:
+            - build
+      - legacy algoliasearch:
+          requires:
+            - build
+      - examples:
+          requires:
+            - build
+      - e2e tests:
+          requires:
+            - examples
+      - release if needed:
+          requires:
+            - build
+            - lint
+            - unit tests
+            - examples
+            - legacy algoliasearch
+            - e2e tests
+          filters:
+            branches:
+              only:
+                - master
+  scheduled release:
+    triggers:
+      - schedule:
+          cron: '0 9 * * 2'
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - prepare release
+
+
 jobs:
-  'build and size':
+  build:
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - *save_yarn_cache
       - run:
           name: Build library
           command: |
-            yarn run build:umd
-            yarn run build:cjs
-            yarn run build:es
+            yarn run build --ignore='example-*'
       - run:
           name: Test packages size
           command: yarn run test:size
       - run:
-          name: Type Export
-          command: yarn run build:types
-      - run:
           name: Test Exports
           command: yarn run test:exports
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - packages/instantsearch.js/es
+            - packages/instantsearch.js/cjs
+            - packages/instantsearch.js/dist
+
   lint:
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Lint & Code styles
           command: yarn run lint
@@ -65,68 +119,80 @@ jobs:
           name: Type Checking
           command: yarn run type-check
 
-  'type check algoliasearch v3':
+  legacy algoliasearch:
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
-            yarn remove @algolia/client-search
-            yarn add @types/algoliasearch@3.34.10 algoliasearch@3.35.1
+            ./scripts/legacy/downgrade-algoliasearch-dependency.js
       - run:
           name: Type Checking
           command: yarn run type-check:v3
 
-  'unit tests':
+  unit tests:
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Unit tests
           command: yarn run test --maxWorkers=4
       - store_test_results:
           path: junit/jest/
 
-  'e2e tests':
+  examples:
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
-          name: Build example
-          command: yarn run website:build e-commerce
+          name: Build examples
+          command: yarn run website:examples --concurrency=1
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - website/examples
+
+  e2e tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: End-2-End tests
           command: yarn run test:e2e:saucelabs
       - store_test_results:
           path: junit/wdio/
 
-  'release if needed':
+  release if needed:
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Trigger a release if the latest commit is a release commit
           command: |
             yarn shipjs trigger
 
-  'prepare release':
+  prepare release:
     <<: *defaults
     steps:
       - checkout
@@ -139,30 +205,4 @@ jobs:
           command: |
             git config --global user.email "instantsearch-bot@algolia.com"
             git config --global user.name "InstantSearch"
-            yarn run release --yes --no-browse
-
-workflows:
-  version: 2
-  ci:
-    jobs:
-      - build and size
-      - unit tests
-      - lint
-      - type check algoliasearch v3
-      - e2e tests
-      - 'release if needed':
-          filters:
-            branches:
-              only:
-                - master
-                - next
-  'scheduled release':
-    triggers:
-      - schedule:
-          cron: '0 9 * * 2'
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - prepare release
+            yarn run shipjs prepare --yes --no-browse
