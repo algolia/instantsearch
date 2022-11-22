@@ -96,12 +96,11 @@
     "rollup-plugin-uglify": "6.0.4",
     "semver": "6.3.0",
     "shelljs": "0.8.5",
-    "shipjs": "0.25.0-alpha.1",
+    "shipjs": "0.25.0",
     "typescript": "4.3.5"
   },
   "resolutions": {
-    "brotli-size": "4.0.0",
-    "shipjs/@octokit/rest": "17.11.0"
+    "brotli-size": "4.0.0"
   },
   "bundlesize": [
     {
