@@ -1,8 +1,0 @@
-{
-  "name": "instantsearch-calendar-widget",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "build": "rm -rf ./dist/ && mkdir dist && cp -r `ls -A | grep -v 'dist'` ./dist/ && cp ../../dist/* ./dist/"
-  }
-}

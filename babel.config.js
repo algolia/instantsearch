@@ -63,6 +63,7 @@ module.exports = (api) => {
 
             // we require polyfills for this already
             'Array.prototype.includes',
+
             // false positive (babel doesn't know types)
             // this is actually only called on arrays
             'String.prototype.includes',

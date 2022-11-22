@@ -1,11 +1,9 @@
-/cjs
-/es
-/website
-dist
-.cache
-node_modules/
+**/cjs
+**/es
+**/dist
 
-# TODO: don't ignore these examples once they're updated
-/examples/calendar-widget
-/examples/media
-/examples/tourism
+/website
+
+.cache
+.parcel-cache
+**/node_modules

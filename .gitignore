@@ -1,21 +1,29 @@
 node_modules/
-!scripts/docs/
+
 .eslintcache
+.parcel-cache
+
 npm-debug.log
 yarn-error.log
+
 .DS_Store
+
 .env
 
 # Bundle build files
-/dist
-/cjs
-/es
+/packages/instantsearch.js/dist
+/packages/instantsearch.js/cjs
+/packages/instantsearch.js/es
 
 # Generated files
 /docs
 /website/examples
 /website/stories
 /storybook/dist/*
+
+# Unneeded changelogs
+examples/*/*/CHANGELOG.md
+tests/*/CHANGELOG.md
 
 # Test output
 /junit
