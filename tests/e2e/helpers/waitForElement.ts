@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    waitForElement(selector: string | Function): Promise<boolean>;
+    waitForElement(selector: string): Promise<boolean>;
   }
 }
 

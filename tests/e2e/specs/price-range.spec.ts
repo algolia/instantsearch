@@ -1,7 +1,7 @@
-export function priceRange(flavor: string) {
+export function createPriceRangeTestSuite(flavor: string) {
   const root = `examples/${flavor}/e-commerce/`;
 
-  describe('Search on specific price range', () => {
+  describe('search on specific price range', () => {
     let lowerBound: number;
     let upperBound: number;
 
@@ -20,8 +20,9 @@ export function priceRange(flavor: string) {
             '.hit-info-container strong'
           );
           return (
-            hitsText.filter(text => Number(text.replace(',', '')) < lowerBound)
-              .length === 0
+            hitsText.filter(
+              (text) => Number(text.replace(',', '')) < lowerBound
+            ).length === 0
           );
         },
         undefined,
@@ -40,8 +41,9 @@ export function priceRange(flavor: string) {
             '.hit-info-container strong'
           );
           return (
-            hitsText.filter(text => Number(text.replace(',', '')) > upperBound)
-              .length === 0
+            hitsText.filter(
+              (text) => Number(text.replace(',', '')) > upperBound
+            ).length === 0
           );
         },
         undefined,

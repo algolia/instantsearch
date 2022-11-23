@@ -1,39 +1,12 @@
 # Contributing
 
-This repository contains the end-to-end (e2e) test suite for [InstantSearch](https://github.com/algolia/instantsearch.js). This test suite is meant to be shared across all InstantSearch flavors, this is why it is stored in a separate repository.
+This repository contains the end-to-end (e2e) test suite for InstantSearch. This test suite is meant to be shared across all InstantSearch flavors, this is why it is stored in the monorepo.
 
 ## Development
 
-### Requirements
-
-To run this project, you will need:
-
-- Node.js >= v8.10.0, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
-- Yarn >= v1.16.0 - [install instructions](https://yarnpkg.com/en/docs/install#alternatives-stable)
-
 ### Installation
 
-The easiest way to work on the tests is to link them into an InstantSearch project using [`yarn link`](https://yarnpkg.com/en/docs/cli/link).
-
-First, clone the `instantsearch-e2e-tests` repository, install its dependencies and link it.
-
-```sh
-git clone git@github.com:algolia/instantsearch-e2e-tests.git
-cd instantsearch-e2e-tests
-yarn
-yarn link
-```
-
-Then, clone the [`instantsearch.js`](https://github.com/algolia/instantsearch.js/) repository (or any other flavor), install its dependencies and link `instantsearch-e2e-tests`.
-
-```sh
-git clone git@github.com:algolia/instantsearch.js
-cd instantsearch.js
-yarn
-yarn link instantsearch-e2e-tests
-```
-
-You can now run your local end-2-end test suite using the `test:e2e:*` scripts from the InstantSearch project.
+Running the tests
 
 ```sh
 yarn test:e2e # Run the test suite on Chrome browser on your local machine
@@ -60,7 +33,7 @@ One spec file represents a scenario to test a behavior from a user point of view
 
 Example of scenario:
 
-1. Load the `examples/e-commerce/` page
+1. Load the `examples/js/e-commerce/` page
 2. Click on "Appliances" category
 3. Click on rating "4 & up"
 4. Check if the result list matches the expected one
@@ -122,31 +95,3 @@ A library of helpers is available in the [`helpers`](helpers) directory and are 
 These helpers are here to simplify the writing of tests, their readability and their maintenance. You are strongly encouraged to use them in your tests and to contribute to the helpers library.
 
 You can find more information about helpers in [WebdriverIO documentation](https://webdriver.io/docs/customcommands.html#adding-custom-commands).
-
-## Release
-
-This project uses [AngularJS's commit message convention](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines) with [Commitizen](http://commitizen.github.io/cz-cli/).
-
-### Commit current changes
-
-```sh
-yarn commit
-```
-
-### Release a new version
-
-```sh
-yarn version
-```
-
-### Updating dependents projects
-
-This package is not published on the npm registry. To update the test suite in an InstantSearch project, run the following command in it:
-
-```sh
-yarn add -D "algolia/instantsearch-e2e-tests#XXX"
-```
-
-(`XXX` being the tag for the version you want to install)
-
-If [Renovate](https://renovatebot.com/) is enabled on your project then it should update it automatically like any other dependency.

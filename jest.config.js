@@ -10,6 +10,7 @@ const config = {
   testPathIgnorePatterns: [
     '<rootDir>/packages/*/node_modules/',
     '<rootDir>/packages/*/dist*',
+    '<rootDir>/tests/e2e/*',
   ],
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/cjs',

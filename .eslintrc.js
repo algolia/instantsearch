@@ -115,6 +115,50 @@ module.exports = {
         ],
       },
     },
+    {
+      files: ['tests/e2e/**/*'],
+      parserOptions: {
+        project: 'tests/e2e/tsconfig.json',
+      },
+      rules: {
+        'valid-jsdoc': 'off',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: 'WebdriverIOAsync',
+            ignoreRestSiblings: true,
+          },
+        ],
+        '@typescript-eslint/no-floating-promises': 'error',
+      },
+    },
+    {
+      files: [
+        'tests/e2e/specs/**/*.spec.ts',
+        'tests/e2e/all-flavors.spec.ts',
+        'tests/e2e/helpers/**/*.ts',
+        'tests/e2e/wdio.*.conf.js',
+      ],
+      extends: ['plugin:wdio/recommended'],
+      plugins: ['wdio'],
+      env: {
+        jasmine: true,
+      },
+      rules: {
+        // we are exporting test "factories", so we need to allow export
+        'jest/no-export': 0,
+        // we use jasmine
+        'jest/expect-expect': 0,
+        '@typescript-eslint/no-namespace': 0,
+      },
+    },
+    {
+      files: ['tests/e2e/**/*.js'],
+      rules: {
+        'import/no-commonjs': 0,
+      },
+    },
   ],
   settings: {
     react: {
