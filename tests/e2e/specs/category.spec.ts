@@ -1,7 +1,7 @@
-export function category(flavor: string) {
+export function createCategoryTestSuite(flavor: string) {
   const root = `examples/${flavor}/e-commerce/`;
 
-  describe('Search on specific category', () => {
+  describe('search on specific category', () => {
     it('navigates to the e-commerce demo', async () => {
       await browser.url(root);
     });

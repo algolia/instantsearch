@@ -1,7 +1,7 @@
-export function pagination(flavor: string) {
+export function createPaginationTestSuite(flavor: string) {
   const root = `examples/${flavor}/e-commerce/`;
 
-  describe('Page navigation', () => {
+  describe('page navigation', () => {
     it('navigates to the e-commerce demo', async () => {
       await browser.url(root);
     });

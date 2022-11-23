@@ -13,7 +13,7 @@ module.exports = {
       mount: '/',
       path: './website',
     },
-    ...flavors.map(flavor => ({
+    ...flavors.map((flavor) => ({
       mount: `/examples/${flavor}/e-commerce/*`,
       path: `./website/examples/${flavor}/e-commerce`,
     })),

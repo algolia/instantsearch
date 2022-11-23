@@ -1,7 +1,7 @@
-export function brandAndQuery(flavor: string) {
+export function createBrandAndQueryTestSuite(flavor: string) {
   const root = `examples/${flavor}/e-commerce/`;
 
-  describe('Search on specific brand and query filtering', () => {
+  describe('search on specific brand and query filtering', () => {
     it('navigates to the e-commerce demo', async () => {
       await browser.url(root);
     });

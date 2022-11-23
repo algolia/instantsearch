@@ -16,6 +16,7 @@
     "packages/instantsearch.js/src/connectors/dynamic-widgets/__tests__/connectDynamicWidgets-test.ts",
     "packages/instantsearch.js/src/connectors/hierarchical-menu/__tests__/connectHierarchicalMenu-test.ts",
     "packages/instantsearch.js/src/connectors/menu/__tests__/connectMenu-test.ts",
-    "packages/instantsearch.js/src/connectors/refinement-list/__tests__/connectRefinementList-test.ts"
+    "packages/instantsearch.js/src/connectors/refinement-list/__tests__/connectRefinementList-test.ts",
+    "tests/e2e",
   ]
 }

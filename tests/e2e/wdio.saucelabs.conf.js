@@ -15,6 +15,9 @@ module.exports = {
       'junit',
       {
         outputDir: `${process.cwd()}/junit/wdio`,
+        /**
+         * @param {{ cid: string; capabilities: { browserName: string; browserVersion: string; }; }} opts
+         */
         outputFileFormat({
           cid,
           capabilities: { browserName, browserVersion },

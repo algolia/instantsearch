@@ -1,26 +1,17 @@
-# End-2-End test suite for InstantSearch
+# End-to-end test suite for InstantSearch
 
-This repository contains the end-2-end test suite for [InstantSearch](https://github.com/algolia/instantsearch.js).
+This package contains the end-to-end test suite for all InstantSearch flavors.
 
 ## Installation
 
-Install `instantsearch-e2e-tests` and its peerDependencies in your InstantSearch project:
-
-```bash
-yarn add --dev \
-algolia/instantsearch-e2e-tests \
-@wdio/cli @wdio/jasmine-framework @wdio/spec-reporter \
-@wdio/junit-reporter @wdio/static-server-service \
-@wdio/local-runner @wdio/selenium-standalone-service \
-@wdio/sauce-service
-```
+The workspace automatically links the dependencies when you run `yarn` at the root of the monorepo.
 
 ## Running the test suite
 
-In addition to the test suite this package contains two [WebdriverIO](https://webdriver.io) configurations:
+In addition to the test suite, this package contains two [WebdriverIO](https://webdriver.io) configurations:
 
-- `local`: Run the test suite on [Chrome browser](https://google.com/chrome) on your local machine.
-- `saucelabs`: Run the test suite on multiple browsers on the [Sauce Labs service](https://saucelabs.com).
+- `local`: run the test suite on [Chrome browser](https://google.com/chrome) on your local machine.
+- `saucelabs`: run the test suite on multiple browsers on the [Sauce Labs service](https://saucelabs.com).
 
 All configurations will run a static web server on your machine on port `5000` to serve the content of the `website` directory in your project, containing the InstantSearch demos to run our tests against.
 
@@ -96,7 +87,3 @@ CircleCI can [read JUnit XML test metadata files](https://circleci.com/docs/2.0/
       - store_test_results:
         path: junit/wdio
 ```
-
-# License
-
-instantsearch-e2e-tests is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).

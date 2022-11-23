@@ -1,5 +1,6 @@
 /* eslint-disable import/no-commonjs */
 
-const { local } = require('instantsearch-e2e-tests');
-
-exports.config = local;
+exports.config = {
+  ...require('@instantsearch/e2e-tests').local,
+  // you can override the default options if needed here
+};

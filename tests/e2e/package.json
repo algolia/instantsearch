@@ -1,9 +1,8 @@
 {
-  "name": "instantsearch-e2e-tests",
-  "version": "2.0.2",
-  "description": "End-2-End test suite for InstantSearch",
-  "homepage": "https://github.com/algolia/instantsearch-e2e-tests",
-  "main": "./index.js",
+  "name": "@instantsearch/e2e-tests",
+  "private": true,
+  "version": "3.0.0",
+  "description": "End-to-end test suite for InstantSearch",
   "keywords": [
     "algolia",
     "instantsearch",
@@ -11,59 +10,22 @@
     "webdriverio"
   ],
   "author": "Algolia <support@algolia.com>",
-  "license": "MIT",
-  "files": [
-    "index.js",
-    "wdio.base.conf.js",
-    "wdio.local.conf.js",
-    "wdio.saucelabs.conf.js",
-    "helpers",
-    "specs"
-  ],
-  "repository": "algolia/instantsearch-e2e-tests",
   "sideEffects": false,
   "scripts": {
-    "commit": "git-cz",
-    "version": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file && git add CHANGELOG.md",
-    "lint": "eslint --ext .js,.ts,.tsx .",
-    "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
-    "type-check": "tsc",
-    "type-check:watch": "yarn type-check --watch"
+    "type-check": "tsc"
   },
   "dependencies": {
-    "dotenv": "^8.0.0",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
-  },
-  "devDependencies": {
     "@types/jasmine": "3.3.16",
-    "@types/node": "12.7.0",
-    "@typescript-eslint/eslint-plugin": "1.13.0",
-    "@typescript-eslint/parser": "1.13.0",
-    "conventional-changelog-cli": "2.0.23",
-    "cz-conventional-changelog": "3.0.2",
-    "eslint": "6.1.0",
-    "eslint-config-algolia": "13.4.0",
-    "eslint-config-prettier": "6.0.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-prettier": "3.1.0",
-    "eslint-plugin-wdio": "5.11.0",
-    "prettier": "1.18.2",
-    "webdriverio": "5.11.13"
-  },
-  "peerDependencies": {
-    "@wdio/cli": "^5.11.13",
-    "@wdio/jasmine-framework": "^5.11.0",
-    "@wdio/junit-reporter": "^5.11.7",
-    "@wdio/local-runner": "^5.11.13",
-    "@wdio/sauce-service": "^5.11.1",
-    "@wdio/selenium-standalone-service": "^5.11.2",
-    "@wdio/spec-reporter": "^5.11.7",
-    "@wdio/static-server-service": "^5.11.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
+    "@wdio/cli": "5.16.9",
+    "@wdio/jasmine-framework": "5.16.5",
+    "@wdio/junit-reporter": "5.16.11",
+    "@wdio/local-runner": "5.16.9",
+    "@wdio/sauce-service": "5.16.5",
+    "@wdio/selenium-standalone-service": "5.16.5",
+    "@wdio/spec-reporter": "5.16.5",
+    "@wdio/static-server-service": "5.16.5",
+    "dotenv": "8.2.0",
+    "ts-node": "8.4.1",
+    "webdriverio": "5.16.9"
   }
 }

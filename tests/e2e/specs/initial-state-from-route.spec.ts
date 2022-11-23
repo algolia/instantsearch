@@ -1,9 +1,9 @@
 import { URL, URLSearchParams } from 'url';
 
-export function initialStateFromRoute(flavor: string) {
+export function createInitialStateFromRouteTestSuite(flavor: string) {
   const root = `examples/${flavor}/e-commerce/`;
 
-  describe('State and route', () => {
+  describe('state and route', () => {
     describe('read', () => {
       it('navigates to the e-commerce demo with refinements set in route', async () => {
         const params = new URLSearchParams({
@@ -12,7 +12,7 @@ export function initialStateFromRoute(flavor: string) {
           brands: 'KitchenAid',
           rating: '4',
           price: '50:350',
-          free_shipping: 'true', // eslint-disable-line @typescript-eslint/camelcase
+          free_shipping: 'true',
           sortBy: 'instant_search_price_desc',
           hitsPerPage: '32',
         });

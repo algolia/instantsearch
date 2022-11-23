@@ -19,5 +19,6 @@
   "exclude": [
     "examples",
     "**/es",
+    "tests/e2e",
   ]
 }

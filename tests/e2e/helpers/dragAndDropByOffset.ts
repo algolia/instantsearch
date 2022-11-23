@@ -25,7 +25,12 @@ browser.addCommand(
     // so we create a dummy element in the document to use as a target
     /* eslint-disable prefer-template */
     const targetId = await browser.execute(
-      function(browserSourceX, browserSourceY, browserOffsetX, browserOffsetY) {
+      function (
+        browserSourceX,
+        browserSourceY,
+        browserOffsetX,
+        browserOffsetY
+      ) {
         const target = document.createElement('div');
         target.id = 'tmp-' + Math.floor(Math.random() * 1e9);
         target.style.position = 'absolute';
@@ -46,7 +51,7 @@ browser.addCommand(
     await source.dragAndDrop(target);
 
     // Cleaning
-    await browser.execute(function(browserTargetId) {
+    await browser.execute(function (browserTargetId) {
       const el = document.getElementById(browserTargetId);
       if (el) {
         document.body.removeChild(el);
