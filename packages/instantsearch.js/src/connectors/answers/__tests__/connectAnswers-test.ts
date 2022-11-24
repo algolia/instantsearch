@@ -11,6 +11,8 @@ import connectAnswers from '../connectAnswers';
 
 const defaultRenderDebounceTime = 10;
 const defaultSearchDebounceTime = 10;
+const waitForDebounceTime =
+  defaultRenderDebounceTime + defaultSearchDebounceTime + 80;
 
 describe('connectAnswers', () => {
   describe('Usage', () => {
@@ -236,7 +238,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       false
     );
 
-    await wait(30); // 10(render debounce) + 10(search debounce) + 10(just to make sure)
+    await wait(waitForDebounceTime);
 
     // render with hits
     const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
@@ -299,8 +301,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     // no debounce for rendering loader
     expect(renderFn).toHaveBeenCalledTimes(3);
 
-    // wait for debounce
-    await wait(30);
+    await wait(waitForDebounceTime);
+
     const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
     expect(renderFn).toHaveBeenCalledTimes(4);
     expect(renderFn).toHaveBeenNthCalledWith(
@@ -312,8 +314,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       false
     );
 
-    // wait
-    await wait(30);
+    await wait(waitForDebounceTime);
+
     // but no more rendering
     expect(renderFn).toHaveBeenCalledTimes(4);
   });
@@ -421,7 +423,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         },
       });
 
-      await wait(30);
+      await wait(waitForDebounceTime);
+
       const expectedHits = [{ title: '', objectID: 'a', __position: 1 }];
       expect(
         widget.getWidgetRenderState(
