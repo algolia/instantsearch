@@ -173,7 +173,7 @@ yarn test --watch
 
 ### End-to-end tests
 
-End-to-end tests are defined by the [tests/e2e](./tests/e2e/README.md) project.
+End-to-end tests are defined in [tests/e2e](./tests/e2e/README.md).
 
 To run them locally:
 
@@ -181,13 +181,15 @@ To run them locally:
 yarn test:e2e:local
 ```
 
-To run them on saucelabs, with credentials as `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variable:
-
+To run them on Sauce Labs:
 ```sh
 yarn test:e2e:saucelabs
 ```
 
-More info, including how to write the tests, can be found in its [CONTRIBUTING](./tests/e2e/CONTRIBUTING.md) and [README](./tests/e2e/README.md) files.
+> **Note**
+>Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
+
+For more info, including how to write end-to-end tests, check the `tests/e2e` [CONTRIBUTING](./tests/e2e/CONTRIBUTING.md) and [README](./tests/e2e/README.md) files.
 
 ### Type checks
 
