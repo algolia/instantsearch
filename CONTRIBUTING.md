@@ -11,7 +11,6 @@ If this guide does not contain what you are looking for and thus prevents you fr
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Reporting an issue](#reporting-an-issue)
 - [The code contribution process](#the-code-contribution-process)
 - [Commit conventions](#commit-conventions)
@@ -153,6 +152,20 @@ Here are the main files and folders of the project.
   ▸ widgets/          << The source of the widgets
 ```
 
+## Importing existing projects
+
+This monorepo has as goal to be used for all InstantSearch flavors and tools. To do so, we need to import existing projects into this repository. The process is as follows:
+
+1. clone your project into a new clean folder (/tmp/myproject)
+2. install [`git-filter-repo`](https://github.com/newren/git-filter-repo)
+3. run `git filter-repo --to-subdirectory-filter packages/myproject`
+4. add your temporary clone as a remote in the instantsearch repository: `git remote add myproject /tmp/myproject`
+5. fetch the remote: `git fetch myproject`
+6. check out to a new branch: `git checkout -b feat/import-myproject`
+7. merge the remote into the monorepo: `git merge --allow-unrelated-histories myproject/mybranch`
+8. make any changes necessary to make the project work in the monorepo and commit those
+9. make a pull request and _merge using rebase or merge_ (if you merge using squash the history will be lost)
+
 ## Tests
 
 ### Unit tests
@@ -252,4 +265,3 @@ yarn run release
 ```
 
 The script will ask you a question about the next version. If it's wrong, you can say "No" and specify the version (e.g. "7.0.0-beta.0"). Then, it will open a pull request for that release. When the pull request is merged, CircleCI will publish it to npm with a `--tag beta` argument.
-
