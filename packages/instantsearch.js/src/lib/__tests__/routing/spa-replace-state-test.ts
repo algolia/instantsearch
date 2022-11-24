@@ -11,7 +11,7 @@ import { connectSearchBox } from '../../../connectors';
 /* eslint no-lone-blocks: "off" */
 
 const writeDelay = 10;
-const writeWait = 1.5 * writeDelay;
+const writeWait = 10 * writeDelay;
 
 describe('routing using `replaceState`', () => {
   // We can't assert whether another router did update the URL

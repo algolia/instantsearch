@@ -11,7 +11,7 @@ import { connectPagination, connectSearchBox } from '../../../connectors';
 /* eslint no-lone-blocks: "off" */
 
 const writeDelay = 10;
-const writeWait = 1.5 * writeDelay;
+const writeWait = 10 * writeDelay;
 
 test('does not write the same URL twice', async () => {
   // -- Flow

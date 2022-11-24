@@ -13,8 +13,10 @@ beforeEach(() => {
   window.history.pushState({}, '', '/');
 });
 
+const writeDelay = 10;
+const writeWait = 10 * writeDelay;
+
 test('correct URL for widgets', async () => {
-  const writeDelay = 10;
   const router = historyRouter({ writeDelay });
 
   const indexName = 'indexName';
@@ -40,7 +42,7 @@ test('correct URL for widgets', async () => {
   // on main index
   search.renderState[indexName].pagination!.refine(39);
 
-  await wait(20);
+  await wait(writeWait);
 
   expect(window.location.search).toBe(
     `?${encodeURI('indexName[page]=40&indexName[query]=test')}`
@@ -48,7 +50,6 @@ test('correct URL for widgets', async () => {
 });
 
 test('correct URL for widgets in indices with repeated indexId', async () => {
-  const writeDelay = 10;
   const router = historyRouter({ writeDelay });
 
   const indexName = 'indexName';
@@ -74,7 +75,7 @@ test('correct URL for widgets in indices with repeated indexId', async () => {
   // on main index
   search.renderState[indexName].pagination!.refine(39);
 
-  await wait(20);
+  await wait(writeWait);
 
   expect(window.location.search).toBe(
     `?${encodeURI('indexName[page]=40&indexName[query]=test')}`
