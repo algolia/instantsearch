@@ -12,7 +12,7 @@ import type InstantSearch from '../../InstantSearch';
 /* eslint no-lone-blocks: "off" */
 
 const writeDelay = 10;
-const writeWait = 1.5 * writeDelay;
+const writeWait = 10 * writeDelay;
 
 const addWidgetsAndStart = (search: InstantSearch) => {
   search.addWidgets([connectSearchBox(() => {})({})]);

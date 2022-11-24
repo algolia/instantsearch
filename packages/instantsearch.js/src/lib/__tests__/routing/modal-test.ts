@@ -11,7 +11,7 @@ import { connectSearchBox } from '../../../connectors';
 /* eslint no-lone-blocks: "off" */
 
 const writeDelay = 10;
-const writeWait = 1.5 * writeDelay;
+const writeWait = 10 * writeDelay;
 
 describe('routing with no navigation', () => {
   test('cleans the URL when InstantSearch is disposed within the same page', async () => {

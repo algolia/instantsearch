@@ -151,7 +151,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       );
       expect(answersContainer.querySelector('.root')).toHaveClass('empty');
 
-      await wait(30);
+      await wait(100);
 
       // debounced render
       expect(answersContainer.querySelector('.root')).not.toHaveClass('empty');
