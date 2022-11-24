@@ -184,6 +184,26 @@ To run the test continuously based on what you changed (useful when developing o
 yarn test --watch
 ```
 
+### End-to-end tests
+
+End-to-end tests are defined in [tests/e2e](./tests/e2e/README.md).
+
+To run them locally:
+
+```sh
+yarn test:e2e:local
+```
+
+To run them on Sauce Labs:
+```sh
+yarn test:e2e:saucelabs
+```
+
+> **Note**
+>Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
+
+For more info, including how to write end-to-end tests, check the `tests/e2e` [CONTRIBUTING](./tests/e2e/CONTRIBUTING.md) and [README](./tests/e2e/README.md) files.
+
 ### Type checks
 
 Type checks ensure code is correctly typed both for code quality and TypeScript compatibility.

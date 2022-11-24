@@ -1,24 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ESNEXT",
-    "module": "es2015",
+    "target": "es2016",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
-    "jsx": "react",
-    "jsxFactory": "h",
-    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "isolatedModules": true
+    "types": ["node", "webdriverio", "jasmine"],
+    "allowJs": true,
+    "checkJs": true,
   },
-  "exclude": [
-    "examples",
-    "**/es",
-    "tests/e2e",
+  "exclude": ["node_modules"],
+  "include": [
+    "./*.ts",
+    "./*.js",
+    "./specs/**/*.ts",
+    "./helpers/**/*.ts"
   ]
 }
