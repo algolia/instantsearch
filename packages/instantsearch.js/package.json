@@ -51,7 +51,7 @@
     "storybook": "start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
     "storybook:build": "build-storybook --quiet --output-dir ../../website/stories/js --static-dir .storybook/static",
     "test": "jest",
-    "test:exports": "node test/module/is-es-module.mjs",
+    "test:exports": "node test/module/is-es-module.mjs && node test/module/is-cjs-module.cjs",
     "version": "./scripts/version/update-version.js"
   },
   "devDependencies": {
