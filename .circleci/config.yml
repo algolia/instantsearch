@@ -197,10 +197,9 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Prepare a pull request for next release
           command: |
