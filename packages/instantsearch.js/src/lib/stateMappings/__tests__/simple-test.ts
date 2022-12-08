@@ -143,5 +143,20 @@ describe('simpleStateMapping', () => {
         },
       });
     });
+
+    it('doesn\'t throw if an index state is null', () => {
+      const stateMapping = simpleStateMapping<
+        UiState & { [indexId: string]: { spy: string[] } }
+      >();
+      const actual = stateMapping.routeToState({
+        // @ts-expect-error
+        indexName: null,
+      });
+
+      expect(actual).toEqual({
+        indexName: {}
+      })
+    });
+
   });
 });
