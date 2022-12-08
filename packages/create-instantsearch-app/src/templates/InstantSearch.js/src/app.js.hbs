@@ -1,0 +1,75 @@
+const { algoliasearch, instantsearch } = window;
+
+const searchClient = algoliasearch('{{appId}}', '{{apiKey}}');
+
+const search = instantsearch({
+  indexName: '{{indexName}}',
+  searchClient,
+});
+
+search.addWidgets([
+  instantsearch.widgets.searchBox({
+    container: '#searchbox',
+    {{#if searchPlaceholder}}
+    placeholder: '{{searchPlaceholder}}',
+    {{/if}}
+  }),
+  instantsearch.widgets.hits({
+    container: '#hits',
+    {{#if attributesToDisplay}}
+    templates: {
+      item: `
+<article>
+  <h1>\{{#helpers.highlight}}{ "attribute": "{{attributesToDisplay.[0]}}" }\{{/helpers.highlight}}</h1>
+  {{#each attributesToDisplay}}
+  {{#unless @first}}
+  <p>\{{#helpers.highlight}}{ "attribute": "{{this}}" }\{{/helpers.highlight}}</p>
+  {{/unless}}
+  {{/each}}
+</article>
+`,
+    },
+    {{/if}}
+  }),
+  instantsearch.widgets.configure({
+    hitsPerPage: 8,
+  }),
+  {{#if flags.dynamicWidgets}}
+  instantsearch.widgets.dynamicWidgets({
+    container: '#dynamic-widgets',
+    fallbackWidget({ container, attribute }) {
+      return instantsearch.widgets.panel({ templates: { header: attribute } })(
+        instantsearch.widgets.refinementList
+      )({
+        container,
+        attribute,
+      });
+    },
+    widgets: [
+      {{#each attributesForFaceting}}
+      container =>
+        instantsearch.widgets.panel({
+          templates: { header: '{{this}}' },
+        })(instantsearch.widgets.refinementList)({
+          container,
+          attribute: '{{this}}',
+        }),
+      {{/each}}
+    ],
+  }),
+  {{else}}
+  {{#each attributesForFaceting}}
+  instantsearch.widgets.panel({
+    templates: { header: '{{this}}' },
+  })(instantsearch.widgets.refinementList)({
+    container: '#{{this}}-list',
+    attribute: '{{this}}',
+  }),
+  {{/each}}
+  {{/if}}
+  instantsearch.widgets.pagination({
+    container: '#pagination',
+  }),
+]);
+
+search.start();

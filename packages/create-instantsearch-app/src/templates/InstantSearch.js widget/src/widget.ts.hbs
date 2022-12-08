@@ -1,0 +1,35 @@
+import { connect{{ pascalCaseName }} } from './connector';
+import { create{{ pascalCaseName }}Renderer } from './renderer';
+import type {
+  {{ pascalCaseName }}WidgetCreator,
+  {{ pascalCaseName }}ConnectorParams,
+  {{ pascalCaseName }}WidgetParams,
+} from './types';
+
+/*
+ * Widget creator
+ * Returns a widget instance
+ */
+export const {{ camelCaseName }}: {{ pascalCaseName }}WidgetCreator = function {{ pascalCaseName }}(
+  widgetParams
+) {
+  const rendererWidgetParams: {{ pascalCaseName }}WidgetParams = {
+    container: widgetParams.container,
+    // TODO: pick the widget-only parameters from the widgetParams
+  };
+
+  const { render, dispose } = create{{ pascalCaseName }}Renderer(
+    rendererWidgetParams
+  );
+
+  const createWidget = connect{{ pascalCaseName }}(render, dispose);
+
+  const connectorParams: {{ pascalCaseName }}ConnectorParams = {
+    // TODO: pick the connector-only parameters from the widgetParams
+  };
+
+  return {
+    ...createWidget(connectorParams),
+    $$widgetType: '{{ widgetType }}',
+  };
+};
