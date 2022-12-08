@@ -31,6 +31,7 @@ const config = {
   snapshotFormat: {
     printBasicPrototype: false,
   },
+  projects: ['<rootDir>/packages/*/jest.config.js'],
   // reporter for circleci
   reporters: [
     'default',

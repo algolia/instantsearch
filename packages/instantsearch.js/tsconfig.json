@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "strict": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "isolatedModules": true
+  },
+  "exclude": [
+    "examples",
+    "**/es",
+    "tests/e2e",
+    "packages/create-instantsearch-app/src/templates"
+  ]
+}

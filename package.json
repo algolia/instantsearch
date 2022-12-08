@@ -17,7 +17,7 @@
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc && lerna run type-check",
     "type-check:v3": "tsc --project tsconfig.v3.json",
-    "test": "jest",
+    "test": "lerna run test",
     "test:size": "bundlesize",
     "test:exports": "lerna run test:exports",
     "test:e2e": "yarn test:e2e:local",

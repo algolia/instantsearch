@@ -27,3 +27,4 @@ tests/*/CHANGELOG.md
 
 # Test output
 /junit
+junit.xml

@@ -3251,14 +3251,14 @@ search.addWidgets([
       });
     },
     widgets: [
-      container =>
+      (container) =>
         instantsearch.widgets.panel({
           templates: { header: 'facet1' },
         })(instantsearch.widgets.refinementList)({
           container,
           attribute: 'facet1',
         }),
-      container =>
+      (container) =>
         instantsearch.widgets.panel({
           templates: { header: 'facet2' },
         })(instantsearch.widgets.refinementList)({
@@ -4198,117 +4198,114 @@ exports[`Templates InstantSearch.js widget File content: src/connector.ts 1`] = 
 
  *   Can be called internally anytime by InstantSearch.
  */
-export const connectDatePicker: DatePickerConnector = function connectDatePicker(
-  renderFn,
-  unmountFn = () => {}
-) {
-  return (widgetParams) => {
-    const {
-      // TODO: read from connector parameters
-     } = widgetParams;
+export const connectDatePicker: DatePickerConnector =
+  function connectDatePicker(renderFn, unmountFn = () => {}) {
+    return (widgetParams) => {
+      const {
+        // TODO: read from connector parameters
+      } = widgetParams;
 
-    return {
-      $$type: 'algolia.date-picker',
-      /*
-       * Sets up the widget during the InstantSearch initialization.
-       * It is called before the first search and is a good place to call the \`renderFn\` function to set up the initial DOM (a placeholder for example).
-       */
-      init(initOptions) {
-        const { instantSearchInstance } = initOptions;
+      return {
+        $$type: 'algolia.date-picker',
+        /*
+         * Sets up the widget during the InstantSearch initialization.
+         * It is called before the first search and is a good place to call the \`renderFn\` function to set up the initial DOM (a placeholder for example).
+         */
+        init(initOptions) {
+          const { instantSearchInstance } = initOptions;
 
-        renderFn(
-          {
-            ...this.getWidgetRenderState(initOptions),
-            instantSearchInstance,
-          },
-          true
-        );
-      },
+          renderFn(
+            {
+              ...this.getWidgetRenderState(initOptions),
+              instantSearchInstance,
+            },
+            true
+          );
+        },
 
-      /*
-       * Re-render the widget with the new information from the search, including results.
-       * This method is called each time we receive results from Algolia.
-       */
-      render(renderOptions) {
-        const { instantSearchInstance } = renderOptions;
+        /*
+         * Re-render the widget with the new information from the search, including results.
+         * This method is called each time we receive results from Algolia.
+         */
+        render(renderOptions) {
+          const { instantSearchInstance } = renderOptions;
 
-        renderFn(
-          {
-            ...this.getWidgetRenderState(renderOptions),
-            instantSearchInstance,
-          },
-          false
-        );
-      },
+          renderFn(
+            {
+              ...this.getWidgetRenderState(renderOptions),
+              instantSearchInstance,
+            },
+            false
+          );
+        },
 
-      /*
-       * Called when this widget is unmounted.
-       * Can be used to remove refinements set by during this widget's initialization and life time.
-       */
-      dispose() {
-        unmountFn();
-      },
+        /*
+         * Called when this widget is unmounted.
+         * Can be used to remove refinements set by during this widget's initialization and life time.
+         */
+        dispose() {
+          unmountFn();
+        },
 
-      /*
-       * Derive a \`uiState\` for this widget based on the existing \`uiState\` and the search parameters applied.
-       * This method is required for a widget to be taken in account for routing.
-       * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
-       */
-      getWidgetUiState(uiState, { searchParameters }) {
+        /*
+         * Derive a \`uiState\` for this widget based on the existing \`uiState\` and the search parameters applied.
+         * This method is required for a widget to be taken in account for routing.
+         * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
+         */
+        getWidgetUiState(uiState, { searchParameters }) {
+          return {
+            ...uiState,
+            datePicker: {
+              // TODO: add this widget's ui state
+            },
+          };
+        },
 
-        return {
-          ...uiState,
-          datePicker: {
-            // TODO: add this widget's ui state
+        /*
+         * It receives the current UiState and applied search parameters, and is
+         * expected to return a new search parameters.
+         * This method is required for a widget to be taken in account for routing.
+         */
+        getWidgetSearchParameters(searchParameters, { uiState }) {
+          // add this widget's search parameters
+          return searchParameters;
+        },
+
+        /*
+         * Returns IndexRenderState of the current index component tree to build the render state of the whole app.
+         * This method is required for a widget to be taken in account for routing.
+         * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
+         */
+        getRenderState(renderState, renderOptions) {
+          return {
+            ...renderState,
+            datePicker: {
+              // TODO: call this.getWidgetRenderState(renderOptions), possibly nested per attribute
+            },
+          };
+        },
+
+        /*
+         * Returns the render state of the current widget.
+         * The render state will be passed to the \`renderFn\` function by the \`init\` and \`render\` methods.
+         * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
+         */
+        getWidgetRenderState({ results }) {
+          if (!results) {
+            // default rendering state without results
+            return {
+              widgetParams,
+            };
           }
-        };
-      },
 
-      /*
-       * It receives the current UiState and applied search parameters, and is
-       * expected to return a new search parameters.
-       * This method is required for a widget to be taken in account for routing.
-       */
-      getWidgetSearchParameters(searchParameters, { uiState }) {
-        // add this widget's search parameters
-        return searchParameters;
-      },
-
-      /*
-       * Returns IndexRenderState of the current index component tree to build the render state of the whole app.
-       * This method is required for a widget to be taken in account for routing.
-       * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
-       */
-      getRenderState(renderState, renderOptions) {
-        return {
-          ...renderState,
-          datePicker: {
-            // TODO: call this.getWidgetRenderState(renderOptions), possibly nested per attribute
-          }
-        };
-      },
-
-      /*
-       * Returns the render state of the current widget.
-       * The render state will be passed to the \`renderFn\` function by the \`init\` and \`render\` methods.
-       * This method can be called internally anytime by InstantSearch and to avoid any issues they must be defined as pure functions.
-       */
-      getWidgetRenderState({ results }) {
-        if (!results) {
-          // default rendering state without results
+          // rendering state when there are results
           return {
             widgetParams,
           };
-        }
-
-        // rendering state when there are results
-        return {
-          widgetParams,
-        };
-      },
+        },
+      };
     };
-  };
-};"
+  };"
 `;
 
 exports[`Templates InstantSearch.js widget File content: src/index.ts 1`] = `
@@ -4377,11 +4374,7 @@ export const createDatePickerRenderer: DatePickerRendererCreator = ({
 `;
 
 exports[`Templates InstantSearch.js widget File content: src/types.ts 1`] = `
-"import type {
-  Renderer,
-  Connector,
-  WidgetFactory,
-} from 'instantsearch.js/es';
+"import type { Renderer, Connector, WidgetFactory } from 'instantsearch.js/es';
 
 /*
  * Parameters send only to the widget creator function
@@ -4415,7 +4408,7 @@ type DatePickerWidgetDescription = {
   indexUiState: {
     datePicker: {
       // TODO: add the return type of getWidgetUiState
-    }
+    };
   };
 };
 
@@ -4473,9 +4466,7 @@ export const datePicker: DatePickerWidgetCreator = function DatePicker(
     // TODO: pick the widget-only parameters from the widgetParams
   };
 
-  const { render, dispose } = createDatePickerRenderer(
-    rendererWidgetParams
-  );
+  const { render, dispose } = createDatePickerRenderer(rendererWidgetParams);
 
   const createWidget = connectDatePicker(render, dispose);
 
@@ -4834,13 +4825,13 @@ const $searchBox = document.querySelector('#searchBox input[type=search]');
 const $hits = document.querySelector('#hits');
 
 function renderHits(query) {
-  index.search(query).then(result => {
+  index.search(query).then((result) => {
     // Please sanitize user-provided data when using \`innerHTML\` to avoid XSS
     $hits.innerHTML = \`
       <ol class=\\"ais-hits\\">
         \${result.hits
           .map(
-            hit =>
+            (hit) =>
               \`<li class=\\"ais-hits--item\\">
                 <article>
                   <h1>\${hit._highlightResult.attribute1.value}</h1>
@@ -4853,7 +4844,7 @@ function renderHits(query) {
   });
 }
 
-$searchBox.addEventListener('input', event => {
+$searchBox.addEventListener('input', (event) => {
   const query = event.target.value;
 
   renderHits(query);
@@ -5142,19 +5133,19 @@ const helper = algoliasearchHelper(client, 'indexName');
 const $searchBox = document.querySelector('#searchBox input[type=search]');
 const $hits = document.querySelector('#hits');
 
-$searchBox.addEventListener('input', event => {
+$searchBox.addEventListener('input', (event) => {
   const query = event.target.value;
 
   helper.setQuery(query).search();
 });
 
-helper.on('result', result => {
+helper.on('result', (result) => {
   // Please sanitize user-provided data when using \`innerHTML\` to avoid XSS
   $hits.innerHTML = \`
     <ol class=\\"ais-hits\\">
       \${result.hits
         .map(
-          hit =>
+          (hit) =>
             \`<li class=\\"ais-hits--item\\">
               <article>
                 <h1>\${hit._highlightResult.attribute1.value}</h1>
@@ -5449,7 +5440,7 @@ const helper = algoliasearchHelper(client, 'indexName');
 const $searchBox = document.querySelector('#searchBox input[type=search]');
 const $hits = document.querySelector('#hits');
 
-$searchBox.addEventListener('input', event => {
+$searchBox.addEventListener('input', (event) => {
   const query = event.target.value;
 
   helper.setQuery(query).search();
@@ -5461,7 +5452,7 @@ helper.on('result', ({ results }) => {
     <ol class=\\"ais-hits\\">
       \${results.hits
         .map(
-          hit =>
+          (hit) =>
             \`<li class=\\"ais-hits--item\\">
               <article>
                 <h1>\${hit._highlightResult.attribute1.value}</h1>
@@ -6056,10 +6047,7 @@ import type { Hit } from 'instantsearch.js';
 
 import './App.css';
 
-const searchClient = algoliasearch(
-  'appId',
-  'apiKey'
-);
+const searchClient = algoliasearch('appId', 'apiKey');
 
 export function App() {
   return (
@@ -6092,7 +6080,10 @@ export function App() {
             </div>
 
             <div className=\\"search-panel__results\\">
-              <SearchBox placeholder=\\"Search placeholder\\" className=\\"searchbox\\" />
+              <SearchBox
+                placeholder=\\"Search placeholder\\"
+                className=\\"searchbox\\"
+              />
               <Hits hitComponent={Hit} />
 
               <div className=\\"pagination\\">
@@ -6831,7 +6822,7 @@ const styles = StyleSheet.create({
 const InfiniteHits = ({ hits, hasMore, refineNext }) => (
   <FlatList
     data={hits}
-    keyExtractor={item => item.objectID}
+    keyExtractor={(item) => item.objectID}
     ItemSeparatorComponent={() => <View style={styles.separator} />}
     onEndReached={() => hasMore && refineNext()}
     renderItem={({ item }) => (
@@ -6886,7 +6877,7 @@ const SearchBox = ({ currentRefinement, refine }) => (
   <View style={styles.container}>
     <TextInput
       style={styles.input}
-      onChangeText={value => refine(value)}
+      onChangeText={(value) => refine(value)}
       value={currentRefinement}
       placeholder=\\"Search placeholder\\"
     />
@@ -7266,18 +7257,14 @@ describe('nothing', () => {
 exports[`Templates React InstantSearch widget File content: src/lib/component.tsx 1`] = `
 "import React from 'react';
 
-import type { ProvidedProps } from './connector'
+import type { ProvidedProps } from './connector';
 
 type Props = ProvidedProps & {
   refine: () => void;
 };
 
 export const DatePickerComponent = ({}: Props) => {
-  return (
-    <div>
-      {/* TODO: render something */}
-    </div>
-  );
+  return <div>{/* TODO: render something */}</div>;
 };"
 `;
 
@@ -7288,35 +7275,36 @@ import { createConnector } from 'react-instantsearch-dom';
 
 export type ProvidedProps = {
   // TODO: fill props that are returned by \`getProvidedProps\`
-}
+};
 
-export const connectDatePicker: Connector<ProvidedProps> = createConnector<ProvidedProps>({
-  displayName: 'DatePicker',
-  $$type: 'algolia.date-picker',
+export const connectDatePicker: Connector<ProvidedProps> =
+  createConnector<ProvidedProps>({
+    displayName: 'DatePicker',
+    $$type: 'algolia.date-picker',
 
-  getProvidedProps(props, searchState, searchResults) {
-    return {
-      // TODO: return a props for the component
-    };
-  },
+    getProvidedProps(props, searchState, searchResults) {
+      return {
+        // TODO: return a props for the component
+      };
+    },
 
-  refine(props, searchState, nextRefinement) {
-    return {
-      // TODO: return a next searchState
-    };
-  },
+    refine(props, searchState, nextRefinement) {
+      return {
+        // TODO: return a next searchState
+      };
+    },
 
-  cleanUp(props, searchState) {
-    return {
-      // TODO: return a searchState where this widget is removed from the widget tree
-    };
-  },
+    cleanUp(props, searchState) {
+      return {
+        // TODO: return a searchState where this widget is removed from the widget tree
+      };
+    },
 
-  getSearchParameters(searchParameters, props, searchState) {
-    // TODO: update and return the searchParameters
-    return searchParameters;
-  },
-});"
+    getSearchParameters(searchParameters, props, searchState) {
+      // TODO: update and return the searchParameters
+      return searchParameters;
+    },
+  });"
 `;
 
 exports[`Templates React InstantSearch widget File content: src/lib/widget.tsx 1`] = `
@@ -7756,7 +7744,7 @@ Vue.config.productionTip = false;
 Vue.use(InstantSearch);
 
 new Vue({
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app');"
 `;
 
@@ -7914,9 +7902,7 @@ exports[`Templates Vue InstantSearch 2 File content: src/App.vue 1`] = `
   <div>
     <header class=\\"header\\">
       <h1 class=\\"header-title\\">
-        <a href=\\"/\\">
-          vue-instantsearch-app
-        </a>
+        <a href=\\"/\\"> vue-instantsearch-app </a>
       </h1>
       <p class=\\"header-subtitle\\">
         using
@@ -8058,7 +8044,7 @@ Vue.config.productionTip = false;
 Vue.use(InstantSearch);
 
 new Vue({
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app');"
 `;
 
@@ -8216,9 +8202,7 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
   <div>
     <header class=\\"header\\">
       <h1 class=\\"header-title\\">
-        <a href=\\"/\\">
-          vue-instantsearch-app
-        </a>
+        <a href=\\"/\\"> vue-instantsearch-app </a>
       </h1>
       <p class=\\"header-subtitle\\">
         using
@@ -8369,7 +8353,7 @@ Vue.config.productionTip = false;
 Vue.use(InstantSearch);
 
 new Vue({
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app');"
 `;
 
