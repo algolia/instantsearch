@@ -144,7 +144,7 @@ describe('simpleStateMapping', () => {
       });
     });
 
-    it('doesn\'t throw if an index state is null', () => {
+    it("doesn't throw if an index state is null", () => {
       const stateMapping = simpleStateMapping<
         UiState & { [indexId: string]: { spy: string[] } }
       >();
@@ -154,8 +154,8 @@ describe('simpleStateMapping', () => {
       });
 
       expect(actual).toEqual({
-        indexName: {}
-      })
+        indexName: {},
+      });
     });
   });
 });
