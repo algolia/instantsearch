@@ -157,6 +157,5 @@ describe('simpleStateMapping', () => {
         indexName: {}
       })
     });
-
   });
 });
