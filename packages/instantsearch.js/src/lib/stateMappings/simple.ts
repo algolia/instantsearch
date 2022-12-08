@@ -28,7 +28,7 @@ export default function simpleStateMapping<
       return Object.keys(routeState).reduce(
         (state, indexId) => ({
           ...state,
-          [indexId]: getIndexStateWithoutConfigure(routeState[indexId]),
+          [indexId]: getIndexStateWithoutConfigure(routeState[indexId] || {}),
         }),
         {} as TUiState
       );
