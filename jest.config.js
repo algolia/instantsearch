@@ -11,7 +11,6 @@ const config = {
     '<rootDir>/packages/*/node_modules/',
     '<rootDir>/packages/*/dist*',
     '<rootDir>/tests/e2e/*',
-    '<rootDir>/packages/create-instantsearch-app/src/templates/',
   ],
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/cjs',

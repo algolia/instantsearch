@@ -20,5 +20,6 @@
     "examples",
     "**/es",
     "tests/e2e",
+    "packages/create-instantsearch-app/src/templates"
   ]
 }
