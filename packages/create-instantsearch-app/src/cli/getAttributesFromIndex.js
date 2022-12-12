@@ -20,7 +20,8 @@ module.exports = async function getAttributesFromIndex({
       ...new Set([
         ...defaultAttributes
           .map(
-            attribute => highlightedAttributes.includes(attribute) && attribute
+            (attribute) =>
+              highlightedAttributes.includes(attribute) && attribute
           )
           .filter(Boolean),
         ...highlightedAttributes,

@@ -97,6 +97,7 @@ module.exports = {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/explicit-member-accessibility': 'off',
+        '@typescript-eslint/naming-convention': 'off',
       },
     },
     {

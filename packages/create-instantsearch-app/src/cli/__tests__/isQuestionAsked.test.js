@@ -3,7 +3,7 @@ const isQuestionAsked = require('../isQuestionAsked');
 test('with appId undefined should ask', () => {
   expect(
     isQuestionAsked({
-      question: { name: 'appId', validate: input => Boolean(input) },
+      question: { name: 'appId', validate: (input) => Boolean(input) },
       args: { appId: undefined, interactive: true },
     })
   ).toBe(false);
@@ -12,7 +12,7 @@ test('with appId undefined should ask', () => {
 test('with appId defined should not ask', () => {
   expect(
     isQuestionAsked({
-      question: { name: 'appId', validate: input => Boolean(input) },
+      question: { name: 'appId', validate: (input) => Boolean(input) },
       args: { appId: 'APP_ID', interactive: true },
     })
   ).toBe(true);

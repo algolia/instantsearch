@@ -39,7 +39,7 @@ module.exports = function build(config) {
         ])
       )
       .use(inPlace())
-      .build(err => {
+      .build((err) => {
         if (err) {
           reject(err);
         }

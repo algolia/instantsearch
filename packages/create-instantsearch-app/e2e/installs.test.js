@@ -71,9 +71,7 @@ describe('Installation', () => {
       }).toThrow();
 
       expect(
-        execSync(`grep "hello" ${appPath}/README.md`)
-          .toString()
-          .trim()
+        execSync(`grep "hello" ${appPath}/README.md`).toString().trim()
       ).toBe('hello');
     });
 

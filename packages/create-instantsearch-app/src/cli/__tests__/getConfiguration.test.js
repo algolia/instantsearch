@@ -31,7 +31,7 @@ test('with options from arguments and prompt merge', async () => {
 });
 
 test('with config file overrides all options', async () => {
-  loadJsonFile.mockImplementationOnce(x => Promise.resolve(x));
+  loadJsonFile.mockImplementationOnce((x) => Promise.resolve(x));
   const ignoredOptions = {
     libraryVersion: '3.0.0',
   };

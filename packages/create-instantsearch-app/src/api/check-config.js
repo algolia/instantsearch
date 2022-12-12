@@ -37,7 +37,7 @@ function getOptions({ supportedTemplates }) {
 module.exports = function checkConfig(config, { supportedTemplates }) {
   const options = getOptions({ supportedTemplates });
 
-  Object.keys(options).forEach(optionName => {
+  Object.keys(options).forEach((optionName) => {
     const isOptionValid = options[optionName].validate(config[optionName]);
 
     if (!isOptionValid) {

@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -10,11 +11,11 @@ expect.extend({ toMatchImageSnapshot });
 const templatesFolder = path.join(__dirname, '../src/templates');
 const templates = fs
   .readdirSync(templatesFolder)
-  .map(name => path.join(templatesFolder, name))
-  .filter(source => fs.lstatSync(source).isDirectory());
+  .map((name) => path.join(templatesFolder, name))
+  .filter((source) => fs.lstatSync(source).isDirectory());
 
 describe('Templates', () => {
-  templates.forEach(templatePath => {
+  templates.forEach((templatePath) => {
     const templateName = path.basename(templatePath);
     const templateConfig = require(`${templatePath}/.template.js`);
     if (templateConfig.category === 'Widget') {
@@ -70,7 +71,7 @@ describe('Templates', () => {
           .readFileSync(`${appPath}/.gitignore`)
           .toString()
           .split('\n')
-          .filter(line => !line.startsWith('#'))
+          .filter((line) => !line.startsWith('#'))
           .filter(Boolean)
           .concat('.DS_Store');
 
@@ -90,8 +91,8 @@ describe('Templates', () => {
 
       test('File content', () => {
         generatedFiles
-          .filter(filePath => !['.jar'].includes(filePath.slice(-4)))
-          .forEach(filePath => {
+          .filter((filePath) => !['.jar'].includes(filePath.slice(-4)))
+          .forEach((filePath) => {
             if (['.png', '.ico', '.jpg'].includes(filePath.slice(-4))) {
               const image = fs.readFileSync(`${templatePath}/${filePath}`);
 
@@ -115,7 +116,8 @@ describe('Templates', () => {
                 // See: https://github.com/algolia/create-instantsearch-app/issues/110
                 const {
                   dependencies = {},
-                  devDependencies = {}, // eslint-disable-line no-unused-vars
+                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                  devDependencies = {},
                   ...packageRest
                 } = JSON.parse(fileContent);
                 const { libraryName } = templateConfig;

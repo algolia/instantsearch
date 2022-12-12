@@ -25,7 +25,7 @@ function checkAppName(appName) {
       appName
     )}" because of npm naming restrictions.`;
 
-    (validationResult.errors || []).forEach(error => {
+    (validationResult.errors || []).forEach((error) => {
       errorMessage += `\n  - ${error}`;
     });
 
@@ -86,9 +86,9 @@ function isYarnAvailable() {
 function getAllTemplates() {
   const templates = fs
     .readdirSync(TEMPLATES_FOLDER)
-    .map(name => path.join(TEMPLATES_FOLDER, name))
-    .filter(source => fs.lstatSync(source).isDirectory())
-    .map(source => path.basename(source));
+    .map((name) => path.join(TEMPLATES_FOLDER, name))
+    .filter((source) => fs.lstatSync(source).isDirectory())
+    .map((source) => path.basename(source));
 
   return templates;
 }
@@ -96,8 +96,8 @@ function getAllTemplates() {
 function getTemplatesByCategory() {
   const templatePaths = fs
     .readdirSync(TEMPLATES_FOLDER)
-    .map(name => path.join(TEMPLATES_FOLDER, name))
-    .filter(source => fs.lstatSync(source).isDirectory());
+    .map((name) => path.join(TEMPLATES_FOLDER, name))
+    .filter((source) => fs.lstatSync(source).isDirectory());
 
   const templates = templatePaths.reduce((allTemplates, source) => {
     const name = path.basename(source);
@@ -138,7 +138,7 @@ async function fetchLibraryVersions(libraryName) {
 }
 
 function getLibraryVersion({ libraryName, supportedVersion = '' }) {
-  return async getVersion => {
+  return async (getVersion) => {
     const versions = await fetchLibraryVersions(libraryName);
 
     return getVersion(versions, supportedVersion);
@@ -153,11 +153,11 @@ async function getEarliestLibraryVersion(...args) {
   return await getLibraryVersion(...args)(semver.minSatisfying);
 }
 
-const splitArray = string =>
+const splitArray = (string) =>
   string
     .split(',')
     .filter(Boolean)
-    .map(x => x.trim());
+    .map((x) => x.trim());
 
 module.exports = {
   checkAppName,

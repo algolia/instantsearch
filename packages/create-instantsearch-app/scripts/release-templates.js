@@ -41,15 +41,15 @@ async function build() {
   const templatesFolder = path.join(__dirname, '../src/templates');
   const templates = fs
     .readdirSync(templatesFolder)
-    .map(name => path.join(templatesFolder, name))
-    .filter(source => fs.lstatSync(source).isDirectory())
-    .map(source => path.basename(source));
+    .map((name) => path.join(templatesFolder, name))
+    .filter((source) => fs.lstatSync(source).isDirectory())
+    .map((source) => path.basename(source));
 
   console.log('▶︎  Generating templates');
 
   // Generate all demos
   await Promise.all(
-    templates.map(async templateTitle => {
+    templates.map(async (templateTitle) => {
       const {
         appName,
         templateName,
@@ -148,7 +148,7 @@ async function build() {
   }
 }
 
-build().catch(err => {
+build().catch((err) => {
   console.log();
   console.log('❎  Canceled template compilation.');
 

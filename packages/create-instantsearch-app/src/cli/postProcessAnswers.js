@@ -9,8 +9,9 @@ function capitalize(str) {
 
 function createNameAlternatives({ organization, name, templateConfig }) {
   return {
-    packageName: `@${organization}/${templateConfig.packageNamePrefix ||
-      ''}${name}`,
+    packageName: `@${organization}/${
+      templateConfig.packageNamePrefix || ''
+    }${name}`,
     widgetType: `${organization}.${name}`,
     camelCaseName: camelCase(name),
     pascalCaseName: capitalize(camelCase(name)),
@@ -64,7 +65,7 @@ async function postProcessAnswers({
     attributesForFaceting:
       Array.isArray(combinedAnswers.attributesForFaceting) &&
       combinedAnswers.attributesForFaceting.filter(
-        attribute => attribute !== 'ais.dynamicWidgets'
+        (attribute) => attribute !== 'ais.dynamicWidgets'
       ),
     flags: {
       dynamicWidgets:

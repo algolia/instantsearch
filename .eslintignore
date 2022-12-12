@@ -7,3 +7,5 @@
 .cache
 .parcel-cache
 **/node_modules
+
+/packages/create-instantsearch-app/src/templates
