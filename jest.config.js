@@ -11,6 +11,7 @@ const config = {
     '<rootDir>/packages/*/node_modules/',
     '<rootDir>/packages/*/dist*',
     '<rootDir>/tests/e2e/*',
+    '<rootDir>/packages/create-instantsearch-app/src/templates/',
   ],
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/cjs',
@@ -31,7 +32,6 @@ const config = {
   snapshotFormat: {
     printBasicPrototype: false,
   },
-  projects: ['<rootDir>/packages/*/jest.config.js'],
   // reporter for circleci
   reporters: [
     'default',

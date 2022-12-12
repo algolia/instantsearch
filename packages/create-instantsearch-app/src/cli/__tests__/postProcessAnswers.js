@@ -2,7 +2,7 @@ const postProcessAnswers = require('../postProcessAnswers');
 const utils = require('../../utils');
 
 jest.mock('../../utils', () => ({
-  ...require.requireActual('../../utils'),
+  ...jest.requireActual('../../utils'),
   fetchLibraryVersions: jest.fn(() => Promise.resolve(['1.0.0'])),
 }));
 
