@@ -30,11 +30,11 @@
     "styles:package": "sass src/styles/themes:themes --no-source-map"
   },
   "devDependencies": {
-    "@types/node": "^18.11.13",
-    "astro": "^1.6.14",
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.20",
-    "postcss-cli": "^10.1.0",
-    "sass": "^1.56.2"
+    "@types/node": "18.11.13",
+    "astro": "1.6.14",
+    "autoprefixer": "10.4.13",
+    "postcss": "8.4.20",
+    "postcss-cli": "10.1.0",
+    "sass": "1.56.2"
   }
 }
