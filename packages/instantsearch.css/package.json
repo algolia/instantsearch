@@ -1,14 +1,7 @@
 {
   "name": "instantsearch.css",
-  "type": "module",
   "version": "7.4.5",
   "description": "InstantSearch.css is a CSS library to style InstantSearch-powered search experiences.",
-  "author": "Algolia <support@algolia.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/algolia/instantsearch.js"
-  },
   "keywords": [
     "algolia",
     "instantsearch",
@@ -16,18 +9,25 @@
     "css",
     "theme"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch.js"
+  },
+  "license": "MIT",
+  "author": "Algolia <support@algolia.com>",
+  "type": "module",
   "scripts": {
-    "dev": "yarn styles:app && astro dev",
-    "start": "yarn styles:app && astro dev",
-    "check": "astro check && tsc",
-    "build": "yarn styles:app && astro build",
-    "preview": "astro preview",
     "astro": "astro",
+    "build": "yarn styles:app && astro build",
+    "check": "astro check && tsc",
+    "dev": "yarn styles:app && astro dev",
+    "prepack": "yarn styles:package && yarn styles:min && yarn styles:autoprefixer",
+    "preview": "astro preview",
+    "start": "yarn styles:app && astro dev",
     "styles:app": "sass src/styles/themes:public/styles --style compressed",
-    "styles:package": "sass src/styles/themes:themes --no-source-map",
-    "styles:min": "sass src/styles/themes/algolia.scss:themes/algolia-min.css src/styles/themes/satellite.scss:themes/satellite-min.css src/styles/themes/reset.scss:themes/reset-min.css --no-source-map --style compressed",
     "styles:autoprefixer": "postcss themes/ --use autoprefixer --replace --no-map",
-    "prepack": "yarn styles:package && yarn styles:min && yarn styles:autoprefixer"
+    "styles:min": "sass src/styles/themes/algolia.scss:themes/algolia-min.css src/styles/themes/satellite.scss:themes/satellite-min.css src/styles/themes/reset.scss:themes/reset-min.css --no-source-map --style compressed",
+    "styles:package": "sass src/styles/themes:themes --no-source-map"
   },
   "devDependencies": {
     "@types/node": "^18.11.13",
