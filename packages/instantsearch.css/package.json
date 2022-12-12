@@ -2,10 +2,20 @@
   "name": "instantsearch.css",
   "type": "module",
   "version": "7.4.5",
-  "description": "instantsearch.css is a CSS library created to help all InstantSearch users easily customize their widgets",
+  "description": "InstantSearch.css is a CSS library to style InstantSearch-powered search experiences.",
   "author": "Algolia <support@algolia.com>",
   "license": "MIT",
-  "repository": "https://github.com/algolia/instantsearch-specs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch.js"
+  },
+  "keywords": [
+    "algolia",
+    "instantsearch",
+    "search",
+    "css",
+    "theme"
+  ],
   "scripts": {
     "dev": "yarn styles:app && astro dev",
     "start": "yarn styles:app && astro dev",
