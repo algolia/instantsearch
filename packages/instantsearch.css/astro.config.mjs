@@ -1,5 +1,7 @@
-import { defineConfig } from "astro/config";
+import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: "https://instantsearch-templates.netlify.app/",
+  site: 'https://instantsearchjs.netlify.app/',
+  base: '/specs',
+  outDir: '../../website/specs',
 });

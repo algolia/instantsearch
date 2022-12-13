@@ -19,6 +19,7 @@ yarn-error.log
 /docs
 /website/examples
 /website/stories
+/website/specs
 /storybook/dist/*
 
 # Unneeded changelogs

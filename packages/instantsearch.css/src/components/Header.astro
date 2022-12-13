@@ -1,10 +1,18 @@
+---
+const { BASE_URL } = import.meta.env;
+---
+
 <header class="main-header">
-  <h1><a href="/"><strong>InstantSearch</strong> specs</a></h1>
+  <h1>
+    <a href={BASE_URL}><strong>InstantSearch</strong> specs</a>
+  </h1>
   <div class="main-header-right">
     <nav>
       <ul>
-        <li><a href="/widgets/breadcrumb/">Widgets</a></li>
-        <li><a href="/demo/">Demo</a></li>
+        <li>
+          <a href={`${BASE_URL}widgets/breadcrumb/`}>Widgets</a>
+        </li>
+        <li><a href={`${BASE_URL}demo/`}>Demo</a></li>
         <li>
           <a
             href="https://github.com/algolia/instantsearch.js/edit/master/packages/instantsearch.css"
