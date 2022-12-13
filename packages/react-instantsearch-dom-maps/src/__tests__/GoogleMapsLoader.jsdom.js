@@ -1,9 +1,13 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import injectScript from 'scriptjs';
 import GoogleMapsLoader from '../GoogleMapsLoader';
-import { wait } from '../../../../test/utils';
+import { wait } from '../../../../tests/utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 

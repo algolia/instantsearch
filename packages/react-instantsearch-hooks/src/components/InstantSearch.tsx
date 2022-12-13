@@ -5,7 +5,10 @@ import { InstantSearchContext } from '../lib/InstantSearchContext';
 import { useInstantSearchApi } from '../lib/useInstantSearchApi';
 
 import type { UseInstantSearchApiProps } from '../lib/useInstantSearchApi';
-import type { UiState } from 'instantsearch.js';
+import type {
+  InstantSearch as InstantSearchType,
+  UiState,
+} from 'instantsearch.js';
 
 export type InstantSearchProps<
   TUiState extends UiState = UiState,
@@ -25,7 +28,9 @@ export function InstantSearch<
   }
 
   return (
-    <InstantSearchContext.Provider value={search}>
+    <InstantSearchContext.Provider
+      value={search as unknown as InstantSearchType<UiState, UiState>}
+    >
       <IndexContext.Provider value={search.mainIndex}>
         {children}
       </IndexContext.Provider>

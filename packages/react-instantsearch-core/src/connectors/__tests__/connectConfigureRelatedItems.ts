@@ -1,8 +1,8 @@
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import { SearchParameters } from 'algoliasearch-helper';
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 
-jest.mock('../../core/createConnector', () => (x) => x);
-
+jest.mock('../../core/createConnector', () => (x: any) => x);
 const connect = connectConfigureRelatedItems as any;
 
 const hit = {
@@ -40,7 +40,7 @@ describe('connectConfigure', () => {
   describe('single index', () => {
     const contextValue = { mainTargetedIndex: 'index' };
     const defaultProps = {
-      transformSearchParameters: (x) => x,
+      transformSearchParameters: (x: PlainSearchParameters) => x,
       contextValue,
     };
 
@@ -118,7 +118,7 @@ describe('connectConfigure', () => {
             brand: { score: 3 },
             categories: { score: 2 },
           },
-          transformSearchParameters(parameters) {
+          transformSearchParameters(parameters: PlainSearchParameters) {
             return {
               ...parameters,
               optionalWords: hit.name.split(' '),
@@ -327,7 +327,7 @@ describe('connectConfigure', () => {
     const contextValue = { mainTargetedIndex: 'first' };
     const indexContextValue = { targetedIndex: 'second' };
     const defaultProps = {
-      transformSearchParameters: (x) => x,
+      transformSearchParameters: (x: PlainSearchParameters) => x,
       contextValue,
       indexContextValue,
     };
@@ -380,7 +380,7 @@ describe('connectConfigure', () => {
             brand: { score: 3 },
             categories: { score: 2 },
           },
-          transformSearchParameters(parameters) {
+          transformSearchParameters(parameters: PlainSearchParameters) {
             return {
               ...parameters,
               optionalWords: hit.name.split(' '),

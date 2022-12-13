@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -7,7 +11,7 @@ import { Pagination } from '../Pagination';
 import type { PaginationProps } from '../Pagination';
 
 describe('Pagination', () => {
-  function createProps(props: Partial<PaginationProps>) {
+  function createProps(props: Partial<PaginationProps>): PaginationProps {
     const onNavigate = jest.fn();
 
     return {

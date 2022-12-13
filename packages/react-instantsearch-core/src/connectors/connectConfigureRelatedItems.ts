@@ -16,6 +16,7 @@ import {
   refineValue,
   getIndexId,
   hasMultipleIndices,
+  // @ts-ignore
 } from '../core/indexUtils';
 
 type Hit = any;
@@ -53,6 +54,10 @@ function createOptionalFilter({
   attributeName,
   attributeValue,
   attributeScore,
+}: {
+  attributeName: string;
+  attributeValue: string;
+  attributeScore: number;
 }) {
   return `${attributeName}:${attributeValue}<score=${attributeScore || 1}>`;
 }
@@ -175,7 +180,7 @@ export default createConnector({
         )
       : [];
     this._searchParameters = searchParameters;
-    const nextValue = {
+    const nextValue: any = {
       [id]: {
         ...omit(nextSearchState[id], nonPresentKeys),
         ...searchParameters,
@@ -206,13 +211,15 @@ export default createConnector({
     const configureKeys =
       subState && subState[id] ? Object.keys(subState[id]) : [];
 
-    const configureState = configureKeys.reduce((acc, item) => {
+    const configureState = (
+      configureKeys as Array<keyof PlainSearchParameters>
+    ).reduce((acc, item) => {
       if (!this._searchParameters[item]) {
-        acc[item] = subState[id][item];
+        (acc as any)[item] = subState[id][item];
       }
 
       return acc;
-    }, {});
+    }, {} as PlainSearchParameters);
 
     const nextValue = { [id]: configureState };
 

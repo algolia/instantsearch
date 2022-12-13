@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
@@ -5,13 +9,15 @@ import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import React, { useEffect } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../test/mock';
+import { createSearchClient } from '../../../../../tests/mock';
 import {
   createInstantSearchTestWrapper,
   InstantSearchHooksTestWrapper,
   wait,
-} from '../../../../../test/utils';
+} from '../../../../../tests/utils';
 import { useInstantSearch } from '../useInstantSearch';
+
+import type { UseInstantSearchProps } from '../useInstantSearch';
 
 describe('useInstantSearch', () => {
   describe('usage', () => {
@@ -389,7 +395,7 @@ describe('useInstantSearch', () => {
       });
     });
 
-    function Status(props) {
+    function Status(props: UseInstantSearchProps) {
       const { status, error } = useInstantSearch(props);
 
       return (
@@ -401,7 +407,7 @@ describe('useInstantSearch', () => {
     }
 
     function createDelayedSearchClient(timeout: number) {
-      const searchFn = createSearchClient({}).search!;
+      const searchFn = createSearchClient({}).search;
       return createSearchClient({
         search: (requests) => wait(timeout).then(() => searchFn(requests)),
       });

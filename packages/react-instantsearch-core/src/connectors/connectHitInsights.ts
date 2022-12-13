@@ -1,4 +1,5 @@
 import createConnector from '../core/createConnector';
+// @ts-ignore
 import { getResults } from '../core/indexUtils';
 
 type Results = { index: string };

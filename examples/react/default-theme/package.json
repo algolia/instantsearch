@@ -1,5 +1,5 @@
 {
-  "name": "algolia-theme",
+  "name": "example-react-instantsearch-default-theme",
   "version": "6.38.1",
   "private": true,
   "dependencies": {

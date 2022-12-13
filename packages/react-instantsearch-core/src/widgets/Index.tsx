@@ -2,6 +2,7 @@ import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
 import type { InstantSearchContext, IndexContext } from '../core/context';
 import { InstantSearchConsumer, IndexProvider } from '../core/context';
+import type { SearchParameters } from 'algoliasearch-helper';
 
 function getIndexContext(props: Props): IndexContext {
   return {
@@ -106,7 +107,7 @@ class Index extends Component<InnerProps, State> {
     }
   }
 
-  getSearchParameters(searchParameters, props: InnerProps) {
+  getSearchParameters(searchParameters: SearchParameters, props: InnerProps) {
     return searchParameters.setIndex(
       this.props ? this.props.indexName : props.indexName
     );

@@ -9,6 +9,7 @@ const config = {
     'algolia/typescript',
     'plugin:react-hooks/recommended',
   ],
+  plugins: ['react-hooks', 'deprecation'],
   globals: {
     __DEV__: false,
   },
@@ -27,20 +28,53 @@ const config = {
   },
   rules: {
     'no-param-reassign': 'off',
-    // We rely on `@typescript-eslint/no-use-before-define`
     'no-use-before-define': 'off',
-    // @TODO: remove once this is in `eslint-config-algolia`
-    'valid-jsdoc': 'off',
-    // @TODO: remove once this is in `eslint-config-algolia`
-    '@typescript-eslint/explicit-member-accessibility': 'off',
-    // @TODO: re-enable this once the code base is made for it
-    '@typescript-eslint/consistent-type-assertions': 'off',
-    '@typescript-eslint/consistent-type-imports': 'error',
     // @TODO: re-enable once the rule is properly setup for monorepos
     // https://github.com/benmosher/eslint-plugin-import/issues/1103
     // https://github.com/benmosher/eslint-plugin-import/issues/1174
     'import/no-extraneous-dependencies': 'off',
     '@typescript-eslint/explicit-member-accessibility': ['off'],
+    'import/extensions': 'off',
+    'eslint-comments/disable-enable-pair': 'off',
+    'react/jsx-no-bind': 'off',
+    // We can't display an error message with the ESLint version we're using
+    // See https://github.com/eslint/eslint/pull/14580
+    'no-restricted-imports': [
+      'error',
+      {
+        // We disallow InstantSearch.js CJS imports to only use ESM and not
+        // end up having duplicated source code in our bundle.
+        patterns: ['instantsearch.js/cjs/*'],
+        // We disallow importing the root ES import because the transformed CJS
+        // build then includes everything (widgets, components, etc.) and these
+        // aren't required or useful.
+        paths: ['instantsearch.js/es'],
+      },
+    ],
+    'react-hooks/exhaustive-deps': [
+      'warn',
+      {
+        additionalHooks: '(useIsomorphicLayoutEffect)',
+      },
+    ],
+    'new-cap': [
+      'error',
+      {
+        capIsNewExceptionPattern:
+          '(\\.|^)EXPERIMENTAL_.+|components\\.[A-Z][a-z]+',
+      },
+    ],
+    'react/no-string-refs': 'error',
+    // Avoid errors about `UNSAFE` lifecycles (e.g. `UNSAFE_componentWillMount`)
+    'react/no-deprecated': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'jest/no-done-callback': 'warn',
+    'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { argsIgnorePattern: '^_', ignoreRestSiblings: true },
+    ],
     '@typescript-eslint/naming-convention': [
       'error',
       {
@@ -72,27 +106,12 @@ const config = {
         },
       },
     ],
-    'import/extensions': 'off',
-    'eslint-comments/disable-enable-pair': 'off',
-    'react/jsx-no-bind': 'off',
-    // We can't display an error message with the ESLint version we're using
-    // See https://github.com/eslint/eslint/pull/14580
-    'no-restricted-imports': [
+    '@typescript-eslint/consistent-type-imports': 'error',
+    'no-restricted-syntax': [
       'error',
       {
-        // We disallow InstantSearch.js CJS imports to only use ESM and not
-        // end up having duplicated source code in our bundle.
-        patterns: ['instantsearch.js/cjs/*'],
-        // We disallow importing the root ES import because the transformed CJS
-        // build then includes everything (widgets, components, etc.) and these
-        // aren't required or useful.
-        paths: ['instantsearch.js/es'],
-      },
-    ],
-    'react-hooks/exhaustive-deps': [
-      'warn',
-      {
-        additionalHooks: '(useIsomorphicLayoutEffect)',
+        selector: 'AssignmentExpression MemberExpression Identifier[name=defaultProps]',
+        message: 'defaultProps are not allowed, use function defaults instead.',
       },
     ],
   },
@@ -125,6 +144,7 @@ const config = {
         'packages/react-instantsearch-hooks-*/**/*',
       ],
       rules: {
+        '@typescript-eslint/consistent-type-assertions': 'off',
         // We don't ship PropTypes in the next version of the library.
         'react/prop-types': 'off',
         'import/order': [
@@ -202,7 +222,116 @@ const config = {
         'packages/react-instantsearch-dom/**/*',
       ],
       rules: {
+        '@typescript-eslint/consistent-type-assertions': 'off',
         '@typescript-eslint/ban-types': 'off',
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        'valid-jsdoc': 'off',
+        'no-redeclare': 'off',
+        '@typescript-eslint/no-redeclare': ['error'],
+        'react/prop-types': 'off',
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      // this is the same files as ignored in tsconfig.json
+      excludedFiles: ['examples/**/*', '*/es'],
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+      rules: {
+        'deprecation/deprecation': 'warn',
+        '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      },
+    },
+    {
+      files: ['examples/hooks/react-native/**/*.ts', 'examples/hooks/react-native/**/*.tsx'],
+      parserOptions: {
+        project: 'examples/hooks/react-native/tsconfig.json',
+      },
+    },
+    {
+      files: [
+        'packages/instantsearch.js/src/**/*.ts',
+        'packages/instantsearch.js/src/**/*.tsx',
+        'packages/instantsearch.js/src/**/*.js',
+      ],
+      rules: {
+        'import/extensions': ['error', 'never'],
+      },
+      settings: {
+        react: {
+          pragma: 'h',
+        },
+      },
+    },
+    {
+      files: ['*.js'],
+      rules: {
+        '@typescript-eslint/explicit-member-accessibility': 'off',
+      },
+    },
+    {
+      files: ['packages/instantsearch.js/src/**/*'],
+      excludedFiles: [
+        '**/__tests__/**/*',
+        'packages/instantsearch.js/src/widgets/**/*',
+      ],
+      rules: {
+        'no-restricted-globals': [
+          'error',
+          {
+            name: 'window',
+            message: 'Use `safelyRunOnBrowser()` to access `window`.',
+          },
+        ],
+      },
+    },
+    {
+      files: ['tests/e2e/**/*'],
+      parserOptions: {
+        project: 'tests/e2e/tsconfig.json',
+      },
+      rules: {
+        'valid-jsdoc': 'off',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: 'WebdriverIOAsync',
+            ignoreRestSiblings: true,
+          },
+        ],
+        '@typescript-eslint/no-floating-promises': 'error',
+      },
+    },
+    {
+      files: [
+        'tests/e2e/specs/**/*.spec.ts',
+        'tests/e2e/all-flavors.spec.ts',
+        'tests/e2e/helpers/**/*.ts',
+        'tests/e2e/wdio.*.conf.js',
+      ],
+      extends: ['plugin:wdio/recommended'],
+      plugins: ['wdio'],
+      env: {
+        jasmine: true,
+      },
+      rules: {
+        // we are exporting test "factories", so we need to allow export
+        'jest/no-export': 0,
+        // we use jasmine
+        'jest/expect-expect': 0,
+        '@typescript-eslint/no-namespace': 0,
+      },
+    },
+    {
+      files: ['tests/e2e/**/*.js'],
+      rules: {
+        'import/no-commonjs': 0,
       },
     },
   ],

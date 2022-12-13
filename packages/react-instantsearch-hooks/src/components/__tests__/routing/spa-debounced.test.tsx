@@ -1,10 +1,14 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import React from 'react';
 import { InstantSearch, SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../../test/mock';
+import { createSearchClient } from '../../../../../../tests/mock';
 
 describe('routing with debounced third-party client-side router', () => {
   test('does not clean the URL after navigating', async () => {

@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -7,8 +11,8 @@ import {
   createSearchClient,
   createSFFVResponse,
   createSingleSearchResponse,
-} from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+} from '../../../../../tests/mock';
+import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { RefinementList } from '../RefinementList';
 
 const FACET_HITS = [
@@ -411,9 +415,9 @@ describe('RefinementList', () => {
     });
 
     const [checkbox1, checkbox2] = [
-      ...(container.querySelectorAll(
+      ...container.querySelectorAll<HTMLInputElement>(
         '.ais-RefinementList-checkbox'
-      ) as NodeListOf<HTMLInputElement>),
+      ),
     ].slice(0, 2);
 
     userEvent.click(checkbox1); // client.search call 2
@@ -724,9 +728,9 @@ describe('RefinementList', () => {
       });
 
       const [checkbox1, checkbox2] = Array.from(
-        container.querySelectorAll(
+        container.querySelectorAll<HTMLInputElement>(
           '.ais-RefinementList-checkbox'
-        ) as NodeListOf<HTMLInputElement>
+        )
       ).slice(-2);
 
       userEvent.click(checkbox1);
@@ -1376,7 +1380,7 @@ describe('RefinementList', () => {
           translations={{
             noResultsText: 'Zero results',
             resetButtonTitle: 'Reset',
-            showMoreButtonText({ isShowingMore }) {
+            showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
               return isShowingMore ? 'Show less brands' : 'Show more brands';
             },
             submitButtonTitle: 'Submit',

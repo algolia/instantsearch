@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 describe('toWarnDev', () => {
   describe('usage', () => {
     test('fails with incorrect type of message', () => {
@@ -44,3 +46,6 @@ describe('toWarnDev', () => {
     });
   });
 });
+
+// eslint-disable-next-line jest/no-export
+export {};

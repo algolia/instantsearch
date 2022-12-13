@@ -6,7 +6,7 @@ exports[`RatingMenu applies translations 1`] = `
 >
   <svg
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -430,7 +430,7 @@ exports[`RatingMenu expect to render from from 1 when min is negative 1`] = `
 >
   <svg
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -854,7 +854,7 @@ exports[`RatingMenu expect to render nothing when min is higher than max 1`] = `
 >
   <svg
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -889,7 +889,7 @@ exports[`RatingMenu expect to render when only max is defined 1`] = `
 >
   <svg
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -1093,7 +1093,7 @@ exports[`RatingMenu expect to render without refinement 1`] = `
 >
   <svg
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -1517,7 +1517,7 @@ exports[`RatingMenu supports passing custom className 1`] = `
 >
   <svg
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -1941,7 +1941,7 @@ exports[`RatingMenu supports passing max/min values 1`] = `
 >
   <svg
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -2365,7 +2365,7 @@ exports[`RatingMenu supports passing max/min values smaller than count max & min
 >
   <svg
     style={
-      Object {
+      {
         "display": "none",
       }
     }

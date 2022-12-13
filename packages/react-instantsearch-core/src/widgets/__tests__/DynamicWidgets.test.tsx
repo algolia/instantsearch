@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from '@testing-library/react';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -36,15 +40,16 @@ const createSearchClient = () => ({
 });
 
 const RefinementList = connectRefinementList(
-  ({ attribute }) => `RefinementList(${attribute})`
+  ({ attribute }: { attribute: string }) => `RefinementList(${attribute})`
 );
 
 const HierarchicalMenu = connectHierarchicalMenu(
-  ({ attributes }) => `HierarchicalMenu([${attributes.join(', ')}])`
+  ({ attributes }: { attributes: string[] }) =>
+    `HierarchicalMenu([${attributes.join(', ')}])`
 );
 
 const Menu = connectMenu(
-  ({ attribute, otherProp }) =>
+  ({ attribute, otherProp }: { attribute: string; otherProp: any }) =>
     `Menu(${attribute})${otherProp ? ` ${JSON.stringify({ otherProp })}` : ''}`
 );
 
@@ -89,7 +94,7 @@ describe('DynamicWidgets', () => {
           // @ts-ignore resultsState in InstantSearch is typed wrongly to deal with multi-index
           resultsState={resultsState}
         >
-          <DynamicWidgets transformItems={(items) => items}>
+          <DynamicWidgets transformItems={(items: string[]) => items}>
             <RefinementList attribute="test1" />
           </DynamicWidgets>
         </InstantSearch>
@@ -412,7 +417,7 @@ describe('DynamicWidgets', () => {
         >
           <DynamicWidgets
             transformItems={() => ['test1', 'test2', 'test3']}
-            fallbackComponent={({ attribute }) => (
+            fallbackComponent={({ attribute }: { attribute: string }) => (
               <Menu attribute={attribute} otherProp />
             )}
           >

@@ -8,7 +8,12 @@ import { useInstantSearchServerContext } from '../lib/useInstantSearchServerCont
 import { useStableValue } from '../lib/useStableValue';
 import { useWidget } from '../lib/useWidget';
 
-import type { Connector, Widget, WidgetDescription } from 'instantsearch.js';
+import type {
+  Connector,
+  UiState,
+  Widget,
+  WidgetDescription,
+} from 'instantsearch.js';
 
 export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>>;
 
@@ -93,7 +98,7 @@ export function useConnector<
     if (widget.getWidgetRenderState) {
       // The helper exists because we've started InstantSearch.
       const helper = parentIndex.getHelper()!;
-      const uiState = parentIndex.getWidgetUiState({})[
+      const uiState = parentIndex.getWidgetUiState<UiState>({})[
         parentIndex.getIndexId()
       ];
       helper.state =

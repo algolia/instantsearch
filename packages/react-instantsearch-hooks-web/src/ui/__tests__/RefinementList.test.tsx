@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { createRef } from 'react';
@@ -34,7 +38,7 @@ describe('RefinementList', () => {
       isShowingMore: false,
       onToggleShowMore: jest.fn(),
       translations: {
-        showMoreButtonText({ isShowingMore }) {
+        showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
           return isShowingMore ? 'Show less' : 'Show more';
         },
       },
@@ -655,7 +659,7 @@ describe('RefinementList', () => {
     const props = createProps({
       showMore: true,
       translations: {
-        showMoreButtonText({ isShowingMore }) {
+        showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
           return isShowingMore ? 'Show less brands' : 'Show more brands';
         },
       },

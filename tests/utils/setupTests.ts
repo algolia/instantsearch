@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom/extend-expect';
 import { warnCache } from '../../packages/react-instantsearch-hooks/src/lib/warn';
 import { toWarnDev } from './matchers';
 

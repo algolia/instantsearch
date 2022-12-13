@@ -18,9 +18,10 @@ import {
   createMultiSearchResponse,
   createSearchClient,
   createSingleSearchResponse,
-} from '../../../../test/mock';
+} from '../../../../tests/mock';
 import { getServerState } from '../getServerState';
 
+import type { Hit as AlgoliaHit } from 'instantsearch.js';
 import type {
   InstantSearchServerState,
   InstantSearchProps,
@@ -38,7 +39,7 @@ function SearchBox() {
   );
 }
 
-function Hit({ hit }) {
+function Hit({ hit }: { hit: AlgoliaHit }) {
   return <>{hit.objectID}</>;
 }
 
@@ -298,8 +299,8 @@ describe('getServerState', () => {
 
     expect(searchClient.search).toHaveBeenCalledTimes(2);
     // both calls are the same, so they're cached
-    expect((searchClient.search as jest.Mock).mock.calls[0][0]).toEqual(
-      (searchClient.search as jest.Mock).mock.calls[1][0]
+    expect(searchClient.search.mock.calls[0][0]).toEqual(
+      searchClient.search.mock.calls[1][0]
     );
   });
 
@@ -317,8 +318,8 @@ describe('getServerState', () => {
 
     expect(searchClient.search).toHaveBeenCalledTimes(2);
     // both calls are the same, so they're cached
-    expect((searchClient.search as jest.Mock).mock.calls[0][0]).toEqual(
-      (searchClient.search as jest.Mock).mock.calls[1][0]
+    expect(searchClient.search.mock.calls[0][0]).toEqual(
+      searchClient.search.mock.calls[1][0]
     );
   });
 
@@ -344,7 +345,7 @@ describe('getServerState', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(2);
 
     // first query doesn't have the fallback widget mounted yet
-    expect((searchClient.search as jest.Mock).mock.calls[0][0][0]).toEqual({
+    expect(searchClient.search.mock.calls[0][0][0]).toEqual({
       indexName: 'instant_search',
       params: {
         facets: ['*'],
@@ -357,7 +358,7 @@ describe('getServerState', () => {
     });
 
     // second query does have the fallback widget mounted, and thus also the refinement
-    expect((searchClient.search as jest.Mock).mock.calls[1][0][0]).toEqual({
+    expect(searchClient.search.mock.calls[1][0][0]).toEqual({
       indexName: 'instant_search',
       params: {
         facetFilters: [['categories:refined!']],

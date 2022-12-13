@@ -19,74 +19,74 @@ exports[`GoogleMaps expect render correctly with the map rendered 2`] = `
   />
   <ContextProvider
     value={
-      Object {
-        "google": Object {
-          "maps": Object {
-            "ControlPosition": Object {
+      {
+        "google": {
+          "maps": {
+            "ControlPosition": {
               "LEFT_TOP": "left:top",
             },
             "LatLng": [MockFunction],
             "LatLngBounds": [MockFunction],
             "Map": [MockFunction] {
-              "calls": Array [
-                Array [
+              "calls": [
+                [
                   null,
-                  Object {
+                  {
                     "clickableIcons": false,
                     "fullscreenControl": false,
                     "mapTypeControl": false,
                     "streetViewControl": false,
-                    "zoomControlOptions": Object {
+                    "zoomControlOptions": {
                       "position": "left:top",
                     },
                   },
                 ],
               ],
-              "results": Array [
-                Object {
+              "results": [
+                {
                   "type": "return",
-                  "value": Object {
+                  "value": {
                     "addListener": [MockFunction] {
-                      "calls": Array [
-                        Array [
+                      "calls": [
+                        [
                           "center_changed",
                           [Function],
                         ],
-                        Array [
+                        [
                           "zoom_changed",
                           [Function],
                         ],
-                        Array [
+                        [
                           "dragstart",
                           [Function],
                         ],
-                        Array [
+                        [
                           "idle",
                           [Function],
                         ],
                       ],
-                      "results": Array [
-                        Object {
+                      "results": [
+                        {
                           "type": "return",
-                          "value": Object {
+                          "value": {
                             "remove": [MockFunction],
                           },
                         },
-                        Object {
+                        {
                           "type": "return",
-                          "value": Object {
+                          "value": {
                             "remove": [MockFunction],
                           },
                         },
-                        Object {
+                        {
                           "type": "return",
-                          "value": Object {
+                          "value": {
                             "remove": [MockFunction],
                           },
                         },
-                        Object {
+                        {
                           "type": "return",
-                          "value": Object {
+                          "value": {
                             "remove": [MockFunction],
                           },
                         },
@@ -98,29 +98,29 @@ exports[`GoogleMaps expect render correctly with the map rendered 2`] = `
                     "getProjection": [MockFunction],
                     "getZoom": [MockFunction],
                     "setCenter": [MockFunction] {
-                      "calls": Array [
-                        Array [
-                          Object {
+                      "calls": [
+                        [
+                          {
                             "lat": 0,
                             "lng": 0,
                           },
                         ],
                       ],
-                      "results": Array [
-                        Object {
+                      "results": [
+                        {
                           "type": "return",
                           "value": undefined,
                         },
                       ],
                     },
                     "setZoom": [MockFunction] {
-                      "calls": Array [
-                        Array [
+                      "calls": [
+                        [
                           1,
                         ],
                       ],
-                      "results": Array [
-                        Object {
+                      "results": [
+                        {
                           "type": "return",
                           "value": undefined,
                         },
@@ -132,52 +132,52 @@ exports[`GoogleMaps expect render correctly with the map rendered 2`] = `
             },
             "Marker": [MockFunction],
             "OverlayView": [Function],
-            "event": Object {
+            "event": {
               "addListenerOnce": [MockFunction] {
-                "calls": Array [
-                  Array [
-                    Object {
+                "calls": [
+                  [
+                    {
                       "addListener": [MockFunction] {
-                        "calls": Array [
-                          Array [
+                        "calls": [
+                          [
                             "center_changed",
                             [Function],
                           ],
-                          Array [
+                          [
                             "zoom_changed",
                             [Function],
                           ],
-                          Array [
+                          [
                             "dragstart",
                             [Function],
                           ],
-                          Array [
+                          [
                             "idle",
                             [Function],
                           ],
                         ],
-                        "results": Array [
-                          Object {
+                        "results": [
+                          {
                             "type": "return",
-                            "value": Object {
+                            "value": {
                               "remove": [MockFunction],
                             },
                           },
-                          Object {
+                          {
                             "type": "return",
-                            "value": Object {
+                            "value": {
                               "remove": [MockFunction],
                             },
                           },
-                          Object {
+                          {
                             "type": "return",
-                            "value": Object {
+                            "value": {
                               "remove": [MockFunction],
                             },
                           },
-                          Object {
+                          {
                             "type": "return",
-                            "value": Object {
+                            "value": {
                               "remove": [MockFunction],
                             },
                           },
@@ -189,29 +189,29 @@ exports[`GoogleMaps expect render correctly with the map rendered 2`] = `
                       "getProjection": [MockFunction],
                       "getZoom": [MockFunction],
                       "setCenter": [MockFunction] {
-                        "calls": Array [
-                          Array [
-                            Object {
+                        "calls": [
+                          [
+                            {
                               "lat": 0,
                               "lng": 0,
                             },
                           ],
                         ],
-                        "results": Array [
-                          Object {
+                        "results": [
+                          {
                             "type": "return",
                             "value": undefined,
                           },
                         ],
                       },
                       "setZoom": [MockFunction] {
-                        "calls": Array [
-                          Array [
+                        "calls": [
+                          [
                             1,
                           ],
                         ],
-                        "results": Array [
-                          Object {
+                        "results": [
+                          {
                             "type": "return",
                             "value": undefined,
                           },
@@ -222,10 +222,10 @@ exports[`GoogleMaps expect render correctly with the map rendered 2`] = `
                     [Function],
                   ],
                 ],
-                "results": Array [
-                  Object {
+                "results": [
+                  {
                     "type": "return",
-                    "value": Object {
+                    "value": {
                       "remove": [MockFunction],
                     },
                   },
@@ -234,48 +234,48 @@ exports[`GoogleMaps expect render correctly with the map rendered 2`] = `
             },
           },
         },
-        "instance": Object {
+        "instance": {
           "addListener": [MockFunction] {
-            "calls": Array [
-              Array [
+            "calls": [
+              [
                 "center_changed",
                 [Function],
               ],
-              Array [
+              [
                 "zoom_changed",
                 [Function],
               ],
-              Array [
+              [
                 "dragstart",
                 [Function],
               ],
-              Array [
+              [
                 "idle",
                 [Function],
               ],
             ],
-            "results": Array [
-              Object {
+            "results": [
+              {
                 "type": "return",
-                "value": Object {
+                "value": {
                   "remove": [MockFunction],
                 },
               },
-              Object {
+              {
                 "type": "return",
-                "value": Object {
+                "value": {
                   "remove": [MockFunction],
                 },
               },
-              Object {
+              {
                 "type": "return",
-                "value": Object {
+                "value": {
                   "remove": [MockFunction],
                 },
               },
-              Object {
+              {
                 "type": "return",
-                "value": Object {
+                "value": {
                   "remove": [MockFunction],
                 },
               },
@@ -287,29 +287,29 @@ exports[`GoogleMaps expect render correctly with the map rendered 2`] = `
           "getProjection": [MockFunction],
           "getZoom": [MockFunction],
           "setCenter": [MockFunction] {
-            "calls": Array [
-              Array [
-                Object {
+            "calls": [
+              [
+                {
                   "lat": 0,
                   "lng": 0,
                 },
               ],
             ],
-            "results": Array [
-              Object {
+            "results": [
+              {
                 "type": "return",
                 "value": undefined,
               },
             ],
           },
           "setZoom": [MockFunction] {
-            "calls": Array [
-              Array [
+            "calls": [
+              [
                 1,
               ],
             ],
-            "results": Array [
-              Object {
+            "results": [
+              {
                 "type": "return",
                 "value": undefined,
               },

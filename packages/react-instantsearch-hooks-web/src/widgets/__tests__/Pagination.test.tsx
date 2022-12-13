@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -6,9 +10,11 @@ import {
   createMultiSearchResponse,
   createSearchClient,
   createSingleSearchResponse,
-} from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+} from '../../../../../tests/mock';
+import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { Pagination } from '../Pagination';
+
+import type { SearchClient } from 'instantsearch.js';
 
 function createMockedSearchClient({ nbPages }: { nbPages?: number } = {}) {
   return createSearchClient({
@@ -1447,7 +1453,7 @@ describe('Pagination', () => {
   });
 
   test('does not add items around the current one when there are not enough pages', async () => {
-    const search = jest.fn((requests) =>
+    const search = jest.fn((requests: Parameters<SearchClient['search']>[0]) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map((request) =>

@@ -2,7 +2,7 @@ import { Middleware } from 'instantsearch.js';
 import React, { useEffect, useRef } from 'react';
 import { useInstantSearch } from 'react-instantsearch-hooks-web';
 
-export function ScrollTo({ children }) {
+export function ScrollTo({ children }: { children: React.ReactNode }) {
   const { use } = useInstantSearch();
   const containerRef = useRef<HTMLDivElement>(null);
 

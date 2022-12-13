@@ -1,10 +1,14 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import algoliasearch from 'algoliasearch';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { connectHits, connectRefinementList, Index } from '../../index';
 import InstantSearch from '../InstantSearch';
-import { createSearchClient } from '../../../../../test/mock';
+import { createSearchClient } from '../../../../../tests/mock';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -74,26 +78,26 @@ describe('metadata', () => {
     );
 
     expect(JSON.parse(meta.content)).toMatchInlineSnapshot(`
-      Object {
+      {
         "ua": "Algolia for JavaScript (test)",
-        "widgets": Array [
-          Object {
+        "widgets": [
+          {
             "$$type": "ais.refinementList",
             "displayName": "AlgoliaRefinementList",
-            "params": Array [
+            "params": [
               "attribute",
             ],
           },
-          Object {
+          {
             "$$type": "ais.hits",
             "displayName": "AlgoliaHits",
-            "params": Array [],
+            "params": [],
           },
-          Object {
+          {
             "$$type": "ais.index",
             "$$widgetType": "ais.index",
             "displayName": "AlgoliaIndex",
-            "params": Array [
+            "params": [
               "indexId",
               "indexName",
               "children",
@@ -125,9 +129,9 @@ describe('metadata', () => {
       );
 
       expect(JSON.parse(meta.content)).toMatchInlineSnapshot(`
-        Object {
+        {
           "ua": "user agent v3",
-          "widgets": Array [],
+          "widgets": [],
         }
       `);
     });

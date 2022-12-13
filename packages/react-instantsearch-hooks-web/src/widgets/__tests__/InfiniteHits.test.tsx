@@ -1,13 +1,17 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { act, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { createSearchClient } from '../../../../../test/mock';
+import { createSearchClient } from '../../../../../tests/mock';
 import {
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../../test/mock/createAPIResponse';
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+} from '../../../../../tests/mock/createAPIResponse';
+import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { InfiniteHits } from '../InfiniteHits';
 
 type CustomHit = {

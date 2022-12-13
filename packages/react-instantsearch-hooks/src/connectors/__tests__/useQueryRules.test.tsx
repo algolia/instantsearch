@@ -1,21 +1,25 @@
 import { renderHook } from '@testing-library/react-hooks';
 
-import { createInstantSearchTestWrapper } from '../../../../../test/utils';
+import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useQueryRules } from '../useQueryRules';
+
+import type { UseQueryRulesProps } from '../useQueryRules';
 
 describe('useQueryRules', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
 
-    const trackedFilters = {
+    const trackedFilters: UseQueryRulesProps['trackedFilters'] = {
       genre: () => ['Comedy', 'Thriller'],
       rating: (values) => values,
     };
 
-    const transformRuleContexts = (ruleContexts) =>
+    const transformRuleContexts: UseQueryRulesProps['transformRuleContexts'] = (
+      ruleContexts
+    ) =>
       ruleContexts.map((ruleContext) => ruleContext.replace('ais-', 'custom-'));
 
-    const transformItems = (items) =>
+    const transformItems: UseQueryRulesProps['transformItems'] = (items) =>
       items.map((item) => ({
         ...item,
         title: `${item.title} (transformed)`,

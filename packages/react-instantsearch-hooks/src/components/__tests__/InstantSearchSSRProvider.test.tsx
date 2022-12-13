@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
@@ -5,12 +9,14 @@ import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode } from 'react';
 import { Hits, RefinementList, SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../test/mock';
+import { createSearchClient } from '../../../../../tests/mock';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
-function Hit({ hit }) {
-  return hit.objectID;
+import type { Hit as AlgoliaHit } from 'instantsearch.js';
+
+function HitComponent({ hit }: { hit: AlgoliaHit }) {
+  return <>{hit.objectID}</>;
 }
 
 describe('InstantSearchSSRProvider', () => {
@@ -42,7 +48,7 @@ describe('InstantSearchSSRProvider', () => {
         <StrictMode>
           <InstantSearchSSRProvider initialResults={initialResults}>
             <InstantSearch searchClient={searchClient} indexName="indexName">
-              <Hits hitComponent={Hit} />
+              <Hits hitComponent={HitComponent} />
             </InstantSearch>
           </InstantSearchSSRProvider>
         </StrictMode>
@@ -113,7 +119,7 @@ describe('InstantSearchSSRProvider', () => {
               }}
             >
               <SearchBox />
-              <Hits hitComponent={Hit} />
+              <Hits hitComponent={HitComponent} />
             </InstantSearch>
           </InstantSearchSSRProvider>
         </StrictMode>
@@ -170,7 +176,7 @@ describe('InstantSearchSSRProvider', () => {
               routing={routing}
             >
               <SearchBox />
-              <Hits hitComponent={Hit} />
+              <Hits hitComponent={HitComponent} />
             </InstantSearch>
           </InstantSearchSSRProvider>
         </StrictMode>
@@ -286,7 +292,7 @@ describe('InstantSearchSSRProvider', () => {
             <InstantSearch searchClient={searchClient} indexName="indexName">
               <main>
                 <h1>Search</h1>
-                <Hits hitComponent={Hit} />
+                <Hits hitComponent={HitComponent} />
               </main>
             </InstantSearch>
           </InstantSearchSSRProvider>
@@ -342,7 +348,7 @@ describe('InstantSearchSSRProvider', () => {
         <StrictMode>
           <InstantSearchSSRProvider initialResults={initialResults}>
             <InstantSearch searchClient={searchClient} indexName="indexName">
-              <Hits hitComponent={Hit} />
+              <Hits hitComponent={HitComponent} />
             </InstantSearch>
           </InstantSearchSSRProvider>
         </StrictMode>

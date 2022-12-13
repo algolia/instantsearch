@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -47,7 +51,7 @@ describe('VoiceSearch', () => {
     });
 
     it('with custom component for button with isListening: false', () => {
-      const customButtonText = ({ isListening }) =>
+      const customButtonText = ({ isListening }: { isListening: boolean }) =>
         isListening ? 'Stop' : 'Start';
 
       const wrapper = mount(
@@ -57,7 +61,7 @@ describe('VoiceSearch', () => {
     });
 
     it('with custom component for button with isListening: true', () => {
-      const customButtonText = ({ isListening }) =>
+      const customButtonText = ({ isListening }: { isListening: boolean }) =>
         isListening ? 'Stop' : 'Start';
       mockIsListening.mockImplementation(() => true);
 

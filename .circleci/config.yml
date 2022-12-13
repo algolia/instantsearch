@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/react-instantsearch
   docker:
-    - image: cimg/node:12.22.7
+    - image: cimg/node:14.17.0
 
 version: 2
 jobs:

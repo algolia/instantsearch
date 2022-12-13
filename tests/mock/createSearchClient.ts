@@ -72,6 +72,7 @@ export function createSearchClient<TOptions extends Partial<SearchClient>>(
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     appId,
     addAlgoliaAgent: jest.fn(),

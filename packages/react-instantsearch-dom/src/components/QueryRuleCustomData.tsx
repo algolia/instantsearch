@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import type { CustomUserData } from 'react-instantsearch-core';
 import { createClassNames } from '../core/utils';
+
+type CustomUserData = {
+  [key: string]: any;
+};
 
 const cx = createClassNames('QueryRuleCustomData');
 
@@ -22,7 +25,7 @@ const QueryRuleCustomData: React.FC<QueryRuleCustomDataProps<CustomUserData>> =
   );
 
 QueryRuleCustomData.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired as any,
   className: PropTypes.string,
   children: PropTypes.func.isRequired,
 };

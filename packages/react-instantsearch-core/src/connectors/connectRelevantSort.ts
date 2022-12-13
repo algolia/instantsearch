@@ -4,6 +4,7 @@ import {
   refineValue,
   getCurrentRefinementValue,
   getResults,
+  // @ts-ignore
 } from '../core/indexUtils';
 
 function getId() {
@@ -12,8 +13,8 @@ function getId() {
 
 function getCurrentRefinement(
   props: ConnectedProps<any>,
-  searchState,
-  context
+  searchState: any,
+  context: any
 ) {
   const id = getId();
   const currentRefinement = getCurrentRefinementValue(

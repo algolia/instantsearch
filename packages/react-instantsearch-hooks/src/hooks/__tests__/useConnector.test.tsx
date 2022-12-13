@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
@@ -7,11 +11,11 @@ import React, { StrictMode, useState } from 'react';
 import {
   createSearchClient,
   createSingleSearchResponse,
-} from '../../../../../test/mock';
+} from '../../../../../tests/mock';
 import {
   createInstantSearchTestWrapper,
   createInstantSearchSpy,
-} from '../../../../../test/utils';
+} from '../../../../../tests/utils';
 import { Index } from '../../components/Index';
 import { InstantSearch } from '../../components/InstantSearch';
 import { useHits } from '../../connectors/useHits';
@@ -19,6 +23,7 @@ import { IndexContext } from '../../lib/IndexContext';
 import { noop } from '../../lib/noop';
 import { useConnector } from '../useConnector';
 
+import type { UseHitsProps } from '../../connectors/useHits';
 import type { Connector } from 'instantsearch.js';
 import type {
   HitsConnectorParams,
@@ -267,7 +272,7 @@ describe('useConnector', () => {
   test('returns the connector render state in a child index', async () => {
     const searchClient = createSearchClient({});
 
-    function Wrapper({ children }) {
+    function Wrapper({ children }: { children: React.ReactNode }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Index indexName="childIndex">{children}</Index>
@@ -316,16 +321,18 @@ describe('useConnector', () => {
 
   test('calls getWidgetRenderState with the InstantSearch render options and artificial results', () => {
     const getWidgetRenderState = jest.fn();
-    const connectCustomSearchBoxMock =
-      (renderFn, unmountFn) => (widgetParams) => ({
-        ...connectCustomSearchBox(renderFn, unmountFn)(widgetParams),
-        getWidgetRenderState,
-      });
+    const connectCustomSearchBoxMock: Connector<
+      CustomSearchBoxWidgetDescription,
+      Record<string, never>
+    > = (renderFn, unmountFn) => (widgetParams) => ({
+      ...connectCustomSearchBox(renderFn, unmountFn)(widgetParams),
+      getWidgetRenderState,
+    });
     const searchClient = createSearchClient({});
     const { InstantSearchSpy, indexContext, searchContext } =
       createInstantSearchSpy();
 
-    function SearchProvider({ children }) {
+    function SearchProvider({ children }: { children: React.ReactNode }) {
       return (
         <InstantSearchSpy
           searchClient={searchClient}
@@ -392,7 +399,7 @@ describe('useConnector', () => {
   test('returns state from artificial results', () => {
     const searchClient = createSearchClient({});
 
-    function SearchProvider({ children }) {
+    function SearchProvider({ children }: { children: React.ReactNode }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           {children}
@@ -428,7 +435,7 @@ describe('useConnector', () => {
       createSingleSearchResponse(),
     ]);
 
-    function SearchProvider({ children }) {
+    function SearchProvider({ children }: { children: React.ReactNode }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <IndexContext.Consumer>
@@ -522,7 +529,7 @@ describe('useConnector', () => {
   test('limits the number of renders with unstable function references from render state', async () => {
     const searchClient = createSearchClient({});
 
-    function Hits(props) {
+    function Hits(props: UseHitsProps) {
       useHits(props);
       return null;
     }
@@ -564,7 +571,7 @@ describe('useConnector', () => {
     const searchClient = createSearchClient({});
     const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
 
-    function App({ attribute }) {
+    function App({ attribute }: { attribute: string }) {
       return (
         <StrictMode>
           <InstantSearchSpy searchClient={searchClient} indexName="indexName">
@@ -628,7 +635,7 @@ describe('useConnector', () => {
     const searchClient = createSearchClient({});
     const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
 
-    function App({ callback }) {
+    function App({ callback }: { callback: () => void }) {
       return (
         <StrictMode>
           <InstantSearchSpy searchClient={searchClient} indexName="indexName">

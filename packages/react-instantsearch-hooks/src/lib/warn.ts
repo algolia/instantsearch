@@ -1,6 +1,10 @@
 /* eslint-disable no-console, no-empty */
 
-export const warnCache = {
+type WarnCache = {
+  current: Record<string, boolean>;
+};
+
+export const warnCache: WarnCache = {
   current: {},
 };
 

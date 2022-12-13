@@ -6,8 +6,8 @@ import { SearchBox } from 'react-instantsearch-hooks-web';
 import {
   createMultiSearchResponse,
   createSearchClient,
-} from '../../../../../test/mock';
-import { createInstantSearchTestWrapper } from '../../../../../test/utils';
+} from '../../../../../tests/mock';
+import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useSearchResults } from '../useSearchResults';
 
 describe('useSearchResults', () => {

@@ -69,7 +69,7 @@ export default createConnector({
     return { hits: hitsWithPositionsAndQueryID };
   },
 
-  /**
+  /*
    * Hits needs to be considered as a widget to trigger a search,
    * even if no other widgets are used.
    *

@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { usePoweredBy } from '../usePoweredBy';
 
 describe('usePoweredBy', () => {

@@ -1,6 +1,7 @@
 import type { SearchParameters } from 'algoliasearch-helper';
 import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
+// @ts-ignore
 import { getResults } from '../core/indexUtils';
 
 const MAX_WILDCARD_FACETS = 20;
@@ -10,7 +11,7 @@ export default createConnector({
   $$type: 'ais.dynamicWidgets',
 
   defaultProps: {
-    transformItems: (items) => items,
+    transformItems: (items: any[]) => items,
     maxValuesPerFacet: 20,
   },
 

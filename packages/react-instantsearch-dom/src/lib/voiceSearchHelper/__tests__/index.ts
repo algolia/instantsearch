@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 // copied from https://github.com/algolia/instantsearch.js/blob/688e36a67bb4c63d008d8abc02257a7b7c04e513/src/lib/voiceSearchHelper/__tests__/index-test.ts
 
 import createVoiceSearchHelper from '..';

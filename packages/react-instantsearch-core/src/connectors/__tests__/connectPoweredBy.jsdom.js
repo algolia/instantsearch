@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import connect from '../connectPoweredBy';
 
 jest.mock('../../core/createConnector', () => (x) => x);

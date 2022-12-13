@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -6,8 +10,8 @@ import {
   createMultiSearchResponse,
   createSearchClient,
   createSingleSearchResponse,
-} from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+} from '../../../../../tests/mock';
+import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { Menu } from '../Menu';
 
 function createMockedSearchClient() {
@@ -419,7 +423,7 @@ describe('Menu', () => {
           transformItems={(items) =>
             items.map((item) => ({
               ...item,
-              label: item.label!.toUpperCase(),
+              label: item.label.toUpperCase(),
             }))
           }
         />

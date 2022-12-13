@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import React, { useEffect } from 'react';
@@ -7,7 +11,7 @@ import {
   useSearchBox,
 } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../../test/mock';
+import { createSearchClient } from '../../../../../../tests/mock';
 
 describe('routing with external influence', () => {
   test('keeps on working when the URL is updated by another program', async () => {

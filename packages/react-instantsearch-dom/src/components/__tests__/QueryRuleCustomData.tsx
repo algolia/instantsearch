@@ -7,8 +7,7 @@ import QueryRuleCustomData from '../QueryRuleCustomData';
 Enzyme.configure({ adapter: new Adapter() });
 
 type CustomDataItem = {
-  title: string;
-  banner: string;
+  [key: string]: any;
 };
 
 type CustomDataProps = QueryRuleCustomDataProps<CustomDataItem>;

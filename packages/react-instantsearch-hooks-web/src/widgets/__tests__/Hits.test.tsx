@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 
@@ -5,8 +9,8 @@ import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+} from '../../../../../tests/mock';
+import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { Hits } from '../Hits';
 
 describe('Hits', () => {

@@ -10,6 +10,11 @@ import {
 import { WrapWithHits } from './util';
 
 type Hit = any;
+type PaginationProvidedProps = {
+  currentRefinement: number;
+  refine: (page: number) => void;
+  nbPages: number;
+};
 
 const stories = storiesOf('ConfigureRelatedItems', module);
 
@@ -30,7 +35,7 @@ function RelatedHit({ hit }: { hit: Hit }) {
 }
 
 const PreviousPagination = connectPagination(
-  ({ currentRefinement, refine }) => {
+  ({ currentRefinement, refine }: PaginationProvidedProps) => {
     return (
       <button
         className="ais-RelatedHits-button"
@@ -46,7 +51,7 @@ const PreviousPagination = connectPagination(
 );
 
 const NextPagination = connectPagination(
-  ({ currentRefinement, refine, nbPages }) => {
+  ({ currentRefinement, refine, nbPages }: PaginationProvidedProps) => {
     return (
       <button
         className="ais-RelatedHits-button"

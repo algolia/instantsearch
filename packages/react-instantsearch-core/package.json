@@ -33,13 +33,17 @@
     "build": "yarn build:cjs && yarn build:es && yarn build:umd",
     "build:cjs": "babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
-    "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js"
+    "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
+    "version": "./scripts/version.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "algoliasearch-helper": "^3.11.1",
     "prop-types": "^15.6.2",
     "react-fast-compare": "^3.0.0"
+  },
+  "devDependencies": {
+    "lodash.orderby": "4.6.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 5",

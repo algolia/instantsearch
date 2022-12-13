@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -6,8 +10,8 @@ import {
   createMultiSearchResponse,
   createSearchClient,
   createSingleSearchResponse,
-} from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+} from '../../../../../tests/mock';
+import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { HierarchicalMenu } from '../HierarchicalMenu';
 
 const attributes = [
@@ -501,7 +505,7 @@ describe('HierarchicalMenu', () => {
           attributes={attributes}
           limit={1}
           translations={{
-            showMoreButtonText({ isShowingMore }) {
+            showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
               return isShowingMore
                 ? 'Show less categories'
                 : 'Show more categories';

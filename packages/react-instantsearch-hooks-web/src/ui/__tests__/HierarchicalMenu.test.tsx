@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -49,7 +53,7 @@ describe('HierarchicalMenu', () => {
       canToggleShowMore: true,
       isShowingMore: false,
       translations: {
-        showMoreButtonText({ isShowingMore }) {
+        showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
           return isShowingMore ? 'Show less' : 'Show more';
         },
       },
@@ -423,7 +427,7 @@ describe('HierarchicalMenu', () => {
     const props = createProps({
       showMore: true,
       translations: {
-        showMoreButtonText({ isShowingMore }) {
+        showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
           return isShowingMore ? 'Show less brands' : 'Show more brands';
         },
       },

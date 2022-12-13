@@ -1,5 +1,6 @@
 # Vendors
 node_modules
+**/node_modules/**
 
 # Artifacts
 dist
@@ -7,3 +8,4 @@ build
 .expo
 .next
 coverage
+website

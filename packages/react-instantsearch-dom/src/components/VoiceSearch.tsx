@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import type { Translate } from 'react-instantsearch-core';
 import { translatable } from 'react-instantsearch-core';
 import { createClassNames } from '../core/utils';
 import type {
@@ -23,6 +22,8 @@ export type InnerComponentProps = {
   isSpeechFinal: boolean;
   isBrowserSupported: boolean;
 };
+
+type Translate = (key: string, ...params: any[]) => string;
 
 type VoiceSearchProps = {
   searchAsYouSpeak: boolean;

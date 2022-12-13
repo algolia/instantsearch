@@ -6,3 +6,7 @@ declare namespace NodeJS {
     NODE_ENV: 'development' | 'production' | 'test';
   }
 }
+
+// fake typing for legacy modules
+declare module 'react-instantsearch-core';
+declare module 'react-instantsearch-dom';

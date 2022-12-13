@@ -1,8 +1,12 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import React, { StrictMode } from 'react';
 
-import { createSearchClient } from '../../../../../test/mock';
-import { createInstantSearchSpy } from '../../../../../test/utils';
+import { createSearchClient } from '../../../../../tests/mock';
+import { createInstantSearchSpy } from '../../../../../tests/utils';
 import { Configure } from '../../components/Configure';
 import { IndexContext } from '../../lib/IndexContext';
 import { noop } from '../../lib/noop';

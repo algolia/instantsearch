@@ -28,8 +28,8 @@ export function getMetadataPayload(
       params: Object.keys(props).filter(
         (prop) =>
           !internalProps.includes(prop) &&
-          defaultProps[prop] !== props[prop] &&
-          props[prop] !== undefined
+          defaultProps[prop] !== (props as any)[prop] &&
+          (props as any)[prop] !== undefined
       ),
     };
   });

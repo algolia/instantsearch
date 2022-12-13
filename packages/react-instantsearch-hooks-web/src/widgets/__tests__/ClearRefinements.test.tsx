@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -6,8 +10,8 @@ import {
   useRefinementList,
 } from 'react-instantsearch-hooks';
 
-import { createSearchClient } from '../../../../../test/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+import { createSearchClient } from '../../../../../tests/mock';
+import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { ClearRefinements } from '../ClearRefinements';
 
 import type {

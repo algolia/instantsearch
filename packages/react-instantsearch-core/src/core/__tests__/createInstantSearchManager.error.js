@@ -1,5 +1,5 @@
 import createInstantSearchManager from '../createInstantSearchManager';
-import { wait } from '../../../../../test/utils';
+import { wait } from '../../../../../tests/utils';
 
 const createSearchClient = () => ({
   search: jest.fn(),

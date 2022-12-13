@@ -1,8 +1,12 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from '@testing-library/react';
 import React from 'react';
 import { InstantSearch as InstantSearchCore } from 'react-instantsearch-core';
 
-import { createSearchClient } from '../../../../test/mock';
+import { createSearchClient } from '../../../../tests/mock';
 import { useSearchBox } from '../connectors/useSearchBox';
 import { noop } from '../lib/noop';
 

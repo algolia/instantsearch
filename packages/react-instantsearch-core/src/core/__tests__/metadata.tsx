@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
 import { render } from '@testing-library/react';
@@ -220,7 +224,7 @@ function FakeProvider({
   children,
   widgetsManager,
 }: {
-  children: React.ReactChild;
+  children: React.ReactNode;
   widgetsManager: any;
 }) {
   const createFakeState = () => ({

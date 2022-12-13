@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 
-import { createInstantSearchTestWrapper } from '../../../../../test/utils';
+import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useDynamicWidgets } from '../useDynamicWidgets';
 
 describe('useDynamicWidgets', () => {

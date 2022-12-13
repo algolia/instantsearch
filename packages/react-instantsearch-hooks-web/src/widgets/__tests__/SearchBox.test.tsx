@@ -1,11 +1,15 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { act, render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { InstantSearchHooksTestWrapper } from '../../../../../test/utils';
+import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { SearchBox } from '../SearchBox';
 
-import type { UiState } from 'instantsearch.js';
+import type { InstantSearch, UiState } from 'instantsearch.js';
 
 describe('SearchBox', () => {
   test('renders with default props', async () => {
@@ -222,7 +226,7 @@ describe('SearchBox', () => {
   });
 
   test('restore InstantSearch query when out of sync on input is blurred', async () => {
-    let localSetUiState;
+    let localSetUiState: InstantSearch['setUiState'];
 
     const { container } = render(
       <InstantSearchHooksTestWrapper

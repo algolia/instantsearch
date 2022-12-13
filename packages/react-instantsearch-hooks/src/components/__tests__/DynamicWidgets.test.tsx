@@ -1,7 +1,11 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { act, render, waitFor } from '@testing-library/react';
 import React, { createRef } from 'react';
 
-import { createSearchClient } from '../../../../../test/mock';
+import { createSearchClient } from '../../../../../tests/mock';
 import { useHierarchicalMenu } from '../../connectors/useHierarchicalMenu';
 import { useMenu } from '../../connectors/useMenu';
 import { usePagination } from '../../connectors/usePagination';
@@ -187,7 +191,7 @@ describe('DynamicWidgets', () => {
 
     const searchClient = createSearchClient({});
 
-    function MyComponent({ children }) {
+    function MyComponent({ children }: { children: React.ReactNode }) {
       return (
         <div className="ais-Panel">
           <div className="ais-Panel-body">{children}</div>

@@ -13,12 +13,12 @@ exports[`GeoSearch Connector expect to render 1`] = `
 exports[`GeoSearch Connector expect to render with defaultRefinement 1`] = `
 <ConnectorWrapper
   defaultRefinement={
-    Object {
-      "northEast": Object {
+    {
+      "northEast": {
         "lat": 10,
         "lng": 12,
       },
-      "southWest": Object {
+      "southWest": {
         "lat": 12,
         "lng": 14,
       },
@@ -44,9 +44,9 @@ exports[`GeoSearch Connector expect to render with enableRefineOnMapMove 1`] = `
 exports[`GeoSearch GoogleMaps expect to render 1`] = `
 <GoogleMaps
   google={
-    Object {
-      "maps": Object {
-        "ControlPosition": Object {
+    {
+      "maps": {
+        "ControlPosition": {
           "LEFT_TOP": "left:top",
         },
         "LatLng": [MockFunction],
@@ -54,20 +54,20 @@ exports[`GeoSearch GoogleMaps expect to render 1`] = `
         "Map": [MockFunction],
         "Marker": [MockFunction],
         "OverlayView": [Function],
-        "event": Object {
+        "event": {
           "addListenerOnce": [MockFunction],
         },
       },
     }
   }
   initialPosition={
-    Object {
+    {
       "lat": 0,
       "lng": 0,
     }
   }
   initialZoom={1}
-  mapOptions={Object {}}
+  mapOptions={{}}
   onChange={[Function]}
   onIdle={[Function]}
   shouldUpdate={[Function]}
@@ -82,9 +82,9 @@ exports[`GeoSearch GoogleMaps expect to render 1`] = `
 exports[`GeoSearch Provider expect to render 1`] = `
 <Provider
   google={
-    Object {
-      "maps": Object {
-        "ControlPosition": Object {
+    {
+      "maps": {
+        "ControlPosition": {
           "LEFT_TOP": "left:top",
         },
         "LatLng": [MockFunction],
@@ -92,14 +92,14 @@ exports[`GeoSearch Provider expect to render 1`] = `
         "Map": [MockFunction],
         "Marker": [MockFunction],
         "OverlayView": [Function],
-        "event": Object {
+        "event": {
           "addListenerOnce": [MockFunction],
         },
       },
     }
   }
   hasMapMoveSinceLastRefine={false}
-  hits={Array []}
+  hits={[]}
   isRefineEnable={true}
   isRefineOnMapMove={true}
   refine={[Function]}

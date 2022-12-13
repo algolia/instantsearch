@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createFakeGoogleReference } from '../../../test/mockGoogleMaps';
 import createHTMLMarker from '../createHTMLMarker';
 

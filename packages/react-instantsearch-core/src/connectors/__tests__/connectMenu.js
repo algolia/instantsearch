@@ -550,8 +550,9 @@ describe('connectMenu', () => {
         hits: [],
       };
 
+      const { defaultProps } = connect;
       props = connect.getProvidedProps(
-        { ...connect.defaultProps, attribute: 'ok', contextValue },
+        { ...defaultProps, attribute: 'ok', contextValue },
         {},
         { results }
       );
@@ -597,9 +598,10 @@ describe('connectMenu', () => {
         hits: [],
       };
 
+      const { defaultProps } = connect;
       props = connect.getProvidedProps(
         {
-          ...connect.defaultProps,
+          ...defaultProps,
           attribute: 'ok',
           searchable: true,
           contextValue,

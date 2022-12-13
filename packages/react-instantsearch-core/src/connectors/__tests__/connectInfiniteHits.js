@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import isEqual from 'react-fast-compare';
 import connect from '../connectInfiniteHits';
 
@@ -630,16 +634,16 @@ describe('connectInfiniteHits', () => {
           searchResults1
         ).hits
       ).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "__position": 1,
             "objectID": "a",
           },
-          Object {
+          {
             "__position": 2,
             "objectID": "b",
           },
-          Object {
+          {
             "__position": 3,
             "objectID": "c",
           },
@@ -662,28 +666,28 @@ describe('connectInfiniteHits', () => {
           searchResults2
         ).hits
       ).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "__position": 1,
             "objectID": "a",
           },
-          Object {
+          {
             "__position": 2,
             "objectID": "b",
           },
-          Object {
+          {
             "__position": 3,
             "objectID": "c",
           },
-          Object {
+          {
             "__position": 4,
             "objectID": "d",
           },
-          Object {
+          {
             "__position": 5,
             "objectID": "e",
           },
-          Object {
+          {
             "__position": 6,
             "objectID": "f",
           },
@@ -699,16 +703,16 @@ describe('connectInfiniteHits', () => {
           searchResults2
         ).hits
       ).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "__position": 4,
             "objectID": "d",
           },
-          Object {
+          {
             "__position": 5,
             "objectID": "e",
           },
-          Object {
+          {
             "__position": 6,
             "objectID": "f",
           },

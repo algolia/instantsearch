@@ -1,8 +1,0 @@
-[build]
-  command = "yarn run storybook:build --quiet && yarn run website:build"
-  publish = "website"
-
-[build.environment]
-  YARN_VERSION = "1.16.0"
-  YARN_FLAGS = "--production=false"
-  NODE_ENV = "production"

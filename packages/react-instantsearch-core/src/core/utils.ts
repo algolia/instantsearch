@@ -1,5 +1,5 @@
 // From https://github.com/reactjs/react-redux/blob/master/src/utils/shallowEqual.js
-export const shallowEqual = (objA, objB) => {
+export const shallowEqual = (objA: any, objB: any) => {
   if (objA === objB) {
     return true;
   }
@@ -22,18 +22,18 @@ export const shallowEqual = (objA, objB) => {
   return true;
 };
 
-export const getDisplayName = (Component) =>
+export const getDisplayName = (Component: any) =>
   Component.displayName || Component.name || 'UnknownComponent';
 
 const resolved = Promise.resolve();
-export const defer = (f) => {
+export const defer = (f: any) => {
   resolved.then(f);
 };
 
 const isPlainObject = (value: unknown): value is object =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-export const removeEmptyKey = (obj: object) => {
+export const removeEmptyKey = (obj: Record<string, any>) => {
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
 
@@ -51,7 +51,7 @@ export const removeEmptyKey = (obj: object) => {
   return obj;
 };
 
-export const removeEmptyArraysFromObject = (obj: object) => {
+export const removeEmptyArraysFromObject = (obj: Record<string, any>) => {
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
 
@@ -63,14 +63,18 @@ export const removeEmptyArraysFromObject = (obj: object) => {
   return obj;
 };
 
-export function addAbsolutePositions(hits, hitsPerPage, page) {
+export function addAbsolutePositions(
+  hits: any[],
+  hitsPerPage: number,
+  page: number
+) {
   return hits.map((hit, index) => ({
     ...hit,
     __position: hitsPerPage * page + index + 1,
   }));
 }
 
-export function addQueryID(hits, queryID) {
+export function addQueryID(hits: any[], queryID: string) {
   if (!queryID) {
     return hits;
   }
@@ -101,11 +105,14 @@ export function objectHasKeys(object: object | undefined) {
 }
 
 // https://github.com/babel/babel/blob/3aaafae053fa75febb3aa45d45b6f00646e30ba4/packages/babel-helpers/src/helpers.js#L604-L620
-export function omit(source: { [key: string]: any }, excluded: string[]) {
+export function omit(
+  source: Record<string, any>,
+  excluded: string[]
+): Record<string, any> {
   if (source === null || source === undefined) {
     return {};
   }
-  const target = {};
+  const target: Record<string, any> = {};
   const sourceKeys = Object.keys(source);
   for (let i = 0; i < sourceKeys.length; i++) {
     const key = sourceKeys[i];
@@ -135,7 +142,10 @@ export function omit(source: { [key: string]: any }, excluded: string[]) {
  * @param object Source object to query
  * @param path either an array of properties, or a string form of the properties, separated by .
  */
-export const getPropertyByPath = (object: object, path: string[] | string) =>
+export const getPropertyByPath = (
+  object: Record<string, any>,
+  path: string[] | string
+): any =>
   (Array.isArray(path)
     ? path
     : path.replace(/\[(\d+)]/g, '.$1').split('.')

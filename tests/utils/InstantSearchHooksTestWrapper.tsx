@@ -27,7 +27,7 @@ export function createInstantSearchTestWrapper(
 ) {
   const client = createSearchClient({});
 
-  const wrapper = ({ children }) => (
+  const wrapper = ({ children }: { children: React.ReactNode }) => (
     <InstantSearch searchClient={client} indexName="indexName" {...props}>
       {children}
     </InstantSearch>

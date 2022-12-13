@@ -42,8 +42,8 @@ export type ConnectorDescription = {
   /**
    * PropTypes forwarded to the wrapped component.
    */
-  propTypes?: {}; // I can't find a definition for a propTypes object
-  defaultProps?: {};
+  propTypes?: Record<string, any>; // I can't find a definition for a propTypes object
+  defaultProps?: Record<string, any>;
 };
 
 export type AdditionalWidgetProperties = {
@@ -146,7 +146,7 @@ export function createConnectorWithoutContext(
         }
       }
 
-      shouldComponentUpdate(nextProps, nextState) {
+      shouldComponentUpdate(nextProps: any, nextState: any) {
         if (typeof connectorDesc.shouldComponentUpdate === 'function') {
           return connectorDesc.shouldComponentUpdate.call(
             this,
@@ -175,7 +175,7 @@ export function createConnectorWithoutContext(
         );
       }
 
-      componentDidUpdate(prevProps) {
+      componentDidUpdate(prevProps: any) {
         if (!isEqual(prevProps, this.props)) {
           this.setState({
             providedProps: this.getProvidedProps(this.props),
@@ -229,7 +229,7 @@ export function createConnectorWithoutContext(
         });
       }
 
-      getProvidedProps(props) {
+      getProvidedProps(props: any) {
         const {
           widgets,
           results,
@@ -262,7 +262,7 @@ export function createConnectorWithoutContext(
         );
       }
 
-      getSearchParameters(searchParameters) {
+      getSearchParameters(searchParameters: any) {
         if (typeof connectorDesc.getSearchParameters === 'function') {
           return connectorDesc.getSearchParameters.call(
             this,
@@ -275,7 +275,7 @@ export function createConnectorWithoutContext(
         return null;
       }
 
-      getMetadata(nextWidgetsState) {
+      getMetadata(nextWidgetsState: any) {
         if (typeof connectorDesc.getMetadata === 'function') {
           return connectorDesc.getMetadata.call(
             this,
@@ -287,7 +287,7 @@ export function createConnectorWithoutContext(
         return {};
       }
 
-      transitionState(prevWidgetsState, nextWidgetsState) {
+      transitionState(prevWidgetsState: any, nextWidgetsState: any) {
         if (typeof connectorDesc.transitionState === 'function') {
           return connectorDesc.transitionState.call(
             this,
@@ -300,7 +300,7 @@ export function createConnectorWithoutContext(
         return nextWidgetsState;
       }
 
-      refine = (...args) => {
+      refine = (...args: any[]) => {
         this.props.contextValue.onInternalStateUpdate(
           // refine will always be defined here because the prop is only given conditionally
           connectorDesc.refine!.call(
@@ -312,7 +312,7 @@ export function createConnectorWithoutContext(
         );
       };
 
-      createURL = (...args) =>
+      createURL = (...args: any[]) =>
         this.props.contextValue.createHrefForState(
           // refine will always be defined here because the prop is only given conditionally
           connectorDesc.refine!.call(
@@ -323,7 +323,7 @@ export function createConnectorWithoutContext(
           )
         );
 
-      searchForFacetValues = (...args) => {
+      searchForFacetValues = (...args: any[]) => {
         this.props.contextValue.onSearchForFacetValues(
           // searchForFacetValues will always be defined here because the prop is only given conditionally
           connectorDesc.searchForFacetValues!.call(

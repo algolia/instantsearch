@@ -1,10 +1,10 @@
 import connectReal from '../connectHitInsights';
 
-jest.mock('../../core/createConnector', () => (x) => x);
+jest.mock('../../core/createConnector', () => (x: any) => x);
 // our mock implementation is diverging from the regular createConnector,
 // so we redefine it as `any` here, since we have no more information
 // @TODO: refactor these tests to work better with TS
-const connect: (client) => any = connectReal;
+const connect: (client: any) => any = connectReal;
 
 function setup() {
   const insightsClient = jest.fn();
@@ -42,7 +42,7 @@ describe('connectHitInsights', () => {
   });
 
   describe('when called with `clickedObjectIDsAfterSearch`', () => {
-    let insightsClient;
+    let insightsClient: jest.Mock;
     beforeEach(() => {
       const { insightsClient: aa, props } = setup();
       insightsClient = aa;
@@ -66,7 +66,7 @@ describe('connectHitInsights', () => {
   });
 
   describe('when called with `convertedObjectIDsAfterSearch`', () => {
-    let insightsClient;
+    let insightsClient: jest.Mock;
     beforeEach(() => {
       const { insightsClient: aa, props } = setup();
       insightsClient = aa;

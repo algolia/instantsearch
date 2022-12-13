@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
@@ -5,14 +9,15 @@ import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../test/mock';
-import { createInstantSearchSpy, wait } from '../../../../../test/utils';
+import { createSearchClient } from '../../../../../tests/mock';
+import { createInstantSearchSpy, wait } from '../../../../../tests/utils';
 import { useRefinementList } from '../../connectors/useRefinementList';
 import version from '../../version';
 import { Index } from '../Index';
 import { InstantSearch } from '../InstantSearch';
 
 import type { UseRefinementListProps } from '../../connectors/useRefinementList';
+import type { InstantSearchProps } from '../InstantSearch';
 
 function RefinementList(props: UseRefinementListProps) {
   useRefinementList(props);
@@ -285,7 +290,7 @@ describe('InstantSearch', () => {
   test('renders with router state from unstable routing', async () => {
     const searchClient = createSearchClient({});
 
-    function App({ url }) {
+    function App({ url }: { url: string }) {
       const routing = {
         stateMapping: simple(),
         router: history({
@@ -397,7 +402,10 @@ describe('InstantSearch', () => {
 
   test('recovers the state on rerender with a stable onStateChange', async () => {
     const searchClient = createSearchClient({});
-    const onStateChange = ({ uiState, setUiState }) => {
+    const onStateChange: InstantSearchProps['onStateChange'] = ({
+      uiState,
+      setUiState,
+    }) => {
       setUiState(uiState);
     };
 
@@ -522,7 +530,7 @@ describe('InstantSearch', () => {
     const searchClient2 = createSearchClient({});
     const searchClient3 = createSearchClient({});
 
-    function App({ searchClient }) {
+    function App({ searchClient }: Pick<InstantSearchProps, 'searchClient'>) {
       return (
         <StrictMode>
           <InstantSearch searchClient={searchClient} indexName="indexName">
@@ -589,7 +597,7 @@ describe('InstantSearch', () => {
   test('updates the index on index prop change', async () => {
     const searchClient = createSearchClient({});
 
-    function App({ indexName }) {
+    function App({ indexName }: Pick<InstantSearchProps, 'indexName'>) {
       return (
         <StrictMode>
           <InstantSearch searchClient={searchClient} indexName={indexName}>
@@ -658,7 +666,7 @@ describe('InstantSearch', () => {
       setUiState(uiState);
     });
 
-    function App({ onStateChange }) {
+    function App({ onStateChange }: Pick<InstantSearchProps, 'onStateChange'>) {
       return (
         <StrictMode>
           <InstantSearch
@@ -712,7 +720,9 @@ describe('InstantSearch', () => {
       helper.search();
     });
 
-    function App({ searchFunction }) {
+    function App({
+      searchFunction,
+    }: Pick<InstantSearchProps, 'searchFunction'>) {
       return (
         <StrictMode>
           <InstantSearch
@@ -781,7 +791,7 @@ describe('InstantSearch', () => {
   test('triggers a search on widget unmount', async () => {
     const searchClient = createSearchClient({});
 
-    function App({ isMounted }) {
+    function App({ isMounted }: { isMounted: boolean }) {
       return (
         <StrictMode>
           <InstantSearch searchClient={searchClient} indexName="indexName">

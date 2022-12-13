@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from '@testing-library/react';
 import React from 'react';
 
@@ -240,10 +244,10 @@ describe('Highlight', () => {
   });
 
   test('forwards tag names and separator', () => {
-    function Highlighted({ children }) {
+    function Highlighted({ children }: { children: React.ReactNode }) {
       return <strong>{children}</strong>;
     }
-    function NonHighlighted({ children }) {
+    function NonHighlighted({ children }: { children: React.ReactNode }) {
       return <small>{children}</small>;
     }
 

@@ -11,7 +11,7 @@ export type TabProps = {
 const getTabId = (index: number, suffix?: string) =>
   [`tab-${index}`, suffix].filter(Boolean).join('-');
 
-export function Tabs({ children }) {
+export function Tabs({ children }: { children: React.ReactNode }) {
   const firstRender = useRef(true);
   const [currentTab, setCurrentTab] = useState(0);
   const tabsRefs = useRef<HTMLElement[]>([]);

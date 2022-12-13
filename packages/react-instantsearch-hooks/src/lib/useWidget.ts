@@ -41,7 +41,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   useIsomorphicLayoutEffect(() => {
     const previousWidget = prevWidgetRef.current;
     function cleanup() {
-      if (search._preventWidgetCleanup) return;
+      if ((search as any)._preventWidgetCleanup) return;
       parentIndex.removeWidgets([previousWidget]);
     }
 

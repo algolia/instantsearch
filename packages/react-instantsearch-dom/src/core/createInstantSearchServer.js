@@ -64,6 +64,8 @@ const getSearchParameters = (indexName, widgets) => {
  * The engine can return params: "query=xxx&query=yyy" if e.g. a query rule modifies it.
  * This however will cause us to miss the cache hydration, so we make sure to keep
  * only the first query (always the one from the parameters).
+ * @param {string} params the parameters to clean
+ * @returns {string} the parameters without duplicate query
  */
 function removeDuplicateQuery(params) {
   if (!params) {

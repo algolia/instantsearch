@@ -5,8 +5,6 @@ import { WrapWithHits } from './util';
 
 const stories = storiesOf('Configure', module);
 
-stories.add('default', () => <ConfigureExample />);
-
 class ConfigureExample extends React.Component {
   constructor() {
     super();
@@ -27,3 +25,5 @@ class ConfigureExample extends React.Component {
     );
   }
 }
+
+stories.add('default', () => <ConfigureExample />);

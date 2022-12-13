@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import createInfiniteHitsSessionStorageCache from '../sessionStorage';
 
 const KEY = 'ais.infiniteHits';

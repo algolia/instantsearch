@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -5,7 +9,7 @@ import React from 'react';
 import { ShowMoreButton } from '../ShowMoreButton';
 
 const defaultTranslations = {
-  showMoreButtonText({ isShowingMore }) {
+  showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
     return isShowingMore ? 'Show less' : 'Show more';
   },
 };
@@ -85,7 +89,7 @@ describe('ShowMoreButton', () => {
 
   test('renders translations', () => {
     const translations = {
-      showMoreButtonText({ isShowingMore }) {
+      showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
         return isShowingMore ? 'Display less' : 'Display more';
       },
     };

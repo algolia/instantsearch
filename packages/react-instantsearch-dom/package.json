@@ -35,7 +35,9 @@
     "build": "yarn build:cjs && yarn build:es && yarn build:umd",
     "build:cjs": "babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
-    "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js"
+    "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
+    "storybook": "start-storybook -p 6006 -c storybook -s storybook/public",
+    "storybook:build": "build-storybook -s storybook/public -o ../../website/storybook/react -c storybook"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
@@ -44,6 +46,9 @@
     "prop-types": "^15.6.2",
     "react-fast-compare": "^3.0.0",
     "react-instantsearch-core": "6.38.1"
+  },
+  "devDependencies": {
+    "nock": "11.7.2"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 5",

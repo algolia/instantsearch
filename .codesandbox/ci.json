@@ -5,6 +5,6 @@
   "sandboxes": [
     "github/algolia/create-instantsearch-app/tree/templates/react-instantsearch",
     "github/algolia/doc-code-samples/tree/master/React InstantSearch/routing-basic",
-    "/examples/hooks"
+    "/examples/hooks/default-theme"
   ]
 }

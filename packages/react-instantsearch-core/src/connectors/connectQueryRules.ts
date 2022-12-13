@@ -1,5 +1,6 @@
 import type { ConnectedProps } from '../core/createConnector';
 import createConnector from '../core/createConnector';
+// @ts-ignore
 import { getResults, getIndexId, hasMultipleIndices } from '../core/indexUtils';
 
 type SearchState = any;

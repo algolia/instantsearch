@@ -3,26 +3,26 @@
     "target": "ESNEXT",
     "module": "es2020",
     "moduleResolution": "node",
-    "jsx": "preserve",
     "noEmit": true,
     "strict": true,
-    // @TODO: It's mandatory to disable this strict check at the moment
-    // otherwise we have to type every import we do. The migration is an
-    // incremental process so it happens that we import JavaScript module
-    // from TypeScript one. The compiler always translates those imports
-    // as impliciy any.
-    "noImplicitAny": false,
+    "jsx": "react",
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "isolatedModules": true
   },
   "exclude": [
-    "examples/hooks-next/next-env.d.ts",
+    "examples",
+    "**/es",
+    "**/dist",
+    "tests/e2e",
+    "examples/hooks/next/next-env.d.ts",
     // @TODO: we need to re-enable type checking in the React Native example
     // when the RN types work with React 18.
-    "examples/hooks-react-native"
+    "examples/hooks/react-native"
   ]
 }

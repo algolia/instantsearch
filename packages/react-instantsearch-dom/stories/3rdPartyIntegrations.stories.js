@@ -5,17 +5,6 @@ import { storiesOf } from '@storybook/react';
 import { connectRange } from 'react-instantsearch-dom';
 import { WrapWithHits } from './util';
 
-const stories = storiesOf('Integration With Other Libraries', module);
-
-stories.add('Airbnb Rheostat', () => (
-  <WrapWithHits linkedStoryGroup="3rdPartyIntegrations.stories.js">
-    <h3 style={{ marginBottom: 50, textAlign: 'center' }}>
-      ⚠️ This example only works with the version 2.x of Rheostat ️️⚠️
-    </h3>
-    <ConnectedRange attribute="price" />
-  </WrapWithHits>
-));
-
 class Range extends Component {
   static propTypes = {
     min: PropTypes.number,
@@ -94,4 +83,13 @@ class Range extends Component {
 
 const ConnectedRange = connectRange(Range);
 
-export default ConnectedRange;
+const stories = storiesOf('Integration With Other Libraries', module);
+
+stories.add('Airbnb Rheostat', () => (
+  <WrapWithHits linkedStoryGroup="3rdPartyIntegrations.stories.js">
+    <h3 style={{ marginBottom: 50, textAlign: 'center' }}>
+      ⚠️ This example only works with the version 2.x of Rheostat ️️⚠️
+    </h3>
+    <ConnectedRange attribute="price" />
+  </WrapWithHits>
+));

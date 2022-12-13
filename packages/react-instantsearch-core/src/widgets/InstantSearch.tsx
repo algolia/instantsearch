@@ -273,7 +273,7 @@ class InstantSearch extends Component<Props, State> {
     }
   }
 
-  onSearchStateChange(searchState) {
+  onSearchStateChange(searchState: any) {
     if (this.props.onSearchStateChange && !this.isUnmounting) {
       this.props.onSearchStateChange(searchState);
     }
@@ -311,7 +311,7 @@ class InstantSearch extends Component<Props, State> {
     }
   }
 
-  onSearchForFacetValues(searchState) {
+  onSearchForFacetValues(searchState: any) {
     this.state.instantSearchManager.onSearchForFacetValues(searchState);
   }
 

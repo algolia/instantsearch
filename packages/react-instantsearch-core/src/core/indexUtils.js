@@ -6,6 +6,7 @@ export function getIndexId(context) {
     : context.ais.mainTargetedIndex;
 }
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @returns {import('algoliasearch-helper').SearchResults} results
  */

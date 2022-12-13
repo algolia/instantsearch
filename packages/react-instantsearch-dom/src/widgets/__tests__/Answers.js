@@ -1,9 +1,13 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import React from 'react';
 import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
 import { render, fireEvent } from '@testing-library/react';
 import Answers from '../Answers';
-import { wait } from '../../../../../test/utils';
-import { createSearchClient } from '../../../../../test/mock';
+import { wait } from '../../../../../tests/utils';
+import { createSearchClient } from '../../../../../tests/mock';
 
 const createAnswersSearchClient = () =>
   createSearchClient({
@@ -107,7 +111,7 @@ describe('Answers', () => {
     fireEvent.change(getByPlaceholderText('Search here…'), {
       target: { value: 'sarah' },
     });
-    await wait(20);
+    await wait(200);
     getByText('hits received');
   });
 });

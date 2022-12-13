@@ -12,7 +12,7 @@ import {
   useSearchBox,
 } from 'react-instantsearch-hooks';
 
-import { createSearchClient } from '../../../../test/mock';
+import { createSearchClient } from '../../../../tests/mock';
 import { getServerState } from '../getServerState';
 
 import type {

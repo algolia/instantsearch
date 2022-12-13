@@ -107,7 +107,7 @@ export function RefinementList({
     }
   }
 
-  const mergedTranslations = {
+  const mergedTranslations: Required<RefinementListProps['translations']> = {
     resetButtonTitle: 'Clear the search query',
     submitButtonTitle: 'Submit the search query',
     noResultsText: 'No results.',

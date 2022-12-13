@@ -1,5 +1,5 @@
 {
-  "name": "tourism",
+  "name": "example-react-instantsearch-tourism",
   "version": "6.38.1",
   "private": true,
   "dependencies": {

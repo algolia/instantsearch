@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import React from 'react';
 import Enzyme, { mount, shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -5,7 +9,7 @@ import createConnector, {
   createConnectorWithoutContext,
 } from '../createConnector';
 import { InstantSearchProvider } from '../context';
-import { wait } from '../../../../../test/utils';
+import { wait } from '../../../../../tests/utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 

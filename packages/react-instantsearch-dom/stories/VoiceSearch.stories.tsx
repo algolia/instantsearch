@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { VoiceSearch, SearchBox } from '../packages/react-instantsearch-dom';
+import { VoiceSearch, SearchBox } from 'react-instantsearch-dom';
 import { WrapWithHits } from './util';
-import type { InnerComponentProps } from '../packages/react-instantsearch-dom/src/components/VoiceSearch';
+import type { InnerComponentProps } from '../src/components/VoiceSearch';
 
 const stories = storiesOf('VoiceSearch', module);
 
@@ -47,7 +47,9 @@ stories
     >
       <div className="custom-button-story">
         <VoiceSearch
-          buttonTextComponent={({ isListening }) => (isListening ? '⏹' : '🎙')}
+          buttonTextComponent={({ isListening }: { isListening: boolean }) =>
+            isListening ? '⏹' : '🎙'
+          }
         />
       </div>
     </WrapWithHits>

@@ -1,9 +1,10 @@
 {
-  "name": "hooks-e-commerce",
+  "name": "example-react-instantsearch-hooks-e-commerce",
   "version": "6.38.1",
   "private": true,
   "scripts": {
     "build": "parcel build index.html",
+    "website:examples": "parcel build index.html --public-url . --dist-dir=../../../website/examples/react-hooks/e-commerce",
     "start": "parcel index.html"
   },
   "dependencies": {

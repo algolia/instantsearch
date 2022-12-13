@@ -5,8 +5,8 @@ import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../../test/mock';
-import { createInstantSearchTestWrapper } from '../../../../../test/utils';
+} from '../../../../../tests/mock';
+import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useBreadcrumb } from '../useBreadcrumb';
 import { useHierarchicalMenu } from '../useHierarchicalMenu';
 
