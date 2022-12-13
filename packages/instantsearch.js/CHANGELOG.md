@@ -1,3 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 4.49.2 (2022-12-13)
+
+**Note:** Version bump only for package instantsearch.js
+
+
+
+
+
 ## [4.49.1](https://github.com/algolia/instantsearch.js/compare/v4.49.0...v4.49.1) (2022-11-01)
 
 

@@ -1,3 +1,85 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 4.0.0 (2022-12-13)
+
+
+### Bug Fixes
+
+* correctly output junit report in target repository (algolia/instantsearch-e2e-tests[#32](https://github.com/algolia/instantsearch.js/issues/32)) ([9fee82e](https://github.com/algolia/instantsearch.js/commit/9fee82e290d2feed084baa4bf3654e3744eb7b27))
+* **helper:** fix dragAndDropByOffset helper Internet Explorer 11 compatibility ([6e56137](https://github.com/algolia/instantsearch.js/commit/6e561376575c77f2d39c872111cb95a9445f4330))
+* **helper:** fix getSelectedHierarchicalMenuItems to wait for the elements ([0e3d8fc](https://github.com/algolia/instantsearch.js/commit/0e3d8fc3fa1bf68a3557a635bf02b94e746e14f6))
+* **helper:** fix getTextFromElements helper to use getText selector ([6d174c5](https://github.com/algolia/instantsearch.js/commit/6d174c5241b4db8c2b46563f6ab5eaa6638f18a2))
+* **helper:** fix helpers to handle RangeSlider in react-instantsearch (algolia/instantsearch-e2e-tests[#9](https://github.com/algolia/instantsearch.js/issues/9)) ([eb896dc](https://github.com/algolia/instantsearch.js/commit/eb896dc9057f0891a124759d85e8017aedeee653))
+* **helper:** fix helpers to handle RangeSlider in vue-instantsearch (algolia/instantsearch-e2e-tests[#12](https://github.com/algolia/instantsearch.js/issues/12)) ([31769cc](https://github.com/algolia/instantsearch.js/commit/31769ccefdda6344a39d611db9ea862b7c494020))
+* **helper:** fix helpers to scroll to elements before attempting to click on it (algolia/instantsearch-e2e-tests[#6](https://github.com/algolia/instantsearch.js/issues/6)) ([a4ebaed](https://github.com/algolia/instantsearch.js/commit/a4ebaed17a0fc5c852fb48d2145ac1065291ad66))
+* **helper:** fix setRangeSliderLowerBound offset calculation (algolia/instantsearch-e2e-tests[#7](https://github.com/algolia/instantsearch.js/issues/7)) ([d760270](https://github.com/algolia/instantsearch.js/commit/d760270c7140e3240ef885ff183a624385bd7424))
+* **setSearchBoxValue:** reset searchbox before editing (algolia/instantsearch-e2e-tests[#15](https://github.com/algolia/instantsearch.js/issues/15)) ([ae5b04e](https://github.com/algolia/instantsearch.js/commit/ae5b04e496803ab62ddc5e8b105761fb9ecd5968)), closes [/app.saucelabs.com/tests/4518f96fdfd447e998786d0ff463658a#54](https://github.com//app.saucelabs.com/tests/4518f96fdfd447e998786d0ff463658a/issues/54)
+* **spec:** fix Internet Explorer 11 compatibility for test on brand and query filtering ([0661053](https://github.com/algolia/instantsearch.js/commit/06610537a88cbf9a2fe619f9edb626ea0afb63ff))
+* **spec:** fix price-range spec to match new slider behavior (algolia/instantsearch-e2e-tests[#8](https://github.com/algolia/instantsearch.js/issues/8)) ([e361d04](https://github.com/algolia/instantsearch.js/commit/e361d0401528e848edfaccd9fe474eea2982c262))
+* **spec:** fix specs to match fixed slider behavior (algolia/instantsearch-e2e-tests[#10](https://github.com/algolia/instantsearch.js/issues/10)) ([e85a1f6](https://github.com/algolia/instantsearch.js/commit/e85a1f6f0b2803c84bd088dac2a927ecbfdc6e87))
+* **spec:** fix stale element reference exceptions ([f9b77cc](https://github.com/algolia/instantsearch.js/commit/f9b77cc5d975a5c375d07b047836f89a6f7fa90a))
+* **spec:** improve specs reliability to minimize flakyness (algolia/instantsearch-e2e-tests[#21](https://github.com/algolia/instantsearch.js/issues/21)) ([4b94600](https://github.com/algolia/instantsearch.js/commit/4b94600cc34abf7f7e4121c380423a2d28020edd))
+* **spec:** reduce flakiness related to range slider manipulation (algolia/instantsearch-e2e-tests[#33](https://github.com/algolia/instantsearch.js/issues/33)) ([b241595](https://github.com/algolia/instantsearch.js/commit/b241595e7d652e62c09f45155805c59d83f75942))
+* **spec:** wait for the browser to be maximized before running the test on brand an query filtering ([0c62851](https://github.com/algolia/instantsearch.js/commit/0c628514e687a5e8990d8fa3183392472b8c6c07))
+* **test:** change InstantSearch.js test branch to `master` (algolia/instantsearch-e2e-tests[#19](https://github.com/algolia/instantsearch.js/issues/19)) ([d9a4b0e](https://github.com/algolia/instantsearch.js/commit/d9a4b0e86933ad4ad7b8bc284d1ea23928bf4b70))
+* **typescript:** fix TypeScript configuration to transpile tests when in node_modules ([3b11705](https://github.com/algolia/instantsearch.js/commit/3b11705feb1fd91224eb8b391105bd68c3dfe6f6))
+* **webdriverio:** fix mount paths for static server so rewritten urls works ([51d9501](https://github.com/algolia/instantsearch.js/commit/51d9501f6e0336438c98c0a32dfefd7346368694))
+
+
+### Features
+
+* generate junit test reports by default with saucelabs (algolia/instantsearch-e2e-tests[#29](https://github.com/algolia/instantsearch.js/issues/29)) ([7ae9978](https://github.com/algolia/instantsearch.js/commit/7ae99784512318b77826ad39e8e4ac96907c9d8a))
+* **helper:** add changeToggleRefinementStatus helper ([a934934](https://github.com/algolia/instantsearch.js/commit/a934934180540472d662a77f14e33be7c74e1a64))
+* **helper:** add clearRefinements helper ([256213d](https://github.com/algolia/instantsearch.js/commit/256213dc789d46db10061055d60fc15264a58801))
+* **helper:** add getHitsPerPage helper ([ce71100](https://github.com/algolia/instantsearch.js/commit/ce71100b5cbf740758a4ccad8e26719d14983aa7))
+* **helper:** add getHitsTitles helper ([8109f27](https://github.com/algolia/instantsearch.js/commit/8109f27c4cc13ed4af66d10f477e12ff75abbc6b))
+* **helper:** add getPage helper ([50de2a1](https://github.com/algolia/instantsearch.js/commit/50de2a1364bb02fb9e9b1b7487cae8bc612f640d))
+* **helper:** add getRangeSliderLowerBound helper ([9321ff6](https://github.com/algolia/instantsearch.js/commit/9321ff6c377ce708c80395f81a947c4ef9be7a92))
+* **helper:** add getRangeSliderUpperBound helper ([2c74e3d](https://github.com/algolia/instantsearch.js/commit/2c74e3dee68627bec3994642b08bc53001db3d82))
+* **helper:** add getRatingMenuValue helper ([3d7e48a](https://github.com/algolia/instantsearch.js/commit/3d7e48aed529fabe92833de325f587326d1d93d3))
+* **helper:** add getSearchBoxValue helper ([46f6ad0](https://github.com/algolia/instantsearch.js/commit/46f6ad0fb5125bed2b90cee00fce60093d24dbaa))
+* **helper:** add getSelectedHierarchicalMenuItems helper ([102a857](https://github.com/algolia/instantsearch.js/commit/102a857bba837acd4f48ed2044b4aadc6239d519))
+* **helper:** add getSelectedRefinementListItem helper ([5856371](https://github.com/algolia/instantsearch.js/commit/585637127ebf9b9ce39599ae0c8698c9717131eb))
+* **helper:** add getSortByValue helper ([d68d662](https://github.com/algolia/instantsearch.js/commit/d68d662dfabb089e91ad3ac8179707b6e4193c7c))
+* **helper:** add getTextFromElements helper ([84ba6a9](https://github.com/algolia/instantsearch.js/commit/84ba6a9eff3b7b7b87ddbe8759a06a8df6fda6ae))
+* **helper:** add getToggleRefinementStatus helper ([fa431f3](https://github.com/algolia/instantsearch.js/commit/fa431f397b2b6c2b16eb07fbb1b8098c2a3ca2af))
+* **helper:** add setHitsPerPage helper ([79d966f](https://github.com/algolia/instantsearch.js/commit/79d966fbf1b9ae553863c33f8d05c1d28413e5a1))
+* **helper:** add setNextPage helper ([d065ca8](https://github.com/algolia/instantsearch.js/commit/d065ca88373989f5516df0e84f15a7481167686c))
+* **helper:** add setPage helper ([c971e2c](https://github.com/algolia/instantsearch.js/commit/c971e2ca1740f662c42c57caaacc7c2c6c2efa27))
+* **helper:** add setPreviousPage helper ([34ba545](https://github.com/algolia/instantsearch.js/commit/34ba5456ce641cf92caae7c301bd6ed689f4c474))
+* **helper:** add setRangeSliderLowerBound helper ([4a900be](https://github.com/algolia/instantsearch.js/commit/4a900be311d9c8e8a2dd8702d33c7f699f191f7b))
+* **helper:** add setRangeSliderUpperBound helper ([700e0c0](https://github.com/algolia/instantsearch.js/commit/700e0c09b6b0d8e050f512375491a60ca418b118))
+* **helper:** add setRatingMenuValue helper ([b1e415c](https://github.com/algolia/instantsearch.js/commit/b1e415ce7ff30245994dc2d160b75f05490f3066))
+* **helper:** add setSearchBoxValue helper ([f3dcab9](https://github.com/algolia/instantsearch.js/commit/f3dcab928228ededf98f3c63918e952eeee56514))
+* **helper:** add setSelectedHierarchicalMenuItem helper ([b54169b](https://github.com/algolia/instantsearch.js/commit/b54169b1c69efd0b3c8e38c75de1d0f56e030c6f))
+* **helper:** add setSelectedRefinementListItem helper ([f922cd1](https://github.com/algolia/instantsearch.js/commit/f922cd1e9971f37a0da5920e86113bf527c4b334))
+* **helper:** add setSortByValue helper ([a375418](https://github.com/algolia/instantsearch.js/commit/a375418dd0186b06b36ece2d461a879e421722f1))
+* **helper:** add waitForElement helper ([1ccf50d](https://github.com/algolia/instantsearch.js/commit/1ccf50d13a7d90f46727c08707683eb76adab5ca))
+* **spec:** add custom error messages for timeouts (algolia/instantsearch-e2e-tests[#18](https://github.com/algolia/instantsearch.js/issues/18)) ([7694e43](https://github.com/algolia/instantsearch.js/commit/7694e43b54c20de81f9345d4001d0f309c568986))
+* **spec:** add spec for initializing the state from the route (algolia/instantsearch-e2e-tests[#4](https://github.com/algolia/instantsearch.js/issues/4)) ([148d4a8](https://github.com/algolia/instantsearch.js/commit/148d4a8903fe76ee368b102943968452dabbe5bd))
+* **spec:** add spec for pagination (algolia/instantsearch-e2e-tests[#2](https://github.com/algolia/instantsearch.js/issues/2)) ([14fb735](https://github.com/algolia/instantsearch.js/commit/14fb7354f119ac2649203ce4add751d0acd0af01))
+* **spec:** add spec for search on specific brand and query filtering ([999319e](https://github.com/algolia/instantsearch.js/commit/999319e5bf00917bf3f9f7f8cde774a3f681fc03))
+* **spec:** add spec for search on specific category (algolia/instantsearch-e2e-tests[#3](https://github.com/algolia/instantsearch.js/issues/3)) ([07f7e53](https://github.com/algolia/instantsearch.js/commit/07f7e53917d9860b2a84d42a869d34155e119a62))
+* **spec:** add spec for search on specific price range ([91de898](https://github.com/algolia/instantsearch.js/commit/91de89888c66d5613ad03c7f41091ff2f804f4d8))
+* **tests:** migrate for monorepo ([a089bfb](https://github.com/algolia/instantsearch.js/commit/a089bfbbe5231d83625ee0e52fecb144c1a57079))
+* **webdriverio:** add Internet Explorer 11 to the Sauce Labs configuration ([1331cd4](https://github.com/algolia/instantsearch.js/commit/1331cd4232ac8b00a0659432f56f2930f3f23f5b))
+* **webdriverio:** add retry for Sauce Connect tunnel (algolia/instantsearch-e2e-tests[#17](https://github.com/algolia/instantsearch.js/issues/17)) ([9a0a1b0](https://github.com/algolia/instantsearch.js/commit/9a0a1b04e80379ee9859d90885c3a926560978c0))
+* **webdriverio:** add WebdriverIO local configuration ([62fc93f](https://github.com/algolia/instantsearch.js/commit/62fc93f7260bf3d3479494f9148ddef56a8b6726))
+* **webdriverio:** add WebdriverIO Sauce Labs configuration ([a8b41f2](https://github.com/algolia/instantsearch.js/commit/a8b41f23a2c4f684386d9da826cf31805776006f))
+
+
+### BREAKING CHANGES
+
+* **tests:** this requires the url to be /examples/js/e-commerce instead of /examples/e-commerce. This means that until the package is in the monorepo, its tests wouldn't pass. After the main monorepo PR is merged, this repo will move inside and will no longer be published.
+* tested projects now require `@wdio/junit-reporter`.
+
+
+
+
+
 ## [3.0.0](https://github.com/algolia/instantsearch-e2e-tests/compare/v2.0.1...v2.0.2) (2022-11-23)
 
 

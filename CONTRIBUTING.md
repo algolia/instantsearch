@@ -11,6 +11,7 @@ If this guide does not contain what you are looking for and thus prevents you fr
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Reporting an issue](#reporting-an-issue)
 - [The code contribution process](#the-code-contribution-process)
 - [Commit conventions](#commit-conventions)
@@ -19,8 +20,10 @@ If this guide does not contain what you are looking for and thus prevents you fr
 - [Launch the dev environment](#launch-the-dev-environment)
 - [Folders of the project](#folders-of-the-project)
   - [InstantSearch.js source folder](#instantsearchjs-source-folder)
+- [Importing existing projects](#importing-existing-projects)
 - [Tests](#tests)
   - [Unit tests](#unit-tests)
+  - [End-to-end tests](#end-to-end-tests)
   - [Type checks](#type-checks)
 - [Linting](#linting)
 - [Release](#release)
