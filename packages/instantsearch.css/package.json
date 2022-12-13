@@ -17,16 +17,16 @@
   "author": "Algolia <support@algolia.com>",
   "type": "module",
   "scripts": {
-    "astro:build": "yarn styles:app && astro build",
+    "build": "rm -rf themes && yarn styles:build && yarn styles:minify && yarn styles:autoprefixer",
+    "astro:build": "yarn styles:dev && astro build",
     "astro:check": "astro check && tsc",
-    "astro:dev": "yarn styles:app && astro dev",
+    "astro:dev": "yarn styles:dev && astro dev",
     "astro:preview": "astro preview",
-    "astro:start": "yarn styles:app && astro dev",
-    "prepack": "yarn styles:package && yarn styles:min && yarn styles:autoprefixer",
-    "styles:app": "sass src/styles/themes:public/styles --style compressed",
+    "astro:start": "yarn styles:dev && astro dev",
+    "styles:dev": "sass src/styles/themes:public/styles --style compressed",
     "styles:autoprefixer": "postcss themes/ --use autoprefixer --replace --no-map",
-    "styles:min": "sass src/styles/themes/algolia.scss:themes/algolia-min.css src/styles/themes/satellite.scss:themes/satellite-min.css src/styles/themes/reset.scss:themes/reset-min.css --no-source-map --style compressed",
-    "styles:package": "sass src/styles/themes:themes --no-source-map"
+    "styles:minify": "sass src/styles/themes/algolia.scss:themes/algolia-min.css src/styles/themes/satellite.scss:themes/satellite-min.css src/styles/themes/reset.scss:themes/reset-min.css --no-source-map --style compressed",
+    "styles:build": "sass src/styles/themes:themes --no-source-map"
   },
   "devDependencies": {
     "@types/node": "18.11.13",
