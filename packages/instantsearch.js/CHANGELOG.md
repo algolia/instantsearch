@@ -5,7 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## 4.49.2 (2022-12-13)
 
-**Note:** Version bump only for package instantsearch.js
+### Bug Fixes
+
+* **answers:** mark as deprecated ([#5157](https://github.com/algolia/instantsearch.js/pull/5157)) ([d7b62eda](https://github.com/algolia/instantsearch.js/commit/d7b62eda77d894a3677a0967a05a2a357e7e5a94))
 
 
 
