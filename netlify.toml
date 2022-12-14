@@ -2,8 +2,7 @@
   command=""" \
     yarn build --ignore='example-*' && \
     yarn website:storybook && \
-    yarn website:examples --concurrency=1 && \
-    yarn website:specs \
+    yarn website:examples --concurrency=1
     """
   publish="website"
 
