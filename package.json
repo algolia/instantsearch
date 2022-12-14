@@ -6,7 +6,8 @@
   "workspaces": [
     "examples/*/*",
     "packages/*",
-    "tests/*"
+    "tests/*",
+    "specs"
   ],
   "scripts": {
     "build": "lerna run build",
