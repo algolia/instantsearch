@@ -72,13 +72,11 @@ We welcome all contributors, from casual to regular 💙
 - **Documentation**. Did you find a typo in the doc? [Open an issue](https://github.com/algolia/instantsearch.js/issues/new?labels=Package%3A%20instantsearch.css) and we'll take care of it.
 - **Development**. If you don't know where to start, you can check the [open issues](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Package%3A+instantsearch.css%22).
 
-To start contributing to code, you need to:
+To start contributing to the code, you need to:
 
 1.  [Fork the project](https://help.github.com/articles/fork-a-repo/)
 2.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
 3.  Install the dependencies: `yarn`
-4.  Run the development mode: `yarn dev`
-5.  [Open the specs site](http://localhost:3000)
 
 Please read [our contribution process](../../CONTRIBUTING.md) to learn more.
 
