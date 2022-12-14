@@ -14,7 +14,6 @@
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md packages/*/README.md",
     "website:storybook": "lerna run storybook:build",
     "website:examples": "lerna run website:examples",
-    "website:specs": "yarn --cwd website/src/specs install && yarn --cwd website/src/specs build",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc && lerna run type-check",
