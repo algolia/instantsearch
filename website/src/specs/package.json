@@ -14,7 +14,7 @@
     "dev": "yarn styles && astro dev",
     "preview": "astro preview",
     "start": "yarn styles && astro dev",
-    "styles": "sass ../../../packages/instantsearch.css/src/styles/themes:public/styles --style compressed"
+    "styles": "sass ../../../packages/instantsearch.css/src/themes:public/styles --style compressed"
   },
   "devDependencies": {
     "@types/node": "18.11.13",
