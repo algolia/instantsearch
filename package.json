@@ -25,7 +25,8 @@
     "test:e2e": "yarn test:e2e:local",
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
-    "release": "shipjs prepare"
+    "release": "shipjs prepare",
+    "prepare": "lerna run prepare"
   },
   "devDependencies": {
     "@babel/cli": "7.8.4",
