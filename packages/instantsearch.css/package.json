@@ -20,7 +20,8 @@
     "build": "rm -rf themes && yarn styles:build && yarn styles:minify && yarn styles:autoprefixer",
     "styles:autoprefixer": "postcss themes/ --use autoprefixer --replace --no-map",
     "styles:minify": "sass src/themes/algolia.scss:themes/algolia-min.css src/themes/satellite.scss:themes/satellite-min.css src/themes/reset.scss:themes/reset-min.css --no-source-map --style compressed",
-    "styles:build": "sass src/themes:themes --no-source-map"
+    "styles:build": "sass src/themes:themes --no-source-map",
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "autoprefixer": "10.4.13",
