@@ -1,7 +1,1 @@
-/public/
-/src/
-/dist/
 !/themes/
-tsconfig.json
-astro.config.mjs
-yarn.lock
