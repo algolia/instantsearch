@@ -1,3 +1,21 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 4.0.0 (2022-12-13)
+
+
+
+### BREAKING CHANGES
+
+* **tests:** this requires the url to be /examples/js/e-commerce instead of /examples/e-commerce. This means that until the package is in the monorepo, its tests wouldn't pass. After the main monorepo PR is merged, this repo will move inside and will no longer be published.
+* tested projects now require `@wdio/junit-reporter`.
+
+
+
+
+
 ## [3.0.0](https://github.com/algolia/instantsearch-e2e-tests/compare/v2.0.1...v2.0.2) (2022-11-23)
 
 
