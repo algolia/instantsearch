@@ -1,0 +1,222 @@
+---
+import { Code } from "astro/components";
+import type { WidgetFrontmatter } from "../types";
+import ThemeSelector from "./ThemeSelector.astro";
+
+type Props = {
+  frontmatter: WidgetFrontmatter;
+  githubEditUrl: string;
+};
+
+const { frontmatter, githubEditUrl } = Astro.props;
+const title = frontmatter.title;
+---
+
+<main class="widgets-details">
+  <div class="flex-right bottom-border">
+    <a href={githubEditUrl} class="link-button">✏️ edit page</a>
+    <ThemeSelector />
+  </div>
+
+  <h2 id={title.toLowerCase()}>{title}</h2>
+
+  {
+    frontmatter.info && (
+      <div class="info">
+        <p>{frontmatter.info}</p>
+      </div>
+    )
+  }
+
+  <h3 id="widget-example">Widget example</h3>
+
+  <div class="code-wrapper">
+    {
+      frontmatter.alt1 && (
+        <div class="code-wrapper-tabs">
+          <button class="code-wrapper-tab selected" data-html="1">
+            Default
+          </button>
+          <button class="code-wrapper-tab" data-html="2">
+            {frontmatter.alt1}
+          </button>
+          {frontmatter.alt2 && (
+            <button class="code-wrapper-tab" data-html="3">
+              {frontmatter.alt2}
+            </button>
+          )}
+        </div>
+      )
+    }
+    <div class="code-wrapper-contents">
+      {
+        frontmatter.html ? (
+          <div
+            class="code-wrapper-content"
+            data-html="1"
+            set:html={frontmatter.html}
+          />
+        ) : (
+          <p>This widget doesn't render anything</p>
+        )
+      }
+      {
+        frontmatter.althtml1 && (
+          <div
+            class="code-wrapper-content"
+            data-html="2"
+            style="display: none;"
+            set:html={frontmatter.althtml1}
+          />
+        )
+      }
+      {
+        frontmatter.althtml2 && (
+          <div
+            class="code-wrapper-content"
+            data-html="3"
+            style="display: none;"
+            set:html={frontmatter.althtml2}
+          />
+        )
+      }
+    </div>
+  </div>
+
+  <h3 id="html-output">HTML output</h3>
+  {
+    frontmatter.html ? (
+      <div id="js-pre">
+        <div class="code-output" data-html="1">
+          <Code code={frontmatter.html} lang="html" />
+        </div>
+        {frontmatter.althtml1 && (
+          <div style="display: none;" class="code-output" data-html="2">
+            <Code lang="html" code={frontmatter.althtml1} />
+          </div>
+        )}
+        {frontmatter.althtml2 && (
+          <div style="display: none;" class="code-output" data-html="3">
+            <Code lang="html" code={frontmatter.althtml2} />
+          </div>
+        )}
+      </div>
+    ) : (
+      <p>
+        <small>
+          <strong>Note:</strong> there is no HTML output for this widget
+        </small>
+      </p>
+    )
+  }
+
+  <h3 id="css-classes">CSS classes</h3>
+  {
+    frontmatter.classes ? (
+      <>
+        <p>
+          <small>
+            <strong>Hint:</strong> hover classes below to see their position.
+          </small>
+        </p>
+        <table>
+          <thead>
+            <th>name</th>
+            <th>description</th>
+          </thead>
+          {frontmatter.classes.map((item) => (
+            <tr class="js-hoverClass" data-value={item.name}>
+              <td>
+                <code>{item.name}</code>
+              </td>
+              <td>{item.description}</td>
+            </tr>
+          ))}
+        </table>
+      </>
+    ) : (
+      <p>
+        <small>
+          <strong>Note:</strong> there are no CSS classes for this widget
+        </small>
+      </p>
+    )
+  }
+
+  <h3 id="options">Options</h3>
+  {
+    frontmatter.options ? (
+      <>
+        <p>
+          <small>
+            <strong>Note:</strong> this is a guideline for new InstantSearch
+            flavours, not a rule.
+          </small>
+        </p>
+        <table>
+          <thead>
+            <th>name</th>
+            <th>default value</th>
+            <th>description</th>
+          </thead>
+          {frontmatter.options.map((item) => (
+            <tr>
+              <td>
+                <code>{item.name}</code>
+              </td>
+              <td>
+                <code>{item.default}</code>
+              </td>
+              <td>{item.description}</td>
+            </tr>
+          ))}
+        </table>
+      </>
+    ) : (
+      <p>
+        <small>
+          <strong>Note:</strong> there are no common options for this widget
+        </small>
+      </p>
+    )
+  }
+
+  <h3 id="translations">Translations</h3>
+  {
+    frontmatter.translations ? (
+      <>
+        <p>
+          <small>
+            <strong>Note:</strong> this is a guideline for new InstantSearch
+            flavours, not a rule.
+          </small>
+        </p>
+
+        <table>
+          <thead>
+            <th>name</th>
+            <th>default value</th>
+            <th>description</th>
+          </thead>
+          {frontmatter.translations.map((item) => (
+            <tr>
+              <td>
+                <code>{item.name}</code>
+              </td>
+              <td>
+                <code>{item.default}</code>
+              </td>
+              <td>{item.description}</td>
+            </tr>
+          ))}
+        </table>
+      </>
+    ) : (
+      <p>
+        <small>
+          <strong>Note:</strong> there are no CSS classes for this widget
+        </small>
+      </p>
+    )
+  }
+</main>
