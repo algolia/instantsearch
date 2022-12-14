@@ -102,6 +102,30 @@
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
       "maxSize": "160 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/algolia.css",
+      "maxSize": "3.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/algolia-min.css",
+      "maxSize": "3.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/reset.css",
+      "maxSize": "1.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/reset-min.css",
+      "maxSize": "1 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/satellite.css",
+      "maxSize": "4.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/satellite-min.css",
+      "maxSize": "4.25 kB"
     }
   ]
 }
