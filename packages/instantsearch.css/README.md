@@ -40,10 +40,10 @@ yarn add instantsearch.css
 ## Available themes
 
 InstantSearch.css exposes two themes:
-- [Algolia](src/styles/themes/algolia.scss)
-- [Satellite](src/styles/themes/satellite.scss)
+- [Algolia](src/themes/algolia.scss)
+- [Satellite](src/themes/satellite.scss)
 
-If you don't need a theme, you can still use the [reset styles](src/styles/themes/reset.scss) to start from a clean slate.
+If you don't need a theme, you can still use the [reset styles](src/themes/reset.scss) to start from a clean slate.
 
 **The reset styles are included in all the provided themes.** You don't need to import them if you use a theme.
 
