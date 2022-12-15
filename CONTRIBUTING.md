@@ -166,8 +166,9 @@ This monorepo has as goal to be used for all InstantSearch flavors and tools. To
 5. fetch the remote: `git fetch myproject`
 6. check out to a new branch: `git checkout -b feat/import-myproject`
 7. merge the remote into the monorepo: `git merge --allow-unrelated-histories myproject/mybranch`
-8. make any changes necessary to make the project work in the monorepo and commit those
-9. make a pull request and _merge using rebase or merge_ (if you merge using squash the history will be lost)
+8. replace commit messages which refer to issues/PRs with #xxx by also referencing the original repo: `git filter-branch --msg-filter 'sed -E "s/(#[[:digit:]]+)/algolia\/myproject\1/"' master..feat/import-myproject`
+9. make any changes necessary to make the project work in the monorepo and commit those
+10. make a pull request and _merge using rebase or merge_ (if you merge using squash the history will be lost)
 
 ## Tests
 
