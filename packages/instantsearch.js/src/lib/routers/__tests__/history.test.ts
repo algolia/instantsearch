@@ -127,7 +127,7 @@ describe('life cycle', () => {
       expect(pushState).toHaveBeenCalledTimes(2);
     });
 
-    test.only("doesn't throw if an index history state is null", () => {
+    test("doesn't throw if an index history state is null", () => {
       const router = historyRouter<UiState>();
       const stateMapping = simple();
 
