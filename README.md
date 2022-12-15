@@ -14,7 +14,6 @@
 [![License][license-image]][license-url]
 [![Build Status][ci-svg]][ci-url]
 [![Pull reminders][pull-reminders-svg]][pull-reminders-url]
-[![Website][website-svg]][website-url]
 
 InstantSearch.js is a vanilla JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:
 
@@ -31,8 +30,6 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 - [Getting started](#getting-started)
 - [Installation](#installation)
   - [TypeScript users](#typescript-users)
-    - [`algoliasearch` v4.x](#algoliasearch-v4x)
-    - [`algoliasearch` v3.x](#algoliasearch-v3x)
 - [Documentation](#documentation)
 - [Demos](#demos)
 - [Playground](#playground)
@@ -187,8 +184,6 @@ InstantSearch.js is [MIT licensed][license-url].
 [ci-url]: https://circleci.com/gh/algolia/instantsearch.js
 [pull-reminders-svg]: https://img.shields.io/badge/pull%20reminders-✓-success.svg?style=flat-square
 [pull-reminders-url]: https://pullreminders.com?ref=badge
-[website-svg]: https://img.shields.io/badge/website-instantsearchjs.netlify.app/specs-yellow?style=flat-square
-[website-url]: https://instantsearchjs.netlify.app/specs/
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 
