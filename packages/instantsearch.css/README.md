@@ -9,6 +9,7 @@
 [![Version][version-svg]][package-url]
 [![License][license-image]][license-url]
 [![Build Status][ci-svg]][ci-url]
+[![Website][website-svg]][website-url]
 
 ## Getting started
 
@@ -91,4 +92,6 @@ InstantSearch.css is [MIT licensed][license-url].
 [ci-svg]: https://img.shields.io/circleci/project/github/algolia/instantsearch.js.svg?style=flat-square
 [ci-url]: https://circleci.com/gh/algolia/instantsearch.js
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
+[website-svg]: https://img.shields.io/badge/website-instantsearchjs.netlify.app/specs-yellow?style=flat-square
+[website-url]: https://instantsearchjs.netlify.app/specs/
 [license-url]: LICENSE
