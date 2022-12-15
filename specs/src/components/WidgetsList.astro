@@ -1,0 +1,16 @@
+---
+const allWidgets = await Astro.glob("../pages/widgets/*.md");
+---
+
+<aside class="widgets-list">
+  <h3>Widgets:</h3>
+  <ul>
+    {
+      allWidgets.map((widget) => (
+        <li>
+          <a href={widget.url}>{widget.frontmatter.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+</aside>

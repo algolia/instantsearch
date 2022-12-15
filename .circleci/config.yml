@@ -1,8 +1,7 @@
 version: 2
 
 references:
-  workspace_root: &workspace_root
-    ~/instantsearch
+  workspace_root: &workspace_root ~/instantsearch
   attach_workspace: &attach_workspace
     attach_workspace:
       at: *workspace_root
@@ -31,7 +30,7 @@ references:
 defaults: &defaults
   working_directory: ~/instantsearch
   docker:
-    - image: cimg/node:14.17.0
+    - image: cimg/node:14.18.0
 
 workflows:
   version: 2

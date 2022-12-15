@@ -6,7 +6,8 @@
   "workspaces": [
     "examples/*/*",
     "packages/*",
-    "tests/*"
+    "tests/*",
+    "specs"
   ],
   "scripts": {
     "build": "lerna run build",
@@ -24,7 +25,8 @@
     "test:e2e": "yarn test:e2e:local",
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
-    "release": "shipjs prepare"
+    "release": "shipjs prepare",
+    "prepare": "lerna run prepare"
   },
   "devDependencies": {
     "@babel/cli": "7.8.4",
@@ -102,6 +104,30 @@
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
       "maxSize": "160 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/algolia.css",
+      "maxSize": "3.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/algolia-min.css",
+      "maxSize": "3.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/reset.css",
+      "maxSize": "1.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/reset-min.css",
+      "maxSize": "1 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/satellite.css",
+      "maxSize": "4.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/satellite-min.css",
+      "maxSize": "4.25 kB"
     }
   ]
 }
