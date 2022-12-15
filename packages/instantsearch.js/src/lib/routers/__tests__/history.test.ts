@@ -126,6 +126,22 @@ describe('life cycle', () => {
 
       expect(pushState).toHaveBeenCalledTimes(2);
     });
+
+    test.only("doesn't throw if an index history state is null", () => {
+      const router = historyRouter<UiState>();
+      const stateMapping = simple();
+
+      router.onUpdate((routeState) => {
+        const state = stateMapping.routeToState(routeState);
+        expect(state).toEqual({});
+      });
+
+      const popStateEvent = new PopStateEvent('popstate', {
+        state: { indexName: null },
+      });
+      window.dispatchEvent(popStateEvent);
+      jest.runAllTimers();
+    });
   });
 
   describe('environment', () => {
