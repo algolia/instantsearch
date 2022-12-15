@@ -108,9 +108,23 @@ describe('reverseSnippet', () => {
         highlightedTagName: 'em',
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<em class=\\"ais-ReverseSnippet-highlighted\\">Enjoy smart access to videos, games and apps with this </em>Amazon<em class=\\"ais-ReverseSnippet-highlighted\\"> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core </em>processor, 1GB<em class=\\"ais-ReverseSnippet-highlighted\\"> internal memory and 8GB of storage, this portable </em>Amazon<em class=\\"ais-ReverseSnippet-highlighted\\"> Fire TV stick works fast for buffer-free streaming.</em>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <em class="ais-ReverseSnippet-highlighted">
+        Enjoy smart access to videos, games and apps with this
+      </em>
+      Amazon
+      <em class="ais-ReverseSnippet-highlighted">
+        Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core
+      </em>
+      processor, 1GB
+      <em class="ais-ReverseSnippet-highlighted">
+        internal memory and 8GB of storage, this portable
+      </em>
+      Amazon
+      <em class="ais-ReverseSnippet-highlighted">
+        Fire TV stick works fast for buffer-free streaming.
+      </em>
+    `);
   });
 
   test('with custom highlighted class name', () => {
@@ -120,9 +134,23 @@ describe('reverseSnippet', () => {
         cssClasses: { highlighted: '__highlighted' },
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseSnippet-highlighted __highlighted\\">Enjoy smart access to videos, games and apps with this </mark>Amazon<mark class=\\"ais-ReverseSnippet-highlighted __highlighted\\"> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core </mark>processor, 1GB<mark class=\\"ais-ReverseSnippet-highlighted __highlighted\\"> internal memory and 8GB of storage, this portable </mark>Amazon<mark class=\\"ais-ReverseSnippet-highlighted __highlighted\\"> Fire TV stick works fast for buffer-free streaming.</mark>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <mark class="ais-ReverseSnippet-highlighted __highlighted">
+        Enjoy smart access to videos, games and apps with this
+      </mark>
+      Amazon
+      <mark class="ais-ReverseSnippet-highlighted __highlighted">
+        Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core
+      </mark>
+      processor, 1GB
+      <mark class="ais-ReverseSnippet-highlighted __highlighted">
+        internal memory and 8GB of storage, this portable
+      </mark>
+      Amazon
+      <mark class="ais-ReverseSnippet-highlighted __highlighted">
+        Fire TV stick works fast for buffer-free streaming.
+      </mark>
+    `);
   });
 
   test('with unknown attribute returns an empty string', () => {
@@ -140,9 +168,15 @@ describe('reverseSnippet', () => {
         attribute: 'meta.name',
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseSnippet-highlighted\\">Nested </mark>Amazon<mark class=\\"ais-ReverseSnippet-highlighted\\"> name</mark>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <mark class="ais-ReverseSnippet-highlighted">
+        Nested
+      </mark>
+      Amazon
+      <mark class="ais-ReverseSnippet-highlighted">
+        name
+      </mark>
+    `);
   });
 
   test('with nested attribute as array', () => {
@@ -151,9 +185,15 @@ describe('reverseSnippet', () => {
         attribute: ['meta', 'name'],
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseSnippet-highlighted\\">Nested </mark>Amazon<mark class=\\"ais-ReverseSnippet-highlighted\\"> name</mark>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <mark class="ais-ReverseSnippet-highlighted">
+        Nested
+      </mark>
+      Amazon
+      <mark class="ais-ReverseSnippet-highlighted">
+        name
+      </mark>
+    `);
   });
 
   test('with array attribute', () => {
@@ -191,9 +231,15 @@ describe('reverseSnippet', () => {
         attribute: 'typeMissingSibling',
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseSnippet-highlighted\\">Streaming - (</mark>media<mark class=\\"ais-ReverseSnippet-highlighted\\"> plyr)</mark>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <mark class="ais-ReverseSnippet-highlighted">
+        Streaming - (
+      </mark>
+      media
+      <mark class="ais-ReverseSnippet-highlighted">
+        plyr)
+      </mark>
+    `);
   });
 
   test('warns if attribute does not exist', () => {

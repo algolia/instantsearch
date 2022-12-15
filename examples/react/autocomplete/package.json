@@ -1,0 +1,30 @@
+{
+  "name": "example-react-instantsearch-autocomplete",
+  "version": "6.38.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "CI=true react-scripts test"
+  },
+  "devDependencies": {
+    "react-scripts": "3.1.2",
+    "react-test-renderer": "17.0.2"
+  },
+  "dependencies": {
+    "algoliasearch": "4.11.0",
+    "antd": "3.23.2",
+    "prop-types": "15.6.0",
+    "react": "17.0.2",
+    "react-autosuggest": "9.4.3",
+    "react-dom": "17.0.2",
+    "react-instantsearch-dom": "6.38.1"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

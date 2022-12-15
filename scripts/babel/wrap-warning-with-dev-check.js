@@ -1,7 +1,7 @@
-/* eslint-disable import/no-commonjs */
+const IDENTIFIER_NAME = ['warn', 'warning'];
 
 /**
- * Babel plugin that wraps `warning` calls with development check to be
+ * Babel plugin that wraps `warn` calls with development check to be
  * completely stripped from the production bundle.
  *
  * In the development bundle, warnings get wrapped with their condition
@@ -22,7 +22,7 @@
  * ```
  */
 
-function wrapWarningInDevCheck(babel) {
+function wrapWarningWithDevCheck(babel) {
   const t = babel.types;
 
   const DEV_EXPRESSION = t.identifier('__DEV__');
@@ -38,7 +38,11 @@ function wrapWarningInDevCheck(babel) {
             return;
           }
 
-          if (path.get('callee').isIdentifier({ name: 'warning' })) {
+          if (
+            IDENTIFIER_NAME.some((name) =>
+              path.get('callee').isIdentifier({ name })
+            )
+          ) {
             node[SEEN_SYMBOL] = true;
 
             path.replaceWith(
@@ -54,4 +58,4 @@ function wrapWarningInDevCheck(babel) {
   };
 }
 
-module.exports = wrapWarningInDevCheck;
+module.exports = wrapWarningWithDevCheck;

@@ -37,24 +37,32 @@ const encodedCategories = {
   Cars: 'Car Electronics & GPS',
   Phones: 'Cell Phones',
   TV: 'TV & Home Theater',
+} as const;
+
+type EncodedCategories = typeof encodedCategories;
+type DecodedCategories = {
+  [K in keyof EncodedCategories as EncodedCategories[K]]: K;
 };
 
-const decodedCategories = Object.keys(encodedCategories).reduce((acc, key) => {
-  const newKey = encodedCategories[key];
+const decodedCategories = Object.keys(
+  encodedCategories
+).reduce<DecodedCategories>((acc, key) => {
+  const newKey = encodedCategories[key as keyof EncodedCategories];
   const newValue = key;
 
   return {
     ...acc,
     [newKey]: newValue,
   };
-}, {});
+}, {} as any);
 
 // Returns a slug from the category name.
 // Spaces are replaced by "+" to make
 // the URL easier to read and other
 // characters are encoded.
 function getCategorySlug(name: string): string {
-  const encodedName = decodedCategories[name] || name;
+  const encodedName =
+    decodedCategories[name as keyof DecodedCategories] || name;
 
   return encodedName.split(' ').map(encodeURIComponent).join('+');
 }
@@ -63,14 +71,15 @@ function getCategorySlug(name: string): string {
 // The "+" are replaced by spaces and other
 // characters are decoded.
 function getCategoryName(slug: string): string {
-  const decodedSlug = encodedCategories[slug] || slug;
+  const decodedSlug =
+    encodedCategories[slug as keyof EncodedCategories] || slug;
 
   return decodedSlug.split('+').map(decodeURIComponent).join(' ');
 }
 
 const originalWindowTitle = document.title;
 
-const router = historyRouter({
+const router = historyRouter<RouteState>({
   windowTitle({ category, query }) {
     const queryTitle = query ? `Results for "${query}"` : '';
 
@@ -157,37 +166,40 @@ const router = historyRouter({
       page = 1,
       brands = [],
       price,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       free_shipping,
     } = queryParameters;
     // `qs` does not return an array when there's a single value.
     const allBrands = Array.isArray(brands) ? brands : [brands].filter(Boolean);
     const hitsPerPage = getFallbackHitsPerPageRoutingValue(
-      queryParameters.hitsPerPage
+      queryParameters.hitsPerPage as string
     );
-    const sortBy = getFallbackSortByRoutingValue(queryParameters.sortBy);
-    const rating = getFallbackRatingsRoutingValue(queryParameters.rating);
+    const sortBy = getFallbackSortByRoutingValue(
+      queryParameters.sortBy as string
+    );
+    const rating = getFallbackRatingsRoutingValue(
+      queryParameters.rating as string
+    );
 
     return {
-      query: decodeURIComponent(query),
-      page,
-      brands: allBrands.map(decodeURIComponent),
+      query: decodeURIComponent(query as string),
+      page: page as string,
+      brands: allBrands.map((brand) => decodeURIComponent(brand as string)),
       category,
       rating,
-      price,
-      free_shipping,
+      price: price as string,
+      free_shipping: free_shipping as string,
       sortBy,
       hitsPerPage,
     };
   },
 });
 
-const getStateMapping = ({ indexName }) => ({
+const getStateMapping = ({ indexName }: { indexName: string }) => ({
   stateToRoute(uiState: UiState): RouteState {
     const indexUiState = uiState[indexName];
     return {
       query: indexUiState.query,
-      page: indexUiState.page && String(indexUiState.page),
+      page: indexUiState.page! > 0 ? String(indexUiState.page) : undefined,
       brands: indexUiState.refinementList && indexUiState.refinementList.brand,
       category:
         indexUiState.hierarchicalMenu &&
@@ -242,7 +254,7 @@ const getStateMapping = ({ indexName }) => ({
   },
 });
 
-const getRouting = ({ indexName }) => ({
+const getRouting = ({ indexName }: { indexName: string }) => ({
   router,
   stateMapping: getStateMapping({ indexName }),
 });

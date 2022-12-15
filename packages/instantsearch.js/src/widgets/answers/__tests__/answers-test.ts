@@ -95,9 +95,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
       ]);
       search.start();
       await wait(0);
-      expect(container.innerHTML).toMatchInlineSnapshot(
-        `"<div class=\\"ais-Answers ais-Answers--empty\\"><div class=\\"ais-Answers-header\\"></div><ul class=\\"ais-Answers-list\\"></ul></div>"`
-      );
+      expect(container.innerHTML).toMatchInlineSnapshot(`
+        <div class="ais-Answers ais-Answers--empty">
+          <div class="ais-Answers-header">
+          </div>
+          <ul class="ais-Answers-list">
+          </ul>
+        </div>
+      `);
     });
 
     it('renders the answers', async () => {

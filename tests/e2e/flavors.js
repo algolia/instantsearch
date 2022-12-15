@@ -1,3 +1,3 @@
 module.exports = {
-  flavors: ['js'],
+  flavors: ['js', 'react', 'react-hooks'],
 };

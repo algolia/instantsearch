@@ -1,1 +1,1 @@
-export { default as toWarnDev } from './toWarnDev';
+export * from './toWarnDev';

@@ -1,6 +1,6 @@
 import { connectMenu, connectDynamicWidgets } from '../..';
 import { index } from '../../../widgets';
-import { widgetSnapshotSerializer } from '@instantsearch/testutils/widgetSnapshotSerializer';
+import { widgetSnapshotSerializer } from '@instantsearch/testutils';
 import {
   createDisposeOptions,
   createInitOptions,

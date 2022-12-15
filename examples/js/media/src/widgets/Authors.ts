@@ -8,7 +8,7 @@ const createAuthorsList = () =>
     },
   })(refinementList);
 
-export const createAuthors = ({ container }) =>
+export const createAuthors = ({ container }: { container: string }) =>
   createAuthorsList()({
     container,
     attribute: 'coauthors.nickname',

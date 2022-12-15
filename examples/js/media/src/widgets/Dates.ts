@@ -8,7 +8,13 @@ const createDatesList = (header: string) =>
     },
   })(numericMenu);
 
-export const createDates = ({ container, header }) =>
+export const createDates = ({
+  container,
+  header,
+}: {
+  container: string;
+  header: string;
+}) =>
   createDatesList(header)({
     container,
     attribute: 'created_at_timestamp',

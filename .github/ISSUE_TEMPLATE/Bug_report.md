@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Help us improve InstantSearch.js
+about: Help us improve InstantSearch
 ---
 
 ## 🐛 Bug description
@@ -16,11 +16,18 @@ about: Help us improve InstantSearch.js
 3. Scroll down to `...`
 4. See error
 
-<!-- A live example helps a lot! Fork the sandbox, reproduce the bug and paste the URL here: -->
+
 
 **Live reproduction:**
 
-https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js
+<!--
+A live example helps a lot! Fork the sandbox, reproduce the bug and paste the URL here:
+
+For a bug in InstantSearch.js: https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js
+For a bug in React InstantSearch: https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch
+For a bug in React InstantSearch Hooks: https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch-hooks
+-->
+
 
 ## 💭 Expected behavior
 
@@ -33,8 +40,9 @@ https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/
 ## Environment
 
 - OS: [e.g. Windows / Linux / macOS / iOS / Android]
-- Browser: [e.g. Chrome, Safari]
-- Version: [e.g. 22]
+- Browser: [e.g. Chrome 102.0.5005.61, Safari 15.2]
+- InstantSearch version: [e.g. 6.24.0]
+- React version: [e.g. 18.1.0] 
 
 ## Additional context
 

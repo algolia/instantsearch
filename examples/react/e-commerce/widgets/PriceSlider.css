@@ -1,0 +1,49 @@
+.ais-RangeSlider .slider-rail {
+  background-color: rgba(65, 66, 71, 0.08);
+  border-radius: 3px;
+  cursor: pointer;
+  height: 3px;
+  position: absolute;
+  width: 100%;
+}
+
+.ais-RangeSlider .slider-track {
+  background-color: #e2a400;
+  border-radius: 3px;
+  cursor: pointer;
+  height: 3px;
+  position: absolute;
+}
+
+.ais-RangeSlider .slider-tick {
+  cursor: grab;
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: bold;
+  position: absolute;
+  text-align: center;
+  top: -28px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+.ais-RangeSlider .slider-handle {
+  background-image: linear-gradient(to top, #f5f5fa, #fff);
+  border-radius: 50%;
+  box-shadow: 0 4px 11px 0 rgba(37, 44, 97, 0.15),
+    0 2px 3px 0 rgba(93, 100, 148, 0.2);
+  cursor: grab;
+  height: 16px;
+  outline: none;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  z-index: 1;
+}
+
+@media (max-width: 899px) {
+  .ais-RangeSlider .slider-handle {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}

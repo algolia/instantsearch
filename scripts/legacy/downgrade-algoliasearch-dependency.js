@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable no-console, import/no-commonjs */
-
 const path = require('path');
 const shell = require('shelljs');
 
@@ -21,12 +19,20 @@ console.log(
 - ${packageJsonPaths.join('\n- ')}`
 );
 
+// change main dependency
 shell.sed(
   '-i',
   /"algoliasearch": "4.*"(,?)/,
   '"algoliasearch": "3.35.1","@types/algoliasearch": "3.34.10"$1',
   packageJsonPaths
 );
-shell.sed('-i', /"@algolia\/client-search": "4.*",?/, '', packageJsonPaths);
+
+// remove other v4 dependencies
+shell.sed(
+  '-i',
+  /"@algolia\/(cache-.*|client-.*|logger-.*|requester-.*|transporter)": "4.*",?/,
+  '',
+  packageJsonPaths
+);
 
 shell.exec('yarn install');

@@ -20,6 +20,8 @@ export function isEqual(first: any, second: any): boolean {
     return false;
   }
 
+  // @TODO avoid for..of because of the large polyfill
+  // eslint-disable-next-line no-restricted-syntax
   for (const key of Object.keys(first)) {
     if (!(key in second)) {
       return false;

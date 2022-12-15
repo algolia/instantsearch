@@ -1,4 +1,3 @@
-/* eslint-disable import/no-commonjs */
 const shell = require('shelljs');
 
 const packages = JSON.parse(

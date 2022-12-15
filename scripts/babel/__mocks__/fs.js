@@ -1,5 +1,3 @@
-/* eslint-disable import/no-commonjs */
-
 const fs = jest.requireActual('fs');
 
 let mockFiles = new Set();

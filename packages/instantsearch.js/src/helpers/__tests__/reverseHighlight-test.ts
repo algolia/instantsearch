@@ -111,9 +111,23 @@ describe('reverseHighlight', () => {
         highlightedTagName: 'em',
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<em class=\\"ais-ReverseHighlight-highlighted\\">Enjoy smart access to videos, games and apps with this </em>Amazon<em class=\\"ais-ReverseHighlight-highlighted\\"> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core </em>processor, 1GB<em class=\\"ais-ReverseHighlight-highlighted\\"> internal memory and 8GB of storage, this portable </em>Amazon<em class=\\"ais-ReverseHighlight-highlighted\\"> Fire TV stick works fast for buffer-free streaming.</em>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <em class="ais-ReverseHighlight-highlighted">
+        Enjoy smart access to videos, games and apps with this
+      </em>
+      Amazon
+      <em class="ais-ReverseHighlight-highlighted">
+        Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core
+      </em>
+      processor, 1GB
+      <em class="ais-ReverseHighlight-highlighted">
+        internal memory and 8GB of storage, this portable
+      </em>
+      Amazon
+      <em class="ais-ReverseHighlight-highlighted">
+        Fire TV stick works fast for buffer-free streaming.
+      </em>
+    `);
   });
 
   test('with custom highlighted class name', () => {
@@ -123,9 +137,23 @@ describe('reverseHighlight', () => {
         cssClasses: { highlighted: '__highlighted class' },
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\">Enjoy smart access to videos, games and apps with this </mark>Amazon<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\"> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core </mark>processor, 1GB<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\"> internal memory and 8GB of storage, this portable </mark>Amazon<mark class=\\"ais-ReverseHighlight-highlighted __highlighted class\\"> Fire TV stick works fast for buffer-free streaming.</mark>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <mark class="ais-ReverseHighlight-highlighted __highlighted class">
+        Enjoy smart access to videos, games and apps with this
+      </mark>
+      Amazon
+      <mark class="ais-ReverseHighlight-highlighted __highlighted class">
+        Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core
+      </mark>
+      processor, 1GB
+      <mark class="ais-ReverseHighlight-highlighted __highlighted class">
+        internal memory and 8GB of storage, this portable
+      </mark>
+      Amazon
+      <mark class="ais-ReverseHighlight-highlighted __highlighted class">
+        Fire TV stick works fast for buffer-free streaming.
+      </mark>
+    `);
   });
 
   test('with unknown attribute returns an empty string', () => {
@@ -143,9 +171,15 @@ describe('reverseHighlight', () => {
         attribute: 'meta.name',
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Nested </mark>Amazon<mark class=\\"ais-ReverseHighlight-highlighted\\"> name</mark>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <mark class="ais-ReverseHighlight-highlighted">
+        Nested
+      </mark>
+      Amazon
+      <mark class="ais-ReverseHighlight-highlighted">
+        name
+      </mark>
+    `);
   });
 
   test('with nested attribute as array', () => {
@@ -154,9 +188,15 @@ describe('reverseHighlight', () => {
         attribute: ['meta', 'name'],
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Nested </mark>Amazon<mark class=\\"ais-ReverseHighlight-highlighted\\"> name</mark>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <mark class="ais-ReverseHighlight-highlighted">
+        Nested
+      </mark>
+      Amazon
+      <mark class="ais-ReverseHighlight-highlighted">
+        name
+      </mark>
+    `);
   });
 
   test('with array attribute', () => {
@@ -194,9 +234,15 @@ describe('reverseHighlight', () => {
         attribute: 'typeMissingSibling',
         hit,
       })
-    ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-ReverseHighlight-highlighted\\">Streaming - (</mark>media<mark class=\\"ais-ReverseHighlight-highlighted\\"> plyr)</mark>"`
-    );
+    ).toMatchInlineSnapshot(`
+      <mark class="ais-ReverseHighlight-highlighted">
+        Streaming - (
+      </mark>
+      media
+      <mark class="ais-ReverseHighlight-highlighted">
+        plyr)
+      </mark>
+    `);
   });
 
   test('warns if attribute does not exist', () => {

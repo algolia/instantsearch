@@ -1,9 +1,24 @@
+# Vendors
+node_modules
+**/node_modules/**
+
+# Artifacts
+dist
+build
+website
 **/cjs
 **/es
 **/dist
+coverage
 
-/website
-
+# Caches
 .cache
 .parcel-cache
-**/node_modules
+.expo
+.next
+
+# Partially wrong examples:
+## React-Native TypeScript wasn't supporting the mix of react 18 and 17
+examples/hooks/react-native
+## Excluded from global typescript config
+examples/hooks/next/next-env.d.ts

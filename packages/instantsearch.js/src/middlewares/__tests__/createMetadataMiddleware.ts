@@ -12,15 +12,9 @@ import { configure, hits, index, pagination, searchBox } from '../../widgets';
 import { isMetadataEnabled } from '../createMetadataMiddleware';
 
 declare global {
-  // using namespace so it's only in this file
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace NodeJS {
-    interface Global {
-      navigator?: {
-        userAgent?: string;
-      };
-      window: Window;
-    }
+  interface Navigator {
+    // make mutable
+    userAgent: string;
   }
 }
 
@@ -71,6 +65,7 @@ describe('createMetadataMiddleware', () => {
     });
 
     it("does not enable when there's a window but no navigator", () => {
+      // @ts-expect-error (simulate no navigator)
       global.navigator = undefined;
 
       createMetadataMiddleware();
@@ -81,6 +76,7 @@ describe('createMetadataMiddleware', () => {
     });
 
     it("does not enable when navigator is different from browser's (React Native)", () => {
+      // @ts-expect-error (simulate no userAgent)
       global.navigator!.userAgent = undefined;
 
       createMetadataMiddleware();
