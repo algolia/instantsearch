@@ -3,7 +3,8 @@ name: release-templates
 on:
   push:
     tags:
-      - '*'
+      - 'instantsearch.js@*'
+      - 'create-instantsearch-app@*'
 
 jobs:
   release:
