@@ -97,7 +97,6 @@ module.exports = {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/explicit-member-accessibility': 'off',
-        '@typescript-eslint/naming-convention': 'off',
       },
     },
     {
@@ -158,6 +157,13 @@ module.exports = {
       files: ['tests/e2e/**/*.js'],
       rules: {
         'import/no-commonjs': 0,
+      },
+    },
+    {
+      // `create-instantsearch-app` does not use TypeScript, this rule makes linting totally fails and asks for a tsconfig.json file which we do not have.
+      files: ['packages/create-instantsearch-app/**/*.js'],
+      rules: {
+        '@typescript-eslint/naming-convention': 'off',
       },
     },
   ],
