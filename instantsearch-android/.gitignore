@@ -1,0 +1,17 @@
+# IDE Files
+*.iml
+.idea/*
+projectFilesBackup
+
+# Build
+.gradle
+/.idea/workspace.xml
+/.idea/libraries
+/build
+/captures
+
+# Local setup
+/local.properties
+
+# OS Files
+.DS_Store
