@@ -1,0 +1,192 @@
+// Reset all lists
+
+.ais-Breadcrumb-list,
+.ais-CurrentRefinements-list,
+.ais-HierarchicalMenu-list,
+.ais-Hits-list,
+.ais-Results-list,
+.ais-InfiniteHits-list,
+.ais-InfiniteResults-list,
+.ais-Menu-list,
+.ais-NumericMenu-list,
+.ais-Pagination-list,
+.ais-RatingMenu-list,
+.ais-RefinementList-list,
+.ais-ToggleRefinement-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Reset all buttons
+
+.ais-ClearRefinements-button,
+.ais-CurrentRefinements-delete,
+.ais-CurrentRefinements-reset,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset,
+.ais-HierarchicalMenu-showMore,
+.ais-InfiniteHits-loadPrevious,
+.ais-InfiniteHits-loadMore,
+.ais-InfiniteResults-loadMore,
+.ais-Menu-showMore,
+.ais-RangeInput-submit,
+.ais-RefinementList-showMore,
+.ais-SearchBox-submit,
+.ais-SearchBox-reset,
+.ais-VoiceSearch-button {
+  padding: 0;
+  overflow: visible;
+  font: inherit;
+  line-height: normal;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  &[disabled] {
+    cursor: default;
+  }
+}
+
+// Prevent InfiniteHits buttons from moving scroll position
+// https://bugs.chromium.org/p/chromium/issues/detail?id=1110323
+.ais-InfiniteHits-loadPrevious,
+.ais-InfiniteHits-loadMore,
+.ais-HierarchicalMenu-showMore,
+.ais-Menu-showMore,
+.ais-RefinementList-showMore {
+  overflow-anchor: none;
+}
+
+// Reset widgets
+
+.ais-Breadcrumb-list,
+.ais-Breadcrumb-item,
+.ais-Pagination-list,
+.ais-RangeInput-form,
+.ais-RatingMenu-link,
+.ais-PoweredBy {
+  display: flex;
+  align-items: center;
+}
+
+.ais-GeoSearch,
+.ais-GeoSearch-map {
+  height: 100%;
+}
+
+.ais-HierarchicalMenu-list .ais-HierarchicalMenu-list {
+  margin-left: 1em;
+}
+
+.ais-PoweredBy-logo {
+  display: block;
+  height: 1.2em;
+  width: auto;
+}
+
+.ais-PoweredBy-text {
+  margin-right: 0.3rem;
+}
+
+.ais-RatingMenu-starIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.ais-SearchBox-input {
+  &::-ms-clear,
+  &::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    display: none;
+  }
+}
+
+// Reset RangeSlider
+
+.ais-RangeSlider {
+  .rheostat {
+    overflow: visible;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .rheostat-background {
+    height: 6px;
+    top: 0px;
+    width: 100%;
+  }
+
+  .rheostat-handle {
+    margin-left: -12px;
+    top: -7px;
+  }
+
+  .rheostat-background {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #aaa;
+  }
+
+  .rheostat-progress {
+    position: absolute;
+    top: 1px;
+    height: 4px;
+    background-color: #333;
+  }
+}
+
+.rheostat-handle {
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 1px solid #333;
+  border-radius: 50%;
+  cursor: grab;
+}
+
+.rheostat-marker {
+  margin-left: -1px;
+  position: absolute;
+  width: 1px;
+  height: 5px;
+  background-color: #aaa;
+}
+
+.rheostat-marker--large {
+  height: 9px;
+}
+
+.rheostat-value {
+  margin-left: 50%;
+  padding-top: 15px;
+  position: absolute;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.rheostat-tooltip {
+  margin-left: 50%;
+  position: absolute;
+  top: -22px;
+  text-align: center;
+  transform: translateX(-50%);
+}
