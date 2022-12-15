@@ -145,14 +145,14 @@ app.create().then(() => console.log('App generated!'));
 
 You can use the web templates on CodeSandbox:
 
-- [InstantSearch.js 3](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js)
-- [InstantSearch.js 2](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js-2.x)
-- [React InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch)
-- [Vue InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/vue-instantsearch)
-- [Angular InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/angular-instantsearch)
-- [Autocomplete.js](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/autocomplete.js)
-- [JavaScript Client](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/javascript-client)
-- [JavaScript Helper](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/javascript-helper)
+- [InstantSearch.js 3](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js)
+- [InstantSearch.js 2](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js-2.x)
+- [React InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/react-instantsearch)
+- [Vue InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/vue-instantsearch)
+- [Angular InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/angular-instantsearch)
+- [Autocomplete.js](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/autocomplete.js)
+- [JavaScript Client](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/javascript-client)
+- [JavaScript Helper](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/javascript-helper)
 
 ## License
 
@@ -163,7 +163,7 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 [version-svg]: https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square
 [package-url]: https://npmjs.org/package/create-instantsearch-app
 [ci-svg]: https://img.shields.io/circleci/project/github/algolia/create-instantsearch-app.svg?style=flat-square
-[ci-url]: https://circleci.com/gh/algolia/create-instantsearch-app
+[ci-url]: https://circleci.com/gh/algolia/instantsearch.js
 [license-image]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 

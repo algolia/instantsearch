@@ -20,7 +20,7 @@ about: Help us improve InstantSearch.js
 
 **Live reproduction:**
 
-https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js
+https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js
 
 ## 💭 Expected behavior
 

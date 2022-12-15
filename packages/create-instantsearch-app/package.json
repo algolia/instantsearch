@@ -7,7 +7,7 @@
     "algolia",
     "instantsearch"
   ],
-  "repository": "algolia/create-instantsearch-app",
+  "repository": "algolia/instantsearch.js",
   "author": "Algolia <support@algolia.com>",
   "main": "index.js",
   "bin": {

@@ -139,7 +139,7 @@ See more demos [on the website](https://www.algolia.com/doc/guides/building-sear
 
 ## Playground
 
-You can get to know InstantSearch.js on [this playground](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js).
+You can get to know InstantSearch.js on [this playground](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js).
 
 Start by [adding widgets](https://www.algolia.com/doc/guides/building-search-ui/widgets/showcase/js/) and tweaking the display. Once you feel familiar with the library, we recommend following the [getting started guide](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
 
