@@ -292,7 +292,6 @@ a[class^='ais-'] {
 .ais-HierarchicalMenu-count,
 .ais-Menu-count,
 .ais-RefinementList-count,
-.ais-ToggleRefinement-count,
 .ais-RatingMenu-count {
   align-items: center;
   background-color: rgba(65, 66, 71, 0.08);

@@ -18,8 +18,6 @@ classes:
     description: the checkbox input of the toggle
   - name: .ais-ToggleRefinement-labelText
     description: the label text of the toggle
-  - name: .ais-ToggleRefinement-count
-    description: the count of items of the toggle
 options:
   - name: attribute
     description: Attribute to apply the filter to

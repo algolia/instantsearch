@@ -318,10 +318,6 @@ mark {
   content: 'Yes';
 }
 
-.ais-ToggleRefinement-count {
-  display: none;
-}
-
 /* RatingMenu */
 
 .ais-RatingMenu-item:not(.ais-RatingMenu-item--selected) {
