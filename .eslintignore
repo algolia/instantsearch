@@ -17,8 +17,10 @@ coverage
 .expo
 .next
 
-# Partially wrong examples:
+# Non-lintable source files
 ## React-Native TypeScript wasn't supporting the mix of react 18 and 17
 examples/hooks/react-native
 ## Excluded from global typescript config
 examples/hooks/next/next-env.d.ts
+## templates that don't get installed
+packages/create-instantsearch-app/src/templates

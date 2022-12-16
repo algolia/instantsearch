@@ -1,0 +1,671 @@
+@import 'reset.scss';
+
+// Colors
+
+$algolia-blue: darken(rgb(0, 174, 255), 7%);
+$ghost: rgb(196, 200, 216);
+$east-bay: rgb(73, 85, 136);
+$koromiko: rgb(255, 193, 104);
+$port-gore: rgb(58, 69, 112);
+
+// Global
+
+[class^='ais-'] {
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+a[class^='ais-'] {
+  text-decoration: none;
+}
+
+.ais-Breadcrumb,
+.ais-ClearRefinements,
+.ais-CurrentRefinements,
+.ais-GeoSearch,
+.ais-HierarchicalMenu,
+.ais-Hits,
+.ais-Results,
+.ais-HitsPerPage,
+.ais-ResultsPerPage,
+.ais-InfiniteHits,
+.ais-InfiniteResults,
+.ais-Menu,
+.ais-MenuSelect,
+.ais-NumericMenu,
+.ais-NumericSelector,
+.ais-Pagination,
+.ais-Panel,
+.ais-PoweredBy,
+.ais-RangeInput,
+.ais-RangeSlider,
+.ais-RatingMenu,
+.ais-RefinementList,
+.ais-SearchBox,
+.ais-RelevantSort,
+.ais-SortBy,
+.ais-Stats,
+.ais-ToggleRefinement {
+  color: $port-gore;
+}
+
+// Widgets
+
+.ais-Breadcrumb-item--selected,
+.ais-HierarchicalMenu-item--selected,
+.ais-Menu-item--selected {
+  font-weight: bold;
+}
+
+.ais-Breadcrumb-separator {
+  margin: 0 0.3em;
+  font-weight: normal;
+}
+
+.ais-Breadcrumb-link,
+.ais-HierarchicalMenu-link,
+.ais-Menu-link,
+.ais-Pagination-link,
+.ais-RatingMenu-link {
+  color: $algolia-blue;
+  transition: color 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    color: darken($algolia-blue, 10%);
+  }
+}
+
+.ais-ClearRefinements-button,
+.ais-CurrentRefinements-reset,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset,
+.ais-HierarchicalMenu-showMore,
+.ais-InfiniteHits-loadPrevious,
+.ais-InfiniteHits-loadMore,
+.ais-InfiniteResults-loadMore,
+.ais-Menu-showMore,
+.ais-RefinementList-showMore,
+.ais-RelevantSort-button {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  color: #fff;
+  background-color: $algolia-blue;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-out;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    background-color: darken($algolia-blue, 10%);
+  }
+}
+
+.ais-ClearRefinements-button--disabled,
+.ais-GeoSearch-redo--disabled,
+.ais-GeoSearch-reset--disabled,
+.ais-HierarchicalMenu-showMore--disabled,
+.ais-InfiniteHits-loadMore--disabled,
+.ais-InfiniteResults-loadMore--disabled,
+.ais-Menu-showMore--disabled,
+.ais-RefinementList-showMore--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+
+  &:hover,
+  &:focus {
+    background-color: $algolia-blue;
+  }
+}
+
+.ais-InfiniteHits-loadPrevious--disabled {
+  display: none;
+}
+
+.ais-CurrentRefinements {
+  margin-top: -0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ais-CurrentRefinements-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ais-CurrentRefinements-item {
+  margin-right: 0.3rem;
+  margin-top: 0.3rem;
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  background-color: $east-bay;
+  border-radius: 5px;
+}
+
+.ais-CurrentRefinements-category {
+  margin-left: 0.3em;
+  display: flex;
+}
+
+.ais-CurrentRefinements-delete {
+  margin-left: 0.3rem;
+}
+
+.ais-CurrentRefinements-label,
+.ais-CurrentRefinements-categoryLabel,
+.ais-CurrentRefinements-delete {
+  white-space: nowrap;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.ais-CurrentRefinements-reset {
+  margin-top: 0.3rem;
+  white-space: nowrap;
+
+  + .ais-CurrentRefinements-list {
+    margin-left: 0.3rem;
+  }
+}
+
+.ais-GeoSearch {
+  position: relative;
+}
+
+.ais-GeoSearch-control {
+  position: absolute;
+  top: 0.8rem;
+  left: 3.75rem;
+}
+
+.ais-GeoSearch-label {
+  display: block;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  background-color: #fff;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-out;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px;
+  outline: none;
+}
+
+.ais-GeoSearch-input {
+  margin: 0 0.25rem 0 0;
+}
+
+.ais-GeoSearch-label,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset {
+  white-space: nowrap;
+}
+
+.ais-GeoSearch-reset {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ais-HierarchicalMenu-link,
+.ais-Menu-link {
+  display: block;
+  line-height: 1.5;
+}
+
+.ais-HierarchicalMenu-list,
+.ais-Menu-list,
+.ais-NumericMenu-list,
+.ais-RatingMenu-list,
+.ais-RefinementList-list {
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.ais-HierarchicalMenu-link {
+  &:after {
+    margin-left: 0.3em;
+    content: '';
+    width: 10px;
+    height: 10px;
+    display: none;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M7.3 24l-2.8-2.8 9.3-9.2-9.3-9.2 2.8-2.8 12.2 12z%27 fill%3D%22%233A4570%22 /%3E%3C/svg%3E');
+    background-size: 100% 100%;
+  }
+
+  .ais-HierarchicalMenu-item--parent > &:after {
+    display: inline-block;
+  }
+
+  .ais-HierarchicalMenu-item--selected > &:after {
+    transform: rotate(90deg);
+  }
+}
+
+.ais-CurrentRefinements-count,
+.ais-RatingMenu-count {
+  font-size: 0.8rem;
+
+  &:before {
+    content: '(';
+  }
+
+  &:after {
+    content: ')';
+  }
+}
+
+.ais-HierarchicalMenu-count,
+.ais-Menu-count,
+.ais-RefinementList-count,
+.ais-ToggleRefinement-count {
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
+  color: $port-gore;
+  background-color: lighten($port-gore, 57%);
+  border-radius: 8px;
+}
+
+.ais-HierarchicalMenu-showMore,
+.ais-Menu-showMore,
+.ais-RefinementList-showMore {
+  margin-top: 0.5rem;
+}
+
+.ais-Highlight-highlighted,
+.ais-Snippet-highlighted {
+  background-color: $koromiko;
+}
+
+.ais-ReverseHighlight-highlighted,
+.ais-ReverseSnippet-highlighted {
+  font-weight: bold;
+  font-style: normal;
+  background: none;
+}
+
+.ais-InfiniteHits-list,
+.ais-InfiniteResults-list,
+.ais-Hits-list,
+.ais-Results-list {
+  margin-top: -1rem;
+  margin-left: -1rem;
+  display: flex;
+  flex-wrap: wrap;
+
+  .ais-Panel-body & {
+    margin: 0.5rem 0 0 -1rem;
+  }
+}
+
+.ais-InfiniteHits-item,
+.ais-InfiniteResults-item,
+.ais-Hits-item,
+.ais-Results-item {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  padding: 1rem;
+  width: calc(25% - 1rem);
+  border: 1px solid $ghost;
+  box-shadow: 0 2px 5px 0px lighten($ghost, 10%);
+
+  .ais-Panel-body & {
+    margin: 0.5rem 0 0.5rem 1rem;
+  }
+}
+
+.ais-InfiniteHits-loadMore,
+.ais-InfiniteResults-loadMore {
+  margin-top: 1rem;
+}
+
+.ais-InfiniteHits-loadPrevious {
+  margin-bottom: 1rem;
+}
+
+.ais-MenuSelect-select,
+.ais-NumericSelector-select,
+.ais-HitsPerPage-select,
+.ais-ResultsPerPage-select,
+.ais-SortBy-select {
+  appearance: none;
+  padding: 0.3rem 2rem 0.3rem 0.3rem;
+  max-width: 100%;
+  background-color: #fff;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M0 7.3l2.8-2.8 9.2 9.3 9.2-9.3 2.8 2.8-12 12.2z%27 fill%3D%22%233A4570%22 /%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
+  background-position: 92% 50%;
+  border: 1px solid $ghost;
+  border-radius: 5px;
+}
+
+.ais-Panel--collapsible {
+  position: relative;
+
+  &.ais-Panel--collapsed {
+    .ais-Panel-body, .ais-Panel-footer{
+      display:none;
+    }
+  }
+
+  .ais-Panel-collapseButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    border: none;
+    background: none;
+  }
+}
+
+.ais-Panel-header {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid $ghost;
+}
+
+.ais-Panel-footer {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.ais-RangeInput-input {
+  padding: 0 0.2rem;
+  width: 5rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
+}
+
+.ais-RangeInput-separator {
+  margin: 0 0.3rem;
+}
+
+.ais-RangeInput-submit {
+  margin-left: 0.3rem;
+  appearance: none;
+  padding: 0 0.5rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  font-size: 0.8rem;
+  color: #fff;
+  background-color: $algolia-blue;
+  border: none;
+  border-radius: 5px;
+  transition: 0.2s ease-out;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    background-color: darken($algolia-blue, 10%);
+  }
+}
+
+.ais-RatingMenu-count {
+  color: $port-gore;
+}
+
+.ais-Pagination-list {
+  justify-content: center;
+}
+
+.ais-Pagination-item {
+  + .ais-Pagination-item {
+    margin-left: 0.3rem;
+  }
+}
+
+.ais-Pagination-link {
+  padding: 0.3rem 0.6rem;
+  display: block;
+  border: 1px solid $ghost;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    background-color: lighten($ghost, 10%);
+  }
+
+  .ais-Pagination-item--disabled & {
+    opacity: 0.6;
+    cursor: not-allowed;
+    color: darken($ghost, 10%);
+
+    &:hover,
+    &:focus {
+      color: darken($ghost, 10%);
+      background-color: #fff;
+    }
+  }
+
+  .ais-Pagination-item--selected & {
+    color: #fff;
+    background-color: $algolia-blue;
+    border-color: $algolia-blue;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+}
+
+.ais-PoweredBy-text,
+.rheostat-tooltip,
+.rheostat-value,
+.ais-Stats-text,
+.ais-RelevantSort-text {
+  font-size: 0.8rem;
+}
+
+.ais-RangeSlider {
+  .rheostat-progress {
+    background-color: $east-bay;
+  }
+
+  .rheostat-background {
+    border-color: darken($ghost, 20%);
+    box-sizing: border-box;
+  }
+
+  .rheostat-handle {
+    border-color: darken($ghost, 20%);
+  }
+
+  .rheostat-marker {
+    background-color: darken($ghost, 20%);
+  }
+
+  .ais-Panel-body & {
+    margin: 2rem 0;
+  }
+}
+
+.ais-RangeSlider-handle {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  border: 1px solid #46AEDA;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.ais-RangeSlider-tooltip {
+  position: absolute;
+  background: #FFFFFF;
+  top: -22px;
+  font-size: .8em;
+}
+
+.ais-RangeSlider-value {
+  width: 40px;
+  position: absolute;
+  text-align: center;
+  margin-left: -20px;
+  padding-top: 15px;
+  font-size: .8em;
+}
+
+.ais-RangeSlider-marker {
+  position: absolute;
+  background: #DDD;
+  margin-left: -1px;
+  width: 1px;
+  height: 5px;
+}
+
+.ais-RatingMenu-count,
+.ais-RatingMenu-label {
+  .ais-RatingMenu-item--disabled & {
+    color: $ghost;
+  }
+}
+
+.ais-RatingMenu-item--selected {
+  font-weight: bold;
+}
+
+.ais-RatingMenu-link {
+  line-height: 1.5;
+
+  > * + * {
+    margin-left: 0.3rem;
+  }
+}
+
+.ais-RatingMenu-starIcon {
+  position: relative;
+  top: -1px;
+  width: 15px;
+  fill: $koromiko;
+
+  .ais-RatingMenu-item--disabled & {
+    fill: $ghost;
+  }
+}
+
+.ais-HierarchicalMenu-searchBox,
+.ais-Menu-searchBox,
+.ais-RefinementList-searchBox {
+  > * {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.ais-SearchBox-form {
+  display: block;
+  position: relative;
+}
+
+.ais-SearchBox-input {
+  appearance: none;
+  padding: 0.3rem 1.7rem;
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid $ghost;
+  border-radius: 5px;
+
+  &::-webkit-input-placeholder {
+    color: lighten($port-gore, 40%);
+  }
+
+  &::-moz-placeholder {
+    color: lighten($port-gore, 40%);
+  }
+
+  &:-ms-input-placeholder {
+    color: lighten($port-gore, 40%);
+  }
+
+  &:-moz-placeholder {
+    color: lighten($port-gore, 40%);
+  }
+}
+
+.ais-SearchBox-submit,
+.ais-SearchBox-reset,
+.ais-SearchBox-loadingIndicator {
+  appearance: none;
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  right: 0.3rem;
+  transform: translateY(-50%);
+}
+
+.ais-SearchBox-submit {
+  left: 0.3rem;
+}
+
+.ais-SearchBox-reset {
+  right: 0.3rem;
+}
+
+.ais-SearchBox-submitIcon,
+.ais-SearchBox-resetIcon,
+.ais-SearchBox-loadingIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.ais-SearchBox-submitIcon,
+.ais-SearchBox-resetIcon {
+  path {
+    fill: $east-bay;
+  }
+}
+
+.ais-SearchBox-submitIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.ais-SearchBox-resetIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.ais-SearchBox-loadingIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.ais-VoiceSearch-button {
+  border: none;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  border-radius: 50%;
+  color: $port-gore;
+  background-color: transparent;
+}
+
+.ais-VoiceSearch-button svg {
+  color: currentColor;
+}
+
+.ais-VoiceSearch-button:hover {
+  cursor: pointer;
+  background-color: lighten($port-gore, 40%);
+  color: #ffffff;
+}
+
+.ais-VoiceSearch-button:disabled {
+  color: lighten($port-gore, 40%);
+}
+
+.ais-VoiceSearch-button:disabled:hover {
+  color: lighten($port-gore, 40%);
+  cursor: not-allowed;
+  background: inherit;
+}

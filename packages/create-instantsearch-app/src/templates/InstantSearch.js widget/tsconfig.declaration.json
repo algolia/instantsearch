@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "outDir": "dist/_types",
+    "stripInternal": true,
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true
+  },
+  "include": ["src"],
+  "exclude": ["**/__tests__","**/index.cjs.ts"]
+}

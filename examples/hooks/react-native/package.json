@@ -11,7 +11,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "algoliasearch": "4.12.1",
+    "algoliasearch": "4.14.2",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
     "instantsearch.js": "4.49.2",

@@ -1,0 +1,26 @@
+{
+  "name": "@instantsearch/specs-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The specs website for InstantSearch.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch.js"
+  },
+  "license": "MIT",
+  "author": "Algolia <support@algolia.com>",
+  "scripts": {
+    "build": "astro build",
+    "check": "astro check && tsc",
+    "dev": "astro dev",
+    "preview": "astro preview",
+    "start": "astro dev",
+    "prepare": "rm -rf public && mkdir public && cp -r ../node_modules/instantsearch.css/themes public/themes"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.13",
+    "astro": "1.6.14",
+    "instantsearch.css": "7.4.5",
+    "sass": "1.56.2"
+  }
+}

@@ -12,6 +12,7 @@ const config = {
     '<rootDir>/packages/*/dist*',
     '<rootDir>/tests/e2e/*',
     '<rootDir>/examples/',
+    '<rootDir>/packages/create-instantsearch-app',
     '/__utils__/',
   ],
   watchPathIgnorePatterns: [

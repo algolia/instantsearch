@@ -153,23 +153,17 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * It enables the URL sync to keep track of the changes.
    */
   public onUpdate(callback: (routeState: TRouteState) => void): void {
-    this._onPopState = (event) => {
+    this._onPopState = () => {
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
         this.writeTimer = undefined;
       }
 
       this.inPopState = true;
-      const routeState = event.state;
 
-      // At initial load, the state is read from the URL without update.
-      // Therefore the state object is not available.
-      // In this case, we fallback and read the URL.
-      if (!routeState) {
-        callback(this.read());
-      } else {
-        callback(routeState);
-      }
+      // We always read the state from the URL because the state of the history
+      // can be incorect in some cases (e.g. using React Router).
+      callback(this.read());
     };
 
     safelyRunOnBrowser(({ window }) => {

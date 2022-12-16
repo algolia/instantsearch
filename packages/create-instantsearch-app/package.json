@@ -1,0 +1,72 @@
+{
+  "name": "create-instantsearch-app",
+  "version": "6.2.1",
+  "license": "MIT",
+  "description": "⚡️ Build InstantSearch apps at the speed of thought",
+  "keywords": [
+    "algolia",
+    "instantsearch"
+  ],
+  "repository": "algolia/instantsearch.js",
+  "author": "Algolia <support@algolia.com>",
+  "main": "index.js",
+  "bin": {
+    "create-instantsearch-app": "src/cli/index.js"
+  },
+  "scripts": {
+    "start": "node src/cli/index.js",
+    "test": "jest --no-color src && yarn run test:e2e",
+    "test:e2e:templates": "jest e2e/templates.test.js",
+    "test:e2e:installs": "jest e2e/installs.test.js",
+    "test:e2e": "yarn run test:e2e:templates && yarn run test:e2e:installs",
+    "lint": "eslint .",
+    "lint:fix": "yarn run lint --fix",
+    "format": "prettier --write *.{js,md,json}",
+    "doctoc": "doctoc --maxlevel 3 README.md CONTRIBUTING.md docs/",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "release-templates": "node ./scripts/release-templates",
+    "release": "shipjs prepare"
+  },
+  "files": [
+    "index.js",
+    "src"
+  ],
+  "engines": {
+    "node": ">= 10"
+  },
+  "dependencies": {
+    "@algolia/cache-in-memory": "4",
+    "algoliasearch": "4",
+    "chalk": "3.0.0",
+    "commander": "4.1.1",
+    "inquirer": "8.0.0",
+    "jstransformer-handlebars": "1.1.0",
+    "latest-semver": "2.0.0",
+    "load-json-file": "6.2.0",
+    "lodash.camelcase": "4.3.0",
+    "metalsmith": "2.3.0",
+    "metalsmith-ignore": "1.0.0",
+    "metalsmith-in-place": "4.4.1",
+    "metalsmith-rename": "1.0.0",
+    "prettier": "1.19.1",
+    "semver": "6.1.1",
+    "validate-npm-package-name": "3.0.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "10.0.3",
+    "conventional-changelog-cli": "2.0.31",
+    "doctoc": "1.4.0",
+    "eslint": "6.7.2",
+    "eslint-config-algolia": "15.0.0",
+    "eslint-config-prettier": "6.7.0",
+    "eslint-plugin-eslint-comments": "3.1.2",
+    "eslint-plugin-html": "6.0.0",
+    "eslint-plugin-import": "2.19.1",
+    "eslint-plugin-jest": "23.1.1",
+    "eslint-plugin-prettier": "3.1.2",
+    "jest": "25.1.0",
+    "jest-image-snapshot": "2.12.0",
+    "shipjs": "0.24.4",
+    "walk-sync": "2.0.2"
+  }
+}

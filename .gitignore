@@ -12,6 +12,7 @@ build/
 /docs
 /website/examples
 /website/stories
+/website/specs
 /storybook/dist/*
 
 # Unneeded changelogs
@@ -33,6 +34,7 @@ tests/*/CHANGELOG.md
 integration/screenshots/
 /junit
 /coverage
+junit.xml
 
 # User-specific files
 *.iml

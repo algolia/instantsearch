@@ -50,7 +50,6 @@
     "build:types": "scripts/typescript/extract.js",
     "storybook": "start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
     "storybook:build": "build-storybook --quiet --output-dir ../../website/stories/js --static-dir .storybook/static",
-    "test": "jest",
     "test:exports": "node test/module/is-es-module.mjs && node test/module/is-cjs-module.cjs",
     "version": "./scripts/version/update-version.js"
   },
@@ -58,7 +57,7 @@
     "@instantsearch/mocks": "1.0.1",
     "@instantsearch/testutils": "1.0.1",
     "@types/scriptjs": "0.0.2",
-    "algoliasearch": "4.11.0",
+    "algoliasearch": "4.14.2",
     "places.js": "1.17.1",
     "scriptjs": "2.5.9",
     "webpack": "4.41.5"

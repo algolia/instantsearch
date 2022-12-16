@@ -1,0 +1,15 @@
+---
+const { BASE_URL } = import.meta.env;
+---
+
+<div class="theme-selector">
+  <label>
+    <small>Choose a CSS theme:</small>
+    <select name="" id="js-changeTheme">
+      <option value={`${BASE_URL}/themes/satellite-min.css`}>Satellite</option>
+      <option value={`${BASE_URL}/themes/algolia-min.css`}>Algolia</option>
+      <option value={`${BASE_URL}/themes/reset-min.css`}>Reset</option>
+      <option value="">None</option>
+    </select>
+  </label>
+</div>

@@ -23,9 +23,9 @@ about: Help us improve InstantSearch
 <!--
 A live example helps a lot! Fork the sandbox, reproduce the bug and paste the URL here:
 
-For a bug in InstantSearch.js: https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js
-For a bug in React InstantSearch: https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch
-For a bug in React InstantSearch Hooks: https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch-hooks
+For a bug in InstantSearch.js: https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js
+For a bug in React InstantSearch: https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/react-instantsearch
+For a bug in React InstantSearch Hooks: https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/react-instantsearch-hooks
 -->
 
 

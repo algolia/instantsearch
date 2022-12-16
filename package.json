@@ -7,7 +7,8 @@
   "workspaces": [
     "examples/*/*",
     "packages/*",
-    "tests/*"
+    "tests/*",
+    "specs"
   ],
   "scripts": {
     "build": "lerna run build",
@@ -18,22 +19,24 @@
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc && lerna run type-check",
     "type-check:v3": "tsc --project tsconfig.v3.json",
-    "test": "jest",
+    "test": "jest && lerna run test",
+    "test:ci": "jest --maxWorkers=4 && lerna run test --concurrency=1",
     "test:size": "bundlesize",
     "test:exports": "lerna run test:exports",
     "test:e2e": "yarn test:e2e:local",
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
     "test:examples": "lerna run test --scope='example-*'",
-    "release": "shipjs prepare"
+    "release": "shipjs prepare",
+    "prepare": "lerna run prepare"
   },
   "devDependencies": {
-    "@algolia/cache-common": "4.11.0",
-    "@algolia/cache-in-memory": "4.11.0",
-    "@algolia/client-search": "4.11.0",
-    "@algolia/logger-common": "4.11.0",
-    "@algolia/requester-node-http": "4.11.0",
-    "@algolia/transporter": "4.11.0",
+    "@algolia/cache-common": "4.14.2",
+    "@algolia/cache-in-memory": "4.14.2",
+    "@algolia/client-search": "4.14.2",
+    "@algolia/logger-common": "4.14.2",
+    "@algolia/requester-node-http": "4.14.2",
+    "@algolia/transporter": "4.14.2",
     "@babel/cli": "7.15.4",
     "@babel/core": "7.15.5",
     "@babel/plugin-proposal-class-properties": "7.14.5",
@@ -87,7 +90,7 @@
     "@wdio/spec-reporter": "5.16.11",
     "@wdio/static-server-service": "5.16.10",
     "@wojtekmaj/enzyme-adapter-react-17": "0.6.5",
-    "algoliasearch": "4.11.0",
+    "algoliasearch": "4.14.2",
     "algoliasearch-v3": "npm:algoliasearch@3.35.0",
     "babel-eslint": "10.1.0",
     "babel-jest": "27.4.6",
@@ -198,6 +201,30 @@
     {
       "path": "packages/react-instantsearch-dom-maps/dist/umd/ReactInstantSearchDOMMaps.min.js",
       "maxSize": "7.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/algolia.css",
+      "maxSize": "3.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/algolia-min.css",
+      "maxSize": "3.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/reset.css",
+      "maxSize": "1.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/reset-min.css",
+      "maxSize": "1 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/satellite.css",
+      "maxSize": "4.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/satellite-min.css",
+      "maxSize": "4.25 kB"
     }
   ]
 }
