@@ -36,7 +36,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn build:cjs && yarn build:es && yarn build:umd",
-    "build:cjs": "babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist --quiet",
+    "build:cjs": "BABEL_ENV=cjs babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist --quiet",
     "build:es": "BABEL_ENV=es babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
     "preparePackageFolder": "cp package.json dist && cp ../../README.md dist",
