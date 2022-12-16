@@ -26,7 +26,6 @@
     "test:e2e": "yarn test:e2e:local",
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
-    "test:examples": "lerna run test --scope='example-*'",
     "release": "shipjs prepare",
     "prepare": "lerna run prepare"
   },

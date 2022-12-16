@@ -154,9 +154,6 @@ jobs:
           command: yarn run test:ci
       - store_test_results:
           path: junit/jest/
-      - run:
-          name: Unit tests of the examples
-          command: yarn run test:examples
 
   examples:
     <<: *defaults
