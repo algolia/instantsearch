@@ -106,7 +106,7 @@ describe('useBreadcrumb', () => {
           ],
         }),
       {
-        wrapper: ({ children }) =>
+        wrapper: ({ children }: { children: React.ReactNode }) =>
           wrapper({
             children: (
               <>

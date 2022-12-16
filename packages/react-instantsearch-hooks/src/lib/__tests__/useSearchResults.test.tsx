@@ -14,7 +14,7 @@ describe('useSearchResults', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
     const { result, waitForNextUpdate } = renderHook(() => useSearchResults(), {
-      wrapper: ({ children }) =>
+      wrapper: ({ children }: { children: React.ReactNode }) =>
         wrapper({
           children: (
             <>
@@ -67,7 +67,7 @@ describe('useSearchResults', () => {
       }),
     });
     const { result, waitForNextUpdate } = renderHook(() => useSearchResults(), {
-      wrapper: ({ children }) =>
+      wrapper: ({ children }: { children: React.ReactNode }) =>
         wrapper({
           children: (
             <>

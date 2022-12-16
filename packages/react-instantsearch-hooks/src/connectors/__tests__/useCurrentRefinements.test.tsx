@@ -50,7 +50,7 @@ describe('useCurrentRefinements', () => {
     const { result, waitForNextUpdate } = renderHook(
       () => useCurrentRefinements(),
       {
-        wrapper: ({ children }) =>
+        wrapper: ({ children }: { children: React.ReactNode }) =>
           wrapper({
             children: (
               <>
