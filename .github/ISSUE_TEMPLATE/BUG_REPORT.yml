@@ -4,12 +4,14 @@ labels:
   - triage
 body:
 - type: textarea
+  id: current-behavior
   attributes:
     label: 🐛 Current behavior
     description: A clear and concise description of what the bug is.
   validations:
     required: true
 - type: textarea
+  id: reproduction-steps
   attributes:
     label: 🔍 Steps to reproduce
     description: Steps to reproduce the behavior.
@@ -23,31 +25,62 @@ body:
   validations:
     required: true
 - type: input
+  id: reproduction-links
   attributes:
     label: Live reproduction
     description: |
       A live example helps a lot! Fork the sandbox relevant to the library you're using, reproduce the bug, and paste the URL here.
-      Sandboxes: [InstantSearch.js](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js)
+
+      <table>
+        <tr>
+          <th>Sandboxes</th>
+          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js" target="_blank">InstantSearch.js</a></td>
+          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/react-instantsearch" target="_blank">React InstantSearch</a></td>
+          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/react-instantsearch-hooks" target="_blank">React InstantSearch Hooks</a></td>
+          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/vue-instantsearch" target="_blank">Vue InstantSearch</a></td>
+          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/angular-instantsearch" target="_blank">Angular InstantSearch</a></td>
+        </tr>
+      </table>
+
     placeholder: https://codesandbox.io/...
   validations:
     required: true
 - type: textarea
+  id: expected-behavior
   attributes:
     label: 💭 Expected behavior
     description: A clear and concise description of what you expected to happen.
   validations:
     required: true
-- type: textarea
+- type: input
+  id: version
   attributes:
-    label: Environment
-    placeholder: |
-      - OS: [e.g. Windows / Linux / macOS / iOS / Android]
-      - Browser: [e.g. Chrome, Safari]
-      - InstantSearch version: [e.g. 4.49.2]
-- type: textarea
+    label: Package version
+    placeholder: 4.49.2
+  validations:
+    required: true
+- type: dropdown
+  id: os
   attributes:
-    label: Additional context
-    description: Add any other context about the problem here.
+    label: Operating System
+    multiple: true
+    options:
+      - Android
+      - iOS
+      - Linux
+      - macOS
+      - Windows
+- type: dropdown
+  id: browser
+  attributes:
+    label: Browser
+    multiple: true
+    options:
+      - Chrome
+      - Firefox
+      - Internet Explorer
+      - Safari
+      - Other (specify in Current behavior)
 - type: checkboxes
   attributes:
     label: Code of Conduct
