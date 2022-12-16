@@ -157,7 +157,6 @@ jobs:
       - run:
           name: Unit tests of the examples
           command: yarn run test:examples
-      - store_test_results:
 
   examples:
     <<: *defaults
