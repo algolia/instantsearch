@@ -5,13 +5,13 @@ labels:
 body:
 - type: textarea
   attributes:
-    label: 🐛 Bug description
+    label: 🐛 Current behavior
     description: A clear and concise description of what the bug is.
   validations:
     required: true
 - type: textarea
   attributes:
-    label: 🔍 Bug reproduction
+    label: 🔍 Steps to reproduce
     description: Steps to reproduce the behavior.
     placeholder: |
       1. Go to ...
@@ -19,14 +19,14 @@ body:
       3. Scroll down to ...
       4. See error
 
-      You can attach screenshots by dragging & dropping, selecting or pasting them on the textarea.
+      You can attach screenshots by dragging and dropping, or selecting and pasting them in the text field.
   validations:
     required: true
 - type: input
   attributes:
     label: Live reproduction
     description: |
-      A live example helps a lot! Fork the sandbox relevant to your package, reproduce the bug and paste the URL here.
+      A live example helps a lot! Fork the sandbox relevant to the library you're using, reproduce the bug, and paste the URL here.
       Sandboxes: [InstantSearch.js](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js)
     placeholder: https://codesandbox.io/...
   validations:
