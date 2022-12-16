@@ -1,0 +1,57 @@
+name: Bug report
+description: Help us improve InstantSearch
+labels:
+  - triage
+body:
+- type: textarea
+  attributes:
+    label: 🐛 Bug description
+    description: A clear and concise description of what the bug is.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: 🔍 Bug reproduction
+    description: Steps to reproduce the behavior.
+    placeholder: |
+      1. Go to ...
+      2. Click on ...
+      3. Scroll down to ...
+      4. See error
+
+      You can attach screenshots by dragging & dropping, selecting or pasting them on the textarea.
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Live reproduction
+    description: |
+      A live example helps a lot! Fork the sandbox relevant to your package, reproduce the bug and paste the URL here.
+      Sandboxes: [InstantSearch.js](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js)
+    placeholder: https://codesandbox.io/...
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: 💭 Expected behavior
+    description: A clear and concise description of what you expected to happen.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Environment
+    placeholder: |
+      - OS: [e.g. Windows / Linux / macOS / iOS / Android]
+      - Browser: [e.g. Chrome, Safari]
+      - InstantSearch version: [e.g. 4.49.2]
+- type: textarea
+  attributes:
+    label: Additional context
+    description: Add any other context about the problem here.
+- type: checkboxes
+  attributes:
+    label: Code of Conduct
+    description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/algolia/.github/blob/main/CODE_OF_CONDUCT.md)
+    options:
+      - label: I agree to follow this project's Code of Conduct
+        required: true
