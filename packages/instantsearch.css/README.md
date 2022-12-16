@@ -68,7 +68,7 @@ InstantSearch.css is a living standard. This table tracks down the version imple
 
 We welcome all contributors, from casual to regular 💙
 
-- **Bug report**. Is something not working as expected? [Send a bug report](https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Package%3A%20instantsearch.css).
+- **Bug report**. Is something not working as expected? [Send a bug report](https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=Package%3A%20instantsearch.css).
 - **Feature request**. Would you like to add something to the library? [Send a feature request](https://github.com/algolia/instantsearch.js/issues/new?template=Feature_request.md&labels=Package%3A%20instantsearch.css).
 - **Documentation**. Did you find a typo in the doc? [Open an issue](https://github.com/algolia/instantsearch.js/issues/new?labels=Package%3A%20instantsearch.css) and we'll take care of it.
 - **Development**. If you don't know where to start, you can check the [open issues](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Package%3A+instantsearch.css%22).
