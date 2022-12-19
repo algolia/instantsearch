@@ -20,7 +20,6 @@
     "test:e2e:installs": "jest e2e/installs.test.js",
     "test:e2e": "yarn run test:e2e:templates && yarn run test:e2e:installs",
     "format": "prettier --write *.{js,md,json}",
-    "doctoc": "doctoc --maxlevel 3 README.md CONTRIBUTING.md docs/",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "release-templates": "node ./scripts/release-templates",
     "release": "shipjs prepare"
@@ -51,9 +50,6 @@
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
-    "conventional-changelog-cli": "2.0.31",
-    "doctoc": "1.4.0",
-    "jest": "25.1.0",
     "jest-image-snapshot": "2.12.0",
     "shipjs": "0.24.4",
     "walk-sync": "2.0.2"
