@@ -62,7 +62,7 @@ body:
 - type: dropdown
   id: os
   attributes:
-    label: Operating System
+    label: Operating system
     multiple: true
     options:
       - Android
