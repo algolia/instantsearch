@@ -1,0 +1,26 @@
+{
+  "extends": [
+    "stylelint-prettier/recommended",
+    "stylelint-config-standard-scss",
+    "stylelint-config-prettier-scss",
+    "stylelint-a11y/recommended"
+  ],
+  "plugins": ["stylelint-no-unsupported-browser-features", "stylelint-order"],
+  "defaultSeverity": "warning",
+  "rules": {
+    "selector-class-pattern": "(?:^ais-[A-Z][a-zA-Z0-9]+[-a-zA-Z0-9]+$|^rheostat(?:-[a-z]+)?$)",
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["input-placeholder"]
+      }
+    ],
+    "plugin/no-unsupported-browser-features": [
+      true,
+      {
+        "browsers": ["defaults", "ie 11"],
+        "severity": "warning"
+      }
+    ]
+  }
+}
