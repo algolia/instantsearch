@@ -15,7 +15,7 @@
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md packages/*/README.md",
     "website:storybook": "lerna run storybook:build",
     "website:examples": "yarn webpack --config scripts/website/webpack.config.js && lerna run website:examples",
-    "lint": "eslint --ext .js,.ts,.tsx .",
+    "lint": "eslint --ext .js,.ts,.tsx . && lerna run lint",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc && lerna run type-check",
     "type-check:v3": "tsc --project tsconfig.v3.json",
