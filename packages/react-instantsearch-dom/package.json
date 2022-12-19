@@ -37,7 +37,7 @@
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
     "storybook": "start-storybook -p 6006 -c storybook -s storybook/public",
-    "storybook:build": "build-storybook -s storybook/public -o ../../website/storybook/react -c storybook"
+    "storybook:build": "build-storybook -s storybook/public -o ../../website/stories/react -c storybook"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
