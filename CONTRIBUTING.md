@@ -149,22 +149,6 @@ Here are the main files and folders of the project.
   README.md                            << The introduction of the project
 ```
 
-### InstantSearch.js source folder
-
-```
-▸ src/                             << The source of the library
-  ▸ components/       << The Preact components for the UI of our widgets
-  ▸ connectors/       << The source of all the connectors driving the widgets' logic
-  ▸ helpers/          << The source of the method helpers
-  ▸ lib/              << The core of the library (InstantSearch, routers, etc.)
-  ▸ middleware/       << The source of the middleware
-  ▸ types/            << The TypeScript declarations
-  ▸ widgets/          << The source of the widgets
-▸ .storybook/                      << The storybook configuration
-▸ stories/                         << The widget stories
-▸ test/                            << Utilities for the tests
-```
-
 ## Importing existing projects
 
 This monorepo has as goal to be used for all InstantSearch flavors and tools. To do so, we need to import existing projects into this repository. The process is as follows:
