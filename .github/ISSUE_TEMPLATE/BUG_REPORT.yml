@@ -56,39 +56,19 @@ body:
   id: version
   attributes:
     label: Package version
-    placeholder: 4.49.2
+    placeholder: e.g., instantsearch.js 4.49.2
   validations:
     required: true
-- type: dropdown
+- type: input
   id: os
   attributes:
     label: Operating system
-    multiple: false
-    options:
-      - Android
-      - iOS
-      - Linux
-      - macOS
-      - Windows
+    placeholder: e.g., macOS 13.1
 - type: input
-  id: os-version
-  attributes:
-    label: Operating system version
-- type: dropdown
   id: browser
   attributes:
     label: Browser
-    multiple: false
-    options:
-      - Chrome
-      - Firefox
-      - Internet Explorer
-      - Safari
-      - Other (specify in Current behavior)
-- type: input
-  id: browser-version
-  attributes:
-    label: Browser version
+    placeholder: e.g., Firefox 108.0.1
 - type: checkboxes
   attributes:
     label: Code of Conduct
