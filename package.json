@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "build": "lerna run build",
+    "build:ci": "lerna run build --ignore='example-*'",
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md packages/*/README.md",
     "website:storybook": "lerna run storybook:build",
     "website:examples": "yarn webpack --config scripts/website/webpack.config.js && lerna run website:examples",

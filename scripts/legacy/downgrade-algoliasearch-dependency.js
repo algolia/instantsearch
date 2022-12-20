@@ -6,7 +6,7 @@ const packageJsonPaths = [
   path.resolve(__dirname, '../../package.json'),
   ...JSON.parse(
     shell.exec(
-      'yarn run --silent lerna list --json --all --ignore="example-*"',
+      "yarn run --silent lerna list --json --all --ignore='example-*'",
       {
         silent: true,
       }
