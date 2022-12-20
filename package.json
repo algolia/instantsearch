@@ -8,6 +8,7 @@
     "examples/*/*",
     "packages/*",
     "tests/*",
+    "scripts/*",
     "specs"
   ],
   "scripts": {
@@ -15,7 +16,7 @@
     "build:ci": "lerna run build --ignore='example-*'",
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md packages/*/README.md packages/create-instantsearch-app/docs",
     "website:storybook": "lerna run storybook:build",
-    "website:examples": "yarn webpack --config scripts/website/webpack.config.js && lerna run website:examples",
+    "website:examples": "lerna run website:examples",
     "lint": "eslint --ext .js,.ts,.tsx . && lerna run lint",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc && lerna run type-check",
@@ -95,15 +96,12 @@
     "algoliasearch-v3": "npm:algoliasearch@3.35.0",
     "babel-eslint": "10.1.0",
     "babel-jest": "27.4.6",
-    "babel-loader": "8.2.2",
     "babel-plugin-dynamic-import-node": "2.3.0",
     "babel-plugin-inline-replace-variables": "1.3.1",
     "babel-plugin-polyfill-es-shims": "0.0.7",
     "babel-plugin-transform-react-pure-class-to-function": "1.0.1",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
     "bundlesize": "0.18.0",
-    "copy-webpack-plugin": "5.0.4",
-    "css-loader": "3.2.0",
     "doctoc": "1.4.0",
     "enzyme": "3.11.0",
     "eslint": "6.8.0",
@@ -119,9 +117,7 @@
     "eslint-plugin-react": "7.26.0",
     "eslint-plugin-react-hooks": "4.3.0",
     "eslint-plugin-wdio": "5.11.0",
-    "file-loader": "4.2.0",
     "glob": "7.1.4",
-    "html-webpack-plugin": "3.2.0",
     "instantsearch.css": "7.4.5",
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
@@ -132,7 +128,6 @@
     "jscodeshift": "0.7.0",
     "jsdom-global": "3.0.2",
     "lerna": "6.0.3",
-    "null-loader": "3.0.0",
     "places.js": "1.17.1",
     "prettier": "2.4.1",
     "prop-types": "15.6.2",
@@ -153,10 +148,7 @@
     "rollup-plugin-uglify": "6.0.4",
     "shelljs": "0.8.5",
     "shipjs": "0.25.0",
-    "style-loader": "1.0.0",
-    "typescript": "4.3.5",
-    "webpack": "4.40.2",
-    "webpack-cli": "3.3.7"
+    "typescript": "4.3.5"
   },
   "resolutions": {
     "brotli-size": "4.0.0"
