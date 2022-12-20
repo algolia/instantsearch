@@ -9,7 +9,7 @@ addParameters({
     theme: create({
       base: 'light',
       brandTitle: 'react-instantsearch',
-      brandUrl: 'https://github.com/algolia/react-instantsearch',
+      brandUrl: 'https://github.com/algolia/instantsearch.js',
     }),
   },
 });

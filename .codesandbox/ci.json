@@ -1,8 +1,8 @@
 {
   "sandboxes": [
     "instantsearchjs-es-template-pcw1k",
-    "github/algolia/create-instantsearch-app/tree/templates/react-instantsearch",
-    "/examples/hooks/default-theme"
+    "github/algolia/instantsearch.js/tree/templates/react-instantsearch",
+    "/examples/react-hooks/default-theme"
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
   "packages": ["packages/*"],

@@ -171,7 +171,7 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 
 [algolia-website]: https://www.algolia.com/?utm_medium=social-owned&utm_source=GitHub&utm_campaign=create-instantsearch-app%20repository
 [instantsearchjs-github]: https://github.com/algolia/instantsearch.js
-[react-instantsearch-github]: https://github.com/algolia/react-instantsearch
+[react-instantsearch-github]: https://github.com/algolia/instantsearch.js
 [vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
 [angular-instantsearch-github]: https://github.com/algolia/angular-instantsearch
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios

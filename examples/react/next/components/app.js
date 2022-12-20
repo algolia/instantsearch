@@ -52,7 +52,7 @@ export function App(props) {
         <Pagination />
         <div>
           See{' '}
-          <a href="https://github.com/algolia/react-instantsearch/tree/master/examples/next">
+          <a href="https://github.com/algolia/instantsearch.js/tree/master/examples/react/next">
             source code
           </a>{' '}
           on GitHub

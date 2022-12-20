@@ -2,12 +2,10 @@
 
 This example shows how to use React InstantSearch Hooks with React Native.
 
-[**Live example →**](https://codesandbox.io/s/github/algolia/react-instantsearch/tree/master/examples/hooks-react-native)
-
 ## Clone the example
 
 ```sh
-curl https://codeload.github.com/algolia/react-instantsearch/tar.gz/master | tar -xz --strip=2 react-instantsearch-master/examples/hooks-react-native
+curl https://codeload.github.com/algolia/instantsearch.js/tar.gz/master | tar -xz --strip=2 instantsearch.js-master/examples/react-hooks/react-native
 ```
 
 ## Start the example

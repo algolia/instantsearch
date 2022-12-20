@@ -54,7 +54,7 @@ export function Content({
   children,
   resultsView,
 }) {
-  const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${linkedStoryGroup}`;
+  const sourceCodeUrl = `https://github.com/algolia/instantsearch.js/tree/master/packages/react-instantsearch-dom/stories/${linkedStoryGroup}`;
   const playgroundLink = hasPlayground ? (
     <button
       onClick={linkTo(linkedStoryGroup, 'playground')}

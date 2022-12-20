@@ -3,7 +3,7 @@ This example shows how to perform a geo search using `react-instantsearch`.
 ## Clone the example
 
 ```
-curl https://codeload.github.com/algolia/react-instantsearch/tar.gz/master | tar -xz --strip=2 react-instantsearch-master/examples/geo-search
+curl https://codeload.github.com/algolia/instantsearch.js/tar.gz/master \| tar -xz --strip=2 instantsearch.js-master/examples/react/geo-search
 ```
 
 ## Start the example

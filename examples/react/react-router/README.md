@@ -4,7 +4,7 @@ if you are using react-router.
 ## Clone the example
 
 ```
-curl https://codeload.github.com/algolia/react-instantsearch/tar.gz/master | tar -xz --strip=2 react-instantsearch-master/examples/react-router
+curl https://codeload.github.com/algolia/instantsearch.js/tar.gz/master \| tar -xz --strip=2 instantsearch.js-master/examples/react/react-router
 ```
 
 ## Start the example

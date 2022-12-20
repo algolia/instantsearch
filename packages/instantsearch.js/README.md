@@ -190,7 +190,7 @@ InstantSearch.js is [MIT licensed][license-url].
 <!-- Links -->
 
 [algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository
-[react-instantsearch-github]: https://github.com/algolia/react-instantsearch/
+[react-instantsearch-github]: https://github.com/algolia/instantsearch.js/
 [vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios

@@ -51,7 +51,7 @@ const App = () => (
 ```
 
 <p align="center">
-  <a href="https://codesandbox.io/s/github/algolia/react-instantsearch/tree/master/examples/hooks" title="Edit on CodeSandbox">
+  <a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/master/examples/react-hooks/default-theme" title="Edit on CodeSandbox">
     <img alt="Edit on CodeSandbox" src="https://codesandbox.io/static/img/play-codesandbox.svg">
   </a>
 </p>
@@ -70,7 +70,7 @@ Start by [adding components][doc-getting-started] and tweaking the display. Once
 
 ## Contributing
 
-We welcome all contributors, from casual to regular. You are only one command away to start the developer environment, [read our CONTRIBUTING guide](https://github.com/algolia/react-instantsearch/blob/master/CONTRIBUTING.md).
+We welcome all contributors, from casual to regular. You are only one command away to start the developer environment, [read our CONTRIBUTING guide](https://github.com/algolia/instantsearch.js/blob/master/CONTRIBUTING.md).
 
 ## License
 
@@ -81,7 +81,7 @@ React InstantSearch Hooks is [MIT licensed](../../LICENSE).
 [doc]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/
 [doc-getting-started]: https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/
 [doc-guides]: https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react-hooks/
-[doc-playground]: https://codesandbox.io/s/github/algolia/react-instantsearch/tree/master/examples/hooks
+[doc-playground]: https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/react-hooks/default-theme
 [algolia-website]: https://www.algolia.com/
 [instantsearch.js-github]: https://github.com/algolia/instantsearch.js
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android

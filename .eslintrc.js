@@ -248,9 +248,9 @@
       },
     },
     {
-      files: ['examples/hooks/react-native/**/*.ts', 'examples/hooks/react-native/**/*.tsx'],
+      files: ['examples/react-hooks/react-native/**/*.ts', 'examples/react-hooks/react-native/**/*.tsx'],
       parserOptions: {
-        project: 'examples/hooks/react-native/tsconfig.json',
+        project: 'examples/react-hooks/react-native/tsconfig.json',
       },
     },
     {

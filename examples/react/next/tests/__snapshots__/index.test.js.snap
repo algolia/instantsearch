@@ -94,7 +94,7 @@ exports[`Next app recipes App renders without crashing 1`] = `
       See
        
       <a
-        href="https://github.com/algolia/react-instantsearch/tree/master/examples/next"
+        href="https://github.com/algolia/instantsearch.js/master/examples/react/next"
       >
         source code
       </a>
