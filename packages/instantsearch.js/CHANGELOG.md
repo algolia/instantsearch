@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.50.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.49.2...instantsearch.js@4.50.0) (2022-12-20)
+
+
+### Bug Fixes
+
+* ignore templates for tsc ([2c574a9](https://github.com/algolia/instantsearch.js/commit/2c574a9fa966934cd259662a04b24d5e1b1f3c1e))
+* simple state mapping `routeToState` function throw an error when state is `null` ([#5177](https://github.com/algolia/instantsearch.js/issues/5177)) ([8e61c4c](https://github.com/algolia/instantsearch.js/commit/8e61c4ca32d8f9649f24721a7c682e517919e55e))
+* **tests:** set concurrency to 1 ([34c6cc4](https://github.com/algolia/instantsearch.js/commit/34c6cc418028274d648a8712a62e5efeb4e2613b))
+* **tests:** use lerna to run tests ([eae255f](https://github.com/algolia/instantsearch.js/commit/eae255f278ba0c81591bf6d4aaa08a7d023269af))
+
+
+### Features
+
+* **cisa:** change URLs in templates + update template release scripts ([7ba7e63](https://github.com/algolia/instantsearch.js/commit/7ba7e633e1dd582557217196e0009af0582aaeca))
+
+
+
+
+
 ## 4.49.2 (2022-12-13)
 
 ### Bug Fixes

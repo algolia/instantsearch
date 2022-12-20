@@ -1,3 +1,30 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 6.3.0 (2022-12-20)
+
+
+### Bug Fixes
+
+* ignore templates for tsc ([2c574a9](https://github.com/algolia/instantsearch.js/commit/2c574a9fa966934cd259662a04b24d5e1b1f3c1e))
+* linting ([9712019](https://github.com/algolia/instantsearch.js/commit/9712019a242dc705505197018c4c4da23595e22e))
+* **tests:** merge jest config files and fix a test ([a376943](https://github.com/algolia/instantsearch.js/commit/a376943e189f488a198519c21c67dc7866cf4522))
+* **tests:** set concurrency to 1 ([34c6cc4](https://github.com/algolia/instantsearch.js/commit/34c6cc418028274d648a8712a62e5efeb4e2613b))
+* **tests:** use lerna to run tests ([eae255f](https://github.com/algolia/instantsearch.js/commit/eae255f278ba0c81591bf6d4aaa08a7d023269af))
+
+
+### Features
+
+* **api:** Create InstantSearch App v3 (algolia/create-instantsearch-app[#10](https://github.com/algolia/instantsearch.js/issues/10)) ([321d94e](https://github.com/algolia/instantsearch.js/commit/321d94e07d9c5ab915b2ffc8cf99c726a1ab569e)), closes [algolia/create-instantsearch-app#9](https://github.com/algolia/create-instantsearch-app/issues/9) [algolia/create-instantsearch-app#30](https://github.com/algolia/create-instantsearch-app/issues/30) [algolia/create-instantsearch-app#14](https://github.com/algolia/create-instantsearch-app/issues/14) [algolia/create-instantsearch-app#22](https://github.com/algolia/create-instantsearch-app/issues/22) [algolia/create-instantsearch-app#26](https://github.com/algolia/create-instantsearch-app/issues/26) [algolia/create-instantsearch-app#27](https://github.com/algolia/create-instantsearch-app/issues/27) [algolia/create-instantsearch-app#28](https://github.com/algolia/create-instantsearch-app/issues/28)
+* **cisa:** change URLs in templates + update template release scripts ([7ba7e63](https://github.com/algolia/instantsearch.js/commit/7ba7e633e1dd582557217196e0009af0582aaeca))
+* **templates:** Add React Native template (algolia/create-instantsearch-app[#53](https://github.com/algolia/instantsearch.js/issues/53)) ([3c2a85a](https://github.com/algolia/instantsearch.js/commit/3c2a85a61baa09c16d373422f17023a1052b783b))
+
+
+
+
+
 ## [6.2.1](https://github.com/algolia/create-instantsearch-app/compare/v6.2.0...v6.2.1) (2022-08-23)
 
 
@@ -576,6 +603,3 @@ the program now asks questions if some of the parameters are sent via arguments.
 * **boilerplate:** add server to vanilla instantsearch.js ([02eb820](https://github.com/algolia/create-instantsearch-app/commit/02eb820))
 * **boilerplate:** configuration of the new app by the script ([da6758c](https://github.com/algolia/create-instantsearch-app/commit/da6758c))
 * **cli:** added config handling ([00d0a40](https://github.com/algolia/create-instantsearch-app/commit/00d0a40))
-
-
-
