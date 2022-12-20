@@ -55,7 +55,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
           router: history({
             getLocation() {
               if (typeof window === 'undefined') {
-                return new URL(url!) as unknown as Location;
+                return new URL(url) as unknown as Location;
               }
 
               return window.location;
