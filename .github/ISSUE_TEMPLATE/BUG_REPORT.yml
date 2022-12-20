@@ -56,7 +56,8 @@ body:
   id: version
   attributes:
     label: Package version
-    placeholder: e.g., instantsearch.js 4.49.2
+    description: What library and version you're experiencing the issue with.
+    placeholder: e.g., instantsearch.js 4.49.2, react-instantsearch 6.38.1
   validations:
     required: true
 - type: input
