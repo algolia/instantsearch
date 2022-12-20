@@ -33,6 +33,9 @@ const config = {
       '<rootDir>/packages/react-instantsearch-$1/src/',
     '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',
   },
+  modulePathIgnorePatterns: [
+    '<rootDir>/packages/create-instantsearch-app/src/templates',
+  ],
   globals: {
     __DEV__: true,
   },
