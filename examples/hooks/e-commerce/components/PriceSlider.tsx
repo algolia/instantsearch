@@ -154,7 +154,7 @@ export function PriceSlider({
               <Handle
                 key={handle.id}
                 handle={handle}
-                domain={[min!, max!]}
+                domain={[range.min!, range.max!]}
                 getHandleProps={getHandleProps}
               />
             ))}
