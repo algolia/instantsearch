@@ -27,12 +27,11 @@ const config = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
-  transformIgnorePatterns: [
-    'node_modules/(?!(search-insights|instantsearch.js)/)',
-  ],
+  transformIgnorePatterns: ['node_modules/(?!(search-insights)/)'],
   moduleNameMapper: {
     '^react-instantsearch-(.*)$':
       '<rootDir>/packages/react-instantsearch-$1/src/',
+    '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',
   },
   globals: {
     __DEV__: true,
