@@ -9,15 +9,15 @@
     "build": "webpack --mode=production"
   },
   "devDependencies": {
-    "@babel/core": "7.4.5",
+    "@babel/core": "7.15.5",
     "@babel/polyfill": "7.4.4",
     "@babel/preset-env": "7.4.5",
     "@babel/preset-react": "7.0.0",
     "babel-core": "6.26.3",
     "babel-jest": "24.9.0",
-    "babel-loader": "8.0.6",
+    "babel-loader": "8.2.2",
     "nodemon": "1.19.3",
-    "webpack": "4.40.2",
+    "webpack": "4.41.5",
     "webpack-cli": "3.3.7",
     "webpack-node-externals": "1.7.2"
   },
