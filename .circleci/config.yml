@@ -37,6 +37,7 @@ workflows:
   ci:
     jobs:
       - build
+      - test metadata
       - lint:
           requires:
             - build
@@ -109,6 +110,16 @@ jobs:
             - packages/react-instantsearch-hooks/dist
             - packages/react-instantsearch-hooks-web/dist
             - packages/react-instantsearch-hooks-server/dist
+
+  test metadata:
+    <<: *defaults
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - run:
+          name: Test package versions
+          command: yarn run test:versions
 
   lint:
     <<: *defaults
