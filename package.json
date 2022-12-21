@@ -23,7 +23,7 @@
     "type-check:v3": "tsc --project tsconfig.v3.json",
     "test": "jest && lerna run test",
     "test:ci": "jest --maxWorkers=4 && lerna run test --concurrency=1",
-    "test:size": "bundlesize --config scripts/bundlesize.config.json",
+    "test:size": "bundlesize",
     "test:exports": "lerna run test:exports",
     "test:versions": "./tests/versions/index.js",
     "test:e2e": "yarn test:e2e:local",
