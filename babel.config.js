@@ -5,6 +5,7 @@ const isCJS = process.env.BABEL_ENV === 'cjs';
 const isES = process.env.BABEL_ENV === 'es';
 const isUMD = process.env.BABEL_ENV === 'umd';
 const isRollup = process.env.BABEL_ENV === 'rollup';
+const isWebpack = process.env.BABEL_ENV === 'webpack';
 
 const clean = (x) => x.filter(Boolean);
 
@@ -26,7 +27,7 @@ module.exports = (api) => {
 
   const buildPlugins = clean([
     '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-transform-react-constant-elements',
+    !isWebpack && '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
     wrapWarningWithDevCheck,
     isRollup && 'babel-plugin-transform-react-remove-prop-types',
