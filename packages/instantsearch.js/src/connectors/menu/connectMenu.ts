@@ -316,7 +316,7 @@ const connectMenu: MenuConnector = function connectMenu(
           createURL: _createURL,
           refine: _refine,
           sendEvent,
-          canRefine: items.length > 0,
+          canRefine: items ? (items.length > 0) : false,
           widgetParams,
           isShowingMore,
           toggleShowMore: cachedToggleShowMore,
