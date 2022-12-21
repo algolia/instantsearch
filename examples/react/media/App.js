@@ -1,5 +1,11 @@
 import React from 'react';
-import {
+import * as ReactInstantSearch from 'react-instantsearch-dom';
+import algoliasearch from 'algoliasearch/lite';
+import withURLSync from './URLSync';
+import './App.css';
+
+// Due to a bug in Webpack, we destructure here instead of using named imports
+const {
   InstantSearch,
   Hits,
   Stats,
@@ -9,10 +15,7 @@ import {
   Configure,
   connectSearchBox,
   connectRefinementList,
-} from 'react-instantsearch-dom';
-import algoliasearch from 'algoliasearch/lite';
-import withURLSync from './URLSync';
-import './App.css';
+} = ReactInstantSearch;
 
 const searchClient = algoliasearch(
   'latency',
