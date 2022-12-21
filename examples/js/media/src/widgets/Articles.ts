@@ -21,7 +21,13 @@ type Hit = {
 const getBlogPostUrl = (hit: Hit) =>
   `https://algolia.com/blog/${hit.primary_category.slug}/${hit.slug}`;
 
-function createHit(hit: Hit, { isHighlighted, refinedCategory }) {
+function createHit(
+  hit: Hit,
+  {
+    isHighlighted,
+    refinedCategory,
+  }: { isHighlighted: boolean; refinedCategory: string | undefined }
+) {
   const author = hit.coauthors && hit.coauthors[0];
   const date = formatDistanceToNow(hit.created_at_timestamp * 1000, {
     addSuffix: true,
@@ -100,7 +106,7 @@ function createHit(hit: Hit, { isHighlighted, refinedCategory }) {
   `;
 }
 
-function createPlaceholderHit({ isHighlighted }) {
+function createPlaceholderHit({ isHighlighted }: { isHighlighted: boolean }) {
   return `
 <li class="ais-InfiniteHits-item${
     isHighlighted ? ' infinite-hits-item--highlighted' : ''

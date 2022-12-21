@@ -1,31 +1,43 @@
+# Dependencies
 node_modules/
 
-.eslintcache
-.parcel-cache
-
-npm-debug.log
-yarn-error.log
-
-.DS_Store
-
-.env
-
-# Bundle build files
+# Build output
 /packages/instantsearch.js/dist
 /packages/instantsearch.js/cjs
 /packages/instantsearch.js/es
+dist/
+build/
 
 # Generated files
 /docs
-/website/examples
-/website/stories
-/website/specs
+/website/examples/*
+/website/stories/*
+/website/specs/*
 /storybook/dist/*
+!.gitkeep
 
 # Unneeded changelogs
 examples/*/*/CHANGELOG.md
 tests/*/CHANGELOG.md
 
-# Test output
+# Logs
+*.log
+
+# private files
+.env
+.idea/
+
+# Caches
+.eslintcache
+.parcel-cache
+
+# Test artifacts
+integration/screenshots/
 /junit
+/coverage
 junit.xml
+
+# User-specific files
+*.iml
+.DS_Store
+preview.zip

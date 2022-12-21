@@ -14,7 +14,7 @@ export const priceSlider = priceRangeSlider({
   attribute: 'price',
   pips: false,
   tooltips: {
-    format(value) {
+    format(value: number) {
       return `${Math.round(value).toLocaleString()}`;
     },
   },

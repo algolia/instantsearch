@@ -1,4 +1,3 @@
-/* eslint-disable import/no-commonjs */
 // original source: https://github.com/shimataro/babel-plugin-module-extension-resolver
 // To create proper ES Modules, the paths imported need to be fully-specified,
 // and can't be resolved like is possible with CommonJS. To have large compatibility
@@ -10,24 +9,46 @@ const path = require('path');
 
 const PLUGIN_NAME = 'babel-plugin-extension-resolver';
 
-const srcExtensions = ['.js', '.ts', '.tsx'];
-const dstExtension = '.js';
-
-module.exports = function extensionResolver(babel) {
-  const { types } = babel;
+module.exports = function extensionResolver(
+  { types },
+  {
+    modulesToResolve = [],
+    srcExtensions = ['.js', '.ts', '.tsx'],
+    dstExtension = '.js',
+  }
+) {
   return {
     name: PLUGIN_NAME,
     visitor: {
       Program: {
         enter: (programPath, state) => {
-          const { filename } = state;
+          const fileName = state.filename;
           programPath.traverse(
             {
               ImportDeclaration(declaration) {
-                handleImportDeclaration(types, declaration, filename);
+                const source = declaration.get('source');
+                replaceSource({
+                  types,
+                  source,
+                  fileName,
+                  modulesToResolve,
+                  srcExtensions,
+                  dstExtension,
+                });
               },
               ExportDeclaration(declaration) {
-                handleExportDeclaration(types, declaration, filename);
+                const source = declaration.get('source');
+                if (Array.isArray(source)) {
+                  return;
+                }
+                replaceSource({
+                  types,
+                  source,
+                  fileName,
+                  modulesToResolve,
+                  srcExtensions,
+                  dstExtension,
+                });
               },
             },
             state
@@ -38,44 +59,80 @@ module.exports = function extensionResolver(babel) {
   };
 };
 
-function handleImportDeclaration(types, declaration, fileName) {
-  const source = declaration.get('source');
-  replaceSource(types, source, fileName);
-}
-
-function handleExportDeclaration(types, declaration, fileName) {
-  const source = declaration.get('source');
-  if (Array.isArray(source)) {
-    return;
-  }
-  replaceSource(types, source, fileName);
-}
-
-function replaceSource(types, source, fileName) {
+function replaceSource({
+  types,
+  source,
+  fileName,
+  modulesToResolve,
+  srcExtensions,
+  dstExtension,
+}) {
   if (!source.isStringLiteral()) {
     return;
   }
   const sourcePath = source.node.value;
-  if (sourcePath[0] !== '.') {
+  if (
+    modulesToResolve.every((prefix) => !sourcePath.startsWith(`${prefix}/`)) &&
+    !isRelativeDependency(sourcePath)
+  ) {
     return;
   }
   const baseDir = path.dirname(fileName);
-  const resolvedPath = resolvePath(baseDir, sourcePath);
-  const normalizedPath = normalizePath(resolvedPath);
+
+  let normalizedPath;
+  if (isRelativeDependency(sourcePath)) {
+    const resolvedPath = resolveRelativePath(
+      baseDir,
+      sourcePath,
+      srcExtensions,
+      dstExtension
+    );
+    normalizedPath = normalizeRelativePath(resolvedPath);
+  } else {
+    const resolvedPath = resolveAbsolutePath(sourcePath);
+    normalizedPath = normalizeAbsolutePath(resolvedPath);
+  }
+
   source.replaceWith(types.stringLiteral(normalizedPath));
 }
 
-function resolvePath(baseDir, sourcePath) {
-  for (const title of [sourcePath, path.join(sourcePath, 'index')]) {
-    const resolvedPath = resolveExtension(baseDir, title);
-    if (resolvedPath !== null) {
-      return resolvedPath;
-    }
+function resolveRelativePath(baseDir, sourcePath, srcExtensions, dstExtension) {
+  let resolvedPath = resolveRelativeExtension(
+    baseDir,
+    sourcePath,
+    srcExtensions,
+    dstExtension
+  );
+
+  if (resolvedPath === null) {
+    resolvedPath = resolveRelativeExtension(
+      baseDir,
+      path.join(sourcePath, 'index'),
+      srcExtensions,
+      dstExtension
+    );
   }
-  throw new Error(`local import for "${sourcePath}" could not be resolved`);
+
+  if (resolvedPath === null) {
+    throw new Error(`import for "${sourcePath}" could not be resolved`);
+  }
+
+  return resolvedPath;
 }
 
-function resolveExtension(baseDir, sourcePath) {
+function resolveAbsolutePath(sourcePath) {
+  const fullPath = require.resolve(sourcePath);
+  const [, suffix] = fullPath.split(sourcePath);
+
+  return sourcePath + suffix;
+}
+
+function resolveRelativeExtension(
+  baseDir,
+  sourcePath,
+  srcExtensions,
+  dstExtension
+) {
   const absolutePath = path.join(baseDir, sourcePath);
   if (isFile(absolutePath)) {
     return sourcePath;
@@ -88,7 +145,7 @@ function resolveExtension(baseDir, sourcePath) {
   return null;
 }
 
-function normalizePath(originalPath) {
+function normalizeRelativePath(originalPath) {
   let normalizedPath = originalPath;
   if (path.sep === '\\') {
     normalizedPath = normalizedPath.split(path.sep).join('/');
@@ -99,10 +156,22 @@ function normalizePath(originalPath) {
   return normalizedPath;
 }
 
+function normalizeAbsolutePath(originalPath) {
+  let normalizedPath = originalPath;
+  if (path.sep === '\\') {
+    normalizedPath = normalizedPath.split(path.sep).join('/');
+  }
+  return normalizedPath;
+}
+
 function isFile(pathName) {
   try {
     return fs.statSync(pathName).isFile();
   } catch (err) {
     return false;
   }
+}
+
+function isRelativeDependency(sourcePath) {
+  return sourcePath[0] === '.';
 }

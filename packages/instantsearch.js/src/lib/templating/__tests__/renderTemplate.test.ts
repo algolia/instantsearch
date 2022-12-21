@@ -63,7 +63,14 @@ describe('renderTemplate', () => {
         <p>message</p> `,
         },
       })
-    ).toMatchInlineSnapshot(`"<h1> hello</h1> <p>message</p>"`);
+    ).toMatchInlineSnapshot(`
+      <h1>
+        hello
+      </h1>
+      <p>
+        message
+      </p>
+    `);
   });
 
   it('expect to throw when the template is not a function or a string', () => {

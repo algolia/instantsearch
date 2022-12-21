@@ -3,6 +3,8 @@
     "lib": ["es6", "dom", "dom.iterable"],
     "baseUrl": ".",
     "downlevelIteration": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": true
   }
 }

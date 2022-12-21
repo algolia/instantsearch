@@ -1,4 +1,3 @@
-/* eslint-disable import/no-commonjs */
 // @ts-check
 
 /** @type {import('@jest/types').Config.InitialOptions} */
@@ -8,10 +7,13 @@ const config = {
   testEnvironment: 'node',
   setupFilesAfterEnv: ['./tests/utils/setupTests.ts'],
   testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
     '<rootDir>/packages/*/node_modules/',
     '<rootDir>/packages/*/dist*',
     '<rootDir>/tests/e2e/*',
+    '<rootDir>/examples/',
     '<rootDir>/packages/create-instantsearch-app',
+    '/__utils__/',
   ],
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/cjs',
@@ -26,6 +28,14 @@ const config = {
     'jest-watch-typeahead/testname',
   ],
   transformIgnorePatterns: ['node_modules/(?!(search-insights)/)'],
+  moduleNameMapper: {
+    '^react-instantsearch-(.*)$':
+      '<rootDir>/packages/react-instantsearch-$1/src/',
+    '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',
+  },
+  modulePathIgnorePatterns: [
+    '<rootDir>/packages/create-instantsearch-app/src/templates',
+  ],
   globals: {
     __DEV__: true,
   },

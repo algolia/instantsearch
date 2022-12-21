@@ -254,7 +254,9 @@ export default function historyRouter<TRouteState = UiState>({
     // See:
     //   - https://github.com/ljharb/qs#parsing-arrays
     //   - https://www.algolia.com/doc/api-reference/api-parameters/maxValuesPerFacet/
-    return qsModule.parse(location.search.slice(1), { arrayLimit: 99 });
+    return qsModule.parse(location.search.slice(1), {
+      arrayLimit: 99,
+    }) as unknown as TRouteState;
   },
   writeDelay = 400,
   windowTitle,

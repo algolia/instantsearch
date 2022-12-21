@@ -1,3 +1,4 @@
+/* eslint-disable import/no-commonjs */
 const defineTest = require('jscodeshift/dist/testUtils').defineTest;
 
 defineTest(

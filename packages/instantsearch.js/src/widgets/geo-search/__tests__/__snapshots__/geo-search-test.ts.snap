@@ -1,6 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GeoSearch expect to render 1`] = `"<div class=\\"ais-GeoSearch\\"><div class=\\"ais-GeoSearch-map\\"></div><div class=\\"ais-GeoSearch-tree\\"></div></div>"`;
+exports[`GeoSearch expect to render 1`] = `
+<div class="ais-GeoSearch">
+  <div class="ais-GeoSearch-map">
+  </div>
+  <div class="ais-GeoSearch-tree">
+  </div>
+</div>
+`;
 
 exports[`GeoSearch expect to render 2`] = `
 {
@@ -43,7 +50,14 @@ exports[`GeoSearch expect to render 2`] = `
 }
 `;
 
-exports[`GeoSearch expect to render with custom classNames 1`] = `"<div class=\\"ais-GeoSearch custom-root\\"><div class=\\"ais-GeoSearch-map custom-map\\"></div><div class=\\"ais-GeoSearch-tree\\"></div></div>"`;
+exports[`GeoSearch expect to render with custom classNames 1`] = `
+<div class="ais-GeoSearch custom-root">
+  <div class="ais-GeoSearch-map custom-map">
+  </div>
+  <div class="ais-GeoSearch-tree">
+  </div>
+</div>
+`;
 
 exports[`GeoSearch expect to render with custom classNames 2`] = `
 {

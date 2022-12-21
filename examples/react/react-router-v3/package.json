@@ -1,0 +1,32 @@
+{
+  "name": "example-react-instantsearch-react-router-v3",
+  "version": "6.38.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "SKIP_PREFLIGHT_CHECK=true CI=true react-scripts test"
+  },
+  "devDependencies": {
+    "react-scripts": "3.1.2",
+    "react-test-renderer": "17.0.2"
+  },
+  "dependencies": {
+    "algoliasearch": "4.14.2",
+    "instantsearch.css": "7.4.5",
+    "prop-types": "15.6.0",
+    "qs": "6.8.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-fast-compare": "3.0.1",
+    "react-instantsearch-dom": "6.38.1",
+    "react-router": "3.2.1"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

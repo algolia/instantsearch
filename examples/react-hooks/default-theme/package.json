@@ -1,0 +1,19 @@
+{
+  "name": "example-react-instantsearch-hooks-default-theme",
+  "version": "6.38.1",
+  "private": true,
+  "scripts": {
+    "build": "parcel build index.html",
+    "start": "parcel index.html"
+  },
+  "dependencies": {
+    "algoliasearch": "4.14.2",
+    "instantsearch.js": "4.49.2",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-instantsearch-hooks-web": "6.38.1"
+  },
+  "devDependencies": {
+    "parcel": "2.8.0"
+  }
+}

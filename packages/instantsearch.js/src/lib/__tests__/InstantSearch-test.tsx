@@ -3,7 +3,7 @@
  */
 /** @jsx h */
 
-import type preact from 'preact';
+import type { RefObject } from 'preact';
 import { h, render, createRef } from 'preact';
 import originalHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
@@ -2637,7 +2637,7 @@ describe('onStateChange', () => {
 
     const searchBox = connectSearchBox<{
       queryTriggered: string;
-      buttonRef: preact.RefObject<any>;
+      buttonRef: RefObject<any>;
       container: HTMLElement;
     }>(({ refine, query, widgetParams }) => {
       render(

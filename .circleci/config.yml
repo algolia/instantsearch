@@ -37,6 +37,7 @@ workflows:
   ci:
     jobs:
       - build
+      - test metadata
       - lint:
           requires:
             - build
@@ -88,7 +89,7 @@ jobs:
       - run:
           name: Build library
           command: |
-            yarn run build --ignore='example-*'
+            yarn run build:ci
       - run:
           name: Test packages size
           command: yarn run test:size
@@ -101,6 +102,24 @@ jobs:
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
             - packages/instantsearch.js/dist
+            - packages/react-instantsearch/dist
+            - packages/react-instantsearch-core/dist
+            - packages/react-instantsearch-dom/dist
+            - packages/react-instantsearch-dom-maps/dist
+            - packages/react-instantsearch-native/dist
+            - packages/react-instantsearch-hooks/dist
+            - packages/react-instantsearch-hooks-web/dist
+            - packages/react-instantsearch-hooks-server/dist
+
+  test metadata:
+    <<: *defaults
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - run:
+          name: Test package versions
+          command: yarn run test:versions
 
   lint:
     <<: *defaults

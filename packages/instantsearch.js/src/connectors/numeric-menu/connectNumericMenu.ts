@@ -327,6 +327,8 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         const hasNoResults = results ? results.nbHits === 0 : true;
         const preparedItems = prepareItems(state);
         let allIsSelected = true;
+        // @TODO avoid for..of for polyfill reasons
+        // eslint-disable-next-line no-restricted-syntax
         for (const item of preparedItems) {
           if (item.isRefined && decodeURI(item.value) !== '{}') {
             allIsSelected = false;
