@@ -10,10 +10,11 @@ build/
 
 # Generated files
 /docs
-/website/examples
-/website/stories
-/website/specs
+/website/examples/*
+/website/stories/*
+/website/specs/*
 /storybook/dist/*
+!.gitkeep
 
 # Unneeded changelogs
 examples/*/*/CHANGELOG.md
