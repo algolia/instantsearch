@@ -118,7 +118,6 @@
     "eslint-plugin-react-hooks": "4.3.0",
     "eslint-plugin-wdio": "5.11.0",
     "glob": "7.1.4",
-    "instantsearch.css": "7.4.5",
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
     "jest-environment-jsdom": "27.1.0",
