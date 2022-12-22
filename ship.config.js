@@ -1,17 +1,13 @@
 const shell = require('shelljs');
 
 const packages = JSON.parse(
-  shell.exec('yarn run --silent lerna list --toposort --json --no-private', {
+  shell.exec('yarn run --silent lerna list --toposort --json', {
     silent: true,
   })
 );
 
 module.exports = {
-  shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
-    const { fix = 0 } = commitNumbersPerType;
-    if (releaseType === 'patch' && fix === 0) {
-      return false;
-    }
+  shouldPrepare: () => {
     return true;
   },
   getTagName: () =>
@@ -23,7 +19,8 @@ module.exports = {
     );
 
     return {
-      // This is used for shouldPrepare
+      // This version number is used for shouldPrepare.
+      // for it to be useful, we need to chang shipjs to accept an array of nextVersions
       nextVersion: packages[0].version,
     };
   },
