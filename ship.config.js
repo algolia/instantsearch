@@ -21,6 +21,8 @@ module.exports = {
     return {
       // This version number is used for shouldPrepare.
       // for it to be useful, we need to chang shipjs to accept an array of nextVersions
+      // @TODO: update this to packages.map(package => package.version) once it's supported in shipjs
+      // see https://github.com/algolia/shipjs/issues/986
       nextVersion: packages[0].version,
     };
   },
