@@ -19,6 +19,7 @@ build/
 # Unneeded changelogs
 examples/*/*/CHANGELOG.md
 tests/*/CHANGELOG.md
+scripts/*/CHANGELOG.md
 
 # Logs
 *.log
