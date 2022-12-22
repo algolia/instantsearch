@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "jest-image-snapshot": "2.12.0",
-    "shipjs": "0.24.4",
+    "shipjs": "0.25.0",
     "walk-sync": "2.0.2"
   }
 }
