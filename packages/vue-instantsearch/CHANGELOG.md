@@ -1,3 +1,17 @@
+# [4.7.0](https://github.com/algolia/vue-instantsearch/compare/v4.6.0...v4.7.0) (2022-12-21)
+
+
+### Bug Fixes
+
+* **state-results:** provide rendering variables for initial render ([#1156](https://github.com/algolia/vue-instantsearch/issues/1156)) ([0d718d5](https://github.com/algolia/vue-instantsearch/commit/0d718d5e622fba69c5d8f8f389ea9fae1f8893dc)), closes [#1154](https://github.com/algolia/vue-instantsearch/issues/1154)
+
+
+### Features
+
+* update PoweredBy component logo ([#1158](https://github.com/algolia/vue-instantsearch/issues/1158)) ([751ffda](https://github.com/algolia/vue-instantsearch/commit/751ffda63ef32328429d5b73ec46dc443e771605))
+
+
+
 # [4.6.0](https://github.com/algolia/vue-instantsearch/compare/v4.5.0...v4.6.0) (2022-10-04)
 
 
