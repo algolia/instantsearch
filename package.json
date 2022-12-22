@@ -118,7 +118,7 @@
     "eslint-plugin-react-hooks": "4.3.0",
     "eslint-plugin-wdio": "5.11.0",
     "glob": "7.1.4",
-    "is-plain-object": "5.0.0",
+
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
     "jest-environment-jsdom": "27.1.0",
