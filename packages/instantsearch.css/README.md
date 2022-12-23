@@ -64,22 +64,23 @@ InstantSearch.css is a living standard. This table tracks down the version imple
 | Vue InstantSearch         | 7       |
 | Angular InstantSearch     | 7       |
 
+
 ## Contributing
 
 We welcome all contributors, from casual to regular 💙
 
-- **Bug report**. Is something not working as expected? [Send a bug report](https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=Package%3A%20instantsearch.css).
-- **Feature request**. Would you like to add something to the library? [Send a feature request](https://github.com/algolia/instantsearch.js/issues/new?template=Feature_request.md&labels=Package%3A%20instantsearch.css).
-- **Documentation**. Did you find a typo in the doc? [Open an issue](https://github.com/algolia/instantsearch.js/issues/new?labels=Package%3A%20instantsearch.css) and we'll take care of it.
-- **Development**. If you don't know where to start, you can check the [open issues](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Package%3A+instantsearch.css%22).
+- **Bug report**. Is something not working as expected? [Send a bug report][contributing-bugreport].
+- **Feature request**. Would you like to add something to the library? [Send a feature request][contributing-featurerequest].
+- **Documentation**. Did you find a typo in the doc? [Open an issue][contributing-newissue] and we'll take care of it.
+- **Development**. If you don't know where to start, you can check the open issues that are [tagged easy][contributing-label-easy], the [bugs][contributing-label-bug] or [chores][contributing-label-chore].
 
-To start contributing to the code, you need to:
+To start contributing to code, you need to:
 
 1.  [Fork the project](https://help.github.com/articles/fork-a-repo/)
-2.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
-3.  Install the dependencies: `yarn`
+1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
+1.  Install the dependencies: `yarn`
 
-Please read [our contribution process](../../CONTRIBUTING.md) to learn more.
+Please read [our contribution process](https://github.com/algolia/instantsearch.js/blob/master/CONTRIBUTING.md) to learn more.
 
 ## License
 
@@ -95,3 +96,12 @@ InstantSearch.css is [MIT licensed][license-url].
 [website-svg]: https://img.shields.io/badge/website-instantsearchjs.netlify.app/specs-yellow?style=flat-square
 [website-url]: https://instantsearchjs.netlify.app/specs/
 [license-url]: LICENSE
+
+<!-- Links -->
+
+[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20InstantSearch.css
+[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage,Library%3A%20InstantSearch.css&title=Feature%20request%3A%20
+[contributing-newissue]: https://github.com/algolia/instantsearch.js/issues/new?labels=triage,Library%3A%20InstantSearch.css
+[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20InstantSearch.css%22
+[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20InstantSearch.css%22
+[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20InstantSearch.css%22
