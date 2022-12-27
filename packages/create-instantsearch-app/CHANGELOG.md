@@ -1,3 +1,28 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [6.3.0](https://github.com/algolia/instantsearch.js/compare/create-instantsearch-app@6.2.1...create-instantsearch-app@6.3.0) (2022-12-27)
+
+
+### Bug Fixes
+
+* ignore templates for tsc ([2c574a9](https://github.com/algolia/instantsearch.js/commit/2c574a9fa966934cd259662a04b24d5e1b1f3c1e))
+* linting ([9712019](https://github.com/algolia/instantsearch.js/commit/9712019a242dc705505197018c4c4da23595e22e))
+* **tests:** merge jest config files and fix a test ([a376943](https://github.com/algolia/instantsearch.js/commit/a376943e189f488a198519c21c67dc7866cf4522))
+* **tests:** set concurrency to 1 ([34c6cc4](https://github.com/algolia/instantsearch.js/commit/34c6cc418028274d648a8712a62e5efeb4e2613b))
+* **tests:** use lerna to run tests ([eae255f](https://github.com/algolia/instantsearch.js/commit/eae255f278ba0c81591bf6d4aaa08a7d023269af))
+
+
+### Features
+
+* **cisa:** change URLs in templates + update template release scripts ([7ba7e63](https://github.com/algolia/instantsearch.js/commit/7ba7e633e1dd582557217196e0009af0582aaeca))
+
+
+
+
+
 ## [6.2.1](https://github.com/algolia/create-instantsearch-app/compare/v6.2.0...v6.2.1) (2022-08-23)
 
 
@@ -576,6 +601,3 @@ the program now asks questions if some of the parameters are sent via arguments.
 * **boilerplate:** add server to vanilla instantsearch.js ([02eb820](https://github.com/algolia/create-instantsearch-app/commit/02eb820))
 * **boilerplate:** configuration of the new app by the script ([da6758c](https://github.com/algolia/create-instantsearch-app/commit/da6758c))
 * **cli:** added config handling ([00d0a40](https://github.com/algolia/create-instantsearch-app/commit/00d0a40))
-
-
-

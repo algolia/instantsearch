@@ -48,7 +48,7 @@
     "algoliasearch": ">= 3.1 < 5",
     "react": ">= 16.3.0 < 19",
     "react-dom": ">= 16.3.0 < 19",
-    "react-instantsearch-dom": "6.38.1"
+    "react-instantsearch-dom": "7.0.0"
   },
   "devDependencies": {
     "react-instantsearch-dom": "7.0.0"

@@ -1,3 +1,43 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 6.39.0 (2022-12-27)
+
+
+### Bug Fixes
+
+* **HierarchicalMenu:** show full hierarchical parent values (algolia/react-instantsearch[#3521](https://github.com/algolia/instantsearch.js/issues/3521)) ([e2b3ff0](https://github.com/algolia/instantsearch.js/commit/e2b3ff066e820dd80dfb87e05e000e072b9539b3))
+* **hooks-server:** import react server via an expression (algolia/react-instantsearch[#3515](https://github.com/algolia/instantsearch.js/issues/3515)) ([17a4b69](https://github.com/algolia/instantsearch.js/commit/17a4b693dcea6192c0b167345cc178cbf8670763)), closes [algolia/react-instantsearch#3512](https://github.com/algolia/react-instantsearch/issues/3512)
+* **hooks-server:** remove faulty UMD build (algolia/react-instantsearch[#3465](https://github.com/algolia/instantsearch.js/issues/3465)) ([d91ddc6](https://github.com/algolia/instantsearch.js/commit/d91ddc6682a0d8d341fd3007f27492e468c76730))
+* **hooks:** allow importing via require (algolia/react-instantsearch[#3257](https://github.com/algolia/instantsearch.js/issues/3257)) ([7d10586](https://github.com/algolia/instantsearch.js/commit/7d10586f8f21f18f19831b0f7780a3060664c72a))
+* **hooks:** mount widgets in SSR to retrieve HTML (algolia/react-instantsearch[#3518](https://github.com/algolia/instantsearch.js/issues/3518)) ([7ce2eb7](https://github.com/algolia/instantsearch.js/commit/7ce2eb76918f8f8080041813243b217adb0eeeea))
+* **instantsearch:** update dependency (algolia/react-instantsearch[#3557](https://github.com/algolia/instantsearch.js/issues/3557)) ([e43fa13](https://github.com/algolia/instantsearch.js/commit/e43fa131f257dbc8747f0d033fbf631cabbdb0fe)), closes [algolia/react-instantsearch#3534](https://github.com/algolia/react-instantsearch/issues/3534)
+* **packages:** correctly mark peer dependency (algolia/react-instantsearch[#3439](https://github.com/algolia/instantsearch.js/issues/3439)) ([a0bb179](https://github.com/algolia/instantsearch.js/commit/a0bb1790f7ff8bae500c0f17da5bd2cef77d0081)), closes [algolia/react-instantsearch#3428](https://github.com/algolia/react-instantsearch/issues/3428)
+* **types:** support React 18 types (algolia/react-instantsearch[#3481](https://github.com/algolia/instantsearch.js/issues/3481)) ([a730219](https://github.com/algolia/instantsearch.js/commit/a730219d539d97a5912ae66d7066bb8dbf6bd320))
+
+
+### Features
+
+* **core:** sort parameters, support client.search for sffv (algolia/react-instantsearch[#3528](https://github.com/algolia/instantsearch.js/issues/3528)) ([271afd1](https://github.com/algolia/instantsearch.js/commit/271afd198967d3d663c83c75c65a464821243f83))
+* **core:** update instantsearch and helper (algolia/react-instantsearch[#3539](https://github.com/algolia/instantsearch.js/issues/3539)) ([70547f9](https://github.com/algolia/instantsearch.js/commit/70547f9468a036b00ead2c480e6db1948c0594c3))
+* **dependencies:** update instantsearch and helper (algolia/react-instantsearch[#3622](https://github.com/algolia/instantsearch.js/issues/3622)) ([00d09be](https://github.com/algolia/instantsearch.js/commit/00d09be32a2f260fc9765df18e1db3cabcc22d85))
+* **getServerState:** allow users to inject renderToString (algolia/react-instantsearch[#3658](https://github.com/algolia/instantsearch.js/issues/3658)) ([cce66c5](https://github.com/algolia/instantsearch.js/commit/cce66c537e3903b875295c179d5df5d6a2ce4f55)), closes [algolia/react-instantsearch#3633](https://github.com/algolia/react-instantsearch/issues/3633) [algolia/react-instantsearch#3618](https://github.com/algolia/react-instantsearch/issues/3618) [vercel/next.jsalgolia/react-instantsearch#40067](https://github.com/vercel/next.jsalgolia/react-instantsearch/issues/40067)
+* **hooks-server:** load data twice in the case of dynamic widget usage (algolia/react-instantsearch[#3259](https://github.com/algolia/instantsearch.js/issues/3259)) ([c85ed3e](https://github.com/algolia/instantsearch.js/commit/c85ed3e831fbe43bf6aab45831114d85b06a01aa))
+* **hooks-server:** support import from React 18 (algolia/react-instantsearch[#3464](https://github.com/algolia/instantsearch.js/issues/3464)) ([0589c7c](https://github.com/algolia/instantsearch.js/commit/0589c7c6b6fbebb217452966bbffce8461538be0)), closes [algolia/react-instantsearch#3453](https://github.com/algolia/react-instantsearch/issues/3453)
+* **hooks:** allow useHits and useInfiniteHit to be generic (algolia/react-instantsearch[#3364](https://github.com/algolia/instantsearch.js/issues/3364)) ([a366282](https://github.com/algolia/instantsearch.js/commit/a36628237b17d68fa0e28cb7a247ce554028a492))
+* **hooks:** bundle as es-module (algolia/react-instantsearch[#3232](https://github.com/algolia/instantsearch.js/issues/3232)) ([c847db4](https://github.com/algolia/instantsearch.js/commit/c847db461c7207006abc32217223c56b0f709862))
+* **hooks:** implement InfiniteHits component (algolia/react-instantsearch[#3366](https://github.com/algolia/instantsearch.js/issues/3366)) ([0b41e66](https://github.com/algolia/instantsearch.js/commit/0b41e66480d730ff2fabfb651ece1b389c077057))
+* **hooks:** introduce SSR support (algolia/react-instantsearch[#3221](https://github.com/algolia/instantsearch.js/issues/3221)) ([f9dbb6f](https://github.com/algolia/instantsearch.js/commit/f9dbb6ffbbf48601e1adfc66129444c209b16c3b))
+* **hooks:** mark initial results as "artificial" (algolia/react-instantsearch[#3384](https://github.com/algolia/instantsearch.js/issues/3384)) ([75a501c](https://github.com/algolia/instantsearch.js/commit/75a501cfbf7462774a46277473e16209293e17ab))
+* **hooks:** upgrade to InstantSearch.js 4.41.0 (algolia/react-instantsearch[#3502](https://github.com/algolia/instantsearch.js/issues/3502)) ([a6a94b3](https://github.com/algolia/instantsearch.js/commit/a6a94b3efee7e0c4b0bc4a528b68a8e159843e35))
+* **useInstantSearch:** expose status & error (algolia/react-instantsearch[#3645](https://github.com/algolia/instantsearch.js/issues/3645)) ([4ddfaa6](https://github.com/algolia/instantsearch.js/commit/4ddfaa692747dfb68b11906827ebf5e2d3548df2))
+
+
+
+
+
 ## [6.38.1](https://github.com/algolia/react-instantsearch/compare/v6.38.0...v6.38.1) (2022-11-08)
 
 
