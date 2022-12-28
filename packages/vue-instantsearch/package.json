@@ -30,7 +30,7 @@
     "prebuild": "rm -rf vue2 vue3",
     "build": "rollup -c",
     "storybook": "start-storybook -p 6006 -c .storybook",
-    "website:storybook": "build-storybook -c .storybook -o ../../website/stories/vue",
+    "storybook:build": "build-storybook -c .storybook -o ../../website/stories/vue",
     "test:exports": "node ./test/module/vue2/is-es-module.mjs && node ./test/module/vue2/is-cjs-module.cjs",
     "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs"
   },
