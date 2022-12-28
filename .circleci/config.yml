@@ -170,6 +170,9 @@ jobs:
       - run:
           name: Vue Unit tests
           command: yarn run jest packages/vue-instantsearch
+      - run:
+          name: Vue 3 Test Exports
+          command: yarn run test:exports:vue3
 
   unit tests:
     <<: *defaults
