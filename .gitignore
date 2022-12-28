@@ -5,6 +5,8 @@ node_modules/
 /packages/instantsearch.js/dist
 /packages/instantsearch.js/cjs
 /packages/instantsearch.js/es
+/packages/vue-instantsearch/vue2
+/packages/vue-instantsearch/vue3
 dist/
 build/
 
@@ -30,6 +32,7 @@ tests/*/CHANGELOG.md
 # Caches
 .eslintcache
 .parcel-cache
+.nuxt
 
 # Test artifacts
 integration/screenshots/

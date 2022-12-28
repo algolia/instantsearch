@@ -1,0 +1,503 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`custom default render renders correctly 1`] = `
+<div class="ais-Menu">
+  <div class>
+    <ol>
+      <li>
+        <a>
+          Apple - 50
+        </a>
+      </li>
+      <li>
+        <a>
+          Samsung - 25
+        </a>
+      </li>
+      <li>
+        <a>
+          Microsoft - 12
+        </a>
+      </li>
+    </ol>
+    <button disabled="disabled">
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`custom default render renders correctly with a disabled show more button 1`] = `
+<div class="ais-Menu">
+  <div class>
+    <ol>
+      <li>
+        <a>
+          Apple - 50
+        </a>
+      </li>
+      <li>
+        <a>
+          Samsung - 25
+        </a>
+      </li>
+      <li>
+        <a>
+          Microsoft - 12
+        </a>
+      </li>
+    </ol>
+    <button disabled="disabled">
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`custom default render renders correctly with a show more button toggled 1`] = `
+<div class="ais-Menu">
+  <div class>
+    <ol>
+      <li>
+        <a>
+          Apple - 50
+        </a>
+      </li>
+      <li>
+        <a>
+          Samsung - 25
+        </a>
+      </li>
+      <li>
+        <a>
+          Microsoft - 12
+        </a>
+      </li>
+    </ol>
+    <button disabled="disabled">
+      Show less
+    </button>
+  </div>
+</div>
+`;
+
+exports[`custom default render renders correctly with an URL for the href 1`] = `
+<div class="ais-Menu">
+  <div class>
+    <ol>
+      <li>
+        <a href="/brand/Apple">
+          Apple - 50
+        </a>
+      </li>
+      <li>
+        <a href="/brand/Samsung">
+          Samsung - 25
+        </a>
+      </li>
+      <li>
+        <a href="/brand/Microsoft">
+          Microsoft - 12
+        </a>
+      </li>
+    </ol>
+    <button disabled="disabled">
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`custom default render renders correctly without refinement 1`] = `
+<div class="ais-Menu ais-Menu--noRefinement">
+  <div class="no-refinement">
+    <ol>
+    </ol>
+    <button disabled="disabled">
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`custom showMoreLabel render renders correctly with a custom show more label 1`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
+  >
+    <span>
+      Voir plus
+    </span>
+  </button>
+</div>
+`;
+
+exports[`custom showMoreLabel render renders correctly with a custom show more label toggled 1`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
+  >
+    <span>
+      Voir moins
+    </span>
+  </button>
+</div>
+`;
+
+exports[`default render renders correctly 1`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`default render renders correctly with a URL for the href 1`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link"
+         href="/brand/Apple"
+      >
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link"
+         href="/brand/Samsung"
+      >
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link"
+         href="/brand/Microsoft"
+      >
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`default render renders correctly with a disabled show more button 1`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
+  >
+    Show more
+  </button>
+</div>
+`;
+
+exports[`default render renders correctly with a selected item 2`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item ais-Menu-item--selected">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`default render renders correctly with show more button 1`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
+  >
+    Show more
+  </button>
+</div>
+`;
+
+exports[`default render renders correctly with show more button toggled 1`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled"
+          disabled="disabled"
+  >
+    Show less
+  </button>
+</div>
+`;
+
+exports[`default render renders correctly without a show more button (canRefine) 1`] = `
+<div class="ais-Menu ais-Menu--noRefinement">
+  <ul class="ais-Menu-list">
+  </ul>
+</div>
+`;
+
+exports[`default render renders correctly without a show more button (showMore) 1`] = `
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Apple
+        </span>
+        <span class="ais-Menu-count">
+          50
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Samsung
+        </span>
+        <span class="ais-Menu-count">
+          25
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          Microsoft
+        </span>
+        <span class="ais-Menu-count">
+          12
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`default render renders correctly without refinement 1`] = `
+<div class="ais-Menu ais-Menu--noRefinement">
+  <ul class="ais-Menu-list">
+  </ul>
+</div>
+`;

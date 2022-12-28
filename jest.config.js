@@ -27,7 +27,14 @@ const config = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
-  transformIgnorePatterns: ['node_modules/(?!(search-insights)/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(search-insights|vue-json-tree)/)',
+  ],
+  transform: {
+    '^.+\\.(j|t)sx?$': 'babel-jest',
+    '^.+\\.vue$': '@vue/vue2-jest',
+  },
+  moduleFileExtensions: ['tsx', 'ts', 'js', 'vue'],
   moduleNameMapper: {
     '^react-instantsearch-(.*)$':
       '<rootDir>/packages/react-instantsearch-$1/src/',

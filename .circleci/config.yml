@@ -47,6 +47,9 @@ workflows:
       - legacy algoliasearch:
           requires:
             - build
+      - vue v3:
+          requires:
+            - build
       - examples:
           requires:
             - build
@@ -151,6 +154,22 @@ jobs:
       - run:
           name: Type Checking
           command: yarn run type-check:v3
+
+  vue v3:
+    <<: *defaults
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - run:
+          name: Update dependencies
+          command: |
+            ./packages/vue-instantsearch/scripts/test-vue3.sh
+      - run:
+          name: Vue Unit tests
+          command: yarn run jest packages/vue-instantsearch
 
   unit tests:
     <<: *defaults

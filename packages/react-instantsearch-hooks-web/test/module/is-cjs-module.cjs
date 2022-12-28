@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, no-console */
+/* eslint-disable no-console */
 
 const assert = require('assert');
 
@@ -6,4 +6,4 @@ const ReactInstantSearchHooksWeb = require('react-instantsearch-hooks-web');
 
 assert.ok(ReactInstantSearchHooksWeb);
 
-console.log('react-instantsearch-hooks-web is a CJS module');
+console.log('react-instantsearch-hooks-web is valid CJS');

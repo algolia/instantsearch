@@ -1,0 +1,210 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`custom render gives all relevant info to scoped slot 1`] = `
+<div class="ais-CurrentRefinements">
+  <div>
+    <ul>
+      <li>
+        brands:
+        <button>
+          apple ╳
+        </button>
+      </li>
+      <li>
+        colors:
+        <button>
+          red ╳
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`custom render item slot gives all relevant info to scoped slot 1`] = `
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <div>
+        brands:
+        <button>
+          apple
+        </button>
+      </div>
+    </li>
+    <li class="ais-CurrentRefinements-item">
+      <div>
+        colors:
+        <button>
+          red
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`disjunctive facet renders correct html 1`] = `
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        CustomDisjunctiveFacet:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          val1
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`facet exclude renders correct html 1`] = `
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        CustomExcludeFacet:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          val1
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`facet renders correct html 1`] = `
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        CustomFacet:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          val1
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`hierarchical facet renders correct html 1`] = `
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        CustomHierarchicalFacet:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          val1
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`numeric filters renders correct html 1`] = `
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        CustomNumericFilter:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          = val1
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          ≤ val2
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          ≥ val3
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`query renders correct html 1`] = `
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        Query:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          <q>
+            search1
+          </q>
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`renders correctly (empty) 1`] = `
+<div class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement">
+  <ul class="ais-CurrentRefinements-list">
+  </ul>
+</div>
+`;
+
+exports[`tag renders correct html 1`] = `
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        _tags:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          tag1
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+</div>
+`;

@@ -1,4 +1,4 @@
-/* eslint-disable no-console, import/extensions */
+/* eslint-disable no-console */
 import assert from 'assert';
 
 import instantsearch from 'instantsearch.js/es/index.js';

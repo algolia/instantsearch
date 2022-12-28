@@ -1,0 +1,354 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div class="ais-Template">
+  <button class="ais-Template-button">
+    example refine
+  </button>
+  <span class="json-tree json-tree-root">
+    <span class="json-tree-deep">
+      <span class="json-tree-row json-tree-expando">
+        <span class="json-tree-indent">
+          &nbsp;
+        </span>
+        <span class="json-tree-sign">
+          -
+        </span>
+        <span class="json-tree-indent">
+          &nbsp;
+        </span>
+        <span class="json-tree-open">
+          {
+        </span>
+        <span class="json-tree-collapsed"
+              style="display: none;"
+        >
+          &nbsp;/*&nbsp;1 item&nbsp;*/&nbsp;
+        </span>
+        <span class="json-tree-close"
+              style="display: none;"
+        >
+          }
+        </span>
+        <span class="json-tree-comma"
+              style="display: none;"
+        >
+          ,
+        </span>
+        <span class="json-tree-indent">
+          &nbsp;
+        </span>
+      </span>
+      <span class="json-tree-deeper">
+        <span class="json-tree">
+          <span class="json-tree-deep">
+            <span class="json-tree-row json-tree-expando">
+              <span class="json-tree-indent">
+                &nbsp;
+              </span>
+              <span class="json-tree-sign">
+                -
+              </span>
+              <span class="json-tree-indent">
+                &nbsp;
+              </span>
+              <span class="json-tree-indent">
+                &nbsp;
+              </span>
+              <span class="json-tree-indent">
+                &nbsp;
+              </span>
+              <span class="json-tree-key">
+                "hits"
+              </span>
+              <span class="json-tree-colon">
+                :&nbsp;
+              </span>
+              <span class="json-tree-open">
+                [
+              </span>
+              <span class="json-tree-collapsed"
+                    style="display: none;"
+              >
+                &nbsp;/*&nbsp;6 items&nbsp;*/&nbsp;
+              </span>
+              <span class="json-tree-close"
+                    style="display: none;"
+              >
+                ]
+              </span>
+              <span class="json-tree-comma"
+                    style="display: none;"
+              >
+                ,
+              </span>
+              <span class="json-tree-indent">
+                &nbsp;
+              </span>
+            </span>
+            <span class="json-tree-deeper">
+              <span class="json-tree">
+                <span class="json-tree-row">
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;yo&quot;"
+                  >
+                    "yo"
+                  </span>
+                  <span class="json-tree-comma">
+                    ,
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                </span>
+              </span>
+              <span class="json-tree">
+                <span class="json-tree-row">
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;how&quot;"
+                  >
+                    "how"
+                  </span>
+                  <span class="json-tree-comma">
+                    ,
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                </span>
+              </span>
+              <span class="json-tree">
+                <span class="json-tree-row">
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;are&quot;"
+                  >
+                    "are"
+                  </span>
+                  <span class="json-tree-comma">
+                    ,
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                </span>
+              </span>
+              <span class="json-tree">
+                <span class="json-tree-row">
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;you&quot;"
+                  >
+                    "you"
+                  </span>
+                  <span class="json-tree-comma">
+                    ,
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                </span>
+              </span>
+              <span class="json-tree">
+                <span class="json-tree-row">
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;doing&quot;"
+                  >
+                    "doing"
+                  </span>
+                  <span class="json-tree-comma">
+                    ,
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                </span>
+              </span>
+              <span class="json-tree">
+                <span class="json-tree-row">
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                  <span class="json-tree-value json-tree-value-string"
+                        title="&quot;?&quot;"
+                  >
+                    "?"
+                  </span>
+                  <span class="json-tree-indent">
+                    &nbsp;
+                  </span>
+                </span>
+              </span>
+            </span>
+            <span class="json-tree-row">
+              <span class="json-tree-ending">
+                <span class="json-tree-indent">
+                  &nbsp;
+                </span>
+                <span class="json-tree-indent">
+                  &nbsp;
+                </span>
+                <span class="json-tree-indent">
+                  &nbsp;
+                </span>
+                <span class="json-tree-indent">
+                  &nbsp;
+                </span>
+                <span class="json-tree-indent">
+                  &nbsp;
+                </span>
+                <span class="json-tree-close">
+                  ]
+                </span>
+                <span class="json-tree-indent">
+                  &nbsp;
+                </span>
+              </span>
+            </span>
+          </span>
+        </span>
+      </span>
+      <span class="json-tree-row">
+        <span class="json-tree-ending">
+          <span class="json-tree-indent">
+            &nbsp;
+          </span>
+          <span class="json-tree-indent">
+            &nbsp;
+          </span>
+          <span class="json-tree-indent">
+            &nbsp;
+          </span>
+          <span class="json-tree-close">
+            }
+          </span>
+          <span class="json-tree-indent">
+            &nbsp;
+          </span>
+        </span>
+      </span>
+    </span>
+  </span>
+</div>
+`;

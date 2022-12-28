@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rendering renders default template correctly 1`] = `
+<div class="ais-VoiceSearch">
+  <button class="ais-VoiceSearch-button"
+          title="Search by voice"
+          type="button"
+  >
+    <svg fill="none"
+         height="16"
+         stroke="currentColor"
+         strokelinecap="round"
+         strokelinejoin="round"
+         strokewidth="2"
+         viewbox="0 0 24 24"
+         width="16"
+         xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
+            fill="none"
+      >
+      </path>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2">
+      </path>
+      <line x1="12"
+            x2="12"
+            y1="19"
+            y2="23"
+      >
+      </line>
+      <line x1="8"
+            x2="16"
+            y1="23"
+            y2="23"
+      >
+      </line>
+    </svg>
+  </button>
+  <div class="ais-VoiceSearch-status">
+    <p>
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Rendering with custom template for status 1`] = `
+<div class="ais-VoiceSearch-status">
+  <div>
+    <p>
+      status: recognizing
+    </p>
+    <p>
+      errorCode:
+    </p>
+    <p>
+      isListening: true
+    </p>
+    <p>
+      transcript: Hello
+    </p>
+    <p>
+      isSpeechFinal: false
+    </p>
+    <p>
+      isBrowserSupported: true
+    </p>
+  </div>
+</div>
+`;

@@ -1,7 +1,7 @@
 /**
  * @type {import('eslint').Linter.Config}
  */
- const config = {
+const config = {
   extends: [
     'algolia',
     'algolia/jest',
@@ -110,7 +110,8 @@
     'no-restricted-syntax': [
       'error',
       {
-        selector: 'AssignmentExpression MemberExpression Identifier[name=defaultProps]',
+        selector:
+          'AssignmentExpression MemberExpression Identifier[name=defaultProps]',
         message: 'defaultProps are not allowed, use function defaults instead.',
       },
     ],
@@ -248,7 +249,10 @@
       },
     },
     {
-      files: ['examples/react-hooks/react-native/**/*.ts', 'examples/react-hooks/react-native/**/*.tsx'],
+      files: [
+        'examples/react-hooks/react-native/**/*.ts',
+        'examples/react-hooks/react-native/**/*.tsx',
+      ],
       parserOptions: {
         project: 'examples/react-hooks/react-native/tsconfig.json',
       },
@@ -288,6 +292,13 @@
             message: 'Use `safelyRunOnBrowser()` to access `window`.',
           },
         ],
+      },
+    },
+    {
+      files: ['packages/*/test/module/**/*.cjs'],
+      rules: {
+        'import/extensions': ['error', 'always'],
+        'import/no-commonjs': ['error', { allowRequire: true }],
       },
     },
     {
@@ -336,7 +347,10 @@
     },
     {
       // `create-instantsearch-app` does not use TypeScript, this rule makes linting totally fails and asks for a tsconfig.json file which we do not have.
-      files: ['packages/create-instantsearch-app/**/*.js'],
+      files: [
+        'packages/create-instantsearch-app/**/*.js',
+        'packages/vue-instantsearch/**/*.js',
+      ],
       rules: {
         '@typescript-eslint/naming-convention': 'off',
       },

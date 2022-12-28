@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`custom default render renders correctly 1`] = `
+<div class="ais-ToggleRefinement">
+  <a class>
+    <span>
+      free_shipping
+    </span>
+    <span>
+      (is disabled)
+    </span>
+  </a>
+</div>
+`;
+
+exports[`custom default render renders correctly with a URL for the href 1`] = `
+<div class="ais-ToggleRefinement">
+  <a class
+     href="/free-shipping"
+  >
+    <span>
+      free_shipping
+    </span>
+    <span>
+      (is disabled)
+    </span>
+  </a>
+</div>
+`;
+
+exports[`custom default render renders correctly with the value selected 1`] = `
+<div class="ais-ToggleRefinement">
+  <a class>
+    <span>
+      free_shipping
+    </span>
+    <span>
+      (is enabled)
+    </span>
+  </a>
+</div>
+`;
+
+exports[`custom default render renders correctly without refinement 1`] = `
+<div class="ais-ToggleRefinement ais-ToggleRefinement--noRefinement">
+  <a class="noRefinement">
+    <span>
+      free_shipping
+    </span>
+    <span>
+      (is disabled)
+    </span>
+  </a>
+</div>
+`;
+
+exports[`default render renders correctly 1`] = `
+<div class="ais-ToggleRefinement">
+  <label class="ais-ToggleRefinement-label">
+    <input class="ais-ToggleRefinement-checkbox"
+           name="free_shipping"
+           type="checkbox"
+           value="true"
+    >
+    <span class="ais-ToggleRefinement-labelText">
+      Free Shipping
+    </span>
+    <span class="ais-ToggleRefinement-count">
+      100
+    </span>
+  </label>
+</div>
+`;
+
+exports[`default render renders correctly without refinement (with 0) 1`] = `
+<div class="ais-ToggleRefinement ais-ToggleRefinement--noRefinement">
+  <label class="ais-ToggleRefinement-label">
+    <input class="ais-ToggleRefinement-checkbox"
+           name="free_shipping"
+           type="checkbox"
+           value="true"
+    >
+    <span class="ais-ToggleRefinement-labelText">
+      Free Shipping
+    </span>
+    <span class="ais-ToggleRefinement-count">
+      0
+    </span>
+  </label>
+</div>
+`;
+
+exports[`default render renders correctly without refinement (with null) 1`] = `
+<div class="ais-ToggleRefinement ais-ToggleRefinement--noRefinement">
+  <label class="ais-ToggleRefinement-label">
+    <input class="ais-ToggleRefinement-checkbox"
+           name="free_shipping"
+           type="checkbox"
+           value="true"
+    >
+    <span class="ais-ToggleRefinement-labelText">
+      Free Shipping
+    </span>
+  </label>
+</div>
+`;

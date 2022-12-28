@@ -1,0 +1,131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`custom default render renders correctly 1`] = `
+<div class="ais-MenuSelect">
+  <select>
+    <option value>
+      All
+    </option>
+    <option value="Apple">
+      APPLE
+    </option>
+    <option value="Samsung">
+      SAMSUNG
+    </option>
+    <option value="Sony">
+      SONY
+    </option>
+  </select>
+</div>
+`;
+
+exports[`custom default render renders correctly without refinements 1`] = `
+<div class="ais-MenuSelect ais-MenuSelect--noRefinement">
+  <select disabled="disabled">
+    <option value>
+      All
+    </option>
+  </select>
+</div>
+`;
+
+exports[`custom item slot renders correctly 1`] = `
+<div class="ais-MenuSelect">
+  <select class="ais-MenuSelect-select">
+    <option class="ais-MenuSelect-option"
+            value
+    >
+      See all
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Apple"
+    >
+      <span>
+        APPLE
+      </span>
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Samsung"
+    >
+      <span>
+        SAMSUNG
+      </span>
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Sony"
+    >
+      <span>
+        SONY
+      </span>
+    </option>
+  </select>
+</div>
+`;
+
+exports[`default render renders correctly 1`] = `
+<div class="ais-MenuSelect">
+  <select class="ais-MenuSelect-select">
+    <option class="ais-MenuSelect-option"
+            value
+    >
+      See all
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Apple"
+    >
+      Apple (50)
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Samsung"
+    >
+      Samsung (20)
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Sony"
+    >
+      Sony (15)
+    </option>
+  </select>
+</div>
+`;
+
+exports[`default render renders correctly with custom label 1`] = `
+<div class="ais-MenuSelect">
+  <select class="ais-MenuSelect-select">
+    <option class="ais-MenuSelect-option"
+            value
+    >
+      <span>
+        None
+      </span>
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Apple"
+    >
+      Apple (50)
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Samsung"
+    >
+      Samsung (20)
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Sony"
+    >
+      Sony (15)
+    </option>
+  </select>
+</div>
+`;
+
+exports[`default render renders correctly without refinements 1`] = `
+<div class="ais-MenuSelect ais-MenuSelect--noRefinement">
+  <select class="ais-MenuSelect-select">
+    <option class="ais-MenuSelect-option"
+            value
+    >
+      See all
+    </option>
+  </select>
+</div>
+`;
