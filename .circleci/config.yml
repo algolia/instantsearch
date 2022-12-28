@@ -113,6 +113,8 @@ jobs:
             - packages/react-instantsearch-hooks/dist
             - packages/react-instantsearch-hooks-web/dist
             - packages/react-instantsearch-hooks-server/dist
+            - packages/vue-instantsearch/vue2
+            - packages/vue-instantsearch/vue3
 
   test metadata:
     <<: *defaults
