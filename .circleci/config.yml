@@ -171,7 +171,7 @@ jobs:
             ./packages/vue-instantsearch/scripts/test-vue3.sh
       - run:
           name: Vue Unit tests
-          command: yarn run jest packages/vue-instantsearch
+          command: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4
       - run:
           name: Vue 3 Test Exports
           command: yarn run test:exports:vue3
