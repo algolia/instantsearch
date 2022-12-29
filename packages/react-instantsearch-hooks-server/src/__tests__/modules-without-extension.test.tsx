@@ -13,7 +13,6 @@ import {
 } from 'react-instantsearch-hooks';
 
 import { createSearchClient } from '../../../../tests/mock';
-import { getServerState } from '../getServerState';
 
 import type {
   InstantSearchServerState,
@@ -105,6 +104,10 @@ jest.mock(
   },
   { virtual: true }
 );
+
+// We are ensuring this line gets imported _after_ the mocks
+// eslint-disable-next-line import/order
+import { getServerState } from '../getServerState';
 
 describe('ReactDOMServer imports', () => {
   test('works when the import with no extension exists', async () => {
