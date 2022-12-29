@@ -172,9 +172,11 @@ jobs:
       - run:
           name: Vue Unit tests
           command: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4
+      - store_test_results:
+          path: junit/jest/
       - run:
           name: Vue 3 Test Exports
-          command: yarn run test:exports:vue3
+          command: yarn workspace vue-instantsearch run test:exports:vue3
 
   unit tests:
     <<: *defaults
