@@ -54,7 +54,8 @@
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
-    "@vue/compiler-sfc": "3.0.11",
+    "@vue/compiler-sfc": "3.1.2",
+    "@vue/server-renderer": "3.1.2",
     "@vue/test-utils": "1.3.0",
     "@vue/test-utils2": "npm:@vue/test-utils@2.0.0-rc.11",
     "algoliasearch": "4.14.3",
@@ -73,7 +74,6 @@
     "rollup-plugin-vue3": "npm:rollup-plugin-vue@6.0.0",
     "vue": "2.7.14",
     "vue-autosuggest": "1.8.1",
-    "vue-json-tree": "0.3.3",
     "vue-loader": "14.2.2",
     "vue-router": "3.4.3",
     "vue-router4": "npm:vue-router@4.0.0",

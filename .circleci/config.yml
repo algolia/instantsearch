@@ -168,7 +168,7 @@ jobs:
       - run:
           name: Update dependencies
           command: |
-            ./packages/vue-instantsearch/scripts/test-vue3.sh
+            yarn run prepare-vue3
       - run:
           name: Vue Unit tests
           command: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4

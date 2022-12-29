@@ -27,9 +27,7 @@ const config = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
-  transformIgnorePatterns: [
-    'node_modules/(?!(search-insights|vue-json-tree)/)',
-  ],
+  transformIgnorePatterns: ['node_modules/(?!(search-insights)/)'],
   transform: {
     '^.+\\.(j|t)sx?$': 'babel-jest',
     '^.+\\.vue$': '@vue/vue2-jest',
@@ -45,6 +43,7 @@ const config = {
   ],
   globals: {
     __DEV__: true,
+    'ts-jest': {},
   },
   snapshotFormat: {
     printBasicPrototype: false,
