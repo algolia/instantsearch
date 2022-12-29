@@ -13,7 +13,6 @@ import {
 } from 'react-instantsearch-hooks';
 
 import { createSearchClient } from '../../../../tests/mock';
-// import { getServerState } from '../getServerState';
 
 import type {
   InstantSearchServerState,
