@@ -4,14 +4,11 @@
       <button @click="state.refine('hi')" :class="suit('button')">
         example refine
       </button>
-      <!-- ⬇ use this to dynamically debug the state, remove it when done -->
-      <json-tree :level="2" :data="state" />
     </slot>
   </div>
 </template>
 
 <script>
-import JsonTree from 'vue-json-tree'; // 👈 When done, remove this
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 // Uncomment and change here ⬇️
@@ -28,9 +25,6 @@ const connectorName =
 
 export default {
   name: 'AisTemplate', // ◀️ change this to the component name that will be exported
-  // ⬇️ this is to help you debugging what's in `state`
-  // remove it before pushing the component
-  components: { 'json-tree': JsonTree },
   mixins: [
     createSuitMixin({ name: 'Template' }), // ◀️ change this
     createWidgetMixin({
