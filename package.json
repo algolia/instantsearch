@@ -31,7 +31,7 @@
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
     "release": "shipjs prepare",
     "prepare": "lerna run prepare",
-    "prepare-vue3": "./scripts/prepare-vue3.sh"
+    "prepare-vue3": "./scripts/prepare-vue3.js"
   },
   "devDependencies": {
     "@algolia/cache-common": "4.14.3",
