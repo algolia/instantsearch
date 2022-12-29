@@ -9,6 +9,8 @@ website
 **/cjs
 **/es
 **/dist
+**/vue2
+**/vue3
 coverage
 
 # Caches
