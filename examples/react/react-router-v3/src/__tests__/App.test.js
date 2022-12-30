@@ -1,7 +1,7 @@
 import React from 'react';
-import App from './App';
 import { Router, Route, browserHistory } from 'react-router';
 import renderer from 'react-test-renderer';
+import App from '../App';
 
 describe('react-router recipe', () => {
   it('App renders without crashing', () => {
