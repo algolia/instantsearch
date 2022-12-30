@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "BABEL_ENV=parcel index.html --port 3000",
-    "build": "BABEL_ENV=parcel build index.html --public-url .",
+    "build": "BABEL_ENV=parcel parcel build index.html --public-url .",
     "test": "jest --ci"
   },
   "devDependencies": {
