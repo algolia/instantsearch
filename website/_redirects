@@ -5,4 +5,4 @@
 /examples/:flavor/:name/search/*   /examples/:flavor/:name/index.html   200
 /examples/:name/*   /examples/js/:name/:splat   301
 
-/stories   /stories/js   301!
+/stories   /stories/js
