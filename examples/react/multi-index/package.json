@@ -16,6 +16,11 @@
     "parcel": "2.8.0",
     "react-test-renderer": "17.0.2"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.(jsx?|tsx?)$": ["babel-jest", { "rootMode": "upward" }]
+    }
+  },
   "dependencies": {
     "algoliasearch": "4.14.3",
     "instantsearch.css": "7.4.5",
