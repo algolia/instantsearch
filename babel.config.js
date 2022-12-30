@@ -1,15 +1,13 @@
-const wrapWarningWithDevCheck = require('./scripts/babel/wrap-warning-with-dev-check');
-const extensionResolver = require('./scripts/babel/extension-resolver');
-
-const isCJS = process.env.BABEL_ENV === 'cjs';
-const isES = process.env.BABEL_ENV === 'es';
-const isUMD = process.env.BABEL_ENV === 'umd';
-const isRollup = process.env.BABEL_ENV === 'rollup';
-
-const clean = (x) => x.filter(Boolean);
-
 module.exports = (api) => {
+  const clean = (x) => x.filter(Boolean);
+
   const isTest = api.env('test');
+  const isCJS = api.env('cjs');
+  const isES = api.env('es');
+  const isUMD = api.env('umd');
+  const isRollup = api.env('rollup');
+  const isParcel = api.env('parcel');
+
   const modules = isTest || isCJS ? 'commonjs' : false;
   const targets = {};
 
@@ -21,7 +19,7 @@ module.exports = (api) => {
 
   const testPlugins = [
     '@babel/plugin-proposal-class-properties',
-    wrapWarningWithDevCheck,
+    './scripts/babel/wrap-warning-with-dev-check',
   ];
 
   const buildPlugins = clean([
@@ -29,7 +27,7 @@ module.exports = (api) => {
     (isCJS || isES || isUMD || isRollup) &&
       '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
-    wrapWarningWithDevCheck,
+    './scripts/babel/wrap-warning-with-dev-check',
     isRollup && 'babel-plugin-transform-react-remove-prop-types',
     (isCJS || isES) && [
       'inline-replace-variables',
@@ -41,7 +39,7 @@ module.exports = (api) => {
       },
     ],
     isES && [
-      extensionResolver,
+      './scripts/babel/extension-resolver',
       {
         // For verification, see test/module/packages-are-es-modules.mjs
         modulesToResolve: [
@@ -90,17 +88,19 @@ module.exports = (api) => {
   ]);
 
   return {
-    presets: [
-      '@babel/preset-typescript',
-      '@babel/preset-react',
-      [
-        '@babel/preset-env',
-        {
-          modules,
-          targets,
-        },
-      ],
-    ],
+    presets: !isParcel
+      ? [
+          '@babel/preset-typescript',
+          '@babel/preset-react',
+          [
+            '@babel/preset-env',
+            {
+              modules,
+              targets,
+            },
+          ],
+        ]
+      : [],
     plugins: isTest ? testPlugins : buildPlugins,
     overrides: [
       {
