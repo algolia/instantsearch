@@ -10,7 +10,6 @@ const clean = (x) => x.filter(Boolean);
 
 module.exports = (api) => {
   const isTest = api.env('test');
-  const isWebpack = api.env('webpack');
   const modules = isTest || isCJS ? 'commonjs' : false;
   const targets = {};
 
@@ -27,7 +26,8 @@ module.exports = (api) => {
 
   const buildPlugins = clean([
     '@babel/plugin-proposal-class-properties',
-    !isWebpack && '@babel/plugin-transform-react-constant-elements',
+    (isCJS || isES || isUMD || isRollup) &&
+      '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
     wrapWarningWithDevCheck,
     isRollup && 'babel-plugin-transform-react-remove-prop-types',
