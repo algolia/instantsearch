@@ -18,9 +18,9 @@
     "prepare": "rm -rf public && mkdir public && cp -r ../node_modules/instantsearch.css/themes public/themes"
   },
   "devDependencies": {
-    "@types/node": "18.11.13",
-    "astro": "1.6.14",
+    "@types/node": "^18.11.13",
+    "astro": "^1.6.14",
     "instantsearch.css": "7.4.5",
-    "sass": "1.56.2"
+    "sass": "^1.56.2"
   }
 }

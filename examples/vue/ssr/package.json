@@ -8,19 +8,19 @@
     "start": "cross-env NODE_ENV=production vue-cli-service ssr:serve --mode production"
   },
   "dependencies": {
-    "algoliasearch": "4.14.3",
+    "algoliasearch": "^4.14.3",
     "instantsearch.css": "7.4.5",
-    "vue": "2.7.14",
+    "vue": "^2.7.14",
     "vue-instantsearch": "4.7.0",
     "vue-router": "^3.0.2",
-    "vue-server-renderer": "2.7.14",
-    "qs": "6.9.6",
-    "core-js": "2"
+    "vue-server-renderer": "^2.7.14",
+    "qs": "^6.9.6",
+    "core-js": "^2"
   },
   "devDependencies": {
     "@akryum/vue-cli-plugin-ssr": "^0.5.0",
     "@vue/cli-plugin-babel": "^3.4.1",
     "@vue/cli-service": "^3.4.1",
-    "vue-template-compiler": "2.7.14"
+    "vue-template-compiler": "^2.7.14"
   }
 }

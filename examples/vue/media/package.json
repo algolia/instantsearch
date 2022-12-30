@@ -8,16 +8,16 @@
     "website:examples": "vue-cli-service build --dest ../../../website/examples/vue/media"
   },
   "dependencies": {
-    "algoliasearch": "4.14.3",
+    "algoliasearch": "^4.14.3",
     "instantsearch.js": "4.49.2",
-    "vue": "2.7.14",
+    "vue": "^2.7.14",
     "vue-instantsearch": "4.7.0",
-    "core-js": "2"
+    "core-js": "^2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "3.12.1",
-    "@vue/cli-service": "3.12.1",
-    "vue-template-compiler": "2.7.14"
+    "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-service": "^3.12.1",
+    "vue-template-compiler": "^2.7.14"
   },
   "postcss": {
     "plugins": {
