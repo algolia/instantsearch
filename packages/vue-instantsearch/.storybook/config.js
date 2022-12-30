@@ -3,7 +3,7 @@ import { setOptions } from '@storybook/addon-options';
 
 setOptions({
   name: 'vue-instantsearch',
-  url: 'https://community.algolia.com/vue-instantsearch/',
+  url: 'https://github.com/algolia/instantsearch.js',
   goFullScreen: false,
   showStoriesPanel: true,
   showAddonPanel: true,

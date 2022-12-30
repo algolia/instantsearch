@@ -1,6 +1,6 @@
 # Contributing
 
-First of all, thanks for contributing! You can check out the issues tagged with "difficulty: easy ❄️" for a start.
+First of all, thanks for contributing! You can check out the issues tagged with "Difficulty: Easy" for a start.
 
 ## Get ready for contributions
 
