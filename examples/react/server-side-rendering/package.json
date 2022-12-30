@@ -10,11 +10,11 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
-    "@babel/plugin-proposal-class-properties": "7.4.4",
-    "@babel/polyfill": "7.4.4",
-    "@babel/preset-env": "7.4.5",
-    "@babel/preset-react": "7.0.0",
+    "@babel/core": "^7.15.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
     "babel-core": "6.26.3",
     "babel-jest": "27.4.6",
     "babel-loader": "8.2.2",
