@@ -7,7 +7,7 @@
     "start": "parcel index.html"
   },
   "dependencies": {
-    "algoliasearch": "4.14.2",
+    "algoliasearch": "4.14.3",
     "instantsearch.js": "4.49.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",

@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, no-console */
+/* eslint-disable no-console */
 const assert = require('assert');
 
 const instantsearch = require('instantsearch.js/cjs/index.js');

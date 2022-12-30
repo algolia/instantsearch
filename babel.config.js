@@ -5,12 +5,12 @@ const isCJS = process.env.BABEL_ENV === 'cjs';
 const isES = process.env.BABEL_ENV === 'es';
 const isUMD = process.env.BABEL_ENV === 'umd';
 const isRollup = process.env.BABEL_ENV === 'rollup';
-const isWebpack = process.env.BABEL_ENV === 'webpack';
 
 const clean = (x) => x.filter(Boolean);
 
 module.exports = (api) => {
   const isTest = api.env('test');
+  const isWebpack = api.env('webpack');
   const modules = isTest || isCJS ? 'commonjs' : false;
   const targets = {};
 

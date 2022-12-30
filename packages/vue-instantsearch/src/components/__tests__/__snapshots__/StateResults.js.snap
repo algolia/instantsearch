@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders explanation if no slot is used 1`] = `
+<div class="ais-StateResults">
+  <p>
+    Use this component to have a different layout based on a certain state.
+  </p>
+  <p>
+    Fill in the slot, and get access to the following things:
+  </p>
+  <pre>
+    results: [
+  "query",
+  "hits",
+  "page"
+]
+  </pre>
+  <pre>
+    state: [
+  "query"
+]
+  </pre>
+  <pre>
+    status: idle
+  </pre>
+  <pre>
+    error:
+  </pre>
+</div>
+`;

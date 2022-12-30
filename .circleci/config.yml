@@ -47,6 +47,9 @@ workflows:
       - legacy algoliasearch:
           requires:
             - build
+      - vue v3:
+          requires:
+            - build
       - examples:
           requires:
             - build
@@ -110,6 +113,8 @@ jobs:
             - packages/react-instantsearch-hooks/dist
             - packages/react-instantsearch-hooks-web/dist
             - packages/react-instantsearch-hooks-server/dist
+            - packages/vue-instantsearch/vue2
+            - packages/vue-instantsearch/vue3
 
   test metadata:
     <<: *defaults
@@ -123,6 +128,7 @@ jobs:
 
   lint:
     <<: *defaults
+    resource_class: large
     steps:
       - checkout
       - *attach_workspace
@@ -152,8 +158,30 @@ jobs:
           name: Type Checking
           command: yarn run type-check:v3
 
+  vue v3:
+    <<: *defaults
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - run:
+          name: Update dependencies
+          command: |
+            yarn run prepare-vue3
+      - run:
+          name: Vue Unit tests
+          command: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4
+      - store_test_results:
+          path: junit/jest/
+      - run:
+          name: Vue 3 Test Exports
+          command: yarn workspace vue-instantsearch run test:exports:vue3
+
   unit tests:
     <<: *defaults
+    resource_class: large
     steps:
       - checkout
       - *attach_workspace

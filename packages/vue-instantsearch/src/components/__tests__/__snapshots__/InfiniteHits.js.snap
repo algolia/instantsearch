@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div class="ais-InfiniteHits">
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
+    Show more results
+  </button>
+</div>
+`;
+
+exports[`renders correctly on the first page 1`] = `
+<div class="ais-InfiniteHits">
+  <button class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+          disabled="disabled"
+  >
+    Show previous results
+  </button>
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
+    Show more results
+  </button>
+</div>
+`;
+
+exports[`renders correctly on the last page 1`] = `
+<div class="ais-InfiniteHits">
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
+          disabled="disabled"
+  >
+    Show more results
+  </button>
+</div>
+`;
+
+exports[`renders correctly when not on the first page 1`] = `
+<div class="ais-InfiniteHits">
+  <button class="ais-InfiniteHits-loadPrevious">
+    Show previous results
+  </button>
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
+    Show more results
+  </button>
+</div>
+`;
+
+exports[`renders correctly with a custom item rendering 1`] = `
+<div class="ais-InfiniteHits">
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      <div>
+        00001
+      </div>
+    </li>
+    <li class="ais-InfiniteHits-item">
+      <div>
+        00002
+      </div>
+    </li>
+    <li class="ais-InfiniteHits-item">
+      <div>
+        00003
+      </div>
+    </li>
+    <li class="ais-InfiniteHits-item">
+      <div>
+        00004
+      </div>
+    </li>
+    <li class="ais-InfiniteHits-item">
+      <div>
+        00005
+      </div>
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
+    Show more results
+  </button>
+</div>
+`;
+
+exports[`renders correctly with a custom rendering 1`] = `
+<div class="ais-InfiniteHits">
+  <div>
+    <div>
+      00001
+    </div>
+    <div>
+      00002
+    </div>
+    <div>
+      00003
+    </div>
+    <div>
+      00004
+    </div>
+    <div>
+      00005
+    </div>
+  </div>
+</div>
+`;

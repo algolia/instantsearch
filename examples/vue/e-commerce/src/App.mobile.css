@@ -1,0 +1,264 @@
+@media (max-width: 899px) {
+  /* Filters overlay */
+
+  .container-filters {
+    background: #fff;
+    border-radius: 16px;
+    left: 0;
+    max-width: initial;
+    padding-bottom: 4rem;
+    position: fixed;
+    top: 0;
+    transform: translateY(120vh);
+    transition: transform 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946);
+    width: 100%;
+    will-change: transform;
+    z-index: 1;
+  }
+
+  .container-filters .container-header,
+  .container-filters .container-body {
+    padding: 2rem 2rem 0 2rem;
+  }
+
+  .filtering .header {
+    /*
+      Closing panel on outter click didn't work on mobile safari.
+      This is one of the workarounds from the following: 
+      https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event#Safari_Mobile 
+    */
+    cursor: pointer;
+  }
+
+  .filtering .header-logo {
+    left: 50%;
+    pointer-events: none;
+    position: absolute;
+    top: 1.5rem;
+    transform: translateX(-50%);
+  }
+
+  .filtering .header-title,
+  .filtering .container-results,
+  .container-filters-footer {
+    display: none;
+  }
+
+  .filtering .container-filters {
+    position: absolute;
+    transform: translateY(4rem);
+  }
+
+  .filtering .container-filters-footer {
+    background-color: #fff;
+    border-top: 1px solid #ebecf3;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 -2rem;
+    padding: 1rem;
+    position: fixed;
+    width: 100%;
+    z-index: 5; /* avoid collision with slider UI */
+  }
+
+  .container-filters-footer-button-wrapper {
+    width: calc(50% - 0.5rem);
+  }
+
+  .container-filters-footer .ais-ClearRefinements-button,
+  .container-filters-footer .button {
+    background-color: rgba(65, 66, 71, 0.08);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: bold;
+    justify-content: center;
+    padding: 12px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .container-filters-footer .button-primary {
+    background-color: #e2a400;
+    color: #fff;
+  }
+
+  /* Filters button that triggers the overlay */
+
+  .filtering .filters-button {
+    display: none;
+  }
+
+  .filters-button {
+    align-items: center;
+    background-color: #e2a400;
+    border: none;
+    border-radius: 8px;
+    bottom: 2rem;
+    box-shadow: 0 4px 22px 0 rgba(185, 135, 0, 0.5);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: bold;
+    justify-content: center;
+    left: 50%;
+    min-height: 40px;
+    min-width: 112px;
+    position: fixed;
+    transform: translateX(-50%);
+  }
+
+  .filters-button svg {
+    height: 14px;
+    margin-right: 8px;
+    width: 16px;
+  }
+
+  .container {
+    padding: 4rem 2rem;
+  }
+
+  .container-options {
+    display: none;
+  }
+
+  .header {
+    background: linear-gradient(to bottom, #ae8600, #885b01);
+    background-image: url('./images/cover-mobile.jpg');
+    background-image: url('./images/cover-mobile.jpg'),
+      linear-gradient(to bottom, #ae8600, #885b01);
+    background-position: bottom;
+    background-size: cover;
+    min-height: 300px;
+    position: relative;
+    transition: transform 200ms ease-out;
+  }
+
+  /* SearchBox */
+
+  .header .ais-SearchBox {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    transform: translateY(50%);
+    width: 100vw;
+  }
+
+  .header .ais-SearchBox .ais-SearchBox-form {
+    margin: auto;
+    max-width: 90%;
+  }
+
+  .ais-SearchBox .ais-SearchBox-input,
+  .ais-RefinementList .ais-SearchBox-input {
+    font-size: 1rem;
+  }
+
+  .ais-RefinementList .ais-SearchBox-input {
+    min-height: 48px;
+  }
+
+  /* RefinementList */
+
+  .ais-RefinementList-list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 0 2rem;
+    grid-template-rows: repeat(5, 1fr);
+  }
+
+  .ais-RefinementList-item {
+    flex: 50%;
+  }
+
+  .ais-RefinementList-checkbox {
+    height: 1.5rem;
+    min-width: 1.5rem;
+  }
+
+  .ais-RefinementList-item--selected .ais-RefinementList-checkbox::after {
+    align-items: center;
+    background: none;
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='12' height='9'%3E%3Cdefs%3E%3Cpath id='a' d='M0 0h24v24H0z'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(-6 -8)'%3E%3Cmask id='b' fill='%23fff'%3E%3Cuse xlink:href='%23a'/%3E%3C/mask%3E%3Cpath fill='%23fff' fill-rule='nonzero' d='M16.5 8.5L18 10l-6.99 7-4.51-4.5L8 11l3.01 3z' mask='url(%23b)'/%3E%3C/g%3E%3C/svg%3E");
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: initial;
+    position: relative;
+    top: initial;
+    transform: initial;
+    width: initial;
+  }
+
+  /* HierarchicalMenu */
+
+  .ais-HierarchicalMenu-link::before {
+    background-color: rgba(65, 66, 71, 0.08);
+    border-radius: 50%;
+    padding: 8px;
+  }
+
+  /* ToggleRefinement */
+
+  .ais-ToggleRefinement-checkbox {
+    min-width: 47px;
+    position: relative;
+  }
+
+  .ais-ToggleRefinement-checkbox {
+    margin-left: 2rem;
+  }
+
+  .ais-ToggleRefinement-checkbox::after {
+    height: 1.5rem;
+    top: -4px;
+    width: 1.5rem;
+  }
+
+  .ais-ToggleRefinement-checkbox::before {
+    right: 54px;
+  }
+
+  /* RatingMenu */
+
+  .ais-RatingMenu-starIcon {
+    height: 1.5rem;
+    margin-right: 1rem;
+    width: 1.5rem;
+  }
+
+  /* Hits */
+
+  .ais-Hits-list {
+    grid-gap: 1rem;
+  }
+
+  .hit {
+    display: flex;
+  }
+
+  .hit-image-container {
+    flex: 1;
+    margin-right: 2rem;
+  }
+
+  .hit-info-container {
+    flex: 2;
+  }
+
+  .hits-empty-state-image {
+    display: none;
+  }
+
+  /* Hide all desktop-specific design on mobile */
+
+  [data-layout='desktop'] {
+    display: none;
+  }
+}

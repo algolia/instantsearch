@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`rendering displays correctly with a max 1`] = `
+<div class="ais-RangeInput">
+  <form class="ais-RangeInput-form">
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--min"
+             max="100"
+             min="0"
+             placeholder="0"
+             step="1"
+             type="number"
+      >
+    </label>
+    <span class="ais-RangeInput-separator">
+      to
+    </span>
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--max"
+             max="100"
+             min="0"
+             placeholder="100"
+             step="1"
+             type="number"
+      >
+    </label>
+    <button class="ais-RangeInput-submit"
+            type="submit"
+    >
+      Go
+    </button>
+  </form>
+</div>
+`;
+
+exports[`rendering displays correctly with a min 1`] = `
+<div class="ais-RangeInput">
+  <form class="ais-RangeInput-form">
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--min"
+             max="1000"
+             min="100"
+             placeholder="100"
+             step="1"
+             type="number"
+      >
+    </label>
+    <span class="ais-RangeInput-separator">
+      to
+    </span>
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--max"
+             max="1000"
+             min="100"
+             placeholder="1000"
+             step="1"
+             type="number"
+      >
+    </label>
+    <button class="ais-RangeInput-submit"
+            type="submit"
+    >
+      Go
+    </button>
+  </form>
+</div>
+`;
+
+exports[`rendering displays correctly with a min and a max 1`] = `
+<div class="ais-RangeInput">
+  <form class="ais-RangeInput-form">
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--min"
+             max="37"
+             min="10"
+             placeholder="10"
+             step="1"
+             type="number"
+      >
+    </label>
+    <span class="ais-RangeInput-separator">
+      to
+    </span>
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--max"
+             max="37"
+             min="10"
+             placeholder="37"
+             step="1"
+             type="number"
+      >
+    </label>
+    <button class="ais-RangeInput-submit"
+            type="submit"
+    >
+      Go
+    </button>
+  </form>
+</div>
+`;
+
+exports[`rendering displays correctly with default 1`] = `
+<div class="ais-RangeInput">
+  <form class="ais-RangeInput-form">
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--min"
+             max="1000"
+             min="0"
+             placeholder="0"
+             step="1"
+             type="number"
+      >
+    </label>
+    <span class="ais-RangeInput-separator">
+      to
+    </span>
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--max"
+             max="1000"
+             min="0"
+             placeholder="1000"
+             step="1"
+             type="number"
+      >
+    </label>
+    <button class="ais-RangeInput-submit"
+            type="submit"
+    >
+      Go
+    </button>
+  </form>
+</div>
+`;
