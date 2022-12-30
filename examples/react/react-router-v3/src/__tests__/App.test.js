@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
 import renderer from 'react-test-renderer';
