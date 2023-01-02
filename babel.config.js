@@ -24,6 +24,8 @@ module.exports = (api) => {
 
   const buildPlugins = clean([
     '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-private-methods',
+    '@babel/plugin-proposal-private-property-in-object',
     (isCJS || isES || isUMD || isRollup) &&
       '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
