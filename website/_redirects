@@ -3,6 +3,10 @@
 /examples/:flavor https://www.algolia.com/doc/guides/building-search-ui/resources/demos/:flavor
 
 /examples/:flavor/:name/search/*   /examples/:flavor/:name/index.html   200
-/examples/:name/*   /examples/js/:name/:splat   301
+
+/examples/calendar-widget/*   /examples/js/calendar-widget/:splat   301
+/examples/e-commerce/*   /examples/js/e-commerce/:splat   301
+/examples/media/*   /examples/js/media/:splat   301
+/examples/tourism/*   /examples/js/tourism/:splat   301
 
 /stories   /stories/js   301!
