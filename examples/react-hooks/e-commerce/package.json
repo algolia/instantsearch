@@ -5,7 +5,7 @@
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
     "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/react-hooks/e-commerce",
-    "start": "BABEL_ENV=parcel index.html"
+    "start": "BABEL_ENV=parcel parcel index.html"
   },
   "browserslist": "last 2 versions, IE 11",
   "dependencies": {

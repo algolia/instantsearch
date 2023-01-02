@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
-    "start": "BABEL_ENV=parcel index.html"
+    "start": "BABEL_ENV=parcel parcel index.html"
   },
   "dependencies": {
     "algoliasearch": "4.14.3",
