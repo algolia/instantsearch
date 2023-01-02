@@ -1,3 +1,19 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [4.7.1](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.7.0...vue-instantsearch@4.7.1) (2023-01-02)
+
+
+### Bug Fixes
+
+* **vue-instantsearch:** compute initial state from helper instead of results ([#5403](https://github.com/algolia/instantsearch.js/issues/5403)) ([b03e7e3](https://github.com/algolia/instantsearch.js/commit/b03e7e3ad49f382bb341e180b88baac66e0b0b75))
+
+
+
+
+
 # [4.7.0](https://github.com/algolia/vue-instantsearch/compare/v4.6.0...v4.7.0) (2022-12-21)
 
 
