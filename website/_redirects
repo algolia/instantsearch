@@ -1,6 +1,10 @@
 /           https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/
 /examples   https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
-/examples/:flavor https://www.algolia.com/doc/guides/building-search-ui/resources/demos/:flavor
+/examples/js/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/
+/examples/react/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react
+/examples/hooks/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react-hooks
+/examples/react-hooks/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react-hooks
+/examples/vue/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/vue
 
 /examples/:flavor/:name/search/*   /examples/:flavor/:name/index.html   200
 
