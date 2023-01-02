@@ -137,16 +137,17 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
       .then(() => {
         initialResults = {};
         walkIndex(instance.mainIndex, (widget) => {
-          const { _state, _rawResults } = widget.getResults();
-
           initialResults[widget.getIndexId()] = {
             // copy just the values of SearchParameters, not the functions
-            state: Object.keys(_state).reduce((acc, key) => {
-              // eslint-disable-next-line no-param-reassign
-              acc[key] = _state[key];
-              return acc;
-            }, {}),
-            results: _rawResults,
+            state: Object.entries(widget.getHelper().state).reduce(
+              (acc, [key, value]) => {
+                // eslint-disable-next-line no-param-reassign
+                acc[key] = value;
+                return acc;
+              },
+              {}
+            ),
+            results: widget.getResults()._rawResults,
           };
         });
 
