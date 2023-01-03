@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [react-instantsearch-hooks-web](#react-instantsearch-hooks-web)
+  - [Why](#why)
+  - [Installation](#installation)
+  - [Getting started](#getting-started)
+  - [Documentation](#documentation)
+  - [Playground](#playground)
+  - [Contributing](#contributing)
+  - [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # react-instantsearch-hooks-web
 
 React InstantSearch Hooks Web is an open-source React library that lets you create an instant search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:

@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [react-instantsearch-hooks](#react-instantsearch-hooks)
+  - [Installation](#installation)
+  - [Getting started](#getting-started)
+  - [API reference](#api-reference)
+  - [Documentation](#documentation)
+  - [Contributing](#contributing)
+  - [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # react-instantsearch-hooks
 
 React InstantSearch Hooks is an open-source UI library for React that lets you quickly build a search interface in your front-end application.

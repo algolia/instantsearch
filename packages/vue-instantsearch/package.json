@@ -16,14 +16,14 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "4.7.0",
+  "version": "4.7.1",
   "files": [
     "vue2",
     "vue3",
     "src"
   ],
   "main": "vue2/cjs",
-  "module": "vue2/es", 
+  "module": "vue2/es",
   "sideEffects": false,
   "repository": "https://github.com/algolia/instantsearch.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs"
   },
   "dependencies": {
-    "instantsearch.js": "^4.47.0",
+    "instantsearch.js": "4.50.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {
@@ -61,7 +61,7 @@
     "@vue/test-utils2": "npm:@vue/test-utils@2.0.0-rc.11",
     "algoliasearch": "4.14.3",
     "algoliasearch-helper": "3.11.1",
-    "instantsearch.css": "7.4.5",
+    "instantsearch.css": "7.4.6",
     "rollup": "1.32.1",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-buble": "0.19.6",

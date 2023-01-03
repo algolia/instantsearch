@@ -19,7 +19,6 @@ If this guide does not contain what you are looking for and thus prevents you fr
 - [Requirements](#requirements)
 - [Launch the dev environment](#launch-the-dev-environment)
 - [Folders of the project](#folders-of-the-project)
-  - [InstantSearch.js source folder](#instantsearchjs-source-folder)
 - [Importing existing projects](#importing-existing-projects)
 - [Tests](#tests)
   - [Unit tests](#unit-tests)
