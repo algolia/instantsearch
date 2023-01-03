@@ -11,7 +11,7 @@
     "algoliasearch": "4.14.3",
     "classnames": "2.2.6",
     "core-js": "2",
-    "instantsearch.js": "4.50.0",
+    "instantsearch.js": "4.49.3",
     "vue": "2.7.14",
     "vue-instantsearch": "4.7.1",
     "vue-slider-component": "3.0.32"
