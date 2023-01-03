@@ -129,13 +129,33 @@ describe('getServerState', () => {
     );
   });
 
-  test('throws when the search client errors', async () => {
+  test('throws when the search client errors, async', async () => {
+    const searchClient = createSearchClient({
+      // Function is async to match the real search client.
+      // a synchronous error would be caught by the derived helper, async by InstantSearch.
+      // eslint-disable-next-line require-await
+      search: async () => {
+        throw new Error('Search client error');
+      },
+    });
+    const { App } = createTestEnvironment({
+      searchClient,
+    });
+
+    await expect(getServerState(<App />)).rejects.toThrow(
+      /Search client error/
+    );
+  });
+
+  test('throws when the search client errors, sync', async () => {
     const searchClient = createSearchClient({
       search: () => {
         throw new Error('Search client error');
       },
     });
-    const { App } = createTestEnvironment({ searchClient });
+    const { App } = createTestEnvironment({
+      searchClient,
+    });
 
     await expect(getServerState(<App />)).rejects.toThrow(
       /Search client error/

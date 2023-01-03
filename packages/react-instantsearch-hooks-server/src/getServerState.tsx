@@ -142,6 +142,8 @@ function waitForResults(search: InstantSearch) {
 
     // However, we listen to errors that can happen on any derived helper because
     // any error is critical.
+    helper.on('error', (error) => reject(error));
+    search.on('error', (error) => reject(error));
     helper.derivedHelpers.forEach((derivedHelper) =>
       derivedHelper.on('error', (error) => {
         reject(error);
