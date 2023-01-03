@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Getting started](#getting-started)
+- [Installation](#installation)
+- [Available themes](#available-themes)
+- [Browser support](#browser-support)
+- [Implemented versions](#implemented-versions)
+- [Contributing](#contributing)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 <p align="center">
   <p align="center">
     InstantSearch.css is a CSS library to style InstantSearch-powered search experiences.

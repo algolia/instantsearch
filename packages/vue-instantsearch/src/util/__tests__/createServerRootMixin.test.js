@@ -11,6 +11,7 @@ import { createServerRootMixin } from '../createServerRootMixin';
 import InstantSearchSsr from '../../components/InstantSearchSsr';
 import Configure from '../../components/Configure';
 import SearchBox from '../../components/SearchBox.vue';
+import Index from '../../components/Index';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
@@ -288,7 +289,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     it('returns correct results state', () => {
       const searchClient = createFakeClient();
 
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const app = {
           mixins: [
             forceIsServerMixin,
@@ -305,6 +306,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                 },
               }),
               h(SearchBox),
+              h(
+                Index,
+                {
+                  attrs: {
+                    indexName: 'hello',
+                    indexId: 'nestedIndex',
+                  },
+                },
+                []
+              ),
             ])
           ),
           async serverPrefetch() {
@@ -312,8 +323,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               component: this,
               renderToString,
             });
-            expect(state).toEqual({
-              hello: {
+
+            try {
+              expect(state).toEqual({
+                hello: expect.objectContaining({}),
+                nestedIndex: expect.objectContaining({}),
+              });
+
+              expect(state.hello).toEqual({
                 results: [
                   {
                     query: '',
@@ -333,8 +350,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   query: '',
                   tagRefinements: [],
                 },
-              },
-            });
+              });
+
+              // Parent's widgets state should not be merged into nested index state
+              expect(state.nestedIndex).toEqual({
+                results: [
+                  {
+                    query: '',
+                  },
+                ],
+                state: {
+                  disjunctiveFacets: [],
+                  disjunctiveFacetsRefinements: {},
+                  facets: [],
+                  facetsExcludes: {},
+                  facetsRefinements: {},
+                  hierarchicalFacets: [],
+                  hierarchicalFacetsRefinements: {},
+                  index: 'hello',
+                  numericRefinements: {},
+                  tagRefinements: [],
+                },
+              });
+            } catch (err) {
+              reject(err);
+            }
+
             resolve();
             return state;
           },
