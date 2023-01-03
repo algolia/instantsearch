@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [react-instantsearch](#react-instantsearch)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # react-instantsearch
 
 This is the [React](https://facebook.github.io/react) version of Algolia's `instantsearch` library.

@@ -1,3 +1,18 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [6.38.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.38.1...react-instantsearch-hooks-server@6.38.2) (2023-01-03)
+
+### Bug Fixes
+
+* **getServerState:** correctly forward asynchronous errors ([#5405](https://github.com/algolia/instantsearch/pull/5405)) ([0f0e84d6](https://github.com/algolia/instantsearch/commit/0f0e84d62c58fdbe81f6e5c823ab6d19b45ee8f3))
+
+
+
+
+
 ## [6.38.1](https://github.com/algolia/react-instantsearch/compare/v6.38.0...v6.38.1) (2022-11-08)
 
 

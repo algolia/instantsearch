@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-hooks-next-example",
-  "version": "6.38.1",
+  "version": "6.38.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "algoliasearch": "4.14.3",
-    "instantsearch.css": "7.4.5",
+    "instantsearch.css": "8.0.0",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-server": "6.38.1",
-    "react-instantsearch-hooks-web": "6.38.1"
+    "react-instantsearch-hooks-server": "6.38.2",
+    "react-instantsearch-hooks-web": "6.38.2"
   },
   "devDependencies": {
     "@types/node": "17.0.40",
