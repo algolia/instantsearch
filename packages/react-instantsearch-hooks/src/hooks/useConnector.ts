@@ -4,7 +4,6 @@ import { dequal } from '../lib/dequal';
 import { getIndexSearchResults } from '../lib/getIndexSearchResults';
 import { useIndexContext } from '../lib/useIndexContext';
 import { useInstantSearchContext } from '../lib/useInstantSearchContext';
-import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
 import { useStableValue } from '../lib/useStableValue';
 import { useWidget } from '../lib/useWidget';
 
@@ -25,7 +24,6 @@ export function useConnector<
   props: TProps = {} as TProps,
   additionalWidgetProperties: AdditionalWidgetProperties = {}
 ): TDescription['renderState'] {
-  const serverContext = useInstantSearchServerContext();
   const search = useInstantSearchContext();
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
