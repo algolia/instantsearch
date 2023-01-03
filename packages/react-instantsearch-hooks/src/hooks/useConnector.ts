@@ -136,7 +136,7 @@ export function useConnector<
     widget,
     parentIndex,
     props: stableProps,
-    shouldSsr: Boolean(serverContext),
+    shouldSsr: true,
   });
 
   return state;
