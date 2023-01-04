@@ -4,7 +4,7 @@
   </a>
 
   <p align="center">
-    InstantSearch.js is a JavaScript library for building performant and instant search experiences in vanilla JS, React, Vue and Angular with <a href="https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository">Algolia</a>.
+    InstantSearch is a JavaScript library for building performant and instant search experiences in vanilla JS, React, Vue and Angular with <a href="https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository">Algolia</a>.
   </p>
 </p>
 
@@ -13,13 +13,13 @@
 [![License][license-image]][license-url]
 [![Build Status][ci-svg]][ci-url]
 
-[InstantSearch.js][instantsearch-docs] is a JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API.
+[InstantSearch][instantsearch-docs] is a JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API.
 
 There are multiple wrappers for popular frameworks, such as [React InstantSearch][react-instantsearch-docs], [Vue InstantSearch][vue-instantsearch-docs], and [Angular InstantSearch][angular-instantsearch-docs].
 
 It is part of the InstantSearch family which is declined for different platforms:
 
-**InstantSearch.js** | [Angular InstantSearch][instantsearch-angular-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
+**InstantSearch** | [Angular InstantSearch][instantsearch-angular-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
 <details>
   <summary><strong>Table of contents</strong></summary>
