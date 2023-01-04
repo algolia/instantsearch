@@ -4,20 +4,22 @@
   </a>
 
   <p align="center">
-    InstantSearch.js is a JavaScript library for building performant and instant search experiences with <a href="https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository">Algolia</a>.
+    InstantSearch is a JavaScript library for building performant and instant search experiences in vanilla JS, React, Vue and Angular with <a href="https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository">Algolia</a>.
   </p>
 </p>
 
 ---
 
-[![Version][version-svg]][package-url]
 [![License][license-image]][license-url]
 [![Build Status][ci-svg]][ci-url]
-[![Pull reminders][pull-reminders-svg]][pull-reminders-url]
 
-InstantSearch.js is a vanilla JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:
+[InstantSearch][instantsearch-docs] is a JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API.
 
-**InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [Vue InstantSearch][vue-instantsearch-github] | [Angular InstantSearch][instantsearch-angular-github] | [React InstantSearch Native][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
+There are multiple wrappers for popular frameworks, such as [React InstantSearch][react-instantsearch-docs], [Vue InstantSearch][vue-instantsearch-docs], and [Angular InstantSearch][angular-instantsearch-docs].
+
+It is part of the InstantSearch family which is declined for different platforms:
+
+**InstantSearch** | [Angular InstantSearch][instantsearch-angular-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
 <details>
   <summary><strong>Table of contents</strong></summary>
@@ -26,15 +28,7 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Why](#why)
-- [Getting started](#getting-started)
-- [Installation](#installation)
-  - [TypeScript users](#typescript-users)
-- [Documentation](#documentation)
-- [Demos](#demos)
-- [Playground](#playground)
-- [Browser support](#browser-support)
-- [Troubleshooting](#troubleshooting)
+- [Packages](#packages)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -42,116 +36,22 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 
 </details>
 
-## Why
+## Packages
 
-You should be using InstantSearch if you want to:
-
-- Design search experiences with best practices
-- Customize your components at will
-- Remain independent from external frameworks
-
-## Getting started
-
-Using InstantSearch.js is as simple as adding this JavaScript code to your page:
-
-```javascript
-// 1. Instantiate the search
-const search = instantsearch({
-  indexName: 'instant_search',
-  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
-});
-
-search.addWidgets([
-  // 2. Create an interactive search box
-  instantsearch.widgets.searchBox({
-    container: '#searchbox',
-    placeholder: 'Search for products',
-  }),
-
-  // 3. Plug the search results into the product container
-  instantsearch.widgets.hits({
-    container: '#products',
-    templates: {
-      item: '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
-    },
-  }),
-
-  // 4. Make the brands refinable
-  instantsearch.widgets.refinementList({
-    container: '#brand',
-    attribute: 'brand',
-  }),
-]);
-
-// 5. Start the search!
-search.start();
-```
-
-<p align="center">
-  <a href="https://codesandbox.io/s/github/algolia/doc-code-samples/tree/master/InstantSearch.js/getting-started" title="Edit on CodeSandbox">
-    <img alt="Edit on CodeSandbox" src="https://codesandbox.io/static/img/play-codesandbox.svg">
-  </a>
-</p>
-
-To learn more about the library, follow the [getting started](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/) guide or check how to [add it to your own project](https://www.algolia.com/doc/guides/building-search-ui/installation/js/).
-
-## Installation
-
-```sh
-npm install instantsearch.js algoliasearch
-# or
-yarn add instantsearch.js algoliasearch
-```
-
-### TypeScript users
-
-To use InstantSearch.js in a TypeScript environment, depending on your [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript) version, you need to import different types.
-
->You still need to import these types even if you don't use InstantSearch.js with [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript).
-
-#### `algoliasearch` v4.x
-
-This version uses types provided by both `algoliasearch` and `@algolia/client-search`.
-
-```bash
-yarn add algoliasearch@4 @algolia/client-search
-```
-
-#### `algoliasearch` v3.x
-
-```bash
-yarn add @types/algoliasearch@3
-```
-
->v3.x is deprecated and will soon no longer be supported.
-
-## Documentation
-
-The documentation is available on the [Algolia website](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/).
-
-## Demos
-
-| E-commerce                                                                                                                                                                                                                   | Media                                                                                                                                                                                                         | Travel                                                                                                                                                                                                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a href="https://instantsearchjs.netlify.com/examples/e-commerce/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/e-commerce-2c7ed6b6.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://instantsearchjs.netlify.com/examples/media/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/media-articles-abc153ab.png" width="250" alt="Media demo preview"></a> | <a href="https://instantsearchjs.netlify.com/examples/tourism/"><img src="https://instantsearchjs.netlify.com/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
-
-See more demos [on the website](https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/).
-
-## Playground
-
-You can get to know InstantSearch.js on [this playground](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js).
-
-Start by [adding widgets](https://www.algolia.com/doc/guides/building-search-ui/widgets/showcase/js/) and tweaking the display. Once you feel familiar with the library, we recommend following the [getting started guide](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
-
-## Browser support
-
-We support the **last two versions of major browsers** (Chrome, Edge, Firefox, Safari).
-
-Please refer to the [browser support](https://www.algolia.com/doc/guides/building-search-ui/installation/js/#browser-support) section in the documentation to use InstantSearch.js on other browsers.
-
-## Troubleshooting
-
-Encountering an issue? Before reaching out to support, we recommend heading to our [FAQ](https://www.algolia.com/doc/guides/building-search-ui/troubleshooting/faq/js/) where you will find answers for the most common issues and gotchas with the library.
+| Package | Version | Description |
+| --- | --- | --- |
+| [`create-instantsearch-app`](packages/create-instantsearch-app) | [![create-instantsearch-app npm version](https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square)](https://npmjs.org/package/create-instantsearch-app) | Command-line utility to quickly bootstrap a project with InstantSearch |
+| [`instantsearch.css`](packages/instantsearch.css) | [![instantsearch.css npm version](https://img.shields.io/npm/v/instantsearch.css.svg?style=flat-square)](https://npmjs.org/package/instantsearch.css) | Default CSS themes for InstantSearch |
+| [`instantsearch.js`](packages/instantsearch.js) | [![instantsearch.js npm version](https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square)](https://npmjs.org/package/instantsearch.js) | InstantSearch.js |
+| [`react-instantsearch`](packages/react-instantsearch) | [![react-instantsearch npm version](https://img.shields.io/npm/v/react-instantsearch.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch)| React InstantSearch (prefer using `react-instantsearch-hooks-web` instead) |
+| [`react-instantsearch-core`](packages/react-instantsearch-core) | [![react-instantsearch-core npm version](https://img.shields.io/npm/v/react-instantsearch-core.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-core) | React InstantSearch Core (prefer using `react-instantsearch-hooks` instead) |
+| [`react-instantsearch-dom`](packages/react-instantsearch-dom) | [![react-instantsearch-dom npm version](https://img.shields.io/npm/v/react-instantsearch-dom.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-dom) | React InstantSearch DOM (prefer using `react-instantsearch-hooks-web` instead) |
+| [`react-instantsearch-dom-maps`](packages/react-instantsearch-dom-maps) | [![react-instantsearch-dom-maps npm version](https://img.shields.io/npm/v/react-instantsearch-dom-maps.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-dom-maps)| GeoSearch widget for React InstantSearch DOM |
+| [`react-instantsearch-hooks`](packages/react-instantsearch-hooks) | [![react-instantsearch-hooks npm version](https://img.shields.io/npm/v/react-instantsearch-hooks?style=flat-square)](https://npmjs.org/package/react-instantsearch-hooks) | React InstantSearch Hooks |
+| [`react-instantsearch-hooks-server`](packages/react-instantsearch-hooks-server) | [![react-instantsearch-hooks-server npm version](https://img.shields.io/npm/v/react-instantsearch-hooks-server.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-hooks-server) | Utilities to do server-side rendering with React InstantSearch Hooks |
+| [`react-instantsearch-hooks-web`](packages/react-instantsearch-hooks-web) | [![react-instantsearch-hooks-web npm version](https://img.shields.io/npm/v/react-instantsearch-hooks-web.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-hooks-web) | React InstantSearch Hooks bundled with UI components |
+| [`react-instantsearch-native`](packages/react-instantsearch-native) | [![react-instantsearch-native npm version](https://img.shields.io/npm/v/react-instantsearch-native.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-native) | React InstantSearch Native (prefer using `react-instantsearch-hooks` instead) |
+| [`vue-instantsearch`](packages/vue-instantsearch) | [![vue-instantsearch npm version](https://img.shields.io/npm/v/vue-instantsearch.svg?style=flat-square)](https://npmjs.org/package/vue-instantsearch) | Vue InstantSearch |
 
 ## Contributing
 
@@ -167,31 +67,28 @@ To start contributing to code, you need to:
 1.  [Fork the project](https://help.github.com/articles/fork-a-repo/)
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
 1.  Install the dependencies: `yarn`
-1.  Run the development mode: `cd packages/instantsearch.js && yarn storybook`
-1.  [Open the stories](http://localhost:6006)
+1.  [Pick a package to work on](#packages) and cd into it (e.g. `cd packages/react-instantsearch-hooks`)
 
 Please read [our contribution process](CONTRIBUTING.md) to learn more.
 
 ## License
 
-InstantSearch.js is [MIT licensed][license-url].
+InstantSearch is [MIT licensed][license-url].
 
 <!-- Badges -->
 
-[version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
-[package-url]: https://npmjs.org/package/instantsearch.js
-[ci-svg]: https://img.shields.io/circleci/project/github/algolia/instantsearch.js.svg?style=flat-square
-[ci-url]: https://circleci.com/gh/algolia/instantsearch.js
-[pull-reminders-svg]: https://img.shields.io/badge/pull%20reminders-✓-success.svg?style=flat-square
-[pull-reminders-url]: https://pullreminders.com?ref=badge
+[ci-svg]: https://img.shields.io/circleci/project/github/algolia/instantsearch.svg?style=flat-square
+[ci-url]: https://circleci.com/gh/algolia/instantsearch
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 
 <!-- Links -->
 
-[algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository
-[react-instantsearch-github]: https://github.com/algolia/instantsearch.js
-[vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
+[algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository "Algolia's website"
+[instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/?utm_source=instantsearch.js&utm_campaign=repository "InstantSearch.js documentation"
+[react-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/?utm_source=instantsearch.js&utm_campaign=repository "React InstantSearch documentation"
+[vue-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/vue/?utm_source=instantsearch.js&utm_campaign=repository "Vue InstantSearch documentation"
+[angular-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/angular/?utm_source=instantsearch.js&utm_campaign=repository "Angular InstantSearch documentation"
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
 [instantsearch-angular-github]: https://github.com/algolia/angular-instantsearch
