@@ -1,8 +1,12 @@
-import React from 'react';
-import App from './App';
-import renderer from 'react-test-renderer';
+/**
+ * @jest-environment jsdom
+ */
 
-describe('Multi index recipe', () => {
+import React from 'react';
+import renderer from 'react-test-renderer';
+import App from '../App';
+
+describe('geo-search recipe', () => {
   it('App renders without crashing', () => {
     const component = renderer.create(<App />);
 

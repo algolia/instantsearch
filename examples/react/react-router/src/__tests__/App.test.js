@@ -1,9 +1,13 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { Router, Route } from 'react-router-dom/cjs/react-router-dom.min';
 import { createMemoryHistory } from 'history';
 
-import App from './App';
+import App from '../App';
 
 const history = createMemoryHistory('/');
 
