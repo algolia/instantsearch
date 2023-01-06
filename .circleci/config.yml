@@ -36,7 +36,8 @@ workflows:
   version: 2
   ci:
     jobs:
-      - build
+      - build:
+          context: fx-libraries
       - test metadata
       - lint:
           requires:
