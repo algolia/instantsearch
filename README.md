@@ -17,7 +17,7 @@
 
 There are multiple wrappers for popular frameworks, such as [React InstantSearch][react-instantsearch-docs], [Vue InstantSearch][vue-instantsearch-docs], and [Angular InstantSearch][angular-instantsearch-docs].
 
-It is part of the InstantSearch family which is declined for different platforms:
+It is part of the InstantSearch family which is designed for different platforms:
 
 **InstantSearch** | [Angular InstantSearch][instantsearch-angular-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
