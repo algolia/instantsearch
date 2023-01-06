@@ -36,7 +36,8 @@ workflows:
   version: 2
   ci:
     jobs:
-      - build
+      - build:
+          context: fx-libraries
       - test metadata
       - lint:
           requires:
@@ -54,9 +55,11 @@ workflows:
           requires:
             - build
       - e2e tests:
+          context: fx-libraries
           requires:
             - examples
       - release if needed:
+          context: fx-libraries
           requires:
             - build
             - lint
@@ -77,7 +80,8 @@ workflows:
               only:
                 - master
     jobs:
-      - prepare release
+      - prepare release:
+          context: fx-libraries
 
 jobs:
   build:
