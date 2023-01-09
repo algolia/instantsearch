@@ -241,6 +241,8 @@ jobs:
       - run:
           name: Trigger a release if the latest commit is a release commit
           command: |
+            git config --global user.email "instantsearch-bot@algolia.com"
+            git config --global user.name "InstantSearch[bot]"
             yarn shipjs trigger
 
   prepare release:
@@ -254,5 +256,5 @@ jobs:
           name: Prepare a pull request for next release
           command: |
             git config --global user.email "instantsearch-bot@algolia.com"
-            git config --global user.name "InstantSearch"
+            git config --global user.name "InstantSearch[bot]"
             yarn run shipjs prepare --yes --no-browse
