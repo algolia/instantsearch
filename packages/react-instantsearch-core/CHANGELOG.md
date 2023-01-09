@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.38.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.38.2...react-instantsearch-core@6.38.3) (2023-01-09)
+
+
+### Bug Fixes
+
+* **dependencies:** update helper requirement for minor PP vulnerability ([#5417](https://github.com/algolia/instantsearch.js/issues/5417)) ([254ef00](https://github.com/algolia/instantsearch.js/commit/254ef00439a9af48be15f22b4fd9902899610226))
+
+
+
+
+
 ## [6.38.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.38.1...react-instantsearch-core@6.38.2) (2023-01-03)
 
 **Note:** Version bump only for package react-instantsearch-core
