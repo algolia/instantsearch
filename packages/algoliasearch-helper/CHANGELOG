@@ -1,3 +1,8 @@
+3.11.2 - 2023-01-09
+ * feat: update Algolia logo (#918) https://github.com/algolia/algoliasearch-helper-js/commit/58e0e588195dde8f411383ad248bd112a9c01eb5
+ * fix: prevent prototype pollution in rare error-cases (#923) https://github.com/algolia/algoliasearch-helper-js/commit/7ae16eaa3f5732b96f1fa40973778c5494e77b89, closes https://github.com/algolia/algoliasearch-helper-js/issues/922
+ * fix(answers): deprecate findAnswers (#919) https://github.com/algolia/algoliasearch-helper-js/commit/07118610d3da07d04390d7b79e857122e98a3db5
+
 3.11.1 - 2022-09-12
  * fix(facetValues): use existing facet filters in multi queries for hierarchical facet values (#915) https://github.com/algolia/algoliasearch-helper-js/commit/bae388c7143653e74628dbd3c72979a51be6ab7f
 
