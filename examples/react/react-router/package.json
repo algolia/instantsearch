@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-react-router",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -19,7 +19,12 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.(jsx?|tsx?)$": ["babel-jest", { "rootMode": "upward" }]
+      "^.+\\.(jsx?|tsx?)$": [
+        "babel-jest",
+        {
+          "rootMode": "upward"
+        }
+      ]
     }
   },
   "dependencies": {
@@ -29,7 +34,7 @@
     "qs": "6.9.6",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-instantsearch-dom": "6.38.2",
+    "react-instantsearch-dom": "6.38.3",
     "react-router-dom": "5.2.0"
   },
   "browserslist": [

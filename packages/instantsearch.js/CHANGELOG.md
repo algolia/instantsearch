@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.49.4](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.49.3...instantsearch.js@4.49.4) (2023-01-09)
+
+
+### Bug Fixes
+
+* **dependencies:** update helper requirement for minor PP vulnerability ([#5417](https://github.com/algolia/instantsearch.js/issues/5417)) ([254ef00](https://github.com/algolia/instantsearch.js/commit/254ef00439a9af48be15f22b4fd9902899610226))
+
+
+
+
+
 # [4.49.3](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.49.2...instantsearch.js@4.49.3) (2023-01-03)
 
 
