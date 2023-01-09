@@ -23,7 +23,8 @@ function _merge(target, source) {
   for (var key in source) {
     if (
       !Object.prototype.hasOwnProperty.call(source, key) ||
-      key === '__proto__'
+      key === '__proto__' ||
+      key === 'constructor'
     ) {
       continue;
     }

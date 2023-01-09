@@ -183,3 +183,15 @@ it('does not pollute the prototype', () => {
 
   expect({}.polluted).toBe(undefined);
 });
+
+it('does not pollute the prototype in error condition', () => {
+  expect({}.polluted).toBe(undefined);
+
+  try {
+    merge({}, {'constructor': {'prototype': {'polluted': 'vulnerable to PP'}}});
+  } catch (e) {
+    // ignore
+  }
+
+  expect({}.polluted).toBe(undefined);
+});
