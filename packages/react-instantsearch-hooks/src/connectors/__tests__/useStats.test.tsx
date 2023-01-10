@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useStats } from '../useStats';
 
-describe('useMenu', () => {
+describe('useStats', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
     const { result, waitForNextUpdate } = renderHook(() => useStats(), {
@@ -12,28 +12,28 @@ describe('useMenu', () => {
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
-      canRefine: false,
-      canToggleShowMore: false,
-      createURL: expect.any(Function),
-      isShowingMore: false,
-      items: [],
-      refine: expect.any(Function),
-      sendEvent: expect.any(Function),
-      toggleShowMore: expect.any(Function),
+      areHitsSorted: false,
+      hitsPerPage: 20,
+      nbHits: 0,
+      nbPages: 0,
+      nbSortedHits: undefined,
+      page: 0,
+      processingTimeMS: 0,
+      query: '',
     });
 
     await waitForNextUpdate();
 
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
-      canRefine: false,
-      canToggleShowMore: false,
-      createURL: expect.any(Function),
-      isShowingMore: false,
-      items: [],
-      refine: expect.any(Function),
-      sendEvent: expect.any(Function),
-      toggleShowMore: expect.any(Function),
+      areHitsSorted: false,
+      hitsPerPage: 20,
+      nbHits: 0,
+      nbPages: 0,
+      nbSortedHits: undefined,
+      page: 0,
+      processingTimeMS: 0,
+      query: '',
     });
   });
 });
