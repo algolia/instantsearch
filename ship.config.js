@@ -5,13 +5,18 @@ const packages = JSON.parse(
     silent: true,
   })
 );
+const changedPackages = JSON.parse(
+  shell.exec('yarn run --silent lerna list --toposort --json', {
+    silent: true,
+  })
+);
 
 module.exports = {
   shouldPrepare: () => {
     return true;
   },
   getTagName: () =>
-    packages.map((package) => `${package.name}@${package.version}`),
+    changedPackages.map((package) => `${package.name}@${package.version}`),
   getStagingBranchName: () => `chore/release-${Date.now()}`,
   version({ exec }) {
     exec(
