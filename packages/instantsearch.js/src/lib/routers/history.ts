@@ -13,7 +13,7 @@ type ParseURL<TRouteState> = (args: {
   location: Location;
 }) => TRouteState;
 
-type BrowserHistoryArgs<TRouteState> = {
+export type BrowserHistoryArgs<TRouteState> = {
   windowTitle?: (routeState: TRouteState) => string;
   writeDelay: number;
   createURL: CreateURL<TRouteState>;
@@ -22,6 +22,11 @@ type BrowserHistoryArgs<TRouteState> = {
   // so we should accept a subset of it that is easier to work with in any
   // environments.
   getLocation(): Location;
+  onUpdate?: (
+    cb: (routeState: TRouteState) => void,
+    browserHistoryInstance: BrowserHistory<TRouteState>
+  ) => void;
+  dispose?: () => void;
 };
 
 const setWindowTitle = (title?: string): void => {
@@ -90,6 +95,13 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   private latestAcknowledgedHistory: number = 0;
 
+  private _onUpdate?: (
+    cb: (routeState: TRouteState) => void,
+    instance: this
+  ) => void;
+
+  private _dispose?: () => void;
+
   /**
    * Initializes a new storage provider that syncs the search state to the URL
    * using web APIs (`window.location.pushState` and `onpopstate` event).
@@ -100,6 +112,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     createURL,
     parseURL,
     getLocation,
+    onUpdate,
+    dispose,
   }: BrowserHistoryArgs<TRouteState>) {
     this.windowTitle = windowTitle;
     this.writeTimer = undefined;
@@ -107,6 +121,8 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this._createURL = createURL;
     this.parseURL = parseURL;
     this.getLocation = getLocation;
+    this._onUpdate = onUpdate;
+    this._dispose = dispose;
 
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -153,6 +169,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * It enables the URL sync to keep track of the changes.
    */
   public onUpdate(callback: (routeState: TRouteState) => void): void {
+    if (this._onUpdate) {
+      this._onUpdate(callback, this);
+    }
+
     this._onPopState = () => {
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
@@ -190,6 +210,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Removes the event listener and cleans up the URL.
    */
   public dispose(): void {
+    if (this._dispose) {
+      this._dispose();
+    }
+
     this.isDisposed = true;
 
     safelyRunOnBrowser(({ window }) => {
@@ -269,6 +293,8 @@ export default function historyRouter<TRouteState = UiState>({
       },
     });
   },
+  onUpdate,
+  dispose,
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({
     createURL,
@@ -276,5 +302,7 @@ export default function historyRouter<TRouteState = UiState>({
     writeDelay,
     windowTitle,
     getLocation,
+    onUpdate,
+    dispose,
   });
 }

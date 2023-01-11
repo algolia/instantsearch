@@ -1,0 +1,26 @@
+{
+  "name": "react-instantsearch-hooks-next-router",
+  "version": "0.0.1",
+  "description": "React InstantSearch Hooks Next Router",
+  "license": "MIT",
+  "type": "module",
+  "source": "index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.module.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.modern.mjs"
+  },
+  "scripts": {
+    "build": "microbundle index.ts"
+  },
+  "devDependencies": {
+    "microbundle": "0.15.1"
+  },
+  "peerDependencies": {
+    "instantsearch.js": "^4.0.0",
+    "next": "^13.0.0"
+  }
+}
