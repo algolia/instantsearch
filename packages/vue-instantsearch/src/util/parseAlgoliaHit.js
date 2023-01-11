@@ -5,7 +5,7 @@ import { unescape } from '../util/unescape';
 const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',
   highlightPostTag: '__/ais-highlight__',
-};
+};    
 
 /**
  * Parses an highlighted attribute into an array of objects with the string value, and
