@@ -28,6 +28,11 @@ body {
   gap: 0.5rem;
 }
 
+.Stats {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .Search-header {
   display: grid;
   align-items: flex-start;
