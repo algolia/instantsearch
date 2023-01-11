@@ -18,6 +18,7 @@
     "website:storybook": "lerna run storybook:build",
     "website:examples": "lerna run website:examples",
     "lint": "eslint --ext .js,.ts,.tsx,.vue . && lerna run lint",
+    "lint:ci": "eslint --ext .js,.ts,.tsx,.vue . --format junit --output-file junit/eslint.xml && lerna run lint",
     "lint:fix": "eslint --ext .js,.ts,.tsx,.vue --fix .",
     "type-check": "tsc && lerna run type-check",
     "type-check:v3": "tsc --project tsconfig.v3.json",

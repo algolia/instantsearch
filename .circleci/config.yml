@@ -141,7 +141,7 @@ jobs:
       - *run_yarn_install
       - run:
           name: Lint & Code styles
-          command: yarn run lint
+          command: yarn run lint:ci
       - run:
           name: Type Checking
           command: yarn run type-check
