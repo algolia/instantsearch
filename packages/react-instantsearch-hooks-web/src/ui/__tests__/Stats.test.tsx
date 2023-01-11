@@ -16,6 +16,13 @@ describe('Stats', () => {
       processingTimeMS: 10,
       areHitsSorted: false,
       nbSortedHits: 100,
+      translations: {
+        stats: (nbHits, processingTimeMS, nbSortedHits, areHitsSorted) => {
+          return areHitsSorted && nbHits !== nbSortedHits
+            ? `${nbSortedHits!.toLocaleString()} relevant results sorted out of ${nbHits.toLocaleString()} found in ${processingTimeMS.toLocaleString()}ms`
+            : `${nbHits.toLocaleString()} results found in ${processingTimeMS.toLocaleString()}ms`;
+        },
+      },
       ...props,
     };
   }
@@ -139,13 +146,13 @@ describe('Stats', () => {
   });
 
   test('renders with translations', () => {
-    const translation = (
+    const translationFn = (
       _nbHits: number,
       _processingTimeMS: number,
       _nbSortedHits?: number,
       areHitsSorted?: boolean
     ) => (areHitsSorted ? 'Sorted' : 'Unsorted');
-    let props = createProps({ translations: translation });
+    let props = createProps({ translations: { stats: translationFn } });
 
     const { getByText, rerender } = render(<Stats {...props} />);
 
@@ -155,7 +162,7 @@ describe('Stats', () => {
       areHitsSorted: true,
       nbSortedHits: 1,
       nbHits: 2,
-      translations: translation,
+      translations: { stats: translationFn },
     });
 
     rerender(<Stats {...props} />);

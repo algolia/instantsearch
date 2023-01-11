@@ -15,7 +15,9 @@ export type StatsProps = React.ComponentProps<'div'> & {
   nbSortedHits?: number;
   areHitsSorted?: boolean;
   classNames?: Partial<StatsClassNames>;
-  translations?: StatsTranslations;
+  translations: {
+    stats: StatsTranslations;
+  };
 };
 
 export type StatsClassNames = {
@@ -34,20 +36,18 @@ export function Stats({
   translations,
   ...props
 }: StatsProps) {
-  const translation =
-    areHitsSorted && nbHits !== nbSortedHits
-      ? `${nbSortedHits!.toLocaleString()} relevant results sorted out of ${nbHits.toLocaleString()} found in ${processingTimeMS.toLocaleString()}ms`
-      : `${nbHits.toLocaleString()} results found in ${processingTimeMS.toLocaleString()}ms`;
-
   return (
     <div
       {...props}
       className={cx('ais-Stats', classNames.root, props.className)}
     >
       <span className="ais-Stats-text">
-        {translations
-          ? translations(nbHits, processingTimeMS, nbSortedHits, areHitsSorted)
-          : translation}
+        {translations.stats(
+          nbHits,
+          processingTimeMS,
+          nbSortedHits,
+          areHitsSorted
+        )}
       </span>
     </div>
   );
