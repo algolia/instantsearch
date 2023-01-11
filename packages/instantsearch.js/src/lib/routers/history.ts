@@ -37,11 +37,11 @@ const setWindowTitle = (title?: string): void => {
   }
 };
 
-class BrowserHistory<TRouteState> implements Router<TRouteState> {
+export class BrowserHistory<TRouteState> implements Router<TRouteState> {
   /**
    * Transforms a UI state into a title for the page.
    */
-  private readonly windowTitle?: BrowserHistoryArgs<TRouteState>['windowTitle'];
+  protected readonly windowTitle?: BrowserHistoryArgs<TRouteState>['windowTitle'];
   /**
    * Time in milliseconds before performing a write in the history.
    * It prevents from adding too many entries in the history and
@@ -49,7 +49,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    *
    * @default 400
    */
-  private readonly writeDelay: Required<
+  protected readonly writeDelay: Required<
     BrowserHistoryArgs<TRouteState>
   >['writeDelay'];
   /**
@@ -74,13 +74,13 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     BrowserHistoryArgs<TRouteState>
   >['getLocation'];
 
-  private writeTimer?: ReturnType<typeof setTimeout>;
+  protected writeTimer?: ReturnType<typeof setTimeout>;
   private _onPopState?(event: PopStateEvent): void;
 
   /**
    * Indicates if last action was back/forward in the browser.
    */
-  private inPopState: boolean = false;
+  protected inPopState: boolean = false;
 
   /**
    * Indicates whether the history router is disposed or not.
@@ -93,7 +93,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * It allows to determine if a `pushState` has been triggered elsewhere,
    * and thus to prevent the `write` method from calling `pushState`.
    */
-  private latestAcknowledgedHistory: number = 0;
+  protected latestAcknowledgedHistory: number = 0;
 
   private _onUpdate?: (
     cb: (routeState: TRouteState) => void,
@@ -229,7 +229,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.write({} as TRouteState);
   }
 
-  private shouldWrite(url: string): boolean {
+  protected shouldWrite(url: string): boolean {
     return safelyRunOnBrowser(({ window }) => {
       // We do want to `pushState` if:
       // - the router is not disposed, IS.js needs to update the URL

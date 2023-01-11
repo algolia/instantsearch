@@ -21,7 +21,7 @@ import { Panel } from '../../components/Panel';
 import Menu from '../../components/Menu';
 import { MenuConnectorParams } from 'instantsearch.js/es/connectors/menu/connectMenu';
 
-import { createInstantSearchNextRouter } from 'react-instantsearch-hooks-next-router';
+import { nextRouter } from 'react-instantsearch-hooks-next-router';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
@@ -76,7 +76,7 @@ export default function CategoryPage({ serverState, url }: CategoryPageProps) {
         searchClient={client}
         indexName="instant_search"
         routing={{
-          router: createInstantSearchNextRouter(url, {
+          router: nextRouter(url, {
             createURL({ routeState, location, qsModule }) {
               const { category, ...queryParameters } = routeState;
               const { origin, pathname } = location;
