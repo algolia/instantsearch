@@ -142,6 +142,8 @@ jobs:
       - run:
           name: Lint & Code styles
           command: yarn run lint:ci
+      - store_test_results:
+          path: junit/eslint.xml
       - run:
           name: Type Checking
           command: yarn run type-check
