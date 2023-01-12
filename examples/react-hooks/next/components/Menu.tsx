@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import router from 'next/router';
 
 export default function Menu() {
   return (
@@ -13,13 +12,9 @@ export default function Menu() {
           <Link href={`/search/appliances`}>Appliances</Link>
         </li>
         <li>
-          <button
-            onClick={() =>
-              router.push('/search/audio', undefined, { shallow: true })
-            }
-          >
-            audio
-          </button>
+          <Link href={`/search/audio`} shallow>
+            Audio
+          </Link>
         </li>
         <li>
           <Link href={`/search/cell%20phones`}>Cell Phones</Link>
