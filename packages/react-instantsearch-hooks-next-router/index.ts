@@ -1,8 +1,9 @@
 import { history } from 'instantsearch.js/es/lib/routers';
-import nextRouter from 'next/router';
+import nextRouterSingleton from 'next/router';
 
 import type { Router, UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
+import type { Router as NextRouter } from 'next/router';
 
 export function createInstantSearchNextRouter<TRouteState = UiState>(
   url: string | undefined,
@@ -14,23 +15,7 @@ export function createInstantSearchNextRouter<TRouteState = UiState>(
   >
 ): Router<TRouteState> {
   let handler: () => void;
-
-  if (typeof window !== 'undefined') {
-    nextRouter.beforePopState(() => {
-      const asPathWithoutParams = nextRouter.asPath.split('?')[0];
-      let pathname = new URL(window.location.href).pathname;
-      if (nextRouter.locale) {
-        pathname = pathname.replace(
-          asPathWithoutParams === '/'
-            ? nextRouter.locale
-            : `/${nextRouter.locale}`,
-          ''
-        );
-      }
-      // We only want to trigger SSR when going back/forward to a different page
-      return asPathWithoutParams !== pathname;
-    });
-  }
+  let previousBeforePopState: NonNullable<NextRouter['_bps']> = () => true;
 
   return history({
     ...options,
@@ -42,17 +27,38 @@ export function createInstantSearchNextRouter<TRouteState = UiState>(
       return window.location;
     },
     onUpdate(cb, browserHistory) {
+      if (typeof window !== 'undefined') {
+        if (nextRouterSingleton.router?._bps) {
+          previousBeforePopState = nextRouterSingleton.router._bps;
+        }
+
+        nextRouterSingleton.beforePopState(() => {
+          const asPathWithoutParams = nextRouterSingleton.asPath.split('?')[0];
+          let pathname = new URL(window.location.href).pathname;
+          if (nextRouterSingleton.locale) {
+            pathname = pathname.replace(
+              asPathWithoutParams === '/'
+                ? nextRouterSingleton.locale
+                : `/${nextRouterSingleton.locale}`,
+              ''
+            );
+          }
+          // We only want to trigger SSR when going back/forward to a different page
+          return asPathWithoutParams !== pathname;
+        });
+      }
+
       handler = () => {
         cb(browserHistory.read());
       };
-      nextRouter.events.on('routeChangeComplete', handler);
+      nextRouterSingleton.events.on('routeChangeComplete', handler);
     },
     dispose() {
-      nextRouter.events.off('routeChangeComplete', handler);
-      nextRouter.beforePopState(() => true);
+      nextRouterSingleton.events.off('routeChangeComplete', handler);
+      nextRouterSingleton.beforePopState(previousBeforePopState);
     },
     push(newUrl) {
-      nextRouter.push(
+      nextRouterSingleton.push(
         {
           href: newUrl,
           // SSR needs this
