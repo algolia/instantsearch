@@ -2,13 +2,6 @@ import React from 'react';
 
 import { cx } from './lib/cx';
 
-export type StatsTranslationOptions = Pick<
-  StatsProps,
-  'nbHits' | 'processingTimeMS' | 'nbSortedHits' | 'areHitsSorted'
->;
-
-export type StatsTranslations = (options: StatsTranslationOptions) => string;
-
 export type StatsProps = React.ComponentProps<'div'> & {
   nbHits: number;
   processingTimeMS: number;
@@ -19,6 +12,13 @@ export type StatsProps = React.ComponentProps<'div'> & {
     stats: StatsTranslations;
   };
 };
+
+export type StatsTranslationOptions = Pick<
+  StatsProps,
+  'nbHits' | 'processingTimeMS' | 'nbSortedHits' | 'areHitsSorted'
+>;
+
+export type StatsTranslations = (options: StatsTranslationOptions) => string;
 
 export type StatsClassNames = {
   /**
