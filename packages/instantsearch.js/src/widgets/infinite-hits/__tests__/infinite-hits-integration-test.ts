@@ -144,33 +144,33 @@ describe('infiniteHits', () => {
       });
       expect(customCache.write).toHaveBeenCalledTimes(2);
       expect(customCache.write.mock.calls[1][0].hits).toMatchInlineSnapshot(`
-{
-  "0": [
-    {
-      "__position": 1,
-      "objectID": "object-id0",
-      "title": "title 1",
-    },
-    {
-      "__position": 2,
-      "objectID": "object-id1",
-      "title": "title 2",
-    },
-  ],
-  "1": [
-    {
-      "__position": 3,
-      "objectID": "object-id0",
-      "title": "title 3",
-    },
-    {
-      "__position": 4,
-      "objectID": "object-id1",
-      "title": "title 4",
-    },
-  ],
-}
-`);
+        {
+          "0": [
+            {
+              "__position": 1,
+              "objectID": "object-id0",
+              "title": "title 1",
+            },
+            {
+              "__position": 2,
+              "objectID": "object-id1",
+              "title": "title 2",
+            },
+          ],
+          "1": [
+            {
+              "__position": 3,
+              "objectID": "object-id0",
+              "title": "title 3",
+            },
+            {
+              "__position": 4,
+              "objectID": "object-id1",
+              "title": "title 4",
+            },
+          ],
+        }
+      `);
     });
 
     it('displays all the hits from cache', async () => {

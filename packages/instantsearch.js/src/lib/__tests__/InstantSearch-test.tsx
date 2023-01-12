@@ -1324,10 +1324,14 @@ describe('scheduleStalledRender', () => {
     // Trigger a new search
     search.mainHelper!.search();
 
+    // search starts
+    await wait(0);
+    expect(widget.render).toHaveBeenCalledTimes(2);
+
     // Reaches the delay
     await wait(search._stalledSearchDelay);
 
-    expect(widget.render).toHaveBeenCalledTimes(2);
+    expect(widget.render).toHaveBeenCalledTimes(3);
   });
 
   it('deduplicates the calls to the `render` method', async () => {
@@ -1359,10 +1363,15 @@ describe('scheduleStalledRender', () => {
     search.mainHelper!.search();
     search.mainHelper!.search();
 
+    await wait(0);
+
+    // search starts
+    expect(widget.render).toHaveBeenCalledTimes(2);
+
     // Reaches the delay
     await wait(search._stalledSearchDelay);
 
-    expect(widget.render).toHaveBeenCalledTimes(2);
+    expect(widget.render).toHaveBeenCalledTimes(3);
   });
 
   it('triggers a `render` once the search expires the delay', async () => {
@@ -1405,11 +1414,24 @@ describe('scheduleStalledRender', () => {
 
     expect(widget.render).toHaveBeenCalledTimes(1);
 
+    await wait(0);
+
+    // Widgets render because of the search
+    expect(widget.render).toHaveBeenCalledTimes(2);
+    expect(widget.render).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        searchMetadata: {
+          isSearchStalled: false,
+        },
+        status: 'loading',
+      })
+    );
+
     // The delay is reached
     await wait(search._stalledSearchDelay);
 
     // Widgets render because of the stalled search
-    expect(widget.render).toHaveBeenCalledTimes(2);
+    expect(widget.render).toHaveBeenCalledTimes(3);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         searchMetadata: {
@@ -1426,7 +1448,7 @@ describe('scheduleStalledRender', () => {
     await wait(0);
 
     // Widgets render because of the results
-    expect(widget.render).toHaveBeenCalledTimes(3);
+    expect(widget.render).toHaveBeenCalledTimes(4);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         searchMetadata: {
