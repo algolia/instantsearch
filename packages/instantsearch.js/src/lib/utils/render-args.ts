@@ -1,6 +1,5 @@
 import type { InstantSearch, UiState } from '../../types';
 import type { IndexWidget } from '../../widgets/index/index';
-import algoliasearchHelper from 'algoliasearch-helper';
 
 export function createInitArgs(
   instantSearchInstance: InstantSearch,
