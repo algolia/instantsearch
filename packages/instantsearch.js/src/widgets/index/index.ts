@@ -493,23 +493,16 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
 
       derivedHelper.on('result', ({ results }) => {
-        // TODO: does this need to be conditional
-        const actualResults = new algoliasearchHelper.SearchResults(
-          this.getHelper()!.state,
-          results._rawResults
-        );
+        // The index does not render the results it schedules a new render
+        // to let all the other indices emit their own results. It allows us to
+        // run the render process in one pass.
+        instantSearchInstance.scheduleRender();
 
         // the derived helper is the one which actually searches, but the helper
         // which is exposed e.g. via instance.helper, doesn't search, and thus
         // does not have access to lastResults, which it used to in pre-federated
         // search behavior.
-        helper!.lastResults = actualResults;
-        derivedHelper!.lastResults = actualResults;
-
-        // The index does not render the results it schedules a new render
-        // to let all the other indices emit their own results. It allows us to
-        // run the render process in one pass.
-        instantSearchInstance.scheduleRender();
+        helper!.lastResults = results;
       });
 
       // We compute the render state before calling `init` in a separate loop

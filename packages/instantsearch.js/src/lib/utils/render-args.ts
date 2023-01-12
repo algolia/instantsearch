@@ -30,12 +30,11 @@ export function createRenderArgs(
   instantSearchInstance: InstantSearch,
   parent: IndexWidget
 ) {
-  // Always make results out of the current state, this enables optimistic UI
-  // TODO: does this need to be conditional
-  const results = new algoliasearchHelper.SearchResults(
-    parent.getHelper()!.state,
-    parent.getResults()!._rawResults
-  );
+  const results = parent.getResults()!;
+  // To make the UI optimistic, we will always render using the current state,
+  // but the previous results. This means a change will be visible immediately,
+  // regardless of the status of the network request.
+  results._state = parent.getHelper()!.state;
 
   return {
     helper: parent.getHelper()!,
