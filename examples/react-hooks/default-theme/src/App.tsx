@@ -21,7 +21,6 @@ import {
   SearchBox,
   SortBy,
   ToggleRefinement,
-  Stats,
 } from 'react-instantsearch-hooks-web';
 
 import {
@@ -109,9 +108,6 @@ export function App() {
           />
 
           <SearchBox placeholder="Search" autoFocus />
-          <div className="Stats">
-            <Stats />
-          </div>
 
           <div className="Search-header">
             <PoweredBy />

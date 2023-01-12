@@ -3,7 +3,10 @@ import { useStats } from 'react-instantsearch-hooks';
 
 import { Stats as StatsUiComponent } from '../ui/Stats';
 
-import type { StatsProps as StatsUiComponentProps } from '../ui/Stats';
+import type {
+  StatsProps as StatsUiComponentProps,
+  StatsTranslationOptions,
+} from '../ui/Stats';
 import type { UseStatsProps } from 'react-instantsearch-hooks';
 
 type UiProps = Pick<
@@ -24,15 +27,10 @@ export function Stats(props: StatsProps) {
     { $$widgetType: 'ais.stats' }
   );
 
-  const statsTranslation = (
-    n: number,
-    ms: number,
-    nSorted?: number,
-    sorted?: boolean
-  ): string =>
-    sorted
-      ? `${nSorted!.toLocaleString()} relevant results sorted out of ${n.toLocaleString()} found in ${ms.toLocaleString()}ms`
-      : `${n.toLocaleString()} results found in ${ms.toLocaleString()}ms`;
+  const statsTranslation = (options: StatsTranslationOptions): string =>
+    options.areHitsSorted
+      ? `${options.nbSortedHits!.toLocaleString()} relevant results sorted out of ${options.nbHits.toLocaleString()} found in ${options.processingTimeMS.toLocaleString()}ms`
+      : `${options.nbHits.toLocaleString()} results found in ${options.processingTimeMS.toLocaleString()}ms`;
 
   const uiProps: UiProps = {
     nbHits,

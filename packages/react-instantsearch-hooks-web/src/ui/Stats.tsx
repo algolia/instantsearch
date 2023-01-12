@@ -2,12 +2,13 @@ import React from 'react';
 
 import { cx } from './lib/cx';
 
-export type StatsTranslations = (
-  nbHits: number,
-  processingTimeMS: number,
-  nbSortedHits?: number,
-  areHitsSorted?: boolean
-) => string;
+export type StatsTranslationOptions = {
+  nbHits: number;
+  processingTimeMS: number;
+  nbSortedHits?: number;
+  areHitsSorted?: boolean;
+};
+export type StatsTranslations = (options: StatsTranslationOptions) => string;
 
 export type StatsProps = React.ComponentProps<'div'> & {
   nbHits: number;
@@ -36,18 +37,20 @@ export function Stats({
   translations,
   ...props
 }: StatsProps) {
+  const translationOptions: StatsTranslationOptions = {
+    nbHits,
+    processingTimeMS,
+    nbSortedHits,
+    areHitsSorted,
+  };
+
   return (
     <div
       {...props}
       className={cx('ais-Stats', classNames.root, props.className)}
     >
       <span className="ais-Stats-text">
-        {translations.stats(
-          nbHits,
-          processingTimeMS,
-          nbSortedHits,
-          areHitsSorted
-        )}
+        {translations.stats(translationOptions)}
       </span>
     </div>
   );

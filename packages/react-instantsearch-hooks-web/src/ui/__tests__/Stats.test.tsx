@@ -7,7 +7,7 @@ import React from 'react';
 
 import { Stats } from '../Stats';
 
-import type { StatsProps } from '../Stats';
+import type { StatsProps, StatsTranslationOptions } from '../Stats';
 
 describe('Stats', () => {
   function createProps(props: Partial<StatsProps>): StatsProps {
@@ -17,7 +17,12 @@ describe('Stats', () => {
       areHitsSorted: false,
       nbSortedHits: 100,
       translations: {
-        stats: (nbHits, processingTimeMS, nbSortedHits, areHitsSorted) => {
+        stats: ({
+          nbHits,
+          processingTimeMS,
+          nbSortedHits,
+          areHitsSorted,
+        }: StatsTranslationOptions) => {
           return areHitsSorted && nbHits !== nbSortedHits
             ? `${nbSortedHits!.toLocaleString()} relevant results sorted out of ${nbHits.toLocaleString()} found in ${processingTimeMS.toLocaleString()}ms`
             : `${nbHits.toLocaleString()} results found in ${processingTimeMS.toLocaleString()}ms`;
@@ -146,12 +151,8 @@ describe('Stats', () => {
   });
 
   test('renders with translations', () => {
-    const translationFn = (
-      _nbHits: number,
-      _processingTimeMS: number,
-      _nbSortedHits?: number,
-      areHitsSorted?: boolean
-    ) => (areHitsSorted ? 'Sorted' : 'Unsorted');
+    const translationFn = ({ areHitsSorted }: StatsTranslationOptions) =>
+      areHitsSorted ? 'Sorted' : 'Unsorted';
     let props = createProps({ translations: { stats: translationFn } });
 
     const { getByText, rerender } = render(<Stats {...props} />);
