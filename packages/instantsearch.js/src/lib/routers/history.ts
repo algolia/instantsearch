@@ -27,6 +27,7 @@ export type BrowserHistoryArgs<TRouteState> = {
     browserHistoryInstance: BrowserHistory<TRouteState>
   ) => void;
   dispose?: () => void;
+  push?: (url: string) => void;
 };
 
 const setWindowTitle = (title?: string): void => {
@@ -37,11 +38,11 @@ const setWindowTitle = (title?: string): void => {
   }
 };
 
-export class BrowserHistory<TRouteState> implements Router<TRouteState> {
+class BrowserHistory<TRouteState> implements Router<TRouteState> {
   /**
    * Transforms a UI state into a title for the page.
    */
-  protected readonly windowTitle?: BrowserHistoryArgs<TRouteState>['windowTitle'];
+  private readonly windowTitle?: BrowserHistoryArgs<TRouteState>['windowTitle'];
   /**
    * Time in milliseconds before performing a write in the history.
    * It prevents from adding too many entries in the history and
@@ -49,7 +50,7 @@ export class BrowserHistory<TRouteState> implements Router<TRouteState> {
    *
    * @default 400
    */
-  protected readonly writeDelay: Required<
+  private readonly writeDelay: Required<
     BrowserHistoryArgs<TRouteState>
   >['writeDelay'];
   /**
@@ -74,13 +75,13 @@ export class BrowserHistory<TRouteState> implements Router<TRouteState> {
     BrowserHistoryArgs<TRouteState>
   >['getLocation'];
 
-  protected writeTimer?: ReturnType<typeof setTimeout>;
+  private writeTimer?: ReturnType<typeof setTimeout>;
   private _onPopState?(event: PopStateEvent): void;
 
   /**
    * Indicates if last action was back/forward in the browser.
    */
-  protected inPopState: boolean = false;
+  private inPopState: boolean = false;
 
   /**
    * Indicates whether the history router is disposed or not.
@@ -93,7 +94,7 @@ export class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * It allows to determine if a `pushState` has been triggered elsewhere,
    * and thus to prevent the `write` method from calling `pushState`.
    */
-  protected latestAcknowledgedHistory: number = 0;
+  private latestAcknowledgedHistory: number = 0;
 
   private _onUpdate?: (
     cb: (routeState: TRouteState) => void,
@@ -101,6 +102,8 @@ export class BrowserHistory<TRouteState> implements Router<TRouteState> {
   ) => void;
 
   private _dispose?: () => void;
+
+  private _push?: (url: string) => void;
 
   /**
    * Initializes a new storage provider that syncs the search state to the URL
@@ -114,6 +117,7 @@ export class BrowserHistory<TRouteState> implements Router<TRouteState> {
     getLocation,
     onUpdate,
     dispose,
+    push,
   }: BrowserHistoryArgs<TRouteState>) {
     this.windowTitle = windowTitle;
     this.writeTimer = undefined;
@@ -123,6 +127,7 @@ export class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.getLocation = getLocation;
     this._onUpdate = onUpdate;
     this._dispose = dispose;
+    this._push = push;
 
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -155,7 +160,11 @@ export class BrowserHistory<TRouteState> implements Router<TRouteState> {
         setWindowTitle(title);
 
         if (this.shouldWrite(url)) {
-          window.history.pushState(routeState, title || '', url);
+          if (this._push) {
+            this._push(url);
+          } else {
+            window.history.pushState(routeState, title || '', url);
+          }
           this.latestAcknowledgedHistory = window.history.length;
         }
         this.inPopState = false;
@@ -229,7 +238,7 @@ export class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.write({} as TRouteState);
   }
 
-  protected shouldWrite(url: string): boolean {
+  private shouldWrite(url: string): boolean {
     return safelyRunOnBrowser(({ window }) => {
       // We do want to `pushState` if:
       // - the router is not disposed, IS.js needs to update the URL
@@ -295,6 +304,7 @@ export default function historyRouter<TRouteState = UiState>({
   },
   onUpdate,
   dispose,
+  push,
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({
     createURL,
@@ -304,5 +314,6 @@ export default function historyRouter<TRouteState = UiState>({
     getLocation,
     onUpdate,
     dispose,
+    push,
   });
 }
