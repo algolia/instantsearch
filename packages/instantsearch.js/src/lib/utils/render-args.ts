@@ -1,5 +1,6 @@
 import type { InstantSearch, UiState } from '../../types';
 import type { IndexWidget } from '../../widgets/index/index';
+import algoliasearchHelper from 'algoliasearch-helper';
 
 export function createInitArgs(
   instantSearchInstance: InstantSearch,
@@ -29,7 +30,12 @@ export function createRenderArgs(
   instantSearchInstance: InstantSearch,
   parent: IndexWidget
 ) {
-  const results = parent.getResults()!;
+  // Always make results out of the current state, this enables optimistic UI
+  // TODO: does this need to be conditional
+  const results = new algoliasearchHelper.SearchResults(
+    parent.getHelper()!.state,
+    parent.getResults()!._rawResults
+  );
 
   return {
     helper: parent.getHelper()!,

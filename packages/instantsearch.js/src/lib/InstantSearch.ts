@@ -487,6 +487,7 @@ See ${createDocumentationLink({
       // these guarantees about the render event, thus emitting it once more
       // isn't a breaking change.
       this.emit('render');
+      this.scheduleRender();
 
       // This solution allows us to keep the exact same API for the users but
       // under the hood, we have a different implementation. It should be
