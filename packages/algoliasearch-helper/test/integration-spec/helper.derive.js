@@ -1,42 +1,45 @@
 'use strict';
 
 var utils = require('../integration-utils.js');
-var setup = utils.setup;
+var setup = utils.setupSimple;
 
 var algoliasearchHelper = require('../../');
 
 var random = require('lodash/random');
 
-test(
-  '[INT][DERIVE] Query the same index twice with different query',
-  function() {
-    var indexName = '_circle-algoliasearch-helper-js-' +
-      (process.env.CIRCLE_BUILD_NUM || 'DEV') +
-      'helper_distinct.facet' + random(0, 5000);
+var indexName =
+  '_circle-algoliasearch-helper-js-' +
+  (process.env.CIRCLE_BUILD_NUM || 'DEV') +
+  'helper_derive' +
+  random(0, 5000);
 
-    return setup(indexName, function(client, index) {
-      return index.addObjects([
-        {objectID: '0', content: 'tata'},
-        {objectID: '1', content: 'toto'}
-      ])
-      .then(function(content) {
-        return index.waitTask(content.taskID);
-      }).then(function() {
-        return client;
-      });
-    }).then(function(client) {
-      var mainHelper = algoliasearchHelper(
-        client,
-        indexName,
-        {
-          facets: ['f'],
-          disjunctiveFacets: ['df'],
-          hierarchicalFacets: [{
+var dataset = [
+  {objectID: '0', content: 'tata'},
+  {objectID: '1', content: 'toto'}
+];
+
+var config = {};
+
+var client;
+beforeAll(function() {
+  return setup(indexName, dataset, config).then(function(c) {
+    client = c;
+  });
+});
+
+test('[INT][DERIVE] Query the same index twice with different query', function() {
+  return Promise.resolve()
+    .then(function() {
+      var mainHelper = algoliasearchHelper(client, indexName, {
+        facets: ['f'],
+        disjunctiveFacets: ['df'],
+        hierarchicalFacets: [
+          {
             name: 'products',
             attributes: ['categories.lvl0', 'categories.lvl1']
-          }]
-        }
-      );
+          }
+        ]
+      });
 
       var derivedHelper = mainHelper.derive(function(state) {
         return state.setQuery('toto');
@@ -53,7 +56,8 @@ test(
       mainHelper.search();
 
       return Promise.all([mainResponse, derivedResponse]);
-    }).then(function(responses) {
+    })
+    .then(function(responses) {
       var mainResponse = responses[0];
 
       expect(mainResponse.state.query).toBeUndefined();
@@ -65,4 +69,4 @@ test(
       expect(derivedResponse.results.hits.length).toBe(1);
       expect(derivedResponse.results.hits[0].objectID).toBe('1');
     });
-  });
+});

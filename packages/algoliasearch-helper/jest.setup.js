@@ -2,4 +2,4 @@
 
 'use strict';
 
-jest.setTimeout(15000);
+jest.setTimeout(20000);

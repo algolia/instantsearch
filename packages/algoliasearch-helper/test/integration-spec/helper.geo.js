@@ -7,9 +7,11 @@ var algoliasearchHelper = require('../../');
 
 var random = require('lodash/random');
 
-var indexName = '_circle-algoliasearch-helper-js-' +
+var indexName =
+  '_circle-algoliasearch-helper-js-' +
   (process.env.CIRCLE_BUILD_NUM || 'DEV') +
-  'helper_searchonce' + random(0, 5000);
+  'helper_geo' +
+  random(0, 5000);
 
 var dataset = [
   {objectID: '1', _geoloc: {lat: 1, lng: 1}},
@@ -20,58 +22,54 @@ var dataset = [
 
 var config = {};
 
-test(
-  '[INT][GEO-SEARCH] search inside a single polygon with a string',
-  function(done) {
-    setup(indexName, dataset, config).
-    then(function(client) {
-      var helper = algoliasearchHelper(client, indexName, {});
-      helper.on('result', function(event) {
-        expect(event.results.hits.length).toBe(1);
-        expect(event.results.hits[0].objectID).toBe('1');
-        done();
-      });
+var client;
+beforeAll(function() {
+  return setup(indexName, dataset, config).then(function(c) {
+    client = c;
+  });
+});
 
-      helper.setQueryParameter('insidePolygon', '0,0,1.1,0,1.1,1.1,0,1.1').search();
+test('[INT][GEO-SEARCH] search inside a single polygon with a string', function(done) {
+  var helper = algoliasearchHelper(client, indexName, {});
+  helper.on('result', function(event) {
+    expect(event.results.hits.length).toBe(1);
+    expect(event.results.hits[0].objectID).toBe('1');
+    done();
+  });
+
+  helper.setQueryParameter('insidePolygon', '0,0,1.1,0,1.1,1.1,0,1.1').search();
+});
+
+test('[INT][GEO-SEARCH] search inside a single polygon with an array', function(done) {
+  var helper = algoliasearchHelper(client, indexName, {});
+  helper.on('result', function(event) {
+    expect(event.results.hits.length).toBe(1);
+    expect(event.results.hits[0].objectID).toBe('1');
+    done();
+  });
+
+  helper
+    .setQueryParameter('insidePolygon', [[0, 0, 1.1, 0, 1.1, 1.1, 0, 1.1]])
+    .search();
+});
+
+test('[INT][GEO-SEARCH] search inside two polygons with an array', function(done) {
+  var helper = algoliasearchHelper(client, indexName, {});
+
+  helper.on('result', function(event) {
+    expect(event.results.hits.length).toBe(2);
+    var sortedHits = event.results.hits.sort(function(a, b) {
+      return a.objectID.localeCompare(b.objectID);
     });
-  }
-);
+    expect(sortedHits[0].objectID).toBe('1');
+    expect(sortedHits[1].objectID).toBe('4');
+    done();
+  });
 
-test(
-  '[INT][GEO-SEARCH] search inside a single polygon with an array',
-  function(done) {
-    setup(indexName, dataset, config).
-    then(function(client) {
-      var helper = algoliasearchHelper(client, indexName, {});
-      helper.on('result', function(event) {
-        expect(event.results.hits.length).toBe(1);
-        expect(event.results.hits[0].objectID).toBe('1');
-        done();
-      });
-
-      helper.setQueryParameter('insidePolygon', [[0, 0, 1.1, 0, 1.1, 1.1, 0, 1.1]]).search();
-    });
-  }
-);
-
-test(
-  '[INT][GEO-SEARCH] search inside two polygons with an array',
-  function(done) {
-    setup(indexName, dataset, config).
-    then(function(client) {
-      var helper = algoliasearchHelper(client, indexName, {});
-
-      helper.on('result', function(event) {
-        expect(event.results.hits.length).toBe(2);
-        var sortedHits = event.results.hits.sort(function(a, b) { return a.objectID.localeCompare(b.objectID); });
-        expect(sortedHits[0].objectID).toBe('1');
-        expect(sortedHits[1].objectID).toBe('4');
-        done();
-      });
-
-      helper.setQueryParameter(
-        'insidePolygon',
-        [[0, 0, 1.1, 0, 1.1, 1.1, 0, 1.1], [1.5, 1.5, 2.1, 1.5, 2.1, 2.1, 1.5, 2.1]]).search();
-    });
-  }
-);
+  helper
+    .setQueryParameter('insidePolygon', [
+      [0, 0, 1.1, 0, 1.1, 1.1, 0, 1.1],
+      [1.5, 1.5, 2.1, 1.5, 2.1, 2.1, 1.5, 2.1]
+    ])
+    .search();
+});

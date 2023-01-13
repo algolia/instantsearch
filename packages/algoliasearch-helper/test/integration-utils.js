@@ -48,6 +48,5 @@ function withDatasetAndConfig(indexName, dataset, config) {
 }
 
 module.exports = {
-  setup: setup,
   setupSimple: withDatasetAndConfig
 };

@@ -9,6 +9,7 @@
     "jest": true
   },
   "globals": {
-    "test": true
+    "test": true,
+    "beforeAll": true
   }
 }
