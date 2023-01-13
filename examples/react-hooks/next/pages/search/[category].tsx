@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { renderToString } from 'react-dom/server';
