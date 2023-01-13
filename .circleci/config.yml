@@ -22,6 +22,29 @@ references:
       key: yarn-packages-{{ checksum "yarn.lock" }}
       paths:
         - ~/.cache/yarn
+  restore_node_modules: &restore_node_modules
+    restore_cache:
+      name: Restore node_modules from cache
+      keys:
+        - yarn-node_modules-{{ .Revision }}
+  save_node_modules: &save_node_modules
+    save_cache:
+      name: Save node_modules in cache
+      key: yarn-node_modules-{{ .Revision }}
+      paths:
+        - node_modules
+        - packages/create-instantsearch-app/node_modules
+        - packages/instantsearch.css/node_modules
+        - packages/instantsearch.js/node_modules
+        - packages/react-instantsearch/node_modules
+        - packages/react-instantsearch-core/node_modules
+        - packages/react-instantsearch-dom/node_modules
+        - packages/react-instantsearch-dom-maps/node_modules
+        - packages/react-instantsearch-hooks/node_modules
+        - packages/react-instantsearch-hooks-server/node_modules
+        - packages/react-instantsearch-hooks-web/node_modules
+        - packages/react-instantsearch-native/node_modules
+        - packages/vue-instantsearch/node_modules
   run_yarn_install: &run_yarn_install
     run:
       name: Install dependencies
@@ -93,6 +116,7 @@ jobs:
       - *restore_yarn_cache
       - *run_yarn_install
       - *save_yarn_cache
+      - *save_node_modules
       - run:
           name: Build library
           command: |
@@ -138,6 +162,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
+      - *restore_node_modules
       - *run_yarn_install
       - run:
           name: Lint & Code styles
@@ -153,6 +178,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
+      - *restore_node_modules
       - *run_yarn_install
       - run:
           name: Update dependencies
@@ -169,6 +195,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
+      - *restore_node_modules
       - *run_yarn_install
       - run:
           name: Update dependencies
@@ -191,6 +218,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
+      - *restore_node_modules
       - *run_yarn_install
       - run:
           name: Unit tests
@@ -206,6 +234,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
+      - *restore_node_modules
       - *run_yarn_install
       - run:
           name: Build examples
@@ -223,6 +252,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
+      - *restore_node_modules
       - *run_yarn_install
       - run:
           name: End-to-end tests
@@ -237,6 +267,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
+      - *restore_node_modules
       - *run_yarn_install
       - run:
           name: Trigger a release if the latest commit is a release commit
