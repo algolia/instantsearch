@@ -27,7 +27,11 @@ export function createInstantSearchNextRouter<TRouteState = UiState>(
       return window.location;
     },
     onUpdate(cb, browserHistory) {
+      let initialPathname: string;
+
       if (typeof window !== 'undefined') {
+        initialPathname = nextRouterSingleton.pathname;
+
         if (nextRouterSingleton.router?._bps) {
           previousBeforePopState = nextRouterSingleton.router._bps;
         }
@@ -49,7 +53,9 @@ export function createInstantSearchNextRouter<TRouteState = UiState>(
       }
 
       handler = () => {
-        cb(browserHistory.read());
+        if (nextRouterSingleton.pathname === initialPathname) {
+          cb(browserHistory.read());
+        }
       };
       nextRouterSingleton.events.on('routeChangeComplete', handler);
     },
