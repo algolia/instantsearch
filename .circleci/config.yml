@@ -24,13 +24,13 @@ references:
         - ~/.cache/yarn
   restore_node_modules: &restore_node_modules
     restore_cache:
-      name: Restore node_modules from cache
+      name: Restore node_modules
       keys:
-        - node-modules-{{ checksum "yarn.lock" }}-{{ .Branch }}
+        - node_modules-{{ checksum "yarn.lock" }}-{{ .Branch }}
   save_node_modules: &save_node_modules
     save_cache:
-      name: Save node_modules in cache
-      key: node-modules-{{ checksum "yarn.lock" }}-{{ .Branch }}
+      name: Save node_modules
+      key: node_modules-{{ checksum "yarn.lock" }}-{{ .Branch }}
       paths:
         - node_modules
         - packages/create-instantsearch-app/node_modules
@@ -45,6 +45,8 @@ references:
         - packages/react-instantsearch-hooks-web/node_modules
         - packages/react-instantsearch-native/node_modules
         - packages/vue-instantsearch/node_modules
+        - specs/node_modules
+        - tests/e2e/node_modules
   run_yarn_install: &run_yarn_install
     run:
       name: Install dependencies
