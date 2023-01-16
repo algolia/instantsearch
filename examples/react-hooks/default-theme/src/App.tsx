@@ -37,11 +37,6 @@ const searchClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
-const search = searchClient.search;
-searchClient.search = async (queries) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return search(queries);
-};
 
 type HitProps = {
   hit: AlgoliaHit<{
@@ -59,10 +54,7 @@ function Hit({ hit }: HitProps) {
   );
 }
 
-const attributes = ['brand', 'price', 'categories'];
-
 export function App() {
-  const [count, setCount] = React.useState(1);
   return (
     <InstantSearch
       searchClient={searchClient}
@@ -73,21 +65,38 @@ export function App() {
 
       <div className="Container">
         <div>
-          <button onClick={() => setCount(count + 1)}>add</button>
-          {Array.from({ length: count }).map((_, i) => (
-            <Panel header={attributes[i]} key={i}>
-              <RefinementList attribute={attributes[i]} />
+          <DynamicWidgets>
+            <Panel header="Brands">
+              <RefinementList
+                attribute="brand"
+                searchable={true}
+                searchablePlaceholder="Search brands"
+                showMore={true}
+              />
             </Panel>
-          ))}
-          <Panel header="hierarchy">
-            <HierarchicalMenu
-              attributes={[
-                'hierarchicalCategories.lvl0',
-                'hierarchicalCategories.lvl1',
-                'hierarchicalCategories.lvl2',
-              ]}
-            />
-          </Panel>
+            <Panel header="Categories">
+              <Menu attribute="categories" showMore={true} />
+            </Panel>
+            <Panel header="Hierarchy">
+              <HierarchicalMenu
+                attributes={[
+                  'hierarchicalCategories.lvl0',
+                  'hierarchicalCategories.lvl1',
+                  'hierarchicalCategories.lvl2',
+                ]}
+                showMore={true}
+              />
+            </Panel>
+            <Panel header="Price">
+              <RangeInput attribute="price" />
+            </Panel>
+            <Panel header="Free Shipping">
+              <ToggleRefinement
+                attribute="free_shipping"
+                label="Free shipping"
+              />
+            </Panel>
+          </DynamicWidgets>
         </div>
         <div className="Search">
           <Breadcrumb
