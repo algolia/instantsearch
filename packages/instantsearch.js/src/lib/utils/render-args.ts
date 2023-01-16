@@ -30,10 +30,6 @@ export function createRenderArgs(
   parent: IndexWidget
 ) {
   const results = parent.getResults()!;
-  // To make the UI optimistic, we will always render using the current state,
-  // but the previous results. This means a change will be visible immediately,
-  // regardless of the status of the network request.
-  results._state = parent.getHelper()!.state;
 
   return {
     helper: parent.getHelper()!,

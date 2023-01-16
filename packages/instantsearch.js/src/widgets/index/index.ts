@@ -230,7 +230,15 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getResults() {
-      return derivedHelper && derivedHelper.lastResults;
+      if (!derivedHelper) return null;
+      if (!derivedHelper.lastResults) return null;
+
+      // To make the UI optimistic, we will always render using the current state,
+      // but the previous results. This means a change will be visible immediately,
+      // regardless of the status of the network request.
+      derivedHelper.lastResults._state = helper!.state;
+
+      return derivedHelper.lastResults;
     },
 
     getScopedResults() {
