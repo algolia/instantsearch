@@ -1,5 +1,5 @@
 {
-  "name": "react-instantsearch-hooks-next-router",
+  "name": "instantsearch-router-next-experimental",
   "version": "0.0.1",
   "description": "React InstantSearch Hooks Next Router",
   "license": "MIT",
@@ -16,11 +16,14 @@
   "scripts": {
     "build": "microbundle index.ts"
   },
+  "dependencies": {
+    "qs": "^6.5.1 < 6.10"
+  },
   "devDependencies": {
     "microbundle": "0.15.1"
   },
   "peerDependencies": {
     "instantsearch.js": ">= 4",
-    "next": ">= 12"
+    "next": ">= 9"
   }
 }

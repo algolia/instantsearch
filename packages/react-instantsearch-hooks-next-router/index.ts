@@ -1,35 +1,46 @@
-import { history } from 'instantsearch.js/es/lib/routers';
 import nextRouterSingleton from 'next/router';
 
+import history from './history';
+
+import type { BrowserHistoryArgs } from './history';
 import type { Router, UiState } from 'instantsearch.js';
-import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
 import type { Router as NextRouter } from 'next/router';
 
-export function createInstantSearchNextRouter<TRouteState = UiState>(
-  url: string | undefined,
-  options?: Partial<
-    Omit<
-      BrowserHistoryArgs<TRouteState>,
-      'getLocation' | 'onUpdate' | 'dispose'
-    >
-  >
-): Router<TRouteState> {
+export function createInstantSearchNextRouter<TRouteState = UiState>(options?: {
+  serverUrl?: string;
+  doNotOverrideBeforePopState?: boolean;
+  routerOptions?: Partial<
+    Omit<BrowserHistoryArgs<TRouteState>, 'onUpdate' | 'dispose'>
+  > & {
+    beforeStart?: BrowserHistoryArgs<TRouteState>['onUpdate'];
+    beforeDispose?: BrowserHistoryArgs<TRouteState>['dispose'];
+  };
+}): Router<TRouteState> {
+  const { beforeStart, beforeDispose, ...browserHistoryOptions } =
+    options?.routerOptions ?? {};
+
   let handler: () => void;
   let previousBeforePopState: NonNullable<NextRouter['_bps']> = () => true;
 
   return history({
-    ...options,
     getLocation() {
       if (typeof window === 'undefined') {
-        return new URL(url!) as unknown as Location;
+        return new URL(options?.serverUrl!) as unknown as Location;
       }
 
       return window.location;
     },
     onUpdate(cb, browserHistory) {
+      if (beforeStart) {
+        beforeStart(cb, browserHistory);
+      }
+
       let initialPathname: string;
 
-      if (typeof window !== 'undefined') {
+      if (
+        typeof window !== 'undefined' &&
+        !options?.doNotOverrideBeforePopState
+      ) {
         initialPathname = nextRouterSingleton.pathname;
 
         if (nextRouterSingleton.router?._bps) {
@@ -60,8 +71,14 @@ export function createInstantSearchNextRouter<TRouteState = UiState>(
       nextRouterSingleton.events.on('routeChangeComplete', handler);
     },
     dispose() {
+      if (beforeDispose) {
+        beforeDispose();
+      }
+
       nextRouterSingleton.events.off('routeChangeComplete', handler);
-      nextRouterSingleton.beforePopState(previousBeforePopState);
+      if (!options?.doNotOverrideBeforePopState) {
+        nextRouterSingleton.beforePopState(previousBeforePopState);
+      }
     },
     push(newUrl) {
       nextRouterSingleton.push(
@@ -76,5 +93,6 @@ export function createInstantSearchNextRouter<TRouteState = UiState>(
         }
       );
     },
+    ...browserHistoryOptions,
   });
 }

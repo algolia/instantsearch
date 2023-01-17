@@ -75,25 +75,30 @@ export default function CategoryPage({ serverState, url }: CategoryPageProps) {
         searchClient={client}
         indexName="instant_search"
         routing={{
-          router: createInstantSearchNextRouter(url, {
-            createURL({ routeState, location, qsModule }) {
-              const { category, ...queryParameters } = routeState;
-              const { origin, pathname } = location;
+          router: createInstantSearchNextRouter({
+            serverUrl: url,
+            routerOptions: {
+              createURL({ routeState, location, qsModule }) {
+                const { category, ...queryParameters } = routeState;
+                const { origin, pathname } = location;
 
-              return `${origin}${pathname}${qsModule.stringify(
-                queryParameters,
-                {
-                  addQueryPrefix: true,
-                }
-              )}`;
-            },
-            parseURL({ location, qsModule }) {
-              return {
-                category: decodeURIComponent(
-                  location.pathname.split('/').pop()!
-                ),
-                ...qsModule.parse(location.search, { ignoreQueryPrefix: true }),
-              };
+                return `${origin}${pathname}${qsModule.stringify(
+                  queryParameters,
+                  {
+                    addQueryPrefix: true,
+                  }
+                )}`;
+              },
+              parseURL({ location, qsModule }) {
+                return {
+                  category: decodeURIComponent(
+                    location.pathname.split('/').pop()!
+                  ),
+                  ...qsModule.parse(location.search, {
+                    ignoreQueryPrefix: true,
+                  }),
+                };
+              },
             },
           }),
           stateMapping: {

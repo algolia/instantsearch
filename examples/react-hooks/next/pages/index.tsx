@@ -52,7 +52,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
         searchClient={client}
         indexName="instant_search"
         routing={{
-          router: createInstantSearchNextRouter(url),
+          router: createInstantSearchNextRouter({ serverUrl: url }),
         }}
       >
         <div className="Container">
