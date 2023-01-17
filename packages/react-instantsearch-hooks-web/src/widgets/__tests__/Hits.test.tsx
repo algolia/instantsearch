@@ -7,10 +7,10 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { Hits } from '../Hits';
 
 import type { MockSearchClient } from '@instantsearch/mocks';

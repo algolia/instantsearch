@@ -8,7 +8,7 @@ import Enzyme, { mount } from 'enzyme';
 import algoliasearch from 'algoliasearch/lite';
 import { SearchResults } from 'algoliasearch-helper';
 import createInstantSearchManager from '../createInstantSearchManager';
-import { runAllMicroTasks } from '../../../../../tests/utils';
+import { runAllMicroTasks } from '@instantsearch/testutils';
 import {
   InstantSearch,
   Index,

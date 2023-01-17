@@ -7,10 +7,10 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { Stats } from '../Stats';
 
 function createMockedSearchClient({ nbSorted }: { nbSorted?: number } = {}) {

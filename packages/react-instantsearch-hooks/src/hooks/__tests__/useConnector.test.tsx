@@ -2,12 +2,6 @@
  * @jest-environment jsdom
  */
 
-import { render, waitFor } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
-import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
-import React, { StrictMode, useState } from 'react';
-
 import {
   createSearchClient,
   createSingleSearchResponse,
@@ -15,7 +9,13 @@ import {
 import {
   createInstantSearchTestWrapper,
   createInstantSearchSpy,
-} from '../../../../../tests/utils';
+} from '@instantsearch/testutils';
+import { render, waitFor } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
+import React, { StrictMode, useState } from 'react';
+
 import { Index } from '../../components/Index';
 import { InstantSearch } from '../../components/InstantSearch';
 import { useHits } from '../../connectors/useHits';

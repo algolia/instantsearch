@@ -3,12 +3,12 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { useRefinementList } from 'react-instantsearch-hooks';
 
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { CurrentRefinements } from '../CurrentRefinements';
 
 import type { UseRefinementListProps } from 'react-instantsearch-hooks';

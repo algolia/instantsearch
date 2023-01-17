@@ -6,10 +6,10 @@ import {
   createAlgoliaSearchClient,
   createSearchClient,
 } from '@instantsearch/mocks';
+import { createInstantSearchSpy } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React, { StrictMode } from 'react';
 
-import { createInstantSearchSpy } from '../../../../../tests/utils';
 import { Configure } from '../../components/Configure';
 import { IndexContext } from '../../lib/IndexContext';
 import { noop } from '../../lib/noop';

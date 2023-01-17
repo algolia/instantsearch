@@ -4,9 +4,9 @@ import {
   createSingleSearchResponse,
   defaultRenderingContent,
 } from '@instantsearch/mocks';
+import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
 import { renderHook } from '@testing-library/react-hooks';
 
-import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useDynamicWidgets } from '../useDynamicWidgets';
 
 describe('useDynamicWidgets', () => {

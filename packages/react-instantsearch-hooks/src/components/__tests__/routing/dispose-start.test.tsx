@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import { createSearchClient } from '@instantsearch/mocks';
 import { render, waitFor } from '@testing-library/react';
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import React, { useEffect } from 'react';
@@ -10,8 +11,6 @@ import {
   SearchBox,
   useSearchBox,
 } from 'react-instantsearch-hooks-web';
-
-import { createSearchClient } from '@instantsearch/mocks';
 
 describe('routing back and forth to an InstantSearch instance', () => {
   test('updates the URL after the instance is disposed then restarted', async () => {

@@ -3,6 +3,7 @@
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
+import { createInstantSearchSpy, wait } from '@instantsearch/testutils';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
@@ -10,7 +11,6 @@ import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createInstantSearchSpy, wait } from '../../../../../tests/utils';
 import { useRefinementList } from '../../connectors/useRefinementList';
 import version from '../../version';
 import { Index } from '../Index';

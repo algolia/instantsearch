@@ -3,6 +3,11 @@
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
+import {
+  createInstantSearchTestWrapper,
+  InstantSearchHooksTestWrapper,
+  wait,
+} from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
@@ -10,11 +15,6 @@ import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import React, { useEffect } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
-import {
-  createInstantSearchTestWrapper,
-  InstantSearchHooksTestWrapper,
-  wait,
-} from '../../../../../tests/utils';
 import { useInstantSearch } from '../useInstantSearch';
 
 import type { UseInstantSearchProps } from '../useInstantSearch';

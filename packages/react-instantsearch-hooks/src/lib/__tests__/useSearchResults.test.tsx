@@ -1,13 +1,13 @@
+import {
+  createMultiSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
+import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
 import { renderHook } from '@testing-library/react-hooks';
 import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import React from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
-import {
-  createMultiSearchResponse,
-  createSearchClient,
-} from '@instantsearch/mocks';
-import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useSearchResults } from '../useSearchResults';
 
 describe('useSearchResults', () => {
