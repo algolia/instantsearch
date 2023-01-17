@@ -21,7 +21,7 @@ type UiProps = Pick<
 export type StatsProps = Omit<StatsUiComponentProps, keyof UiProps> &
   UseStatsProps & { translations?: Partial<UiProps['translations']> };
 
-export function Stats(props: StatsProps) {
+export function Stats({ translations, ...props }: StatsProps) {
   const { nbHits, nbSortedHits, processingTimeMS, areHitsSorted } = useStats(
     undefined,
     { $$widgetType: 'ais.stats' }
@@ -39,7 +39,7 @@ export function Stats(props: StatsProps) {
     areHitsSorted,
     translations: {
       stats: statsTranslation,
-      ...(props.translations || {}),
+      ...translations,
     },
   };
 
