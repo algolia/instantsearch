@@ -18,9 +18,11 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

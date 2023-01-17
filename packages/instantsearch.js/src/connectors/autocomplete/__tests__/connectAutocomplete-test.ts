@@ -7,11 +7,11 @@ import {
   createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/createWidget';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+} from '@instantsearch/mocks';
 import type { AutocompleteRenderState } from '../connectAutocomplete';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';

@@ -6,14 +6,16 @@ import algoliasearchHelper, {
 import type { SortByRenderState } from '../connectSortBy';
 import connectSortBy from '../connectSortBy';
 import index from '../../../widgets/index/index';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 describe('connectSortBy', () => {
   describe('Usage', () => {

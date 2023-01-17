@@ -5,7 +5,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import type {
   VoiceSearchHelperParams,
   VoiceSearchHelper,

@@ -4,14 +4,14 @@
 /** @jsx h */
 import { Fragment, h } from 'preact';
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
 import infiniteHits from '../infinite-hits';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
 import type { SearchResponse } from '../../../../src/types';
 import searchBox from '../../search-box/search-box';
 import { within, fireEvent } from '@testing-library/dom';

@@ -4,14 +4,14 @@
 /** @jsx h */
 import { h } from 'preact';
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
 import relevantSort from '../relevant-sort';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
 
 beforeEach(() => {
   document.body.innerHTML = '';

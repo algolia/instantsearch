@@ -1,7 +1,9 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createDisposeOptions,
   createInitOptions,

@@ -7,12 +7,14 @@ import { render as preactRender } from 'preact';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import currentRefinements from '../current-refinements';
 import type { CurrentRefinementsProps } from '../../../components/CurrentRefinements/CurrentRefinements';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 
 const render = castToJestMock(preactRender);

@@ -11,7 +11,7 @@ import { prepareTemplateProps } from '../../../lib/templating';
 import Template from '../../Template/Template';
 import type { HitsProps } from '../Hits';
 import Hits from '../Hits';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import defaultTemplates from '../../../widgets/hits/defaultTemplates';
 

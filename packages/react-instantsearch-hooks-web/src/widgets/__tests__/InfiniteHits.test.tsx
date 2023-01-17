@@ -6,11 +6,11 @@ import { act, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { createSearchClient } from '../../../../../tests/mock';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../../tests/mock/createAPIResponse';
+} from '../../../../../tests/mock';
 import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { InfiniteHits } from '../InfiniteHits';
 

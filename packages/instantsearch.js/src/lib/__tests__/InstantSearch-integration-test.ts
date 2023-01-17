@@ -6,7 +6,7 @@ import { getByText, fireEvent } from '@testing-library/dom';
 import instantsearch from '../../index.es';
 import { configure, searchBox } from '../../widgets';
 import { connectConfigure, connectSearchBox } from '../../connectors';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import type { MiddlewareDefinition } from '../../types';
 import { wait } from '@instantsearch/testutils/wait';
 

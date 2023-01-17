@@ -2,8 +2,10 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,

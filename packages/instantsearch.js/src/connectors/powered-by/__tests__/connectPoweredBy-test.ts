@@ -3,7 +3,7 @@
  */
 
 import jsHelper from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import {
   createDisposeOptions,
   createInitOptions,

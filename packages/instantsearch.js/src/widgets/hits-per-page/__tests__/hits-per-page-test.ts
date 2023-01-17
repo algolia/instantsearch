@@ -14,8 +14,10 @@ import hitsPerPage from '../hits-per-page';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import type { SelectorProps } from '../../../components/Selector/Selector';
 import type { HitsPerPageConnectorParamsItem } from '../../../connectors/hits-per-page/connectHitsPerPage';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createInitOptions,
   createRenderOptions,

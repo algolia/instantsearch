@@ -4,8 +4,10 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import { warning } from '../../../lib/utils';
 import connectBreadcrumb from '../connectBreadcrumb';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createDisposeOptions,
   createInitOptions,

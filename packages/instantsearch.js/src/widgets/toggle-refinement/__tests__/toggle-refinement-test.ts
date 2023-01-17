@@ -6,11 +6,13 @@ import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
 import toggleRefinement from '../toggle-refinement';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { createRenderOptions } from '../../../../test/createWidget';
 import { wait } from '@instantsearch/testutils/wait';
 import instantsearch from '../../..';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import type { ToggleRefinementProps } from '../../../components/ToggleRefinement/ToggleRefinement';
 
 const render = castToJestMock(preactRender);

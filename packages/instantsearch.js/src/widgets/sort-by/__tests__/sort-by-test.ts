@@ -7,14 +7,16 @@ import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import type { SortByIndexDefinition } from '../sort-by';
 import sortBy from '../sort-by';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

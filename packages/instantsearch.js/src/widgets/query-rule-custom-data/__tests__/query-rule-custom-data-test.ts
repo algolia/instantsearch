@@ -6,7 +6,7 @@ import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
 import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import {
   createDisposeOptions,
   createInitOptions,

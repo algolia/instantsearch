@@ -4,13 +4,15 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import connectQueryRules from '../connectQueryRules';
 import type { TransformItems } from '../../../types';
 

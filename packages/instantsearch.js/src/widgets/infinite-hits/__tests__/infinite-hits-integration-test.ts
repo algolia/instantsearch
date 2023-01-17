@@ -13,8 +13,10 @@ import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
 } from '../../../connectors/infinite-hits/connectInfiniteHits';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 
 describe('infiniteHits', () => {
   const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
@@ -28,7 +30,7 @@ describe('infiniteHits', () => {
                 hits: Array(hitsPerPage)
                   .fill(undefined)
                   .map((_, index) => ({
-                    title: `title ${page! * hitsPerPage + index + 1}`,
+                    title: `title ${page * hitsPerPage + index + 1}`,
                     objectID: `object-id${index}`,
                   })),
                 page,

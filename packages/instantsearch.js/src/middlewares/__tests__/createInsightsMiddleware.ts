@@ -7,8 +7,8 @@ import { createInsightsMiddleware } from '..';
 import {
   createInsights,
   createInsightsUmdVersion,
-} from '@instantsearch/mocks/createInsightsClient';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+  createSearchClient,
+} from '@instantsearch/mocks';
 import { warning } from '../../lib/utils';
 import { history } from '../../lib/routers';
 import { wait } from '@instantsearch/testutils/wait';

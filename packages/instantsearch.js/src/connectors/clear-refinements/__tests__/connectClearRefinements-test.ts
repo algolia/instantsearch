@@ -5,8 +5,10 @@ import {
   createRenderOptions,
 } from '../../../../test/createWidget';
 import connectClearRefinements from '../connectClearRefinements';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
 
 describe('connectClearRefinements', () => {
   describe('Usage', () => {
