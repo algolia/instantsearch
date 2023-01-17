@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.39.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.38.3...react-instantsearch-hooks@6.39.0) (2023-01-17)
+
+
+### Features
+
+* **react-instantsearch-hooks:** Add useStats hook ([#5425](https://github.com/algolia/instantsearch.js/issues/5425)) ([772c918](https://github.com/algolia/instantsearch.js/commit/772c918f47aec183af3f1aa78c65505f70dd0088))
+
+
+
+
+
 ## [6.38.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.38.2...react-instantsearch-hooks@6.38.3) (2023-01-09)
 
 
