@@ -2,10 +2,13 @@
  * @jest-environment jsdom
  */
 
+import {
+  createAlgoliaSearchClient,
+  createSearchClient,
+} from '@instantsearch/mocks';
 import { render, waitFor } from '@testing-library/react';
 import React, { StrictMode } from 'react';
 
-import { createSearchClient } from '../../../../../tests/mock';
 import { createInstantSearchSpy } from '../../../../../tests/utils';
 import { Configure } from '../../components/Configure';
 import { IndexContext } from '../../lib/IndexContext';
@@ -138,7 +141,7 @@ describe('Index', () => {
   });
 
   test('adds the index only once on SSR', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
     const initialResults = {
       indexName: {

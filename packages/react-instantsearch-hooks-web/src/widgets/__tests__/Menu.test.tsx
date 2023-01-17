@@ -2,20 +2,20 @@
  * @jest-environment jsdom
  */
 
+import {
+  createMultiSearchResponse,
+  createAlgoliaSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import {
-  createMultiSearchResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '../../../../../tests/mock';
 import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { Menu } from '../Menu';
 
 function createMockedSearchClient() {
-  return createSearchClient({
+  return createAlgoliaSearchClient({
     search: jest.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
@@ -43,6 +43,15 @@ function createMockedSearchClient() {
                   Dell: 174,
                   'Hamilton Beach': 173,
                   Platinum: 155,
+                },
+              },
+              renderingContent: {
+                facetOrdering: {
+                  values: {
+                    brand: {
+                      sortRemainingBy: 'count',
+                    },
+                  },
                 },
               },
             })

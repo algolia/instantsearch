@@ -1,3 +1,4 @@
+import { createSearchClient } from '@instantsearch/mocks';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import {
@@ -6,7 +7,6 @@ import {
 } from 'react-instantsearch-hooks';
 
 import * as widgets from '../..';
-import { createSearchClient } from '../../../../../../tests/mock';
 
 import type { InstantSearch as InstantSearchClass } from 'instantsearch.js';
 import type { ComponentProps } from 'react';

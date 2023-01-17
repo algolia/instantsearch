@@ -8,7 +8,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { connectHits, connectRefinementList, Index } from '../../index';
 import InstantSearch from '../InstantSearch';
-import { createSearchClient } from '../../../../../tests/mock';
+import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -40,7 +40,10 @@ describe('metadata', () => {
     const Hits = connectHits(() => null);
 
     mount(
-      <InstantSearch searchClient={createSearchClient({})} indexName="root">
+      <InstantSearch
+        searchClient={createAlgoliaSearchClient({})}
+        indexName="root"
+      >
         <RefinementList attribute="brand" />
         <Index indexName="test">
           <Hits />
@@ -58,7 +61,10 @@ describe('metadata', () => {
     const Hits = connectHits(() => null);
 
     mount(
-      <InstantSearch searchClient={createSearchClient({})} indexName="root">
+      <InstantSearch
+        searchClient={createAlgoliaSearchClient({})}
+        indexName="root"
+      >
         <RefinementList attribute="brand" />
         <Index indexName="test">
           <Hits />
@@ -161,7 +167,10 @@ describe('metadata', () => {
       navigator.userAgent = algoliaUserAgent;
 
       mount(
-        <InstantSearch searchClient={createSearchClient({})} indexName="root" />
+        <InstantSearch
+          searchClient={createAlgoliaSearchClient({})}
+          indexName="root"
+        />
       );
 
       expect(document.head).toMatchInlineSnapshot(`

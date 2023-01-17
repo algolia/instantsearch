@@ -13,6 +13,7 @@ import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
 } from '../../../connectors/infinite-hits/connectInfiniteHits';
+import type { MockSearchClient } from '@instantsearch/mocks';
 import {
   createSearchClient,
   createSingleSearchResponse,
@@ -21,11 +22,12 @@ import {
 describe('infiniteHits', () => {
   const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
     const searchClient = createSearchClient({
-      // have to cast here, because this function isn't generic
-      search: jest.fn(
-        (requests) =>
-          Promise.resolve({
-            results: requests.map(({ params: { page } = {} }) =>
+      search: jest.fn((requests) =>
+        Promise.resolve({
+          results: requests.map(
+            ({
+              params: { page },
+            }: Parameters<MockSearchClient['search']>[0][number]) =>
               createSingleSearchResponse({
                 hits: Array(hitsPerPage)
                   .fill(undefined)
@@ -36,9 +38,9 @@ describe('infiniteHits', () => {
                 page,
                 hitsPerPage,
               })
-            ),
-          }) as any
-      ),
+          ),
+        })
+      ) as MockSearchClient['search'],
       // credentials are stored like this in client v3, but not part of the SearchClient type
       ...({ applicationID: 'latency', apiKey: '123' } as any),
     });

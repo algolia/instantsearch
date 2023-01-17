@@ -4,6 +4,33 @@ import type {
   SearchForFacetValuesResponse,
 } from 'instantsearch.js';
 
+export const defaultRenderingContent = {
+  facetOrdering: {
+    facets: {
+      order: ['brand', 'hierarchicalCategories.lvl0', 'categories'],
+    },
+    values: {
+      brand: {
+        sortRemainingBy: 'count',
+      },
+      categories: {
+        sortRemainingBy: 'count',
+      },
+      'hierarchicalCategories.lvl0': {
+        sortRemainingBy: 'count',
+      },
+    },
+  },
+} as const;
+
+export const defaultUserData = [
+  {
+    title: 'Banner title',
+    banner: 'https://banner.jpg',
+    link: 'https://banner.com/link/',
+  },
+];
+
 export const createSingleSearchResponse = <THit = any>(
   subset: Partial<SearchResponse<THit>> = {}
 ): SearchResponse<THit> => {

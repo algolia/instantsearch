@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 
+import { createSearchClient } from '@instantsearch/mocks';
 import React from 'react';
 import {
   InstantSearch,
@@ -11,8 +12,6 @@ import {
   useRefinementList,
   useSearchBox,
 } from 'react-instantsearch-hooks';
-
-import { createSearchClient } from '../../../../tests/mock';
 
 import type {
   InstantSearchServerState,

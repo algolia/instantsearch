@@ -2,37 +2,39 @@
  * @jest-environment jsdom
  */
 
+import {
+  createMultiSearchResponse,
+  createAlgoliaSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import {
-  createMultiSearchResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '../../../../../tests/mock';
 import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { Pagination } from '../Pagination';
 
+import type { MockSearchClient } from '@instantsearch/mocks';
 import type { SearchClient } from 'instantsearch.js';
 
 function createMockedSearchClient({ nbPages }: { nbPages?: number } = {}) {
-  return createSearchClient({
+  return createAlgoliaSearchClient({
     search: jest.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map((request) =>
-            createSingleSearchResponse({
-              hits: Array.from({ length: 1000 }).map((_, index) => ({
-                objectID: String(index),
-              })),
-              index: request.indexName,
-              nbPages,
-            })
+          ...requests.map(
+            (request: Parameters<SearchClient['search']>[0][number]) =>
+              createSingleSearchResponse({
+                hits: Array.from({ length: 1000 }).map((_, index) => ({
+                  objectID: String(index),
+                })),
+                index: request.indexName,
+                nbPages,
+              })
           )
         )
       )
-    ),
+    ) as MockSearchClient['search'],
   });
 }
 
@@ -1453,21 +1455,22 @@ describe('Pagination', () => {
   });
 
   test('does not add items around the current one when there are not enough pages', async () => {
-    const search = jest.fn((requests: Parameters<SearchClient['search']>[0]) =>
-      Promise.resolve(
-        createMultiSearchResponse(
-          ...requests.map((request) =>
-            createSingleSearchResponse({
-              hits: Array.from({ length: 120 }).map((_, index) => ({
-                objectID: String(index),
-              })),
-              index: request.indexName,
-            })
+    const client = createAlgoliaSearchClient({
+      search: jest.fn((requests: Parameters<SearchClient['search']>[0]) =>
+        Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map((request) =>
+              createSingleSearchResponse({
+                hits: Array.from({ length: 120 }).map((_, index) => ({
+                  objectID: String(index),
+                })),
+                index: request.indexName,
+              })
+            )
           )
         )
-      )
-    );
-    const client = createSearchClient({ search });
+      ) as MockSearchClient['search'],
+    });
 
     const { container } = render(
       <InstantSearchHooksTestWrapper searchClient={client}>

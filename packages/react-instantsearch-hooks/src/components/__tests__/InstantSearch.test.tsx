@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
@@ -9,7 +10,6 @@ import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../tests/mock';
 import { createInstantSearchSpy, wait } from '../../../../../tests/utils';
 import { useRefinementList } from '../../connectors/useRefinementList';
 import version from '../../version';
@@ -26,7 +26,7 @@ function RefinementList(props: UseRefinementListProps) {
 
 describe('InstantSearch', () => {
   test('renders children', () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     const { container } = render(
       <StrictMode>
@@ -44,7 +44,7 @@ describe('InstantSearch', () => {
   });
 
   test('provides the search instance', () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
 
     render(
@@ -64,7 +64,7 @@ describe('InstantSearch', () => {
   });
 
   test('provides the main index', () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
 
     render(
@@ -83,7 +83,7 @@ describe('InstantSearch', () => {
   });
 
   test('attaches users agents', () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     render(
       <StrictMode>
@@ -103,7 +103,7 @@ describe('InstantSearch', () => {
   });
 
   test('starts the search on mount', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
 
     render(
@@ -118,7 +118,7 @@ describe('InstantSearch', () => {
   });
 
   test('starts the search on mount with a widget and triggers a search', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
 
     render(
@@ -135,7 +135,7 @@ describe('InstantSearch', () => {
   });
 
   test('disposes the search on unmount', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
 
     const { unmount } = render(
@@ -160,7 +160,7 @@ describe('InstantSearch', () => {
   });
 
   test('triggers a single network request on mount with widgets', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     render(
       <StrictMode>
@@ -193,7 +193,7 @@ describe('InstantSearch', () => {
   });
 
   test('renders components within a Suspense boundary', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     render(
       <StrictMode>
@@ -228,7 +228,7 @@ describe('InstantSearch', () => {
   });
 
   test('renders with router state', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const routing = {
       stateMapping: simple(),
       router: history({
@@ -288,7 +288,7 @@ describe('InstantSearch', () => {
   });
 
   test('renders with router state from unstable routing', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     function App({ url }: { url: string }) {
       const routing = {
@@ -349,7 +349,7 @@ describe('InstantSearch', () => {
   });
 
   test('recovers the state on rerender', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     function App() {
       return (
@@ -401,7 +401,7 @@ describe('InstantSearch', () => {
   });
 
   test('recovers the state on rerender with a stable onStateChange', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const onStateChange: InstantSearchProps['onStateChange'] = ({
       uiState,
       setUiState,
@@ -470,7 +470,7 @@ describe('InstantSearch', () => {
   // Prior to the current implementation, we created a new InstantSearch.js
   // instance at each prop change, which made this test fail.
   test('recovers the state on rerender with an unstable onStateChange', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     function App() {
       return (
@@ -530,9 +530,9 @@ describe('InstantSearch', () => {
   });
 
   test('updates the client on client prop change', async () => {
-    const searchClient1 = createSearchClient({});
-    const searchClient2 = createSearchClient({});
-    const searchClient3 = createSearchClient({});
+    const searchClient1 = createAlgoliaSearchClient({});
+    const searchClient2 = createAlgoliaSearchClient({});
+    const searchClient3 = createAlgoliaSearchClient({});
 
     function App({ searchClient }: Pick<InstantSearchProps, 'searchClient'>) {
       return (
@@ -599,7 +599,7 @@ describe('InstantSearch', () => {
   });
 
   test('updates the index on index prop change', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     function App({ indexName }: Pick<InstantSearchProps, 'indexName'>) {
       return (
@@ -666,7 +666,7 @@ describe('InstantSearch', () => {
   });
 
   test('updates onStateChange on onStateChange prop change', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const onStateChange1 = jest.fn(({ uiState, setUiState }) => {
       setUiState(uiState);
     });
@@ -720,7 +720,7 @@ describe('InstantSearch', () => {
   });
 
   test('updates searchFunction on searchFunction prop change', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const searchFunction1 = jest.fn((helper) => {
       helper.search();
     });
@@ -769,7 +769,7 @@ describe('InstantSearch', () => {
   });
 
   test('triggers no search on unmount', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     function App() {
       return (
@@ -797,7 +797,7 @@ describe('InstantSearch', () => {
   });
 
   test('triggers a search on widget unmount', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     function App({ isMounted }: { isMounted: boolean }) {
       return (

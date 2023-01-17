@@ -11,7 +11,7 @@ import React, { StrictMode, useState } from 'react';
 import {
   createSearchClient,
   createSingleSearchResponse,
-} from '../../../../../tests/mock';
+} from '@instantsearch/mocks';
 import {
   createInstantSearchTestWrapper,
   createInstantSearchSpy,

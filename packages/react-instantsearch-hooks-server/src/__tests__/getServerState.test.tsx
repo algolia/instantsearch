@@ -2,6 +2,13 @@
  * @jest-environment node
  */
 
+import {
+  createMultiSearchResponse,
+  createSearchClient,
+  createAlgoliaSearchClient,
+  createSingleSearchResponse,
+  defaultRenderingContent,
+} from '@instantsearch/mocks';
 import React, { version as ReactVersion } from 'react';
 import { renderToString } from 'react-dom/server';
 import {
@@ -14,13 +21,9 @@ import {
 } from 'react-instantsearch-hooks';
 import { Hits, RefinementList } from 'react-instantsearch-hooks-web';
 
-import {
-  createMultiSearchResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '../../../../tests/mock';
 import { getServerState } from '../getServerState';
 
+import type { MockSearchClient } from '@instantsearch/mocks';
 import type { Hit as AlgoliaHit } from 'instantsearch.js';
 import type {
   InstantSearchServerState,
@@ -163,7 +166,7 @@ describe('getServerState', () => {
   });
 
   test('adds the server user agents', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
     await getServerState(<App />);
@@ -298,7 +301,7 @@ describe('getServerState', () => {
   });
 
   test('returns initialResults', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
     const serverState = await getServerState(<App />);
@@ -308,7 +311,7 @@ describe('getServerState', () => {
   });
 
   test('searches twice (cached) with dynamic widgets', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { App } = createTestEnvironment({ searchClient, initialUiState: {} });
 
     await getServerState(
@@ -325,7 +328,7 @@ describe('getServerState', () => {
   });
 
   test('searches twice (cached) with dynamic widgets inside index', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const { App } = createTestEnvironment({ searchClient, initialUiState: {} });
 
     await getServerState(
@@ -344,7 +347,19 @@ describe('getServerState', () => {
   });
 
   test('searches twice with dynamic widgets and a refinement', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({
+      search: jest.fn((requests) => {
+        return Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map(() =>
+              createSingleSearchResponse({
+                renderingContent: defaultRenderingContent,
+              })
+            )
+          )
+        );
+      }),
+    });
     const { App } = createTestEnvironment({
       searchClient,
       initialUiState: {
@@ -404,7 +419,7 @@ describe('getServerState', () => {
             )
           )
         )
-      ),
+      ) as MockSearchClient['search'],
     });
     const { App } = createTestEnvironment({ searchClient });
 

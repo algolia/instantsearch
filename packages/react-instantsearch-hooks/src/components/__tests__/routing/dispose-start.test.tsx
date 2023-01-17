@@ -11,7 +11,7 @@ import {
   useSearchBox,
 } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../../tests/mock';
+import { createSearchClient } from '@instantsearch/mocks';
 
 describe('routing back and forth to an InstantSearch instance', () => {
   test('updates the URL after the instance is disposed then restarted', async () => {

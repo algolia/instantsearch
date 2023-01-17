@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 
-import { render, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import React from 'react';
-
 import {
   createMultiSearchResponse,
   createSearchClient,
   createSingleSearchResponse,
-} from '../../../../../tests/mock';
+} from '@instantsearch/mocks';
+import { render, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import React from 'react';
+
 import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { HierarchicalMenu } from '../HierarchicalMenu';
 

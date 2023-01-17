@@ -8,7 +8,7 @@ import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import React from 'react';
 import { InstantSearch, SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../../tests/mock';
+import { createSearchClient } from '@instantsearch/mocks';
 
 describe('routing with third-party client-side router', () => {
   test('does not clean the URL after navigating', async () => {

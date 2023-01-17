@@ -11,7 +11,7 @@ import {
   useSearchBox,
 } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../../tests/mock';
+import { createSearchClient } from '@instantsearch/mocks';
 
 describe('routing with external influence', () => {
   test('keeps on working when the URL is updated by another program', async () => {

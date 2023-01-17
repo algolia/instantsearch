@@ -2,6 +2,11 @@
  * @jest-environment jsdom
  */
 
+import {
+  createAlgoliaSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
@@ -9,11 +14,6 @@ import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode } from 'react';
 import { Hits, RefinementList, SearchBox } from 'react-instantsearch-hooks-web';
 
-import {
-  createMultiSearchResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '../../../../../tests/mock';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
@@ -25,7 +25,7 @@ function HitComponent({ hit }: { hit: AlgoliaHit }) {
 
 describe('InstantSearchSSRProvider', () => {
   test('provides initialResults to InstantSearch', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const initialResults = {
       indexName: {
         state: {},
@@ -87,7 +87,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('renders initial results state with initialUiState', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const initialResults = {
       indexName: {
         state: { query: 'iphone' },
@@ -138,7 +138,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('renders initial results state with router', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const initialResults = {
       indexName: {
         state: { query: 'iphone' },
@@ -195,7 +195,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('renders refinements from local widget state', async () => {
-    const searchClient = createSearchClient({
+    const searchClient = createAlgoliaSearchClient({
       search: jest.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse(
@@ -312,7 +312,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('without server state renders children', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
 
     function App() {
       return (
@@ -350,7 +350,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('does not trigger a network request with initialResults', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const initialResults = {
       indexName: {
         state: {},
@@ -392,7 +392,7 @@ describe('InstantSearchSSRProvider', () => {
   });
 
   test('recovers the state on rerender', async () => {
-    const searchClient = createSearchClient({});
+    const searchClient = createAlgoliaSearchClient({});
     const initialResults = {
       indexName: {
         state: {},

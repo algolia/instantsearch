@@ -1,16 +1,17 @@
-import { renderHook } from '@testing-library/react-hooks';
-import React from 'react';
-
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../../tests/mock';
+} from '@instantsearch/mocks';
+import { renderHook } from '@testing-library/react-hooks';
+import React from 'react';
+
 import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useBreadcrumb } from '../useBreadcrumb';
 import { useHierarchicalMenu } from '../useHierarchicalMenu';
 
 import type { UseHierarchicalMenuProps } from '../useHierarchicalMenu';
+import type { MockSearchClient } from '@instantsearch/mocks';
 
 describe('useBreadcrumb', () => {
   it('returns the connector render state', async () => {
@@ -65,35 +66,36 @@ describe('useBreadcrumb', () => {
         search: jest.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) =>
-                createSingleSearchResponse({
-                  index: request.indexName,
-                  facets: {
-                    'hierarchicalCategories.lvl0': {
-                      Appliances: 382,
-                    },
-                    'hierarchicalCategories.lvl1': {
-                      'Appliances > Small Kitchen Appliances': 382,
-                    },
-                    'hierarchicalCategories.lvl2': {
-                      'Appliances > Small Kitchen Appliances > Coffee, Tea & Espresso': 382,
-                    },
-                  },
-                  hits: [
-                    {
-                      objectID: '1',
-                      hierarchicalCategories: {
-                        lvl0: 'Appliances',
-                        lvl1: 'Appliances > Small Kitchen Appliances',
-                        lvl2: 'Appliances > Small Kitchen Appliances > Coffee, Tea & Espresso',
+              ...requests.map(
+                (request: Parameters<MockSearchClient['search']>[0][number]) =>
+                  createSingleSearchResponse({
+                    index: request.indexName,
+                    facets: {
+                      'hierarchicalCategories.lvl0': {
+                        Appliances: 382,
+                      },
+                      'hierarchicalCategories.lvl1': {
+                        'Appliances > Small Kitchen Appliances': 382,
+                      },
+                      'hierarchicalCategories.lvl2': {
+                        'Appliances > Small Kitchen Appliances > Coffee, Tea & Espresso': 382,
                       },
                     },
-                  ],
-                })
+                    hits: [
+                      {
+                        objectID: '1',
+                        hierarchicalCategories: {
+                          lvl0: 'Appliances',
+                          lvl1: 'Appliances > Small Kitchen Appliances',
+                          lvl2: 'Appliances > Small Kitchen Appliances > Coffee, Tea & Espresso',
+                        },
+                      },
+                    ],
+                  })
               )
             )
           )
-        ),
+        ) as MockSearchClient['search'],
       }),
     });
     const { result, waitForNextUpdate } = renderHook(
