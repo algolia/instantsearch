@@ -230,8 +230,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getResults() {
-      if (!derivedHelper) return null;
-      if (!derivedHelper.lastResults) return null;
+      if (!derivedHelper?.lastResults) return null;
 
       // To make the UI optimistic, we will always render using the current state,
       // but the previous results. This means a change will be visible immediately,
