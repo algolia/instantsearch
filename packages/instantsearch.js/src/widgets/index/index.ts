@@ -212,6 +212,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let localParent: IndexWidget | null = null;
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
+  let lastValidSearchParameters: SearchParameters | null = null;
 
   return {
     $$type: 'ais.index',
@@ -512,6 +513,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // does not have access to lastResults, which it used to in pre-federated
         // search behavior.
         helper!.lastResults = results;
+        lastValidSearchParameters = results._state;
       });
 
       // We compute the render state before calling `init` in a separate loop
@@ -583,6 +585,15 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     render({ instantSearchInstance }: IndexRenderOptions) {
       if (!this.getResults()) {
         return;
+      }
+
+      // we can't attach a listener to the error event of search, as the error
+      // then would no longer be thrown for global handlers.
+      if (
+        instantSearchInstance.status === 'error' &&
+        !instantSearchInstance.mainHelper!.hasPendingRequests()
+      ) {
+        helper!.setState(lastValidSearchParameters!);
       }
 
       localWidgets.forEach((widget) => {
