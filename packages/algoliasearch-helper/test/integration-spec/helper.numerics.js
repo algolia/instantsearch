@@ -2,16 +2,11 @@
 
 var utils = require('../integration-utils.js');
 var setup = utils.setupSimple;
+var createIndexName = utils.createIndexName;
 
 var algoliasearchHelper = require('../../');
 
-var random = require('lodash/random');
-
-var indexName =
-  '_circle-algoliasearch-helper-js-' +
-  (process.env.CIRCLE_BUILD_NUM || 'DEV') +
-  'helper_numerics' +
-  random(0, 5000);
+var indexName = createIndexName('helper_numerics');
 
 var dataset = [
   {objectID: '0', n: [6]},

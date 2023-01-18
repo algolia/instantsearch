@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var algoliasearchHelper = require('../../index');
 
 var emptyClient = {};
@@ -13,14 +12,14 @@ test('Adding refinements should add an entry to the refinements attribute', func
     facets: [facetName]
   });
 
-  expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements).length).toBe(0);
   helper.addRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements)).toBe(1);
+  expect(Object.keys(helper.state.facetsRefinements).length).toBe(1);
   expect(helper.state.facetsRefinements.facet1).toEqual([facetValue]);
   helper.addRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements)).toBe(1);
+  expect(Object.keys(helper.state.facetsRefinements).length).toBe(1);
   helper.removeRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements)).toBe(1);
+  expect(Object.keys(helper.state.facetsRefinements).length).toBe(1);
   expect(helper.state.facetsRefinements[facetName]).toEqual([]);
 });
 
@@ -31,13 +30,13 @@ test('Adding several refinements for a single attribute should be handled', func
     facets: [facetName]
   });
 
-  expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements).length).toBe(0);
   helper.addRefine(facetName, 'value1');
-  expect(_.size(helper.state.facetsRefinements[facetName]) === 1).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(1);
   helper.addRefine(facetName, 'value2');
-  expect(_.size(helper.state.facetsRefinements[facetName]) === 2).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(2);
   helper.addRefine(facetName, 'value1');
-  expect(_.size(helper.state.facetsRefinements[facetName]) === 2).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(2);
 });
 
 test('Toggling several refinements for a single attribute should be handled', function() {
@@ -47,20 +46,22 @@ test('Toggling several refinements for a single attribute should be handled', fu
     facets: [facetName]
   });
 
-  expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements).length).toBe(0);
   helper.toggleRefine(facetName, 'value1');
-  expect(_.size(helper.state.facetsRefinements[facetName]) === 1).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(1);
   helper.toggleRefine(facetName, 'value2');
-  expect(_.size(helper.state.facetsRefinements[facetName]) === 2).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(2);
   helper.toggleRefine(facetName, 'value1');
-  expect(_.size(helper.state.facetsRefinements[facetName]) === 1).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(1);
   expect(helper.state.facetsRefinements[facetName]).toEqual(['value2']);
 });
 
 test('Using toggleRefine on a non specified facet should throw an exception', function() {
   var helper = algoliasearchHelper(emptyClient, null, {});
 
-  expect(_.partial(helper.toggleRefine, 'unknown', 'value')).toThrow();
+  expect(function() {
+    helper.toggleRefine('unknown', 'value');
+  }).toThrow();
 });
 
 test('Removing several refinements for a single attribute should be handled', function() {
@@ -70,13 +71,13 @@ test('Removing several refinements for a single attribute should be handled', fu
     facets: [facetName]
   });
 
-  expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements).length).toBe(0);
   helper.addRefine(facetName, 'value1');
   helper.addRefine(facetName, 'value2');
   helper.addRefine(facetName, 'value3');
-  expect(_.size(helper.state.facetsRefinements[facetName]) === 3).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(3);
   helper.removeRefine(facetName, 'value2');
-  expect(_.size(helper.state.facetsRefinements[facetName]) === 2).toBeTruthy();
+  expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(2);
   expect(helper.state.facetsRefinements[facetName]).toEqual(['value1', 'value3']);
 });
 
@@ -111,7 +112,7 @@ test('hasRefinements(facet) should return true if the facet is refined.', functi
 
   // in complete honesty we should be able to detect numeric facets but we can't
   // t.throws(helper.hasRefinements.bind(helper, 'notAFacet'), 'not a facet');
-  expect(_.bind(helper.hasRefinements, null)).toThrow();
+  expect(helper.hasRefinements(null)).toBe(false);
 });
 
 test('getRefinements should return all the refinements for a given facet', function() {

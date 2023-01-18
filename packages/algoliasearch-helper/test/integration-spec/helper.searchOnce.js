@@ -2,16 +2,11 @@
 
 var utils = require('../integration-utils.js');
 var setup = utils.setupSimple;
+var createIndexName = utils.createIndexName;
 
 var algoliasearchHelper = require('../../');
 
-var random = require('lodash/random');
-
-var indexName =
-  '_circle-algoliasearch-helper-js-' +
-  (process.env.CIRCLE_BUILD_NUM || 'DEV') +
-  'helper_searchonce' +
-  random(0, 5000);
+var indexName = createIndexName('helper_searchonce');
 
 var dataset = [
   {objectID: '1', facet: ['f1', 'f2']},

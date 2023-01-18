@@ -47,6 +47,16 @@ function withDatasetAndConfig(indexName, dataset, config) {
   });
 }
 
+function createIndexName(name) {
+  return (
+    '_circle-algoliasearch-helper-js-' +
+    (process.env.CIRCLE_BUILD_NUM || 'DEV') +
+    name +
+    Math.round(Math.random() * 5000)
+  );
+}
+
 module.exports = {
-  setupSimple: withDatasetAndConfig
+  setupSimple: withDatasetAndConfig,
+  createIndexName: createIndexName
 };

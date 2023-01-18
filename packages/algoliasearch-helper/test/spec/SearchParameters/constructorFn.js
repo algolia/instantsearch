@@ -1,6 +1,5 @@
 'use strict';
 
-var forOwn = require('lodash/forOwn');
 var SearchParameters = require('../../../src/SearchParameters');
 
 test('Constructor should accept an object with known keys', function() {
@@ -21,7 +20,7 @@ test('Constructor should accept an object with known keys', function() {
     ]
   };
   var params = new SearchParameters(legitConfig);
-  forOwn(legitConfig, function(v, k) {
+  Object.entries(legitConfig).forEach(function([k, v]) {
     expect(params[k]).toEqual(v);
   });
 });
@@ -46,7 +45,7 @@ test('Constructor should accept an object with unknown keys', function() {
     'otherBetaParameter': ['alpha', 'omega']
   };
   var params = new SearchParameters(betaConfig);
-  forOwn(betaConfig, function(v, k) {
+  Object.entries(betaConfig).forEach(function([k, v]) {
     expect(params[k]).toEqual(v);
   });
 });
@@ -100,7 +99,7 @@ test('Factory should accept an object with known keys', function() {
     ]
   };
   var params = SearchParameters.make(legitConfig);
-  forOwn(legitConfig, function(v, k) {
+  Object.entries(legitConfig).forEach(function([k, v]) {
     expect(params[k]).toEqual(v);
   });
 });
@@ -125,7 +124,7 @@ test('Factory should accept an object with unknown keys', function() {
     'otherBetaParameter': ['alpha', 'omega']
   };
   var params = SearchParameters.make(betaConfig);
-  forOwn(betaConfig, function(v, k) {
+  Object.entries(betaConfig).forEach(function([k, v]) {
     expect(params[k]).toEqual(v);
   });
 });

@@ -1,6 +1,5 @@
 'use strict';
 
-var clone = require('lodash/clone');
 var defaults = require('../../../src/functions/defaultsPure');
 
 // tests modified from lodash source
@@ -58,10 +57,10 @@ it('should assign properties that shadow those on `Object.prototype`', function(
     'valueOf': 7
   };
 
-  var expected = clone(source);
+  var expected = Object.assign({}, source);
   expect(defaults({}, source)).toEqual(expected);
 
-  expected = clone(object);
+  expected = Object.assign({}, object);
   expect(defaults({}, object, source)).toEqual(expected);
 });
 

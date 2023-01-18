@@ -2,8 +2,6 @@
 
 var algoliasearchHelper = require('../../../index');
 
-var bind = require('lodash/bind');
-
 var fakeClient = {};
 
 test('setChange should change the current page', function() {
@@ -45,7 +43,7 @@ test('previousPage should decrement the current page by one', function() {
 test('previousPage should throw an error without a current page', function() {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
-  expect(bind(helper.previousPage, helper)).toThrow('Page requested below 0.');
+  expect(function() {helper.previousPage();}).toThrow('Page requested below 0.');
 });
 
 test('pages should be reset if the mutation might change the number of pages', function() {
@@ -55,30 +53,28 @@ test('pages should be reset if the mutation might change the number of pages', f
   });
 
   [
-    ['clearRefinements', bind(helper.clearRefinements, helper)],
-    ['setQuery', bind(helper.setQuery, helper, 'query')],
-    ['addNumericRefinement', bind(helper.addNumericRefinement, helper, 'facet', '>', '2')],
-    ['removeNumericRefinement', bind(helper.removeNumericRefinement, helper, 'facet', '>')],
+    ['clearRefinements'],
+    ['setQuery', 'query'],
+    ['addNumericRefinement', 'facet', '>', '2'],
+    ['removeNumericRefinement', 'facet', '>'],
 
-    ['addExclude', bind(helper.addExclude, helper, 'facet1', 'val2')],
-    ['removeExclude', bind(helper.removeExclude, helper, 'facet1', 'val2')],
+    ['addExclude', 'facet1', 'val2'],
+    ['removeExclude', 'facet1', 'val2'],
 
-    ['addRefine', bind(helper.addRefine, helper, 'f2', 'val')],
-    ['removeRefine', bind(helper.removeRefine, helper, 'f2', 'val')],
+    ['addRefine', 'f2', 'val'],
+    ['removeRefine', 'f2', 'val'],
 
-    ['addDisjunctiveRefine', bind(helper.addDisjunctiveRefine, helper, 'f1', 'val')],
-    ['removeDisjunctiveRefine', bind(helper.removeDisjunctiveRefine, helper, 'f1', 'val')],
+    ['addDisjunctiveRefine', 'f1', 'val'],
+    ['removeDisjunctiveRefine', 'f1', 'val'],
 
-    ['toggleRefine', bind(helper.toggleRefine, helper, 'f1', 'v1')],
-    ['toggleExclude', bind(helper.toggleExclude, helper, 'facet1', '55')]
-  ].forEach(function(definition) {
-    var fn = definition[1];
-
+    ['toggleRefine', 'f1', 'v1'],
+    ['toggleExclude', 'facet1', '55']
+  ].forEach(function([fn, ...args]) {
     helper.setPage(10);
 
     expect(helper.getPage()).toBe(10);
 
-    fn();
+    helper[fn](...args);
 
     expect(helper.getPage()).toBe(0);
   });

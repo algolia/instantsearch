@@ -1,8 +1,6 @@
 'use strict';
 
 var algoliasearchHelper = require('../../../index');
-var forEach = require('lodash/forEach');
-var isUndefined = require('lodash/isUndefined');
 
 function fixture() {
   var helper = algoliasearchHelper({}, 'Index', {
@@ -78,9 +76,9 @@ test('Clearing the same field from multiple elements should remove it everywhere
   expect(helper.state.facetsExcludes.facet1).toEqual(['value']);
 
   helper.clearRefinements('facet1');
-  expect(isUndefined(helper.state.facetsRefinements.facet1)).toBeTruthy();
-  expect(isUndefined(helper.state.numericRefinements.facet1)).toBeTruthy();
-  expect(isUndefined(helper.state.facetsExcludes.facet1)).toBeTruthy();
+  expect(helper.state.facetsRefinements.facet1).toBeUndefined();
+  expect(helper.state.numericRefinements.facet1).toBeUndefined();
+  expect(helper.state.facetsExcludes.facet1).toBeUndefined();
 });
 
 test('Clear with a function: neutral predicate', function() {
@@ -138,7 +136,7 @@ test('Clear with a function: filtering', function() {
   });
 
   expect(Object.keys(checkType).length).toBe(5);
-  forEach(checkType, function(typeTest) {
+  Object.keys(checkType).forEach(function(typeTest) {
     expect(typeTest).toBeTruthy();
   });
 
@@ -166,28 +164,28 @@ test('Clearing twice the same attribute should be not problem', function() {
 
   expect(helper.state.facetsRefinements.facet1).toEqual(['0']);
   helper.clearRefinements('facet1');
-  expect(isUndefined(helper.state.facetsRefinements.facet1)).toBeTruthy();
+  expect(helper.state.facetsRefinements.facet1).toBeUndefined();
   expect(function() {
     helper.clearRefinements('facet1');
   }).not.toThrow();
 
   expect(helper.state.disjunctiveFacetsRefinements.disjunctiveFacet1).toEqual(['0']);
   helper.clearRefinements('disjunctiveFacet1');
-  expect(isUndefined(helper.state.disjunctiveFacetsRefinements.disjunctiveFacet1)).toBeTruthy();
+  expect(helper.state.disjunctiveFacetsRefinements.disjunctiveFacet1).toBeUndefined();
   expect(function() {
     helper.clearRefinements('disjunctiveFacet1');
   }).not.toThrow();
 
   expect(helper.state.facetsExcludes.excluded1).toEqual(['0']);
   helper.clearRefinements('excluded1');
-  expect(isUndefined(helper.state.facetsExcludes.excluded1)).toBeTruthy();
+  expect(helper.state.facetsExcludes.excluded1).toBeUndefined();
   expect(function() {
     helper.clearRefinements('excluded1');
   }).not.toThrow();
 
   expect(helper.state.numericRefinements.numeric1).toEqual({'>=': [0], '<': [10]});
   helper.clearRefinements('numeric1');
-  expect(isUndefined(helper.state.numericRefinements.numeric1)).toBeTruthy();
+  expect(helper.state.numericRefinements.numeric1).toBeUndefined();
   expect(function() {
     helper.clearRefinements('numeric1');
   }).not.toThrow();

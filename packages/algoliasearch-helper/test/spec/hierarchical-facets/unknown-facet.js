@@ -1,11 +1,9 @@
 'use strict';
+var algoliasearch = require('algoliasearch');
+
+var algoliasearchHelper = require('../../../');
 
 test('hierarchical facets: throw on unknown facet', function() {
-  var bind = require('lodash/bind');
-  var algoliasearch = require('algoliasearch');
-
-  var algoliasearchHelper = require('../../../');
-
   var appId = 'hierarchical-throw-appId';
   var apiKey = 'hierarchical-throw-apiKey';
   var indexName = 'hierarchical-throw-indexName';
@@ -18,5 +16,5 @@ test('hierarchical facets: throw on unknown facet', function() {
     }]
   });
 
-  expect(bind(helper.toggleRefine, helper, 'unknownFacet', 'beers')).toThrow();
+  expect(function() {helper.toggleRefine('unknownFacet', 'beers');}).toThrow();
 });

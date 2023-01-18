@@ -2,13 +2,11 @@
 
 var algoliasearchHelper = require('../../../index');
 
-var _ = require('lodash');
-
 var fakeClient = {};
 
 test('undefined attribute', function() {
   var helper = algoliasearchHelper(fakeClient, 'index');
-  expect(_.partial(helper.hasRefinements, 'unknown')).toThrow(Error);
+  expect(helper.hasRefinements('unknown')).toBe(false);
 });
 
 describe('numericRefinement', function() {

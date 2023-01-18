@@ -2,7 +2,6 @@
 
 test('hierarchical facets: pagination', function(done) {
   var algoliasearch = require('algoliasearch');
-  var isArray = require('lodash/isArray');
 
   var algoliasearchHelper = require('../../../');
 
@@ -84,7 +83,7 @@ test('hierarchical facets: pagination', function(done) {
     // we do not yet support multiple values for hierarchicalFacetsRefinements
     // but at some point we may want to open multiple leafs of a hierarchical menu
     // So we set this as an array so that we do not have to bump major to handle it
-    expect(isArray(helper.state.hierarchicalFacetsRefinements.categories)).toBeTruthy();
+    expect(Array.isArray(helper.state.hierarchicalFacetsRefinements.categories)).toBeTruthy();
     done();
   });
 });
