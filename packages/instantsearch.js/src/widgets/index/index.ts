@@ -232,9 +232,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     getResults() {
       if (!derivedHelper?.lastResults) return null;
 
-      // To make the UI optimistic, we will always render using the current state,
-      // but the previous results. This means a change will be visible immediately,
-      // regardless of the status of the network request.
+      // To make the UI optimistic, we patch the state to display to the current
+      // one instead of the one associated with the latest results.
+      // This means user-driven UI changes (e.g., checked checkbox) are reflected
+      // immediately instead of waiting for Algolia to respond, regardless of
+      // the status of the network request.
       derivedHelper.lastResults._state = helper!.state;
 
       return derivedHelper.lastResults;
