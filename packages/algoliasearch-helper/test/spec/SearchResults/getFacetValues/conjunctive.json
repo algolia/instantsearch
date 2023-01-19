@@ -1,0 +1,47 @@
+{
+  "content": {
+    "results": [
+      {
+        "hits": [
+          {
+            "objectID": "1696302"
+          }
+        ],
+        "nbHits": 10000,
+        "page": 0,
+        "nbPages": 1000,
+        "hitsPerPage": 1,
+        "processingTimeMS": 1,
+        "facets": {
+          "brand": {
+            "Insignia™": 551,
+            "Samsung": 511,
+            "Apple": 386
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&maxValuesPerFacet=3&page=0&hitsPerPage=1&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&facets=brand",
+        "index": "instant_search"
+      }
+    ]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": ["brand"],
+    "disjunctiveFacets": [],
+    "hierarchicalFacets": [],
+    "facetsRefinements": {
+      "brand": ["Apple"]
+    },
+    "facetsExcludes": {},
+    "disjunctiveFacetsRefinements": {},
+    "numericRefinements": {},
+    "tagRefinements": [],
+    "hierarchicalFacetsRefinements": {},
+    "maxValuesPerFacet": 3,
+    "page": 0
+  },
+  "error": null
+}

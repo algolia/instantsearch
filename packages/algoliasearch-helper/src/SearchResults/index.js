@@ -668,7 +668,33 @@ function extractNormalizedFacetValues(results, attribute) {
       };
     });
   } else if (results._state.isHierarchicalFacet(attribute)) {
-    return find(results.hierarchicalFacets, predicate);
+    var hierarchicalFacetValues = find(results.hierarchicalFacets, predicate);
+    if (!hierarchicalFacetValues) return hierarchicalFacetValues;
+
+    var hierarchicalFacet = results._state.getHierarchicalFacetByName(attribute);
+    var currentRefinementSplit = unescapeFacetValue(
+      results._state.getHierarchicalRefinement(attribute)[0] || ''
+    ).split(results._state._getHierarchicalFacetSeparator(hierarchicalFacet));
+    currentRefinementSplit.unshift(attribute);
+
+    setIsRefined(hierarchicalFacetValues, currentRefinementSplit, 0);
+
+    return hierarchicalFacetValues;
+  }
+}
+
+/**
+ * Set the isRefined of a hierarchical facet result based on the current state.
+ * @param {SearchResults.HierarchicalFacet} item Hierarchical facet to fix
+ * @param {string[]} currentRefinementSplit array of parts of the current hierarchical refinement
+ * @param {number} depth recursion depth in the currentRefinement
+ */
+function setIsRefined(item, currentRefinement, depth) {
+  item.isRefined = item.name === currentRefinement[depth];
+  if (item.data) {
+    item.data.forEach(function(child) {
+      setIsRefined(child, currentRefinement, depth + 1);
+    });
   }
 }
 

@@ -267,7 +267,7 @@ test('getFacetValues introduces numeric disjunctive refinements', function() {
   expect(facetValues.length).toBe(2);
 });
 
-test('getFacetValues(hierachical) returns escaped facet values', function() {
+test('getFacetValues(hierarchical) returns escaped facet values', function() {
   var searchParams = new SearchParameters({
     index: 'instant_search',
     hierarchicalFacets: [{
@@ -373,4 +373,137 @@ test('getFacetValues(unknown) returns undefined (does not throw)', function() {
   var results = new SearchResults(searchParams, [result, result]);
 
   expect(results.getFacetValues('type')).toBeUndefined();
+});
+
+
+test('getFacetValues(disjunctive) when current state is different to constructor state', function() {
+  var data = require('./getFacetValues/disjunctive.json');
+  var searchParams = new SearchParameters(data.state);
+  var result = new SearchResults(searchParams, data.content.results);
+
+  // set current state to something different than constructor
+  result._state = result._state.addDisjunctiveFacetRefinement('brand', 'Samsung');
+
+  var facetValues = result.getFacetValues('brand');
+
+  var expected = [
+    {count: 511, isRefined: true, name: 'Samsung', escapedValue: 'Samsung'},
+    {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
+    {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'}
+  ];
+
+  expect(facetValues).toEqual(expected);
+});
+
+test('getFacetValues(conjunctive) when current state is different to constructor state', function() {
+  var data = require('./getFacetValues/conjunctive.json');
+  var searchParams = new SearchParameters(data.state);
+  var result = new SearchResults(searchParams, data.content.results);
+
+  // set current state to something different than constructor
+  result._state = result._state.addFacetRefinement('brand', 'Samsung');
+
+  var facetValues = result.getFacetValues('brand');
+
+  var expected = [
+    {count: 511, isRefined: true, isExcluded: false, name: 'Samsung', escapedValue: 'Samsung'},
+    {count: 386, isRefined: true, isExcluded: false, name: 'Apple', escapedValue: 'Apple'},
+    {count: 551, isRefined: false, isExcluded: false, name: 'Insignia™', escapedValue: 'Insignia™'}
+  ];
+
+  expect(facetValues).toEqual(expected);
+});
+
+test('getFacetValues(hierarchical) when current state is different to constructor state', function() {
+  var searchParams = new SearchParameters({
+    index: 'instant_search',
+    hierarchicalFacets: [{
+      name: 'type',
+      attributes: ['type1', 'type2', 'type3']
+    }],
+    hierarchicalFacetsRefinements: {type: ['\\-something > discounts']}
+  });
+
+  var result = {
+    query: '',
+    facets: {
+      type1: {
+        'dogs': 1,
+        '-something': 5
+      },
+      type2: {
+        'dogs > hounds': 1,
+        '-something > discounts': 5
+      },
+      type3: {
+        '-something > discounts > -5%': 1,
+        '-something > discounts > full price': 4
+      }
+    },
+    exhaustiveFacetsCount: true
+  };
+
+  var results = new SearchResults(searchParams, [result, result, result]);
+  results._state = results._state
+    .removeHierarchicalFacetRefinement('type')
+    .addHierarchicalFacetRefinement('type', '\\-something > discounts > -5%');
+
+  var facetValues = results.getFacetValues('type');
+
+  var expected = {
+    data: [
+      {
+        count: 5,
+        data: [
+          {
+            count: 5,
+            data: [{
+              count: 1,
+              data: null,
+              exhaustive: true,
+              isRefined: true,
+              name: '-5%',
+              path: '-something > discounts > -5%',
+              escapedValue: '\\-something > discounts > -5%'
+            }, {
+              count: 4,
+              data: null,
+              exhaustive: true,
+              isRefined: false,
+              name: 'full price',
+              path: '-something > discounts > full price',
+              escapedValue: '\\-something > discounts > full price'
+            }],
+            exhaustive: true,
+            isRefined: true,
+            name: 'discounts',
+            path: '-something > discounts',
+            escapedValue: '\\-something > discounts'
+          }
+        ],
+        exhaustive: true,
+        isRefined: true,
+        name: '-something',
+        path: '-something',
+        escapedValue: '\\-something'
+      },
+      {
+        count: 1,
+        data: null,
+        exhaustive: true,
+        isRefined: false,
+        name: 'dogs',
+        path: 'dogs',
+        escapedValue: 'dogs'
+      }
+    ],
+    exhaustive: true,
+    isRefined: true,
+    name: 'type',
+    path: null,
+    escapedValue: null,
+    count: null
+  };
+
+  expect(facetValues).toEqual(expected);
 });
