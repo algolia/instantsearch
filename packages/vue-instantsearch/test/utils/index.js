@@ -74,4 +74,12 @@ export const createSSRApp = (props) => {
   }
 };
 
+export const mountApp = (props, container) => {
+  if (isVue3) {
+    return _createApp(props).mount(container);
+  } else {
+    return new Vue2(props).$mount(container);
+  }
+};
+
 export const nextTick = () => (isVue3 ? _nextTick() : Vue2.nextTick());

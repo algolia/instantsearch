@@ -8,8 +8,8 @@ import {
   createPaginationTests,
 } from '@instantsearch/tests';
 
-import { nextTick } from '../../test/utils';
-import { renderCompat, Vue } from '../util/vue-compat';
+import { nextTick, mountApp } from '../../test/utils';
+import { renderCompat } from '../util/vue-compat';
 import {
   AisInstantSearch,
   AisRefinementList,
@@ -20,83 +20,83 @@ import {
 jest.unmock('instantsearch.js/es');
 
 createRefinementListTests(async ({ instantSearchOptions, attribute }) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.body.appendChild(document.createElement('div'));
 
-  const vm = new Vue({
-    render: renderCompat((h) =>
-      h(AisInstantSearch, { props: instantSearchOptions }, [
-        h(AisRefinementList, { props: { attribute } }),
-      ])
-    ),
-  }).$mount(container);
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisRefinementList, { props: { attribute } }),
+        ])
+      ),
+    },
+    container
+  );
 
   await nextTick();
 
   return {
-    get container() {
-      return vm.$el;
-    },
+    container,
   };
 });
 
 createHierarchicalMenuTests(async ({ instantSearchOptions, attributes }) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.body.appendChild(document.createElement('div'));
 
-  const vm = new Vue({
-    render: renderCompat((h) =>
-      h(AisInstantSearch, { props: instantSearchOptions }, [
-        h(AisHierarchicalMenu, { props: { attributes } }),
-      ])
-    ),
-  }).$mount(container);
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisHierarchicalMenu, { props: { attributes } }),
+        ])
+      ),
+    },
+    container
+  );
 
   await nextTick();
 
   return {
-    get container() {
-      return vm.$el;
-    },
+    container,
   };
 });
 
 createMenuTests(async ({ instantSearchOptions, attribute }) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.body.appendChild(document.createElement('div'));
 
-  const vm = new Vue({
-    render: renderCompat((h) =>
-      h(AisInstantSearch, { props: instantSearchOptions }, [
-        h(AisMenu, { props: { attribute } }),
-      ])
-    ),
-  }).$mount(container);
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisMenu, { props: { attribute } }),
+        ])
+      ),
+    },
+    container
+  );
 
   await nextTick();
 
   return {
-    get container() {
-      return vm.$el;
-    },
+    container,
   };
 });
 
 createPaginationTests(async ({ instantSearchOptions }) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.body.appendChild(document.createElement('div'));
 
-  const vm = new Vue({
-    render: renderCompat((h) =>
-      h(AisInstantSearch, { props: instantSearchOptions }, [h(AisPagination)])
-    ),
-  }).$mount(container);
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [h(AisPagination)])
+      ),
+    },
+    container
+  );
 
   await nextTick();
 
   return {
-    get container() {
-      return vm.$el;
-    },
+    container,
   };
 });
