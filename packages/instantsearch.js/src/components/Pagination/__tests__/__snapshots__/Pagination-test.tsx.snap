@@ -12,7 +12,7 @@ exports[`Pagination should add the noRefinement CSS class with a single page 1`]
         class="item pageItem selectedItem"
       >
         <a
-          aria-label="1"
+          aria-label="Page 1"
           class="link"
           href="0"
         >
@@ -23,7 +23,7 @@ exports[`Pagination should add the noRefinement CSS class with a single page 1`]
         class="item pageItem"
       >
         <a
-          aria-label="2"
+          aria-label="Page 2"
           class="link"
           href="1"
         >
@@ -34,7 +34,7 @@ exports[`Pagination should add the noRefinement CSS class with a single page 1`]
         class="item pageItem"
       >
         <a
-          aria-label="3"
+          aria-label="Page 3"
           class="link"
           href="2"
         >
@@ -45,7 +45,7 @@ exports[`Pagination should add the noRefinement CSS class with a single page 1`]
         class="item pageItem"
       >
         <a
-          aria-label="4"
+          aria-label="Page 4"
           class="link"
           href="3"
         >
@@ -56,7 +56,7 @@ exports[`Pagination should add the noRefinement CSS class with a single page 1`]
         class="item pageItem"
       >
         <a
-          aria-label="5"
+          aria-label="Page 5"
           class="link"
           href="4"
         >
@@ -67,7 +67,7 @@ exports[`Pagination should add the noRefinement CSS class with a single page 1`]
         class="item pageItem"
       >
         <a
-          aria-label="6"
+          aria-label="Page 6"
           class="link"
           href="5"
         >
@@ -78,7 +78,7 @@ exports[`Pagination should add the noRefinement CSS class with a single page 1`]
         class="item pageItem"
       >
         <a
-          aria-label="7"
+          aria-label="Page 7"
           class="link"
           href="6"
         >
@@ -120,7 +120,7 @@ exports[`Pagination should disable last page if already on it 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="14"
+          aria-label="Page 14"
           class="link"
           href="13"
         >
@@ -131,7 +131,7 @@ exports[`Pagination should disable last page if already on it 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="15"
+          aria-label="Page 15"
           class="link"
           href="14"
         >
@@ -142,7 +142,7 @@ exports[`Pagination should disable last page if already on it 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="16"
+          aria-label="Page 16"
           class="link"
           href="15"
         >
@@ -153,7 +153,7 @@ exports[`Pagination should disable last page if already on it 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="17"
+          aria-label="Page 17"
           class="link"
           href="16"
         >
@@ -164,7 +164,7 @@ exports[`Pagination should disable last page if already on it 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="18"
+          aria-label="Page 18"
           class="link"
           href="17"
         >
@@ -175,7 +175,7 @@ exports[`Pagination should disable last page if already on it 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="19"
+          aria-label="Page 19"
           class="link"
           href="18"
         >
@@ -186,7 +186,7 @@ exports[`Pagination should disable last page if already on it 1`] = `
         class="item pageItem selectedItem"
       >
         <a
-          aria-label="20"
+          aria-label="Page 20"
           class="link"
           href="19"
         >
@@ -231,7 +231,7 @@ exports[`Pagination should display the first/last link 1`] = `
         class="item pageItem selectedItem"
       >
         <a
-          aria-label="1"
+          aria-label="Page 1"
           class="link"
           href="0"
         >
@@ -242,7 +242,7 @@ exports[`Pagination should display the first/last link 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="2"
+          aria-label="Page 2"
           class="link"
           href="1"
         >
@@ -253,7 +253,7 @@ exports[`Pagination should display the first/last link 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="3"
+          aria-label="Page 3"
           class="link"
           href="2"
         >
@@ -264,7 +264,7 @@ exports[`Pagination should display the first/last link 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="4"
+          aria-label="Page 4"
           class="link"
           href="3"
         >
@@ -275,7 +275,7 @@ exports[`Pagination should display the first/last link 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="5"
+          aria-label="Page 5"
           class="link"
           href="4"
         >
@@ -286,7 +286,7 @@ exports[`Pagination should display the first/last link 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="6"
+          aria-label="Page 6"
           class="link"
           href="5"
         >
@@ -297,7 +297,7 @@ exports[`Pagination should display the first/last link 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="7"
+          aria-label="Page 7"
           class="link"
           href="6"
         >
@@ -344,7 +344,7 @@ exports[`Pagination should have all buttons disabled if there are no results 1`]
         class="item pageItem selectedItem"
       >
         <a
-          aria-label="1"
+          aria-label="Page 1"
           class="link"
           href="0"
         >
@@ -382,7 +382,7 @@ exports[`Pagination should render five elements 1`] = `
         class="item pageItem selectedItem"
       >
         <a
-          aria-label="1"
+          aria-label="Page 1"
           class="link"
           href="0"
         >
@@ -393,7 +393,7 @@ exports[`Pagination should render five elements 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="2"
+          aria-label="Page 2"
           class="link"
           href="1"
         >
@@ -404,7 +404,7 @@ exports[`Pagination should render five elements 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="3"
+          aria-label="Page 3"
           class="link"
           href="2"
         >
@@ -415,7 +415,7 @@ exports[`Pagination should render five elements 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="4"
+          aria-label="Page 4"
           class="link"
           href="3"
         >
@@ -426,7 +426,7 @@ exports[`Pagination should render five elements 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="5"
+          aria-label="Page 5"
           class="link"
           href="4"
         >
@@ -437,7 +437,7 @@ exports[`Pagination should render five elements 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="6"
+          aria-label="Page 6"
           class="link"
           href="5"
         >
@@ -448,7 +448,7 @@ exports[`Pagination should render five elements 1`] = `
         class="item pageItem"
       >
         <a
-          aria-label="7"
+          aria-label="Page 7"
           class="link"
           href="6"
         >
