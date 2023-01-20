@@ -5,7 +5,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import type { MenuSetup } from '.';
-import { fakeAct } from '../common';
+import { fakeAct } from '../../common';
 import userEvent from '@testing-library/user-event';
 
 export function createOptimisticUiTests(setup: MenuSetup) {

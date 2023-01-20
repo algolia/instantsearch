@@ -5,7 +5,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import type { PaginationSetup } from '.';
-import { fakeAct } from '../common';
+import { fakeAct } from '../../common';
 
 export function createOptimisticUiTests(setup: PaginationSetup) {
   // https://github.com/jsdom/jsdom/issues/1695

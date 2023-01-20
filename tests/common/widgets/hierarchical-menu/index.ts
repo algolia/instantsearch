@@ -1,4 +1,4 @@
-import type { TestSetup } from '../common';
+import type { TestSetup } from '../../common';
 import { createOptimisticUiTests } from './optimistic-ui';
 
 export type HierarchicalMenuSetup = TestSetup<{ attributes: string[] }>;
