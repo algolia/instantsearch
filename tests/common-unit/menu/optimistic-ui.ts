@@ -9,7 +9,8 @@ import { fakeAct } from '../common';
 import userEvent from '@testing-library/user-event';
 
 export function createOptimisticUiTests(setup: MenuSetup) {
-  describe('optimistic UI', () => {
+  // @TODO: after helper is updated with https://github.com/algolia/algoliasearch-helper-js/pull/925, enable this test
+  describe.skip('optimistic UI', () => {
     test('is checked immediately with a slow network', async () => {
       const delay = 100;
       const margin = 10;
@@ -66,10 +67,9 @@ export function createOptimisticUiTests(setup: MenuSetup) {
         });
 
         // immediately after interaction
-        // TODO: after helper is updated with https://github.com/algolia/algoliasearch-helper-js/pull/925, enable this test
-        // expect(
-        //   env.container.querySelectorAll('.ais-Menu-item--selected')
-        // ).toHaveLength(1);
+        expect(
+          env.container.querySelectorAll('.ais-Menu-item--selected')
+        ).toHaveLength(1);
       }
 
       // after result comes in
@@ -93,10 +93,9 @@ export function createOptimisticUiTests(setup: MenuSetup) {
         });
 
         // immediately after interaction
-        // TODO: after helper is updated with https://github.com/algolia/algoliasearch-helper-js/pull/925, enable this test
-        // expect(
-        //   env.container.querySelectorAll('.ais-Menu-item--selected')
-        // ).toHaveLength(0);
+        expect(
+          env.container.querySelectorAll('.ais-Menu-item--selected')
+        ).toHaveLength(0);
       }
 
       // after result comes in
