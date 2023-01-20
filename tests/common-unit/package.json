@@ -1,0 +1,5 @@
+{
+  "name": "@instantsearch/tests",
+  "version": "1.0.3",
+  "description": "common unit tests for all InstantSearch flavours"
+}

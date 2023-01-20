@@ -56,6 +56,7 @@
   "devDependencies": {
     "@instantsearch/mocks": "1.0.3",
     "@instantsearch/testutils": "1.0.3",
+    "@instantsearch/tests": "1.0.3",
     "@storybook/html": "5.3.9",
     "@types/scriptjs": "0.0.2",
     "algoliasearch": "4.14.3",
