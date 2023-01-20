@@ -81,7 +81,7 @@ function Pagination(props: PaginationProps) {
         {props.pages.map((pageNumber) => (
           <PaginationLink
             key={pageNumber}
-            ariaLabel={`${pageNumber + 1}`}
+            ariaLabel={`Page ${pageNumber + 1}`}
             className={props.cssClasses.pageItem}
             isSelected={pageNumber === props.currentPage}
             label={`${pageNumber + 1}`}

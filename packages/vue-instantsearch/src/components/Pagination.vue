@@ -88,6 +88,7 @@
             <a
               :class="suit('link')"
               :href="state.createURL(page)"
+              :aria-label="`Page ${page + 1}`"
               @click.prevent="refine(page)"
               >{{ page + 1 }}</a
             >
