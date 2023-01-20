@@ -126,6 +126,11 @@ describe('widgets', () => {
           "name": "SortBy",
         },
         {
+          "$$type": "ais.stats",
+          "$$widgetType": "ais.stats",
+          "name": "Stats",
+        },
+        {
           "$$type": "ais.toggleRefinement",
           "$$widgetType": "ais.toggleRefinement",
           "name": "ToggleRefinement",

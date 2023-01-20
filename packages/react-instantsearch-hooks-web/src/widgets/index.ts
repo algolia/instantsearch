@@ -14,4 +14,5 @@ export * from './RefinementList';
 export * from './SearchBox';
 export * from './Snippet';
 export * from './SortBy';
+export * from './Stats';
 export * from './ToggleRefinement';
