@@ -19,53 +19,33 @@ import {
 } from '..';
 
 createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
-  const { container } = render(
+  render(
     <InstantSearch {...instantSearchOptions}>
       <RefinementList {...widgetParams} />
     </InstantSearch>
   );
-
-  return {
-    container,
-    act,
-  };
-});
+}, act);
 
 createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
-  const { container } = render(
+  render(
     <InstantSearch {...instantSearchOptions}>
       <HierarchicalMenu {...widgetParams} />
     </InstantSearch>
   );
-
-  return {
-    container,
-    act,
-  };
-});
+}, act);
 
 createMenuTests(({ instantSearchOptions, widgetParams }) => {
-  const { container } = render(
+  render(
     <InstantSearch {...instantSearchOptions}>
       <Menu {...widgetParams} />
     </InstantSearch>
   );
-
-  return {
-    container,
-    act,
-  };
-});
+}, act);
 
 createPaginationTests(({ instantSearchOptions, widgetParams }) => {
-  const { container } = render(
+  render(
     <InstantSearch {...instantSearchOptions}>
       <Pagination {...widgetParams} />
     </InstantSearch>
   );
-
-  return {
-    container,
-    act,
-  };
-});
+}, act);

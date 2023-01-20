@@ -4,11 +4,11 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { getByRole } from '@testing-library/dom';
+import { screen } from '@testing-library/dom';
 import type { RefinementListSetup } from '.';
-import { fakeAct } from '../../common';
+import type { Act } from '../../common';
 
-export function createOptimisticUiTests(setup: RefinementListSetup) {
+export function createOptimisticUiTests(setup: RefinementListSetup, act: Act) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;
@@ -37,8 +37,8 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
         },
         widgetParams: { attribute },
       };
-      const env = await setup(options);
-      const { act = fakeAct } = env;
+
+      await setup(options);
 
       // Wait for initial results to populate widgets with data
       await act(async () => {
@@ -49,16 +49,16 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
       // before interaction
       {
         expect(
-          env.container.querySelectorAll('.ais-RefinementList-item')
+          document.querySelectorAll('.ais-RefinementList-item')
         ).toHaveLength(2);
         expect(
-          env.container.querySelectorAll('.ais-RefinementList-item--selected')
+          document.querySelectorAll('.ais-RefinementList-item--selected')
         ).toHaveLength(0);
       }
 
       // Select a refinement
       {
-        const firstItem = getByRole(env.container, 'checkbox', {
+        const firstItem = screen.getByRole('checkbox', {
           name: 'Apple 200',
         });
         await act(async () => {
@@ -70,13 +70,13 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
         // UI has changed immediately after the user interaction
         expect(firstItem).toBeChecked();
         expect(
-          env.container.querySelectorAll('.ais-RefinementList-item--selected')
+          document.querySelectorAll('.ais-RefinementList-item--selected')
         ).toHaveLength(1);
       }
 
       // Wait for new results to come in
       {
-        const firstItem = getByRole(env.container, 'checkbox', {
+        const firstItem = screen.getByRole('checkbox', {
           name: 'Apple 200',
         });
 
@@ -86,13 +86,13 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
 
         expect(firstItem).toBeChecked();
         expect(
-          env.container.querySelectorAll('.ais-RefinementList-item--selected')
+          document.querySelectorAll('.ais-RefinementList-item--selected')
         ).toHaveLength(1);
       }
 
       // Unselect the refinement
       {
-        const firstItem = getByRole(env.container, 'checkbox', {
+        const firstItem = screen.getByRole('checkbox', {
           name: 'Apple 200',
         });
         await act(async () => {
@@ -104,13 +104,13 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
         // UI has changed immediately after the user interaction
         expect(firstItem).not.toBeChecked();
         expect(
-          env.container.querySelectorAll('.ais-RefinementList-item--selected')
+          document.querySelectorAll('.ais-RefinementList-item--selected')
         ).toHaveLength(0);
       }
 
       // Wait for new results to come in
       {
-        const firstItem = getByRole(env.container, 'checkbox', {
+        const firstItem = screen.getByRole('checkbox', {
           name: 'Apple 200',
         });
 
@@ -121,7 +121,7 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
 
         expect(firstItem).not.toBeChecked();
         expect(
-          env.container.querySelectorAll('.ais-RefinementList-item--selected')
+          document.querySelectorAll('.ais-RefinementList-item--selected')
         ).toHaveLength(0);
       }
     });

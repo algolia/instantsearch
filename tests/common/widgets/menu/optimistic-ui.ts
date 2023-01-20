@@ -5,11 +5,11 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import type { MenuSetup } from '.';
-import { fakeAct } from '../../common';
+import type { Act } from '../../common';
 import userEvent from '@testing-library/user-event';
-import { getByRole } from '@testing-library/dom';
+import { screen } from '@testing-library/dom';
 
-export function createOptimisticUiTests(setup: MenuSetup) {
+export function createOptimisticUiTests(setup: MenuSetup, act: Act) {
   // @TODO: after helper is updated with https://github.com/algolia/algoliasearch-helper-js/pull/925, enable this test
   describe.skip('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
@@ -39,8 +39,8 @@ export function createOptimisticUiTests(setup: MenuSetup) {
         },
         widgetParams: { attribute },
       };
-      const env = await setup(options);
-      const { act = fakeAct } = env;
+
+      await setup(options);
 
       // Wait for initial results to populate widgets with data
       await act(async () => {
@@ -50,17 +50,15 @@ export function createOptimisticUiTests(setup: MenuSetup) {
 
       // before interaction
       {
-        expect(env.container.querySelectorAll('.ais-Menu-item')).toHaveLength(
-          2
-        );
+        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(2);
         expect(
-          env.container.querySelectorAll('.ais-Menu-item--selected')
+          document.querySelectorAll('.ais-Menu-item--selected')
         ).toHaveLength(0);
       }
 
       // Select a refinement
       {
-        const firstItem = getByRole(env.container, 'link', {
+        const firstItem = screen.getByRole('link', {
           name: 'Apple 200',
         });
 
@@ -73,7 +71,7 @@ export function createOptimisticUiTests(setup: MenuSetup) {
         // UI has changed immediately after the user interaction
         // @TODO: menu doesn't have any accessible way to determine if an item is selected, so we use the class name (https://github.com/algolia/instantsearch/issues/5187)
         expect(
-          env.container.querySelectorAll('.ais-Menu-item--selected')
+          document.querySelectorAll('.ais-Menu-item--selected')
         ).toHaveLength(1);
       }
 
@@ -84,13 +82,13 @@ export function createOptimisticUiTests(setup: MenuSetup) {
         });
 
         expect(
-          env.container.querySelectorAll('.ais-Menu-item--selected')
+          document.querySelectorAll('.ais-Menu-item--selected')
         ).toHaveLength(1);
       }
 
       // Unselect the refinement
       {
-        const firstItem = getByRole(env.container, 'link', {
+        const firstItem = screen.getByRole('link', {
           name: 'Apple 200',
         });
 
@@ -102,7 +100,7 @@ export function createOptimisticUiTests(setup: MenuSetup) {
 
         // UI has changed immediately after the user interaction
         expect(
-          env.container.querySelectorAll('.ais-Menu-item--selected')
+          document.querySelectorAll('.ais-Menu-item--selected')
         ).toHaveLength(0);
       }
 
@@ -114,7 +112,7 @@ export function createOptimisticUiTests(setup: MenuSetup) {
         });
 
         expect(
-          env.container.querySelectorAll('.ais-Menu-item--selected')
+          document.querySelectorAll('.ais-Menu-item--selected')
         ).toHaveLength(0);
       }
     });

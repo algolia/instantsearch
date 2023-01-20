@@ -1,5 +1,6 @@
 import type { HierarchicalMenuWidget } from 'instantsearch.js/es/widgets/hierarchical-menu/hierarchical-menu';
-import type { TestSetup } from '../../common';
+import type { Act, TestSetup } from '../../common';
+import { fakeAct } from '../../common';
 import { createOptimisticUiTests } from './optimistic-ui';
 
 type WidgetParams = Parameters<HierarchicalMenuWidget>[0];
@@ -7,8 +8,11 @@ export type HierarchicalMenuSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createHierarchicalMenuTests(setup: HierarchicalMenuSetup) {
+export function createHierarchicalMenuTests(
+  setup: HierarchicalMenuSetup,
+  act: Act = fakeAct
+) {
   describe('HierarchicalMenu common tests', () => {
-    createOptimisticUiTests(setup);
+    createOptimisticUiTests(setup, act);
   });
 }

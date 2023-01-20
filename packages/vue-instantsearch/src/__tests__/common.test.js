@@ -20,9 +20,7 @@ import {
 jest.unmock('instantsearch.js/es');
 
 createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
-  const container = document.body.appendChild(document.createElement('div'));
-
-  const vm = mountApp(
+  mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -30,22 +28,14 @@ createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
         ])
       ),
     },
-    container
+    document.body.appendChild(document.createElement('div'))
   );
 
   await nextTick();
-
-  return {
-    get container() {
-      return vm.$el;
-    },
-  };
 });
 
 createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
-  const container = document.body.appendChild(document.createElement('div'));
-
-  const vm = mountApp(
+  mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -53,22 +43,14 @@ createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
         ])
       ),
     },
-    container
+    document.body.appendChild(document.createElement('div'))
   );
 
   await nextTick();
-
-  return {
-    get container() {
-      return vm.$el;
-    },
-  };
 });
 
 createMenuTests(async ({ instantSearchOptions, widgetParams }) => {
-  const container = document.body.appendChild(document.createElement('div'));
-
-  const vm = mountApp(
+  mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -76,22 +58,14 @@ createMenuTests(async ({ instantSearchOptions, widgetParams }) => {
         ])
       ),
     },
-    container
+    document.body.appendChild(document.createElement('div'))
   );
 
   await nextTick();
-
-  return {
-    get container() {
-      return vm.$el;
-    },
-  };
 });
 
 createPaginationTests(async ({ instantSearchOptions, widgetParams }) => {
-  const container = document.body.appendChild(document.createElement('div'));
-
-  const vm = mountApp(
+  mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -99,14 +73,8 @@ createPaginationTests(async ({ instantSearchOptions, widgetParams }) => {
         ])
       ),
     },
-    container
+    document.body.appendChild(document.createElement('div'))
   );
 
   await nextTick();
-
-  return {
-    get container() {
-      return vm.$el;
-    },
-  };
 });

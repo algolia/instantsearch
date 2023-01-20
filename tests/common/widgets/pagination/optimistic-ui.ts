@@ -1,14 +1,14 @@
 import { wait } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import type { PaginationSetup } from '.';
-import { fakeAct } from '../../common';
-import { getByRole } from '@testing-library/dom';
+import type { Act } from '../../common';
 
-export function createOptimisticUiTests(setup: PaginationSetup) {
+export function createOptimisticUiTests(setup: PaginationSetup, act: Act) {
   // https://github.com/jsdom/jsdom/issues/1695
   window.Element.prototype.scrollIntoView = jest.fn();
 
@@ -35,8 +35,8 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
         },
         widgetParams: {},
       };
-      const env = await setup(options);
-      const { act = fakeAct } = env;
+
+      await setup(options);
 
       // Wait for initial results to populate widgets with data
       await act(async () => {
@@ -50,20 +50,20 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
         const nextLast = 2;
         const current = 1;
         const padding = 2 * 3;
+        expect(document.querySelectorAll('.ais-Pagination-item')).toHaveLength(
+          firstPrev + current + padding + nextLast
+        );
         expect(
-          env.container.querySelectorAll('.ais-Pagination-item')
-        ).toHaveLength(firstPrev + current + padding + nextLast);
-        expect(
-          env.container.querySelectorAll('.ais-Pagination-item--selected')
+          document.querySelectorAll('.ais-Pagination-item--selected')
         ).toHaveLength(1);
         expect(
-          env.container.querySelector('.ais-Pagination-item--selected')
+          document.querySelector('.ais-Pagination-item--selected')
         ).toHaveTextContent('1');
       }
 
       // Select a refinement
       {
-        const secondPage = getByRole(env.container, 'link', { name: 'Page 2' });
+        const secondPage = screen.getByRole('link', { name: 'Page 2' });
         await act(async () => {
           secondPage.click();
           await wait(0);
@@ -75,13 +75,13 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
           'ais-Pagination-item--selected'
         );
         expect(
-          env.container.querySelectorAll('.ais-Pagination-item--selected')
+          document.querySelectorAll('.ais-Pagination-item--selected')
         ).toHaveLength(1);
       }
 
       // Wait for new results to come in
       {
-        const secondPage = getByRole(env.container, 'link', { name: 'Page 2' });
+        const secondPage = screen.getByRole('link', { name: 'Page 2' });
 
         await act(async () => {
           await wait(delay + margin);
@@ -91,13 +91,13 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
           'ais-Pagination-item--selected'
         );
         expect(
-          env.container.querySelectorAll('.ais-Pagination-item--selected')
+          document.querySelectorAll('.ais-Pagination-item--selected')
         ).toHaveLength(1);
       }
 
       // Select a refinement
       {
-        const firstPage = getByRole(env.container, 'link', { name: 'Page 1' });
+        const firstPage = screen.getByRole('link', { name: 'Page 1' });
 
         await act(async () => {
           firstPage.click();
@@ -110,13 +110,13 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
           'ais-Pagination-item--selected'
         );
         expect(
-          env.container.querySelectorAll('.ais-Pagination-item--selected')
+          document.querySelectorAll('.ais-Pagination-item--selected')
         ).toHaveLength(1);
       }
 
       // Wait for new results to come in
       {
-        const firstPage = getByRole(env.container, 'link', { name: 'Page 1' });
+        const firstPage = screen.getByRole('link', { name: 'Page 1' });
 
         await act(async () => {
           await wait(delay + margin);
@@ -126,7 +126,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
           'ais-Pagination-item--selected'
         );
         expect(
-          env.container.querySelectorAll('.ais-Pagination-item--selected')
+          document.querySelectorAll('.ais-Pagination-item--selected')
         ).toHaveLength(1);
       }
     });
