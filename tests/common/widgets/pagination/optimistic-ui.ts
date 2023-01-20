@@ -6,6 +6,7 @@ import {
 } from '@instantsearch/mocks';
 import type { PaginationSetup } from '.';
 import { fakeAct } from '../../common';
+import { getByRole } from '@testing-library/dom';
 
 export function createOptimisticUiTests(setup: PaginationSetup) {
   // https://github.com/jsdom/jsdom/issues/1695
@@ -62,9 +63,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
 
       // Select a refinement
       {
-        const secondPage = env.container.querySelector<HTMLAnchorElement>(
-          '[aria-label="Page 2"]'
-        )!;
+        const secondPage = getByRole(env.container, 'link', { name: 'Page 2' });
         await act(async () => {
           secondPage.click();
           await wait(0);
@@ -82,9 +81,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
 
       // Wait for new results to come in
       {
-        const secondPage = env.container.querySelector<HTMLAnchorElement>(
-          '[aria-label="Page 2"]'
-        )!;
+        const secondPage = getByRole(env.container, 'link', { name: 'Page 2' });
 
         await act(async () => {
           await wait(delay + margin);
@@ -100,9 +97,8 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
 
       // Select a refinement
       {
-        const firstPage = env.container.querySelector<HTMLAnchorElement>(
-          '[aria-label="Page 1"]'
-        )!;
+        const firstPage = getByRole(env.container, 'link', { name: 'Page 1' });
+
         await act(async () => {
           firstPage.click();
           await wait(0);
@@ -120,9 +116,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
 
       // Wait for new results to come in
       {
-        const firstPage = env.container.querySelector<HTMLAnchorElement>(
-          '[aria-label="Page 1"]'
-        )!;
+        const firstPage = getByRole(env.container, 'link', { name: 'Page 1' });
 
         await act(async () => {
           await wait(delay + margin);

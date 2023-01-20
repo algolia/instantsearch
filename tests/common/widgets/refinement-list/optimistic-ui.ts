@@ -4,6 +4,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { getByRole } from '@testing-library/dom';
 import type { RefinementListSetup } from '.';
 import { fakeAct } from '../../common';
 
@@ -25,7 +26,7 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
                     facets: {
                       [attribute]: {
                         Samsung: 100,
-                        Apple: 1000,
+                        Apple: 200,
                       },
                     },
                   })
@@ -55,11 +56,11 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
         ).toHaveLength(0);
       }
 
-      // Select a page
+      // Select a refinement
       {
-        const firstItem = env.container.querySelector<HTMLInputElement>(
-          '.ais-RefinementList-checkbox'
-        )!;
+        const firstItem = getByRole(env.container, 'checkbox', {
+          name: 'Apple 200',
+        });
         await act(async () => {
           firstItem.click();
           await wait(0);
@@ -75,9 +76,9 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
 
       // Wait for new results to come in
       {
-        const firstItem = env.container.querySelector<HTMLInputElement>(
-          '.ais-RefinementList-checkbox'
-        )!;
+        const firstItem = getByRole(env.container, 'checkbox', {
+          name: 'Apple 200',
+        });
 
         await act(async () => {
           await wait(delay + margin);
@@ -89,11 +90,11 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
         ).toHaveLength(1);
       }
 
-      // Select the next page
+      // Unselect the refinement
       {
-        const firstItem = env.container.querySelector<HTMLInputElement>(
-          '.ais-RefinementList-checkbox'
-        )!;
+        const firstItem = getByRole(env.container, 'checkbox', {
+          name: 'Apple 200',
+        });
         await act(async () => {
           firstItem.click();
           await wait(0);
@@ -109,9 +110,9 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
 
       // Wait for new results to come in
       {
-        const firstItem = env.container.querySelector<HTMLInputElement>(
-          '.ais-RefinementList-checkbox'
-        )!;
+        const firstItem = getByRole(env.container, 'checkbox', {
+          name: 'Apple 200',
+        });
 
         await act(async () => {
           await wait(delay + margin);

@@ -7,6 +7,7 @@ import {
 import type { MenuSetup } from '.';
 import { fakeAct } from '../../common';
 import userEvent from '@testing-library/user-event';
+import { getByRole } from '@testing-library/dom';
 
 export function createOptimisticUiTests(setup: MenuSetup) {
   // @TODO: after helper is updated with https://github.com/algolia/algoliasearch-helper-js/pull/925, enable this test
@@ -27,7 +28,7 @@ export function createOptimisticUiTests(setup: MenuSetup) {
                     facets: {
                       [attribute]: {
                         Samsung: 100,
-                        Apple: 1000,
+                        Apple: 200,
                       },
                     },
                   })
@@ -59,7 +60,10 @@ export function createOptimisticUiTests(setup: MenuSetup) {
 
       // Select a refinement
       {
-        const firstItem = env.container.querySelector('.ais-Menu-link')!;
+        const firstItem = getByRole(env.container, 'link', {
+          name: 'Apple 200',
+        });
+
         await act(async () => {
           userEvent.click(firstItem);
           await wait(0);
@@ -67,6 +71,7 @@ export function createOptimisticUiTests(setup: MenuSetup) {
         });
 
         // UI has changed immediately after the user interaction
+        // @TODO: menu doesn't have any accessible way to determine if an item is selected, so we use the class name (https://github.com/algolia/instantsearch/issues/5187)
         expect(
           env.container.querySelectorAll('.ais-Menu-item--selected')
         ).toHaveLength(1);
@@ -83,9 +88,12 @@ export function createOptimisticUiTests(setup: MenuSetup) {
         ).toHaveLength(1);
       }
 
-      // Unselect a refinement
+      // Unselect the refinement
       {
-        const firstItem = env.container.querySelector('.ais-Menu-link')!;
+        const firstItem = getByRole(env.container, 'link', {
+          name: 'Apple 200',
+        });
+
         await act(async () => {
           userEvent.click(firstItem);
           await wait(0);
