@@ -11,8 +11,7 @@ import instantsearch from '../index.es';
 import { hierarchicalMenu, menu, refinementList, pagination } from '../widgets';
 
 createHierarchicalMenuTests(({ instantSearchOptions, attributes }) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.body.appendChild(document.createElement('div'));
 
   instantsearch(instantSearchOptions)
     .addWidgets([hierarchicalMenu({ container, attributes })])
@@ -22,8 +21,7 @@ createHierarchicalMenuTests(({ instantSearchOptions, attributes }) => {
 });
 
 createRefinementListTests(({ instantSearchOptions, attribute }) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.body.appendChild(document.createElement('div'));
 
   instantsearch(instantSearchOptions)
     .addWidgets([refinementList({ container, attribute })])
@@ -33,8 +31,7 @@ createRefinementListTests(({ instantSearchOptions, attribute }) => {
 });
 
 createMenuTests(({ instantSearchOptions, attribute }) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.body.appendChild(document.createElement('div'));
 
   instantsearch(instantSearchOptions)
     .addWidgets([menu({ container, attribute })])
@@ -44,8 +41,7 @@ createMenuTests(({ instantSearchOptions, attribute }) => {
 });
 
 createPaginationTests(({ instantSearchOptions }) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.body.appendChild(document.createElement('div'));
 
   instantsearch(instantSearchOptions)
     .addWidgets([pagination({ container })])
