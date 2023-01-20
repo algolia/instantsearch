@@ -1320,18 +1320,20 @@ describe('scheduleStalledRender', () => {
     await wait(0);
 
     expect(widget.render).toHaveBeenCalledTimes(1);
+    castToJestMock(widget.render!).mockReset();
 
     // Trigger a new search
     search.mainHelper!.search();
 
     // search starts
     await wait(0);
-    expect(widget.render).toHaveBeenCalledTimes(2);
+    expect(widget.render).toHaveBeenCalledTimes(1);
+    castToJestMock(widget.render!).mockReset();
 
     // Reaches the delay
     await wait(search._stalledSearchDelay);
 
-    expect(widget.render).toHaveBeenCalledTimes(3);
+    expect(widget.render).toHaveBeenCalledTimes(1);
   });
 
   it('deduplicates the calls to the `render` method', async () => {
