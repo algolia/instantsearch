@@ -9,7 +9,7 @@ import { fakeAct } from '../../common';
 
 export function createOptimisticUiTests(setup: RefinementListSetup) {
   describe('optimistic UI', () => {
-    test('is checked immediately with a slow network', async () => {
+    test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;
       const margin = 10;
       const attribute = 'brand';
@@ -39,7 +39,7 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
       const env = await setup(options);
       const { act = fakeAct } = env;
 
-      // wait for initial results
+      // Wait for initial results to populate widgets with data
       await act(async () => {
         await wait(margin + delay);
         await wait(0);
@@ -55,7 +55,7 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
         ).toHaveLength(0);
       }
 
-      // select item
+      // Select a page
       {
         const firstItem = env.container.querySelector<HTMLInputElement>(
           '.ais-RefinementList-checkbox'
@@ -66,14 +66,14 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
           await wait(0);
         });
 
-        // immediately after interaction
+        // UI has changed immediately after the user interaction
         expect(firstItem).toBeChecked();
         expect(
           env.container.querySelectorAll('.ais-RefinementList-item--selected')
         ).toHaveLength(1);
       }
 
-      // after result comes in
+      // Wait for new results to come in
       {
         const firstItem = env.container.querySelector<HTMLInputElement>(
           '.ais-RefinementList-checkbox'
@@ -89,7 +89,7 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
         ).toHaveLength(1);
       }
 
-      // unselect item
+      // Select the next page
       {
         const firstItem = env.container.querySelector<HTMLInputElement>(
           '.ais-RefinementList-checkbox'
@@ -100,14 +100,14 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
           await wait(0);
         });
 
-        // immediately after interaction
+        // UI has changed immediately after the user interaction
         expect(firstItem).not.toBeChecked();
         expect(
           env.container.querySelectorAll('.ais-RefinementList-item--selected')
         ).toHaveLength(0);
       }
 
-      // after result comes in
+      // Wait for new results to come in
       {
         const firstItem = env.container.querySelector<HTMLInputElement>(
           '.ais-RefinementList-checkbox'

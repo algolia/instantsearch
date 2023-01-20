@@ -11,7 +11,7 @@ import userEvent from '@testing-library/user-event';
 export function createOptimisticUiTests(setup: HierarchicalMenuSetup) {
   // @TODO: after helper is updated with https://github.com/algolia/algoliasearch-helper-js/pull/925, enable this test
   describe.skip('optimistic UI', () => {
-    test('is checked immediately with a slow network', async () => {
+    test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;
       const margin = 10;
       const attributes = ['brand'];
@@ -41,7 +41,7 @@ export function createOptimisticUiTests(setup: HierarchicalMenuSetup) {
       const env = await setup(options);
       const { act = fakeAct } = env;
 
-      // wait for initial results
+      // Wait for initial results to populate widgets with data
       await act(async () => {
         await wait(margin + delay);
         await wait(0);
@@ -57,7 +57,7 @@ export function createOptimisticUiTests(setup: HierarchicalMenuSetup) {
         ).toHaveLength(0);
       }
 
-      // select item
+      // Select a refinement
       {
         const firstItem = env.container.querySelector(
           '.ais-HierarchicalMenu-link'
@@ -68,13 +68,13 @@ export function createOptimisticUiTests(setup: HierarchicalMenuSetup) {
           await wait(0);
         });
 
-        // immediately after interaction
+        // UI has changed immediately after the user interaction
         expect(
           env.container.querySelectorAll('.ais-HierarchicalMenu-item--selected')
         ).toHaveLength(1);
       }
 
-      // after result comes in
+      // Wait for new results to come in
       {
         await act(async () => {
           await wait(delay + margin);
@@ -85,7 +85,7 @@ export function createOptimisticUiTests(setup: HierarchicalMenuSetup) {
         ).toHaveLength(1);
       }
 
-      // unselect item
+      // Unselect a refinement
       {
         const firstItem = env.container.querySelector(
           '.ais-HierarchicalMenu-link'
@@ -96,13 +96,13 @@ export function createOptimisticUiTests(setup: HierarchicalMenuSetup) {
           await wait(0);
         });
 
-        // immediately after interaction
+        // UI has changed immediately after the user interaction
         expect(
           env.container.querySelectorAll('.ais-HierarchicalMenu-item--selected')
         ).toHaveLength(0);
       }
 
-      // after result comes in
+      // Wait for new results to come in
       {
         await act(async () => {
           await wait(delay + margin);

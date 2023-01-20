@@ -12,7 +12,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
   window.Element.prototype.scrollIntoView = jest.fn();
 
   describe('optimistic UI', () => {
-    test('is checked immediately with a slow network', async () => {
+    test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;
       const margin = 10;
       const options = {
@@ -37,7 +37,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
       const env = await setup(options);
       const { act = fakeAct } = env;
 
-      // wait for initial results
+      // Wait for initial results to populate widgets with data
       await act(async () => {
         await wait(margin + delay);
         await wait(0);
@@ -60,7 +60,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
         ).toHaveTextContent('1');
       }
 
-      // select item
+      // Select a refinement
       {
         const secondPage = env.container.querySelector<HTMLAnchorElement>(
           '[aria-label="Page 2"]'
@@ -71,7 +71,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
           await wait(0);
         });
 
-        // immediately after interaction
+        // UI has changed immediately after the user interaction
         expect(secondPage.parentNode).toHaveClass(
           'ais-Pagination-item--selected'
         );
@@ -80,7 +80,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
         ).toHaveLength(1);
       }
 
-      // after result comes in
+      // Wait for new results to come in
       {
         const secondPage = env.container.querySelector<HTMLAnchorElement>(
           '[aria-label="Page 2"]'
@@ -98,7 +98,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
         ).toHaveLength(1);
       }
 
-      // unselect item
+      // Select a refinement
       {
         const firstPage = env.container.querySelector<HTMLAnchorElement>(
           '[aria-label="Page 1"]'
@@ -109,7 +109,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
           await wait(0);
         });
 
-        // immediately after interaction
+        // UI has changed immediately after the user interaction
         expect(firstPage.parentNode).toHaveClass(
           'ais-Pagination-item--selected'
         );
@@ -118,7 +118,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
         ).toHaveLength(1);
       }
 
-      // after result comes in
+      // Wait for new results to come in
       {
         const firstPage = env.container.querySelector<HTMLAnchorElement>(
           '[aria-label="Page 1"]'
