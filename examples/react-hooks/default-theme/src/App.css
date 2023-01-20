@@ -16,6 +16,10 @@ body {
   margin: 0 auto;
 }
 
+img {
+  max-width: 100%;
+}
+
 .Container {
   display: grid;
   align-items: flex-start;
