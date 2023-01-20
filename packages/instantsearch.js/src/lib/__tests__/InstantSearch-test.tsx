@@ -1358,6 +1358,7 @@ describe('scheduleStalledRender', () => {
     await wait(0);
 
     expect(widget.render).toHaveBeenCalledTimes(1);
+    castToJestMock(widget.render!).mockClear();
 
     // Trigger multiple searches
     search.mainHelper!.search();
@@ -1368,12 +1369,14 @@ describe('scheduleStalledRender', () => {
     await wait(0);
 
     // search starts
-    expect(widget.render).toHaveBeenCalledTimes(2);
+    expect(widget.render).toHaveBeenCalledTimes(1);
+    castToJestMock(widget.render!).mockClear();
 
     // Reaches the delay
     await wait(search._stalledSearchDelay);
 
-    expect(widget.render).toHaveBeenCalledTimes(3);
+    expect(widget.render).toHaveBeenCalledTimes(1);
+    castToJestMock(widget.render!).mockClear();
   });
 
   it('triggers a `render` once the search expires the delay', async () => {
@@ -1415,11 +1418,12 @@ describe('scheduleStalledRender', () => {
     search.mainHelper!.search();
 
     expect(widget.render).toHaveBeenCalledTimes(1);
+    castToJestMock(widget.render!).mockClear();
 
     await wait(0);
 
     // Widgets render because of the search
-    expect(widget.render).toHaveBeenCalledTimes(2);
+    expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         searchMetadata: {
@@ -1428,12 +1432,13 @@ describe('scheduleStalledRender', () => {
         status: 'loading',
       })
     );
+    castToJestMock(widget.render!).mockClear();
 
     // The delay is reached
     await wait(search._stalledSearchDelay);
 
     // Widgets render because of the stalled search
-    expect(widget.render).toHaveBeenCalledTimes(3);
+    expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         searchMetadata: {
@@ -1442,6 +1447,7 @@ describe('scheduleStalledRender', () => {
         status: 'stalled',
       })
     );
+    castToJestMock(widget.render!).mockClear();
 
     // Resolve the `search`
     searches[1].resolver();
