@@ -22,7 +22,7 @@ jest.unmock('instantsearch.js/es');
 createRefinementListTests(async ({ instantSearchOptions, attribute }) => {
   const container = document.body.appendChild(document.createElement('div'));
 
-  mountApp(
+  const vm = mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -36,14 +36,16 @@ createRefinementListTests(async ({ instantSearchOptions, attribute }) => {
   await nextTick();
 
   return {
-    container,
+    get container() {
+      return vm.$el;
+    },
   };
 });
 
 createHierarchicalMenuTests(async ({ instantSearchOptions, attributes }) => {
   const container = document.body.appendChild(document.createElement('div'));
 
-  mountApp(
+  const vm = mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -57,14 +59,16 @@ createHierarchicalMenuTests(async ({ instantSearchOptions, attributes }) => {
   await nextTick();
 
   return {
-    container,
+    get container() {
+      return vm.$el;
+    },
   };
 });
 
 createMenuTests(async ({ instantSearchOptions, attribute }) => {
   const container = document.body.appendChild(document.createElement('div'));
 
-  mountApp(
+  const vm = mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -78,14 +82,16 @@ createMenuTests(async ({ instantSearchOptions, attribute }) => {
   await nextTick();
 
   return {
-    container,
+    get container() {
+      return vm.$el;
+    },
   };
 });
 
 createPaginationTests(async ({ instantSearchOptions }) => {
   const container = document.body.appendChild(document.createElement('div'));
 
-  mountApp(
+  const vm = mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [h(AisPagination)])
@@ -97,6 +103,8 @@ createPaginationTests(async ({ instantSearchOptions }) => {
   await nextTick();
 
   return {
-    container,
+    get container() {
+      return vm.$el;
+    },
   };
 });
