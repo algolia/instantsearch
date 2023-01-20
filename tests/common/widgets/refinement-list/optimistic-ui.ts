@@ -34,7 +34,7 @@ export function createOptimisticUiTests(setup: RefinementListSetup) {
             }),
           }),
         },
-        attribute,
+        widgetParams: { attribute },
       };
       const env = await setup(options);
       const { act = fakeAct } = env;

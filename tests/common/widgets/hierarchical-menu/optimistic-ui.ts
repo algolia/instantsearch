@@ -36,7 +36,7 @@ export function createOptimisticUiTests(setup: HierarchicalMenuSetup) {
             }),
           }),
         },
-        attributes,
+        widgetParams: { attributes },
       };
       const env = await setup(options);
       const { act = fakeAct } = env;

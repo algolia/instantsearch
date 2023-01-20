@@ -36,7 +36,7 @@ export function createOptimisticUiTests(setup: MenuSetup) {
             }),
           }),
         },
-        attribute,
+        widgetParams: { attribute },
       };
       const env = await setup(options);
       const { act = fakeAct } = env;

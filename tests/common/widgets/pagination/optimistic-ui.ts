@@ -15,7 +15,6 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
     test('is checked immediately with a slow network', async () => {
       const delay = 100;
       const margin = 10;
-      const attribute = 'brand';
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -33,7 +32,7 @@ export function createOptimisticUiTests(setup: PaginationSetup) {
             }),
           }),
         },
-        attribute,
+        widgetParams: {},
       };
       const env = await setup(options);
       const { act = fakeAct } = env;

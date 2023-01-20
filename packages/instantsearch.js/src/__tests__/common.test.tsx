@@ -10,41 +10,41 @@ import {
 import instantsearch from '../index.es';
 import { hierarchicalMenu, menu, refinementList, pagination } from '../widgets';
 
-createHierarchicalMenuTests(({ instantSearchOptions, attributes }) => {
+createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
   const container = document.body.appendChild(document.createElement('div'));
 
   instantsearch(instantSearchOptions)
-    .addWidgets([hierarchicalMenu({ container, attributes })])
+    .addWidgets([hierarchicalMenu({ container, ...widgetParams })])
     .start();
 
   return { container };
 });
 
-createRefinementListTests(({ instantSearchOptions, attribute }) => {
+createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
   const container = document.body.appendChild(document.createElement('div'));
 
   instantsearch(instantSearchOptions)
-    .addWidgets([refinementList({ container, attribute })])
+    .addWidgets([refinementList({ container, ...widgetParams })])
     .start();
 
   return { container };
 });
 
-createMenuTests(({ instantSearchOptions, attribute }) => {
+createMenuTests(({ instantSearchOptions, widgetParams }) => {
   const container = document.body.appendChild(document.createElement('div'));
 
   instantsearch(instantSearchOptions)
-    .addWidgets([menu({ container, attribute })])
+    .addWidgets([menu({ container, ...widgetParams })])
     .start();
 
   return { container };
 });
 
-createPaginationTests(({ instantSearchOptions }) => {
+createPaginationTests(({ instantSearchOptions, widgetParams }) => {
   const container = document.body.appendChild(document.createElement('div'));
 
   instantsearch(instantSearchOptions)
-    .addWidgets([pagination({ container })])
+    .addWidgets([pagination({ container, ...widgetParams })])
     .start();
 
   return { container };

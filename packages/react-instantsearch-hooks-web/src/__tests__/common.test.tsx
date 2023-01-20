@@ -18,10 +18,10 @@ import {
   Pagination,
 } from '..';
 
-createRefinementListTests(({ instantSearchOptions, attribute }) => {
+createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
   const { container } = render(
     <InstantSearch {...instantSearchOptions}>
-      <RefinementList attribute={attribute} />
+      <RefinementList {...widgetParams} />
     </InstantSearch>
   );
 
@@ -31,10 +31,10 @@ createRefinementListTests(({ instantSearchOptions, attribute }) => {
   };
 });
 
-createHierarchicalMenuTests(({ instantSearchOptions, attributes }) => {
+createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
   const { container } = render(
     <InstantSearch {...instantSearchOptions}>
-      <HierarchicalMenu attributes={attributes} />
+      <HierarchicalMenu {...widgetParams} />
     </InstantSearch>
   );
 
@@ -44,10 +44,10 @@ createHierarchicalMenuTests(({ instantSearchOptions, attributes }) => {
   };
 });
 
-createMenuTests(({ instantSearchOptions, attribute }) => {
+createMenuTests(({ instantSearchOptions, widgetParams }) => {
   const { container } = render(
     <InstantSearch {...instantSearchOptions}>
-      <Menu attribute={attribute} />
+      <Menu {...widgetParams} />
     </InstantSearch>
   );
 
@@ -57,10 +57,10 @@ createMenuTests(({ instantSearchOptions, attribute }) => {
   };
 });
 
-createPaginationTests(({ instantSearchOptions }) => {
+createPaginationTests(({ instantSearchOptions, widgetParams }) => {
   const { container } = render(
     <InstantSearch {...instantSearchOptions}>
-      <Pagination />
+      <Pagination {...widgetParams} />
     </InstantSearch>
   );
 
