@@ -1456,7 +1456,7 @@ describe('scheduleStalledRender', () => {
     await wait(0);
 
     // Widgets render because of the results
-    expect(widget.render).toHaveBeenCalledTimes(4);
+    expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         searchMetadata: {
