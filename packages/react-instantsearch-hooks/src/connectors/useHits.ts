@@ -9,17 +9,43 @@ import type {
   HitsWidgetDescription,
   HitsConnector,
 } from 'instantsearch.js/es/connectors/hits/connectHits';
+import { type } from '@testing-library/user-event/dist/type';
 
 export type UseHitsProps<THit extends BaseHit = BaseHit> =
   HitsConnectorParams<THit>;
+
+type GetHitsPropsType = ({ hit }: { hit: BaseHit }) => {
+  onClick: React.MouseEventHandler;
+};
 
 export function useHits<THit extends BaseHit = BaseHit>(
   props?: UseHitsProps<THit>,
   additionalWidgetProperties?: AdditionalWidgetProperties
 ) {
-  return useConnector<HitsConnectorParams<THit>, HitsWidgetDescription<THit>>(
-    connectHits as HitsConnector<THit>,
-    props,
-    additionalWidgetProperties
-  );
+  const output = useConnector<
+    HitsConnectorParams<THit>,
+    HitsWidgetDescription<THit>
+  >(connectHits as HitsConnector<THit>, props, additionalWidgetProperties);
+
+  const getHitProps: GetHitsPropsType = ({ hit }) => {
+    return {
+      onClick(event) {
+        console.log({ event });
+        const payload = {
+          eventType: 'click',
+          eventName: 'Hit clicked',
+          queryID: output.results.queryID,
+          objectIDs: [hit.objectID],
+          positions: [hit.__position],
+        };
+
+        console.log({ payload });
+      },
+    };
+  };
+
+  return {
+    ...output,
+    getHitProps,
+  };
 }

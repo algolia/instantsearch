@@ -21,6 +21,7 @@ import {
   SearchBox,
   SortBy,
   ToggleRefinement,
+  useHits,
 } from 'react-instantsearch-hooks-web';
 
 import {
@@ -61,7 +62,7 @@ export function App() {
       indexName="instant_search"
       routing={true}
     >
-      <Configure ruleContexts={[]} />
+      <Configure ruleContexts={[]} clickAnalytics={true} />
 
       <div className="Container">
         <div>
@@ -165,7 +166,8 @@ export function App() {
 
           <Tabs>
             <Tab title="Hits">
-              <Hits hitComponent={Hit} />
+              {/* <Hits hitComponent={Hit} /> */}
+              <CustomHits />
               <Pagination className="Pagination" />
             </Tab>
             <Tab title="InfiniteHits">
@@ -175,5 +177,29 @@ export function App() {
         </div>
       </div>
     </InstantSearch>
+  );
+}
+
+function CustomHits() {
+  const { hits, getHitProps } = useHits();
+
+  return (
+    <ul>
+      {hits.map((hit) => {
+        const hitProps = getHitProps({ hit });
+        return (
+          <li
+            key={hit.objectID}
+            {...hitProps}
+            onClick={(e) => {
+              hitProps.onClick(e);
+              console.log('overridden event handler');
+            }}
+          >
+            {hit.name}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
