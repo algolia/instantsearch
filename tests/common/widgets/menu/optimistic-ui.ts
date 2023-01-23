@@ -10,8 +10,7 @@ import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/dom';
 
 export function createOptimisticUiTests(setup: MenuSetup, act: Act) {
-  // @TODO: after helper is updated with https://github.com/algolia/algoliasearch-helper-js/pull/925, enable this test
-  describe.skip('optimistic UI', () => {
+  describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;
       const margin = 10;
