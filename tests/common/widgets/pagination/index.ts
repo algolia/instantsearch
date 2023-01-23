@@ -12,6 +12,10 @@ export function createPaginationTests(
   setup: PaginationSetup,
   act: Act = fakeAct
 ) {
+  beforeAll(() => {
+    document.body.innerHTML = '';
+  });
+
   describe('Pagination common tests', () => {
     createOptimisticUiTests(setup, act);
   });

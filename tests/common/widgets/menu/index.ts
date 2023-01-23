@@ -9,6 +9,10 @@ export type MenuSetup = TestSetup<{
 }>;
 
 export function createMenuTests(setup: MenuSetup, act: Act = fakeAct) {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
   describe('Menu common tests', () => {
     createOptimisticUiTests(setup, act);
   });

@@ -12,6 +12,10 @@ export function createHierarchicalMenuTests(
   setup: HierarchicalMenuSetup,
   act: Act = fakeAct
 ) {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
   describe('HierarchicalMenu common tests', () => {
     createOptimisticUiTests(setup, act);
   });

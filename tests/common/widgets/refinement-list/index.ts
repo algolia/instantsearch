@@ -12,6 +12,10 @@ export function createRefinementListTests(
   setup: RefinementListSetup,
   act: Act = fakeAct
 ) {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
   describe('RefinementList common tests', () => {
     createOptimisticUiTests(setup, act);
   });
