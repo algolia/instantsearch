@@ -157,7 +157,7 @@ export function createSendEventForHits({
   index: string;
   widgetType: string;
 }): SendEventForHits {
-  const events = [];
+  let events = [];
   let timerId = undefined;
 
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
@@ -176,15 +176,15 @@ export function createSendEventForHits({
     }
 
     timerId = setTimeout(() => {
-      console.log(events);
-    }, 100);
-
-    // payloads.forEach((payload) =>
-    //   instantSearchInstance.sendEventToInsights(payload)
-    // );
+      const [payloads] = events;
+      console.log('sending event', payloads);
+      payloads.forEach((payload) =>
+        instantSearchInstance.sendEventToInsights(payload)
+      );
+      events = [];
+    }, 0);
   };
 
-  return console.log;
   return sendEventForHits;
 }
 

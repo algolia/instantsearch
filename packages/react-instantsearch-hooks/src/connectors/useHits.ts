@@ -37,17 +37,9 @@ export function useHits<THit extends BaseHit = BaseHit>(
       return children;
     }
 
-    const onClick = (event) => {
+    const onClick = () => {
       children.props.onClick?.();
-      const payload = {
-        eventType: 'click',
-        eventName: 'Hit clicked',
-        queryID: output.results.queryID,
-        objectIDs: [hit.objectID],
-        positions: [hit.__position],
-      };
-
-      output.sendEvent({ source: 'HitWrapper', event, payload });
+      output.sendEvent('click', hit, 'HitWrapper: Hit clicked');
     };
 
     const root = createElement(children.type, { ...children.props, onClick });
@@ -57,15 +49,8 @@ export function useHits<THit extends BaseHit = BaseHit>(
 
   const getHitProps: GetHitsPropsType = ({ hit }) => {
     return {
-      onClick(event) {
-        const payload = {
-          eventType: 'click',
-          eventName: 'Hit clicked',
-          queryID: output.results.queryID,
-          objectIDs: [hit.objectID],
-          positions: [hit.__position],
-        };
-        console.log({ event, payload });
+      onClick() {
+        output.sendEvent('click', hit, 'getHitProps: Hit clicked');
       },
     };
   };

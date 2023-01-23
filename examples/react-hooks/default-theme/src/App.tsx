@@ -152,13 +152,13 @@ export function App() {
           <Tabs>
             <Tab title="Hits">
               {/* <Hits hitComponent={Hit} /> */}
-              {/* <CustomHitsWithProps /> */}
-              <CustomHitsWithWrapper />
+              <CustomHitsWithProps />
+              {/* <CustomHitsWithWrapper /> */}
               <Pagination className="Pagination" />
             </Tab>
-            <Tab title="InfiniteHits">
+            {/* <Tab title="InfiniteHits">
               <InfiniteHits showPrevious hitComponent={Hit} />
-            </Tab>
+            </Tab> */}
           </Tabs>
         </div>
       </div>
@@ -183,7 +183,7 @@ function Hit({ hit }: HitProps) {
 }
 
 function CustomHitsWithProps() {
-  const { hits, getHitProps } = useHits();
+  const { hits, getHitProps, sendEvent } = useHits();
 
   return (
     <ul>
@@ -195,7 +195,7 @@ function CustomHitsWithProps() {
             {...hitProps}
             onClick={(e) => {
               hitProps.onClick(e);
-              console.log('overridden event handler');
+              sendEvent('click', hit, 'CustomHitsWithProps: Hit Clicked');
             }}
           >
             {hit.name}
@@ -217,10 +217,17 @@ function CustomHitsWithWrapper() {
             {hit.name}
             <button
               onClick={() => {
-                sendEvent({ source: 'CustomHitsWithWrapper' });
+                sendEvent('click', hit, 'CustomHitsWithWrapper: Hit clicked');
               }}
             >
               Click me
+            </button>
+            <button
+              onClick={() =>
+                console.log('will bubble to default event handler')
+              }
+            >
+              This won't trigger event
             </button>
           </li>
         </HitWrapper>
