@@ -46,11 +46,13 @@ export function useHits<THit extends BaseHit = BaseHit>(
         objectIDs: [hit.objectID],
         positions: [hit.__position],
       };
-      console.log({ source: 'HitWrapper', event, payload });
+
+      output.sendEvent({ source: 'HitWrapper', event, payload });
     };
+
     const root = createElement(children.type, { ...children.props, onClick });
 
-    return React.Fragment({ children: root });
+    return React.createElement(React.Fragment, { children: root });
   }
 
   const getHitProps: GetHitsPropsType = ({ hit }) => {

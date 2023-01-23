@@ -157,19 +157,34 @@ export function createSendEventForHits({
   index: string;
   widgetType: string;
 }): SendEventForHits {
-  const sendEventForHits: SendEventForHits = (...args: any[]) => {
-    const payloads = buildPayloads({
-      widgetType,
-      index,
-      methodName: 'sendEvent',
-      args,
-      isSearchStalled: instantSearchInstance.status === 'stalled',
-    });
+  const events = [];
+  let timerId = undefined;
 
-    payloads.forEach((payload) =>
-      instantSearchInstance.sendEventToInsights(payload)
+  const sendEventForHits: SendEventForHits = (...args: any[]) => {
+    events.push(
+      buildPayloads({
+        widgetType,
+        index,
+        methodName: 'sendEvent',
+        args,
+        isSearchStalled: instantSearchInstance.status === 'stalled',
+      })
     );
+
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+
+    timerId = setTimeout(() => {
+      console.log(events);
+    }, 100);
+
+    // payloads.forEach((payload) =>
+    //   instantSearchInstance.sendEventToInsights(payload)
+    // );
   };
+
+  return console.log;
   return sendEventForHits;
 }
 

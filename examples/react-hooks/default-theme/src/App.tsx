@@ -151,9 +151,9 @@ export function App() {
 
           <Tabs>
             <Tab title="Hits">
-              <Hits hitComponent={Hit} />
+              {/* <Hits hitComponent={Hit} /> */}
               {/* <CustomHitsWithProps /> */}
-              {/* <CustomHitsWithWrapper /> */}
+              <CustomHitsWithWrapper />
               <Pagination className="Pagination" />
             </Tab>
             <Tab title="InfiniteHits">
@@ -207,21 +207,22 @@ function CustomHitsWithProps() {
 }
 
 function CustomHitsWithWrapper() {
-  const { hits, HitWrapper } = useHits();
+  const { hits, HitWrapper, sendEvent } = useHits();
 
   return (
     <ul>
       {hits.map((hit) => (
         <HitWrapper key={hit.objectID} hit={hit}>
-          <>
-            <li
+          <li>
+            {hit.name}
+            <button
               onClick={() => {
-                console.log('overridden event handler');
+                sendEvent({ source: 'CustomHitsWithWrapper' });
               }}
             >
-              {hit.name}
-            </li>
-          </>
+              Click me
+            </button>
+          </li>
         </HitWrapper>
       ))}
     </ul>
