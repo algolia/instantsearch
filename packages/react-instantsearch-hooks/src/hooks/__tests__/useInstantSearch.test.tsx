@@ -365,9 +365,10 @@ describe('useInstantSearch', () => {
 
     test('turns to loading and error when searching', async () => {
       const searchClient = createSearchClient({});
-      searchClient.search.mockImplementation(() =>
-        Promise.reject(new Error('API_ERROR'))
-      );
+      searchClient.search.mockImplementation(async () => {
+        await wait(100);
+        throw new Error('API_ERROR');
+      });
 
       const App = () => (
         <InstantSearchHooksTestWrapper searchClient={searchClient}>

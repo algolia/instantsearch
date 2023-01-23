@@ -9,7 +9,11 @@ import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode } from 'react';
 import { Hits, RefinementList, SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../tests/mock';
+import {
+  createMultiSearchResponse,
+  createSearchClient,
+  createSingleSearchResponse,
+} from '../../../../../tests/mock';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
@@ -190,8 +194,25 @@ describe('InstantSearchSSRProvider', () => {
     });
   });
 
-  test('renders refinements from initial results state', async () => {
-    const searchClient = createSearchClient({});
+  test('renders refinements from local widget state', async () => {
+    const searchClient = createSearchClient({
+      search: jest.fn((requests) => {
+        return Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map(() =>
+              createSingleSearchResponse({
+                facets: {
+                  brand: {
+                    Samsung: 633,
+                    Apple: 442,
+                  },
+                },
+              })
+            )
+          )
+        );
+      }),
+    });
     const initialResults = {
       indexName: {
         state: {
@@ -200,6 +221,7 @@ describe('InstantSearchSSRProvider', () => {
           hierarchicalFacets: [],
           facetsRefinements: {},
           facetsExcludes: {},
+          // gets ignored, the value is taken from the local widget state (which is not checked)
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
           numericRefinements: {},
           tagRefinements: [],
@@ -272,13 +294,20 @@ describe('InstantSearchSSRProvider', () => {
       );
     }
 
-    render(<App />);
+    const { getByRole } = render(<App />);
 
     await waitFor(() => {
-      expect(screen.getByRole('checkbox', { name: 'Apple 442' })).toBeChecked();
-      expect(
-        screen.getByRole('checkbox', { name: 'Samsung 633' })
-      ).not.toBeChecked();
+      expect(searchClient.search).toHaveBeenCalledTimes(0);
+      expect(getByRole('checkbox', { name: 'Apple 442' })).not.toBeChecked();
+      expect(getByRole('checkbox', { name: 'Samsung 633' })).not.toBeChecked();
+    });
+
+    userEvent.click(getByRole('checkbox', { name: 'Apple 442' }));
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(getByRole('checkbox', { name: 'Apple 442' })).toBeChecked();
+      expect(getByRole('checkbox', { name: 'Samsung 633' })).not.toBeChecked();
     });
   });
 
@@ -435,114 +464,6 @@ describe('InstantSearchSSRProvider', () => {
           }),
         },
       ]);
-    });
-  });
-
-  // Fixes https://github.com/algolia/react-instantsearch/issues/3530
-  test('renders initial refinement and allows to refine them', async () => {
-    const searchClient = createSearchClient({});
-    const initialResults = {
-      indexName: {
-        state: {
-          facets: [],
-          disjunctiveFacets: ['brand'],
-          hierarchicalFacets: [],
-          facetsRefinements: {},
-          facetsExcludes: {},
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          numericRefinements: {},
-          tagRefinements: [],
-          hierarchicalFacetsRefinements: {},
-          index: 'indexName',
-          query: '',
-        },
-        results: [
-          {
-            hits: [
-              {
-                name: 'Apple - MacBook Air® (Latest Model) - 13.3" Display - Intel Core i5 - 8GB Memory - 128GB Flash Storage - Silver',
-                objectID: '6443034',
-              },
-              {
-                name: 'Apple - EarPods™ with Remote and Mic - White',
-                objectID: '6848136',
-              },
-            ],
-            nbHits: 442,
-            page: 0,
-            nbPages: 23,
-            hitsPerPage: 2,
-            facets: { brand: { Apple: 442, Samsung: 633 } },
-            exhaustiveFacetsCount: true,
-            exhaustiveNbHits: true,
-            exhaustiveTypo: true,
-            query: '',
-            queryAfterRemoval: '',
-            params: '',
-            index: 'indexName',
-            processingTimeMS: 1,
-          },
-          {
-            hits: [
-              {
-                name: 'Amazon - Fire TV Stick with Alexa Voice Remote - Black',
-                objectID: '5477500',
-              },
-            ],
-            nbHits: 21469,
-            page: 0,
-            nbPages: 1000,
-            hitsPerPage: 1,
-            facets: {
-              brand: { Samsung: 633, Apple: 442 },
-            },
-            exhaustiveFacetsCount: true,
-            exhaustiveNbHits: true,
-            exhaustiveTypo: true,
-            query: '',
-            queryAfterRemoval: '',
-            params: '',
-            index: 'indexName',
-            processingTimeMS: 1,
-          },
-        ],
-      },
-    };
-    const routing = {
-      stateMapping: simple(),
-      router: history({
-        getLocation() {
-          return new URL(
-            `http://localhost/?indexName[query]=iphone`
-          ) as unknown as Location;
-        },
-      }),
-    };
-
-    function App() {
-      return (
-        <StrictMode>
-          <InstantSearchSSRProvider initialResults={initialResults}>
-            <InstantSearch
-              searchClient={searchClient}
-              indexName="indexName"
-              routing={routing}
-            >
-              <SearchBox />
-              <RefinementList attribute="brand" />
-            </InstantSearch>
-          </InstantSearchSSRProvider>
-        </StrictMode>
-      );
-    }
-
-    const { getByRole } = render(<App />);
-    const appleRefinement = getByRole('checkbox', { name: 'Apple 442' });
-
-    userEvent.click(appleRefinement);
-
-    await waitFor(() => {
-      expect(appleRefinement).toBeChecked();
     });
   });
 });

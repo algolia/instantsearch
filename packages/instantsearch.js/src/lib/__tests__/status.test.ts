@@ -185,7 +185,6 @@ describe('status', () => {
   });
 
   test('lets users render on error with the `render` event', async () => {
-    // expect.assertions(4);
     const search = instantsearch({
       indexName: 'indexName',
       searchClient: createSearchClient({

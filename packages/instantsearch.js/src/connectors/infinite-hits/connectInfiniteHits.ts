@@ -335,7 +335,11 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             { results }
           );
 
-          if (cachedHits[page] === undefined && !results.__isArtificial) {
+          if (
+            cachedHits[page] === undefined &&
+            !results.__isArtificial &&
+            instantSearchInstance.status === 'idle'
+          ) {
             cachedHits[page] = transformedHits;
             cache.write({ state, hits: cachedHits });
           }

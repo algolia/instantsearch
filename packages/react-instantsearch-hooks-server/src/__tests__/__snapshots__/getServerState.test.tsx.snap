@@ -200,14 +200,8 @@ exports[`getServerState returns initialResults 1`] = `
       },
     ],
     "state": {
-      "disjunctiveFacets": [
-        "brand",
-      ],
-      "disjunctiveFacetsRefinements": {
-        "brand": [
-          "Apple",
-        ],
-      },
+      "disjunctiveFacets": [],
+      "disjunctiveFacetsRefinements": {},
       "facets": [],
       "facetsExcludes": {},
       "facetsRefinements": {},
@@ -216,9 +210,7 @@ exports[`getServerState returns initialResults 1`] = `
       "highlightPostTag": "__/ais-highlight__",
       "highlightPreTag": "__ais-highlight__",
       "index": "instant_search_price_asc",
-      "maxValuesPerFacet": 10,
       "numericRefinements": {},
-      "query": "iphone",
       "tagRefinements": [],
     },
   },
@@ -310,14 +302,8 @@ exports[`getServerState returns initialResults 1`] = `
       },
     ],
     "state": {
-      "disjunctiveFacets": [
-        "brand",
-      ],
-      "disjunctiveFacetsRefinements": {
-        "brand": [
-          "Apple",
-        ],
-      },
+      "disjunctiveFacets": [],
+      "disjunctiveFacetsRefinements": {},
       "facets": [],
       "facetsExcludes": {},
       "facetsRefinements": {},
@@ -326,9 +312,7 @@ exports[`getServerState returns initialResults 1`] = `
       "highlightPostTag": "__/ais-highlight__",
       "highlightPreTag": "__ais-highlight__",
       "index": "instant_search_price_desc",
-      "maxValuesPerFacet": 10,
       "numericRefinements": {},
-      "query": "iphone",
       "tagRefinements": [],
     },
   },
@@ -420,14 +404,8 @@ exports[`getServerState returns initialResults 1`] = `
       },
     ],
     "state": {
-      "disjunctiveFacets": [
-        "brand",
-      ],
-      "disjunctiveFacetsRefinements": {
-        "brand": [
-          "Apple",
-        ],
-      },
+      "disjunctiveFacets": [],
+      "disjunctiveFacetsRefinements": {},
       "facets": [],
       "facetsExcludes": {},
       "facetsRefinements": {},
@@ -436,9 +414,7 @@ exports[`getServerState returns initialResults 1`] = `
       "highlightPostTag": "__/ais-highlight__",
       "highlightPreTag": "__ais-highlight__",
       "index": "instant_search_rating_desc",
-      "maxValuesPerFacet": 10,
       "numericRefinements": {},
-      "query": "iphone",
       "tagRefinements": [],
     },
   },

@@ -29,14 +29,18 @@ type ControlledClient = {
 };
 
 export const createControlledSearchClient = (
-  args: Partial<SearchClient> = {}
+  args: Partial<SearchClient> = {},
+  createResponse = (...params: Parameters<SearchClient['search']>) =>
+    createMultiSearchResponse(
+      ...params[0].map(() => createSingleSearchResponse())
+    )
 ): ControlledClient => {
   const searches: ControlledClient['searches'] = [];
   const searchClient = createSearchClient({
-    search: jest.fn(() => {
+    search: jest.fn((...params) => {
       let resolver: () => void;
       const promise: Promise<SearchResponses<any>> = new Promise((resolve) => {
-        resolver = () => resolve(createMultiSearchResponse());
+        resolver = () => resolve(createResponse(...params));
       });
 
       searches.push({

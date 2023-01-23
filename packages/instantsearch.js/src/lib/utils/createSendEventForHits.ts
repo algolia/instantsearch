@@ -31,13 +31,13 @@ const buildPayloads = ({
   widgetType,
   methodName,
   args,
-  isSearchStalled,
+  invalidStatus,
 }: {
   widgetType: string;
   index: string;
   methodName: 'sendEvent' | 'bindEvent';
   args: any[];
-  isSearchStalled: boolean;
+  invalidStatus: boolean;
 }): InsightsEvent[] => {
   // when there's only one argument, that means it's custom
   if (args.length === 1 && typeof args[0] === 'object') {
@@ -87,7 +87,7 @@ const buildPayloads = ({
   );
 
   if (eventType === 'view') {
-    if (isSearchStalled) {
+    if (invalidStatus) {
       return [];
     }
     return hitsChunks.map((batch, i) => {
@@ -163,7 +163,7 @@ export function createSendEventForHits({
       index,
       methodName: 'sendEvent',
       args,
-      isSearchStalled: instantSearchInstance.status === 'stalled',
+      invalidStatus: instantSearchInstance.status !== 'idle',
     });
 
     payloads.forEach((payload) =>
@@ -186,7 +186,7 @@ export function createBindEventForHits({
       index,
       methodName: 'bindEvent',
       args,
-      isSearchStalled: false,
+      invalidStatus: false,
     });
 
     return payloads.length

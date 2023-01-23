@@ -230,7 +230,16 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getResults() {
-      return derivedHelper && derivedHelper.lastResults;
+      if (!derivedHelper?.lastResults) return null;
+
+      // To make the UI optimistic, we patch the state to display to the current
+      // one instead of the one associated with the latest results.
+      // This means user-driven UI changes (e.g., checked checkbox) are reflected
+      // immediately instead of waiting for Algolia to respond, regardless of
+      // the status of the network request.
+      derivedHelper.lastResults._state = helper!.state;
+
+      return derivedHelper.lastResults;
     },
 
     getScopedResults() {

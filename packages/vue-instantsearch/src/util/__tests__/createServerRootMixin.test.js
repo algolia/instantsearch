@@ -1133,6 +1133,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       const resultsState = createSerializedState();
       const state = new SearchParameters(resultsState.state);
+      const localState = new SearchParameters({ index: 'lol' });
       const results = new SearchResults(state, resultsState.results);
 
       instantSearchInstance.hydrate({
@@ -1149,18 +1150,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       const renderArgs = widget.render.mock.calls[0][0];
 
-      expect(renderArgs).toEqual(
-        expect.objectContaining({
-          state,
-          results,
-          scopedResults: [
-            expect.objectContaining({
-              indexId: 'lol',
-              results,
-            }),
-          ],
-        })
-      );
+      // renders with local state, not the one from results
+      expect(renderArgs.state).toEqual(localState);
+      results._state = localState;
+      expect(renderArgs.results).toEqual(results);
+      expect(renderArgs.scopedResults).toHaveLength(1);
+      expect(renderArgs.scopedResults[0].indexId).toEqual('lol');
+      expect(renderArgs.scopedResults[0].results).toEqual(results);
     });
 
     describe('createURL', () => {

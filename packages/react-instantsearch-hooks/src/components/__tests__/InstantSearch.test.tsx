@@ -427,12 +427,13 @@ describe('InstantSearch', () => {
 
     await waitFor(() => {
       expect(searchClient.search).toHaveBeenCalledTimes(1);
+      searchClient.search.mockClear();
     });
 
     userEvent.type(screen.getByRole('searchbox'), 'iphone');
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenLastCalledWith([
         {
           indexName: 'indexName',
@@ -441,6 +442,7 @@ describe('InstantSearch', () => {
           }),
         },
       ]);
+      searchClient.search.mockClear();
     });
 
     rerender(<App />);
@@ -450,7 +452,7 @@ describe('InstantSearch', () => {
     });
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenLastCalledWith([
         {
           indexName: 'indexName',
@@ -490,12 +492,13 @@ describe('InstantSearch', () => {
 
     await waitFor(() => {
       expect(searchClient.search).toHaveBeenCalledTimes(1);
+      searchClient.search.mockClear();
     });
 
     userEvent.type(screen.getByRole('searchbox'), 'iphone');
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenLastCalledWith([
         {
           indexName: 'indexName',
@@ -504,6 +507,7 @@ describe('InstantSearch', () => {
           }),
         },
       ]);
+      searchClient.search.mockClear();
     });
 
     rerender(<App />);
@@ -513,7 +517,7 @@ describe('InstantSearch', () => {
     });
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenLastCalledWith([
         {
           indexName: 'indexName',
@@ -619,33 +623,36 @@ describe('InstantSearch', () => {
     });
 
     expect(searchClient.search).toHaveBeenCalledTimes(1);
+    searchClient.search.mockClear();
 
     rerender(<App indexName="indexName2" />);
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenLastCalledWith([
         expect.objectContaining({
           indexName: 'indexName2',
         }),
       ]);
+      searchClient.search.mockClear();
     });
 
     rerender(<App indexName="indexName3" />);
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenLastCalledWith([
         expect.objectContaining({
           indexName: 'indexName3',
         }),
       ]);
+      searchClient.search.mockClear();
     });
 
     userEvent.type(screen.getByRole('searchbox'), 'iphone');
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(9);
+      expect(searchClient.search).toHaveBeenCalledTimes(6);
       expect(searchClient.search).toHaveBeenLastCalledWith([
         {
           indexName: 'indexName3',
@@ -654,6 +661,7 @@ describe('InstantSearch', () => {
           }),
         },
       ]);
+      searchClient.search.mockClear();
     });
   });
 
