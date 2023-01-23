@@ -18,6 +18,12 @@ createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
         ...widgetParams,
       }),
     ])
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
     .start();
 });
 
@@ -29,6 +35,12 @@ createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
         ...widgetParams,
       }),
     ])
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
     .start();
 });
 
@@ -40,6 +52,12 @@ createMenuTests(({ instantSearchOptions, widgetParams }) => {
         ...widgetParams,
       }),
     ])
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
     .start();
 });
 
@@ -51,5 +69,11 @@ createPaginationTests(({ instantSearchOptions, widgetParams }) => {
         ...widgetParams,
       }),
     ])
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
     .start();
 });

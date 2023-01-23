@@ -16,8 +16,23 @@ import {
   AisHierarchicalMenu,
   AisMenu,
   AisPagination,
+  createWidgetMixin,
 } from '../instantsearch';
 jest.unmock('instantsearch.js/es');
+
+/**
+ * prevent rethrowing InstantSearch errors, so tests can be asserted.
+ * IRL this isn't needed, as the error doesn't stop execution.
+ */
+const GlobalErrorSwallower = {
+  mixins: [createWidgetMixin({ connector: true })],
+  mounted() {
+    this.instantSearchInstance.on('error', () => {});
+  },
+  render() {
+    return null;
+  },
+};
 
 createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
   mountApp(
@@ -25,6 +40,7 @@ createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisRefinementList, { props: widgetParams }),
+          h(GlobalErrorSwallower),
         ])
       ),
     },
@@ -40,6 +56,7 @@ createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisHierarchicalMenu, { props: widgetParams }),
+          h(GlobalErrorSwallower),
         ])
       ),
     },
@@ -55,6 +72,7 @@ createMenuTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisMenu, { props: widgetParams }),
+          h(GlobalErrorSwallower),
         ])
       ),
     },
@@ -70,6 +88,7 @@ createPaginationTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisPagination, { props: widgetParams }),
+          h(GlobalErrorSwallower),
         ])
       ),
     },
