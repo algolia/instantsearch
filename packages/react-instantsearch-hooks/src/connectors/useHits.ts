@@ -9,7 +9,6 @@ import type {
   HitsWidgetDescription,
   HitsConnector,
 } from 'instantsearch.js/es/connectors/hits/connectHits';
-import { type } from '@testing-library/user-event/dist/type';
 
 export type UseHitsProps<THit extends BaseHit = BaseHit> =
   HitsConnectorParams<THit>;
@@ -30,7 +29,6 @@ export function useHits<THit extends BaseHit = BaseHit>(
   const getHitProps: GetHitsPropsType = ({ hit }) => {
     return {
       onClick(event) {
-        console.log({ event });
         const payload = {
           eventType: 'click',
           eventName: 'Hit clicked',
@@ -38,8 +36,7 @@ export function useHits<THit extends BaseHit = BaseHit>(
           objectIDs: [hit.objectID],
           positions: [hit.__position],
         };
-
-        console.log({ payload });
+        console.log({ event, payload });
       },
     };
   };

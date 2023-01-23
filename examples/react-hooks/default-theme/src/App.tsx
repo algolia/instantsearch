@@ -1,6 +1,6 @@
 import { Hit as AlgoliaHit } from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
-import React from 'react';
+import React, { createElement } from 'react';
 import {
   InstantSearch,
   Breadcrumb,
@@ -22,6 +22,7 @@ import {
   SortBy,
   ToggleRefinement,
   useHits,
+  useInstantSearch,
 } from 'react-instantsearch-hooks-web';
 
 import {
@@ -167,7 +168,8 @@ export function App() {
           <Tabs>
             <Tab title="Hits">
               {/* <Hits hitComponent={Hit} /> */}
-              <CustomHits />
+              {/* <CustomHitsWithProps /> */}
+              <CustomHitsWithWrapper />
               <Pagination className="Pagination" />
             </Tab>
             <Tab title="InfiniteHits">
@@ -180,7 +182,7 @@ export function App() {
   );
 }
 
-function CustomHits() {
+function CustomHitsWithProps() {
   const { hits, getHitProps } = useHits();
 
   return (
@@ -202,4 +204,42 @@ function CustomHits() {
       })}
     </ul>
   );
+}
+
+function CustomHitsWithWrapper() {
+  const { hits } = useHits();
+
+  return (
+    <ul>
+      {hits.map((hit) => (
+        <HitWrapper key={hit.objectID} hit={hit}>
+          <li
+            onClick={() => {
+              console.log('overridden event handler');
+            }}
+          >
+            {hit.name}
+          </li>
+        </HitWrapper>
+      ))}
+    </ul>
+  );
+}
+
+function HitWrapper({ hit, children }) {
+  const { results } = useInstantSearch();
+
+  const onClick = (event) => {
+    const payload = {
+      eventType: 'click',
+      eventName: 'Hit clicked',
+      queryID: results.queryID,
+      objectIDs: [hit.objectID],
+      positions: [hit.__position],
+    };
+    console.log({ event, payload });
+    children.props.onClick?.();
+  };
+  const root = createElement(children.type, { ...children.props, onClick });
+  return <>{root}</>;
 }
