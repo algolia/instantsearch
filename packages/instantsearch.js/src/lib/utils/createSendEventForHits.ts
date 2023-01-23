@@ -43,7 +43,10 @@ const buildPayloads = ({
   if (args.length === 1 && typeof args[0] === 'object') {
     return [args[0]];
   }
-  const eventType: string = args[0];
+  const [eventType, internal] = args[0].split(':');
+  console.log({ eventType, internal });
+
+  // const eventType: string = args[0];
   const hits: Hit | Hit[] | EscapedHits = args[1];
   const eventName: string | undefined = args[2];
   if (!hits) {
@@ -104,7 +107,7 @@ const buildPayloads = ({
       };
     });
   } else if (eventType === 'click') {
-    return hitsChunks.map((batch, i) => {
+    const payloads = hitsChunks.map((batch, i) => {
       return {
         insightsMethod: 'clickedObjectIDsAfterSearch',
         widgetType,
@@ -119,6 +122,8 @@ const buildPayloads = ({
         hits: batch,
       };
     });
+    payloads.__internal = Boolean(internal);
+    return payloads;
   } else if (eventType === 'conversion') {
     return hitsChunks.map((batch, i) => {
       return {
@@ -161,23 +166,34 @@ export function createSendEventForHits({
   let timerId = undefined;
 
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
-    events.push(
-      buildPayloads({
-        widgetType,
-        index,
-        methodName: 'sendEvent',
-        args,
-        isSearchStalled: instantSearchInstance.status === 'stalled',
-      })
-    );
+    const payloads = buildPayloads({
+      widgetType,
+      index,
+      methodName: 'sendEvent',
+      args,
+      isSearchStalled: instantSearchInstance.status === 'stalled',
+    });
+    if (payloads[0].eventType !== 'click') {
+      console.log('sending immediate event', payloads);
+      payloads.forEach((payload) =>
+        instantSearchInstance.sendEventToInsights(payload)
+      );
+      return;
+    }
+
+    events.push(payloads);
 
     if (timerId) {
       clearTimeout(timerId);
     }
 
     timerId = setTimeout(() => {
-      const [payloads] = events;
-      console.log('sending event', payloads);
+      const payloads =
+        events.length > 1
+          ? events.find((event) => !event.__internal)
+          : events[0];
+      delete payloads.__internal;
+      console.log('sending event', payloads, events);
       payloads.forEach((payload) =>
         instantSearchInstance.sendEventToInsights(payload)
       );

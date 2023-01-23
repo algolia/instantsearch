@@ -152,8 +152,8 @@ export function App() {
           <Tabs>
             <Tab title="Hits">
               {/* <Hits hitComponent={Hit} /> */}
-              <CustomHitsWithProps />
-              {/* <CustomHitsWithWrapper /> */}
+              {/* <CustomHitsWithProps /> */}
+              <CustomHitsWithWrapper />
               <Pagination className="Pagination" />
             </Tab>
             {/* <Tab title="InfiniteHits">
@@ -196,6 +196,11 @@ function CustomHitsWithProps() {
             onClick={(e) => {
               hitProps.onClick(e);
               sendEvent('click', hit, 'CustomHitsWithProps: Hit Clicked');
+              sendEvent(
+                'conversion',
+                hit,
+                'CustomHitsWithProps: Hit Added to Cart'
+              );
             }}
           >
             {hit.name}

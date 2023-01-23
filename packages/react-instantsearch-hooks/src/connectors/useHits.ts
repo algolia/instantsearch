@@ -39,18 +39,18 @@ export function useHits<THit extends BaseHit = BaseHit>(
 
     const onClick = () => {
       children.props.onClick?.();
-      output.sendEvent('click', hit, 'HitWrapper: Hit clicked');
+      output.sendEvent('click:internal', hit, 'HitWrapper: Hit clicked');
     };
 
     const root = createElement(children.type, { ...children.props, onClick });
 
-    return React.createElement(React.Fragment, { children: root });
+    return createElement(React.Fragment, null, root);
   }
 
   const getHitProps: GetHitsPropsType = ({ hit }) => {
     return {
       onClick() {
-        output.sendEvent('click', hit, 'getHitProps: Hit clicked');
+        output.sendEvent('click:internal', hit, 'getHitProps: Hit clicked');
       },
     };
   };
