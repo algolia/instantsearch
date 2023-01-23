@@ -46,7 +46,7 @@ export function createOptimisticUiTests(setup: RefinementListSetup, act: Act) {
         await wait(0);
       });
 
-      // before interaction
+      // Initial state, before interaction
       {
         expect(
           document.querySelectorAll('.ais-RefinementList-item')

@@ -50,7 +50,7 @@ export function createOptimisticUiTests(
         await wait(0);
       });
 
-      // before interaction
+      // Initial state, before interaction
       {
         expect(
           document.querySelectorAll('.ais-HierarchicalMenu-item')

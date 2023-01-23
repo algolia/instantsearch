@@ -47,7 +47,7 @@ export function createOptimisticUiTests(setup: MenuSetup, act: Act) {
         await wait(0);
       });
 
-      // before interaction
+      // Initial state, before interaction
       {
         expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(2);
         expect(

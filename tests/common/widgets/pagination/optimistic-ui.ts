@@ -44,7 +44,7 @@ export function createOptimisticUiTests(setup: PaginationSetup, act: Act) {
         await wait(0);
       });
 
-      // before interaction
+      // Initial state, before interaction
       {
         const firstPrev = 2;
         const nextLast = 2;
