@@ -40,22 +40,6 @@ const searchClient = algoliasearch(
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
-type HitProps = {
-  hit: AlgoliaHit<{
-    name: string;
-    price: number;
-  }>;
-};
-
-function Hit({ hit }: HitProps) {
-  return (
-    <>
-      <Highlight hit={hit} attribute="name" className="Hit-label" />
-      <span className="Hit-price">${hit.price}</span>
-    </>
-  );
-}
-
 export function App() {
   return (
     <InstantSearch
@@ -167,9 +151,9 @@ export function App() {
 
           <Tabs>
             <Tab title="Hits">
-              {/* <Hits hitComponent={Hit} /> */}
+              <Hits hitComponent={Hit} />
               {/* <CustomHitsWithProps /> */}
-              <CustomHitsWithWrapper />
+              {/* <CustomHitsWithWrapper /> */}
               <Pagination className="Pagination" />
             </Tab>
             <Tab title="InfiniteHits">
@@ -179,6 +163,22 @@ export function App() {
         </div>
       </div>
     </InstantSearch>
+  );
+}
+
+type HitProps = {
+  hit: AlgoliaHit<{
+    name: string;
+    price: number;
+  }>;
+};
+
+function Hit({ hit }: HitProps) {
+  return (
+    <>
+      <Highlight hit={hit} attribute="name" className="Hit-label" />
+      <span className="Hit-price">${hit.price}</span>
+    </>
   );
 }
 
@@ -207,39 +207,23 @@ function CustomHitsWithProps() {
 }
 
 function CustomHitsWithWrapper() {
-  const { hits } = useHits();
+  const { hits, HitWrapper } = useHits();
 
   return (
     <ul>
       {hits.map((hit) => (
         <HitWrapper key={hit.objectID} hit={hit}>
-          <li
-            onClick={() => {
-              console.log('overridden event handler');
-            }}
-          >
-            {hit.name}
-          </li>
+          <>
+            <li
+              onClick={() => {
+                console.log('overridden event handler');
+              }}
+            >
+              {hit.name}
+            </li>
+          </>
         </HitWrapper>
       ))}
     </ul>
   );
-}
-
-function HitWrapper({ hit, children }) {
-  const { results } = useInstantSearch();
-
-  const onClick = (event) => {
-    const payload = {
-      eventType: 'click',
-      eventName: 'Hit clicked',
-      queryID: results.queryID,
-      objectIDs: [hit.objectID],
-      positions: [hit.__position],
-    };
-    console.log({ event, payload });
-    children.props.onClick?.();
-  };
-  const root = createElement(children.type, { ...children.props, onClick });
-  return <>{root}</>;
 }

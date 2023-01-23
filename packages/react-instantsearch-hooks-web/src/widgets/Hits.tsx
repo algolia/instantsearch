@@ -9,7 +9,7 @@ import type { UseHitsProps } from 'react-instantsearch-hooks';
 
 type UiProps<THit extends BaseHit> = Pick<
   HitsUiComponentProps<Hit<THit>>,
-  'hits' | 'sendEvent'
+  'hits' | 'sendEvent' | 'results'
 >;
 
 export type HitsProps<THit extends BaseHit> = Omit<
@@ -23,7 +23,7 @@ export function Hits<THit extends BaseHit = BaseHit>({
   transformItems,
   ...props
 }: HitsProps<THit>) {
-  const { hits, sendEvent } = useHits<THit>(
+  const { hits, sendEvent, results } = useHits<THit>(
     { escapeHTML, transformItems },
     { $$widgetType: 'ais.hits' }
   );
@@ -31,6 +31,7 @@ export function Hits<THit extends BaseHit = BaseHit>({
   const uiProps: UiProps<THit> = {
     hits,
     sendEvent,
+    results,
   };
 
   return <HitsUiComponent {...props} {...uiProps} />;
