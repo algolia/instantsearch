@@ -1,3 +1,8 @@
+3.11.3 - 2023-01-23
+ * chore(tests): remove remaining lodash usage (#927) https://github.com/algolia/algoliasearch-helper-js/commit/e234837aaa10e6458d06085ff9938c741ee74d4b
+ * fix(getFacetValues): reflect the value of _state in hierarchicalFacetValues (#925) https://github.com/algolia/algoliasearch-helper-js/commit/4d093b464e62dc6963dc6676aee19ff78145f48a
+ * test(integration): refactor to speed up (#926) https://github.com/algolia/algoliasearch-helper-js/commit/2c9ffeb23d68a09ac78a29d2a53024d9f724d525
+
 3.11.2 - 2023-01-09
  * feat: update Algolia logo (#918) https://github.com/algolia/algoliasearch-helper-js/commit/58e0e588195dde8f411383ad248bd112a9c01eb5
  * fix: prevent prototype pollution in rare error-cases (#923) https://github.com/algolia/algoliasearch-helper-js/commit/7ae16eaa3f5732b96f1fa40973778c5494e77b89, closes https://github.com/algolia/algoliasearch-helper-js/issues/922
