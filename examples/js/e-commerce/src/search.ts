@@ -1,5 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
+import { createInsightsMiddleware } from 'instantsearch.js/es/middlewares';
 import {
   brands,
   categories,
@@ -11,7 +12,7 @@ import {
   hitsPerPage,
   pagination,
   priceSlider,
-  products,
+  // products,
   ratings,
   resultsNumberMobile,
   saveFiltersMobile,
@@ -19,6 +20,7 @@ import {
   sortBy,
 } from './widgets';
 import getRouting from './routing';
+import { customHits } from './widgets/CustomHits';
 
 const searchClient = algoliasearch(
   'latency',
@@ -31,6 +33,15 @@ const search = instantsearch({
   routing: getRouting({ indexName: 'instant_search' }),
 });
 
+const insightsMiddleware = createInsightsMiddleware({
+  insightsClient: (window as any).aa,
+  insightsInitParams: {
+    useCookie: true,
+  },
+});
+
+search.use(insightsMiddleware);
+
 search.addWidgets([
   brands,
   categories,
@@ -42,12 +53,13 @@ search.addWidgets([
   hitsPerPage,
   pagination,
   priceSlider,
-  products,
+  // products,
   ratings,
   resultsNumberMobile,
   saveFiltersMobile,
   searchBox,
   sortBy,
+  customHits({ container: document.querySelector('[data-widget="hits"]') }),
 ]);
 
 export default search;
