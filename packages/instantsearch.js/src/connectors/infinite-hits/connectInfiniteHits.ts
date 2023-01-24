@@ -308,6 +308,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           bindEvent = createBindEventForHits({
             index: helper.getIndex(),
             widgetType: this.$$type,
+            instantSearchInstance,
           });
           isFirstPage =
             state.page === undefined ||
