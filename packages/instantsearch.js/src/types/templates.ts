@@ -24,6 +24,7 @@ export type TemplateParams = {
     Snippet: typeof Snippet;
     ReverseSnippet: typeof ReverseSnippet;
   };
+  sendEvent?: SendEventForHits;
 };
 
 interface TemplateWithBindEventParams extends TemplateParams {
