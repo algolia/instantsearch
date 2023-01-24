@@ -219,21 +219,27 @@ function CustomHitsWithWrapper() {
       {hits.map((hit) => (
         <HitWrapper key={hit.objectID} hit={hit}>
           <li>
-            {hit.name}
-            <button
+            <div
               onClick={() => {
-                sendEvent('click', hit, 'CustomHitsWithWrapper: Hit clicked');
+                sendEvent('click', hit, 'CustomHitsWithWrapper: div clicked');
               }}
             >
-              Click me
-            </button>
-            <button
-              onClick={() =>
-                console.log('will bubble to default event handler')
-              }
-            >
-              This won't trigger event
-            </button>
+              {hit.name}
+              <button
+                onClick={() => {
+                  sendEvent('click', hit, 'CustomHitsWithWrapper: Hit clicked');
+                }}
+              >
+                Click me
+              </button>
+              <button
+                onClick={() =>
+                  console.log('will bubble to default event handler')
+                }
+              >
+                This won't trigger event
+              </button>
+            </div>
           </li>
         </HitWrapper>
       ))}

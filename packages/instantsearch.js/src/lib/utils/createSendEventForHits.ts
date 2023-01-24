@@ -162,8 +162,8 @@ export function createSendEventForHits({
   index: string;
   widgetType: string;
 }): SendEventForHits {
-  let events = [];
-  let timerId = undefined;
+  let eventBatches: Array<InsightsEvent[] & { __internal?: boolean }> = [];
+  let timerId: NodeJS.Timeout | undefined = undefined;
 
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
     const payloads = buildPayloads({
@@ -173,31 +173,36 @@ export function createSendEventForHits({
       args,
       isSearchStalled: instantSearchInstance.status === 'stalled',
     });
-    if (payloads[0].eventType !== 'click') {
-      console.log('sending immediate event', payloads);
-      payloads.forEach((payload) =>
-        instantSearchInstance.sendEventToInsights(payload)
-      );
-      return;
-    }
 
-    events.push(payloads);
+    eventBatches.push(payloads);
 
-    if (timerId) {
-      clearTimeout(timerId);
-    }
-
+    clearTimeout(timerId);
     timerId = setTimeout(() => {
-      const payloads =
-        events.length > 1
-          ? events.find((event) => !event.__internal)
-          : events[0];
-      delete payloads.__internal;
-      console.log('sending event', payloads, events);
-      payloads.forEach((payload) =>
-        instantSearchInstance.sendEventToInsights(payload)
+      const { internal, external } = eventBatches.reduce<{
+        internal: InsightsEvent[][];
+        external: InsightsEvent[][];
+      }>(
+        (acc, batch) => {
+          if (batch.__internal) {
+            acc.internal.push(batch);
+          } else {
+            acc.external.push(batch);
+          }
+
+          delete batch.__internal;
+          return acc;
+        },
+        { internal: [], external: [] }
       );
-      events = [];
+
+      const dedupedPayloads = external.length > 0 ? external : internal;
+      console.log('sending event', dedupedPayloads, eventBatches);
+      dedupedPayloads
+        .flat()
+        .forEach((payload) =>
+          instantSearchInstance.sendEventToInsights(payload)
+        );
+      eventBatches = [];
     }, 0);
   };
 
