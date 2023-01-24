@@ -70,10 +70,10 @@ storiesOf('Results/InfiniteHits', module)
           instantsearch.widgets.infiniteHits({
             container,
             templates: {
-              item: (item, bindEvent) => `
+              item: (item, { html, sendEvent }) => html`
                 <h4>${item.name}</h4>
                 <button
-                  ${bindEvent(
+                  onClick=${sendEvent(
                     'clickedObjectIDsAfterSearch',
                     [item],
                     'Add to cart'
