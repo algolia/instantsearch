@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.39.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.38.3...react-instantsearch-hooks@6.39.0) (2023-01-24)
+
+
+### Features
+
+* **react-instantsearch-hooks-web:** Add stats widget and ui component ([#5427](https://github.com/algolia/instantsearch.js/issues/5427)) ([d07cf0d](https://github.com/algolia/instantsearch.js/commit/d07cf0d0310bf4e49d4a4c2142b3783d9bcda79d))
+* **react-instantsearch-hooks:** Add useStats hook ([#5425](https://github.com/algolia/instantsearch.js/issues/5425)) ([772c918](https://github.com/algolia/instantsearch.js/commit/772c918f47aec183af3f1aa78c65505f70dd0088))
+* **rendering:** always render with current state ([#5429](https://github.com/algolia/instantsearch.js/issues/5429)) ([920e951](https://github.com/algolia/instantsearch.js/commit/920e951f03aada0e6a1ce16bc389a82a2f00b202))
+
+
+
+
+
 ## [6.38.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.38.2...react-instantsearch-hooks@6.38.3) (2023-01-09)
 
 

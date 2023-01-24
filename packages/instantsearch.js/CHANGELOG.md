@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.50.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.49.4...instantsearch.js@4.50.0) (2023-01-24)
+
+
+### Features
+
+* **rendering:** always render with current state ([#5429](https://github.com/algolia/instantsearch.js/issues/5429)) ([920e951](https://github.com/algolia/instantsearch.js/commit/920e951f03aada0e6a1ce16bc389a82a2f00b202))
+
+
+
+
+
 ## [4.49.4](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.49.3...instantsearch.js@4.49.4) (2023-01-09)
 
 
