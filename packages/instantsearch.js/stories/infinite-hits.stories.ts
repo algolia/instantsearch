@@ -73,7 +73,7 @@ storiesOf('Results/InfiniteHits', module)
               item: (item, { html, sendEvent }) => html`
                 <h4>${item.name}</h4>
                 <button
-                  onClick=${sendEvent?.(
+                  onClick=${sendEvent(
                     'clickedObjectIDsAfterSearch',
                     [item],
                     'Add to cart'
