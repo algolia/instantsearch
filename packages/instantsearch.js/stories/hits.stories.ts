@@ -209,14 +209,15 @@ storiesOf('Results/Hits', module)
           instantsearch.widgets.hits({
             container,
             templates: {
-              item: (item, bindEvent) => `
+              item: (item, { html, sendEvent }) => html`
                 <h4>${item.name}</h4>
                 <button
-                  ${bindEvent(
-                    'clickedObjectIDsAfterSearch',
-                    [item],
-                    'Add to cart'
-                  )}
+                  onClick=${() =>
+                    sendEvent(
+                      'clickedObjectIDsAfterSearch',
+                      [item],
+                      'Add to cart'
+                    )}
                 >
                   Add to cart
                 </button>
