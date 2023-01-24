@@ -19,8 +19,6 @@ const PACKAGE_GROUPS = {
     'react-instantsearch-hooks',
     'react-instantsearch-hooks-web',
     'react-instantsearch-hooks-server',
-    'react-instantsearch-dom-maps',
-    'react-instantsearch-native',
   ],
 };
 
