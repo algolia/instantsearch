@@ -10,12 +10,14 @@ type BuiltInSendEventForHits = (
 type CustomSendEventForHits = (customPayload: any) => void;
 export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
 
-type BuiltInBindEventForHits = (
+export type BuiltInBindEventForHits = (
   eventType: string,
   hits: Hit | Hit[],
   eventName?: string
 ) => string;
-type CustomBindEventForHits = (customPayload: any) => string;
+
+export type CustomBindEventForHits = (customPayload: any) => string;
+
 export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
 function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
