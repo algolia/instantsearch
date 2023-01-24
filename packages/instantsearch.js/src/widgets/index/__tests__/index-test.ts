@@ -23,6 +23,7 @@ import { warning } from '../../../lib/utils';
 import { refinementList } from '../..';
 import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { connectHits } from '../../../connectors';
+import { castToJestMock } from '../../../../../../tests/utils';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
@@ -3163,6 +3164,48 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect.objectContaining({ objectID: '2' }),
         expect.objectContaining({ objectID: '3' }),
       ]);
+    });
+  });
+
+  describe('on error', () => {
+    it('resets the state', async () => {
+      const searchClient = createSearchClient();
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient,
+      }).addWidgets([createSearchBox()]);
+
+      search.start();
+      // suppress global error
+      search.on('error', () => {});
+
+      // initial state: nothing
+      expect(search.getUiState()).toEqual({ indexName: {} });
+
+      // set query
+      search.setUiState({ indexName: { query: 'iphone' } });
+      // state updates
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+
+      // wait for the search to be done
+      await wait(0);
+      // state is still the same
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+
+      // start erroring
+      castToJestMock(searchClient.search).mockRejectedValue(
+        new Error('search error')
+      );
+
+      // set query
+      search.setUiState({ indexName: { query: 'iphone 2' } });
+      // state updates
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone 2' } });
+
+      // wait for the search to be done
+      await wait(0);
+      // state has reverted
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
     });
   });
 });

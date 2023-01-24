@@ -16,12 +16,24 @@ import {
   HierarchicalMenu,
   Menu,
   Pagination,
+  useInstantSearch,
 } from '..';
+
+/**
+ * prevent rethrowing InstantSearch errors, so tests can be asserted.
+ * IRL this isn't needed, as the error doesn't stop execution.
+ */
+function GlobalErrorSwallower() {
+  useInstantSearch({ catchError: true });
+
+  return null;
+}
 
 createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
   render(
     <InstantSearch {...instantSearchOptions}>
       <RefinementList {...widgetParams} />
+      <GlobalErrorSwallower />
     </InstantSearch>
   );
 }, act);
@@ -30,6 +42,7 @@ createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
   render(
     <InstantSearch {...instantSearchOptions}>
       <HierarchicalMenu {...widgetParams} />
+      <GlobalErrorSwallower />
     </InstantSearch>
   );
 }, act);
@@ -38,6 +51,7 @@ createMenuTests(({ instantSearchOptions, widgetParams }) => {
   render(
     <InstantSearch {...instantSearchOptions}>
       <Menu {...widgetParams} />
+      <GlobalErrorSwallower />
     </InstantSearch>
   );
 }, act);
@@ -46,6 +60,7 @@ createPaginationTests(({ instantSearchOptions, widgetParams }) => {
   render(
     <InstantSearch {...instantSearchOptions}>
       <Pagination {...widgetParams} />
+      <GlobalErrorSwallower />
     </InstantSearch>
   );
 }, act);
