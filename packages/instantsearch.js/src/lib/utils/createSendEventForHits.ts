@@ -200,6 +200,8 @@ export function createSendEventForHits({
       // eslint-disable-next-line no-console
       console.log('sendEvent: running deduplication', {
         eventBatches,
+        internal,
+        external,
         sending: dedupedPayloads,
       });
       dedupedPayloads

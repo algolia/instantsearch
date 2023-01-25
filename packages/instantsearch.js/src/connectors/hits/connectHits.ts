@@ -96,9 +96,9 @@ class HitWrapper {
         const target = event.target as HTMLElement;
         if (target.dataset.productId && this.hits.size > 0) {
           this.sendEvent(
-            'click',
+            'click:internal',
             this.hits.get(target.dataset.productId),
-            'CustomHits widget: Hit clicked'
+            'CustomHits Wrapper: Hit clicked'
           );
         }
       });
@@ -224,6 +224,10 @@ const connectHits: HitsConnector = function connectHits(
             template: string,
             container: HTMLElement
           ): string {
+            if (!results.queryID) {
+              return template;
+            }
+
             return hitWrapperInstance.push({
               hit,
               template,
