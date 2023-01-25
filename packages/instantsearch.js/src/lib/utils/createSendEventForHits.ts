@@ -197,8 +197,11 @@ export function createSendEventForHits({
       );
 
       const dedupedPayloads = external.length > 0 ? external : internal;
-      // console.log('all events', eventBatches);
-      // console.log('sending event', dedupedPayloads);
+      // eslint-disable-next-line no-console
+      console.log('sendEvent: running deduplication', {
+        eventBatches,
+        sending: dedupedPayloads,
+      });
       dedupedPayloads
         // .flat()
         .reduce((acc, batch) => acc.concat(batch), [])
