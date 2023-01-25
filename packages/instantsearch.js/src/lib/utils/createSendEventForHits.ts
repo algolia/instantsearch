@@ -44,7 +44,6 @@ const buildPayloads = ({
     return [args[0]];
   }
   const [eventType, internal] = args[0].split(':');
-  console.log({ eventType, internal });
 
   // const eventType: string = args[0];
   const hits: Hit | Hit[] | EscapedHits = args[1];
@@ -196,7 +195,8 @@ export function createSendEventForHits({
       );
 
       const dedupedPayloads = external.length > 0 ? external : internal;
-      console.log('sending event', dedupedPayloads, eventBatches);
+      console.log('all events', eventBatches);
+      console.log('sending event', dedupedPayloads);
       dedupedPayloads
         .flat()
         .forEach((payload) =>

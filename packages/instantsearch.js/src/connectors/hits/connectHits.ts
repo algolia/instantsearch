@@ -73,6 +73,48 @@ export type HitsConnector<THit extends BaseHit = BaseHit> = Connector<
   HitsConnectorParams<THit>
 >;
 
+class HitWrapper {
+  hits: any[] = [];
+  hasEventListener = false;
+  sendEvent: SendEventForHits;
+
+  constructor(sendEvent: SendEventForHits) {
+    this.sendEvent = sendEvent;
+  }
+
+  push({
+    hit,
+    template,
+    container,
+  }: {
+    hit: Hit<BaseHit>;
+    template: string;
+    container?: HTMLElement;
+  }): string {
+    if (!this.hasEventListener && container) {
+      container.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        if (target.dataset.productId && this.hits.length > 0) {
+          this.sendEvent(
+            'click',
+            this.hits.find((hit) => hit.objectID === target.dataset.productId),
+            'CustomHits widget: Hit clicked'
+          );
+        }
+      });
+      this.hasEventListener = true;
+    }
+
+    const root = document.createElement('template');
+    root.innerHTML = template;
+    root.content.querySelector<HTMLElement>('*')!.dataset.productId =
+      hit.objectID;
+
+    this.hits.push(hit);
+    return root.innerHTML;
+  }
+}
+
 const connectHits: HitsConnector = function connectHits(
   renderFn,
   unmountFn = noop
@@ -169,12 +211,25 @@ const connectHits: HitsConnector = function connectHits(
           { results }
         );
 
+        const hitWrapperInstance = new HitWrapper(sendEvent);
+
         return {
           hits: transformedHits,
           results,
           sendEvent,
           bindEvent,
           widgetParams,
+          wrap(
+            hit: Hit<BaseHit>,
+            template: string,
+            container: HTMLElement
+          ): string {
+            return hitWrapperInstance.push({
+              hit,
+              template,
+              container,
+            });
+          },
         };
       },
 

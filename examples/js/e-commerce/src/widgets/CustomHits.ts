@@ -46,56 +46,20 @@ const renderHitsWithSelector: Renderer<
   });
 };
 
-class HitsWrapper {
-  hits: any[] = [];
-
-  constructor(
-    readonly container: HTMLElement,
-    readonly sendEvent: SendEventForHits
-  ) {}
-
-  push(hit: Hit<BaseHit>, template: string): string {
-    const root = document.createElement('template');
-    root.innerHTML = template;
-    root.content.querySelector<HTMLElement>('*')!.dataset.productId =
-      hit.objectID;
-
-    this.hits.push(hit);
-    return root.innerHTML;
-  }
-
-  bind() {
-    this.container
-      .querySelectorAll<HTMLElement>('[data-product-id]')
-      .forEach((el) => {
-        el.addEventListener('click', () => {
-          this.sendEvent(
-            'click',
-            this.hits.find((hit) => hit.objectID === el.dataset.productId),
-            'CustomHits widget: Hit clicked'
-          );
-        });
-      });
-  }
-}
-
 const renderHitsWithWrapper: Renderer<
   HitsWidgetDescription['renderState'],
   HitsWidgetParams
 > = (renderOptions, _isFirstRender) => {
-  const { hits, widgetParams, sendEvent } = renderOptions;
+  const { hits, widgetParams, sendEvent, wrap } = renderOptions;
   const container = getContainerNode(widgetParams.container);
-  const wrapper = new HitsWrapper(container, sendEvent);
 
   container.innerHTML = `
     <ul>
       ${hits
-        .map((item) => wrapper.push(item, `<li>${item.name}</li>`))
+        .map((item) => wrap(item, `<li>${item.name}</li>`, container))
         .join('')}
     </ul>
   `;
-
-  wrapper.bind();
 };
 
 // const renderHitsWithBindEvent = (renderOptions, isFirstRender) => {
@@ -115,5 +79,5 @@ const renderHitsWithWrapper: Renderer<
 //   `;
 // };
 
-export const customHits = connectHits(renderHitsWithSelector);
-// export const customHits = connectHits(renderHitsWithWrapper);
+// export const customHits = connectHits(renderHitsWithSelector);
+export const customHits = connectHits(renderHitsWithWrapper);

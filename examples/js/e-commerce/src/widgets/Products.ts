@@ -4,6 +4,17 @@ export const products = hits({
   container: '[data-widget="hits"]',
   templates: {
     item(hit, { html, components, sendEvent }) {
+      // item(hit, bindEvent) {
+      // return `
+      //   <div class="hit" ${bindEvent('click', hit, 'Product clicked')}>
+      //     ${hit.name}
+      //     <button ${bindEvent(
+      //       'conversion',
+      //       hit,
+      //       'Product added to cart'
+      //     )}>Add to cart</button>
+      //   </div>
+      // `;
       return html`
         <article
           class="hit"
@@ -21,6 +32,12 @@ export const products = hits({
               ${components.Snippet({ hit, attribute: 'description' })}
             </p>
 
+            <button
+              onClick=${() =>
+                sendEvent?.('click', hit, 'Button: Product clicked')}
+            >
+              Send click event
+            </button>
             <footer>
               <p>
                 <span class="hit-em">$</span>

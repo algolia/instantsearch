@@ -12,7 +12,7 @@ import {
   hitsPerPage,
   pagination,
   priceSlider,
-  // products,
+  products,
   ratings,
   resultsNumberMobile,
   saveFiltersMobile,
