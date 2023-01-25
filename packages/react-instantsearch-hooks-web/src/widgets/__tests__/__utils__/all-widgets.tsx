@@ -62,8 +62,7 @@ function Widget<TWidget extends SingleWidget>({
         <widget.Component
           hit={{ objectID: '', __position: 0 }}
           attribute="objectID"
-          // @TODO: something causes a mismatch in ReactNode for children, easier to ignore, as it's just a test here.
-          {...(props as unknown)}
+          {...props}
         />
       );
     }

@@ -120,9 +120,9 @@ describe('simpleStateMapping', () => {
     });
 
     it('passes non-UiState through', () => {
-      const stateMapping = simpleStateMapping<
-        UiState & { [indexId: string]: { spy: string[] } }
-      >();
+      const stateMapping = simpleStateMapping<{
+        [indexId in string]: UiState[indexId] & { spy: string[] };
+      }>();
       const actual = stateMapping.routeToState({
         indexName: {
           query: 'zamboni',
