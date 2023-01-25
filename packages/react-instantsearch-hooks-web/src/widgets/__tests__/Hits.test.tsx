@@ -14,6 +14,7 @@ import React from 'react';
 import { Hits } from '../Hits';
 
 import type { MockSearchClient } from '@instantsearch/mocks';
+import type { AlgoliaHit } from 'instantsearch.js';
 
 describe('Hits', () => {
   test('renders with default props', async () => {
@@ -47,7 +48,7 @@ describe('Hits', () => {
           createMultiSearchResponse(
             ...requests.map(
               (request: Parameters<MockSearchClient['search']>[0][number]) =>
-                createSingleSearchResponse<CustomHit>({
+                createSingleSearchResponse<AlgoliaHit<CustomHit>>({
                   hits: [
                     { objectID: '1', somethingSpecial: 'a' },
                     { objectID: '2', somethingSpecial: 'b' },
