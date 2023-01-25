@@ -30,7 +30,7 @@
     "algoliasearch": "4.14.3",
     "instantsearch.css": "8.0.0",
     "prop-types": "15.6.2",
-    "qs": "6.9.6",
+    "qs": "6.9.7",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-fast-compare": "3.0.1",
