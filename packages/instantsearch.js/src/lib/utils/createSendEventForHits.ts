@@ -106,21 +106,23 @@ const buildPayloads = ({
       };
     });
   } else if (eventType === 'click') {
-    const payloads = hitsChunks.map((batch, i) => {
-      return {
-        insightsMethod: 'clickedObjectIDsAfterSearch',
-        widgetType,
-        eventType,
-        payload: {
-          eventName,
-          index,
-          queryID,
-          objectIDs: objectIDsByChunk[i],
-          positions: positionsByChunk[i],
-        },
-        hits: batch,
-      };
-    });
+    const payloads: InsightsEvent[] & { __internal?: boolean } = hitsChunks.map(
+      (batch, i) => {
+        return {
+          insightsMethod: 'clickedObjectIDsAfterSearch',
+          widgetType,
+          eventType,
+          payload: {
+            eventName,
+            index,
+            queryID,
+            objectIDs: objectIDsByChunk[i],
+            positions: positionsByChunk[i],
+          },
+          hits: batch,
+        };
+      }
+    );
     payloads.__internal = Boolean(internal);
     return payloads;
   } else if (eventType === 'conversion') {
@@ -195,10 +197,11 @@ export function createSendEventForHits({
       );
 
       const dedupedPayloads = external.length > 0 ? external : internal;
-      console.log('all events', eventBatches);
-      console.log('sending event', dedupedPayloads);
+      // console.log('all events', eventBatches);
+      // console.log('sending event', dedupedPayloads);
       dedupedPayloads
-        .flat()
+        // .flat()
+        .reduce((acc, batch) => acc.concat(batch), [])
         .forEach((payload) =>
           instantSearchInstance.sendEventToInsights(payload)
         );

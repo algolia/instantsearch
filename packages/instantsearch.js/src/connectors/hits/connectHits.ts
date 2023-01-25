@@ -74,7 +74,7 @@ export type HitsConnector<THit extends BaseHit = BaseHit> = Connector<
 >;
 
 class HitWrapper {
-  hits: any[] = [];
+  hits = new Map();
   hasEventListener = false;
   sendEvent: SendEventForHits;
 
@@ -94,10 +94,10 @@ class HitWrapper {
     if (!this.hasEventListener && container) {
       container.addEventListener('click', (event) => {
         const target = event.target as HTMLElement;
-        if (target.dataset.productId && this.hits.length > 0) {
+        if (target.dataset.productId && this.hits.size > 0) {
           this.sendEvent(
             'click',
-            this.hits.find((hit) => hit.objectID === target.dataset.productId),
+            this.hits.get(target.dataset.productId),
             'CustomHits widget: Hit clicked'
           );
         }
@@ -110,7 +110,7 @@ class HitWrapper {
     root.content.querySelector<HTMLElement>('*')!.dataset.productId =
       hit.objectID;
 
-    this.hits.push(hit);
+    this.hits.set(hit.objectID, hit);
     return root.innerHTML;
   }
 }

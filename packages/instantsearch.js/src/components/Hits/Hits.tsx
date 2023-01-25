@@ -53,7 +53,7 @@ const Hits = ({
             rootProps={{
               className: cssClasses.item,
               onClick: () => {
-                sendEvent(
+                sendEvent!(
                   'click:internal',
                   hit,
                   'Internal Hits component: Hit Clicked'
