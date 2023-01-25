@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.8.0](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.7.2...vue-instantsearch@4.8.0) (2023-01-25)
+
+
+### Features
+
+* **rendering:** always render with current state ([#5429](https://github.com/algolia/instantsearch.js/issues/5429)) ([920e951](https://github.com/algolia/instantsearch.js/commit/920e951f03aada0e6a1ce16bc389a82a2f00b202))
+* **rendering:** revert search state on error ([#5438](https://github.com/algolia/instantsearch.js/issues/5438)) ([732fcac](https://github.com/algolia/instantsearch.js/commit/732fcac79ea1f51b19f62d5c4bf1fdf22619fa73))
+
+
+
+
+
 ## [4.7.2](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.7.1...vue-instantsearch@4.7.2) (2023-01-09)
 
 

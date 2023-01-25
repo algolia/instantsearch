@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.50.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.49.4...instantsearch.js@4.50.0) (2023-01-25)
+
+
+### Bug Fixes
+
+* **bindEvent:** skip view event if search isn't stable ([#5439](https://github.com/algolia/instantsearch.js/issues/5439)) ([b0ea594](https://github.com/algolia/instantsearch.js/commit/b0ea59404faff40c975bfa63f98ca411ddef27cb))
+* **sendEvent:**  correct types in template ([#5449](https://github.com/algolia/instantsearch.js/issues/5449)) ([68152d0](https://github.com/algolia/instantsearch.js/commit/68152d0665ad67954ab7351069798e6fd530aa4b))
+
+
+### Features
+
+* **rendering:** always render with current state ([#5429](https://github.com/algolia/instantsearch.js/issues/5429)) ([920e951](https://github.com/algolia/instantsearch.js/commit/920e951f03aada0e6a1ce16bc389a82a2f00b202))
+* **rendering:** revert search state on error ([#5438](https://github.com/algolia/instantsearch.js/issues/5438)) ([732fcac](https://github.com/algolia/instantsearch.js/commit/732fcac79ea1f51b19f62d5c4bf1fdf22619fa73))
+
+
+
+
+
 ## [4.49.4](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.49.3...instantsearch.js@4.49.4) (2023-01-09)
 
 
