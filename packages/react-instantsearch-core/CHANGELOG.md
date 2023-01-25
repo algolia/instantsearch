@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
 ## [6.38.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.38.2...react-instantsearch-core@6.38.3) (2023-01-09)
 
 
