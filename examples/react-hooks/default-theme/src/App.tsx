@@ -1,6 +1,6 @@
 import { Hit as AlgoliaHit } from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
-import React, { createElement } from 'react';
+import React, { createElement, useLayoutEffect } from 'react';
 import {
   InstantSearch,
   Breadcrumb,
@@ -34,11 +34,29 @@ import {
 import { Tab, Tabs } from './components/layout';
 
 import './App.css';
+import { createInsightsMiddleware } from 'instantsearch.js/es/middlewares';
 
 const searchClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
+
+function Insights() {
+  const { use } = useInstantSearch();
+
+  useLayoutEffect(() => {
+    const middleware = createInsightsMiddleware({
+      insightsClient: window.aa,
+      insightsInitParams: {
+        useCookie: true,
+      },
+    });
+
+    return use(middleware);
+  }, [use]);
+
+  return null;
+}
 
 export function App() {
   return (
@@ -47,6 +65,7 @@ export function App() {
       indexName="instant_search"
       routing={true}
     >
+      <Insights />
       <Configure ruleContexts={[]} clickAnalytics={true} />
 
       <div className="Container">

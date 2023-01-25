@@ -113,6 +113,13 @@ export function InfiniteHits<THit extends Hit>({
           <li
             key={hit.objectID}
             className={cx('ais-InfiniteHits-item', classNames.item)}
+            onClick={() => {
+              sendEvent(
+                'click:internal',
+                hit,
+                'Internal InfiniteHits widget: Hit Clicked'
+              );
+            }}
           >
             <HitComponent hit={hit} sendEvent={sendEvent} />
           </li>

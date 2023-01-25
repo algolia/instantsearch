@@ -53,13 +53,13 @@ search.addWidgets([
   hitsPerPage,
   pagination,
   priceSlider,
-  // products,
+  products,
   ratings,
   resultsNumberMobile,
   saveFiltersMobile,
   searchBox,
   sortBy,
-  customHits({ container: document.querySelector('[data-widget="hits"]') }),
+  // customHits({ container: document.querySelector('[data-widget="hits"]') }),
 ]);
 
 export default search;

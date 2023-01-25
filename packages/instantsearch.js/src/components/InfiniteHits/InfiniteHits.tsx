@@ -82,7 +82,16 @@ const InfiniteHits = ({
             {...templateProps}
             templateKey="item"
             rootTagName="li"
-            rootProps={{ className: cssClasses.item }}
+            rootProps={{
+              className: cssClasses.item,
+              onClick: () => {
+                sendEvent(
+                  'click:internal',
+                  hit,
+                  'Internal InfiniteHits component: Hit Clicked'
+                );
+              },
+            }}
             key={hit.objectID}
             data={{
               ...hit,

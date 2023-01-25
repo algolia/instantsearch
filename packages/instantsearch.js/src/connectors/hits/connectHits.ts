@@ -98,7 +98,7 @@ class HitWrapper {
           this.sendEvent(
             'click:internal',
             this.hits.get(target.dataset.productId),
-            'CustomHits Wrapper: Hit clicked'
+            'Internal connectHits wrapper: Hit Clicked'
           );
         }
       });

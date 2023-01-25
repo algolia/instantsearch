@@ -166,6 +166,7 @@ const renderer =
       instantSearchInstance,
       insights,
       bindEvent,
+      sendEvent,
     },
     isFirstRendering
   ) => {
@@ -190,9 +191,10 @@ const renderer =
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
         insights={insights as InsightsClient}
-        sendEvent={(event: InsightsEvent) => {
-          instantSearchInstance.sendEventToInsights(event);
-        }}
+        // sendEvent={(event: InsightsEvent) => {
+        //   instantSearchInstance.sendEventToInsights(event);
+        // }}
+        sendEvent={sendEvent}
         bindEvent={bindEvent}
       />,
       containerNode

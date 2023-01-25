@@ -14,7 +14,7 @@ import type {
 export type UseHitsProps<THit extends BaseHit = BaseHit> =
   HitsConnectorParams<THit>;
 
-type GetHitsPropsType = ({ hit }: { hit: Hit }) => {
+type GetHitPropsType = ({ hit }: { hit: Hit }) => {
   onClick: React.MouseEventHandler;
 };
 
@@ -44,7 +44,11 @@ export function useHits<THit extends BaseHit = BaseHit>(
     const onClick = () => {
       // eslint-disable-next-line no-unused-expressions
       children?.props.onClick?.();
-      output.sendEvent('click:internal', hit, 'HitWrapper: Hit clicked');
+      output.sendEvent(
+        'click:internal',
+        hit,
+        'Internal useHit HitWrapper: Hit Clicked'
+      );
     };
 
     const root = createElement(children.type, { ...children.props, onClick });
@@ -52,10 +56,14 @@ export function useHits<THit extends BaseHit = BaseHit>(
     return createElement(React.Fragment, null, root);
   }
 
-  const getHitProps: GetHitsPropsType = ({ hit }) => {
+  const getHitProps: GetHitPropsType = ({ hit }) => {
     return {
       onClick() {
-        output.sendEvent('click:internal', hit, 'getHitProps: Hit clicked');
+        output.sendEvent(
+          'click:internal',
+          hit,
+          'Internal useHit getHitProps: Hit Clicked'
+        );
       },
     };
   };

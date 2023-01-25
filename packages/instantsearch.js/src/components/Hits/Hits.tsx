@@ -56,7 +56,7 @@ const Hits = ({
                 sendEvent!(
                   'click:internal',
                   hit,
-                  'Internal Hits component: Hit Clicked'
+                  'Internal Hits widget: Hit Clicked'
                 );
               },
             }}

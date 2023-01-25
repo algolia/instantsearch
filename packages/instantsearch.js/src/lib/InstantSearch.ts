@@ -32,6 +32,7 @@ import {
   createMetadataMiddleware,
   isMetadataEnabled,
 } from '../middlewares/createMetadataMiddleware';
+import { enableInsights } from './insightsLoader';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -304,6 +305,9 @@ See ${createDocumentationLink({
     if (isMetadataEnabled()) {
       this.use(createMetadataMiddleware());
     }
+
+    // Insights detection
+    enableInsights(this as unknown as InstantSearch<UiState, UiState>);
   }
 
   /**
