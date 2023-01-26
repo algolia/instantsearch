@@ -45,7 +45,7 @@ describe('routing with third-party client-side router', () => {
 
     // 2. Refine: '/?indexName[query]=Apple'
     {
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(writeWait);
       expect(window.location.search).toEqual(

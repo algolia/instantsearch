@@ -45,7 +45,7 @@ describe('routing with external influence', () => {
 
     // 2. Refine: '/?indexName[query]=Apple'
     {
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(writeWait);
       expect(window.location.search).toEqual(
@@ -66,7 +66,7 @@ describe('routing with external influence', () => {
 
     // 4. Refine: '/about?indexName[query]=Samsung'
     {
-      search.renderState.indexName!.searchBox!.refine('Samsung');
+      search.renderState.indexName.searchBox!.refine('Samsung');
 
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/about');

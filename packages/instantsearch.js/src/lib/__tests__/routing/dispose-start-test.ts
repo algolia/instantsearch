@@ -52,7 +52,7 @@ describe('routing back and forth to an InstantSearch instance', () => {
 
     // 2. Refine: '/?indexName[query]=Apple'
     {
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(writeWait);
       expect(window.location.search).toEqual(
@@ -72,7 +72,7 @@ describe('routing back and forth to an InstantSearch instance', () => {
 
     // 4. Refine: '/'
     {
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(writeWait);
       expect(window.location.search).toEqual('');
@@ -90,7 +90,7 @@ describe('routing back and forth to an InstantSearch instance', () => {
 
     // 6. Refine: '/?indexName[query]=Apple'
     {
-      search.renderState.indexName!.searchBox!.refine('Samsung');
+      search.renderState.indexName.searchBox!.refine('Samsung');
 
       await wait(writeWait);
       expect(window.location.search).toEqual(

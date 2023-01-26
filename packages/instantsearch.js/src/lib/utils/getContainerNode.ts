@@ -14,7 +14,7 @@ export function getContainerNode(
 ): HTMLElement {
   const isSelectorString = typeof selectorOrHTMLElement === 'string';
   const domElement = isSelectorString
-    ? document.querySelector(selectorOrHTMLElement as string)
+    ? document.querySelector(selectorOrHTMLElement)
     : selectorOrHTMLElement;
 
   if (!isDomElement(domElement)) {
