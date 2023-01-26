@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.39.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.39.0...react-instantsearch-hooks-web@6.39.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* **dependencies:** update typescript ([#5454](https://github.com/algolia/instantsearch.js/issues/5454)) ([0e6bb48](https://github.com/algolia/instantsearch.js/commit/0e6bb485a31cd3294436ac9902c2c2662dfcdf8b))
+* **HierarchicalMenu:** don't give --parent class if data is empty ([#5458](https://github.com/algolia/instantsearch.js/issues/5458)) ([1d1a209](https://github.com/algolia/instantsearch.js/commit/1d1a209992e86b720939607cd22e37a04e865195)), closes [/github.com/algolia/instantsearch/blob/f84c01b2f66ac279f7e33fafe5f1cd559436edef/packages/instantsearch.js/src/components/RefinementList/RefinementList.tsx#L175-L179](https://github.com//github.com/algolia/instantsearch/blob/f84c01b2f66ac279f7e33fafe5f1cd559436edef/packages/instantsearch.js/src/components/RefinementList/RefinementList.tsx/issues/L175-L179)
+
+
+
+
+
 # [6.39.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.38.3...react-instantsearch-hooks-web@6.39.0) (2023-01-25)
 
 

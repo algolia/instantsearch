@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.1](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.0...vue-instantsearch@4.8.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* **HierarchicalMenu:** don't give --parent class if data is empty ([#5458](https://github.com/algolia/instantsearch.js/issues/5458)) ([1d1a209](https://github.com/algolia/instantsearch.js/commit/1d1a209992e86b720939607cd22e37a04e865195)), closes [/github.com/algolia/instantsearch/blob/f84c01b2f66ac279f7e33fafe5f1cd559436edef/packages/instantsearch.js/src/components/RefinementList/RefinementList.tsx#L175-L179](https://github.com//github.com/algolia/instantsearch/blob/f84c01b2f66ac279f7e33fafe5f1cd559436edef/packages/instantsearch.js/src/components/RefinementList/RefinementList.tsx/issues/L175-L179)
+
+
+
+
+
 # [4.8.0](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.7.2...vue-instantsearch@4.8.0) (2023-01-25)
 
 
