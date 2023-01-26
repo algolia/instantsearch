@@ -90,6 +90,10 @@ function HierarchicalList({
   createURL,
   onNavigate,
 }: HierarchicalListProps) {
+  if (items.length === 0) {
+    return null;
+  }
+
   return (
     <ul className={cx('ais-HierarchicalMenu-list', classNames.list, className)}>
       {items.map((item) => (

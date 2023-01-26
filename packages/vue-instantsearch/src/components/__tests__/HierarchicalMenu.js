@@ -98,6 +98,14 @@ const microsoft = {
   data: null,
 };
 
+const google = {
+  label: 'Google',
+  value: 'Google',
+  isRefined: true,
+  count: 2,
+  data: [],
+};
+
 const defaultState = {
   items: [
     {
@@ -116,6 +124,7 @@ const defaultState = {
       data: [galaxy, note],
     },
     microsoft,
+    google,
   ],
   refine: () => {},
   createURL: () => {},
