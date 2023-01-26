@@ -8,7 +8,10 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createWidget,
@@ -21,7 +24,6 @@ import InstantSearch from '../../../lib/InstantSearch';
 import index from '../index';
 import { warning } from '../../../lib/utils';
 import { refinementList } from '../..';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { connectHits } from '../../../connectors';
 import { castToJestMock } from '../../../../../../tests/utils';
 

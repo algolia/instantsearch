@@ -2,6 +2,12 @@
  * @jest-environment jsdom
  */
 
+import { createAlgoliaSearchClient } from '@instantsearch/mocks';
+import {
+  createInstantSearchTestWrapper,
+  InstantSearchHooksTestWrapper,
+  wait,
+} from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
@@ -9,12 +15,6 @@ import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import React, { useEffect } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
-import { createSearchClient } from '../../../../../tests/mock';
-import {
-  createInstantSearchTestWrapper,
-  InstantSearchHooksTestWrapper,
-  wait,
-} from '../../../../../tests/utils';
 import { useInstantSearch } from '../useInstantSearch';
 
 import type { UseInstantSearchProps } from '../useInstantSearch';
@@ -244,7 +244,7 @@ describe('useInstantSearch', () => {
 
   describe('refresh', () => {
     test('refreshes the search', async () => {
-      const searchClient = createSearchClient({});
+      const searchClient = createAlgoliaSearchClient({});
       function Refresh() {
         const { refresh } = useInstantSearch();
 
@@ -364,7 +364,7 @@ describe('useInstantSearch', () => {
     });
 
     test('turns to loading and error when searching', async () => {
-      const searchClient = createSearchClient({});
+      const searchClient = createAlgoliaSearchClient({});
       searchClient.search.mockImplementation(async () => {
         await wait(100);
         throw new Error('API_ERROR');
@@ -408,8 +408,8 @@ describe('useInstantSearch', () => {
     }
 
     function createDelayedSearchClient(timeout: number) {
-      const searchFn = createSearchClient({}).search;
-      return createSearchClient({
+      const searchFn = createAlgoliaSearchClient({}).search;
+      return createAlgoliaSearchClient({
         search: (requests) => wait(timeout).then(() => searchFn(requests)),
       });
     }

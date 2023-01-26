@@ -6,12 +6,14 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createMultiSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import ratingMenu from '../rating-menu';
 
 function getInitializedWidget() {

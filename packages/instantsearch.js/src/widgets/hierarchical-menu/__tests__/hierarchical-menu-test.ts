@@ -10,8 +10,10 @@ import type {
 } from '../hierarchical-menu';
 import hierarchicalMenu from '../hierarchical-menu';
 import type { HierarchicalMenuConnectorParams } from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';

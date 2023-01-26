@@ -9,7 +9,7 @@ import createConnector, {
   createConnectorWithoutContext,
 } from '../createConnector';
 import { InstantSearchProvider } from '../context';
-import { wait } from '../../../../../tests/utils';
+import { wait } from '@instantsearch/testutils';
 
 Enzyme.configure({ adapter: new Adapter() });
 

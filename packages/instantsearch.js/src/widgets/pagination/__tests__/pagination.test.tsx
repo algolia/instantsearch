@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
 import pagination from '../pagination';
 import configure from '../../configure/configure';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
 import type { SearchResponse } from '../../../../src/types';
 
 beforeEach(() => {

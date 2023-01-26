@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import instantsearch from '../../index.es';
 import { searchBox } from '../../widgets';

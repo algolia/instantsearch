@@ -14,11 +14,11 @@ import algoliasearchHelper, {
 import {
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+  createSearchClient,
+} from '@instantsearch/mocks';
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 

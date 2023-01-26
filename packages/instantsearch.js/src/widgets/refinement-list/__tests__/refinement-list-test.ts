@@ -8,8 +8,10 @@ import type { RefinementListTemplates } from '../refinement-list';
 import refinementList from '../refinement-list';
 import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
 

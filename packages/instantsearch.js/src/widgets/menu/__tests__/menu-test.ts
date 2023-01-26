@@ -8,8 +8,10 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
 import {
   createInitOptions,
   createRenderOptions,

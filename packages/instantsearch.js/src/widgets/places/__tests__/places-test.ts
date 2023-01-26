@@ -5,7 +5,7 @@
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import algoliaPlaces from 'places.js';
 import places from '../places';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { createInitOptions } from '../../../../test/createWidget';
 import type { SearchClient } from '../../../types';
 

@@ -2,12 +2,12 @@
  * @jest-environment jsdom
  */
 
+import { createSearchClient } from '@instantsearch/mocks';
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { createSearchClient } from '../../../../../tests/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { HitsPerPage } from '../HitsPerPage';
 
 describe('HitsPerPage', () => {

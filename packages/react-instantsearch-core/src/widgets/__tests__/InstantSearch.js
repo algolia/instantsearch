@@ -8,7 +8,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import createInstantSearchManager from '../../core/createInstantSearchManager';
 import InstantSearch from '../InstantSearch';
 import { InstantSearchConsumer } from '../../core/context';
-import { wait } from '../../../../../tests/utils';
+import { wait } from '@instantsearch/testutils';
 
 Enzyme.configure({ adapter: new Adapter() });
 

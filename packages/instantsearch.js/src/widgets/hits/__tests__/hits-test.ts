@@ -18,7 +18,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import { createSingleSearchResponse } from '@instantsearch/mocks';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

@@ -10,13 +10,15 @@ import originalRenderer from '../GeoSearchRenderer';
 import geoSearch from '../geo-search';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

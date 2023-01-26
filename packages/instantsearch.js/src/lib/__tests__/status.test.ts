@@ -1,4 +1,4 @@
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';

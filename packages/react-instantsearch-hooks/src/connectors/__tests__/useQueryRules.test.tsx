@@ -1,13 +1,34 @@
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+  defaultUserData,
+} from '@instantsearch/mocks';
+import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
 import { renderHook } from '@testing-library/react-hooks';
 
-import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useQueryRules } from '../useQueryRules';
 
 import type { UseQueryRulesProps } from '../useQueryRules';
 
 describe('useQueryRules', () => {
   test('returns the connector render state', async () => {
-    const wrapper = createInstantSearchTestWrapper();
+    const wrapper = createInstantSearchTestWrapper({
+      searchClient: createSearchClient({
+        search: jest.fn((requests) =>
+          Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map((request) =>
+                createSingleSearchResponse({
+                  index: request.indexName,
+                  userData: defaultUserData,
+                })
+              )
+            )
+          )
+        ),
+      }),
+    });
 
     const trackedFilters: UseQueryRulesProps['trackedFilters'] = {
       genre: () => ['Comedy', 'Thriller'],

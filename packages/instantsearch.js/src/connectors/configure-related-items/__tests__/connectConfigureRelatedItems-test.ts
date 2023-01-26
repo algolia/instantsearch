@@ -1,6 +1,6 @@
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 import instantsearch from '../../..';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import type { AlgoliaHit } from '../../../types';
 import { noop } from '../../../lib/utils';
 import { wait } from '@instantsearch/testutils/wait';

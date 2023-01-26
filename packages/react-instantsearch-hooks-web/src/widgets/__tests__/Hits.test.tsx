@@ -2,16 +2,19 @@
  * @jest-environment jsdom
  */
 
-import { render, waitFor } from '@testing-library/react';
-import React from 'react';
-
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../../tests/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
+} from '@instantsearch/mocks';
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { render, waitFor } from '@testing-library/react';
+import React from 'react';
+
 import { Hits } from '../Hits';
+
+import type { MockSearchClient } from '@instantsearch/mocks';
+import type { AlgoliaHit } from 'instantsearch.js';
 
 describe('Hits', () => {
   test('renders with default props', async () => {
@@ -40,21 +43,23 @@ describe('Hits', () => {
     };
 
     const client = createSearchClient({
-      search: (requests) =>
+      search: jest.fn((requests) =>
         Promise.resolve(
           createMultiSearchResponse(
-            ...requests.map((request) =>
-              createSingleSearchResponse<CustomHit>({
-                hits: [
-                  { objectID: '1', somethingSpecial: 'a' },
-                  { objectID: '2', somethingSpecial: 'b' },
-                  { objectID: '3', somethingSpecial: 'c' },
-                ],
-                index: request.indexName,
-              })
+            ...requests.map(
+              (request: Parameters<MockSearchClient['search']>[0][number]) =>
+                createSingleSearchResponse<AlgoliaHit<CustomHit>>({
+                  hits: [
+                    { objectID: '1', somethingSpecial: 'a' },
+                    { objectID: '2', somethingSpecial: 'b' },
+                    { objectID: '3', somethingSpecial: 'c' },
+                  ],
+                  index: request.indexName,
+                })
             )
           )
-        ),
+        )
+      ) as MockSearchClient['search'],
     });
 
     const { container } = render(

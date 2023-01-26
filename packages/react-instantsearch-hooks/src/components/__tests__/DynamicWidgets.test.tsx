@@ -2,10 +2,10 @@
  * @jest-environment jsdom
  */
 
+import { createSearchClient } from '@instantsearch/mocks';
 import { act, render, waitFor } from '@testing-library/react';
 import React, { createRef } from 'react';
 
-import { createSearchClient } from '../../../../../tests/mock';
 import { useHierarchicalMenu } from '../../connectors/useHierarchicalMenu';
 import { useMenu } from '../../connectors/useMenu';
 import { usePagination } from '../../connectors/usePagination';

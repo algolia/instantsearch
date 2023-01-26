@@ -10,7 +10,7 @@ import {
   createRenderOptions,
 } from '../../../../test/createWidget';
 import clearRefinements from '../clear-refinements';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import type { ClearRefinementsProps } from '../../../components/ClearRefinements/ClearRefinements';
 

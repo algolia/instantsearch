@@ -1,7 +1,7 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import index from '../src/widgets/index/index';
 import type { InstantSearch } from '../src/types';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { defer } from '../src/lib/utils';
 
 export const createInstantSearch = (

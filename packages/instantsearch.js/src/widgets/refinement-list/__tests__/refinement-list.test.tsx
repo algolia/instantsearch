@@ -4,15 +4,15 @@
 /** @jsx h */
 import { h } from 'preact';
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import refinementList from '../refinement-list';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSFFVResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+} from '@instantsearch/mocks';
+import instantsearch from '../../../index.es';
+import { wait } from '@instantsearch/testutils/wait';
+import refinementList from '../refinement-list';
 import { fireEvent, within } from '@testing-library/dom';
 
 beforeEach(() => {

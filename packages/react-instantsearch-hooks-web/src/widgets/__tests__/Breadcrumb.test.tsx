@@ -2,17 +2,17 @@
  * @jest-environment jsdom
  */
 
+import {
+  createMultiSearchResponse,
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { useHierarchicalMenu } from 'react-instantsearch-hooks';
 
-import {
-  createMultiSearchResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '../../../../../tests/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { Breadcrumb } from '../Breadcrumb';
 
 import type { UseHierarchicalMenuProps } from 'react-instantsearch-hooks';

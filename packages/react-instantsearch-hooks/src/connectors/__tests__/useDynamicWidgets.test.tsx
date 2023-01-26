@@ -1,11 +1,31 @@
+import {
+  createMultiSearchResponse,
+  createSearchClient,
+  createSingleSearchResponse,
+  defaultRenderingContent,
+} from '@instantsearch/mocks';
+import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
 import { renderHook } from '@testing-library/react-hooks';
 
-import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useDynamicWidgets } from '../useDynamicWidgets';
 
 describe('useDynamicWidgets', () => {
   test('returns the connector render state', async () => {
-    const wrapper = createInstantSearchTestWrapper();
+    const wrapper = createInstantSearchTestWrapper({
+      searchClient: createSearchClient({
+        search: jest.fn((requests) => {
+          return Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map(() =>
+                createSingleSearchResponse({
+                  renderingContent: defaultRenderingContent,
+                })
+              )
+            )
+          );
+        }),
+      }),
+    });
     const { result, waitForNextUpdate } = renderHook(
       () => useDynamicWidgets(),
       {

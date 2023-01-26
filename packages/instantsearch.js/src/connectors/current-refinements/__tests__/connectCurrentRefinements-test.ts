@@ -5,13 +5,15 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import type { CurrentRefinementsConnectorParamsItem } from '../connectCurrentRefinements';
 import connectCurrentRefinements from '../connectCurrentRefinements';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 describe('connectCurrentRefinements', () => {
   describe('Usage', () => {

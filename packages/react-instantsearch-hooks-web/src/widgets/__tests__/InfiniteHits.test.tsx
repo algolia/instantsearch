@@ -2,17 +2,19 @@
  * @jest-environment jsdom
  */
 
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { act, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { createSearchClient } from '../../../../../tests/mock';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '../../../../../tests/mock/createAPIResponse';
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { InfiniteHits } from '../InfiniteHits';
+
+import type { MockSearchClient } from '@instantsearch/mocks';
 
 type CustomHit = {
   somethingSpecial: string;
@@ -23,29 +25,31 @@ function createMockedSearchClient() {
     search: jest.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map((request) => {
-            const { hitsPerPage = 3, page = 0 } = request.params!;
-            const hits = Array.from({ length: hitsPerPage }, (_, i) => {
-              const offset = hitsPerPage * page;
-              return {
-                objectID: (i + offset).toString(),
-                somethingSpecial: String.fromCharCode(
-                  'a'.charCodeAt(0) + i + offset
-                ),
-              };
-            });
+          ...requests.map(
+            (request: Parameters<MockSearchClient['search']>[0][number]) => {
+              const { hitsPerPage = 3, page = 0 } = request.params!;
+              const hits = Array.from({ length: hitsPerPage }, (_, i) => {
+                const offset = hitsPerPage * page;
+                return {
+                  objectID: (i + offset).toString(),
+                  somethingSpecial: String.fromCharCode(
+                    'a'.charCodeAt(0) + i + offset
+                  ),
+                };
+              });
 
-            return createSingleSearchResponse<CustomHit>({
-              hits,
-              page,
-              nbPages: 10,
-              hitsPerPage,
-              index: request.indexName,
-            });
-          })
+              return createSingleSearchResponse<CustomHit>({
+                hits,
+                page,
+                nbPages: 10,
+                hitsPerPage,
+                index: request.indexName,
+              });
+            }
+          )
         )
       )
-    ),
+    ) as MockSearchClient['search'],
   });
 }
 

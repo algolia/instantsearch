@@ -1,7 +1,7 @@
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import connectConfigure from '../connectConfigure';
 import {
   createInitOptions,

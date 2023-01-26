@@ -2,10 +2,10 @@
  * @jest-environment jsdom
  */
 
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { PoweredBy } from '../PoweredBy';
 
 describe('PoweredBy', () => {

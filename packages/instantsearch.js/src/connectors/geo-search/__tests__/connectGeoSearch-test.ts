@@ -4,16 +4,16 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import connectGeoSearch from '../connectGeoSearch';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
 import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
 import type { SearchResponse } from '../../../types';

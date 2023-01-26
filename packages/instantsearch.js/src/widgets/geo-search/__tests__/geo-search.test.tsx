@@ -5,7 +5,7 @@
 import { h } from 'preact';
 import { initialize } from '@googlemaps/jest-mocks';
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
 import geoSearch from '../geo-search';

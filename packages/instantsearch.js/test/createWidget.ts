@@ -6,7 +6,7 @@ import type {
   Widget,
 } from '../src/types';
 import type { IndexInitOptions } from '../src/widgets/index/index';
-import { createMultiSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import { createMultiSearchResponse } from '@instantsearch/mocks';
 import { createInstantSearch } from './createInstantSearch';
 
 export const createInitOptions = (

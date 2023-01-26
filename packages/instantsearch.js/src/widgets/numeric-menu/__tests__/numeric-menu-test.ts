@@ -17,8 +17,10 @@ import {
   createRenderOptions,
   createInitOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
 import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
 import type { NumericMenuConnectorParamsItem } from '../../../connectors/numeric-menu/connectNumericMenu';
 

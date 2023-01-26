@@ -1,11 +1,13 @@
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import { wait } from '@instantsearch/testutils/wait';
 import connectAnswers from '../connectAnswers';
 

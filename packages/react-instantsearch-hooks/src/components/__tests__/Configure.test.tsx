@@ -2,10 +2,10 @@
  * @jest-environment jsdom
  */
 
+import { createSearchClient } from '@instantsearch/mocks';
 import { act, render, waitFor } from '@testing-library/react';
 import React from 'react';
 
-import { createSearchClient } from '../../../../../tests/mock';
 import { Configure } from '../Configure';
 import { InstantSearch } from '../InstantSearch';
 

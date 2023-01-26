@@ -16,35 +16,6 @@ exports[`getServerState returns initialResults 1`] = `
         "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
-        "renderingContent": {
-          "facetOrdering": {
-            "facets": {
-              "order": [
-                "brand",
-                "hierarchicalCategories.lvl0",
-                "categories",
-              ],
-            },
-            "values": {
-              "brand": {
-                "sortRemainingBy": "count",
-              },
-              "categories": {
-                "sortRemainingBy": "count",
-              },
-              "hierarchicalCategories.lvl0": {
-                "sortRemainingBy": "count",
-              },
-            },
-          },
-        },
-        "userData": [
-          {
-            "banner": "https://banner.jpg",
-            "link": "https://banner.com/link/",
-            "title": "Banner title",
-          },
-        ],
       },
       {
         "exhaustiveFacetsCount": true,
@@ -58,35 +29,6 @@ exports[`getServerState returns initialResults 1`] = `
         "params": "analytics=false&clickAnalytics=false&facets=brand&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=0&maxValuesPerFacet=10&page=0&query=iphone",
         "processingTimeMS": 0,
         "query": "",
-        "renderingContent": {
-          "facetOrdering": {
-            "facets": {
-              "order": [
-                "brand",
-                "hierarchicalCategories.lvl0",
-                "categories",
-              ],
-            },
-            "values": {
-              "brand": {
-                "sortRemainingBy": "count",
-              },
-              "categories": {
-                "sortRemainingBy": "count",
-              },
-              "hierarchicalCategories.lvl0": {
-                "sortRemainingBy": "count",
-              },
-            },
-          },
-        },
-        "userData": [
-          {
-            "banner": "https://banner.jpg",
-            "link": "https://banner.com/link/",
-            "title": "Banner title",
-          },
-        ],
       },
     ],
     "state": {
@@ -126,35 +68,6 @@ exports[`getServerState returns initialResults 1`] = `
         "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
-        "renderingContent": {
-          "facetOrdering": {
-            "facets": {
-              "order": [
-                "brand",
-                "hierarchicalCategories.lvl0",
-                "categories",
-              ],
-            },
-            "values": {
-              "brand": {
-                "sortRemainingBy": "count",
-              },
-              "categories": {
-                "sortRemainingBy": "count",
-              },
-              "hierarchicalCategories.lvl0": {
-                "sortRemainingBy": "count",
-              },
-            },
-          },
-        },
-        "userData": [
-          {
-            "banner": "https://banner.jpg",
-            "link": "https://banner.com/link/",
-            "title": "Banner title",
-          },
-        ],
       },
       {
         "exhaustiveFacetsCount": true,
@@ -168,35 +81,6 @@ exports[`getServerState returns initialResults 1`] = `
         "params": "analytics=false&clickAnalytics=false&facets=brand&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=0&maxValuesPerFacet=10&page=0&query=iphone",
         "processingTimeMS": 0,
         "query": "",
-        "renderingContent": {
-          "facetOrdering": {
-            "facets": {
-              "order": [
-                "brand",
-                "hierarchicalCategories.lvl0",
-                "categories",
-              ],
-            },
-            "values": {
-              "brand": {
-                "sortRemainingBy": "count",
-              },
-              "categories": {
-                "sortRemainingBy": "count",
-              },
-              "hierarchicalCategories.lvl0": {
-                "sortRemainingBy": "count",
-              },
-            },
-          },
-        },
-        "userData": [
-          {
-            "banner": "https://banner.jpg",
-            "link": "https://banner.com/link/",
-            "title": "Banner title",
-          },
-        ],
       },
     ],
     "state": {
@@ -228,35 +112,6 @@ exports[`getServerState returns initialResults 1`] = `
         "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
-        "renderingContent": {
-          "facetOrdering": {
-            "facets": {
-              "order": [
-                "brand",
-                "hierarchicalCategories.lvl0",
-                "categories",
-              ],
-            },
-            "values": {
-              "brand": {
-                "sortRemainingBy": "count",
-              },
-              "categories": {
-                "sortRemainingBy": "count",
-              },
-              "hierarchicalCategories.lvl0": {
-                "sortRemainingBy": "count",
-              },
-            },
-          },
-        },
-        "userData": [
-          {
-            "banner": "https://banner.jpg",
-            "link": "https://banner.com/link/",
-            "title": "Banner title",
-          },
-        ],
       },
       {
         "exhaustiveFacetsCount": true,
@@ -270,35 +125,6 @@ exports[`getServerState returns initialResults 1`] = `
         "params": "analytics=false&clickAnalytics=false&facets=brand&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=0&maxValuesPerFacet=10&page=0&query=iphone",
         "processingTimeMS": 0,
         "query": "",
-        "renderingContent": {
-          "facetOrdering": {
-            "facets": {
-              "order": [
-                "brand",
-                "hierarchicalCategories.lvl0",
-                "categories",
-              ],
-            },
-            "values": {
-              "brand": {
-                "sortRemainingBy": "count",
-              },
-              "categories": {
-                "sortRemainingBy": "count",
-              },
-              "hierarchicalCategories.lvl0": {
-                "sortRemainingBy": "count",
-              },
-            },
-          },
-        },
-        "userData": [
-          {
-            "banner": "https://banner.jpg",
-            "link": "https://banner.com/link/",
-            "title": "Banner title",
-          },
-        ],
       },
     ],
     "state": {
@@ -330,35 +156,6 @@ exports[`getServerState returns initialResults 1`] = `
         "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
         "processingTimeMS": 0,
         "query": "",
-        "renderingContent": {
-          "facetOrdering": {
-            "facets": {
-              "order": [
-                "brand",
-                "hierarchicalCategories.lvl0",
-                "categories",
-              ],
-            },
-            "values": {
-              "brand": {
-                "sortRemainingBy": "count",
-              },
-              "categories": {
-                "sortRemainingBy": "count",
-              },
-              "hierarchicalCategories.lvl0": {
-                "sortRemainingBy": "count",
-              },
-            },
-          },
-        },
-        "userData": [
-          {
-            "banner": "https://banner.jpg",
-            "link": "https://banner.com/link/",
-            "title": "Banner title",
-          },
-        ],
       },
       {
         "exhaustiveFacetsCount": true,
@@ -372,35 +169,6 @@ exports[`getServerState returns initialResults 1`] = `
         "params": "analytics=false&clickAnalytics=false&facets=brand&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=0&maxValuesPerFacet=10&page=0&query=iphone",
         "processingTimeMS": 0,
         "query": "",
-        "renderingContent": {
-          "facetOrdering": {
-            "facets": {
-              "order": [
-                "brand",
-                "hierarchicalCategories.lvl0",
-                "categories",
-              ],
-            },
-            "values": {
-              "brand": {
-                "sortRemainingBy": "count",
-              },
-              "categories": {
-                "sortRemainingBy": "count",
-              },
-              "hierarchicalCategories.lvl0": {
-                "sortRemainingBy": "count",
-              },
-            },
-          },
-        },
-        "userData": [
-          {
-            "banner": "https://banner.jpg",
-            "link": "https://banner.com/link/",
-            "title": "Banner title",
-          },
-        ],
       },
     ],
     "state": {

@@ -14,7 +14,7 @@ import { noop, warning } from '../utils';
 import {
   createSearchClient,
   createControlledSearchClient,
-} from '@instantsearch/mocks/createSearchClient';
+} from '@instantsearch/mocks';
 import { createRenderOptions, createWidget } from '../../../test/createWidget';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import type { IndexWidget } from '../../widgets/index/index';

@@ -2,11 +2,11 @@
  * @jest-environment jsdom
  */
 
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { act, render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
 import { SearchBox } from '../SearchBox';
 
 import type { InstantSearch, UiState } from 'instantsearch.js';

@@ -9,11 +9,13 @@ import {
 import { index, searchBox, menu, dynamicWidgets } from '../..';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { createMultiSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createMultiSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { widgetSnapshotSerializer } from '@instantsearch/testutils/widgetSnapshotSerializer';
 import refinementList from '../../refinement-list/refinement-list';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import instantsearch from '../../..';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import instantsearch from '../../../index.es';
 import { connectPagination, connectSearchBox } from '../../../connectors';
 import { index } from '../../../widgets';

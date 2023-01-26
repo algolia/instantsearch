@@ -1,7 +1,7 @@
+import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
 import { renderHook } from '@testing-library/react-hooks';
 import React from 'react';
 
-import { createInstantSearchTestWrapper } from '../../../../../tests/utils';
 import { useCurrentRefinements } from '../useCurrentRefinements';
 import { useRefinementList } from '../useRefinementList';
 

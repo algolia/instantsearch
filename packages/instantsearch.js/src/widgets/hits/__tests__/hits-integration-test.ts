@@ -7,7 +7,7 @@ import { getByText, fireEvent } from '@testing-library/dom';
 import instantsearch from '../../../index.es';
 import { hits, configure } from '../..';
 import { createInsightsMiddleware } from '../../../middlewares';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
 const createSearchClient = ({

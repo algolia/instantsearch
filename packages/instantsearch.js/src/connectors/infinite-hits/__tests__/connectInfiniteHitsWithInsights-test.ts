@@ -5,8 +5,10 @@ import {
   createRenderOptions,
 } from '../../../../test/createWidget';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import type {
   InstantSearch,
   InitOptions,

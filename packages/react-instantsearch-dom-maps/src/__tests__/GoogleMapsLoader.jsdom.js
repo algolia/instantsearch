@@ -7,7 +7,7 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import injectScript from 'scriptjs';
 import GoogleMapsLoader from '../GoogleMapsLoader';
-import { wait } from '../../../../tests/utils';
+import { wait } from '@instantsearch/testutils';
 
 Enzyme.configure({ adapter: new Adapter() });
 

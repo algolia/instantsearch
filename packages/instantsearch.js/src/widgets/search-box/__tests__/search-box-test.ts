@@ -7,7 +7,7 @@ import { render as preactRender } from 'preact';
 import searchBox from '../search-box';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import algoliaSearchHelper from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import {
   createInitOptions,

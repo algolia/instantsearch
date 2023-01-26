@@ -20,10 +20,10 @@ import {
 import {
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+  createSearchClient,
+} from '@instantsearch/mocks';
 import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
 import connectInfiniteHits from '../connectInfiniteHits';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
 

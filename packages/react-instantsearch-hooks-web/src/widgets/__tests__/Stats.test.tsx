@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 
-import { render, waitFor } from '@testing-library/react';
-import React from 'react';
-
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '../../../../../tests/mock';
-import { InstantSearchHooksTestWrapper } from '../../../../../tests/utils';
+} from '@instantsearch/mocks';
+import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { render, waitFor } from '@testing-library/react';
+import React from 'react';
+
 import { Stats } from '../Stats';
 
 function createMockedSearchClient({ nbSorted }: { nbSorted?: number } = {}) {
@@ -20,9 +20,6 @@ function createMockedSearchClient({ nbSorted }: { nbSorted?: number } = {}) {
         createMultiSearchResponse(
           ...requests.map((request) =>
             createSingleSearchResponse({
-              hits: Array.from({ length: 1000 }).map((_, index) => ({
-                objectID: String(index),
-              })),
               index: request.indexName,
               nbHits: 1000,
               appliedRelevancyStrictness: nbSorted ? 1 : 0,

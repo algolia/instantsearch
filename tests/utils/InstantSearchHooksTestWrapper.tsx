@@ -1,11 +1,11 @@
 import React from 'react';
 import { InstantSearch } from 'react-instantsearch-hooks';
 
-import { createSearchClient } from '../mock';
+import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 
 import type { InstantSearchProps } from 'react-instantsearch-hooks';
 
-const searchClient = createSearchClient({});
+const searchClient = createAlgoliaSearchClient({});
 
 type InstantSearchHooksTestWrapperProps = {
   children: React.ReactNode;
@@ -25,7 +25,7 @@ export function InstantSearchHooksTestWrapper({
 export function createInstantSearchTestWrapper(
   props?: Partial<InstantSearchProps>
 ) {
-  const client = createSearchClient({});
+  const client = createAlgoliaSearchClient({});
 
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <InstantSearch searchClient={client} indexName="indexName" {...props}>

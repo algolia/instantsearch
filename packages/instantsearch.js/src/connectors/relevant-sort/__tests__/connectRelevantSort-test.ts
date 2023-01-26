@@ -9,8 +9,10 @@ import {
   createDisposeOptions,
 } from '../../../../test/createWidget';
 import { noop } from '../../../lib/utils';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 
 const createHelper = () => {
   return algoliasearchHelper(createSearchClient(), '', {});

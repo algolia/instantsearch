@@ -6,12 +6,14 @@ import { render } from 'preact';
 import type { RelevantSortTemplates } from '../relevant-sort';
 import relevantSort from '../relevant-sort';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');

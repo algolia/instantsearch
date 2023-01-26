@@ -17,7 +17,7 @@ import infiniteHits from '../infinite-hits';
 import type { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import { createSingleSearchResponse } from '@instantsearch/mocks';
 import {
   createInitOptions,
   createRenderOptions,
