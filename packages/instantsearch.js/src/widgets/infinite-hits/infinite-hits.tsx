@@ -31,7 +31,6 @@ import type {
   Renderer,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -166,6 +165,7 @@ const renderer =
       instantSearchInstance,
       insights,
       bindEvent,
+      sendEvent,
     },
     isFirstRendering
   ) => {
@@ -190,9 +190,7 @@ const renderer =
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
         insights={insights as InsightsClient}
-        sendEvent={(event: InsightsEvent) => {
-          instantSearchInstance.sendEventToInsights(event);
-        }}
+        sendEvent={sendEvent}
         bindEvent={bindEvent}
       />,
       containerNode

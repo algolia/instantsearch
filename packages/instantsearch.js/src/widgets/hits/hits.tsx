@@ -29,7 +29,6 @@ import type {
   Renderer,
   InsightsClient,
 } from '../../types';
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -52,7 +51,14 @@ const renderer =
     templates: HitsTemplates;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
   (
-    { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
+    {
+      hits: receivedHits,
+      results,
+      instantSearchInstance,
+      insights,
+      bindEvent,
+      sendEvent,
+    },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
@@ -71,9 +77,7 @@ const renderer =
         results={results}
         templateProps={renderState.templateProps}
         insights={insights as InsightsClient}
-        sendEvent={(event: InsightsEvent) => {
-          instantSearchInstance.sendEventToInsights(event);
-        }}
+        sendEvent={sendEvent}
         bindEvent={bindEvent}
       />,
       containerNode
