@@ -122,7 +122,101 @@ describe('hits', () => {
       );
     });
 
-    it('sends click event', async () => {
+    it('sendEvent sends click event', async () => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.use(insights);
+
+      search.addWidgets([
+        hits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <button
+                type="button"
+                onClick=${() => sendEvent('click', item, 'Item Clicked')}
+              >
+                ${item.title}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      fireEvent.click(getByText(container, 'title 1'));
+      expect(onEvent).toHaveBeenCalledTimes(2);
+      expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
+        eventType: 'click',
+        hits: [
+          {
+            __hitIndex: 0,
+            __position: 1,
+            objectID: 'object-id0',
+            title: 'title 1',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Item Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id0'],
+          positions: [1],
+        },
+        widgetType: 'ais.hits',
+      });
+    });
+
+    it('sendEvent sends conversion event', async () => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.use(insights);
+
+      search.addWidgets([
+        hits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <button
+                type="button"
+                onClick=${() =>
+                  sendEvent('conversion', item, 'Product Ordered')}
+              >
+                ${item.title}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      fireEvent.click(getByText(container, 'title 2'));
+      expect(onEvent).toHaveBeenCalledTimes(2);
+      expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
+        eventType: 'conversion',
+        hits: [
+          {
+            __hitIndex: 1,
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Ordered',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+        },
+        widgetType: 'ais.hits',
+      });
+    });
+
+    it('bindEvent sends click event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.use(insights);
@@ -166,7 +260,7 @@ describe('hits', () => {
       });
     });
 
-    it('sends conversion event', async () => {
+    it('bindEvent sends conversion event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.use(insights);

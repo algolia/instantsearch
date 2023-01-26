@@ -52,7 +52,14 @@ const renderer =
     templates: HitsTemplates;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
   (
-    { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
+    {
+      hits: receivedHits,
+      results,
+      instantSearchInstance,
+      insights,
+      bindEvent,
+      sendEvent,
+    },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
@@ -71,9 +78,10 @@ const renderer =
         results={results}
         templateProps={renderState.templateProps}
         insights={insights as InsightsClient}
-        sendEvent={(event: InsightsEvent) => {
+        sendEventToInsights={(event: InsightsEvent) => {
           instantSearchInstance.sendEventToInsights(event);
         }}
+        sendEvent={sendEvent}
         bindEvent={bindEvent}
       />,
       containerNode
