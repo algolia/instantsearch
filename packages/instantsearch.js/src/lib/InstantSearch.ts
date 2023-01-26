@@ -44,7 +44,7 @@ function defaultCreateURL() {
 // this purposely breaks typescript's type inference to ensure it's not used
 // as it's used for a default parameter for example
 // source: https://github.com/Microsoft/TypeScript/issues/14829#issuecomment-504042546
-type NoInfer<T> = [T][T extends any ? 0 : never];
+type NoInfer<T> = T extends infer S ? S : never;
 
 /**
  * Global options for an InstantSearch instance.
@@ -287,7 +287,7 @@ See ${createDocumentationLink({
     this._searchStalledTimer = null;
 
     this._createURL = defaultCreateURL;
-    this._initialUiState = initialUiState;
+    this._initialUiState = initialUiState as TUiState;
     this._initialResults = null;
 
     if (searchFunction) {

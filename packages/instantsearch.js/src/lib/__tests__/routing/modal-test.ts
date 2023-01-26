@@ -44,7 +44,7 @@ describe('routing with no navigation', () => {
 
     // 2. Refine: '/?indexName[query]=Apple'
     {
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/');

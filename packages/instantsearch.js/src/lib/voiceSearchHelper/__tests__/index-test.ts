@@ -32,6 +32,7 @@ const createFakeSpeechRecognition = (): jest.Mock => {
 
 describe('VoiceSearchHelper', () => {
   afterEach(() => {
+    // @ts-expect-error
     delete window.webkitSpeechRecognition;
     // @ts-expect-error
     delete window.SpeechRecognition;
@@ -70,6 +71,7 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('is supported with webkitSpeechRecognition', () => {
+    // @ts-expect-error
     window.webkitSpeechRecognition = () => {};
     const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: false,

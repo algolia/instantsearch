@@ -7,7 +7,7 @@ describe('createSingleSearchResponse', () => {
   test('calculates nbHits from hits', () => {
     expect(
       createSingleSearchResponse({
-        hits: Array.from({ length: 100 }),
+        hits: Array.from({ length: 100 }, (_, i) => ({ objectID: `${i}` })),
       })
     ).toEqual(
       expect.objectContaining({

@@ -49,7 +49,7 @@ describe('routing using `replaceState`', () => {
 
     // 2. Refine: '/?indexName[query]=Apple'
     {
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(writeWait);
       expect(window.location.search).toEqual(

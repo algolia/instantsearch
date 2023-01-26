@@ -271,7 +271,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(0);
 
@@ -379,7 +379,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(0);
 
@@ -391,7 +391,7 @@ describe('RoutingManager', () => {
       });
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple iPhone');
+      search.renderState.indexName.searchBox!.refine('Apple iPhone');
 
       await wait(0);
 
@@ -476,7 +476,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(0);
 
