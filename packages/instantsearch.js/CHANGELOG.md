@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.50.1](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.50.0...instantsearch.js@4.50.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* **dependencies:** update typescript ([#5454](https://github.com/algolia/instantsearch.js/issues/5454)) ([0e6bb48](https://github.com/algolia/instantsearch.js/commit/0e6bb485a31cd3294436ac9902c2c2662dfcdf8b))
+* **insights:** pass correct sendEvent to html template ([#5457](https://github.com/algolia/instantsearch.js/issues/5457)) ([11a8473](https://github.com/algolia/instantsearch.js/commit/11a8473e52f535ec1cb54b24187f2e5899c772e3)), closes [/github.com/algolia/instantsearch/discussions/5447#discussioncomment-4779169](https://github.com//github.com/algolia/instantsearch/discussions/5447/issues/discussioncomment-4779169)
+
+
+
+
+
 # [4.50.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.49.4...instantsearch.js@4.50.0) (2023-01-25)
 
 
