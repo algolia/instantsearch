@@ -65,7 +65,7 @@ export function App() {
       indexName="instant_search"
       routing={true}
     >
-      <Insights />
+      {/* <Insights /> */}
       <Configure ruleContexts={[]} clickAnalytics={true} />
 
       <div className="Container">

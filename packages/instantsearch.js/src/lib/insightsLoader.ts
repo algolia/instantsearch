@@ -3,7 +3,7 @@ import { noop, safelyRunOnBrowser } from './utils';
 
 // Simplified version for POC
 function insightsLibraryDetected() {
-  return safelyRunOnBrowser(({ window }) => {
+  return safelyRunOnBrowser<boolean>(({ window }) => {
     return Boolean(window[(window as any).AlgoliaAnalyticsObject]);
   });
 }
@@ -12,11 +12,38 @@ function insightsMiddlewareDetected(instantSearchInstance: InstantSearch) {
   return instantSearchInstance.sendEventToInsights !== noop;
 }
 
-export function enableInsights(instantSearchInstance: InstantSearch) {
-  // FIXME: How do we make sure the middleware is loaded in RISH before we go through this?
-  console.log({
-    libraryDetected: insightsLibraryDetected(),
-    middlewareDetected: insightsMiddlewareDetected(instantSearchInstance),
-    instantSearchInstance,
+function loadSearchInsights(version = '2.2.3') {
+  if (insightsLibraryDetected()) return Promise.resolve();
+
+  return new Promise((resolve, reject) => {
+    // Casting window as any because the modified interface from search-insights is not compatible with the documented script snippet
+    safelyRunOnBrowser(({ window }: { window: any }) => {
+      window.AlgoliaAnalyticsObject = 'aa';
+      window[window.AlgoliaAnalyticsObject] =
+        window[window.AlgoliaAnalyticsObject] ||
+        function (...args: any[]) {
+          (window[window.AlgoliaAnalyticsObject].queue =
+            window[window.AlgoliaAnalyticsObject].queue || []).push(...args);
+        };
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://cdn.jsdelivr.net/npm/search-insights@${version}`;
+
+      const child = document.getElementsByTagName('script')[0];
+      child.parentNode!.insertBefore(script, child);
+
+      script.addEventListener('load', resolve);
+      script.addEventListener('error', reject);
+    });
   });
+}
+
+export function enableInsights(instantSearchInstance: InstantSearch) {
+  if (
+    !insightsLibraryDetected() &&
+    !insightsMiddlewareDetected(instantSearchInstance)
+  ) {
+    loadSearchInsights();
+  }
 }
