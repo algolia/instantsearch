@@ -83,7 +83,6 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
     "query": "",
   },
   "sendEvent": [Function],
-  "sendEventToInsights": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
   "templateProps": {
@@ -187,7 +186,6 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
     "query": "",
   },
   "sendEvent": [Function],
-  "sendEventToInsights": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
   "templateProps": {
@@ -293,7 +291,6 @@ exports[`infiniteHits() renders transformed items 1`] = `
     "query": "",
   },
   "sendEvent": [Function],
-  "sendEventToInsights": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
   "templateProps": {

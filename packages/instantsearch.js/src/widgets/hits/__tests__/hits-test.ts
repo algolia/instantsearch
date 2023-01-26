@@ -150,7 +150,6 @@ describe('hits()', () => {
           "query": "",
         },
         "sendEvent": [Function],
-        "sendEventToInsights": [Function],
         "templateProps": {
           "templates": {
             "empty": [Function],
@@ -234,7 +233,6 @@ describe('hits()', () => {
           "query": "",
         },
         "sendEvent": [Function],
-        "sendEventToInsights": [Function],
         "templateProps": {
           "templates": {
             "empty": [Function],
@@ -340,7 +338,6 @@ describe('hits()', () => {
           "query": "",
         },
         "sendEvent": [Function],
-        "sendEventToInsights": [Function],
         "templateProps": {
           "templates": {
             "empty": [Function],

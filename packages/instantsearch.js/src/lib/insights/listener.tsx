@@ -9,7 +9,7 @@ import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 type WithInsightsListenerProps = {
   [key: string]: unknown;
   insights: InsightsClient;
-  sendEventToInsights?: (event: InsightsEvent) => void;
+  sendEvent?: (event: InsightsEvent) => void;
 };
 
 const findInsightsTarget = (
@@ -48,7 +48,7 @@ const parseInsightsEvent = (element: HTMLElement): InsightsEvent[] => {
 const insightsListener = (BaseComponent: any) => {
   function WithInsightsListener(props: WithInsightsListenerProps) {
     const handleClick = (event: MouseEvent): void => {
-      if (props.sendEventToInsights) {
+      if (props.sendEvent) {
         // new way with insights middleware
         const targetWithEvent = findInsightsTarget(
           event.target as HTMLElement | null,
@@ -58,7 +58,7 @@ const insightsListener = (BaseComponent: any) => {
         if (targetWithEvent) {
           const payload = parseInsightsEvent(targetWithEvent);
 
-          payload.forEach((single) => props.sendEventToInsights!(single));
+          payload.forEach((single) => props.sendEvent!(single));
         }
       }
 
