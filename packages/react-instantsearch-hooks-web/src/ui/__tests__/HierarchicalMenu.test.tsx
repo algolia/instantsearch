@@ -39,6 +39,13 @@ describe('HierarchicalMenu', () => {
           ],
         },
         {
+          label: 'Microsoft',
+          value: 'Microsoft',
+          count: 120,
+          isRefined: true,
+          data: [],
+        },
+        {
           label: 'Samsung',
           value: 'Samsung',
           count: 100,
@@ -132,6 +139,25 @@ describe('HierarchicalMenu', () => {
                   </a>
                 </li>
               </ul>
+            </li>
+            <li
+              class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
+            >
+              <a
+                class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
+                href="#Microsoft"
+              >
+                <span
+                  class="ais-HierarchicalMenu-label"
+                >
+                  Microsoft
+                </span>
+                <span
+                  class="ais-HierarchicalMenu-count"
+                >
+                  120
+                </span>
+              </a>
             </li>
             <li
               class="ais-HierarchicalMenu-item"
@@ -243,6 +269,25 @@ describe('HierarchicalMenu', () => {
                     </a>
                   </li>
                 </ul>
+              </li>
+              <li
+                class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
+              >
+                <a
+                  class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
+                  href="#Microsoft"
+                >
+                  <span
+                    class="ais-HierarchicalMenu-label"
+                  >
+                    Microsoft
+                  </span>
+                  <span
+                    class="ais-HierarchicalMenu-count"
+                  >
+                    120
+                  </span>
+                </a>
               </li>
               <li
                 class="ais-HierarchicalMenu-item"
@@ -381,6 +426,25 @@ describe('HierarchicalMenu', () => {
                   </a>
                 </li>
               </ul>
+            </li>
+            <li
+              class="ais-HierarchicalMenu-item ITEM ais-HierarchicalMenu-item--selected SELECTEDITEM"
+            >
+              <a
+                class="ais-HierarchicalMenu-link LINK ais-HierarchicalMenu-link--selected SELECTEDITEMLINK"
+                href="#Microsoft"
+              >
+                <span
+                  class="ais-HierarchicalMenu-label LABEL"
+                >
+                  Microsoft
+                </span>
+                <span
+                  class="ais-HierarchicalMenu-count COUNT"
+                >
+                  120
+                </span>
+              </a>
             </li>
             <li
               class="ais-HierarchicalMenu-item ITEM"
