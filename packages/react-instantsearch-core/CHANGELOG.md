@@ -6,11 +6,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [6.39.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.38.3...react-instantsearch-core@6.39.0) (2023-01-26)
 
 
-### Features
-
-* **rendering:** always render with current state ([#5429](https://github.com/algolia/instantsearch.js/issues/5429)) ([920e951](https://github.com/algolia/instantsearch.js/commit/920e951f03aada0e6a1ce16bc389a82a2f00b202))
-
-
+**Note:** Version bump only for package react-instantsearch-core
 
 
 
