@@ -534,6 +534,49 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       });
     });
 
+    it('skips sending duplicate events', () => {
+      const { insightsClient, instantSearchInstance, analytics } =
+        createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+      insightsClient('setUserToken', 'token');
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+      });
+
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith({
+        index: 'my-index',
+        eventName: 'My Hits Viewed',
+        objectIDs: ['obj1'],
+      });
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+      });
+
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
+    });
+
     it('calls onEvent when given', () => {
       const { insightsClient, instantSearchInstance, analytics } =
         createTestEnvironment();

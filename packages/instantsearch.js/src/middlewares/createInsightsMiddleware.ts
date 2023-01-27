@@ -150,6 +150,8 @@ export function createInsightsMiddleware<
           immediate: true,
         });
 
+        const viewEventCache: Record<string, boolean> = {};
+
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
             onEvent(event, _insightsClient);
@@ -158,6 +160,14 @@ export function createInsightsMiddleware<
               (helper.state as PlainSearchParameters).userToken
             );
             if (hasUserToken) {
+              if (event.insightsMethod === 'viewedObjectIDs') {
+                const hits = JSON.stringify(event.payload.hits);
+                if (viewEventCache[hits]) {
+                  return;
+                } else {
+                  viewEventCache[hits] = true;
+                }
+              }
               insightsClient(event.insightsMethod, event.payload);
             } else {
               warning(
