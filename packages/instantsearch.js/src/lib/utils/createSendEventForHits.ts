@@ -197,15 +197,7 @@ export function createSendEventForHits({
       );
 
       const dedupedPayloads = external.length > 0 ? external : internal;
-      // eslint-disable-next-line no-console
-      console.log('sendEvent: running deduplication', {
-        eventBatches,
-        internal,
-        external,
-        sending: dedupedPayloads,
-      });
       dedupedPayloads
-        // .flat()
         .reduce((acc, batch) => acc.concat(batch), [])
         .forEach((payload) =>
           instantSearchInstance.sendEventToInsights(payload)
