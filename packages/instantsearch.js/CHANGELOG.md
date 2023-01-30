@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.50.2](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.50.1...instantsearch.js@4.50.2) (2023-01-30)
+
+
+### Bug Fixes
+
+* **infiniteHits:** read cache correctly when search is loading ([#5461](https://github.com/algolia/instantsearch.js/issues/5461)) ([bfabe00](https://github.com/algolia/instantsearch.js/commit/bfabe002a26e15e13b33200c355379f4e3c60f21))
+
+
+
+
+
 ## [4.50.1](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.50.0...instantsearch.js@4.50.1) (2023-01-26)
 
 
