@@ -6,6 +6,7 @@ import {
   createHierarchicalMenuTests,
   createMenuTests,
   createPaginationTests,
+  createInfiniteHitsTests,
 } from '@instantsearch/tests';
 import { act, render } from '@testing-library/react';
 import React from 'react';
@@ -16,6 +17,8 @@ import {
   HierarchicalMenu,
   Menu,
   Pagination,
+  InfiniteHits,
+  SearchBox,
   useInstantSearch,
 } from '..';
 
@@ -60,6 +63,16 @@ createPaginationTests(({ instantSearchOptions, widgetParams }) => {
   render(
     <InstantSearch {...instantSearchOptions}>
       <Pagination {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createInfiniteHitsTests(({ instantSearchOptions, widgetParams }) => {
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <SearchBox />
+      <InfiniteHits {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );

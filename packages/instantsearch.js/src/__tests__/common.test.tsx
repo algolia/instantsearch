@@ -6,9 +6,17 @@ import {
   createRefinementListTests,
   createPaginationTests,
   createMenuTests,
+  createInfiniteHitsTests,
 } from '@instantsearch/tests';
 import instantsearch from '../index.es';
-import { hierarchicalMenu, menu, refinementList, pagination } from '../widgets';
+import {
+  hierarchicalMenu,
+  menu,
+  refinementList,
+  pagination,
+  infiniteHits,
+  searchBox,
+} from '../widgets';
 
 createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
   instantsearch(instantSearchOptions)
@@ -65,6 +73,26 @@ createPaginationTests(({ instantSearchOptions, widgetParams }) => {
   instantsearch(instantSearchOptions)
     .addWidgets([
       pagination({
+        container: document.body.appendChild(document.createElement('div')),
+        ...widgetParams,
+      }),
+    ])
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
+    .start();
+});
+
+createInfiniteHitsTests(({ instantSearchOptions, widgetParams }) => {
+  instantsearch(instantSearchOptions)
+    .addWidgets([
+      searchBox({
+        container: document.body.appendChild(document.createElement('div')),
+      }),
+      infiniteHits({
         container: document.body.appendChild(document.createElement('div')),
         ...widgetParams,
       }),
