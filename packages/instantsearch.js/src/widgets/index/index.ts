@@ -245,7 +245,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getPreviousState() {
-      return lastValidSearchParameters || helper?.state || null;
+      return lastValidSearchParameters;
     },
 
     getScopedResults() {
