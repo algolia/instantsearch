@@ -3,8 +3,8 @@ if you are using react-router.
 
 ## Clone the example
 
-```
-curl https://codeload.github.com/algolia/instantsearch.js/tar.gz/master \| tar -xz --strip=2 instantsearch.js-master/examples/react/react-router-v3
+```sh
+curl https://codeload.github.com/algolia/instantsearch/tar.gz/master | tar -xz --strip=3 instantsearch-master/examples/react/react-router-v3
 ```
 
 ## Start the example
