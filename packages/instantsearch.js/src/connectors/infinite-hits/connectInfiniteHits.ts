@@ -292,9 +292,16 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         };
       },
 
-      getWidgetRenderState({ results, helper, state, instantSearchInstance }) {
+      getWidgetRenderState({ results, helper, parent, instantSearchInstance }) {
         let isFirstPage: boolean;
         let currentPageHits: Array<Hit<THit>> = [];
+        /**
+         * We bail out of optimistic UI here, as the cache is based on search
+         * parameters, and we don't want to invalidate the cache when the search
+         * is loading.
+         */
+        const state = parent.getPreviousState()!;
+
         const cachedHits = cache.read({ state }) || {};
 
         if (!results) {

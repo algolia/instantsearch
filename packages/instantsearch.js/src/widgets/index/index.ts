@@ -66,6 +66,7 @@ export type IndexWidget = Omit<
   getIndexId(): string;
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
+  getPreviousState(): SearchParameters | null;
   getScopedResults(): ScopedResult[];
   getParent(): IndexWidget | null;
   getWidgets(): Array<Widget | IndexWidget>;
@@ -241,6 +242,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       derivedHelper.lastResults._state = helper!.state;
 
       return derivedHelper.lastResults;
+    },
+
+    getPreviousState() {
+      return lastValidSearchParameters || helper?.state || null;
     },
 
     getScopedResults() {

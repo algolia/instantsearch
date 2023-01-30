@@ -6,6 +6,7 @@ import {
   createHierarchicalMenuTests,
   createMenuTests,
   createPaginationTests,
+  createInfiniteHitsTests,
 } from '@instantsearch/tests';
 
 import { nextTick, mountApp } from '../../test/utils';
@@ -16,6 +17,8 @@ import {
   AisHierarchicalMenu,
   AisMenu,
   AisPagination,
+  AisInfiniteHits,
+  AisSearchBox,
   createWidgetMixin,
 } from '../instantsearch';
 jest.unmock('instantsearch.js/es');
@@ -88,6 +91,23 @@ createPaginationTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisPagination, { props: widgetParams }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createInfiniteHitsTests(async ({ instantSearchOptions, widgetParams }) => {
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisSearchBox),
+          h(AisInfiniteHits, { props: widgetParams }),
           h(GlobalErrorSwallower),
         ])
       ),
