@@ -4,8 +4,8 @@ This example shows how to do server-side rendering with React InstantSearch Hook
 
 ## Clone the example
 
-```
-curl https://codeload.github.com/algolia/instantsearch.js/tar.gz/master | tar -xz --strip=2 instantsearch.js-master/examples/react-hooks/ssr
+```sh
+curl https://codeload.github.com/algolia/instantsearch/tar.gz/master | tar -xz --strip=3 instantsearch-master/examples/react-hooks/ssr
 ```
 
 ## Start the example
