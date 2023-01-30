@@ -5,11 +5,7 @@ const packages = JSON.parse(
     silent: true,
   })
 );
-const changedPackages = JSON.parse(
-  shell.exec('yarn run --silent lerna list --toposort --json', {
-    silent: true,
-  })
-)
+const changedPackages = packages
   .map((package) => ({
     ...package,
     isPublished: Boolean(
