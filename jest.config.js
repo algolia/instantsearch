@@ -40,6 +40,8 @@ const config = {
     '^react-instantsearch-(.*[^v6])$':
       '<rootDir>/packages/react-instantsearch-$1/src/',
     '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',
+    '^instantsearch.js/es(.*)$': '<rootDir>/packages/instantsearch.js/src$1',
+    '^instantsearch.js/(.*)$': '<rootDir>/packages/instantsearch.js/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/packages/create-instantsearch-app/src/templates',
