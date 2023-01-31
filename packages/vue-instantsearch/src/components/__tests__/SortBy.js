@@ -92,7 +92,7 @@ it('renders with scoped slots', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('calls `refine` when the selection changes with the `value`', async () => {
+it('calls `refine` when the selection changes with the `value`', () => {
   const refine = jest.fn();
   __setState({
     ...defaultState,
