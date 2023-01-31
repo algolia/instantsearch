@@ -6,6 +6,8 @@ import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import SortBy from '../SortBy.vue';
 import '../../../test/utils/sortedHtmlSerializer';
+import userEvent from '@testing-library/user-event';
+import { getByRole } from '@testing-library/dom';
 
 jest.mock('../../mixins/widget');
 jest.mock('../../mixins/panel');
@@ -101,14 +103,15 @@ it('calls `refine` when the selection changes with the `value`', async () => {
       ...defaultProps,
     },
   });
-  // This is bad 👇🏽 but the only way for now to trigger changes
-  // on a select: https://github.com/vuejs/vue-test-utils/issues/260
-  const select = wrapper.find('select');
-  select.element.value = 'some_index_quality';
-  await select.trigger('change');
-  const selectedOption = wrapper.find('option[value=some_index_quality]');
+
+  userEvent.selectOptions(
+    getByRole(wrapper.element, 'combobox'),
+    getByRole(wrapper.element, 'option', { name: 'Quality ascending' })
+  );
 
   expect(refine).toHaveBeenCalledTimes(1);
   expect(refine).toHaveBeenLastCalledWith('some_index_quality');
-  expect(selectedOption.element.selected).toBe(true);
+  expect(
+    getByRole(wrapper.element, 'option', { name: 'Quality ascending' }).selected
+  ).toBe(true);
 });

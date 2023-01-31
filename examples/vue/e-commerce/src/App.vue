@@ -259,19 +259,15 @@
                 {
                   label: '16 hits per page',
                   value: 16,
-                  default:
-                    getSelectedHitsPerPageValue() === 16 ||
-                    !getSelectedHitsPerPageValue(),
+                  default: true,
                 },
                 {
                   label: '32 hits per page',
                   value: 32,
-                  default: getSelectedHitsPerPageValue() === 32,
                 },
                 {
                   label: '64 hits per page',
                   value: 64,
-                  default: getSelectedHitsPerPageValue() === 64,
                 },
               ]"
             />
@@ -560,11 +556,6 @@ export default {
         typeof value.min === 'number' ? value.min : range.min,
         typeof value.max === 'number' ? value.max : range.max,
       ];
-    },
-    getSelectedHitsPerPageValue() {
-      const [, hitsPerPage] =
-        document.location.search.match(/hitsPerPage=([0-9]+)/) || [];
-      return Number(hitsPerPage);
     },
     openFilters() {
       document.body.classList.add('filtering');
