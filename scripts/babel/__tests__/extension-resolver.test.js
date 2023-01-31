@@ -9,7 +9,7 @@ describe('babel-plugin-extension-resolver', () => {
   const pluginOptions = {
     modulesToResolve: [
       // in workspace (in local path)
-      'instantsearch.js',
+      '@instantsearch/babel-testfixture',
       // not in workspace (in node_modules)
       'algoliasearch-v3',
     ],
@@ -97,8 +97,8 @@ describe('babel-plugin-extension-resolver', () => {
 
     expect(
       await transformAsync(
-        'import workspaceRoot from "instantsearch.js";\n' +
-          'import workspacePath from "instantsearch.js/es/widgets/index/index";\n' +
+        'import workspaceRoot from "@instantsearch/babel-testfixture";\n' +
+          'import workspacePath from "@instantsearch/babel-testfixture/nested/index/index";\n' +
           'import nodeModulesRoot from "algoliasearch-v3";\n' +
           'import nodeModulesPath from "algoliasearch-v3/src/browser/builds/algoliasearch";\n' +
           'import otherRoot from "different-module";\n' +
@@ -107,8 +107,8 @@ describe('babel-plugin-extension-resolver', () => {
       )
     ).toHaveProperty(
       'code',
-      'import workspaceRoot from "instantsearch.js";\n' +
-        'import workspacePath from "instantsearch.js/es/widgets/index/index.js";\n' +
+      'import workspaceRoot from "@instantsearch/babel-testfixture";\n' +
+        'import workspacePath from "@instantsearch/babel-testfixture/nested/index/index.js";\n' +
         'import nodeModulesRoot from "algoliasearch-v3";\n' +
         'import nodeModulesPath from "algoliasearch-v3/src/browser/builds/algoliasearch.js";\n' +
         'import otherRoot from "different-module";\n' +
@@ -170,11 +170,11 @@ describe('babel-plugin-extension-resolver', () => {
 
     await expect(() =>
       transformAsync(
-        'import other from "instantsearch.js/non-existing-folder-this-can-never-exist/qsdf/gh/jklm";',
+        'import other from "@instantsearch/babel-testfixture/non-existing-folder-this-can-never-exist/qsdf/gh/jklm";',
         options
       )
     ).rejects.toThrow(
-      "/path/to/src/file.js: Cannot find module 'instantsearch.js/non-existing-folder-this-can-never-exist/qsdf/gh/jklm' from 'scripts/babel/extension-resolver.js'"
+      "/path/to/src/file.js: Cannot find module '@instantsearch/babel-testfixture/non-existing-folder-this-can-never-exist/qsdf/gh/jklm' from 'scripts/babel/extension-resolver.js'"
     );
   });
 });
