@@ -6,6 +6,8 @@ import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import HitsPerPage from '../HitsPerPage.vue';
 import '../../../test/utils/sortedHtmlSerializer';
+import { getByRole } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 
 jest.mock('../../mixins/widget');
 jest.mock('../../mixins/panel');
@@ -63,7 +65,7 @@ it('renders correctly', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('calls `refine` with the `value` on `change`', async () => {
+it('calls `refine` with the `value` on `change`', () => {
   __setState({
     ...defaultState,
     refine: jest.fn(),
@@ -73,11 +75,10 @@ it('calls `refine` with the `value` on `change`', async () => {
     propsData: defaultProps,
   });
 
-  await wrapper.setData({
-    selected: 20,
-  });
-
-  await wrapper.find('select').trigger('change');
+  userEvent.selectOptions(
+    getByRole(wrapper.element, 'combobox'),
+    getByRole(wrapper.element, 'option', { name: '20 results' })
+  );
 
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(20);
 });

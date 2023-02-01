@@ -6,12 +6,16 @@
       :has-no-results="state.hasNoResults"
       :can-refine="state.canRefine"
     >
-      <select :class="suit('select')" v-model="selected" @change="handleChange">
+      <select
+        :class="suit('select')"
+        @change="state.refine(Number($event.currentTarget.value))"
+      >
         <option
           v-for="item in state.items"
           :key="item.value"
           :class="suit('option')"
           :value="item.value"
+          :selected="item.isRefined"
         >
           {{ item.label }}
         </option>
@@ -50,22 +54,12 @@ export default {
       default: undefined,
     },
   },
-  data() {
-    return {
-      selected: this.items.find((item) => item.default === true).value,
-    };
-  },
   computed: {
     widgetParams() {
       return {
         items: this.items,
         transformItems: this.transformItems,
       };
-    },
-  },
-  methods: {
-    handleChange() {
-      this.state.refine(this.selected);
     },
   },
 };
