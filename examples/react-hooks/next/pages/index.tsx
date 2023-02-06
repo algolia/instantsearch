@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import algoliasearch from 'algoliasearch/lite';
 import { Hit as AlgoliaHit } from 'instantsearch.js';
@@ -14,9 +13,11 @@ import {
 } from 'react-instantsearch-hooks-web';
 import { getServerState } from 'react-instantsearch-hooks-server';
 import { Panel } from '../components/Panel';
-import Link from 'next/link';
 import { renderToString } from 'react-dom/server';
-import { createInstantSearchNextRouter } from 'react-instantsearch-hooks-next-router';
+import singletonRouter from 'next/router';
+import Link from 'next/link';
+import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
+import Head from 'next/head';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
@@ -29,10 +30,12 @@ type HitProps = {
 
 function Hit({ hit }: HitProps) {
   return (
-    <Link href="/test" passHref>
-      <Highlight hit={hit} attribute="name" className="Hit-label" />
+    <>
+      <Link href="/test" passHref className="Hit-label">
+        <Highlight hit={hit} attribute="name" />
+      </Link>
       <span className="Hit-price">${hit.price}</span>
-    </Link>
+    </>
   );
 }
 
@@ -52,7 +55,10 @@ export default function HomePage({ serverState, url }: HomePageProps) {
         searchClient={client}
         indexName="instant_search"
         routing={{
-          router: createInstantSearchNextRouter(url),
+          router: createInstantSearchRouterNext({
+            singletonRouter,
+            serverUrl: url,
+          }),
         }}
       >
         <div className="Container">

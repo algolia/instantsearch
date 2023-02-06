@@ -22,10 +22,7 @@ export type BrowserHistoryArgs<TRouteState> = {
   // so we should accept a subset of it that is easier to work with in any
   // environments.
   getLocation(): Location;
-  onUpdate?: (
-    cb: (routeState: TRouteState) => void,
-    browserHistoryInstance: BrowserHistory<TRouteState>
-  ) => void;
+  start?: (onUpdate: () => void) => void;
   dispose?: () => void;
   push?: (url: string) => void;
 };
@@ -96,10 +93,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   private latestAcknowledgedHistory: number = 0;
 
-  private _onUpdate?: (
-    cb: (routeState: TRouteState) => void,
-    instance: this
-  ) => void;
+  private _start?: (onUpdate: () => void) => void;
 
   private _dispose?: () => void;
 
@@ -115,7 +109,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     createURL,
     parseURL,
     getLocation,
-    onUpdate,
+    start,
     dispose,
     push,
   }: BrowserHistoryArgs<TRouteState>) {
@@ -125,7 +119,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this._createURL = createURL;
     this.parseURL = parseURL;
     this.getLocation = getLocation;
-    this._onUpdate = onUpdate;
+    this._start = start;
     this._dispose = dispose;
     this._push = push;
 
@@ -178,8 +172,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * It enables the URL sync to keep track of the changes.
    */
   public onUpdate(callback: (routeState: TRouteState) => void): void {
-    if (this._onUpdate) {
-      this._onUpdate(callback, this);
+    if (this._start) {
+      this._start(() => {
+        callback(this.read());
+      });
     }
 
     this._onPopState = () => {
@@ -302,7 +298,7 @@ export default function historyRouter<TRouteState = UiState>({
       },
     });
   },
-  onUpdate,
+  start,
   dispose,
   push,
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
@@ -312,7 +308,7 @@ export default function historyRouter<TRouteState = UiState>({
     writeDelay,
     windowTitle,
     getLocation,
-    onUpdate,
+    start,
     dispose,
     push,
   });

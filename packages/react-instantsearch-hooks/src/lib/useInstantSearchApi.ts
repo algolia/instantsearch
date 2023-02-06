@@ -7,6 +7,7 @@ import { useInstantSearchSSRContext } from '../lib/useInstantSearchSSRContext';
 import version from '../version';
 
 import { useForceUpdate } from './useForceUpdate';
+import { warn } from './warn';
 
 import type {
   InstantSearchOptions,
@@ -69,6 +70,8 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       // the server state and pass it to the render on SSR.
       serverContext.notifyServer({ search });
     }
+
+    warnNextRouter(props.routing);
 
     searchRef.current = search;
   }
@@ -178,4 +181,24 @@ function addAlgoliaAgents(
   userAgents.filter(Boolean).forEach((userAgent) => {
     searchClient.addAlgoliaAgent!(userAgent!);
   });
+}
+
+function warnNextRouter<TUiState extends UiState, TRouteState>(
+  routing: UseInstantSearchApiProps<TUiState, TRouteState>['routing']
+) {
+  if (!routing || typeof window === 'undefined' || !('__NEXT_DATA__' in window))
+    return;
+
+  // @ts-expect-error: _isNextRouter is only set on the Next.js router
+  const isUsingNextRouter = routing !== true && routing?.router?._isNextRouter;
+
+  warn(
+    isUsingNextRouter,
+    `
+You are using Next.js with InstantSearch without the "react-instantsearch-hooks-router-nextjs" package.
+This package is recommended to make the routing work correctly with Next.js.
+Please check its usage instructions: https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch-hooks-router-nextjs
+
+You can ignore this warning if you are using a custom router that suits your needs, it won't be outputted in production builds.`
+  );
 }

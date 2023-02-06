@@ -20,7 +20,8 @@ import { Panel } from '../../components/Panel';
 import Menu from '../../components/Menu';
 import { MenuConnectorParams } from 'instantsearch.js/es/connectors/menu/connectMenu';
 
-import { createInstantSearchNextRouter } from 'react-instantsearch-hooks-next-router';
+import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
+import singletonRouter from 'next/router';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
@@ -75,25 +76,31 @@ export default function CategoryPage({ serverState, url }: CategoryPageProps) {
         searchClient={client}
         indexName="instant_search"
         routing={{
-          router: createInstantSearchNextRouter(url, {
-            createURL({ routeState, location, qsModule }) {
-              const { category, ...queryParameters } = routeState;
-              const { origin, pathname } = location;
+          router: createInstantSearchRouterNext({
+            singletonRouter,
+            serverUrl: url,
+            routerOptions: {
+              createURL({ routeState, location, qsModule }) {
+                const { category, ...queryParameters } = routeState;
+                const { origin, pathname } = location;
 
-              return `${origin}${pathname}${qsModule.stringify(
-                queryParameters,
-                {
-                  addQueryPrefix: true,
-                }
-              )}`;
-            },
-            parseURL({ location, qsModule }) {
-              return {
-                category: decodeURIComponent(
-                  location.pathname.split('/').pop()!
-                ),
-                ...qsModule.parse(location.search, { ignoreQueryPrefix: true }),
-              };
+                return `${origin}${pathname}${qsModule.stringify(
+                  queryParameters,
+                  {
+                    addQueryPrefix: true,
+                  }
+                )}`;
+              },
+              parseURL({ location, qsModule }) {
+                return {
+                  category: decodeURIComponent(
+                    location.pathname.split('/').pop()!
+                  ),
+                  ...qsModule.parse(location.search, {
+                    ignoreQueryPrefix: true,
+                  }),
+                };
+              },
             },
           }),
           stateMapping: {
