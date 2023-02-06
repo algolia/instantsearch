@@ -12,12 +12,15 @@ import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch-hooks-web';
 
 import { useRefinementList } from '../../connectors/useRefinementList';
+import { warn } from '../../lib/warn';
 import version from '../../version';
 import { Index } from '../Index';
 import { InstantSearch } from '../InstantSearch';
 
 import type { UseRefinementListProps } from '../../connectors/useRefinementList';
 import type { InstantSearchProps } from '../InstantSearch';
+
+jest.mock('../../lib/warn');
 
 function RefinementList(props: UseRefinementListProps) {
   useRefinementList(props);
@@ -817,5 +820,90 @@ describe('InstantSearch', () => {
     rerender(<App isMounted={false} />);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+  });
+
+  describe('warn about Next.js router', () => {
+    beforeEach(() => {
+      (warn as jest.Mock).mockClear();
+      delete (window as any).__NEXT_DATA__;
+    });
+
+    test('warns when using Next.js with routing without _isNextRouter', () => {
+      (window as any).__NEXT_DATA__ = {};
+      const searchClient = createAlgoliaSearchClient({});
+
+      render(
+        <StrictMode>
+          <InstantSearch
+            indexName="indexName"
+            searchClient={searchClient}
+            routing
+          >
+            Children
+          </InstantSearch>
+        </StrictMode>
+      );
+
+      expect(warn).toHaveBeenLastCalledWith(false, expect.any(String));
+    });
+
+    test('does not warn when using Next.js with routing with _isNextRouter', () => {
+      (window as any).__NEXT_DATA__ = {};
+      const searchClient = createAlgoliaSearchClient({});
+
+      render(
+        <StrictMode>
+          <InstantSearch
+            indexName="indexName"
+            searchClient={searchClient}
+            routing={{
+              router: {
+                // @ts-expect-error: _isNextRouter is not part of the public API
+                _isNextRouter: true,
+                read: jest.fn(),
+                onUpdate: jest.fn(),
+              },
+            }}
+          >
+            Children
+          </InstantSearch>
+        </StrictMode>
+      );
+
+      expect(warn).toHaveBeenLastCalledWith(true, expect.any(String));
+    });
+
+    test('does not warn when using Next.js without routing', () => {
+      (window as any).__NEXT_DATA__ = {};
+      const searchClient = createAlgoliaSearchClient({});
+
+      render(
+        <StrictMode>
+          <InstantSearch indexName="indexName" searchClient={searchClient}>
+            Children
+          </InstantSearch>
+        </StrictMode>
+      );
+
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    test('does not warn when not using Next.js', () => {
+      const searchClient = createAlgoliaSearchClient({});
+
+      render(
+        <StrictMode>
+          <InstantSearch
+            indexName="indexName"
+            searchClient={searchClient}
+            routing
+          >
+            Children
+          </InstantSearch>
+        </StrictMode>
+      );
+
+      expect(warn).not.toHaveBeenCalled();
+    });
   });
 });

@@ -55,6 +55,21 @@ describe('life cycle', () => {
         'http://localhost/?indexName%5Bquery%5D=query3'
       );
     });
+
+    test('calls user-provided push if set', () => {
+      const windowPushState = jest.spyOn(window.history, 'pushState');
+      const customPush = jest.fn();
+      const router = historyRouter<UiState>({ push: customPush });
+
+      router.write({ indexName: { query: 'query' } });
+      jest.runAllTimers();
+
+      expect(windowPushState).toHaveBeenCalledTimes(0);
+      expect(customPush).toHaveBeenCalledTimes(1);
+      expect(customPush).toHaveBeenLastCalledWith(
+        'http://localhost/?indexName%5Bquery%5D=query'
+      );
+    });
   });
 
   describe('getLocation', () => {
@@ -220,6 +235,28 @@ describe('life cycle', () => {
         router.dispose();
         router.createURL({ indexName: { query: 'query1' } });
       }).not.toThrow();
+    });
+  });
+
+  describe('onUpdate', () => {
+    test('calls user-provided start function', () => {
+      const start = jest.fn();
+      const router = historyRouter<UiState>({ start });
+
+      router.onUpdate(jest.fn());
+
+      expect(start).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('dispose', () => {
+    test('calls user-provided dispose function', () => {
+      const dispose = jest.fn();
+      const router = historyRouter<UiState>({ dispose });
+
+      router.dispose();
+
+      expect(dispose).toHaveBeenCalledTimes(1);
     });
   });
 });
