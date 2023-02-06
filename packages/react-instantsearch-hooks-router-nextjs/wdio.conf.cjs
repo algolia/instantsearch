@@ -1,6 +1,6 @@
 exports.config = {
   runner: 'local',
-  specs: ['./__tests__/e2e/**/*.test.ts'],
+  specs: ['./tests/e2e/**/*.test.ts'],
   logLevel: 'info',
   bail: 1,
   baseUrl: 'http://localhost:3000',

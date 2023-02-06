@@ -1,3 +1,4 @@
 {
-  "extends": "../../tsconfig.declaration"
+  "extends": "../../tsconfig.declaration",
+  "exclude": ["**/tests/**/*"]
 }
