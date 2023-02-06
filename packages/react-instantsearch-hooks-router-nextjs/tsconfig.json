@@ -14,6 +14,5 @@
     "allowJs": true,
     "checkJs": true
   },
-  "exclude": ["node_modules"],
-  "include": ["tests/e2e/**/*.ts"]
+  "exclude": ["node_modules"]
 }

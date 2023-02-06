@@ -18,6 +18,7 @@
     "packages/instantsearch.js/src/connectors/menu/__tests__/connectMenu-test.ts",
     "packages/instantsearch.js/src/connectors/refinement-list/__tests__/connectRefinementList-test.ts",
     "tests/e2e",
+    "**/__tests__/e2e",
     "packages/create-instantsearch-app/src/templates/**/*"
   ]
 }

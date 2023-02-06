@@ -13,6 +13,7 @@ const config = {
     '<rootDir>/tests/e2e/*',
     '<rootDir>/examples/',
     '<rootDir>/packages/create-instantsearch-app',
+    '<rootDir>/packages/react-instantsearch-hooks-router-nextjs',
     '/__utils__/',
   ],
   watchPathIgnorePatterns: [

@@ -355,6 +355,15 @@ const config = {
         '@typescript-eslint/naming-convention': 'off',
       },
     },
+    {
+      files: [
+        'packages/react-instantsearch-hooks-router-nextjs/__tests__/e2e/**/*',
+      ],
+      parserOptions: {
+        project:
+          'packages/react-instantsearch-hooks-router-nextjs/tsconfig.json',
+      },
+    },
   ],
 };
 
