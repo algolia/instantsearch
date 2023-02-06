@@ -1,8 +1,10 @@
 import React from 'react';
 import { GetServerSideProps } from 'next';
+import { renderToString } from 'react-dom/server';
 import algoliasearch from 'algoliasearch/lite';
 import { Hit as AlgoliaHit } from 'instantsearch.js';
 import {
+  DynamicWidgets,
   InstantSearch,
   Hits,
   Highlight,
@@ -10,11 +12,9 @@ import {
   SearchBox,
   InstantSearchServerState,
   InstantSearchSSRProvider,
-  DynamicWidgets,
 } from 'react-instantsearch-hooks-web';
 import { getServerState } from 'react-instantsearch-hooks-server';
 import { Panel } from '../components/Panel';
-import { renderToString } from 'react-dom/server';
 import singletonRouter from 'next/router';
 import Link from 'next/link';
 import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
@@ -49,7 +49,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
   return (
     <InstantSearchSSRProvider {...serverState}>
       <Head>
-        <title>React InstantSearch - Next.js</title>
+        <title>React InstantSearch Hooks - Next.js</title>
       </Head>
 
       <InstantSearch
@@ -64,12 +64,6 @@ export default function HomePage({ serverState, url }: HomePageProps) {
       >
         <div className="Container">
           <div>
-            <Panel header="brand">
-              <RefinementList attribute="brand" />
-            </Panel>
-            <Panel header="categories">
-              <RefinementList attribute="categories" />
-            </Panel>
             <DynamicWidgets fallbackComponent={FallbackComponent} />
           </div>
           <div>
