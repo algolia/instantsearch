@@ -1,13 +1,13 @@
 {
   "name": "@instantsearch/testutils",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "dependencies": {
     "@types/enzyme": "3.1.15",
     "enzyme": "3.11.0",
     "enzyme-adapter-preact-pure": "2.2.0",
     "enzyme-to-json": "3.6.2",
-    "instantsearch.js": "4.50.2",
+    "instantsearch.js": "4.50.3",
     "jest-serializer-html": "7.1.0",
     "preact": "^10.10.0"
   }

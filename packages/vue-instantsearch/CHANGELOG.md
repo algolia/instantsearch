@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.3](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.2...vue-instantsearch@4.8.3) (2023-02-07)
+
+
+### Bug Fixes
+
+* **HitsPerPage:** compute selected from isRefined ([#5469](https://github.com/algolia/instantsearch.js/issues/5469)) ([7dc16f4](https://github.com/algolia/instantsearch.js/commit/7dc16f479cdc88cf771199a74e33b3b175961fe7))
+
+
+
+
+
 ## [4.8.2](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.1...vue-instantsearch@4.8.2) (2023-01-30)
 
 
