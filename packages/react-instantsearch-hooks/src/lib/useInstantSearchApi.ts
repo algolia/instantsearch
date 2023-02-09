@@ -32,10 +32,16 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
 ) {
   const forceUpdate = useForceUpdate();
   const serverContext = useInstantSearchServerContext<TUiState, TRouteState>();
-  const serverState = useInstantSearchSSRContext();
+  const serverState = useInstantSearchSSRContext<TUiState, TRouteState>();
   const initialResults = serverState?.initialResults;
-  const searchRef = useRef<InstantSearch<TUiState, TRouteState> | null>(null);
   const prevPropsRef = useRef(props);
+
+  let searchRef = useRef<InstantSearch<TUiState, TRouteState> | null>(null);
+  // To prevent starting two instances with React Strict Mode + SSR, we use
+  // a ref from a parent.
+  if (serverState) {
+    searchRef = serverState.ssrSearchRef;
+  }
 
   if (searchRef.current === null) {
     // We don't use the `instantsearch()` function because it comes with other

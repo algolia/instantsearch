@@ -2,7 +2,7 @@ import React from 'react';
 
 import { InstantSearchSSRContext } from '../lib/InstantSearchSSRContext';
 
-import type { InitialResults } from 'instantsearch.js';
+import type { InitialResults, InstantSearch, UiState } from 'instantsearch.js';
 import type { ReactNode } from 'react';
 
 export type InstantSearchServerState = {
@@ -18,10 +18,14 @@ export type InstantSearchSSRProviderProps =
  * Provider to pass the server state retrieved from `getServerState()` to
  * <InstantSearch>.
  */
-export function InstantSearchSSRProvider({
-  children,
-  ...props
-}: InstantSearchSSRProviderProps) {
+export function InstantSearchSSRProvider<
+  TUiState extends UiState,
+  TRouteState = TUiState
+>({ children, ...props }: InstantSearchSSRProviderProps) {
+  const ssrSearchRef = React.useRef<InstantSearch<UiState, TRouteState> | null>(
+    null
+  );
+
   // When <DynamicWidgets> is mounted, a second provider is used above the user-land
   // <InstantSearchSSRProvider> in `getServerState()`.
   // To avoid the user's provider overriding the context value with an empty object,
@@ -31,7 +35,7 @@ export function InstantSearchSSRProvider({
   }
 
   return (
-    <InstantSearchSSRContext.Provider value={props}>
+    <InstantSearchSSRContext.Provider value={{ ...props, ssrSearchRef }}>
       {children}
     </InstantSearchSSRContext.Provider>
   );
