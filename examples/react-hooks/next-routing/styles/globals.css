@@ -20,3 +20,7 @@ body {
   grid-template-columns: minmax(min-content, 200px) 1fr;
   gap: 0.5rem;
 }
+
+.Hit-price {
+  margin-left: auto;
+}

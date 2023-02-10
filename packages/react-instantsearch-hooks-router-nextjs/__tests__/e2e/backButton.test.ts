@@ -22,7 +22,7 @@ describe('browser back/forward buttons works on routes pushed by InstantSearch',
     const link = await $('.ais-Hits-item');
     await link.click();
 
-    await waitForUrl('http://localhost:3000/test');
+    await waitForUrl('http://localhost:3000/other-page');
 
     await browser.back();
 
@@ -53,7 +53,7 @@ describe('browser back/forward buttons works on routes pushed by InstantSearch',
     const link = await $('.ais-Hits-item');
     await link.click();
 
-    await waitForUrl('http://localhost:3000/fr/test');
+    await waitForUrl('http://localhost:3000/fr/other-page');
 
     await browser.back();
 
