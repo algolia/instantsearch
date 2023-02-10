@@ -192,14 +192,22 @@ function addAlgoliaAgents(
 function warnNextRouter<TUiState extends UiState, TRouteState>(
   routing: UseInstantSearchApiProps<TUiState, TRouteState>['routing']
 ) {
-  if (!routing || typeof window === 'undefined' || !('__NEXT_DATA__' in window))
-    return;
-
-  // @ts-expect-error: _isNextRouter is only set on the Next.js router
-  const isUsingNextRouter = routing !== true && routing?.router?._isNextRouter;
-
   warn(
-    isUsingNextRouter,
+    (function () {
+      if (
+        !routing ||
+        typeof window === 'undefined' ||
+        !('__NEXT_DATA__' in window)
+      ) {
+        return true;
+      }
+
+      const isUsingNextRouter =
+        // @ts-expect-error: _isNextRouter is only set on the Next.js router
+        routing !== true && routing?.router?._isNextRouter;
+
+      return isUsingNextRouter;
+    })(),
     `
 You are using Next.js with InstantSearch without the "react-instantsearch-hooks-router-nextjs" package.
 This package is recommended to make the routing work correctly with Next.js.
