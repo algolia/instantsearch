@@ -34,7 +34,7 @@ exports.config = {
       ignore: [],
       // Force `ts-node` to use the config file from the package root
       // instead of the directory from which `wdio` was called
-      project: './tsconfig.json',
+      project: './tsconfig.wdio.json',
     });
   },
 };
