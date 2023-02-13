@@ -3,7 +3,7 @@ This example shows how to do server side rendering with next.js and React Instan
 ## Clone the example
 
 ```sh
-curl https://codeload.github.com/algolia/instantsearch/tar.gz/master | tar -xz --strip=3 instantsearch-master/examples/react-hooks/next
+curl https://codeload.github.com/algolia/instantsearch/tar.gz/master | tar -xz --strip=3 instantsearch-master/examples/react-hooks/next-routing
 ```
 
 ## Start the example
