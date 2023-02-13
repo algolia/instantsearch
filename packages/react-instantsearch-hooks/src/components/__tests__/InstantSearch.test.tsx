@@ -885,7 +885,7 @@ describe('InstantSearch', () => {
         </StrictMode>
       );
 
-      expect(warn).toHaveBeenLastCalledWith(true, expect.any(String));
+      expect(warn).not.toHaveBeenCalled();
     });
 
     test('does not warn when not using Next.js', () => {
@@ -903,7 +903,7 @@ describe('InstantSearch', () => {
         </StrictMode>
       );
 
-      expect(warn).toHaveBeenLastCalledWith(true, expect.any(String));
+      expect(warn).not.toHaveBeenCalled();
     });
   });
 });

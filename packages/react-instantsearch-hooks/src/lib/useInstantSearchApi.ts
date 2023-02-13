@@ -37,8 +37,9 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const prevPropsRef = useRef(props);
 
   let searchRef = useRef<InstantSearch<TUiState, TRouteState> | null>(null);
-  // To prevent starting two instances with React Strict Mode + SSR, we use
-  // a ref from a parent.
+  // As we need to render on mount with SSR, using the local ref above in `StrictMode` will
+  // create and start two instances of InstantSearch. To avoid this, we instead discard it and use
+  // an upward ref from `InstantSearchSSRContext` as it has already been mounted a second time at this point.
   if (serverState) {
     searchRef = serverState.ssrSearchRef;
   }
@@ -192,27 +193,27 @@ function addAlgoliaAgents(
 function warnNextRouter<TUiState extends UiState, TRouteState>(
   routing: UseInstantSearchApiProps<TUiState, TRouteState>['routing']
 ) {
-  warn(
-    (function () {
-      if (
-        !routing ||
-        typeof window === 'undefined' ||
-        !('__NEXT_DATA__' in window)
-      ) {
-        return true;
-      }
+  if (__DEV__) {
+    if (
+      !routing ||
+      typeof window === 'undefined' ||
+      !('__NEXT_DATA__' in window)
+    ) {
+      return;
+    }
 
-      const isUsingNextRouter =
-        // @ts-expect-error: _isNextRouter is only set on the Next.js router
-        routing !== true && routing?.router?._isNextRouter;
+    const isUsingNextRouter =
+      // @ts-expect-error: _isNextRouter is only set on the Next.js router
+      routing !== true && routing?.router?._isNextRouter;
 
-      return isUsingNextRouter;
-    })(),
-    `
+    warn(
+      isUsingNextRouter,
+      `
 You are using Next.js with InstantSearch without the "react-instantsearch-hooks-router-nextjs" package.
 This package is recommended to make the routing work correctly with Next.js.
 Please check its usage instructions: https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch-hooks-router-nextjs
 
 You can ignore this warning if you are using a custom router that suits your needs, it won't be outputted in production builds.`
-  );
+    );
+  }
 }
