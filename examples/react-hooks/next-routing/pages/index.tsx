@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import React from 'react';
 import { GetServerSideProps } from 'next';
 import { renderToString } from 'react-dom/server';
@@ -15,9 +14,11 @@ import {
   InstantSearchSSRProvider,
 } from 'react-instantsearch-hooks-web';
 import { getServerState } from 'react-instantsearch-hooks-server';
-import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
-import singletonRouter from 'next/router';
 import { Panel } from '../components/Panel';
+import singletonRouter from 'next/router';
+import Link from 'next/link';
+import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
+import Head from 'next/head';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
@@ -31,7 +32,11 @@ type HitProps = {
 function Hit({ hit }: HitProps) {
   return (
     <>
-      <Highlight hit={hit} attribute="name" className="Hit-label" />
+      <Link href="/other-page" passHref className="Hit-label">
+        <a>
+          <Highlight hit={hit} attribute="name" />
+        </a>
+      </Link>
       <span className="Hit-price">${hit.price}</span>
     </>
   );
@@ -49,19 +54,24 @@ export default function HomePage({ serverState, url }: HomePageProps) {
         <title>React InstantSearch Hooks - Next.js</title>
       </Head>
 
+      {/* If you have navigation links outside of InstantSearch */}
+      <Link href="/?instant_search%5Bquery%5D=apple" passHref>
+        <a>Prefilled query</a>
+      </Link>
+
       <InstantSearch
         searchClient={client}
         indexName="instant_search"
         routing={{
           router: createInstantSearchRouterNext({
-            serverUrl: url,
             singletonRouter,
+            serverUrl: url,
           }),
         }}
       >
         <div className="Container">
           <div>
-            <DynamicWidgets fallbackComponent={FallbackComponent} />
+            <DynamicWidgets fallbackComponent={FallbackComponent} facets={[]} />
           </div>
           <div>
             <SearchBox />
