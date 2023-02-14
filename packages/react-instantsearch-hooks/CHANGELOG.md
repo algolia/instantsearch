@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.40.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.39.3...react-instantsearch-hooks@6.40.0) (2023-02-14)
+
+
+### Features
+
+* Warn when not using the dedicated Next.js router ([#5432](https://github.com/algolia/instantsearch.js/issues/5432)) ([39b5859](https://github.com/algolia/instantsearch.js/commit/39b5859ba78a5e8472a80e357a35ba900c963b61))
+
+
+### Bug Fixes
+
+* Prevent issue where instantsearch instance got created twice in ssr ([#5432](https://github.com/algolia/instantsearch.js/issues/5432)) ([39b5859](https://github.com/algolia/instantsearch.js/commit/39b5859ba78a5e8472a80e357a35ba900c963b61))
+
+
+
 ## [6.39.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.39.2...react-instantsearch-hooks@6.39.3) (2023-02-07)
 
 **Note:** Version bump only for package react-instantsearch-hooks
