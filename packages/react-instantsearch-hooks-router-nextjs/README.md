@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [react-instantsearch-hooks-router-nextjs](#react-instantsearch-hooks-router-nextjs)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [API](#api)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # react-instantsearch-hooks-router-nextjs
 
 This package is a router for [React InstantSearch Hooks](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/) that is compatible with [Next.js](https://nextjs.org/) routing.
