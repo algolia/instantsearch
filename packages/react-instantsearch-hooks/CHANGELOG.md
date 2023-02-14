@@ -8,9 +8,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* handling routing in Next.js ([#5432](https://github.com/algolia/instantsearch.js/issues/5432)) ([39b5859](https://github.com/algolia/instantsearch.js/commit/39b5859ba78a5e8472a80e357a35ba900c963b61))
+* Warn when not using the dedicated Next.js router ([#5432](https://github.com/algolia/instantsearch.js/issues/5432)) ([39b5859](https://github.com/algolia/instantsearch.js/commit/39b5859ba78a5e8472a80e357a35ba900c963b61))
 
 
+### Bug Fixes
+
+* Prevent issue where instantsearch instance got created twice in ssr ([#5432](https://github.com/algolia/instantsearch.js/issues/5432)) ([39b5859](https://github.com/algolia/instantsearch.js/commit/39b5859ba78a5e8472a80e357a35ba900c963b61))
 
 
 
