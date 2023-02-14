@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [6.39.4](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.39.3...react-instantsearch-hooks-web@6.39.4) (2023-02-14)
+## [6.40.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.39.3...react-instantsearch-hooks-web@6.40.0) (2023-02-14)
 
 **Note:** Version bump only for package react-instantsearch-hooks-web
 
