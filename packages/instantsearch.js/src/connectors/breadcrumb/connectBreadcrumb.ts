@@ -194,14 +194,17 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
           const [{ name: facetName }] = state.hierarchicalFacets;
 
-          const facetValues = results.getFacetValues(
-            facetName,
-            {}
-          ) as SearchResults.HierarchicalFacet;
-          const data = Array.isArray(facetValues.data) ? facetValues.data : [];
-          const items = transformItems(shiftItemsValues(prepareItems(data)), {
-            results,
-          });
+          const facetValues = results.getFacetValues(facetName, {});
+          const facetItems =
+            facetValues && !Array.isArray(facetValues) && facetValues.data
+              ? facetValues.data
+              : [];
+          const items = transformItems(
+            shiftItemsValues(prepareItems(facetItems)),
+            {
+              results,
+            }
+          );
 
           return items;
         }

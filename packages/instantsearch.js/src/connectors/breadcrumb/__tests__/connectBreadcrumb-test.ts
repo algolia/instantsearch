@@ -293,6 +293,57 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
     });
 
+    it('returns an empty array of items if no hierarchicalFacets result exist', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
+      const breadcrumb = createBreadcrumb({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        breadcrumb.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      const results = new algoliasearchHelper.SearchResults(
+        new SearchParameters({ index: helper.state.index }),
+        [
+          {
+            query: helper.state.query ?? '',
+            page: helper.state.page ?? 0,
+            hitsPerPage: helper.state.hitsPerPage ?? 20,
+            hits: [],
+            nbHits: 0,
+            nbPages: 0,
+            params: '',
+            exhaustiveNbHits: true,
+            exhaustiveFacetsCount: true,
+            processingTimeMS: 0,
+            index: helper.state.index,
+          },
+        ]
+      );
+
+      const renderState = breadcrumb.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results,
+          state: helper.state,
+        })
+      );
+
+      expect(renderState).toEqual({
+        canRefine: false,
+        createURL: expect.any(Function),
+        items: [],
+        refine: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+      });
+    });
+
     test('refine method called with null does not mutate the current helper state if no hierarchicalFacets exist', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();

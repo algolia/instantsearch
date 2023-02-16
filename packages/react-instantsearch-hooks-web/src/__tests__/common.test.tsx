@@ -4,6 +4,7 @@
 import {
   createRefinementListTests,
   createHierarchicalMenuTests,
+  createBreadcrumbTests,
   createMenuTests,
   createPaginationTests,
   createInfiniteHitsTests,
@@ -15,6 +16,7 @@ import {
   InstantSearch,
   RefinementList,
   HierarchicalMenu,
+  Breadcrumb,
   Menu,
   Pagination,
   InfiniteHits,
@@ -45,6 +47,17 @@ createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
   render(
     <InstantSearch {...instantSearchOptions}>
       <HierarchicalMenu {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
+  const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <Breadcrumb {...widgetParams} />
+      <HierarchicalMenu {...hierarchicalWidgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );
