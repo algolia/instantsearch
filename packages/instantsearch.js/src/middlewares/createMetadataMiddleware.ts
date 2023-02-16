@@ -82,6 +82,7 @@ export function createMetadataMiddleware(): InternalMiddleware {
     payloadContainer.name = 'instantsearch:widgets';
 
     return {
+      $$type: 'ais.metadata',
       onStateChange() {},
       subscribe() {
         // using setTimeout here to delay extraction until widgets have been added in a tick (e.g. Vue)

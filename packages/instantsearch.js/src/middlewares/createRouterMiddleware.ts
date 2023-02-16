@@ -63,6 +63,7 @@ export const createRouterMiddleware = <
     const initialUiState = instantSearchInstance._initialUiState;
 
     return {
+      $$type: 'ais.router',
       onStateChange({ uiState }) {
         const routeState = stateMapping.stateToRoute(uiState);
 

@@ -85,6 +85,12 @@ export function createInsightsMiddleware<
   }
 
   return ({ instantSearchInstance }) => {
+    // only one insights middleware can be used at a time
+    const existingInsightsMiddlewares = instantSearchInstance.middleware
+      .filter((m) => m.instance.$$type === 'ais.insights')
+      .map((m) => m.creator);
+    instantSearchInstance.unuse(...existingInsightsMiddlewares);
+
     const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
 
     // search-insights.js also throws an error so dev-only clarification is sufficient
@@ -132,6 +138,7 @@ export function createInsightsMiddleware<
     let helper: AlgoliaSearchHelper;
 
     return {
+      $$type: 'ais.insights',
       onStateChange() {},
       subscribe() {
         if (!needsToLoadInsightsClient) return;
@@ -222,7 +229,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
         if (helper && initialParameters) {
-          helper.setState({
+          helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
             ...initialParameters,
           });

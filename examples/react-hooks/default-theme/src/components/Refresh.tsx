@@ -4,6 +4,7 @@ import './Refresh.css';
 
 export function Refresh() {
   const { refresh } = useInstantSearch();
+
   return (
     <button
       className="Refresh"
