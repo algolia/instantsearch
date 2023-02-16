@@ -3,6 +3,7 @@ import type { UiState } from './ui-state';
 import type { AtLeastOne } from './utils';
 
 export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
+  $$type: string;
   onStateChange(options: { uiState: TUiState }): void;
   subscribe(): void;
   started(): void;

@@ -1,9 +1,15 @@
+import { createInsightsMiddleware } from 'instantsearch.js/src/middlewares';
 import React from 'react';
 import { useInstantSearch } from 'react-instantsearch-hooks-web';
 import './Refresh.css';
 
 export function Refresh() {
-  const { refresh } = useInstantSearch();
+  const { refresh, use } = useInstantSearch();
+
+  React.useLayoutEffect(() => {
+    return use(createInsightsMiddleware({}));
+  }, [use]);
+
   return (
     <button
       className="Refresh"

@@ -28,6 +28,7 @@ import type {
 import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
 import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
   createMetadataMiddleware,
   isMetadataEnabled,
@@ -301,6 +302,9 @@ See ${createDocumentationLink({
       this.use(createRouterMiddleware(routerOptions));
     }
 
+    // This is the default middleware, any user-provided middleware will be added later and override this one.
+    this.use(createInsightsMiddleware({}));
+
     if (isMetadataEnabled()) {
       this.use(createMetadataMiddleware());
     }
@@ -312,6 +316,7 @@ See ${createDocumentationLink({
   public use(...middleware: Middleware[]): this {
     const newMiddlewareList = middleware.map((fn) => {
       const newMiddleware = {
+        $$type: '__unknown__',
         subscribe: noop,
         started: noop,
         unsubscribe: noop,
