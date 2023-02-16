@@ -67,8 +67,8 @@ export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
           document.querySelectorAll('.ais-Breadcrumb-item--selected')
         ).toHaveLength(1);
         expect(
-          document.querySelector('.ais-Breadcrumb-item--selected')!.textContent
-        ).toMatch(/> ?iPhone/);
+          document.querySelector('.ais-Breadcrumb-item--selected')
+        ).toHaveTextContent(/> ?iPhone/);
       }
 
       // Select a refinement
@@ -88,8 +88,8 @@ export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
           document.querySelectorAll('.ais-Breadcrumb-item--selected')
         ).toHaveLength(1);
         expect(
-          document.querySelector('.ais-Breadcrumb-item--selected')!.textContent
-        ).toMatch(/> ?Apple/);
+          document.querySelector('.ais-Breadcrumb-item--selected')
+        ).toHaveTextContent(/> ?Apple/);
       }
 
       // Wait for new results to come in
@@ -102,8 +102,8 @@ export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
           document.querySelectorAll('.ais-Breadcrumb-item--selected')
         ).toHaveLength(1);
         expect(
-          document.querySelector('.ais-Breadcrumb-item--selected')!.textContent
-        ).toMatch(/> ?Apple/);
+          document.querySelector('.ais-Breadcrumb-item--selected')
+        ).toHaveTextContent(/> ?Apple/);
       }
     });
 
@@ -167,8 +167,8 @@ export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
           document.querySelectorAll('.ais-Breadcrumb-item--selected')
         ).toHaveLength(1);
         expect(
-          document.querySelector('.ais-Breadcrumb-item--selected')?.textContent
-        ).toMatch(/> ?iPhone/);
+          document.querySelector('.ais-Breadcrumb-item--selected')
+        ).toHaveTextContent(/> ?iPhone/);
       }
 
       // start erroring
@@ -190,8 +190,8 @@ export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
           document.querySelectorAll('.ais-Breadcrumb-item--selected')
         ).toHaveLength(1);
         expect(
-          document.querySelector('.ais-Breadcrumb-item--selected')!.textContent
-        ).toMatch(/> ?Apple/);
+          document.querySelector('.ais-Breadcrumb-item--selected')
+        ).toHaveTextContent(/> ?Apple/);
       }
 
       // Wait for new results to come in
@@ -206,8 +206,8 @@ export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
           document.querySelectorAll('.ais-Breadcrumb-item--selected')
         ).toHaveLength(1);
         expect(
-          document.querySelector('.ais-Breadcrumb-item--selected')!.textContent
-        ).toMatch(/> ?iPhone/);
+          document.querySelector('.ais-Breadcrumb-item--selected')
+        ).toHaveTextContent(/> ?iPhone/);
       }
 
       // stop erroring
@@ -229,8 +229,8 @@ export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
           document.querySelectorAll('.ais-Breadcrumb-item--selected')
         ).toHaveLength(1);
         expect(
-          document.querySelector('.ais-Breadcrumb-item--selected')!.textContent
-        ).toMatch(/> ?Apple/);
+          document.querySelector('.ais-Breadcrumb-item--selected')
+        ).toHaveTextContent(/> ?Apple/);
       }
 
       // Wait for new results to come in
@@ -245,8 +245,8 @@ export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
           document.querySelectorAll('.ais-Breadcrumb-item--selected')
         ).toHaveLength(1);
         expect(
-          document.querySelector('.ais-Breadcrumb-item--selected')!.textContent
-        ).toMatch(/> ?Apple/);
+          document.querySelector('.ais-Breadcrumb-item--selected')
+        ).toHaveTextContent(/> ?Apple/);
       }
     });
   });
