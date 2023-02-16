@@ -81,11 +81,11 @@ export function createInsightsMiddleware<
           script.async = true;
           script.src = ALGOLIA_INSIGHTS_SRC;
           script.onerror = () => {
-            // @TODO: what can be notified of this error?
+            // @TODO: it would be useful to track errors
           };
           document.body.appendChild(script);
         } catch (e) {
-          // @TODO: what can be notified of this error?
+          // @TODO: it would be useful to track errors
         }
       }
     });
