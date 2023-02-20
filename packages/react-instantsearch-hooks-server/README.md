@@ -15,9 +15,7 @@
 
 # react-instantsearch-hooks-server
 
-> 🚧 This version is not yet production-ready.
-
-React InstantSearch Hooks is an open-source, **experimental UI library** for React that lets you server-side render a search interface.
+React InstantSearch Hooks is an open-source, **UI library** for React that lets you server-side render a search interface.
 
 Server-side rendering (SSR) lets you generate HTML from InstantSearch components on the server. React InstantSearch Hooks is compatible with server-side rendering. The library provides an API that works with any SSR solution.
 
@@ -45,10 +43,6 @@ Check out our [**Server-side rendering guide**](https://algolia.com/doc/guides/b
 ## Documentation
 
 The full documentation is available on [algolia.com/doc](https://algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/).
-
-## Troubleshooting
-
-React InstantSearch Hooks is an experimental library, and might contain bugs. If you're experiencing issues, please refer to the [**Need help?**](https://algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/#need-help) section of the docs, or [open a new issue](https://github.com/algolia/instantsearch.js/issues/new?assignees=&labels=triage&template=BUG_REPORT.yml).
 
 ## Contributing
 
