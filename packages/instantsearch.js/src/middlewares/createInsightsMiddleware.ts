@@ -40,6 +40,10 @@ export type InsightsProps<
     region?: 'de' | 'us';
   };
   onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
+  /**
+   * @internal indicator for the default insights middleware
+   */
+  $$internal?: boolean;
 };
 
 const ALGOLIA_INSIGHTS_SRC =
@@ -54,6 +58,7 @@ export function createInsightsMiddleware<
     insightsClient: _insightsClient,
     insightsInitParams,
     onEvent,
+    $$internal = false,
   } = props;
 
   let insightsClient: InsightsClient = _insightsClient || noop;
@@ -85,9 +90,12 @@ export function createInsightsMiddleware<
   }
 
   return ({ instantSearchInstance }) => {
-    // only one insights middleware can be used at a time
+    // remove existing default insights middleware
+    // user-provided insights middleware takes precedence
     const existingInsightsMiddlewares = instantSearchInstance.middleware
-      .filter((m) => m.instance.$$type === 'ais.insights')
+      .filter(
+        (m) => m.instance.$$type === 'ais.insights' && m.instance.$$internal
+      )
       .map((m) => m.creator);
     instantSearchInstance.unuse(...existingInsightsMiddlewares);
 
@@ -139,6 +147,7 @@ export function createInsightsMiddleware<
 
     return {
       $$type: 'ais.insights',
+      $$internal,
       onStateChange() {},
       subscribe() {
         if (!needsToLoadInsightsClient) return;
@@ -172,7 +181,9 @@ export function createInsightsMiddleware<
           ...helper.state,
           clickAnalytics: true,
         });
-        instantSearchInstance.scheduleSearch();
+        if (!$$internal) {
+          instantSearchInstance.scheduleSearch();
+        }
 
         const setUserTokenToSearch = (userToken?: string) => {
           helper.overrideStateWithoutTriggeringChangeEvent({
