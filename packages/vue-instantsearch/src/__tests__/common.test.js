@@ -4,6 +4,7 @@
 import {
   createRefinementListTests,
   createHierarchicalMenuTests,
+  createBreadcrumbTests,
   createMenuTests,
   createPaginationTests,
   createInfiniteHitsTests,
@@ -15,6 +16,7 @@ import {
   AisInstantSearch,
   AisRefinementList,
   AisHierarchicalMenu,
+  AisBreadcrumb,
   AisMenu,
   AisPagination,
   AisInfiniteHits,
@@ -59,6 +61,25 @@ createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisHierarchicalMenu, { props: widgetParams }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisBreadcrumb, { props: widgetParams }),
+          h(AisHierarchicalMenu, { props: hierarchicalWidgetParams }),
           h(GlobalErrorSwallower),
         ])
       ),
