@@ -855,8 +855,8 @@ search.addWidgets([
         stalledSearchDelay: 1,
         indexName: 'indexName',
       });
-      instantSearchInstance.sendEventToInsights = jest.fn();
       instantSearchInstance.start();
+      instantSearchInstance.sendEventToInsights = jest.fn();
 
       instantSearchInstance.addWidgets([widget]);
 

@@ -181,11 +181,12 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenLastCalledWith([
       {
         indexName: 'indexName',
-        params: { facets: [], query: '', tagFilters: '' },
+        params: { clickAnalytics: true, facets: [], query: '', tagFilters: '' },
       },
       {
         indexName: 'subIndexName',
         params: {
+          clickAnalytics: true,
           facets: ['brand'],
           maxValuesPerFacet: 10,
           query: '',
@@ -216,11 +217,12 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenLastCalledWith([
       {
         indexName: 'indexName',
-        params: { facets: [], query: '', tagFilters: '' },
+        params: { clickAnalytics: true, facets: [], query: '', tagFilters: '' },
       },
       {
         indexName: 'subIndexName',
         params: {
+          clickAnalytics: true,
           facets: ['brand'],
           maxValuesPerFacet: 10,
           query: '',

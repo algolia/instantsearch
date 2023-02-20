@@ -343,6 +343,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         {
           indexName: 'test',
           params: {
+            clickAnalytics: true,
             facets: ['hierarchy.1'],
             maxValuesPerFacet: 10,
             tagFilters: '',
@@ -363,6 +364,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         {
           indexName: 'test',
           params: {
+            clickAnalytics: true,
             facetFilters: [['hierarchy.1:zero']],
             facets: ['hierarchy.1', 'hierarchy.2'],
             maxValuesPerFacet: 10,

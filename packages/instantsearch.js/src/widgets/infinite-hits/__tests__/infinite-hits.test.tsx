@@ -39,6 +39,9 @@ describe('infiniteHits', () => {
       // assertion can go away.
       expect(async () => {
         search.start();
+        // prevent warning from insights view event because insightsClient isn't yet loaded
+        // @ts-ignore
+        search.helper!.state.userToken = 'userToken';
 
         await wait(0);
       }).not.toWarnDev();

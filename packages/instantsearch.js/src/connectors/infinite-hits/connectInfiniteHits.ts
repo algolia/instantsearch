@@ -153,6 +153,11 @@ function getStateWithoutPage(state: PlainSearchParameters) {
   return rest;
 }
 
+function normalizeState(state: PlainSearchParameters) {
+  const { clickAnalytics, userToken, ...rest } = state || {};
+  return rest;
+}
+
 function getInMemoryCache<THit extends BaseHit>(): InfiniteHitsCache<THit> {
   let cachedHits: InfiniteHitsCachedHits<THit> | null = null;
   let cachedState: PlainSearchParameters | null = null;
@@ -237,7 +242,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             page:
               getFirstReceivedPage(
                 helper.state,
-                cache.read({ state: helper.state }) || {}
+                cache.read({ state: normalizeState(helper.state) }) || {}
               ) - 1,
           })
           .searchWithoutTriggeringOnStateChange();
@@ -250,7 +255,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           .setPage(
             getLastReceivedPage(
               helper.state,
-              cache.read({ state: helper.state }) || {}
+              cache.read({ state: normalizeState(helper.state) }) || {}
             ) + 1
           )
           .search();
@@ -308,7 +313,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
          */
         const state = parent.getPreviousState() || existingState;
 
-        const cachedHits = cache.read({ state }) || {};
+        const cachedHits = cache.read({ state: normalizeState(state) }) || {};
 
         if (!results) {
           showPrevious = getShowPrevious(helper);
@@ -355,7 +360,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             instantSearchInstance.status === 'idle'
           ) {
             cachedHits[page] = transformedHits;
-            cache.write({ state, hits: cachedHits });
+            cache.write({ state: normalizeState(state), hits: cachedHits });
           }
           currentPageHits = transformedHits;
 
