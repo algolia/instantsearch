@@ -17,6 +17,10 @@ export type RouterProps<
   // ideally stateMapping should be required if TRouteState is given,
   // but there's no way to check if a generic is provided or the default value.
   stateMapping?: StateMapping<TUiState, TRouteState>;
+  /**
+   * @internal indicator for the default middleware
+   */
+  $$internal?: boolean;
 };
 
 export const createRouterMiddleware = <
@@ -35,6 +39,7 @@ export const createRouterMiddleware = <
       TUiState,
       TRouteState
     >,
+    $$internal = false,
   } = props;
 
   return ({ instantSearchInstance }) => {
@@ -64,6 +69,7 @@ export const createRouterMiddleware = <
 
     return {
       $$type: 'ais.router',
+      $$internal,
       onStateChange({ uiState }) {
         const routeState = stateMapping.stateToRoute(uiState);
 
