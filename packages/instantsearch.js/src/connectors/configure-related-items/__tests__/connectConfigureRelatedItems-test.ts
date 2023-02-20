@@ -124,6 +124,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         {
           indexName: 'indexName',
           params: {
+            clickAnalytics: true,
             facets: [],
             facetFilters: ['objectID:-1'],
             tagFilters: '',
@@ -166,6 +167,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         {
           indexName: 'indexName',
           params: {
+            clickAnalytics: true,
             facets: [],
             facetFilters: ['objectID:-1'],
             tagFilters: '',
@@ -211,6 +213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         {
           indexName: 'indexName',
           params: {
+            clickAnalytics: true,
             facets: [],
             facetFilters: ['objectID:-1'],
             tagFilters: '',
@@ -274,6 +277,7 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/`);
         {
           indexName: 'indexName',
           params: {
+            clickAnalytics: true,
             facets: [],
             facetFilters: ['objectID:-1'],
             tagFilters: '',
