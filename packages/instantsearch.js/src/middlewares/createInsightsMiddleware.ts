@@ -5,7 +5,13 @@ import type {
   Hit,
 } from '../types';
 import { getInsightsAnonymousUserTokenInternal } from '../helpers';
-import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils';
+import {
+  warning,
+  noop,
+  getAppIdAndApiKey,
+  find,
+  safelyRunOnBrowser,
+} from '../lib/utils';
 import type {
   AlgoliaSearchHelper,
   PlainSearchParameters,
@@ -21,9 +27,12 @@ export type InsightsEvent = {
 };
 
 export type InsightsProps<
-  TInsightsClient extends null | InsightsClient = InsightsClient | null
+  TInsightsClient extends InsightsClient | null | undefined =
+    | InsightsClient
+    | null
+    | undefined
 > = {
-  insightsClient: TInsightsClient;
+  insightsClient?: TInsightsClient;
   insightsInitParams?: {
     userHasOptedOut?: boolean;
     useCookie?: boolean;
@@ -33,31 +42,47 @@ export type InsightsProps<
   onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
 };
 
+const ALGOLIA_INSIGHTS_SRC =
+  'https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js';
+
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
 export function createInsightsMiddleware<
   TInsightsClient extends null | InsightsClient
->(props: InsightsProps<TInsightsClient>): InternalMiddleware {
+>(props: InsightsProps<TInsightsClient> = {}): InternalMiddleware {
   const {
     insightsClient: _insightsClient,
     insightsInitParams,
     onEvent,
-  } = props || {};
-  if (_insightsClient !== null && !_insightsClient) {
-    if (__DEV__) {
-      throw new Error(
-        "The `insightsClient` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to `null`."
-      );
-    } else {
-      throw new Error(
-        'The `insightsClient` option is required. To disable, set it to `null`.'
-      );
-    }
-  }
+  } = props;
 
-  const hasInsightsClient = Boolean(_insightsClient);
-  const insightsClient: InsightsClient =
-    _insightsClient === null ? noop : _insightsClient;
+  let insightsClient: InsightsClient = _insightsClient || noop;
+
+  let needsToLoadInsightsClient = false;
+  if (_insightsClient !== null && !_insightsClient) {
+    safelyRunOnBrowser(({ window }: { window: any }) => {
+      const pointer = window.AlgoliaAnalyticsObject || 'aa';
+
+      if (typeof pointer === 'string') {
+        insightsClient = window[pointer];
+      }
+
+      if (!insightsClient) {
+        window.AlgoliaAnalyticsObject = pointer;
+        if (!window[pointer]) {
+          window[pointer] = (...args: any[]) => {
+            if (!window[pointer].queue) {
+              window[pointer].queue = [];
+            }
+            window[pointer].queue.push(args);
+          };
+        }
+
+        insightsClient = window[pointer];
+        needsToLoadInsightsClient = true;
+      }
+    });
+  }
 
   return ({ instantSearchInstance }) => {
     const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
@@ -104,7 +129,24 @@ export function createInsightsMiddleware<
 
     return {
       onStateChange() {},
-      subscribe() {},
+      subscribe() {
+        if (!needsToLoadInsightsClient) return;
+
+        const errorMessage =
+          '[insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init';
+
+        try {
+          const script = document.createElement('script');
+          script.async = true;
+          script.src = ALGOLIA_INSIGHTS_SRC;
+          script.onerror = () => {
+            instantSearchInstance.emit('error', new Error(errorMessage));
+          };
+          document.body.appendChild(script);
+        } catch (cause) {
+          instantSearchInstance.emit('error', new Error(errorMessage));
+        }
+      },
       started() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
@@ -131,7 +173,7 @@ export function createInsightsMiddleware<
         };
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
-        if (hasInsightsClient && anonymousUserToken) {
+        if (anonymousUserToken) {
           // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
           // We can set it as userToken.
           setUserTokenToSearch(anonymousUserToken);
@@ -152,7 +194,7 @@ export function createInsightsMiddleware<
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
-            onEvent(event, _insightsClient);
+            onEvent(event, _insightsClient as TInsightsClient);
           } else if (event.insightsMethod) {
             const hasUserToken = Boolean(
               (helper.state as PlainSearchParameters).userToken
