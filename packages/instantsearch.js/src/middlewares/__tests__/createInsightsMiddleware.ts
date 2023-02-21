@@ -8,6 +8,7 @@ import {
   createSearchClient,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { fireEvent } from '@testing-library/dom';
 
 import { createInsightsMiddleware } from '..';
 import instantsearch from '../../index.es';
@@ -99,16 +100,16 @@ describe('insights', () => {
 
   beforeEach(() => {
     warning.cache = {};
+
+    (window as any).AlgoliaAnalyticsObject = undefined;
+    (window as any).aa = undefined;
+
+    document.body.innerHTML = '';
   });
 
   describe('usage', () => {
-    it('throws when insightsClient is not given', () => {
-      expect(() =>
-        // @ts-expect-error
-        createInsightsMiddleware()
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"The \`insightsClient\` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to \`null\`."`
-      );
+    it('passes when insightsClient is not given', () => {
+      expect(() => createInsightsMiddleware()).not.toThrow();
     });
 
     it('passes with insightsClient: null', () => {
@@ -117,6 +118,94 @@ describe('insights', () => {
           insightsClient: null,
         })
       ).not.toThrow();
+    });
+  });
+
+  describe('insightsClient', () => {
+    it('does nothing when insightsClient is passed', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient: () => {} })
+      );
+
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
+      expect((window as any).aa).toBe(undefined);
+    });
+
+    it('does nothing when insightsClient is null', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient: null })
+      );
+
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
+      expect((window as any).aa).toBe(undefined);
+    });
+
+    it('does nothing when insightsClient is already present', () => {
+      (window as any).AlgoliaAnalyticsObject = 'aa';
+      const aa = () => {};
+      (window as any).aa = aa;
+
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toBe(aa);
+    });
+
+    it('loads the script when insightsClient is not passed', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      expect(document.body).toMatchInlineSnapshot(`
+        <body>
+          <script
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js"
+          />
+        </body>
+      `);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+    });
+
+    it('notifies when the script fails to be added', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+      const createElement = document.createElement;
+      document.createElement = () => {
+        throw new Error('error');
+      };
+
+      instantSearchInstance.on('error', (error) =>
+        expect(error).toMatchInlineSnapshot(
+          `[Error: [insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init]`
+        )
+      );
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      document.createElement = createElement;
+    });
+
+    it('notifies when the script fails to load', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.on('error', (error) =>
+        expect(error).toMatchInlineSnapshot(
+          `[Error: [insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init]`
+        )
+      );
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      fireEvent(document.querySelector('script')!, new ErrorEvent('error'));
     });
   });
 
