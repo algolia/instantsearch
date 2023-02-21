@@ -134,8 +134,11 @@ export type InstantSearchOptions<
   routing?: RouterProps<TUiState, TRouteState> | boolean;
 
   /**
-   * Enables the insights middleware. This middleware will send view and click events,
-   * as well as allowing to set up your own events.
+   * Automatically enables the Insights middleware and loads the Insights library
+   * if not already loaded.
+   * 
+   * The Insights middleware sends view and click events automatically, and lets
+   * you set up your own events.
    *
    * @default true
    */
