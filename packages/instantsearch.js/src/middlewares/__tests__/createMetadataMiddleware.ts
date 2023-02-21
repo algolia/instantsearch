@@ -127,52 +127,106 @@ describe('createMetadataMiddleware', () => {
       expect(document.head).toMatchInlineSnapshot(`
         <head>
           <meta
-            content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"widgetType\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"]},{\\"type\\":\\"ais.index\\",\\"widgetType\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"widgetType\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"widgetType\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]}]}"
+            content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"widgetType\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"]},{\\"type\\":\\"ais.index\\",\\"widgetType\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"widgetType\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"widgetType\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]}],\\"middleware\\":[{\\"type\\":\\"ais.insights\\",\\"internal\\":true},{\\"type\\":\\"ais.metadata\\",\\"internal\\":true}]}"
             name="instantsearch:widgets"
           />
         </head>
       `);
 
-      expect(JSON.parse(document.head.querySelector('meta')!.content))
+      expect(JSON.parse(document.head.querySelector('meta')!.content).widgets)
         .toMatchInlineSnapshot(`
-        {
-          "widgets": [
-            {
-              "params": [],
-              "type": "ais.searchBox",
-              "widgetType": "ais.searchBox",
-            },
-            {
-              "params": [],
-              "type": "ais.searchBox",
-              "widgetType": "ais.searchBox",
-            },
-            {
-              "params": [
-                "escapeHTML",
-              ],
-              "type": "ais.hits",
-              "widgetType": "ais.hits",
-            },
-            {
-              "params": [],
-              "type": "ais.index",
-              "widgetType": "ais.index",
-            },
-            {
-              "params": [],
-              "type": "ais.pagination",
-              "widgetType": "ais.pagination",
-            },
-            {
-              "params": [
-                "searchParameters",
-              ],
-              "type": "ais.configure",
-              "widgetType": "ais.configure",
-            },
-          ],
-        }
+        [
+          {
+            "params": [],
+            "type": "ais.searchBox",
+            "widgetType": "ais.searchBox",
+          },
+          {
+            "params": [],
+            "type": "ais.searchBox",
+            "widgetType": "ais.searchBox",
+          },
+          {
+            "params": [
+              "escapeHTML",
+            ],
+            "type": "ais.hits",
+            "widgetType": "ais.hits",
+          },
+          {
+            "params": [],
+            "type": "ais.index",
+            "widgetType": "ais.index",
+          },
+          {
+            "params": [],
+            "type": "ais.pagination",
+            "widgetType": "ais.pagination",
+          },
+          {
+            "params": [
+              "searchParameters",
+            ],
+            "type": "ais.configure",
+            "widgetType": "ais.configure",
+          },
+        ]
+      `);
+    });
+
+    it('fills it with metadata after start', async () => {
+      // not using createMetadataMiddleware() here,
+      // since metadata is built into instantsearch
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        routing: true,
+      });
+
+      search.use(
+        () => ({ $$type: 'test', $$internal: false }),
+        // @ts-expect-error (unknown middleware, shouldn't error)
+        () => ({})
+      );
+
+      search.start();
+
+      await wait(100);
+
+      expect(document.head).toMatchInlineSnapshot(`
+        <head>
+          <meta
+            content="{\\"widgets\\":[],\\"middleware\\":[{\\"type\\":\\"ais.router\\",\\"internal\\":true},{\\"type\\":\\"ais.insights\\",\\"internal\\":true},{\\"type\\":\\"ais.metadata\\",\\"internal\\":true},{\\"type\\":\\"test\\",\\"internal\\":false},{\\"type\\":\\"__unknown__\\",\\"internal\\":false}]}"
+            name="instantsearch:widgets"
+          />
+        </head>
+      `);
+
+      expect(
+        JSON.parse(document.head.querySelector('meta')!.content).middleware
+      ).toMatchInlineSnapshot(`
+        [
+          {
+            "internal": true,
+            "type": "ais.router",
+          },
+          {
+            "internal": true,
+            "type": "ais.insights",
+          },
+          {
+            "internal": true,
+            "type": "ais.metadata",
+          },
+          {
+            "internal": false,
+            "type": "test",
+          },
+          {
+            "internal": false,
+            "type": "__unknown__",
+          },
+        ]
       `);
     });
 
@@ -203,7 +257,8 @@ describe('createMetadataMiddleware', () => {
           ua: expect.stringMatching(
             /^Algolia for JavaScript \(4\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\)$/
           ),
-          widgets: [],
+          widgets: expect.any(Array),
+          middleware: expect.any(Array),
         });
       });
 
@@ -235,7 +290,8 @@ describe('createMetadataMiddleware', () => {
           ua: expect.stringMatching(
             /^Algolia for JavaScript \(4\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\); test \(cool\)$/
           ),
-          widgets: [],
+          widgets: expect.any(Array),
+          middleware: expect.any(Array),
         });
       });
 
@@ -264,7 +320,8 @@ describe('createMetadataMiddleware', () => {
           ua: expect.stringMatching(
             /^Algolia for JavaScript \(3\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\)$/
           ),
-          widgets: [],
+          widgets: expect.any(Array),
+          middleware: expect.any(Array),
         });
       });
 
@@ -295,7 +352,8 @@ describe('createMetadataMiddleware', () => {
           ua: expect.stringMatching(
             /^Algolia for JavaScript \(3\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\); test \(cool\)$/
           ),
-          widgets: [],
+          widgets: expect.any(Array),
+          middleware: expect.any(Array),
         });
       });
 
@@ -319,7 +377,8 @@ describe('createMetadataMiddleware', () => {
         expect(
           JSON.parse(document.head.querySelector('meta')!.content)
         ).toEqual({
-          widgets: [],
+          widgets: expect.any(Array),
+          middleware: expect.any(Array),
         });
       });
     });
