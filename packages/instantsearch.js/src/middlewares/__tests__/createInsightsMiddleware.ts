@@ -14,6 +14,7 @@ import { history } from '../../lib/routers';
 import { wait } from '@instantsearch/testutils/wait';
 import type { JSDOM } from 'jsdom';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import { fireEvent } from '@testing-library/dom';
 
 declare const jsdom: JSDOM;
 
@@ -120,7 +121,11 @@ describe('insights', () => {
 
   describe('insightsClient', () => {
     it('does nothing when insightsClient is passed', () => {
-      createInsightsMiddleware({ insightsClient: () => {} });
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient: () => {} })
+      );
 
       expect(document.body).toMatchInlineSnapshot(`<body />`);
       expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
@@ -128,7 +133,11 @@ describe('insights', () => {
     });
 
     it('does nothing when insightsClient is null', () => {
-      createInsightsMiddleware({ insightsClient: null });
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient: null })
+      );
 
       expect(document.body).toMatchInlineSnapshot(`<body />`);
       expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
@@ -140,7 +149,9 @@ describe('insights', () => {
       const aa = () => {};
       (window as any).aa = aa;
 
-      createInsightsMiddleware();
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(createInsightsMiddleware());
 
       expect(document.body).toMatchInlineSnapshot(`<body />`);
       expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
@@ -148,7 +159,9 @@ describe('insights', () => {
     });
 
     it('loads the script when insightsClient is not passed', () => {
-      createInsightsMiddleware();
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(createInsightsMiddleware());
 
       expect(document.body).toMatchInlineSnapshot(`
         <body>
@@ -161,9 +174,37 @@ describe('insights', () => {
       expect((window as any).aa).toEqual(expect.any(Function));
     });
 
-    it.todo('notifies when the script fails to be added');
+    it('notifies when the script fails to be added', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+      const createElement = document.createElement;
+      document.createElement = () => {
+        throw new Error('error');
+      };
 
-    it.todo('notifies when the script fails to load');
+      instantSearchInstance.on('error', (error) =>
+        expect(error).toMatchInlineSnapshot(
+          `[Error: [insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init]`
+        )
+      );
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      document.createElement = createElement;
+    });
+
+    it('notifies when the script fails to load', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.on('error', (error) =>
+        expect(error).toMatchInlineSnapshot(
+          `[Error: [insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init]`
+        )
+      );
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      fireEvent(document.querySelector('script')!, new ErrorEvent('error'));
+    });
   });
 
   describe('initialize', () => {
