@@ -89,11 +89,10 @@ export function createInsightsMiddleware<
     const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
 
     // search-insights.js also throws an error so dev-only clarification is sufficient
-    if (__DEV__ && !(appId && apiKey)) {
-      throw new Error(
-        '[insights middleware]: could not extract Algolia credentials from searchClient'
-      );
-    }
+    warning(
+      Boolean(appId && apiKey),
+      'could not extract Algolia credentials from searchClient in insights middleware.'
+    );
 
     let queuedUserToken: string | undefined = undefined;
     let userTokenBeforeInit: string | undefined = undefined;
@@ -123,7 +122,12 @@ export function createInsightsMiddleware<
       // Otherwise, the `init` call might override it with anonymous user token.
       userTokenBeforeInit = userToken;
     });
-    insightsClient('init', { appId, apiKey, ...insightsInitParams });
+    insightsClient('init', {
+      appId,
+      apiKey,
+      useCookie: true,
+      ...insightsInitParams,
+    });
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
@@ -197,21 +201,16 @@ export function createInsightsMiddleware<
           if (onEvent) {
             onEvent(event, _insightsClient as TInsightsClient);
           } else if (event.insightsMethod) {
-            const hasUserToken = Boolean(
-              (helper.state as PlainSearchParameters).userToken
-            );
-            if (hasUserToken) {
-              insightsClient(event.insightsMethod, event.payload);
-            } else {
-              warning(
-                false,
-                `
+            insightsClient(event.insightsMethod, event.payload);
+
+            warning(
+              Boolean((helper.state as PlainSearchParameters).userToken),
+              `
 Cannot send event to Algolia Insights because \`userToken\` is not set.
 
 See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-further/send-insights-events/js/#setting-the-usertoken
 `
-              );
-            }
+            );
           } else {
             warning(
               false,
