@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.40.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.40.0...react-instantsearch-hooks-server@6.40.1) (2023-02-21)
+
+
+### Bug Fixes
+
+* **readme:** remove experimental warning ([#5485](https://github.com/algolia/instantsearch.js/issues/5485)) ([4409993](https://github.com/algolia/instantsearch.js/commit/44099939b5c51c94ef294b31dc91548f1530b65b))
+
+
+
+
+
 ## [6.40.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.39.3...react-instantsearch-hooks-server@6.40.0) (2023-02-14)
 
 **Note:** Version bump only for package react-instantsearch-hooks-server

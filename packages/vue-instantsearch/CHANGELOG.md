@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.5](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.4...vue-instantsearch@4.8.5) (2023-02-21)
+
+
+### Bug Fixes
+
+* **breadcrumb:** guard against undefined facets ([#5482](https://github.com/algolia/instantsearch.js/issues/5482)) ([3159afe](https://github.com/algolia/instantsearch.js/commit/3159afe57472fe2b669dceb5f1ee638b658f7f52))
+
+
+
+
+
 ## [4.8.4](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.3...vue-instantsearch@4.8.4) (2023-02-14)
 
 **Note:** Version bump only for package vue-instantsearch

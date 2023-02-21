@@ -7,7 +7,6 @@
   - [Getting started](#getting-started)
   - [API reference](#api-reference)
   - [Documentation](#documentation)
-  - [Troubleshooting](#troubleshooting)
   - [Contributing](#contributing)
   - [License](#license)
 
