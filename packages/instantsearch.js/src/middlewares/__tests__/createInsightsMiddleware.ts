@@ -41,12 +41,14 @@ describe('insights', () => {
   const createTestEnvironment = ({
     searchClient = searchClientWithCredentials,
     started = true,
+    insights = false,
   } = {}) => {
     const { analytics, insightsClient } = createInsights();
     const indexName = 'my-index';
     const instantSearchInstance = instantsearch({
       searchClient,
       indexName,
+      insights,
     });
     if (started) {
       instantSearchInstance.start();
@@ -78,6 +80,7 @@ describe('insights', () => {
           },
         },
       }),
+      insights: false,
       indexName,
     });
     instantSearchInstance.start();
@@ -420,7 +423,9 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('removes default middleware if user adds a custom one', () => {
-      const { instantSearchInstance } = createTestEnvironment();
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
 
       // just the internal one
       expect(instantSearchInstance.middleware).toHaveLength(1);
@@ -440,7 +445,9 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         ]
       `);
 
-      instantSearchInstance.use(createInsightsMiddleware({}));
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient: () => {} })
+      );
 
       // just the user-provided one
       expect(instantSearchInstance.middleware).toHaveLength(1);

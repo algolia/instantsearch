@@ -134,6 +134,14 @@ export type InstantSearchOptions<
   routing?: RouterProps<TUiState, TRouteState> | boolean;
 
   /**
+   * Enables the insights middleware. This middleware will send view and click events,
+   * as well as allowing to set up your own events.
+   *
+   * @default true
+   */
+  insights?: boolean;
+
+  /**
    * the instance of search-insights to use for sending insights events inside
    * widgets like `hits`.
    *
@@ -211,6 +219,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
+      insights = true,
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
@@ -305,7 +314,9 @@ See ${createDocumentationLink({
 
     // This is the default middleware,
     // any user-provided middleware will be added later and override this one.
-    this.use(createInsightsMiddleware({ $$internal: true }));
+    if (insights) {
+      this.use(createInsightsMiddleware({ $$internal: true }));
+    }
 
     if (isMetadataEnabled()) {
       this.use(createMetadataMiddleware({ $$internal: true }));
