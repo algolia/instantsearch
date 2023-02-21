@@ -69,11 +69,14 @@ export function createInsightsMiddleware<
 
       if (!insightsClient) {
         window.AlgoliaAnalyticsObject = pointer;
-        window[pointer] =
-          window[pointer] ||
-          function (...args: any[]) {
-            (window[pointer].queue = window[pointer].queue || []).push(args);
+        if (!window[pointer]) {
+          window[pointer] = (...args: any[]) => {
+            if (!window[pointer].queue) {
+              window[pointer].queue = [];
+            }
+            window[pointer].queue.push(args);
           };
+        }
 
         insightsClient = window[pointer];
         needsToLoadInsightsClient = true;
