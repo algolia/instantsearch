@@ -11,6 +11,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/dom';
 
 import { createInsightsMiddleware } from '..';
+import { createInstantSearch } from '../../../test/createInstantSearch';
 import instantsearch from '../../index.es';
 import { history } from '../../lib/routers';
 import { warning } from '../../lib/utils';
@@ -229,15 +230,36 @@ describe('insights', () => {
     });
 
     it('throws when search client does not have credentials', () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment({
-        searchClient: createSearchClient(),
+      const { insightsClient } = createInsights();
+      const instantSearchInstance = createInstantSearch({
+        // @ts-expect-error fake client
+        client: { search: () => {} },
       });
       expect(() =>
         createInsightsMiddleware({
           insightsClient,
         })({ instantSearchInstance })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"[insights middleware]: could not extract Algolia credentials from searchClient"`
+        `"apiKey is missing, please provide it so we can authenticate the application"`
+      );
+    });
+
+    it('warns when search client does not have credentials', () => {
+      const { insightsClient } = createInsights();
+      const instantSearchInstance = createInstantSearch({
+        // @ts-expect-error fake client
+        client: { search: () => {} },
+      });
+      expect(() => {
+        try {
+          createInsightsMiddleware({
+            insightsClient,
+          })({ instantSearchInstance });
+        } catch (e) {
+          // insights error
+        }
+      }).toWarnDev(
+        '[InstantSearch.js]: could not extract Algolia credentials from searchClient in insights middleware.'
       );
     });
 
