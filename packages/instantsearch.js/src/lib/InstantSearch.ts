@@ -97,6 +97,7 @@ export type InstantSearchOptions<
    * A hook that will be called each time a search needs to be done, with the
    * helper as a parameter. It's your responsibility to call `helper.search()`.
    * This option allows you to avoid doing searches at page load for example.
+   * @deprecated use onStateChange instead
    */
   searchFunction?: (helper: AlgoliaSearchHelper) => void;
 
@@ -291,6 +292,10 @@ See ${createDocumentationLink({
     this._initialResults = null;
 
     if (searchFunction) {
+      warning(
+        false,
+        `The \`searchFunction\` option is deprecated. Use \`onStateChange\` instead.`
+      );
       this._searchFunction = searchFunction;
     }
 
