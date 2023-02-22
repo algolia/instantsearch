@@ -136,7 +136,7 @@ export type InstantSearchOptions<
   /**
    * Automatically enables the Insights middleware and loads the Insights library
    * if not already loaded.
-   * 
+   *
    * The Insights middleware sends view and click events automatically, and lets
    * you set up your own events.
    *
