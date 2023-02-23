@@ -5,6 +5,7 @@ import { cx } from '@algolia/ui-components-shared';
 import Template from '../Template/Template';
 import type { SearchResults } from 'algoliasearch-helper';
 import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
+import { warning } from '../../lib/utils';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses, Hit } from '../../types';
 import type { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
@@ -54,7 +55,13 @@ const Hits = ({
             key={hit.objectID}
             data={{
               ...hit,
-              __hitIndex: index,
+              get __hitIndex() {
+                warning(
+                  false,
+                  'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
+                );
+                return index;
+              },
             }}
             bindEvent={bindEvent}
             sendEvent={sendEvent}

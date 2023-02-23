@@ -102,7 +102,7 @@ export type InfiniteHitsTemplates = Partial<{
    */
   item: TemplateWithBindEvent<
     Hit & {
-      // @deprecated the index in the hits array, use __position instead, which is the absolute position
+      /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
       __hitIndex: number;
     }
   >;
