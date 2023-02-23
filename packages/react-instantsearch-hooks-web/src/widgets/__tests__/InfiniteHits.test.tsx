@@ -202,6 +202,7 @@ describe('InfiniteHits', () => {
       {
         indexName: 'indexName',
         params: {
+          clickAnalytics: true,
           facets: [],
           highlightPostTag: '__/ais-highlight__',
           highlightPreTag: '__ais-highlight__',
@@ -223,6 +224,7 @@ describe('InfiniteHits', () => {
         {
           indexName: 'indexName',
           params: {
+            clickAnalytics: true,
             facets: [],
             highlightPostTag: '__/ais-highlight__',
             highlightPreTag: '__ais-highlight__',
@@ -258,6 +260,7 @@ describe('InfiniteHits', () => {
       {
         indexName: 'indexName',
         params: {
+          clickAnalytics: true,
           facets: [],
           highlightPostTag: '__/ais-highlight__',
           highlightPreTag: '__ais-highlight__',
@@ -281,6 +284,7 @@ describe('InfiniteHits', () => {
         {
           indexName: 'indexName',
           params: {
+            clickAnalytics: true,
             facets: [],
             highlightPostTag: '__/ais-highlight__',
             highlightPreTag: '__ais-highlight__',

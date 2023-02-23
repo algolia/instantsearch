@@ -9,7 +9,10 @@ import { createInitOptions } from 'instantsearch.js/test/createWidget';
 function getAttribute(widget: Widget | IndexWidget) {
   try {
     // casted to harmonize between src and es types of the same
-    return getWidgetAttribute(widget, createInitOptions() as InitOptions);
+    return getWidgetAttribute(
+      widget,
+      createInitOptions() as unknown as InitOptions
+    );
   } catch {
     return undefined;
   }
