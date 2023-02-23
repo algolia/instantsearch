@@ -17,6 +17,9 @@ export const createSearchClient = (
     )
   ),
   searchForFacetValues: jest.fn(() => Promise.resolve([createSFFVResponse()])),
+  // @ts-ignore this allows us to test insights initialization without warning
+  applicationID: 'appId',
+  apiKey: 'apiKey',
   ...args,
 });
 

@@ -8,6 +8,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { getByText, waitFor, fireEvent } from '@testing-library/dom';
+import { SearchParameters } from 'algoliasearch-helper';
 
 import { infiniteHits, configure } from '../..';
 import instantsearch from '../../../index.es';
@@ -235,22 +236,13 @@ describe('infiniteHits', () => {
       const { customCache } = createCustomCache();
 
       customCache.write({
-        state: {
-          facets: [],
-          disjunctiveFacets: [],
-          hierarchicalFacets: [],
-          facetsRefinements: {},
-          facetsExcludes: {},
-          disjunctiveFacetsRefinements: {},
-          numericRefinements: {},
-          tagRefinements: [],
-          hierarchicalFacetsRefinements: {},
+        state: new SearchParameters({
           index: 'instant_search',
           hitsPerPage: 2,
           highlightPreTag: '__ais-highlight__',
           highlightPostTag: '__/ais-highlight__',
           page: 0,
-        },
+        }),
         hits: {
           0: [
             {

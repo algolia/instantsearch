@@ -870,8 +870,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             stalledSearchDelay: 1,
             indexName: 'indexName',
           });
-          instantSearchInstance.sendEventToInsights = jest.fn();
           instantSearchInstance.start();
+          instantSearchInstance.sendEventToInsights = jest.fn();
 
           instantSearchInstance.addWidgets([widget]);
 

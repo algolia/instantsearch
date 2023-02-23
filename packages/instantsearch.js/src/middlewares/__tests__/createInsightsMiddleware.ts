@@ -420,6 +420,79 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         'insights-middleware'
       );
     });
+
+    it('removes default middleware if user adds a custom one', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      // just the internal one
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": true,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+
+      instantSearchInstance.use(createInsightsMiddleware({}));
+
+      // just the user-provided one
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": false,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+
+      instantSearchInstance.use(createInsightsMiddleware({}));
+
+      // both user-provided
+      expect(instantSearchInstance.middleware).toHaveLength(2);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": false,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": false,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+    });
   });
 
   describe('userToken', () => {

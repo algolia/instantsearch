@@ -1460,8 +1460,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             stalledSearchDelay: 1,
             indexName: 'indexName',
           });
-          instantSearchInstance.sendEventToInsights = jest.fn();
           instantSearchInstance.start();
+          instantSearchInstance.sendEventToInsights = jest.fn();
 
           instantSearchInstance.addWidgets([widget]);
 
