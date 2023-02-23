@@ -233,26 +233,28 @@ describe('menuSelect', () => {
 
       search.start();
 
-      expect(search.helper!.state).toEqual(
-        new SearchParameters({
+      expect(search.helper!.state).toEqual({
+        ...new SearchParameters({
           index: 'test',
           clickAnalytics: true,
-        })
-      );
+        }),
+        userToken: expect.any(String),
+      });
 
       search.addWidgets([widget]);
 
       await wait(0);
 
-      expect(search.helper!.state).toEqual(
-        new SearchParameters({
+      expect(search.helper!.state).toEqual({
+        ...new SearchParameters({
           index: 'test',
           clickAnalytics: true,
           hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
           hierarchicalFacetsRefinements: { test: [] },
           maxValuesPerFacet: 10,
-        })
-      );
+        }),
+        userToken: expect.any(String),
+      });
 
       expect(render).toHaveBeenCalledTimes(1);
 
@@ -260,9 +262,10 @@ describe('menuSelect', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render).toHaveBeenLastCalledWith(null, container);
-      expect(search.helper!.state).toEqual(
-        new SearchParameters({ index: 'test', clickAnalytics: true })
-      );
+      expect(search.helper!.state).toEqual({
+        ...new SearchParameters({ index: 'test', clickAnalytics: true }),
+        userToken: expect.any(String),
+      });
     });
   });
 });

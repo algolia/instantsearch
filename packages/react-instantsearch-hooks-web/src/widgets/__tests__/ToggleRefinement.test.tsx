@@ -101,12 +101,10 @@ describe('ToggleRefinement', () => {
       expect(client.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           expect.objectContaining({
-            params: {
-              clickAnalytics: true,
+            params: expect.objectContaining({
               facetFilters: [['free_shipping:true']],
               facets: ['free_shipping'],
-              tagFilters: '',
-            },
+            }),
           }),
         ])
       );
@@ -122,7 +120,6 @@ describe('ToggleRefinement', () => {
           expect.objectContaining({
             params: expect.objectContaining({
               facets: ['free_shipping'],
-              tagFilters: '',
             }),
           }),
         ])
@@ -156,12 +153,10 @@ describe('ToggleRefinement', () => {
       expect(client.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           expect.objectContaining({
-            params: {
-              clickAnalytics: true,
+            params: expect.objectContaining({
               facetFilters: [['free_shipping:yes']],
               facets: ['free_shipping'],
-              tagFilters: '',
-            },
+            }),
           }),
         ])
       );

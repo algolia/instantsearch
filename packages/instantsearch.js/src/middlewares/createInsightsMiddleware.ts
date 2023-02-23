@@ -16,6 +16,7 @@ import type {
   AlgoliaSearchHelper,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
+import { createUUID } from '../lib/utils/uuid';
 
 export type InsightsEvent = {
   insightsMethod?: InsightsClientMethod;
@@ -138,7 +139,6 @@ export function createInsightsMiddleware<
     insightsClient('init', {
       appId,
       apiKey,
-      useCookie: true,
       ...insightsInitParams,
     });
 
@@ -186,12 +186,21 @@ export function createInsightsMiddleware<
         }
 
         const setUserTokenToSearch = (userToken?: string) => {
+          const existingToken = (helper.state as PlainSearchParameters)
+            .userToken;
+
+          if (!userToken) {
+            return;
+          }
+
           helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
             userToken,
           });
 
-          instantSearchInstance.scheduleSearch();
+          if (existingToken && existingToken !== userToken) {
+            instantSearchInstance.scheduleSearch();
+          }
         };
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
@@ -204,9 +213,17 @@ export function createInsightsMiddleware<
         // We consider the `userToken` coming from a `init` call to have a higher
         // importance than the one coming from the queue.
         if (userTokenBeforeInit) {
+          setUserTokenToSearch(userTokenBeforeInit);
           insightsClient('setUserToken', userTokenBeforeInit);
         } else if (queuedUserToken) {
+          setUserTokenToSearch(queuedUserToken);
           insightsClient('setUserToken', queuedUserToken);
+        }
+
+        if (!(helper.state as PlainSearchParameters).userToken) {
+          const newAnonymousUserToken = `anonymous-${createUUID()}`;
+          setUserTokenToSearch(newAnonymousUserToken);
+          insightsClient('setUserToken', newAnonymousUserToken);
         }
 
         // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
@@ -219,15 +236,6 @@ export function createInsightsMiddleware<
             onEvent(event, _insightsClient as TInsightsClient);
           } else if (event.insightsMethod) {
             insightsClient(event.insightsMethod, event.payload);
-
-            warning(
-              Boolean((helper.state as PlainSearchParameters).userToken),
-              `
-Cannot send event to Algolia Insights because \`userToken\` is not set.
-
-See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-further/send-insights-events/js/#setting-the-usertoken
-`
-            );
           } else {
             warning(
               false,

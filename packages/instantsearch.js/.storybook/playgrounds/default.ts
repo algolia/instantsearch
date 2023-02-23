@@ -129,13 +129,13 @@ const instantSearchPlayground: Playground = function instantSearchPlayground({
     }),
   ]);
 
-  const insights = instantsearch.middlewares.createInsightsMiddleware({
-    insightsClient: null,
-    onEvent: props => {
-      console.log('insights onEvent', props);
-    },
-  });
-  search.use(insights);
+  // const insights = instantsearch.middlewares.createInsightsMiddleware({
+  //   insightsClient: null,
+  //   onEvent: props => {
+  //     console.log('insights onEvent', props);
+  //   },
+  // });
+  // search.use(insights);
 };
 
 export default instantSearchPlayground;

@@ -271,20 +271,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       `);
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
-      expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-        [
-          {
-            "indexName": "hello",
-            "params": {
-              "clickAnalytics": true,
-              "facets": [],
-              "hitsPerPage": 100,
-              "query": "",
-              "tagFilters": "",
-            },
+      expect(searchClient.search.mock.calls[0][0]).toEqual([
+        {
+          indexName: 'hello',
+          params: {
+            clickAnalytics: true,
+            userToken: expect.any(String),
+            facets: [],
+            hitsPerPage: 100,
+            query: '',
+            tagFilters: '',
           },
-        ]
-      `);
+        },
+      ]);
     });
 
     it('returns correct results state', () => {
@@ -348,6 +347,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   hitsPerPage: 100,
                   index: 'hello',
                   clickAnalytics: true,
+                  userToken: expect.any(String),
                   numericRefinements: {},
                   query: '',
                   tagRefinements: [],
@@ -823,20 +823,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         await renderToString(wrapper);
 
         expect(searchClient.search).toHaveBeenCalledTimes(1);
-        expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-          [
-            {
-              "indexName": "hello",
-              "params": {
-                "clickAnalytics": true,
-                "facets": [],
-                "hitsPerPage": 100,
-                "query": "",
-                "tagFilters": "",
-              },
+        expect(searchClient.search.mock.calls[0][0]).toEqual([
+          {
+            indexName: 'hello',
+            params: {
+              clickAnalytics: true,
+              userToken: expect.any(String),
+              facets: [],
+              hitsPerPage: 100,
+              query: '',
+              tagFilters: '',
             },
-          ]
-        `);
+          },
+        ]);
       });
 
       it('works when component is at root (and therefore has no $vnode)', async () => {
@@ -900,20 +899,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         `);
 
         expect(searchClient.search).toHaveBeenCalledTimes(1);
-        expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-          [
-            {
-              "indexName": "hello",
-              "params": {
-                "clickAnalytics": true,
-                "facets": [],
-                "hitsPerPage": 100,
-                "query": "",
-                "tagFilters": "",
-              },
+        expect(searchClient.search.mock.calls[0][0]).toEqual([
+          {
+            indexName: 'hello',
+            params: {
+              clickAnalytics: true,
+              userToken: expect.any(String),
+              facets: [],
+              hitsPerPage: 100,
+              query: '',
+              tagFilters: '',
             },
-          ]
-        `);
+          },
+        ]);
       });
     }
   });
@@ -1140,6 +1138,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       const localState = new SearchParameters({
         index: 'lol',
         clickAnalytics: true,
+        userToken: expect.any(String),
       });
       const results = new SearchResults(state, resultsState.results);
 
@@ -1158,12 +1157,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       const renderArgs = widget.render.mock.calls[0][0];
 
       // renders with local state, not the one from results
-      expect(renderArgs.state).toEqual(localState);
-      results._state = localState;
-      expect(renderArgs.results).toEqual(results);
+      expect(renderArgs.state).toEqual({
+        ...localState,
+        userToken: expect.any(String),
+      });
+      expect(renderArgs.results).toEqual({
+        ...results,
+        _state: {
+          ...localState,
+          userToken: expect.any(String),
+        },
+      });
       expect(renderArgs.scopedResults).toHaveLength(1);
       expect(renderArgs.scopedResults[0].indexId).toEqual('lol');
-      expect(renderArgs.scopedResults[0].results).toEqual(results);
+      expect(renderArgs.scopedResults[0].results).toEqual({
+        ...results,
+        _state: {
+          ...localState,
+          userToken: expect.any(String),
+        },
+      });
     });
 
     describe('createURL', () => {

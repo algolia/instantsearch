@@ -197,6 +197,7 @@ describe('getServerState', () => {
         indexName: 'instant_search',
         params: {
           clickAnalytics: true,
+          userToken: expect.any(String),
           facetFilters: [['brand:Apple']],
           facets: ['brand'],
           highlightPostTag: '__/ais-highlight__',
@@ -211,6 +212,7 @@ describe('getServerState', () => {
         params: {
           analytics: false,
           clickAnalytics: false,
+          userToken: expect.any(String),
           facets: 'brand',
           highlightPostTag: '__/ais-highlight__',
           highlightPreTag: '__ais-highlight__',
@@ -224,6 +226,7 @@ describe('getServerState', () => {
         indexName: 'instant_search_price_asc',
         params: {
           clickAnalytics: true,
+          userToken: expect.any(String),
           facetFilters: [['brand:Apple']],
           facets: ['brand'],
           highlightPostTag: '__/ais-highlight__',
@@ -238,6 +241,7 @@ describe('getServerState', () => {
         params: {
           analytics: false,
           clickAnalytics: false,
+          userToken: expect.any(String),
           facets: 'brand',
           highlightPostTag: '__/ais-highlight__',
           highlightPreTag: '__ais-highlight__',
@@ -251,6 +255,7 @@ describe('getServerState', () => {
         indexName: 'instant_search_rating_desc',
         params: {
           clickAnalytics: true,
+          userToken: expect.any(String),
           facetFilters: [['brand:Apple']],
           facets: ['brand'],
           highlightPostTag: '__/ais-highlight__',
@@ -265,6 +270,7 @@ describe('getServerState', () => {
         params: {
           analytics: false,
           clickAnalytics: false,
+          userToken: expect.any(String),
           facets: 'brand',
           highlightPostTag: '__/ais-highlight__',
           highlightPreTag: '__ais-highlight__',
@@ -278,6 +284,7 @@ describe('getServerState', () => {
         indexName: 'instant_search_price_desc',
         params: {
           clickAnalytics: true,
+          userToken: expect.any(String),
           facetFilters: [['brand:Apple']],
           facets: ['brand'],
           highlightPostTag: '__/ais-highlight__',
@@ -292,6 +299,7 @@ describe('getServerState', () => {
         params: {
           analytics: false,
           clickAnalytics: false,
+          userToken: expect.any(String),
           facets: 'brand',
           highlightPostTag: '__/ais-highlight__',
           highlightPreTag: '__ais-highlight__',
@@ -388,6 +396,7 @@ describe('getServerState', () => {
       indexName: 'instant_search',
       params: {
         clickAnalytics: true,
+        userToken: expect.any(String),
         facets: ['*'],
         highlightPostTag: '__/ais-highlight__',
         highlightPreTag: '__ais-highlight__',
@@ -402,6 +411,7 @@ describe('getServerState', () => {
       indexName: 'instant_search',
       params: {
         clickAnalytics: true,
+        userToken: expect.any(String),
         facetFilters: [['categories:refined!']],
         facets: ['*'],
         highlightPostTag: '__/ais-highlight__',

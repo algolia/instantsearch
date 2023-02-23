@@ -354,6 +354,7 @@ describe('useConnector', () => {
 
     const helperState = {
       clickAnalytics: true,
+      userToken: expect.any(String),
       disjunctiveFacets: [],
       disjunctiveFacetsRefinements: {},
       facets: [],

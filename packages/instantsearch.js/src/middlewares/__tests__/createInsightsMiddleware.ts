@@ -358,34 +358,6 @@ describe('insights', () => {
       );
     });
 
-    it('warns when userToken is not set', () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment();
-
-      instantSearchInstance.use(
-        createInsightsMiddleware({
-          insightsClient,
-          insightsInitParams: { useCookie: false },
-        })
-      );
-
-      expect(() =>
-        instantSearchInstance.sendEventToInsights({
-          eventType: 'view',
-          insightsMethod: 'viewedObjectIDs',
-          payload: {
-            eventName: 'Hits Viewed',
-            index: '',
-            objectIDs: ['1', '2'],
-          },
-          widgetType: 'ais.hits',
-        })
-      ).toWarnDev(
-        `[InstantSearch.js]: Cannot send event to Algolia Insights because \`userToken\` is not set.
-
-See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-further/send-insights-events/js/#setting-the-usertoken`
-      );
-    });
-
     it('applies clickAnalytics', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
       instantSearchInstance.use(
