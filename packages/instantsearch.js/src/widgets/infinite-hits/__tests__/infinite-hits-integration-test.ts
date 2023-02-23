@@ -9,6 +9,7 @@ import { infiniteHits, configure } from '../..';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { wait } from '@instantsearch/testutils/wait';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import { SearchParameters } from 'algoliasearch-helper';
 import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
@@ -234,22 +235,13 @@ describe('infiniteHits', () => {
       const { customCache } = createCustomCache();
 
       customCache.write({
-        state: {
-          facets: [],
-          disjunctiveFacets: [],
-          hierarchicalFacets: [],
-          facetsRefinements: {},
-          facetsExcludes: {},
-          disjunctiveFacetsRefinements: {},
-          numericRefinements: {},
-          tagRefinements: [],
-          hierarchicalFacetsRefinements: {},
+        state: new SearchParameters({
           index: 'instant_search',
           hitsPerPage: 2,
           highlightPreTag: '__ais-highlight__',
           highlightPostTag: '__/ais-highlight__',
           page: 0,
-        },
+        }),
         hits: {
           0: [
             {

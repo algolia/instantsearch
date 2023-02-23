@@ -40,6 +40,10 @@ export type InsightsProps<
     region?: 'de' | 'us';
   };
   onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
+  /**
+   * @internal indicator for the default insights middleware
+   */
+  $$internal?: boolean;
 };
 
 const ALGOLIA_INSIGHTS_SRC =
@@ -54,6 +58,7 @@ export function createInsightsMiddleware<
     insightsClient: _insightsClient,
     insightsInitParams,
     onEvent,
+    $$internal = false,
   } = props;
 
   let insightsClient: InsightsClient = _insightsClient || noop;
@@ -85,6 +90,15 @@ export function createInsightsMiddleware<
   }
 
   return ({ instantSearchInstance }) => {
+    // remove existing default insights middleware
+    // user-provided insights middleware takes precedence
+    const existingInsightsMiddlewares = instantSearchInstance.middleware
+      .filter(
+        (m) => m.instance.$$type === 'ais.insights' && m.instance.$$internal
+      )
+      .map((m) => m.creator);
+    instantSearchInstance.unuse(...existingInsightsMiddlewares);
+
     const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
 
     // search-insights.js also throws an error so dev-only clarification is sufficient
@@ -132,6 +146,8 @@ export function createInsightsMiddleware<
     let helper: AlgoliaSearchHelper;
 
     return {
+      $$type: 'ais.insights',
+      $$internal,
       onStateChange() {},
       subscribe() {
         if (!needsToLoadInsightsClient) return;
@@ -165,7 +181,9 @@ export function createInsightsMiddleware<
           ...helper.state,
           clickAnalytics: true,
         });
-        instantSearchInstance.scheduleSearch();
+        if (!$$internal) {
+          instantSearchInstance.scheduleSearch();
+        }
 
         const setUserTokenToSearch = (userToken?: string) => {
           helper.overrideStateWithoutTriggeringChangeEvent({
@@ -222,7 +240,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
         if (helper && initialParameters) {
-          helper.setState({
+          helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
             ...initialParameters,
           });

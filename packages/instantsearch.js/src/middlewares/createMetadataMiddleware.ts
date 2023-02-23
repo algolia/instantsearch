@@ -72,7 +72,11 @@ export function isMetadataEnabled() {
  * - widget name
  * - connector name
  */
-export function createMetadataMiddleware(): InternalMiddleware {
+export function createMetadataMiddleware({
+  $$internal = false,
+}: {
+  $$internal?: boolean;
+} = {}): InternalMiddleware {
   return ({ instantSearchInstance }) => {
     const payload: Payload = {
       widgets: [],
@@ -82,6 +86,8 @@ export function createMetadataMiddleware(): InternalMiddleware {
     payloadContainer.name = 'instantsearch:widgets';
 
     return {
+      $$type: 'ais.metadata',
+      $$internal,
       onStateChange() {},
       subscribe() {
         // using setTimeout here to delay extraction until widgets have been added in a tick (e.g. Vue)
