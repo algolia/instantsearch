@@ -238,6 +238,7 @@ describe('menuSelect', () => {
       expect(search.helper!.state).toEqual(
         new SearchParameters({
           index: 'test',
+          clickAnalytics: true,
         })
       );
 
@@ -248,6 +249,7 @@ describe('menuSelect', () => {
       expect(search.helper!.state).toEqual(
         new SearchParameters({
           index: 'test',
+          clickAnalytics: true,
           hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
           hierarchicalFacetsRefinements: { test: [] },
           maxValuesPerFacet: 10,
@@ -261,7 +263,7 @@ describe('menuSelect', () => {
       expect(render).toHaveBeenCalledTimes(2);
       expect(render).toHaveBeenLastCalledWith(null, container);
       expect(search.helper!.state).toEqual(
-        new SearchParameters({ index: 'test' })
+        new SearchParameters({ index: 'test', clickAnalytics: true })
       );
     });
   });

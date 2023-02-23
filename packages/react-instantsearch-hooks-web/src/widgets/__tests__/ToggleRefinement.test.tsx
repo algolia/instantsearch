@@ -102,6 +102,7 @@ describe('ToggleRefinement', () => {
         expect.arrayContaining([
           expect.objectContaining({
             params: {
+              clickAnalytics: true,
               facetFilters: [['free_shipping:true']],
               facets: ['free_shipping'],
               tagFilters: '',
@@ -156,6 +157,7 @@ describe('ToggleRefinement', () => {
         expect.arrayContaining([
           expect.objectContaining({
             params: {
+              clickAnalytics: true,
               facetFilters: [['free_shipping:yes']],
               facets: ['free_shipping'],
               tagFilters: '',
