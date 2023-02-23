@@ -3,6 +3,9 @@
   "exclude": [
     "examples",
     "es",
+    "tests/e2e",
+    "packages/create-instantsearch-app/src/templates/**/*",
+
     // this test has specific code for v3 and v4, so already checked in the v4 test
     "packages/instantsearch.js/src/middlewares/__tests__/createMetadataMiddleware.ts",
     // these two files are temporarily excluded because
@@ -17,7 +20,5 @@
     "packages/instantsearch.js/src/connectors/hierarchical-menu/__tests__/connectHierarchicalMenu-test.ts",
     "packages/instantsearch.js/src/connectors/menu/__tests__/connectMenu-test.ts",
     "packages/instantsearch.js/src/connectors/refinement-list/__tests__/connectRefinementList-test.ts",
-    "tests/e2e",
-    "packages/create-instantsearch-app/src/templates/**/*"
   ]
 }
