@@ -62,6 +62,8 @@ describe('middleware', () => {
     });
 
     const middlewareDefinition: MiddlewareDefinition = {
+      $$type: 'fake',
+      $$internal: false,
       onStateChange: jest.fn(),
       subscribe: jest.fn(),
       started: jest.fn(),
@@ -98,6 +100,8 @@ describe('middleware', () => {
     });
 
     const middlewareDefinition: MiddlewareDefinition = {
+      $$type: 'fake',
+      $$internal: false,
       onStateChange: jest.fn(),
       subscribe: jest.fn(),
       started: jest.fn(),

@@ -451,29 +451,47 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     });
 
     it("doesn't add metadata middleware by default", () => {
-      const useSpy = jest.spyOn(InstantSearch.prototype, 'use');
-
-      // eslint-disable-next-line no-new
-      new InstantSearch({
+      const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
       });
 
-      expect(useSpy).toHaveBeenCalledTimes(0);
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+      ]);
     });
 
     it('adds metadata middleware on the Crawler user agent', () => {
       userAgentMock = algoliaUserAgent;
 
-      const useSpy = jest.spyOn(InstantSearch.prototype, 'use');
-
-      // eslint-disable-next-line no-new
-      new InstantSearch({
+      const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
       });
 
-      expect(useSpy).toHaveBeenCalledTimes(1);
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+        {
+          $$type: 'ais.metadata',
+          $$internal: true,
+        },
+      ]);
     });
   });
 });
