@@ -226,6 +226,10 @@ export function createInsightsMiddleware<
         });
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
+          // Pass credentials in event payload, in case init was called with different credentials
+          event.payload.appId = event.payload.appId || appId;
+          event.payload.apiKey = event.payload.apiKey || apiKey;
+
           if (onEvent) {
             onEvent(event, _insightsClient as TInsightsClient);
           } else if (event.insightsMethod) {
