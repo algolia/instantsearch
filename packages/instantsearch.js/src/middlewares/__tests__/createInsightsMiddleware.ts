@@ -16,6 +16,8 @@ import type { JSDOM } from 'jsdom';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import { fireEvent } from '@testing-library/dom';
 import { createInstantSearch } from '../../../test/createInstantSearch';
+import { castToJestMock } from '@instantsearch/testutils';
+import { connectSearchBox } from '../../connectors';
 
 declare const jsdom: JSDOM;
 
@@ -43,6 +45,7 @@ describe('insights', () => {
     started = true,
     insights = false,
   } = {}) => {
+    castToJestMock(searchClient.search).mockClear();
     const { analytics, insightsClient } = createInsights();
     const indexName = 'my-index';
     const instantSearchInstance = instantsearch({
@@ -619,6 +622,31 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(
         (instantSearchInstance.helper!.state as PlainSearchParameters).userToken
       ).toEqual('def');
+    });
+
+    it('searches once per unique userToken', async () => {
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
+
+      instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(1);
+
+      insightsClient('setUserToken', 'abc');
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
+
+      insightsClient('setUserToken', 'abc');
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
     });
 
     describe('umd', () => {
