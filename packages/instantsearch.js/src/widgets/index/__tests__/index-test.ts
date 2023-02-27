@@ -24,8 +24,13 @@ import InstantSearch from '../../../lib/InstantSearch';
 import index from '../index';
 import { warning } from '../../../lib/utils';
 import { refinementList } from '../..';
-import { connectHits } from '../../../connectors';
+import {
+  connectHits,
+  connectPagination,
+  connectSearchBox,
+} from '../../../connectors';
 import { castToJestMock } from '../../../../../../tests/utils';
+import instantsearch from '../../../index.es';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
@@ -2891,6 +2896,64 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       }).not.toWarnDev(
         '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
       );
+    });
+  });
+
+  describe('setIndexUiState', () => {
+    it('updates main ui state with object', () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = instantsearch({
+        indexName: 'root',
+        searchClient: createSearchClient(),
+      });
+      instantSearchInstance.start();
+      instantSearchInstance.addWidgets([
+        instance.addWidgets([virtualSearchBox({})]),
+      ]);
+
+      instance.setIndexUiState({
+        query: 'iphone',
+      });
+
+      expect(instantSearchInstance.getUiState()).toEqual({
+        root: {},
+        indexName: {
+          query: 'iphone',
+        },
+      });
+    });
+
+    it('updates main ui state with function', () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = instantsearch({
+        indexName: 'root',
+        searchClient: createSearchClient(),
+      });
+      instantSearchInstance.start();
+      instantSearchInstance.addWidgets([
+        instance.addWidgets([virtualPagination({})]),
+      ]);
+      instance.setIndexUiState((uiState) => ({
+        page: (uiState.page || 1) + 1,
+      }));
+
+      expect(instantSearchInstance.getUiState()).toEqual({
+        root: {},
+        indexName: {
+          page: 2,
+        },
+      });
+
+      instance.setIndexUiState((uiState) => ({
+        page: (uiState.page || 1) + 1,
+      }));
+
+      expect(instantSearchInstance.getUiState()).toEqual({
+        root: {},
+        indexName: {
+          page: 3,
+        },
+      });
     });
   });
 
