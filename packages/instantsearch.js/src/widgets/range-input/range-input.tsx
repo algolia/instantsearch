@@ -1,26 +1,28 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import RangeInput from '../../components/RangeInput/RangeInput';
+import connectRange from '../../connectors/range/connectRange';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
 import type {
   RangeInputComponentCSSClasses,
   RangeInputComponentTemplates,
 } from '../../components/RangeInput/RangeInput';
-import RangeInput from '../../components/RangeInput/RangeInput';
 import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
 } from '../../connectors/range/connectRange';
-import connectRange from '../../connectors/range/connectRange';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import type { Renderer, Template, WidgetFactory } from '../../types';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Renderer, Template, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
 const suit = component('RangeInput');

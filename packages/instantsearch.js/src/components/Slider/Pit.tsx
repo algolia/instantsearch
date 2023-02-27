@@ -1,7 +1,8 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
 import type { PitProps } from './Rheostat';
 
 const Pit = ({ style, children }: PitProps) => {

@@ -1,22 +1,23 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import type {
-  PaginationConnectorParams,
-  PaginationRenderState,
-} from '../connectPagination';
-import connectPagination from '../connectPagination';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import connectPagination from '../connectPagination';
+
+import type {
+  PaginationConnectorParams,
+  PaginationRenderState,
+} from '../connectPagination';
 
 describe('connectPagination', () => {
   const getInitializedWidget = (

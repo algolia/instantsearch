@@ -1,4 +1,5 @@
 import { unescape } from './escape-html';
+
 import type { HighlightedParts } from '../../types';
 
 const hasAlphanumeric = new RegExp(/\w/i);

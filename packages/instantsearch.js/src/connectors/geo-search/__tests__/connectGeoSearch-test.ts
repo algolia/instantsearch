@@ -1,21 +1,23 @@
-import algoliasearchHelper, {
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
-import connectGeoSearch from '../connectGeoSearch';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
 import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
+import connectGeoSearch from '../connectGeoSearch';
+
 import type { SearchResponse } from '../../../types';
 
 describe('connectGeoSearch', () => {

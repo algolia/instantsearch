@@ -10,13 +10,13 @@ import {
   getHighlightedParts,
 } from '../../lib/utils';
 
+import type { ReverseSnippetProps as ReverseSnippetUiComponentProps } from '../../components/ReverseSnippet/ReverseSnippet';
 import type {
   BaseHit,
   Hit,
   HitAttributeSnippetResult,
   PartialKeys,
 } from '../../types';
-import type { ReverseSnippetProps as ReverseSnippetUiComponentProps } from '../../components/ReverseSnippet/ReverseSnippet';
 
 export type ReverseSnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;

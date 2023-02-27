@@ -1,18 +1,19 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectSearchBox from '../connectSearchBox';
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
 import InstantSearch from '../../../lib/InstantSearch';
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import connectSearchBox from '../connectSearchBox';
 
 describe('connectSearchBox', () => {
   const getInitializedWidget = (config = {}) => {

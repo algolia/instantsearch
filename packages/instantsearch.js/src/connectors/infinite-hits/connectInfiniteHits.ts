@@ -1,17 +1,3 @@
-import type {
-  AlgoliaSearchHelper as Helper,
-  PlainSearchParameters,
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
-import type {
-  Connector,
-  TransformItems,
-  Hit,
-  WidgetRenderState,
-  BaseHit,
-} from '../../types';
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -24,6 +10,21 @@ import {
   createSendEventForHits,
   createBindEventForHits,
 } from '../../lib/utils';
+
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
+import type {
+  Connector,
+  TransformItems,
+  Hit,
+  WidgetRenderState,
+  BaseHit,
+} from '../../types';
+import type {
+  AlgoliaSearchHelper as Helper,
+  PlainSearchParameters,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 
 export type InfiniteHitsCachedHits<THit extends BaseHit> = {
   [page: number]: Array<Hit<THit>>;

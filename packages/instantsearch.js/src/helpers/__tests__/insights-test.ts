@@ -2,12 +2,12 @@
  * @jest-environment jsdom
  */
 
+import { warning, serializePayload } from '../../lib/utils';
 import insights, {
   writeDataAttributes,
   readDataAttributes,
   hasDataAttributes,
 } from '../insights';
-import { warning, serializePayload } from '../../lib/utils';
 
 const makeDomElement = (html: string): HTMLElement => {
   const div = document.createElement('div');

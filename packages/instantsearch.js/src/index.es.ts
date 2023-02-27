@@ -1,7 +1,3 @@
-import type { Expand, UiState } from './types';
-import type { InstantSearchOptions } from './lib/InstantSearch';
-import InstantSearch from './lib/InstantSearch';
-import version from './lib/version';
 import {
   snippet,
   reverseSnippet,
@@ -11,7 +7,12 @@ import {
   getInsightsAnonymousUserToken,
 } from './helpers';
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache';
+import InstantSearch from './lib/InstantSearch';
 import { deprecate } from './lib/utils';
+import version from './lib/version';
+
+import type { InstantSearchOptions } from './lib/InstantSearch';
+import type { Expand, UiState } from './types';
 
 type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(

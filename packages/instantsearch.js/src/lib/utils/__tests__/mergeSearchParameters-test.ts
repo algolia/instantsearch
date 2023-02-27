@@ -1,4 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
+
 import { mergeSearchParameters } from '../mergeSearchParameters';
 
 describe('mergeSearchParameters', () => {

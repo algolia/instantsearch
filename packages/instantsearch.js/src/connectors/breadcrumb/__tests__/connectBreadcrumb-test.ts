@@ -1,18 +1,19 @@
-import algoliasearchHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import { warning } from '../../../lib/utils';
-import connectBreadcrumb from '../connectBreadcrumb';
 import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import { warning } from '../../../lib/utils';
+import connectBreadcrumb from '../connectBreadcrumb';
 
 describe('connectBreadcrumb', () => {
   describe('Usage', () => {

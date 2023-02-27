@@ -1,5 +1,7 @@
-import { clearRefinements } from '../clearRefinements';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+
+import { clearRefinements } from '../clearRefinements';
+
 import type { SearchClient } from '../../../types';
 
 const initHelperWithRefinements = () => {

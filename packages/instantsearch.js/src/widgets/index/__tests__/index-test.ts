@@ -2,34 +2,35 @@
  * @jest-environment jsdom
  */
 
-import type { PlainSearchParameters } from 'algoliasearch-helper';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import { castToJestMock } from '../../../../../../tests/utils';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createWidget,
   createIndexInitOptions,
   createDisposeOptions,
 } from '../../../../test/createWidget';
-import { wait } from '@instantsearch/testutils/wait';
-import type { Widget } from '../../../types';
-import index from '../index';
-import { warning } from '../../../lib/utils';
 import {
   connectHits,
   connectPagination,
   connectRefinementList,
   connectSearchBox,
 } from '../../../connectors';
-import { castToJestMock } from '../../../../../../tests/utils';
 import instantsearch from '../../../index.es';
+import { warning } from '../../../lib/utils';
+import index from '../index';
+
+import type { Widget } from '../../../types';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>

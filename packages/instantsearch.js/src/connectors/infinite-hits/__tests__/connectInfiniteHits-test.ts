@@ -2,8 +2,24 @@
  * @jest-environment jsdom
  */
 
-import type { SearchParameters } from 'algoliasearch-helper';
+import {
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
+import {
+  createDisposeOptions,
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/createWidget';
+import instantsearch from '../../../index.es';
+import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
+import connectInfiniteHits from '../connectInfiniteHits';
+
 import type {
   SearchClient,
   HitAttributeHighlightResult,
@@ -11,21 +27,7 @@ import type {
   EscapedHits,
   SearchResponse,
 } from '../../../types';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
-import {
-  createDisposeOptions,
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/createWidget';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-  createSearchClient,
-} from '@instantsearch/mocks';
-import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
-import connectInfiniteHits from '../connectInfiniteHits';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
+import type { SearchParameters } from 'algoliasearch-helper';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,

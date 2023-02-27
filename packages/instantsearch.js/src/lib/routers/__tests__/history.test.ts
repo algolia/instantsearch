@@ -2,12 +2,14 @@
  * @jest-environment jsdom
  */
 
-import historyRouter from '../history';
-import type { UiState } from '../../../types';
-import { noop } from '../../utils';
 import { createSearchClient } from '@instantsearch/mocks';
+
 import instantsearch from '../../..';
 import { simple } from '../../stateMappings';
+import { noop } from '../../utils';
+import historyRouter from '../history';
+
+import type { UiState } from '../../../types';
 
 jest.useFakeTimers();
 

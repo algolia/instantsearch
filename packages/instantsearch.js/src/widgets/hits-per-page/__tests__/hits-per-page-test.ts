@@ -2,26 +2,28 @@
  * @jest-environment jsdom
  */
 
-import type { VNode, ComponentChildren } from 'preact';
-import { render as preactRender } from 'preact';
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import algoliasearchHelper, {
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
-import type { HitsPerPageCSSClasses } from '../hits-per-page';
-import hitsPerPage from '../hits-per-page';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import type { SelectorProps } from '../../../components/Selector/Selector';
-import type { HitsPerPageConnectorParamsItem } from '../../../connectors/hits-per-page/connectHitsPerPage';
 import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import { render as preactRender } from 'preact';
+
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import hitsPerPage from '../hits-per-page';
+
+import type { SelectorProps } from '../../../components/Selector/Selector';
+import type { HitsPerPageConnectorParamsItem } from '../../../connectors/hits-per-page/connectHitsPerPage';
+import type { HitsPerPageCSSClasses } from '../hits-per-page';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { VNode, ComponentChildren } from 'preact';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

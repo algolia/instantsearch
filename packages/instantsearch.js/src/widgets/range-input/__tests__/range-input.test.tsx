@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
+import { h } from 'preact';
+
+import instantsearch from '../../../index.es';
 import rangeInput from '../range-input';
 
 beforeEach(() => {

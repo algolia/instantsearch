@@ -1,8 +1,3 @@
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
 import {
   checkRendering,
   escapeFacetValue,
@@ -11,12 +6,18 @@ import {
   noop,
   toArray,
 } from '../../lib/utils';
+
 import type {
   Connector,
   CreateURL,
   InstantSearch,
   WidgetRenderState,
 } from '../../types';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',

@@ -3,9 +3,10 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { mount } from '@instantsearch/testutils/enzyme';
 import { render, fireEvent } from '@testing-library/preact';
+import { h } from 'preact';
+
 import SearchBox from '../SearchBox';
 
 const defaultProps = {

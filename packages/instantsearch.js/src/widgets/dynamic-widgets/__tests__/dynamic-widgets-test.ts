@@ -3,20 +3,21 @@
  */
 
 import {
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/createWidget';
-import { index, searchBox, menu, dynamicWidgets } from '../..';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import {
   createMultiSearchResponse,
   createSearchClient,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { widgetSnapshotSerializer } from '@instantsearch/testutils/widgetSnapshotSerializer';
-import refinementList from '../../refinement-list/refinement-list';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+
+import { index, searchBox, menu, dynamicWidgets } from '../..';
 import instantsearch from '../../..';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/createWidget';
+import refinementList from '../../refinement-list/refinement-list';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 

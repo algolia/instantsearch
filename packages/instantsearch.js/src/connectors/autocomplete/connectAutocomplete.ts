@@ -1,5 +1,3 @@
-import type { SearchResults } from 'algoliasearch-helper';
-import type { SendEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -9,7 +7,10 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
+
+import type { SendEventForHits } from '../../lib/utils';
 import type { Hit, Connector, WidgetRenderState } from '../../types';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',

@@ -2,11 +2,12 @@
  * @jest-environment jsdom
  */
 
-import algoliasearch from 'algoliasearch';
-import algoliasearchV3 from 'algoliasearch-v3';
-import { createMetadataMiddleware } from '..';
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import algoliasearch from 'algoliasearch';
+import algoliasearchV3 from 'algoliasearch-v3';
+
+import { createMetadataMiddleware } from '..';
 import instantsearch from '../..';
 import { configure, hits, index, pagination, searchBox } from '../../widgets';
 import { isMetadataEnabled } from '../createMetadataMiddleware';

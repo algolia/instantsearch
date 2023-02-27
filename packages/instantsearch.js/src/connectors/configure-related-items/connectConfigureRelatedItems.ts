@@ -1,17 +1,19 @@
-import type {
-  SearchParameters,
-  PlainSearchParameters,
-} from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type { AlgoliaHit, Connector } from '../../types';
+
 import {
   createDocumentationMessageGenerator,
   getObjectType,
   warning,
   getPropertyByPath,
 } from '../../lib/utils';
-import type { ConfigureWidgetDescription } from '../configure/connectConfigure';
 import connectConfigure from '../configure/connectConfigure';
+
+import type { AlgoliaHit, Connector } from '../../types';
+import type { ConfigureWidgetDescription } from '../configure/connectConfigure';
+import type {
+  SearchParameters,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
 
 export type MatchingPatterns = {
   [attribute: string]: {

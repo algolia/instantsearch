@@ -1,14 +1,15 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
 
 import { isSpecialClick } from '../../lib/utils';
+
+import type { ComponentCSSClasses } from '../../types';
 import type {
   PaginationCSSClasses,
   PaginationTemplates,
 } from '../../widgets/pagination/pagination';
-import type { ComponentCSSClasses } from '../../types';
 
 export type PaginationComponentCSSClasses =
   ComponentCSSClasses<PaginationCSSClasses>;

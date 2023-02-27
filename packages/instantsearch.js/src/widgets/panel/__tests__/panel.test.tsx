@@ -2,17 +2,17 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
-import panel from '../panel';
+import { h } from 'preact';
+
+import instantsearch from '../../../index.es';
 import stats from '../../stats/stats';
+import panel from '../panel';
 
 beforeEach(() => {
   document.body.innerHTML = '';

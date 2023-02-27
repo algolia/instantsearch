@@ -3,10 +3,12 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render } from '@testing-library/preact';
-import type { AnswersProps } from '../Answers';
+import { h } from 'preact';
+
 import Answers from '../Answers';
+
+import type { AnswersProps } from '../Answers';
 
 const defaultProps: AnswersProps = {
   hits: [],

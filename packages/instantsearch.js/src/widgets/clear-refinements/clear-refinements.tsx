@@ -1,27 +1,30 @@
 /** @jsx h */
 
+import { cx } from '@algolia/ui-components-shared';
 import { h, render } from 'preact';
+
+import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
+import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   ClearRefinementsComponentCSSClasses,
   ClearRefinementsComponentTemplates,
 } from '../../components/ClearRefinements/ClearRefinements';
-import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
-import { cx } from '@algolia/ui-components-shared';
 import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
 } from '../../connectors/clear-refinements/connectClearRefinements';
-import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import type { WidgetFactory, Template, Renderer } from '../../types';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { WidgetFactory, Template, Renderer } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',

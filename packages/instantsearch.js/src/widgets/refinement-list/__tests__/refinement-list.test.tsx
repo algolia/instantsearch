@@ -2,18 +2,18 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSFFVResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
-import refinementList from '../refinement-list';
 import { fireEvent, within } from '@testing-library/dom';
+import { h } from 'preact';
+
+import instantsearch from '../../../index.es';
+import refinementList from '../refinement-list';
 
 beforeEach(() => {
   document.body.innerHTML = '';

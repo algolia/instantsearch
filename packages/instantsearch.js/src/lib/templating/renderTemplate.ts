@@ -1,17 +1,19 @@
-import type { HoganOptions, Template } from 'hogan.js';
 import hogan from 'hogan.js';
 import { html } from 'htm/preact';
+
 import {
   Highlight,
   ReverseHighlight,
   ReverseSnippet,
   Snippet,
 } from '../../helpers/components';
+
 import type { Templates, HoganHelpers, TemplateParams } from '../../types';
 import type {
   BindEventForHits,
   SendEventForHits,
 } from '../utils/createSendEventForHits';
+import type { HoganOptions, Template } from 'hogan.js';
 
 type TransformedHoganHelpers = {
   [helper: string]: () => (text: string) => string;

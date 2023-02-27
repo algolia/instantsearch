@@ -1,5 +1,6 @@
-import type { UiState } from '../../../types';
 import simpleStateMapping from '../simple';
+
+import type { UiState } from '../../../types';
 
 describe('simpleStateMapping', () => {
   describe('stateToRoute', () => {

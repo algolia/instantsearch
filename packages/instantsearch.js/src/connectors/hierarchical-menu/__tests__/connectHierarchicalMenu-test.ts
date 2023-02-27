@@ -1,19 +1,20 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { warning } from '../../../lib/utils';
-import connectHierarchicalMenu from '../connectHierarchicalMenu';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { warning } from '../../../lib/utils';
+import connectHierarchicalMenu from '../connectHierarchicalMenu';
 
 describe('connectHierarchicalMenu', () => {
   describe('Usage', () => {

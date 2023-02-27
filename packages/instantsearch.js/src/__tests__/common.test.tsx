@@ -9,6 +9,7 @@ import {
   createMenuTests,
   createInfiniteHitsTests,
 } from '@instantsearch/tests';
+
 import instantsearch from '../index.es';
 import {
   hierarchicalMenu,

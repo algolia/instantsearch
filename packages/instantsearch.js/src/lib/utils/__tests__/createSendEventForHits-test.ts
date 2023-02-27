@@ -3,11 +3,12 @@
  */
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { deserializePayload } from '../../utils';
 import {
   createBindEventForHits,
   createSendEventForHits,
 } from '../createSendEventForHits';
-import { deserializePayload } from '../../utils';
+
 import type { EscapedHits } from '../../../types';
 
 const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {

@@ -1,13 +1,15 @@
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import algoliasearchHelper, {
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
 import {
   createSingleSearchResponse,
   createSearchClient,
 } from '@instantsearch/mocks';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+
 import { getRefinements } from '../getRefinements';
+
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 describe('getRefinements', () => {
   let helper: AlgoliaSearchHelper;

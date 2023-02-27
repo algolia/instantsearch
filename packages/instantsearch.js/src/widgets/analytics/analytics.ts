@@ -1,6 +1,7 @@
-import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createDocumentationMessageGenerator, warning } from '../../lib/utils';
+
 import type { WidgetFactory, WidgetRenderState } from '../../types';
+import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 export type AnalyticsWidgetParamsPushFunction = (
   /**

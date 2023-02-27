@@ -1,12 +1,13 @@
-import type { WidgetFactory } from '../../types';
+import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
 import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
+
 import type {
   ParamTrackedFilters,
   ParamTransformRuleContexts,
   QueryRulesConnectorParams,
   QueryRulesWidgetDescription,
 } from '../../connectors/query-rules/connectQueryRules';
-import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
+import type { WidgetFactory } from '../../types';
 
 export type QueryRuleContextWidgetParams = {
   trackedFilters: ParamTrackedFilters;

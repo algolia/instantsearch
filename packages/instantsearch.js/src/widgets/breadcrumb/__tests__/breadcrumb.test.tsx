@@ -2,17 +2,17 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
-import breadcrumb from '../breadcrumb';
+import { h } from 'preact';
+
 import { connectHierarchicalMenu } from '../../../connectors';
+import instantsearch from '../../../index.es';
+import breadcrumb from '../breadcrumb';
 
 beforeEach(() => {
   document.body.innerHTML = '';

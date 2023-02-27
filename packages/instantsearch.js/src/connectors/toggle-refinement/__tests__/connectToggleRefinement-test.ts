@@ -1,19 +1,21 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type { ToggleRefinementRenderState } from '../connectToggleRefinement';
-import connectToggleRefinement from '../connectToggleRefinement';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import connectToggleRefinement from '../connectToggleRefinement';
+
+import type { ToggleRefinementRenderState } from '../connectToggleRefinement';
 
 describe('connectToggleRefinement', () => {
   const createInitializedWidget = () => {

@@ -1,28 +1,31 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
 import RefinementList from '../../components/RefinementList/RefinementList';
+import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   NumericMenuConnectorParams,
   NumericMenuRenderState,
   NumericMenuWidgetDescription,
 } from '../../connectors/numeric-menu/connectNumericMenu';
-import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   ComponentCSSClasses,
   Renderer,
   Template,
   WidgetFactory,
 } from '../../types';
-import { prepareTemplateProps } from '../../lib/templating';
-import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');

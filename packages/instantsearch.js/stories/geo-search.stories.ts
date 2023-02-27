@@ -1,9 +1,10 @@
-import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
-import { withHits, withLifecycle } from '../.storybook/decorators';
-import createInfoBox from '../.storybook/utils/create-info-box';
+import { storiesOf } from '@storybook/html';
 import algoliaPlaces from 'places.js';
 import injectScript from 'scriptjs';
+
+import { withHits, withLifecycle } from '../.storybook/decorators';
+import createInfoBox from '../.storybook/utils/create-info-box';
 
 const API_KEY = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
 

@@ -1,4 +1,3 @@
-import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   warning,
@@ -7,7 +6,8 @@ import {
   isEqual,
   noop,
 } from '../../lib/utils';
-import type { SearchResults } from 'algoliasearch-helper';
+
+import type { SendEventForFacet } from '../../lib/utils';
 import type {
   Connector,
   CreateURL,
@@ -17,6 +17,7 @@ import type {
   SortBy,
   WidgetRenderState,
 } from '../../types';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hierarchical-menu',

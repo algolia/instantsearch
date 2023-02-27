@@ -3,6 +3,8 @@
 /* eslint-disable import/no-commonjs, no-console */
 
 const path = require('path');
+
+const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 const shell = require('shelljs');
 
 console.log(`Compiling definitions...`);
@@ -29,8 +31,6 @@ shell.sed(
 
 console.log();
 console.log(`Validating definitions...`);
-
-const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 
 const extractorConfig = ExtractorConfig.loadFileAndPrepare(
   path.resolve(path.join(__dirname, 'api-extractor.json'))

@@ -3,12 +3,14 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
-import type { TemplateProps } from '../Template';
-import Template from '../Template';
 import { mount, shallow } from '@instantsearch/testutils/enzyme';
 import { render } from '@testing-library/preact';
+import { h } from 'preact';
+
 import { warning } from '../../../lib/utils';
+import Template from '../Template';
+
+import type { TemplateProps } from '../Template';
 
 function getProps({
   templates = { test: '' },

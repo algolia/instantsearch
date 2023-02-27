@@ -2,10 +2,10 @@
  * @jest-environment jsdom
  */
 
+import { warning } from '../../lib/utils';
 import getInsightsAnonymousUserToken, {
   ANONYMOUS_TOKEN_COOKIE_KEY,
 } from '../get-insights-anonymous-user-token';
-import { warning } from '../../lib/utils';
 
 const DAY = 86400000; /* 1 day in ms*/
 const DATE_TOMORROW = new Date(Date.now() + DAY).toUTCString();

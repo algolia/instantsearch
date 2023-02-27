@@ -3,15 +3,17 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import type { RefinementListProps } from '../RefinementList';
-import RefinementList from '../RefinementList';
+import { h } from 'preact';
+
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
+import RefinementList from '../RefinementList';
+
 import type {
   RefinementListItemData,
   RefinementListTemplates,
 } from '../../../widgets/refinement-list/refinement-list';
+import type { RefinementListProps } from '../RefinementList';
 
 const defaultProps = {
   createURL: () => '#',

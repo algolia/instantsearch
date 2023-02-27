@@ -2,8 +2,9 @@
  * @jest-environment jsdom
  */
 
-import jsHelper from 'algoliasearch-helper';
 import { createSearchClient } from '@instantsearch/mocks';
+import jsHelper from 'algoliasearch-helper';
+
 import {
   createDisposeOptions,
   createInitOptions,

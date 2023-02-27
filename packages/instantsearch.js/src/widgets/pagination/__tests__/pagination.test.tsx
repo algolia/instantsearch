@@ -7,10 +7,12 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
-import pagination from '../pagination';
+
+import instantsearch from '../../../index.es';
 import configure from '../../configure/configure';
+import pagination from '../pagination';
+
 import type { SearchResponse } from '../../../../src/types';
 
 beforeEach(() => {

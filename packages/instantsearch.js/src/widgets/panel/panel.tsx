@@ -1,16 +1,18 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import Panel from '../../components/Panel/Panel';
+import { component } from '../../lib/suit';
 import {
   createDocumentationMessageGenerator,
   getContainerNode,
   getObjectType,
   warning,
 } from '../../lib/utils';
-import { component } from '../../lib/suit';
+
 import type { PanelComponentCSSClasses } from '../../components/Panel/Panel';
-import Panel from '../../components/Panel/Panel';
 import type {
   Template,
   RenderOptions,

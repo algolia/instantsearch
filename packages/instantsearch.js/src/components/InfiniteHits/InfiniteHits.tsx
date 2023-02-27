@@ -1,16 +1,18 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
+import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
-import type { SearchResults } from 'algoliasearch-helper';
+
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import type { ComponentCSSClasses, Hit } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
 } from '../../widgets/infinite-hits/infinite-hits';
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
-import { warning } from '../../lib/utils';
+import type { SearchResults } from 'algoliasearch-helper';
 
 export type InfiniteHitsComponentCSSClasses =
   ComponentCSSClasses<InfiniteHitsCSSClasses>;

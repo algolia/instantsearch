@@ -3,11 +3,12 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
-import ClearRefinements from '../ClearRefinements';
 import { mount } from '@instantsearch/testutils/enzyme';
+import { h } from 'preact';
+
 import { prepareTemplateProps } from '../../../lib/templating';
 import defaultTemplates from '../../../widgets/clear-refinements/defaultTemplates';
+import ClearRefinements from '../ClearRefinements';
 
 describe('ClearRefinements', () => {
   const defaultProps = {

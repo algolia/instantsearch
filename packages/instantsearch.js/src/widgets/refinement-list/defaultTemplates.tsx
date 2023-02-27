@@ -1,9 +1,10 @@
 /** @jsx h */
+import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
-import type { RefinementListComponentTemplates } from './refinement-list';
 import { formatNumber } from '../../lib/formatNumber';
-import { cx } from '@algolia/ui-components-shared';
+
+import type { RefinementListComponentTemplates } from './refinement-list';
 
 const defaultTemplates: RefinementListComponentTemplates = {
   item({ cssClasses, count, value, highlighted, isRefined, isFromSearch }) {

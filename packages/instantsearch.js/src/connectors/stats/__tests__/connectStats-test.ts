@@ -1,17 +1,18 @@
-import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
 import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import jsHelper from 'algoliasearch-helper';
+const SearchResults = jsHelper.SearchResults;
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import connectStats from '../connectStats';
 
 import type { StatsRenderState } from '../connectStats';
-import connectStats from '../connectStats';
 
 describe('connectStats', () => {
   const getInitializedWidget = (config = {}) => {

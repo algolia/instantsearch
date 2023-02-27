@@ -3,10 +3,12 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import type { VoiceSearchProps } from '../VoiceSearch';
+import { h } from 'preact';
+
 import VoiceSearch from '../VoiceSearch';
+
+import type { VoiceSearchProps } from '../VoiceSearch';
 
 const defaultProps: VoiceSearchProps = {
   cssClasses: {

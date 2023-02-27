@@ -2,19 +2,20 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { Fragment, h } from 'preact';
-
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
-import infiniteHits from '../infinite-hits';
-import type { SearchResponse } from '../../../../src/types';
-import searchBox from '../../search-box/search-box';
 import { within, fireEvent } from '@testing-library/dom';
+import { Fragment, h } from 'preact';
+
+import instantsearch from '../../../index.es';
+import searchBox from '../../search-box/search-box';
+import infiniteHits from '../infinite-hits';
+
+import type { SearchResponse } from '../../../../src/types';
 
 beforeEach(() => {
   document.body.innerHTML = '';

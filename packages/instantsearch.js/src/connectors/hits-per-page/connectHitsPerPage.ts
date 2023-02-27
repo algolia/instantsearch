@@ -6,10 +6,6 @@ import {
 } from '../../lib/utils';
 
 import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import type {
   Connector,
   TransformItems,
   CreateURL,
@@ -17,6 +13,10 @@ import type {
   RenderOptions,
   WidgetRenderState,
 } from '../../types';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',

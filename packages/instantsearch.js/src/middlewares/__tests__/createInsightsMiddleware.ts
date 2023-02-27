@@ -2,18 +2,20 @@
  * @jest-environment jsdom-global
  */
 
-import instantsearch from '../../index.es';
-import { createInsightsMiddleware } from '..';
 import {
   createInsights,
   createInsightsUmdVersion,
   createSearchClient,
 } from '@instantsearch/mocks';
-import { warning } from '../../lib/utils';
-import { history } from '../../lib/routers';
 import { wait } from '@instantsearch/testutils/wait';
-import type { JSDOM } from 'jsdom';
+
+import { createInsightsMiddleware } from '..';
+import instantsearch from '../../index.es';
+import { history } from '../../lib/routers';
+import { warning } from '../../lib/utils';
+
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;
 

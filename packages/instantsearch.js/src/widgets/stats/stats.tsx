@@ -1,27 +1,29 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import Stats from '../../components/Stats/Stats';
+import connectStats from '../../connectors/stats/connectStats';
+import { formatNumber } from '../../lib/formatNumber';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
 import type {
   StatsComponentCSSClasses,
   StatsComponentTemplates,
 } from '../../components/Stats/Stats';
-import Stats from '../../components/Stats/Stats';
 import type {
   StatsConnectorParams,
   StatsRenderState,
   StatsWidgetDescription,
 } from '../../connectors/stats/connectStats';
-import connectStats from '../../connectors/stats/connectStats';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import type { Renderer, Template, WidgetFactory } from '../../types';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import { formatNumber } from '../../lib/formatNumber';
+import type { Renderer, Template, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');
