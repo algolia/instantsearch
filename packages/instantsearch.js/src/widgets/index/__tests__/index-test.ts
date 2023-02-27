@@ -109,6 +109,9 @@ describe('index', () => {
       ...args,
     });
 
+  const virtualSearchBox = connectSearchBox(() => {});
+  const virtualPagination = connectPagination(() => {});
+
   it('throws without argument', () => {
     expect(() => {
       // @ts-expect-error
