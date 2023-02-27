@@ -4,8 +4,13 @@ import { invariant } from '../lib/invariant';
 
 import { IndexContext } from './IndexContext';
 
-export function useIndexContext() {
-  const context = useContext(IndexContext);
+import type { IndexWidget, UiState } from 'instantsearch.js';
+import type { Context } from 'react';
+
+export function useIndexContext<TUiState extends UiState = UiState>() {
+  const context = useContext(
+    IndexContext as Context<IndexWidget<TUiState> | null>
+  );
 
   invariant(
     context !== null,
