@@ -206,7 +206,7 @@ describe('createMetadataMiddleware', () => {
       expect(document.head).toMatchInlineSnapshot(`
         <head>
           <meta
-            content="{\\"widgets\\":[{\\"middleware\\":true,\\"type\\":\\"ais.router\\",\\"internal\\":true},{\\"middleware\\":true,\\"type\\":\\"ais.insights\\",\\"internal\\":true},{\\"middleware\\":true,\\"type\\":\\"ais.metadata\\",\\"internal\\":true},{\\"middleware\\":true,\\"type\\":\\"test\\",\\"internal\\":false},{\\"middleware\\":true,\\"type\\":\\"__unknown__\\",\\"internal\\":false}]}"
+            content="{\\"widgets\\":[{\\"middleware\\":true,\\"type\\":\\"ais.router({router:ais.browser, stateMapping:ais.simple})\\",\\"internal\\":true},{\\"middleware\\":true,\\"type\\":\\"ais.insights\\",\\"internal\\":true},{\\"middleware\\":true,\\"type\\":\\"ais.metadata\\",\\"internal\\":true},{\\"middleware\\":true,\\"type\\":\\"test\\",\\"internal\\":false},{\\"middleware\\":true,\\"type\\":\\"__unknown__\\",\\"internal\\":false}]}"
             name="instantsearch:widgets"
           />
         </head>
@@ -218,7 +218,7 @@ describe('createMetadataMiddleware', () => {
           {
             "internal": true,
             "middleware": true,
-            "type": "ais.router",
+            "type": "ais.router({router:ais.browser, stateMapping:ais.simple})",
           },
           {
             "internal": true,
