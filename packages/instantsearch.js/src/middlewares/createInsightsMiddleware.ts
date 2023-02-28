@@ -186,12 +186,12 @@ export function createInsightsMiddleware<
         }
 
         const setUserTokenToSearch = (userToken?: string) => {
-          const existingToken = (helper.state as PlainSearchParameters)
-            .userToken;
-
           if (!userToken) {
             return;
           }
+
+          const existingToken = (helper.state as PlainSearchParameters)
+            .userToken;
 
           helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
