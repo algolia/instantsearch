@@ -110,6 +110,8 @@ describe('insights', () => {
     (window as any).aa = undefined;
 
     document.body.innerHTML = '';
+
+    document.cookie = '_ALGOLIA=;';
   });
 
   describe('usage', () => {
@@ -625,8 +627,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('searches once per unique userToken', async () => {
-      const { insightsClient, instantSearchInstance } =
-        createTestEnvironment();
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
 
       instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
 
@@ -644,6 +645,52 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
 
       insightsClient('setUserToken', 'abc');
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
+    });
+
+    it("doesn't search when userToken is falsy", async () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(1);
+      expect(instantSearchInstance.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'my-index',
+          params: {
+            facets: [],
+            query: '',
+            tagFilters: '',
+          },
+        },
+      ]);
+
+      insightsClient('setUserToken', 0);
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          insightsInitParams: { useCookie: false },
+        })
+      );
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
+      expect(instantSearchInstance.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'my-index',
+          params: {
+            clickAnalytics: true,
+            facets: [],
+            query: '',
+            tagFilters: '',
+          },
+        },
+      ]);
+
+      insightsClient('setUserToken', undefined);
 
       await wait(0);
       expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
@@ -844,8 +891,6 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     await wait(100);
     // url should not get cleared
     expect(document.location.href).toEqual(url);
-
-    document.cookie = '';
   });
 
   test('does not throw error when document or cookie are undefined', () => {
