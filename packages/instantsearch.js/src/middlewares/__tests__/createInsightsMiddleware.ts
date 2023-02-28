@@ -625,7 +625,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('searches once per unique userToken', async () => {
-      const { insightsClient, instantSearchInstance, getUserToken } =
+      const { insightsClient, instantSearchInstance } =
         createTestEnvironment();
 
       instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
