@@ -187,12 +187,21 @@ export function createInsightsMiddleware<
         }
 
         const setUserTokenToSearch = (userToken?: string) => {
+          if (!userToken) {
+            return;
+          }
+
+          const existingToken = (helper.state as PlainSearchParameters)
+            .userToken;
+
           helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
             userToken,
           });
 
-          instantSearchInstance.scheduleSearch();
+          if (existingToken && existingToken !== userToken) {
+            instantSearchInstance.scheduleSearch();
+          }
         };
 
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
@@ -205,8 +214,10 @@ export function createInsightsMiddleware<
         // We consider the `userToken` coming from a `init` call to have a higher
         // importance than the one coming from the queue.
         if (userTokenBeforeInit) {
+          setUserTokenToSearch(userTokenBeforeInit);
           insightsClient('setUserToken', userTokenBeforeInit);
         } else if (queuedUserToken) {
+          setUserTokenToSearch(queuedUserToken);
           insightsClient('setUserToken', queuedUserToken);
         }
 
