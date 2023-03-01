@@ -2922,7 +2922,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
   });
 
   describe('setIndexUiState', () => {
-    it('updates main ui state with object', () => {
+    it('updates main UI state with an object', () => {
       const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = instantsearch({
         indexName: 'root',
@@ -2945,7 +2945,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
     });
 
-    it('updates main ui state with function', () => {
+    it('updates main UI state with a function', () => {
       const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = instantsearch({
         indexName: 'root',
