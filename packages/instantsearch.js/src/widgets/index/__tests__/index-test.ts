@@ -20,13 +20,12 @@ import {
 } from '../../../../test/createWidget';
 import { wait } from '@instantsearch/testutils/wait';
 import type { Widget } from '../../../types';
-import InstantSearch from '../../../lib/InstantSearch';
 import index from '../index';
 import { warning } from '../../../lib/utils';
-import { refinementList } from '../..';
 import {
   connectHits,
   connectPagination,
+  connectRefinementList,
   connectSearchBox,
 } from '../../../connectors';
 import { castToJestMock } from '../../../../../../tests/utils';
@@ -111,6 +110,7 @@ describe('index', () => {
 
   const virtualSearchBox = connectSearchBox(() => {});
   const virtualPagination = connectPagination(() => {});
+  const virtualRefinementList = connectRefinementList(() => {});
 
   it('throws without argument', () => {
     expect(() => {
@@ -153,7 +153,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(instance.getWidgets()).toHaveLength(0);
 
-      instance.addWidgets([createSearchBox(), createPagination()]);
+      instance.addWidgets([virtualSearchBox({}), virtualPagination({})]);
 
       expect(instance.getWidgets()).toHaveLength(2);
     });
@@ -163,7 +163,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const subLevelInstance = index({ indexName: 'subLevelIndexName' });
 
       topLevelInstance.addWidgets([
-        subLevelInstance.addWidgets([createSearchBox(), createPagination()]),
+        subLevelInstance.addWidgets([
+          virtualSearchBox({}),
+          virtualPagination({}),
+        ]),
       ]);
 
       expect(topLevelInstance.getWidgets()).toHaveLength(1);
@@ -251,7 +254,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       it('calls `init` on the added widgets', () => {
         const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
-        const widgets = [createSearchBox(), createPagination()];
+        const widgets = [virtualSearchBox({}), virtualPagination({})];
+        widgets.forEach((widget) => jest.spyOn(widget, 'init'));
 
         instance.init(
           createIndexInitOptions({
@@ -274,7 +278,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             uiState: {},
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
-            renderState: {},
+            renderState: expect.any(Object),
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
             scopedResults: [],
@@ -301,8 +305,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const inner = index({ indexName: 'two' });
         jest.spyOn(inner, 'init');
 
-        const widgets = [createSearchBox(), createPagination(), inner];
-        const innerWidgets = [createSearchBox()];
+        const widgets = [virtualSearchBox({}), virtualPagination({}), inner];
+        widgets.forEach((widget) => jest.spyOn(widget, 'init'));
+        const innerWidgets = [virtualSearchBox({})];
+        innerWidgets.forEach((widget) => jest.spyOn(widget, 'init'));
 
         instance.init(
           createIndexInitOptions({
@@ -332,7 +338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             },
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
-            renderState: {},
+            renderState: expect.any(Object),
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
             scopedResults: [],
@@ -367,7 +373,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         expect(instantSearchInstance.scheduleSearch).toHaveBeenCalledTimes(0);
 
-        instance.addWidgets([createSearchBox()]);
+        instance.addWidgets([virtualSearchBox({})]);
 
         expect(instantSearchInstance.scheduleSearch).toHaveBeenCalledTimes(1);
       });
@@ -397,8 +403,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
   describe('removeWidgets', () => {
     it('removes given widget from the instance', () => {
       const instance = index({ indexName: 'indexName' });
-      const searchBox = createSearchBox();
-      const pagination = createPagination();
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
 
       instance.addWidgets([searchBox, pagination]);
 
@@ -411,8 +417,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
     it('removes given widgets from the instance', () => {
       const instance = index({ indexName: 'indexName' });
-      const searchBox = createSearchBox();
-      const pagination = createPagination();
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
 
       instance.addWidgets([searchBox, pagination]);
 
@@ -426,8 +432,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     it('returns the instance to be able to chain the calls', () => {
       const topLevelInstance = index({ indexName: 'topLevelIndexName' });
       const subLevelInstance = index({ indexName: 'subLevelIndexName' });
-      const searchBox = createSearchBox();
-      const pagination = createPagination();
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
 
       topLevelInstance.addWidgets([
         subLevelInstance
@@ -533,7 +539,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.addWidgets([
           configureTopLevel,
           configureSubLevel,
-          createSearchBox(),
+          virtualSearchBox({}),
         ]);
 
         instance.init(
@@ -610,9 +616,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           scheduleSearch: jest.fn() as any,
         });
 
-        const searchBox = createSearchBox();
+        const searchBox = virtualSearchBox({});
 
-        instance.addWidgets([searchBox, createPagination()]);
+        instance.addWidgets([searchBox, virtualPagination({})]);
 
         instance.init(
           createIndexInitOptions({
@@ -634,7 +640,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           scheduleSearch: jest.fn() as any,
         });
 
-        const searchBox = createSearchBox();
+        const searchBox = virtualSearchBox({});
 
         instance.addWidgets([searchBox]);
 
@@ -658,7 +664,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           scheduleSearch: jest.fn() as any,
         });
 
-        const searchBox = createSearchBox();
+        const searchBox = virtualSearchBox({});
 
         instance.addWidgets([searchBox]);
 
@@ -681,8 +687,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
   describe('createURL', () => {
     it('default url returns #', () => {
       const instance = index({ indexName: 'indexName' });
-      const searchBox = createSearchBox();
-      const pagination = createPagination();
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
 
       instance.addWidgets([searchBox, pagination]);
 
@@ -693,8 +699,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
     it('calls the createURL of routing', () => {
       const instance = index({ indexName: 'indexName' });
-      const searchBox = createSearchBox();
-      const pagination = createPagination();
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
 
       instance.addWidgets([searchBox, pagination]);
 
@@ -716,8 +722,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
     it('create URLs with custom helper state', () => {
       const instance = index({ indexName: 'indexName' });
-      const searchBox = createSearchBox();
-      const pagination = createPagination();
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
 
       instance.addWidgets([searchBox, pagination]);
 
@@ -732,15 +738,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
 
-      expect(instance.createURL(new SearchParameters({ page: 100 }))).toEqual({
+      expect(instance.createURL(new SearchParameters({ page: 99 }))).toEqual({
         indexName: { page: 100 },
       });
     });
 
     it('create URLs with non-namesake helper state', () => {
       const instance = index({ indexName: 'indexName' });
-      const searchBox = createSearchBox();
-      const pagination = createPagination();
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
 
       const container = document.createElement('div');
       document.body.append(container);
@@ -748,7 +754,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.addWidgets([
         searchBox,
         pagination,
-        refinementList({ container, attribute: 'doggies' }),
+        virtualRefinementList({ attribute: 'doggies' }),
       ]);
 
       instance.init(
@@ -784,22 +790,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const level22 = index({ indexName: 'level22IndexName' });
       const level221 = index({ indexName: 'level221IndexName' });
       const level3 = index({ indexName: 'level3IndexName' });
-      const searchBoxLevel0 = createSearchBox();
-      const searchBoxLevel1 = createSearchBox();
-      const searchBoxLevel21 = createSearchBox();
+      const searchBoxLevel0 = virtualSearchBox({});
+      const searchBoxLevel1 = virtualSearchBox({});
+      const searchBoxLevel21 = virtualSearchBox({});
 
       level0.addWidgets([
         searchBoxLevel0,
         level1.addWidgets([searchBoxLevel1]),
         level2.addWidgets([
-          createSearchBox(),
+          virtualSearchBox({}),
           level21.addWidgets([searchBoxLevel21]),
           level22.addWidgets([
-            createSearchBox(),
-            level221.addWidgets([createSearchBox()]),
+            virtualSearchBox({}),
+            level221.addWidgets([virtualSearchBox({})]),
           ]),
         ]),
-        level3.addWidgets([createSearchBox()]),
+        level3.addWidgets([virtualSearchBox({})]),
       ]);
 
       level0.init(createIndexInitOptions({ parent: null }));
@@ -1246,7 +1252,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     it('calls `init` on its widgets', () => {
       const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
-      const widgets = [createSearchBox(), createPagination()];
+      const widgets = [virtualSearchBox({}), virtualPagination({})];
+      widgets.forEach((widget) => jest.spyOn(widget, 'init'));
 
       instance.addWidgets(widgets);
 
@@ -1269,7 +1276,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           uiState: {},
           helper: instance.getHelper(),
           state: instance.getHelper()!.state,
-          renderState: {},
+          renderState: expect.any(Object),
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           scopedResults: [],
@@ -1417,18 +1424,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const level3 = index({ indexName: 'level3IndexName' });
 
         level0.addWidgets([
-          createSearchBox(),
-          createPagination(),
+          virtualSearchBox({}),
+          virtualPagination({}),
 
           level1.addWidgets([
-            createSearchBox(),
-            createPagination(),
+            virtualSearchBox({}),
+            virtualPagination({}),
 
             level2.addWidgets([
-              createSearchBox(),
-              createPagination(),
+              virtualSearchBox({}),
+              virtualPagination({}),
 
-              level3.addWidgets([createSearchBox(), createPagination()]),
+              level3.addWidgets([virtualSearchBox({}), virtualPagination({})]),
             ]),
           ]),
         ]);
@@ -1458,19 +1465,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(level0.getWidgetUiState({})).toEqual({
           level0IndexName: {
             query: 'Apple',
-            page: 1,
+            page: 2,
           },
           level1IndexName: {
             query: 'Apple iPhone',
-            page: 2,
+            page: 3,
           },
           level2IndexName: {
             query: 'Apple iPhone XS',
-            page: 3,
+            page: 4,
           },
           level3IndexName: {
             query: 'Apple iPhone XS Red',
-            page: 4,
+            page: 5,
           },
         });
 
@@ -1739,7 +1746,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     describe('with uiState', () => {
       it('uses `indexId` for scope key', () => {
         const instance = index({ indexName: 'indexName', indexId: 'indexId' });
-        const widgets = [createSearchBox(), createPagination()];
+        const widgets = [virtualSearchBox({}), virtualPagination({})];
 
         instance.addWidgets(widgets);
 
@@ -1754,7 +1761,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getWidgetUiState({})).toEqual({
           indexId: {
             query: 'Apple',
-            page: 5,
+            page: 6,
           },
         });
       });
@@ -1818,7 +1825,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       it('updates the local `uiState` when the state changes', () => {
         const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
-        const widgets = [createSearchBox(), createPagination()];
+        const widgets = [virtualSearchBox({}), virtualPagination({})];
 
         instance.addWidgets(widgets);
 
@@ -1838,7 +1845,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getWidgetUiState({})).toEqual({
           indexName: {
             query: 'Apple',
-            page: 5,
+            page: 6,
           },
         });
 
@@ -1855,8 +1862,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const instantSearchInstance = createInstantSearch();
 
         const widgets = [
-          createSearchBox(),
-          createPagination(),
+          virtualSearchBox({}),
+          virtualPagination({}),
           createWidget({
             init({ helper }) {
               helper
@@ -1895,7 +1902,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       it('updates the local `uiState` only with widgets', () => {
         const level0 = index({ indexName: 'level0IndexName' });
         const level1 = index({ indexName: 'level1IndexName' });
-        const widgets = [createSearchBox(), createPagination()];
+        const widgets = [virtualSearchBox({}), virtualPagination({})];
+        widgets.forEach((widget) => jest.spyOn(widget, 'getWidgetUiState'));
 
         jest.spyOn(level1, 'getWidgetUiState');
 
@@ -1922,7 +1930,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           onInternalStateChange: jest.fn() as any,
         });
 
-        instance.addWidgets([createSearchBox()]);
+        instance.addWidgets([virtualSearchBox({})]);
 
         instance.init(
           createIndexInitOptions({
@@ -1982,8 +1990,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         });
 
         topLevelInstance.addWidgets([
-          createSearchBox(),
-          subLevelInstance.addWidgets([createSearchBox()]),
+          virtualSearchBox({}),
+          subLevelInstance.addWidgets([virtualSearchBox({})]),
         ]);
 
         topLevelInstance.init(
@@ -2030,14 +2038,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const level3 = index({ indexName: 'level3IndexName' });
 
         level0.addWidgets([
-          createSearchBox(),
-          createPagination(),
+          virtualSearchBox({}),
+          virtualPagination({}),
 
           level1.addWidgets([
-            createSearchBox(),
-            createPagination(),
+            virtualSearchBox({}),
+            virtualPagination({}),
 
-            level2.addWidgets([createSearchBox(), createPagination(), level3]),
+            level2.addWidgets([
+              virtualSearchBox({}),
+              virtualPagination({}),
+              level3,
+            ]),
           ]),
         ]);
 
@@ -2062,15 +2074,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(level0.getWidgetUiState({})).toEqual({
           level0IndexName: {
             query: 'Apple',
-            page: 5,
+            page: 6,
           },
           level1IndexName: {
             query: 'Apple iPhone',
-            page: 7,
+            page: 8,
           },
           level2IndexName: {
             query: 'Apple iPhone 5S',
-            page: 9,
+            page: 10,
           },
           level3IndexName: {},
         });
@@ -2078,11 +2090,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(level1.getWidgetUiState({})).toEqual({
           level1IndexName: {
             query: 'Apple iPhone',
-            page: 7,
+            page: 8,
           },
           level2IndexName: {
             query: 'Apple iPhone 5S',
-            page: 9,
+            page: 10,
           },
           level3IndexName: {},
         });
@@ -2090,7 +2102,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(level2.getWidgetUiState({})).toEqual({
           level2IndexName: {
             query: 'Apple iPhone 5S',
-            page: 9,
+            page: 10,
           },
           level3IndexName: {},
         });
@@ -2134,7 +2146,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         }),
       ]);
 
-      level0.addWidgets([createSearchBox()]);
+      level0.addWidgets([virtualSearchBox({})]);
 
       expect(level0.getHelper()!.state.query).toBe('something');
 
@@ -2152,7 +2164,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     test('stores the render state on the instance', () => {
       expect.assertions(2);
 
-      const search = new InstantSearch({
+      const search = instantsearch({
         indexName: 'indexName',
         searchClient: createSearchClient(),
       });
@@ -2414,7 +2426,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
 
-      const widgets = [createSearchBox(), createPagination()];
+      const widgets = [virtualSearchBox({}), virtualPagination({})];
+      widgets.forEach((widget) => jest.spyOn(widget, 'render'));
 
       instance.addWidgets(widgets);
 
@@ -2453,12 +2466,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           scopedResults: [
             {
               indexId: 'indexName',
-              results: (widget.render as jest.Mock).mock.calls[0][0].results,
+              results: expect.any(Object),
               helper: instance.getHelper(),
             },
           ],
           state: expect.any(algoliasearchHelper.SearchParameters),
-          renderState: {},
+          renderState: expect.any(Object),
           helper: instance.getHelper(),
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
@@ -2474,7 +2487,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     it('does not call `render` without `lastResults`', () => {
       const instance = index({ indexName: 'indexName' });
 
-      const widgets = [createSearchBox(), createPagination()];
+      const widgets = [virtualSearchBox({}), virtualPagination({})];
+      widgets.forEach((widget) => jest.spyOn(widget, 'render'));
 
       instance.addWidgets(widgets);
 
@@ -2503,22 +2517,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const level22 = index({ indexName: 'level22IndexName' });
       const level221 = index({ indexName: 'level221IndexName' });
       const level3 = index({ indexName: 'level3IndexName' });
-      const searchBoxLevel0 = createSearchBox();
-      const searchBoxLevel1 = createSearchBox();
-      const searchBoxLevel21 = createSearchBox();
+      const searchBoxLevel0 = virtualSearchBox({});
+      jest.spyOn(searchBoxLevel0, 'render');
+      const searchBoxLevel1 = virtualSearchBox({});
+      jest.spyOn(searchBoxLevel1, 'render');
+      const searchBoxLevel21 = virtualSearchBox({});
+      jest.spyOn(searchBoxLevel21, 'render');
 
       level0.addWidgets([
         searchBoxLevel0,
         level1.addWidgets([searchBoxLevel1]),
         level2.addWidgets([
-          createSearchBox(),
+          virtualSearchBox({}),
           level21.addWidgets([searchBoxLevel21]),
           level22.addWidgets([
-            createSearchBox(),
-            level221.addWidgets([createSearchBox()]),
+            virtualSearchBox({}),
+            level221.addWidgets([virtualSearchBox({})]),
           ]),
         ]),
-        level3.addWidgets([createSearchBox()]),
+        level3.addWidgets([virtualSearchBox({})]),
       ]);
 
       level0.init(createIndexInitOptions({ parent: null }));
@@ -2655,7 +2672,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     it('calls `dispose` on its widgets', () => {
       const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
-      const widgets = [createSearchBox(), createPagination()];
+      const widgets = [virtualSearchBox({}), virtualPagination({})];
+      widgets.forEach((widget) => jest.spyOn(widget, 'dispose'));
 
       instance.addWidgets(widgets);
 
@@ -2693,8 +2711,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     it('keeps the widgets on the index', () => {
       const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
-      const searchBox = createSearchBox();
-      const pagination = createPagination();
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
 
       instance.addWidgets([searchBox, pagination]);
 
@@ -2729,7 +2747,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
     it('removes the listeners on internal Helper', () => {
       const instance = index({ indexName: 'indexName' });
-      const searchBox = createSearchBox();
+      const searchBox = virtualSearchBox({});
+      jest.spyOn(searchBox, 'getWidgetUiState');
 
       instance.addWidgets([searchBox]);
 
@@ -2962,7 +2981,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   describe('with initial results', () => {
     it('injects the results to the index helper', () => {
-      const search = new InstantSearch({
+      const search = instantsearch({
         indexName: 'indexName',
         searchClient: createSearchClient(),
       });
@@ -3032,7 +3051,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     });
 
     it('supports nested indices', () => {
-      const search = new InstantSearch({
+      const search = instantsearch({
         indexName: 'indexName',
         searchClient: createSearchClient(),
       });
@@ -3113,7 +3132,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     });
 
     it('does not fail with non-provided index results', () => {
-      const search = new InstantSearch({
+      const search = instantsearch({
         indexName: 'indexName',
         searchClient: createSearchClient(),
       });
@@ -3203,7 +3222,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     });
 
     it('renders the hits coming from the initial results', async () => {
-      const search = new InstantSearch({
+      const search = instantsearch({
         indexName: 'indexName',
         searchClient: createSearchClient(),
       });
@@ -3238,10 +3257,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
   describe('on error', () => {
     it('resets the state', async () => {
       const searchClient = createSearchClient();
-      const search = new InstantSearch({
+      const search = instantsearch({
         indexName: 'indexName',
         searchClient,
-      }).addWidgets([createSearchBox()]);
+      }).addWidgets([virtualSearchBox({})]);
 
       search.start();
       // suppress global error
