@@ -13,6 +13,7 @@ export default function singleIndexStateMapping<
   indexName: keyof TUiState
 ): StateMapping<TUiState, TUiState[typeof indexName]> {
   return {
+    $$type: 'ais.singleIndex',
     stateToRoute(uiState) {
       return getIndexStateWithoutConfigure(uiState[indexName] || {});
     },

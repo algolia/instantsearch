@@ -40,6 +40,11 @@ export type Router<TRouteState = UiState> = {
    * Called when InstantSearch is started.
    */
   start?: () => void;
+
+  /**
+   * Identifier for this router. Used to differentiate between routers.
+   */
+  $$type?: string;
 };
 
 /**
@@ -62,4 +67,9 @@ export type StateMapping<TUiState = UiState, TRouteState = TUiState> = {
    * The format is the output of `stateToRoute`.
    */
   routeToState(routeState: TRouteState): TUiState;
+
+  /**
+   * Identifier for this stateMapping. Used to differentiate between stateMappings.
+   */
+  $$type?: string;
 };
