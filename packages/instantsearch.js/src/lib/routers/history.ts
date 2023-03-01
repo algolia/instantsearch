@@ -38,6 +38,7 @@ const setWindowTitle = (title?: string): void => {
 };
 
 class BrowserHistory<TRouteState> implements Router<TRouteState> {
+  public $$type = 'ais.browser';
   /**
    * Transforms a UI state into a title for the page.
    */
