@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.40.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.40.1...react-instantsearch-hooks-web@6.40.2) (2023-02-28)
+
+**Note:** Version bump only for package react-instantsearch-hooks-web
+
+
+
+
+
+## [6.40.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.40.0...react-instantsearch-hooks-web@6.40.1) (2023-02-21)
+
+
+### Bug Fixes
+
+* **breadcrumb:** guard against undefined facets ([#5482](https://github.com/algolia/instantsearch.js/issues/5482)) ([3159afe](https://github.com/algolia/instantsearch.js/commit/3159afe57472fe2b669dceb5f1ee638b658f7f52))
+
+
+
+
+
 ## [6.40.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.39.3...react-instantsearch-hooks-web@6.40.0) (2023-02-14)
 
 **Note:** Version bump only for package react-instantsearch-hooks-web

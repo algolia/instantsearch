@@ -1,6 +1,7 @@
-import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { find } from './find';
 import { unescapeFacetValue, escapeFacetValue } from './escapeFacetValue';
+import { find } from './find';
+
+import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 export type FacetRefinement = {
   type: 'facet' | 'disjunctive' | 'hierarchical';

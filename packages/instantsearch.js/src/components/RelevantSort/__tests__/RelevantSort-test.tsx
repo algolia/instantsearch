@@ -3,11 +3,12 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
+import { h } from 'preact';
+
+import RelevantSort from '../RelevantSort';
 
 import type { RelevantSortComponentTemplates } from '../RelevantSort';
-import RelevantSort from '../RelevantSort';
 
 const cssClasses = {
   root: 'root',

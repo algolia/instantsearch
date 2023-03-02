@@ -3,11 +3,13 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent, createEvent } from '@testing-library/preact';
-import type { PaginationProps } from '../Pagination';
-import Pagination from '../Pagination';
+import { h } from 'preact';
+
 import Paginator from '../../../connectors/pagination/Paginator';
+import Pagination from '../Pagination';
+
+import type { PaginationProps } from '../Pagination';
 
 describe('Pagination', () => {
   const pager = new Paginator({

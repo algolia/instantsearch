@@ -10,13 +10,13 @@ import {
   getHighlightedParts,
 } from '../../lib/utils';
 
+import type { HighlightProps as HighlightUiComponentProps } from '../../components/Highlight/Highlight';
 import type {
   BaseHit,
   Hit,
   HitAttributeHighlightResult,
   PartialKeys,
 } from '../../types';
-import type { HighlightProps as HighlightUiComponentProps } from '../../components/Highlight/Highlight';
 
 export type HighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;

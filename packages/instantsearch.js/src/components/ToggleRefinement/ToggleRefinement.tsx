@@ -1,6 +1,9 @@
 /** @jsx h */
 
 import { h } from 'preact';
+
+import Template from '../Template/Template';
+
 import type {
   ToggleRefinementRenderState,
   ToggleRefinementValue,
@@ -11,8 +14,6 @@ import type {
   ToggleRefinementTemplates,
   ToggleRefinementCSSClasses,
 } from '../../widgets/toggle-refinement/toggle-refinement';
-
-import Template from '../Template/Template';
 
 export type ToggleRefinementComponentCSSClasses =
   ComponentCSSClasses<ToggleRefinementCSSClasses>;

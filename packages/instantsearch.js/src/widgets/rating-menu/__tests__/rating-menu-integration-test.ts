@@ -2,14 +2,15 @@
  * @jest-environment jsdom
  */
 
-import jsHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
 import {
   createSearchClient,
   createMultiSearchResponse,
 } from '@instantsearch/mocks';
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+
 import {
   createInitOptions,
   createRenderOptions,

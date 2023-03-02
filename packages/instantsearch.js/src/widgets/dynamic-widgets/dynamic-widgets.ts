@@ -1,7 +1,3 @@
-import type {
-  DynamicWidgetsConnectorParams,
-  DynamicWidgetsWidgetDescription,
-} from '../../connectors/dynamic-widgets/connectDynamicWidgets';
 import connectDynamicWidgets from '../../connectors/dynamic-widgets/connectDynamicWidgets';
 import { component } from '../../lib/suit';
 import {
@@ -9,6 +5,11 @@ import {
   getContainerNode,
   getWidgetAttribute,
 } from '../../lib/utils';
+
+import type {
+  DynamicWidgetsConnectorParams,
+  DynamicWidgetsWidgetDescription,
+} from '../../connectors/dynamic-widgets/connectDynamicWidgets';
 import type { Widget, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({

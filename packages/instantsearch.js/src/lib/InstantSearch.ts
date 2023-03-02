@@ -1,10 +1,14 @@
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import algoliasearchHelper from 'algoliasearch-helper';
 import EventEmitter from '@algolia/events';
+import algoliasearchHelper from 'algoliasearch-helper';
 
-import type { IndexWidget } from '../widgets/index/index';
+import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
+import {
+  createMetadataMiddleware,
+  isMetadataEnabled,
+} from '../middlewares/createMetadataMiddleware';
+import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
 import index from '../widgets/index/index';
-import version from './version';
+
 import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
@@ -14,6 +18,10 @@ import {
   warning,
   setIndexHelperState,
 } from './utils';
+import version from './version';
+
+import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import type {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
@@ -25,14 +33,8 @@ import type {
   RenderState,
   InitialResults,
 } from '../types';
-import type { RouterProps } from '../middlewares/createRouterMiddleware';
-import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
-import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
-import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
-import {
-  createMetadataMiddleware,
-  isMetadataEnabled,
-} from '../middlewares/createMetadataMiddleware';
+import type { IndexWidget } from '../widgets/index/index';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -98,6 +100,7 @@ export type InstantSearchOptions<
    * A hook that will be called each time a search needs to be done, with the
    * helper as a parameter. It's your responsibility to call `helper.search()`.
    * This option allows you to avoid doing searches at page load for example.
+   * @deprecated use onStateChange instead
    */
   searchFunction?: (helper: AlgoliaSearchHelper) => void;
 
@@ -304,6 +307,10 @@ See ${createDocumentationLink({
     this._initialResults = null;
 
     if (searchFunction) {
+      warning(
+        false,
+        `The \`searchFunction\` option is deprecated. Use \`onStateChange\` instead.`
+      );
       this._searchFunction = searchFunction;
     }
 

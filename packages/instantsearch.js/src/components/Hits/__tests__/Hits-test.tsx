@@ -3,17 +3,19 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
-import { shallow, mount } from '@instantsearch/testutils/enzyme';
-import { highlight } from '../../../helpers';
-import { TAG_REPLACEMENT } from '../../../lib/utils';
-import { prepareTemplateProps } from '../../../lib/templating';
-import Template from '../../Template/Template';
-import type { HitsProps } from '../Hits';
-import Hits from '../Hits';
 import { createSingleSearchResponse } from '@instantsearch/mocks';
+import { shallow, mount } from '@instantsearch/testutils/enzyme';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import { h } from 'preact';
+
+import { highlight } from '../../../helpers';
+import { prepareTemplateProps } from '../../../lib/templating';
+import { TAG_REPLACEMENT } from '../../../lib/utils';
 import defaultTemplates from '../../../widgets/hits/defaultTemplates';
+import Template from '../../Template/Template';
+import Hits from '../Hits';
+
+import type { HitsProps } from '../Hits';
 
 describe('Hits', () => {
   const cssClasses = {

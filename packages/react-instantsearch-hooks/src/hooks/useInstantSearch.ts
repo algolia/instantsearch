@@ -9,13 +9,14 @@ import type { SearchResultsApi } from '../lib/useSearchResults';
 import type { SearchStateApi } from '../lib/useSearchState';
 import type { InstantSearch, Middleware, UiState } from 'instantsearch.js';
 
-type InstantSearchApi<TUiState extends UiState> = SearchStateApi<TUiState> &
-  SearchResultsApi & {
-    use: (...middlewares: Middleware[]) => () => void;
-    refresh: InstantSearch['refresh'];
-    status: InstantSearch['status'];
-    error: InstantSearch['error'];
-  };
+export type InstantSearchApi<TUiState extends UiState = UiState> =
+  SearchStateApi<TUiState> &
+    SearchResultsApi & {
+      use: (...middlewares: Middleware[]) => () => void;
+      refresh: InstantSearch['refresh'];
+      status: InstantSearch['status'];
+      error: InstantSearch['error'];
+    };
 
 export type UseInstantSearchProps = {
   /**

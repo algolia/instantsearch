@@ -1,20 +1,21 @@
+import {
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import connectRefinementList from '../connectRefinementList';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import {
-  createSingleSearchResponse,
-  createSearchClient,
-} from '@instantsearch/mocks';
-import { wait } from '@instantsearch/testutils/wait';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
+import connectRefinementList from '../connectRefinementList';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {

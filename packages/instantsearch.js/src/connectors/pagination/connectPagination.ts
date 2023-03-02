@@ -3,7 +3,9 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
+
 import Paginator from './Paginator';
+
 import type { Connector, CreateURL, WidgetRenderState } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 

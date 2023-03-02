@@ -3,11 +3,13 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import type { PanelProps } from '../Panel';
-import Panel from '../Panel';
+import { h } from 'preact';
+
 import { createRenderOptions } from '../../../../test/createWidget';
+import Panel from '../Panel';
+
+import type { PanelProps } from '../Panel';
 
 const cssClasses = {
   root: 'root',

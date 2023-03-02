@@ -2,13 +2,13 @@
  * @jest-environment jsdom
  */
 
-import { getByText, fireEvent } from '@testing-library/dom';
-
-import instantsearch from '../../../index.es';
-import { hits, configure } from '../..';
-import { createInsightsMiddleware } from '../../../middlewares';
 import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { getByText, fireEvent } from '@testing-library/dom';
+
+import { hits, configure } from '../..';
+import instantsearch from '../../../index.es';
+import { createInsightsMiddleware } from '../../../middlewares';
 
 const createSearchClient = ({
   hitsPerPage,

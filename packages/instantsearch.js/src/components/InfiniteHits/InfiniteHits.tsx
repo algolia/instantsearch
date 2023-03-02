@@ -1,15 +1,18 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
+import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
-import type { SearchResults } from 'algoliasearch-helper';
+
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import type { ComponentCSSClasses, Hit } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
 } from '../../widgets/infinite-hits/infinite-hits';
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
+import type { SearchResults } from 'algoliasearch-helper';
 
 export type InfiniteHitsComponentCSSClasses =
   ComponentCSSClasses<InfiniteHitsCSSClasses>;
@@ -77,7 +80,7 @@ const InfiniteHits = ({
       )}
 
       <ol className={cssClasses.list}>
-        {hits.map((hit, position) => (
+        {hits.map((hit, index) => (
           <Template
             {...templateProps}
             templateKey="item"
@@ -91,7 +94,13 @@ const InfiniteHits = ({
             key={hit.objectID}
             data={{
               ...hit,
-              __hitIndex: position,
+              get __hitIndex() {
+                warning(
+                  false,
+                  'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
+                );
+                return index;
+              },
             }}
             bindEvent={bindEvent}
             sendEvent={sendEvent}

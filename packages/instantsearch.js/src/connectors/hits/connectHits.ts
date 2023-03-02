@@ -1,4 +1,3 @@
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -10,6 +9,8 @@ import {
   createBindEventForHits,
   noop,
 } from '../../lib/utils';
+
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import type {
   TransformItems,
   Connector,

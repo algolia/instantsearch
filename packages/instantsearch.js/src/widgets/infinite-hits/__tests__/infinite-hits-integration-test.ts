@@ -2,23 +2,24 @@
  * @jest-environment jsdom
  */
 
-import { getByText, waitFor, fireEvent } from '@testing-library/dom';
-
-import instantsearch from '../../../index.es';
-import { infiniteHits, configure } from '../..';
-import { createInsightsMiddleware } from '../../../middlewares';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import type { PlainSearchParameters } from 'algoliasearch-helper';
+import { getByText, waitFor, fireEvent } from '@testing-library/dom';
 import { SearchParameters } from 'algoliasearch-helper';
+
+import { infiniteHits, configure } from '../..';
+import instantsearch from '../../../index.es';
+import { createInsightsMiddleware } from '../../../middlewares';
+
 import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
 } from '../../../connectors/infinite-hits/connectInfiniteHits';
 import type { MockSearchClient } from '@instantsearch/mocks';
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 describe('infiniteHits', () => {
   const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {

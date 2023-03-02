@@ -1,27 +1,30 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
-import type { RefinementListComponentCSSClasses } from '../../components/RefinementList/RefinementList';
+import { h, render } from 'preact';
+
 import RefinementList from '../../components/RefinementList/RefinementList';
+import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
+
+import defaultTemplates from './defaultTemplates';
+
+import type { RefinementListComponentCSSClasses } from '../../components/RefinementList/RefinementList';
+import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 import type {
   RefinementListRenderState,
   RefinementListConnectorParams,
   RefinementListWidgetDescription,
 } from '../../connectors/refinement-list/connectRefinementList';
-import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import type { Template, WidgetFactory, Renderer } from '../../types';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
+import type { Template, WidgetFactory, Renderer } from '../../types';
 import type { SearchBoxTemplates } from '../search-box/search-box';
-import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
-import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',

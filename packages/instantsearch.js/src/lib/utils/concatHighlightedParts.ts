@@ -1,5 +1,6 @@
-import type { HighlightedParts } from '../../types';
 import { TAG_REPLACEMENT } from './escape-highlight';
+
+import type { HighlightedParts } from '../../types';
 
 export function concatHighlightedParts(parts: HighlightedParts[]) {
   const { highlightPreTag, highlightPostTag } = TAG_REPLACEMENT;

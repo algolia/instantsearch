@@ -1,21 +1,5 @@
-import type {
-  AlgoliaSearchHelper as Helper,
-  DerivedHelper,
-  PlainSearchParameters,
-  SearchParameters,
-  SearchResults,
-  AlgoliaSearchHelper,
-} from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type {
-  InstantSearch,
-  UiState,
-  IndexUiState,
-  Widget,
-  ScopedResult,
-  SearchClient,
-  IndexRenderState,
-} from '../../types';
+
 import {
   checkIndexUiState,
   createDocumentationMessageGenerator,
@@ -26,6 +10,24 @@ import {
   createInitArgs,
   createRenderArgs,
 } from '../../lib/utils';
+
+import type {
+  InstantSearch,
+  UiState,
+  IndexUiState,
+  Widget,
+  ScopedResult,
+  SearchClient,
+  IndexRenderState,
+} from '../../types';
+import type {
+  AlgoliaSearchHelper as Helper,
+  DerivedHelper,
+  PlainSearchParameters,
+  SearchParameters,
+  SearchResults,
+  AlgoliaSearchHelper,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',
@@ -58,7 +60,7 @@ export type IndexWidgetDescription = {
   $$widgetType: 'ais.index';
 };
 
-export type IndexWidget = Omit<
+export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   Widget<IndexWidgetDescription & { widgetParams: IndexWidgetParams }>,
   'getWidgetUiState' | 'getWidgetState'
 > & {
@@ -82,14 +84,28 @@ export type IndexWidget = Omit<
    * @deprecated
    */
   getWidgetState(uiState: UiState): UiState;
-  getWidgetUiState<TUiState extends UiState = UiState>(
-    uiState: TUiState
-  ): TUiState;
+  getWidgetUiState<TSpecificUiState extends UiState = TUiState>(
+    uiState: TSpecificUiState
+  ): TSpecificUiState;
   getWidgetSearchParameters(
     searchParameters: SearchParameters,
     searchParametersOptions: { uiState: IndexUiState }
   ): SearchParameters;
+  /**
+   * Set this index' UI state back to the state defined by the widgets.
+   * Can only be called after `init`.
+   */
   refreshUiState(): void;
+  /**
+   * Set this index' UI state and search. This is the equivalent of calling
+   * a spread `setUiState` on the InstantSearch instance.
+   * Can only be called after `init`.
+   */
+  setIndexUiState(
+    indexUiState:
+      | TUiState[string]
+      | ((previousIndexUiState: TUiState[string]) => TUiState[string])
+  ): void;
 };
 
 /**
@@ -697,6 +713,22 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         },
         localUiState
       );
+    },
+
+    setIndexUiState<TIndexUiState extends IndexUiState = IndexUiState>(
+      indexUiState:
+        | TIndexUiState
+        | ((previousIndexUiState: TIndexUiState) => TIndexUiState)
+    ) {
+      const nextIndexUiState =
+        typeof indexUiState === 'function'
+          ? indexUiState(localUiState as TIndexUiState)
+          : indexUiState;
+
+      localInstantSearchInstance!.setUiState((state) => ({
+        ...state,
+        [indexId]: nextIndexUiState,
+      }));
     },
   };
 };

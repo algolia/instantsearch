@@ -1,8 +1,9 @@
-import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
@@ -10,6 +11,7 @@ import {
   createRenderOptions,
 } from '../../../../test/createWidget';
 import connectHitsWithInsights from '../connectHitsWithInsights';
+
 import type { Hit } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({

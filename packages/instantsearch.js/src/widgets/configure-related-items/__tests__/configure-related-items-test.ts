@@ -1,7 +1,9 @@
-import configureRelatedItems from '../configure-related-items';
-import type { ConfigureRelatedItemsConnectorParams } from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
-import connectConfigureRelatedItems from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+
+import connectConfigureRelatedItems from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
+import configureRelatedItems from '../configure-related-items';
+
+import type { ConfigureRelatedItemsConnectorParams } from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
 
 jest.mock(
   '../../../connectors/configure-related-items/connectConfigureRelatedItems'

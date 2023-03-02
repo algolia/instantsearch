@@ -3,14 +3,17 @@
  */
 import {
   createHierarchicalMenuTests,
+  createBreadcrumbTests,
   createRefinementListTests,
   createPaginationTests,
   createMenuTests,
   createInfiniteHitsTests,
 } from '@instantsearch/tests';
+
 import instantsearch from '../index.es';
 import {
   hierarchicalMenu,
+  breadcrumb,
   menu,
   refinementList,
   pagination,
@@ -24,6 +27,30 @@ createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
       hierarchicalMenu({
         container: document.body.appendChild(document.createElement('div')),
         ...widgetParams,
+      }),
+    ])
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
+    .start();
+});
+
+createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
+  const { transformItems, templates, ...hierarchicalWidgetParams } =
+    widgetParams;
+
+  instantsearch(instantSearchOptions)
+    .addWidgets([
+      breadcrumb({
+        container: document.body.appendChild(document.createElement('div')),
+        ...widgetParams,
+      }),
+      hierarchicalMenu({
+        container: document.body.appendChild(document.createElement('div')),
+        ...hierarchicalWidgetParams,
       }),
     ])
     .on('error', () => {

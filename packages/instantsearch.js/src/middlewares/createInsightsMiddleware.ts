@@ -1,9 +1,3 @@
-import type {
-  InsightsClient,
-  InsightsClientMethod,
-  InternalMiddleware,
-  Hit,
-} from '../types';
 import { getInsightsAnonymousUserTokenInternal } from '../helpers';
 import {
   warning,
@@ -12,6 +6,13 @@ import {
   find,
   safelyRunOnBrowser,
 } from '../lib/utils';
+
+import type {
+  InsightsClient,
+  InsightsClientMethod,
+  InternalMiddleware,
+  Hit,
+} from '../types';
 import type {
   AlgoliaSearchHelper,
   PlainSearchParameters,

@@ -1,5 +1,6 @@
-import type { MenuSelectComponentTemplates } from '../../components/MenuSelect/MenuSelect';
 import { formatNumber } from '../../lib/formatNumber';
+
+import type { MenuSelectComponentTemplates } from '../../components/MenuSelect/MenuSelect';
 
 const defaultTemplates: MenuSelectComponentTemplates = {
   item({ label, count }) {

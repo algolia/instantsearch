@@ -3,10 +3,11 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import withInsightsListener from '../insights/listener';
+import { h } from 'preact';
+
 import { serializePayload } from '../../lib/utils';
+import withInsightsListener from '../insights/listener';
 
 describe('withInsightsListener', () => {
   it('should capture clicks performed on inner elements with data-insights-method defined', () => {

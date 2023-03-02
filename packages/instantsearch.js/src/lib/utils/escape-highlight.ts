@@ -1,5 +1,6 @@
 import { escape } from './escape-html';
 import { isPlainObject } from './isPlainObject';
+
 import type { Hit, FacetHit, EscapedHits } from '../../types';
 
 export const TAG_PLACEHOLDER = {

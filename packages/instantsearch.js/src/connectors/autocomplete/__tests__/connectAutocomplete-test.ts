@@ -1,23 +1,25 @@
-import algoliasearchHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import {
-  createInitOptions,
-  createRenderOptions,
-  createDisposeOptions,
-} from '../../../../test/createWidget';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { AutocompleteRenderState } from '../connectAutocomplete';
-import connectAutocomplete from '../connectAutocomplete';
-import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import type { SearchClient, SearchResponse } from '../../../types';
 import { wait } from '@instantsearch/testutils/wait';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+
+import {
+  createInitOptions,
+  createRenderOptions,
+  createDisposeOptions,
+} from '../../../../test/createWidget';
 import instantsearch from '../../../index.es';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
+import connectAutocomplete from '../connectAutocomplete';
+
+import type { SearchClient, SearchResponse } from '../../../types';
+import type { AutocompleteRenderState } from '../connectAutocomplete';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {

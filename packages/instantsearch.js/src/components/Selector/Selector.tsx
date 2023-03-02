@@ -1,7 +1,7 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
 
 export type SelectorOption = {
   value?: string | number;

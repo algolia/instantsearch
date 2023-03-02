@@ -2,11 +2,12 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import type { ComponentChildren } from '@algolia/ui-components-shared';
 import { render } from '@testing-library/preact';
 import { h } from 'preact';
 
 import { Highlight } from '../Highlight';
+
+import type { ComponentChildren } from '@algolia/ui-components-shared';
 
 describe('Highlight', () => {
   test('renders single match', () => {

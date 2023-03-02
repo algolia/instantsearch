@@ -2,13 +2,15 @@
  * @jest-environment jsdom
  */
 
+import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import { getByText, fireEvent } from '@testing-library/dom';
+
+import { connectConfigure, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { configure, searchBox } from '../../widgets';
-import { connectConfigure, connectSearchBox } from '../../connectors';
-import { createSearchClient } from '@instantsearch/mocks';
+
 import type { MiddlewareDefinition } from '../../types';
-import { wait } from '@instantsearch/testutils/wait';
 
 describe('configure', () => {
   it('provides up-to-date uiState to onStateChange', () => {

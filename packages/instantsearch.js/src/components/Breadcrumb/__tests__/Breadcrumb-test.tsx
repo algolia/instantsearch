@@ -3,12 +3,14 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import type { BreadcrumbProps } from '../Breadcrumb';
-import Breadcrumb from '../Breadcrumb';
+import { h } from 'preact';
+
 import { prepareTemplateProps } from '../../../lib/templating';
 import defaultTemplates from '../../../widgets/breadcrumb/defaultTemplates';
+import Breadcrumb from '../Breadcrumb';
+
+import type { BreadcrumbProps } from '../Breadcrumb';
 
 const defaultProps: BreadcrumbProps = {
   items: [],

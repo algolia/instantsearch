@@ -3,22 +3,22 @@
  */
 /** @jsx h */
 
-import type { RefObject } from 'preact';
-import { h, render, createRef } from 'preact';
-import originalHelper from 'algoliasearch-helper';
-import InstantSearch from '../InstantSearch';
-import version from '../version';
-import { connectSearchBox, connectPagination } from '../../connectors';
-import { index } from '../../widgets';
-import { noop, warning } from '../utils';
 import {
   createSearchClient,
   createControlledSearchClient,
 } from '@instantsearch/mocks';
-import { createRenderOptions, createWidget } from '../../../test/createWidget';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import type { IndexWidget } from '../../widgets/index/index';
-import type { UiState, Widget } from '../../types';
+import { wait } from '@instantsearch/testutils/wait';
+import originalHelper from 'algoliasearch-helper';
+import { h, render, createRef } from 'preact';
+
+import { createRenderOptions, createWidget } from '../../../test/createWidget';
+import { connectSearchBox, connectPagination } from '../../connectors';
+import { index } from '../../widgets';
+import InstantSearch from '../InstantSearch';
+import { noop, warning } from '../utils';
+import version from '../version';
+
 import type {
   PaginationConnectorParams,
   PaginationWidgetDescription,
@@ -27,7 +27,9 @@ import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
 } from '../../connectors/search-box/connectSearchBox';
-import { wait } from '@instantsearch/testutils/wait';
+import type { UiState, Widget } from '../../types';
+import type { IndexWidget } from '../../widgets/index/index';
+import type { RefObject } from 'preact';
 
 type SearchBoxWidgetInstance = Widget<
   SearchBoxWidgetDescription & { widgetParams: SearchBoxConnectorParams }

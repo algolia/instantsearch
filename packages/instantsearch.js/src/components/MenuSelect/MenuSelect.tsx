@@ -1,15 +1,17 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
 import { find } from '../../lib/utils';
 import Template from '../Template/Template';
+
+import type { MenuRenderState } from '../../connectors/menu/connectMenu';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   MenuSelectCSSClasses,
   MenuSelectTemplates,
 } from '../../widgets/menu-select/menu-select';
-import type { MenuRenderState } from '../../connectors/menu/connectMenu';
-import type { ComponentCSSClasses } from '../../types';
 
 export type MenuSelectComponentCSSClasses =
   ComponentCSSClasses<MenuSelectCSSClasses>;

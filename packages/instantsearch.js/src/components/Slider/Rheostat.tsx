@@ -6,8 +6,9 @@
 
 /** @jsx h */
 
-import type { ComponentChildren, ComponentType, JSX } from 'preact';
 import { h, Component, createRef } from 'preact';
+
+import type { ComponentChildren, ComponentType, JSX } from 'preact';
 
 type BoundingBox = {
   height: number;

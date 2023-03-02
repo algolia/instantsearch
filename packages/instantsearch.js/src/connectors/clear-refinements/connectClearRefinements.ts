@@ -1,4 +1,3 @@
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import {
   checkRendering,
   clearRefinements,
@@ -8,6 +7,7 @@ import {
   uniq,
   mergeSearchParameters,
 } from '../../lib/utils';
+
 import type {
   TransformItems,
   CreateURL,
@@ -15,6 +15,7 @@ import type {
   WidgetRenderState,
   ScopedResult,
 } from '../../types';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',

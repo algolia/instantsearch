@@ -1,15 +1,17 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
 import Template from '../Template/Template';
+
+import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   BreadcrumbCSSClasses,
   BreadcrumbTemplates,
 } from '../../widgets/breadcrumb/breadcrumb';
-import type { ComponentCSSClasses } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
 
 export type BreadcrumbComponentCSSClasses =
   ComponentCSSClasses<BreadcrumbCSSClasses>;

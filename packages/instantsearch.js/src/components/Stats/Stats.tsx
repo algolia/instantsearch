@@ -1,13 +1,15 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
+import Template from '../Template/Template';
+
+import type { ComponentCSSClasses } from '../../types';
 import type {
   StatsCSSClasses,
   StatsTemplates,
 } from '../../widgets/stats/stats';
-import Template from '../Template/Template';
-import type { ComponentCSSClasses } from '../../types';
 
 export type StatsComponentCSSClasses = ComponentCSSClasses<StatsCSSClasses>;
 

@@ -1,16 +1,16 @@
-import type { VNode } from 'preact';
 import type {
   Highlight,
   ReverseHighlight,
   ReverseSnippet,
   Snippet,
 } from '../helpers/components';
-import type { html } from 'htm/preact';
 import type {
   BuiltInBindEventForHits,
   CustomBindEventForHits,
   SendEventForHits,
 } from '../lib/utils';
+import type { html } from 'htm/preact';
+import type { VNode } from 'preact';
 
 export type Template<TTemplateData = void> =
   | string

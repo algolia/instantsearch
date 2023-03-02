@@ -1,18 +1,19 @@
-import algoliasearchHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import { warning } from '../../../lib/utils';
-import connectBreadcrumb from '../connectBreadcrumb';
 import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import { warning } from '../../../lib/utils';
+import connectBreadcrumb from '../connectBreadcrumb';
 
 describe('connectBreadcrumb', () => {
   describe('Usage', () => {
@@ -281,6 +282,57 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
           helper,
           results,
           state: results._state,
+        })
+      );
+
+      expect(renderState).toEqual({
+        canRefine: false,
+        createURL: expect.any(Function),
+        items: [],
+        refine: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+      });
+    });
+
+    it('returns an empty array of items if no hierarchicalFacets result exist', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
+      const breadcrumb = createBreadcrumb({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        breadcrumb.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      const results = new algoliasearchHelper.SearchResults(
+        new SearchParameters({ index: helper.state.index }),
+        [
+          {
+            query: helper.state.query ?? '',
+            page: helper.state.page ?? 0,
+            hitsPerPage: helper.state.hitsPerPage ?? 20,
+            hits: [],
+            nbHits: 0,
+            nbPages: 0,
+            params: '',
+            exhaustiveNbHits: true,
+            exhaustiveFacetsCount: true,
+            processingTimeMS: 0,
+            index: helper.state.index,
+          },
+        ]
+      );
+
+      const renderState = breadcrumb.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results,
+          state: helper.state,
         })
       );
 

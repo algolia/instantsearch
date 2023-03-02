@@ -1,6 +1,7 @@
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import type { InstantSearch } from '../../types';
 import { isFacetRefined } from './isFacetRefined';
+
+import type { InstantSearch } from '../../types';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 type BuiltInSendEventForFacet = (
   eventType: string,

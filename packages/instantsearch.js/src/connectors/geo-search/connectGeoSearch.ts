@@ -1,8 +1,3 @@
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import type { SendEventForHits } from '../../lib/utils';
 import {
   checkRendering,
   aroundLatLngToPosition,
@@ -11,6 +6,8 @@ import {
   createSendEventForHits,
   noop,
 } from '../../lib/utils';
+
+import type { SendEventForHits } from '../../lib/utils';
 import type {
   BaseHit,
   Connector,
@@ -21,6 +18,10 @@ import type {
   TransformItems,
   WidgetRenderState,
 } from '../../types';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'geo-search',

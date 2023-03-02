@@ -1,27 +1,30 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import MenuSelect from '../../components/MenuSelect/MenuSelect';
+import connectMenu from '../../connectors/menu/connectMenu';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
+import type {
+  MenuSelectComponentCSSClasses,
+  MenuSelectComponentTemplates,
+} from '../../components/MenuSelect/MenuSelect';
 import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
 } from '../../connectors/menu/connectMenu';
-import connectMenu from '../../connectors/menu/connectMenu';
-import type {
-  MenuSelectComponentCSSClasses,
-  MenuSelectComponentTemplates,
-} from '../../components/MenuSelect/MenuSelect';
-import MenuSelect from '../../components/MenuSelect/MenuSelect';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import type { RendererOptions, Template, WidgetFactory } from '../../types';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { RendererOptions, Template, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');

@@ -1,5 +1,7 @@
-import simpleStateMapping from '../lib/stateMappings/simple';
 import historyRouter from '../lib/routers/history';
+import simpleStateMapping from '../lib/stateMappings/simple';
+import { isEqual } from '../lib/utils';
+
 import type {
   Router,
   StateMapping,
@@ -7,7 +9,6 @@ import type {
   InternalMiddleware,
   CreateURL,
 } from '../types';
-import { isEqual } from '../lib/utils';
 
 export type RouterProps<
   TUiState extends UiState = UiState,

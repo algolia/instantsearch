@@ -35,6 +35,7 @@ export * from './isPlainObject';
 export * from './isSpecialClick';
 export * from './logger';
 export * from './mergeSearchParameters';
+export * from './omit';
 export * from './noop';
 export * from './range';
 export * from './render-args';

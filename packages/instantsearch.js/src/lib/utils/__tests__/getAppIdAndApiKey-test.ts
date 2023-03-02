@@ -1,6 +1,7 @@
-import { getAppIdAndApiKey } from '../getAppIdAndApiKey';
 import algoliasearchV4 from 'algoliasearch';
 import algoliasearchV3 from 'algoliasearch-v3';
+
+import { getAppIdAndApiKey } from '../getAppIdAndApiKey';
 
 const APP_ID = 'myAppId';
 const API_KEY = 'myApiKey';

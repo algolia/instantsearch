@@ -1,6 +1,8 @@
 import qs from 'qs';
-import type { Router, UiState } from '../../types';
+
 import { safelyRunOnBrowser } from '../utils';
+
+import type { Router, UiState } from '../../types';
 
 type CreateURL<TRouteState> = (args: {
   qsModule: typeof qs;
