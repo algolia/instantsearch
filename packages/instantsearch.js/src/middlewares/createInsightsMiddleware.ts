@@ -146,6 +146,11 @@ export function createInsightsMiddleware<
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
 
+    const eventsSent = new Map<
+      NonNullable<InsightsEvent['insightsMethod']>,
+      Set<string>
+    >();
+
     return {
       $$type: 'ais.insights',
       $$internal,
@@ -226,11 +231,37 @@ export function createInsightsMiddleware<
           immediate: true,
         });
 
+        let lastQueryId: string | undefined = undefined;
+        instantSearchInstance.mainHelper!.derivedHelpers[0].on(
+          'result',
+          ({ results }) => {
+            if (!results.queryID || results.queryID !== lastQueryId) {
+              lastQueryId = results.queryID;
+              eventsSent.clear();
+            }
+          }
+        );
+
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
             onEvent(event, _insightsClient as TInsightsClient);
           } else if (event.insightsMethod) {
-            insightsClient(event.insightsMethod, event.payload);
+            let eventsSentForMethod = eventsSent.get(event.insightsMethod);
+            if (!eventsSentForMethod) {
+              eventsSentForMethod = new Set();
+              eventsSent.set(event.insightsMethod, eventsSentForMethod);
+            }
+
+            const serializedPayload = JSON.stringify({
+              q: event.payload.queryId,
+              o: event.payload.objectIDs,
+            });
+            if (eventsSentForMethod.has(serializedPayload)) {
+              return;
+            } else {
+              eventsSentForMethod.add(serializedPayload);
+              insightsClient(event.insightsMethod, event.payload);
+            }
 
             warning(
               Boolean((helper.state as PlainSearchParameters).userToken),
