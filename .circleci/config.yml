@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 references:
   workspace_root: &workspace_root ~/instantsearch
@@ -35,6 +35,9 @@ defaults: &defaults
 workflows:
   version: 2
   ci:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - build:
           context: fx-libraries
@@ -51,6 +54,37 @@ workflows:
       - vue v3:
           requires:
             - build
+      - release if needed:
+          context: fx-libraries
+          requires:
+            - build
+            - lint
+            - unit tests
+            - legacy algoliasearch
+          filters:
+            branches:
+              only:
+                - master
+  scheduled release:
+    # This workflow is triggered by a schedule pipeline.
+    # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
+    when:
+      and:
+        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ scheduled_release, << pipeline.schedule.name >> ]
+    jobs:
+      - prepare release:
+          context: fx-libraries
+  scheduled e2e:
+    # This workflow is triggered by a schedule pipeline.
+    # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
+    when:
+      and:
+        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ scheduled_e2e, << pipeline.schedule.name >> ]
+    jobs:
+      - build:
+          context: fx-libraries
       - examples:
           requires:
             - build
@@ -58,30 +92,6 @@ workflows:
           context: fx-libraries
           requires:
             - examples
-      - release if needed:
-          context: fx-libraries
-          requires:
-            - build
-            - lint
-            - unit tests
-            - examples
-            - legacy algoliasearch
-            - e2e tests
-          filters:
-            branches:
-              only:
-                - master
-  scheduled release:
-    triggers:
-      - schedule:
-          cron: '0 9 * * 2'
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - prepare release:
-          context: fx-libraries
 
 jobs:
   build:
