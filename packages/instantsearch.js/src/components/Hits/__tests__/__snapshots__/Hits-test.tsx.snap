@@ -14,6 +14,7 @@ exports[`Hits markup should render <Hits /> 1`] = `
           "__html": "item",
         }
       }
+      onClick={[Function]}
     />
     <li
       className="item"
@@ -22,6 +23,7 @@ exports[`Hits markup should render <Hits /> 1`] = `
           "__html": "item",
         }
       }
+      onClick={[Function]}
     />
   </ol>
 </div>
@@ -43,6 +45,7 @@ exports[`Hits markup should render <Hits /> without highlight function 1`] = `
 </mark>,
         }
       }
+      onClick={[Function]}
     />
     <li
       className="item"
@@ -53,6 +56,7 @@ exports[`Hits markup should render <Hits /> without highlight function 1`] = `
 </mark>,
         }
       }
+      onClick={[Function]}
     />
   </ol>
 </div>
