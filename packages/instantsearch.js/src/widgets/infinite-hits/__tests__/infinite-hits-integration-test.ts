@@ -8,6 +8,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { getByText, waitFor, fireEvent } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { SearchParameters } from 'algoliasearch-helper';
 
 import { infiniteHits, configure } from '../..';
@@ -20,7 +21,6 @@ import type {
 } from '../../../connectors/infinite-hits/connectInfiniteHits';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
-import userEvent from '@testing-library/user-event';
 
 describe('infiniteHits', () => {
   const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
