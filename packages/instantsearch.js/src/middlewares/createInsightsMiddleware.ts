@@ -224,7 +224,7 @@ export function createInsightsMiddleware<
           if (onEvent) {
             onEvent(event, _insightsClient as TInsightsClient);
           } else if (event.insightsMethod) {
-            // We keep the queue length for later.
+            // We keep the queue length to check whether the client is already loaded.
             const queueLength = insightsClient.queue?.length || 0;
 
             try {
@@ -247,7 +247,7 @@ export function createInsightsMiddleware<
               // that `search-insights` is not yet loaded.
               (insightsClient.queue?.length || 0) > queueLength &&
               // We check if `init` has already been added to the queue.
-              insightsClient.queue?.every((el) => el[0] !== 'init')
+              insightsClient.queue?.every(([eventType]) => eventType !== 'init')
             ) {
               insightsClient('init', {
                 appId,
