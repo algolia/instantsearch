@@ -136,12 +136,6 @@ export function createInsightsMiddleware<
       // Otherwise, the `init` call might override it with anonymous user token.
       userTokenBeforeInit = userToken;
     });
-    insightsClient('init', {
-      appId,
-      apiKey,
-      useCookie: true,
-      ...insightsInitParams,
-    });
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
@@ -230,7 +224,42 @@ export function createInsightsMiddleware<
           if (onEvent) {
             onEvent(event, _insightsClient as TInsightsClient);
           } else if (event.insightsMethod) {
-            insightsClient(event.insightsMethod, event.payload);
+            // We keep the queue length for later.
+            const queueLength = insightsClient.queue?.length || 0;
+
+            try {
+              // We first try to send the event.
+              insightsClient(event.insightsMethod, event.payload);
+            } catch (e) {
+              // We catch if `search-insights` is not initialized yet
+              // and we `init` before sending the event.
+              insightsClient('init', {
+                appId,
+                apiKey,
+                useCookie: true,
+                ...insightsInitParams,
+              });
+              insightsClient(event.insightsMethod, event.payload);
+            }
+
+            if (
+              // If the `search-insights` queue length has changed, it means
+              // that `search-insights` is not yet loaded.
+              (insightsClient.queue?.length || 0) > queueLength &&
+              // We check if `init` has already been added to the queue.
+              insightsClient.queue?.every((el) => el[0] !== 'init')
+            ) {
+              insightsClient('init', {
+                appId,
+                apiKey,
+                useCookie: true,
+                ...insightsInitParams,
+              });
+              // We make sure to put `init` in the first position in the queue.
+              // We can assume that `pop` will return the `init` event since
+              // we know that the queue exists and that the event has been added to it.
+              insightsClient.queue.unshift(insightsClient.queue.pop()!);
+            }
 
             warning(
               Boolean((helper.state as PlainSearchParameters).userToken),
