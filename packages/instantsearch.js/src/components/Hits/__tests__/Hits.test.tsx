@@ -3,16 +3,16 @@
  */
 /** @jsx h */
 import { createSingleSearchResponse } from '@instantsearch/mocks';
-import userEvent from '@testing-library/user-event';
 import { getAllByRole, render } from '@testing-library/preact';
+import userEvent from '@testing-library/user-event';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { h } from 'preact';
 
-import Hits from '../Hits';
 import { prepareTemplateProps } from '../../../lib/templating';
+import Hits from '../Hits';
 
-import type { Hit } from 'instantsearch.js';
 import type { HitsProps } from '../Hits';
+import type { Hit } from 'instantsearch.js';
 
 beforeEach(() => {
   document.body.innerHTML = '';
