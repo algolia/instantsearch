@@ -2,15 +2,17 @@
  * @jest-environment jsdom-global
  */
 
-import qs from 'qs';
 import { createSearchClient } from '@instantsearch/mocks';
-import { createWidget } from '../../../test/createWidget';
 import { wait } from '@instantsearch/testutils/wait';
-import type { Router, UiState, StateMapping, IndexUiState } from '../../types';
-import historyRouter from '../routers/history';
+import qs from 'qs';
+
 import instantsearch from '../..';
-import type { JSDOM } from 'jsdom';
+import { createWidget } from '../../../test/createWidget';
 import { connectHitsPerPage, connectSearchBox } from '../../connectors';
+import historyRouter from '../routers/history';
+
+import type { Router, UiState, StateMapping, IndexUiState } from '../../types';
+import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;
 

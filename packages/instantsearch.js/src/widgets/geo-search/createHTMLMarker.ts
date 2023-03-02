@@ -1,5 +1,6 @@
 /* global google EventListener */
 import { render } from 'preact';
+
 import type { renderTemplate } from '../../lib/templating';
 
 export type HTMLMarkerArguments = {

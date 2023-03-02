@@ -1,21 +1,5 @@
-import type {
-  AlgoliaSearchHelper as Helper,
-  DerivedHelper,
-  PlainSearchParameters,
-  SearchParameters,
-  SearchResults,
-  AlgoliaSearchHelper,
-} from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type {
-  InstantSearch,
-  UiState,
-  IndexUiState,
-  Widget,
-  ScopedResult,
-  SearchClient,
-  IndexRenderState,
-} from '../../types';
+
 import {
   checkIndexUiState,
   createDocumentationMessageGenerator,
@@ -26,6 +10,24 @@ import {
   createInitArgs,
   createRenderArgs,
 } from '../../lib/utils';
+
+import type {
+  InstantSearch,
+  UiState,
+  IndexUiState,
+  Widget,
+  ScopedResult,
+  SearchClient,
+  IndexRenderState,
+} from '../../types';
+import type {
+  AlgoliaSearchHelper as Helper,
+  DerivedHelper,
+  PlainSearchParameters,
+  SearchParameters,
+  SearchResults,
+  AlgoliaSearchHelper,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',

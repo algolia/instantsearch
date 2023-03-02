@@ -3,10 +3,12 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { shallow } from '@instantsearch/testutils/enzyme';
-import type { SliderProps } from '../Slider';
+import { h } from 'preact';
+
 import Slider from '../Slider';
+
+import type { SliderProps } from '../Slider';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {

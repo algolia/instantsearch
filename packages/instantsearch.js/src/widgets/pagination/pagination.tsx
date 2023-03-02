@@ -1,23 +1,25 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import Pagination from '../../components/Pagination/Pagination';
+import connectPagination from '../../connectors/pagination/connectPagination';
+import { component } from '../../lib/suit';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
 import type {
   PaginationComponentCSSClasses,
   PaginationComponentTemplates,
 } from '../../components/Pagination/Pagination';
-import Pagination from '../../components/Pagination/Pagination';
 import type {
   PaginationConnectorParams,
   PaginationRenderState,
   PaginationWidgetDescription,
 } from '../../connectors/pagination/connectPagination';
-import connectPagination from '../../connectors/pagination/connectPagination';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
 import type { Renderer, WidgetFactory } from '../../types';
 
 const suit = component('Pagination');

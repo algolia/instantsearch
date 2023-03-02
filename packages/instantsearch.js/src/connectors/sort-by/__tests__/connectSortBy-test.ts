@@ -1,21 +1,22 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import type { SortByRenderState } from '../connectSortBy';
-import connectSortBy from '../connectSortBy';
-import index from '../../../widgets/index/index';
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import index from '../../../widgets/index/index';
+import connectSortBy from '../connectSortBy';
+
+import type { SortByRenderState } from '../connectSortBy';
 
 describe('connectSortBy', () => {
   describe('Usage', () => {

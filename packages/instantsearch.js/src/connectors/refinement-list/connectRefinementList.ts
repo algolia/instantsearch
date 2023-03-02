@@ -1,5 +1,3 @@
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
-import type { SendEventForFacet } from '../../lib/utils';
 import {
   escapeFacets,
   TAG_PLACEHOLDER,
@@ -9,6 +7,8 @@ import {
   createSendEventForFacet,
   noop,
 } from '../../lib/utils';
+
+import type { SendEventForFacet } from '../../lib/utils';
 import type {
   Connector,
   TransformItems,
@@ -20,6 +20,7 @@ import type {
   CreateURL,
   WidgetRenderState,
 } from '../../types';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',

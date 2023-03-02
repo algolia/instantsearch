@@ -1,5 +1,6 @@
-import type { HitsComponentTemplates } from '../../components/Hits/Hits';
 import { omit } from '../../lib/utils';
+
+import type { HitsComponentTemplates } from '../../components/Hits/Hits';
 
 const defaultTemplates: HitsComponentTemplates = {
   empty() {

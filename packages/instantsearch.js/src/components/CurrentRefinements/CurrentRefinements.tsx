@@ -1,14 +1,16 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
 import { isSpecialClick, capitalize } from '../../lib/utils';
+
 import type {
   CurrentRefinementsConnectorParamsItem,
   CurrentRefinementsConnectorParamsRefinement,
 } from '../../connectors/current-refinements/connectCurrentRefinements';
-import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
 import type { ComponentCSSClasses } from '../../types';
+import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
 
 export type CurrentRefinementsComponentCSSClasses =
   ComponentCSSClasses<CurrentRefinementsCSSClasses>;

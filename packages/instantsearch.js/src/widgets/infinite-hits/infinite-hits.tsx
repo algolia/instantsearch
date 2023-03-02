@@ -1,27 +1,31 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
-import type { SearchResults } from 'algoliasearch-helper';
+import { h, render } from 'preact';
+
+import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
+import { withInsights, withInsightsListener } from '../../lib/insights';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   InfiniteHitsComponentCSSClasses,
   InfiniteHitsComponentTemplates,
 } from '../../components/InfiniteHits/InfiniteHits';
-import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import type {
   InfiniteHitsConnectorParams,
   InfiniteHitsRenderState,
   InfiniteHitsCache,
   InfiniteHitsWidgetDescription,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import { withInsights, withInsightsListener } from '../../lib/insights';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
   Template,
@@ -30,8 +34,7 @@ import type {
   InsightsClient,
   Renderer,
 } from '../../types';
-import defaultTemplates from './defaultTemplates';
-import type { PreparedTemplateProps } from '../../lib/templating';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',

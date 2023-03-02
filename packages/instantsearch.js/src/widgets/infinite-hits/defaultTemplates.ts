@@ -1,4 +1,5 @@
 import { omit } from '../../lib/utils';
+
 import type { InfiniteHitsComponentTemplates } from '../../components/InfiniteHits/InfiniteHits';
 
 const defaultTemplates: InfiniteHitsComponentTemplates = {

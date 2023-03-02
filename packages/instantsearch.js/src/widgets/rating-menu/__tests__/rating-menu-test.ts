@@ -2,23 +2,25 @@
  * @jest-environment jsdom
  */
 
-import type { VNode } from 'preact';
-import { render as preactRender } from 'preact';
-import jsHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
 import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+import { render as preactRender } from 'preact';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
 import ratingMenu from '../rating-menu';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+
+import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

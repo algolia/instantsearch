@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { renderTemplate } from '../templating';
-import createHelpers from '../createHelpers';
 import { insights } from '../../helpers';
+import createHelpers from '../createHelpers';
+import { renderTemplate } from '../templating';
 
 describe('insights hogan helper', () => {
   const helpers = createHelpers({ numberLocale: 'en-US' });

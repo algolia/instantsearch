@@ -1,5 +1,6 @@
-import type { Connector, WidgetRenderState } from '../../types';
 import { noop } from '../../lib/utils';
+
+import type { Connector, WidgetRenderState } from '../../types';
 
 export type RelevantSortConnectorParams = Record<string, unknown>;
 

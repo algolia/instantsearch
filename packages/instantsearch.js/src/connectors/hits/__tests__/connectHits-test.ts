@@ -2,31 +2,33 @@
  * @jest-environment jsdom
  */
 
-import algoliasearchHelper, {
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
-import connectHits from '../connectHits';
-import {
-  createDisposeOptions,
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/createWidget';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
+import {
+  createDisposeOptions,
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/createWidget';
+import instantsearch from '../../../index.es';
+import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
+import connectHits from '../connectHits';
+
 import type {
   EscapedHits,
   Hit,
   HitAttributeHighlightResult,
   SearchResponse,
 } from '../../../types';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { wait } from '@instantsearch/testutils/wait';
-import instantsearch from '../../../index.es';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,

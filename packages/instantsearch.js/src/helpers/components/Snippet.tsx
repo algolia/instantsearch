@@ -10,13 +10,13 @@ import {
   getHighlightedParts,
 } from '../../lib/utils';
 
+import type { SnippetProps as SnippetUiComponentProps } from '../../components/Snippet/Snippet';
 import type {
   BaseHit,
   Hit,
   HitAttributeSnippetResult,
   PartialKeys,
 } from '../../types';
-import type { SnippetProps as SnippetUiComponentProps } from '../../components/Snippet/Snippet';
 
 export type SnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;

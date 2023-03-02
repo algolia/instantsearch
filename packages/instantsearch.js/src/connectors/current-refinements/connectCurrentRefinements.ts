@@ -1,8 +1,3 @@
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
 import {
   getRefinements,
   checkRendering,
@@ -10,6 +5,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
+
 import type {
   Refinement,
   FacetRefinement,
@@ -21,6 +17,11 @@ import type {
   CreateURL,
   WidgetRenderState,
 } from '../../types';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 
 export type CurrentRefinementsConnectorParamsRefinement = {
   /**

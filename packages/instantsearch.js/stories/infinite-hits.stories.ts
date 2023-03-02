@@ -1,7 +1,9 @@
-import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 import { createInfiniteHitsSessionStorageCache } from '../src/lib/infiniteHitsCache';
+
 import type { InsightsClient } from '../src/types';
 
 const fakeInsightsClient: InsightsClient = (method, ...payloads) => {

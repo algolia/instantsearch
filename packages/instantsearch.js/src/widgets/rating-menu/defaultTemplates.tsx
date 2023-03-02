@@ -1,13 +1,14 @@
 /** @jsx h */
+import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
-import type { ComponentChild } from 'preact';
+import { formatNumber } from '../../lib/formatNumber';
+
 import type {
   RatingMenuComponentTemplates,
   RatingMenuCSSClasses,
 } from './rating-menu';
-import { formatNumber } from '../../lib/formatNumber';
-import { cx } from '@algolia/ui-components-shared';
+import type { ComponentChild } from 'preact';
 
 type ItemWrapperProps = { children: ComponentChild } & {
   value: string;

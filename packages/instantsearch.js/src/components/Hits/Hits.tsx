@@ -1,14 +1,16 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
-import Template from '../Template/Template';
-import type { SearchResults } from 'algoliasearch-helper';
-import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
+import { h } from 'preact';
+
 import { warning } from '../../lib/utils';
+import Template from '../Template/Template';
+
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
 import type { ComponentCSSClasses, Hit } from '../../types';
 import type { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
+import type { SearchResults } from 'algoliasearch-helper';
 
 export type HitsComponentCSSClasses = ComponentCSSClasses<HitsCSSClasses>;
 export type HitsComponentTemplates = Required<HitsTemplates>;

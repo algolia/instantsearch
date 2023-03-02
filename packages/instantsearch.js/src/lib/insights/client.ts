@@ -1,10 +1,10 @@
-import type { SearchResults } from 'algoliasearch-helper';
 import {
   uniq,
   find,
   createDocumentationMessageGenerator,
   warning,
 } from '../utils';
+
 import type {
   Hit,
   InsightsClient,
@@ -12,6 +12,7 @@ import type {
   InsightsClientPayload,
   Connector,
 } from '../../types';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const getSelectedHits = (hits: Hit[], selectedObjectIDs: string[]): Hit[] => {
   return selectedObjectIDs.map((objectID) => {

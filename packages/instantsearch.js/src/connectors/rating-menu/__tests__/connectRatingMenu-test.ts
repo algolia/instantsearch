@@ -1,18 +1,19 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectRatingMenu from '../connectRatingMenu';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import connectRatingMenu from '../connectRatingMenu';
 
 describe('connectRatingMenu', () => {
   const getInitializedWidget = (config = {}, unmount = () => {}) => {

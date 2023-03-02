@@ -1,26 +1,30 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import Hits from '../../components/Hits/Hits';
+import connectHits from '../../connectors/hits/connectHits';
+import { withInsights, withInsightsListener } from '../../lib/insights';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
+import type {
+  HitsComponentCSSClasses,
+  HitsComponentTemplates,
+} from '../../components/Hits/Hits';
 import type {
   HitsConnectorParams,
   HitsRenderState,
   HitsWidgetDescription,
 } from '../../connectors/hits/connectHits';
-import connectHits from '../../connectors/hits/connectHits';
-import type {
-  HitsComponentCSSClasses,
-  HitsComponentTemplates,
-} from '../../components/Hits/Hits';
-import Hits from '../../components/Hits/Hits';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import { withInsights, withInsightsListener } from '../../lib/insights';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   TemplateWithBindEvent,
@@ -29,7 +33,6 @@ import type {
   Renderer,
   InsightsClient,
 } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/templating';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });

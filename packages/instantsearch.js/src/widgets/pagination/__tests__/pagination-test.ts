@@ -2,27 +2,29 @@
  * @jest-environment jsdom
  */
 
-import { render as preactRender } from 'preact';
-import { getContainerNode as utilsGetContainerNode } from '../../../lib/utils/getContainerNode';
-import type {
-  PaginationCSSClasses,
-  PaginationWidgetParams,
-} from '../pagination';
-import pagination from '../pagination';
-import {
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/createWidget';
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import algoliasearchHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
 import {
   createSingleSearchResponse,
   createSearchClient,
 } from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+import { render as preactRender } from 'preact';
+
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/createWidget';
+import { getContainerNode as utilsGetContainerNode } from '../../../lib/utils/getContainerNode';
+import pagination from '../pagination';
+
+import type {
+  PaginationCSSClasses,
+  PaginationWidgetParams,
+} from '../pagination';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

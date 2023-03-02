@@ -1,11 +1,12 @@
+import { getInsightsAnonymousUserTokenInternal } from '../helpers';
+import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils';
+
 import type {
   InsightsClient,
   InsightsClientMethod,
   InternalMiddleware,
   Hit,
 } from '../types';
-import { getInsightsAnonymousUserTokenInternal } from '../helpers';
-import { warning, noop, getAppIdAndApiKey, find } from '../lib/utils';
 import type {
   AlgoliaSearchHelper,
   PlainSearchParameters,

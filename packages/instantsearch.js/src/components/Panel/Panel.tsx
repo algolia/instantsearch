@@ -1,15 +1,17 @@
 /** @jsx h */
 
+import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { cx } from '@algolia/ui-components-shared';
+
 import Template from '../Template/Template';
+
+import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types';
 import type {
   PanelCSSClasses,
   PanelSharedOptions,
   PanelTemplates,
 } from '../../widgets/panel/panel';
-import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types';
 
 export type PanelComponentCSSClasses = ComponentCSSClasses<
   // `collapseIcon` is only used in the default templates of the widget

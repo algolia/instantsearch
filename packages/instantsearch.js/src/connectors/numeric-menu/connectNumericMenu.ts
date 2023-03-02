@@ -1,10 +1,12 @@
-import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   isFiniteNumber,
   noop,
 } from '../../lib/utils';
+
+import type { SendEventForFacet } from '../../lib/utils';
+import type { InsightsEvent } from '../../middlewares';
 import type {
   Connector,
   CreateURL,
@@ -13,7 +15,6 @@ import type {
   WidgetRenderState,
 } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
-import type { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'numeric-menu',

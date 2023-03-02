@@ -1,18 +1,20 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+
 import { connectHitsPerPage } from '../..';
-import type { HitsPerPageConnectorParams } from '../connectHitsPerPage';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+
+import type { HitsPerPageConnectorParams } from '../connectHitsPerPage';
 
 describe('connectHitsPerPage', () => {
   describe('Usage', () => {

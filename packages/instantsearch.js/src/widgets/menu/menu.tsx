@@ -1,28 +1,31 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
 import RefinementList from '../../components/RefinementList/RefinementList';
+import connectMenu from '../../connectors/menu/connectMenu';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
 } from '../../connectors/menu/connectMenu';
-import connectMenu from '../../connectors/menu/connectMenu';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   ComponentCSSClasses,
   RendererOptions,
   Template,
   WidgetFactory,
 } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');

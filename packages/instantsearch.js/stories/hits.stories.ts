@@ -1,6 +1,8 @@
-import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
+
 import type { InsightsClient } from '../src/types';
 
 const fakeInsightsClient: InsightsClient = (method, ...payloads) => {

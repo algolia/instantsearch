@@ -3,8 +3,9 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render } from '@testing-library/preact';
+import { h } from 'preact';
+
 import CurrentRefinements from '../CurrentRefinements';
 
 describe('CurrentRefinements', () => {

@@ -5,13 +5,14 @@ import {
   isEqual,
   noop,
 } from '../../lib/utils';
-import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
+
 import type {
   Connector,
   TransformItems,
   CreateURL,
   WidgetRenderState,
 } from '../../types';
+import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'breadcrumb',

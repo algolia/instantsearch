@@ -1,17 +1,19 @@
 /** @jsx h */
 
-import { h, Component } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, Component } from 'preact';
+
 import Template from '../Template/Template';
-import type {
-  RangeInputCSSClasses,
-  RangeInputTemplates,
-} from '../../widgets/range-input/range-input';
+
 import type {
   Range,
   RangeBoundaries,
 } from '../../connectors/range/connectRange';
 import type { ComponentCSSClasses } from '../../types';
+import type {
+  RangeInputCSSClasses,
+  RangeInputTemplates,
+} from '../../widgets/range-input/range-input';
 
 export type RangeInputComponentCSSClasses =
   ComponentCSSClasses<RangeInputCSSClasses>;

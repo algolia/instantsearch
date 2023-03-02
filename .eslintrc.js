@@ -148,6 +148,21 @@ const config = {
         '@typescript-eslint/consistent-type-assertions': 'off',
         // We don't ship PropTypes in the next version of the library.
         'react/prop-types': 'off',
+        'import/extensions': ['error', 'never'],
+      },
+      settings: {
+        'import/parsers': {
+          '@typescript-eslint/parser': ['.ts', '.tsx'],
+        },
+      },
+    },
+    {
+      files: [
+        'packages/instantsearch.js/**/*',
+        'packages/react-instantsearch-hooks/**/*',
+        'packages/react-instantsearch-hooks-*/**/*',
+      ],
+      rules: {
         'import/order': [
           'error',
           {
@@ -174,13 +189,7 @@ const config = {
             pathGroupsExcludedImportTypes: ['builtin'],
           },
         ],
-        'import/extensions': ['error', 'never'],
-      },
-      settings: {
-        'import/parsers': {
-          '@typescript-eslint/parser': ['.ts', '.tsx'],
-        },
-      },
+      }
     },
     {
       files: 'packages/**/*',

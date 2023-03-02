@@ -1,19 +1,21 @@
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import algoliasearchHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import type { CurrentRefinementsConnectorParamsItem } from '../connectCurrentRefinements';
-import connectCurrentRefinements from '../connectCurrentRefinements';
 import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import connectCurrentRefinements from '../connectCurrentRefinements';
+
+import type { CurrentRefinementsConnectorParamsItem } from '../connectCurrentRefinements';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 describe('connectCurrentRefinements', () => {
   describe('Usage', () => {

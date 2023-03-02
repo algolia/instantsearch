@@ -1,20 +1,22 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
 import Selector from '../../components/Selector/Selector';
-import type {
-  HitsPerPageConnectorParams,
-  HitsPerPageRenderState,
-  HitsPerPageWidgetDescription,
-} from '../../connectors/hits-per-page/connectHitsPerPage';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
+import { component } from '../../lib/suit';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
   find,
 } from '../../lib/utils';
-import { component } from '../../lib/suit';
+
+import type {
+  HitsPerPageConnectorParams,
+  HitsPerPageRenderState,
+  HitsPerPageWidgetDescription,
+} from '../../connectors/hits-per-page/connectHitsPerPage';
 import type { ComponentCSSClasses, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({

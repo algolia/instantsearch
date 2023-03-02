@@ -1,28 +1,31 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
 import RefinementList from '../../components/RefinementList/RefinementList';
+import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   RatingMenuWidgetDescription,
   RatingMenuConnectorParams,
   RatingMenuRenderState,
 } from '../../connectors/rating-menu/connectRatingMenu';
-import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   ComponentCSSClasses,
   RendererOptions,
   Template,
   WidgetFactory,
 } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/templating';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
 const suit = component('RatingMenu');

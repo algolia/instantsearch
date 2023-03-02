@@ -2,11 +2,12 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import type { ComponentChildren } from '@algolia/ui-components-shared';
 import { render } from '@testing-library/preact';
 import { h } from 'preact';
 
 import { ReverseHighlight } from '../ReverseHighlight';
+
+import type { ComponentChildren } from '@algolia/ui-components-shared';
 
 describe('ReverseHighlight', () => {
   test('renders single match', () => {

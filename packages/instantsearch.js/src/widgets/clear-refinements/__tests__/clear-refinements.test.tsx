@@ -2,14 +2,14 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
+import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import { fireEvent, within } from '@testing-library/dom';
 import { h } from 'preact';
 
-import { createSearchClient } from '@instantsearch/mocks';
 import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import clearRefinements from '../clear-refinements';
 import refinementList from '../../refinement-list/refinement-list';
-import { fireEvent, within } from '@testing-library/dom';
+import clearRefinements from '../clear-refinements';
 
 beforeEach(() => {
   document.body.innerHTML = '';

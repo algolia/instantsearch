@@ -3,12 +3,13 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { mount } from '@instantsearch/testutils/enzyme';
 import { render } from '@testing-library/preact';
-import Stats from '../Stats';
-import defaultTemplates from '../../../widgets/stats/defaultTemplates';
+import { h } from 'preact';
+
 import createHelpers from '../../../lib/createHelpers';
+import defaultTemplates from '../../../widgets/stats/defaultTemplates';
+import Stats from '../Stats';
 
 describe('Stats', () => {
   const cssClasses = {
