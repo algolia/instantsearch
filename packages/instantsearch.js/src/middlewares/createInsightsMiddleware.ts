@@ -57,7 +57,6 @@ export function createInsightsMiddleware<
 >(props: InsightsProps<TInsightsClient> = {}): InternalMiddleware {
   const {
     insightsClient: _insightsClient,
-    insightsInitParams,
     onEvent,
     $$internal = false,
   } = props;
@@ -220,6 +219,13 @@ export function createInsightsMiddleware<
           immediate: true,
         });
 
+        const insightsInitParams = {
+          appId,
+          apiKey,
+          useCookie: true,
+          ...props.insightsInitParams,
+        };
+
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
             onEvent(event, _insightsClient as TInsightsClient);
@@ -233,12 +239,7 @@ export function createInsightsMiddleware<
             } catch (e) {
               // We catch if `search-insights` is not initialized yet
               // and we `init` before sending the event.
-              insightsClient('init', {
-                appId,
-                apiKey,
-                useCookie: true,
-                ...insightsInitParams,
-              });
+              insightsClient('init', insightsInitParams);
               insightsClient(event.insightsMethod, event.payload);
             }
 
@@ -249,12 +250,7 @@ export function createInsightsMiddleware<
               // We check if `init` has already been added to the queue.
               insightsClient.queue?.every(([eventType]) => eventType !== 'init')
             ) {
-              insightsClient('init', {
-                appId,
-                apiKey,
-                useCookie: true,
-                ...insightsInitParams,
-              });
+              insightsClient('init', insightsInitParams);
               // We make sure to put `init` in the first position in the queue.
               // We can assume that `pop` will return the `init` event since
               // we know that the queue exists and that the event has been added to it.
