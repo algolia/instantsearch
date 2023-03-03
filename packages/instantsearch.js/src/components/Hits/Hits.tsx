@@ -18,8 +18,8 @@ export type HitsComponentTemplates = Required<HitsTemplates>;
 export type HitsProps = {
   results: SearchResults;
   hits: Hit[];
-  sendEvent?: SendEventForHits;
-  bindEvent?: BindEventForHits;
+  sendEvent: SendEventForHits;
+  bindEvent: BindEventForHits;
   cssClasses: HitsComponentCSSClasses;
   templateProps: PreparedTemplateProps<HitsComponentTemplates>;
 };
@@ -53,7 +53,12 @@ const Hits = ({
             {...templateProps}
             templateKey="item"
             rootTagName="li"
-            rootProps={{ className: cssClasses.item }}
+            rootProps={{
+              className: cssClasses.item,
+              onClick: () => {
+                sendEvent('click', hit, 'Hit Clicked');
+              },
+            }}
             key={hit.objectID}
             data={{
               ...hit,
