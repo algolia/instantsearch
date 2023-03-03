@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.12.1
+
 references:
   workspace_root: &workspace_root ~/instantsearch
   attach_workspace: &attach_workspace
@@ -240,6 +243,12 @@ jobs:
           command: yarn run test:e2e:saucelabs
       - store_test_results:
           path: junit/wdio/
+      - slack/notify:
+          channel: $SLACK_E2E_NOTIF_CHANNEL
+          event: fail
+          # See: https://app.slack.com/block-kit-builder/
+          custom: |
+            {"blocks":[{"type":"header","text":{"type":"plain_text","text":":warning: End-to-end tests failed","emoji":true}},{"type":"section","fields":[{"type":"mrkdwn","text":"*Project*: $CIRCLE_PROJECT_REPONAME"}]},{"type":"actions","elements":[{"type":"button","text":{"type":"plain_text","text":"CircleCI"},"url":"$CIRCLE_BUILD_URL"},{"type":"button","text":{"type":"plain_text","text":"SauceLabs"},"url":"https://app.saucelabs.com/dashboard/tests/vdc"}]}]}
 
   release if needed:
     <<: *defaults
