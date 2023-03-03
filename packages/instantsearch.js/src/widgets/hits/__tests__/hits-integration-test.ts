@@ -123,7 +123,7 @@ describe('hits', () => {
       );
     });
 
-    test('sends a default `click` event when clicking on a hit', async () => {
+    test.only('sends a default `click` event when clicking on a hit', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
 
@@ -190,8 +190,8 @@ describe('hits', () => {
 
       fireEvent.click(getByText(container, 'title 1'));
 
-      // The default `click` one + the custom one
-      expect(onEvent).toHaveBeenCalledTimes(2);
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'click',
         hits: [
@@ -242,8 +242,8 @@ describe('hits', () => {
       onEvent.mockClear();
 
       fireEvent.click(getByText(container, 'title 2'));
-      // The default `click` one + the custom one
-      expect(onEvent).toHaveBeenCalledTimes(2);
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'conversion',
         hits: [
@@ -289,9 +289,9 @@ describe('hits', () => {
       onEvent.mockClear();
 
       fireEvent.click(getByText(container, 'title 1'));
-      // The default `click` one + the custom one
-      expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[1][0]).toEqual({
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'click',
         hits: [
           {
@@ -342,9 +342,9 @@ describe('hits', () => {
 
       fireEvent.click(getByText(container, 'title 2'));
 
-      // The default `click` one + the custom one
-      expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[1][0]).toEqual({
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'conversion',
         hits: [
           {

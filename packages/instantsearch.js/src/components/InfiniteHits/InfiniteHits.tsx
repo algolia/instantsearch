@@ -97,7 +97,7 @@ const InfiniteHits = ({
             rootProps={{
               className: cssClasses.item,
               onClick: () => {
-                sendEvent('click', hit, 'Hit Clicked');
+                sendEvent('click:internal', hit, 'Hit Clicked');
               },
             }}
             key={hit.objectID}

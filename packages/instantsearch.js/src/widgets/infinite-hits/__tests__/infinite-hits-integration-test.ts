@@ -434,9 +434,9 @@ describe('infiniteHits', () => {
 
       fireEvent.click(getByText(container, 'title 1'));
 
-      // The default `click` one + the custom one
-      expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'click',
         hits: [
           {
@@ -486,9 +486,9 @@ describe('infiniteHits', () => {
 
       fireEvent.click(getByText(container, 'title 2'));
 
-      // The default `click` one + the custom one
-      expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'conversion',
         hits: [
           {
