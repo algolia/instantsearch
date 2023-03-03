@@ -1,3 +1,6 @@
+3.12.0 - 2023-03-03
+ * feat(types): add `queryAfterRemoval` to `SearchResults` (#934) https://github.com/algolia/algoliasearch-helper-js/commit/4fb5a0345f0cf438fb026d8010faf843bd3b0a01
+
 3.11.3 - 2023-01-23
  * chore(tests): remove remaining lodash usage (#927) https://github.com/algolia/algoliasearch-helper-js/commit/e234837aaa10e6458d06085ff9938c741ee74d4b
  * fix(getFacetValues): reflect the value of _state in hierarchicalFacetValues (#925) https://github.com/algolia/algoliasearch-helper-js/commit/4d093b464e62dc6963dc6676aee19ff78145f48a
