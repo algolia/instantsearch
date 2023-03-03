@@ -1139,9 +1139,17 @@ declare namespace algoliasearchHelper {
      */
     query: string;
     /**
-     * The query as parsed by the engine given all the rules.
+     * A markup text indicating which parts of the original query have been removed in order to retrieve a non-empty result set.
+     *
+     * Returned when `removeWordsIfNoResults` is set to `lastWords` or `firstWords`.
      */
-    parsedQuery: string;
+    queryAfterRemoval?: string;
+    /**
+     * The query as parsed by the engine given all the rules.
+     *
+     * Returned only if `getRankingInfo` is set to `true`.
+     */
+    parsedQuery?: string;
     /**
      * all the records that match the search parameters. Each record is
      * augmented with a new attribute `_highlightResult`
@@ -1273,6 +1281,25 @@ declare namespace algoliasearchHelper {
      * This value is only available if the `clickAnalytics` search parameter is set to `true`.
      */
     queryID?: string;
+
+    /**
+     * Used to return warnings about the query.
+     */
+    message?: string;
+
+    /**
+     * If a search encounters an index that is being A/B tested, `abTestID` reports the ongoing A/B test ID.
+     *
+     * Returned only if `getRankingInfo` is set to `true`.
+     */
+    abTestID?: number;
+    /**
+     * In case of AB test, reports the variant ID used. The variant ID is the position in the array of variants (starting at 1).
+     *
+     * Returned only if `getRankingInfo` is set to `true`.
+     */
+    abTestVariantID?: number;
+
     /**
      * disjunctive facets results
      */
