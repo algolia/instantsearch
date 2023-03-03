@@ -73,9 +73,7 @@ const buildPayloads = ({
       return [];
     }
   }
-  const hitsArray: Hit[] = Array.isArray(hits)
-    ? removeEscapedFromHits(hits)
-    : [hits];
+  const hitsArray: Hit[] = Array.isArray(hits) ? hits : [hits];
 
   if (hitsArray.length === 0) {
     return [];
@@ -145,11 +143,6 @@ const buildPayloads = ({
     return [];
   }
 };
-
-function removeEscapedFromHits(hits: Hit[] | EscapedHits): Hit[] {
-  // remove `hits.__escaped` without mutating
-  return hits.slice();
-}
 
 export function createSendEventForHits({
   instantSearchInstance,
