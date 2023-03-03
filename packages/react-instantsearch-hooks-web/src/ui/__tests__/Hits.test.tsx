@@ -118,8 +118,8 @@ describe('Hits', () => {
 
     userEvent.click(container.querySelector('button')!);
 
-    expect(props.sendEvent).toHaveBeenCalledTimes(1);
-    expect(props.sendEvent).toHaveBeenLastCalledWith(props.hits[0]);
+    expect(props.sendEvent).toHaveBeenCalledTimes(2);
+    expect((props.sendEvent as jest.Mock).mock.calls[0][0]).toBe(props.hits[0]);
   });
 
   test('accepts custom class names', () => {
@@ -199,6 +199,21 @@ describe('Hits', () => {
 
     expect(container.querySelector<HTMLDivElement>('.ais-Hits')!.hidden).toBe(
       true
+    );
+  });
+
+  test('sends a default `click` event when clicking on a hit', () => {
+    const props = createProps({});
+
+    const { container } = render(<Hits {...props} />);
+
+    userEvent.click(container.querySelectorAll('.ais-Hits-item')[0]!);
+
+    expect(props.sendEvent).toHaveBeenCalledTimes(1);
+    expect(props.sendEvent).toHaveBeenLastCalledWith(
+      'click',
+      props.hits[0],
+      'Hit Clicked'
     );
   });
 });

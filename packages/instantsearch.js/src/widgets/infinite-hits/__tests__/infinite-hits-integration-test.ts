@@ -8,6 +8,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { getByText, waitFor, fireEvent } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { SearchParameters } from 'algoliasearch-helper';
 
 import { infiniteHits, configure } from '../..';
@@ -370,6 +371,44 @@ describe('infiniteHits', () => {
       );
     });
 
+    it('sends a default `click` event when clicking on a hit', async () => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      search.use(insights);
+      search.addWidgets([infiniteHits({ container })]);
+      search.start();
+
+      await wait(0);
+
+      onEvent.mockClear();
+
+      userEvent.click(container.querySelectorAll('.ais-InfiniteHits-item')[0]);
+
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent).toHaveBeenCalledWith(
+        {
+          eventType: 'click',
+          hits: [
+            {
+              __position: 1,
+              objectID: 'object-id0',
+              title: 'title 1',
+            },
+          ],
+          insightsMethod: 'clickedObjectIDsAfterSearch',
+          payload: {
+            eventName: 'Hit Clicked',
+            index: 'instant_search',
+            objectIDs: ['object-id0'],
+            positions: [1],
+          },
+          widgetType: 'ais.infiniteHits',
+        },
+        null
+      );
+    });
+
     it('sends click event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
@@ -391,7 +430,11 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      onEvent.mockClear();
+
       fireEvent.click(getByText(container, 'title 1'));
+
+      // The default `click` one + the custom one
       expect(onEvent).toHaveBeenCalledTimes(2);
       expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
         eventType: 'click',
@@ -439,7 +482,11 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      onEvent.mockClear();
+
       fireEvent.click(getByText(container, 'title 2'));
+
+      // The default `click` one + the custom one
       expect(onEvent).toHaveBeenCalledTimes(2);
       expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
         eventType: 'conversion',

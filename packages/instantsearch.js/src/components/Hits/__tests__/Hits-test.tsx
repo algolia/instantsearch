@@ -37,6 +37,8 @@ describe('Hits', () => {
         createSingleSearchResponse(),
       ]),
       hits: [],
+      bindEvent: jest.fn(),
+      sendEvent: jest.fn(),
       ...extraProps,
     };
 
@@ -268,6 +270,8 @@ describe('Hits', () => {
           templatesConfig: {},
         }),
         cssClasses,
+        bindEvent: jest.fn(),
+        sendEvent: jest.fn(),
       };
 
       const wrapper = mount(<Hits {...props} />);
@@ -322,6 +326,8 @@ describe('Hits', () => {
           templatesConfig: {},
         }),
         cssClasses,
+        bindEvent: jest.fn(),
+        sendEvent: jest.fn(),
       };
 
       const wrapper = mount(<Hits {...props} />);
