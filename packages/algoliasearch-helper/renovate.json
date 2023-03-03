@@ -1,6 +1,0 @@
-{
-  "extends": [
-    "config:js-lib",
-    "algolia"
-  ]
-}
