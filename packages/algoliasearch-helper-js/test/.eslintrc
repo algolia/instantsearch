@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "quote-props": [
+      2,
+      "consistent"
+    ]
+  },
+  "env": {
+    "jest": true
+  },
+  "globals": {
+    "test": true,
+    "beforeAll": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "max-len": 0
+  },
+  "extends": [
+    "eslint:recommended",
+    "airbnb/base",
+    "algolia/es5"
+  ]
+}
