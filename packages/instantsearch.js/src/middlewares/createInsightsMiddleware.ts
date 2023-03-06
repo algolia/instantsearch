@@ -47,8 +47,8 @@ export type InsightsProps<
   $$internal?: boolean;
 };
 
-const ALGOLIA_INSIGHTS_SRC =
-  'https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js';
+const VERSION = '2.4.0';
+const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${VERSION}/dist/search-insights.min.js`;
 
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
@@ -83,7 +83,7 @@ export function createInsightsMiddleware<
             window[pointer].queue.push(args);
           };
         }
-
+        window[pointer].version = VERSION;
         insightsClient = window[pointer];
         needsToLoadInsightsClient = true;
       }
@@ -136,12 +136,26 @@ export function createInsightsMiddleware<
       // Otherwise, the `init` call might override it with anonymous user token.
       userTokenBeforeInit = userToken;
     });
-    insightsClient('init', {
-      appId,
-      apiKey,
-      useCookie: true,
-      ...insightsInitParams,
-    });
+
+    const version = insightsClient.version;
+    let canInit = false;
+    if (typeof version !== 'undefined') {
+      const [major, minor] = version.split('.').map(Number);
+      canInit =
+        major >= 3 ||
+        (major === 2 && minor >= 4) ||
+        (major === 1 && minor >= 10);
+    }
+
+    if (canInit) {
+      insightsClient('init', {
+        appId,
+        apiKey,
+        useCookie: true,
+        partial: true,
+        ...insightsInitParams,
+      });
+    }
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
@@ -151,7 +165,7 @@ export function createInsightsMiddleware<
       $$internal,
       onStateChange() {},
       subscribe() {
-        if (!needsToLoadInsightsClient) return;
+        if (!needsToLoadInsightsClient || !canInit) return;
 
         const errorMessage =
           '[insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init';
@@ -169,6 +183,8 @@ export function createInsightsMiddleware<
         }
       },
       started() {
+        if (!canInit) return;
+
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
         helper = instantSearchInstance.helper!;
