@@ -43,7 +43,7 @@ export const createInsightsEventHandler =
     }
   };
 
-function findInsightsTarget(
+export function findInsightsTarget(
   startElement: HTMLElement | null,
   endElement: HTMLElement | null,
   validator: (element: HTMLElement) => boolean

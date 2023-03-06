@@ -123,7 +123,7 @@ describe('hits', () => {
       );
     });
 
-    test.only('sends a default `click` event when clicking on a hit', async () => {
+    test('sends a default `click` event when clicking on a hit', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
 
