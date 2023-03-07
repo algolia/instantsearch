@@ -390,9 +390,9 @@ function SearchResults(state, results, options) {
 
   if (automaticFilters && automaticFilters.length) {
     this.automaticFilters = [];
-    automaticFilters.forEach((filter) => {
+    automaticFilters.forEach(function (filter) {
       if (Array.isArray(filter)) {
-        filter.forEach((_filter) => {
+        filter.forEach(function (_filter) {
           this.automaticFilters.push(_filter);
         });
       } else {
