@@ -409,6 +409,7 @@ const connectRefinementList: RefinementListConnector =
                 results.query === helper.state.query &&
                 helper.state.extensions?.queryCategorization
                   ?.enableAutoFiltering !== false &&
+                helper.lastResults?.automaticFilters &&
                 find<string>(
                   helper.lastResults?.automaticFilters,
                   (filter) => filter.split(':')[0] === attribute
