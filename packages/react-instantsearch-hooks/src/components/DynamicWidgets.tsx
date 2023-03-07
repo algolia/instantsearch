@@ -2,10 +2,10 @@ import React, { Fragment } from 'react';
 
 import { useDynamicWidgets } from '../connectors/useDynamicWidgets';
 import { invariant } from '../lib/invariant';
+import { warn } from '../lib/warn';
 
 import type { DynamicWidgetsConnectorParams } from 'instantsearch.js/es/connectors/dynamic-widgets/connectDynamicWidgets';
 import type { ReactElement, ComponentType, ReactNode } from 'react';
-import { warn } from '../lib/warn';
 
 function DefaultFallbackComponent() {
   return null;
