@@ -5,8 +5,9 @@ import { invariant } from '../lib/invariant';
 
 import type { DynamicWidgetsConnectorParams } from 'instantsearch.js/es/connectors/dynamic-widgets/connectDynamicWidgets';
 import type { ReactElement, ComponentType, ReactNode } from 'react';
+import { warn } from '../lib/warn';
 
-function FallbackComponent() {
+function DefaultFallbackComponent() {
   return null;
 }
 
@@ -26,9 +27,16 @@ export type DynamicWidgetsProps = Omit<
 
 export function DynamicWidgets({
   children,
-  fallbackComponent: Fallback = FallbackComponent,
+  fallbackComponent: Fallback = DefaultFallbackComponent,
   ...props
 }: DynamicWidgetsProps) {
+  const FallbackComponent = React.useRef(Fallback);
+
+  warn(
+    Fallback === FallbackComponent.current,
+    'The `fallbackComponent` prop of `DynamicWidgets` changed between renders. Please provide a stable reference.'
+  );
+
   const { attributesToRender } = useDynamicWidgets(props, {
     $$widgetType: 'ais.dynamicWidgets',
   });
@@ -49,7 +57,9 @@ export function DynamicWidgets({
     <>
       {attributesToRender.map((attribute) => (
         <Fragment key={attribute}>
-          {widgets.get(attribute) || <Fallback attribute={attribute} />}
+          {widgets.get(attribute) || (
+            <FallbackComponent.current attribute={attribute} />
+          )}
         </Fragment>
       ))}
     </>
