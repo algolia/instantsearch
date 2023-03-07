@@ -332,23 +332,53 @@ describe('DynamicWidgets', () => {
   test('renders attributes without widget with fallbackComponent (function form)', async () => {
     const searchClient = createSearchClient({});
 
-    const { container } = render(
-      <InstantSearch indexName="indexName" searchClient={searchClient}>
-        <DynamicWidgets
-          fallbackComponent={({ attribute }) => <Menu attribute={attribute} />}
-          transformItems={() => [
-            'brand',
-            'categories',
-            'hierarchicalCategories.lvl0',
-          ]}
-        >
-          <RefinementList attribute="brand" />
-        </DynamicWidgets>
-      </InstantSearch>
+    let fallbackComponent = ({ attribute }: { attribute: string }) => (
+      <Menu attribute={attribute} />
     );
+
+    function App() {
+      return (
+        <InstantSearch indexName="indexName" searchClient={searchClient}>
+          <DynamicWidgets
+            fallbackComponent={fallbackComponent}
+            transformItems={() => [
+              'brand',
+              'categories',
+              'hierarchicalCategories.lvl0',
+            ]}
+          >
+            <RefinementList attribute="brand" />
+          </DynamicWidgets>
+        </InstantSearch>
+      );
+    }
+
+    const { container, rerender } = render(<App />);
 
     await waitFor(() => {
       expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        RefinementList(brand)
+        Menu(categories)
+        Menu(hierarchicalCategories.lvl0)
+      </div>
+    `);
+
+    fallbackComponent = ({ attribute }: { attribute: string }) => (
+      <RefinementList attribute={attribute} />
+    );
+
+    expect(() => {
+      rerender(<App />);
+    }).toWarnDev(
+      '[InstantSearch] The `fallbackComponent` prop of `DynamicWidgets` changed between renders. Please provide a stable reference, as described in https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react-hooks/#widget-param-fallbackcomponent'
+    );
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
     });
 
     expect(container).toMatchInlineSnapshot(`
