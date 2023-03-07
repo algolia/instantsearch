@@ -39,7 +39,7 @@ export type Router<TRouteState = UiState> = {
   /**
    * Called when InstantSearch is started.
    */
-  start(): void;
+  start?: () => void;
 };
 
 /**
