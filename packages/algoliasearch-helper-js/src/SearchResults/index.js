@@ -381,25 +381,14 @@ function SearchResults(state, results, options) {
   /**
    * AFB
    */
-  var automaticFilters =
+  this.automaticFilters =
     this._rawResults[0].extensions &&
     this._rawResults[0].extensions.queryCategorization &&
     this._rawResults[0].extensions.queryCategorization.autofiltering &&
     this._rawResults[0].extensions.queryCategorization.autofiltering
       .facetFilters;
 
-  if (automaticFilters && automaticFilters.length) {
-    this.automaticFilters = [];
-    automaticFilters.forEach(function (filter) {
-      if (Array.isArray(filter)) {
-        filter.forEach(function (_filter) {
-          this.automaticFilters.push(_filter);
-        });
-      } else {
-        this.automaticFilters.push(filter);
-      }
-    });
-
+  if (this.automaticFilters && this.automaticFilters.length) {
     state.automaticFilters = this.automaticFilters;
   }
 
