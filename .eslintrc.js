@@ -124,6 +124,16 @@ const config = {
         // these sorts of errors anyway.
         // See: https://github.com/typescript-eslint/typescript-eslint/issues/342
         'no-undef': 'off',
+        // This rule only supports ?. with the TypeScript parser.
+        'no-unused-expressions': 'off',
+        '@typescript-eslint/no-unused-expressions': [
+          'error',
+          {
+            allowShortCircuit: true,
+            allowTernary: true,
+            allowTaggedTemplates: true,
+          },
+        ],
       },
     },
     {
