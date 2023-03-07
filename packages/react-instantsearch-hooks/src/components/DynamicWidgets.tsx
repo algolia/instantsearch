@@ -2,11 +2,12 @@ import React, { Fragment } from 'react';
 
 import { useDynamicWidgets } from '../connectors/useDynamicWidgets';
 import { invariant } from '../lib/invariant';
+import { warn } from '../lib/warn';
 
 import type { DynamicWidgetsConnectorParams } from 'instantsearch.js/es/connectors/dynamic-widgets/connectDynamicWidgets';
 import type { ReactElement, ComponentType, ReactNode } from 'react';
 
-function FallbackComponent() {
+function DefaultFallbackComponent() {
   return null;
 }
 
@@ -26,9 +27,16 @@ export type DynamicWidgetsProps = Omit<
 
 export function DynamicWidgets({
   children,
-  fallbackComponent: Fallback = FallbackComponent,
+  fallbackComponent: Fallback = DefaultFallbackComponent,
   ...props
 }: DynamicWidgetsProps) {
+  const FallbackComponent = React.useRef(Fallback);
+
+  warn(
+    Fallback === FallbackComponent.current,
+    'The `fallbackComponent` prop of `DynamicWidgets` changed between renders. Please provide a stable reference, as described in https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react-hooks/#widget-param-fallbackcomponent'
+  );
+
   const { attributesToRender } = useDynamicWidgets(props, {
     $$widgetType: 'ais.dynamicWidgets',
   });
@@ -49,7 +57,9 @@ export function DynamicWidgets({
     <>
       {attributesToRender.map((attribute) => (
         <Fragment key={attribute}>
-          {widgets.get(attribute) || <Fallback attribute={attribute} />}
+          {widgets.get(attribute) || (
+            <FallbackComponent.current attribute={attribute} />
+          )}
         </Fragment>
       ))}
     </>

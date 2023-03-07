@@ -35,6 +35,11 @@ export type Router<TRouteState = UiState> = {
    * Called when InstantSearch is disposed. Used to remove subscriptions.
    */
   dispose(): void;
+
+  /**
+   * Called when InstantSearch is started.
+   */
+  start?: () => void;
 };
 
 /**
