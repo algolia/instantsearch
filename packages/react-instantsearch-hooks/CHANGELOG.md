@@ -12,7 +12,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **react:** export `InstantSearchApi` type ([#5518](https://github.com/algolia/instantsearch.js/issues/5518)) ([27b478f](https://github.com/algolia/instantsearch.js/commit/27b478f8f20c4e8835914cceabbdce57ff5d4650))
 
 
+## Bug Fixes
 
+* **DynamicWidgets**: prevent non-stable fallbackComponent ([#5532](https://github.com/algolia/instantsearch.js/issues/5532)) ([0625c90](https://github.com/algolia/instantsearch.js/commit/0625c90346e32b926d6ce276a4e0b13d4fa4bf6c))
 
 
 ## [6.40.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.40.1...react-instantsearch-hooks@6.40.2) (2023-02-28)

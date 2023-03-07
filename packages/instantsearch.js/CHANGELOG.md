@@ -10,6 +10,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **core:** deprecate searchFunction ([#5494](https://github.com/algolia/instantsearch.js/issues/5494)) ([6a98ae0](https://github.com/algolia/instantsearch.js/commit/6a98ae065802b6c6c599aa7ce37af52b2c3b26fb))
 * **infinitehits/hits:** correctly deprecate __hitIndex ([#5495](https://github.com/algolia/instantsearch.js/issues/5495)) ([2e3d1f3](https://github.com/algolia/instantsearch.js/commit/2e3d1f3f999428bbf688b0f16a1f4a422dbab87b))
+* **instantsearch**: allow dispose before start ([#5533](https://github.com/algolia/instantsearch.js/issues/5533)) ([ab1b872](https://github.com/algolia/instantsearch.js/commit/ab1b872969f08266ea8a67cb04cdd3aa7aa5431f))
 
 
 ### Features
