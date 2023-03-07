@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.52.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.51.1...instantsearch.js@4.52.0) (2023-03-07)
+
+
+### Bug Fixes
+
+* **core:** deprecate searchFunction ([#5494](https://github.com/algolia/instantsearch.js/issues/5494)) ([6a98ae0](https://github.com/algolia/instantsearch.js/commit/6a98ae065802b6c6c599aa7ce37af52b2c3b26fb))
+* **infinitehits/hits:** correctly deprecate __hitIndex ([#5495](https://github.com/algolia/instantsearch.js/issues/5495)) ([2e3d1f3](https://github.com/algolia/instantsearch.js/commit/2e3d1f3f999428bbf688b0f16a1f4a422dbab87b))
+
+
+### Features
+
+* **index:** introduce setIndexUiState ([#5504](https://github.com/algolia/instantsearch.js/issues/5504)) ([c199feb](https://github.com/algolia/instantsearch.js/commit/c199febbc3381df574afbb2504edd7373b32904a))
+
+
+
+
+
 ## [4.51.2](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.51.1...instantsearch.js@4.51.2) (2023-02-28)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.41.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.40.1...react-instantsearch-hooks@6.41.0) (2023-03-07)
+
+
+### Features
+
+* **index:** introduce setIndexUiState ([#5504](https://github.com/algolia/instantsearch.js/issues/5504)) ([c199feb](https://github.com/algolia/instantsearch.js/commit/c199febbc3381df574afbb2504edd7373b32904a))
+* **react:** export `InstantSearchApi` type ([#5518](https://github.com/algolia/instantsearch.js/issues/5518)) ([27b478f](https://github.com/algolia/instantsearch.js/commit/27b478f8f20c4e8835914cceabbdce57ff5d4650))
+
+
+
+
+
 ## [6.40.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.40.1...react-instantsearch-hooks@6.40.2) (2023-02-28)
 
 **Note:** Version bump only for package react-instantsearch-hooks
