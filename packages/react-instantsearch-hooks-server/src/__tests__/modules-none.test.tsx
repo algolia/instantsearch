@@ -104,6 +104,11 @@ jest.mock(
   { virtual: true }
 );
 
+afterAll(() => {
+  jest.unmock('react-dom/server.js');
+  jest.unmock('react-dom/server');
+});
+
 // We are ensuring this line gets imported _after_ the mocks
 // eslint-disable-next-line import/order
 import { getServerState } from '../getServerState';
