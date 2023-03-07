@@ -177,8 +177,15 @@ const connectClearRefinements: ClearRefinementsConnector =
           }, []);
 
           connectorState.refine = () => {
+            console.log('clearing');
+
             connectorState.attributesToClear.forEach(
               ({ helper: indexHelper, items }) => {
+                if (indexHelper.state.automaticFilters) {
+                  indexHelper.setQueryParameter('extensions', {
+                    queryCategorization: { enableAutoFiltering: false },
+                  });
+                }
                 indexHelper
                   .setState(
                     clearRefinements({

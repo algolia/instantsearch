@@ -42,7 +42,6 @@
   ],
   "devDependencies": {
     "@types/algoliasearch": "3.34.11",
-    "algolia-frontend-components": "0.0.35",
     "babel-loader": "8.2.2",
     "babel-preset-es2015": "6.24.1",
     "browserify": "14.5.0",

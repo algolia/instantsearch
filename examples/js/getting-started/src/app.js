@@ -2,6 +2,7 @@ import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import {
   clearRefinements,
+  hierarchicalMenu,
   hits,
   pagination,
   refinementList,
@@ -9,7 +10,7 @@ import {
 } from 'instantsearch.js/es/widgets';
 
 const search = instantsearch({
-  indexName: 'instant_search',
+  indexName: 'instant_search_query_cat',
   searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
 });
 
@@ -19,6 +20,16 @@ search.addWidgets([
   }),
   clearRefinements({
     container: '#clear-refinements',
+  }),
+  hierarchicalMenu({
+    container: '#categories-list',
+    attributes: [
+      'hierarchicalCategories.lvl0',
+      'hierarchicalCategories.lvl1',
+      'hierarchicalCategories.lvl2',
+      'hierarchicalCategories.lvl3',
+      'hierarchicalCategories.lvl4',
+    ],
   }),
   refinementList({
     container: '#brand-list',

@@ -136,6 +136,24 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
       getWidgetRenderState({ helper, searchMetadata, state }) {
         if (!_refine) {
           _refine = (query) => {
+            if (
+              helper.state.automaticFilters.length &&
+              query.trim() !== helper.state.query?.trim()
+            ) {
+              helper.state.automaticFilters.forEach((filter: string) => {
+                const [name, value] = filter.split(':');
+                if (helper.state.isDisjunctiveFacet(name)) {
+                  helper.removeDisjunctiveFacetRefinement(name, value);
+                }
+                if (helper.state.isHierarchicalFacet(name)) {
+                  helper.removeHierarchicalFacetRefinement(name);
+                }
+              });
+
+              helper.setQueryParameter('extensions', {
+                queryCategorization: { enableAutoFiltering: true },
+              });
+            }
             queryHook(query, (q) => helper.setQuery(q).search());
           };
 

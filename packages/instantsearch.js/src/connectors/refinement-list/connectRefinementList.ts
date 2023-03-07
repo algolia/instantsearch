@@ -381,6 +381,15 @@ const connectRefinementList: RefinementListConnector =
 
             triggerRefine = (facetValue) => {
               sendEvent!('click', facetValue);
+
+              if (helper.state.automaticFilters.length) {
+                helper
+                  // TODO: spread extensions
+                  .setQueryParameter('extensions', {
+                    queryCategorization: { enableAutoFiltering: false },
+                  });
+              }
+
               helper.toggleFacetRefinement(attribute, facetValue).search();
             };
 
@@ -393,6 +402,24 @@ const connectRefinementList: RefinementListConnector =
               facetOrdering: sortBy === DEFAULT_SORT,
             });
             facetValues = values && Array.isArray(values) ? values : [];
+
+            facetValues = facetValues.map((value) => {
+              if (
+                results.query === helper.state.query &&
+                helper.state.extensions?.queryCategorization
+                  ?.enableAutoFiltering !== false &&
+                helper.lastResults?.automaticFilters
+                  ?.find((filter: string) => filter.split(':')[0] === attribute)
+                  ?.split(':')[1] === value.escapedValue
+              ) {
+                helper.addDisjunctiveFacetRefinement(
+                  attribute,
+                  value.escapedValue
+                );
+                return { ...value, isRefined: true };
+              }
+              return value;
+            });
             items = transformItems(
               facetValues.slice(0, getLimit()).map(formatItems),
               { results }
