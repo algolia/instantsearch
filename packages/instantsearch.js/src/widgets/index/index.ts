@@ -665,10 +665,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       localInstantSearchInstance = null;
       localParent = null;
-      helper!.removeAllListeners();
+      helper?.removeAllListeners();
       helper = null;
 
-      derivedHelper!.detach();
+      derivedHelper?.detach();
       derivedHelper = null;
     },
 

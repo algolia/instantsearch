@@ -1177,6 +1177,15 @@ describe('dispose', () => {
     expect(search.mainHelper).not.toBe(null);
     expect(search.helper).not.toBe(null);
   });
+
+  it("doesn't throw without starting", () => {
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+
+    expect(() => search.dispose()).not.toThrow();
+  });
 });
 
 describe('scheduleSearch', () => {
