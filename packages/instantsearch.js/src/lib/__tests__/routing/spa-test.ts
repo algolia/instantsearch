@@ -21,6 +21,8 @@ describe('routing with third-party client-side router', () => {
     // 2. Refine: '/?indexName[query]=Apple'
     // 3. Navigate: '/about'
     // 4. Back: '/?indexName[query]=Apple'
+    // 5. Restart: '/?indexName[query]=Apple'
+    // 6. Refine: '/?indexName[query]=Samsung'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -75,6 +77,29 @@ describe('routing with third-party client-side router', () => {
       expect(window.location.search).toEqual(
         `?${encodeURI('indexName[query]=Apple')}`
       );
+    }
+
+    // 5. Restart InstantSearch
+    {
+      search.addWidgets([connectSearchBox(() => {})({})]);
+      search.start();
+
+      await wait(writeWait);
+      expect(window.location.pathname).toEqual('/');
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+    }
+
+    // 6. Refine: '/?indexName[query]=Samsung'
+    {
+      search.renderState.indexName.searchBox!.refine('Samsung');
+
+      await wait(writeWait);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Samsung')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(3);
     }
   });
 });

@@ -236,6 +236,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.write({} as TRouteState);
   }
 
+  public start() {
+    this.isDisposed = false;
+  }
+
   private shouldWrite(url: string): boolean {
     return safelyRunOnBrowser(({ window }) => {
       // We do want to `pushState` if:

@@ -87,7 +87,9 @@ export const createRouterMiddleware = <
         });
       },
 
-      started() {},
+      started() {
+        router.start?.();
+      },
 
       unsubscribe() {
         router.dispose();
