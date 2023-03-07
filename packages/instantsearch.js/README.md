@@ -10,9 +10,6 @@
 
 ---
 
-[![Version][version-svg]][package-url]
-[![License][license-image]][license-url]
-
 InstantSearch.js is a vanilla JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:
 
 **InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [Vue InstantSearch][vue-instantsearch-github] | [Angular InstantSearch][instantsearch-angular-github] | [React InstantSearch Native][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
@@ -174,15 +171,9 @@ Please read [our contribution process](https://github.com/algolia/instantsearch.
 
 InstantSearch.js is [MIT licensed][license-url].
 
-<!-- Badges -->
-
-[version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
-[package-url]: https://npmjs.org/package/instantsearch.js
-[license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
-[license-url]: LICENSE
-
 <!-- Links -->
 
+[license-url]: LICENSE
 [algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository
 [react-instantsearch-github]: https://github.com/algolia/instantsearch.js/
 [vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
