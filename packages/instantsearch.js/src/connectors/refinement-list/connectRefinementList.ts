@@ -6,6 +6,7 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
+  find,
 } from '../../lib/utils';
 
 import type { SendEventForFacet } from '../../lib/utils';
@@ -408,9 +409,10 @@ const connectRefinementList: RefinementListConnector =
                 results.query === helper.state.query &&
                 helper.state.extensions?.queryCategorization
                   ?.enableAutoFiltering !== false &&
-                helper.lastResults?.automaticFilters
-                  ?.find((filter: string) => filter.split(':')[0] === attribute)
-                  ?.split(':')[1] === value.escapedValue
+                find<string>(
+                  helper.lastResults?.automaticFilters,
+                  (filter) => filter.split(':')[0] === attribute
+                )?.split(':')[1] === value.escapedValue
               ) {
                 helper.addDisjunctiveFacetRefinement(
                   attribute,
