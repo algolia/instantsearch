@@ -388,6 +388,8 @@ function SearchResults(state, results, options) {
     this._rawResults[0].extensions.queryCategorization.autofiltering
       .facetFilters;
 
+  console.log('in helper results', this.automaticFilters);
+
   if (this.automaticFilters && this.automaticFilters.length) {
     state.automaticFilters = this.automaticFilters;
   }

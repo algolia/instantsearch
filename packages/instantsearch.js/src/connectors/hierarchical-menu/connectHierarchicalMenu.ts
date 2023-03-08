@@ -357,6 +357,8 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
                 },
                 []
               );
+            console.log(hierarchicalAutoFilters);
+
             if (
               results.query === helper.state.query &&
               helper.state.extensions?.queryCategorization

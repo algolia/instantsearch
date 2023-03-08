@@ -219,6 +219,8 @@ function SearchParameters(newParameters) {
   });
 }
 
+console.log('in helper parameters');
+
 /**
  * List all the properties in SearchParameters and therefore all the known Algolia properties
  * This doesn't contain any beta/hidden features.
