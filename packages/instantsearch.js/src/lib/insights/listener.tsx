@@ -15,9 +15,7 @@ export type InsightsEventHandlerOptions = {
 
 export const createInsightsEventHandler =
   ({ insights, sendEvent }: InsightsEventHandlerOptions) =>
-  (event: MouseEvent): boolean => {
-    let hasSentAnEvent = false;
-
+  (event: MouseEvent): void => {
     // new way, e.g. bindEvent("click", hit, "Hit clicked")
     const insightsThroughSendEvent = findInsightsTarget(
       event.target as HTMLElement | null,
@@ -29,7 +27,6 @@ export const createInsightsEventHandler =
       const payload = parseInsightsEvent(insightsThroughSendEvent);
 
       payload.forEach((single) => sendEvent(single));
-      hasSentAnEvent = true;
     }
 
     // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
@@ -43,10 +40,7 @@ export const createInsightsEventHandler =
     if (insightsThroughFunction) {
       const { method, payload } = readDataAttributes(insightsThroughFunction);
       insights!(method, payload);
-      hasSentAnEvent = true;
     }
-
-    return hasSentAnEvent;
   };
 
 function findInsightsTarget(
