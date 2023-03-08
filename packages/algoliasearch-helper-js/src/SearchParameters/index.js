@@ -1298,11 +1298,13 @@ SearchParameters.prototype = {
     return this.getHierarchicalFacetByName(facetName) !== undefined;
   },
   isHierarchicalFacetAttribute: function (facetName) {
-    return (
-      find(this.hierarchicalFacets, function (f) {
-        f.attributes.includes(facetName);
-      }) !== undefined
-    );
+    return this.getHierarchicalFacetByAttribute(facetName) !== undefined;
+  },
+
+  getHierarchicalFacetByAttribute: function (hierarchicalFacetAttribute) {
+    return find(this.hierarchicalFacets, function (f) {
+      return f.attributes.includes(hierarchicalFacetAttribute);
+    });
   },
   /**
    * Test if the facet name is from one of the conjunctive/normal facets
