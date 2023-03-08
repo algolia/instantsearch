@@ -426,7 +426,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
                         {
                           name: hierarchicalAutoFilters[2]
                             .split(':')[1]
-                            .split(' > ')[1],
+                            .split(' > ')[2],
                           path: hierarchicalAutoFilters[2].split(':')[1],
                           escapedValue:
                             hierarchicalAutoFilters[2].split(':')[1],
