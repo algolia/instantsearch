@@ -5,7 +5,7 @@ import { h, render } from 'preact';
 
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
-import { withInsights, withInsightsListener } from '../../lib/insights';
+import { withInsights } from '../../lib/insights';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -40,7 +40,6 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
 });
 const suit = component('InfiniteHits');
-const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
 export type InfiniteHitsCSSClasses = Partial<{
   /**
@@ -182,11 +181,11 @@ const renderer =
     }
 
     render(
-      <InfiniteHitsWithInsightsListener
+      <InfiniteHits
         cssClasses={cssClasses}
         hits={hits}
-        results={results}
-        hasShowPrevious={hasShowPrevious}
+        results={results!}
+        hasShowPrevious={hasShowPrevious!}
         showPrevious={showPrevious}
         showMore={showMore}
         templateProps={renderState.templateProps!}

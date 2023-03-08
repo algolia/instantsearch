@@ -29,7 +29,7 @@ function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
   return chunks;
 }
 
-const buildPayloads = ({
+export function _buildEventPayloadsForHits({
   index,
   widgetType,
   methodName,
@@ -41,7 +41,7 @@ const buildPayloads = ({
   methodName: 'sendEvent' | 'bindEvent';
   args: any[];
   instantSearchInstance: InstantSearch;
-}): InsightsEvent[] => {
+}): InsightsEvent[] {
   // when there's only one argument, that means it's custom
   if (args.length === 1 && typeof args[0] === 'object') {
     return [args[0]];
@@ -142,7 +142,7 @@ const buildPayloads = ({
   } else {
     return [];
   }
-};
+}
 
 export function createSendEventForHits({
   instantSearchInstance,
@@ -154,7 +154,7 @@ export function createSendEventForHits({
   widgetType: string;
 }): SendEventForHits {
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
-    const payloads = buildPayloads({
+    const payloads = _buildEventPayloadsForHits({
       widgetType,
       index,
       methodName: 'sendEvent',
@@ -179,7 +179,7 @@ export function createBindEventForHits({
   instantSearchInstance: InstantSearch;
 }): BindEventForHits {
   const bindEventForHits: BindEventForHits = (...args: any[]) => {
-    const payloads = buildPayloads({
+    const payloads = _buildEventPayloadsForHits({
       widgetType,
       index,
       methodName: 'bindEvent',

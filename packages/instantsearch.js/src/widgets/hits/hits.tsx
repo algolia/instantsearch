@@ -5,7 +5,7 @@ import { h, render } from 'preact';
 
 import Hits from '../../components/Hits/Hits';
 import connectHits from '../../connectors/hits/connectHits';
-import { withInsights, withInsightsListener } from '../../lib/insights';
+import { withInsights } from '../../lib/insights';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -31,13 +31,11 @@ import type {
   Hit,
   WidgetFactory,
   Renderer,
-  InsightsClient,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
-const HitsWithInsightsListener = withInsightsListener(Hits);
 
 const renderer =
   ({
@@ -74,12 +72,12 @@ const renderer =
     }
 
     render(
-      <HitsWithInsightsListener
+      <Hits
         cssClasses={cssClasses}
         hits={receivedHits}
-        results={results}
-        templateProps={renderState.templateProps}
-        insights={insights as InsightsClient}
+        results={results!}
+        templateProps={renderState.templateProps!}
+        insights={insights}
         sendEvent={sendEvent}
         bindEvent={bindEvent}
       />,

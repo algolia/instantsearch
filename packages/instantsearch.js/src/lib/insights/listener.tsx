@@ -2,23 +2,52 @@
 
 import { h } from 'preact';
 
-import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
-import { deserializePayload } from '../utils';
+import { readDataAttributes } from '../../helpers/insights';
+import { deserializePayload, warning } from '../utils';
 
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type { InsightsClient } from '../../types';
 
-type WithInsightsListenerProps = {
-  [key: string]: unknown;
-  insights: InsightsClient;
-  sendEvent?: (event: InsightsEvent) => void;
+export type InsightsEventHandlerOptions = {
+  insights?: InsightsClient;
+  sendEvent: (event: InsightsEvent) => void;
 };
 
-const findInsightsTarget = (
+export const createInsightsEventHandler =
+  ({ insights, sendEvent }: InsightsEventHandlerOptions) =>
+  (event: MouseEvent): void => {
+    // new way, e.g. bindEvent("click", hit, "Hit clicked")
+    const insightsThroughSendEvent = findInsightsTarget(
+      event.target as HTMLElement | null,
+      event.currentTarget as HTMLElement | null,
+      (element) => element.hasAttribute('data-insights-event')
+    );
+
+    if (insightsThroughSendEvent) {
+      const payload = parseInsightsEvent(insightsThroughSendEvent);
+
+      payload.forEach((single) => sendEvent(single));
+    }
+
+    // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
+    const insightsThroughFunction = findInsightsTarget(
+      event.target as HTMLElement | null,
+      event.currentTarget as HTMLElement | null,
+      (element) =>
+        element.hasAttribute('data-insights-method') &&
+        element.hasAttribute('data-insights-payload')
+    );
+    if (insightsThroughFunction) {
+      const { method, payload } = readDataAttributes(insightsThroughFunction);
+      insights!(method, payload);
+    }
+  };
+
+function findInsightsTarget(
   startElement: HTMLElement | null,
   endElement: HTMLElement | null,
   validator: (element: HTMLElement) => boolean
-): HTMLElement | null => {
+): HTMLElement | null {
   let element: HTMLElement | null = startElement;
   while (element && !validator(element)) {
     if (element === endElement) {
@@ -27,9 +56,9 @@ const findInsightsTarget = (
     element = element.parentElement;
   }
   return element;
-};
+}
 
-const parseInsightsEvent = (element: HTMLElement): InsightsEvent[] => {
+function parseInsightsEvent(element: HTMLElement): InsightsEvent[] {
   const serializedPayload = element.getAttribute('data-insights-event');
 
   if (typeof serializedPayload !== 'string') {
@@ -45,45 +74,26 @@ const parseInsightsEvent = (element: HTMLElement): InsightsEvent[] => {
       'The insights middleware was unable to parse `data-insights-event`.'
     );
   }
-};
+}
 
-const insightsListener = (BaseComponent: any) => {
-  function WithInsightsListener(props: WithInsightsListenerProps) {
-    const handleClick = (event: MouseEvent): void => {
-      if (props.sendEvent) {
-        // new way with insights middleware
-        const targetWithEvent = findInsightsTarget(
-          event.target as HTMLElement | null,
-          event.currentTarget as HTMLElement | null,
-          (element) => element.hasAttribute('data-insights-event')
-        );
-        if (targetWithEvent) {
-          const payload = parseInsightsEvent(targetWithEvent);
+/**
+ * @deprecated use `sendEvent` directly instead
+ */
+export default function withInsightsListener(BaseComponent: any) {
+  warning(
+    false,
+    'The `withInsightsListener` function is deprecated and will be removed in the next major version. Please use `sendEvent` directly instead.'
+  );
 
-          payload.forEach((single) => props.sendEvent!(single));
-        }
-      }
-
-      // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
-      const insightsTarget = findInsightsTarget(
-        event.target as HTMLElement | null,
-        event.currentTarget as HTMLElement | null,
-        (element) => hasDataAttributes(element)
-      );
-      if (insightsTarget) {
-        const { method, payload } = readDataAttributes(insightsTarget);
-        props.insights(method, payload);
-      }
-    };
+  return function WithInsightsListener(
+    props: { [key: string]: any } & InsightsEventHandlerOptions
+  ) {
+    const handleClick = createInsightsEventHandler(props);
 
     return (
       <div onClick={handleClick}>
         <BaseComponent {...props} />
       </div>
     );
-  }
-
-  return WithInsightsListener;
-};
-
-export default insightsListener;
+  };
+}
