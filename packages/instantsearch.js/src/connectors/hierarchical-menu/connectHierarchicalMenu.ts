@@ -350,6 +350,11 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             const hierarchicalAutoFilters =
               helper.lastResults?.automaticFilters?.reduce(
                 (filters: string[], filter: string) => {
+                  console.log(
+                    helper.state.isHierarchicalFacetAttribute(
+                      filter.split(':')[0]
+                    )
+                  );
                   if (
                     helper.state.isHierarchicalFacetAttribute(
                       filter.split(':')[0]
