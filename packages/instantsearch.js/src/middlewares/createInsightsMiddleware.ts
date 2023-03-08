@@ -138,8 +138,10 @@ export function createInsightsMiddleware<
     });
 
     const version = insightsClient.version;
-    let canInit = false;
-    if (typeof version !== 'undefined') {
+    let canInit = !$$internal; // User provided insights middleware.
+
+    // We only check the `version` for the default insights middleware.
+    if ($$internal && typeof version !== 'undefined') {
       const [major, minor] = version.split('.').map(Number);
       canInit =
         major >= 3 ||
@@ -165,7 +167,7 @@ export function createInsightsMiddleware<
       $$internal,
       onStateChange() {},
       subscribe() {
-        if (!needsToLoadInsightsClient || !canInit) return;
+        if (!needsToLoadInsightsClient) return;
 
         const errorMessage =
           '[insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init';
