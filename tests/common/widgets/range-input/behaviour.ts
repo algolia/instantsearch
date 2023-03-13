@@ -33,6 +33,8 @@ export function createBehaviourTests(setup: RangeInputSetup, act: Act) {
                       [attribute]: {
                         min: 1,
                         max: 100,
+                        avg: 50,
+                        sum: 200,
                       },
                     },
                   })
