@@ -8,6 +8,7 @@ import {
   createMenuTests,
   createPaginationTests,
   createInfiniteHitsTests,
+  createRangeInputTests,
 } from '@instantsearch/tests';
 
 import { nextTick, mountApp } from '../../test/utils';
@@ -22,6 +23,7 @@ import {
   AisInfiniteHits,
   AisSearchBox,
   createWidgetMixin,
+  AisRangeInput,
 } from '../instantsearch';
 jest.unmock('instantsearch.js/es');
 
@@ -129,6 +131,22 @@ createInfiniteHitsTests(async ({ instantSearchOptions, widgetParams }) => {
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisSearchBox),
           h(AisInfiniteHits, { props: widgetParams }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createRangeInputTests(async ({ instantSearchOptions, widgetParams }) => {
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisRangeInput, { props: widgetParams }),
           h(GlobalErrorSwallower),
         ])
       ),

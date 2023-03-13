@@ -45,12 +45,14 @@ class RangeInput extends Component<RangeInputProps, Partial<Range>> {
     });
   }
 
-  private onInput = (key: string) => (event: Event) => {
+  private onInput = (key: keyof typeof this.state) => (event: Event) => {
     const { value } = event.currentTarget as HTMLInputElement;
 
-    this.setState({
-      [key]: Number(value),
-    });
+    if (value) {
+      this.setState({
+        [key]: Number(value),
+      });
+    }
   };
 
   private onSubmit = (event: Event) => {

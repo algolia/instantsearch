@@ -8,6 +8,7 @@ import {
   createMenuTests,
   createPaginationTests,
   createInfiniteHitsTests,
+  createRangeInputTests,
 } from '@instantsearch/tests';
 import { act, render } from '@testing-library/react';
 import React from 'react';
@@ -22,6 +23,7 @@ import {
   InfiniteHits,
   SearchBox,
   useInstantSearch,
+  RangeInput,
 } from '..';
 
 /**
@@ -86,6 +88,15 @@ createInfiniteHitsTests(({ instantSearchOptions, widgetParams }) => {
     <InstantSearch {...instantSearchOptions}>
       <SearchBox />
       <InfiniteHits {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <RangeInput {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );

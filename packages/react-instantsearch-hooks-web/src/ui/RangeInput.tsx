@@ -132,9 +132,12 @@ export function RangeInput({
             step={step}
             placeholder={min?.toString()}
             disabled={disabled}
-            onInput={({ currentTarget }) =>
-              setRange({ from: Number(currentTarget.value), to })
-            }
+            onInput={({ currentTarget }) => {
+              const value = Number(currentTarget.value);
+              if (value) {
+                setRange({ from: value, to });
+              }
+            }}
           />
         </label>
         <span className={cx('ais-RangeInput-separator', classNames.separator)}>
@@ -155,9 +158,12 @@ export function RangeInput({
             step={step}
             placeholder={max?.toString()}
             disabled={disabled}
-            onInput={({ currentTarget }) =>
-              setRange({ from, to: Number(currentTarget.value) })
-            }
+            onInput={({ currentTarget }) => {
+              const value = Number(currentTarget.value);
+              if (value) {
+                setRange({ from, to: value });
+              }
+            }}
           />
         </label>
         <button
