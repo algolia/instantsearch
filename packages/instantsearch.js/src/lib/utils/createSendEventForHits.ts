@@ -44,7 +44,7 @@ export function _buildEventPayloadsForHits({
 }): {
   payloads: InsightsEvent[];
   eventModifier?: string;
-  preventNextInternalEvent?: boolean;
+  canPreventNextInternalEvent?: boolean;
 } {
   // when there's only one argument, that means it's custom
   if (args.length === 1 && typeof args[0] === 'object') {
@@ -130,7 +130,7 @@ export function _buildEventPayloadsForHits({
         };
       }),
       eventModifier,
-      preventNextInternalEvent: eventModifier !== 'internal',
+      canPreventNextInternalEvent: true,
     };
   } else if (eventType === 'conversion') {
     return {
@@ -149,7 +149,6 @@ export function _buildEventPayloadsForHits({
         };
       }),
       eventModifier,
-      preventNextInternalEvent: eventModifier !== 'internal',
     };
   } else if (__DEV__) {
     throw new Error(`eventType("${eventType}") is not supported.
@@ -172,7 +171,7 @@ export function createSendEventForHits({
   let shouldSendInternalEvent = true;
 
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
-    const { payloads, eventModifier, preventNextInternalEvent } =
+    const { payloads, eventModifier, canPreventNextInternalEvent } =
       _buildEventPayloadsForHits({
         widgetType,
         index,
@@ -185,9 +184,9 @@ export function createSendEventForHits({
       // don't send internal events, but still send the next one
       shouldSendInternalEvent = true;
       return;
-    } else if (eventModifier === 'internal') {
+    } else if (eventModifier === 'internal' && shouldSendInternalEvent) {
       shouldSendInternalEvent = true;
-    } else if (preventNextInternalEvent) {
+    } else if (canPreventNextInternalEvent) {
       shouldSendInternalEvent = false;
     }
 
