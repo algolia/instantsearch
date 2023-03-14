@@ -61,6 +61,7 @@ exports[`RefinementList applies translations 1`] = `
             height="10"
             viewBox="0 0 20 20"
             width="10"
+            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -418,6 +419,7 @@ exports[`RefinementList refinement list with search inside items but no search r
             height="10"
             viewBox="0 0 20 20"
             width="10"
+            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -571,6 +573,7 @@ exports[`RefinementList refinement list with search inside items with search res
             height="10"
             viewBox="0 0 20 20"
             width="10"
+            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path

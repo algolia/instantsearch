@@ -61,6 +61,7 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
             height="10"
             viewBox="0 0 20 20"
             width="10"
+            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -202,6 +203,7 @@ exports[`Menu Menu with search inside items with search results 1`] = `
             height="10"
             viewBox="0 0 20 20"
             width="10"
+            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -299,6 +301,7 @@ exports[`Menu applies translations 1`] = `
             height="10"
             viewBox="0 0 20 20"
             width="10"
+            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
