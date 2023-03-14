@@ -976,6 +976,7 @@ describe('RefinementList', () => {
                       stroke="#444"
                       viewBox="0 0 38 38"
                       width="16"
+                      aria-hidden="true"
                     >
                       <g
                         fill="none"

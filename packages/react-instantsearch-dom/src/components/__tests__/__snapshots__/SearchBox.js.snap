@@ -389,6 +389,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 1`] 
         stroke="#444"
         viewBox="0 0 38 38"
         width="18"
+        aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
       >
         <g
@@ -497,6 +498,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 2`] 
         stroke="#444"
         viewBox="0 0 38 38"
         width="18"
+        aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
       >
         <g
