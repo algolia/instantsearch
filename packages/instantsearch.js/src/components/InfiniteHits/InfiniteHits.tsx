@@ -7,10 +7,11 @@ import {
   createInsightsEventHandler,
   findInsightsTarget,
 } from '../../lib/insights/listener';
-import { warning } from '../../lib/utils';
+import { deserializePayload, warning } from '../../lib/utils';
 import Template from '../Template/Template';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
+import type { InsightsEvent } from '../../middlewares';
 import type { ComponentCSSClasses, Hit, InsightsClient } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
@@ -110,7 +111,31 @@ const InfiniteHits = ({
                 );
 
                 if (targetWithEvent) {
-                  return;
+                  try {
+                    const method = targetWithEvent.getAttribute(
+                      'data-insights-method'
+                    );
+
+                    if (method?.slice(0, 'clicked'.length) === 'clicked') {
+                      return;
+                    }
+
+                    const payloads = deserializePayload<InsightsEvent[]>(
+                      targetWithEvent.getAttribute('data-insights-event')!
+                    );
+
+                    if (
+                      payloads.some(
+                        (payload) =>
+                          payload.insightsMethod!.slice(0, 'clicked'.length) ===
+                          'clicked'
+                      )
+                    ) {
+                      return;
+                    }
+                  } catch (e) {
+                    // event doesn't match the expected format
+                  }
                 }
 
                 sendEvent('click:internal', hit, 'Hit Clicked');
