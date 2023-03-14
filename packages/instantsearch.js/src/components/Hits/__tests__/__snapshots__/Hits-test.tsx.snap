@@ -3,7 +3,6 @@
 exports[`Hits markup should render <Hits /> 1`] = `
 <div
   className="root"
-  onClick={[Function]}
 >
   <ol
     className="list"
@@ -33,7 +32,6 @@ exports[`Hits markup should render <Hits /> 1`] = `
 exports[`Hits markup should render <Hits /> without highlight function 1`] = `
 <div
   className="root"
-  onClick={[Function]}
 >
   <ol
     className="list"

@@ -3,15 +3,11 @@
 import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
-import {
-  createInsightsEventHandler,
-  findInsightsTarget,
-} from '../../lib/insights/listener';
-import { deserializePayload, warning } from '../../lib/utils';
+import { createInsightsEventHandler } from '../../lib/insights/listener';
+import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
-import type { InsightsEvent } from '../../middlewares';
 import type { ComponentCSSClasses, Hit, InsightsClient } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
@@ -75,7 +71,7 @@ const InfiniteHits = ({
   }
 
   return (
-    <div className={cssClasses.root} onClick={handleInsightsClick}>
+    <div className={cssClasses.root}>
       {hasShowPrevious && (
         <Template
           {...templateProps}
@@ -101,43 +97,7 @@ const InfiniteHits = ({
             rootProps={{
               className: cssClasses.item,
               onClick: (event: MouseEvent) => {
-                const targetWithEvent = findInsightsTarget(
-                  event.target as HTMLElement | null,
-                  event.currentTarget as HTMLElement | null,
-                  (element) =>
-                    element.hasAttribute('data-insights-event') ||
-                    (element.hasAttribute('data-insights-method') &&
-                      element.hasAttribute('data-insights-payload'))
-                );
-
-                if (targetWithEvent) {
-                  try {
-                    const method = targetWithEvent.getAttribute(
-                      'data-insights-method'
-                    );
-
-                    if (method?.slice(0, 'clicked'.length) === 'clicked') {
-                      return;
-                    }
-
-                    const payloads = deserializePayload<InsightsEvent[]>(
-                      targetWithEvent.getAttribute('data-insights-event')!
-                    );
-
-                    if (
-                      payloads.some(
-                        (payload) =>
-                          payload.insightsMethod!.slice(0, 'clicked'.length) ===
-                          'clicked'
-                      )
-                    ) {
-                      return;
-                    }
-                  } catch (e) {
-                    // event doesn't match the expected format
-                  }
-                }
-
+                handleInsightsClick(event);
                 sendEvent('click:internal', hit, 'Hit Clicked');
               },
             }}

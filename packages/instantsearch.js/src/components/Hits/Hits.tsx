@@ -3,10 +3,7 @@
 import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
-import {
-  createInsightsEventHandler,
-  findInsightsTarget,
-} from '../../lib/insights/listener';
+import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
 
@@ -58,7 +55,7 @@ export default function Hits({
   }
 
   return (
-    <div className={cssClasses.root} onClick={handleInsightsClick}>
+    <div className={cssClasses.root}>
       <ol className={cssClasses.list}>
         {hits.map((hit, index) => (
           <Template
@@ -68,19 +65,7 @@ export default function Hits({
             rootProps={{
               className: cssClasses.item,
               onClick: (event: MouseEvent) => {
-                const targetWithEvent = findInsightsTarget(
-                  event.target as HTMLElement | null,
-                  event.currentTarget as HTMLElement | null,
-                  (element) =>
-                    element.hasAttribute('data-insights-event') ||
-                    (element.hasAttribute('data-insights-method') &&
-                      element.hasAttribute('data-insights-payload'))
-                );
-
-                if (targetWithEvent) {
-                  return;
-                }
-
+                handleInsightsClick(event);
                 sendEvent('click:internal', hit, 'Hit Clicked');
               },
             }}
