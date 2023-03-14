@@ -1547,6 +1547,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'click',
+            canPreventNextInternalEvent: true,
             hits: [
               {
                 __position: 0,
@@ -1616,6 +1617,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           ).toEqual([
             {
               eventType: 'click',
+              canPreventNextInternalEvent: true,
               hits: [
                 {
                   __position: 0,

@@ -228,6 +228,7 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'click',
+      canPreventNextInternalEvent: true,
       hits: [
         {
           __position: 0,
@@ -255,6 +256,7 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'click',
+      canPreventNextInternalEvent: true,
       hits: Array.from({ length: 20 }, (_, i) => {
         return {
           __position: i,
@@ -274,6 +276,7 @@ describe('createSendEventForHits', () => {
     });
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'click',
+      canPreventNextInternalEvent: true,
       hits: [
         {
           __position: 20,
@@ -465,6 +468,7 @@ describe('createBindEventForHits', () => {
     expect(parsedPayload).toEqual([
       {
         eventType: 'click',
+        canPreventNextInternalEvent: true,
         hits: [
           {
             __position: 0,
@@ -520,6 +524,7 @@ describe('createBindEventForHits', () => {
     expect(parsedPayload).toEqual([
       {
         eventType: 'click',
+        canPreventNextInternalEvent: true,
         hits: Array.from({ length: 20 }, (_, i) => ({
           __position: i,
           __queryID: 'test-query-id',
@@ -537,6 +542,7 @@ describe('createBindEventForHits', () => {
       },
       {
         eventType: 'click',
+        canPreventNextInternalEvent: true,
         hits: [
           {
             __position: 20,

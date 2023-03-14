@@ -957,6 +957,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'click',
+            canPreventNextInternalEvent: true,
             hits: [
               {
                 __position: 0,
@@ -1026,6 +1027,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           ).toEqual([
             {
               eventType: 'click',
+              canPreventNextInternalEvent: true,
               hits: [
                 {
                   __position: 0,
