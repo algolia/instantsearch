@@ -409,7 +409,127 @@ describe('infiniteHits', () => {
       );
     });
 
-    it('sends click event', async () => {
+    it('sends click event with sendEvent', async () => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.use(insights);
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <button
+                type="button"
+                onClick=${() => sendEvent('click', item, 'Item Clicked')}
+              >
+                ${item.title}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      onEvent.mockClear();
+
+      fireEvent.click(getByText(container, 'title 1'));
+
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
+        eventType: 'click',
+        hits: [
+          {
+            __hitIndex: 0,
+            __position: 1,
+            objectID: 'object-id0',
+            title: 'title 1',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Item Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id0'],
+          positions: [1],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+    });
+
+    it('sends conversion event with sendEvent', async () => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.use(insights);
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <button
+                type="button"
+                onClick=${() =>
+                  sendEvent('conversion', item, 'Product Ordered')}
+              >
+                ${item.title}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      onEvent.mockClear();
+
+      fireEvent.click(getByText(container, 'title 2'));
+
+      // The custom one + the default one
+      expect(onEvent).toHaveBeenCalledTimes(2);
+      expect(onEvent.mock.calls[0][0]).toEqual({
+        eventType: 'conversion',
+        hits: [
+          {
+            __hitIndex: 1,
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Ordered',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+      expect(onEvent.mock.calls[1][0]).toEqual({
+        eventType: 'click',
+        hits: [
+          {
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Hit Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+          positions: [2],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+    });
+
+    it('sends click event with bindEvent', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.use(insights);
@@ -457,7 +577,7 @@ describe('infiniteHits', () => {
       });
     });
 
-    it('sends conversion event', async () => {
+    it('sends conversion event with bindEvent', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.use(insights);
