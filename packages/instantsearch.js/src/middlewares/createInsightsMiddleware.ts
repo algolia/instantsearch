@@ -228,21 +228,7 @@ export function createInsightsMiddleware<
           immediate: true,
         });
 
-        let shouldSendInternalEvent = true;
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
-          if (event.eventModifier === 'internal' && !shouldSendInternalEvent) {
-            // don't send internal events, but still send the next one
-            shouldSendInternalEvent = true;
-            return;
-          } else if (
-            event.eventModifier === 'internal' &&
-            shouldSendInternalEvent
-          ) {
-            shouldSendInternalEvent = true;
-          } else if (event.canPreventNextInternalEvent) {
-            shouldSendInternalEvent = false;
-          }
-
           if (onEvent) {
             onEvent(event, _insightsClient as TInsightsClient);
           } else if (event.insightsMethod) {

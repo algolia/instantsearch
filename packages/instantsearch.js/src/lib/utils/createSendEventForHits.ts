@@ -158,6 +158,8 @@ export function createSendEventForHits({
   index: string;
   widgetType: string;
 }): SendEventForHits {
+  let shouldSendInternalEvent = true;
+
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
     const payloads = _buildEventPayloadsForHits({
       widgetType,
@@ -166,6 +168,22 @@ export function createSendEventForHits({
       args,
       instantSearchInstance,
     });
+
+    const event = payloads[0];
+
+    if (!event) {
+      return;
+    }
+
+    if (event.eventModifier === 'internal' && !shouldSendInternalEvent) {
+      // don't send internal events, but still send the next one
+      shouldSendInternalEvent = true;
+      return;
+    } else if (event.eventModifier === 'internal' && shouldSendInternalEvent) {
+      shouldSendInternalEvent = true;
+    } else if (event.canPreventNextInternalEvent) {
+      shouldSendInternalEvent = false;
+    }
 
     payloads.forEach((payload) =>
       instantSearchInstance.sendEventToInsights(payload)
