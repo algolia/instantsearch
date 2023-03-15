@@ -16,6 +16,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
   "items": [
     {
       "attribute": "facet",
+      "indexId": "index_name",
       "indexName": "indexName",
       "label": "facet",
       "refine": [Function],
@@ -30,6 +31,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     },
     {
       "attribute": "facetExclude",
+      "indexId": "index_name",
       "indexName": "indexName",
       "label": "facetExclude",
       "refine": [Function],
@@ -44,6 +46,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     },
     {
       "attribute": "rating",
+      "indexId": "index_name",
       "indexName": "indexName",
       "label": "rating",
       "refine": [Function],
@@ -64,6 +67,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     },
     {
       "attribute": "brand",
+      "indexId": "index_name",
       "indexName": "indexName",
       "label": "brand",
       "refine": [Function],
@@ -84,6 +88,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     },
     {
       "attribute": "hierarchicalCategories.lvl0",
+      "indexId": "index_name",
       "indexName": "indexName",
       "label": "hierarchicalCategories.lvl0",
       "refine": [Function],
@@ -100,6 +105,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     },
     {
       "attribute": "price",
+      "indexId": "index_name",
       "indexName": "indexName",
       "label": "price",
       "refine": [Function],
@@ -122,6 +128,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     },
     {
       "attribute": "_tags",
+      "indexId": "index_name",
       "indexName": "indexName",
       "label": "_tags",
       "refine": [Function],
@@ -177,6 +184,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
   "items": [
     {
       "attribute": "facet",
+      "indexId": "index_name",
       "indexName": "index_name",
       "label": "facet",
       "refine": [Function],
@@ -211,6 +219,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
   "items": [
     {
       "attribute": "facet",
+      "indexId": "index_name",
       "indexName": "index_name",
       "label": "facet",
       "refine": [Function],
