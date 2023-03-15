@@ -44,11 +44,11 @@ exports[`react-router recipe App renders without crashing 1`] = `
           type="submit"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-submitIcon"
             height="10"
             viewBox="0 0 40 40"
             width="10"
-            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
