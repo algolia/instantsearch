@@ -27,6 +27,7 @@ describe('CurrentRefinements', () => {
       items: [
         {
           indexName: 'indexName',
+          indexId: 'indexName',
           attribute: 'facet',
           label: 'facet',
           refine: () => {},
@@ -47,6 +48,7 @@ describe('CurrentRefinements', () => {
         },
         {
           indexName: 'indexName',
+          indexId: 'indexName',
           attribute: 'facetExclude',
           label: 'facetExclude',
           refine: () => {},
@@ -62,6 +64,7 @@ describe('CurrentRefinements', () => {
         },
         {
           indexName: 'indexName',
+          indexId: 'indexName',
           attribute: 'disjunctive',
           label: 'disjunctive',
           refine: () => {},
@@ -76,6 +79,7 @@ describe('CurrentRefinements', () => {
         },
         {
           indexName: 'indexName',
+          indexId: 'indexName',
           attribute: 'hierarchical',
           label: 'hierarchical',
           refine: () => {},
@@ -90,6 +94,7 @@ describe('CurrentRefinements', () => {
         },
         {
           indexName: 'indexName',
+          indexId: 'indexName',
           attribute: 'numeric',
           label: 'numeric',
           refine: () => {},
@@ -105,6 +110,7 @@ describe('CurrentRefinements', () => {
         },
         {
           indexName: 'indexName',
+          indexId: 'indexName',
           attribute: 'tag',
           label: 'tag',
           refine: () => {},
@@ -147,6 +153,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: 'customFacet',
             label: 'customFacet',
             refine: () => {},
@@ -174,6 +181,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: 'customExcludeFacet',
             label: 'customExcludeFacet',
             refine: () => {},
@@ -202,6 +210,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: 'customDisjunctiveFacet',
             label: 'customDisjunctiveFacet',
             refine: () => {},
@@ -229,6 +238,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: 'customHierarchicalFacet',
             label: 'customHierarchicalFacet',
             refine: () => {},
@@ -256,6 +266,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
@@ -271,6 +282,7 @@ describe('CurrentRefinements', () => {
           },
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
@@ -286,6 +298,7 @@ describe('CurrentRefinements', () => {
           },
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
@@ -314,6 +327,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: '_tags',
             label: '_tags',
             refine: () => {},
@@ -341,6 +355,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             indexName: 'indexName',
+            indexId: 'indexName',
             attribute: 'query',
             label: 'query',
             refine: () => {},

@@ -68,6 +68,7 @@ describe('useCurrentRefinements', () => {
         {
           attribute: 'brand',
           indexName: 'indexName',
+          indexId: 'indexName',
           label: 'brand',
           refine: expect.any(Function),
           refinements: [
@@ -93,6 +94,7 @@ describe('useCurrentRefinements', () => {
         {
           attribute: 'brand',
           indexName: 'indexName',
+          indexId: 'indexName',
           label: 'brand',
           refine: expect.any(Function),
           refinements: [
