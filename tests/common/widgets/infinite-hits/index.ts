@@ -11,9 +11,7 @@ export type InfiniteHitsSetup = TestSetup<{
 
 export function createInfiniteHitsTests(
   setup: InfiniteHitsSetup,
-  act: Act = fakeAct,
-  // @todo: temporary, until Vue also supports insights
-  skipTests: { insights?: boolean } = {}
+  act: Act = fakeAct
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
@@ -21,6 +19,6 @@ export function createInfiniteHitsTests(
 
   describe('InfiniteHits common tests', () => {
     createOptimisticUiTests(setup, act);
-    !skipTests.insights && createInsightsTests(setup, act);
+    createInsightsTests(setup, act);
   });
 }
