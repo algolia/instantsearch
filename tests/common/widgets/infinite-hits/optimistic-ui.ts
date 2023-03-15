@@ -55,15 +55,15 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
       // Initial state, before interaction
       {
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
 
       // Load the next page
       {
-        const nextPage = screen.getByRole('button', {
+        const nextPage = screen.getAllByRole('button', {
           name: 'Show more results',
-        });
+        })[0];
         await act(async () => {
           nextPage.click();
           await wait(0);
@@ -72,7 +72,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
 
         // UI has not changed yet
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
 
@@ -83,7 +83,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
         });
 
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(2 * hitsPerPage);
       }
     });
@@ -130,7 +130,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
       // Initial state, before interaction
       {
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
 
@@ -146,7 +146,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
 
         // UI has not changed yet
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
 
@@ -157,7 +157,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
         });
 
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
     });
@@ -208,7 +208,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
       // Initial state, before interaction
       {
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
 
@@ -216,9 +216,9 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
 
       // Load the next page
       {
-        const nextPage = screen.getByRole('button', {
+        const nextPage = screen.getAllByRole('button', {
           name: 'Show more results',
-        });
+        })[0];
         await act(async () => {
           nextPage.click();
           await wait(0);
@@ -227,7 +227,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
 
         // UI has not changed yet
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
 
@@ -238,7 +238,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
         });
 
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
 
@@ -246,9 +246,9 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
 
       // Load the next page
       {
-        const nextPage = screen.getByRole('button', {
+        const nextPage = screen.getAllByRole('button', {
           name: 'Show more results',
-        });
+        })[0];
         await act(async () => {
           nextPage.click();
           await wait(0);
@@ -257,7 +257,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
 
         // UI has not changed yet
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(hitsPerPage);
       }
 
@@ -268,7 +268,7 @@ export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
         });
 
         expect(
-          document.querySelectorAll('.ais-InfiniteHits-item')
+          document.querySelectorAll('#main-hits .ais-InfiniteHits-item')
         ).toHaveLength(2 * hitsPerPage);
       }
     });
