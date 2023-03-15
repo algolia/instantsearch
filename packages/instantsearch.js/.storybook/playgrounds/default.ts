@@ -1,23 +1,22 @@
+import { Hit, TemplateWithBindEvent } from '../../src/types';
 import { Playground } from '../decorators';
 
-export const hitsItemTemplate = `
-<div
-  class="hits-image"
-  style="background-image: url({{image}})"
-></div>
-<article>
-  <header>
-    <strong>{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</strong>
-  </header>
-  <p>
-    {{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}
-  </p>
-  <footer>
-    <p>
-      <strong>{{price}}$</strong>
-    </p>
-  </footer>
-</article>
+export const hitsItemTemplate: TemplateWithBindEvent<Hit> = (
+  hit,
+  { html, components }
+) => html`
+  <div class="hits-image" style="background-image: url(${hit.image})"></div>
+  <article>
+    <header>
+      <strong>${components.Highlight({ hit, attribute: 'name' })}</strong>
+    </header>
+    <p>${components.Snippet({ hit, attribute: 'description' })}</p>
+    <footer>
+      <p>
+        <strong>${hit.price}$</strong>
+      </p>
+    </footer>
+  </article>
 `;
 
 const instantSearchPlayground: Playground = function instantSearchPlayground({
@@ -131,7 +130,7 @@ const instantSearchPlayground: Playground = function instantSearchPlayground({
 
   const insights = instantsearch.middlewares.createInsightsMiddleware({
     insightsClient: null,
-    onEvent: props => {
+    onEvent: (props) => {
       console.log('insights onEvent', props);
     },
   });
