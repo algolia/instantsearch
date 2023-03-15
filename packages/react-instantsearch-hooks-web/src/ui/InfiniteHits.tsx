@@ -114,7 +114,7 @@ export function InfiniteHits<THit extends Hit>({
             key={hit.objectID}
             className={cx('ais-InfiniteHits-item', classNames.item)}
             onClick={() => {
-              sendEvent('click', hit, 'Hit Clicked');
+              sendEvent('click:internal', hit, 'Hit Clicked');
             }}
           >
             <HitComponent hit={hit} sendEvent={sendEvent} />
