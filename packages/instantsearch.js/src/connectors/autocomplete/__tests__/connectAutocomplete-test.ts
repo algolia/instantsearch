@@ -888,7 +888,6 @@ search.addWidgets([
       expect(sendEventToInsights).toHaveBeenCalledTimes(3);
       expect(sendEventToInsights.mock.calls[2][0]).toEqual({
         eventType: 'click',
-        canPreventNextInternalEvent: true,
         hits: [
           {
             __position: 0,

@@ -23,10 +23,8 @@ export type InsightsEvent = {
   payload: any;
   widgetType: string;
   eventType: string; // 'view' | 'click' | 'conversion', but we're not restricting.
-  eventModifier?: string;
   hits?: Hit[];
   attribute?: string;
-  canPreventNextInternalEvent?: boolean;
 };
 
 export type InsightsProps<

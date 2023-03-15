@@ -389,8 +389,6 @@ describe('infiniteHits', () => {
       expect(onEvent).toHaveBeenCalledWith(
         {
           eventType: 'click',
-          eventModifier: 'internal',
-          canPreventNextInternalEvent: true,
           hits: [
             {
               __position: 1,
@@ -443,7 +441,6 @@ describe('infiniteHits', () => {
       expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'click',
-        canPreventNextInternalEvent: true,
         hits: [
           {
             __hitIndex: 0,
@@ -514,8 +511,6 @@ describe('infiniteHits', () => {
       });
       expect(onEvent.mock.calls[1][0]).toEqual({
         eventType: 'click',
-        eventModifier: 'internal',
-        canPreventNextInternalEvent: true,
         hits: [
           {
             __position: 2,
@@ -563,7 +558,6 @@ describe('infiniteHits', () => {
       expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'click',
-        canPreventNextInternalEvent: true,
         hits: [
           {
             __hitIndex: 0,
@@ -634,8 +628,6 @@ describe('infiniteHits', () => {
       });
       expect(onEvent.mock.calls[1][0]).toEqual({
         eventType: 'click',
-        eventModifier: 'internal',
-        canPreventNextInternalEvent: true,
         hits: [
           {
             __position: 2,

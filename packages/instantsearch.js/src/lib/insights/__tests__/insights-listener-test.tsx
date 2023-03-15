@@ -132,7 +132,7 @@ describe('createInsightsEventHandler', () => {
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Hit Clicked'],
-        })
+        }).payloads
       );
 
       const Hits = (props: InsightsEventHandlerOptions) => (
@@ -156,7 +156,6 @@ describe('createInsightsEventHandler', () => {
       expect(props.sendEvent).toHaveBeenCalledTimes(1);
       expect(props.sendEvent).toHaveBeenCalledWith({
         eventType: 'click',
-        canPreventNextInternalEvent: true,
         hits: [{ objectID: '1', __position: 1 }],
         insightsMethod: 'clickedObjectIDsAfterSearch',
         payload: {
@@ -177,7 +176,7 @@ describe('createInsightsEventHandler', () => {
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Hit Clicked'],
-        })
+        }).payloads
       );
 
       const Hits = (props: InsightsEventHandlerOptions) => (
@@ -203,7 +202,6 @@ describe('createInsightsEventHandler', () => {
       expect(props.sendEvent).toHaveBeenCalledTimes(1);
       expect(props.sendEvent).toHaveBeenCalledWith({
         eventType: 'click',
-        canPreventNextInternalEvent: true,
         hits: [{ objectID: '1', __position: 1 }],
         insightsMethod: 'clickedObjectIDsAfterSearch',
         payload: {
@@ -252,7 +250,7 @@ describe('createInsightsEventHandler', () => {
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Product Clicked'],
-        })
+        }).payloads
       );
 
       const Hits = (props: InsightsEventHandlerOptions) => (
@@ -291,7 +289,6 @@ describe('createInsightsEventHandler', () => {
       expect(props.sendEvent).toHaveBeenCalledTimes(1);
       expect(props.sendEvent).toHaveBeenCalledWith({
         eventType: 'click',
-        canPreventNextInternalEvent: true,
         hits: [{ objectID: '1', __position: 1 }],
         insightsMethod: 'clickedObjectIDsAfterSearch',
         payload: {

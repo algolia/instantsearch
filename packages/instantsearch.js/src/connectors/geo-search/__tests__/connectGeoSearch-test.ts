@@ -1784,7 +1784,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         eventType: 'click',
-        canPreventNextInternalEvent: true,
         hits: [
           {
             __position: 0,
