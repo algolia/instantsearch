@@ -44,14 +44,10 @@ export function _buildEventPayloadsForHits({
 }): {
   payloads: InsightsEvent[];
   eventModifier?: string;
-  preventable?: boolean;
 } {
   // when there's only one argument, that means it's custom
   if (args.length === 1 && typeof args[0] === 'object') {
-    return {
-      payloads: [args[0]],
-      preventable: args[0].eventType === 'click',
-    };
+    return { payloads: [args[0]] };
   }
   const [eventType, eventModifier]: [string, string] = args[0].split(':');
 
@@ -133,7 +129,6 @@ export function _buildEventPayloadsForHits({
         };
       }),
       eventModifier,
-      preventable: true,
     };
   } else if (eventType === 'conversion') {
     return {
@@ -171,31 +166,33 @@ export function createSendEventForHits({
   index: string;
   widgetType: string;
 }): SendEventForHits {
-  let shouldSendInternalEvent = true;
+  let sentEvents: Record<InsightsEvent['eventType'], boolean> = {};
+  let timer: ReturnType<typeof setTimeout> | undefined = undefined;
+
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
-    const { payloads, eventModifier, preventable } = _buildEventPayloadsForHits(
-      {
-        widgetType,
-        index,
-        methodName: 'sendEvent',
-        args,
-        instantSearchInstance,
+    const { payloads, eventModifier } = _buildEventPayloadsForHits({
+      widgetType,
+      index,
+      methodName: 'sendEvent',
+      args,
+      instantSearchInstance,
+    });
+
+    payloads.forEach((payload) => {
+      if (eventModifier === 'internal' && sentEvents[payload.eventType]) {
+        return;
       }
-    );
 
-    if (eventModifier === 'internal' && !shouldSendInternalEvent) {
-      // don't send internal events, but still send the next one
-      shouldSendInternalEvent = true;
-      return;
-    } else if (eventModifier === 'internal' && shouldSendInternalEvent) {
-      shouldSendInternalEvent = true;
-    } else if (preventable) {
-      shouldSendInternalEvent = false;
+      sentEvents[payload.eventType] = true;
+      instantSearchInstance.sendEventToInsights(payload);
+    });
+
+    if (timer) {
+      clearTimeout(timer);
     }
-
-    payloads.forEach((payload) =>
-      instantSearchInstance.sendEventToInsights(payload)
-    );
+    timer = setTimeout(() => {
+      sentEvents = {};
+    }, 0);
   };
   return sendEventForHits;
 }
