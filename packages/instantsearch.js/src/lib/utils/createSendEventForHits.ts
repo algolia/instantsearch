@@ -187,9 +187,7 @@ export function createSendEventForHits({
       instantSearchInstance.sendEventToInsights(payload);
     });
 
-    if (timer) {
-      clearTimeout(timer);
-    }
+    clearTimeout(timer);
     timer = setTimeout(() => {
       sentEvents = {};
     }, 0);
