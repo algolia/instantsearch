@@ -1226,6 +1226,7 @@ SearchParameters.prototype = {
    * @throws Error if the facet is not defined or if the facet is refined
    */
   addHierarchicalFacetRefinement: function (facet, path) {
+    // debugger;
     if (this.isHierarchicalFacetRefined(facet)) {
       throw new Error(facet + ' is already refined.');
     }
@@ -1258,6 +1259,7 @@ SearchParameters.prototype = {
     }
     var mod = {};
     mod[facet] = [];
+    // debugger;
     return this.setQueryParameters({
       hierarchicalFacetsRefinements: defaultsPure(
         {},
@@ -1383,6 +1385,7 @@ SearchParameters.prototype = {
     }
 
     var refinements = this.getHierarchicalRefinement(facet);
+    // debugger;
 
     if (!value) {
       return refinements.length > 0;

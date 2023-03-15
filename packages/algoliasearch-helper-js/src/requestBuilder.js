@@ -29,6 +29,16 @@ var requestBuilder = {
       params: requestBuilder._getHitsSearchParams(state)
     });
 
+    // one query without afb
+    queries.push({
+      indexName: index,
+      params: sortObject(
+        merge({}, requestBuilder._getHitsSearchParams(state), {
+          extensions: { queryCategorization: { enableAutoFiltering: false } }
+        })
+      )
+    });
+
     // One for each disjunctive facets
     state.getRefinedDisjunctiveFacets().forEach(function (refinedFacet) {
       queries.push({
@@ -352,6 +362,8 @@ var requestBuilder = {
   _getHitsHierarchicalFacetsAttributes: function (state) {
     var out = [];
 
+    // return state.hierarchicalFacets[0].attributes;
+
     return state.hierarchicalFacets.reduce(
       // ask for as much levels as there's hierarchical refinements
       function getHitsAttributesForHierarchicalFacet(
@@ -364,7 +376,9 @@ var requestBuilder = {
 
         // if no refinement, ask for root level
         if (!hierarchicalRefinement) {
-          allAttributes.push(hierarchicalFacet.attributes[0]);
+          hierarchicalFacet.attributes.forEach((attribute) => {
+            allAttributes.push(attribute);
+          });
           return allAttributes;
         }
 

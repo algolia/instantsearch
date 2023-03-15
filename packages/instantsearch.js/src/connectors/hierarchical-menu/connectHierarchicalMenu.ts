@@ -340,6 +340,13 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           if (!_refine) {
             _refine = function (facetValue) {
               sendEvent('click', facetValue);
+
+              if (helper.state.automaticFilters) {
+                helper.setQueryParameter('extensions', {
+                  queryCategorization: { enableAutoFiltering: false },
+                });
+              }
+
               helper
                 .toggleFacetRefinement(hierarchicalFacetName, facetValue)
                 .search();
@@ -366,7 +373,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
                 },
                 []
               );
-            console.log(hierarchicalAutoFilters);
+            console.log(hierarchicalAutoFilters, 'het');
 
             if (
               results.query === helper.state.query &&
@@ -378,6 +385,11 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
                 hierarchicalAutoFilters[
                   hierarchicalAutoFilters.length - 1
                 ].split(':');
+              if (
+                helper.state.isHierarchicalFacetRefined(hierarchicalFacetName)
+              ) {
+                helper.removeHierarchicalFacetRefinement(hierarchicalFacetName);
+              }
               if (
                 !helper.state.isHierarchicalFacetRefined(
                   hierarchicalFacetName,
