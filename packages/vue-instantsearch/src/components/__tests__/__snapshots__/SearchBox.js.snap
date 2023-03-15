@@ -22,8 +22,8 @@ exports[`renders HTML correctly 1`] = `
             title="Search"
             type="submit"
     >
-      <svg class="ais-SearchBox-submitIcon"
-           aria-hidden="true"
+      <svg aria-hidden="true"
+           class="ais-SearchBox-submitIcon"
            height="10"
            role="img"
            viewbox="0 0 40 40"
@@ -41,8 +41,8 @@ exports[`renders HTML correctly 1`] = `
             title="Clear"
             type="reset"
     >
-      <svg class="ais-SearchBox-resetIcon"
-           aria-hidden="true"
+      <svg aria-hidden="true"
+           class="ais-SearchBox-resetIcon"
            height="1em"
            role="img"
            viewbox="0 0 20 20"

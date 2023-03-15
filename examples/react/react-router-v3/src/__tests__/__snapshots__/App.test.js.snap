@@ -63,6 +63,7 @@ exports[`react-router recipe App renders without crashing 1`] = `
           type="reset"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-resetIcon"
             height="10"
             viewBox="0 0 20 20"
