@@ -8,17 +8,12 @@ export type HitsSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createHitsTests(
-  setup: HitsSetup,
-  act: Act = fakeAct,
-  // @todo: temporary, until Vue also supports insights
-  skipTests: { insights?: boolean } = {}
-) {
+export function createHitsTests(setup: HitsSetup, act: Act = fakeAct) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('Hits common tests', () => {
-    !skipTests.insights && createInsightsTests(setup, act);
+    createInsightsTests(setup, act);
   });
 }

@@ -11,6 +11,7 @@ jest.mock('../../mixins/widget');
 
 const defaultState = {
   hits: [{ objectID: 'one' }, { objectID: 'two' }],
+  sendEvent: jest.fn(),
 };
 
 it('accepts an escapeHTML prop', () => {
