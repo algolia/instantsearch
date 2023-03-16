@@ -71,7 +71,7 @@ const InfiniteHits = ({
   }
 
   return (
-    <div className={cssClasses.root} onClick={handleInsightsClick}>
+    <div className={cssClasses.root}>
       {hasShowPrevious && (
         <Template
           {...templateProps}
@@ -96,8 +96,9 @@ const InfiniteHits = ({
             rootTagName="li"
             rootProps={{
               className: cssClasses.item,
-              onClick: () => {
-                sendEvent('click', hit, 'Hit Clicked');
+              onClick: (event: MouseEvent) => {
+                handleInsightsClick(event);
+                sendEvent('click:internal', hit, 'Hit Clicked');
               },
             }}
             key={hit.objectID}

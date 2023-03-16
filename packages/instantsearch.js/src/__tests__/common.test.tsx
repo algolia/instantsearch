@@ -8,6 +8,7 @@ import {
   createPaginationTests,
   createMenuTests,
   createInfiniteHitsTests,
+  createHitsTests,
 } from '@instantsearch/tests';
 
 import instantsearch from '../index.es';
@@ -19,6 +20,8 @@ import {
   pagination,
   infiniteHits,
   searchBox,
+  hits,
+  index,
 } from '../widgets';
 
 createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
@@ -120,9 +123,117 @@ createInfiniteHitsTests(({ instantSearchOptions, widgetParams }) => {
         container: document.body.appendChild(document.createElement('div')),
       }),
       infiniteHits({
-        container: document.body.appendChild(document.createElement('div')),
+        container: document.body.appendChild(
+          Object.assign(document.createElement('div'), {
+            id: 'main-hits',
+          })
+        ),
+        templates: {
+          item: (hit, { html, sendEvent }) =>
+            html`<div data-testid=${`main-hits-top-level-${hit.__position}`}>
+              ${hit.objectID}
+              <button
+                data-testid=${`main-hits-convert-${hit.__position}`}
+                onClick=${() => sendEvent('conversion', hit, 'Converted')}
+              >
+                convert
+              </button>
+              <button
+                data-testid=${`main-hits-click-${hit.__position}`}
+                onClick=${() => sendEvent('click', hit, 'Clicked')}
+              >
+                click
+              </button>
+            </div>`,
+        },
         ...widgetParams,
       }),
+      index({ indexName: 'nested' }).addWidgets([
+        infiniteHits({
+          container: document.body.appendChild(
+            Object.assign(document.createElement('div'), {
+              id: 'nested-hits',
+            })
+          ),
+          templates: {
+            item: (hit, { html, sendEvent }) =>
+              html`<div
+                data-testid=${`nested-hits-top-level-${hit.__position}`}
+              >
+                ${hit.objectID}
+                <button
+                  data-testid=${`nested-hits-click-${hit.__position}`}
+                  onClick=${() => sendEvent('click', hit, 'Clicked nested')}
+                >
+                  click
+                </button>
+              </div>`,
+          },
+        }),
+      ]),
+    ])
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
+    .start();
+});
+
+createHitsTests(({ instantSearchOptions, widgetParams }) => {
+  instantsearch(instantSearchOptions)
+    .addWidgets([
+      searchBox({
+        container: document.body.appendChild(document.createElement('div')),
+      }),
+      hits({
+        container: document.body.appendChild(
+          Object.assign(document.createElement('div'), {
+            id: 'main-hits',
+          })
+        ),
+        templates: {
+          item: (hit, { html, sendEvent }) =>
+            html`<div data-testid=${`main-hits-top-level-${hit.__position}`}>
+              ${hit.objectID}
+              <button
+                data-testid=${`main-hits-convert-${hit.__position}`}
+                onClick=${() => sendEvent('conversion', hit, 'Converted')}
+              >
+                convert
+              </button>
+              <button
+                data-testid=${`main-hits-click-${hit.__position}`}
+                onClick=${() => sendEvent('click', hit, 'Clicked')}
+              >
+                click
+              </button>
+            </div>`,
+        },
+        ...widgetParams,
+      }),
+      index({ indexName: 'nested' }).addWidgets([
+        hits({
+          container: document.body.appendChild(
+            Object.assign(document.createElement('div'), {
+              id: 'nested-hits',
+            })
+          ),
+          templates: {
+            item: (hit, { html, sendEvent }) =>
+              html`<div data-testid=${`nested-hits-${hit.__position}`}>
+                ${hit.objectID}
+                <button
+                  data-testid=${`nested-hits-click-${hit.__position}`}
+                  onClick=${() => sendEvent('click', hit, 'Clicked nested')}
+                >
+                  click
+                </button>
+              </div>`,
+          },
+        }),
+      ]),
     ])
     .on('error', () => {
       /*

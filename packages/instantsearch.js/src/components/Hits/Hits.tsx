@@ -55,7 +55,7 @@ export default function Hits({
   }
 
   return (
-    <div className={cssClasses.root} onClick={handleInsightsClick}>
+    <div className={cssClasses.root}>
       <ol className={cssClasses.list}>
         {hits.map((hit, index) => (
           <Template
@@ -64,8 +64,9 @@ export default function Hits({
             rootTagName="li"
             rootProps={{
               className: cssClasses.item,
-              onClick: () => {
-                sendEvent('click', hit, 'Hit Clicked');
+              onClick: (event: MouseEvent) => {
+                handleInsightsClick(event);
+                sendEvent('click:internal', hit, 'Hit Clicked');
               },
             }}
             key={hit.objectID}
