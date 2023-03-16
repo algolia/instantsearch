@@ -14,6 +14,7 @@ import { h, render, createRef } from 'preact';
 
 import { createRenderOptions, createWidget } from '../../../test/createWidget';
 import { connectSearchBox, connectPagination } from '../../connectors';
+import { createInsightsMiddleware } from '../../middlewares';
 import { index } from '../../widgets';
 import InstantSearch from '../InstantSearch';
 import { noop, warning } from '../utils';
@@ -425,6 +426,148 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     // could be null if we don't pretend the main helper is the one who searched
     expect(search.helper!.lastResults).not.toBe(null);
+  });
+
+  describe('insights middleware', () => {
+    test('adds insights middleware by default', () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+      });
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+      ]);
+    });
+
+    test('insights: true still adds only one middleware', () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        insights: true,
+      });
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+      ]);
+    });
+
+    test('insights: options still creates one middleware only', () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        insights: {
+          insightsInitParams: {
+            useCookie: false,
+          },
+        },
+      });
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+      ]);
+    });
+
+    test('insights: options passes options to middleware', () => {
+      const insightsClient = jest.fn();
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        insights: {
+          insightsClient,
+        },
+      });
+      search.start();
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+      ]);
+
+      // it's called a couple times setting up the middleware
+      expect(insightsClient).toHaveBeenCalled();
+      insightsClient.mockClear();
+
+      search.sendEventToInsights({
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: { eventName: 'Add to cart' },
+        eventType: 'click',
+        widgetType: 'ais.hits',
+      });
+
+      expect(insightsClient).toHaveBeenCalledTimes(1);
+      expect(insightsClient).toHaveBeenCalledWith(
+        'clickedObjectIDsAfterSearch',
+        { eventName: 'Add to cart' }
+      );
+    });
+
+    test('insights: false disables default insights', () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        insights: false,
+      });
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([]);
+    });
+
+    test("users' middleware overrides the builtin one", () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+      });
+
+      search.use(createInsightsMiddleware({}));
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: false,
+        },
+      ]);
+    });
   });
 
   describe('metadata middleware', () => {

@@ -27,11 +27,10 @@ export type InsightsEvent = {
   attribute?: string;
 };
 
+type ProvidedInsightsClient = InsightsClient | null | undefined;
+
 export type InsightsProps<
-  TInsightsClient extends InsightsClient | null | undefined =
-    | InsightsClient
-    | null
-    | undefined
+  TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
 > = {
   insightsClient?: TInsightsClient;
   insightsInitParams?: {
@@ -53,7 +52,7 @@ const ALGOLIA_INSIGHTS_SRC =
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
 export function createInsightsMiddleware<
-  TInsightsClient extends null | InsightsClient
+  TInsightsClient extends ProvidedInsightsClient
 >(props: InsightsProps<TInsightsClient> = {}): InternalMiddleware {
   const {
     insightsClient: _insightsClient,
