@@ -68,8 +68,7 @@
           aria-hidden="true"
           role="img"
           xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
+          style="width: 1em; height: 1em"
           viewBox="0 0 20 20"
           :class="suit('resetIcon')"
         >
