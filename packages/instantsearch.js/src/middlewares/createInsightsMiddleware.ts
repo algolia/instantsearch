@@ -61,9 +61,9 @@ export function createInsightsMiddleware<
     $$internal = false,
   } = props;
 
-  let insightsClient: InsightsClient = _insightsClient || noop;
+  let insightsClient: InsightsClient & { needsToLoadInsightsClient?: boolean } =
+    _insightsClient || noop;
 
-  let needsToLoadInsightsClient = false;
   if (_insightsClient !== null && !_insightsClient) {
     safelyRunOnBrowser(({ window }: { window: any }) => {
       const pointer = window.AlgoliaAnalyticsObject || 'aa';
@@ -84,7 +84,7 @@ export function createInsightsMiddleware<
         }
 
         insightsClient = window[pointer];
-        needsToLoadInsightsClient = true;
+        insightsClient.needsToLoadInsightsClient = true;
       }
     });
   }
@@ -150,7 +150,7 @@ export function createInsightsMiddleware<
       $$internal,
       onStateChange() {},
       subscribe() {
-        if (!needsToLoadInsightsClient) return;
+        if (!insightsClient.needsToLoadInsightsClient) return;
 
         const errorMessage =
           '[insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init';
@@ -163,7 +163,9 @@ export function createInsightsMiddleware<
             instantSearchInstance.emit('error', new Error(errorMessage));
           };
           document.body.appendChild(script);
+          insightsClient.needsToLoadInsightsClient = false;
         } catch (cause) {
+          insightsClient.needsToLoadInsightsClient = false;
           instantSearchInstance.emit('error', new Error(errorMessage));
         }
       },
