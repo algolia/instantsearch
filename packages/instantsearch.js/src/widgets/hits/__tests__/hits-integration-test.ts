@@ -190,8 +190,8 @@ describe('hits', () => {
 
       fireEvent.click(getByText(container, 'title 1'));
 
-      // The default `click` one + the custom one
-      expect(onEvent).toHaveBeenCalledTimes(2);
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'click',
         hits: [
@@ -242,7 +242,7 @@ describe('hits', () => {
       onEvent.mockClear();
 
       fireEvent.click(getByText(container, 'title 2'));
-      // The default `click` one + the custom one
+      // The custom one + default click
       expect(onEvent).toHaveBeenCalledTimes(2);
       expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'conversion',
@@ -259,6 +259,24 @@ describe('hits', () => {
           eventName: 'Product Ordered',
           index: 'instant_search',
           objectIDs: ['object-id1'],
+        },
+        widgetType: 'ais.hits',
+      });
+      expect(onEvent.mock.calls[1][0]).toEqual({
+        eventType: 'click',
+        hits: [
+          {
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Hit Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+          positions: [2],
         },
         widgetType: 'ais.hits',
       });
@@ -289,9 +307,9 @@ describe('hits', () => {
       onEvent.mockClear();
 
       fireEvent.click(getByText(container, 'title 1'));
-      // The default `click` one + the custom one
-      expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[1][0]).toEqual({
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'click',
         hits: [
           {
@@ -342,9 +360,9 @@ describe('hits', () => {
 
       fireEvent.click(getByText(container, 'title 2'));
 
-      // The default `click` one + the custom one
+      // The custom one + default click
       expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[1][0]).toEqual({
+      expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'conversion',
         hits: [
           {
@@ -359,6 +377,24 @@ describe('hits', () => {
           eventName: 'Product Ordered',
           index: 'instant_search',
           objectIDs: ['object-id1'],
+        },
+        widgetType: 'ais.hits',
+      });
+      expect(onEvent.mock.calls[1][0]).toEqual({
+        eventType: 'click',
+        hits: [
+          {
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Hit Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+          positions: [2],
         },
         widgetType: 'ais.hits',
       });
