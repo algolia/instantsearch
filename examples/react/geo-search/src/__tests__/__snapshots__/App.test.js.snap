@@ -34,6 +34,7 @@ Array [
         type="submit"
       >
         <svg
+          aria-hidden="true"
           className="ais-SearchBox-submitIcon"
           height="10"
           viewBox="0 0 40 40"
@@ -52,6 +53,7 @@ Array [
         type="reset"
       >
         <svg
+          aria-hidden="true"
           className="ais-SearchBox-resetIcon"
           height="10"
           viewBox="0 0 20 20"

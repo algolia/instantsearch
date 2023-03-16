@@ -38,6 +38,7 @@ exports[`RefinementList applies translations 1`] = `
           type="submit"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-submitIcon"
             height="10"
             viewBox="0 0 40 40"
@@ -56,6 +57,7 @@ exports[`RefinementList applies translations 1`] = `
           type="reset"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-resetIcon"
             height="10"
             viewBox="0 0 20 20"
@@ -394,6 +396,7 @@ exports[`RefinementList refinement list with search inside items but no search r
           type="submit"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-submitIcon"
             height="10"
             viewBox="0 0 40 40"
@@ -412,6 +415,7 @@ exports[`RefinementList refinement list with search inside items but no search r
           type="reset"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-resetIcon"
             height="10"
             viewBox="0 0 20 20"
@@ -546,6 +550,7 @@ exports[`RefinementList refinement list with search inside items with search res
           type="submit"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-submitIcon"
             height="10"
             viewBox="0 0 40 40"
@@ -564,6 +569,7 @@ exports[`RefinementList refinement list with search inside items with search res
           type="reset"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-resetIcon"
             height="10"
             viewBox="0 0 20 20"

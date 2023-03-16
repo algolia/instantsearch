@@ -38,6 +38,7 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
           type="submit"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-submitIcon"
             height="10"
             viewBox="0 0 40 40"
@@ -56,6 +57,7 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
           type="reset"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-resetIcon"
             height="10"
             viewBox="0 0 20 20"
@@ -178,6 +180,7 @@ exports[`Menu Menu with search inside items with search results 1`] = `
           type="submit"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-submitIcon"
             height="10"
             viewBox="0 0 40 40"
@@ -196,6 +199,7 @@ exports[`Menu Menu with search inside items with search results 1`] = `
           type="reset"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-resetIcon"
             height="10"
             viewBox="0 0 20 20"
@@ -274,6 +278,7 @@ exports[`Menu applies translations 1`] = `
           type="submit"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-submitIcon"
             height="10"
             viewBox="0 0 40 40"
@@ -292,6 +297,7 @@ exports[`Menu applies translations 1`] = `
           type="reset"
         >
           <svg
+            aria-hidden="true"
             className="ais-SearchBox-resetIcon"
             height="10"
             viewBox="0 0 20 20"
