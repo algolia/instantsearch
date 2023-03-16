@@ -44,7 +44,7 @@ exports[`renders HTML correctly 1`] = `
       <svg aria-hidden="true"
            class="ais-SearchBox-resetIcon"
            role="img"
-           style="width: 1em; height: 1em"
+           style="width: 1em; height: 1em;"
            viewbox="0 0 20 20"
            xmlns="http://www.w3.org/2000/svg"
       >
