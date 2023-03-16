@@ -20,7 +20,10 @@ import {
 } from './utils';
 import version from './version';
 
-import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import type {
+  InsightsEvent,
+  InsightsProps,
+} from '../middlewares/createInsightsMiddleware';
 import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import type {
   InsightsClient as AlgoliaInsightsClient,
@@ -145,7 +148,7 @@ export type InstantSearchOptions<
    *
    * @default true
    */
-  insights?: boolean;
+  insights?: InsightsProps | boolean;
 
   /**
    * the instance of search-insights to use for sending insights events inside
@@ -325,7 +328,9 @@ See ${createDocumentationLink({
     // This is the default middleware,
     // any user-provided middleware will be added later and override this one.
     if (insights) {
-      this.use(createInsightsMiddleware({ $$internal: true }));
+      const insightsOptions = typeof insights === 'boolean' ? {} : insights;
+      insightsOptions.$$internal = true;
+      this.use(createInsightsMiddleware(insightsOptions));
     }
 
     if (isMetadataEnabled()) {
