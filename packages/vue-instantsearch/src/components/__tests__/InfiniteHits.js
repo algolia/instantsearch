@@ -15,6 +15,7 @@ const defaultState = {
     escapeHTML: true,
     transformItems: (items) => items,
   },
+  sendEvent: jest.fn(),
   hits: [
     {
       objectID: '00001',

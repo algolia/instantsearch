@@ -34,12 +34,14 @@
           v-for="(item, index) in items"
           :class="suit('item')"
           :key="item.objectID"
+          @click="state.sendEvent('click:internal', item, 'Hit Clicked')"
         >
           <slot
             name="item"
             :item="item"
             :index="index"
             :insights="state.insights"
+            :send-event="state.sendEvent"
           >
             objectID: {{ item.objectID }}, index: {{ index }}
           </slot>
