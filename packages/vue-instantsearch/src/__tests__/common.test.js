@@ -26,7 +26,6 @@ import {
   AisHits,
   AisIndex,
 } from '../instantsearch';
-import { fakeAct } from '@instantsearch/tests/common';
 jest.unmock('instantsearch.js/es');
 
 /**
@@ -126,174 +125,158 @@ createPaginationTests(async ({ instantSearchOptions, widgetParams }) => {
   await nextTick();
 });
 
-createInfiniteHitsTests(
-  async ({ instantSearchOptions, widgetParams }) => {
-    mountApp(
-      {
-        render: renderCompat((h) =>
-          h(AisInstantSearch, { props: instantSearchOptions }, [
-            h(AisSearchBox),
+createInfiniteHitsTests(async ({ instantSearchOptions, widgetParams }) => {
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisSearchBox),
+          h(AisInfiniteHits, {
+            attrs: { id: 'main-hits' },
+            props: widgetParams,
+            scopedSlots: {
+              item: ({ item: hit, sendEvent }) =>
+                h(
+                  'div',
+                  {
+                    attrs: {
+                      'data-testid': `main-hits-top-level-${hit.__position}`,
+                    },
+                  },
+                  [
+                    hit.objectID,
+                    h('button', {
+                      attrs: {
+                        'data-testid': `main-hits-convert-${hit.__position}`,
+                      },
+                      on: {
+                        click: () => sendEvent('conversion', hit, 'Converted'),
+                      },
+                    }),
+                    h('button', {
+                      attrs: {
+                        'data-testid': `main-hits-click-${hit.__position}`,
+                      },
+                      on: {
+                        click: () => sendEvent('click', hit, 'Clicked'),
+                      },
+                    }),
+                  ]
+                ),
+            },
+          }),
+          h(AisIndex, { props: { indexName: 'nested' } }, [
             h(AisInfiniteHits, {
-              attrs: { id: 'main-hits' },
-              props: widgetParams,
+              attrs: { id: 'nested-hits' },
               scopedSlots: {
                 item: ({ item: hit, sendEvent }) =>
                   h(
                     'div',
                     {
                       attrs: {
-                        'data-testid': `main-hits-top-level-${hit.__position}`,
+                        'data-testid': `nested-hits-top-level-${hit.__position}`,
                       },
                     },
                     [
                       hit.objectID,
                       h('button', {
                         attrs: {
-                          'data-testid': `main-hits-convert-${hit.__position}`,
+                          'data-testid': `nested-hits-click-${hit.__position}`,
                         },
                         on: {
                           click: () =>
-                            sendEvent('conversion', hit, 'Converted'),
-                        },
-                      }),
-                      h('button', {
-                        attrs: {
-                          'data-testid': `main-hits-click-${hit.__position}`,
-                        },
-                        on: {
-                          click: () => sendEvent('click', hit, 'Clicked'),
+                            sendEvent('click', hit, 'Clicked nested'),
                         },
                       }),
                     ]
                   ),
               },
             }),
-            h(AisIndex, { props: { indexName: 'nested' } }, [
-              h(AisInfiniteHits, {
-                attrs: { id: 'nested-hits' },
-                scopedSlots: {
-                  item: ({ item: hit, sendEvent }) =>
-                    h(
-                      'div',
-                      {
-                        attrs: {
-                          'data-testid': `nested-hits-top-level-${hit.__position}`,
-                        },
+          ]),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createHitsTests(async ({ instantSearchOptions, widgetParams }) => {
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisSearchBox),
+          h(AisHits, {
+            attrs: { id: 'main-hits' },
+            props: widgetParams,
+            scopedSlots: {
+              item: ({ item: hit, sendEvent }) =>
+                h(
+                  'div',
+                  {
+                    attrs: {
+                      'data-testid': `main-hits-top-level-${hit.__position}`,
+                    },
+                  },
+                  [
+                    hit.objectID,
+                    h('button', {
+                      attrs: {
+                        'data-testid': `main-hits-convert-${hit.__position}`,
                       },
-                      [
-                        hit.objectID,
-                        h('button', {
-                          attrs: {
-                            'data-testid': `nested-hits-click-${hit.__position}`,
-                          },
-                          on: {
-                            click: () =>
-                              sendEvent('click', hit, 'Clicked nested'),
-                          },
-                        }),
-                      ]
-                    ),
-                },
-              }),
-            ]),
-            h(GlobalErrorSwallower),
-          ])
-        ),
-      },
-      document.body.appendChild(document.createElement('div'))
-    );
-
-    await nextTick();
-  },
-  fakeAct,
-  {
-    // Vue InstantSearch doesn't support modern insights with sendEvent + default events
-    insights: true,
-  }
-);
-
-createHitsTests(
-  async ({ instantSearchOptions, widgetParams }) => {
-    mountApp(
-      {
-        render: renderCompat((h) =>
-          h(AisInstantSearch, { props: instantSearchOptions }, [
-            h(AisSearchBox),
+                      on: {
+                        click: () => sendEvent('conversion', hit, 'Converted'),
+                      },
+                    }),
+                    h('button', {
+                      attrs: {
+                        'data-testid': `main-hits-click-${hit.__position}`,
+                      },
+                      on: {
+                        click: () => sendEvent('click', hit, 'Clicked'),
+                      },
+                    }),
+                  ]
+                ),
+            },
+          }),
+          h(AisIndex, { props: { indexName: 'nested' } }, [
             h(AisHits, {
-              attrs: { id: 'main-hits' },
-              props: widgetParams,
+              attrs: { id: 'nested-hits' },
               scopedSlots: {
                 item: ({ item: hit, sendEvent }) =>
                   h(
                     'div',
                     {
                       attrs: {
-                        'data-testid': `main-hits-top-level-${hit.__position}`,
+                        'data-testid': `nested-hits-top-level-${hit.__position}`,
                       },
                     },
                     [
                       hit.objectID,
                       h('button', {
                         attrs: {
-                          'data-testid': `main-hits-convert-${hit.__position}`,
+                          'data-testid': `nested-hits-click-${hit.__position}`,
                         },
                         on: {
                           click: () =>
-                            sendEvent('conversion', hit, 'Converted'),
-                        },
-                      }),
-                      h('button', {
-                        attrs: {
-                          'data-testid': `main-hits-click-${hit.__position}`,
-                        },
-                        on: {
-                          click: () => sendEvent('click', hit, 'Clicked'),
+                            sendEvent('click', hit, 'Clicked nested'),
                         },
                       }),
                     ]
                   ),
               },
             }),
-            h(AisIndex, { props: { indexName: 'nested' } }, [
-              h(AisHits, {
-                attrs: { id: 'nested-hits' },
-                scopedSlots: {
-                  item: ({ item: hit, sendEvent }) =>
-                    h(
-                      'div',
-                      {
-                        attrs: {
-                          'data-testid': `nested-hits-top-level-${hit.__position}`,
-                        },
-                      },
-                      [
-                        hit.objectID,
-                        h('button', {
-                          attrs: {
-                            'data-testid': `nested-hits-click-${hit.__position}`,
-                          },
-                          on: {
-                            click: () =>
-                              sendEvent('click', hit, 'Clicked nested'),
-                          },
-                        }),
-                      ]
-                    ),
-                },
-              }),
-            ]),
-            h(GlobalErrorSwallower),
-          ])
-        ),
-      },
-      document.body.appendChild(document.createElement('div'))
-    );
+          ]),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
 
-    await nextTick();
-  },
-  fakeAct,
-  {
-    // Vue InstantSearch doesn't support modern insights with sendEvent + default events
-    insights: true,
-  }
-);
+  await nextTick();
+});
