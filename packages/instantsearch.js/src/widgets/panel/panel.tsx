@@ -265,8 +265,7 @@ const panel: PanelWidget = (panelWidgetParams) => {
       collapseButtonText: ({ collapsed: isCollapsed }) =>
         `<svg
           class="${cssClasses.collapseIcon}"
-          width="1em"
-          height="1em"
+          style="width: 1em; height: 1em;"
           viewBox="0 0 500 500"
         >
         <path d="${

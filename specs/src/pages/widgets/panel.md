@@ -16,7 +16,7 @@ althtml1: |
     <div class="ais-Panel-header">
       <span>Header</span>
       <button class="ais-Panel-collapseButton" aria-expanded="true">
-        <svg class="ais-Panel-collapseIcon" width="1em" height="1em" viewBox="0 0 500 500">
+        <svg class="ais-Panel-collapseIcon" style="width: 1em; height: 1em" viewBox="0 0 500 500">
           <path d="M250 400l150-300H100z" fill="currentColor" />
         </svg>
       </button>
@@ -30,7 +30,7 @@ althtml2: |
     <div class="ais-Panel-header">
       <span>Header</span>
       <button class="ais-Panel-collapseButton" aria-expanded="false">
-        <svg class="ais-Panel-collapseIcon" width="1em" height="1em" viewBox="0 0 500 500">
+        <svg class="ais-Panel-collapseIcon" style="width: 1em; height: 1em" viewBox="0 0 500 500">
           <path d="M100 250l300-150v300z" fill="currentColor" />
         </svg>
       </button>
