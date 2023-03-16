@@ -406,7 +406,7 @@ describe('InfiniteHits', () => {
 
     expect(props.sendEvent).toHaveBeenCalledTimes(1);
     expect(props.sendEvent).toHaveBeenLastCalledWith(
-      'click',
+      'click:internal',
       props.hits[0],
       'Hit Clicked'
     );

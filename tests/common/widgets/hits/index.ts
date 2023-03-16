@@ -1,16 +1,15 @@
-import type { InfiniteHitsWidget } from 'instantsearch.js/es/widgets/infinite-hits/infinite-hits';
+import type { HitsWidget } from 'instantsearch.js/es/widgets/hits/hits';
 import type { Act, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
-import { createOptimisticUiTests } from './optimistic-ui';
 import { createInsightsTests } from './insights';
 
-type WidgetParams = Parameters<InfiniteHitsWidget>[0];
-export type InfiniteHitsSetup = TestSetup<{
+type WidgetParams = Parameters<HitsWidget>[0];
+export type HitsSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createInfiniteHitsTests(
-  setup: InfiniteHitsSetup,
+export function createHitsTests(
+  setup: HitsSetup,
   act: Act = fakeAct,
   // @todo: temporary, until Vue also supports insights
   skipTests: { insights?: boolean } = {}
@@ -19,8 +18,7 @@ export function createInfiniteHitsTests(
     document.body.innerHTML = '';
   });
 
-  describe('InfiniteHits common tests', () => {
-    createOptimisticUiTests(setup, act);
+  describe('Hits common tests', () => {
     !skipTests.insights && createInsightsTests(setup, act);
   });
 }
