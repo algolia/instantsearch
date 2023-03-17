@@ -6,6 +6,7 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type { SendEventForFacet } from '../../lib/utils';
@@ -485,6 +486,16 @@ const connectRefinementList: RefinementListConnector =
           const isDisjunctive = operator === 'or';
           const values =
             uiState.refinementList && uiState.refinementList[attribute];
+
+          if (searchParameters.isHierarchicalFacet(attribute)) {
+            warning(
+              false,
+              `RefinementList: Attribute "${attribute}" is already used by another widget applying hierarchical faceting.
+As this is not supported, please make sure to remove this other widget or this RefinementList widget will not work at all.`
+            );
+
+            return searchParameters;
+          }
 
           const withoutRefinements =
             searchParameters.clearRefinements(attribute);
