@@ -370,7 +370,7 @@ describe('refinementList', () => {
           },
           widgetType: 'ais.hierarchicalMenu',
         },
-        null
+        expect.any(Function)
       );
 
       await wait(0);
@@ -393,7 +393,7 @@ describe('refinementList', () => {
           },
           widgetType: 'ais.hierarchicalMenu',
         },
-        null
+        expect.any(Function)
       );
     });
   });
