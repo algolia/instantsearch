@@ -46,8 +46,8 @@ export type InsightsProps<
   $$internal?: boolean;
 };
 
-const VERSION = '2.4.0';
-const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${VERSION}/dist/search-insights.min.js`;
+const ALGOLIA_INSIGHTS_VERSION = '2.4.0';
+const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
 
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
@@ -74,6 +74,7 @@ export function createInsightsMiddleware<
 
       if (!insightsClient) {
         window.AlgoliaAnalyticsObject = pointer;
+
         if (!window[pointer]) {
           window[pointer] = (...args: any[]) => {
             if (!window[pointer].queue) {
@@ -81,10 +82,12 @@ export function createInsightsMiddleware<
             }
             window[pointer].queue.push(args);
           };
+
+          window[pointer].version = ALGOLIA_INSIGHTS_VERSION;
+          window[pointer].shouldAddScript = true;
         }
-        window[pointer].version = VERSION;
+
         insightsClient = window[pointer];
-        insightsClient.shouldAddScript = true;
       }
     });
   }
