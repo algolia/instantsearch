@@ -14,7 +14,6 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { warning } from '../../../lib/utils';
 import connectRange from '../connectRange';
 
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
@@ -2216,23 +2215,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         }),
         true
       );
-    });
-
-    it('warns when attribute is used for hierarchical faceting and does not change `SearchParameters`', () => {
-      warning.cache = {};
-      const helper = jsHelper(createSearchClient(), '', {
-        hierarchicalFacets: [{ name: 'price', attributes: ['price'] }],
-      });
-      const widget = connectRange(jest.fn())({
-        attribute: 'price',
-      });
-
-      expect(() => {
-        const searchParams = widget.getWidgetSearchParameters(helper.state, {
-          uiState: {},
-        });
-        expect(searchParams.disjunctiveFacets).toHaveLength(0);
-      }).toWarnDev();
     });
   });
 });

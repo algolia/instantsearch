@@ -4,7 +4,6 @@ import {
   isFiniteNumber,
   find,
   noop,
-  warning,
 } from '../../lib/utils';
 
 import type { SendEventForFacet } from '../../lib/utils';
@@ -418,16 +417,6 @@ const connectRange: RangeConnector = function connectRange(
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (searchParameters.isHierarchicalFacet(attribute)) {
-          warning(
-            false,
-            `Range: Attribute "${attribute}" is already used by another widget applying hierarchical faceting.
-As this is not supported, please make sure to remove this other widget or this Range widget will not work at all.`
-          );
-
-          return searchParameters;
-        }
-
         let widgetSearchParameters = searchParameters
           .addDisjunctiveFacet(attribute)
           .setQueryParameters({
