@@ -367,7 +367,7 @@ describe('infiniteHits', () => {
           },
           widgetType: 'ais.infiniteHits',
         },
-        null
+        expect.any(Function)
       );
     });
 
@@ -405,7 +405,7 @@ describe('infiniteHits', () => {
           },
           widgetType: 'ais.infiniteHits',
         },
-        null
+        expect.any(Function)
       );
     });
 

@@ -77,22 +77,40 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       // View event called for each index once
       {
         expect(window.aa).toHaveBeenCalledTimes(2);
-        expect(window.aa).toHaveBeenCalledWith('viewedObjectIDs', {
-          eventName: 'Hits Viewed',
-          index: 'indexName',
-          objectIDs: Array.from(
-            { length: hitsPerPage },
-            (_, index) => `indexName-${index}`
-          ),
-        });
-        expect(window.aa).toHaveBeenCalledWith('viewedObjectIDs', {
-          eventName: 'Hits Viewed',
-          index: 'nested',
-          objectIDs: Array.from(
-            { length: hitsPerPage },
-            (_, index) => `nested-${index}`
-          ),
-        });
+        expect(window.aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          {
+            eventName: 'Hits Viewed',
+            index: 'indexName',
+            objectIDs: Array.from(
+              { length: hitsPerPage },
+              (_, index) => `indexName-${index}`
+            ),
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
+        expect(window.aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          {
+            eventName: 'Hits Viewed',
+            index: 'nested',
+            objectIDs: Array.from(
+              { length: hitsPerPage },
+              (_, index) => `nested-${index}`
+            ),
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
         window.aa.mockClear();
       }
 
@@ -170,39 +188,75 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       // View event called for each index, batched in chunks of 20
       {
         expect(window.aa).toHaveBeenCalledTimes(4);
-        expect(window.aa).toHaveBeenCalledWith('viewedObjectIDs', {
-          eventName: 'Hits Viewed',
-          index: 'indexName',
-          objectIDs: Array.from(
-            { length: 20 },
-            (_, index) => `indexName-${index}`
-          ),
-        });
-        expect(window.aa).toHaveBeenCalledWith('viewedObjectIDs', {
-          eventName: 'Hits Viewed',
-          index: 'indexName',
-          objectIDs: Array.from(
-            { length: 5 },
-            (_, index) => `indexName-${20 + index}`
-          ),
-        });
+        expect(window.aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          {
+            eventName: 'Hits Viewed',
+            index: 'indexName',
+            objectIDs: Array.from(
+              { length: 20 },
+              (_, index) => `indexName-${index}`
+            ),
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
+        expect(window.aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          {
+            eventName: 'Hits Viewed',
+            index: 'indexName',
+            objectIDs: Array.from(
+              { length: 5 },
+              (_, index) => `indexName-${20 + index}`
+            ),
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
 
-        expect(window.aa).toHaveBeenCalledWith('viewedObjectIDs', {
-          eventName: 'Hits Viewed',
-          index: 'nested',
-          objectIDs: Array.from(
-            { length: 20 },
-            (_, index) => `nested-${index}`
-          ),
-        });
-        expect(window.aa).toHaveBeenCalledWith('viewedObjectIDs', {
-          eventName: 'Hits Viewed',
-          index: 'nested',
-          objectIDs: Array.from(
-            { length: 5 },
-            (_, index) => `nested-${20 + index}`
-          ),
-        });
+        expect(window.aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          {
+            eventName: 'Hits Viewed',
+            index: 'nested',
+            objectIDs: Array.from(
+              { length: 20 },
+              (_, index) => `nested-${index}`
+            ),
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
+        expect(window.aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          {
+            eventName: 'Hits Viewed',
+            index: 'nested',
+            objectIDs: Array.from(
+              { length: 5 },
+              (_, index) => `nested-${20 + index}`
+            ),
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
       }
     });
 
@@ -268,12 +322,21 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
         userEvent.click(screen.getByTestId('main-hits-top-level-1'));
 
         expect(window.aa).toHaveBeenCalledTimes(1);
-        expect(window.aa).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-          eventName: 'Hit Clicked',
-          index: 'indexName',
-          objectIDs: ['indexName-0'],
-          positions: [1],
-        });
+        expect(window.aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          {
+            eventName: 'Hit Clicked',
+            index: 'indexName',
+            objectIDs: ['indexName-0'],
+            positions: [1],
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
       }
     });
 
@@ -343,12 +406,21 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
         userEvent.click(screen.getByTestId('main-hits-top-level-1'));
 
         expect(window.aa).toHaveBeenCalledTimes(2);
-        expect(window.aa).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-          eventName: 'Hit Clicked',
-          index: 'indexName',
-          objectIDs: ['indexName-0'],
-          positions: [1],
-        });
+        expect(window.aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          {
+            eventName: 'Hit Clicked',
+            index: 'indexName',
+            objectIDs: ['indexName-0'],
+            positions: [1],
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
       }
     });
 
@@ -420,14 +492,29 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
             eventName: 'Converted',
             index: 'indexName',
             objectIDs: ['indexName-0'],
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
           }
         );
-        expect(window.aa).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-          eventName: 'Hit Clicked',
-          index: 'indexName',
-          objectIDs: ['indexName-0'],
-          positions: [1],
-        });
+        expect(window.aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          {
+            eventName: 'Hit Clicked',
+            index: 'indexName',
+            objectIDs: ['indexName-0'],
+            positions: [1],
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
       }
     });
 
@@ -493,12 +580,21 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
         userEvent.click(screen.getByTestId('main-hits-click-1'));
 
         expect(window.aa).toHaveBeenCalledTimes(1);
-        expect(window.aa).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-          eventName: 'Clicked',
-          index: 'indexName',
-          objectIDs: ['indexName-0'],
-          positions: [1],
-        });
+        expect(window.aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          {
+            eventName: 'Clicked',
+            index: 'indexName',
+            objectIDs: ['indexName-0'],
+            positions: [1],
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
       }
     });
 
@@ -566,18 +662,36 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
         userEvent.click(screen.getByTestId('main-hits-top-level-1'));
 
         expect(window.aa).toHaveBeenCalledTimes(2);
-        expect(window.aa).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-          eventName: 'Clicked nested',
-          index: 'nested',
-          objectIDs: ['nested-0'],
-          positions: [1],
-        });
-        expect(window.aa).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-          eventName: 'Hit Clicked',
-          index: 'indexName',
-          objectIDs: ['indexName-0'],
-          positions: [1],
-        });
+        expect(window.aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          {
+            eventName: 'Clicked nested',
+            index: 'nested',
+            objectIDs: ['nested-0'],
+            positions: [1],
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
+        expect(window.aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          {
+            eventName: 'Hit Clicked',
+            index: 'indexName',
+            objectIDs: ['indexName-0'],
+            positions: [1],
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
       }
     });
   });
