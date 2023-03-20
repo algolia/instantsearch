@@ -185,6 +185,49 @@ describe('insights', () => {
       expect((window as any).aa).toEqual(expect.any(Function));
     });
 
+    it('loads script, even when globals are set up by a different instance', () => {
+      const { instantSearchInstance: instantSearchInstance1 } =
+        createTestEnvironment({
+          started: false,
+        });
+      const { instantSearchInstance: instantSearchInstance2 } =
+        createTestEnvironment({
+          started: false,
+        });
+
+      expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
+
+      // middleware is added to first instance
+      instantSearchInstance1.use(createInsightsMiddleware());
+
+      // it sets up globals
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+
+      // middleware is set up on second instance
+      instantSearchInstance2.use(createInsightsMiddleware());
+
+      // globals stay as-is
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+
+      // only second instance starts
+      instantSearchInstance2.start();
+
+      // which finally loads search-insights
+      expect(document.body).toMatchInlineSnapshot(`
+        <body>
+          <script
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js"
+          />
+        </body>
+      `);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+    });
+
     it('notifies when the script fails to be added', () => {
       const { instantSearchInstance } = createTestEnvironment();
       const createElement = document.createElement;
