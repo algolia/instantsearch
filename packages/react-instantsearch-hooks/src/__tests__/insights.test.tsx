@@ -9,7 +9,7 @@ import React, { StrictMode } from 'react';
 import { InstantSearch } from '..';
 
 describe('insights', () => {
-  test('loads insights client in StrictMode', () => {
+  test('automatically loads the Insights client in `StrictMode`', () => {
     const searchClient = createSearchClient();
 
     render(
@@ -18,9 +18,9 @@ describe('insights', () => {
       </StrictMode>
     );
 
-    // sets global
+    // Sets the global
     expect((window as any).aa).toEqual(expect.any(Function));
-    // loads script
+    // Injects the script
     expect(document.body).toMatchInlineSnapshot(`
       <body>
         <div />
