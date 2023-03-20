@@ -484,8 +484,6 @@ const connectRefinementList: RefinementListConnector =
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
           const isDisjunctive = operator === 'or';
-          const values =
-            uiState.refinementList && uiState.refinementList[attribute];
 
           if (searchParameters.isHierarchicalFacet(attribute)) {
             warning(
@@ -496,6 +494,22 @@ As this is not supported, please make sure to remove this other widget or this R
 
             return searchParameters;
           }
+
+          if (
+            (isDisjunctive && searchParameters.isConjunctiveFacet(attribute)) ||
+            (!isDisjunctive && searchParameters.isDisjunctiveFacet(attribute))
+          ) {
+            warning(
+              false,
+              `RefinementList: Attribute "${attribute}" is used by two different refinement lists with different operators.
+As this is not supported, please make sure to only use this attribute with one of the two operators.`
+            );
+
+            return searchParameters;
+          }
+
+          const values =
+            uiState.refinementList && uiState.refinementList[attribute];
 
           const withoutRefinements =
             searchParameters.clearRefinements(attribute);

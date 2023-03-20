@@ -3076,6 +3076,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           brand: ['Apple', 'Samsung'],
         });
       });
+
+      test('returns the `SearchParameters` untouched and warns when attribute is used for disjunctive faceting', () => {
+        warning.cache = {};
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper(createSearchClient(), '', {
+          disjunctiveFacets: ['brand'],
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+          operator: 'and',
+        });
+
+        expect(() =>
+          widget.getWidgetSearchParameters(helper.state, {
+            uiState: {},
+          })
+        ).toWarnDev();
+      });
     });
 
     describe('with disjunctive facet', () => {
@@ -3170,9 +3190,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           brand: ['Apple', 'Samsung'],
         });
       });
+
+      test('returns the `SearchParameters` untouched and warns when attribute is used for conjunctive faceting', () => {
+        warning.cache = {};
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper(createSearchClient(), '', {
+          facets: ['brand'],
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        expect(() =>
+          widget.getWidgetSearchParameters(helper.state, {
+            uiState: {},
+          })
+        ).toWarnDev();
+      });
     });
 
-    it('warns when attribute is used for hierarchical faceting and does not change `SearchParameters`', () => {
+    test('warns when attribute is used for hierarchical faceting and does not change `SearchParameters`', () => {
       warning.cache = {};
       const helper = jsHelper(createSearchClient(), '', {
         hierarchicalFacets: [{ name: 'brand', attributes: ['brand'] }],
