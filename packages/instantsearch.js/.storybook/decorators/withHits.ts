@@ -55,9 +55,7 @@ export const withHits =
       searchClient,
       routing: {
         router: {
-          write: (routeState: object) => {
-            urlLogger(JSON.stringify(routeState, null, 2));
-          },
+          write: urlLogger,
           read: () => ({}),
           createURL: () => '',
           dispose: () => {},

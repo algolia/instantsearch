@@ -29,8 +29,8 @@
   "scripts": {
     "prebuild": "rm -rf vue2 vue3",
     "build": "rollup -c",
-    "storybook": "start-storybook -p 6006 -c .storybook",
-    "storybook:build": "build-storybook -c .storybook -o ../../website/stories/vue",
+    "storybook:dev": "storybook dev -p 6006 -c .storybook",
+    "storybook:build": "storybook build -c .storybook -o ../../website/stories/vue",
     "test:exports": "node ./test/module/vue2/is-es-module.mjs && node ./test/module/vue2/is-cjs-module.cjs",
     "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs"
   },
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
-    "@storybook/vue": "5.3.9",
+    "@storybook/vue": "^7.0.0-rc.4",
     "@vue/compiler-sfc": "3.1.2",
     "@vue/server-renderer": "3.1.2",
     "@vue/test-utils": "1.3.0",

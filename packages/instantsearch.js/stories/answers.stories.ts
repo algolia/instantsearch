@@ -1,6 +1,7 @@
-import { storiesOf } from '@storybook/html';
-
 import { withHits } from '../.storybook/decorators';
+
+import type { Meta, StoryObj } from '@storybook/html';
+
 import '../.storybook/static/answers.css';
 
 const searchOptions = {
@@ -9,102 +10,105 @@ const searchOptions = {
   indexName: 'ted',
 };
 
-storiesOf('Results/Answers', module)
-  .add(
-    'default',
-    withHits(({ search, container, instantsearch }) => {
-      const p = document.createElement('p');
-      p.innerText = `Try to search for "sarah jones"`;
-      const answersContainer = document.createElement('div');
-      container.appendChild(p);
-      container.appendChild(answersContainer);
+const meta: Meta = {
+  title: 'Results/Answers',
+  render: withHits(({ search, container, instantsearch }) => {
+    const p = document.createElement('p');
+    p.innerText = `Try to search for "sarah jones"`;
+    const answersContainer = document.createElement('div');
+    container.appendChild(p);
+    container.appendChild(answersContainer);
 
-      search.addWidgets([
-        instantsearch.widgets.EXPERIMENTAL_answers({
-          container: answersContainer,
-          queryLanguages: ['en'],
-          attributesForPrediction: ['description'],
-          templates: {
-            item: (hit) => {
-              return `<p>${hit._answer.extract}</p>`;
-            },
+    search.addWidgets([
+      instantsearch.widgets.EXPERIMENTAL_answers({
+        container: answersContainer,
+        queryLanguages: ['en'],
+        attributesForPrediction: ['description'],
+        templates: {
+          item: (hit) => {
+            return `<p>${hit._answer.extract}</p>`;
           },
-        }),
-      ]);
-    }, searchOptions)
-  )
-  .add(
-    'with header',
-    withHits(({ search, container, instantsearch }) => {
-      const p = document.createElement('p');
-      p.innerText = `Try to search for "sarah jones"`;
-      const answersContainer = document.createElement('div');
-      container.appendChild(p);
-      container.appendChild(answersContainer);
+        },
+      }),
+    ]);
+  }, searchOptions),
+};
 
-      search.addWidgets([
-        instantsearch.widgets.EXPERIMENTAL_answers({
-          container: answersContainer,
-          queryLanguages: ['en'],
-          attributesForPrediction: ['description'],
-          templates: {
-            header: ({ hits }) => {
-              return hits.length === 0 ? '' : `<p>Answers</p>`;
-            },
-            item: (hit) => {
-              return `<p>${hit._answer.extract}</p>`;
-            },
-          },
-        }),
-      ]);
-    }, searchOptions)
-  )
-  .add(
-    'with loader',
-    withHits(({ search, container, instantsearch }) => {
-      const p = document.createElement('p');
-      p.innerText = `Try to search for "sarah jones"`;
-      const answersContainer = document.createElement('div');
-      container.appendChild(p);
-      container.appendChild(answersContainer);
+export default meta;
 
-      search.addWidgets([
-        instantsearch.widgets.EXPERIMENTAL_answers({
-          container: answersContainer,
-          queryLanguages: ['en'],
-          attributesForPrediction: ['description'],
-          templates: {
-            header: ({ hits }) => {
-              return hits.length === 0 ? '' : `<p>Answers</p>`;
-            },
-            loader: `loading...`,
-            item: (hit) => {
-              return `<p>${hit._answer.extract}</p>`;
-            },
-          },
-        }),
-      ]);
-    }, searchOptions)
-  )
-  .add(
-    'full example',
-    withHits(({ search, container, instantsearch }) => {
-      const p = document.createElement('p');
-      p.innerText = `Try to search for "sarah jones"`;
-      const answersContainer = document.createElement('div');
-      container.appendChild(p);
-      container.appendChild(answersContainer);
+export const Default: StoryObj = {};
 
-      search.addWidgets([
-        instantsearch.widgets.EXPERIMENTAL_answers({
-          container: answersContainer,
-          queryLanguages: ['en'],
-          attributesForPrediction: ['description'],
-          cssClasses: {
-            root: 'my-Answers',
+export const WithHeader: StoryObj = {
+  render: withHits(({ search, container, instantsearch }) => {
+    const p = document.createElement('p');
+    p.innerText = `Try to search for "sarah jones"`;
+    const answersContainer = document.createElement('div');
+    container.appendChild(p);
+    container.appendChild(answersContainer);
+
+    search.addWidgets([
+      instantsearch.widgets.EXPERIMENTAL_answers({
+        container: answersContainer,
+        queryLanguages: ['en'],
+        attributesForPrediction: ['description'],
+        templates: {
+          header: ({ hits }) => {
+            return hits.length === 0 ? '' : `<p>Answers</p>`;
           },
-          templates: {
-            loader: `
+          item: (hit) => {
+            return `<p>${hit._answer.extract}</p>`;
+          },
+        },
+      }),
+    ]);
+  }, searchOptions),
+};
+
+export const WithLoader: StoryObj = {
+  render: withHits(({ search, container, instantsearch }) => {
+    const p = document.createElement('p');
+    p.innerText = `Try to search for "sarah jones"`;
+    const answersContainer = document.createElement('div');
+    container.appendChild(p);
+    container.appendChild(answersContainer);
+
+    search.addWidgets([
+      instantsearch.widgets.EXPERIMENTAL_answers({
+        container: answersContainer,
+        queryLanguages: ['en'],
+        attributesForPrediction: ['description'],
+        templates: {
+          header: ({ hits }) => {
+            return hits.length === 0 ? '' : `<p>Answers</p>`;
+          },
+          loader: `loading...`,
+          item: (hit) => {
+            return `<p>${hit._answer.extract}</p>`;
+          },
+        },
+      }),
+    ]);
+  }, searchOptions),
+};
+
+export const FullExample: StoryObj = {
+  render: withHits(({ search, container, instantsearch }) => {
+    const p = document.createElement('p');
+    p.innerText = `Try to search for "sarah jones"`;
+    const answersContainer = document.createElement('div');
+    container.appendChild(p);
+    container.appendChild(answersContainer);
+
+    search.addWidgets([
+      instantsearch.widgets.EXPERIMENTAL_answers({
+        container: answersContainer,
+        queryLanguages: ['en'],
+        attributesForPrediction: ['description'],
+        cssClasses: {
+          root: 'my-Answers',
+        },
+        templates: {
+          loader: `
             <div class="card-skeleton">
               <div class="animated-background">
                 <div class="skel-mask-container">
@@ -115,15 +119,15 @@ storiesOf('Results/Answers', module)
               </div>
             </div>
             `,
-            item: (hit) => {
-              return `
+          item: (hit) => {
+            return `
                 <p class="title one-line">${hit.title}</p>
                 <div class="separator"></div>
                 <p class="description three-lines">${hit._answer.extract}</p>
               `;
-            },
           },
-        }),
-      ]);
-    }, searchOptions)
-  );
+        },
+      }),
+    ]);
+  }, searchOptions),
+};

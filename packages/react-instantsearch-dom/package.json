@@ -36,8 +36,8 @@
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
-    "storybook": "start-storybook -p 6006 -c .storybook -s .storybook/public",
-    "storybook:build": "build-storybook -c .storybook -s .storybook/public -o ../../website/stories/react"
+    "storybook:dev": "storybook dev -p 6006 -c .storybook -s .storybook/public",
+    "storybook:build": "storybook build -c .storybook -s .storybook/public -o ../../website/stories/react"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
@@ -48,7 +48,7 @@
     "react-instantsearch-core": "6.39.0"
   },
   "devDependencies": {
-    "@storybook/react": "5.3.9",
+    "@storybook/react": "^7.0.0-rc.4",
     "babel-preset-react-app": "10.0.1",
     "lodash.orderby": "4.6.0",
     "nock": "11.7.2",

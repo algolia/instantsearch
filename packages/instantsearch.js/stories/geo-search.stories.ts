@@ -1,10 +1,12 @@
 import { action } from '@storybook/addon-actions';
-import { storiesOf } from '@storybook/html';
 import algoliaPlaces from 'places.js';
 import injectScript from 'scriptjs';
 
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import createInfoBox from '../.storybook/utils/create-info-box';
+
+import type { GeoSearchWidget } from '../src/widgets/geo-search/geo-search';
+import type { Meta, StoryObj } from '@storybook/html';
 
 const API_KEY = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
 
@@ -38,68 +40,66 @@ const injectGoogleMaps = (fn: () => void) => {
   );
 };
 
-const stories = storiesOf('Results/GeoSearch', module);
+type Args = {
+  widgetParams: Partial<Parameters<GeoSearchWidget>[0]>;
+};
+
+const meta: Meta<Args> = {
+  title: 'Results/GeoSearch',
+  render: (args) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
+      injectGoogleMaps(() => {
+        search.addWidgets([
+          instantsearch.widgets.geoSearch({
+            googleReference: window.google,
+            container,
+            ...args.widgetParams,
+          }),
+        ]);
+      })
+    )(),
+};
+
+export default meta;
+
 const initialZoom = 12;
 const initialPosition = {
   lat: 40.71,
   lng: -74.01,
 };
 
-stories.add(
-  'default',
-  withHitsAndConfigure(({ search, container, instantsearch }) =>
+export const Default: StoryObj<Args> = {};
+
+export const WithIp: StoryObj<Args> = {
+  args: {
+    widgetParams: {
+      initialPosition,
+      initialZoom,
+    },
+  },
+};
+
+export const WithPosition: StoryObj<Args> = {
+  render: withHitsAndConfigure(({ search, container, instantsearch }) =>
     injectGoogleMaps(() => {
       search.addWidgets([
+        instantsearch.widgets.configure({
+          aroundLatLngViaIP: false,
+          aroundLatLng: '37.7793, -122.419',
+        }),
+
         instantsearch.widgets.geoSearch({
           googleReference: window.google,
           container,
+          initialZoom,
         }),
       ]);
     })
-  )
-);
+  ),
+};
 
-// With IP
-stories
-  .add(
-    'with IP',
-    withHitsAndConfigure(({ search, container, instantsearch }) =>
-      injectGoogleMaps(() => {
-        search.addWidgets([
-          instantsearch.widgets.geoSearch({
-            googleReference: window.google,
-            container,
-            initialPosition,
-            initialZoom,
-          }),
-        ]);
-      })
-    )
-  )
-  .add(
-    'with position',
-    withHitsAndConfigure(({ search, container, instantsearch }) =>
-      injectGoogleMaps(() => {
-        search.addWidgets([
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: false,
-            aroundLatLng: '37.7793, -122.419',
-          }),
-
-          instantsearch.widgets.geoSearch({
-            googleReference: window.google,
-            container,
-            initialZoom,
-          }),
-        ]);
-      })
-    )
-  );
-
-// With Places
-stories.add(
-  'with position from Places',
-  withHitsAndConfigure(({ search, container, instantsearch }) =>
+export const WithPositionFromPlaces: StoryObj<Args> = {
+  render: withHitsAndConfigure(({ search, container, instantsearch }) =>
     injectGoogleMaps(() => {
       const placesElement = document.createElement('input');
       const mapElement = document.createElement('div');
@@ -127,78 +127,58 @@ stories.add(
         }),
       ]);
     })
-  )
-);
+  ),
+};
 
-// Only UI
+export const WithRefineDisabled: StoryObj<Args> = {
+  args: {
+    widgetParams: {
+      initialPosition,
+      initialZoom,
+      enableRefine: false,
+    },
+  },
+};
+
+export const WithControlRefineOnMapMove: StoryObj<Args> = {
+  name: 'with control & refine on map move',
+  args: {
+    widgetParams: {
+      initialPosition,
+      initialZoom,
+      enableRefine: false,
+    },
+  },
+};
+
+export const WithControlDisableRefineOnMapMove: StoryObj<Args> = {
+  name: 'with control & disable refine on map move',
+  args: {
+    widgetParams: {
+      enableRefineControl: true,
+      enableRefineOnMapMove: false,
+      container,
+      initialPosition,
+      initialZoom,
+    },
+  },
+};
+
+export const xxxx: StoryObj<Args> = {
+  name: 'without control & refine on map move',
+  args: {
+    widgetParams: {
+      enableRefineControl: false,
+      enableRefineOnMapMove: true,
+
+      initialPosition,
+      initialZoom,
+    },
+  },
+};
+
+// TODO from here onwards
 stories
-  .add(
-    'with refine disabled',
-    withHitsAndConfigure(({ search, container, instantsearch }) =>
-      injectGoogleMaps(() => {
-        search.addWidgets([
-          instantsearch.widgets.geoSearch({
-            googleReference: window.google,
-            container,
-            initialPosition,
-            initialZoom,
-            enableRefine: false,
-          }),
-        ]);
-      })
-    )
-  )
-  .add(
-    'with control & refine on map move',
-    withHitsAndConfigure(({ search, container, instantsearch }) =>
-      injectGoogleMaps(() => {
-        search.addWidgets([
-          instantsearch.widgets.geoSearch({
-            googleReference: window.google,
-            container,
-            initialPosition,
-            initialZoom,
-            enableRefineControl: true,
-            enableRefineOnMapMove: true,
-          }),
-        ]);
-      })
-    )
-  )
-  .add(
-    'with control & disable refine on map move',
-    withHitsAndConfigure(({ search, container, instantsearch }) =>
-      injectGoogleMaps(() => {
-        search.addWidgets([
-          instantsearch.widgets.geoSearch({
-            googleReference: window.google,
-            enableRefineControl: true,
-            enableRefineOnMapMove: false,
-            container,
-            initialPosition,
-            initialZoom,
-          }),
-        ]);
-      })
-    )
-  )
-  .add(
-    'without control & refine on map move',
-    withHitsAndConfigure(({ search, container, instantsearch }) =>
-      injectGoogleMaps(() => {
-        search.addWidgets([
-          instantsearch.widgets.geoSearch({
-            googleReference: window.google,
-            enableRefineControl: false,
-            enableRefineOnMapMove: true,
-            container,
-            initialPosition,
-            initialZoom,
-          }),
-        ]);
-      })
-    )
-  )
   .add(
     'without control & disable refine on map move',
     withHitsAndConfigure(({ search, container, instantsearch }) =>

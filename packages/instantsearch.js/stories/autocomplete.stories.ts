@@ -1,10 +1,10 @@
-import { storiesOf } from '@storybook/html';
-
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Basics/Autocomplete', module).add(
-  'default',
-  withHits(({ search, container, instantsearch }) => {
+import type { Meta, StoryObj } from '@storybook/html';
+
+const meta: Meta = {
+  title: 'Basics/Autocomplete',
+  render: withHits(({ search, container, instantsearch }) => {
     const instantSearchAutocomplete = document.createElement('div');
 
     container.appendChild(instantSearchAutocomplete);
@@ -69,5 +69,9 @@ storiesOf('Basics/Autocomplete', module).add(
             ]),
         ]),
     ]);
-  })
-);
+  }),
+};
+
+export default meta;
+
+export const Default: StoryObj = {};

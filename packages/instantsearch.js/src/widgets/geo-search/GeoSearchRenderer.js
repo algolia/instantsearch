@@ -1,5 +1,3 @@
-/** @jsx h */
-
 import { h, render } from 'preact';
 
 import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchControls';
@@ -213,24 +211,24 @@ const renderer = (
   }
 
   render(
-    <GeoSearchControls
-      cssClasses={cssClasses}
-      enableRefine={enableRefine}
-      enableRefineControl={enableRefineControl}
-      enableClearMapRefinement={enableClearMapRefinement}
-      isRefineOnMapMove={isRefineOnMapMove()}
-      isRefinedWithMap={isRefinedWithMap()}
-      hasMapMoveSinceLastRefine={hasMapMoveSinceLastRefine()}
-      onRefineToggle={toggleRefineOnMapMove}
-      onRefineClick={() =>
-        refineWithMap({
+    h(GeoSearchControls, {
+      cssClasses,
+      enableRefine,
+      enableRefineControl,
+      enableClearMapRefinement,
+      isRefineOnMapMove: isRefineOnMapMove(),
+      isRefinedWithMap: isRefinedWithMap(),
+      hasMapMoveSinceLastRefine: hasMapMoveSinceLastRefine(),
+      onRefineToggle: toggleRefineOnMapMove,
+      onRefineClick: function onRefineClick() {
+        return refineWithMap({
           mapInstance: renderState.mapInstance,
           refine,
-        })
-      }
-      onClearClick={clearMapRefinement}
-      templateProps={renderState.templateProps}
-    />,
+        });
+      },
+      onClearClick: clearMapRefinement,
+      templateProps: renderState.templateProps,
+    }),
     container.querySelector(`.${cssClasses.tree}`)
   );
 };

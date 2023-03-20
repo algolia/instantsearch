@@ -1,11 +1,12 @@
 import { action } from '@storybook/addon-actions';
-import { storiesOf } from '@storybook/html';
 
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Metadata/Analytics', module).add(
-  'default',
-  withHits(({ search, container, instantsearch }) => {
+import type { Meta, StoryObj } from '@storybook/html';
+
+const meta: Meta = {
+  title: 'Metadata/Analytics',
+  render: withHits(({ search, container, instantsearch }) => {
     const description = document.createElement('p');
     description.innerText = 'Search for something, look into Action Logger';
     container.appendChild(description);
@@ -21,5 +22,9 @@ storiesOf('Metadata/Analytics', module).add(
         pushInitialSearch: false,
       }),
     ]);
-  })
-);
+  }),
+};
+
+export default meta;
+
+export const Default: StoryObj = {};
