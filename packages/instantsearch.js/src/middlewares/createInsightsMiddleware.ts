@@ -163,9 +163,9 @@ export function createInsightsMiddleware<
             instantSearchInstance.emit('error', new Error(errorMessage));
           };
           document.body.appendChild(script);
-          insightsClient.needsToLoadInsightsClient = false;
+          insightsClient.shouldAddScript = false;
         } catch (cause) {
-          insightsClient.needsToLoadInsightsClient = false;
+          insightsClient.shouldAddScript = false;
           instantSearchInstance.emit('error', new Error(errorMessage));
         }
       },
