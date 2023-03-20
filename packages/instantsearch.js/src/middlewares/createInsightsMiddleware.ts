@@ -150,7 +150,7 @@ export function createInsightsMiddleware<
       $$internal,
       onStateChange() {},
       subscribe() {
-        if (!insightsClient.needsToLoadInsightsClient) return;
+        if (!insightsClient.shouldAddScript) return;
 
         const errorMessage =
           '[insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init';
