@@ -225,11 +225,27 @@ export function createInsightsMiddleware<
           immediate: true,
         });
 
+        // @ts-ignore
+        const insightsClientWithLocalCredentials = (method, payload) => {
+          return insightsClient(method, payload, {
+            headers: {
+              'X-Algolia-Application-Id': appId,
+              'X-Algolia-API-Key': apiKey,
+            },
+          });
+        };
+
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
-            onEvent(event, _insightsClient as TInsightsClient);
+            onEvent(
+              event,
+              insightsClientWithLocalCredentials as TInsightsClient
+            );
           } else if (event.insightsMethod) {
-            insightsClient(event.insightsMethod, event.payload);
+            insightsClientWithLocalCredentials(
+              event.insightsMethod,
+              event.payload
+            );
 
             warning(
               Boolean((helper.state as PlainSearchParameters).userToken),

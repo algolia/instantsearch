@@ -119,7 +119,7 @@ describe('hits', () => {
           },
           widgetType: 'ais.hits',
         },
-        null
+        expect.any(Function)
       );
     });
 
@@ -157,7 +157,7 @@ describe('hits', () => {
           },
           widgetType: 'ais.hits',
         },
-        null
+        expect.any(Function)
       );
     });
 
