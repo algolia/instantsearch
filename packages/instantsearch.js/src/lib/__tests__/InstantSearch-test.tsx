@@ -529,7 +529,13 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       expect(insightsClient).toHaveBeenCalledTimes(1);
       expect(insightsClient).toHaveBeenCalledWith(
         'clickedObjectIDsAfterSearch',
-        { eventName: 'Add to cart' }
+        { eventName: 'Add to cart' },
+        {
+          headers: {
+            'X-Algolia-API-Key': 'apiKey',
+            'X-Algolia-Application-Id': 'appId',
+          },
+        }
       );
     });
 

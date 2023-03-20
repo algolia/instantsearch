@@ -795,11 +795,19 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       });
 
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
-      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith({
-        index: 'my-index',
-        eventName: 'My Hits Viewed',
-        objectIDs: ['obj1'],
-      });
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith(
+        {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+        {
+          headers: {
+            'X-Algolia-Application-Id': 'myAppId',
+            'X-Algolia-API-Key': 'myApiKey',
+          },
+        }
+      );
     });
 
     it('calls onEvent when given', () => {
@@ -807,6 +815,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         createTestEnvironment();
 
       const onEvent = jest.fn();
+
       instantSearchInstance.use(
         createInsightsMiddleware({
           insightsClient,
@@ -833,7 +842,42 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             hello: 'world',
           },
         },
-        insightsClient
+        expect.any(Function)
+      );
+    });
+
+    it('sends events using onEvent', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      const onEvent = jest.fn((event, aa) => {
+        aa(event.insightsMethod, event.payload);
+      });
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          onEvent,
+        })
+      );
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'click',
+        payload: {
+          hello: 'world',
+        },
+      });
+
+      expect(insightsClient).toHaveBeenLastCalledWith(
+        'viewedObjectIDs',
+        { hello: 'world' },
+        {
+          headers: {
+            'X-Algolia-API-Key': 'myApiKey',
+            'X-Algolia-Application-Id': 'myAppId',
+          },
+        }
       );
     });
 
