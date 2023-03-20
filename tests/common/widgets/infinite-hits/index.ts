@@ -2,6 +2,7 @@ import type { InfiniteHitsWidget } from 'instantsearch.js/es/widgets/infinite-hi
 import type { Act, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createInsightsTests } from './insights';
 
 type WidgetParams = Parameters<InfiniteHitsWidget>[0];
 export type InfiniteHitsSetup = TestSetup<{
@@ -18,5 +19,6 @@ export function createInfiniteHitsTests(
 
   describe('InfiniteHits common tests', () => {
     createOptimisticUiTests(setup, act);
+    createInsightsTests(setup, act);
   });
 }

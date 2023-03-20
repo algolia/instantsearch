@@ -27,11 +27,10 @@ export type InsightsEvent = {
   attribute?: string;
 };
 
+type ProvidedInsightsClient = InsightsClient | null | undefined;
+
 export type InsightsProps<
-  TInsightsClient extends InsightsClient | null | undefined =
-    | InsightsClient
-    | null
-    | undefined
+  TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
 > = {
   insightsClient?: TInsightsClient;
   insightsInitParams?: {
@@ -53,7 +52,7 @@ const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${VER
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
 export function createInsightsMiddleware<
-  TInsightsClient extends null | InsightsClient
+  TInsightsClient extends ProvidedInsightsClient
 >(props: InsightsProps<TInsightsClient> = {}): InternalMiddleware {
   const {
     insightsClient: _insightsClient,
@@ -62,9 +61,9 @@ export function createInsightsMiddleware<
     $$internal = false,
   } = props;
 
-  let insightsClient: InsightsClient = _insightsClient || noop;
+  let insightsClient: InsightsClient & { shouldAddScript?: boolean } =
+    _insightsClient || noop;
 
-  let needsToLoadInsightsClient = false;
   if (_insightsClient !== null && !_insightsClient) {
     safelyRunOnBrowser(({ window }: { window: any }) => {
       const pointer = window.AlgoliaAnalyticsObject || 'aa';
@@ -85,7 +84,7 @@ export function createInsightsMiddleware<
         }
         window[pointer].version = VERSION;
         insightsClient = window[pointer];
-        needsToLoadInsightsClient = true;
+        insightsClient.shouldAddScript = true;
       }
     });
   }
@@ -167,7 +166,7 @@ export function createInsightsMiddleware<
       $$internal,
       onStateChange() {},
       subscribe() {
-        if (!needsToLoadInsightsClient) return;
+        if (!insightsClient.shouldAddScript) return;
 
         const errorMessage =
           '[insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init';
@@ -180,7 +179,9 @@ export function createInsightsMiddleware<
             instantSearchInstance.emit('error', new Error(errorMessage));
           };
           document.body.appendChild(script);
+          insightsClient.shouldAddScript = false;
         } catch (cause) {
+          insightsClient.shouldAddScript = false;
           instantSearchInstance.emit('error', new Error(errorMessage));
         }
       },
@@ -244,11 +245,27 @@ export function createInsightsMiddleware<
           immediate: true,
         });
 
+        // @ts-ignore
+        const insightsClientWithLocalCredentials = (method, payload) => {
+          return insightsClient(method, payload, {
+            headers: {
+              'X-Algolia-Application-Id': appId,
+              'X-Algolia-API-Key': apiKey,
+            },
+          });
+        };
+
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
-            onEvent(event, _insightsClient as TInsightsClient);
+            onEvent(
+              event,
+              insightsClientWithLocalCredentials as TInsightsClient
+            );
           } else if (event.insightsMethod) {
-            insightsClient(event.insightsMethod, event.payload);
+            insightsClientWithLocalCredentials(
+              event.insightsMethod,
+              event.payload
+            );
 
             warning(
               Boolean((helper.state as PlainSearchParameters).userToken),

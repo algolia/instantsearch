@@ -185,6 +185,49 @@ describe('insights', () => {
       expect((window as any).aa).toEqual(expect.any(Function));
     });
 
+    it('loads script, even when globals are set up by a different instance', () => {
+      const { instantSearchInstance: instantSearchInstance1 } =
+        createTestEnvironment({
+          started: false,
+        });
+      const { instantSearchInstance: instantSearchInstance2 } =
+        createTestEnvironment({
+          started: false,
+        });
+
+      expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
+
+      // middleware is added to first instance
+      instantSearchInstance1.use(createInsightsMiddleware());
+
+      // it sets up globals
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+
+      // middleware is set up on second instance
+      instantSearchInstance2.use(createInsightsMiddleware());
+
+      // globals stay as-is
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+
+      // only second instance starts
+      instantSearchInstance2.start();
+
+      // which finally loads search-insights
+      expect(document.body).toMatchInlineSnapshot(`
+        <body>
+          <script
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js"
+          />
+        </body>
+      `);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+    });
+
     it('notifies when the script fails to be added', () => {
       const { instantSearchInstance } = createTestEnvironment();
       const createElement = document.createElement;
@@ -795,11 +838,19 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       });
 
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
-      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith({
-        index: 'my-index',
-        eventName: 'My Hits Viewed',
-        objectIDs: ['obj1'],
-      });
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith(
+        {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+        {
+          headers: {
+            'X-Algolia-Application-Id': 'myAppId',
+            'X-Algolia-API-Key': 'myApiKey',
+          },
+        }
+      );
     });
 
     it('calls onEvent when given', () => {
@@ -807,6 +858,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         createTestEnvironment();
 
       const onEvent = jest.fn();
+
       instantSearchInstance.use(
         createInsightsMiddleware({
           insightsClient,
@@ -833,7 +885,42 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             hello: 'world',
           },
         },
-        insightsClient
+        expect.any(Function)
+      );
+    });
+
+    it('sends events using onEvent', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      const onEvent = jest.fn((event, aa) => {
+        aa(event.insightsMethod, event.payload);
+      });
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          onEvent,
+        })
+      );
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'click',
+        payload: {
+          hello: 'world',
+        },
+      });
+
+      expect(insightsClient).toHaveBeenLastCalledWith(
+        'viewedObjectIDs',
+        { hello: 'world' },
+        {
+          headers: {
+            'X-Algolia-API-Key': 'myApiKey',
+            'X-Algolia-Application-Id': 'myAppId',
+          },
+        }
       );
     });
 
