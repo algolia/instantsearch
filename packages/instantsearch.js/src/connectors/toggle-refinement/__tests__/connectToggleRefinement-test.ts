@@ -1368,6 +1368,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         expect(searchParams.disjunctiveFacets).toHaveLength(0);
       }).toWarnDev();
     });
+
+    test('warns when attribute is used for conjunctive faceting and does not change `SearchParameters`', () => {
+      warning.cache = {};
+      const helper = jsHelper(createSearchClient(), '', {
+        facets: ['brand'],
+      });
+      const widget = connectToggleRefinement(jest.fn())({ attribute: 'brand' });
+
+      expect(() => {
+        const searchParams = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+        expect(searchParams.disjunctiveFacets).toHaveLength(0);
+      }).toWarnDev();
+    });
   });
 
   describe('insights', () => {

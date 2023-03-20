@@ -426,10 +426,13 @@ const connectToggleRefinement: ToggleRefinementConnector =
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
-          if (searchParameters.isHierarchicalFacet(attribute)) {
+          if (
+            searchParameters.isHierarchicalFacet(attribute) ||
+            searchParameters.isConjunctiveFacet(attribute)
+          ) {
             warning(
               false,
-              `ToggleRefinement: Attribute "${attribute}" is already used by another widget applying hierarchical faceting.
+              `ToggleRefinement: Attribute "${attribute}" is already used by another widget applying hierarchical or conjunctive faceting.
 As this is not supported, please make sure to remove this other widget or this ToggleRefinement widget will not work at all.`
             );
 
