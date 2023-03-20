@@ -61,7 +61,7 @@ export function createInsightsMiddleware<
     $$internal = false,
   } = props;
 
-  let insightsClient: InsightsClient & { needsToLoadInsightsClient?: boolean } =
+  let insightsClient: InsightsClient & { shouldAddScript?: boolean } =
     _insightsClient || noop;
 
   if (_insightsClient !== null && !_insightsClient) {
@@ -84,7 +84,7 @@ export function createInsightsMiddleware<
         }
 
         insightsClient = window[pointer];
-        insightsClient.needsToLoadInsightsClient = true;
+        insightsClient.shouldAddScript = true;
       }
     });
   }
