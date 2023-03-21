@@ -189,8 +189,6 @@ export function createInsightsMiddleware<
         }
       },
       started() {
-        if (!canInit) return;
-
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
         helper = instantSearchInstance.helper!;

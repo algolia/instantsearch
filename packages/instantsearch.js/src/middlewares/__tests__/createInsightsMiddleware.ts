@@ -177,7 +177,7 @@ describe('insights', () => {
       expect(document.body).toMatchInlineSnapshot(`
         <body>
           <script
-            src="https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js"
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
           />
         </body>
       `);
@@ -220,7 +220,7 @@ describe('insights', () => {
       expect(document.body).toMatchInlineSnapshot(`
         <body>
           <script
-            src="https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js"
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
           />
         </body>
       `);
@@ -276,23 +276,9 @@ describe('insights', () => {
         apiKey: 'myApiKey',
         appId: 'myAppId',
         region: 'de',
+        partial: true,
         useCookie: false,
       });
-    });
-
-    it('throws when search client does not have credentials', () => {
-      const { insightsClient } = createInsights();
-      const instantSearchInstance = createInstantSearch({
-        // @ts-expect-error fake client
-        client: { search: () => {} },
-      });
-      expect(() =>
-        createInsightsMiddleware({
-          insightsClient,
-        })({ instantSearchInstance })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"apiKey is missing, please provide it so we can authenticate the application"`
-      );
     });
 
     it('warns when search client does not have credentials', () => {

@@ -6,6 +6,14 @@ import {
 
 import type { InsightsClient } from 'instantsearch.js';
 
+/**
+ * Tests that rely on this mock interface have side effects caused by
+ * the import of search-insights. The following code deletes those side effects.
+ */
+try {
+  delete window.AlgoliaAnalyticsObject;
+} catch (error) {} // eslint-disable-line no-empty
+
 export function createInsights() {
   const analytics = mockMethods(
     new AlgoliaAnalytics({
