@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.53.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.52.0...instantsearch.js@4.53.0) (2023-03-21)
+
+
+### Bug Fixes
+
+* **searchbox:** add aria-hidden to svg icons ([#5547](https://github.com/algolia/instantsearch.js/issues/5547)) ([50344e3](https://github.com/algolia/instantsearch.js/commit/50344e3b14c22c886415c0e7d799aca778dc39ab)), closes [#5546](https://github.com/algolia/instantsearch.js/issues/5546)
+* **svg:** don't style width/height in attributes with unit ([#5550](https://github.com/algolia/instantsearch.js/issues/5550)) ([31b85a6](https://github.com/algolia/instantsearch.js/commit/31b85a6ad56993455adb201f88ab1d1ae2d96683))
+
+
+### Features
+
+* **current-refinements:** provide indexId of refinements in transformItems ([#5546](https://github.com/algolia/instantsearch.js/issues/5546)) ([89781db](https://github.com/algolia/instantsearch.js/commit/89781db6cb1d2b8ebbc116e9bcd8a10f646e7baf))
+
+
+
+
+
 # [4.52.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.51.1...instantsearch.js@4.52.0) (2023-03-07)
 
 
