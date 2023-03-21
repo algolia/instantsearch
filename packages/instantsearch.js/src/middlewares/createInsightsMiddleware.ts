@@ -238,6 +238,17 @@ export function createInsightsMiddleware<
         };
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
+          // @TODO: find out the exact key of the result to determine if analytics is disabled.
+          // if ($$internal && Boolean(helper.lastResults?.renderingContent?.analytics) === false) {
+          if ($$internal && !helper.lastResults?.queryID) {
+            warning(
+              false,
+              'Cannot send event to Algolia Insights because it is disabled through the dashboard.'
+            );
+
+            return;
+          }
+
           if (onEvent) {
             onEvent(
               event,
