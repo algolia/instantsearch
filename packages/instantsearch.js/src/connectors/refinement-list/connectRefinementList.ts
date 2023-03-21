@@ -501,7 +501,7 @@ As this is not supported, please make sure to remove this other widget or this R
           ) {
             warning(
               false,
-              `RefinementList: Attribute "${attribute}" is used by two different refinement lists with different operators.
+              `RefinementList: Attribute "${attribute}" is used by another refinement list with a different operator.
 As this is not supported, please make sure to only use this attribute with one of the two operators.`
             );
 

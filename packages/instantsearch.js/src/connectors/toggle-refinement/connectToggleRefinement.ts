@@ -432,7 +432,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
           ) {
             warning(
               false,
-              `ToggleRefinement: Attribute "${attribute}" is already used by another widget applying hierarchical or conjunctive faceting.
+              `ToggleRefinement: Attribute "${attribute}" is already used by another widget of a different type.
 As this is not supported, please make sure to remove this other widget or this ToggleRefinement widget will not work at all.`
             );
 
