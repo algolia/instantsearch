@@ -44,6 +44,16 @@ export type InsightsProps<
    * @internal indicator for the default insights middleware
    */
   $$internal?: boolean;
+  /**
+   * If this is true, don't send events, unless the search response contains:
+   *
+   * {
+   *   "renderingContent": {
+   *     "analytics": true
+   *  }
+   * }
+   */
+  verifyEventPermission?: boolean;
 };
 
 const ALGOLIA_INSIGHTS_SRC =
@@ -59,6 +69,7 @@ export function createInsightsMiddleware<
     insightsInitParams,
     onEvent,
     $$internal = false,
+    verifyEventPermission = false,
   } = props;
 
   let insightsClient: InsightsClient & { shouldAddScript?: boolean } =
@@ -239,8 +250,15 @@ export function createInsightsMiddleware<
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           // @TODO: find out the exact key of the result to determine if analytics is disabled.
-          // if ($$internal && Boolean(helper.lastResults?.renderingContent?.analytics) === false) {
-          if ($$internal && !helper.lastResults?.queryID) {
+          if (
+            verifyEventPermission &&
+            !(
+              helper.lastResults?.renderingContent as
+                | Record<string, unknown>
+                | undefined
+            )?.analytics
+          ) {
+            // @TODO: does this need to be a warning?
             warning(
               false,
               'Cannot send event to Algolia Insights because it is disabled through the dashboard.'
