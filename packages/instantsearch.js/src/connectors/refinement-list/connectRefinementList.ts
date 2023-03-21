@@ -372,6 +372,8 @@ const connectRefinementList: RefinementListConnector =
           let items: RefinementListItem[] = [];
           let facetValues: SearchResults.FacetValue[] | FacetHit[] = [];
 
+          console.log(results, state, helper, 'in render state');
+
           if (!sendEvent || !triggerRefine || !searchForFacetValues) {
             sendEvent = createSendEventForFacet({
               instantSearchInstance,
@@ -404,25 +406,25 @@ const connectRefinementList: RefinementListConnector =
             });
             facetValues = values && Array.isArray(values) ? values : [];
 
-            facetValues = facetValues.map((value) => {
-              if (
-                results.query === helper.state.query &&
-                helper.state.extensions?.queryCategorization
-                  ?.enableAutoFiltering !== false &&
-                helper.lastResults?.automaticFilters &&
-                find<string>(
-                  helper.lastResults?.automaticFilters,
-                  (filter) => filter.split(':')[0] === attribute
-                )?.split(':')[1] === value.escapedValue
-              ) {
-                helper.addDisjunctiveFacetRefinement(
-                  attribute,
-                  value.escapedValue
-                );
-                return { ...value, isRefined: true };
-              }
-              return value;
-            });
+            // facetValues = facetValues.map((value) => {
+            //   if (
+            //     results.query === helper.state.query &&
+            //     helper.state.extensions?.queryCategorization
+            //       ?.enableAutoFiltering !== false &&
+            //     helper.lastResults?.automaticFilters &&
+            //     find<string>(
+            //       helper.lastResults?.automaticFilters,
+            //       (filter) => filter.split(':')[0] === attribute
+            //     )?.split(':')[1] === value.escapedValue
+            //   ) {
+            //     helper.addDisjunctiveFacetRefinement(
+            //       attribute,
+            //       value.escapedValue
+            //     );
+            //     return { ...value, isRefined: true };
+            //   }
+            //   return value;
+            // });
             items = transformItems(
               facetValues.slice(0, getLimit()).map(formatItems),
               { results }

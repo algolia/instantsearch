@@ -378,21 +378,28 @@ function SearchResults(state, results, options) {
    * @instance
    */
 
-  /**
-   * AFB
-   */
-  this.automaticFilters =
-    this._rawResults[0].extensions &&
-    this._rawResults[0].extensions.queryCategorization &&
-    this._rawResults[0].extensions.queryCategorization.autofiltering &&
-    this._rawResults[0].extensions.queryCategorization.autofiltering
-      .facetFilters;
+  // /**
+  //  * AFB
+  //  */
+  // this.automaticFilters =
+  //   this._rawResults[0].extensions &&
+  //   this._rawResults[0].extensions.queryCategorization &&
+  //   this._rawResults[0].extensions.queryCategorization.autofiltering &&
+  //   this._rawResults[0].extensions.queryCategorization.autofiltering
+  //     .facetFilters;
 
-  console.log('in helper results', this.automaticFilters);
+  // console.log('in helper results', this.automaticFilters);
 
-  if (this.automaticFilters && this.automaticFilters.length) {
-    state.automaticFilters = this.automaticFilters;
-  }
+  // if (this.automaticFilters && this.automaticFilters.length) {
+  //   state.automaticFilters = this.automaticFilters;
+  //   this.automaticFilters.forEach((filter) => {
+  //     const [name, value] = filter.split(':');
+  //     console.log(name, value);
+  //     state = state.addDisjunctiveFacetRefinement(name, value);
+  //   });
+  // }
+
+  console.log(state, 'after');
 
   /**
    * sum of the processing time of all the queries
@@ -426,9 +433,16 @@ function SearchResults(state, results, options) {
 
   var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
 
+  console.log('disjunctive', disjunctiveFacets);
+
   var facetsIndices = getIndices(state.facets);
   var disjunctiveFacetsIndices = getIndices(state.disjunctiveFacets);
+
+  // if disjunctive facet from afb => start with 1 => how do you differentiate??
+  // else start with 2 ?
+  console.log(state, disjunctiveFacets, 'before next disj var');
   var nextDisjunctiveResult = 1;
+  // state.automaticFilters.length && disjunctiveFacets.length === 2 ? 1 : 2;
 
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets information from the first, general, response.
@@ -489,12 +503,16 @@ function SearchResults(state, results, options) {
     }
   });
 
+  console.log(disjunctiveFacets, 'dis junc');
+
   // Make sure we do not keep holes within the hierarchical facets
   this.hierarchicalFacets = compact(this.hierarchicalFacets);
 
   // aggregate the refined disjunctive facets
   disjunctiveFacets.forEach(function (disjunctiveFacet) {
+    console.log(disjunctiveFacet);
     var result = results[nextDisjunctiveResult];
+    console.log(result, 'result');
     var facets = result && result.facets ? result.facets : {};
     var hierarchicalFacet = state.getHierarchicalFacetByName(disjunctiveFacet);
 
@@ -531,6 +549,8 @@ function SearchResults(state, results, options) {
         var dataFromMainRequest =
           (mainSubResponse.facets && mainSubResponse.facets[dfacet]) || {};
 
+        console.log({ dataFromMainRequest }, 'datafrommain');
+
         self.disjunctiveFacets[position] = {
           name: dfacet,
           data: defaultsPure({}, facetResults, dataFromMainRequest),
@@ -561,6 +581,13 @@ function SearchResults(state, results, options) {
     });
     nextDisjunctiveResult++;
   });
+
+  console.log(state, 'after after');
+
+  // state.addHierarchicalFacetRefinement(
+  //   'hierarchicalCategories.lvl0',
+  //   'Appliances'
+  // );
 
   // if we have some parent level values for hierarchical facets, merge them
   state.getRefinedHierarchicalFacets().forEach(function (refinedFacet) {
@@ -658,6 +685,8 @@ function SearchResults(state, results, options) {
   this.disjunctiveFacets = compact(this.disjunctiveFacets);
 
   this._state = state;
+  console.log(this._state);
+  console.log(this, 'final search results function');
 }
 
 /**
@@ -905,6 +934,7 @@ function getFacetOrdering(results, attribute) {
  */
 SearchResults.prototype.getFacetValues = function (attribute, opts) {
   var facetValues = extractNormalizedFacetValues(this, attribute);
+  console.log(this, facetValues, 'facetvalues');
   if (!facetValues) {
     return undefined;
   }

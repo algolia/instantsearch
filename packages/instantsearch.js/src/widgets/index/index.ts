@@ -255,7 +255,19 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // This means user-driven UI changes (e.g., checked checkbox) are reflected
       // immediately instead of waiting for Algolia to respond, regardless of
       // the status of the network request.
-      derivedHelper.lastResults._state = helper!.state;
+
+      if (
+        helper!.state.automaticFilters ===
+        derivedHelper.lastResults._state.automaticFilters
+      ) {
+        derivedHelper.lastResults._state = helper!.state;
+      } else {
+        // helper!.state = {
+        //   ...derivedHelper.lastResults._state,
+        //   automaticFilters: helper?.state.automaticFilters,
+        // };
+        helper!.state = derivedHelper.lastResults._state;
+      }
 
       return derivedHelper.lastResults;
     },

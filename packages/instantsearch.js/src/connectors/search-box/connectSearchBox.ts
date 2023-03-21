@@ -145,8 +145,28 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
                 if (helper.state.isDisjunctiveFacet(name)) {
                   helper.removeDisjunctiveFacetRefinement(name, value);
                 }
-                if (helper.state.isHierarchicalFacet(name)) {
-                  helper.removeHierarchicalFacetRefinement(name);
+
+                console.log(
+                  helper.state.automaticFilters[0].split(':')[0],
+                  value,
+                  helper.state.isHierarchicalFacetRefined(
+                    helper.state.automaticFilters[0].split(':')[0],
+                    value
+                  )
+                );
+
+                if (
+                  helper.state.isHierarchicalFacet(
+                    helper.state.automaticFilters[0].split(':')[0]
+                  ) &&
+                  helper.state.isHierarchicalFacetRefined(
+                    helper.state.automaticFilters[0].split(':')[0],
+                    value
+                  )
+                ) {
+                  helper.removeHierarchicalFacetRefinement(
+                    helper.state.automaticFilters[0].split(':')[0]
+                  );
                 }
               });
 

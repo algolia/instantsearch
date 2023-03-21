@@ -651,6 +651,19 @@ See ${createDocumentationLink({
       }
     }
 
+    // console.log(this.helper?.lastResults?._state.disjunctiveFacetsRefinements);
+    // console.log(
+    //   {
+    //     instantSearchInstance: this as unknown as InstantSearch<
+    //       UiState,
+    //       UiState
+    //     >,
+    //   }.instantSearchInstance.helper?.lastResults?._state
+    //     .disjunctiveFacetsRefinements
+    // );
+
+    // debugger;
+
     this.mainIndex.render({
       instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
     });

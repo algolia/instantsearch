@@ -341,7 +341,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             _refine = function (facetValue) {
               sendEvent('click', facetValue);
 
-              if (helper.state.automaticFilters) {
+              if (helper.state.automaticFilters.length) {
                 helper.setQueryParameter('extensions', {
                   queryCategorization: { enableAutoFiltering: false },
                 });
@@ -354,54 +354,54 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           }
 
           if (results) {
-            const hierarchicalAutoFilters =
-              helper.lastResults?.automaticFilters?.reduce(
-                (filters: string[], filter: string) => {
-                  console.log(
-                    helper.state.isHierarchicalFacetAttribute(
-                      filter.split(':')[0]
-                    )
-                  );
-                  if (
-                    helper.state.isHierarchicalFacetAttribute(
-                      filter.split(':')[0]
-                    )
-                  ) {
-                    filters.push(filter);
-                  }
-                  return filters;
-                },
-                []
-              );
-            console.log(hierarchicalAutoFilters, 'het');
+            // const hierarchicalAutoFilters =
+            //   helper.lastResults?.automaticFilters?.reduce(
+            //     (filters: string[], filter: string) => {
+            //       console.log(
+            //         helper.state.isHierarchicalFacetAttribute(
+            //           filter.split(':')[0]
+            //         )
+            //       );
+            //       if (
+            //         helper.state.isHierarchicalFacetAttribute(
+            //           filter.split(':')[0]
+            //         )
+            //       ) {
+            //         filters.push(filter);
+            //       }
+            //       return filters;
+            //     },
+            //     []
+            //   );
+            // console.log(hierarchicalAutoFilters, 'het');
 
-            if (
-              results.query === helper.state.query &&
-              helper.state.extensions?.queryCategorization
-                ?.enableAutoFiltering !== false &&
-              hierarchicalAutoFilters?.length
-            ) {
-              const [, value] =
-                hierarchicalAutoFilters[
-                  hierarchicalAutoFilters.length - 1
-                ].split(':');
-              if (
-                helper.state.isHierarchicalFacetRefined(hierarchicalFacetName)
-              ) {
-                helper.removeHierarchicalFacetRefinement(hierarchicalFacetName);
-              }
-              if (
-                !helper.state.isHierarchicalFacetRefined(
-                  hierarchicalFacetName,
-                  value
-                )
-              ) {
-                helper.addHierarchicalFacetRefinement(
-                  hierarchicalFacetName,
-                  value
-                );
-              }
-            }
+            // if (
+            //   results.query === helper.state.query &&
+            //   helper.state.extensions?.queryCategorization
+            //     ?.enableAutoFiltering !== false &&
+            //   hierarchicalAutoFilters?.length
+            // ) {
+            //   const [, value] =
+            //     hierarchicalAutoFilters[
+            //       hierarchicalAutoFilters.length - 1
+            //     ].split(':');
+            //   if (
+            //     helper.state.isHierarchicalFacetRefined(hierarchicalFacetName)
+            //   ) {
+            //     helper.removeHierarchicalFacetRefinement(hierarchicalFacetName);
+            //   }
+            //   if (
+            //     !helper.state.isHierarchicalFacetRefined(
+            //       hierarchicalFacetName,
+            //       value
+            //     )
+            //   ) {
+            //     helper.addHierarchicalFacetRefinement(
+            //       hierarchicalFacetName,
+            //       value
+            //     );
+            //   }
+            // }
             const facetValues = results.getFacetValues(hierarchicalFacetName, {
               sortBy,
               facetOrdering: sortBy === DEFAULT_SORT,
@@ -411,51 +411,51 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
                 ? facetValues.data
                 : [];
 
-            let updatedItems = [];
-            if (hierarchicalAutoFilters?.length) {
-              updatedItems = facetItems.map((item) => {
-                if (item.name === hierarchicalAutoFilters[0].split(':')[1]) {
-                  item.isRefined = true;
+            // let updatedItems = [];
+            // if (hierarchicalAutoFilters?.length) {
+            //   updatedItems = facetItems.map((item) => {
+            //     if (item.name === hierarchicalAutoFilters[0].split(':')[1]) {
+            //       item.isRefined = true;
 
-                  if (hierarchicalAutoFilters[1]) {
-                    item.data = [
-                      {
-                        name: hierarchicalAutoFilters[1]
-                          .split(':')[1]
-                          .split(' > ')[1],
-                        path: hierarchicalAutoFilters[1].split(':')[1],
-                        escapedValue: hierarchicalAutoFilters[1].split(':')[1],
-                        exhaustive: true,
-                        count: item.count,
-                        data: null,
-                        isRefined: false,
-                      },
-                    ];
+            //       if (hierarchicalAutoFilters[1]) {
+            //         item.data = [
+            //           {
+            //             name: hierarchicalAutoFilters[1]
+            //               .split(':')[1]
+            //               .split(' > ')[1],
+            //             path: hierarchicalAutoFilters[1].split(':')[1],
+            //             escapedValue: hierarchicalAutoFilters[1].split(':')[1],
+            //             exhaustive: true,
+            //             count: item.count,
+            //             data: null,
+            //             isRefined: false,
+            //           },
+            //         ];
 
-                    if (hierarchicalAutoFilters[2]) {
-                      item.data[0].isRefined = true;
-                      item.data[0].data = [
-                        {
-                          name: hierarchicalAutoFilters[2]
-                            .split(':')[1]
-                            .split(' > ')[2],
-                          path: hierarchicalAutoFilters[2].split(':')[1],
-                          escapedValue:
-                            hierarchicalAutoFilters[2].split(':')[1],
-                          exhaustive: true,
-                          count: item.count,
-                          data: null,
-                          isRefined: true,
-                        },
-                      ];
-                    }
-                  }
-                }
-                return item;
-              });
-            }
+            //         if (hierarchicalAutoFilters[2]) {
+            //           item.data[0].isRefined = true;
+            //           item.data[0].data = [
+            //             {
+            //               name: hierarchicalAutoFilters[2]
+            //                 .split(':')[1]
+            //                 .split(' > ')[2],
+            //               path: hierarchicalAutoFilters[2].split(':')[1],
+            //               escapedValue:
+            //                 hierarchicalAutoFilters[2].split(':')[1],
+            //               exhaustive: true,
+            //               count: item.count,
+            //               data: null,
+            //               isRefined: true,
+            //             },
+            //           ];
+            //         }
+            //       }
+            //     }
+            //     return item;
+            //   });
+            // }
 
-            console.log(updatedItems, helper);
+            // console.log(updatedItems, helper);
 
             // If the limit is the max number of facet retrieved it is impossible to know
             // if the facets are exhaustive. The only moment we are sure it is exhaustive
@@ -473,7 +473,8 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
 
             items = transformItems(
               _prepareFacetValues(
-                updatedItems.length ? updatedItems : facetItems
+                // updatedItems.length ? updatedItems : facetItems
+                facetItems
               ),
               {
                 results,
