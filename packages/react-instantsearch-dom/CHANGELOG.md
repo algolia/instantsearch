@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.39.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-dom@6.39.0...react-instantsearch-dom@6.39.1) (2023-03-21)
+
+
+### Bug Fixes
+
+* **searchbox:** add aria-hidden to svg icons ([#5547](https://github.com/algolia/instantsearch.js/issues/5547)) ([50344e3](https://github.com/algolia/instantsearch.js/commit/50344e3b14c22c886415c0e7d799aca778dc39ab)), closes [#5546](https://github.com/algolia/instantsearch.js/issues/5546)
+
+
+
+
+
 # [6.39.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-dom@6.38.3...react-instantsearch-dom@6.39.0) (2023-01-26)
 
 

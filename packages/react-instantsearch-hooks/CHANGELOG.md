@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.42.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.41.0...react-instantsearch-hooks@6.42.0) (2023-03-21)
+
+
+### Features
+
+* **current-refinements:** provide indexId of refinements in transformItems ([#5546](https://github.com/algolia/instantsearch.js/issues/5546)) ([89781db](https://github.com/algolia/instantsearch.js/commit/89781db6cb1d2b8ebbc116e9bcd8a10f646e7baf))
+
+
+
+
+
 # [6.41.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.40.1...react-instantsearch-hooks@6.41.0) (2023-03-07)
 
 
