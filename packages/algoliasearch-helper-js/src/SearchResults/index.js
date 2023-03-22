@@ -441,8 +441,10 @@ function SearchResults(state, results, options) {
   // if disjunctive facet from afb => start with 1 => how do you differentiate??
   // else start with 2 ?
   console.log(state, disjunctiveFacets, 'before next disj var');
-  var nextDisjunctiveResult = 1;
-  // state.automaticFilters.length && disjunctiveFacets.length === 2 ? 1 : 2;
+  var nextDisjunctiveResult =
+    state.automaticFilters.length && !state.disjunctiveFacetsRefinements.length
+      ? 1
+      : 2;
 
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets information from the first, general, response.

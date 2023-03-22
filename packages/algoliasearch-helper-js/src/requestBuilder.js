@@ -30,23 +30,22 @@ var requestBuilder = {
     });
 
     // one query without afb
-    // queries.push({
-    //   indexName: index,
-    //   params: sortObject(
-    //     merge({}, requestBuilder._getHitsSearchParams(state), {
-    //       // facets: 'brand',
-    //       // facets: [
-    //       //   'hierarchicalCategories.lvl0',
-    //       //   'hierarchicalCategories.lvl1',
-    //       //   'hierarchicalCategories.lvl2',
-    //       //   'hierarchicalCategories.lvl3'
-    //       // ],
-    //       facets: ['brand', 'type'],
-    //       maxValuesPerFacet: 20,
-    //       extensions: { queryCategorization: { enableAutoFiltering: false } }
-    //     })
-    //   )
-    // });
+    queries.push({
+      indexName: index,
+      params: sortObject(
+        merge({}, requestBuilder._getHitsSearchParams(state), {
+          // facets: 'brand',
+          facets: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+            'hierarchicalCategories.lvl3'
+          ],
+          // facets: ['brand', 'type'],
+          extensions: { queryCategorization: { enableAutoFiltering: false } }
+        })
+      )
+    });
 
     // One for each disjunctive facets
     state.getRefinedDisjunctiveFacets().forEach(function (refinedFacet) {
