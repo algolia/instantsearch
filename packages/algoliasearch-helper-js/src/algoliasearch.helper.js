@@ -1423,7 +1423,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
         state.automaticFilters.forEach(function (filter) {
           const facet = filter.split(':');
           if (state.isDisjunctiveFacet(facet[0])) {
-            state = state.addDisjunctiveFacetRefinement(facet[0], facet);
+            state = state.addDisjunctiveFacetRefinement(facet[0], facet[1]);
           }
         });
       }

@@ -389,10 +389,10 @@ var requestBuilder = {
 
         // if no refinement, ask for root level
         if (!hierarchicalRefinement) {
-          // hierarchicalFacet.attributes.forEach((attribute) => {
-          //   allAttributes.push(attribute);
-          // });
-          allAttributes.push(hierarchicalFacet.attributes[0]);
+          hierarchicalFacet.attributes.forEach(function (attribute) {
+            allAttributes.push(attribute);
+          });
+          // allAttributes.push(hierarchicalFacet.attributes[0]);
           return allAttributes;
         }
 
