@@ -13,6 +13,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import { warning } from '../../../lib/utils';
 import connectToggleRefinement from '../connectToggleRefinement';
 
 import type { ToggleRefinementRenderState } from '../connectToggleRefinement';
@@ -1351,6 +1352,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       expect(actual.disjunctiveFacetsRefinements).toEqual({
         freeShipping: ['true'],
       });
+    });
+
+    test('warns when attribute is used for hierarchical faceting and does not change `SearchParameters`', () => {
+      warning.cache = {};
+      const helper = jsHelper(createSearchClient(), '', {
+        hierarchicalFacets: [{ name: 'brand', attributes: ['brand'] }],
+      });
+      const widget = connectToggleRefinement(jest.fn())({ attribute: 'brand' });
+
+      expect(() => {
+        const searchParams = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+        expect(searchParams.disjunctiveFacets).toHaveLength(0);
+      }).toWarnDev();
+    });
+
+    test('warns when attribute is used for conjunctive faceting and does not change `SearchParameters`', () => {
+      warning.cache = {};
+      const helper = jsHelper(createSearchClient(), '', {
+        facets: ['brand'],
+      });
+      const widget = connectToggleRefinement(jest.fn())({ attribute: 'brand' });
+
+      expect(() => {
+        const searchParams = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+        expect(searchParams.disjunctiveFacets).toHaveLength(0);
+      }).toWarnDev();
     });
   });
 

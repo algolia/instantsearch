@@ -5,6 +5,7 @@ import {
   find,
   noop,
   toArray,
+  warning,
 } from '../../lib/utils';
 
 import type {
@@ -425,6 +426,19 @@ const connectToggleRefinement: ToggleRefinementConnector =
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
+          if (
+            searchParameters.isHierarchicalFacet(attribute) ||
+            searchParameters.isConjunctiveFacet(attribute)
+          ) {
+            warning(
+              false,
+              `ToggleRefinement: Attribute "${attribute}" is already used by another widget of a different type.
+As this is not supported, please make sure to remove this other widget or this ToggleRefinement widget will not work at all.`
+            );
+
+            return searchParameters;
+          }
+
           let withFacetConfiguration = searchParameters
             .clearRefinements(attribute)
             .addDisjunctiveFacet(attribute);
