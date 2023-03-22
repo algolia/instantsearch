@@ -872,7 +872,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         eventType: 'click',
         payload: {
           hello: 'world',
-        },
+        } as any,
       });
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
       expect(onEvent).toHaveBeenCalledTimes(1);
@@ -909,7 +909,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         eventType: 'click',
         payload: {
           hello: 'world',
-        },
+        } as any,
       });
 
       expect(insightsClient).toHaveBeenLastCalledWith(
@@ -940,7 +940,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           eventType: 'click',
           payload: {
             hello: 'world',
-          },
+          } as any,
         });
       }).toWarnDev();
       expect(insightsClient).toHaveBeenCalledTimes(numberOfCalls); // still the same

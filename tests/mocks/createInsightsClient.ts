@@ -6,17 +6,32 @@ import {
 
 import type { InsightsClient } from 'instantsearch.js';
 
-export function createInsights() {
+export function createInsights<TVersion extends string | undefined = '2.4.0'>({
+  forceVersion = '2.4.0',
+}: {
+  forceVersion?: TVersion;
+} = {}) {
   const analytics = mockMethods(
     new AlgoliaAnalytics({
       requestFn: jest.fn(),
     })
   );
-  const insightsClient = jest.fn(getFunctionalInterface(analytics));
+
+  if (forceVersion) {
+    return {
+      analytics,
+      insightsClient: Object.assign(
+        jest.fn(getFunctionalInterface(analytics)),
+        {
+          version: forceVersion,
+        }
+      ),
+    };
+  }
 
   return {
     analytics,
-    insightsClient,
+    insightsClient: jest.fn(getFunctionalInterface(analytics)),
   };
 }
 
