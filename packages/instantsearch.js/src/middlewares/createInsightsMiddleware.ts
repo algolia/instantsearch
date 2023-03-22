@@ -9,36 +9,20 @@ import {
 
 import type {
   InsightsClient,
+  InsightsEvent as _InsightsEvent,
+  InsightsMethod,
   InsightsMethodMap,
   InternalMiddleware,
-  Hit,
 } from '../types';
 import type {
   AlgoliaSearchHelper,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 
-// not every method is actually allowed to be called with the insights middleware
-export type InsightsMethod =
-  | 'clickedObjectIDsAfterSearch'
-  | 'clickedObjectIDs'
-  | 'clickedFilters'
-  | 'convertedObjectIDsAfterSearch'
-  | 'convertedObjectIDs'
-  | 'convertedFilters'
-  | 'viewedObjectIDs'
-  | 'viewedFilters';
-
-export type InsightsEvent<TMethod extends InsightsMethod = InsightsMethod> = {
-  insightsMethod?: TMethod;
-  payload: InsightsMethodMap[TMethod][0];
-  widgetType: string;
-  eventType: string; // 'view' | 'click' | 'conversion', but we're not restricting.
-  hits?: Hit[];
-  attribute?: string;
-};
-
 type ProvidedInsightsClient = InsightsClient | null | undefined;
+
+export type InsightsEvent<TMethod extends InsightsMethod = InsightsMethod> =
+  _InsightsEvent<TMethod>;
 
 export type InsightsProps<
   TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
