@@ -228,13 +228,20 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
-      insights = true,
+      insights,
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
       insightsClient = null,
       onStateChange = null,
     } = options;
+
+    if (insights === undefined) {
+      console.log(
+        "insights argument isn't passed to instantsearch, so we will attempt to load the middleware if the results request it."
+      );
+      (this as any)._shouldVerifyInsights = true;
+    }
 
     if (indexName === null) {
       throw new Error(withUsage('The `indexName` option is required.'));
@@ -620,6 +627,20 @@ See ${createDocumentationLink({
     // Keep the previous reference for legacy purpose, some pattern use
     // the direct Helper access `search.helper` (e.g multi-index).
     this.helper = this.mainIndex.getHelper();
+
+    // Search results are only notified to the derived helper of the main index
+    // because the main helper is not used to search. This listener is used to
+    // decide whether we start insights middleware automatically.
+    if (
+      (this as any)._shouldVerifyInsights &&
+      this.middleware.every((m) => m.instance.$$type !== 'ais.insights')
+    ) {
+      this.mainHelper.derivedHelpers[0].once('result', ({ results }) => {
+        if (results.renderingContent?.analytics) {
+          this.use(createInsightsMiddleware({ $$internal: true }));
+        }
+      });
+    }
 
     // track we started the search if we add more widgets,
     // to init them directly after add
