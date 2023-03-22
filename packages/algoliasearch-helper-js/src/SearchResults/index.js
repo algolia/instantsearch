@@ -549,7 +549,7 @@ function SearchResults(state, results, options) {
         var dataFromMainRequest =
           (mainSubResponse.facets && mainSubResponse.facets[dfacet]) || {};
 
-        console.log({ dataFromMainRequest }, 'datafrommain');
+        // console.log({ dataFromMainRequest }, 'datafrommain');
 
         self.disjunctiveFacets[position] = {
           name: dfacet,

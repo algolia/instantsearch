@@ -1420,10 +1420,10 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
           )[1]
         );
       } else {
-        state.automaticFilters.forEach((filter) => {
-          const [name, value] = filter.split(':');
-          if (state.isDisjunctiveFacet(name)) {
-            state = state.addDisjunctiveFacetRefinement(name, value);
+        state.automaticFilters.forEach(function (filter) {
+          const facet = filter.split(':');
+          if (state.isDisjunctiveFacet(facet[0])) {
+            state = state.addDisjunctiveFacetRefinement(facet[0], facet);
           }
         });
       }
