@@ -119,7 +119,7 @@ export function _buildEventPayloadsForHits({
           widgetType,
           eventType,
           payload: {
-            eventName,
+            eventName: eventName || 'Hit Clicked',
             index,
             queryID,
             objectIDs: objectIDsByChunk[i],
@@ -138,7 +138,7 @@ export function _buildEventPayloadsForHits({
           widgetType,
           eventType,
           payload: {
-            eventName,
+            eventName: eventName || 'Hit Converted',
             index,
             queryID,
             objectIDs: objectIDsByChunk[i],

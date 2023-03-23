@@ -493,7 +493,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     });
 
     test('insights: options passes options to middleware', () => {
-      const insightsClient = jest.fn();
+      const insightsClient = Object.assign(jest.fn(), { version: '2.4.0' });
       const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
@@ -521,7 +521,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
       search.sendEventToInsights({
         insightsMethod: 'clickedObjectIDsAfterSearch',
-        payload: { eventName: 'Add to cart' },
+        payload: { eventName: 'Add to cart' } as any,
         eventType: 'click',
         widgetType: 'ais.hits',
       });

@@ -22,7 +22,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = jest.fn();
+      window.aa = Object.assign(jest.fn(), { version: '2.4.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -133,7 +133,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 25;
-      window.aa = jest.fn();
+      window.aa = Object.assign(jest.fn(), { version: '2.4.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -264,7 +264,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = jest.fn();
+      window.aa = Object.assign(jest.fn(), { version: '2.4.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -344,7 +344,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = jest.fn();
+      window.aa = Object.assign(jest.fn(), { version: '2.4.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -428,7 +428,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = jest.fn();
+      window.aa = Object.assign(jest.fn(), { version: '2.4.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -522,7 +522,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = jest.fn();
+      window.aa = Object.assign(jest.fn(), { version: '2.4.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -602,7 +602,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = jest.fn();
+      window.aa = Object.assign(jest.fn(), { version: '2.4.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
