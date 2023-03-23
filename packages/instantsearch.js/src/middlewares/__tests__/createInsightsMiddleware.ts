@@ -177,7 +177,7 @@ describe('insights', () => {
       expect(document.body).toMatchInlineSnapshot(`
         <body>
           <script
-            src="https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js"
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
           />
         </body>
       `);
@@ -220,7 +220,7 @@ describe('insights', () => {
       expect(document.body).toMatchInlineSnapshot(`
         <body>
           <script
-            src="https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js"
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
           />
         </body>
       `);
@@ -872,7 +872,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         eventType: 'click',
         payload: {
           hello: 'world',
-        },
+        } as any,
       });
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
       expect(onEvent).toHaveBeenCalledTimes(1);
@@ -909,7 +909,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         eventType: 'click',
         payload: {
           hello: 'world',
-        },
+        } as any,
       });
 
       expect(insightsClient).toHaveBeenLastCalledWith(
@@ -940,7 +940,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           eventType: 'click',
           payload: {
             hello: 'world',
-          },
+          } as any,
         });
       }).toWarnDev();
       expect(insightsClient).toHaveBeenCalledTimes(numberOfCalls); // still the same
