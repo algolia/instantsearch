@@ -13,6 +13,7 @@ import type {
   InsightsMethod,
   InsightsMethodMap,
   InternalMiddleware,
+  InstantSearch,
 } from '../types';
 import type {
   AlgoliaSearchHelper,
@@ -39,6 +40,16 @@ export type InsightsProps<
    * @internal indicator for the default insights middleware
    */
   $$internal?: boolean;
+  /**
+   * If this is true, don't send events, unless the search response contains:
+   *
+   * {
+   *   "renderingContent": {
+   *     "analytics": true
+   *  }
+   * }
+   */
+  verifyEventPermission?: boolean;
 };
 
 const ALGOLIA_INSIGHTS_VERSION = '2.4.0';
@@ -59,6 +70,7 @@ export function createInsightsMiddleware<
     insightsInitParams,
     onEvent,
     $$internal = false,
+    verifyEventPermission = false,
   } = props;
 
   let insightsClient: InsightsClientWithGlobals = _insightsClient || noop;
@@ -150,23 +162,8 @@ export function createInsightsMiddleware<
       $$internal,
       onStateChange() {},
       subscribe() {
-        if (!insightsClient.shouldAddScript) return;
-
-        const errorMessage =
-          '[insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init';
-
-        try {
-          const script = document.createElement('script');
-          script.async = true;
-          script.src = ALGOLIA_INSIGHTS_SRC;
-          script.onerror = () => {
-            instantSearchInstance.emit('error', new Error(errorMessage));
-          };
-          document.body.appendChild(script);
-          insightsClient.shouldAddScript = false;
-        } catch (cause) {
-          insightsClient.shouldAddScript = false;
-          instantSearchInstance.emit('error', new Error(errorMessage));
+        if (!verifyEventPermission) {
+          loadInsightsScript(insightsClient, instantSearchInstance);
         }
       },
       started() {
@@ -278,6 +275,17 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             );
           }
         };
+
+        if (verifyEventPermission) {
+          instantSearchInstance.mainHelper!.derivedHelpers[0].once(
+            'result',
+            ({ results }) => {
+              if (results.renderingContent?.analytics) {
+                loadInsightsScript(insightsClient, instantSearchInstance);
+              }
+            }
+          );
+        }
       },
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);
@@ -305,4 +313,27 @@ function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
   /* eslint-enable @typescript-eslint/naming-convention */
 
   return v3 || v2_4 || v1_10;
+}
+
+const errorMessage =
+  '[insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init';
+
+function loadInsightsScript(
+  insightsClient: InsightsClientWithGlobals,
+  instantSearchInstance: InstantSearch
+) {
+  try {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = ALGOLIA_INSIGHTS_SRC;
+    script.onerror = () => {
+      instantSearchInstance.emit('error', new Error(errorMessage));
+    };
+
+    document.body.appendChild(script);
+    insightsClient.shouldAddScript = false;
+  } catch (cause) {
+    insightsClient.shouldAddScript = false;
+    instantSearchInstance.emit('error', new Error(errorMessage));
+  }
 }
