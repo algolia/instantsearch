@@ -606,7 +606,7 @@ describe('InstantSearch', () => {
     });
   });
 
-  test('warns when the `searchClient` changes', async () => {
+  test('warns when the `searchClient` changes', () => {
     function App() {
       // The client is re-created whenever the component re-renders
       const searchClient = createAlgoliaSearchClient({});
@@ -630,7 +630,7 @@ describe('InstantSearch', () => {
     );
   });
 
-  test('does not warn when the `searchClient` does not change', async () => {
+  test('does not warn when the `searchClient` does not change', () => {
     const searchClient = createAlgoliaSearchClient({});
 
     function App() {
