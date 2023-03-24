@@ -3,7 +3,8 @@
     "instantsearchjs-es-template-pcw1k",
     "github/algolia/instantsearch.js/tree/templates/react-instantsearch",
     "/examples/react-hooks/default-theme",
-    "/examples/vue/default-theme"
+    "/examples/vue/default-theme",
+    "/examples/js/autocomplete"
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
   "packages": [

@@ -32,6 +32,25 @@
     webpack-node-externals "^1.7.2"
     webpackbar "^2.6.3"
 
+"@algolia/autocomplete-core@^1.8.3":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-core/-/autocomplete-core-1.8.3.tgz#97354875342a4ece9491017517bd7c7f69adec61"
+  integrity sha512-DpNL4PZTes+6pg2ysJQzZZBQUvHSYP1q8IkiJA7UoNqFMf0pdq2bSIehuiMTxNegpMjSszaB7G+o5UgxavKhWA==
+  dependencies:
+    "@algolia/autocomplete-shared" "1.8.3"
+
+"@algolia/autocomplete-preset-algolia@^1.8.3":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-preset-algolia/-/autocomplete-preset-algolia-1.8.3.tgz#d907511b79cc9822fa23255b9ddbac45917f2f4c"
+  integrity sha512-M5B9VZtMtBFS8KSIzv8m0gtwVYtFBBjCvr8boBi+orbQUqzdoj5f70CqhQxUtnNcFGizHUaShUDV571F33/m7g==
+  dependencies:
+    "@algolia/autocomplete-shared" "1.8.3"
+
+"@algolia/autocomplete-shared@1.8.3":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@algolia/autocomplete-shared/-/autocomplete-shared-1.8.3.tgz#0a344aa8de1f313e216fd76e84f7f79ed000a761"
+  integrity sha512-llwPEemKzVhOjL9AsoZPejkaTTAsCB/2HHBQapC8LgQ2E/ipD5M1kTT6oSJskSVO5zI0YbBOCxAigZhgpPJ3eA==
+
 "@algolia/cache-browser-local-storage@4.14.3":
   version "4.14.3"
   resolved "https://registry.yarnpkg.com/@algolia/cache-browser-local-storage/-/cache-browser-local-storage-4.14.3.tgz#b9e0da012b2f124f785134a4d468ee0841b2399d"
