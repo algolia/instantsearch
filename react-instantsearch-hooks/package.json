@@ -11,7 +11,7 @@
     "instantsearch.js": "4.43.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-web": "6.41.0"
+    "react-instantsearch-hooks-web": "6.42.0"
   },
   "devDependencies": {
     "@types/react": "18.0.15",
