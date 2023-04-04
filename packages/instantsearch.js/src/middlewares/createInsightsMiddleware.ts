@@ -89,7 +89,8 @@ export function createInsightsMiddleware<
     });
   }
   // if still no insightsClient was found, we use a noop
-  const insightsClient: InsightsClientWithGlobals = potentialInsightsClient || noop;
+  const insightsClient: InsightsClientWithGlobals =
+    potentialInsightsClient || noop;
 
   return ({ instantSearchInstance }) => {
     // remove existing default insights middleware
