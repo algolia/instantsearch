@@ -240,7 +240,7 @@ describe('insights', () => {
       expect(document.body).toMatchInlineSnapshot(`
         <body>
           <script
-            src="https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js"
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
           />
         </body>
       `);
