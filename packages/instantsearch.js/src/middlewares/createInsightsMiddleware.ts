@@ -9,25 +9,20 @@ import {
 
 import type {
   InsightsClient,
-  InsightsClientMethod,
+  InsightsEvent as _InsightsEvent,
+  InsightsMethod,
+  InsightsMethodMap,
   InternalMiddleware,
-  Hit,
 } from '../types';
 import type {
   AlgoliaSearchHelper,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 
-export type InsightsEvent = {
-  insightsMethod?: InsightsClientMethod;
-  payload: any;
-  widgetType: string;
-  eventType: string; // 'view' | 'click' | 'conversion', but we're not restricting.
-  hits?: Hit[];
-  attribute?: string;
-};
-
 type ProvidedInsightsClient = InsightsClient | null | undefined;
+
+export type InsightsEvent<TMethod extends InsightsMethod = InsightsMethod> =
+  _InsightsEvent<TMethod>;
 
 export type InsightsProps<
   TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
@@ -46,8 +41,13 @@ export type InsightsProps<
   $$internal?: boolean;
 };
 
-const ALGOLIA_INSIGHTS_SRC =
-  'https://cdn.jsdelivr.net/npm/search-insights@2.3.0/dist/search-insights.min.js';
+const ALGOLIA_INSIGHTS_VERSION = '2.4.0';
+const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
+
+export type InsightsClientWithGlobals = InsightsClient & {
+  shouldAddScript?: boolean;
+  version?: string;
+};
 
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
@@ -80,6 +80,7 @@ export function createInsightsMiddleware<
             }
             window[pointer].queue.push(args);
           };
+          window[pointer].version = ALGOLIA_INSIGHTS_VERSION;
           window[pointer].shouldAddScript = true;
         }
 
@@ -229,15 +230,29 @@ export function createInsightsMiddleware<
           immediate: true,
         });
 
-        // @ts-ignore
-        const insightsClientWithLocalCredentials = (method, payload) => {
-          return insightsClient(method, payload, {
-            headers: {
-              'X-Algolia-Application-Id': appId,
-              'X-Algolia-API-Key': apiKey,
-            },
-          });
-        };
+        type InsightsClientWithLocalCredentials = <
+          TMethod extends InsightsMethod
+        >(
+          method: TMethod,
+          payload: InsightsMethodMap[TMethod][0]
+        ) => void;
+
+        let insightsClientWithLocalCredentials =
+          insightsClient as InsightsClientWithLocalCredentials;
+
+        if (isModernInsightsClient(insightsClient)) {
+          insightsClientWithLocalCredentials = (method, payload) => {
+            const extraParams = {
+              headers: {
+                'X-Algolia-Application-Id': appId,
+                'X-Algolia-API-Key': apiKey,
+              },
+            };
+
+            // @ts-ignore we are calling this only when we know that the client actually is correct
+            return insightsClient(method, payload, extraParams);
+          };
+        }
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
@@ -281,4 +296,16 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       },
     };
   };
+}
+
+function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
+  const [major, minor] = (client.version || '').split('.').map(Number);
+
+  /* eslint-disable @typescript-eslint/naming-convention */
+  const v3 = major >= 3;
+  const v2_4 = major === 2 && minor >= 4;
+  const v1_10 = major === 1 && minor >= 10;
+  /* eslint-enable @typescript-eslint/naming-convention */
+
+  return v3 || v2_4 || v1_10;
 }
