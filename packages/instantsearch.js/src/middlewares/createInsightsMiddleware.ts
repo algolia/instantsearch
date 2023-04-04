@@ -61,17 +61,17 @@ export function createInsightsMiddleware<
     $$internal = false,
   } = props;
 
-  let insightsClient: InsightsClientWithGlobals = _insightsClient || noop;
+  let potentialInsightsClient: ProvidedInsightsClient = _insightsClient;
 
-  if (_insightsClient !== null && !_insightsClient) {
+  if (!_insightsClient && _insightsClient !== null) {
     safelyRunOnBrowser(({ window }: { window: any }) => {
       const pointer = window.AlgoliaAnalyticsObject || 'aa';
 
       if (typeof pointer === 'string') {
-        insightsClient = window[pointer];
+        potentialInsightsClient = window[pointer];
       }
 
-      if (!insightsClient) {
+      if (!potentialInsightsClient) {
         window.AlgoliaAnalyticsObject = pointer;
         if (!window[pointer]) {
           window[pointer] = (...args: any[]) => {
@@ -81,13 +81,16 @@ export function createInsightsMiddleware<
             window[pointer].queue.push(args);
           };
           window[pointer].version = ALGOLIA_INSIGHTS_VERSION;
+          window[pointer].shouldAddScript = true;
         }
 
-        insightsClient = window[pointer];
-        insightsClient.shouldAddScript = true;
+        potentialInsightsClient = window[pointer];
       }
     });
   }
+  // if still no insightsClient was found, we use a noop
+  const insightsClient: InsightsClientWithGlobals =
+    potentialInsightsClient || noop;
 
   return ({ instantSearchInstance }) => {
     // remove existing default insights middleware

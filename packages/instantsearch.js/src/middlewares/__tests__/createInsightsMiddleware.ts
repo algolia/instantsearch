@@ -228,6 +228,39 @@ describe('insights', () => {
       expect((window as any).aa).toEqual(expect.any(Function));
     });
 
+    it("loads the script when pointer isn't a string, and value is absent", () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      const anyWindow = window as any;
+      anyWindow.AlgoliaAnalyticsObject = {
+        type: 'not a string',
+      };
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      expect(document.body).toMatchInlineSnapshot(`
+        <body>
+          <script
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
+          />
+        </body>
+      `);
+    });
+
+    it("doesn't load the script when pointer isn't a string, and value is present", () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      const anyWindow = window as any;
+
+      anyWindow.AlgoliaAnalyticsObject = {
+        type: 'not a string',
+      };
+      anyWindow[anyWindow.AlgoliaAnalyticsObject] = () => {};
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+    });
+
     it('notifies when the script fails to be added', () => {
       const { instantSearchInstance } = createTestEnvironment();
       const createElement = document.createElement;
