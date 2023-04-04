@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.55.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.53.0...instantsearch.js@4.55.0) (2023-04-04)
+
+
+### Bug Fixes
+
+* **places:** don't require package to be installed ([#5574](https://github.com/algolia/instantsearch.js/issues/5574)) ([f5ed576](https://github.com/algolia/instantsearch.js/commit/f5ed576129e7e81c37d985b19dff54acff893b1b)), closes [#5570](https://github.com/algolia/instantsearch.js/issues/5570)
+
+
+### Features
+
+* warn if same attribute is used for different faceting type ([#5553](https://github.com/algolia/instantsearch.js/issues/5553)) ([2b3da9b](https://github.com/algolia/instantsearch.js/commit/2b3da9b398fcf081bdefc5cf7887f0a9a2dd2409))
+
+
+
+
+
 # [4.54.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.53.0...instantsearch.js@4.54.0) (2023-03-28)
 
 

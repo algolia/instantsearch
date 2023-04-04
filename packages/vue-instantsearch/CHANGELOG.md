@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.9.0](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.8...vue-instantsearch@4.9.0) (2023-04-04)
+
+
+### Features
+
+* **ais-instant-search:** warn when an unstable search client is detected ([#5572](https://github.com/algolia/instantsearch.js/issues/5572)) ([71296a4](https://github.com/algolia/instantsearch.js/commit/71296a4eaa6233d397d2fc3b7e635e12e521409c))
+
+
+
+
+
 ## [4.8.9](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.8...vue-instantsearch@4.8.9) (2023-03-28)
 
 ### Features
