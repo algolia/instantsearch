@@ -353,7 +353,6 @@ describe('useConnector', () => {
     });
 
     const helperState = {
-      clickAnalytics: true,
       disjunctiveFacets: [],
       disjunctiveFacetsRefinements: {},
       facets: [],

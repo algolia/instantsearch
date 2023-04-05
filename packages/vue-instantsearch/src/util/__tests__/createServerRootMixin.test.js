@@ -276,7 +276,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           {
             "indexName": "hello",
             "params": {
-              "clickAnalytics": true,
               "facets": [],
               "hitsPerPage": 100,
               "query": "",
@@ -347,7 +346,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   hierarchicalFacetsRefinements: {},
                   hitsPerPage: 100,
                   index: 'hello',
-                  clickAnalytics: true,
                   numericRefinements: {},
                   query: '',
                   tagRefinements: [],
@@ -828,7 +826,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             {
               "indexName": "hello",
               "params": {
-                "clickAnalytics": true,
                 "facets": [],
                 "hitsPerPage": 100,
                 "query": "",
@@ -905,7 +902,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             {
               "indexName": "hello",
               "params": {
-                "clickAnalytics": true,
                 "facets": [],
                 "hitsPerPage": 100,
                 "query": "",
@@ -1139,7 +1135,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       const state = new SearchParameters(resultsState.state);
       const localState = new SearchParameters({
         index: 'lol',
-        clickAnalytics: true,
       });
       const results = new SearchResults(state, resultsState.results);
 
