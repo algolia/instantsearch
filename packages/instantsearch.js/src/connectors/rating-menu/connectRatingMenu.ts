@@ -45,7 +45,8 @@ const createSendEvent: CreateSendEvent =
       instantSearchInstance.sendEventToInsights(args[0]);
       return;
     }
-    const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+    const [, facetValue, eventName = 'Filter Applied'] = args;
+    const [eventType, eventModifier] = args[0].split(':');
     if (eventType !== 'click') {
       return;
     }
@@ -55,6 +56,7 @@ const createSendEvent: CreateSendEvent =
         insightsMethod: 'clickedFilters',
         widgetType: $$type,
         eventType,
+        eventModifier,
         payload: {
           eventName,
           index: helper.getIndex(),
@@ -264,7 +266,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
       helper: AlgoliaSearchHelper,
       facetValue: string
     ) => {
-      sendEvent('click', facetValue);
+      sendEvent('click:internal', facetValue);
       helper.setState(getRefinedState(helper.state, facetValue)).search();
     };
 

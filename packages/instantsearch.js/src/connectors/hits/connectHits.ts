@@ -114,7 +114,7 @@ const connectHits: HitsConnector = function connectHits(
           false
         );
 
-        renderState.sendEvent('view', renderState.hits);
+        renderState.sendEvent('view:internal', renderState.hits);
       },
 
       getRenderState(renderState, renderOptions) {

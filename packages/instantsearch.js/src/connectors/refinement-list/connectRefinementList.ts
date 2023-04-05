@@ -381,7 +381,7 @@ const connectRefinementList: RefinementListConnector =
             });
 
             triggerRefine = (facetValue) => {
-              sendEvent!('click', facetValue);
+              sendEvent!('click:internal', facetValue);
               helper.toggleFacetRefinement(attribute, facetValue).search();
             };
 
