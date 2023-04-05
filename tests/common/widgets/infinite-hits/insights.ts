@@ -26,6 +26,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
+          insights: true,
           searchClient: createSearchClient({
             search: jest.fn(async (requests) => {
               await wait(delay);
@@ -137,6 +138,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
+          insights: true,
           searchClient: createSearchClient({
             search: jest.fn(async (requests) => {
               await wait(delay);
@@ -268,6 +270,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
+          insights: true,
           searchClient: createSearchClient({
             search: jest.fn(async (requests) => {
               await wait(delay);
@@ -348,6 +351,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
+          insights: true,
           searchClient: createSearchClient({
             search: jest.fn(async (requests) => {
               await wait(delay);
@@ -432,6 +436,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
+          insights: true,
           searchClient: createSearchClient({
             search: jest.fn(async (requests) => {
               await wait(delay);
@@ -526,6 +531,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
+          insights: true,
           searchClient: createSearchClient({
             search: jest.fn(async (requests) => {
               await wait(delay);
@@ -606,6 +612,7 @@ export function createInsightsTests(setup: InfiniteHitsSetup, act: Act) {
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
+          insights: true,
           searchClient: createSearchClient({
             search: jest.fn(async (requests) => {
               await wait(delay);

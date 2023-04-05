@@ -3017,7 +3017,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ],
         _state: {
           index: 'indexName',
-          clickAnalytics: true,
           disjunctiveFacets: [],
           disjunctiveFacetsRefinements: {},
           facets: [],

@@ -429,7 +429,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   describe('insights middleware', () => {
-    test('adds insights middleware by default', () => {
+    test('does not add insights middleware by default', () => {
       const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
@@ -440,15 +440,10 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
           $$type,
           $$internal,
         }))
-      ).toEqual([
-        {
-          $$type: 'ais.insights',
-          $$internal: true,
-        },
-      ]);
+      ).toEqual([]);
     });
 
-    test('insights: true still adds only one middleware', () => {
+    test('insights: true adds only one insights middleware', () => {
       const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
@@ -468,7 +463,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       ]);
     });
 
-    test('insights: options still creates one middleware only', () => {
+    test('insights: options adds only one insights middleware', () => {
       const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
@@ -610,12 +605,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
           $$type,
           $$internal,
         }))
-      ).toEqual([
-        {
-          $$type: 'ais.insights',
-          $$internal: true,
-        },
-      ]);
+      ).toEqual([]);
     });
 
     it('adds metadata middleware on the Crawler user agent', () => {
@@ -632,10 +622,6 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
           $$internal,
         }))
       ).toEqual([
-        {
-          $$type: 'ais.insights',
-          $$internal: true,
-        },
         {
           $$type: 'ais.metadata',
           $$internal: true,

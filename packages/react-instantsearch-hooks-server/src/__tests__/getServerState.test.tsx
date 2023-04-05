@@ -219,7 +219,6 @@ describe('getServerState', () => {
       {
         indexName: 'instant_search',
         params: {
-          clickAnalytics: true,
           facetFilters: [['brand:Apple']],
           facets: ['brand'],
           highlightPostTag: '__/ais-highlight__',
@@ -246,7 +245,6 @@ describe('getServerState', () => {
       {
         indexName: 'instant_search_price_asc',
         params: {
-          clickAnalytics: true,
           facetFilters: [['brand:Apple']],
           facets: ['brand'],
           highlightPostTag: '__/ais-highlight__',
@@ -273,7 +271,6 @@ describe('getServerState', () => {
       {
         indexName: 'instant_search_rating_desc',
         params: {
-          clickAnalytics: true,
           facetFilters: [['brand:Apple']],
           facets: ['brand'],
           highlightPostTag: '__/ais-highlight__',
@@ -300,7 +297,6 @@ describe('getServerState', () => {
       {
         indexName: 'instant_search_price_desc',
         params: {
-          clickAnalytics: true,
           facetFilters: [['brand:Apple']],
           facets: ['brand'],
           highlightPostTag: '__/ais-highlight__',
@@ -410,7 +406,6 @@ describe('getServerState', () => {
     expect(searchClient.search.mock.calls[0][0][0]).toEqual({
       indexName: 'instant_search',
       params: {
-        clickAnalytics: true,
         facets: ['*'],
         highlightPostTag: '__/ais-highlight__',
         highlightPreTag: '__ais-highlight__',
@@ -424,7 +419,6 @@ describe('getServerState', () => {
     expect(searchClient.search.mock.calls[1][0][0]).toEqual({
       indexName: 'instant_search',
       params: {
-        clickAnalytics: true,
         facetFilters: [['categories:refined!']],
         facets: ['*'],
         highlightPostTag: '__/ais-highlight__',
