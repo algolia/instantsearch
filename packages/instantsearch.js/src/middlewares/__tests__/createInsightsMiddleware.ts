@@ -263,6 +263,7 @@ describe('insights', () => {
 
     it('notifies when the script fails to be added', () => {
       const { instantSearchInstance } = createTestEnvironment();
+      /* eslint-disable deprecation/deprecation */
       const createElement = document.createElement;
       document.createElement = () => {
         throw new Error('error');
@@ -277,6 +278,7 @@ describe('insights', () => {
       instantSearchInstance.use(createInsightsMiddleware());
 
       document.createElement = createElement;
+      /* eslint-enable deprecation/deprecation */
     });
 
     it('notifies when the script fails to load', () => {
@@ -566,6 +568,40 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           },
         ]
       `);
+    });
+
+    it('does not call `init` when default middleware is used', () => {
+      const anyWindow = window as any;
+      anyWindow.aa = jest.fn();
+
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
+
+      // internal middleware
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": true,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+
+      expect(anyWindow.aa).not.toHaveBeenCalledWith('init', {
+        apiKey: 'myApiKey',
+        appId: 'myAppId',
+        partial: true,
+        useCookie: true,
+      });
     });
   });
 

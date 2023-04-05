@@ -140,19 +140,8 @@ export function createInsightsMiddleware<
       userTokenBeforeInit = userToken;
     });
 
-    const version = insightsClient.version;
-    let canInit = !$$internal; // User provided insights middleware.
-
-    // We only check the `version` for the default insights middleware.
-    if ($$internal && typeof version !== 'undefined') {
-      const [major, minor] = version.split('.').map(Number);
-      canInit =
-        major >= 3 ||
-        (major === 2 && minor >= 4) ||
-        (major === 1 && minor >= 10);
-    }
-
-    if (canInit) {
+    // Only `init` if user provided the `insights` middleware.
+    if (!$$internal) {
       insightsClient('init', {
         appId,
         apiKey,
