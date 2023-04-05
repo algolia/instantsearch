@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type { SendEventForFacet } from '../../lib/utils';
@@ -344,6 +345,19 @@ const connectMenu: MenuConnector = function connectMenu(
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const value = uiState.menu && uiState.menu[attribute];
+
+        if (
+          searchParameters.isConjunctiveFacet(attribute) ||
+          searchParameters.isDisjunctiveFacet(attribute)
+        ) {
+          warning(
+            false,
+            `Menu: Attribute "${attribute}" is already used by another widget applying conjunctive or disjunctive faceting.
+As this is not supported, please make sure to remove this other widget or this Menu widget will not work at all.`
+          );
+
+          return searchParameters;
+        }
 
         const withFacetConfiguration = searchParameters
           .removeHierarchicalFacet(attribute)

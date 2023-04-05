@@ -14,7 +14,11 @@ describe('insights', () => {
 
     render(
       <StrictMode>
-        <InstantSearch searchClient={searchClient} indexName="123" />
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="123"
+          insights={true}
+        />
       </StrictMode>
     );
 

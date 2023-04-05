@@ -140,13 +140,13 @@ export type InstantSearchOptions<
   routing?: RouterProps<TUiState, TRouteState> | boolean;
 
   /**
-   * Automatically enables the Insights middleware and loads the Insights library
+   * Enables the Insights middleware and loads the Insights library
    * if not already loaded.
    *
    * The Insights middleware sends view and click events automatically, and lets
    * you set up your own events.
    *
-   * @default true
+   * @default false
    */
   insights?: InsightsProps | boolean;
 
@@ -228,7 +228,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
-      insights = true,
+      insights = false,
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,

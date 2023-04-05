@@ -14,7 +14,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { TAG_PLACEHOLDER } from '../../../lib/utils';
+import { TAG_PLACEHOLDER, warning } from '../../../lib/utils';
 import connectRefinementList from '../connectRefinementList';
 
 describe('connectRefinementList', () => {
@@ -3076,6 +3076,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           brand: ['Apple', 'Samsung'],
         });
       });
+
+      test('returns the `SearchParameters` untouched and warns when attribute is used for disjunctive faceting', () => {
+        warning.cache = {};
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper(createSearchClient(), '', {
+          disjunctiveFacets: ['brand'],
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+          operator: 'and',
+        });
+
+        expect(() =>
+          widget.getWidgetSearchParameters(helper.state, {
+            uiState: {},
+          })
+        ).toWarnDev();
+      });
     });
 
     describe('with disjunctive facet', () => {
@@ -3170,6 +3190,41 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           brand: ['Apple', 'Samsung'],
         });
       });
+
+      test('returns the `SearchParameters` untouched and warns when attribute is used for conjunctive faceting', () => {
+        warning.cache = {};
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper(createSearchClient(), '', {
+          facets: ['brand'],
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        expect(() =>
+          widget.getWidgetSearchParameters(helper.state, {
+            uiState: {},
+          })
+        ).toWarnDev();
+      });
+    });
+
+    test('warns when attribute is used for hierarchical faceting and does not change `SearchParameters`', () => {
+      warning.cache = {};
+      const helper = jsHelper(createSearchClient(), '', {
+        hierarchicalFacets: [{ name: 'brand', attributes: ['brand'] }],
+      });
+      const widget = connectRefinementList(jest.fn())({ attribute: 'brand' });
+
+      expect(() => {
+        const searchParams = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+        expect(searchParams.disjunctiveFacets).toHaveLength(0);
+        expect(searchParams.facets).toHaveLength(0);
+      }).toWarnDev();
     });
   });
 

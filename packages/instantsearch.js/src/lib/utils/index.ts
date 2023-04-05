@@ -33,6 +33,7 @@ export * from './isFacetRefined';
 export * from './isFiniteNumber';
 export * from './isPlainObject';
 export * from './isSpecialClick';
+export * from './walkIndex';
 export * from './logger';
 export * from './mergeSearchParameters';
 export * from './omit';

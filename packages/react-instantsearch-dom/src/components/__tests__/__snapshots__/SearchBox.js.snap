@@ -32,6 +32,7 @@ exports[`SearchBox applies its default props 1`] = `
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -50,6 +51,7 @@ exports[`SearchBox applies its default props 1`] = `
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"
@@ -97,6 +99,7 @@ exports[`SearchBox applies its default props with custom className 1`] = `
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -115,6 +118,7 @@ exports[`SearchBox applies its default props with custom className 1`] = `
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"
@@ -162,6 +166,7 @@ exports[`SearchBox lets you customize its theme 1`] = `
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -180,6 +185,7 @@ exports[`SearchBox lets you customize its theme 1`] = `
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"
@@ -227,6 +233,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -245,6 +252,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"
@@ -345,6 +353,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 1`] 
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -363,6 +372,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 1`] 
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"
@@ -379,6 +389,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 1`] 
       hidden={true}
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-loadingIcon"
         height="18"
         stroke="#444"
@@ -452,6 +463,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 2`] 
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -470,6 +482,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 2`] 
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"
@@ -486,6 +499,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 2`] 
       hidden={false}
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-loadingIcon"
         height="18"
         stroke="#444"
@@ -559,6 +573,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -577,6 +592,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"
@@ -624,6 +640,7 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -642,6 +659,7 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"
@@ -689,6 +707,7 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
       type="submit"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-submitIcon"
         height="10"
         viewBox="0 0 40 40"
@@ -707,6 +726,7 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
       type="reset"
     >
       <svg
+        aria-hidden="true"
         className="ais-SearchBox-resetIcon"
         height="10"
         viewBox="0 0 20 20"

@@ -30901,10 +30901,10 @@ shiki@^0.11.1:
     vscode-oniguruma "^1.6.1"
     vscode-textmate "^6.0.0"
 
-shipjs-lib@0.25.1:
-  version "0.25.1"
-  resolved "https://registry.yarnpkg.com/shipjs-lib/-/shipjs-lib-0.25.1.tgz#584144befb58b2e7a1ef3c6f1426ef1320cf7fef"
-  integrity sha512-oxK+bnCTVLYl9xtDe5SnEsUi3qatqAECuMPUqkJqffmdUPkQtTIrHsxmeeblK+hCdu32cm6+JjPrYvSRTL8Zrw==
+shipjs-lib@0.26.0:
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/shipjs-lib/-/shipjs-lib-0.26.0.tgz#73a7160e58555d11e5ed5b1fdf1ad9fc9ce52a1d"
+  integrity sha512-Tr62CfQve6/i5jhVXT6gm/eqB2B0nlL7DE1F+8MIfDEpgesiJIqyb6f3yreNlRXYxN2DsztNamkObCvOSv2c4A==
   dependencies:
     deepmerge "^4.2.2"
     dotenv "^8.1.0"
@@ -30912,10 +30912,10 @@ shipjs-lib@0.25.1:
     semver "6.3.0"
     shelljs "0.8.5"
 
-shipjs@0.25.1:
-  version "0.25.1"
-  resolved "https://registry.yarnpkg.com/shipjs/-/shipjs-0.25.1.tgz#d69b7ee5d182d6dd1efa4ae227d62378d85e4202"
-  integrity sha512-xdZeZUH7klWaECEwrJLlIIexc9PfObz7JRwGpUgy0pCYgTKnQEFWVGzMAe1sL0PMLyWdLj9ZrBvsHNvZitBe7g==
+shipjs@0.26.0:
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/shipjs/-/shipjs-0.26.0.tgz#4184130a29024ee835707c1bd63e5d6d74fc8d16"
+  integrity sha512-rbPLVT3O0Wl9fMGT2siGX98Zyw0gRMTOZSx+NPqOcZlofmjGOvQekvnMAgtSS21FUOLBEOLoxNzIUVBpWm4QFg==
   dependencies:
     "@babel/runtime" "^7.6.3"
     "@octokit/rest" "^17.11.0"
@@ -30939,7 +30939,7 @@ shipjs@0.25.1:
     prettier "^2.0.0"
     serialize-javascript "^3.0.0"
     shell-quote "^1.7.2"
-    shipjs-lib "0.25.1"
+    shipjs-lib "0.26.0"
     temp-write "4.0.0"
     tempfile "^3.0.0"
 
