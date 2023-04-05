@@ -6,6 +6,7 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type { SendEventForFacet } from '../../lib/utils';
@@ -483,6 +484,30 @@ const connectRefinementList: RefinementListConnector =
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
           const isDisjunctive = operator === 'or';
+
+          if (searchParameters.isHierarchicalFacet(attribute)) {
+            warning(
+              false,
+              `RefinementList: Attribute "${attribute}" is already used by another widget applying hierarchical faceting.
+As this is not supported, please make sure to remove this other widget or this RefinementList widget will not work at all.`
+            );
+
+            return searchParameters;
+          }
+
+          if (
+            (isDisjunctive && searchParameters.isConjunctiveFacet(attribute)) ||
+            (!isDisjunctive && searchParameters.isDisjunctiveFacet(attribute))
+          ) {
+            warning(
+              false,
+              `RefinementList: Attribute "${attribute}" is used by another refinement list with a different operator.
+As this is not supported, please make sure to only use this attribute with one of the two operators.`
+            );
+
+            return searchParameters;
+          }
+
           const values =
             uiState.refinementList && uiState.refinementList[attribute];
 

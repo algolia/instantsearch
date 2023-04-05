@@ -16,7 +16,7 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "4.8.7",
+  "version": "4.8.9",
   "files": [
     "vue2",
     "vue3",
@@ -35,7 +35,7 @@
     "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs"
   },
   "dependencies": {
-    "instantsearch.js": "4.52.0",
+    "instantsearch.js": "4.54.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {

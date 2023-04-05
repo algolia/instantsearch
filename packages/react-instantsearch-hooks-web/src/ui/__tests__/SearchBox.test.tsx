@@ -66,6 +66,7 @@ describe('SearchBox', () => {
               type="submit"
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-submitIcon"
                 height="10"
                 viewBox="0 0 40 40"
@@ -83,6 +84,7 @@ describe('SearchBox', () => {
               type="reset"
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-resetIcon"
                 height="10"
                 viewBox="0 0 20 20"
@@ -98,6 +100,7 @@ describe('SearchBox', () => {
               hidden=""
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-loadingIcon"
                 height="16"
                 stroke="#444"
@@ -178,6 +181,7 @@ describe('SearchBox', () => {
               type="submit"
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-submitIcon"
                 height="10"
                 viewBox="0 0 40 40"
@@ -195,6 +199,7 @@ describe('SearchBox', () => {
               type="reset"
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-resetIcon"
                 height="10"
                 viewBox="0 0 20 20"
@@ -210,6 +215,7 @@ describe('SearchBox', () => {
               hidden=""
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-loadingIcon"
                 height="16"
                 stroke="#444"
@@ -523,6 +529,7 @@ describe('SearchBox', () => {
               type="submit"
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-submitIcon SUBMITICON"
                 height="10"
                 viewBox="0 0 40 40"
@@ -540,6 +547,7 @@ describe('SearchBox', () => {
               type="reset"
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-resetIcon RESETICON"
                 height="10"
                 viewBox="0 0 20 20"
@@ -555,6 +563,7 @@ describe('SearchBox', () => {
               hidden=""
             >
               <svg
+                aria-hidden="true"
                 class="ais-SearchBox-loadingIcon LOADINGICON"
                 height="16"
                 stroke="#444"

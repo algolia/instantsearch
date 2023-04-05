@@ -93,6 +93,11 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     }
 
     if (prevProps.searchClient !== props.searchClient) {
+      warn(
+        false,
+        'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react-hooks/#widget-param-searchclient'
+      );
+
       addAlgoliaAgents(props.searchClient, [
         ...defaultUserAgents,
         serverContext && serverUserAgent,
