@@ -38,6 +38,12 @@ export default createInstantSearchComponent({
         return true;
       },
     },
+    insights: {
+      default: undefined,
+      validator(value) {
+        return typeof value === 'boolean' || typeof value === 'object';
+      },
+    },
     stalledSearchDelay: {
       type: Number,
       default: undefined,
@@ -84,6 +90,7 @@ export default createInstantSearchComponent({
       instantSearchInstance: instantsearch({
         searchClient: this.searchClient,
         insightsClient: this.insightsClient,
+        insights: this.insights,
         indexName: this.indexName,
         routing: this.routing,
         stalledSearchDelay: this.stalledSearchDelay,
