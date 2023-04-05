@@ -1,33 +1,10 @@
 import instantsearch from 'instantsearch.js/es';
+import {
+  waitForResults,
+  getInitialResults,
+} from 'instantsearch.js/es/lib/server';
 import { isVue3, isVue2, Vue2, createSSRApp } from './vue-compat';
 import { warn } from './warn';
-
-function walkIndex(indexWidget, visit) {
-  visit(indexWidget);
-
-  return indexWidget.getWidgets().forEach((widget) => {
-    if (widget.$$type !== 'ais.index') return;
-    visit(widget);
-    walkIndex(widget, visit);
-  });
-}
-
-function searchOnlyWithDerivedHelpers(helper) {
-  return new Promise((resolve, reject) => {
-    helper.searchOnlyWithDerivedHelpers();
-
-    // we assume all derived helpers resolve at least in the same tick
-    helper.derivedHelpers[0].on('result', () => {
-      resolve();
-    });
-
-    helper.derivedHelpers.forEach((derivedHelper) =>
-      derivedHelper.on('error', (e) => {
-        reject(e);
-      })
-    );
-  });
-}
 
 function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
   const options = {
@@ -133,24 +110,9 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
         });
       })
       .then(() => renderToString(app))
-      .then(() => searchOnlyWithDerivedHelpers(instance.mainHelper))
+      .then(() => waitForResults(instance))
       .then(() => {
-        initialResults = {};
-        walkIndex(instance.mainIndex, (widget) => {
-          initialResults[widget.getIndexId()] = {
-            // copy just the values of SearchParameters, not the functions
-            state: Object.entries(widget.getHelper().state).reduce(
-              (acc, [key, value]) => {
-                // eslint-disable-next-line no-param-reassign
-                acc[key] = value;
-                return acc;
-              },
-              {}
-            ),
-            results: widget.getResults()._rawResults,
-          };
-        });
-
+        initialResults = getInitialResults(instance.mainIndex);
         search.hydrate(initialResults);
         return search.getState();
       });
