@@ -24,22 +24,22 @@ export function createInsights<TVersion extends string | undefined = '2.4.0'>({
       requestFn: jest.fn(),
     })
   );
+  const mockedInsightsClient = jest.fn(
+    getFunctionalInterface(analytics)
+  ) as unknown as jest.Mock<InsightsClient>;
 
   if (forceVersion) {
     return {
       analytics,
-      insightsClient: Object.assign(
-        jest.fn(getFunctionalInterface(analytics)),
-        {
-          version: forceVersion,
-        }
-      ),
+      insightsClient: Object.assign(mockedInsightsClient, {
+        version: forceVersion,
+      }),
     };
   }
 
   return {
     analytics,
-    insightsClient: jest.fn(getFunctionalInterface(analytics)),
+    insightsClient: mockedInsightsClient,
   };
 }
 
