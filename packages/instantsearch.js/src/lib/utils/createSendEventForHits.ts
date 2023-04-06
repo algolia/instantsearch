@@ -43,7 +43,6 @@ export function _buildEventPayloadsForHits({
   instantSearchInstance: InstantSearch;
 }): {
   payloads: InsightsEvent[];
-  eventModifier?: string;
 } {
   // when there's only one argument, that means it's custom
   if (args.length === 1 && typeof args[0] === 'object') {
@@ -107,9 +106,9 @@ export function _buildEventPayloadsForHits({
             objectIDs: objectIDsByChunk[i],
           },
           hits: batch,
+          eventModifier,
         };
       }),
-      eventModifier,
     };
   } else if (eventType === 'click') {
     return {
@@ -126,9 +125,9 @@ export function _buildEventPayloadsForHits({
             positions: positionsByChunk[i],
           },
           hits: batch,
+          eventModifier,
         };
       }),
-      eventModifier,
     };
   } else if (eventType === 'conversion') {
     return {
@@ -144,9 +143,9 @@ export function _buildEventPayloadsForHits({
             objectIDs: objectIDsByChunk[i],
           },
           hits: batch,
+          eventModifier,
         };
       }),
-      eventModifier,
     };
   } else if (__DEV__) {
     throw new Error(`eventType("${eventType}") is not supported.
@@ -170,7 +169,7 @@ export function createSendEventForHits({
   let timer: ReturnType<typeof setTimeout> | undefined = undefined;
 
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
-    const { payloads, eventModifier } = _buildEventPayloadsForHits({
+    const { payloads } = _buildEventPayloadsForHits({
       widgetType,
       index,
       methodName: 'sendEvent',
@@ -179,7 +178,11 @@ export function createSendEventForHits({
     });
 
     payloads.forEach((payload) => {
-      if (eventModifier === 'internal' && sentEvents[payload.eventType]) {
+      if (
+        payload.eventType === 'click' &&
+        payload.eventModifier === 'internal' &&
+        sentEvents[payload.eventType]
+      ) {
         return;
       }
 

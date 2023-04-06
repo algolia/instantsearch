@@ -932,6 +932,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           index: 'my-index',
           eventName: 'My Hits Viewed',
           objectIDs: ['obj1'],
+          algoliaSource: ['instantsearch'],
         },
         {
           headers: {
