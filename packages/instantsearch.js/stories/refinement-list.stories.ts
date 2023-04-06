@@ -39,13 +39,7 @@ storiesOf('Refinements/RefinementList', module)
           showMore: true,
           showMoreLimit: 10,
           templates: {
-            showMoreText: `
-              {{#isShowingMore}}
-                ⬆️
-              {{/isShowingMore}}
-              {{^isShowingMore}}
-                ⬇️
-              {{/isShowingMore}}`,
+            showMoreText: ({ isShowingMore }) => (isShowingMore ? '⬆️' : '⬇️'),
           },
         }),
       ]);
@@ -73,10 +67,10 @@ storiesOf('Refinements/RefinementList', module)
           searchable: true,
           searchablePlaceholder: 'Find other brands...',
           templates: {
-            searchableNoResults: 'No results found',
-            searchableSubmit: 'Go',
-            searchableReset: 'x',
-            searchableLoadingIndicator: '•',
+            searchableNoResults: () => 'No results found',
+            searchableSubmit: () => 'Go',
+            searchableReset: () => 'x',
+            searchableLoadingIndicator: () => '•',
           },
         }),
       ]);

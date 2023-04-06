@@ -46,22 +46,20 @@ storiesOf('Metadata/QueryRuleContext', module)
             return items.filter((item) => typeof item.banner !== 'undefined');
           },
           templates: {
-            default: ({ items }: { items: CustomDataItem[] }) =>
-              items
-                .map((item) => {
-                  const { title, banner, link } = item;
+            default: ({ items }: { items: CustomDataItem[] }, { html }) =>
+              items.map((item) => {
+                const { title, banner, link } = item;
 
-                  return `
+                return html`
                   <section>
                     <h2>${title}</h2>
 
                     <a href="${link}">
-                      <img src="${banner}" alt="${title}">
+                      <img src="${banner}" alt="${title}" />
                     </a>
                   </section>
                 `;
-                })
-                .join(''),
+              }),
           },
         }),
       ]);
@@ -97,22 +95,20 @@ storiesOf('Metadata/QueryRuleContext', module)
               return items.filter((item) => typeof item.banner !== 'undefined');
             },
             templates: {
-              default: ({ items }: { items: CustomDataItem[] }) =>
-                items
-                  .map((item) => {
-                    const { title, banner, link } = item;
+              default: ({ items }: { items: CustomDataItem[] }, { html }) =>
+                items.map((item) => {
+                  const { title, banner, link } = item;
 
-                    return `
-                <section>
-                  <h2>${title}</h2>
+                  return html`
+                    <section>
+                      <h2>${title}</h2>
 
-                  <a href="${link}">
-                    <img src="${banner}" alt="${title}">
-                  </a>
-                </section>
-              `;
-                  })
-                  .join(''),
+                      <a href="${link}">
+                        <img src="${banner}" alt="${title}" />
+                      </a>
+                    </section>
+                  `;
+                }),
             },
           }),
         ]);

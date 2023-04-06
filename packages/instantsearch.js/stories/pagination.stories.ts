@@ -76,10 +76,10 @@ storiesOf('Pagination/Pagination', module)
         instantsearch.widgets.pagination({
           container,
           templates: {
-            previous: 'Previous',
-            next: 'Next',
-            first: 'First',
-            last: 'Last',
+            previous: () => 'Previous',
+            next: () => 'Next',
+            first: () => 'First',
+            last: () => 'Last',
           },
         }),
       ]);
