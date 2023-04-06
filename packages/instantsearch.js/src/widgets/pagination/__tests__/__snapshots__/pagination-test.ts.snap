@@ -36,10 +36,11 @@ exports[`pagination() calls twice render(<Pagination props />, container) 1`] = 
   "showNext": true,
   "showPrevious": true,
   "templates": {
-    "first": "«",
-    "last": "»",
-    "next": "›",
-    "previous": "‹",
+    "first": [Function],
+    "last": [Function],
+    "next": [Function],
+    "page": [Function],
+    "previous": [Function],
   },
 }
 `;
@@ -80,10 +81,11 @@ exports[`pagination() calls twice render(<Pagination props />, container) 2`] = 
   "showNext": true,
   "showPrevious": true,
   "templates": {
-    "first": "«",
-    "last": "»",
-    "next": "›",
-    "previous": "‹",
+    "first": [Function],
+    "last": [Function],
+    "next": [Function],
+    "page": [Function],
+    "previous": [Function],
   },
 }
 `;
