@@ -22,12 +22,22 @@ export type ReverseSnippetOptions = {
 
 const suit = component('ReverseSnippet');
 
+/**
+ * @deprecated use html tagged templates and the ReverseSnippet component instead
+ */
 export default function reverseSnippet({
   attribute,
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
 }: ReverseSnippetOptions): string {
+  warning(
+    false,
+    `\`instantsearch.reverseSnippet\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`ReverseSnippet\` component.
+
+For more information, visit https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/?client=html+tagged+templates#upgrade-templates`
+  );
+
   const snippetAttributeResult = getPropertyByPath(
     hit._snippetResult,
     attribute
