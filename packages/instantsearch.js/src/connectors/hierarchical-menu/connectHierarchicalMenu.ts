@@ -339,7 +339,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
 
           if (!_refine) {
             _refine = function (facetValue) {
-              sendEvent('click', facetValue);
+              sendEvent('click:internal', facetValue);
               helper
                 .toggleFacetRefinement(hierarchicalFacetName, facetValue)
                 .search();

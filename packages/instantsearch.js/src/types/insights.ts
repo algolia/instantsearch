@@ -36,6 +36,7 @@ export type InsightsEvent<TMethod extends InsightsMethod = InsightsMethod> = {
   payload: InsightsMethodMap[TMethod][0];
   widgetType: string;
   eventType: string; // 'view' | 'click' | 'conversion', but we're not restricting.
+  eventModifier?: string; // 'internal', but we're not restricting.
   hits?: Hit[];
   attribute?: string;
 };

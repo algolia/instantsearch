@@ -53,7 +53,8 @@ const createSendEvent = ({
       instantSearchInstance.sendEventToInsights(args[0]);
       return;
     }
-    const [eventType, isRefined, eventName = 'Filter Applied'] = args;
+    const [, isRefined, eventName = 'Filter Applied'] = args;
+    const [eventType, eventModifier] = args[0].split(':');
     if (eventType !== 'click' || on === undefined) {
       return;
     }
@@ -65,6 +66,7 @@ const createSendEvent = ({
         insightsMethod: 'clickedFilters',
         widgetType: $$type,
         eventType,
+        eventModifier,
         payload: {
           eventName,
           index: helper.getIndex(),
@@ -210,7 +212,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
           } = { isRefined: false }
         ) => {
           if (!isRefined) {
-            sendEvent('click', isRefined);
+            sendEvent('click:internal', isRefined);
             if (hasAnOffValue) {
               off!.forEach((v) =>
                 helper.removeDisjunctiveFacetRefinement(attribute, v)

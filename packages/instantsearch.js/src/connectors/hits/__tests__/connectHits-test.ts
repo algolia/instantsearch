@@ -809,6 +809,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'view',
+            eventModifier: 'internal',
             hits: [
               {
                 __position: 0,

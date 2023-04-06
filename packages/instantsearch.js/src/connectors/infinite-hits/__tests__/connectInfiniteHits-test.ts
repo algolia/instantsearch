@@ -1399,6 +1399,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'view',
+            eventModifier: 'internal',
             hits: [
               {
                 __position: 0,

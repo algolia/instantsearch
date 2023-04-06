@@ -778,6 +778,7 @@ search.addWidgets([
       expect(sendEventToInsights).toHaveBeenCalledTimes(2);
       expect(sendEventToInsights.mock.calls[0][0]).toEqual({
         eventType: 'view',
+        eventModifier: 'internal',
         hits: [
           {
             __position: 0,
@@ -796,6 +797,7 @@ search.addWidgets([
       });
       expect(sendEventToInsights.mock.calls[1][0]).toEqual({
         eventType: 'view',
+        eventModifier: 'internal',
         hits: [
           {
             __position: 0,

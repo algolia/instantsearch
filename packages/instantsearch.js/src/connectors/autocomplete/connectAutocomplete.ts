@@ -141,7 +141,7 @@ search.addWidgets([
         const renderState = this.getWidgetRenderState(renderOptions);
 
         renderState.indices.forEach(({ sendEvent, hits }) => {
-          sendEvent('view', hits);
+          sendEvent('view:internal', hits);
         });
 
         renderFn(
