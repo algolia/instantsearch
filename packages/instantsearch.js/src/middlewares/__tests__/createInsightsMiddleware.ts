@@ -571,14 +571,14 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('does not call `init` when default middleware is used', () => {
-      const anyWindow = window as any;
-      anyWindow.aa = jest.fn();
-
-      const { instantSearchInstance } = createTestEnvironment({
+      const { instantSearchInstance, insightsClient } = createTestEnvironment({
         insights: true,
       });
 
-      // internal middleware
+      instantSearchInstance.use(
+        createInsightsMiddleware({ $$internal: true, insightsClient })
+      );
+
       expect(instantSearchInstance.middleware).toHaveLength(1);
       expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
         [
@@ -595,8 +595,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           },
         ]
       `);
-
-      expect(anyWindow.aa).not.toHaveBeenCalledWith('init', {
+      expect(insightsClient).not.toHaveBeenCalledWith('init', {
         apiKey: 'myApiKey',
         appId: 'myAppId',
         partial: true,
