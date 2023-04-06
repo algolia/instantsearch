@@ -82,6 +82,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'viewedObjectIDs',
           {
             eventName: 'Hits Viewed',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'indexName',
             objectIDs: Array.from(
               { length: hitsPerPage },
@@ -99,6 +100,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'viewedObjectIDs',
           {
             eventName: 'Hits Viewed',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'nested',
             objectIDs: Array.from(
               { length: hitsPerPage },
@@ -194,6 +196,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'viewedObjectIDs',
           {
             eventName: 'Hits Viewed',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'indexName',
             objectIDs: Array.from(
               { length: 20 },
@@ -211,6 +214,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'viewedObjectIDs',
           {
             eventName: 'Hits Viewed',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'indexName',
             objectIDs: Array.from(
               { length: 5 },
@@ -229,6 +233,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'viewedObjectIDs',
           {
             eventName: 'Hits Viewed',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'nested',
             objectIDs: Array.from(
               { length: 20 },
@@ -246,6 +251,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'viewedObjectIDs',
           {
             eventName: 'Hits Viewed',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'nested',
             objectIDs: Array.from(
               { length: 5 },
@@ -329,6 +335,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'clickedObjectIDsAfterSearch',
           {
             eventName: 'Hit Clicked',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
@@ -414,6 +421,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'clickedObjectIDsAfterSearch',
           {
             eventName: 'Hit Clicked',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
@@ -495,6 +503,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'convertedObjectIDsAfterSearch',
           {
             eventName: 'Converted',
+            algoliaSource: ['instantsearch'],
             index: 'indexName',
             objectIDs: ['indexName-0'],
           },
@@ -509,6 +518,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'clickedObjectIDsAfterSearch',
           {
             eventName: 'Hit Clicked',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
@@ -590,6 +600,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'clickedObjectIDsAfterSearch',
           {
             eventName: 'Clicked',
+            algoliaSource: ['instantsearch'],
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
@@ -673,6 +684,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'clickedObjectIDsAfterSearch',
           {
             eventName: 'Clicked nested',
+            algoliaSource: ['instantsearch'],
             index: 'nested',
             objectIDs: ['nested-0'],
             positions: [1],
@@ -688,6 +700,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           'clickedObjectIDsAfterSearch',
           {
             eventName: 'Hit Clicked',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],

@@ -99,6 +99,7 @@ describe('hits', () => {
       expect(onEvent).toHaveBeenCalledWith(
         {
           eventType: 'view',
+          eventModifier: 'internal',
           hits: [
             {
               __position: 1,
@@ -141,6 +142,7 @@ describe('hits', () => {
       expect(onEvent).toHaveBeenCalledWith(
         {
           eventType: 'click',
+          eventModifier: 'internal',
           hits: [
             {
               __position: 1,
@@ -264,6 +266,7 @@ describe('hits', () => {
       });
       expect(onEvent.mock.calls[1][0]).toEqual({
         eventType: 'click',
+        eventModifier: 'internal',
         hits: [
           {
             __position: 2,
@@ -382,6 +385,7 @@ describe('hits', () => {
       });
       expect(onEvent.mock.calls[1][0]).toEqual({
         eventType: 'click',
+        eventModifier: 'internal',
         hits: [
           {
             __position: 2,

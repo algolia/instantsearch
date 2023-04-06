@@ -274,7 +274,7 @@ const connectMenu: MenuConnector = function connectMenu(
           _refine = function (facetValue: string) {
             const [refinedItem] =
               helper.getHierarchicalFacetBreadcrumb(attribute);
-            sendEvent!('click', facetValue ? facetValue : refinedItem);
+            sendEvent!('click:internal', facetValue ? facetValue : refinedItem);
             helper
               .toggleFacetRefinement(
                 attribute,

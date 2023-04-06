@@ -1398,6 +1398,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'isShippingFree',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

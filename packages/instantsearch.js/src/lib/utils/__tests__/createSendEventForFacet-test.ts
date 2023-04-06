@@ -96,6 +96,26 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
       });
     });
 
+    it('sends with internal eventName', () => {
+      const { sendEvent, instantSearchInstance } = createTestEnvironment();
+      sendEvent('click:internal', 'value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'category',
+        eventType: 'click',
+        eventModifier: 'internal',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['category:value'],
+          index: '',
+        },
+        widgetType: 'ais.customWidget',
+      });
+    });
+
     it('sends with custom eventName', () => {
       const { sendEvent, instantSearchInstance } = createTestEnvironment();
       sendEvent('click', 'value', 'Category Clicked');

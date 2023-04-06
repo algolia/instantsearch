@@ -27,7 +27,8 @@ export function createSendEventForFacet({
   widgetType,
 }: CreateSendEventForFacetOptions): SendEventForFacet {
   const sendEventForFacet: SendEventForFacet = (...args: any[]) => {
-    const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+    const [, facetValue, eventName = 'Filter Applied'] = args;
+    const [eventType, eventModifier]: [string, string] = args[0].split(':');
     const attribute = typeof attr === 'string' ? attr : attr(facetValue);
 
     if (args.length === 1 && typeof args[0] === 'object') {
@@ -42,6 +43,7 @@ export function createSendEventForFacet({
           insightsMethod: 'clickedFilters',
           widgetType,
           eventType,
+          eventModifier,
           payload: {
             eventName,
             index: helper.getIndex(),
