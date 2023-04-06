@@ -5,6 +5,7 @@ import {
 } from 'search-insights';
 
 import type { InsightsClient } from 'instantsearch.js';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 
 /**
  * Tests that rely on this mock interface have side effects caused by
@@ -24,9 +25,9 @@ export function createInsights<TVersion extends string | undefined = '2.4.0'>({
       requestFn: jest.fn(),
     })
   );
-  const mockedInsightsClient = jest.fn(
-    getFunctionalInterface(analytics)
-  ) as unknown as jest.Mock<InsightsClient>;
+  const mockedInsightsClient = castToJestMock(
+    jest.fn(getFunctionalInterface(analytics)) as InsightsClient
+  );
 
   if (forceVersion) {
     return {

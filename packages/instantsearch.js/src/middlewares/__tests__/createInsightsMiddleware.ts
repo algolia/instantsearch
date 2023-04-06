@@ -789,7 +789,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         },
       ]);
 
-      insightsClient('setUserToken', undefined);
+      insightsClient('setUserToken', '');
 
       await wait(0);
       expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
