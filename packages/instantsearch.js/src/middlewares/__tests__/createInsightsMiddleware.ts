@@ -602,6 +602,41 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         useCookie: true,
       });
     });
+
+    it('does call `init` when `initParams` are passed', () => {
+      const { instantSearchInstance, insightsClient } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          $$internal: true,
+          insightsClient,
+          insightsInitParams: { useCookie: false },
+        })
+      );
+
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": true,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+      expect(insightsClient).toHaveBeenCalledWith('init', {
+        apiKey: 'myApiKey',
+        appId: 'myAppId',
+        partial: true,
+        useCookie: false,
+      });
+    });
   });
 
   describe('userToken', () => {

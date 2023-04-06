@@ -141,7 +141,7 @@ export function createInsightsMiddleware<
     });
 
     // Only `init` if user provided the `insights` middleware.
-    if (!$$internal) {
+    if (!$$internal || insightsInitParams) {
       insightsClient('init', {
         appId,
         apiKey,
