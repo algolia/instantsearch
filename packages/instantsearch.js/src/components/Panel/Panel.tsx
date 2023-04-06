@@ -19,7 +19,7 @@ export type PanelComponentCSSClasses = ComponentCSSClasses<
 >;
 
 export type PanelComponentTemplates<TWidget extends UnknownWidgetFactory> =
-  Required<PanelTemplates<TWidget>>;
+  PanelTemplates<TWidget>;
 
 export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   hidden: boolean;
