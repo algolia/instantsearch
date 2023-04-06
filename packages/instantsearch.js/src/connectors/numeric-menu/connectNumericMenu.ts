@@ -309,7 +309,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
               attribute,
               facetValue
             );
-            connectorState.sendEvent!('click', facetValue);
+            connectorState.sendEvent!('click:internal', facetValue);
             helper.setState(refinedState).search();
           };
         }

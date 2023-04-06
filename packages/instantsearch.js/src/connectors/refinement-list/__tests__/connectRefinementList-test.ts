@@ -3274,6 +3274,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'category',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

@@ -1668,6 +1668,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'category',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

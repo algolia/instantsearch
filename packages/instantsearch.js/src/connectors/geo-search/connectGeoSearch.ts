@@ -316,7 +316,7 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
 
         const widgetRenderState = this.getWidgetRenderState(renderArgs);
 
-        sendEvent('view', widgetRenderState.items);
+        sendEvent('view:internal', widgetRenderState.items);
 
         renderFn(
           {

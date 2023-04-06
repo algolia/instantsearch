@@ -261,6 +261,14 @@ export function createInsightsMiddleware<
               insightsClientWithLocalCredentials as TInsightsClient
             );
           } else if (event.insightsMethod) {
+            // Source is used to differentiate events sent by instantsearch from those sent manually.
+            (event.payload as any).algoliaSource = ['instantsearch'];
+            if (event.eventModifier === 'internal') {
+              (event.payload as any).algoliaSource.push(
+                'instantsearch-internal'
+              );
+            }
+
             insightsClientWithLocalCredentials(
               event.insightsMethod,
               event.payload
