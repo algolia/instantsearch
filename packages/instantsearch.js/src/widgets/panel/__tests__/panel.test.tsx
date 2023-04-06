@@ -48,30 +48,28 @@ describe('panel', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed"
-  >
-    
-    <div
-      class="ais-Panel-body"
-    >
-      <div>
-        <div
-          class="ais-Stats"
-        >
-          <span
-            class="ais-Stats-text"
+        <div>
+          <div
+            class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed"
           >
-            10 results found in 0ms
-          </span>
+            <div
+              class="ais-Panel-body"
+            >
+              <div>
+                <div
+                  class="ais-Stats"
+                >
+                  <span
+                    class="ais-Stats-text"
+                  >
+                    10 results found in 0ms
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    
-  </div>
-</div>
-`);
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -109,58 +107,58 @@ describe('panel', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed"
-  >
-    <div
-      class="ais-Panel-header"
-    >
-      <span>
-        <span>
-          Header 
-          (10 results)
-        </span>
-      </span>
-      <button
-        aria-expanded="false"
-        class="ais-Panel-collapseButton"
-      >
-        <span>
-          <span>
-            More
-          </span>
-        </span>
-      </button>
-    </div>
-    <div
-      class="ais-Panel-body"
-    >
-      <div>
-        <div
-          class="ais-Stats"
-        >
-          <span
-            class="ais-Stats-text"
+        <div>
+          <div
+            class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed"
           >
-            10 results found in 0ms
-          </span>
+            <div
+              class="ais-Panel-header"
+            >
+              <span>
+                <span>
+                  Header 
+                  (10 results)
+                </span>
+              </span>
+              <button
+                aria-expanded="false"
+                class="ais-Panel-collapseButton"
+              >
+                <span>
+                  <span>
+                    More
+                  </span>
+                </span>
+              </button>
+            </div>
+            <div
+              class="ais-Panel-body"
+            >
+              <div>
+                <div
+                  class="ais-Stats"
+                >
+                  <span
+                    class="ais-Stats-text"
+                  >
+                    10 results found in 0ms
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="ais-Panel-footer"
+            >
+              <a
+                href="#"
+              >
+                Footer 
+                (10 results)
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div
-      class="ais-Panel-footer"
-    >
-      <a
-        href="#"
-      >
-        Footer 
-        (10 results)
-      </a>
-    </div>
-  </div>
-</div>
-`);
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -200,58 +198,58 @@ describe('panel', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed"
-  >
-    <div
-      class="ais-Panel-header"
-    >
-      <span>
-        <span>
-          Header 
-          (10 results)
-        </span>
-      </span>
-      <button
-        aria-expanded="false"
-        class="ais-Panel-collapseButton"
-      >
-        <span>
-          <span>
-            More
-          </span>
-        </span>
-      </button>
-    </div>
-    <div
-      class="ais-Panel-body"
-    >
-      <div>
-        <div
-          class="ais-Stats"
-        >
-          <span
-            class="ais-Stats-text"
+        <div>
+          <div
+            class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed"
           >
-            10 results found in 0ms
-          </span>
+            <div
+              class="ais-Panel-header"
+            >
+              <span>
+                <span>
+                  Header 
+                  (10 results)
+                </span>
+              </span>
+              <button
+                aria-expanded="false"
+                class="ais-Panel-collapseButton"
+              >
+                <span>
+                  <span>
+                    More
+                  </span>
+                </span>
+              </button>
+            </div>
+            <div
+              class="ais-Panel-body"
+            >
+              <div>
+                <div
+                  class="ais-Stats"
+                >
+                  <span
+                    class="ais-Stats-text"
+                  >
+                    10 results found in 0ms
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="ais-Panel-footer"
+            >
+              <a
+                href="#"
+              >
+                Footer 
+                (10 results)
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div
-      class="ais-Panel-footer"
-    >
-      <a
-        href="#"
-      >
-        Footer 
-        (10 results)
-      </a>
-    </div>
-  </div>
-</div>
-`);
+      `);
     });
 
     function createMockedSearchClient() {
