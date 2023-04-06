@@ -68,13 +68,7 @@ storiesOf('Refinements/Menu', module)
           showMore: true,
           showMoreLimit: 10,
           templates: {
-            showMoreText: `
-              {{#isShowingMore}}
-                ⬆️
-              {{/isShowingMore}}
-              {{^isShowingMore}}
-                ⬇️
-              {{/isShowingMore}}`,
+            showMoreText: ({ isShowingMore }) => (isShowingMore ? '⬆️' : '⬇️'),
           },
         }),
       ]);

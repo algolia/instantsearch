@@ -31,26 +31,24 @@ storiesOf('Metadata/QueryRuleCustomData', module)
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
           templates: {
-            default: ({ items }: { items: CustomDataItem[] }) =>
-              items
-                .map((item) => {
-                  const { title, banner, link } = item;
+            default: ({ items }: { items: CustomDataItem[] }, { html }) =>
+              items.map((item) => {
+                const { title, banner, link } = item;
 
-                  if (!banner) {
-                    return '';
-                  }
+                if (!banner) {
+                  return html``;
+                }
 
-                  return `
+                return html`
                   <section>
                     <h2>${title}</h2>
 
                     <a href="${link}">
-                      <img src="${banner}" alt="${title}">
+                      <img src="${banner}" alt="${title}" />
                     </a>
                   </section>
                 `;
-                })
-                .join(''),
+              }),
           },
         }),
       ]);
@@ -116,20 +114,20 @@ storiesOf('Metadata/QueryRuleCustomData', module)
             ];
           },
           templates: {
-            default({ items }: { items: CustomDataItem[] }) {
+            default({ items }: { items: CustomDataItem[] }, { html }) {
               if (items.length === 0) {
-                return '';
+                return html``;
               }
 
               const { title, banner, link } = items[0];
 
-              return `
-              <h2>${title}</h2>
+              return html`
+                <h2>${title}</h2>
 
-              <a href="${link}">
-                <img src="${banner}" alt="${title}">
-              </a>
-            `;
+                <a href="${link}">
+                  <img src="${banner}" alt="${title}" />
+                </a>
+              `;
             },
           },
         }),

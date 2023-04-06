@@ -34,7 +34,7 @@ storiesOf('Basics/DynamicWidgets', module)
               }),
             (container) =>
               instantsearch.widgets.panel({
-                templates: { header: 'hierarchy' },
+                templates: { header: () => 'hierarchy' },
               })(instantsearch.widgets.hierarchicalMenu)({
                 container,
                 attributes: [
@@ -79,7 +79,7 @@ storiesOf('Basics/DynamicWidgets', module)
               }),
             (container) =>
               instantsearch.widgets.panel({
-                templates: { header: 'hierarchy' },
+                templates: { header: () => 'hierarchy' },
               })(instantsearch.widgets.hierarchicalMenu)({
                 container,
                 attributes: [
