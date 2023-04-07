@@ -140,8 +140,9 @@ export function createInsightsMiddleware<
       userTokenBeforeInit = userToken;
     });
 
-    // Only `init` if user provided the `insights` middleware.
-    if (!$$internal || insightsInitParams) {
+    // Only `init` if the `insightsInitParams` option is passed or
+    // if the `insightsClient` version doesn't supports optional `init` calling.
+    if (insightsInitParams || !supportsOptionalInitMethod(insightsClient)) {
       insightsClient('init', {
         appId,
         apiKey,
@@ -246,7 +247,7 @@ export function createInsightsMiddleware<
         let insightsClientWithLocalCredentials =
           insightsClient as InsightsClientWithLocalCredentials;
 
-        if (isModernInsightsClient(insightsClient)) {
+        if (supportsOptionalInitMethod(insightsClient)) {
           insightsClientWithLocalCredentials = (method, payload) => {
             const extraParams = {
               headers: {
@@ -312,7 +313,9 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
   };
 }
 
-function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
+function supportsOptionalInitMethod(
+  client: InsightsClientWithGlobals
+): boolean {
   const [major, minor] = (client.version || '').split('.').map(Number);
 
   /* eslint-disable @typescript-eslint/naming-convention */
