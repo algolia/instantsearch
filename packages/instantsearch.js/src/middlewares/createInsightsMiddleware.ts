@@ -142,7 +142,7 @@ export function createInsightsMiddleware<
 
     // Only `init` if the `insightsInitParams` option is passed or
     // if the `insightsClient` version doesn't supports optional `init` calling.
-    if (insightsInitParams || !supportsOptionalInitMethod(insightsClient)) {
+    if (insightsInitParams || !isModernInsightsClient(insightsClient)) {
       insightsClient('init', {
         appId,
         apiKey,
@@ -247,7 +247,7 @@ export function createInsightsMiddleware<
         let insightsClientWithLocalCredentials =
           insightsClient as InsightsClientWithLocalCredentials;
 
-        if (supportsOptionalInitMethod(insightsClient)) {
+        if (isModernInsightsClient(insightsClient)) {
           insightsClientWithLocalCredentials = (method, payload) => {
             const extraParams = {
               headers: {
@@ -313,9 +313,11 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
   };
 }
 
-function supportsOptionalInitMethod(
-  client: InsightsClientWithGlobals
-): boolean {
+/**
+ * Determines if a given insights `client` supports the optional call to `init`
+ * and the ability to set credentials via extra parameters when sending events.
+ */
+function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
   const [major, minor] = (client.version || '').split('.').map(Number);
 
   /* eslint-disable @typescript-eslint/naming-convention */
