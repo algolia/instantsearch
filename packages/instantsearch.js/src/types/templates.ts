@@ -4,12 +4,12 @@ import type {
   ReverseSnippet,
   Snippet,
 } from '../helpers/components';
+import type { html } from '../lib/templating/renderTemplate';
 import type {
   BuiltInBindEventForHits,
   CustomBindEventForHits,
   SendEventForHits,
 } from '../lib/utils';
-import type { html } from 'htm/preact';
 import type { VNode } from 'preact';
 
 export type Template<TTemplateData = void> =

@@ -1,5 +1,6 @@
 import hogan from 'hogan.js';
-import { html } from 'htm/preact';
+import htm from 'htm';
+import { h, options } from 'preact';
 
 import {
   Highlight,
@@ -14,6 +15,25 @@ import type {
   SendEventForHits,
 } from '../utils/createSendEventForHits';
 import type { HoganOptions, Template } from 'hogan.js';
+
+const components = {
+  Highlight,
+  ReverseHighlight,
+  Snippet,
+  ReverseSnippet,
+};
+
+const oldVnodeOptions = options.vnode;
+options.vnode = (vnode) => {
+  if ((vnode.type as string) in components) {
+    vnode.type = components[
+      vnode.type as keyof typeof components
+    ] as typeof vnode.type;
+  }
+  if (oldVnodeOptions) oldVnodeOptions(vnode);
+};
+
+export const html = htm.bind(h);
 
 type TransformedHoganHelpers = {
   [helper: string]: () => (text: string) => string;
@@ -75,12 +95,7 @@ export function renderTemplate({
 
     params.html = html;
     (params as any).sendEvent = sendEvent;
-    params.components = {
-      Highlight,
-      ReverseHighlight,
-      Snippet,
-      ReverseSnippet,
-    };
+    params.components = components;
 
     // @MAJOR remove the `as any` when string templates are removed
     // needed because not every template receives sendEvent

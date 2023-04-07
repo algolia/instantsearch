@@ -1,16 +1,13 @@
 import { HitsTemplates } from '../../src/widgets/hits/hits';
 import { Playground } from '../decorators';
 
-export const hitsItemTemplate: HitsTemplates['item'] = (
-  hit,
-  { html, components }
-) => html`
+export const hitsItemTemplate: HitsTemplates['item'] = (hit, { html }) => html`
   <div class="hits-image" style="background-image: url(${hit.image})"></div>
   <article>
     <header>
-      <strong>${components.Highlight({ hit, attribute: 'name' })}</strong>
+      <strong><Highlight hit=${hit} attribute="name" /></strong>
     </header>
-    <p>${components.Snippet({ hit, attribute: 'description' })}</p>
+    <p><Snippet hit=${hit} attribute="description" /></p>
     <footer>
       <p>
         <strong>${hit.price}$</strong>
@@ -140,7 +137,7 @@ const instantSearchPlayground: Playground = function instantSearchPlayground({
 
   const insights = instantsearch.middlewares.createInsightsMiddleware({
     insightsClient: null,
-    onEvent: props => {
+    onEvent: (props) => {
       console.log('insights onEvent', props);
     },
   });
