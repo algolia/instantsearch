@@ -132,6 +132,29 @@ describe('getServerState', () => {
     );
   });
 
+  test('throws with multiple <InstantSearch> components', async () => {
+    function App({ serverState }: { serverState?: InstantSearchServerState }) {
+      return (
+        <InstantSearchSSRProvider {...serverState}>
+          <InstantSearch
+            searchClient={createSearchClient({})}
+            indexName="index"
+          />
+          <InstantSearch
+            searchClient={createSearchClient({})}
+            indexName="index"
+          />
+        </InstantSearchSSRProvider>
+      );
+    }
+
+    await expect(
+      getServerState(<App />)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"getServerState should be called with a single InstantSearchSSRProvider and a single InstantSearch component."`
+    );
+  });
+
   test('throws when the search client errors, async', async () => {
     const searchClient = createSearchClient({
       // Function is async to match the real search client.
