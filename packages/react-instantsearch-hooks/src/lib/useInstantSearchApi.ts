@@ -127,7 +127,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     const prevProps = prevPropsRef.current;
 
     if (prevProps.indexName !== props.indexName) {
-      search.helper!.setIndex(props.indexName).search();
+      search.helper!.setIndex(props.indexName || '').search();
       prevPropsRef.current = props;
     }
 

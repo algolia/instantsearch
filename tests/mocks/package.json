@@ -3,7 +3,7 @@
   "version": "1.12.0",
   "private": true,
   "dependencies": {
-    "algoliasearch-helper": "3.11.3",
+    "algoliasearch-helper": "https://pkg.csb.dev/algolia/algoliasearch-helper-js/commit/6ca09d86/algoliasearch-helper",
     "instantsearch.js": "4.55.0"
   }
 }

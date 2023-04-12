@@ -8521,10 +8521,10 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-algoliasearch-helper@3.11.3, algoliasearch-helper@^3.11.3:
-  version "3.11.3"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.11.3.tgz#6e7af8afe6f9a9e55186abffb7b6cf7ca8de3301"
-  integrity sha512-TbaEvLwiuGygHQIB8y+OsJKQQ40+JKUua5B91X66tMUHyyhbNHvqyr0lqd3wCoyKx7WybyQrC0WJvzoIeh24Aw==
+"algoliasearch-helper@https://pkg.csb.dev/algolia/algoliasearch-helper-js/commit/6ca09d86/algoliasearch-helper":
+  version "3.12.0"
+  uid e4bc32a93a30775c72a2f5cef98748fd76f0a03c
+  resolved "https://pkg.csb.dev/algolia/algoliasearch-helper-js/commit/6ca09d86/algoliasearch-helper#e4bc32a93a30775c72a2f5cef98748fd76f0a03c"
   dependencies:
     "@algolia/events" "^4.0.1"
 
