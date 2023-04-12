@@ -137,6 +137,10 @@ export type RefinementListRenderState = {
    */
   isShowingMore: boolean;
   /**
+   * Total number of facets that can be displayed for 'show more'.
+   */
+  showMoreCount: number;
+  /**
    * Toggles the number of values displayed between `limit` and `showMoreLimit`.
    */
   toggleShowMore: () => void;
@@ -235,6 +239,7 @@ const connectRefinementList: RefinementListConnector =
       let sendEvent: RefinementListRenderState['sendEvent'] | undefined;
 
       let isShowingMore = false;
+      let showMoreCount = 0;
       // Provide the same function to the `renderFn` so that way the user
       // has to only bind it once when `isFirstRendering` for instance
       let toggleShowMore = () => {};
@@ -322,6 +327,7 @@ const connectRefinementList: RefinementListConnector =
                       }),
                       items: normalizedFacetValues,
                       canToggleShowMore: false,
+                      showMoreCount,
                       canRefine: true,
                       isFromSearch: true,
                       instantSearchInstance,
@@ -371,6 +377,7 @@ const connectRefinementList: RefinementListConnector =
             renderOptions;
           let items: RefinementListItem[] = [];
           let facetValues: SearchResults.FacetValue[] | FacetHit[] = [];
+          showMoreCount = 0;
 
           if (!sendEvent || !triggerRefine || !searchForFacetValues) {
             sendEvent = createSendEventForFacet({
@@ -415,6 +422,10 @@ const connectRefinementList: RefinementListConnector =
             lastResultsFromMainSearch = results;
             lastItemsFromMainSearch = items;
 
+            if (facetValues.length > 0 && facetValues.length > currentLimit) {
+              showMoreCount = Object.keys(facetValues).length - currentLimit;
+            }
+
             if (renderOptions.results) {
               toggleShowMore = createToggleShowMore(renderOptions, this);
             }
@@ -443,6 +454,7 @@ const connectRefinementList: RefinementListConnector =
             canRefine: items.length > 0,
             widgetParams,
             isShowingMore,
+            showMoreCount,
             canToggleShowMore,
             toggleShowMore: cachedToggleShowMore,
             sendEvent,
