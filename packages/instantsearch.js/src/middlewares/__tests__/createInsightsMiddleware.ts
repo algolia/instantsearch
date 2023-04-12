@@ -263,6 +263,7 @@ describe('insights', () => {
 
     it('notifies when the script fails to be added', () => {
       const { instantSearchInstance } = createTestEnvironment();
+      /* eslint-disable deprecation/deprecation */
       const createElement = document.createElement;
       document.createElement = () => {
         throw new Error('error');
@@ -277,6 +278,7 @@ describe('insights', () => {
       instantSearchInstance.use(createInsightsMiddleware());
 
       document.createElement = createElement;
+      /* eslint-enable deprecation/deprecation */
     });
 
     it('notifies when the script fails to load', () => {
@@ -309,23 +311,9 @@ describe('insights', () => {
         apiKey: 'myApiKey',
         appId: 'myAppId',
         region: 'de',
+        partial: true,
         useCookie: false,
       });
-    });
-
-    it('throws when search client does not have credentials', () => {
-      const { insightsClient } = createInsights();
-      const instantSearchInstance = createInstantSearch({
-        // @ts-expect-error fake client
-        client: { search: () => {} },
-      });
-      expect(() =>
-        createInsightsMiddleware({
-          insightsClient,
-        })({ instantSearchInstance })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"apiKey is missing, please provide it so we can authenticate the application"`
-      );
     });
 
     it('warns when search client does not have credentials', () => {
@@ -581,6 +569,74 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         ]
       `);
     });
+
+    it('does not call `init` when default middleware is used', () => {
+      const { instantSearchInstance, insightsClient } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ $$internal: true, insightsClient })
+      );
+
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": true,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+      expect(insightsClient).not.toHaveBeenCalledWith('init', {
+        apiKey: 'myApiKey',
+        appId: 'myAppId',
+        partial: true,
+        useCookie: true,
+      });
+    });
+
+    it('does call `init` when `initParams` are passed', () => {
+      const { instantSearchInstance, insightsClient } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          $$internal: true,
+          insightsClient,
+          insightsInitParams: { useCookie: false },
+        })
+      );
+
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": true,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+      expect(insightsClient).toHaveBeenCalledWith('init', {
+        apiKey: 'myApiKey',
+        appId: 'myAppId',
+        partial: true,
+        useCookie: false,
+      });
+    });
   });
 
   describe('userToken', () => {
@@ -768,7 +824,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         },
       ]);
 
-      insightsClient('setUserToken', undefined);
+      insightsClient('setUserToken', '');
 
       await wait(0);
       expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);

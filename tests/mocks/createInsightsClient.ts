@@ -5,6 +5,15 @@ import {
 } from 'search-insights';
 
 import type { InsightsClient } from 'instantsearch.js';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+
+/**
+ * Tests that rely on this mock interface have side effects caused by
+ * the import of search-insights. The following code deletes those side effects.
+ */
+try {
+  delete window.AlgoliaAnalyticsObject;
+} catch (error) {} // eslint-disable-line no-empty
 
 export function createInsights<TVersion extends string | undefined = '2.4.0'>({
   forceVersion = '2.4.0',
@@ -16,22 +25,22 @@ export function createInsights<TVersion extends string | undefined = '2.4.0'>({
       requestFn: jest.fn(),
     })
   );
+  const mockedInsightsClient = castToJestMock(
+    jest.fn(getFunctionalInterface(analytics)) as InsightsClient
+  );
 
   if (forceVersion) {
     return {
       analytics,
-      insightsClient: Object.assign(
-        jest.fn(getFunctionalInterface(analytics)),
-        {
-          version: forceVersion,
-        }
-      ),
+      insightsClient: Object.assign(mockedInsightsClient, {
+        version: forceVersion,
+      }),
     };
   }
 
   return {
     analytics,
-    insightsClient: jest.fn(getFunctionalInterface(analytics)),
+    insightsClient: mockedInsightsClient,
   };
 }
 
