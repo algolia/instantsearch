@@ -243,6 +243,7 @@ const renderer =
       instantSearchInstance,
       toggleShowMore,
       isShowingMore,
+      showMoreCount,
       hasExhaustiveItems,
       canToggleShowMore,
     },
@@ -277,6 +278,7 @@ const renderer =
         showMore={showMore && !isFromSearch && items.length > 0}
         toggleShowMore={toggleShowMore}
         isShowingMore={isShowingMore}
+        showMoreCount={showMoreCount}
         hasExhaustiveItems={hasExhaustiveItems}
         canToggleShowMore={canToggleShowMore}
       />,
