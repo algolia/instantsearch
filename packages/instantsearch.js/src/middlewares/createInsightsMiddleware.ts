@@ -73,6 +73,7 @@ export function createInsightsMiddleware<
 
       if (!potentialInsightsClient) {
         window.AlgoliaAnalyticsObject = pointer;
+
         if (!window[pointer]) {
           window[pointer] = (...args: any[]) => {
             if (!window[pointer].queue) {
@@ -138,12 +139,18 @@ export function createInsightsMiddleware<
       // Otherwise, the `init` call might override it with anonymous user token.
       userTokenBeforeInit = userToken;
     });
-    insightsClient('init', {
-      appId,
-      apiKey,
-      useCookie: true,
-      ...insightsInitParams,
-    });
+
+    // Only `init` if the `insightsInitParams` option is passed or
+    // if the `insightsClient` version doesn't supports optional `init` calling.
+    if (insightsInitParams || !isModernInsightsClient(insightsClient)) {
+      insightsClient('init', {
+        appId,
+        apiKey,
+        useCookie: true,
+        partial: true,
+        ...insightsInitParams,
+      });
+    }
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
@@ -306,6 +313,10 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
   };
 }
 
+/**
+ * Determines if a given insights `client` supports the optional call to `init`
+ * and the ability to set credentials via extra parameters when sending events.
+ */
 function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
   const [major, minor] = (client.version || '').split('.').map(Number);
 
