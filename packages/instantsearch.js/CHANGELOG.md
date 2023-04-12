@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.54.1](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.54.0...instantsearch.js@4.54.1) (2023-04-11)
+
+
+### Bug Fixes
+
+* **helpers:** deprecate highlight helpers ([09817fb](https://github.com/algolia/instantsearch.js/commit/09817fb1e9231cb60d91f1c08e918fec18b08fcf))
+* **pagination:** use real template ([6783408](https://github.com/algolia/instantsearch.js/commit/678340856f690e1ebaa94c407d4d2e7644f6c1d1))
+* **panel:** use undefined templates by default ([dcef813](https://github.com/algolia/instantsearch.js/commit/dcef813020a5f9b2d3a128fe79653df52efb097d))
+* **Template:** easier to debug warning when string template is used ([f285942](https://github.com/algolia/instantsearch.js/commit/f2859424526b65f969e0bf69e0c358c433bf5b32))
+
+
+
+
+
 # [4.54.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.53.0...instantsearch.js@4.54.0) (2023-03-28)
 
 
