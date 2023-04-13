@@ -6,7 +6,10 @@ import {
   createAlgoliaSearchClient,
   createSearchClient,
 } from '@instantsearch/mocks';
-import { createInstantSearchSpy } from '@instantsearch/testutils';
+import {
+  createInstantSearchSpy,
+  widgetSnapshotSerializer,
+} from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React, { StrictMode } from 'react';
 
@@ -18,6 +21,8 @@ import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+
+expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
 describe('Index', () => {
   test('throws when used outside of <InstantSearch>', () => {
@@ -187,6 +192,55 @@ describe('Index', () => {
       expect(indexContext.current!.removeWidgets).toHaveBeenCalledWith([
         expect.objectContaining({ $$type: 'ais.index' }),
       ]);
+    });
+  });
+
+  describe('parentIndexId', () => {
+    test('adds the index with the correct parentIndexId', () => {
+      const searchClient = createSearchClient({});
+      const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
+
+      render(
+        <StrictMode>
+          <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+            <Index indexName="indexName2">
+              <Index indexName="indexName3" parentIndexId={null}>
+                <Index indexName="indexName4" parentIndexId="indexName2" />
+                <Index indexName="indexName5" />
+              </Index>
+            </Index>
+          </InstantSearchSpy>
+        </StrictMode>
+      );
+
+      expect(searchContext.current!.mainIndex).toMatchInlineSnapshot(`
+        Widget(ais.index) {
+          $$widgetType: ais.index
+          indexId: indexName
+          widgets: [
+            Widget(ais.index) {
+              $$widgetType: ais.index
+              indexId: indexName2
+              widgets: [
+                Widget(ais.index) {
+                  $$widgetType: ais.index
+                  indexId: indexName4
+                }
+              ]
+            }
+            Widget(ais.index) {
+              $$widgetType: ais.index
+              indexId: indexName3
+              widgets: [
+                Widget(ais.index) {
+                  $$widgetType: ais.index
+                  indexId: indexName5
+                }
+              ]
+            }
+          ]
+        }
+      `);
     });
   });
 });
