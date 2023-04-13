@@ -35,11 +35,23 @@ export function getServerState(
     current: undefined,
   };
 
-  const notifyServer: InstantSearchServerContextApi<
-    UiState,
-    UiState
-  >['notifyServer'] = ({ search }) => {
-    searchRef.current = search;
+  const createNotifyServer = () => {
+    let hasBeenNotified = false;
+    const notifyServer: InstantSearchServerContextApi<
+      UiState,
+      UiState
+    >['notifyServer'] = ({ search }) => {
+      if (hasBeenNotified) {
+        throw new Error(
+          'getServerState should be called with a single InstantSearchSSRProvider and a single InstantSearch component.'
+        );
+      }
+
+      hasBeenNotified = true;
+      searchRef.current = search;
+    };
+
+    return notifyServer;
   };
 
   return importRenderToString(options.renderToString)
@@ -48,7 +60,7 @@ export function getServerState(
         children,
         renderToString,
         searchRef,
-        notifyServer,
+        notifyServer: createNotifyServer(),
       }).then((serverState) => ({ serverState, renderToString }));
     })
     .then(({ renderToString, serverState }) => {
@@ -73,7 +85,7 @@ export function getServerState(
           ),
           renderToString,
           searchRef,
-          notifyServer,
+          notifyServer: createNotifyServer(),
         });
       }
 
@@ -94,14 +106,19 @@ function execute({
   notifyServer,
   searchRef,
 }: ExecuteArgs) {
-  renderToString(
-    <InstantSearchServerContext.Provider value={{ notifyServer }}>
-      {children}
-    </InstantSearchServerContext.Provider>
-  );
-
-  // We wait for the component to mount so that `notifyServer()` is called.
-  return new Promise((resolve) => setTimeout(resolve, 0))
+  return Promise.resolve()
+    .then(() => {
+      renderToString(
+        <InstantSearchServerContext.Provider value={{ notifyServer }}>
+          {children}
+        </InstantSearchServerContext.Provider>
+      );
+    })
+    .then(
+      () =>
+        // We wait for the component to mount so that `notifyServer()` is called.
+        new Promise((resolve) => setTimeout(resolve, 0))
+    )
     .then(() => {
       // If `notifyServer()` is not called by then, it means that <InstantSearch>
       // wasn't within the `children`.
