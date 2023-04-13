@@ -404,7 +404,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
 
         if (localWidgets.length) {
-          localInstantSearchInstance.scheduleSearch();
+          localInstantSearchInstance.scheduleSearch2();
         }
       }
 

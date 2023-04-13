@@ -640,6 +640,15 @@ See ${createDocumentationLink({
     }
   });
 
+  public scheduleSearch2 = defer(
+    () => {
+      if (this.started) {
+        this.mainHelper!.search();
+      }
+    },
+    () => new Promise((resolve) => setTimeout(resolve, 0))
+  );
+
   public scheduleRender = defer((shouldResetStatus: boolean = true) => {
     if (!this.mainHelper?.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
