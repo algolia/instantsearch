@@ -1,5 +1,6 @@
-/** @ts-ignore */
 import type { WidgetFactory, WidgetRenderState } from '../../types';
+/* Places.js is an optional dependency, no error should be reported if the package is missing */
+/** @ts-ignore */
 import type * as Places from 'places.js';
 
 // using the type like this requires only one ts-ignore

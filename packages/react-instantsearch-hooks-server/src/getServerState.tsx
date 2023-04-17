@@ -1,12 +1,15 @@
-import { isIndexWidget } from 'instantsearch.js/es/lib/utils/index';
+import {
+  getInitialResults,
+  waitForResults,
+} from 'instantsearch.js/es/lib/server';
+import { walkIndex } from 'instantsearch.js/es/lib/utils';
 import React from 'react';
 import {
   InstantSearchServerContext,
   InstantSearchSSRProvider,
 } from 'react-instantsearch-hooks';
 
-import type { InitialResults, InstantSearch, UiState } from 'instantsearch.js';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { InstantSearch, UiState } from 'instantsearch.js';
 import type { ReactNode } from 'react';
 import type {
   InstantSearchServerContextApi,
@@ -32,11 +35,23 @@ export function getServerState(
     current: undefined,
   };
 
-  const notifyServer: InstantSearchServerContextApi<
-    UiState,
-    UiState
-  >['notifyServer'] = ({ search }) => {
-    searchRef.current = search;
+  const createNotifyServer = () => {
+    let hasBeenNotified = false;
+    const notifyServer: InstantSearchServerContextApi<
+      UiState,
+      UiState
+    >['notifyServer'] = ({ search }) => {
+      if (hasBeenNotified) {
+        throw new Error(
+          'getServerState should be called with a single InstantSearchSSRProvider and a single InstantSearch component.'
+        );
+      }
+
+      hasBeenNotified = true;
+      searchRef.current = search;
+    };
+
+    return notifyServer;
   };
 
   return importRenderToString(options.renderToString)
@@ -45,7 +60,7 @@ export function getServerState(
         children,
         renderToString,
         searchRef,
-        notifyServer,
+        notifyServer: createNotifyServer(),
       }).then((serverState) => ({ serverState, renderToString }));
     })
     .then(({ renderToString, serverState }) => {
@@ -70,7 +85,7 @@ export function getServerState(
           ),
           renderToString,
           searchRef,
-          notifyServer,
+          notifyServer: createNotifyServer(),
         });
       }
 
@@ -91,14 +106,19 @@ function execute({
   notifyServer,
   searchRef,
 }: ExecuteArgs) {
-  renderToString(
-    <InstantSearchServerContext.Provider value={{ notifyServer }}>
-      {children}
-    </InstantSearchServerContext.Provider>
-  );
-
-  // We wait for the component to mount so that `notifyServer()` is called.
-  return new Promise((resolve) => setTimeout(resolve, 0))
+  return Promise.resolve()
+    .then(() => {
+      renderToString(
+        <InstantSearchServerContext.Provider value={{ notifyServer }}>
+          {children}
+        </InstantSearchServerContext.Provider>
+      );
+    })
+    .then(
+      () =>
+        // We wait for the component to mount so that `notifyServer()` is called.
+        new Promise((resolve) => setTimeout(resolve, 0))
+    )
     .then(() => {
       // If `notifyServer()` is not called by then, it means that <InstantSearch>
       // wasn't within the `children`.
@@ -116,78 +136,10 @@ function execute({
       return waitForResults(searchRef.current);
     })
     .then(() => {
-      const initialResults = getInitialResults(searchRef.current!.mainIndex);
-
       return {
-        initialResults,
+        initialResults: getInitialResults(searchRef.current!.mainIndex),
       };
     });
-}
-
-/**
- * Waits for the results from the search instance to coordinate the next steps
- * in `getServerState()`.
- */
-function waitForResults(search: InstantSearch) {
-  const helper = search.mainHelper!;
-
-  helper.searchOnlyWithDerivedHelpers();
-
-  return new Promise<void>((resolve, reject) => {
-    // All derived helpers resolve in the same tick so we're safe only relying
-    // on the first one.
-    helper.derivedHelpers[0].on('result', () => {
-      resolve();
-    });
-
-    // However, we listen to errors that can happen on any derived helper because
-    // any error is critical.
-    helper.on('error', (error) => reject(error));
-    search.on('error', (error) => reject(error));
-    helper.derivedHelpers.forEach((derivedHelper) =>
-      derivedHelper.on('error', (error) => {
-        reject(error);
-      })
-    );
-  });
-}
-
-/**
- * Recurse over all child indices
- */
-function walkIndex(
-  indexWidget: IndexWidget,
-  callback: (widget: IndexWidget) => void
-) {
-  callback(indexWidget);
-
-  return indexWidget.getWidgets().forEach((widget) => {
-    if (!isIndexWidget(widget)) {
-      return;
-    }
-
-    callback(widget);
-    walkIndex(widget, callback);
-  });
-}
-
-/**
- * Walks the InstantSearch root index to construct the initial results.
- */
-function getInitialResults(rootIndex: IndexWidget): InitialResults {
-  const initialResults: InitialResults = {};
-
-  walkIndex(rootIndex, (widget) => {
-    const searchResults = widget.getResults()!;
-    initialResults[widget.getIndexId()] = {
-      // We convert the Helper state to a plain object to pass parsable data
-      // structures from server to client.
-      state: { ...searchResults._state },
-      results: searchResults._rawResults,
-    };
-  });
-
-  return initialResults;
 }
 
 function importRenderToString(

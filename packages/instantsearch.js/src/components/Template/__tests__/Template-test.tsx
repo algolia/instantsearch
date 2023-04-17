@@ -79,6 +79,8 @@ describe('Template', () => {
 
 You can replace them with function-form templates and use either the provided \`html\` function or JSX templates.
 
+String-based templates: test.
+
 See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`);
   });
 

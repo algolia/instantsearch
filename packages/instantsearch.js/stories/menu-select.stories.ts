@@ -23,7 +23,7 @@ storiesOf('Refinements/MenuSelect', module)
           attribute: 'categories',
           limit: 10,
           templates: {
-            item: '{{label}}',
+            item: ({ label }) => label,
           },
         }),
       ]);
@@ -38,7 +38,7 @@ storiesOf('Refinements/MenuSelect', module)
           attribute: 'categories',
           limit: 10,
           templates: {
-            defaultOption: 'Default choice',
+            defaultOption: () => 'Default choice',
           },
         }),
       ]);

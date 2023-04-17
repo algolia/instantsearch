@@ -2,6 +2,7 @@ import { createSuitMixin } from '../mixins/suit';
 import { version } from '../../package.json'; // rollup does pick only what needed from json
 import { _objectSpread } from './polyfills';
 import { isVue3, version as vueVersion } from './vue-compat';
+import { warn } from './warn';
 
 export const createInstantSearchComponent = (component) =>
   _objectSpread(
@@ -14,6 +15,11 @@ export const createInstantSearchComponent = (component) =>
       },
       watch: {
         searchClient(searchClient) {
+          warn(
+            false,
+            'The `search-client` prop of `<ais-instant-search>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-search-client'
+          );
+
           this.instantSearchInstance.helper.setClient(searchClient).search();
         },
         indexName(indexName) {

@@ -73,8 +73,8 @@ storiesOf('Refinements/RangeInput', module)
           min: 10,
           max: 500,
           templates: {
-            separatorText: '→',
-            submitText: 'Refine',
+            separatorText: () => '→',
+            submitText: () => 'Refine',
           },
         }),
       ]);

@@ -151,7 +151,7 @@ const renderer =
     containerNode: HTMLElement;
     bodyContainerNode: HTMLElement;
     cssClasses: PanelComponentCSSClasses;
-    templates: Required<PanelTemplates<TWidget>>;
+    templates: PanelTemplates<TWidget>;
   }) =>
   ({
     options,
@@ -259,9 +259,7 @@ const panel: PanelWidget = (panelWidgetParams) => {
 
     const containerNode = getContainerNode(widgetParams.container);
 
-    const defaultTemplates: Required<PanelTemplates<typeof widgetFactory>> = {
-      header: '',
-      footer: '',
+    const defaultTemplates: PanelTemplates<typeof widgetFactory> = {
       collapseButtonText: ({ collapsed: isCollapsed }) =>
         `<svg
           class="${cssClasses.collapseIcon}"

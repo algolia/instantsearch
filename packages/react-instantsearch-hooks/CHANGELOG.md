@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.42.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.42.1...react-instantsearch-hooks@6.42.2) (2023-04-11)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+## [6.42.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.42.0...react-instantsearch-hooks@6.42.1) (2023-03-28)
+
+### Features
+
+* **InstantSearch**: warn when an unstable search client is detected ([#5563](https://github.com/algolia/instantsearch.js/issues/5563)) ([0fcf716](https://github.com/algolia/instantsearch/commit/0fcf7162ce77246133c0d4a6ff7ea975ba17cc4c))
+
+
+
+# [6.42.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.41.0...react-instantsearch-hooks@6.42.0) (2023-03-21)
+
+
+### Features
+
+* **current-refinements:** provide indexId of refinements in transformItems ([#5546](https://github.com/algolia/instantsearch.js/issues/5546)) ([89781db](https://github.com/algolia/instantsearch.js/commit/89781db6cb1d2b8ebbc116e9bcd8a10f646e7baf))
+
+
+
+
+
 # [6.41.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.40.1...react-instantsearch-hooks@6.41.0) (2023-03-07)
 
 

@@ -53,7 +53,7 @@ storiesOf('Basics/SearchBox', module)
         instantsearch.widgets.searchBox({
           container,
           templates: {
-            loadingIndicator: '⚡️',
+            loadingIndicator: () => '⚡️',
           },
         }),
       ]);
@@ -66,8 +66,10 @@ storiesOf('Basics/SearchBox', module)
         instantsearch.widgets.searchBox({
           container,
           templates: {
-            submit: '<div class="ais-search-box--magnifier">🔍</div>',
-            reset: '<div class="ais-search-box--reset">✖️</div>',
+            submit: (_, { html }) =>
+              html`<div class="ais-search-box--magnifier">🔍</div>`,
+            reset: (_, { html }) =>
+              html`<div class="ais-search-box--reset">✖️</div>`,
           },
         }),
       ]);

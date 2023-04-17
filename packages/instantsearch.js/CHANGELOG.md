@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.54.1](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.54.0...instantsearch.js@4.54.1) (2023-04-11)
+
+
+### Bug Fixes
+
+* **helpers:** deprecate highlight helpers ([09817fb](https://github.com/algolia/instantsearch.js/commit/09817fb1e9231cb60d91f1c08e918fec18b08fcf))
+* **pagination:** use real template ([6783408](https://github.com/algolia/instantsearch.js/commit/678340856f690e1ebaa94c407d4d2e7644f6c1d1))
+* **panel:** use undefined templates by default ([dcef813](https://github.com/algolia/instantsearch.js/commit/dcef813020a5f9b2d3a128fe79653df52efb097d))
+* **Template:** easier to debug warning when string template is used ([f285942](https://github.com/algolia/instantsearch.js/commit/f2859424526b65f969e0bf69e0c358c433bf5b32))
+
+
+
+
+
+# [4.54.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.53.0...instantsearch.js@4.54.0) (2023-03-28)
+
+
+### Features
+
+* warn if same attribute is used for different faceting type ([#5553](https://github.com/algolia/instantsearch.js/issues/5553)) ([2b3da9b](https://github.com/algolia/instantsearch.js/commit/2b3da9b398fcf081bdefc5cf7887f0a9a2dd2409))
+
+### Bug Fixes
+
+* **places**: don't require package to be installed ([#5574](https://github.com/algolia/instantsearch/pull/5574)) ([f5ed576](https://github.com/algolia/instantsearch/commit/f5ed576129e7e81c37d985b19dff54acff893b1b))
+
+
+
+
+
+# [4.53.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.52.0...instantsearch.js@4.53.0) (2023-03-21)
+
+
+### Bug Fixes
+
+* **searchbox:** add aria-hidden to svg icons ([#5547](https://github.com/algolia/instantsearch.js/issues/5547)) ([50344e3](https://github.com/algolia/instantsearch.js/commit/50344e3b14c22c886415c0e7d799aca778dc39ab)), closes [#5546](https://github.com/algolia/instantsearch.js/issues/5546)
+* **svg:** don't style width/height in attributes with unit ([#5550](https://github.com/algolia/instantsearch.js/issues/5550)) ([31b85a6](https://github.com/algolia/instantsearch.js/commit/31b85a6ad56993455adb201f88ab1d1ae2d96683))
+
+
+### Features
+
+* **current-refinements:** provide indexId of refinements in transformItems ([#5546](https://github.com/algolia/instantsearch.js/issues/5546)) ([89781db](https://github.com/algolia/instantsearch.js/commit/89781db6cb1d2b8ebbc116e9bcd8a10f646e7baf))
+
+
+
+
+
 # [4.52.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.51.1...instantsearch.js@4.52.0) (2023-03-07)
 
 

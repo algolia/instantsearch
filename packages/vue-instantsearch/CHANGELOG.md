@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.10](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.9...vue-instantsearch@4.8.10) (2023-04-11)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.8.9](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.8...vue-instantsearch@4.8.9) (2023-03-28)
+
+### Features
+
+* **ais-instant-search**: warn when an unstable search client is detected ([#5572](https://github.com/algolia/instantsearch.js/issues/5572)) ([71296a4](https://github.com/algolia/instantsearch/commit/71296a4eaa6233d397d2fc3b7e635e12e521409c))
+
+
+
+
+## [4.8.8](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.7...vue-instantsearch@4.8.8) (2023-03-21)
+
+
+### Bug Fixes
+
+* **searchbox:** add aria-hidden to svg icons ([#5547](https://github.com/algolia/instantsearch.js/issues/5547)) ([50344e3](https://github.com/algolia/instantsearch.js/commit/50344e3b14c22c886415c0e7d799aca778dc39ab)), closes [#5546](https://github.com/algolia/instantsearch.js/issues/5546)
+* **svg:** don't style width/height in attributes with unit ([#5550](https://github.com/algolia/instantsearch.js/issues/5550)) ([31b85a6](https://github.com/algolia/instantsearch.js/commit/31b85a6ad56993455adb201f88ab1d1ae2d96683))
+
+
+
+
+
 ## [4.8.7](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.5...vue-instantsearch@4.8.7) (2023-03-07)
 
 **Note:** Version bump only for package vue-instantsearch
