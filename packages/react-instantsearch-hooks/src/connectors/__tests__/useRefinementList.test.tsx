@@ -39,6 +39,7 @@ describe('useRefinementList', () => {
       hasExhaustiveItems: true,
       isFromSearch: false,
       isShowingMore: false,
+      showMoreCount: 0,
       items: [],
       refine: expect.any(Function),
       searchForItems: expect.any(Function),

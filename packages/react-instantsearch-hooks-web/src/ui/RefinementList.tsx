@@ -19,6 +19,7 @@ export type RefinementListProps = React.ComponentProps<'div'> & {
   canToggleShowMore: boolean;
   onToggleShowMore: () => void;
   isShowingMore: boolean;
+  showMoreCount: number;
   classNames?: Partial<RefinementListClassNames>;
   translations: RefinementListTranslations;
 };
@@ -91,6 +92,7 @@ export function RefinementList({
   canToggleShowMore,
   onToggleShowMore,
   isShowingMore,
+  showMoreCount,
   className,
   classNames = {},
   translations,
@@ -190,6 +192,7 @@ export function RefinementList({
           disabled={!canToggleShowMore}
           onClick={onToggleShowMore}
           isShowingMore={isShowingMore}
+          showMoreCount={showMoreCount}
           translations={translations}
         />
       )}
