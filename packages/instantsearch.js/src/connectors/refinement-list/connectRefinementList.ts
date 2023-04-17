@@ -422,8 +422,12 @@ const connectRefinementList: RefinementListConnector =
             lastResultsFromMainSearch = results;
             lastItemsFromMainSearch = items;
 
-            if (facetValues.length > 0 && facetValues.length > currentLimit) {
-              showMoreCount = Object.keys(facetValues).length - currentLimit;
+            if (showMore) {
+              const showMoreTotalCount =
+                showMoreLimit < facetValues.length
+                  ? showMoreLimit
+                  : facetValues.length;
+              showMoreCount = showMoreTotalCount - currentLimit;
             }
 
             if (renderOptions.results) {
