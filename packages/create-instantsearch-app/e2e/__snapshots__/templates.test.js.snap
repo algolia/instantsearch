@@ -2771,7 +2771,7 @@ exports[`Templates InstantSearch.js 2 File content: index.html 1`] = `
     </h1>
     <p class=\\"header-subtitle\\">
       using
-      <a href=\\"https://github.com/algolia/instantsearch/tree/master/packages/instantsearch.js\\">
+      <a href=\\"https://github.com/algolia/instantsearch/tree/v2.10.5\\">
         InstantSearch.js
       </a>
     </p>
