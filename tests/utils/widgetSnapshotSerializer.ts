@@ -31,6 +31,7 @@ export const widgetSnapshotSerializer: jest.SnapshotSerializerPlugin = {
     const keys = {
       $$widgetType: widget.$$widgetType,
       attribute: getAttribute(widget),
+      indexId: isIndexWidget(widget) && widget.getIndexId(),
       widgets:
         isIndexWidget(widget) &&
         `[\n${indentation + indent + indent}${widget
