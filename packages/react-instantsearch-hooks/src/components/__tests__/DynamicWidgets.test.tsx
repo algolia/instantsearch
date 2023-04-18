@@ -139,9 +139,9 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.refinementList' }),
-      expect.objectContaining({ $$type: 'ais.dynamicWidgets' }),
+    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.refinementList',
+      'ais.dynamicWidgets',
     ]);
   });
 
@@ -179,9 +179,9 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.refinementList' }),
-      expect.objectContaining({ $$type: 'ais.dynamicWidgets' }),
+    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.refinementList',
+      'ais.dynamicWidgets',
     ]);
   });
 
@@ -284,9 +284,9 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.refinementList' }),
-      expect.objectContaining({ $$type: 'ais.dynamicWidgets' }),
+    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.refinementList',
+      'ais.dynamicWidgets',
     ]);
   });
 
@@ -321,11 +321,11 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.refinementList' }),
-      expect.objectContaining({ $$type: 'ais.menu' }),
-      expect.objectContaining({ $$type: 'ais.menu' }),
-      expect.objectContaining({ $$type: 'ais.dynamicWidgets' }),
+    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.refinementList',
+      'ais.menu',
+      'ais.menu',
+      'ais.dynamicWidgets',
     ]);
   });
 
@@ -419,12 +419,12 @@ describe('DynamicWidgets', () => {
       .find<IndexWidget>(
         (widget): widget is IndexWidget => widget.$$type === 'ais.index'
       )!;
-    expect(indexContextRef.current!.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.index' }),
+    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.index',
     ]);
-    expect(index.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.refinementList' }),
-      expect.objectContaining({ $$type: 'ais.dynamicWidgets' }),
+    expect(index.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.refinementList',
+      'ais.dynamicWidgets',
     ]);
   });
 
@@ -460,9 +460,9 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.refinementList' }),
-      expect.objectContaining({ $$type: 'ais.dynamicWidgets' }),
+    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.refinementList',
+      'ais.dynamicWidgets',
     ]);
 
     act(() => {
@@ -480,10 +480,10 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.refinementList' }),
-      expect.objectContaining({ $$type: 'ais.dynamicWidgets' }),
-      expect.objectContaining({ $$type: 'ais.menu' }),
+    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.refinementList',
+      'ais.dynamicWidgets',
+      'ais.menu',
     ]);
 
     act(() => {
@@ -500,9 +500,9 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets()).toEqual([
-      expect.objectContaining({ $$type: 'ais.refinementList' }),
-      expect.objectContaining({ $$type: 'ais.dynamicWidgets' }),
+    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
+      'ais.refinementList',
+      'ais.dynamicWidgets',
     ]);
 
     consoleError.mockRestore();
