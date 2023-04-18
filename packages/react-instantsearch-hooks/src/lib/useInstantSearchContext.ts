@@ -4,7 +4,8 @@ import { invariant } from '../lib/invariant';
 
 import { InstantSearchContext } from './InstantSearchContext';
 
-import type { InstantSearch, UiState } from 'instantsearch.js';
+import type { InternalInstantSearch } from './useInstantSearchApi';
+import type { UiState } from 'instantsearch.js';
 import type { Context } from 'react';
 
 export function useInstantSearchContext<
@@ -12,7 +13,10 @@ export function useInstantSearchContext<
   TRouteState = TUiState
 >() {
   const search = useContext(
-    InstantSearchContext as Context<InstantSearch<TUiState, TRouteState> | null>
+    InstantSearchContext as Context<InternalInstantSearch<
+      TUiState,
+      TRouteState
+    > | null>
   );
 
   invariant(
