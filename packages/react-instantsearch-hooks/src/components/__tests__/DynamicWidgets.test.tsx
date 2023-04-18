@@ -3,6 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { widgetSnapshotSerializer } from '@instantsearch/testutils';
 import { act, render, waitFor } from '@testing-library/react';
 import React, { createRef } from 'react';
 
@@ -21,6 +22,8 @@ import type { UsePaginationProps } from '../../connectors/usePagination';
 import type { UseRefinementListProps } from '../../connectors/useRefinementList';
 import type { InstantSearchProps } from '../InstantSearch';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+
+expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
 function Pagination(props: UsePaginationProps) {
   usePagination(props);
@@ -139,10 +142,16 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.refinementList',
-      'ais.dynamicWidgets',
-    ]);
+    expect(indexContextRef.current!.getWidgets()).toMatchInlineSnapshot(`
+      [
+        Widget(ais.refinementList) {
+          attribute: brand
+        },
+        Widget(ais.dynamicWidgets) {
+          $$widgetType: ais.dynamicWidgets
+        },
+      ]
+    `);
   });
 
   test('renders widgets in components', async () => {
@@ -179,10 +188,16 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.refinementList',
-      'ais.dynamicWidgets',
-    ]);
+    expect(indexContextRef.current!.getWidgets()).toMatchInlineSnapshot(`
+      [
+        Widget(ais.refinementList) {
+          attribute: brand
+        },
+        Widget(ais.dynamicWidgets) {
+          $$widgetType: ais.dynamicWidgets
+        },
+      ]
+    `);
   });
 
   test('throws when a nested component contains multiple children', () => {
@@ -284,10 +299,16 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.refinementList',
-      'ais.dynamicWidgets',
-    ]);
+    expect(indexContextRef.current!.getWidgets()).toMatchInlineSnapshot(`
+      [
+        Widget(ais.refinementList) {
+          attribute: brand
+        },
+        Widget(ais.dynamicWidgets) {
+          $$widgetType: ais.dynamicWidgets
+        },
+      ]
+    `);
   });
 
   test('renders attributes without widget with fallbackComponent', async () => {
@@ -321,12 +342,22 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.refinementList',
-      'ais.menu',
-      'ais.menu',
-      'ais.dynamicWidgets',
-    ]);
+    expect(indexContextRef.current!.getWidgets()).toMatchInlineSnapshot(`
+      [
+        Widget(ais.refinementList) {
+          attribute: brand
+        },
+        Widget(ais.menu) {
+          attribute: categories
+        },
+        Widget(ais.menu) {
+          attribute: hierarchicalCategories.lvl0
+        },
+        Widget(ais.dynamicWidgets) {
+          $$widgetType: ais.dynamicWidgets
+        },
+      ]
+    `);
   });
 
   test('renders attributes without widget with fallbackComponent (function form)', async () => {
@@ -414,18 +445,26 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    const index = indexContextRef
-      .current!.getWidgets()
-      .find<IndexWidget>(
-        (widget): widget is IndexWidget => widget.$$type === 'ais.index'
-      )!;
-    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.index',
-    ]);
-    expect(index.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.refinementList',
-      'ais.dynamicWidgets',
-    ]);
+    expect(indexContextRef.current).toMatchInlineSnapshot(`
+      Widget(ais.index) {
+        $$widgetType: ais.index
+        indexId: indexName
+        widgets: [
+          Widget(ais.index) {
+            $$widgetType: ais.index
+            indexId: subIndexName
+            widgets: [
+              Widget(ais.refinementList) {
+                attribute: brand
+              }
+              Widget(ais.dynamicWidgets) {
+                $$widgetType: ais.dynamicWidgets
+              }
+            ]
+          }
+        ]
+      }
+    `);
   });
 
   test('dynamically updates widgets when attributes change', async () => {
@@ -460,10 +499,16 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.refinementList',
-      'ais.dynamicWidgets',
-    ]);
+    expect(indexContextRef.current!.getWidgets()).toMatchInlineSnapshot(`
+      [
+        Widget(ais.refinementList) {
+          attribute: brand
+        },
+        Widget(ais.dynamicWidgets) {
+          $$widgetType: ais.dynamicWidgets
+        },
+      ]
+    `);
 
     act(() => {
       rerender(<App attributes={['brand', 'categories']} />);
@@ -480,11 +525,19 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.refinementList',
-      'ais.dynamicWidgets',
-      'ais.menu',
-    ]);
+    expect(indexContextRef.current!.getWidgets()).toMatchInlineSnapshot(`
+      [
+        Widget(ais.refinementList) {
+          attribute: brand
+        },
+        Widget(ais.dynamicWidgets) {
+          $$widgetType: ais.dynamicWidgets
+        },
+        Widget(ais.menu) {
+          attribute: categories
+        },
+      ]
+    `);
 
     act(() => {
       rerender(<App attributes={['brand']} />);
@@ -500,10 +553,16 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current!.getWidgets().map((w) => w.$$type)).toEqual([
-      'ais.refinementList',
-      'ais.dynamicWidgets',
-    ]);
+    expect(indexContextRef.current!.getWidgets()).toMatchInlineSnapshot(`
+      [
+        Widget(ais.refinementList) {
+          attribute: brand
+        },
+        Widget(ais.dynamicWidgets) {
+          $$widgetType: ais.dynamicWidgets
+        },
+      ]
+    `);
 
     consoleError.mockRestore();
   });
