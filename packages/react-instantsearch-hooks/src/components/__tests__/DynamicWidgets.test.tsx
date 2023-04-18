@@ -445,25 +445,21 @@ describe('DynamicWidgets', () => {
       </div>
     `);
 
-    expect(indexContextRef.current).toMatchInlineSnapshot(`
-      Widget(ais.index) {
-        $$widgetType: ais.index
-        indexId: indexName
-        widgets: [
-          Widget(ais.index) {
-            $$widgetType: ais.index
-            indexId: subIndexName
-            widgets: [
-              Widget(ais.refinementList) {
-                attribute: brand
-              }
-              Widget(ais.dynamicWidgets) {
-                $$widgetType: ais.dynamicWidgets
-              }
-            ]
-          }
-        ]
-      }
+    expect(indexContextRef.current!.getWidgets()).toMatchInlineSnapshot(`
+      [
+        Widget(ais.index) {
+          $$widgetType: ais.index
+          indexId: subIndexName
+          widgets: [
+            Widget(ais.refinementList) {
+              attribute: brand
+            }
+            Widget(ais.dynamicWidgets) {
+              $$widgetType: ais.dynamicWidgets
+            }
+          ]
+        },
+      ]
     `);
   });
 
