@@ -27,6 +27,27 @@ export type UseInstantSearchApiProps<
   TRouteState
 > = InstantSearchOptions<TUiState, TRouteState>;
 
+export type InternalInstantSearch<
+  TUiState extends UiState,
+  TRouteState = TUiState
+> = InstantSearch<TUiState, TRouteState> & {
+  /**
+   * Schedule a function to be called on the next timer tick
+   * @private
+   */
+  _schedule: {
+    (cb: () => void): void;
+    queue: Array<() => void>;
+    timer: ReturnType<typeof setTimeout> | undefined;
+  };
+  /**
+   * Used inside useWidget, which ensures that removeWidgets is not called.
+   * This prevents a search from being triggered when InstantSearch is also unmounted.
+   * @private
+   */
+  _preventWidgetCleanup?: boolean;
+};
+
 export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   props: UseInstantSearchApiProps<TUiState, TRouteState>
 ) {
@@ -36,7 +57,9 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const initialResults = serverState?.initialResults;
   const prevPropsRef = useRef(props);
 
-  let searchRef = useRef<InstantSearch<TUiState, TRouteState> | null>(null);
+  let searchRef = useRef<InternalInstantSearch<TUiState, TRouteState> | null>(
+    null
+  );
   // As we need to render on mount with SSR, using the local ref above in `StrictMode` will
   // create and start two instances of InstantSearch. To avoid this, we instead discard it and use
   // an upward ref from `InstantSearchSSRContext` as it has already been mounted a second time at this point.
@@ -48,7 +71,23 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     // We don't use the `instantsearch()` function because it comes with other
     // top-level APIs that we don't need.
     // See https://github.com/algolia/instantsearch.js/blob/5b529f43d8acc680f85837eaaa41f7fd03a3f833/src/index.es.ts#L63-L86
-    const search = new InstantSearch(props);
+    const search = new InstantSearch(props) as InternalInstantSearch<
+      TUiState,
+      TRouteState
+    >;
+
+    search._schedule = function _schedule(cb: () => void) {
+      search._schedule.queue.push(cb);
+
+      clearTimeout(search._schedule.timer);
+      search._schedule.timer = setTimeout(() => {
+        search._schedule.queue.forEach((callback) => {
+          callback();
+        });
+        search._schedule.queue = [];
+      }, 0);
+    } as typeof search._schedule;
+    search._schedule.queue = [];
 
     if (serverContext || initialResults) {
       // InstantSearch.js has a private Initial Results API that lets us inject
@@ -153,7 +192,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         // We cancel the previous cleanup function because we don't want to
         // dispose the search during an update.
         clearTimeout(cleanupTimerRef.current);
-        (search as any)._preventWidgetCleanup = false;
+        search._preventWidgetCleanup = false;
       }
 
       return () => {
@@ -161,6 +200,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
           search.dispose();
         }
 
+        clearTimeout(search._schedule.timer);
         // We clean up only when the component that uses this subscription unmounts,
         // but not when it updates, because it would dispose the instance, which
         // would remove all the widgets and break routing.
@@ -172,7 +212,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         // We need to prevent the `useWidget` cleanup function so that widgets
         // are not removed before the instance is disposed, triggering
         // an unwanted search request.
-        (search as any)._preventWidgetCleanup = true;
+        search._preventWidgetCleanup = true;
       };
     }, [forceUpdate]),
     () => searchRef.current!,
