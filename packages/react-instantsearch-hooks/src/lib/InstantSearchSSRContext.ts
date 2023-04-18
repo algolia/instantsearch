@@ -1,14 +1,18 @@
 import { createContext } from 'react';
 
 import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
-import type { UiState, InstantSearch } from 'instantsearch.js';
+import type { InternalInstantSearch } from './useInstantSearchApi';
+import type { UiState } from 'instantsearch.js';
 import type { MutableRefObject } from 'react';
 
 export type InstantSearchSSRContextApi<
   TUiState extends UiState,
   TRouteState = TUiState
 > = InstantSearchServerState & {
-  ssrSearchRef: MutableRefObject<InstantSearch<TUiState, TRouteState> | null>;
+  ssrSearchRef: MutableRefObject<InternalInstantSearch<
+    TUiState,
+    TRouteState
+  > | null>;
 };
 
 export const InstantSearchSSRContext = createContext<Partial<
