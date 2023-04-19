@@ -78,6 +78,7 @@ export type HierarchicalMenuProps = React.ComponentProps<'div'> &
     canToggleShowMore: boolean;
     onToggleShowMore: () => void;
     isShowingMore: boolean;
+    showMoreCount: number;
     translations: ShowMoreButtonTranslations;
   };
 
@@ -167,6 +168,7 @@ export function HierarchicalMenu({
   canToggleShowMore,
   onToggleShowMore,
   isShowingMore,
+  showMoreCount,
   translations,
   ...props
 }: HierarchicalMenuProps) {
@@ -201,6 +203,7 @@ export function HierarchicalMenu({
           disabled={!canToggleShowMore}
           onClick={onToggleShowMore}
           isShowingMore={isShowingMore}
+          showMoreCount={showMoreCount}
           translations={translations}
         />
       )}

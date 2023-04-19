@@ -97,6 +97,10 @@ export type MenuRenderState = {
    */
   isShowingMore: boolean;
   /**
+   * Total number of facets that can be displayed for 'show more'.
+   */
+  showMoreCount: number;
+  /**
    * Toggles the number of values displayed between `limit` and `showMore.limit`.
    */
   toggleShowMore(): void;
@@ -182,6 +186,7 @@ const connectMenu: MenuConnector = function connectMenu(
     // Provide the same function to the `renderFn` so that way the user
     // has to only bind it once when `isFirstRendering` for instance
     let isShowingMore = false;
+    let showMoreCount = 0;
     let toggleShowMore = () => {};
     function createToggleShowMore(
       renderOptions: RenderOptions,
@@ -289,6 +294,7 @@ const connectMenu: MenuConnector = function connectMenu(
         }
 
         if (results) {
+          const currentLimit = getLimit();
           const facetValues = results.getFacetValues(attribute, {
             sortBy,
             facetOrdering: sortBy === DEFAULT_SORT,
@@ -298,12 +304,20 @@ const connectMenu: MenuConnector = function connectMenu(
               ? facetValues.data
               : [];
 
+          if (showMore) {
+            const showMoreTotalCount =
+              showMoreLimit < facetItems.length
+                ? showMoreLimit
+                : facetItems.length;
+            showMoreCount = showMoreTotalCount - currentLimit;
+          }
+
           canToggleShowMore =
-            showMore && (isShowingMore || facetItems.length > getLimit());
+            showMore && (isShowingMore || facetItems.length > currentLimit);
 
           items = transformItems(
             facetItems
-              .slice(0, getLimit())
+              .slice(0, currentLimit)
               .map(({ name: label, escapedValue: value, path, ...item }) => ({
                 ...item,
                 label,
@@ -321,6 +335,7 @@ const connectMenu: MenuConnector = function connectMenu(
           canRefine: items.length > 0,
           widgetParams,
           isShowingMore,
+          showMoreCount,
           toggleShowMore: cachedToggleShowMore,
           canToggleShowMore,
         };
