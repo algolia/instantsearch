@@ -1091,6 +1091,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 2,
       },
       isShowingMore: false,
+      showMoreCount: 1, // @todo should be 0;
       canToggleShowMore: true,
       toggleShowMore: expect.any(Function),
       hasExhaustiveItems: false,
@@ -1125,6 +1126,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 2,
       },
       isShowingMore: false,
+      showMoreCount: 1, // should be 0;
       canToggleShowMore: false,
       toggleShowMore: expect.any(Function),
       hasExhaustiveItems: false,
@@ -1160,6 +1162,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 2,
       },
       isShowingMore: false,
+      showMoreCount: 1, // @todo should be 0;
       canToggleShowMore: true,
       toggleShowMore: expect.any(Function),
       hasExhaustiveItems: false,
@@ -1201,6 +1204,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 2,
       },
       isShowingMore: true,
+      showMoreCount: 0, // @todo should be 1;
       canToggleShowMore: true,
       toggleShowMore: expect.any(Function),
       hasExhaustiveItems: false,
@@ -2455,6 +2459,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           hasExhaustiveItems: true,
           isFromSearch: false,
           isShowingMore: false,
+          showMoreCount: 0,
           items: [],
           refine: expect.any(Function),
           searchForItems: expect.any(Function),
@@ -2515,6 +2520,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           hasExhaustiveItems: true,
           isFromSearch: false,
           isShowingMore: false,
+          showMoreCount: 0,
           items: [
             {
               count: 88,
@@ -2575,6 +2581,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         hasExhaustiveItems: true,
         isFromSearch: false,
         isShowingMore: false,
+        showMoreCount: 0,
         items: [],
         refine: expect.any(Function),
         searchForItems: expect.any(Function),
@@ -2618,6 +2625,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         hasExhaustiveItems: true,
         isFromSearch: false,
         isShowingMore: false,
+        showMoreCount: 0,
         items: [],
         refine: expect.any(Function),
         searchForItems: expect.any(Function),
