@@ -41,7 +41,7 @@ export type InsightsProps<
   $$internal?: boolean;
 };
 
-const ALGOLIA_INSIGHTS_VERSION = '2.4.0';
+const ALGOLIA_INSIGHTS_VERSION = '2.5.0';
 const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
 
 export type InsightsClientWithGlobals = InsightsClient & {
@@ -146,7 +146,6 @@ export function createInsightsMiddleware<
       insightsClient('init', {
         appId,
         apiKey,
-        useCookie: true,
         partial: true,
         ...insightsInitParams,
       });
@@ -322,9 +321,9 @@ function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
 
   /* eslint-disable @typescript-eslint/naming-convention */
   const v3 = major >= 3;
-  const v2_4 = major === 2 && minor >= 4;
+  const v2_5 = major === 2 && minor >= 5;
   const v1_10 = major === 1 && minor >= 10;
   /* eslint-enable @typescript-eslint/naming-convention */
 
-  return v3 || v2_4 || v1_10;
+  return v3 || v2_5 || v1_10;
 }
