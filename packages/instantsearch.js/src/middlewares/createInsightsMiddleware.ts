@@ -31,6 +31,7 @@ export type InsightsProps<
   insightsInitParams?: {
     userHasOptedOut?: boolean;
     useCookie?: boolean;
+    anonymousUserToken?: boolean;
     cookieDuration?: number;
     region?: 'de' | 'us';
   };
@@ -321,9 +322,9 @@ function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
 
   /* eslint-disable @typescript-eslint/naming-convention */
   const v3 = major >= 3;
-  const v2_5 = major === 2 && minor >= 5;
+  const v2_6 = major === 2 && minor >= 6;
   const v1_10 = major === 1 && minor >= 10;
   /* eslint-enable @typescript-eslint/naming-convention */
 
-  return v3 || v2_5 || v1_10;
+  return v3 || v2_6 || v1_10;
 }

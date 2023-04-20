@@ -38,7 +38,7 @@
     "htm": "^3.0.0",
     "preact": "^10.10.0",
     "qs": "^6.5.1 < 6.10",
-    "search-insights": "^2.5.0"
+    "search-insights": "^2.6.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 6"
