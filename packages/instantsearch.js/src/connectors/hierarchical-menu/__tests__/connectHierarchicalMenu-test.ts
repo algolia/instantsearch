@@ -620,6 +620,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
               attributes: ['anotherCategory', 'anotherSubCategory'],
             },
             isShowingMore: false,
+            showMoreCount: 0,
             toggleShowMore: () => {},
             canToggleShowMore: false,
           },
@@ -641,6 +642,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           sendEvent: expect.any(Function),
           widgetParams: { attributes: ['category', 'subCategory'] },
           isShowingMore: false,
+          showMoreCount: 0,
           toggleShowMore: expect.any(Function),
           canToggleShowMore: false,
         },
@@ -713,6 +715,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         sendEvent: expect.any(Function),
         widgetParams: { attributes: ['category', 'subCategory'] },
         isShowingMore: false,
+        showMoreCount: 0,
         toggleShowMore: expect.any(Function),
         canToggleShowMore: false,
       });
@@ -751,6 +754,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         createURL: expect.any(Function),
         widgetParams: { attributes: ['category', 'subCategory'] },
         isShowingMore: false,
+        showMoreCount: 0,
         toggleShowMore: expect.any(Function),
         canToggleShowMore: false,
       });
@@ -821,6 +825,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         createURL: expect.any(Function),
         widgetParams: { attributes: ['category', 'subCategory'] },
         isShowingMore: false,
+        showMoreCount: 0,
         toggleShowMore: expect.any(Function),
         canToggleShowMore: false,
       });
