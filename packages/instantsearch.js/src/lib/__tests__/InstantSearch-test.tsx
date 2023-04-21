@@ -488,7 +488,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     });
 
     test('insights: options passes options to middleware', () => {
-      const insightsClient = Object.assign(jest.fn(), { version: '2.4.0' });
+      const insightsClient = Object.assign(jest.fn(), { version: '2.6.0' });
       const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
