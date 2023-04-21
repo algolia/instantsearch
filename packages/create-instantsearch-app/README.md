@@ -4,7 +4,7 @@
 
 [![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Build Status][ci-svg]][ci-url]
 
-`create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch][react-instantsearch-github], [Vue InstantSearch][vue-instantsearch-github], [Angular InstantSearch][angular-instantsearch-github], [InstantSearch iOS][instantsearch-ios-github] and [InstantSearch Android][instantsearch-android-github]).
+`create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch Hooks][react-instantsearch-hooks-github], [Vue InstantSearch][vue-instantsearch-github], [Angular InstantSearch][angular-instantsearch-github], [InstantSearch iOS][instantsearch-ios-github] and [InstantSearch Android][instantsearch-android-github]).
 
 <p align="center">
   <img src="preview.png" width="800" alt="Preview">
@@ -17,13 +17,16 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Get started](#get-started)
-- [Usage](#usage)
-- [API](#api)
-- [Tutorials](#tutorials)
-- [Previews](#previews)
-- [Contributing](#contributing)
-- [License](#license)
+- [Create InstantSearch App](#create-instantsearch-app)
+  - [Get started](#get-started)
+  - [Usage](#usage)
+      - [`--template`](#--template)
+      - [`--config`](#--config)
+  - [API](#api)
+  - [Tutorials](#tutorials)
+  - [Previews](#previews)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -147,14 +150,14 @@ app.create().then(() => console.log('App generated!'));
 
 You can use the web templates on CodeSandbox:
 
-- [InstantSearch.js 3](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js)
-- [InstantSearch.js 2](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js-2.x)
-- [React InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/react-instantsearch)
-- [Vue InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/vue-instantsearch)
-- [Angular InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/angular-instantsearch)
-- [Autocomplete.js](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/autocomplete.js)
-- [JavaScript Client](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/javascript-client)
-- [JavaScript Helper](https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/javascript-helper)
+- [InstantSearch.js 3](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js)
+- [InstantSearch.js 2](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js-2.x)
+- [React InstantSearch Hooks](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/react-instantsearch-hooks)
+- [Vue InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/vue-instantsearch)
+- [Angular InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/angular-instantsearch)
+- [Autocomplete.js](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/autocomplete.js)
+- [JavaScript Client](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/javascript-client)
+- [JavaScript Helper](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/javascript-helper)
 
 ## Contributing
 
@@ -170,7 +173,7 @@ To start contributing to the code, you need to:
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
 1.  Install the dependencies: `yarn`
 
-Please read [our contribution process](https://github.com/algolia/instantsearch.js/blob/master/CONTRIBUTING.md) to learn more.
+Please read [our contribution process](https://github.com/algolia/instantsearch/blob/master/CONTRIBUTING.md) to learn more.
 
 ## License
 
@@ -188,14 +191,14 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 <!-- Links -->
 
 [algolia-website]: https://www.algolia.com/?utm_medium=social-owned&utm_source=GitHub&utm_campaign=create-instantsearch-app%20repository
-[instantsearchjs-github]: https://github.com/algolia/instantsearch.js
-[react-instantsearch-github]: https://github.com/algolia/instantsearch.js
-[vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
+[instantsearchjs-github]: https://github.com/algolia/instantsearch/tree/master/packages/instantsearch.js
+[react-instantsearch-hooks-github]: https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch-hooks-web
+[vue-instantsearch-github]: https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch
 [angular-instantsearch-github]: https://github.com/algolia/angular-instantsearch
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
-[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20Create+InstantSearch+App
-[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage,Library%3A%20Create+InstantSearch+App&title=Feature%20request%3A%20
-[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20Create+InstantSearch+App%22
-[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20Create+InstantSearch+App%22
-[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20Create+InstantSearch+App%22
+[contributing-bugreport]: https://github.com/algolia/instantsearch/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20Create+InstantSearch+App
+[contributing-featurerequest]: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage,Library%3A%20Create+InstantSearch+App&title=Feature%20request%3A%20
+[contributing-label-easy]: https://github.com/algolia/instantsearch/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20Create+InstantSearch+App%22
+[contributing-label-bug]: https://github.com/algolia/instantsearch/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20Create+InstantSearch+App%22
+[contributing-label-chore]: https://github.com/algolia/instantsearch/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20Create+InstantSearch+App%22

@@ -3,7 +3,7 @@
 /*
  * This script releases compiled templates to the branch `templates`.
  * This branch is used for CodeSandbox.
- * Example: https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js
+ * Example: https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js
  *
  * If this is the first time running this script, you need to create a new orphan branch:
  *   $ git checkout --orphan templates
@@ -17,7 +17,7 @@ const chalk = require('chalk');
 const { getLatestLibraryVersion } = require('../src/utils');
 const createInstantSearchApp = require('../');
 
-const GITHUB_REPOSITORY = 'https://github.com/algolia/instantsearch.js.git';
+const GITHUB_REPOSITORY = 'https://github.com/algolia/instantsearch.git';
 const TEMPLATES_BRANCH = 'templates';
 const BUILD_FOLDER = 'build';
 
