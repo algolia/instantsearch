@@ -15,6 +15,7 @@ const search = instantsearch({
   searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
   indexName: 'airbnb',
   routing: true,
+  insights: true,
 });
 
 search.addWidgets([

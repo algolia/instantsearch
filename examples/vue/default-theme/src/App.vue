@@ -4,6 +4,7 @@
       :search-client="searchClient"
       index-name="instant_search"
       :routing="routing"
+      :insights="true"
     >
       <ais-configure :hits-per-page.camel="16" />
 

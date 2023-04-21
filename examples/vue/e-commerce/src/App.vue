@@ -4,6 +4,7 @@
       :search-client="searchClient"
       index-name="instant_search"
       :routing="routing"
+      :insights="true"
     >
       <ais-configure
         :attributes-to-snippet.camel="['description:10']"
