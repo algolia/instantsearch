@@ -15,8 +15,8 @@ try {
   delete window.AlgoliaAnalyticsObject;
 } catch (error) {} // eslint-disable-line no-empty
 
-export function createInsights<TVersion extends string | undefined = '2.4.0'>({
-  forceVersion = '2.4.0',
+export function createInsights<TVersion extends string | undefined = '2.6.0'>({
+  forceVersion = '2.6.0',
 }: {
   forceVersion?: TVersion;
 } = {}) {
@@ -45,10 +45,13 @@ export function createInsights<TVersion extends string | undefined = '2.4.0'>({
 }
 
 export function createInsightsUmdVersion() {
-  const globalObject: { AlgoliaAnalyticsObject: string; aa?: InsightsClient } =
-    {
-      AlgoliaAnalyticsObject: 'aa',
-    };
+  const globalObject: {
+    AlgoliaAnalyticsObject: 'aa';
+    aa?: InsightsClient;
+  } = {
+    AlgoliaAnalyticsObject: 'aa',
+  };
+
   globalObject.aa = (methodName, ...args) => {
     globalObject.aa!.queue = globalObject.aa!.queue || [];
     // @ts-expect-error TypeScript loses track of the exact tuple type when the array gets recreated

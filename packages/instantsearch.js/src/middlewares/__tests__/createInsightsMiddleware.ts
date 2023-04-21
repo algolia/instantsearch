@@ -177,7 +177,7 @@ describe('insights', () => {
       expect(document.body).toMatchInlineSnapshot(`
         <body>
           <script
-            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.6.0/dist/search-insights.min.js"
           />
         </body>
       `);
@@ -220,7 +220,7 @@ describe('insights', () => {
       expect(document.body).toMatchInlineSnapshot(`
         <body>
           <script
-            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.6.0/dist/search-insights.min.js"
           />
         </body>
       `);
@@ -240,7 +240,7 @@ describe('insights', () => {
       expect(document.body).toMatchInlineSnapshot(`
         <body>
           <script
-            src="https://cdn.jsdelivr.net/npm/search-insights@2.4.0/dist/search-insights.min.js"
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.6.0/dist/search-insights.min.js"
           />
         </body>
       `);
@@ -435,7 +435,10 @@ describe('insights', () => {
       instantSearchInstance.use(
         createInsightsMiddleware({
           insightsClient,
-          insightsInitParams: { useCookie: false },
+          insightsInitParams: {
+            useCookie: false,
+            anonymousUserToken: false,
+          },
         })
       );
 
