@@ -18,6 +18,7 @@
       <ais-instant-search
         :search-client="searchClient"
         index-name="instant_search"
+        :insights="true"
       >
         <ais-configure :hits-per-page.camel="8" />
         <div class="search-panel">
