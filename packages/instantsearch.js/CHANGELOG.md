@@ -6,28 +6,15 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [4.55.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.54.1...instantsearch.js@4.55.0) (2023-04-24)
 
 
-### Bug Fixes
-
-* **insights:** keep track of script loading in global ([#5551](https://github.com/algolia/instantsearch.js/issues/5551)) ([f34b204](https://github.com/algolia/instantsearch.js/commit/f34b2043165505a543596d966b35e749749135d5))
-* **insights:** only `init` if `version` allows it ([#5529](https://github.com/algolia/instantsearch.js/issues/5529)) ([8537f8f](https://github.com/algolia/instantsearch.js/commit/8537f8f7a10bcaf053ff62180c082e077b1b052d))
-* **insights:** only load script if we write window.aa ([#5559](https://github.com/algolia/instantsearch.js/issues/5559)) ([07bfdeb](https://github.com/algolia/instantsearch.js/commit/07bfdebbf1f271583fbff91373bff52a0473aa3c))
-* **insights:** send extra parameters only for applicable versions ([#5558](https://github.com/algolia/instantsearch.js/issues/5558)) ([82144c0](https://github.com/algolia/instantsearch.js/commit/82144c0a0b18e6b47d6f508e5c670a9de274c121))
-* **insights:** user-defined send/bindEvent overrides internal click ([#5527](https://github.com/algolia/instantsearch.js/issues/5527)) ([0e55821](https://github.com/algolia/instantsearch.js/commit/0e558213c807cd17d592fadec052f3d1fc692e6c))
-* **userToken:** prevent search waterfall ([#5512](https://github.com/algolia/instantsearch.js/issues/5512)) ([85dfbc9](https://github.com/algolia/instantsearch.js/commit/85dfbc9ebd722fbe6a7e1bd056950fdbcc16d8d9)), closes [#5500](https://github.com/algolia/instantsearch.js/issues/5500)
-
 
 ### Features
 
-* **createInsightsMiddleware:** always pass Algolia credentials locally ([#5554](https://github.com/algolia/instantsearch.js/issues/5554)) ([654ab81](https://github.com/algolia/instantsearch.js/commit/654ab81e1669354c249710b6756610fba35d54b4))
-* **insights:** allow passing options to default middleware ([#5545](https://github.com/algolia/instantsearch.js/issues/5545)) ([99a0972](https://github.com/algolia/instantsearch.js/commit/99a0972663b8f3284cac3b5621571ced7a33908f))
+* **insights:** add insights option to InstantSearch ([#5488](https://github.com/algolia/instantsearch.js/issues/5488)) ([9031573](https://github.com/algolia/instantsearch.js/commit/9031573807fa6803dcfae9f33d61b8f111f68423)) ([#5578](https://github.com/algolia/instantsearch.js/issues/5578)) ([8fb517f](https://github.com/algolia/instantsearch.js/commit/8fb517f15381ecb32ea00cf4b01a0fd5e70e1d17)) ([#5545](https://github.com/algolia/instantsearch.js/issues/5545)) ([99a0972](https://github.com/algolia/instantsearch.js/commit/99a0972663b8f3284cac3b5621571ced7a33908f)) ([#5493](https://github.com/algolia/instantsearch.js/issues/5493)) ([cff723f](https://github.com/algolia/instantsearch.js/commit/cff723fc95a90ebb2ed14c46c51ab05764835a47))
+* **insights:** always pass Algolia credentials locally ([#5554](https://github.com/algolia/instantsearch.js/issues/5554)) ([654ab81](https://github.com/algolia/instantsearch.js/commit/654ab81e1669354c249710b6756610fba35d54b4)) ([#5558](https://github.com/algolia/instantsearch.js/issues/5558)) ([82144c0](https://github.com/algolia/instantsearch.js/commit/82144c0a0b18e6b47d6f508e5c670a9de274c121)) ([#5529](https://github.com/algolia/instantsearch.js/issues/5529)) ([8537f8f](https://github.com/algolia/instantsearch.js/commit/8537f8f7a10bcaf053ff62180c082e077b1b052d))
 * **insights:** annotate events with algoliaSource ([#5580](https://github.com/algolia/instantsearch.js/issues/5580)) ([c419307](https://github.com/algolia/instantsearch.js/commit/c419307a5f7fe46d5032c9437a17c8e3dad57fe5))
-* **insights:** automatically add insights middleware ([#5488](https://github.com/algolia/instantsearch.js/issues/5488)) ([9031573](https://github.com/algolia/instantsearch.js/commit/9031573807fa6803dcfae9f33d61b8f111f68423))
 * **insights:** automatically load search-insights if not passed ([#5484](https://github.com/algolia/instantsearch.js/issues/5484)) ([a85797b](https://github.com/algolia/instantsearch.js/commit/a85797b503edc94e001c5bfb3b754db6cb556943))
-* **insights:** enable default click events on hits and infinite hits ([#5522](https://github.com/algolia/instantsearch.js/issues/5522)) ([271bd12](https://github.com/algolia/instantsearch.js/commit/271bd12e34bc55656976bb53c90282193083eb86))
-* **insights:** option to disable automatic insights middleware ([#5493](https://github.com/algolia/instantsearch.js/issues/5493)) ([cff723f](https://github.com/algolia/instantsearch.js/commit/cff723fc95a90ebb2ed14c46c51ab05764835a47))
-* **insights:** prevent potential errors ([#5487](https://github.com/algolia/instantsearch.js/issues/5487)) ([33fe510](https://github.com/algolia/instantsearch.js/commit/33fe510307e4b382a5ba1153a0eaf160420acd11))
-* **insights:** remove useCookie from default parameters ([#5606](https://github.com/algolia/instantsearch.js/issues/5606)) ([bdd9290](https://github.com/algolia/instantsearch.js/commit/bdd92901b59ae4e5d7311eadfbf53ed656bbaf4a))
-* **insights:** require optin for insights option ([#5578](https://github.com/algolia/instantsearch.js/issues/5578)) ([8fb517f](https://github.com/algolia/instantsearch.js/commit/8fb517f15381ecb32ea00cf4b01a0fd5e70e1d17))
+* **insights:** enable default click events on hits and infinite hits ([#5522](https://github.com/algolia/instantsearch.js/issues/5522)) ([271bd12](https://github.com/algolia/instantsearch.js/commit/271bd12e34bc55656976bb53c90282193083eb86)) ([#5527](https://github.com/algolia/instantsearch.js/issues/5527)) ([0e55821](https://github.com/algolia/instantsearch.js/commit/0e558213c807cd17d592fadec052f3d1fc692e6c))
+* **insights:** prevent potential errors ([#5487](https://github.com/algolia/instantsearch.js/issues/5487)) ([33fe510](https://github.com/algolia/instantsearch.js/commit/33fe510307e4b382a5ba1153a0eaf160420acd11)) ([#5606](https://github.com/algolia/instantsearch.js/issues/5606)) ([bdd9290](https://github.com/algolia/instantsearch.js/commit/bdd92901b59ae4e5d7311eadfbf53ed656bbaf4a)) ([#5512](https://github.com/algolia/instantsearch.js/issues/5512)) ([85dfbc9](https://github.com/algolia/instantsearch.js/commit/85dfbc9ebd722fbe6a7e1bd056950fdbcc16d8d9))
 * **metadata:** register metadata around middleware ([#5492](https://github.com/algolia/instantsearch.js/issues/5492)) ([3e72ec8](https://github.com/algolia/instantsearch.js/commit/3e72ec82894a05a071328a4802d2f764233fe005))
 
 
