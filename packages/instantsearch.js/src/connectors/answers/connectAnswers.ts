@@ -105,6 +105,9 @@ export type AnswersConnector = Connector<
   AnswersConnectorParams
 >;
 
+/**
+ * @deprecated the answers service is no longer offered, and this widget will be removed in InstantSearch.js v5
+ */
 const connectAnswers: AnswersConnector = function connectAnswers(
   renderFn,
   unmountFn = noop
