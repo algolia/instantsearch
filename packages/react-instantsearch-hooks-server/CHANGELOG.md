@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.43.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.42.2...react-instantsearch-hooks-server@6.43.0) (2023-04-24)
+
+
+### Bug Fixes
+
+* **server:** error when multiple InstantSearch instances in getServerState ([#5588](https://github.com/algolia/instantsearch.js/issues/5588)) ([0778460](https://github.com/algolia/instantsearch.js/commit/0778460dee935b929e420b362948b4962978d3a5))
+
+
+### Features
+
+* **insights:** automatically add insights middleware ([#5488](https://github.com/algolia/instantsearch.js/issues/5488)) ([9031573](https://github.com/algolia/instantsearch.js/commit/9031573807fa6803dcfae9f33d61b8f111f68423))
+* **insights:** require optin for insights option ([#5578](https://github.com/algolia/instantsearch.js/issues/5578)) ([8fb517f](https://github.com/algolia/instantsearch.js/commit/8fb517f15381ecb32ea00cf4b01a0fd5e70e1d17))
+
+
+
+
+
 ## [6.42.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.42.1...react-instantsearch-hooks-server@6.42.2) (2023-04-11)
 
 **Note:** Version bump only for package react-instantsearch-hooks-server

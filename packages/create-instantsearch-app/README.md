@@ -17,16 +17,13 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Create InstantSearch App](#create-instantsearch-app)
-  - [Get started](#get-started)
-  - [Usage](#usage)
-      - [`--template`](#--template)
-      - [`--config`](#--config)
-  - [API](#api)
-  - [Tutorials](#tutorials)
-  - [Previews](#previews)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [Get started](#get-started)
+- [Usage](#usage)
+- [API](#api)
+- [Tutorials](#tutorials)
+- [Previews](#previews)
+- [Contributing](#contributing)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

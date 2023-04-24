@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.43.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.42.2...react-instantsearch-hooks@6.43.0) (2023-04-24)
+
+
+### Bug Fixes
+
+* **insights:** keep track of script loading in global ([#5551](https://github.com/algolia/instantsearch.js/issues/5551)) ([f34b204](https://github.com/algolia/instantsearch.js/commit/f34b2043165505a543596d966b35e749749135d5))
+* **insights:** send extra parameters only for applicable versions ([#5558](https://github.com/algolia/instantsearch.js/issues/5558)) ([82144c0](https://github.com/algolia/instantsearch.js/commit/82144c0a0b18e6b47d6f508e5c670a9de274c121))
+* **lifecycle:** prevent extra network requests when unmounting multiple widgets ([#5602](https://github.com/algolia/instantsearch.js/issues/5602)) ([11458ee](https://github.com/algolia/instantsearch.js/commit/11458eee7e7f0f3e9c5f368584a16f58646b1cdd))
+
+
+### Features
+
+* **insights:** automatically add insights middleware ([#5488](https://github.com/algolia/instantsearch.js/issues/5488)) ([9031573](https://github.com/algolia/instantsearch.js/commit/9031573807fa6803dcfae9f33d61b8f111f68423))
+* **insights:** remove useCookie from default parameters ([#5606](https://github.com/algolia/instantsearch.js/issues/5606)) ([bdd9290](https://github.com/algolia/instantsearch.js/commit/bdd92901b59ae4e5d7311eadfbf53ed656bbaf4a))
+* **insights:** require optin for insights option ([#5578](https://github.com/algolia/instantsearch.js/issues/5578)) ([8fb517f](https://github.com/algolia/instantsearch.js/commit/8fb517f15381ecb32ea00cf4b01a0fd5e70e1d17))
+
+
+
+
+
 ## [6.42.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.42.1...react-instantsearch-hooks@6.42.2) (2023-04-11)
 
 **Note:** Version bump only for package react-instantsearch-hooks

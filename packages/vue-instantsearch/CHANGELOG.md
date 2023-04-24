@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.9.0](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.10...vue-instantsearch@4.9.0) (2023-04-24)
+
+
+### Bug Fixes
+
+* **insights:** user-defined send/bindEvent overrides internal click ([#5527](https://github.com/algolia/instantsearch.js/issues/5527)) ([0e55821](https://github.com/algolia/instantsearch.js/commit/0e558213c807cd17d592fadec052f3d1fc692e6c))
+
+
+### Features
+
+* **hits/infinite-hits:** send a default click event and expose sendEvent to slot ([#5549](https://github.com/algolia/instantsearch.js/issues/5549)) ([6954460](https://github.com/algolia/instantsearch.js/commit/6954460c8842e633ba1f2afc5ac58e966f70d364))
+* **insights:** automatically add insights middleware ([#5488](https://github.com/algolia/instantsearch.js/issues/5488)) ([9031573](https://github.com/algolia/instantsearch.js/commit/9031573807fa6803dcfae9f33d61b8f111f68423))
+* **insights:** require optin for insights option ([#5578](https://github.com/algolia/instantsearch.js/issues/5578)) ([8fb517f](https://github.com/algolia/instantsearch.js/commit/8fb517f15381ecb32ea00cf4b01a0fd5e70e1d17))
+
+
+
+
+
 ## [4.8.10](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.9...vue-instantsearch@4.8.10) (2023-04-11)
 
 **Note:** Version bump only for package vue-instantsearch
