@@ -26,6 +26,7 @@ const search = instantsearch({
   routing: {
     stateMapping: singleIndex('PROD_algolia_blog'),
   },
+  insights: true,
 });
 
 const datesDesktop = createDates({

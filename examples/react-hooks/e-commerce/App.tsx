@@ -84,6 +84,7 @@ export function App() {
       searchClient={searchClient}
       indexName={indexName}
       routing={routing}
+      insights={true}
     >
       <header className="header" ref={headerRef}>
         <p className="header-logo">
