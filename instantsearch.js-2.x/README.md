@@ -1,6 +1,6 @@
 # instantsearch.js-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 

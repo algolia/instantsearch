@@ -8,7 +8,7 @@
       </h1>
       <p class="header-subtitle">
         using
-        <a href="https://github.com/algolia/vue-instantsearch">
+        <a href="https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch">
           Vue InstantSearch
         </a>
       </p>
