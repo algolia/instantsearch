@@ -14,7 +14,7 @@ import type { BreadcrumbProps } from '../Breadcrumb';
 
 const defaultProps: BreadcrumbProps = {
   items: [],
-  createURL: (data: string) => data,
+  createURL: (data) => `${data}`,
   refine: () => {},
   cssClasses: {
     root: 'root',

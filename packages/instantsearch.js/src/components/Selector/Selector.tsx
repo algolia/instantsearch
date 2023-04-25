@@ -4,7 +4,7 @@ import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
 export type SelectorOption = {
-  value?: string | number;
+  value: string | number | undefined;
   label: string;
 };
 
@@ -18,7 +18,7 @@ export type SelectorProps = {
   cssClasses: SelectorComponentCSSClasses;
   currentValue?: string | number;
   options: SelectorOption[];
-  setValue: (value: SelectorOption['value']) => void;
+  setValue: (value: string) => void;
 };
 
 function Selector({

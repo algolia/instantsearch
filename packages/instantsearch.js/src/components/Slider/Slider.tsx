@@ -127,7 +127,7 @@ class Slider extends Component<SliderProps> {
           pitPoints={pitPoints}
           snap={true}
           snapPoints={snapPoints}
-          values={(this.isDisabled ? [min, max] : values) as number[]}
+          values={(this.isDisabled ? [min, max] : values) as [number, number]}
           disabled={this.isDisabled}
         />
       </div>

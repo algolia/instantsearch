@@ -22,8 +22,8 @@ export type BreadcrumbProps = {
   items: BreadcrumbConnectorParamsItem[];
   cssClasses: BreadcrumbComponentCSSClasses;
   templateProps: PreparedTemplateProps<BreadcrumbComponentTemplates>;
-  createURL: (value?: string | null) => string;
-  refine: (value?: string | null) => void;
+  createURL: (value: string | null) => string;
+  refine: (value: string | null) => void;
   canRefine?: boolean;
 };
 
@@ -53,10 +53,10 @@ const Breadcrumb = ({
           rootTagName="a"
           rootProps={{
             className: cssClasses.link,
-            href: createURL(undefined),
+            href: createURL(null),
             onClick: (event: MouseEvent) => {
               event.preventDefault();
-              refine(undefined);
+              refine(null);
             },
           }}
         />

@@ -37,6 +37,6 @@ export type InternalMiddleware<TUiState extends UiState = UiState> = (
   options: MiddlewareOptions
 ) => MiddlewareDefinition<TUiState>;
 
-export type Middleware = (
+export type Middleware<TUiState extends UiState = UiState> = (
   options: MiddlewareOptions
-) => AtLeastOne<MiddlewareDefinition>;
+) => AtLeastOne<MiddlewareDefinition<TUiState>>;

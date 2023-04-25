@@ -105,6 +105,14 @@ export type HandleProps = {
   tabIndex: number;
 };
 
+type Bounds = [min: number, max: number];
+
+type PublicState = {
+  max?: number;
+  min?: number;
+  values: Bounds;
+};
+
 type Props = {
   children?: ComponentChildren;
   className?: string;
@@ -112,30 +120,30 @@ type Props = {
   handle?: ComponentType<HandleProps>;
   max?: number;
   min?: number;
-  onClick?: (...args: unknown[]) => unknown;
-  onChange?: (...args: unknown[]) => unknown;
-  onKeyPress?: (...args: unknown[]) => unknown;
-  onSliderDragEnd?: (...args: unknown[]) => unknown;
-  onSliderDragMove?: (...args: unknown[]) => unknown;
-  onSliderDragStart?: (...args: unknown[]) => unknown;
-  onValuesUpdated?: (...args: unknown[]) => unknown;
+  onClick?: () => void;
+  onChange?: (state: PublicState) => void;
+  onKeyPress?: () => void;
+  onSliderDragEnd?: () => void;
+  onSliderDragMove?: () => void;
+  onSliderDragStart?: () => void;
+  onValuesUpdated?: (state: PublicState) => void;
   orientation?: 'horizontal' | 'vertical';
   pitComponent?: ComponentType<PitProps>;
   pitPoints?: number[];
   progressBar?: ComponentType<JSX.HTMLAttributes>;
   snap?: boolean;
   snapPoints?: number[];
-  values?: number[];
+  values?: Bounds;
 };
 
 type State = {
   className: string;
-  handlePos: number[];
+  handlePos: Bounds;
   handleDimensions: number;
   mousePos: { x: number; y: number } | null;
   sliderBox: Partial<BoundingBox>;
   slidingIndex: number | null;
-  values: number[];
+  values: Bounds;
 };
 
 class Rheostat extends Component<Props, State> {
@@ -162,12 +170,14 @@ class Rheostat extends Component<Props, State> {
     values: [PERCENT_EMPTY],
   };
 
+  x = [0, 0].map((y) => y);
+
   public state: State = {
     className: getClassName(this.props),
     // non-null thanks to defaultProps
     handlePos: this.props.values!.map((value) =>
       getPosition(value, this.props.min!, this.props.max!)
-    ),
+    ) as Bounds,
     handleDimensions: 0,
     mousePos: null,
     sliderBox: {},
@@ -368,11 +378,11 @@ class Rheostat extends Component<Props, State> {
 
     const nextHandlePos = handlePos.map((pos, index) =>
       index === idx ? actualPosition : pos
-    );
+    ) as Bounds;
 
     return {
       handlePos: nextHandlePos,
-      values: nextHandlePos.map((pos) => getValue(pos, min, max)),
+      values: nextHandlePos.map((pos) => getValue(pos, min, max)) as Bounds,
     };
   };
 
@@ -545,10 +555,7 @@ class Rheostat extends Component<Props, State> {
     );
   };
 
-  private validateValues = (
-    proposedValues: number[],
-    props: Required<Props>
-  ) => {
+  private validateValues = (proposedValues: Bounds, props: Required<Props>) => {
     const { max, min } = props || this.props;
 
     return proposedValues.map((value, idx, values) => {
@@ -559,7 +566,7 @@ class Rheostat extends Component<Props, State> {
       }
 
       return realValue;
-    });
+    }) as Bounds;
   };
 
   public canMove = (idx: number, proposedPosition: number) => {
@@ -618,7 +625,9 @@ class Rheostat extends Component<Props, State> {
 
     this.setState(
       {
-        handlePos: nextValues.map((value) => getPosition(value, min, max)),
+        handlePos: nextValues.map((value) =>
+          getPosition(value, min, max)
+        ) as Bounds,
         values: nextValues,
       },
       () => this.fireChangeEvent()
