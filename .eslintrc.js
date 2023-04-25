@@ -123,6 +123,9 @@ const config = {
       parserOptions: {
         project: './tsconfig.json',
       },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
       rules: {
         'valid-jsdoc': 'off',
         'no-redeclare': 'off',
