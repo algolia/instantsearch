@@ -22,8 +22,8 @@ export type BreadcrumbProps = {
   items: BreadcrumbConnectorParamsItem[];
   cssClasses: BreadcrumbComponentCSSClasses;
   templateProps: PreparedTemplateProps<BreadcrumbComponentTemplates>;
-  createURL: (value: string | null) => string;
-  refine: (value: string | null) => void;
+  createURL: (value: BreadcrumbConnectorParamsItem['value']) => string;
+  refine: (value: BreadcrumbConnectorParamsItem['value']) => void;
   canRefine?: boolean;
 };
 
