@@ -246,7 +246,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
               createURL,
             }: {
               state: SearchParameters;
-              createURL(parameters: SearchParameters): string;
+              createURL: (parameters: SearchParameters) => string;
             }
           ) =>
           () => {

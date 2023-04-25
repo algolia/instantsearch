@@ -263,7 +263,9 @@ describe('insights', () => {
 
     it('notifies when the script fails to be added', () => {
       const { instantSearchInstance } = createTestEnvironment();
+
       /* eslint-disable deprecation/deprecation */
+      // eslint-disable-next-line jest/unbound-method
       const createElement = document.createElement;
       document.createElement = () => {
         throw new Error('error');

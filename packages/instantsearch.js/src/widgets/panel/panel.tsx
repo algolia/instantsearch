@@ -119,13 +119,13 @@ export type PanelWidgetParams<TWidgetFactory extends AnyWidgetFactory> = {
    * A function that is called on each render to determine if the
    * panel should be hidden based on the render options.
    */
-  hidden?(options: PanelRenderOptions<TWidgetFactory>): boolean;
+  hidden?: (options: PanelRenderOptions<TWidgetFactory>) => boolean;
 
   /**
    * A function that is called on each render to determine if the
    * panel should be collapsed based on the render options.
    */
-  collapsed?(options: PanelRenderOptions<TWidgetFactory>): boolean;
+  collapsed?: (options: PanelRenderOptions<TWidgetFactory>) => boolean;
 
   /**
    * The templates to use for the widget.

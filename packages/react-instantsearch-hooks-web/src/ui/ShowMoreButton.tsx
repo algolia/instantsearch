@@ -16,7 +16,7 @@ export type ShowMoreButtonTranslations = {
   /**
    * Alternative text for the "Show more" button.
    */
-  showMoreButtonText(options: ShowMoreButtonTextOptions): string;
+  showMoreButtonText: (options: ShowMoreButtonTextOptions) => string;
 };
 
 export function ShowMoreButton({

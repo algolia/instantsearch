@@ -20,7 +20,7 @@ export type RangeSliderComponentCSSClasses =
   ComponentCSSClasses<RangeSliderCssClasses>;
 
 export type SliderProps = {
-  refine(values: RangeBoundaries): void;
+  refine: (values: RangeBoundaries) => void;
   min?: number;
   max?: number;
   values: RangeBoundaries;

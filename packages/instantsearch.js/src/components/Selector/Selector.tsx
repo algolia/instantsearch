@@ -18,7 +18,7 @@ export type SelectorProps = {
   cssClasses: SelectorComponentCSSClasses;
   currentValue?: string | number;
   options: SelectorOption[];
-  setValue(value: SelectorOption['value']): void;
+  setValue: (value: SelectorOption['value']) => void;
 };
 
 function Selector({

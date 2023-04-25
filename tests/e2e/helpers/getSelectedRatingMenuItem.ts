@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getSelectedRatingMenuItem(): Promise<string>;
+    getSelectedRatingMenuItem: () => Promise<string>;
   }
 }
 

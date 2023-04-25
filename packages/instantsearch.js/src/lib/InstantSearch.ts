@@ -115,9 +115,9 @@ export type InstantSearchOptions<
    */
   onStateChange?: (params: {
     uiState: TUiState;
-    setUiState(
+    setUiState: (
       uiState: TUiState | ((previousUiState: TUiState) => TUiState)
-    ): void;
+    ) => void;
   }) => void;
 
   /**

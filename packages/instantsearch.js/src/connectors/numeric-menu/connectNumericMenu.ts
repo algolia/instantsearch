@@ -172,8 +172,8 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     }
 
     type ConnectorState = {
-      refine?(facetValue: string): void;
-      createURL?(state: SearchParameters): (facetValue: string) => string;
+      refine?: (facetValue: string) => void;
+      createURL?: (state: SearchParameters) => (facetValue: string) => string;
       sendEvent?: SendEventForFacet;
     };
 

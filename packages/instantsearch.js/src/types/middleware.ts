@@ -14,19 +14,19 @@ export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
   /**
    * Change handler called on every UiState change
    */
-  onStateChange(options: { uiState: TUiState }): void;
+  onStateChange: (options: { uiState: TUiState }) => void;
   /**
    * Called when the middleware is added to InstantSearch
    */
-  subscribe(): void;
+  subscribe: () => void;
   /**
    * Called when InstantSearch is started
    */
-  started(): void;
+  started: () => void;
   /**
    * Called when the middleware is removed from InstantSearch
    */
-  unsubscribe(): void;
+  unsubscribe: () => void;
 };
 
 export type MiddlewareOptions = {

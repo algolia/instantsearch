@@ -69,7 +69,6 @@ const config = {
     'react/no-deprecated': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    'jest/no-done-callback': 'warn',
     'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
     '@typescript-eslint/no-unused-vars': [
       'error',
@@ -119,7 +118,16 @@ const config = {
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
+      // this is the same files as ignored in tsconfig.json
+      excludedFiles: ['examples/**/*', '*/es'],
+      parserOptions: {
+        project: './tsconfig.json',
+      },
       rules: {
+        'valid-jsdoc': 'off',
+        'no-redeclare': 'off',
+        '@typescript-eslint/no-redeclare': ['error'],
+        'react/prop-types': 'off',
         // This rule has issues with the TypeScript parser, but tsc catches
         // these sorts of errors anyway.
         // See: https://github.com/typescript-eslint/typescript-eslint/issues/342
@@ -134,6 +142,18 @@ const config = {
             allowTaggedTemplates: true,
           },
         ],
+        'deprecation/deprecation': 'warn',
+        '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+        '@typescript-eslint/method-signature-style': 'error',
+        '@typescript-eslint/unbound-method': 'error',
+      },
+    },
+    {
+      files: ['**/__tests__/**.ts', '**/__tests__/**.tsx'],
+      rules: {
+        'jest/no-done-callback': 'warn',
+        '@typescript-eslint/unbound-method': 'off',
+        'jest/unbound-method': 'error',
       },
     },
     {
@@ -199,7 +219,7 @@ const config = {
             pathGroupsExcludedImportTypes: ['builtin'],
           },
         ],
-      }
+      },
     },
     {
       files: 'packages/**/*',
@@ -244,27 +264,6 @@ const config = {
       rules: {
         '@typescript-eslint/consistent-type-assertions': 'off',
         '@typescript-eslint/ban-types': 'off',
-      },
-    },
-    {
-      files: ['*.ts', '*.tsx'],
-      rules: {
-        'valid-jsdoc': 'off',
-        'no-redeclare': 'off',
-        '@typescript-eslint/no-redeclare': ['error'],
-        'react/prop-types': 'off',
-      },
-    },
-    {
-      files: ['*.ts', '*.tsx'],
-      // this is the same files as ignored in tsconfig.json
-      excludedFiles: ['examples/**/*', '*/es'],
-      parserOptions: {
-        project: './tsconfig.json',
-      },
-      rules: {
-        'deprecation/deprecation': 'warn',
-        '@typescript-eslint/no-unnecessary-type-assertion': 'error',
       },
     },
     {

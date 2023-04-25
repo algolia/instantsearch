@@ -36,7 +36,7 @@ export type PaginationTranslations = {
   /**
    * The label for a page's button.
    */
-  pageItemText(options: PageItemTextOptions): string;
+  pageItemText: (options: PageItemTextOptions) => string;
   /**
    * The accessible label for the first page's button.
    */
@@ -56,7 +56,7 @@ export type PaginationTranslations = {
   /**
    * The accessible label for a page's button.
    */
-  pageItemAriaLabel(options: PageItemTextOptions): string;
+  pageItemAriaLabel: (options: PageItemTextOptions) => string;
 };
 
 export type PaginationProps = React.ComponentProps<'div'> & {

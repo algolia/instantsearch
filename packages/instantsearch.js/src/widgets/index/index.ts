@@ -64,48 +64,48 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   Widget<IndexWidgetDescription & { widgetParams: IndexWidgetParams }>,
   'getWidgetUiState' | 'getWidgetState'
 > & {
-  getIndexName(): string;
-  getIndexId(): string;
-  getHelper(): Helper | null;
-  getResults(): SearchResults | null;
-  getPreviousState(): SearchParameters | null;
-  getScopedResults(): ScopedResult[];
-  getParent(): IndexWidget | null;
-  getWidgets(): Array<Widget | IndexWidget>;
-  createURL(state: SearchParameters): string;
+  getIndexName: () => string;
+  getIndexId: () => string;
+  getHelper: () => Helper | null;
+  getResults: () => SearchResults | null;
+  getPreviousState: () => SearchParameters | null;
+  getScopedResults: () => ScopedResult[];
+  getParent: () => IndexWidget | null;
+  getWidgets: () => Array<Widget | IndexWidget>;
+  createURL: (state: SearchParameters) => string;
 
-  addWidgets(widgets: Array<Widget | IndexWidget>): IndexWidget;
-  removeWidgets(widgets: Array<Widget | IndexWidget>): IndexWidget;
+  addWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
+  removeWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
 
-  init(options: IndexInitOptions): void;
-  render(options: IndexRenderOptions): void;
-  dispose(): void;
+  init: (options: IndexInitOptions) => void;
+  render: (options: IndexRenderOptions) => void;
+  dispose: () => void;
   /**
    * @deprecated
    */
-  getWidgetState(uiState: UiState): UiState;
-  getWidgetUiState<TSpecificUiState extends UiState = TUiState>(
+  getWidgetState: (uiState: UiState) => UiState;
+  getWidgetUiState: <TSpecificUiState extends UiState = TUiState>(
     uiState: TSpecificUiState
-  ): TSpecificUiState;
-  getWidgetSearchParameters(
+  ) => TSpecificUiState;
+  getWidgetSearchParameters: (
     searchParameters: SearchParameters,
     searchParametersOptions: { uiState: IndexUiState }
-  ): SearchParameters;
+  ) => SearchParameters;
   /**
    * Set this index' UI state back to the state defined by the widgets.
    * Can only be called after `init`.
    */
-  refreshUiState(): void;
+  refreshUiState: () => void;
   /**
    * Set this index' UI state and search. This is the equivalent of calling
    * a spread `setUiState` on the InstantSearch instance.
    * Can only be called after `init`.
    */
-  setIndexUiState(
+  setIndexUiState: (
     indexUiState:
       | TUiState[string]
       | ((previousIndexUiState: TUiState[string]) => TUiState[string])
-  ): void;
+  ) => void;
 };
 
 /**

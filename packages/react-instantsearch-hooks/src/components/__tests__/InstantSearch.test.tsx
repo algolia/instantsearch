@@ -158,7 +158,6 @@ describe('InstantSearch', () => {
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     unmount();
-
     await waitFor(() => {
       expect(searchContext.current!.dispose).toHaveBeenCalledTimes(1);
       expect(searchContext.current!.started).toEqual(false);
