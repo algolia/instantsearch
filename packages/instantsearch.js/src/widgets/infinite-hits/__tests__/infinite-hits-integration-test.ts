@@ -78,7 +78,7 @@ describe('infiniteHits', () => {
       let cachedHits: InfiniteHitsCachedHits<Record<string, any>> | undefined =
         undefined;
 
-      type Cache = InfiniteHitsCache & { clear(): void };
+      type Cache = InfiniteHitsCache & { clear: () => void };
       type MockedCache = {
         [key in keyof Cache]: jest.MockedFunction<Cache[key]>;
       };

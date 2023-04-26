@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    clickToggleRefinement(): Promise<void>;
+    clickToggleRefinement: () => Promise<void>;
   }
 }
 

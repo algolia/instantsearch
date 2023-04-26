@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    clickRefinementListItem(label: string): Promise<void>;
+    clickRefinementListItem: (label: string) => Promise<void>;
   }
 }
 

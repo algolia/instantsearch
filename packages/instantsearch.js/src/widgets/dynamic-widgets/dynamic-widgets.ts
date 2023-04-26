@@ -33,12 +33,12 @@ export type DynamicWidgetsWidgetParams = {
    * Function to return a fallback widget when an attribute isn't found in
    * `widgets`.
    */
-  fallbackWidget?(args: {
+  fallbackWidget?: (args: {
     /** The attribute name to create a widget for. */
     attribute: string;
     /** CSS Selector or HTMLElement to insert the widget */
     container: HTMLElement;
-  }): Widget;
+  }) => Widget;
 };
 
 export type DynamicWidgetsWidget = WidgetFactory<

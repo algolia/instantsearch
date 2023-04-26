@@ -2,8 +2,8 @@ const nextMicroTask = Promise.resolve();
 
 type Callback = (...args: any[]) => void;
 type Defer = {
-  wait(): Promise<void>;
-  cancel(): void;
+  wait: () => Promise<void>;
+  cancel: () => void;
 };
 
 export function defer<TCallback extends Callback>(

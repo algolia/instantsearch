@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    setHitsPerPage(label: string): Promise<void>;
+    setHitsPerPage: (label: string) => Promise<void>;
   }
 }
 

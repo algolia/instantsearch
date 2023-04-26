@@ -24,7 +24,7 @@
         <div class="search-panel">
           <div class="search-panel__filters">
             <ais-panel>
-              <template v-slot:header>brand</template>
+              <template #header>brand</template>
               <ais-refinement-list attribute="brand" />
             </ais-panel>
           </div>

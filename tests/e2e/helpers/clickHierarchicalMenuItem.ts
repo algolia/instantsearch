@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    clickHierarchicalMenuItem(label: string): Promise<void>;
+    clickHierarchicalMenuItem: (label: string) => Promise<void>;
   }
 }
 

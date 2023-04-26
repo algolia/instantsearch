@@ -18,7 +18,7 @@ export type PaginationComponentCSSClasses =
 export type PaginationComponentTemplates = Required<PaginationTemplates>;
 
 export type PaginationProps = {
-  createURL(value: number): string;
+  createURL: (value: number) => string;
   cssClasses: PaginationComponentCSSClasses;
   templates: PaginationComponentTemplates;
   currentPage: number;
@@ -26,7 +26,7 @@ export type PaginationProps = {
   pages: number[];
   isFirstPage: boolean;
   isLastPage: boolean;
-  setCurrentPage(value: number): void;
+  setCurrentPage: (value: number) => void;
   showFirst?: boolean;
   showLast?: boolean;
   showPrevious?: boolean;
@@ -138,7 +138,7 @@ type PaginationLinkProps = {
   isSelected?: boolean;
   className?: string;
   cssClasses: PaginationComponentCSSClasses;
-  createURL(value: number): string;
+  createURL: (value: number) => string;
   createClickHandler: (pageNumber: number) => (event: MouseEvent) => void;
 };
 

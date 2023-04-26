@@ -128,7 +128,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
     function getRefinedState(
       state: SearchParameters,
-      facetValue: string | null
+      facetValue: BreadcrumbConnectorParamsItem['value']
     ) {
       if (!facetValue) {
         const breadcrumb = state.getHierarchicalFacetBreadcrumb(

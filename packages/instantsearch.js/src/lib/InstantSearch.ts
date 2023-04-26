@@ -115,9 +115,9 @@ export type InstantSearchOptions<
    */
   onStateChange?: (params: {
     uiState: TUiState;
-    setUiState(
+    setUiState: (
       uiState: TUiState | ((previousUiState: TUiState) => TUiState)
-    ): void;
+    ) => void;
   }) => void;
 
   /**
@@ -189,8 +189,8 @@ class InstantSearch<
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: Array<{
-    creator: Middleware;
-    instance: MiddlewareDefinition;
+    creator: Middleware<TUiState>;
+    instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
   /**
@@ -341,7 +341,7 @@ See ${createDocumentationLink({
   /**
    * Hooks a middleware into the InstantSearch lifecycle.
    */
-  public use(...middleware: Middleware[]): this {
+  public use(...middleware: Array<Middleware<TUiState>>): this {
     const newMiddlewareList = middleware.map((fn) => {
       const newMiddleware = {
         $$type: '__unknown__',
@@ -379,7 +379,7 @@ See ${createDocumentationLink({
   /**
    * Removes a middleware from the InstantSearch lifecycle.
    */
-  public unuse(...middlewareToUnuse: Middleware[]): this {
+  public unuse(...middlewareToUnuse: Array<Middleware<TUiState>>): this {
     this.middleware
       .filter((m) => middlewareToUnuse.includes(m.creator))
       .forEach((m) => m.instance.unsubscribe());
@@ -750,7 +750,7 @@ See ${createDocumentationLink({
   }
 
   public onInternalStateChange = defer(() => {
-    const nextUiState = this.mainIndex.getWidgetUiState({});
+    const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
     this.middleware.forEach(({ instance }) => {
       instance.onStateChange({

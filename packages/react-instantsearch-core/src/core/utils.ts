@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const hasOwn = Object.prototype.hasOwnProperty;
+
 // From https://github.com/reactjs/react-redux/blob/master/src/utils/shallowEqual.js
 export const shallowEqual = (objA: any, objB: any) => {
   if (objA === objB) {
@@ -12,7 +15,6 @@ export const shallowEqual = (objA: any, objB: any) => {
   }
 
   // Test for A's keys different from B.
-  const hasOwn = Object.prototype.hasOwnProperty;
   for (let i = 0; i < keysA.length; i++) {
     if (!hasOwn.call(objB, keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
       return false;
