@@ -61,7 +61,7 @@ export type InstantSearchOptions<
   TRouteState = TUiState
 > = {
   /**
-   * The name of the main index
+   * The name of the main index. If no indexName is provided, you have to manually add an index widget.
    */
   indexName?: string;
 
