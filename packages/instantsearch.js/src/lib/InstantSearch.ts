@@ -514,14 +514,11 @@ See ${createDocumentationLink({
       this.status = 'loading';
       this.scheduleRender(false);
 
-      if (__DEV__) {
-        const mainWidgets = this.mainIndex.getWidgets();
-        warning(
-          !this.indexName &&
-            (!mainWidgets.length || mainWidgets.some(isIndexWidget)),
-          'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
-        );
-      }
+      warning(
+        Boolean(this.indexName) ||
+          this.mainIndex.getWidgets().some(isIndexWidget),
+        'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
 
       // This solution allows us to keep the exact same API for the users but
       // under the hood, we have a different implementation. It should be

@@ -52,7 +52,7 @@ describe('sortBy()', () => {
     render.mockClear();
 
     const instantSearchInstance = createInstantSearch({
-      indexName: '',
+      indexName: 'indexName',
     });
 
     container = document.createElement('div');

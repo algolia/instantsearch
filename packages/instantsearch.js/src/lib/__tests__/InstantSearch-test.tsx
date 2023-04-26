@@ -79,18 +79,6 @@ describe('Usage', () => {
     warning.cache = {};
   });
 
-  it('throws without indexName', () => {
-    expect(() => {
-      // @ts-expect-error
-      // eslint-disable-next-line no-new
-      new InstantSearch({ indexName: undefined });
-    }).toThrowErrorMatchingInlineSnapshot(`
-"The \`indexName\` option is required.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
-  });
-
   it('throws without searchClient', () => {
     expect(() => {
       // @ts-expect-error
@@ -113,6 +101,63 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
 See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
 `);
+  });
+
+  describe('root index warning', () => {
+    it('warns if no index is provided', async () => {
+      await expect(async () => {
+        const search = new InstantSearch({
+          searchClient: createSearchClient(),
+        });
+        search.addWidgets([createWidget()]);
+        search.start();
+        await wait(0);
+      }).toWarnDev(
+        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
+    });
+
+    it('does not warn if indexName is provided', async () => {
+      await expect(async () => {
+        const search = new InstantSearch({
+          searchClient: createSearchClient(),
+          indexName: 'indexName',
+        });
+
+        search.addWidgets([createWidget()]);
+        search.start();
+        await wait(0);
+      }).not.toWarnDev(
+        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
+    });
+
+    it('does not warn if no index and no widgets are provided', async () => {
+      await expect(async () => {
+        const search = new InstantSearch({
+          searchClient: createSearchClient(),
+        });
+
+        search.start();
+        await wait(0);
+      }).not.toWarnDev(
+        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
+    });
+
+    it('does not warn if index widget is provided', async () => {
+      await expect(async () => {
+        const search = new InstantSearch({
+          searchClient: createSearchClient(),
+        });
+
+        search.addWidgets([index({ indexName: 'indexName' })]);
+        search.start();
+        await wait(0);
+      }).not.toWarnDev(
+        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
+    });
   });
 
   it('throws if insightsClient is not a function', () => {
@@ -1119,6 +1164,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     instance.start();
 
     expect(instance.mainHelper).toBe(helper);
+  });
+
+  it('empty query for root if indexName is not given', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      searchClient,
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(searchClient.search).toHaveBeenCalledWith([]);
+
+    search.addWidgets([index({ indexName: 'indexName' })]);
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(searchClient.search).toHaveBeenCalledWith([
+      {
+        indexName: 'indexName',
+        params: {
+          facets: [],
+          query: '',
+          tagFilters: '',
+        },
+      },
+    ]);
   });
 });
 

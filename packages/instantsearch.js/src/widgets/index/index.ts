@@ -608,12 +608,19 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // then would no longer be thrown for global handlers.
       if (
         instantSearchInstance.status === 'error' &&
-        !instantSearchInstance.mainHelper!.hasPendingRequests()
+        !instantSearchInstance.mainHelper!.hasPendingRequests() &&
+        lastValidSearchParameters
       ) {
-        helper!.setState(lastValidSearchParameters!);
+        helper!.setState(lastValidSearchParameters);
       }
 
-      localWidgets.forEach((widget) => {
+      // We only render index widgets if there are no results.
+      // This makes sure `render` is never called with `results` being `null`.
+      const widgetsToRender = this.getResults()
+        ? localWidgets
+        : localWidgets.filter(isIndexWidget);
+
+      widgetsToRender.forEach((widget) => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
@@ -628,12 +635,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
-      (this.getResults()
-        ? localWidgets
-        : // We only render index widgets if there are no results.
-          // This makes sure `render` is never called with `results` being `null`.
-          localWidgets.filter(isIndexWidget)
-      ).forEach((widget) => {
+      widgetsToRender.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
         // `lastResults` might be `null` though. It's possible that a stalled render
