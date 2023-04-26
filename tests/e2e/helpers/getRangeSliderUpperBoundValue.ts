@@ -2,7 +2,7 @@ import { RANGE_SLIDER_HANDLE_SELECTOR } from './selectors';
 
 declare module 'webdriverio' {
   interface Browser {
-    getRangeSliderUpperBoundValue(): Promise<number>;
+    getRangeSliderUpperBoundValue: () => Promise<number>;
   }
 }
 

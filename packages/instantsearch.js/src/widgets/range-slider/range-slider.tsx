@@ -90,7 +90,7 @@ type RangeSliderTooltipOptions = {
    * @example
    * { format(rawValue) {return '$' + Math.round(rawValue).toLocaleString() } }
    */
-  format(value: number): string;
+  format: (value: number) => string;
 };
 
 export type RangeSliderWidgetParams = {

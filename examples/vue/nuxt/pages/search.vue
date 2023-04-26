@@ -67,6 +67,7 @@ export default {
     createServerRootMixin({
       searchClient,
       indexName: 'instant_search',
+      insights: true,
       initialUiState: {
         // eslint-disable-next-line camelcase
         instant_search: {

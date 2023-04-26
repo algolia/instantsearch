@@ -39,6 +39,7 @@ export async function createApp({
       createServerRootMixin({
         searchClient,
         indexName: 'instant_search',
+        insights: true,
         routing: {
           router: {
             read() {

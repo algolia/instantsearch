@@ -68,6 +68,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
             serverUrl: url,
           }),
         }}
+        insights={true}
       >
         <div className="Container">
           <div>

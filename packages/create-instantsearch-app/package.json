@@ -1,13 +1,13 @@
 {
   "name": "create-instantsearch-app",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "license": "MIT",
   "description": "⚡️ Build InstantSearch apps at the speed of thought",
   "keywords": [
     "algolia",
     "instantsearch"
   ],
-  "repository": "algolia/instantsearch.js",
+  "repository": "algolia/instantsearch",
   "author": "Algolia <support@algolia.com>",
   "main": "index.js",
   "bin": {

@@ -64,6 +64,9 @@ export function Hits<THit extends Hit>({
           <li
             key={hit.objectID}
             className={cx('ais-Hits-item', classNames.item)}
+            onClick={() => {
+              sendEvent('click:internal', hit, 'Hit Clicked');
+            }}
           >
             <HitComponent hit={hit} sendEvent={sendEvent} />
           </li>

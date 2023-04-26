@@ -7,7 +7,7 @@ import type { UseSortByProps } from 'react-instantsearch-hooks';
 export type SortByProps = Omit<React.ComponentProps<'div'>, 'onChange'> &
   Pick<UseSortByProps, 'items'> &
   Pick<React.ComponentProps<'select'>, 'value'> & {
-    onChange?(value: string): void;
+    onChange?: (value: string) => void;
     classNames?: Partial<SortByClassNames>;
   };
 

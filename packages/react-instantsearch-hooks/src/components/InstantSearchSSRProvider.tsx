@@ -2,7 +2,8 @@ import React from 'react';
 
 import { InstantSearchSSRContext } from '../lib/InstantSearchSSRContext';
 
-import type { InitialResults, InstantSearch, UiState } from 'instantsearch.js';
+import type { InternalInstantSearch } from '../lib/useInstantSearchApi';
+import type { InitialResults, UiState } from 'instantsearch.js';
 import type { ReactNode } from 'react';
 
 export type InstantSearchServerState = {
@@ -24,9 +25,10 @@ export function InstantSearchSSRProvider<
 >({ children, ...props }: InstantSearchSSRProviderProps) {
   // This is used in `useInstantSearchApi()` to avoid creating and starting multiple instances of
   // `InstantSearch` on mount.
-  const ssrSearchRef = React.useRef<InstantSearch<UiState, TRouteState> | null>(
-    null
-  );
+  const ssrSearchRef = React.useRef<InternalInstantSearch<
+    UiState,
+    TRouteState
+  > | null>(null);
 
   // When <DynamicWidgets> is mounted, a second provider is used above the user-land
   // <InstantSearchSSRProvider> in `getServerState()`.

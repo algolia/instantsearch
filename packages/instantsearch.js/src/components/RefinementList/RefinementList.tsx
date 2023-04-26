@@ -111,11 +111,6 @@ class RefinementList<TTemplates extends Templates> extends Component<
 
   private searchBox = createRef<SearchBox>();
 
-  public constructor(props: RefinementListPropsWithDefaultProps<TTemplates>) {
-    super(props);
-    this.handleItemClick = this.handleItemClick.bind(this);
-  }
-
   public shouldComponentUpdate(
     nextProps: RefinementListPropsWithDefaultProps<TTemplates>
   ) {
@@ -131,7 +126,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
     this.props.toggleRefinement(facetValueToRefine);
   }
 
-  private _generateFacetItem(facetValue: FacetValue) {
+  private _generateFacetItem = (facetValue: FacetValue) => {
     let subItems;
     if (
       isHierarchicalMenuItem(facetValue) &&
@@ -196,7 +191,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
         templateProps={this.props.templateProps}
       />
     );
-  }
+  };
 
   // Click events on DOM tree like LABEL > INPUT will result in two click events
   // instead of one.
@@ -213,7 +208,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
   //
   // Finally, we always stop propagation of the event to avoid multiple levels RefinementLists to fail: click
   // on child would click on parent also
-  private handleItemClick({
+  private handleItemClick = ({
     facetValueToRefine,
     isRefined,
     originalEvent,
@@ -221,7 +216,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
     facetValueToRefine: string;
     isRefined: boolean;
     originalEvent: MouseEvent;
-  }) {
+  }) => {
     if (isSpecialClick(originalEvent)) {
       // do not alter the default browser behavior
       // if one special key is down
@@ -271,7 +266,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
     originalEvent.stopPropagation();
 
     this.refine(facetValueToRefine);
-  }
+  };
 
   public componentWillReceiveProps(
     nextProps: RefinementListPropsWithDefaultProps<TTemplates>

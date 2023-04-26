@@ -1,6 +1,7 @@
 import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
   createMetadataMiddleware,
   isMetadataEnabled,
@@ -19,7 +20,10 @@ import {
 } from './utils';
 import version from './version';
 
-import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import type {
+  InsightsEvent,
+  InsightsProps,
+} from '../middlewares/createInsightsMiddleware';
 import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import type {
   InsightsClient as AlgoliaInsightsClient,
@@ -111,9 +115,9 @@ export type InstantSearchOptions<
    */
   onStateChange?: (params: {
     uiState: TUiState;
-    setUiState(
+    setUiState: (
       uiState: TUiState | ((previousUiState: TUiState) => TUiState)
-    ): void;
+    ) => void;
   }) => void;
 
   /**
@@ -134,6 +138,17 @@ export type InstantSearchOptions<
    * client side persistence. Passing `true` will use the default URL options.
    */
   routing?: RouterProps<TUiState, TRouteState> | boolean;
+
+  /**
+   * Enables the Insights middleware and loads the Insights library
+   * if not already loaded.
+   *
+   * The Insights middleware sends view and click events automatically, and lets
+   * you set up your own events.
+   *
+   * @default false
+   */
+  insights?: InsightsProps | boolean;
 
   /**
    * the instance of search-insights to use for sending insights events inside
@@ -174,8 +189,8 @@ class InstantSearch<
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: Array<{
-    creator: Middleware;
-    instance: MiddlewareDefinition;
+    creator: Middleware<TUiState>;
+    instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
   /**
@@ -213,6 +228,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
+      insights = false,
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
@@ -304,21 +320,32 @@ See ${createDocumentationLink({
     this.sendEventToInsights = noop;
 
     if (routing) {
-      const routerOptions = typeof routing === 'boolean' ? undefined : routing;
+      const routerOptions = typeof routing === 'boolean' ? {} : routing;
+      routerOptions.$$internal = true;
       this.use(createRouterMiddleware(routerOptions));
     }
 
+    // This is the default middleware,
+    // any user-provided middleware will be added later and override this one.
+    if (insights) {
+      const insightsOptions = typeof insights === 'boolean' ? {} : insights;
+      insightsOptions.$$internal = true;
+      this.use(createInsightsMiddleware(insightsOptions));
+    }
+
     if (isMetadataEnabled()) {
-      this.use(createMetadataMiddleware());
+      this.use(createMetadataMiddleware({ $$internal: true }));
     }
   }
 
   /**
    * Hooks a middleware into the InstantSearch lifecycle.
    */
-  public use(...middleware: Middleware[]): this {
+  public use(...middleware: Array<Middleware<TUiState>>): this {
     const newMiddlewareList = middleware.map((fn) => {
       const newMiddleware = {
+        $$type: '__unknown__',
+        $$internal: false,
         subscribe: noop,
         started: noop,
         unsubscribe: noop,
@@ -352,7 +379,7 @@ See ${createDocumentationLink({
   /**
    * Removes a middleware from the InstantSearch lifecycle.
    */
-  public unuse(...middlewareToUnuse: Middleware[]): this {
+  public unuse(...middlewareToUnuse: Array<Middleware<TUiState>>): this {
     this.middleware
       .filter((m) => middlewareToUnuse.includes(m.creator))
       .forEach((m) => m.instance.unsubscribe());
@@ -723,7 +750,7 @@ See ${createDocumentationLink({
   }
 
   public onInternalStateChange = defer(() => {
-    const nextUiState = this.mainIndex.getWidgetUiState({});
+    const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
     this.middleware.forEach(({ instance }) => {
       instance.onStateChange({

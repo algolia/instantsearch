@@ -10,6 +10,7 @@ const search = instantsearch({
   indexName: 'concert_events_instantsearchjs',
   searchClient: algoliasearch('latency', '059c79ddd276568e990286944276464a'),
   routing: true,
+  insights: true,
 });
 
 search.addWidgets([

@@ -1133,7 +1133,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       const resultsState = createSerializedState();
       const state = new SearchParameters(resultsState.state);
-      const localState = new SearchParameters({ index: 'lol' });
+      const localState = new SearchParameters({
+        index: 'lol',
+      });
       const results = new SearchResults(state, resultsState.results);
 
       instantSearchInstance.hydrate({

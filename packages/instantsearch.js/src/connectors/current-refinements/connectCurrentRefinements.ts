@@ -96,7 +96,7 @@ export type CurrentRefinementsConnectorParamsItem = {
   /**
    * Removes the given refinement and triggers a new search.
    */
-  refine(refinement: CurrentRefinementsConnectorParamsRefinement): void;
+  refine: (refinement: CurrentRefinementsConnectorParamsRefinement) => void;
 };
 
 export type CurrentRefinementsConnectorParams = {
@@ -136,7 +136,7 @@ export type CurrentRefinementsRenderState = {
   /**
    * Removes the given refinement and triggers a new search.
    */
-  refine(refinement: CurrentRefinementsConnectorParamsRefinement): void;
+  refine: (refinement: CurrentRefinementsConnectorParamsRefinement) => void;
 
   /**
    * Generates a URL for the next state.

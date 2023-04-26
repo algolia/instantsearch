@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getToggleRefinementStatus(): Promise<boolean>;
+    getToggleRefinementStatus: () => Promise<boolean>;
   }
 }
 

@@ -1817,6 +1817,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'category',
+        eventModifier: 'internal',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {
@@ -1837,6 +1838,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       ).toHaveBeenLastCalledWith({
         attribute: 'sub_category',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

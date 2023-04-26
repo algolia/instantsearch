@@ -40,13 +40,9 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   // break routing.
   useIsomorphicLayoutEffect(() => {
     const previousWidget = prevWidgetRef.current;
-    function cleanup() {
-      if ((search as any)._preventWidgetCleanup) return;
-      parentIndex.removeWidgets([previousWidget]);
-    }
 
     // Scenario 1: the widget is added for the first time.
-    if (cleanupTimerRef.current === null) {
+    if (!cleanupTimerRef.current) {
       if (!shouldAddWidgetEarly) {
         parentIndex.addWidgets([widget]);
       }
@@ -70,7 +66,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
       // waiting for the scheduled cleanup function to finish (that we canceled
       // above).
       if (!arePropsEqual) {
-        cleanup();
+        parentIndex.removeWidgets([previousWidget]);
         parentIndex.addWidgets([widget]);
       }
     }
@@ -78,7 +74,12 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
     return () => {
       // We don't remove the widget right away, but rather schedule it so that
       // we're able to cancel it in the next effect.
-      cleanupTimerRef.current = setTimeout(cleanup);
+      cleanupTimerRef.current = setTimeout(() => {
+        search._schedule(() => {
+          if (search._preventWidgetCleanup) return;
+          parentIndex.removeWidgets([previousWidget]);
+        });
+      });
     };
   }, [parentIndex, widget, shouldAddWidgetEarly, search, props]);
 

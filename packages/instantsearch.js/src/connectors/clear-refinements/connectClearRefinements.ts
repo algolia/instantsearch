@@ -109,8 +109,8 @@ const connectClearRefinements: ClearRefinementsConnector =
       }
 
       type ConnectorState = {
-        refine(): void;
-        createURL(): string;
+        refine: () => void;
+        createURL: () => string;
         attributesToClear: AttributesToClear[];
       };
 

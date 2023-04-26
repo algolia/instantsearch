@@ -778,6 +778,7 @@ search.addWidgets([
       expect(sendEventToInsights).toHaveBeenCalledTimes(2);
       expect(sendEventToInsights.mock.calls[0][0]).toEqual({
         eventType: 'view',
+        eventModifier: 'internal',
         hits: [
           {
             __position: 0,
@@ -796,6 +797,7 @@ search.addWidgets([
       });
       expect(sendEventToInsights.mock.calls[1][0]).toEqual({
         eventType: 'view',
+        eventModifier: 'internal',
         hits: [
           {
             __position: 0,
@@ -857,8 +859,8 @@ search.addWidgets([
         stalledSearchDelay: 1,
         indexName: 'indexName',
       });
-      instantSearchInstance.sendEventToInsights = jest.fn();
       instantSearchInstance.start();
+      instantSearchInstance.sendEventToInsights = jest.fn();
 
       instantSearchInstance.addWidgets([widget]);
 

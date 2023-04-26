@@ -12,13 +12,13 @@ export type StatsProps = {
   nbHits: number;
   nbSortedHits?: number;
   processingTimeMS: number;
-  translate(
+  translate: (
     key: string,
     n: number,
     ms: number,
     nSorted?: number,
     areHitsSorted?: boolean
-  ): string;
+  ) => string;
 };
 
 const Stats: React.FC<StatsProps> = ({

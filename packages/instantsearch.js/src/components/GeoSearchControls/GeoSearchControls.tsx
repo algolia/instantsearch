@@ -23,9 +23,9 @@ type Props = {
   isRefineOnMapMove: boolean;
   isRefinedWithMap: boolean;
   hasMapMoveSinceLastRefine: boolean;
-  onRefineToggle(event: Event): void;
-  onRefineClick(event: MouseEvent): void;
-  onClearClick(event: MouseEvent): void;
+  onRefineToggle: (event: Event) => void;
+  onRefineClick: (event: MouseEvent) => void;
+  onClearClick: (event: MouseEvent) => void;
   templateProps: PreparedTemplateProps<GeoSearchTemplates>;
 };
 

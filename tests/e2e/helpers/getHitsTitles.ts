@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getHitsTitles(): Promise<string[]>;
+    getHitsTitles: () => Promise<string[]>;
   }
 }
 

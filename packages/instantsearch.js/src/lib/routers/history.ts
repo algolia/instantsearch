@@ -23,7 +23,7 @@ export type BrowserHistoryArgs<TRouteState> = {
   // @MAJOR: The `Location` type is hard to simulate in non-browser environments
   // so we should accept a subset of it that is easier to work with in any
   // environments.
-  getLocation(): Location;
+  getLocation: () => Location;
   start?: (onUpdate: () => void) => void;
   dispose?: () => void;
   push?: (url: string) => void;
@@ -38,6 +38,7 @@ const setWindowTitle = (title?: string): void => {
 };
 
 class BrowserHistory<TRouteState> implements Router<TRouteState> {
+  public $$type = 'ais.browser';
   /**
    * Transforms a UI state into a title for the page.
    */
@@ -75,7 +76,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   >['getLocation'];
 
   private writeTimer?: ReturnType<typeof setTimeout>;
-  private _onPopState?(event: PopStateEvent): void;
+  private _onPopState?: (event: PopStateEvent) => void;
 
   /**
    * Indicates if last action was back/forward in the browser.

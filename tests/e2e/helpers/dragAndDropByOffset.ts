@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    dragAndDropByOffset(
+    dragAndDropByOffset: (
       source: WebdriverIOAsync.Element,
       x: number,
       y?: number
-    ): Promise<void>;
+    ) => Promise<void>;
   }
 }
 

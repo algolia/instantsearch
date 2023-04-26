@@ -3,11 +3,12 @@
 import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
+import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
-import type { ComponentCSSClasses, Hit } from '../../types';
+import type { ComponentCSSClasses, Hit, InsightsClient } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
@@ -31,6 +32,7 @@ export type InfiniteHitsProps = {
   };
   isFirstPage: boolean;
   isLastPage: boolean;
+  insights?: InsightsClient;
   sendEvent: SendEventForHits;
   bindEvent: BindEventForHits;
 };
@@ -38,6 +40,7 @@ export type InfiniteHitsProps = {
 const InfiniteHits = ({
   results,
   hits,
+  insights,
   bindEvent,
   sendEvent,
   hasShowPrevious,
@@ -48,6 +51,11 @@ const InfiniteHits = ({
   cssClasses,
   templateProps,
 }: InfiniteHitsProps) => {
+  const handleInsightsClick = createInsightsEventHandler({
+    insights,
+    sendEvent,
+  });
+
   if (results.hits.length === 0) {
     return (
       <Template
@@ -55,6 +63,7 @@ const InfiniteHits = ({
         templateKey="empty"
         rootProps={{
           className: cx(cssClasses.root, cssClasses.emptyRoot),
+          onClick: handleInsightsClick,
         }}
         data={results}
       />
@@ -85,7 +94,13 @@ const InfiniteHits = ({
             {...templateProps}
             templateKey="item"
             rootTagName="li"
-            rootProps={{ className: cssClasses.item }}
+            rootProps={{
+              className: cssClasses.item,
+              onClick: (event: MouseEvent) => {
+                handleInsightsClick(event);
+                sendEvent('click:internal', hit, 'Hit Clicked');
+              },
+            }}
             key={hit.objectID}
             data={{
               ...hit,

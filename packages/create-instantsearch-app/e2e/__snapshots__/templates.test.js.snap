@@ -50,7 +50,7 @@ dist/"
 exports[`Templates Angular InstantSearch File content: README.md 1`] = `
 "# angular-instantsearch-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -764,7 +764,7 @@ exports[`Templates Autocomplete File content: .prettierrc 1`] = `
 exports[`Templates Autocomplete File content: README.md 1`] = `
 "# autocomplete-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -1002,7 +1002,7 @@ exports[`Templates Autocomplete.js 0 File content: .prettierrc 1`] = `
 exports[`Templates Autocomplete.js 0 File content: README.md 1`] = `
 "# autocomplete.js-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -2723,7 +2723,7 @@ exports[`Templates InstantSearch.js 2 File content: .prettierrc 1`] = `
 exports[`Templates InstantSearch.js 2 File content: README.md 1`] = `
 "# instantsearch.js-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -2771,7 +2771,7 @@ exports[`Templates InstantSearch.js 2 File content: index.html 1`] = `
     </h1>
     <p class=\\"header-subtitle\\">
       using
-      <a href=\\"https://github.com/algolia/instantsearch.js\\">
+      <a href=\\"https://github.com/algolia/instantsearch/tree/v2.10.5\\">
         InstantSearch.js
       </a>
     </p>
@@ -3057,7 +3057,7 @@ exports[`Templates InstantSearch.js File content: .prettierrc 1`] = `
 exports[`Templates InstantSearch.js File content: README.md 1`] = `
 "# instantsearch.js-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -3103,7 +3103,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
     </h1>
     <p class=\\"header-subtitle\\">
       using
-      <a href=\\"https://github.com/algolia/instantsearch.js\\">
+      <a href=\\"https://github.com/algolia/instantsearch/tree/master/packages/instantsearch.js\\">
         InstantSearch.js
       </a>
     </p>
@@ -3632,7 +3632,7 @@ Please read [our contribution process](./CONTRIBUTING.md) to learn more.
 
 ---
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._"
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._"
 `;
 
 exports[`Templates InstantSearch.js widget File content: babel.config.cjs 1`] = `
@@ -4631,7 +4631,7 @@ exports[`Templates JavaScript Client File content: .prettierrc 1`] = `
 exports[`Templates JavaScript Client File content: README.md 1`] = `
 "# javascript-client-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -4944,7 +4944,7 @@ exports[`Templates JavaScript Helper 2 File content: .prettierrc 1`] = `
 exports[`Templates JavaScript Helper 2 File content: README.md 1`] = `
 "# javascript-helper-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -5251,7 +5251,7 @@ exports[`Templates JavaScript Helper File content: .prettierrc 1`] = `
 exports[`Templates JavaScript Helper File content: README.md 1`] = `
 "# javascript-helper-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -5551,7 +5551,7 @@ exports[`Templates React InstantSearch File content: .prettierrc 1`] = `
 exports[`Templates React InstantSearch File content: README.md 1`] = `
 "# react-instantsearch-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -5736,7 +5736,7 @@ function App() {
         </h1>
         <p className=\\"header-subtitle\\">
           using{' '}
-          <a href=\\"https://github.com/algolia/react-instantsearch\\">
+          <a href=\\"https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch\\">
             React InstantSearch
           </a>
         </p>
@@ -5885,7 +5885,7 @@ exports[`Templates React InstantSearch Hooks File content: .prettierrc 1`] = `
 exports[`Templates React InstantSearch Hooks File content: README.md 1`] = `
 "# react-instantsearch-hooks-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -6058,7 +6058,7 @@ export function App() {
         </h1>
         <p className=\\"header-subtitle\\">
           using{' '}
-          <a href=\\"https://github.com/algolia/react-instantsearch\\">
+          <a href=\\"https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch-hooks-web\\">
             React InstantSearch Hooks
           </a>
         </p>
@@ -6253,7 +6253,7 @@ const styles = StyleSheet.create({
 exports[`Templates React InstantSearch Hooks Native File content: README.md 1`] = `
 "# react-instantsearch-hooks-native-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -6703,7 +6703,7 @@ export default App;"
 exports[`Templates React InstantSearch Native File content: README.md 1`] = `
 "# react-instantsearch-native-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -7108,7 +7108,7 @@ Please read [our contribution process](./CONTRIBUTING.md) to learn more.
 
 ---
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._"
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._"
 `;
 
 exports[`Templates React InstantSearch widget File content: babel.config.cjs 1`] = `
@@ -7501,7 +7501,7 @@ exports[`Templates Vue InstantSearch 1 File content: .prettierrc 1`] = `
 exports[`Templates Vue InstantSearch 1 File content: README.md 1`] = `
 "# vue-instantsearch-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -7584,7 +7584,9 @@ exports[`Templates Vue InstantSearch 1 File content: src/App.vue 1`] = `
       </h1>
       <p class=\\"header-subtitle\\">
         using
-        <a href=\\"https://github.com/algolia/vue-instantsearch\\">
+        <a
+          href=\\"https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch\\"
+        >
           Vue InstantSearch
         </a>
       </p>
@@ -7823,7 +7825,7 @@ exports[`Templates Vue InstantSearch 2 File content: .prettierrc 1`] = `
 exports[`Templates Vue InstantSearch 2 File content: README.md 1`] = `
 "# vue-instantsearch-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -7906,7 +7908,9 @@ exports[`Templates Vue InstantSearch 2 File content: src/App.vue 1`] = `
       </h1>
       <p class=\\"header-subtitle\\">
         using
-        <a href=\\"https://github.com/algolia/vue-instantsearch\\">
+        <a
+          href=\\"https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch\\"
+        >
           Vue InstantSearch
         </a>
       </p>
@@ -8123,7 +8127,7 @@ exports[`Templates Vue InstantSearch File content: .prettierrc 1`] = `
 exports[`Templates Vue InstantSearch File content: README.md 1`] = `
 "# vue-instantsearch-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -8206,7 +8210,9 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
       </h1>
       <p class=\\"header-subtitle\\">
         using
-        <a href=\\"https://github.com/algolia/vue-instantsearch\\">
+        <a
+          href=\\"https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch\\"
+        >
           Vue InstantSearch
         </a>
       </p>
@@ -8422,7 +8428,7 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: .prettierrc 1`] = 
 exports[`Templates Vue InstantSearch with Vue 3 File content: README.md 1`] = `
 "# vue-instantsearch-app
 
-_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch.js/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started
 
@@ -8491,7 +8497,9 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: src/App.vue 1`] = 
       </h1>
       <p class=\\"header-subtitle\\">
         using
-        <a href=\\"https://github.com/algolia/vue-instantsearch\\">
+        <a
+          href=\\"https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch\\"
+        >
           Vue InstantSearch
         </a>
       </p>
