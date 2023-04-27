@@ -222,7 +222,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
         warning(
           false,
           `The URL returned by the \`createURL\` function is invalid.
-  Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`
+Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`
         );
       }
     }
