@@ -1,3 +1,4 @@
+import { walkIndex } from 'instantsearch.js/es/lib/utils';
 import { _objectSpread } from '../util/polyfills';
 import { isVue3 } from '../util/vue-compat';
 import { warn } from '../util/warn';
@@ -16,7 +17,7 @@ export const createWidgetMixin = (
         );
       },
     },
-    getParentIndex: {
+    getPhysicalParent: {
       from: '$_ais_getParentIndex',
       default() {
         return () => this.instantSearchInstance.mainIndex;
@@ -35,7 +36,7 @@ export const createWidgetMixin = (
         this.factory(this.widgetParams),
         additionalProperties
       );
-      this.getParentIndex().addWidgets([this.widget]);
+      this.parentIndex.addWidgets([this.widget]);
 
       if (
         this.instantSearchInstance._initialResults &&
@@ -46,10 +47,7 @@ export const createWidgetMixin = (
             'You are using server side rendering with <ais-instant-search> instead of <ais-instant-search-ssr>.'
           );
         }
-        this.instantSearchInstance.__forceRender(
-          this.widget,
-          this.getParentIndex()
-        );
+        this.instantSearchInstance.__forceRender(this.widget, this.parentIndex);
       }
     } else if (connector !== true) {
       warn(
@@ -65,21 +63,48 @@ Read more on using connectors: https://alg.li/vue-custom`
   },
   [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
     if (this.widget) {
-      this.getParentIndex().removeWidgets([this.widget]);
+      this.parentIndex.removeWidgets([this.widget]);
     }
   },
   watch: {
     widgetParams: {
       handler(nextWidgetParams) {
         this.state = null;
-        this.getParentIndex().removeWidgets([this.widget]);
+        this.parentIndex.removeWidgets([this.widget]);
         this.widget = _objectSpread(
           this.factory(nextWidgetParams),
           additionalProperties
         );
-        this.getParentIndex().addWidgets([this.widget]);
+        this.parentIndex.addWidgets([this.widget]);
       },
       deep: true,
+    },
+  },
+  computed: {
+    parentIndex() {
+      const mainIndex = this.instantSearchInstance.mainIndex;
+      const parentIndexId = this.parentIndexId;
+
+      if (parentIndexId === null) {
+        return mainIndex;
+      }
+
+      if (parentIndexId) {
+        let foundIndex = null;
+        walkIndex(mainIndex, (currentIndex) => {
+          if (currentIndex.getIndexId() === parentIndexId) {
+            foundIndex = currentIndex;
+          }
+        });
+
+        if (!foundIndex) {
+          throw new Error(`Couldn't find index ${parentIndexId}`);
+        }
+
+        return foundIndex;
+      }
+
+      return this.getPhysicalParent();
     },
   },
   methods: {

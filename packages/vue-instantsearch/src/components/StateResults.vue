@@ -30,13 +30,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   data() {
     return {
       renderFn: () => {
         const { status, error } = this.instantSearchInstance;
-        const results = this.getParentIndex().getResults();
-        const helper = this.getParentIndex().getHelper();
+        const results = this.parentIndex.getResults();
+        const helper = this.parentIndex.getHelper();
         const state = helper ? helper.state : null;
 
         // @MAJOR no longer spread this inside `results`

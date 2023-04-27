@@ -105,6 +105,11 @@ export default {
       type: Object,
       default: undefined,
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {

@@ -78,6 +78,11 @@ export default {
       required: false,
       default: 'Search by voice (not supported on this browser)',
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   data() {
     return {

@@ -207,6 +207,11 @@ export default {
       type: Boolean,
       default: true,
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {

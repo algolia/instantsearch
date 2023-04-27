@@ -96,6 +96,11 @@ export default {
       required: false,
       default: 0,
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   data() {
     return {

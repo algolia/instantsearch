@@ -65,6 +65,13 @@ export default {
       type: Number,
       default: undefined,
     },
+    // TODO: this only adds the dynamic widgets to the parent index, not the
+    // widgets that it renders. The parentIndexId should be forwarded.
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   render: renderCompat(function (h) {
     const components = new Map();

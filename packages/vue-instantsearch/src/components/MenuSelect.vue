@@ -70,6 +70,11 @@ export default {
         return items;
       },
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {

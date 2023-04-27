@@ -33,6 +33,11 @@ export default {
       type: String,
       required: false,
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   render: renderCompat(function (h) {
     return h('div', {}, getDefaultSlot(this));

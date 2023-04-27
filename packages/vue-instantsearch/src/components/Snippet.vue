@@ -31,6 +31,11 @@ export default {
       type: String,
       default: 'mark',
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
 };
 </script>

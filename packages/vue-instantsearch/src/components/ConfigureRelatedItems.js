@@ -27,6 +27,11 @@ export default {
       type: Function,
       required: false,
     },
+    parentIndexId: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {
