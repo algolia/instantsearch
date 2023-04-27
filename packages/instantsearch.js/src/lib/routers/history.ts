@@ -1,6 +1,6 @@
 import qs from 'qs';
 
-import { safelyRunOnBrowser } from '../utils';
+import { safelyRunOnBrowser, warning } from '../utils';
 
 import type { Router, UiState } from '../../types';
 
@@ -207,11 +207,25 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * See: https://github.com/algolia/instantsearch.js/issues/790
    */
   public createURL(routeState: TRouteState): string {
-    return this._createURL({
+    const url = this._createURL({
       qsModule: qs,
       routeState,
       location: this.getLocation(),
     });
+
+    try {
+      // We just want to check if the URL is valid.
+      // eslint-disable-next-line no-new
+      new URL(url);
+    } catch (e) {
+      warning(
+        false,
+        `The URL returned by the \`createURL\` function is invalid.
+Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`
+      );
+    }
+
+    return url;
   }
 
   /**

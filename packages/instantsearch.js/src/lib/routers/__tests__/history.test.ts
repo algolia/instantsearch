@@ -6,7 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 
 import instantsearch from '../../..';
 import { simple } from '../../stateMappings';
-import { noop } from '../../utils';
+import { noop, warning } from '../../utils';
 import historyRouter from '../history';
 
 import type { UiState } from '../../../types';
@@ -259,6 +259,18 @@ describe('life cycle', () => {
       router.dispose();
 
       expect(dispose).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('createURL', () => {
+    test('prints a warning when created URL is not valid', () => {
+      warning.cache = {};
+
+      const router = historyRouter<UiState>({ createURL: () => '/search' });
+
+      expect(() => router.createURL({ indexName: {} }))
+        .toWarnDev(`[InstantSearch.js]: The URL returned by the \`createURL\` function is invalid.
+Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`);
     });
   });
 });
