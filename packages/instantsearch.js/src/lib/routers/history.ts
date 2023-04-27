@@ -213,16 +213,18 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
       location: this.getLocation(),
     });
 
-    try {
-      // We just want to check if the URL is valid.
-      // eslint-disable-next-line no-new
-      new URL(url);
-    } catch (e) {
-      warning(
-        false,
-        `The URL returned by the \`createURL\` function is invalid.
-Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`
-      );
+    if (__DEV__) {
+      try {
+        // We just want to check if the URL is valid.
+        // eslint-disable-next-line no-new
+        new URL(url);
+      } catch (e) {
+        warning(
+          false,
+          `The URL returned by the \`createURL\` function is invalid.
+  Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`
+        );
+      }
     }
 
     return url;
