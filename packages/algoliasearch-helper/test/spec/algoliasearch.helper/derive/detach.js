@@ -6,7 +6,7 @@ test('[derived helper] detach a derived helper', function(done) {
   var client = {
     search: searchTest
   };
-  var helper = algoliasearchHelper(client, '');
+  var helper = algoliasearchHelper(client, 'indexName');
   var derivedHelper = helper.derive(function(s) { return s; });
   derivedHelper.on('result', function() {});
   helper.search();
