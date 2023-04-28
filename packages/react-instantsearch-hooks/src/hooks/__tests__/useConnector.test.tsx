@@ -34,7 +34,7 @@ type CustomSearchBoxWidgetDescription = {
   $$type: 'test.searchBox';
   renderState: {
     query: string;
-    refine(value: string): void;
+    refine: (value: string) => void;
   };
 };
 

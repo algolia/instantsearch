@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type { SendEventForFacet } from '../../lib/utils';
@@ -86,7 +87,7 @@ export type MenuRenderState = {
   /**
    * Filter the search to item value.
    */
-  refine(value: string): void;
+  refine: (value: string) => void;
   /**
    * True if refinement can be applied.
    */
@@ -98,7 +99,7 @@ export type MenuRenderState = {
   /**
    * Toggles the number of values displayed between `limit` and `showMore.limit`.
    */
-  toggleShowMore(): void;
+  toggleShowMore: () => void;
   /**
    * `true` if the toggleShowMore button can be activated (enough items to display more or
    * already displaying more than `limit` items)
@@ -273,7 +274,7 @@ const connectMenu: MenuConnector = function connectMenu(
           _refine = function (facetValue: string) {
             const [refinedItem] =
               helper.getHierarchicalFacetBreadcrumb(attribute);
-            sendEvent!('click', facetValue ? facetValue : refinedItem);
+            sendEvent!('click:internal', facetValue ? facetValue : refinedItem);
             helper
               .toggleFacetRefinement(
                 attribute,
@@ -344,6 +345,19 @@ const connectMenu: MenuConnector = function connectMenu(
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const value = uiState.menu && uiState.menu[attribute];
+
+        if (
+          searchParameters.isConjunctiveFacet(attribute) ||
+          searchParameters.isDisjunctiveFacet(attribute)
+        ) {
+          warning(
+            false,
+            `Menu: Attribute "${attribute}" is already used by another widget applying conjunctive or disjunctive faceting.
+As this is not supported, please make sure to remove this other widget or this Menu widget will not work at all.`
+          );
+
+          return searchParameters;
+        }
 
         const withFacetConfiguration = searchParameters
           .removeHierarchicalFacet(attribute)

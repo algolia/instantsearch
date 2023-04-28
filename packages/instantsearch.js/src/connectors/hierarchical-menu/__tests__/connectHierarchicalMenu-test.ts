@@ -1391,6 +1391,46 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       ).toWarnDev();
     });
 
+    it('warns when the root of `hierarchicalFacets` is used with conjunctive facets and does not change `SearchParameters`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        facets: ['category'],
+      });
+
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        rootPath: 'TopLevel',
+      });
+
+      expect(() => {
+        const searchParams = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+        expect(searchParams.hierarchicalFacets).toHaveLength(0);
+      }).toWarnDev();
+    });
+
+    it('warns when the root of `hierarchicalFacets` is used with disjunctive facets and does not change `SearchParameters`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        disjunctiveFacets: ['category'],
+      });
+
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        rootPath: 'TopLevel',
+      });
+
+      expect(() => {
+        const searchParams = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+        expect(searchParams.hierarchicalFacets).toHaveLength(0);
+      }).toWarnDev();
+    });
+
     describe('with `maxValuesPerFacet`', () => {
       test('returns the `SearchParameters` with default `limit`', () => {
         const render = () => {};
@@ -1772,6 +1812,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'category',
+        eventModifier: 'internal',
         eventType: 'click',
         insightsMethod: 'clickedFilters',
         payload: {
@@ -1792,6 +1833,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       ).toHaveBeenLastCalledWith({
         attribute: 'sub_category',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

@@ -14,6 +14,8 @@ export default function simpleStateMapping<
   TUiState extends UiState = UiState
 >(): StateMapping<TUiState, TUiState> {
   return {
+    $$type: 'ais.simple',
+
     stateToRoute(uiState) {
       return Object.keys(uiState).reduce(
         (state, indexId) => ({

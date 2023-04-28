@@ -5,6 +5,7 @@ import {
   find,
   noop,
   toArray,
+  warning,
 } from '../../lib/utils';
 
 import type {
@@ -52,7 +53,8 @@ const createSendEvent = ({
       instantSearchInstance.sendEventToInsights(args[0]);
       return;
     }
-    const [eventType, isRefined, eventName = 'Filter Applied'] = args;
+    const [, isRefined, eventName = 'Filter Applied'] = args;
+    const [eventType, eventModifier] = args[0].split(':');
     if (eventType !== 'click' || on === undefined) {
       return;
     }
@@ -64,6 +66,7 @@ const createSendEvent = ({
         insightsMethod: 'clickedFilters',
         widgetType: $$type,
         eventType,
+        eventModifier,
         payload: {
           eventName,
           index: helper.getIndex(),
@@ -209,7 +212,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
           } = { isRefined: false }
         ) => {
           if (!isRefined) {
-            sendEvent('click', isRefined);
+            sendEvent('click:internal', isRefined);
             if (hasAnOffValue) {
               off!.forEach((v) =>
                 helper.removeDisjunctiveFacetRefinement(attribute, v)
@@ -243,7 +246,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
               createURL,
             }: {
               state: SearchParameters;
-              createURL(parameters: SearchParameters): string;
+              createURL: (parameters: SearchParameters) => string;
             }
           ) =>
           () => {
@@ -425,6 +428,19 @@ const connectToggleRefinement: ToggleRefinementConnector =
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
+          if (
+            searchParameters.isHierarchicalFacet(attribute) ||
+            searchParameters.isConjunctiveFacet(attribute)
+          ) {
+            warning(
+              false,
+              `ToggleRefinement: Attribute "${attribute}" is already used by another widget of a different type.
+As this is not supported, please make sure to remove this other widget or this ToggleRefinement widget will not work at all.`
+            );
+
+            return searchParameters;
+          }
+
           let withFacetConfiguration = searchParameters
             .clearRefinements(attribute)
             .addDisjunctiveFacet(attribute);

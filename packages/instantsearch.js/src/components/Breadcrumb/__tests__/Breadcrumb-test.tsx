@@ -14,7 +14,7 @@ import type { BreadcrumbProps } from '../Breadcrumb';
 
 const defaultProps: BreadcrumbProps = {
   items: [],
-  createURL: (data: string) => data,
+  createURL: (data) => data as string,
   refine: () => {},
   cssClasses: {
     root: 'root',
@@ -117,7 +117,7 @@ describe('Breadcrumb', () => {
       fireEvent.click(firstLink);
 
       expect(refine).toHaveBeenCalledTimes(2);
-      expect(refine).toHaveBeenCalledWith(undefined);
+      expect(refine).toHaveBeenCalledWith(null);
     });
   });
 });

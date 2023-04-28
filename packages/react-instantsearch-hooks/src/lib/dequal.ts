@@ -9,6 +9,7 @@
  * We use it to skip comparing function references.
  */
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const has = Object.prototype.hasOwnProperty;
 
 export function dequal(

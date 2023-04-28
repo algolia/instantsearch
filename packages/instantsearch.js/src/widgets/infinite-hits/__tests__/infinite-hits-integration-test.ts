@@ -8,6 +8,8 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { getByText, waitFor, fireEvent } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
+import { SearchParameters } from 'algoliasearch-helper';
 
 import { infiniteHits, configure } from '../..';
 import instantsearch from '../../../index.es';
@@ -76,7 +78,7 @@ describe('infiniteHits', () => {
       let cachedHits: InfiniteHitsCachedHits<Record<string, any>> | undefined =
         undefined;
 
-      type Cache = InfiniteHitsCache & { clear(): void };
+      type Cache = InfiniteHitsCache & { clear: () => void };
       type MockedCache = {
         [key in keyof Cache]: jest.MockedFunction<Cache[key]>;
       };
@@ -235,22 +237,13 @@ describe('infiniteHits', () => {
       const { customCache } = createCustomCache();
 
       customCache.write({
-        state: {
-          facets: [],
-          disjunctiveFacets: [],
-          hierarchicalFacets: [],
-          facetsRefinements: {},
-          facetsExcludes: {},
-          disjunctiveFacetsRefinements: {},
-          numericRefinements: {},
-          tagRefinements: [],
-          hierarchicalFacetsRefinements: {},
+        state: new SearchParameters({
           index: 'instant_search',
           hitsPerPage: 2,
           highlightPreTag: '__ais-highlight__',
           highlightPostTag: '__/ais-highlight__',
           page: 0,
-        },
+        }),
         hits: {
           0: [
             {
@@ -354,6 +347,7 @@ describe('infiniteHits', () => {
       expect(onEvent).toHaveBeenCalledWith(
         {
           eventType: 'view',
+          eventModifier: 'internal',
           hits: [
             {
               __position: 1,
@@ -374,11 +368,50 @@ describe('infiniteHits', () => {
           },
           widgetType: 'ais.infiniteHits',
         },
-        null
+        expect.any(Function)
       );
     });
 
-    it('sends click event', async () => {
+    it('sends a default `click` event when clicking on a hit', async () => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      search.use(insights);
+      search.addWidgets([infiniteHits({ container })]);
+      search.start();
+
+      await wait(0);
+
+      onEvent.mockClear();
+
+      userEvent.click(container.querySelectorAll('.ais-InfiniteHits-item')[0]);
+
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent).toHaveBeenCalledWith(
+        {
+          eventType: 'click',
+          eventModifier: 'internal',
+          hits: [
+            {
+              __position: 1,
+              objectID: 'object-id0',
+              title: 'title 1',
+            },
+          ],
+          insightsMethod: 'clickedObjectIDsAfterSearch',
+          payload: {
+            eventName: 'Hit Clicked',
+            index: 'instant_search',
+            objectIDs: ['object-id0'],
+            positions: [1],
+          },
+          widgetType: 'ais.infiniteHits',
+        },
+        expect.any(Function)
+      );
+    });
+
+    it('sends click event with sendEvent', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.use(insights);
@@ -387,8 +420,11 @@ describe('infiniteHits', () => {
         infiniteHits({
           container,
           templates: {
-            item: (item, bindEvent) => `
-              <button type='button' ${bindEvent('click', item, 'Item Clicked')}>
+            item: (item, { html, sendEvent }) => html`
+              <button
+                type="button"
+                onClick=${() => sendEvent('click', item, 'Item Clicked')}
+              >
                 ${item.title}
               </button>
             `,
@@ -399,9 +435,13 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      onEvent.mockClear();
+
       fireEvent.click(getByText(container, 'title 1'));
-      expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
+
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'click',
         hits: [
           {
@@ -422,7 +462,125 @@ describe('infiniteHits', () => {
       });
     });
 
-    it('sends conversion event', async () => {
+    it('sends conversion event with sendEvent', async () => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.use(insights);
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <button
+                type="button"
+                onClick=${() =>
+                  sendEvent('conversion', item, 'Product Ordered')}
+              >
+                ${item.title}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      onEvent.mockClear();
+
+      fireEvent.click(getByText(container, 'title 2'));
+
+      // The custom one + the default one
+      expect(onEvent).toHaveBeenCalledTimes(2);
+      expect(onEvent.mock.calls[0][0]).toEqual({
+        eventType: 'conversion',
+        hits: [
+          {
+            __hitIndex: 1,
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Ordered',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+      expect(onEvent.mock.calls[1][0]).toEqual({
+        eventType: 'click',
+        eventModifier: 'internal',
+        hits: [
+          {
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Hit Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+          positions: [2],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+    });
+
+    it('sends click event with bindEvent', async () => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.use(insights);
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item: (item, bindEvent) => `
+              <button type='button' ${bindEvent('click', item, 'Item Clicked')}>
+                ${item.title}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      onEvent.mockClear();
+
+      fireEvent.click(getByText(container, 'title 1'));
+
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
+        eventType: 'click',
+        hits: [
+          {
+            __hitIndex: 0,
+            __position: 1,
+            objectID: 'object-id0',
+            title: 'title 1',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Item Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id0'],
+          positions: [1],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+    });
+
+    it('sends conversion event with bindEvent', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.use(insights);
@@ -447,9 +605,13 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      onEvent.mockClear();
+
       fireEvent.click(getByText(container, 'title 2'));
+
+      // The custom one + the default one
       expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
+      expect(onEvent.mock.calls[0][0]).toEqual({
         eventType: 'conversion',
         hits: [
           {
@@ -464,6 +626,25 @@ describe('infiniteHits', () => {
           eventName: 'Product Ordered',
           index: 'instant_search',
           objectIDs: ['object-id1'],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+      expect(onEvent.mock.calls[1][0]).toEqual({
+        eventType: 'click',
+        eventModifier: 'internal',
+        hits: [
+          {
+            __position: 2,
+            objectID: 'object-id1',
+            title: 'title 2',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Hit Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+          positions: [2],
         },
         widgetType: 'ais.infiniteHits',
       });

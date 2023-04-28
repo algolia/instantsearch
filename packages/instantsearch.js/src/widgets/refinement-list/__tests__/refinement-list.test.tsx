@@ -91,6 +91,7 @@ describe('refinementList', () => {
             type="submit"
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-submitIcon"
               height="10"
               viewBox="0 0 40 40"
@@ -108,6 +109,7 @@ describe('refinementList', () => {
             type="reset"
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-resetIcon"
               height="10"
               viewBox="0 0 20 20"
@@ -123,6 +125,7 @@ describe('refinementList', () => {
             hidden=""
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-loadingIcon"
               height="16"
               stroke="#444"
@@ -273,6 +276,7 @@ describe('refinementList', () => {
             type="submit"
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-submitIcon"
               height="10"
               viewBox="0 0 40 40"
@@ -289,6 +293,7 @@ describe('refinementList', () => {
             type="reset"
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-resetIcon"
               height="10"
               viewBox="0 0 20 20"
@@ -304,6 +309,7 @@ describe('refinementList', () => {
             hidden=""
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-loadingIcon"
               height="16"
               stroke="#444"

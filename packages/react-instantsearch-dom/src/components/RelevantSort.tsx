@@ -15,7 +15,7 @@ export type RelevantSortProps = {
   isRelevantSorted: boolean;
   buttonTextComponent?: React.FunctionComponent<RelevantSortComponentProps>;
   textComponent?: React.FunctionComponent<RelevantSortComponentProps>;
-  refine(relevancyStrictness: number | undefined): void;
+  refine: (relevancyStrictness: number | undefined) => void;
 };
 
 const DefaultButtonTextComponent = ({

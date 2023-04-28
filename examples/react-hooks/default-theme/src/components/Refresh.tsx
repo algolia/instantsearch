@@ -4,6 +4,7 @@ import './Refresh.css';
 
 export function Refresh() {
   const { refresh } = useInstantSearch();
+
   return (
     <button
       className="Refresh"
@@ -13,10 +14,12 @@ export function Refresh() {
       }}
     >
       <svg
-        width="1rem"
-        height="1rem"
         fill="none"
         viewBox="0 0 24 24"
+        style={{
+          width: '1rem',
+          height: '1rem',
+        }}
         stroke="currentColor"
         strokeWidth={2}
       >

@@ -45,9 +45,9 @@ interface ConfigureRelatedItemsProps {
   /**
    * Function to transform the generated search parameters.
    */
-  transformSearchParameters?(
+  transformSearchParameters?: (
     searchParameters: SearchParameters
-  ): PlainSearchParameters;
+  ) => PlainSearchParameters;
 }
 
 function createOptionalFilter({

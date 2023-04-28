@@ -362,6 +362,7 @@ describe('refinementList', () => {
         {
           attribute: 'categories.lvl0',
           eventType: 'click',
+          eventModifier: 'internal',
           insightsMethod: 'clickedFilters',
           payload: {
             eventName: 'Filter Applied',
@@ -370,7 +371,7 @@ describe('refinementList', () => {
           },
           widgetType: 'ais.hierarchicalMenu',
         },
-        null
+        expect.any(Function)
       );
 
       await wait(0);
@@ -385,6 +386,7 @@ describe('refinementList', () => {
         {
           attribute: 'categories.lvl1',
           eventType: 'click',
+          eventModifier: 'internal',
           insightsMethod: 'clickedFilters',
           payload: {
             eventName: 'Filter Applied',
@@ -393,7 +395,7 @@ describe('refinementList', () => {
           },
           widgetType: 'ais.hierarchicalMenu',
         },
-        null
+        expect.any(Function)
       );
     });
   });

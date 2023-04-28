@@ -17,6 +17,9 @@ export const createSearchClient = (
     )
   ),
   searchForFacetValues: jest.fn(() => Promise.resolve([createSFFVResponse()])),
+  // @ts-ignore this allows us to test insights initialization without warning
+  applicationID: 'appId',
+  apiKey: 'apiKey',
   ...args,
 });
 
@@ -25,6 +28,7 @@ type ControlledClient = {
   searches: Array<{
     promise: Promise<SearchResponses<any>>;
     resolver: () => void;
+    rejecter: (value: any) => void;
   }>;
 };
 
@@ -39,14 +43,20 @@ export const createControlledSearchClient = (
   const searchClient = createSearchClient({
     search: jest.fn((...params) => {
       let resolver: () => void;
-      const promise: Promise<SearchResponses<any>> = new Promise((resolve) => {
-        resolver = () => resolve(createResponse(...params));
-      });
+      let rejecter: (value: any) => void;
+      const promise: Promise<SearchResponses<any>> = new Promise(
+        (resolve, reject) => {
+          resolver = () => resolve(createResponse(...params));
+          rejecter = (value) => reject(value);
+        }
+      );
 
       searches.push({
         promise,
-        // @ts-expect-error
+        // @ts-expect-error actually being assigned in the promise constructor
         resolver,
+        // @ts-expect-error actually being assigned in the promise constructor
+        rejecter,
       });
 
       return promise;

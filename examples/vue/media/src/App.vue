@@ -3,6 +3,7 @@
     :search-client="searchClient"
     index-name="movies"
     :routing="routing"
+    :insights="true"
   >
     <header class="navbar">
       <img

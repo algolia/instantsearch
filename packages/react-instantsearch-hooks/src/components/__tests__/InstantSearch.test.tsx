@@ -4,7 +4,7 @@
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 import { createInstantSearchSpy, wait } from '@instantsearch/testutils';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
@@ -21,6 +21,10 @@ import type { UseRefinementListProps } from '../../connectors/useRefinementList'
 import type { InstantSearchProps } from '../InstantSearch';
 
 jest.mock('../../lib/warn');
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 function RefinementList(props: UseRefinementListProps) {
   useRefinementList(props);
@@ -154,7 +158,6 @@ describe('InstantSearch', () => {
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     unmount();
-
     await waitFor(() => {
       expect(searchContext.current!.dispose).toHaveBeenCalledTimes(1);
       expect(searchContext.current!.started).toEqual(false);
@@ -598,7 +601,53 @@ describe('InstantSearch', () => {
           }),
         },
       ]);
+      expect(warn).toHaveBeenCalledTimes(2);
     });
+  });
+
+  test('warns when the `searchClient` changes', () => {
+    function App() {
+      // The client is re-created whenever the component re-renders
+      const searchClient = createAlgoliaSearchClient({});
+
+      return (
+        <StrictMode>
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App />);
+
+    rerender(<App />);
+
+    expect(warn).toHaveBeenCalledWith(
+      false,
+      'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react-hooks/#widget-param-searchclient'
+    );
+  });
+
+  test('does not warn when the `searchClient` does not change', () => {
+    const searchClient = createAlgoliaSearchClient({});
+
+    function App() {
+      return (
+        <StrictMode>
+          {/* The same reference to `searchClient` is used between each render */}
+          <InstantSearch searchClient={searchClient} indexName="indexName">
+            <SearchBox />
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(<App />);
+
+    rerender(<App />);
+
+    expect(warn).not.toHaveBeenCalled();
   });
 
   test('updates the index on index prop change', async () => {
@@ -820,6 +869,46 @@ describe('InstantSearch', () => {
     rerender(<App isMounted={false} />);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+  });
+
+  it('should search once when multiple widgets are removed', async () => {
+    const searchClient = createAlgoliaSearchClient({});
+
+    function App({ children }: { children?: React.ReactNode }) {
+      return (
+        <StrictMode>
+          <InstantSearch indexName="instant_search" searchClient={searchClient}>
+            {children}
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(
+      <App>
+        <SearchBox />
+        <SearchBox />
+        <SearchBox />
+        <SearchBox />
+      </App>
+    );
+
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+    rerender(<App />);
+
+    await act(async () => {
+      await wait(0);
+      await wait(0);
+    });
+
+    // if the timing is wrong, the search will be called once for every removed widget
+    // except the final one (as there's no search if there are no widgets)
+    expect(searchClient.search).toHaveBeenCalledTimes(2);
   });
 
   describe('warn about Next.js router', () => {

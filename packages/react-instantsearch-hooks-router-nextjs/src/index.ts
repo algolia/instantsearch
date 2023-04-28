@@ -165,6 +165,7 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
     ...routerOptions,
   });
   router._isNextRouter = true;
+  router.$$type = 'ais.nextjs';
 
   return router;
 }

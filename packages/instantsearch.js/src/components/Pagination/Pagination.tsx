@@ -4,6 +4,7 @@ import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
 import { isSpecialClick } from '../../lib/utils';
+import Template from '../Template/Template';
 
 import type { ComponentCSSClasses } from '../../types';
 import type {
@@ -17,7 +18,7 @@ export type PaginationComponentCSSClasses =
 export type PaginationComponentTemplates = Required<PaginationTemplates>;
 
 export type PaginationProps = {
-  createURL(value: number): string;
+  createURL: (value: number) => string;
   cssClasses: PaginationComponentCSSClasses;
   templates: PaginationComponentTemplates;
   currentPage: number;
@@ -25,7 +26,7 @@ export type PaginationProps = {
   pages: number[];
   isFirstPage: boolean;
   isLastPage: boolean;
-  setCurrentPage(value: number): void;
+  setCurrentPage: (value: number) => void;
   showFirst?: boolean;
   showLast?: boolean;
   showPrevious?: boolean;
@@ -58,7 +59,8 @@ function Pagination(props: PaginationProps) {
             ariaLabel="First"
             className={props.cssClasses.firstPageItem}
             isDisabled={props.isFirstPage}
-            label={props.templates.first}
+            templates={props.templates}
+            templateKey="first"
             pageNumber={0}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
@@ -71,7 +73,8 @@ function Pagination(props: PaginationProps) {
             ariaLabel="Previous"
             className={props.cssClasses.previousPageItem}
             isDisabled={props.isFirstPage}
-            label={props.templates.previous}
+            templates={props.templates}
+            templateKey="previous"
             pageNumber={props.currentPage - 1}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
@@ -85,7 +88,8 @@ function Pagination(props: PaginationProps) {
             ariaLabel={`Page ${pageNumber + 1}`}
             className={props.cssClasses.pageItem}
             isSelected={pageNumber === props.currentPage}
-            label={`${pageNumber + 1}`}
+            templates={props.templates}
+            templateKey="page"
             pageNumber={pageNumber}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
@@ -98,7 +102,8 @@ function Pagination(props: PaginationProps) {
             ariaLabel="Next"
             className={props.cssClasses.nextPageItem}
             isDisabled={props.isLastPage}
-            label={props.templates.next}
+            templates={props.templates}
+            templateKey="next"
             pageNumber={props.currentPage + 1}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
@@ -111,7 +116,8 @@ function Pagination(props: PaginationProps) {
             ariaLabel="Last"
             className={props.cssClasses.lastPageItem}
             isDisabled={props.isLastPage}
-            label={props.templates.last}
+            templates={props.templates}
+            templateKey="last"
             pageNumber={props.nbPages - 1}
             createURL={props.createURL}
             cssClasses={props.cssClasses}
@@ -124,19 +130,21 @@ function Pagination(props: PaginationProps) {
 }
 
 type PaginationLinkProps = {
-  label: string;
+  templates: PaginationTemplates;
+  templateKey: keyof PaginationTemplates;
   ariaLabel: string;
   pageNumber: number;
   isDisabled?: boolean;
   isSelected?: boolean;
   className?: string;
   cssClasses: PaginationComponentCSSClasses;
-  createURL(value: number): string;
+  createURL: (value: number) => string;
   createClickHandler: (pageNumber: number) => (event: MouseEvent) => void;
 };
 
 function PaginationLink({
-  label,
+  templates,
+  templateKey,
   ariaLabel,
   pageNumber,
   className,
@@ -156,17 +164,31 @@ function PaginationLink({
       )}
     >
       {isDisabled ? (
-        <span
-          className={cssClasses.link}
-          dangerouslySetInnerHTML={{ __html: label }}
+        <Template
+          rootTagName="span"
+          rootProps={{
+            className: cssClasses.link,
+          }}
+          templateKey={templateKey}
+          templates={templates}
+          data={{
+            page: pageNumber + 1,
+          }}
         />
       ) : (
-        <a
-          className={cssClasses.link}
-          aria-label={ariaLabel}
-          href={createURL(pageNumber)}
-          onClick={createClickHandler(pageNumber)}
-          dangerouslySetInnerHTML={{ __html: label }}
+        <Template
+          rootTagName="a"
+          rootProps={{
+            className: cssClasses.link,
+            'aria-label': ariaLabel,
+            href: createURL(pageNumber),
+            onClick: createClickHandler(pageNumber),
+          }}
+          templateKey={templateKey}
+          templates={templates}
+          data={{
+            page: pageNumber + 1,
+          }}
         />
       )}
     </li>

@@ -10,7 +10,9 @@ export type InstantSearchServerContextApi<
    * Fowards search internals to the server execution context to access them
    * in `getServerState()`.
    */
-  notifyServer(params: { search: InstantSearch<TUiState, TRouteState> }): void;
+  notifyServer: (params: {
+    search: InstantSearch<TUiState, TRouteState>;
+  }) => void;
 };
 
 export const InstantSearchServerContext =

@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getCurrentPage(): Promise<number>;
+    getCurrentPage: () => Promise<number>;
   }
 }
 

@@ -25,9 +25,14 @@ type InstantSearchModule = {
   stateMappings: typeof stateMappings;
 
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
+
+  /** @deprecated use html tagged templates and the Highlight component instead */
   highlight: typeof helpers.highlight;
+  /** @deprecated use html tagged templates and the ReverseHighlight component instead */
   reverseHighlight: typeof helpers.reverseHighlight;
+  /** @deprecated use html tagged templates and the Snippet component instead */
   snippet: typeof helpers.snippet;
+  /** @deprecated use html tagged templates and the ReverseSnippet component instead */
   reverseSnippet: typeof helpers.reverseSnippet;
 
   /**

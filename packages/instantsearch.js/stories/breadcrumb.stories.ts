@@ -69,7 +69,7 @@ storiesOf('Metadata/Breadcrumb', module)
               'hierarchicalCategories.lvl2',
             ],
             templates: {
-              separator: ' + ',
+              separator: () => ' + ',
             },
           }),
         ]);
@@ -105,7 +105,7 @@ storiesOf('Metadata/Breadcrumb', module)
               'hierarchicalCategories.lvl2',
             ],
             templates: {
-              home: 'Home Page',
+              home: () => 'Home Page',
             },
           }),
         ]);

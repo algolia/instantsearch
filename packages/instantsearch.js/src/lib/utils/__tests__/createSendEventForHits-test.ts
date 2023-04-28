@@ -113,6 +113,30 @@ describe('createSendEventForHits', () => {
     });
   });
 
+  it('sends internal view event with default eventName', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    sendEvent('view:internal', hits[0]);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'view',
+      eventModifier: 'internal',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'viewedObjectIDs',
+      payload: {
+        eventName: 'Hits Viewed',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
   it('sends view event with custom eventName', () => {
     const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
     sendEvent('view', hits[0], 'Products Displayed');
@@ -247,6 +271,32 @@ describe('createSendEventForHits', () => {
     });
   });
 
+  it('sends internal click event', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    sendEvent('click:internal', hits[0], 'Product Clicked');
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'click',
+      eventModifier: 'internal',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'clickedObjectIDsAfterSearch',
+      payload: {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+        positions: [0],
+        queryID: 'test-query-id',
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
   it('sends click event with more than 20 hits', () => {
     const { sendEvent, instantSearchInstance, hits } = createTestEnvironment({
       nbHits: 21,
@@ -299,6 +349,31 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'conversion',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'convertedObjectIDsAfterSearch',
+      payload: {
+        eventName: 'Product Ordered',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+        queryID: 'test-query-id',
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
+  it('sends internal conversion event', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    sendEvent('conversion:internal', hits[0], 'Product Ordered');
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'conversion',
+      eventModifier: 'internal',
       hits: [
         {
           __position: 0,

@@ -13,7 +13,7 @@ const demoQueryRulesPlayground: Playground = function demoQueryRulesPlayground({
     typeof instantsearch.widgets.refinementList
   >({
     templates: {
-      header: 'Genres',
+      header: () => 'Genres',
     },
   })(instantsearch.widgets.refinementList);
 
@@ -53,16 +53,18 @@ const demoQueryRulesPlayground: Playground = function demoQueryRulesPlayground({
     instantsearch.widgets.hits({
       container: hits,
       templates: {
-        item: `
-<div
-  class="hits-image"
-  style="background-image: url({{image}})"
-></div>
-<article>
-  <header>
-    <strong>{{#helpers.highlight}}{ "attribute": "title" }{{/helpers.highlight}}</strong>
-  </header>
-</article>
+        item: (hit, { html, components }) => html`
+          <div
+            class="hits-image"
+            style="background-image: url(${hit.image})"
+          ></div>
+          <article>
+            <header>
+              <strong
+                >${components.Highlight({ attribute: 'title', hit })}</strong
+              >
+            </header>
+          </article>
         `,
       },
       cssClasses: {

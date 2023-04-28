@@ -14,7 +14,7 @@ export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
     Pick<CurrentRefinementsConnectorParamsItem, 'label' | 'refinements'> &
       Record<string, unknown>
   >;
-  onRemove?(refinement: CurrentRefinementsConnectorParamsRefinement): void;
+  onRemove?: (refinement: CurrentRefinementsConnectorParamsRefinement) => void;
   hasRefinements?: boolean;
 };
 

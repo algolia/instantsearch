@@ -3,18 +3,24 @@ import { createInitArgs, safelyRunOnBrowser } from '../lib/utils';
 import type { InstantSearch, InternalMiddleware, Widget } from '../types';
 import type { IndexWidget } from '../widgets/index/index';
 
-type WidgetMetaData = {
-  type: string | undefined;
-  widgetType: string | undefined;
-  params: string[];
-};
+type WidgetMetadata =
+  | {
+      type: string | undefined;
+      widgetType: string | undefined;
+      params: string[];
+    }
+  | {
+      type: string;
+      middleware: true;
+      internal: boolean;
+    };
 
 type Payload = {
-  widgets: WidgetMetaData[];
+  widgets: WidgetMetadata[];
   ua?: string;
 };
 
-function extractPayload(
+function extractWidgetPayload(
   widgets: Array<Widget | IndexWidget>,
   instantSearchInstance: InstantSearch,
   payload: Payload
@@ -49,7 +55,7 @@ function extractPayload(
     });
 
     if (widget.$$type === 'ais.index') {
-      extractPayload(
+      extractWidgetPayload(
         (widget as IndexWidget).getWidgets(),
         instantSearchInstance,
         payload
@@ -73,7 +79,11 @@ export function isMetadataEnabled() {
  * - widget name
  * - connector name
  */
-export function createMetadataMiddleware(): InternalMiddleware {
+export function createMetadataMiddleware({
+  $$internal = false,
+}: {
+  $$internal?: boolean;
+} = {}): InternalMiddleware {
   return ({ instantSearchInstance }) => {
     const payload: Payload = {
       widgets: [],
@@ -83,6 +93,8 @@ export function createMetadataMiddleware(): InternalMiddleware {
     payloadContainer.name = 'instantsearch:widgets';
 
     return {
+      $$type: 'ais.metadata',
+      $$internal,
       onStateChange() {},
       subscribe() {
         // using setTimeout here to delay extraction until widgets have been added in a tick (e.g. Vue)
@@ -93,10 +105,18 @@ export function createMetadataMiddleware(): InternalMiddleware {
               ? client.transporter.userAgent.value
               : client._ua;
 
-          extractPayload(
+          extractWidgetPayload(
             instantSearchInstance.mainIndex.getWidgets(),
             instantSearchInstance,
             payload
+          );
+
+          instantSearchInstance.middleware.forEach((middleware) =>
+            payload.widgets.push({
+              middleware: true,
+              type: middleware.instance.$$type,
+              internal: middleware.instance.$$internal,
+            })
           );
 
           payloadContainer.content = JSON.stringify(payload);

@@ -29,7 +29,7 @@ export type RangeInputProps = {
   templateProps: {
     templates: RangeInputComponentTemplates;
   };
-  refine(rangeValue: RangeBoundaries): void;
+  refine: (rangeValue: RangeBoundaries) => void;
 };
 
 class RangeInput extends Component<

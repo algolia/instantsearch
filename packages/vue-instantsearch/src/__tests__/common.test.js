@@ -8,6 +8,7 @@ import {
   createMenuTests,
   createPaginationTests,
   createInfiniteHitsTests,
+  createHitsTests,
   createRangeInputTests,
 } from '@instantsearch/tests';
 
@@ -23,6 +24,8 @@ import {
   AisInfiniteHits,
   AisSearchBox,
   createWidgetMixin,
+  AisHits,
+  AisIndex,
   AisRangeInput,
 } from '../instantsearch';
 jest.unmock('instantsearch.js/es');
@@ -130,7 +133,146 @@ createInfiniteHitsTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisSearchBox),
-          h(AisInfiniteHits, { props: widgetParams }),
+          h(AisInfiniteHits, {
+            attrs: { id: 'main-hits' },
+            props: widgetParams,
+            scopedSlots: {
+              item: ({ item: hit, sendEvent }) =>
+                h(
+                  'div',
+                  {
+                    attrs: {
+                      'data-testid': `main-hits-top-level-${hit.__position}`,
+                    },
+                  },
+                  [
+                    hit.objectID,
+                    h('button', {
+                      attrs: {
+                        'data-testid': `main-hits-convert-${hit.__position}`,
+                      },
+                      on: {
+                        click: () => sendEvent('conversion', hit, 'Converted'),
+                      },
+                    }),
+                    h('button', {
+                      attrs: {
+                        'data-testid': `main-hits-click-${hit.__position}`,
+                      },
+                      on: {
+                        click: () => sendEvent('click', hit, 'Clicked'),
+                      },
+                    }),
+                  ]
+                ),
+            },
+          }),
+          h(AisIndex, { props: { indexName: 'nested' } }, [
+            h(AisInfiniteHits, {
+              attrs: { id: 'nested-hits' },
+              scopedSlots: {
+                item: ({ item: hit, sendEvent }) =>
+                  h(
+                    'div',
+                    {
+                      attrs: {
+                        'data-testid': `nested-hits-top-level-${hit.__position}`,
+                      },
+                    },
+                    [
+                      hit.objectID,
+                      h('button', {
+                        attrs: {
+                          'data-testid': `nested-hits-click-${hit.__position}`,
+                        },
+                        on: {
+                          click: () =>
+                            sendEvent('click', hit, 'Clicked nested'),
+                        },
+                      }),
+                    ]
+                  ),
+              },
+            }),
+          ]),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createHitsTests(async ({ instantSearchOptions, widgetParams }) => {
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisSearchBox),
+          h(AisHits, {
+            attrs: { id: 'main-hits' },
+            props: widgetParams,
+            scopedSlots: {
+              item: ({ item: hit, sendEvent }) =>
+                h(
+                  'div',
+                  {
+                    attrs: {
+                      'data-testid': `main-hits-top-level-${hit.__position}`,
+                    },
+                  },
+                  [
+                    hit.objectID,
+                    h('button', {
+                      attrs: {
+                        'data-testid': `main-hits-convert-${hit.__position}`,
+                      },
+                      on: {
+                        click: () => sendEvent('conversion', hit, 'Converted'),
+                      },
+                    }),
+                    h('button', {
+                      attrs: {
+                        'data-testid': `main-hits-click-${hit.__position}`,
+                      },
+                      on: {
+                        click: () => sendEvent('click', hit, 'Clicked'),
+                      },
+                    }),
+                  ]
+                ),
+            },
+          }),
+          h(AisIndex, { props: { indexName: 'nested' } }, [
+            h(AisHits, {
+              attrs: { id: 'nested-hits' },
+              scopedSlots: {
+                item: ({ item: hit, sendEvent }) =>
+                  h(
+                    'div',
+                    {
+                      attrs: {
+                        'data-testid': `nested-hits-top-level-${hit.__position}`,
+                      },
+                    },
+                    [
+                      hit.objectID,
+                      h('button', {
+                        attrs: {
+                          'data-testid': `nested-hits-click-${hit.__position}`,
+                        },
+                        on: {
+                          click: () =>
+                            sendEvent('click', hit, 'Clicked nested'),
+                        },
+                      }),
+                    ]
+                  ),
+              },
+            }),
+          ]),
           h(GlobalErrorSwallower),
         ])
       ),

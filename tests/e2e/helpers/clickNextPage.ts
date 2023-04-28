@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    clickNextPage(): Promise<void>;
+    clickNextPage: () => Promise<void>;
   }
 }
 

@@ -211,6 +211,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
             {
               attribute: 'category',
               indexName: 'indexName',
+              indexId: 'indexName',
               label: 'category',
               refine: expect.any(Function),
               refinements: [
@@ -317,6 +318,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           {
             attribute: 'category',
             indexName: 'indexName',
+            indexId: 'indexName',
             label: 'category',
             refine: expect.any(Function),
             refinements: [
@@ -736,6 +738,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       expect(firstRenderingOptions.items).toEqual([
         {
           indexName: 'indexName',
+          indexId: 'indexName',
           attribute: 'facet1',
           label: 'facet1',
           refinements: [
@@ -780,6 +783,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       expect(items).toEqual([
         {
           indexName: 'indexName',
+          indexId: 'firstIndex',
           attribute: 'facet1',
           label: 'facet1',
           refinements: [
@@ -794,6 +798,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         },
         {
           indexName: 'indexName',
+          indexId: 'firstIndex',
           attribute: 'facet2',
           label: 'facet2',
           refinements: [
@@ -833,6 +838,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('provides the items from multiple scoped results', () => {
+      const indexHelper = algoliasearchHelper({} as any, 'indexName', {
+        facets: ['facet3', 'facet4'],
+      });
+
       const rendering = jest.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
       const widget = customCurrentRefinements({});
@@ -850,6 +859,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         .addFacetRefinement('facet1', 'facetValue')
         .addFacetRefinement('facet2', 'facetValue');
 
+      indexHelper
+        .addFacetRefinement('facet3', 'facetValue')
+        .addFacetRefinement('facet4', 'facetValue');
+
       widget.render!(
         createRenderOptions({
           scopedResults: [
@@ -858,16 +871,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
               helper,
               results: new SearchResults(helper.state, [
                 createSingleSearchResponse({
-                  index: 'firstIndex',
+                  index: 'indexName',
                 }),
               ]),
             },
             {
               indexId: 'secondIndex',
-              helper,
-              results: new SearchResults(helper.state, [
+              helper: indexHelper,
+              results: new SearchResults(indexHelper.state, [
                 createSingleSearchResponse({
-                  index: 'secondIndex',
+                  index: 'indexName',
                 }),
               ]),
             },
@@ -884,6 +897,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       expect(items).toEqual([
         {
           indexName: 'indexName',
+          indexId: 'firstIndex',
           attribute: 'facet1',
           label: 'facet1',
           refinements: [
@@ -898,6 +912,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         },
         {
           indexName: 'indexName',
+          indexId: 'firstIndex',
           attribute: 'facet2',
           label: 'facet2',
           refinements: [
@@ -912,11 +927,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         },
         {
           indexName: 'indexName',
-          attribute: 'facet1',
-          label: 'facet1',
+          indexId: 'secondIndex',
+          attribute: 'facet3',
+          label: 'facet3',
           refinements: [
             {
-              attribute: 'facet1',
+              attribute: 'facet3',
               label: 'facetValue',
               type: 'facet',
               value: 'facetValue',
@@ -926,11 +942,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         },
         {
           indexName: 'indexName',
-          attribute: 'facet2',
-          label: 'facet2',
+          indexId: 'secondIndex',
+          attribute: 'facet4',
+          label: 'facet4',
           refinements: [
             {
-              attribute: 'facet2',
+              attribute: 'facet4',
               label: 'facetValue',
               type: 'facet',
               value: 'facetValue',

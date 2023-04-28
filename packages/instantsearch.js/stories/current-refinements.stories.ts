@@ -141,7 +141,7 @@ storiesOf('Refinements/CurrentRefinements', module)
           container: toggleRefinementContainer,
           attribute: 'free_shipping',
           templates: {
-            labelText: 'Free Shipping',
+            labelText: () => 'Free Shipping',
           },
         }),
       ]);

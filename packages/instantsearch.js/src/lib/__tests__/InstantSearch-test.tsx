@@ -14,6 +14,7 @@ import { h, render, createRef } from 'preact';
 
 import { createRenderOptions, createWidget } from '../../../test/createWidget';
 import { connectSearchBox, connectPagination } from '../../connectors';
+import { createInsightsMiddleware } from '../../middlewares';
 import { index } from '../../widgets';
 import InstantSearch from '../InstantSearch';
 import { noop, warning } from '../utils';
@@ -427,6 +428,149 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     expect(search.helper!.lastResults).not.toBe(null);
   });
 
+  describe('insights middleware', () => {
+    test('does not add insights middleware by default', () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+      });
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([]);
+    });
+
+    test('insights: true adds only one insights middleware', () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        insights: true,
+      });
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+      ]);
+    });
+
+    test('insights: options adds only one insights middleware', () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        insights: {
+          insightsInitParams: {
+            useCookie: false,
+          },
+        },
+      });
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+      ]);
+    });
+
+    test('insights: options passes options to middleware', () => {
+      const insightsClient = Object.assign(jest.fn(), { version: '2.6.0' });
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        insights: {
+          insightsClient,
+        },
+      });
+      search.start();
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+        },
+      ]);
+
+      // it's called a couple times setting up the middleware
+      expect(insightsClient).toHaveBeenCalled();
+      insightsClient.mockClear();
+
+      search.sendEventToInsights({
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: { eventName: 'Add to cart' } as any,
+        eventType: 'click',
+        widgetType: 'ais.hits',
+      });
+
+      expect(insightsClient).toHaveBeenCalledTimes(1);
+      expect(insightsClient).toHaveBeenCalledWith(
+        'clickedObjectIDsAfterSearch',
+        { eventName: 'Add to cart', algoliaSource: ['instantsearch'] },
+        {
+          headers: {
+            'X-Algolia-API-Key': 'apiKey',
+            'X-Algolia-Application-Id': 'appId',
+          },
+        }
+      );
+    });
+
+    test('insights: false disables default insights', () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+        insights: false,
+      });
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([]);
+    });
+
+    test("users' middleware overrides the builtin one", () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'test',
+      });
+
+      search.use(createInsightsMiddleware({}));
+
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: false,
+        },
+      ]);
+    });
+  });
+
   describe('metadata middleware', () => {
     const defaultUserAgent =
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15';
@@ -451,29 +595,38 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     });
 
     it("doesn't add metadata middleware by default", () => {
-      const useSpy = jest.spyOn(InstantSearch.prototype, 'use');
-
-      // eslint-disable-next-line no-new
-      new InstantSearch({
+      const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
       });
 
-      expect(useSpy).toHaveBeenCalledTimes(0);
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([]);
     });
 
     it('adds metadata middleware on the Crawler user agent', () => {
       userAgentMock = algoliaUserAgent;
 
-      const useSpy = jest.spyOn(InstantSearch.prototype, 'use');
-
-      // eslint-disable-next-line no-new
-      new InstantSearch({
+      const search = new InstantSearch({
         searchClient: createSearchClient(),
         indexName: 'test',
       });
 
-      expect(useSpy).toHaveBeenCalledTimes(1);
+      expect(
+        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+          $$type,
+          $$internal,
+        }))
+      ).toEqual([
+        {
+          $$type: 'ais.metadata',
+          $$internal: true,
+        },
+      ]);
     });
   });
 });

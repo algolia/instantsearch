@@ -27,7 +27,7 @@ export type ToggleRefinementProps = Omit<
 > &
   Pick<React.ComponentProps<'input'>, 'checked'> & {
     classNames?: Partial<ToggleRefinementClassNames>;
-    onChange(isChecked: boolean): void;
+    onChange: (isChecked: boolean) => void;
     label: string;
   };
 

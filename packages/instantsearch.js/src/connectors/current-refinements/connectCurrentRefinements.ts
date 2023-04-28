@@ -74,6 +74,11 @@ export type CurrentRefinementsConnectorParamsItem = {
   indexName: string;
 
   /**
+   * The index id as provided to the index widget.
+   */
+  indexId: string;
+
+  /**
    * The attribute on which the refinement is applied.
    */
   attribute: string;
@@ -91,7 +96,7 @@ export type CurrentRefinementsConnectorParamsItem = {
   /**
    * Removes the given refinement and triggers a new search.
    */
-  refine(refinement: CurrentRefinementsConnectorParamsRefinement): void;
+  refine: (refinement: CurrentRefinementsConnectorParamsRefinement) => void;
 };
 
 export type CurrentRefinementsConnectorParams = {
@@ -131,7 +136,7 @@ export type CurrentRefinementsRenderState = {
   /**
    * Removes the given refinement and triggers a new search.
    */
-  refine(refinement: CurrentRefinementsConnectorParamsRefinement): void;
+  refine: (refinement: CurrentRefinementsConnectorParamsRefinement) => void;
 
   /**
    * Generates a URL for the next state.
@@ -229,6 +234,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
                 getRefinementsItems({
                   results: {},
                   helper,
+                  indexId: helper.state.index,
                   includedAttributes,
                   excludedAttributes,
                 }),
@@ -244,6 +250,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
                   getRefinementsItems({
                     results: scopedResult.results,
                     helper: scopedResult.helper,
+                    indexId: scopedResult.indexId,
                     includedAttributes,
                     excludedAttributes,
                   }),
@@ -271,11 +278,13 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
 function getRefinementsItems({
   results,
   helper,
+  indexId,
   includedAttributes,
   excludedAttributes,
 }: {
   results: SearchResults | Record<string, never>;
   helper: AlgoliaSearchHelper;
+  indexId: string;
   includedAttributes: CurrentRefinementsConnectorParams['includedAttributes'];
   excludedAttributes: CurrentRefinementsConnectorParams['excludedAttributes'];
 }): CurrentRefinementsConnectorParamsItem[] {
@@ -298,6 +307,7 @@ function getRefinementsItems({
       ...allItems.filter((item) => item.attribute !== currentItem.attribute),
       {
         indexName: helper.state.index,
+        indexId,
         attribute: currentItem.attribute,
         label: currentItem.attribute,
         refinements: items

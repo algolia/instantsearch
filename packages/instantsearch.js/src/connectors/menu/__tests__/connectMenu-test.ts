@@ -13,6 +13,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import { warning } from '../../../lib/utils';
 import connectMenu from '../connectMenu';
 
 import type { WidgetFactory } from '../../../types';
@@ -1424,6 +1425,44 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         expect(actual.maxValuesPerFacet).toBe(110);
       });
     });
+
+    describe('warns when attribute is used for conjunctive/disjunctive faceting', () => {
+      beforeEach(() => {
+        warning.cache = {};
+      });
+
+      it('warns when attribute is used for conjunctive faceting and does not change `SearchParameters`', () => {
+        const helper = jsHelper(createSearchClient(), '', {
+          facets: ['brand'],
+        });
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        expect(() => {
+          const searchParams = widget.getWidgetSearchParameters(helper.state, {
+            uiState: {},
+          });
+          expect(searchParams.hierarchicalFacets).toHaveLength(0);
+        }).toWarnDev();
+      });
+
+      it('warns when attribute is used for disjunctive faceting and does not change `SearchParameters`', () => {
+        const helper = jsHelper(createSearchClient(), '', {
+          disjunctiveFacets: ['brand'],
+        });
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        expect(() => {
+          const searchParams = widget.getWidgetSearchParameters(helper.state, {
+            uiState: {},
+          });
+          expect(searchParams.hierarchicalFacets).toHaveLength(0);
+        }).toWarnDev();
+      });
+    });
   });
 
   describe('dispose', () => {
@@ -1629,6 +1668,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'category',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

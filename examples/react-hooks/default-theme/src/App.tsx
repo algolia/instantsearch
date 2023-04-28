@@ -60,6 +60,7 @@ export function App() {
       searchClient={searchClient}
       indexName="instant_search"
       routing={true}
+      insights={true}
     >
       <Configure ruleContexts={[]} />
 

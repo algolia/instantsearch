@@ -6,7 +6,7 @@ import type { ComponentChildren } from 'preact';
 
 type Props = {
   className: string;
-  onClick(event: MouseEvent): void;
+  onClick: (event: MouseEvent) => void;
   children: ComponentChildren;
   disabled?: boolean;
 };

@@ -84,6 +84,7 @@ export function App() {
       searchClient={searchClient}
       indexName={indexName}
       routing={routing}
+      insights={true}
     >
       <header className="header" ref={headerRef}>
         <p className="header-logo">
@@ -249,6 +250,7 @@ function SubmitIcon() {
       width="16"
       height="16"
       viewBox="0 0 18 18"
+      aria-hidden="true"
     >
       <g
         fill="none"

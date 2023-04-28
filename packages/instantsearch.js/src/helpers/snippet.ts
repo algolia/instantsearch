@@ -15,12 +15,22 @@ export type SnippetOptions = {
 
 const suit = component('Snippet');
 
+/**
+ * @deprecated use html tagged templates and the Snippet component instead
+ */
 export default function snippet({
   attribute,
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
 }: SnippetOptions): string {
+  warning(
+    false,
+    `\`instantsearch.snippet\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`Snippet\` component.
+
+For more information, visit https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/?client=html+tagged+templates#upgrade-templates`
+  );
+
   const snippetAttributeResult = getPropertyByPath(
     hit._snippetResult,
     attribute

@@ -42,6 +42,7 @@ function App({ serverState, location }) {
             },
           }),
         }}
+        insights={true}
       >
         <Configure hitsPerPage={10} />
 

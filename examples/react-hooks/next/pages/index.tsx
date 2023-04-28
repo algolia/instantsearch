@@ -58,6 +58,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
             singletonRouter,
           }),
         }}
+        insights={true}
       >
         <div className="Container">
           <div>

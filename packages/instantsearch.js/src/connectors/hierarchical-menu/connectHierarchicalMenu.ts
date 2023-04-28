@@ -339,7 +339,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
 
           if (!_refine) {
             _refine = function (facetValue) {
-              sendEvent('click', facetValue);
+              sendEvent('click:internal', facetValue);
               helper
                 .toggleFacetRefinement(hierarchicalFacetName, facetValue)
                 .search();
@@ -410,6 +410,19 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           const values =
             uiState.hierarchicalMenu &&
             uiState.hierarchicalMenu[hierarchicalFacetName];
+
+          if (
+            searchParameters.isConjunctiveFacet(hierarchicalFacetName) ||
+            searchParameters.isDisjunctiveFacet(hierarchicalFacetName)
+          ) {
+            warning(
+              false,
+              `HierarchicalMenu: Attribute "${hierarchicalFacetName}" is already used by another widget applying conjunctive or disjunctive faceting.
+As this is not supported, please make sure to remove this other widget or this HierarchicalMenu widget will not work at all.`
+            );
+
+            return searchParameters;
+          }
 
           if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
             const facet = searchParameters.getHierarchicalFacetByName(

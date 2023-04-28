@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.43.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.42.2...react-instantsearch-hooks-server@6.43.0) (2023-04-24)
+
+
+### Bug Fixes
+
+* **server:** error when multiple InstantSearch instances in getServerState ([#5588](https://github.com/algolia/instantsearch.js/issues/5588)) ([0778460](https://github.com/algolia/instantsearch.js/commit/0778460dee935b929e420b362948b4962978d3a5))
+
+
+
+
+
+## [6.42.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.42.1...react-instantsearch-hooks-server@6.42.2) (2023-04-11)
+
+**Note:** Version bump only for package react-instantsearch-hooks-server
+
+
+
+
+
+## [6.42.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.42.0...react-instantsearch-hooks-server@6.42.1) (2023-03-28)
+
+**Note:** Version bump only for package react-instantsearch-hooks-server
+
+
+
+
+
+## [6.42.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.41.0...react-instantsearch-hooks-server@6.42.0) (2023-03-21)
+
+**Note:** Version bump only for package react-instantsearch-hooks-server
+
+
+
+
+
 ## [6.41.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-server@6.40.1...react-instantsearch-hooks-server@6.41.0) (2023-03-07)
 
 **Note:** Version bump only for package react-instantsearch-hooks-server
