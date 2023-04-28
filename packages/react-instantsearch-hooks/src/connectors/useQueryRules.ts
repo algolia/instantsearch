@@ -3,12 +3,14 @@ import connectQueryRules from 'instantsearch.js/es/connectors/query-rules/connec
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
+import type { UseParentIndexProps } from '../lib/useParentIndex';
 import type {
   QueryRulesConnectorParams,
   QueryRulesWidgetDescription,
 } from 'instantsearch.js/es/connectors/query-rules/connectQueryRules';
 
-export type UseQueryRulesProps = QueryRulesConnectorParams;
+export type UseQueryRulesProps = QueryRulesConnectorParams &
+  UseParentIndexProps;
 
 export function useQueryRules(
   props?: UseQueryRulesProps,

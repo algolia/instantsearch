@@ -3,12 +3,14 @@ import connectPagination from 'instantsearch.js/es/connectors/pagination/connect
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
+import type { UseParentIndexProps } from '../lib/useParentIndex';
 import type {
   PaginationConnectorParams,
   PaginationWidgetDescription,
 } from 'instantsearch.js/es/connectors/pagination/connectPagination';
 
-export type UsePaginationProps = PaginationConnectorParams;
+export type UsePaginationProps = PaginationConnectorParams &
+  UseParentIndexProps;
 
 export function usePagination(
   props?: UsePaginationProps,

@@ -3,6 +3,7 @@ import connectDynamicWidgets from 'instantsearch.js/es/connectors/dynamic-widget
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
+import type { UseParentIndexProps } from '../lib/useParentIndex';
 import type {
   DynamicWidgetsConnectorParams,
   DynamicWidgetsWidgetDescription,
@@ -11,7 +12,8 @@ import type {
 export type UseDynamicWidgetsProps = Omit<
   DynamicWidgetsConnectorParams,
   'widgets' | 'fallbackWidget'
->;
+> &
+  UseParentIndexProps;
 
 export function useDynamicWidgets(
   props?: UseDynamicWidgetsProps,
