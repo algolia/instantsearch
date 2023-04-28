@@ -3,7 +3,10 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { widgetSnapshotSerializer } from '@instantsearch/testutils';
+import {
+  castToJestMock,
+  widgetSnapshotSerializer,
+} from '@instantsearch/testutils';
 import { act, render, waitFor } from '@testing-library/react';
 import React, { createRef } from 'react';
 
@@ -561,5 +564,106 @@ describe('DynamicWidgets', () => {
     `);
 
     consoleError.mockRestore();
+  });
+
+  test('injects child widgets into the parentIndex if provided', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
+
+    function App({
+      attributes,
+      mounted = true,
+    }: {
+      attributes: string[];
+      mounted?: boolean;
+    }) {
+      return (
+        <InstantSearchMock indexName="root" searchClient={searchClient}>
+          <Index indexName="1">
+            {mounted && (
+              <DynamicWidgets
+                transformItems={() => attributes}
+                fallbackComponent={RefinementList}
+                parentIndexId={null}
+              >
+                <RefinementList attribute="brand" parentIndexId="1" />
+                <Menu attribute="categories" />
+              </DynamicWidgets>
+            )}
+          </Index>
+        </InstantSearchMock>
+      );
+    }
+
+    const { rerender } = render(
+      <App attributes={['brand', 'categories', 'something']} mounted={false} />
+    );
+
+    expect(indexContextRef.current).toMatchInlineSnapshot(`
+      Widget(ais.index) {
+        $$widgetType: ais.index
+        indexId: root
+        widgets: [
+          Widget(ais.index) {
+            $$widgetType: ais.index
+            indexId: 1
+          }
+        ]
+      }
+    `);
+
+    rerender(<App attributes={['brand', 'categories', 'something']} mounted />);
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      castToJestMock(searchClient.search).mockClear();
+    });
+
+    expect(indexContextRef.current).toMatchInlineSnapshot(`
+      Widget(ais.index) {
+        $$widgetType: ais.index
+        indexId: root
+        widgets: [
+          Widget(ais.index) {
+            $$widgetType: ais.index
+            indexId: 1
+            widgets: [
+              Widget(ais.refinementList) {
+                attribute: brand
+              }
+            ]
+          }
+          Widget(ais.menu) {
+            attribute: categories
+          }
+          Widget(ais.refinementList) {
+            attribute: something
+          }
+          Widget(ais.dynamicWidgets) {
+            $$widgetType: ais.dynamicWidgets
+          }
+        ]
+      }
+    `);
+
+    rerender(
+      <App attributes={['brand', 'categories', 'something']} mounted={false} />
+    );
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      castToJestMock(searchClient.search).mockClear();
+    });
+
+    expect(indexContextRef.current).toMatchInlineSnapshot(`
+      Widget(ais.index) {
+        $$widgetType: ais.index
+        indexId: root
+        widgets: [
+          Widget(ais.index) {
+            $$widgetType: ais.index
+            indexId: 1
+          }
+        ]
+      }
+    `);
   });
 });

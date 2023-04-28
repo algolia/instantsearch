@@ -65,13 +65,18 @@ export default {
       type: Number,
       default: undefined,
     },
-    // TODO: this only adds the dynamic widgets to the parent index, not the
-    // widgets that it renders. The parentIndexId should be forwarded.
     parentIndexId: {
       type: String,
       required: false,
       default: undefined,
     },
+  },
+  provide() {
+    return {
+      // To ensure child widgets are registered in the correct parent.
+      // DynamicWidgets can only have widget children, so this doesn't get propagated further.
+      $_ais_getParentIndex: () => this.parentIndex,
+    };
   },
   render: renderCompat(function (h) {
     const components = new Map();

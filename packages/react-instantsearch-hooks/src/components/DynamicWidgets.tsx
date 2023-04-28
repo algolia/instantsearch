@@ -1,10 +1,12 @@
 import React, { Fragment } from 'react';
 
 import { useDynamicWidgets } from '../connectors/useDynamicWidgets';
+import { IndexContext } from '../lib/IndexContext';
 import { invariant } from '../lib/invariant';
+import { useParentIndex } from '../lib/useParentIndex';
 import { warn } from '../lib/warn';
 
-import type { DynamicWidgetsConnectorParams } from 'instantsearch.js/es/connectors/dynamic-widgets/connectDynamicWidgets';
+import type { UseDynamicWidgetsProps } from '../connectors/useDynamicWidgets';
 import type { ReactElement, ComponentType, ReactNode } from 'react';
 
 function DefaultFallbackComponent() {
@@ -17,7 +19,7 @@ type AtLeastOne<
 > = Partial<TTarget> & TMapped[keyof TMapped];
 
 export type DynamicWidgetsProps = Omit<
-  DynamicWidgetsConnectorParams,
+  UseDynamicWidgetsProps,
   'widgets' | 'fallbackWidget'
 > &
   AtLeastOne<{
@@ -40,6 +42,7 @@ export function DynamicWidgets({
   const { attributesToRender } = useDynamicWidgets(props, {
     $$widgetType: 'ais.dynamicWidgets',
   });
+  const parentIndex = useParentIndex(props);
   const widgets: Map<string, ReactNode> = new Map();
 
   React.Children.forEach(children, (child) => {
@@ -54,7 +57,7 @@ export function DynamicWidgets({
   });
 
   return (
-    <>
+    <IndexContext.Provider value={parentIndex}>
       {attributesToRender.map((attribute) => (
         <Fragment key={attribute}>
           {widgets.get(attribute) || (
@@ -62,7 +65,7 @@ export function DynamicWidgets({
           )}
         </Fragment>
       ))}
-    </>
+    </IndexContext.Provider>
   );
 }
 
