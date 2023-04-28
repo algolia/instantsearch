@@ -32,33 +32,38 @@ export type RangeInputProps = {
   refine(rangeValue: RangeBoundaries): void;
 };
 
-class RangeInput extends Component<RangeInputProps, Partial<Range>> {
+class RangeInput extends Component<
+  RangeInputProps,
+  { min?: string; max?: string }
+> {
   public state = {
-    min: this.props.values.min,
-    max: this.props.values.max,
+    min: this.props.values.min?.toString(),
+    max: this.props.values.max?.toString(),
   };
 
   public componentWillReceiveProps(nextProps: RangeInputProps) {
     this.setState({
-      min: nextProps.values.min,
-      max: nextProps.values.max,
+      min: nextProps.values.min?.toString(),
+      max: nextProps.values.max?.toString(),
     });
   }
 
   private onInput = (key: keyof typeof this.state) => (event: Event) => {
     const { value } = event.currentTarget as HTMLInputElement;
 
-    if (value) {
-      this.setState({
-        [key]: Number(value),
-      });
-    }
+    this.setState({
+      [key]: value,
+    });
   };
 
   private onSubmit = (event: Event) => {
     event.preventDefault();
 
-    this.props.refine([this.state.min, this.state.max]);
+    const { min, max } = this.state;
+    this.props.refine([
+      min ? Number(min) : undefined,
+      max ? Number(max) : undefined,
+    ]);
   };
 
   public render() {

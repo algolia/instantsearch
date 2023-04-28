@@ -10,7 +10,7 @@ import userEvent from '@testing-library/user-event';
 
 export function createBehaviourTests(setup: RangeInputSetup, act: Act) {
   describe('behaviour', () => {
-    test('allows input of values containing a decimal separator', async () => {
+    test('allows input of values containing a dot decimal separator', async () => {
       const delay = 100;
       const margin = 10;
       const attribute = 'brand';

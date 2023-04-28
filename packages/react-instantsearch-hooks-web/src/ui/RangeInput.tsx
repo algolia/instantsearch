@@ -133,10 +133,11 @@ export function RangeInput({
             placeholder={min?.toString()}
             disabled={disabled}
             onInput={({ currentTarget }) => {
-              const value = Number(currentTarget.value);
-              if (value) {
-                setRange({ from: value, to });
-              }
+              const value = currentTarget.value;
+              setRange({
+                from: value ? Number(value) : unsetNumberInputValue,
+                to,
+              });
             }}
           />
         </label>
@@ -159,10 +160,11 @@ export function RangeInput({
             placeholder={max?.toString()}
             disabled={disabled}
             onInput={({ currentTarget }) => {
-              const value = Number(currentTarget.value);
-              if (value) {
-                setRange({ from, to: value });
-              }
+              const value = currentTarget.value;
+              setRange({
+                from,
+                to: value ? Number(value) : unsetNumberInputValue,
+              });
             }}
           />
         </label>
