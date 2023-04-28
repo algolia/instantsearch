@@ -2,12 +2,13 @@ import { useMemo, useRef, useState } from 'react';
 
 import { dequal } from '../lib/dequal';
 import { getIndexSearchResults } from '../lib/getIndexSearchResults';
-import { useIndexContext } from '../lib/useIndexContext';
 import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
+import { useParentIndex } from '../lib/useParentIndex';
 import { useStableValue } from '../lib/useStableValue';
 import { useWidget } from '../lib/useWidget';
 
+import type { UseParentIndexProps } from '../lib/useParentIndex';
 import type {
   Connector,
   UiState,
@@ -22,13 +23,13 @@ export function useConnector<
   TDescription extends WidgetDescription
 >(
   connector: Connector<TDescription, TProps>,
-  props: TProps = {} as TProps,
+  { parentIndexId, ...props }: TProps & UseParentIndexProps = {} as TProps,
   additionalWidgetProperties: AdditionalWidgetProperties = {}
 ): TDescription['renderState'] {
   const serverContext = useInstantSearchServerContext();
   const search = useInstantSearchContext();
-  const parentIndex = useIndexContext();
-  const stableProps = useStableValue(props);
+  const parentIndex = useParentIndex({ parentIndexId });
+  const stableProps = useStableValue(props as TProps);
   const stableAdditionalWidgetProperties = useStableValue(
     additionalWidgetProperties
   );

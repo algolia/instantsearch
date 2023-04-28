@@ -9,6 +9,8 @@ import {
 import {
   createInstantSearchTestWrapper,
   createInstantSearchSpy,
+  castToJestMock,
+  widgetSnapshotSerializer,
 } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
@@ -29,6 +31,8 @@ import type {
   HitsConnectorParams,
   HitsWidgetDescription,
 } from 'instantsearch.js/es/connectors/hits/connectHits';
+
+expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
 type CustomSearchBoxWidgetDescription = {
   $$type: 'test.searchBox';
@@ -658,5 +662,67 @@ describe('useConnector', () => {
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
     expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
     expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
+  });
+
+  describe('parentIndexId', () => {
+    test('uses the parentIndexId when set', async () => {
+      const searchClient = createSearchClient({});
+      const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
+
+      function App() {
+        return (
+          <StrictMode>
+            <InstantSearchSpy searchClient={searchClient} indexName="root">
+              <Index indexName="1">
+                <Index indexName="2" parentIndexId={null}>
+                  <CustomWidget attribute="2-natural" />
+                  <CustomWidget parentIndexId="1" attribute="1-moved" />
+                </Index>
+                <CustomWidget attribute="1-natural" />
+                {/* @TODO: parentIndexId 2 isn't found? */}
+                {/* <CustomWidget parentIndexId="2" attribute="2-moved" /> */}
+              </Index>
+            </InstantSearchSpy>
+          </StrictMode>
+        );
+      }
+
+      render(<App />);
+
+      await waitFor(() => {
+        expect(searchClient.search).toHaveBeenCalledTimes(1);
+        castToJestMock(searchClient.search).mockClear();
+      });
+
+      expect(indexContext.current!).toMatchInlineSnapshot(`
+        Widget(ais.index) {
+          $$widgetType: ais.index
+          indexId: root
+          widgets: [
+            Widget(ais.index) {
+              $$widgetType: ais.index
+              indexId: 1
+              widgets: [
+                Widget(test.customWidget) {
+                  attribute: 1-natural
+                }
+                Widget(test.customWidget) {
+                  attribute: 1-moved
+                }
+              ]
+            }
+            Widget(ais.index) {
+              $$widgetType: ais.index
+              indexId: 2
+              widgets: [
+                Widget(test.customWidget) {
+                  attribute: 2-natural
+                }
+              ]
+            }
+          ]
+        }
+      `);
+    });
   });
 });
