@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-react-native-query-suggestions",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "build": "echo \"Error: no build specified\" && exit 0",
@@ -18,7 +18,7 @@
     "prop-types": "15.6.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-instantsearch-native": "6.39.1",
+    "react-instantsearch-native": "6.39.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
     "react-native-vector-icons": "6.6.0",
     "react-native-web": "0.11.7"

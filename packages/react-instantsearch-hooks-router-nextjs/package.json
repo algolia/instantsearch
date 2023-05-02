@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-hooks-router-nextjs",
-  "version": "6.43.0",
+  "version": "6.43.1",
   "description": "React InstantSearch Hooks Router for Next.js",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
@@ -48,8 +48,8 @@
     "test:e2e": "start-server-and-test test:start-server 3000 'wdio run ./wdio.conf.cjs'"
   },
   "dependencies": {
-    "instantsearch.js": "4.55.0",
-    "react-instantsearch-hooks": "6.43.0"
+    "instantsearch.js": "4.55.1",
+    "react-instantsearch-hooks": "6.43.1"
   },
   "devDependencies": {
     "@types/jasmine": "3.3.16",

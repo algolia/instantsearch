@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.55.1](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.55.0...instantsearch.js@4.55.1) (2023-05-02)
+
+
+### Bug Fixes
+
+* **this:** ensure all functions are able to be destructured ([#5611](https://github.com/algolia/instantsearch.js/issues/5611)) ([a8b5c1e](https://github.com/algolia/instantsearch.js/commit/a8b5c1e5bbd6afac39fce523f7d7c2ec02f51153)), closes [#5589](https://github.com/algolia/instantsearch.js/issues/5589)
+
+
+
+
+
 # [4.55.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.54.1...instantsearch.js@4.55.0) (2023-04-24)
 
 

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.39.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-dom-maps@6.39.1...react-instantsearch-dom-maps@6.39.2) (2023-05-02)
+
+**Note:** Version bump only for package react-instantsearch-dom-maps
+
+
+
+
+
 ## [6.39.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-dom-maps@6.39.0...react-instantsearch-dom-maps@6.39.1) (2023-03-21)
 
 **Note:** Version bump only for package react-instantsearch-dom-maps

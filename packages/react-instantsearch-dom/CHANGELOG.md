@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.39.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-dom@6.39.1...react-instantsearch-dom@6.39.2) (2023-05-02)
+
+
+### Bug Fixes
+
+* **this:** ensure all functions are able to be destructured ([#5611](https://github.com/algolia/instantsearch.js/issues/5611)) ([a8b5c1e](https://github.com/algolia/instantsearch.js/commit/a8b5c1e5bbd6afac39fce523f7d7c2ec02f51153)), closes [#5589](https://github.com/algolia/instantsearch.js/issues/5589)
+
+
+
+
+
 ## [6.39.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-dom@6.39.0...react-instantsearch-dom@6.39.1) (2023-03-21)
 
 
