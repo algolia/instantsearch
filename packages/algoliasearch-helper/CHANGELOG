@@ -1,3 +1,7 @@
+3.13.0 - 2023-05-03
+ * chore: delete renovate (#936) https://github.com/algolia/algoliasearch-helper-js/commit/0e3d8cff722d4a91a04251533636f0860ef3828c
+ * feat(DerivedHelper): skip request for empty index (#938) https://github.com/algolia/algoliasearch-helper-js/commit/79caa4b0ca2537c0f4431ee11556464031935436
+
 3.12.0 - 2023-03-03
  * feat(types): add `queryAfterRemoval` to `SearchResults` (#934) https://github.com/algolia/algoliasearch-helper-js/commit/4fb5a0345f0cf438fb026d8010faf843bd3b0a01
 
