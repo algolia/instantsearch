@@ -507,7 +507,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const renderFn = jest.fn();
         const customSortBy = connectSortBy(renderFn);
         const instantSearchInstance = createInstantSearch({
-          indexName: '',
+          indexName: 'indexName',
         });
         const helper = algoliasearchHelper(
           createSearchClient(),
@@ -540,7 +540,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const renderFn = jest.fn();
         const customSortBy = connectSortBy(renderFn);
         const instantSearchInstance = createInstantSearch({
-          indexName: '',
+          indexName: 'indexName',
         });
         const helper = algoliasearchHelper(
           createSearchClient(),
