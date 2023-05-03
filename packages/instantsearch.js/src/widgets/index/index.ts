@@ -534,7 +534,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // does not have access to lastResults, which it used to in pre-federated
         // search behavior.
         helper!.lastResults = results;
-        lastValidSearchParameters = results._state;
+        lastValidSearchParameters = results?._state;
       });
 
       // We compute the render state before calling `init` in a separate loop
@@ -604,20 +604,23 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
-      if (!this.getResults()) {
-        return;
-      }
-
       // we can't attach a listener to the error event of search, as the error
       // then would no longer be thrown for global handlers.
       if (
         instantSearchInstance.status === 'error' &&
-        !instantSearchInstance.mainHelper!.hasPendingRequests()
+        !instantSearchInstance.mainHelper!.hasPendingRequests() &&
+        lastValidSearchParameters
       ) {
-        helper!.setState(lastValidSearchParameters!);
+        helper!.setState(lastValidSearchParameters);
       }
 
-      localWidgets.forEach((widget) => {
+      // We only render index widgets if there are no results.
+      // This makes sure `render` is never called with `results` being `null`.
+      const widgetsToRender = this.getResults()
+        ? localWidgets
+        : localWidgets.filter(isIndexWidget);
+
+      widgetsToRender.forEach((widget) => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
@@ -632,7 +635,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
-      localWidgets.forEach((widget) => {
+      widgetsToRender.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
         // `lastResults` might be `null` though. It's possible that a stalled render

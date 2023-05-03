@@ -95,14 +95,6 @@ export const withHits =
     rightPanelPlaygroundElement.classList.add('panel-right');
     playgroundElement.appendChild(rightPanelPlaygroundElement);
 
-    search.addWidgets([
-      instantsearch.widgets.configure({
-        hitsPerPage: 4,
-        attributesToSnippet: ['description:15'],
-        snippetEllipsisText: '[…]',
-      }),
-    ]);
-
     playground({
       search,
       instantsearch,

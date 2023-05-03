@@ -219,7 +219,7 @@ describe('dynamicWidgets()', () => {
 
     it('renders the widgets returned by transformItems', async () => {
       const instantSearchInstance = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient: createSearchClient(),
       });
       const rootContainer = document.createElement('div');
@@ -291,7 +291,7 @@ describe('dynamicWidgets()', () => {
 
     it('updates the position of widgets returned by transformItems', async () => {
       const instantSearchInstance = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient: createSearchClient(),
       });
       instantSearchInstance.start();
@@ -491,7 +491,7 @@ describe('dynamicWidgets()', () => {
 
     it('removes dom on dispose', async () => {
       const instantSearchInstance = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient: createSearchClient(),
       });
       instantSearchInstance.start();
