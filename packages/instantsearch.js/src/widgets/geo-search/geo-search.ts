@@ -71,7 +71,7 @@ export type GeoSearchMarker<TOptions> = {
    * See the documentation for more information:
    * https://developers.google.com/maps/documentation/javascript/reference/3/#MarkerOptions
    */
-  createOptions?(item: GeoHit): TOptions;
+  createOptions?: (item: GeoHit) => TOptions;
   /**
    * Object that takes an event type (ex: `click`, `mouseover`) as key and a
    * listener as value. The listener is provided with an object that contains:

@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getTextFromSelector(selector: string): Promise<string[]>;
+    getTextFromSelector: (selector: string) => Promise<string[]>;
   }
 }
 

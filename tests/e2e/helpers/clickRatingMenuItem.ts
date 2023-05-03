@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    clickRatingMenuItem(label: string): Promise<void>;
+    clickRatingMenuItem: (label: string) => Promise<void>;
   }
 }
 

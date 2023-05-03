@@ -44,6 +44,7 @@ const renderer =
           cssClasses={cssClasses}
           currentValue={currentValue}
           options={items}
+          // @ts-expect-error: the refine function expects a number, but setValue will call it with a string. We don't want to change the type of the refine function because it's part of the connector API.
           setValue={refine}
         />
       </div>,

@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getSelectedHierarchicalMenuItems(): Promise<string[]>;
+    getSelectedHierarchicalMenuItems: () => Promise<string[]>;
   }
 }
 

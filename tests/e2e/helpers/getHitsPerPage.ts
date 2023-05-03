@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getHitsPerPage(): Promise<number>;
+    getHitsPerPage: () => Promise<number>;
   }
 }
 

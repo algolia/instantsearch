@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    clickClearRefinements(): Promise<void>;
+    clickClearRefinements: () => Promise<void>;
   }
 }
 

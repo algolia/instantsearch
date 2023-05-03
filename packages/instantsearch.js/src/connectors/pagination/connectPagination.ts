@@ -32,7 +32,7 @@ export type PaginationRenderState = {
   createURL: CreateURL<number>;
 
   /** Sets the current page and triggers a search. */
-  refine(page: number): void;
+  refine: (page: number) => void;
 
   /** true if this search returned more than one page */
   canRefine: boolean;
@@ -98,8 +98,8 @@ const connectPagination: PaginationConnector = function connectPagination(
     });
 
     type ConnectorState = {
-      refine?(page: number): void;
-      createURL?(state: SearchParameters): (page: number) => string;
+      refine?: (page: number) => void;
+      createURL?: (state: SearchParameters) => (page: number) => string;
     };
 
     const connectorState: ConnectorState = {};

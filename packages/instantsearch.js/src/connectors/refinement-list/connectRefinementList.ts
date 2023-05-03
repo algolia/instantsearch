@@ -110,7 +110,7 @@ export type RefinementListRenderState = {
   /**
    * Action to apply selected refinements.
    */
-  refine(value: string): void;
+  refine: (value: string) => void;
   /**
    * Send event to insights middleware
    */
@@ -118,7 +118,7 @@ export type RefinementListRenderState = {
   /**
    * Searches for values inside the list.
    */
-  searchForItems(query: string): void;
+  searchForItems: (query: string) => void;
   /**
    * `true` if the values are from an index search.
    */
@@ -139,7 +139,7 @@ export type RefinementListRenderState = {
   /**
    * Toggles the number of values displayed between `limit` and `showMoreLimit`.
    */
-  toggleShowMore(): void;
+  toggleShowMore: () => void;
 };
 
 export type RefinementListWidgetDescription = {

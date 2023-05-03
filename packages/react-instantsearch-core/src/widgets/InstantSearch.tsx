@@ -24,18 +24,18 @@ type ResultsState = {
 type InstantSearchManager = {
   store: Store;
   widgetsManager: WidgetsManager;
-  getWidgetsIds(): any;
-  getSearchParameters(...args: any[]): {
+  getWidgetsIds: () => any;
+  getSearchParameters: (...args: any[]) => {
     mainParameters: SearchParameters;
     derivedParameters: SearchParameters;
   };
-  onSearchForFacetValues(...args: any[]): any;
-  onExternalStateUpdate(...args: any[]): any;
+  onSearchForFacetValues: (...args: any[]) => any;
+  onExternalStateUpdate: (...args: any[]) => any;
   transitionState: any;
   updateClient: any;
   updateIndex: any;
-  clearCache(): void;
-  skipSearch(...args: any[]): any;
+  clearCache: () => void;
+  skipSearch: (...args: any[]) => any;
 };
 
 export type SearchClient = {

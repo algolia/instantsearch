@@ -115,7 +115,7 @@ search.addWidgets([
     );
 
     type ConnectorState = {
-      refine?(query: string): void;
+      refine?: (query: string) => void;
     };
 
     const connectorState: ConnectorState = {};
