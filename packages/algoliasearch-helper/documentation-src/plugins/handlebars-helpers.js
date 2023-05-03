@@ -7,15 +7,17 @@ marked.setOptions({
 module.exports = function(requires) {
   requires.handlebars = Handlebars;
 
+  var state = {};
+
   Handlebars.registerHelper('switch', function(value, options) {
-    this._switch_value_ = value;
+    state._switch_value_ = value;
     var html = options.fn(this); // Process the body of the switch block
-    delete this._switch_value_;
+    delete state._switch_value_;
     return html;
   });
 
   Handlebars.registerHelper('case', function(value, options) {
-    if (value === this._switch_value_) {
+    if (value === state._switch_value_) {
       return options.fn(this);
     }
   });
@@ -55,19 +57,19 @@ module.exports = function(requires) {
       '?height=' + h +
       '&amp;theme-id=light&amp;slug-hash=' + hash +
       '&amp;default-tab=result&amp;user=Algolia&amp;embed-version=2';
-    var copedenContent = '<iframe id="cp_embed_' + hash +
+    var codepenContent = '<iframe id="cp_embed_' + hash +
       '" src="' + url + '" scrolling="no" frameborder="0" height="' + h +
       '" allowtransparency="true" allowfullscreen="true" name="CodePen Embed" title="CodePen Embed" class="cp_embed_iframe " style="width: 100%; overflow: hidden;"></iframe>';
     var downloadLink = '<a href="http://codepen.io/Algolia/share/zip/' + hash + '/">Download this example.</a>';
-    return new Handlebars.SafeString(downloadLink + copedenContent);
+    return new Handlebars.SafeString(downloadLink + codepenContent);
   });
 
   Handlebars.registerHelper('cleanParameters', function(parameters) {
-    if(!parameters) return '';
+    if (!parameters) return '';
     return new Handlebars.SafeString(parameters.map(function(p, k) {
-      if(p.name.indexOf('.') !== -1) return '';
-      if(p.optional) return  `<span class="param param-${k} optional">${p.name}</span>`;
-      else return  `<span class="param param-${k}">${p.name}</span>`;
+      if (p.name.indexOf('.') !== -1) return '';
+      if (p.optional) return `<span class="param param-${k} optional">${p.name}</span>`;
+      return `<span class="param param-${k}">${p.name}</span>`;
     }).join(''));
   });
 };

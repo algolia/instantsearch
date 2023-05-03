@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/algoliasearch-helper-js
   docker:
-    - image: cimg/node:8.17.0
+    - image: cimg/node:14.18.0
 
 version: 2
 jobs:
@@ -86,6 +86,9 @@ jobs:
       - run:
           name: Build documentation
           command: yarn doc
+      - store_artifacts:
+          path: documentation
+
 
 workflows:
   version: 2

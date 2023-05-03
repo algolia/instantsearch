@@ -12,7 +12,7 @@ When a user updates a parameter in the UI, a new search is triggered,
 and new results appear. Not only these results are updated, but
 also all the filters available should be too.
 
-![The search flow](images/concepts/The search cycle.svg)
+![The search flow](images/concepts/search-cycle.svg)
 
 ### The source of truth of the UI
 
@@ -23,13 +23,13 @@ still being able to trigger the search. For example, the text search input
 will only set the `query` whereas the category list will only deal with
 facets. But both will trigger the search with the parameters of the other.
 
-![Search states](images/concepts/Search states.svg)
+![Search states](images/concepts/search-states.svg)
 
 Changing the parameters of the search with the Helper does not trigger the 
 search. Instead the changes are stored until the `search` method is called.
 Taking the first schema for reference, the updates look like that:
 
-![Setting parameters](images/concepts/Setting Parameters.svg)
+![Setting parameters](images/concepts/setting-parameters.svg)
 
 ## Managed parameters
 
@@ -111,7 +111,7 @@ and video projectors, each in their own category. By default, if you select
 TV then only the TV will be returned and therefore the facet values for the
 category will only be TV.
 
-![conjunctive facets](images/concepts/conjunctive facets.svg)
+![conjunctive facets](images/concepts/conjunctive-facets.svg)
 
 The purpose of the disjunctive facets is to be able to search further than
 a single facet filter. To do that, the helper implements a second request that
@@ -123,7 +123,7 @@ one will retrieve the values for the category attribute. When the results come
 back from Algolia the two requests will be merged and a single list of values
 will be created.
 
-![disjunctive facets](images/concepts/disjunctive facets.svg)
+![disjunctive facets](images/concepts/disjunctive-facets.svg)
 
 These facets need to be declared so that the values can be retrieved and
 then filtered through the UI ([see the configuration](reference.html#disjunctive-facets)).
@@ -215,7 +215,7 @@ provided back when the `result` event is fired.
  - if we want to create urls with different parameters, we can reuse the search
 parameters object and its api to create new states that we can serialize.
 
-![Search states](images/concepts/State is immutable.svg)
+![Search states](images/concepts/state-is-immutable.svg)
 
 ### Derivations of the helper: multi-queries
 

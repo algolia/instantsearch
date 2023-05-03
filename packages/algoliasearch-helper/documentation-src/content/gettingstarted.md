@@ -123,12 +123,13 @@ the first records ordered by the [custom ranking](https://www.algolia.com/doc/gu
 {{{codepen "AXbmEX" 300}}}
 
 <div class='chapter-summary'>
-{{#md}}
+
 You now know:
- - how to **instantiate** the helper
- - **listen** to the `result` event and **read the results** from Algolia
- - **trigger a search** to algolia
-{{/md}}
+
+* how to **instantiate** the helper
+* **listen** to the `result` event and **read the results** from Algolia
+* **trigger a search** to algolia
+
 </div>
 
 ## Setting the query
@@ -200,13 +201,14 @@ The object `_highlightResult` contains all the attributes that may be highlighte
 {{{codepen "VjAVjX" 300}}}
 
 <div class='chapter-summary'>
-{{#md}}
+
 In this part, we have seen:
- - how to **set the query** of the search
- - how to **trigger the search**
- - how to **display highlighting** to help our users
- - how to plug all these to make an interactive search
-{{/md}}
+
+* how to **set the query** of the search
+* how to **trigger the search**
+* how to **display highlighting** to help our users
+* how to plug all these to make an interactive search
+
 </div>
 
 ## Adding facets
@@ -290,13 +292,15 @@ kind of filtering that you can apply with the helper. You can also do:
 {{{codepen "ZOamyB" 300}}}
 
 <div class='chapter-summary'>
-{{#md}}
+
 In this part, we have seen:
 
- - how to **declare a facet** in the configuration of the helper
- - how to **display the facet values** computed by the API
- - how to **refine a facet**
-{{/md}}
+
+* how to **declare a facet** in the configuration of the helper
+* how to **display the facet values** computed by the API
+* how to **refine a facet**
+
+
 </div>
 
 ## Going further

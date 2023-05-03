@@ -379,7 +379,10 @@ function SearchResults(state, results, options) {
 
   /**
    * sum of the processing time of all the queries
+   * @name processingTimeMS
    * @member {number}
+   * @memberof SearchResults
+   * @instance
    */
   this.processingTimeMS = results.reduce(function(sum, result) {
     return result.processingTimeMS === undefined

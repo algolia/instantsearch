@@ -2,18 +2,17 @@
 
 @import 'vendors/normalize',
         'vendors/variables',
-        'vendors/functions',
         'vendors/mixins',
         'vendors/base',
         'vendors/helpers',
-        'vendors/animations';
+        'vendors/animations',
+        'vendors/communityHeader';
 
 @import "components/footer",
         "components/home",
         'components/code-highlight',
         'components/icons',
         'components/containers',
-        'components/navigation',
         'components/buttons',
         'components/media',
         'components/inputs',
@@ -25,6 +24,4 @@
         'components/footer',
         'components/visual-helper',
         'components/clipboard';
-
-@import './../node_modules/algolia-frontend-components/components/communityHeader/communityHeader';
 

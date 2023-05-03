@@ -25,11 +25,9 @@ but it might not be the one you expect according to the last results received.
 
 ### Search
 
-Like the client, the sole purpose of the helper is to make
-search query to Algolia.
+Like the client, the sole purpose of the helper is to make search queries to Algolia.
 
-There are two ways to generate a query
-to Algolia.
+There are two ways to generate a query to Algolia.
 
  - The first one, using `search`, triggers the events and
 all its parameters come directly from the internal search parameters
