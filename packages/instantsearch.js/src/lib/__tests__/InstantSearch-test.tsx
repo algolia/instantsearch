@@ -1166,7 +1166,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     expect(instance.mainHelper).toBe(helper);
   });
 
-  it('empty query for root if indexName is not given', async () => {
+  it('no query for root if indexName is not given', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       searchClient,
@@ -1176,13 +1176,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     search.start();
     await wait(0);
 
-    expect(searchClient.search).toHaveBeenCalledTimes(1);
-    expect(searchClient.search).toHaveBeenCalledWith([]);
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
 
     search.addWidgets([index({ indexName: 'indexName' })]);
     await wait(0);
 
-    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
     expect(searchClient.search).toHaveBeenCalledWith([
       {
         indexName: 'indexName',
