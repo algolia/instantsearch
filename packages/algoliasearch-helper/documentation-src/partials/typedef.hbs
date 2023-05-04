@@ -8,14 +8,22 @@
     <span class="type">{{> types type}}</span>
     {{/if}}
   </div>
-  <div class="description">{{#md}}{{{description}}}{{/md}}</div>
+  <div class="description">
+
+{{{description}}}
+
+  </div>
   {{#if properties}}
   <div class="type-properties">
-  {{#each properties}}  
+  {{#each properties}}
     <div class="type-property">
       <span class="param">{{name}}</span>
       <span class="type">{{> types type}}</span>
-      <span class="description">{{#md}}{{{description}}}{{/md}}</span>
+      <span class="description">
+
+{{{description}}}
+
+</span>
     </div>
   {{/each}}
   </div>
@@ -26,7 +34,11 @@
     <div class="parameter">
       <span class="param param-{{k}}">{{name}}</span>
       <span class="type">{{> types type}}</span>
-      <div class="description">{{#md}}{{{description}}}{{/md}}</div>
+      <div class="description">
+
+{{{description}}}
+
+</div>
     </div>
     {{/each}}
   </div>
@@ -36,7 +48,11 @@
   <div class="returns">
     <div class="return">
       <span class="type">{{> types type}}</span>
-      <span class="description">{{#md}}{{{description}}}{{/md}}</span>
+      <span class="description">
+
+{{{description}}}
+
+</span>
     </div>
   </div>
   {{/each}}

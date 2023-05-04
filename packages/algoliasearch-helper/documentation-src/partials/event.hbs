@@ -1,21 +1,31 @@
 <div class="event">
   <div class="summary"><span class="name"><a href="#{{id}}" id="{{id}}" class="api-entry">{{#event}}{{name}}{{/event}}</a></span></div>
-  <div class="description">{{#md}}{{{description}}}{{/md}}</div>
+  <div class="description">
+
+{{{description}}}
+
+</div>
   <ul class="parameters">
     {{#each properties}}
     <li class="parameter">
       <span class="param param-{{k}}">{{name}}</span>
       <span class="type">{{> types type}}</span>
-      <div class="description">{{#md}}{{{description}}}{{/md}}</div>
+      <div class="description">
+
+{{{description}}}
+
+</div>
     </li>
     {{/each}}
   </ul>
   {{#if examples}}
   <div class="examples">
   {{#each examples}}
+
 ```javascript
 {{{this}}}
 ```
+
   {{/each}}
   </div>
   {{/if}}

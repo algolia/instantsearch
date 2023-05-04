@@ -1,7 +1,7 @@
-{{#switch kind}}
-  {{#case "function"}}{{> method this}}{{/case}}
-  {{#case "module"}}{{> method this}}{{/case}}
-  {{#case "member"}}{{> member this}}{{/case}}
-  {{#case "typedef"}}{{> typedef this}}{{/case}}
-  {{#case "event"}}{{> event this}}{{/case}}
-{{/switch}}
+{{!--
+  The kinds "typedef", "member" and "event" have self-named partials.
+  "function" and "module" are special cases of "kind" that are mapped to "method".
+--}}
+{{> (lookup this "kind") }}
+{{#*inline "function"}}{{> method this}}{{/inline}}
+{{#*inline "module"}}{{> method this}}{{/inline}}

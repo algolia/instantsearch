@@ -1,7 +1,0 @@
-@import "docsearch/docsearch",
-        "docsearch/dropdown",
-        "docsearch/searchbox";
-
-
-@include searchbox($searchbox-config...);
-@include dropdown($dropdown-config...);

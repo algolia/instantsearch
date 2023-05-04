@@ -494,19 +494,6 @@
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
-CSSselect@~0.4.0:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/CSSselect/-/CSSselect-0.4.1.tgz#f8ab7e1f8418ce63cda6eb7bd778a85d7ec492b2"
-  integrity sha1-+Kt+H4QYzmPNput713ioXX7EkrI=
-  dependencies:
-    CSSwhat "0.4"
-    domutils "1.4"
-
-CSSwhat@0.4:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/CSSwhat/-/CSSwhat-0.4.7.tgz#867da0ff39f778613242c44cfea83f0aa4ebdf9b"
-  integrity sha1-hn2g/zn3eGEyQsRM/qg/CqTr35s=
-
 JSONStream@^1.0.3, JSONStream@^1.0.4:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/JSONStream/-/JSONStream-1.3.1.tgz#707f761e01dae9e16f1bcf93703b78c70966579a"
@@ -1435,16 +1422,6 @@ character-reference-invalid@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/character-reference-invalid/-/character-reference-invalid-1.1.1.tgz#942835f750e4ec61a308e60c2ef8cc1011202efc"
   integrity sha1-lCg191Dk7GGjCOYMLvjMEBEgLvw=
-
-cheerio@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/cheerio/-/cheerio-0.14.0.tgz#209648d501846de95cdca6440f389a7f5c29dc8f"
-  integrity sha1-IJZI1QGEbelc3KZEDziaf1wp3I8=
-  dependencies:
-    CSSselect "~0.4.0"
-    entities "~1.0.0"
-    htmlparser2 "~3.7.0"
-    lodash "~2.4.1"
 
 "chokidar@>=3.0.0 <4.0.0":
   version "3.5.3"
@@ -2391,33 +2368,11 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
-domhandler@2.2:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-2.2.1.tgz#59df9dcd227e808b365ae73e1f6684ac3d946fc2"
-  integrity sha1-Wd+dzSJ+gIs2Wuc+H2aErD2Ub8I=
-  dependencies:
-    domelementtype "1"
-
 domhandler@^2.3.0:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-2.4.1.tgz#892e47000a99be55bbf3774ffea0561d8879c259"
   integrity sha1-iS5HAAqZvlW783dP/qBWHYh5wlk=
   dependencies:
-    domelementtype "1"
-
-domutils@1.4:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/domutils/-/domutils-1.4.3.tgz#0865513796c6b306031850e175516baf80b72a6f"
-  integrity sha1-CGVRN5bGswYDGFDhdVFrr4C3Km8=
-  dependencies:
-    domelementtype "1"
-
-domutils@1.5:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/domutils/-/domutils-1.5.1.tgz#dcd8488a26f563d61079e48c9f7b7e32373682cf"
-  integrity sha1-3NhIiib1Y9YQeeSMn3t+Mjc2gs8=
-  dependencies:
-    dom-serializer "0"
     domelementtype "1"
 
 domutils@^1.5.1:
@@ -2500,11 +2455,6 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0:
   integrity sha512-1MkrZNvWTKCaigbn+W15elq2BB/L22nqrSY5DKlo3X6+vclJm8Bb5djXJBmEX6fS3+zCh/F4VBK5Z2KxJt4s2Q==
   dependencies:
     once "^1.4.0"
-
-entities@1.0, entities@~1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/entities/-/entities-1.0.0.tgz#b2987aa3821347fcde642b24fdfc9e4fb712bf26"
-  integrity sha1-sph6o4ITR/zeZCsk/fyeT7cSvyY=
 
 entities@^1.1.1, entities@~1.1, entities@~1.1.1:
   version "1.1.1"
@@ -3530,17 +3480,6 @@ htmlescape@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/htmlescape/-/htmlescape-1.1.1.tgz#3a03edc2214bca3b66424a3e7959349509cb0351"
   integrity sha1-OgPtwiFLyjtmQko+eVk0lQnLA1E=
-
-htmlparser2@~3.7.0:
-  version "3.7.3"
-  resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.7.3.tgz#6a64c77637c08c6f30ec2a8157a53333be7cb05e"
-  integrity sha1-amTHdjfAjG8w7CqBV6UzM758sF4=
-  dependencies:
-    domelementtype "1"
-    domhandler "2.2"
-    domutils "1.5"
-    entities "1.0"
-    readable-stream "1.1"
 
 htmlparser2@~3.9.2:
   version "3.9.2"
@@ -5215,11 +5154,6 @@ lodash@^4.0.0, lodash@^4.1.0, lodash@^4.14.0, lodash@^4.17.11, lodash@^4.17.15, 
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
-lodash@~2.4.1:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.4.2.tgz#fadd834b9683073da179b3eae6d9c0d15053f73e"
-  integrity sha1-+t2DS5aDBz2hebPq5tnA0VBT9z4=
-
 longest-streak@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/longest-streak/-/longest-streak-1.0.0.tgz#d06597c4d4c31b52ccb1f5d8f8fe7148eafd6965"
@@ -5398,13 +5332,6 @@ merge-stream@^1.0.1:
   integrity sha1-QEEgLVCKNCugAXQAjfDCUbjBNeE=
   dependencies:
     readable-stream "^2.0.1"
-
-metalsmith-headings@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/metalsmith-headings/-/metalsmith-headings-0.2.0.tgz#b9c4d7e1609e377b45863d47ae39861b86c50529"
-  integrity sha512-6Ntg+GLsYcHB/o4fvjbXwnvF6pHNUqdFaLEHhp9T9i9Dqeheyq4OGj6/rr71FZOZO7a8LebtLtzduV98INjKaA==
-  dependencies:
-    cheerio "^0.14.0"
 
 metalsmith-in-place@1.4.4:
   version "1.4.4"
@@ -6647,16 +6574,6 @@ read@1.0.x:
   integrity sha1-s9oZvQUkMal2cdRKQmNK33ELQMQ=
   dependencies:
     mute-stream "~0.0.4"
-
-readable-stream@1.1:
-  version "1.1.14"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.1.14.tgz#7cf4c54ef648e3813084c636dd2079e166c081d9"
-  integrity sha1-fPTFTvZI44EwhMY23SB54WbAgdk=
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.1"
-    isarray "0.0.1"
-    string_decoder "~0.10.x"
 
 "readable-stream@2 || 3":
   version "3.1.1"

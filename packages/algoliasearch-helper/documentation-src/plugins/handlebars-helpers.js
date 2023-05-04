@@ -1,30 +1,8 @@
 'use strict';
 var Handlebars = require('handlebars');
-var marked = require('marked');
-marked.setOptions({
-  gfm: true
-});
+
 module.exports = function(requires) {
   requires.handlebars = Handlebars;
-
-  var state = {};
-
-  Handlebars.registerHelper('switch', function(value, options) {
-    state._switch_value_ = value;
-    var html = options.fn(this); // Process the body of the switch block
-    delete state._switch_value_;
-    return html;
-  });
-
-  Handlebars.registerHelper('case', function(value, options) {
-    if (value === state._switch_value_) {
-      return options.fn(this);
-    }
-  });
-
-  Handlebars.registerHelper('md', function(options) {
-    return new Handlebars.SafeString(marked(options.fn(this)));
-  });
 
   var arrayRegexp = /^Array\.<(.+?)>$/;
   var mapRegexp = /^Object\.<string, \(?(.+?)\)?>$/;

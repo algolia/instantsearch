@@ -63,7 +63,6 @@
     "lodash.keyby": "4.6.0",
     "handlebars": "4.1.0",
     "metalsmith": "2.5.1",
-    "metalsmith-headings": "0.2.0",
     "metalsmith-in-place": "1.4.4",
     "metalsmith-layouts": "1.8.1",
     "metalsmith-markdown": "1.3.0",

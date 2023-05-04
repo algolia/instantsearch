@@ -14,7 +14,9 @@
     {{/each}}
   </div>
   <div class="description">
-    {{#md}}{{{description}}}{{/md}}
+
+{{{description}}}
+
   </div>
   {{#if params}}
   <div class="parameters">
@@ -22,7 +24,11 @@
     <div class="parameter">
       <span class="param param-{{k}}">{{name}}</span>
       <span class="type">{{> types type}}</span>
-      <div class="description">{{#md}}{{{description}}}{{/md}}</div>
+      <div class="description">
+
+{{{description}}}
+
+</div>
     </div>
     {{/each}}
   </div>
@@ -31,7 +37,11 @@
   <div class="returns">
     <div class="return">
       <span class="type">{{> types type}}</span>
-      <span class="description">{{#md}}{{{description}}}{{/md}}</span>
+      <span class="description">
+
+{{{description}}}
+
+</span>
     </div>
   </div>
   {{else}}
@@ -40,11 +50,13 @@
   {{/if}}
   {{#if examples}}
   <div class="examples">
-  {{#each examples}}
+{{#each examples}}
+
 ```javascript
 {{{this}}}
 ```
-  {{/each}}
+
+{{/each}}
   </div>
   {{/if}}
 </div>
