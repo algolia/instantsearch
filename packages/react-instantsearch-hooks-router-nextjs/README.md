@@ -16,6 +16,8 @@
 
 This package is a router for [React InstantSearch Hooks](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/) that is compatible with [Next.js](https://nextjs.org/) routing.
 
+> :warning: **This function cannot be used in conjunction with [`getStaticProps()`](https://nextjs.org/docs/api-reference/data-fetching/get-static-props). Use `getServerSideProps()` or client-side rendering instead.**
+
 ## Installation
 
 ```sh
