@@ -372,9 +372,9 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           });
 
           const hasNoFacets =
-            !results?.disjunctiveFacets?.length &&
-            !results?.facets?.length &&
-            !results?.hierarchicalFacets?.length;
+            !results.disjunctiveFacets?.length &&
+            !results.facets?.length &&
+            !results.hierarchicalFacets?.length;
 
           if (
             cachedHits[page] === undefined &&
