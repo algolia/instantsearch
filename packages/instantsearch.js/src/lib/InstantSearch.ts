@@ -17,6 +17,7 @@ import {
   noop,
   warning,
   setIndexHelperState,
+  isIndexWidget,
 } from './utils';
 import version from './version';
 
@@ -60,9 +61,9 @@ export type InstantSearchOptions<
   TRouteState = TUiState
 > = {
   /**
-   * The name of the main index
+   * The name of the main index. If no indexName is provided, you have to manually add an index widget.
    */
-  indexName: string;
+  indexName?: string;
 
   /**
    * The search client to plug to InstantSearch.js
@@ -224,7 +225,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
     this.setMaxListeners(100);
 
     const {
-      indexName = null,
+      indexName = '',
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
@@ -235,10 +236,6 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       insightsClient = null,
       onStateChange = null,
     } = options;
-
-    if (indexName === null) {
-      throw new Error(withUsage('The `indexName` option is required.'));
-    }
 
     if (searchClient === null) {
       throw new Error(withUsage('The `searchClient` option is required.'));
@@ -516,6 +513,12 @@ See ${createDocumentationLink({
     mainHelper.search = () => {
       this.status = 'loading';
       this.scheduleRender(false);
+
+      warning(
+        Boolean(this.indexName) ||
+          this.mainIndex.getWidgets().some(isIndexWidget),
+        'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
 
       // This solution allows us to keep the exact same API for the users but
       // under the hood, we have a different implementation. It should be

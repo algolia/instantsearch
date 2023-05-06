@@ -70,23 +70,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 `);
     });
 
-    it('requires indexName', () => {
-      expect(() =>
-        createSSRApp({
-          mixins: [
-            createServerRootMixin({
-              searchClient: createFakeClient(),
-              indexName: undefined,
-            }),
-          ],
-        })
-      ).toThrowErrorMatchingInlineSnapshot(`
-"The \`indexName\` option is required.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
-    });
-
     it('creates an instantsearch instance on "data"', () => {
       const App = {
         mixins: [
