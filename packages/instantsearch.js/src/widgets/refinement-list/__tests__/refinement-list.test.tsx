@@ -874,7 +874,7 @@ describe('refinementList', () => {
           showMore: true,
           searchable: true,
           limit: 2,
-          showMoreLimit: 4,
+          showMoreLimit: 6,
           templates: {
             showMoreText({ isShowingMore, showMoreCount }) {
               return isShowingMore
@@ -1054,7 +1054,7 @@ describe('refinementList', () => {
     <button
       class="ais-RefinementList-showMore"
     >
-      Show 2 more
+      Show 4 more
     </button>
   </div>
 </div>
@@ -1081,10 +1081,23 @@ describe('refinementList', () => {
                       Apple: 746,
                       Samsung: 633,
                       Metra: 591,
-                      Motorola: 434,
-                      OtterBox: 143,
-                      Speck: 114,
-                      Platinum: 76,
+                      HP: 530,
+                      'Insignia™': 442,
+                      GE: 394,
+                      Sony: 350,
+                      Incipio: 320,
+                      KitchenAid: 318,
+                      Whirlpool: 298,
+                      LG: 291,
+                      Canon: 287,
+                      Frigidaire: 275,
+                      Speck: 216,
+                      OtterBox: 214,
+                      Epson: 204,
+                      'Dynex™': 184,
+                      Dell: 174,
+                      'Hamilton Beach': 173,
+                      Platinum: 155,
                     },
                   },
                 })
