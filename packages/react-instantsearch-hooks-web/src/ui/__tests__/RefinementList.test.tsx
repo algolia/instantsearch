@@ -682,4 +682,34 @@ describe('RefinementList', () => {
       getByRole('button', { name: 'Show less brands' })
     ).toBeInTheDocument();
   });
+
+  test('renders with translations show more count', () => {
+    const props = createProps({
+      showMore: true,
+      translations: {
+        showMoreButtonText({
+          isShowingMore,
+          showMoreCount,
+        }: {
+          isShowingMore: boolean;
+          showMoreCount: number;
+        }) {
+          return isShowingMore
+            ? `Show top 5 items`
+            : `Show ${showMoreCount} more`;
+        },
+      },
+    });
+    const { getByRole, rerender } = render(
+      <RefinementList {...props} isShowingMore={false} showMoreCount={5} />
+    );
+
+    expect(getByRole('button', { name: 'Show 5 more' })).toBeInTheDocument();
+
+    rerender(<RefinementList {...props} isShowingMore />);
+
+    expect(
+      getByRole('button', { name: 'Show top 5 items' })
+    ).toBeInTheDocument();
+  });
 });

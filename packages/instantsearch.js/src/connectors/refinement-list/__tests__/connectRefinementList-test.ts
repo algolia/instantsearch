@@ -1091,7 +1091,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 2,
       },
       isShowingMore: false,
-      showMoreCount: 1, // @todo should be 0;
+      showMoreCount: 1,
       canToggleShowMore: true,
       toggleShowMore: expect.any(Function),
       hasExhaustiveItems: false,
@@ -1126,7 +1126,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 2,
       },
       isShowingMore: false,
-      showMoreCount: 1, // should be 0;
+      showMoreCount: 1,
       canToggleShowMore: false,
       toggleShowMore: expect.any(Function),
       hasExhaustiveItems: false,
@@ -1162,7 +1162,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 2,
       },
       isShowingMore: false,
-      showMoreCount: 1, // @todo should be 0;
+      showMoreCount: 1,
       canToggleShowMore: true,
       toggleShowMore: expect.any(Function),
       hasExhaustiveItems: false,
@@ -1204,7 +1204,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 2,
       },
       isShowingMore: true,
-      showMoreCount: 0, // @todo should be 1;
+      showMoreCount: 0,
       canToggleShowMore: true,
       toggleShowMore: expect.any(Function),
       hasExhaustiveItems: false,
