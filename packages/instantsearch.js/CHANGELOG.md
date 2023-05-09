@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.56.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.55.0...instantsearch.js@4.56.0) (2023-05-09)
+
+
+### Bug Fixes
+
+* **this:** ensure all functions are able to be destructured ([#5611](https://github.com/algolia/instantsearch.js/issues/5611)) ([a8b5c1e](https://github.com/algolia/instantsearch.js/commit/a8b5c1e5bbd6afac39fce523f7d7c2ec02f51153)), closes [#5589](https://github.com/algolia/instantsearch.js/issues/5589)
+
+
+### Features
+
+* **history:** warn when `createURL` does not return an absolute URL ([#5613](https://github.com/algolia/instantsearch.js/issues/5613)) ([f45e0fa](https://github.com/algolia/instantsearch.js/commit/f45e0faede3461678cb05170887f3b7bc02dad50))
+* **instantsearch:** make root indexName optional ([#5590](https://github.com/algolia/instantsearch.js/issues/5590)) ([80f309e](https://github.com/algolia/instantsearch.js/commit/80f309ed69b61534ca118b60c9c88691e0148fca))
+
+
+
+
+
 # [4.55.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.54.1...instantsearch.js@4.55.0) (2023-04-24)
 
 

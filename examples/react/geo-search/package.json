@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-geo-search",
-  "version": "11.0.0",
+  "version": "12.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -32,8 +32,8 @@
     "qs": "6.9.7",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-instantsearch-dom": "6.39.1",
-    "react-instantsearch-dom-maps": "6.39.1"
+    "react-instantsearch-dom": "6.40.0",
+    "react-instantsearch-dom-maps": "6.39.2"
   },
   "browserslist": [
     ">0.2%",

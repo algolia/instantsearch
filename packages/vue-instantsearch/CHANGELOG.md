@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.10.0](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.9.0...vue-instantsearch@4.10.0) (2023-05-09)
+
+
+### Features
+
+* **instantsearch:** make root indexName optional ([#5590](https://github.com/algolia/instantsearch.js/issues/5590)) ([80f309e](https://github.com/algolia/instantsearch.js/commit/80f309ed69b61534ca118b60c9c88691e0148fca))
+
+
+
+
+
 # [4.9.0](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.8.10...vue-instantsearch@4.9.0) (2023-04-24)
 
 
