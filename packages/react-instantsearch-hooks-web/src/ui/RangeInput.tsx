@@ -66,7 +66,7 @@ export type RangeInputTranslations = {
 };
 
 // if the default value is undefined, React considers the component uncontrolled initially, which we don't want 0 or NaN as the default value
-const unsetNumberInputValue = '' as unknown as number;
+const unsetNumberInputValue = '';
 
 export function RangeInput({
   classNames = {},
@@ -91,12 +91,12 @@ export function RangeInput({
   const [prevValues, setPrevValues] = useState(values);
 
   const [{ from, to }, setRange] = useState({
-    from: values.min,
-    to: values.max,
+    from: values.min?.toString(),
+    to: values.max?.toString(),
   });
 
   if (values.min !== prevValues.min || values.max !== prevValues.max) {
-    setRange({ from: values.min, to: values.max });
+    setRange({ from: values.min?.toString(), to: values.max?.toString() });
     setPrevValues(values);
   }
 
@@ -114,7 +114,10 @@ export function RangeInput({
         className={cx('ais-RangeInput-form', classNames.form)}
         onSubmit={(event) => {
           event.preventDefault();
-          onSubmit([from, to]);
+          onSubmit([
+            from ? Number(from) : undefined,
+            to ? Number(to) : undefined,
+          ]);
         }}
       >
         <label className={cx('ais-RangeInput-label', classNames.label)}>
@@ -128,14 +131,14 @@ export function RangeInput({
             type="number"
             min={min}
             max={max}
-            value={from?.toString()} // Strips leading `0` from a positive number value
+            value={from}
             step={step}
             placeholder={min?.toString()}
             disabled={disabled}
             onInput={({ currentTarget }) => {
               const value = currentTarget.value;
               setRange({
-                from: value ? Number(value) : unsetNumberInputValue,
+                from: value || unsetNumberInputValue,
                 to,
               });
             }}
@@ -155,7 +158,7 @@ export function RangeInput({
             type="number"
             min={min}
             max={max}
-            value={to?.toString()} // Strips leading `0` from a positive number value
+            value={to}
             step={step}
             placeholder={max?.toString()}
             disabled={disabled}
@@ -163,7 +166,7 @@ export function RangeInput({
               const value = currentTarget.value;
               setRange({
                 from,
-                to: value ? Number(value) : unsetNumberInputValue,
+                to: value || unsetNumberInputValue,
               });
             }}
           />
